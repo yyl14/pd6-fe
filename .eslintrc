@@ -1,0 +1,29 @@
+{
+  "root": true,
+  "extends": ["plugin:react/recommended"],
+  "rules": {
+    "no-console": "off",
+    "prettier/prettier": "off",
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": ["js", ".jsx"]
+      }
+    ],
+    "import/no-named-as-default": 0,
+    "import/no-named-as-default-member": 0,
+    "eqeqeq": ["error", "smart"],
+    "no-unused-vars": "off",
+    "no-extra-boolean-cast": "off"
+  },
+  "parserOptions": {
+    "parser": "babel-eslint",
+    "sourceType": "module",
+    "allowImportExportEverywhere": "true"
+  },
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  }
+}
