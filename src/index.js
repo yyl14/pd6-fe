@@ -21,7 +21,7 @@ ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <App />
   </MuiThemeProvider>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 // If you want to start measuring performance in your app, pass a function

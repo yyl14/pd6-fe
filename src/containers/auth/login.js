@@ -5,7 +5,7 @@ import agent from '../../actions/agent';
 
 import {} from '../../actions/auth';
 
-import '../../styles/login.css';
+import '../../styles/auth.css';
 import '../../styles/index.css';
 
 class Login extends Component {
