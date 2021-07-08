@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Login from './containers/auth/Login';
+import Login from './containers/auth/login';
 import Index from './containers';
 import NoMatch from './components/noMatch';
 

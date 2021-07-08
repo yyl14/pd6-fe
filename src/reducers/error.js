@@ -1,4 +1,4 @@
-import { API_CALL_ERROR } from '../actions/constant';
+import { userConstants } from '../actions/constant';
 
 const initialState = {
   errors: {},
@@ -6,7 +6,7 @@ const initialState = {
 
 export default function board(state = initialState, action) {
   switch (action.type) {
-    case API_CALL_ERROR:
+    case userConstants.API_CALL_ERROR:
       return {
         errors: action.errors,
       };
