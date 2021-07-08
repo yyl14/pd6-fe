@@ -2,7 +2,9 @@ import agent from './agent';
 
 import {} from './constant';
 
-export const userSignIn = () => (dispatch) => {
+export const userSignIn = (data) => (dispatch) => {
+  console.log('user sign in successfully');
+  console.log(data);
   // agent.post('/signin', { userId: user_id })
   // .then(res => {
   //   dispatch({
