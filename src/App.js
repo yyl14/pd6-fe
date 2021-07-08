@@ -1,18 +1,13 @@
-import thunk from 'redux-thunk';
-import { createStore, applyMiddleware } from 'redux';
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import reducer from './reducers';
 import Login from './containers/auth/login';
 import Index from './containers';
 import NoMatch from './components/noMatch';
 
-// import { store } from './store';
+import store from './store';
 
 import './App.css';
-
-const store = createStore(reducer, applyMiddleware(thunk));
 
 class App extends Component {
   constructor(props) {
