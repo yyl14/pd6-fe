@@ -3,7 +3,7 @@
   "extends": ["airbnb", "airbnb/hooks", "plugin:react/recommended"],
   "rules": {
     "no-console": "off",
-    "prettier/prettier": "off",
+    // "prettier/prettier": "off",
     "react/jsx-filename-extension": [
       1,
       {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { ThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider, withStyles } from '@material-ui/core/styles';
+
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import theme from './theme';
@@ -11,6 +12,24 @@ import NoMatch from './components/noMatch';
 import store from './store';
 
 import './App.css';
+
+const GlobalCss = withStyles({
+  // @global is handled by jss-plugin-global.
+  '@global': {
+    // You should target [class*="MuiButton-root"] instead if you nest themes.
+    // '.MuiButton-root': {
+    //   fontSize: '1rem',
+    // },
+
+    '.MuiTextField-root': {
+      borderRadius: '10px',
+    },
+  },
+})(() => null);
+
+// …
+
+  <GlobalCss />;
 
 class App extends Component {
   constructor(props) {
@@ -28,6 +47,7 @@ class App extends Component {
     return (
       <ThemeProvider theme={theme}>
         <Provider store={store}>
+          <GlobalCss />
           <Router>
             <Switch>
               <Route path="/login" component={Login} />
