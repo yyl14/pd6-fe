@@ -1,0 +1,19 @@
+{
+  "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+
+  "[javascript]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true
+  }
+}
