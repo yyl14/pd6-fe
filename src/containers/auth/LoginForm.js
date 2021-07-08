@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import React, { useSelector, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Button } from '@material-ui/core';
 import { authActions } from '../../actions/index';
 
 export default function LoginForm() {
@@ -20,9 +21,15 @@ export default function LoginForm() {
       {' '}
       <input placeholder="username" value={username} onChange={(e) => setUserName(e.target.value)} />
       <input placeholder="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      <button type="button" onClick={onsubmit}>
+      <Button onClick={onsubmit}>Log In</Button>
+      {' '}
+      <Button color="secondary" onClick={onsubmit}>
         Log In
-      </button>
+      </Button>
+      {' '}
+      <Button color="primary" onClick={onsubmit}>
+        Log In
+      </Button>
     </div>
   );
 }

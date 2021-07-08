@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
+import { ThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
+import theme from './theme';
 import Login from './containers/auth/Login';
 import Index from './containers';
 import NoMatch from './components/noMatch';
@@ -23,15 +26,17 @@ class App extends Component {
 
   render() {
     return (
-      <Provider store={store}>
-        <Router>
-          <Switch>
-            <Route path="/login" component={Login} />
-            <Route path="/" component={Index} />
-            <Route component={NoMatch} />
-          </Switch>
-        </Router>
-      </Provider>
+      <ThemeProvider theme={theme}>
+        <Provider store={store}>
+          <Router>
+            <Switch>
+              <Route path="/login" component={Login} />
+              <Route path="/" component={Index} />
+              <Route component={NoMatch} />
+            </Switch>
+          </Router>
+        </Provider>
+      </ThemeProvider>
     );
   }
 }
