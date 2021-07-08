@@ -17,7 +17,8 @@
     "no-unused-vars": "off",
     "no-extra-boolean-cast": "off",
     "comma-dangle": [2, "always-multiline"],
-    "linebreak-style": 0
+    "linebreak-style": 0,
+    "import/named": "off"
   },
   "parserOptions": {
     "parser": "babel-eslint",
@@ -28,5 +29,6 @@
     "browser": true,
     "es6": true,
     "node": true
-  }
+  },
+  "parser": "babel-eslint"
 }
