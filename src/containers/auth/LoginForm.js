@@ -24,7 +24,7 @@ export default function LoginForm() {
       <Button onClick={onsubmit}>Log In</Button>
       {' '}
       <Button color="secondary" onClick={onsubmit}>
-        Log In
+        Submit
       </Button>
       {' '}
       <Button color="primary" onClick={onsubmit}>

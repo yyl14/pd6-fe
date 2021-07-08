@@ -1,10 +1,7 @@
 import { createTheme } from '@material-ui/core/styles';
-import { blue, purple, green } from '@material-ui/core/colors';
-// import green from '@material-ui/core/colors/green';
 
 const palette = {
   primary: {
-    // light: ''
     main: '#1EA5FF',
     dark: '#1590e2',
     contrastText: 'white',
@@ -27,10 +24,11 @@ const theme = createTheme({
     button: {
       textTransform: 'none',
     },
+    fontFamily: 'San Francisco',
   },
   overrides: {
     MuiButton: {
-      root: { transition: 'opacity 0.3s, background 0.3s' },
+      root: { transition: 'opacity 0.4s, background 0.4s' },
       contained: {
         '&:hover': {
           backgroundColor: palette.mono.light,
@@ -44,7 +42,7 @@ const theme = createTheme({
       containedPrimary: {
         '&:hover': {
           backgroundColor: palette.primary.main,
-          opacity: '80%',
+          opacity: '60%',
         },
         '&:active': {
           backgroundColor: palette.primary.dark,
@@ -54,7 +52,7 @@ const theme = createTheme({
       containedSecondary: {
         '&:hover': {
           backgroundColor: palette.secondary.main,
-          opacity: '80%',
+          opacity: '60%',
         },
         '&:active': {
           backgroundColor: palette.secondary.dark,
