@@ -112,7 +112,7 @@ class ForgetPasswordForm extends Component {
             </Grid>
           </Grid>
           <Grid container item xs={6} className="auth-page-col auth-page-col-right" justify="center">
-            <Card className="auth-form" varient="outlined">
+            <Card className="auth-form" variant="outlined">
               <CardContent className="auth-form-content">
                 <TextField
                   required
