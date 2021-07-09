@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Container } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import agent from '../../actions/agent';
 import { userSignIn } from '../../actions/auth';
 import LoginForm from './LoginForm';
@@ -24,25 +24,21 @@ class Login extends Component {
 
   componentDidMount() {}
 
-  // handleChange1(event) {
-  //   this.setState({ userId: event.target.value });
-  // }
-
-  // handleChange2(event) {
-  //   this.setState({ password: event.target.value });
-  // }
-
-  // handleSubmit(event) {
-  //   event.preventDefault();
-  //   const { onSubmit } = this.props;
-  //   onSubmit(this.state);
-  // }
-
   render() {
     return (
       <div className="page login-page">
-        <h1 className="login-title">Login and train your puppy!</h1>
-        <LoginForm />
+        <Grid className="auth-page-container" container direction="row" justifyContent="center" alignItems="center">
+          <Grid container item xs={6} className="auth-page-col auth-page-col-left" justify="center">
+            <Grid item className="auth-title">
+              <Typography className="auth-title" variant="h1">
+                Login and train your puppy!
+              </Typography>
+            </Grid>
+          </Grid>
+          <Grid container item xs={6} className="auth-page-col auth-page-col-right" justify="center">
+            <LoginForm />
+          </Grid>
+        </Grid>
       </div>
     );
   }

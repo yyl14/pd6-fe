@@ -1,3 +1,28 @@
+.login-page {
+  /* display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; */
+  height: 100%;
+}
+
+.auth-page-container {
+  min-height: 100%;
+}
+
+.auth-page-col {
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.auth-page-col-right {
+  align-items: center;
+}
+
+.auth-title h1 {
+  margin-left: 100px;
+}
+
 .auth-form {
   position: absolute;
   width: 740px;

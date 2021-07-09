@@ -34,7 +34,7 @@ const typography = {
   // UI/UX terminology
   // Big Title
   h1: {
-    fontSize: '48px',
+    fontSize: 48,
     fontWeight: 700,
     lineHeight: '57px',
     letterSpacing: '-0.01em',
@@ -42,7 +42,7 @@ const typography = {
 
   // Title
   h2: {
-    fontSize: '24px',
+    fontSize: 24,
     fontWeight: 600,
     lineHeight: '29px',
     letterSpacing: '-0.01em',
@@ -50,7 +50,7 @@ const typography = {
 
   // Body
   body1: {
-    fontSize: '20px',
+    fontSize: 20,
     fontWeight: 400,
     lineHeight: '24px',
     letterSpacing: '-0.01em',
@@ -58,7 +58,7 @@ const typography = {
 
   // Sub-body
   body2: {
-    fontSize: '16px',
+    fontSize: 16,
     fontWeight: 400,
     lineHeight: '19px',
     letterSpacing: '-0.01em',
@@ -66,7 +66,7 @@ const typography = {
 
   // Caption
   caption: {
-    fontSize: '14px',
+    fontSize: 14,
     fontWeight: 400,
     lineHeight: '17px',
     letterSpacing: '-0.02em',
@@ -74,7 +74,7 @@ const typography = {
 
   button: {
     textTransform: 'none',
-    fontSize: '20px',
+    fontSize: 20,
     lineHeight: '24px',
     letterSpacing: '-0.01em',
   },

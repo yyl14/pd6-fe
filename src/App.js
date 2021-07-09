@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { ThemeProvider, withStyles } from '@material-ui/core/styles';
+import { MuiThemeProvider, withStyles } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -32,7 +32,7 @@ const GlobalCss = withStyles({
 
 // …
 
-  <GlobalCss />;
+// <GlobalCss />;
 
 class App extends Component {
   constructor(props) {
@@ -49,7 +49,7 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <ThemeProvider theme={theme}>
+        <MuiThemeProvider theme={theme}>
           <CssBaseline />
           <Router>
             <Switch>
@@ -60,7 +60,7 @@ class App extends Component {
               <Route component={NoMatch} />
             </Switch>
           </Router>
-        </ThemeProvider>
+        </MuiThemeProvider>
       </Provider>
     );
   }
