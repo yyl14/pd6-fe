@@ -83,7 +83,7 @@ class ForgetPasswordForm extends Component {
   render() {
     const value = this.state;
     return (
-      <div className="page forget-password-page">
+      <div className="page auth-page">
         <Grid className="auth-page-container" container direction="row" justifyContent="center" alignItems="center">
           <Grid container item xs={6} className="auth-page-col auth-page-col-left" justify="center">
             <Grid item className="auth-title">
