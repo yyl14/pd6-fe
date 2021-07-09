@@ -87,6 +87,7 @@ const shape = {
 };
 
 const overrides = {
+  // "Button"
   MuiButton: {
     root: {
       transition: 'opacity 0.4s, background 0.4s',
@@ -125,20 +126,23 @@ const overrides = {
     },
   },
 
+  // "Input"
   MuiTextField: {
     root: {
+      width: '350px',
       margin: '10px 5px 10px 5px',
     },
   },
 
   MuiOutlinedInput: {
     root: {
-      width: '350px',
       '& $notchedOutline': {
+        width: '350px',
         borderRadius: 10,
       },
 
       '& input': {
+        width: '350px',
         padding: '12px 0px 14px 15px',
         fontWeight: 500,
         fontSize: '20px',
@@ -162,13 +166,15 @@ const overrides = {
   },
 
   MuiCard: {
+    // "Box"
     elevation: {
       boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.25)',
     },
+    // "Card"
     outlined: {
       boxShadow: 'none',
-      // border: '1px solid #CACACA',
     },
+    // both "Box" and "Card"
     rounded: {
       borderRadius: '10px',
     },

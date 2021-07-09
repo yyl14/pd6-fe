@@ -41,10 +41,8 @@ class Login extends Component {
   render() {
     return (
       <div className="page login-page">
-        <p>Hello Pdogs!</p>
-        <Container>
-          <LoginForm />
-        </Container>
+        <h1 className="login-title">Login and train your puppy!</h1>
+        <LoginForm />
       </div>
     );
   }

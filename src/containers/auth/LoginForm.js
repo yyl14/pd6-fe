@@ -2,7 +2,7 @@ import { useState } from 'react';
 import React, { useSelector, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-  Button, TextField, Card, CardContent,
+  Button, TextField, Card, CardContent, Container, Grid,
 } from '@material-ui/core';
 import { borders, borderRadius } from '@material-ui/system';
 
@@ -21,25 +21,27 @@ export default function LoginForm() {
 
   return (
     <Card className="login-form" variant="outlined">
-      <CardContent>
-        {' '}
-        <TextField placeholder="Username" value={username} onChange={(e) => setUserName(e.target.value)} />
-        {' '}
+      <CardContent className="login-form-content">
         <TextField
+          id="login-username"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUserName(e.target.value)}
+        />
+
+        <TextField
+          id="login-username"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           error
           helperText="Some error"
         />
-        {' '}
-        <Button onClick={onsubmit}>Submit</Button>
-        <Button color="primary" onClick={onsubmit}>
-          Submit
-        </Button>
-        <Button color="secondary" onClick={onsubmit}>
-          Submit
-        </Button>
+        <Grid>
+          <Button color="primary" onClick={onsubmit}>
+            Login
+          </Button>
+        </Grid>
       </CardContent>
     </Card>
   );
