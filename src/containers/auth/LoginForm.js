@@ -19,11 +19,16 @@ export default function LoginForm() {
 
   return (
     <div className="login-form">
-      <span>{String(loginState)}</span>
       {' '}
       <TextField placeholder="Username" value={username} onChange={(e) => setUserName(e.target.value)} />
       {' '}
-      <TextField placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      <TextField
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        error
+        helperText="Some error"
+      />
       {' '}
       <Button onClick={onsubmit}>Submit</Button>
       <Button color="primary" onClick={onsubmit}>

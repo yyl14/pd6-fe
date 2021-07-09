@@ -52,7 +52,7 @@ class App extends Component {
           <Router>
             <Switch>
               <Route path="/login" component={Login} />
-              <Route path="/forgetpassword" component={ForgetPasswordForm} />
+              <Route path="/forget-password" component={ForgetPasswordForm} />
               <Route path="/" component={Index} />
               <Route component={NoMatch} />
             </Switch>

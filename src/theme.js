@@ -118,9 +118,14 @@ const overrides = {
     },
   },
 
-  MuiOutlinedInput: {
+  MuiTextField: {
     root: {
       margin: '10px 5px 10px 5px',
+    },
+  },
+
+  MuiOutlinedInput: {
+    root: {
       width: '350px',
       '& $notchedOutline': {
         borderRadius: 10,
@@ -133,6 +138,12 @@ const overrides = {
       },
     },
   },
+
+  MuiFormHelperText: {
+    root: {
+      marginTop: '5px',
+    },
+  },
 };
 
 const props = {
@@ -142,9 +153,14 @@ const props = {
     disableElevation: true,
     disableRipple: true,
   },
+
   MuiTextField: {
     variant: 'outlined',
     borderRadius: '10px',
+  },
+
+  MuiFormHelperText: {
+    component: 'caption',
   },
 };
 
