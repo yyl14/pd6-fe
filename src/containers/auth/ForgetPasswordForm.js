@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
-  Button, TextField, Card, CardContent, Container, Grid,
+  Button, TextField, Card, CardContent, Container, Grid, Typography,
   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
 } from '@material-ui/core';
 import { borders, borderRadius } from '@material-ui/system';
@@ -84,50 +84,59 @@ class ForgetPasswordForm extends Component {
     const value = this.state;
     return (
       <div className="page forget-password-page">
-        <h1 className="forget-password-title">Lost your puppy? Reset Password</h1>
-        <Card className="forget-password-form" varient="outlined">
-          <CardContent className="forget-password-form-content">
-            <TextField
-              required
-              error={value.error}
-              helperText={value.errorText}
-              placeholder="Email"
-              value={value.email}
-              onChange={this.handleChange}
-              onKeyPress={(event) => {
-                if (event.key === 'Enter') this.handleSubmit();
-              }}
-            />
-            <Grid>
-              <Button disabled={value.disabled} type="submit" color="primary" onClick={this.handleSubmit} onKeyPress={this.handleSubmit}>
-                Send
-              </Button>
+        <Grid className="auth-page-container" container direction="row" justifyContent="center" alignItems="center">
+          <Grid container item xs={6} className="auth-page-col auth-page-col-left" justify="center">
+            <Grid item className="auth-title">
+              <Typography className="auth-title" variant="h1">
+                Lost your puppy? Reset Password
+              </Typography>
             </Grid>
-          </CardContent>
-        </Card>
-        {value.popUp ? (
-          <Dialog
-            open={value.popUp}
-            keepMounted
-            onClose={this.handleClosePopUp}
-            aria-labelledby="alert-dialog-slide-title"
-            aria-describedby="alert-dialog-slide-description"
-          >
-            <DialogTitle id="alert-dialog-slide-title">
-              Password reset email sent
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-slide-description">
-                Please check your mailbox to reset your password.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.handleClosePopUp} color="primary">
-                Done
-              </Button>
-            </DialogActions>
-          </Dialog>
-        ) : (<></>)}
+          </Grid>
+          <Grid container item xs={6} className="auth-page-col auth-page-col-right" justify="center">
+            <Card className="auth-form" varient="outlined">
+              <CardContent className="auth-form-content">
+                <TextField
+                  required
+                  error={value.error}
+                  helperText={value.errorText}
+                  placeholder="Email"
+                  value={value.email}
+                  onChange={this.handleChange}
+                  onKeyPress={(event) => {
+                    if (event.key === 'Enter') this.handleSubmit();
+                  }}
+                />
+                <Button disabled={value.disabled} type="submit" color="primary" onClick={this.handleSubmit} onKeyPress={this.handleSubmit}>
+                  Send
+                </Button>
+              </CardContent>
+            </Card>
+            {value.popUp ? (
+              <Dialog
+                open={value.popUp}
+                keepMounted
+                onClose={this.handleClosePopUp}
+                aria-labelledby="alert-dialog-slide-title"
+                aria-describedby="alert-dialog-slide-description"
+              >
+                <DialogTitle id="alert-dialog-slide-title">
+                  Password reset email sent
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-slide-description">
+                    Please check your mailbox to reset your password.
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleClosePopUp}>
+                    Done
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            ) : (<></>)}
+
+          </Grid>
+        </Grid>
       </div>
     );
   }

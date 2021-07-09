@@ -51,7 +51,7 @@ export default function LoginForm() {
         <caption className="login-caption">
           Lost your puppy?
           {' '}
-          <Link to="reset-password">Reset password</Link>
+          <Link to="forget-password">Reset password</Link>
         </caption>
       </CardContent>
     </Card>
