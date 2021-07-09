@@ -116,6 +116,7 @@ class ForgetPasswordForm extends Component {
               <CardContent className="auth-form-content">
                 <TextField
                   required
+                  className="auth-form-input"
                   error={value.error}
                   helperText={value.errorText}
                   placeholder="Email"

@@ -129,19 +129,16 @@ const overrides = {
   // "Input"
   MuiTextField: {
     root: {
-      width: '350px',
       margin: '10px 5px 10px 5px',
     },
   },
   MuiOutlinedInput: {
     root: {
       '& $notchedOutline': {
-        width: '350px',
         borderRadius: 10,
       },
 
       '& input': {
-        width: '350px',
         padding: '12px 0px 14px 15px',
         fontWeight: 500,
         fontSize: '20px',

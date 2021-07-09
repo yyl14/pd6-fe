@@ -36,8 +36,8 @@
   justify-content: center;
 }
 
-#login-username {
-  width: 350px;
+.auth-form-input {
+  width: 18vw;
 }
 
 #login-captions {

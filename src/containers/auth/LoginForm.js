@@ -26,12 +26,14 @@ export default function LoginForm() {
         <div className="auth-form-inputs">
           <TextField
             id="login-username"
+            className="auth-form-input"
             placeholder="Account ID"
             value={username}
             onChange={(e) => setUserName(e.target.value)}
           />
           <TextField
             id="login-username"
+            className="auth-form-input"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
