@@ -47,7 +47,7 @@ export default function ResetPassword() {
           </Grid>
         </Grid>
         <Grid container item xs={6} className="auth-page-col auth-page-col-right" justify="center">
-          <Card className="auth-form" varient="outlined">
+          <Card className="auth-form" variant="outlined">
             <CardContent className="auth-form-content">
               <form className="auth-form-content" onSubmit={onSubmit}>
                 <TextField
@@ -67,7 +67,9 @@ export default function ResetPassword() {
                     if (event.key === 'Enter') onSubmit();
                   }}
                 />
-                <Button onClick={onSubmit} color="primary">Send</Button>
+                <Button onClick={onSubmit} color="primary">
+                  Send
+                </Button>
               </form>
             </CardContent>
           </Card>

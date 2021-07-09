@@ -2,11 +2,11 @@ import { useState } from 'react';
 import React, { useSelector, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-  Button, TextField, Card, CardContent, Container, Grid,
+  Button, TextField, Card, CardContent, Container, Grid, Link,
 } from '@material-ui/core';
 import { borders, borderRadius } from '@material-ui/system';
 
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { authActions } from '../../actions/index';
 
 export default function LoginForm() {
@@ -45,13 +45,17 @@ export default function LoginForm() {
         <caption className="login-caption">
           Need a new puppy?
           {' '}
-          <Link to="register">Register</Link>
+          <Link component={RouterLink} to="/register">
+            Register
+          </Link>
           {' '}
         </caption>
         <caption className="login-caption">
           Lost your puppy?
           {' '}
-          <Link to="forget-password">Reset password</Link>
+          <Link component={RouterLink} to="/forget-password">
+            Reset password
+          </Link>
         </caption>
       </CardContent>
     </Card>

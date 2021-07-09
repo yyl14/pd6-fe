@@ -3,8 +3,18 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
-  Button, TextField, Card, CardContent, Container, Grid, Typography,
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+  Button,
+  TextField,
+  Card,
+  CardContent,
+  Container,
+  Grid,
+  Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from '@material-ui/core';
 import { borders, borderRadius } from '@material-ui/system';
 import { TrainRounded } from '@material-ui/icons';
@@ -48,18 +58,27 @@ class ForgetPasswordForm extends Component {
   handleChange(event) {
     if (event.target.value === '') {
       this.setState({
-        email: event.target.value, errorText: '', error: false, disabled: true,
+        email: event.target.value,
+        errorText: '',
+        error: false,
+        disabled: true,
       });
       return;
     }
     const error = checkEmailFormat(event.target.value);
     if (error === 'Invalid email address') {
       this.setState({
-        email: event.target.value, errorText: error, error: true, disabled: true,
+        email: event.target.value,
+        errorText: error,
+        error: true,
+        disabled: true,
       });
     } else {
       this.setState({
-        email: event.target.value, errorText: '', error: false, disabled: false,
+        email: event.target.value,
+        errorText: '',
+        error: false,
+        disabled: false,
       });
     }
   }
@@ -106,7 +125,13 @@ class ForgetPasswordForm extends Component {
                     if (event.key === 'Enter') this.handleSubmit();
                   }}
                 />
-                <Button disabled={value.disabled} type="submit" color="primary" onClick={this.handleSubmit} onKeyPress={this.handleSubmit}>
+                <Button
+                  disabled={value.disabled}
+                  type="submit"
+                  color="primary"
+                  onClick={this.handleSubmit}
+                  onKeyPress={this.handleSubmit}
+                >
                   Send
                 </Button>
               </CardContent>
@@ -120,7 +145,7 @@ class ForgetPasswordForm extends Component {
                 aria-describedby="alert-dialog-slide-description"
               >
                 <DialogTitle id="alert-dialog-slide-title">
-                  Password reset email sent
+                  <Typography variant="h2">Password reset email sent</Typography>
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-slide-description">
@@ -128,13 +153,12 @@ class ForgetPasswordForm extends Component {
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={this.handleClosePopUp}>
-                    Done
-                  </Button>
+                  <Button onClick={this.handleClosePopUp}>Done</Button>
                 </DialogActions>
               </Dialog>
-            ) : (<></>)}
-
+            ) : (
+              <></>
+            )}
           </Grid>
         </Grid>
       </div>

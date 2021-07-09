@@ -133,7 +133,6 @@ const overrides = {
       margin: '10px 5px 10px 5px',
     },
   },
-
   MuiOutlinedInput: {
     root: {
       '& $notchedOutline': {
@@ -149,7 +148,6 @@ const overrides = {
       },
     },
   },
-
   MuiFormHelperText: {
     root: {
       marginTop: '5px',
@@ -157,6 +155,7 @@ const overrides = {
   },
 
   MuiPaper: {
+    // elevation: {  },
     outlined: {
       border: '1px solid #CACACA',
     },
@@ -165,6 +164,7 @@ const overrides = {
     },
   },
 
+  // Box / Card
   MuiCard: {
     // "Box"
     elevation: {
@@ -177,6 +177,27 @@ const overrides = {
     // both "Box" and "Card"
     rounded: {
       borderRadius: '10px',
+    },
+  },
+
+  // Box (dialog)
+  MuiDialog: {
+    paper: { padding: '4px 6px 4px 6px', minWidth: '45vw', boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.25)' },
+  },
+  MuiDialogTitle: {
+    // root: { padding: '20px 30px 0 30px' },
+  },
+  MuiDialogContent: {
+    // root: { padding: '20px 30px 12px 30px' },
+  },
+  MuiDialogActions: {
+    root: { padding: '0 24px 0 0' },
+  },
+
+  // "Mask"
+  MuiBackdrop: {
+    root: {
+      backgroundColor: `${palette.mono.main}66`, // 8-digit hex for opacity = 40%
     },
   },
 };
@@ -196,6 +217,9 @@ const props = {
 
   MuiFormHelperText: {
     component: 'caption',
+  },
+  MuiDialogTitle: {
+    disableTypography: true,
   },
 };
 
