@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import theme from './theme';
 import Login from './containers/auth/Login';
+import ForgetPasswordForm from './containers/auth/ForgetPasswordForm';
 import Index from './containers';
 import NoMatch from './components/noMatch';
 
@@ -51,6 +52,7 @@ class App extends Component {
           <Router>
             <Switch>
               <Route path="/login" component={Login} />
+              <Route path="/forgetpassword" component={ForgetPasswordForm} />
               <Route path="/" component={Index} />
               <Route component={NoMatch} />
             </Switch>

@@ -1,0 +1,63 @@
+.warning{
+  /* Auto Layout */
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0px 10px;
+
+  position: absolute;
+  width: 204px;
+  height: 19px;
+  left: 5px;
+  bottom: 0px;
+
+  background: #FFFFFF;
+}
+
+.warning_msg{
+  position: static;
+  left: 17.16%;
+  right: 4.9%;
+  top: 0%;
+  bottom: 0%;
+
+  /* Sub-Body */
+
+  font-family: SF UI Text;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+  /* identical to box height */
+
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.01em;
+
+  /* Red/100 */
+
+  color: #EA3222;
+
+
+  /* Inside Auto Layout */
+
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  margin: 0px 10px;
+}
+
+.warning_img{
+  position: absolute;
+  left: 8.33%;
+  right: 91.18%;
+  top: 73.68%;
+  bottom: 21.05%;
+
+  /* Mono/White */
+
+  background: #FFFFFF;
+  transform: matrix(1, 0, 0, -1, 0, 0);
+}
