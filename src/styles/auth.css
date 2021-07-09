@@ -1,20 +1,34 @@
-.reset-password-form
-.forget-password-form
-.login-form {
+.auth-form {
   position: absolute;
   width: 740px;
-  padding: 124px 150px 50px 150px;
+  padding: 124px 174px 26px 174px;
+}
+
+.auth-form-inputs {
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 #login-username {
   width: 350px;
 }
 
-.forget-password-form-content
-.reset-password-form-content
-.login-form-content {
+#login-captions {
+  margin-top: 30px;
+  width: 100%;
+}
+
+.login-caption {
+  margin-top: 5px;
+  width: inherit;
+}
+
+.auth-form-content {
   display: flex;
   flex-direction: column;
-  align-content: center;
+  align-items: center;
   justify-content: center;
 }

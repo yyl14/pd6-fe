@@ -6,6 +6,7 @@ import {
 } from '@material-ui/core';
 import { borders, borderRadius } from '@material-ui/system';
 
+import { Link } from 'react-router-dom';
 import { authActions } from '../../actions/index';
 
 export default function LoginForm() {
@@ -20,28 +21,38 @@ export default function LoginForm() {
   };
 
   return (
-    <Card className="login-form" variant="outlined">
-      <CardContent className="login-form-content">
-        <TextField
-          id="login-username"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUserName(e.target.value)}
-        />
-
-        <TextField
-          id="login-username"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          error
-          helperText="Some error"
-        />
-        <Grid>
+    <Card className="auth-form" variant="outlined">
+      <CardContent className="auth-form-content">
+        <div className="auth-form-inputs">
+          <TextField
+            id="login-username"
+            placeholder="Account ID"
+            value={username}
+            onChange={(e) => setUserName(e.target.value)}
+          />
+          <TextField
+            id="login-username"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            error
+            helperText="Some error"
+          />
           <Button color="primary" onClick={onsubmit}>
             Login
           </Button>
-        </Grid>
+        </div>
+        <caption className="login-caption">
+          Need a new puppy?
+          {' '}
+          <Link to="register">Register</Link>
+          {' '}
+        </caption>
+        <caption className="login-caption">
+          Lost your puppy?
+          {' '}
+          <Link to="reset-password">Reset password</Link>
+        </caption>
       </CardContent>
     </Card>
   );
