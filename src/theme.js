@@ -24,8 +24,52 @@ const palette = {
 };
 
 const typography = {
+  // UI/UX terminology
+  // Big Title
+  h1: {
+    fontSize: '48px',
+    fontWeight: 700,
+    lineHeight: '57px',
+    letterSpacing: '-0.01em',
+  },
+
+  // Title
+  h2: {
+    fontSize: '24px',
+    fontWeight: 600,
+    lineHeight: '29px',
+    letterSpacing: '-0.01em',
+  },
+
+  // Body
+  body1: {
+    fontSize: '20px',
+    fontWeight: 400,
+    lineHeight: '24px',
+    letterSpacing: '-0.01em',
+  },
+
+  // Sub-body
+  body2: {
+    fontSize: '16px',
+    fontWeight: 400,
+    lineHeight: '19px',
+    letterSpacing: '-0.01em',
+  },
+
+  // Caption
+  caption: {
+    fontSize: '14px',
+    fontWeight: 400,
+    lineHeight: '17px',
+    letterSpacing: '-0.02em',
+  },
+
   button: {
     textTransform: 'none',
+    fontSize: '20px',
+    lineHeight: '24px',
+    letterSpacing: '-0.01em',
   },
 
   fontFamily: 'San Francisco',
@@ -41,9 +85,6 @@ const overrides = {
       transition: 'opacity 0.4s, background 0.4s',
       margin: '10px 5px 10px 5px',
       padding: '8px 25px',
-      fontSize: '20px',
-      lineHeight: '24px',
-      letterSpacing: '-0.01em',
     },
     contained: {
       '&:hover': {
