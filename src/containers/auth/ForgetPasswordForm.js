@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Button, TextField } from '@material-ui/core';
-// import { borders, borderradius } from '@material-ui/system';
+import {
+  Button, TextField, Card, CardContent, Container, Grid,
+} from '@material-ui/core';
+import { borders, borderRadius } from '@material-ui/system';
 import agent from '../../actions/agent';
 import { userForgetPassword } from '../../actions/auth';
 
@@ -12,11 +14,13 @@ import '../../styles/index.css';
 
 function checkEmailFormat(email) {
   // console.log('checkEmailFormat: ', email.indexOf('@ntu.edu.tw'));
-  const index = email.indexOf('@ntu.edu.tw');
+  const index1 = email.indexOf('@ntu.edu.tw'); // 台大
+  const index2 = email.indexOf('@mail.ntust.edu.tw'); // 台科大
+  const index3 = email.indexOf('@ntnu.edu.tw'); // 台師大
   if (email === '') {
     return '';
   }
-  if (index === -1) {
+  if (index1 <= 0 && index2 <= 0 && index3 <= 0) {
     return 'Invalid email address';
   }
   return '';
@@ -59,22 +63,28 @@ class ForgetPasswordForm extends Component {
   render() {
     const value = this.state;
     return (
-      <div className="login-page">
-        <p>Hello Pdogs!</p>
-        <TextField
-          required
-          error={value.error}
-          helperText={value.errorText}
-          placeholder="Email"
-          value={value.email}
-          onChange={this.handleChange}
-          onKeyPress={(event) => {
-            if (event.key === 'Enter') this.handleSubmit();
-          }}
-        />
-        <Button type="submit" color="primary" onClick={this.handleSubmit} onKeyPress={this.handleSubmit}>
-          Send
-        </Button>
+      <div className="page forget-password-page">
+        <h1 className="forget-password-title">Lost your puppy? Reset Password</h1>
+        <Card className="forget-password-form" varient="outlined">
+          <CardContent className="forget-password-form-content">
+            <TextField
+              required
+              error={value.error}
+              helperText={value.errorText}
+              placeholder="Email"
+              value={value.email}
+              onChange={this.handleChange}
+              onKeyPress={(event) => {
+                if (event.key === 'Enter') this.handleSubmit();
+              }}
+            />
+            <Grid>
+              <Button type="submit" color="primary" onClick={this.handleSubmit} onKeyPress={this.handleSubmit}>
+                Send
+              </Button>
+            </Grid>
+          </CardContent>
+        </Card>
       </div>
     );
   }

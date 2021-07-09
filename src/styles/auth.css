@@ -1,3 +1,5 @@
+.reset-password-form
+.forget-password-form
 .login-form {
   position: absolute;
   width: 740px;
@@ -8,6 +10,8 @@
   width: 350px;
 }
 
+.forget-password-form-content
+.reset-password-form-content
 .login-form-content {
   display: flex;
   flex-direction: column;

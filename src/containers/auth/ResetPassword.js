@@ -39,7 +39,6 @@ export default function ResetPassword() {
       <form onSubmit={onSubmit}>
         <TextField
           required
-          label="New Password"
           placeholder="New Password"
           value={password1}
           onChange={(e) => setPassword1(e.target.value)}
@@ -47,7 +46,6 @@ export default function ResetPassword() {
         <TextField
           required
           error={error1}
-          label="Confirmed Password"
           placeholder="Confirmed Password"
           value={password2}
           helperText={errorText1}
