@@ -4,8 +4,10 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Button, TextField, Card, CardContent, Container, Grid,
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
 } from '@material-ui/core';
 import { borders, borderRadius } from '@material-ui/system';
+import { TrainRounded } from '@material-ui/icons';
 import agent from '../../actions/agent';
 import { userForgetPassword } from '../../actions/auth';
 
@@ -33,19 +35,32 @@ class ForgetPasswordForm extends Component {
       email: '',
       error: false,
       errorText: '',
+      disabled: true,
+      popUp: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClosePopUp = this.handleClosePopUp.bind(this);
   }
 
   componentDidMount() {}
 
   handleChange(event) {
+    if (event.target.value === '') {
+      this.setState({
+        email: event.target.value, errorText: '', error: false, disabled: true,
+      });
+      return;
+    }
     const error = checkEmailFormat(event.target.value);
     if (error === 'Invalid email address') {
-      this.setState({ email: event.target.value, errorText: error, error: true });
+      this.setState({
+        email: event.target.value, errorText: error, error: true, disabled: true,
+      });
     } else {
-      this.setState({ email: event.target.value, errorText: '', error: false });
+      this.setState({
+        email: event.target.value, errorText: '', error: false, disabled: false,
+      });
     }
   }
 
@@ -58,6 +73,11 @@ class ForgetPasswordForm extends Component {
     }
     const { onSubmit } = this.props;
     onSubmit(value);
+    this.setState({ popUp: true });
+  }
+
+  handleClosePopUp(event) {
+    this.setState({ popUp: false });
   }
 
   render() {
@@ -79,12 +99,35 @@ class ForgetPasswordForm extends Component {
               }}
             />
             <Grid>
-              <Button type="submit" color="primary" onClick={this.handleSubmit} onKeyPress={this.handleSubmit}>
+              <Button disabled={value.disabled} type="submit" color="primary" onClick={this.handleSubmit} onKeyPress={this.handleSubmit}>
                 Send
               </Button>
             </Grid>
           </CardContent>
         </Card>
+        {value.popUp ? (
+          <Dialog
+            open={value.popUp}
+            keepMounted
+            onClose={this.handleClosePopUp}
+            aria-labelledby="alert-dialog-slide-title"
+            aria-describedby="alert-dialog-slide-description"
+          >
+            <DialogTitle id="alert-dialog-slide-title">
+              Password reset email sent
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-slide-description">
+                Please check your mailbox to reset your password.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClosePopUp} color="primary">
+                Done
+              </Button>
+            </DialogActions>
+          </Dialog>
+        ) : (<></>)}
       </div>
     );
   }
