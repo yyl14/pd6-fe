@@ -24,9 +24,9 @@
 }
 
 .auth-form {
-  position: absolute;
-  width: 740px;
-  padding: 124px 174px 26px 174px;
+  width: 80%;
+
+  padding: 12% 174px 3% 174px;
 }
 
 .auth-form-inputs {
