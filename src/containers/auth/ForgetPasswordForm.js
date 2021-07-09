@@ -27,7 +27,8 @@ class ForgetPasswordForm extends Component {
     super(props);
     this.state = {
       email: '',
-      error: '',
+      error: false,
+      errorText: '',
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -36,14 +37,19 @@ class ForgetPasswordForm extends Component {
   componentDidMount() {}
 
   handleChange(event) {
-    this.setState({ email: event.target.value, error: checkEmailFormat(event.target.value) });
+    const error = checkEmailFormat(event.target.value);
+    if (error === 'Invalid email address') {
+      this.setState({ email: event.target.value, errorText: error, error: true });
+    } else {
+      this.setState({ email: event.target.value, errorText: '', error: false });
+    }
   }
 
   handleSubmit(event) {
     // event.preventDefault();
     // console.log(this.state);
     const value = this.state;
-    if (value.error === 'Invalid email address') {
+    if (value.error) {
       return;
     }
     const { onSubmit } = this.props;
@@ -56,6 +62,9 @@ class ForgetPasswordForm extends Component {
       <div className="login-page">
         <p>Hello Pdogs!</p>
         <TextField
+          required
+          error={value.error}
+          helperText={value.errorText}
           placeholder="Email"
           value={value.email}
           onChange={this.handleChange}
@@ -63,16 +72,9 @@ class ForgetPasswordForm extends Component {
             if (event.key === 'Enter') this.handleSubmit();
           }}
         />
-        {' '}
         <Button type="submit" color="primary" onClick={this.handleSubmit} onKeyPress={this.handleSubmit}>
           Send
         </Button>
-        {value.error === '' ? (<></>) : (
-          <div>
-            {/* <img className="warning_img" /> */}
-            <p className="warning_msg">{value.error}</p>
-          </div>
-        )}
       </div>
     );
   }
