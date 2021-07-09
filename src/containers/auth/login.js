@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Container } from '@material-ui/core';
 import agent from '../../actions/agent';
 import { userSignIn } from '../../actions/auth';
 import LoginForm from './LoginForm';
@@ -39,9 +40,11 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="login-page">
+      <div className="page login-page">
         <p>Hello Pdogs!</p>
-        <LoginForm />
+        <Container>
+          <LoginForm />
+        </Container>
       </div>
     );
   }

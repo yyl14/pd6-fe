@@ -3,6 +3,7 @@ import { createTheme } from '@material-ui/core/styles';
 const palette = {
   // default: grey
   mono: {
+    veryLight: '#F8F8F8',
     light: '#EAEAEA',
     main: '#CACACA',
     dark: '#AAAAAA',
@@ -20,6 +21,12 @@ const palette = {
     main: '#EA3222',
     dark: '#D41D0D',
     contrastText: 'white',
+  },
+
+  background: {
+    default: '#F8F8F8', // mono - very light
+    paper: 'white',
+    card: 'white',
   },
 };
 
@@ -142,6 +149,28 @@ const overrides = {
   MuiFormHelperText: {
     root: {
       marginTop: '5px',
+    },
+  },
+
+  MuiPaper: {
+    outlined: {
+      border: '1px solid #CACACA',
+    },
+    rounded: {
+      borderRadius: '10px',
+    },
+  },
+
+  MuiCard: {
+    elevation: {
+      boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.25)',
+    },
+    outlined: {
+      boxShadow: 'none',
+      // border: '1px solid #CACACA',
+    },
+    rounded: {
+      borderRadius: '10px',
     },
   },
 };

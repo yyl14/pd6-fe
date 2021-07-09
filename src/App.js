@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { ThemeProvider, withStyles } from '@material-ui/core/styles';
+import { CssBaseline } from '@material-ui/core';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -46,9 +47,9 @@ class App extends Component {
 
   render() {
     return (
-      <ThemeProvider theme={theme}>
-        <Provider store={store}>
-          <GlobalCss />
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
           <Router>
             <Switch>
               <Route path="/login" component={Login} />
@@ -57,8 +58,8 @@ class App extends Component {
               <Route component={NoMatch} />
             </Switch>
           </Router>
-        </Provider>
-      </ThemeProvider>
+        </ThemeProvider>
+      </Provider>
     );
   }
 }

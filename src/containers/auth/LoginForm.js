@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import React, { useSelector, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Button, TextField } from '@material-ui/core';
+import {
+  Button, TextField, Card, CardContent,
+} from '@material-ui/core';
 import { borders, borderRadius } from '@material-ui/system';
 
 import { authActions } from '../../actions/index';
@@ -18,25 +20,27 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="login-form">
-      {' '}
-      <TextField placeholder="Username" value={username} onChange={(e) => setUserName(e.target.value)} />
-      {' '}
-      <TextField
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        error
-        helperText="Some error"
-      />
-      {' '}
-      <Button onClick={onsubmit}>Submit</Button>
-      <Button color="primary" onClick={onsubmit}>
-        Submit
-      </Button>
-      <Button color="secondary" onClick={onsubmit}>
-        Submit
-      </Button>
-    </div>
+    <Card className="login-form" variant="outlined">
+      <CardContent>
+        {' '}
+        <TextField placeholder="Username" value={username} onChange={(e) => setUserName(e.target.value)} />
+        {' '}
+        <TextField
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          error
+          helperText="Some error"
+        />
+        {' '}
+        <Button onClick={onsubmit}>Submit</Button>
+        <Button color="primary" onClick={onsubmit}>
+          Submit
+        </Button>
+        <Button color="secondary" onClick={onsubmit}>
+          Submit
+        </Button>
+      </CardContent>
+    </Card>
   );
 }
