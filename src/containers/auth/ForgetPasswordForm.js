@@ -88,8 +88,8 @@ export default function ForgetPasswordForm() {
             // required
             error={error}
             helperText={errorText}
-            label="Email"
-            // placeholder="Email"
+            // label="Email"
+            placeholder="Email"
             value={email}
             onChange={(e) => handleChange(e)}
             onKeyPress={(event) => {
@@ -124,7 +124,9 @@ export default function ForgetPasswordForm() {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => handleClosePopUp()} color="primary">Done</Button>
+            <Button onClick={() => handleClosePopUp()} color="primary">
+              Done
+            </Button>
           </DialogActions>
         </Dialog>
       ) : (

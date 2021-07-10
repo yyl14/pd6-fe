@@ -6,6 +6,7 @@ import { Grid, Typography } from '@material-ui/core';
 import agent from '../../actions/agent';
 import { userSignIn } from '../../actions/auth';
 import LoginForm from './LoginForm';
+import Trademark from '../../components/auth/Trademark';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
@@ -38,26 +39,8 @@ class Login extends Component {
           <Grid container item xs={6} className="auth-page-col auth-page-col-right" justify="center">
             <LoginForm />
           </Grid>
+          <Trademark />
         </Grid>
-        <div className="auth-trademark">
-          <span
-            className="auth-trademark-main"
-            style={{
-              fontSize: '48px',
-              lineHeight: '48px',
-              fontFamily: 'Azonix',
-            }}
-          >
-            PDOGS 6.0
-          </span>
-          <Typography className="auth-trademark-caption" variant="body1">
-            Department of Information Management,
-            <br />
-            Nation Taiwan University
-            <br />
-            2021 All rights reserved.
-          </Typography>
-        </div>
       </div>
     );
   }
