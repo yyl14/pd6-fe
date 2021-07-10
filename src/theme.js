@@ -38,6 +38,7 @@ const typography = {
     fontWeight: 700,
     lineHeight: '57px',
     letterSpacing: '-0.01em',
+    fontFamily: 'San Francisco',
   },
 
   // Title
@@ -46,6 +47,7 @@ const typography = {
     fontWeight: 600,
     lineHeight: '29px',
     letterSpacing: '-0.01em',
+    fontFamily: 'San Francisco',
   },
 
   // Body
@@ -54,6 +56,7 @@ const typography = {
     fontWeight: 400,
     lineHeight: '24px',
     letterSpacing: '-0.01em',
+    fontFamily: 'San Francisco',
   },
 
   // Sub-body
@@ -62,6 +65,7 @@ const typography = {
     fontWeight: 400,
     lineHeight: '19px',
     letterSpacing: '-0.01em',
+    fontFamily: 'San Francisco',
   },
 
   // Caption
@@ -70,6 +74,7 @@ const typography = {
     fontWeight: 400,
     lineHeight: '17px',
     letterSpacing: '-0.02em',
+    fontFamily: 'San Francisco',
   },
 
   button: {
@@ -77,9 +82,8 @@ const typography = {
     fontSize: 20,
     lineHeight: '24px',
     letterSpacing: '-0.01em',
+    fontFamily: 'San Francisco',
   },
-
-  fontFamily: 'San Francisco',
 };
 
 const shape = {

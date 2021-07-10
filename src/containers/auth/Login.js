@@ -40,9 +40,16 @@ class Login extends Component {
           </Grid>
         </Grid>
         <div className="auth-trademark">
-          <Typography className="auth-trademark-main" variant="h1">
+          <span
+            className="auth-trademark-main"
+            style={{
+              fontSize: '48px',
+              lineHeight: '48px',
+              fontFamily: 'Azonix',
+            }}
+          >
             PDOGS 6.0
-          </Typography>
+          </span>
           <Typography className="auth-trademark-caption" variant="body1">
             Department of Information Management,
             <br />
