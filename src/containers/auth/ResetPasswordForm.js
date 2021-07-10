@@ -2,7 +2,12 @@ import { useState } from 'react';
 import React, { useSelector, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-  Button, TextField, Grid, Typography, Card, CardContent,
+  Button,
+  TextField,
+  Grid,
+  Typography,
+  Card,
+  CardContent,
   Dialog,
   DialogActions,
   DialogContent,
@@ -78,16 +83,16 @@ export default function ResetPassword() {
           <form className="auth-form-content" onSubmit={() => onSubmit()}>
             <TextField
               required
-              label="New Password"
-              // placeholder="New Password"
+              // label="New Password"
+              placeholder="New Password"
               value={password1}
               onChange={(e) => setPassword1(e.target.value)}
             />
             <TextField
               required
               error={error}
-              label="Confirmed Password"
-              // placeholder="Confirmed Password"
+              // label="Confirmed Password"
+              placeholder="Confirmed Password"
               value={password2}
               helperText={errorText}
               onChange={(e) => handleChange(e)}
@@ -113,18 +118,17 @@ export default function ResetPassword() {
             <Typography variant="h2">Password reset success</Typography>
           </DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-dialog-slide-description">
-              Go train your puppy right now!
-            </DialogContentText>
+            <DialogContentText id="alert-dialog-slide-description">Go train your puppy right now!</DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => handleClosePopUp()} color="primary">Done</Button>
+            <Button onClick={() => handleClosePopUp()} color="primary">
+              Done
+            </Button>
           </DialogActions>
         </Dialog>
       ) : (
         <></>
       )}
     </>
-
   );
 }
