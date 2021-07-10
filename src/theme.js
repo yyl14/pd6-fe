@@ -133,7 +133,7 @@ const overrides = {
   // "Input"
   MuiTextField: {
     root: {
-      margin: '10px 5px 10px 5px',
+      margin: '10px 5px 40px 5px',
     },
   },
   MuiOutlinedInput: {
@@ -152,6 +152,14 @@ const overrides = {
   MuiFormHelperText: {
     root: {
       marginTop: '5px',
+    },
+  },
+  MuiInputLabel: {
+    // Name of the component ⚛️ / style sheet
+    outlined: {
+      // Name of the rule
+      top: '-5px',
+      '&$shrink': { transform: 'translate(14px, -14px) scale(0.75)' },
     },
   },
 
@@ -214,6 +222,10 @@ const props = {
   MuiTextField: {
     variant: 'outlined',
     borderRadius: '10px',
+  },
+
+  MuiOutlinedInput: {
+    notched: false,
   },
 
   MuiFormHelperText: {
