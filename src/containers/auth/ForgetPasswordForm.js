@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { useState } from 'react';
+import React, { useSelector, useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import {
   Button,
   TextField,
@@ -17,9 +16,8 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 import { borders, borderRadius } from '@material-ui/system';
-import { TrainRounded } from '@material-ui/icons';
-import agent from '../../actions/agent';
-import { userForgetPassword } from '../../actions/auth';
+import { EmailOutlined, TrainRounded } from '@material-ui/icons';
+import { authActions } from '../../actions/index';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
@@ -38,145 +36,99 @@ function checkEmailFormat(email) {
   return '';
 }
 
-class ForgetPasswordForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      error: false,
-      errorText: '',
-      disabled: true,
-      popUp: false,
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleClosePopUp = this.handleClosePopUp.bind(this);
-  }
+export default function ForgetPasswordForm() {
+  const dispatch = useDispatch();
+  const { userForgetPassword } = bindActionCreators(authActions, dispatch);
+  const loginState = useSelector((state) => state.auth);
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState(false);
+  const [errorText, setErrorText] = useState('');
+  const [disabled, setDisabled] = useState(true);
+  const [popUp, setPopUp] = useState(false);
 
-  componentDidMount() {}
-
-  handleChange(event) {
+  const handleChange = (event) => {
     if (event.target.value === '') {
-      this.setState({
-        email: event.target.value,
-        errorText: '',
-        error: false,
-        disabled: true,
-      });
+      setEmail(event.target.value);
+      setErrorText('');
+      setError(false);
+      setDisabled(true);
       return;
     }
-    const error = checkEmailFormat(event.target.value);
-    if (error === 'Invalid email address') {
-      this.setState({
-        email: event.target.value,
-        errorText: error,
-        error: true,
-        disabled: true,
-      });
+    const status = checkEmailFormat(event.target.value);
+    if (status === 'Invalid email address') {
+      setEmail(event.target.value);
+      setErrorText(status);
+      setError(true);
+      setDisabled(true);
     } else {
-      this.setState({
-        email: event.target.value,
-        errorText: '',
-        error: false,
-        disabled: false,
-      });
+      setEmail(event.target.value);
+      setErrorText('');
+      setError(false);
+      setDisabled(false);
     }
-  }
+  };
 
-  handleSubmit(event) {
-    // event.preventDefault();
-    // console.log(this.state);
-    const value = this.state;
-    if (value.error) {
+  const handleSubmit = () => {
+    if (error) {
       return;
     }
-    const { onSubmit } = this.props;
-    onSubmit(value);
-    this.setState({ popUp: true });
-  }
+    userForgetPassword(email);
+    setPopUp(true);
+  };
 
-  handleClosePopUp(event) {
-    this.setState({ popUp: false });
-  }
+  const handleClosePopUp = () => {
+    setPopUp(false);
+  };
 
-  render() {
-    const value = this.state;
-    return (
-      <div className="page auth-page">
-        <Grid className="auth-page-container" container direction="row" justifyContent="center" alignItems="center">
-          <Grid container item xs={6} className="auth-page-col auth-page-col-left" justify="center">
-            <Grid item className="auth-title">
-              <Typography className="auth-title" variant="h1">
-                Lost your puppy? Reset Password
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid container item xs={6} className="auth-page-col auth-page-col-right" justify="center">
-            <Card className="auth-form" variant="outlined">
-              <CardContent className="auth-form-content">
-                <TextField
-                  required
-                  error={value.error}
-                  helperText={value.errorText}
-                  placeholder="Email"
-                  value={value.email}
-                  onChange={this.handleChange}
-                  onKeyPress={(event) => {
-                    if (event.key === 'Enter') this.handleSubmit();
-                  }}
-                />
-                <Button
-                  disabled={value.disabled}
-                  type="submit"
-                  color="primary"
-                  onClick={this.handleSubmit}
-                  onKeyPress={this.handleSubmit}
-                >
-                  Send
-                </Button>
-              </CardContent>
-            </Card>
-            {value.popUp ? (
-              <Dialog
-                open={value.popUp}
-                keepMounted
-                onClose={this.handleClosePopUp}
-                aria-labelledby="alert-dialog-slide-title"
-                aria-describedby="alert-dialog-slide-description"
-              >
-                <DialogTitle id="alert-dialog-slide-title">
-                  <Typography variant="h2">Password reset email sent</Typography>
-                </DialogTitle>
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-slide-description">
-                    Please check your mailbox to reset your password.
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={this.handleClosePopUp}>Done</Button>
-                </DialogActions>
-              </Dialog>
-            ) : (
-              <></>
-            )}
-          </Grid>
-        </Grid>
-      </div>
-    );
-  }
+  return (
+    <>
+      <Card className="auth-form" variant="outlined">
+        <CardContent className="auth-form-content">
+          <TextField
+            required
+            error={error}
+            helperText={errorText}
+            // placeholder="Email"
+            value={email}
+            onChange={(e) => handleChange(e)}
+            onKeyPress={(event) => {
+              if (event.key === 'Enter') handleSubmit();
+            }}
+          />
+          <Button
+            disabled={disabled}
+            type="submit"
+            color="primary"
+            onClick={() => handleSubmit()}
+            onKeyPress={() => handleSubmit()}
+          >
+            Send
+          </Button>
+        </CardContent>
+      </Card>
+      {popUp ? (
+        <Dialog
+          open={popUp}
+          keepMounted
+          onClose={() => handleClosePopUp()}
+          aria-labelledby="alert-dialog-slide-title"
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle id="alert-dialog-slide-title">
+            <Typography variant="h2">Password reset email sent</Typography>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              Please check your mailbox to reset your password.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => handleClosePopUp()} color="primary">Done</Button>
+          </DialogActions>
+        </Dialog>
+      ) : (
+        <></>
+      )}
+    </>
+  );
 }
-
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-  error: state.error,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onSubmit: (input) => dispatch(userForgetPassword(input)),
-});
-
-ForgetPasswordForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ForgetPasswordForm));
