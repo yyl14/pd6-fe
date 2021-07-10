@@ -1,4 +1,5 @@
 import { createTheme } from '@material-ui/core/styles';
+import ErrorText from './components/auth/ErrorText';
 
 const palette = {
   // default: grey
@@ -151,7 +152,13 @@ const overrides = {
   },
   MuiFormHelperText: {
     root: {
-      marginTop: '5px',
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: '7px',
+      '& caption': {
+        marginLeft: '6px',
+      },
     },
   },
   MuiInputLabel: {
@@ -227,7 +234,7 @@ const props = {
   },
 
   MuiFormHelperText: {
-    component: 'caption',
+    component: ErrorText,
   },
   MuiDialogTitle: {
     disableTypography: true,

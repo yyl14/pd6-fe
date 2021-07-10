@@ -18,7 +18,8 @@
     "no-extra-boolean-cast": "off",
     "comma-dangle": [2, "always-multiline"],
     "linebreak-style": 0,
-    "import/named": "off"
+    "import/named": "off",
+    "react/prop-types": "off"
   },
   "parserOptions": {
     "parser": "babel-eslint",
