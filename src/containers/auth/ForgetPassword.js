@@ -32,6 +32,18 @@ class ForgetPassword extends Component {
           <Grid container item xs={6} className="auth-page-col auth-page-col-right" justify="center">
             <ForgetPasswordForm />
           </Grid>
+          <Grid item xs={12} className="auth-trademark" justifyContent="flex-start">
+            <Typography className="auth-trademark" variant="h1">
+              PDOGS 6.0
+            </Typography>
+            <Typography className="auth-trademark" variant="h6">
+              Department of Information Management,
+              <br />
+              Nation Taiwan University
+              <br />
+              2021 All rights reserved.
+            </Typography>
+          </Grid>
         </Grid>
       </div>
     );

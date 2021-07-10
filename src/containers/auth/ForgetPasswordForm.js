@@ -85,9 +85,10 @@ export default function ForgetPasswordForm() {
       <Card className="auth-form" variant="outlined">
         <CardContent className="auth-form-content">
           <TextField
-            required
+            // required
             error={error}
             helperText={errorText}
+            label="Email"
             // placeholder="Email"
             value={email}
             onChange={(e) => handleChange(e)}
