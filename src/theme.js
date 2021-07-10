@@ -1,5 +1,5 @@
 import { createTheme } from '@material-ui/core/styles';
-import ErrorText from './components/auth/ErrorText';
+import ErrorText from './components/ErrorText';
 
 const palette = {
   // default: grey
