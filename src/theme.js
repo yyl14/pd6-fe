@@ -53,7 +53,7 @@ const typography = {
   // Body
   body1: {
     fontSize: 20,
-    fontWeight: 400,
+    fontWeight: 500,
     lineHeight: '24px',
     letterSpacing: '-0.01em',
     fontFamily: 'San Francisco',
@@ -133,7 +133,7 @@ const overrides = {
   // "Input"
   MuiTextField: {
     root: {
-      margin: '10px 5px 40px 5px',
+      margin: '1vh 5px 4vh 5px',
     },
   },
   MuiOutlinedInput: {
@@ -155,11 +155,9 @@ const overrides = {
     },
   },
   MuiInputLabel: {
-    // Name of the component ⚛️ / style sheet
     outlined: {
-      // Name of the rule
       top: '-5px',
-      '&$shrink': { transform: 'translate(14px, -14px) scale(0.75)' },
+      '&$shrink': { transform: 'translate(14px, -14px) scale(0.70)', fontWeight: 400 },
     },
   },
 

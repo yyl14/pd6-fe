@@ -99,7 +99,7 @@ export default function ResetPassword() {
               // required
               label="New Password"
               type={showPassword1 ? 'text' : 'password'}
-              // placeholder="New Password"
+              // placeholder="New  Password"
               value={password1}
               onChange={(e) => setPassword1(e.target.value)}
               InputProps={{
