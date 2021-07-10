@@ -18,7 +18,7 @@ export default function Trademark() {
       <Typography className="auth-trademark-caption" variant="body1">
         Department of Information Management,
         <br />
-        Nation Taiwan University
+        National Taiwan University
         <br />
         2021 All rights reserved.
       </Typography>
