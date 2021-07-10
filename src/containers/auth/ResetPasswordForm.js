@@ -84,6 +84,7 @@ export default function ResetPassword() {
             <TextField
               required
               // label="New Password"
+              type="password"
               placeholder="New Password"
               value={password1}
               onChange={(e) => setPassword1(e.target.value)}
@@ -91,6 +92,7 @@ export default function ResetPassword() {
             <TextField
               required
               error={error}
+              type="password"
               // label="Confirmed Password"
               placeholder="Confirmed Password"
               value={password2}

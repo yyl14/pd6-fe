@@ -2,8 +2,17 @@ import { useState } from 'react';
 import React, { useSelector, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-  Button, TextField, Card, CardContent, Container, Grid, Link,
+  Button,
+  TextField,
+  Card,
+  CardContent,
+  Container,
+  Grid,
+  Link,
+  InputAdornment,
+  IconButton,
 } from '@material-ui/core';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { borders, borderRadius } from '@material-ui/system';
 
 import { Link as RouterLink } from 'react-router-dom';
@@ -16,8 +25,18 @@ export default function LoginForm() {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const onSubmit = () => {
     userSignIn(username, password);
+  };
+
+  const onPasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -33,13 +52,24 @@ export default function LoginForm() {
           />
           <TextField
             id="login-username"
+            type={showPassword ? 'text' : 'password'}
             className="auth-form-input"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => onPasswordChange(e)}
             error
             helperText="Some error"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword} edge="end">
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
+
           <Button color="primary" onClick={onsubmit}>
             Login
           </Button>
