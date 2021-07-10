@@ -4,13 +4,13 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@material-ui/core';
 import agent from '../../actions/agent';
-import { userResetPaswword } from '../../actions/auth';
-import ResetPasswordForm from './ResetPasswordForm';
+import { userForgetPassword } from '../../actions/auth';
+import ForgetPasswordForm from './ForgetPasswordForm';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
 
-class ResetPassword extends Component {
+class ForgetPassword extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -23,14 +23,14 @@ class ResetPassword extends Component {
       <div className="page auth-page">
         <Grid className="auth-page-container" container direction="row" justifyContent="center" alignItems="center">
           <Grid container item xs={6} className="auth-page-col auth-page-col-left" justify="center">
-            <Grid container className="auth-title">
+            <Grid item className="auth-title">
               <Typography className="auth-title" variant="h1">
-                Go find your puppy!
+                Login and train your puppy!
               </Typography>
             </Grid>
           </Grid>
           <Grid container item xs={6} className="auth-page-col auth-page-col-right" justify="center">
-            <ResetPasswordForm />
+            <ForgetPasswordForm />
           </Grid>
           <Grid item xs={12} className="auth-trademark" justifyContent="flex-start">
             <Typography className="auth-trademark" variant="h1">
@@ -59,10 +59,10 @@ class ResetPassword extends Component {
 //   onSubmit: (input) => dispatch(userForgetPassword(input)),
 // });
 
-// ResetPassword.propTypes = {
+// ForgetPassword.propTypes = {
 //   onSubmit: PropTypes.func.isRequired,
 // };
 
 // export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ForgetPassword));
 
-export default ResetPassword;
+export default ForgetPassword;
