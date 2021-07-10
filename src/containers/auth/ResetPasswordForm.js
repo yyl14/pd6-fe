@@ -8,12 +8,15 @@ import {
   Typography,
   Card,
   CardContent,
+  InputAdornment,
+  IconButton,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
 } from '@material-ui/core';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { borders, borderRadius } from '@material-ui/system';
 
 import { authActions } from '../../actions/index';
@@ -35,6 +38,9 @@ export default function ResetPassword() {
   const [errorText, setErrorText] = useState('');
   const [disabled, setDisabled] = useState(true);
   const [popUp, setPopUp] = useState(false);
+
+  const [showPassword1, setShowPassword1] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
 
   const onSubmit = () => {
     const status = checkPassword(password1, password2);
@@ -76,30 +82,56 @@ export default function ResetPassword() {
     setPopUp(false);
   };
 
+  const handleClickShowPassword1 = () => {
+    setShowPassword1(!showPassword1);
+  };
+
+  const handleClickShowPassword2 = () => {
+    setShowPassword2(!showPassword2);
+  };
+
   return (
     <>
       <Card className="auth-form" variant="outlined">
         <CardContent className="auth-form-content">
           <form className="auth-form-content" onSubmit={() => onSubmit()}>
             <TextField
-              required
-              // label="New Password"
-              type="password"
-              placeholder="New Password"
+              // required
+              label="New Password"
+              type={showPassword1 ? 'text' : 'password'}
+              // placeholder="New Password"
               value={password1}
               onChange={(e) => setPassword1(e.target.value)}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword1} edge="end">
+                      {showPassword1 ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <TextField
-              required
+              // required
               error={error}
-              type="password"
-              // label="Confirmed Password"
-              placeholder="Confirmed Password"
+              type={showPassword2 ? 'text' : 'password'}
+              label="Confirmed Password"
+              // placeholder="Confirmed Password"
               value={password2}
               helperText={errorText}
               onChange={(e) => handleChange(e)}
               onKeyPress={(event) => {
                 if (event.key === 'Enter') onSubmit();
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword2} edge="end">
+                      {showPassword2 ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
               }}
             />
             <Button disabled={disabled} onClick={() => onSubmit()} color="primary">

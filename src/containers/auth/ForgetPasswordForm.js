@@ -88,8 +88,8 @@ export default function ForgetPasswordForm() {
             // required
             error={error}
             helperText={errorText}
-            // label="Email"
-            placeholder="Email"
+            label="Email"
+            // placeholder="Email"
             value={email}
             onChange={(e) => handleChange(e)}
             onKeyPress={(event) => {

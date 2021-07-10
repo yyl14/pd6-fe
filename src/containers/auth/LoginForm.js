@@ -46,7 +46,7 @@ export default function LoginForm() {
           <TextField
             id="login-username"
             className="auth-form-input"
-            placeholder="Account ID"
+            label="Account ID"
             value={username}
             onChange={(e) => setUserName(e.target.value)}
           />
@@ -54,7 +54,7 @@ export default function LoginForm() {
             id="login-username"
             type={showPassword ? 'text' : 'password'}
             className="auth-form-input"
-            placeholder="Password"
+            label="Password"
             value={password}
             onChange={(e) => onPasswordChange(e)}
             error
