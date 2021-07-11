@@ -66,15 +66,10 @@
 
 .auth-form-input-email-tail {
   /*adjust text position */
-  transform: translate(0px, 4px);
+  transform: translate(0px, 0.3vh);
 }
 
-#login-captions {
-  margin-top: 30px;
-  width: 100%;
-}
-
-.login-caption {
+.register-caption {
   margin-top: 5px;
   width: inherit;
 }

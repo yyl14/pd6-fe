@@ -155,7 +155,7 @@ const overrides = {
     },
   },
   MuiSelect: {
-    outlined: { padding: '12px 0px 14px 15px' },
+    outlined: { padding: '13px 0px 14px 15px' },
   },
   MuiOutlinedInput: {
     root: {
