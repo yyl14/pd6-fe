@@ -56,6 +56,15 @@ const typography = {
     fontFamily: 'San Francisco',
   },
 
+  // Text
+  h6: {
+    fontSize: '1rem',
+    fontWeight: 600,
+    lineHeight: 25 / 8,
+    letterSpacing: '-0.01rem',
+    fontFamily: 'San Francisco',
+  },
+
   // Body
   body1: {
     fontSize: '1rem',
