@@ -35,20 +35,6 @@ function checkPassword(password1, password2) {
   return "Passwords don't match";
 }
 
-// function checkEmailFormat(email) {
-//   // console.log('checkEmailFormat: ', email.indexOf('@ntu.edu.tw'));
-//   const index1 = email.indexOf('@ntu.edu.tw'); // 台大
-//   const index2 = email.indexOf('@mail.ntust.edu.tw'); // 台科大
-//   const index3 = email.indexOf('@ntnu.edu.tw'); // 台師大
-//   if (email === '') {
-//     return "Can't be empty";
-//   }
-//   if (index1 < 0 && index2 < 0 && index3 < 0) {
-//     return 'Invalid email address';
-//   }
-//   return '';
-// }
-
 export default function RegisterForm() {
   const dispatch = useDispatch();
   const { userRegister } = bindActionCreators(authActions, dispatch);
@@ -105,14 +91,6 @@ export default function RegisterForm() {
       }
     });
 
-    // check email
-    // const statusE = checkEmailFormat(inputs.email);
-    // if (statusE === 'Invalid email address') {
-    //   setErrors((input) => ({ ...input, email: true }));
-    //   setErrorTexts((input) => ({ ...input, email: statusE }));
-    //   errorCnt += 1;
-    // }
-
     // check password
     const statusP = checkPassword(inputs.password, inputs.confirmPassword);
     if (statusP === "Passwords don't match") {
@@ -137,14 +115,6 @@ export default function RegisterForm() {
       setErrors((input) => ({ ...input, [name]: false }));
       setErrorTexts((input) => ({ ...input, [name]: '' }));
     }
-
-    // if (name === 'email' && errorTexts.email === 'Invalid email address') {
-    //   const statusE = checkEmailFormat(value);
-    //   if (statusE === '') {
-    //     setErrors((input) => ({ ...input, email: false }));
-    //     setErrorTexts((input) => ({ ...input, email: '' }));
-    //   }
-    // }
 
     if (name === 'confirmPassword' || name === 'password') {
       const statusP = checkPassword(inputs.password, value);
@@ -173,17 +143,6 @@ export default function RegisterForm() {
           setEmailTail('@ntu.edu.tw');
       }
     }
-  };
-  const handleClosePopUp = () => {
-    setPopUp(false);
-  };
-
-  const handleClickShowPassword1 = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleClickShowPassword2 = () => {
-    setShowConfirmPassword(!showConfirmPassword);
   };
 
   return (
@@ -273,7 +232,7 @@ export default function RegisterForm() {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword1} edge="end">
+                    <IconButton aria-label="toggle password visibility" onClick={() => setShowPassword(!showPassword)} edge="end">
                       {showPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
@@ -293,7 +252,7 @@ export default function RegisterForm() {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword2} edge="end">
+                    <IconButton aria-label="toggle password visibility" onClick={() => setShowConfirmPassword(!showConfirmPassword)} edge="end">
                       {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
@@ -317,7 +276,7 @@ export default function RegisterForm() {
         <Dialog
           open={popUp}
           keepMounted
-          onClose={() => handleClosePopUp()}
+          onClose={() => setPopUp(false)}
           aria-labelledby="alert-dialog-slide-title"
           aria-describedby="alert-dialog-slide-description"
         >
@@ -330,7 +289,7 @@ export default function RegisterForm() {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => handleClosePopUp()} color="primary">
+            <Button onClick={() => setPopUp(false)} color="primary">
               Done
             </Button>
           </DialogActions>
