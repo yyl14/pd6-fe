@@ -99,6 +99,7 @@ export default function ResetPassword() {
             <TextField
               // required
               label="New Password"
+              className="auth-form-input"
               type={showPassword1 ? 'text' : 'password'}
               // placeholder="New  Password"
               value={password1}
@@ -118,6 +119,7 @@ export default function ResetPassword() {
               error={error}
               type={showPassword2 ? 'text' : 'password'}
               label="Confirmed Password"
+              className="auth-form-input"
               // placeholder="Confirmed Password"
               value={password2}
               helperText={errorText}

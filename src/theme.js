@@ -164,7 +164,7 @@ const overrides = {
       '& $notchedOutline': {
         borderRadius: 10,
       },
-      '&:hover:not($disabled):not($focused):not($error) $notchedOutline': { borderColor: palette.primary.main },
+      '&:hover:not($disabled):not($focused):not($error) $notchedOutline': { borderColor: palette.mono.main }, // removes hover effect
 
       '& input': {
         padding: '12px 0px 14px 15px',
