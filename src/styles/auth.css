@@ -44,7 +44,6 @@
 }
 
 .auth-form-inputs {
-  /* margin-bottom: 25px; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -60,15 +59,14 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: stretch;
-  /* width: 18.84vw; */
 }
 
 .auth-form-input-email-text {
-  /* width: 18vw; */
   flex-grow: 1;
 }
 
 .auth-form-input-email-tail {
+  /*adjust text position */
   transform: translate(0px, 4px);
 }
 

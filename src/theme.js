@@ -202,20 +202,20 @@ const overrides = {
   },
 
   // Box / Card
-  MuiCard: {
-    // "Box"
-    elevation: {
-      boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.25)',
-    },
-    // "Card"
-    outlined: {
-      boxShadow: 'none',
-    },
-    // both "Box" and "Card"
-    rounded: {
-      borderRadius: '10px',
-    },
-  },
+  // MuiCard: {
+  //   // "Box"
+  //   elevation: {
+  //     boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.25)',
+  //   },
+  //   // "Card"
+  //   outlined: {
+  //     boxShadow: 'none',
+  //   },
+  //   // both "Box" and "Card"
+  //   rounded: {
+  //     borderRadius: '10px',
+  //   },
+  // },
 
   // Box (dialog)
   MuiDialog: {

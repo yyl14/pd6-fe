@@ -107,31 +107,28 @@ export default function ForgetPasswordForm() {
           </Button>
         </CardContent>
       </Card>
-      {popUp ? (
-        <Dialog
-          open={popUp}
-          keepMounted
-          onClose={() => handleClosePopUp()}
-          aria-labelledby="alert-dialog-slide-title"
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <DialogTitle id="alert-dialog-slide-title">
-            <Typography variant="h2">Password reset email sent</Typography>
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-slide-description">
-              Please check your mailbox to reset your password.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => handleClosePopUp()} color="primary">
-              Done
-            </Button>
-          </DialogActions>
-        </Dialog>
-      ) : (
-        <></>
-      )}
+
+      <Dialog
+        open={popUp}
+        keepMounted
+        onClose={() => handleClosePopUp()}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">
+          <Typography variant="h2">Password reset email sent</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Please check your mailbox to reset your password.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleClosePopUp()} color="primary">
+            Done
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
