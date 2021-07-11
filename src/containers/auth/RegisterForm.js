@@ -20,10 +20,12 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Link,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { borders, borderRadius } from '@material-ui/system';
 
+import { Link as RouterLink } from 'react-router-dom';
 import { authActions } from '../../actions/index';
 
 function checkPassword(password1, password2) {
@@ -282,6 +284,13 @@ export default function RegisterForm() {
               Register
             </Button>
           </div>
+          <caption className="login-caption">
+            Already have a puppy?
+            {' '}
+            <Link component={RouterLink} to="/forget-password">
+              Log in
+            </Link>
+          </caption>
         </CardContent>
       </Card>
       {popUp ? (
