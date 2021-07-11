@@ -12,16 +12,11 @@ import '../../styles/auth.css';
 import '../../styles/index.css';
 
 class Login extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     userId: '',
-  //     password: '',
-  //   };
-  //   this.handleChange1 = this.handleChange1.bind(this);
-  //   this.handleChange2 = this.handleChange2.bind(this);
-  //   this.handleSubmit = this.handleSubmit.bind(this);
-  // }
+  constructor(props) {
+    super(props);
+    this.state = {
+    };
+  }
 
   componentDidMount() {}
 
