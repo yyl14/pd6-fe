@@ -1,8 +1,4 @@
 .auth-page {
-  /* display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center; */
   height: 100%;
 }
 
@@ -19,8 +15,11 @@
   align-items: center;
 }
 
-.auth-title h1 {
-  margin-left: 6vw;
+.auth-title {
+  /* margin-left: 6vw; */
+  position: fixed;
+  left: 6vw;
+  bottom: 45vh;
 }
 
 .auth-trademark {

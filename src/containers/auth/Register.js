@@ -14,7 +14,7 @@ import '../../styles/index.css';
 class Register extends Component {
   constructor(props) {
     super(props);
-    this.state = { };
+    this.state = {};
   }
 
   componentDidMount() {}
@@ -23,36 +23,18 @@ class Register extends Component {
     return (
       <div className="page auth-page">
         <Grid className="auth-page-container" container direction="row" justifyContent="center" alignItems="center">
-          <Grid container item xs={6} className="auth-page-col auth-page-col-left" justify="center">
-            <Grid item className="auth-title">
-              <Typography className="auth-title" variant="h1">
-                Register and adopt a puppy...
-              </Typography>
-            </Grid>
-          </Grid>
+          <Grid container item xs={6} className="auth-page-col auth-page-col-left" justify="center" />
           <Grid container item xs={6} className="auth-page-col auth-page-col-right" justify="center">
             <RegisterForm />
           </Grid>
+          <Typography className="auth-title" variant="h1">
+            Register and adopt a puppy...
+          </Typography>
           <Trademark />
         </Grid>
       </div>
     );
   }
 }
-
-// const mapStateToProps = (state) => ({
-//   auth: state.auth,
-//   error: state.error,
-// });
-
-// const mapDispatchToProps = (dispatch) => ({
-//   onSubmit: (input) => dispatch(userSignUp(input)),
-// });
-
-// Register.propTypes = {
-//   onSubmit: PropTypes.func.isRequired,
-// };
-
-// export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Register));
 
 export default Register;

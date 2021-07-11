@@ -23,16 +23,13 @@ class ResetPassword extends Component {
     return (
       <div className="page auth-page">
         <Grid className="auth-page-container" container direction="row" justifyContent="center" alignItems="center">
-          <Grid container item xs={6} className="auth-page-col auth-page-col-left" justify="center">
-            <Grid container className="auth-title">
-              <Typography className="auth-title" variant="h1">
-                Go find your puppy!
-              </Typography>
-            </Grid>
-          </Grid>
+          <Grid container item xs={6} className="auth-page-col auth-page-col-left" justify="center" />
           <Grid container item xs={6} className="auth-page-col auth-page-col-right" justify="center">
             <ResetPasswordForm />
           </Grid>
+          <Typography className="auth-title" variant="h1">
+            Go find your puppy!
+          </Typography>
           <Trademark />
         </Grid>
       </div>
