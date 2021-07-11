@@ -94,7 +94,7 @@ export default function RegisterForm() {
   const labelName = [
     'realName',
     'school',
-    'accountId',
+    'username',
     'nickname',
     'studentId',
     'email',
@@ -211,8 +211,8 @@ export default function RegisterForm() {
               label="Username"
               value={inputs.username}
               onChange={(e) => handleChange(e)}
-              error={errors.accountId}
-              helperText={errorTexts.accountId}
+              error={errors.username}
+              helperText={errorTexts.username}
             />
             <TextField
               id="nickname"
@@ -292,7 +292,7 @@ export default function RegisterForm() {
           <caption className="login-caption">
             Already have a puppy?
             {' '}
-            <Link component={RouterLink} to="/forget-password">
+            <Link component={RouterLink} to="/login">
               Log in
             </Link>
           </caption>
