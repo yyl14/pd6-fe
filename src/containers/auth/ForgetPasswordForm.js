@@ -23,7 +23,6 @@ import '../../styles/auth.css';
 import '../../styles/index.css';
 
 function checkEmailFormat(email) {
-  // console.log('checkEmailFormat: ', email.indexOf('@ntu.edu.tw'));
   const index1 = email.indexOf('@ntu.edu.tw'); // 台大
   const index2 = email.indexOf('@mail.ntust.edu.tw'); // 台科大
   const index3 = email.indexOf('@ntnu.edu.tw'); // 台師大

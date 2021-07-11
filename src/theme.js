@@ -1,6 +1,5 @@
 import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import { borderRadius } from '@material-ui/system';
-// import { ArrowDropDownIcon } from '@material-ui/icons';
 import ErrorText from './components/ErrorText';
 
 const palette = {
@@ -34,10 +33,9 @@ const palette = {
 };
 
 const typography = {
-  // UI/UX terminology
-
   /* Note: to change default html font size (basis of 'rem'), go to src/styles/index.css */
 
+  // UI/UX terminology
   // Big Title
   h1: {
     fontSize: '2.4rem',

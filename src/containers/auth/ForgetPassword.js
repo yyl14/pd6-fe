@@ -39,19 +39,4 @@ class ForgetPassword extends Component {
   }
 }
 
-// const mapStateToProps = (state) => ({
-//   auth: state.auth,
-//   error: state.error,
-// });
-
-// const mapDispatchToProps = (dispatch) => ({
-//   onSubmit: (input) => dispatch(userForgetPassword(input)),
-// });
-
-// ForgetPassword.propTypes = {
-//   onSubmit: PropTypes.func.isRequired,
-// };
-
-// export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ForgetPassword));
-
 export default ForgetPassword;

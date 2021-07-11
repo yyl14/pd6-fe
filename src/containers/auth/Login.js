@@ -37,19 +37,4 @@ class Login extends Component {
   }
 }
 
-// const mapStateToProps = (state) => ({
-//   auth: state.auth,
-//   error: state.error,
-// });
-
-// const mapDispatchToProps = (dispatch) => ({
-//   onSubmit: (input) => dispatch(userSignIn(input)),
-// });
-
-// Login.propTypes = {
-//   onSubmit: PropTypes.func.isRequired,
-// };
-
-// export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login));
-
 export default Login;
