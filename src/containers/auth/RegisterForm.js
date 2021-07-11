@@ -89,12 +89,21 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const labelName = ['realName', 'school', 'accountId', 'nickname', 'studentId', 'email', 'password', 'confirmPassword'];
+  const labelName = [
+    'realName',
+    'school',
+    'accountId',
+    'nickname',
+    'studentId',
+    'email',
+    'password',
+    'confirmPassword',
+  ];
 
   const onSubmit = () => {
     let errorCnt = 0;
     labelName.forEach((name) => {
-      if (inputs.[name] === '') {
+      if (inputs[name] === '') {
         setErrors((input) => ({ ...input, [name]: true }));
         setErrorTexts((input) => ({ ...input, [name]: "Can't be empty" }));
         errorCnt += 1;
@@ -118,7 +127,7 @@ export default function RegisterForm() {
     }
 
     labelName.forEach((name) => {
-      if (errors.[name] === true) {
+      if (errors[name] === true) {
         errorCnt += 1;
       }
     });
@@ -129,7 +138,7 @@ export default function RegisterForm() {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setInputs((input) => ({ ...input, [name]: value }));
-    if (value !== '' && errorTexts.[name] === "Can't be empty") {
+    if (value !== '' && errorTexts[name] === "Can't be empty") {
       setErrors((input) => ({ ...input, [name]: false }));
       setErrorTexts((input) => ({ ...input, [name]: '' }));
     }
@@ -168,7 +177,7 @@ export default function RegisterForm() {
 
   return (
     <>
-      <Card className="auth-form login-form" variant="outlined">
+      <Card className="auth-form register-form" variant="outlined">
         {/* className login-form applies here */}
         <CardContent className="auth-form-content">
           <div className="auth-form-inputs">
@@ -184,21 +193,14 @@ export default function RegisterForm() {
             />
             <FormControl variant="outlined" className="auth-form-input" error={errors.school}>
               <InputLabel id="demo-simple-select-outlined-label">School</InputLabel>
-              <Select
-                id="school"
-                name="school"
-                value={inputs.school}
-                onChange={handleChange}
-                label="School"
-
-              >
+              <Select id="school" name="school" value={inputs.school} onChange={handleChange} label="School">
                 <MenuItem value="National Taiwan University">National Taiwan University</MenuItem>
                 <MenuItem value="National Taiwan Normal University">National Taiwan Normal University</MenuItem>
                 <MenuItem value="National Taiwan University of Science and Technology">
                   National Taiwan University of Science and Technology
                 </MenuItem>
               </Select>
-              {errors.school ? (<FormHelperText>{errorTexts.school}</FormHelperText>) : (<></>)}
+              {errors.school ? <FormHelperText>{errorTexts.school}</FormHelperText> : <></>}
             </FormControl>
             <TextField
               id="username"
