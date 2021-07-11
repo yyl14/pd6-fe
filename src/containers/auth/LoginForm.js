@@ -45,7 +45,7 @@ export default function LoginForm() {
       setErrorTexts((ori) => ({ ...ori, password: "Can't be empty" }));
     }
 
-    if (errors.username === false && errors.password === false) {
+    if (errors.username === false && errors.password === false && username !== '' && password !== '') {
       userSignIn(username, password);
     }
   };
@@ -84,7 +84,7 @@ export default function LoginForm() {
             helperText={errorTexts.username}
           />
           <TextField
-            id="login-username"
+            id="login-password"
             type={showPassword ? 'text' : 'password'}
             className="auth-form-input"
             label="Password"
