@@ -8,8 +8,8 @@ export default function Trademark() {
       <span
         className="auth-trademark-main"
         style={{
-          fontSize: '48px',
-          lineHeight: '48px',
+          fontSize: '2.4rem',
+          lineHeight: 57 / 48,
           fontFamily: 'Azonix',
         }}
       >

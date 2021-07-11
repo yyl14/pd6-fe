@@ -1,4 +1,4 @@
-import { createTheme } from '@material-ui/core/styles';
+import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import ErrorText from './components/ErrorText';
 
 const palette = {
@@ -33,55 +33,59 @@ const palette = {
 
 const typography = {
   // UI/UX terminology
+
+  // Defualt font size, basis of 'rem' units
+  fontSize: 18,
+
   // Big Title
   h1: {
-    fontSize: 48,
+    fontSize: '2.4rem',
     fontWeight: 700,
-    lineHeight: '57px',
+    lineHeight: 57 / 48,
     letterSpacing: '-0.01em',
     fontFamily: 'San Francisco',
   },
 
   // Title
   h2: {
-    fontSize: 24,
+    fontSize: '1.2rem',
     fontWeight: 600,
-    lineHeight: '29px',
+    lineHeight: 29 / 24,
     letterSpacing: '-0.01em',
     fontFamily: 'San Francisco',
   },
 
   // Body
   body1: {
-    fontSize: 20,
+    fontSize: '1rem',
     fontWeight: 500,
-    lineHeight: '24px',
+    lineHeight: 24 / 20,
     letterSpacing: '-0.01em',
     fontFamily: 'San Francisco',
   },
 
   // Sub-body
   body2: {
-    fontSize: 16,
+    fontSize: '0.8rem',
     fontWeight: 400,
-    lineHeight: '19px',
+    lineHeight: 19 / 16,
     letterSpacing: '-0.01em',
     fontFamily: 'San Francisco',
   },
 
   // Caption
   caption: {
-    fontSize: 14,
+    fontSize: '0.7rem',
     fontWeight: 400,
-    lineHeight: '17px',
+    lineHeight: 17 / 14,
     letterSpacing: '-0.02em',
     fontFamily: 'San Francisco',
   },
 
   button: {
     textTransform: 'none',
-    fontSize: 20,
-    lineHeight: '24px',
+    fontSize: '1rem',
+    lineHeight: 24 / 20,
     letterSpacing: '-0.01em',
     fontFamily: 'San Francisco',
   },
@@ -134,7 +138,7 @@ const overrides = {
   // "Input"
   MuiTextField: {
     root: {
-      margin: '1vh 5px 4vh 5px',
+      margin: '1vh 5px 2.2vh 5px',
     },
   },
   MuiOutlinedInput: {
@@ -146,7 +150,7 @@ const overrides = {
       '& input': {
         padding: '12px 0px 14px 15px',
         fontWeight: 500,
-        fontSize: '20px',
+        fontSize: '1rem',
       },
     },
   },
@@ -164,7 +168,7 @@ const overrides = {
   MuiInputLabel: {
     outlined: {
       top: '-5px',
-      '&$shrink': { transform: 'translate(14px, -14px) scale(0.70)', fontWeight: 400 },
+      '&$shrink': { transform: 'translate(14px, -10px) scale(0.80)', fontWeight: 400 },
     },
   },
 
@@ -249,4 +253,4 @@ const theme = createTheme({
   props,
 });
 
-export default theme;
+export default responsiveFontSizes(theme);
