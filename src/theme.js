@@ -36,15 +36,14 @@ const palette = {
 const typography = {
   // UI/UX terminology
 
-  // Default font size, basis of 'rem' units
-  fontSize: 20,
+  /* Note: to change default html font size (basis of 'rem'), go to src/styles/index.css */
 
   // Big Title
   h1: {
     fontSize: '2.4rem',
     fontWeight: 700,
     lineHeight: 57 / 48,
-    letterSpacing: '-0.01em',
+    letterSpacing: '-0.01rem',
     fontFamily: 'San Francisco',
   },
 
@@ -53,7 +52,7 @@ const typography = {
     fontSize: '1.2rem',
     fontWeight: 600,
     lineHeight: 29 / 24,
-    letterSpacing: '-0.01em',
+    letterSpacing: '-0.01rem',
     fontFamily: 'San Francisco',
   },
 
@@ -62,7 +61,7 @@ const typography = {
     fontSize: '1rem',
     fontWeight: 500,
     lineHeight: 24 / 20,
-    letterSpacing: '-0.01em',
+    letterSpacing: '-0.01rem',
     fontFamily: 'San Francisco',
   },
 
@@ -71,7 +70,7 @@ const typography = {
     fontSize: '0.8rem',
     fontWeight: 400,
     lineHeight: 19 / 16,
-    letterSpacing: '-0.01em',
+    letterSpacing: '-0.01rem',
     fontFamily: 'San Francisco',
   },
 
@@ -80,7 +79,7 @@ const typography = {
     fontSize: '0.7rem',
     fontWeight: 400,
     lineHeight: 17 / 14,
-    letterSpacing: '-0.02em',
+    letterSpacing: '-0.02rem',
     fontFamily: 'San Francisco',
   },
 
@@ -88,7 +87,7 @@ const typography = {
     textTransform: 'none',
     fontSize: '1rem',
     lineHeight: 24 / 20,
-    letterSpacing: '-0.01em',
+    letterSpacing: '-0.01rem',
     fontFamily: 'San Francisco',
   },
 };
@@ -169,16 +168,16 @@ const overrides = {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-      marginTop: '7px',
-      '& caption': {
-        marginLeft: '6px',
+      marginTop: '5px',
+      '& p': {
+        marginLeft: '8px',
       },
     },
   },
   MuiInputLabel: {
     outlined: {
       top: '-5px',
-      '&$shrink': { transform: 'translate(14px, -10px) scale(0.80)', fontWeight: 400 },
+      '&$shrink': { transform: 'translate(14px, -11px) scale(0.80)', fontWeight: 400 },
     },
   },
 
