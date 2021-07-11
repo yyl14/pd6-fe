@@ -82,14 +82,14 @@ export default function ForgetPasswordForm() {
 
   return (
     <>
-      <Card className="auth-form" variant="outlined">
+      <Card className="auth-form login-form" variant="outlined">
         <CardContent className="auth-form-content">
           <TextField
             // required
+            className="auth-form-input"
             error={error}
             helperText={errorText}
             label="Email"
-            // placeholder="Email"
             value={email}
             onChange={(e) => handleChange(e)}
             onKeyPress={(event) => {
