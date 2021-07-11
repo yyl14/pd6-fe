@@ -58,16 +58,18 @@
 .auth-form-input-email {
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  width: 18.84vw;
+  justify-content: space-between;
+  align-items: stretch;
+  /* width: 18.84vw; */
 }
 
 .auth-form-input-email-text {
-  width: 18vw;
+  /* width: 18vw; */
+  flex-grow: 1;
 }
 
 .auth-form-input-email-tail {
-  width: 9vw;
+  transform: translate(0px, 4px);
 }
 
 #login-captions {

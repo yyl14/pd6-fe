@@ -93,16 +93,7 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const labelName = [
-    'realName',
-    'school',
-    'username',
-    'nickname',
-    'studentId',
-    'email',
-    'password',
-    'confirmPassword',
-  ];
+  const labelName = ['realName', 'school', 'username', 'nickname', 'studentId', 'email', 'password', 'confirmPassword'];
 
   const onSubmit = () => {
     let errorCnt = 0;
@@ -252,7 +243,7 @@ export default function RegisterForm() {
               error={errors.studentId}
               helperText={errorTexts.studentId}
             />
-            <div className="auth-form-input-email">
+            <div className="auth-form-input auth-form-input-email">
               <TextField
                 id="email"
                 name="email"
@@ -262,8 +253,11 @@ export default function RegisterForm() {
                 onChange={(e) => handleChange(e)}
                 error={errors.email}
                 helperText={errorTexts.email}
+                style={{ marginLeft: '0px', marginRight: '10px' }}
               />
-              <Typography className="auth-form-input-email-tail" variant="h6">{emailTail}</Typography>
+              <Typography className="auth-form-input-email-tail" variant="h6">
+                {emailTail}
+              </Typography>
             </div>
             <TextField
               // required
