@@ -24,14 +24,45 @@ export default function LoginForm() {
   const loginState = useSelector((state) => state.auth);
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({
+    username: false,
+    password: false,
+  });
+  const [errorTexts, setErrorTexts] = useState({
+    username: '',
+    password: '',
+  });
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const onSubmit = () => {
-    userSignIn(username, password);
+  const onsubmit = () => {
+    if (username === '') {
+      setErrors((ori) => ({ ...ori, username: true }));
+      setErrorTexts((ori) => ({ ...ori, username: "Can't be empty" }));
+    }
+    if (password === '') {
+      setErrors((ori) => ({ ...ori, password: true }));
+      setErrorTexts((ori) => ({ ...ori, password: "Can't be empty" }));
+    }
+
+    if (errors.username === false && errors.password === false && username !== '' && password !== '') {
+      userSignIn(username, password);
+    }
   };
 
-  const onPasswordChange = (e) => {
+  const handleUsernameChange = (e) => {
+    if (e.target.value !== '') {
+      setErrors((ori) => ({ ...ori, username: false }));
+      setErrorTexts((ori) => ({ ...ori, username: '' }));
+    }
+    setUserName(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    if (e.target.value !== '') {
+      setErrors((ori) => ({ ...ori, password: false }));
+      setErrorTexts((ori) => ({ ...ori, password: '' }));
+    }
     setPassword(e.target.value);
   };
 
@@ -48,17 +79,19 @@ export default function LoginForm() {
             className="auth-form-input"
             label="Username"
             value={username}
-            onChange={(e) => setUserName(e.target.value)}
+            onChange={(e) => handleUsernameChange(e)}
+            error={errors.username}
+            helperText={errorTexts.username}
           />
           <TextField
-            id="login-username"
+            id="login-password"
             type={showPassword ? 'text' : 'password'}
             className="auth-form-input"
             label="Password"
             value={password}
-            onChange={(e) => onPasswordChange(e)}
-            error
-            helperText="Some error"
+            onChange={(e) => handlePasswordChange(e)}
+            error={errors.password}
+            helperText={errorTexts.password}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
