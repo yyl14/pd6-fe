@@ -92,7 +92,8 @@ export default function ResetPassword() {
 
   return (
     <>
-      <Card className="auth-form" variant="outlined">
+      <Card className="auth-form login-form" variant="outlined">
+        {/* className login-form applies here */}
         <CardContent className="auth-form-content">
           <form className="auth-form-content" onSubmit={() => onSubmit()}>
             <TextField

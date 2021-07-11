@@ -1,4 +1,4 @@
-import { createTheme } from '@material-ui/core/styles';
+import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import ErrorText from './components/ErrorText';
 
 const palette = {
@@ -37,7 +37,7 @@ const typography = {
   h1: {
     fontSize: 48,
     fontWeight: 700,
-    lineHeight: '57px',
+    lineHeight: 57 / 48,
     letterSpacing: '-0.01em',
     fontFamily: 'San Francisco',
   },
@@ -46,7 +46,7 @@ const typography = {
   h2: {
     fontSize: 24,
     fontWeight: 600,
-    lineHeight: '29px',
+    lineHeight: 29 / 24,
     letterSpacing: '-0.01em',
     fontFamily: 'San Francisco',
   },
@@ -55,7 +55,7 @@ const typography = {
   body1: {
     fontSize: 20,
     fontWeight: 500,
-    lineHeight: '24px',
+    lineHeight: 24 / 20,
     letterSpacing: '-0.01em',
     fontFamily: 'San Francisco',
   },
@@ -64,7 +64,7 @@ const typography = {
   body2: {
     fontSize: 16,
     fontWeight: 400,
-    lineHeight: '19px',
+    lineHeight: 19 / 16,
     letterSpacing: '-0.01em',
     fontFamily: 'San Francisco',
   },
@@ -73,7 +73,7 @@ const typography = {
   caption: {
     fontSize: 14,
     fontWeight: 400,
-    lineHeight: '17px',
+    lineHeight: 17 / 14,
     letterSpacing: '-0.02em',
     fontFamily: 'San Francisco',
   },
@@ -81,7 +81,7 @@ const typography = {
   button: {
     textTransform: 'none',
     fontSize: 20,
-    lineHeight: '24px',
+    lineHeight: 24 / 20,
     letterSpacing: '-0.01em',
     fontFamily: 'San Francisco',
   },
@@ -134,7 +134,7 @@ const overrides = {
   // "Input"
   MuiTextField: {
     root: {
-      margin: '1vh 5px 4vh 5px',
+      margin: '1vh 5px 2vh 5px',
     },
   },
   MuiOutlinedInput: {
@@ -164,7 +164,7 @@ const overrides = {
   MuiInputLabel: {
     outlined: {
       top: '-5px',
-      '&$shrink': { transform: 'translate(14px, -14px) scale(0.70)', fontWeight: 400 },
+      '&$shrink': { transform: 'translate(14px, -11px) scale(0.70)', fontWeight: 400 },
     },
   },
 
@@ -249,4 +249,4 @@ const theme = createTheme({
   props,
 });
 
-export default theme;
+export default responsiveFontSizes(theme);

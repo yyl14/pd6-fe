@@ -53,33 +53,33 @@ export default function RegisterForm() {
   const [inputs, setInputs] = useState({
     realName: '',
     school: '',
-    accountId: '',
+    username: '',
     nickname: '',
     studentId: '',
     email: '',
     password: '',
-    confirmPassord: '',
+    confirmPassword: '',
   });
 
   const [errors, setErrors] = useState({
     realName: false,
     school: false,
-    accountId: false,
+    username: false,
     nickname: false,
     studentId: false,
     email: false,
     password: false,
-    confirmPassord: false,
+    confirmPassword: false,
   });
   const [errorTexts, setErrorTexts] = useState({
     realName: '',
     school: '',
-    accountId: '',
+    username: '',
     nickname: '',
     studentId: '',
     email: '',
     password: '',
-    confirmPassord: '',
+    confirmPassword: '',
   });
 
   const [disabled, setDisabled] = useState(false);
@@ -111,7 +111,8 @@ export default function RegisterForm() {
 
   return (
     <>
-      <Card className="auth-form" variant="outlined">
+      <Card className="auth-form login-form" variant="outlined">
+        {/* className login-form applies here */}
         <CardContent className="auth-form-content">
           <div className="auth-form-inputs">
             <TextField
@@ -124,24 +125,20 @@ export default function RegisterForm() {
             />
             <FormControl variant="outlined" className="auth-form-input">
               <InputLabel id="demo-simple-select-outlined-label">School</InputLabel>
-              <Select
-                id="school"
-                name="school"
-                value={inputs.school}
-                onChange={handleChange}
-                label="School"
-              >
+              <Select id="school" name="school" value={inputs.school} onChange={handleChange} label="School">
                 <MenuItem value="National Taiwan University">National Taiwan University</MenuItem>
                 <MenuItem value="National Taiwan Normal University">National Taiwan Normal University</MenuItem>
-                <MenuItem value="National Taiwan University of Science and Technology">National Taiwan University of Science and Technology</MenuItem>
+                <MenuItem value="National Taiwan University of Science and Technology">
+                  National Taiwan University of Science and Technology
+                </MenuItem>
               </Select>
             </FormControl>
             <TextField
-              id="accountId"
-              name="accountId"
+              id="username"
+              name="username"
               className="auth-form-input"
-              label="Account ID"
-              value={inputs.accountId}
+              label="Username"
+              value={inputs.username}
               onChange={(e) => handleChange(e)}
             />
             <TextField
@@ -190,12 +187,12 @@ export default function RegisterForm() {
             <TextField
               // required
               className="auth-form-input"
-              name="confirmPassord"
-              error={errors.confirmPassord}
+              name="confirmPassword"
+              error={errors.confirmPassword}
               type={showConfirmPassword ? 'text' : 'password'}
               label="Confirm Password"
-              value={inputs.confirmPassord}
-              helperText={errorTexts.confirmPassord}
+              value={inputs.confirmPassword}
+              helperText={errorTexts.confirmPassword}
               onChange={(e) => handleChange(e)}
               InputProps={{
                 endAdornment: (
@@ -225,7 +222,9 @@ export default function RegisterForm() {
             <Typography variant="h2">Verification email sent</Typography>
           </DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-dialog-slide-description">Please check your mailbox to activate the account</DialogContentText>
+            <DialogContentText id="alert-dialog-slide-description">
+              Please check your mailbox to activate the account
+            </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={() => handleClosePopUp()} color="primary">

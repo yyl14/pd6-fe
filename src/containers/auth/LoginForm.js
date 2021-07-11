@@ -40,13 +40,13 @@ export default function LoginForm() {
   };
 
   return (
-    <Card className="auth-form" variant="outlined">
+    <Card className="auth-form login-form" variant="outlined">
       <CardContent className="auth-form-content">
         <div className="auth-form-inputs">
           <TextField
             id="login-username"
             className="auth-form-input"
-            label="Account ID"
+            label="Username"
             value={username}
             onChange={(e) => setUserName(e.target.value)}
           />
