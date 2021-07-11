@@ -1,4 +1,6 @@
 import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
+import { borderRadius } from '@material-ui/system';
+// import { ArrowDropDownIcon } from '@material-ui/icons';
 import ErrorText from './components/ErrorText';
 
 const palette = {
@@ -34,8 +36,8 @@ const palette = {
 const typography = {
   // UI/UX terminology
 
-  // Defualt font size, basis of 'rem' units
-  fontSize: 18,
+  // Default font size, basis of 'rem' units
+  fontSize: 20,
 
   // Big Title
   h1: {
@@ -137,9 +139,17 @@ const overrides = {
 
   // "Input"
   MuiTextField: {
+    // root: {
+    //   margin: '1vh 5px 2.2vh 5px',
+    // },
+  },
+  MuiFormControl: {
     root: {
       margin: '1vh 5px 2.2vh 5px',
     },
+  },
+  MuiSelect: {
+    outlined: { padding: '12px 0px 14px 15px' },
   },
   MuiOutlinedInput: {
     root: {
@@ -212,6 +222,19 @@ const overrides = {
     root: { padding: '0 24px 0 0' },
   },
 
+  // Base of "List"
+  MuiPopover: {
+    paper: { boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)' },
+  },
+
+  MuiMenuItem: {
+    root: {
+      paddingTop: '12px',
+      paddingBottom: '12px',
+      borderRadius: '5px',
+    },
+  },
+
   // "Mask"
   MuiBackdrop: {
     root: {
@@ -221,11 +244,38 @@ const overrides = {
 };
 
 const props = {
+  // This includes List items, icon buttons, etc.
+  MuiButtonBase: {
+    disableRipple: true,
+  },
+
   // Name of the component ⚛️
   MuiButton: {
     variant: 'contained',
     disableElevation: true,
-    disableRipple: true,
+  },
+
+  MuiIconButton: {
+    size: 'small',
+  },
+
+  MuiSvgIcon: {
+    fontSize: 'small',
+  },
+
+  MuiFormControl: {
+    variant: 'outlined',
+  },
+
+  MuiList: {
+    disablePadding: true,
+  },
+
+  MuiMenu: {
+    // make sure the popover is under the input (MUI default: over the input component)
+    getContentAnchorEl: null,
+    anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
+    transformOrigin: { vertical: 'top', horizontal: 'left' },
   },
 
   MuiTextField: {
