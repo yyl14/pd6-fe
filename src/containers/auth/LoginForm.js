@@ -37,17 +37,20 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const onsubmit = () => {
-    if (username === '') {
+    const newUserName = username.trim();
+    const newPassword = password.trim();
+
+    if (newUserName === '') {
       setErrors((ori) => ({ ...ori, username: true }));
       setErrorTexts((ori) => ({ ...ori, username: "Can't be empty" }));
     }
-    if (password === '') {
+    if (newPassword === '') {
       setErrors((ori) => ({ ...ori, password: true }));
       setErrorTexts((ori) => ({ ...ori, password: "Can't be empty" }));
     }
 
-    if (errors.username === false && errors.password === false && username !== '' && password !== '') {
-      userSignIn(username, password);
+    if (errors.username === false && errors.password === false && newUserName !== '' && newPassword !== '') {
+      userSignIn(newUserName, newPassword);
     }
   };
 

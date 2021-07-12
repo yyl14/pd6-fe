@@ -43,7 +43,9 @@ export default function ResetPassword() {
   const [showPassword2, setShowPassword2] = useState(false);
 
   const onSubmit = () => {
-    const status = checkPassword(password1, password2);
+    const newPassword = password1.trim();
+    const confirmPassword = password2.trim();
+    const status = checkPassword(newPassword, confirmPassword);
     if (status === "Passwords don't match") {
       setError(true);
       setErrorText(status);
@@ -52,7 +54,7 @@ export default function ResetPassword() {
     }
     setError(false);
     setErrorText('');
-    // userResetPassword(password2);
+    // userResetPassword(confirmPassword);
     setPopUp(true);
   };
 

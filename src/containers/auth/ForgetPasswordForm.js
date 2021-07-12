@@ -71,7 +71,7 @@ export default function ForgetPasswordForm() {
     if (error) {
       return;
     }
-    userForgetPassword(email);
+    userForgetPassword(email.trim());
     setPopUp(true);
   };
 

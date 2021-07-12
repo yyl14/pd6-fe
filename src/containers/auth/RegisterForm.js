@@ -83,8 +83,11 @@ export default function RegisterForm() {
 
   const onSubmit = () => {
     let errorCnt = 0;
+    const newInputs = {};
+
     labelName.forEach((name) => {
-      if (inputs[name] === '') {
+      newInputs[name] = inputs[name].trim();
+      if (newInputs[name] === '') {
         setErrors((input) => ({ ...input, [name]: true }));
         setErrorTexts((input) => ({ ...input, [name]: "Can't be empty" }));
         errorCnt += 1;
@@ -92,7 +95,7 @@ export default function RegisterForm() {
     });
 
     // check password
-    const statusP = checkPassword(inputs.password, inputs.confirmPassword);
+    const statusP = checkPassword(newInputs.password, newInputs.confirmPassword);
     if (statusP === "Passwords don't match") {
       setErrors((input) => ({ ...input, confirmPassword: true }));
       setErrorTexts((input) => ({ ...input, confirmPassword: statusP }));
