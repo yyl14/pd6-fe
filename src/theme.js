@@ -195,7 +195,7 @@ const overrides = {
   MuiPaper: {
     // elevation: {  },
     outlined: {
-      border: '1px solid #CACACA',
+      border: `1px solid ${palette.mono.main}`,
     },
     rounded: {
       borderRadius: '10px',
@@ -290,7 +290,6 @@ const props = {
 
   MuiTextField: {
     variant: 'outlined',
-    borderRadius: '10px',
   },
 
   MuiOutlinedInput: {
