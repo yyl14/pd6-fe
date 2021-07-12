@@ -271,13 +271,13 @@ export default function RegisterForm() {
               Register
             </Button>
           </div>
-          <caption className="register-caption">
+          <Typography variant="body2" className="register-caption">
             Already have a puppy?
             {' '}
             <Link component={RouterLink} to="/login">
               Log in
             </Link>
-          </caption>
+          </Typography>
         </CardContent>
       </Card>
       {popUp ? (

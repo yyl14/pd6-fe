@@ -11,6 +11,7 @@ import {
   Link,
   InputAdornment,
   IconButton,
+  Typography,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { borders, borderRadius } from '@material-ui/system';
@@ -107,21 +108,22 @@ export default function LoginForm() {
             Login
           </Button>
         </div>
-        <caption className="login-caption">
+
+        <Typography variant="body2" className="auth-link">
           Need a new puppy?
           {' '}
           <Link component={RouterLink} to="/register">
             Register
           </Link>
           {' '}
-        </caption>
-        <caption className="login-caption">
+        </Typography>
+        <Typography variant="body2" className="auth-link">
           Lost your puppy?
           {' '}
           <Link component={RouterLink} to="/forget-password">
             Reset password
           </Link>
-        </caption>
+        </Typography>
       </CardContent>
     </Card>
   );

@@ -104,6 +104,9 @@ const shape = {
 };
 
 const overrides = {
+  // MuiTypography: {
+  //   root: { margin: null }, // enable CSS margin settings
+  // },
   // "Button"
   MuiButton: {
     root: {
