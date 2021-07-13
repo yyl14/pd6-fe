@@ -2,31 +2,68 @@ import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import { borderRadius } from '@material-ui/system';
 import ErrorText from './components/ErrorText';
 
+// Standard Colors
+/*
+  These objects exists solely for the ease of reference. It is NOT included in the theme object.
+  */
+const mono = {
+  veryLightGray: '#F8F8F8',
+  lightGray: '#EAEAEA',
+  gray: '#CACACA',
+  semiDarkGray: '#AAAAAA',
+  darkGray: '#656565',
+};
+
+const blue = {
+  60: '#8DD1FF',
+  80: '#6DC5FF',
+  100: '#1EA5FF',
+  dark: '#1184D1',
+};
+
+const red = {
+  60: '#FF9A9A', // 8-digit hex, last two digits for opacity
+  80: '#FF8176',
+  100: '#EA3222',
+  dark: '#D51D0D',
+};
+
 const palette = {
-  // default: grey
-  mono: {
-    veryLight: '#F8F8F8',
-    light: '#EAEAEA',
-    main: '#CACACA',
-    dark: '#AAAAAA',
+  /*
+  Default components applies colors in "grey" sub-object if "color" prop was not specified.
+  See component source code to see which one it applies
+  (eg. grey[300] for contained Button backgroundColor).
+  */
+  grey: {
+    100: mono.lightGray, // :hover backgroundColor for Contained Buttons, etc.
+    300: mono.gray, // root backgroundColor for Contained Buttons, etc.
+    A100: mono.lightGray,
+    A400: mono.darkGray,
+    A700: mono.semiDarkGray,
   },
 
   // primary: blue
   primary: {
-    main: '#1EA5FF',
-    dark: '#1590e2',
+    main: blue[100],
+    dark: blue.dark,
     contrastText: 'white',
   },
 
   // secondary: red
   secondary: {
-    main: '#EA3222',
-    dark: '#D41D0D',
+    main: red[100],
+    dark: red.dark,
     contrastText: 'white',
   },
 
+  action: {
+    disabledBackground: mono.gray,
+    disabled: mono.lightGray, // font color
+    disabledOpacity: '100%',
+  },
+
   background: {
-    default: '#F8F8F8', // mono - very light
+    default: mono.veryLightGray, // mono - very light
     paper: 'white',
     card: 'white',
   },
@@ -110,38 +147,32 @@ const overrides = {
   // "Button"
   MuiButton: {
     root: {
-      transition: 'opacity 0.4s, background 0.4s',
+      transition: 'background 0.4s',
       margin: '10px 5px 10px 5px',
       padding: '8px 25px',
     },
     contained: {
       '&:hover': {
-        backgroundColor: palette.mono.light,
-        // opacity: '80%',
+        backgroundColor: palette.grey[100],
       },
       '&:active': {
-        backgroundColor: palette.mono.dark,
-        // opacity: '100%',
+        backgroundColor: palette.grey.A700,
       },
     },
     containedPrimary: {
       '&:hover': {
         backgroundColor: palette.primary.main,
-        opacity: '60%',
       },
       '&:active': {
         backgroundColor: palette.primary.dark,
-        opacity: '100%',
       },
     },
     containedSecondary: {
       '&:hover': {
         backgroundColor: palette.secondary.main,
-        opacity: '70%',
       },
       '&:active': {
         backgroundColor: palette.secondary.dark,
-        opacity: '100%',
       },
     },
   },
@@ -165,7 +196,7 @@ const overrides = {
       '& $notchedOutline': {
         borderRadius: 10,
       },
-      '&:hover:not($disabled):not($focused):not($error) $notchedOutline': { borderColor: palette.mono.main }, // removes hover effect
+      '&:hover:not($disabled):not($focused):not($error) $notchedOutline': { borderColor: mono.gray }, // removes hover effect
 
       '& input': {
         padding: '12px 0px 14px 15px',
@@ -195,28 +226,12 @@ const overrides = {
   MuiPaper: {
     // elevation: {  },
     outlined: {
-      border: `1px solid ${palette.mono.main}`,
+      border: `1px solid ${mono.gray}`,
     },
     rounded: {
       borderRadius: '10px',
     },
   },
-
-  // Box / Card
-  // MuiCard: {
-  //   // "Box"
-  //   elevation: {
-  //     boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.25)',
-  //   },
-  //   // "Card"
-  //   outlined: {
-  //     boxShadow: 'none',
-  //   },
-  //   // both "Box" and "Card"
-  //   rounded: {
-  //     borderRadius: '10px',
-  //   },
-  // },
 
   // Box (dialog)
   MuiDialog: {
@@ -248,7 +263,7 @@ const overrides = {
   // "Mask"
   MuiBackdrop: {
     root: {
-      backgroundColor: `${palette.mono.main}66`, // 8-digit hex for opacity = 40%
+      backgroundColor: `${palette.grey[300]}66`, // 8-digit hex for opacity = 40%
     },
   },
 };
