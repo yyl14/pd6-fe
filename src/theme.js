@@ -35,7 +35,7 @@ const palette = {
   (eg. grey[300] for contained Button backgroundColor).
   */
   grey: {
-    100: mono.lightGray, // :hover backgroundColor for Contained Buttons, etc.
+    100: mono.lightGray,
     300: mono.gray, // root backgroundColor for Contained Buttons, etc.
     A100: mono.lightGray,
     A400: mono.darkGray,
@@ -44,6 +44,7 @@ const palette = {
 
   // primary: blue
   primary: {
+    light: blue[60],
     main: blue[100],
     dark: blue.dark,
     contrastText: 'white',
@@ -51,6 +52,7 @@ const palette = {
 
   // secondary: red
   secondary: {
+    light: red[60],
     main: red[100],
     dark: red.dark,
     contrastText: 'white',
@@ -141,9 +143,6 @@ const shape = {
 };
 
 const overrides = {
-  // MuiTypography: {
-  //   root: { margin: null }, // enable CSS margin settings
-  // },
   // "Button"
   MuiButton: {
     root: {
@@ -153,26 +152,26 @@ const overrides = {
     },
     contained: {
       '&:hover': {
-        backgroundColor: palette.grey[100],
+        backgroundColor: mono.lightGray,
       },
       '&:active': {
-        backgroundColor: palette.grey.A700,
+        backgroundColor: mono.semiDarkGray,
       },
     },
     containedPrimary: {
       '&:hover': {
-        backgroundColor: palette.primary.main,
+        backgroundColor: blue[100],
       },
       '&:active': {
-        backgroundColor: palette.primary.dark,
+        backgroundColor: blue.dark,
       },
     },
     containedSecondary: {
       '&:hover': {
-        backgroundColor: palette.secondary.main,
+        backgroundColor: red[100],
       },
       '&:active': {
-        backgroundColor: palette.secondary.dark,
+        backgroundColor: red.dark,
       },
     },
   },
