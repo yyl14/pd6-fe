@@ -148,7 +148,7 @@ const overrides = {
     root: {
       transition: 'background 0.4s',
       margin: '10px 5px 10px 5px',
-      padding: '8px 25px',
+      padding: '0.44rem 1.39rem',
     },
     contained: {
       '&:hover': {
@@ -313,6 +313,7 @@ const props = {
   MuiFormHelperText: {
     component: ErrorText,
   },
+
   MuiDialogTitle: {
     disableTypography: true,
   },
