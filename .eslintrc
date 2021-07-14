@@ -3,7 +3,7 @@
   "extends": ["airbnb", "airbnb/hooks", "plugin:react/recommended"],
   "rules": {
     "no-console": "off",
-    "prettier/prettier": "off",
+    // "prettier/prettier": "off",
     "react/jsx-filename-extension": [
       1,
       {
@@ -16,7 +16,10 @@
     "eqeqeq": ["error", "smart"],
     "no-unused-vars": "off",
     "no-extra-boolean-cast": "off",
-    "comma-dangle": [2, "always-multiline"]
+    "comma-dangle": [2, "always-multiline"],
+    "linebreak-style": 0,
+    "import/named": "off",
+    "react/prop-types": "off"
   },
   "parserOptions": {
     "parser": "babel-eslint",
@@ -27,5 +30,6 @@
     "browser": true,
     "es6": true,
     "node": true
-  }
+  },
+  "parser": "babel-eslint"
 }

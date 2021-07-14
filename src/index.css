@@ -1,10 +1,66 @@
+/**
+ * http://applemusic.tumblr.com/
+ * https://jsfiddle.net/xq56dmrh/
+ */
+
+/** Ultra Light */
+@font-face {
+  font-family: 'San Francisco';
+  font-weight: 100;
+  src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-ultralight-webfont.woff');
+}
+
+/** Thin */
+@font-face {
+  font-family: 'San Francisco';
+  font-weight: 200;
+  src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-thin-webfont.woff');
+}
+
+/** Regular */
+@font-face {
+  font-family: 'San Francisco';
+  font-weight: 400;
+  src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff');
+}
+
+/** Medium */
+@font-face {
+  font-family: 'San Francisco';
+  font-weight: 500;
+  src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-medium-webfont.woff');
+}
+
+/** Semi Bold */
+@font-face {
+  font-family: 'San Francisco';
+  font-weight: 600;
+  src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-semibold-webfont.woff');
+}
+
+/** Bold */
+@font-face {
+  font-family: 'San Francisco';
+  font-weight: 700;
+  src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-bold-webfont.woff');
+}
+
+/** Trademark font **/
+@import url(//db.onlinewebfonts.com/c/50cd2aad9c8f35800bb6beac3ad42f16?family=Azonix);
+@font-face {
+  font-family: 'Azonix';
+  src: url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.eot');
+  src: url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.eot?#iefix') format('embedded-opentype'),
+    url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.woff2') format('woff2'),
+    url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.woff') format('woff'),
+    url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.ttf') format('truetype'),
+    url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.svg#Azonix') format('svg');
+}
 body {
   width: 100vw;
   height: 100vh;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'San Francisco';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
