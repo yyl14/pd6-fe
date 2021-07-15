@@ -184,7 +184,7 @@ const overrides = {
   },
   MuiFormControl: {
     root: {
-      margin: '1vh 5px 1.5vh 5px',
+      margin: '10px 5px 10px 5px',
     },
   },
   MuiSelect: {
@@ -218,7 +218,7 @@ const overrides = {
   MuiInputLabel: {
     outlined: {
       top: '-5px',
-      '&$shrink': { transform: 'translate(14px, -11px) scale(0.80)', fontWeight: 400 },
+      '&$shrink': { transform: 'translate(14px, -10px) scale(0.80)', fontWeight: 400 },
     },
   },
 
