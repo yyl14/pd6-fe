@@ -24,7 +24,7 @@ const blue = {
 };
 
 const red = {
-  60: '#FF9A9A', // 8-digit hex, last two digits for opacity
+  60: '#FF9A9A',
   80: '#FF8176',
   100: '#EA3222',
   dark: '#D51D0D',
@@ -220,7 +220,7 @@ const overrides = {
   MuiInputLabel: {
     outlined: {
       transform: 'translate(15px, 14px) scale(1)',
-      '&$shrink': { transform: 'translate(14px, -16px) scale(0.80)', fontWeight: 400 },
+      '&$shrink': { transform: 'translate(14px, -19px) scale(0.89)', fontWeight: 400 },
     },
   },
 

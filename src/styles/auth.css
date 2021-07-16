@@ -67,7 +67,7 @@
 
 .auth-form-input-email-tail {
   /*adjust text position */
-  transform: translate(0px, 0.3vh);
+  transform: translate(0px, 1.9vh);
 }
 
 .register-caption {
