@@ -219,7 +219,7 @@ const overrides = {
   },
   MuiInputLabel: {
     outlined: {
-      transform: 'translate(15px, 12px) scale(1)',
+      transform: 'translate(15px, 11px) scale(1)',
       '&$shrink': { transform: 'translate(14px, -18px) scale(0.89)', fontWeight: 400 },
     },
   },
