@@ -186,7 +186,7 @@ const overrides = {
   },
   MuiFormControl: {
     root: {
-      margin: '10px 5px 10px 5px',
+      margin: '10px 5px 50px 5px',
     },
   },
   MuiSelect: {
@@ -200,7 +200,7 @@ const overrides = {
       '&:hover:not($disabled):not($focused):not($error) $notchedOutline': { borderColor: mono.gray }, // removes hover effect
 
       '& input': {
-        padding: '12px 0px 14px 15px',
+        padding: '10px 0px 10px 15px',
         fontWeight: 500,
         fontSize: '1rem',
       },
@@ -219,8 +219,8 @@ const overrides = {
   },
   MuiInputLabel: {
     outlined: {
-      transform: 'translate(15px, 14px) scale(1)',
-      '&$shrink': { transform: 'translate(14px, -19px) scale(0.89)', fontWeight: 400 },
+      transform: 'translate(15px, 12px) scale(1)',
+      '&$shrink': { transform: 'translate(14px, -18px) scale(0.89)', fontWeight: 400 },
     },
   },
 
