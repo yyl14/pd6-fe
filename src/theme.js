@@ -2,10 +2,12 @@ import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import { borderRadius } from '@material-ui/system';
 import ErrorText from './components/ErrorText';
 
-// Standard Colors
+// UI/UX Standard
 /*
   These objects exists solely for the ease of reference. It is NOT included in the theme object.
-  */
+*/
+
+/*  Colors  */
 const mono = {
   veryLightGray: '#F8F8F8',
   lightGray: '#EAEAEA',
@@ -22,7 +24,7 @@ const blue = {
 };
 
 const red = {
-  60: '#FF9A9A', // 8-digit hex, last two digits for opacity
+  60: '#FF9A9A',
   80: '#FF8176',
   100: '#EA3222',
   dark: '#D51D0D',
@@ -77,64 +79,64 @@ const typography = {
   // UI/UX terminology
   // Big Title
   h1: {
-    fontSize: '2.4rem',
+    fontSize: '2.67rem',
     fontWeight: 700,
-    lineHeight: 57 / 48,
-    letterSpacing: '-0.01rem',
-    fontFamily: 'San Francisco',
+    lineHeight: 65 / 48,
+    // letterSpacing: '-0.01rem',
+    fontFamily: 'Noto Sans',
   },
 
   // Title
   h2: {
-    fontSize: '1.2rem',
-    fontWeight: 600,
-    lineHeight: 29 / 24,
-    letterSpacing: '-0.01rem',
-    fontFamily: 'San Francisco',
+    fontSize: '1.56rem',
+    fontWeight: 700,
+    lineHeight: 33 / 24,
+    // letterSpacing: '-0.01rem',
+    fontFamily: 'Noto Sans',
   },
 
-  // Text
+  // Bold-Body
   h6: {
     fontSize: '1rem',
     fontWeight: 600,
-    lineHeight: 25 / 8,
-    letterSpacing: '-0.01rem',
-    fontFamily: 'San Francisco',
+    lineHeight: 25 / 18,
+    // letterSpacing: '-0.01rem',
+    fontFamily: 'Noto Sans',
   },
 
   // Body
   body1: {
     fontSize: '1rem',
     fontWeight: 500,
-    lineHeight: 24 / 20,
-    letterSpacing: '-0.01rem',
-    fontFamily: 'San Francisco',
+    lineHeight: 25 / 18,
+    // letterSpacing: '-0.01rem',
+    fontFamily: 'Noto Sans',
   },
 
   // Sub-body
   body2: {
-    fontSize: '0.8rem',
+    fontSize: '0.89rem',
     fontWeight: 400,
-    lineHeight: 19 / 16,
-    letterSpacing: '-0.01rem',
-    fontFamily: 'San Francisco',
+    lineHeight: 22 / 16,
+    // letterSpacing: '-0.01rem',
+    fontFamily: 'Noto Sans',
   },
 
   // Caption
   caption: {
-    fontSize: '0.7rem',
-    fontWeight: 400,
-    lineHeight: 17 / 14,
-    letterSpacing: '-0.02rem',
-    fontFamily: 'San Francisco',
+    fontSize: '0.78rem',
+    fontWeight: 300,
+    lineHeight: 19 / 14,
+    // letterSpacing: '-0.02rem',
+    fontFamily: 'Noto Sans',
   },
 
   button: {
     textTransform: 'none',
     fontSize: '1rem',
     lineHeight: 24 / 20,
-    letterSpacing: '-0.01rem',
-    fontFamily: 'San Francisco',
+    // letterSpacing: '-0.01rem',
+    fontFamily: 'Noto Sans',
   },
 };
 
@@ -148,7 +150,7 @@ const overrides = {
     root: {
       transition: 'background 0.4s',
       margin: '10px 5px 10px 5px',
-      padding: '0.44rem 1.39rem',
+      padding: '8.5px 25px 10px 25px',
     },
     contained: {
       '&:hover': {
@@ -160,7 +162,7 @@ const overrides = {
     },
     containedPrimary: {
       '&:hover': {
-        backgroundColor: blue[100],
+        backgroundColor: blue[60],
       },
       '&:active': {
         backgroundColor: blue.dark,
@@ -168,7 +170,7 @@ const overrides = {
     },
     containedSecondary: {
       '&:hover': {
-        backgroundColor: red[100],
+        backgroundColor: red[60],
       },
       '&:active': {
         backgroundColor: red.dark,
@@ -184,7 +186,7 @@ const overrides = {
   },
   MuiFormControl: {
     root: {
-      margin: '1vh 5px 1.5vh 5px',
+      margin: '10px 5px 50px 5px',
     },
   },
   MuiSelect: {
@@ -198,7 +200,7 @@ const overrides = {
       '&:hover:not($disabled):not($focused):not($error) $notchedOutline': { borderColor: mono.gray }, // removes hover effect
 
       '& input': {
-        padding: '12px 0px 14px 15px',
+        padding: '10px 0px 10px 15px',
         fontWeight: 500,
         fontSize: '1rem',
       },
@@ -217,8 +219,8 @@ const overrides = {
   },
   MuiInputLabel: {
     outlined: {
-      top: '-5px',
-      '&$shrink': { transform: 'translate(14px, -11px) scale(0.80)', fontWeight: 400 },
+      transform: 'translate(15px, 11px) scale(1)',
+      '&$shrink': { transform: 'translate(14px, -18px) scale(0.89)', fontWeight: 400 },
     },
   },
 

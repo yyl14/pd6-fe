@@ -20,6 +20,7 @@
   position: fixed;
   left: 6vw;
   bottom: 45vh;
+  width: 42vw;
 }
 
 .auth-trademark {
@@ -47,6 +48,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-bottom: 30px;
 }
 
 .auth-form-input {
@@ -66,7 +68,7 @@
 
 .auth-form-input-email-tail {
   /*adjust text position */
-  transform: translate(0px, 0.3vh);
+  transform: translate(0px, 19px);
 }
 
 .register-caption {
