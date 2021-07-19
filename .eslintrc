@@ -13,6 +13,7 @@
     "react-hooks/exhaustive-deps": "warn",
     "import/no-named-as-default": 0,
     "import/no-named-as-default-member": 0,
+    "react/destructuring-assignment": [0, "never"],
     "eqeqeq": ["error", "smart"],
     "no-unused-vars": "off",
     "no-extra-boolean-cast": "off",
