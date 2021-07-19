@@ -4,11 +4,11 @@ const initialState = {
   errors: {},
 };
 
-export default function board(state = initialState, action) {
-  switch (action.type) {
+export default function board(state = initialState, payload) {
+  switch (payload.type) {
     case userConstants.API_CALL_ERROR:
       return {
-        errors: action.errors,
+        errors: payload.errors,
       };
     default:
       return state;

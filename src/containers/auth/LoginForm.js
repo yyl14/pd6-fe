@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import React, { useSelector, useDispatch } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, { useState } from 'react';
 import {
   Button,
   TextField,
@@ -17,12 +15,8 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { borders, borderRadius } from '@material-ui/system';
 
 import { Link as RouterLink } from 'react-router-dom';
-import { authActions } from '../../actions/index';
 
-export default function LoginForm() {
-  const dispatch = useDispatch();
-  const { userSignIn } = bindActionCreators(authActions, dispatch);
-  const loginState = useSelector((state) => state.auth);
+export default function LoginForm(props) {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({
@@ -50,7 +44,7 @@ export default function LoginForm() {
     }
 
     if (errors.username === false && errors.password === false && newUserName !== '' && newPassword !== '') {
-      userSignIn(newUserName, newPassword);
+      props.userSignIn(newUserName, newPassword);
     }
   };
 

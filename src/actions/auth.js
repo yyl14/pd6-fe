@@ -3,33 +3,59 @@ import {
   userConstants,
 } from './constant';
 
-export const userSignIn = (userId, password) => (dispatch) => {
-  console.log('user signin function');
-  console.log(userId);
-  // Todo: encrypt password
+export const getUserInfo = (id, token) => (dispatch) => {
+  const header = {
+    header: {
+      Authorization: `Barear ${token}`,
+    },
+  };
 
-  dispatch({
-    type: userConstants.AUTH_START, payload: userId,
-  });
-  // agent.post('/signin', { userId: userId })
-  // .then(res => {
-  //   dispatch({
-  //     type: userConstants.AUTH_SUCCESS,
-  //     payload: res.data
-  //   })
-  // })
-  // .catch(err => {
-  //   dispatch({
-  //     type: userConstants.AUTH_FAIL,
-  //     errors: err
-  //   })
-  // })
+  agent.get(`/account/${id}`, header)
+    .then((userInfo) => {
+      dispatch({
+        type: userConstants.AUTH_SUCCESS,
+        user: {
+          ...userInfo.data,
+          token,
+        },
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: userConstants.AUTH_FAIL,
+        errors: err,
+      });
+    });
 };
 
-export const userLogout = () => (dispatch) => {
+export const userSignIn = (username, password) => (dispatch) => {
+  const header = {
+    header: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  agent.post('/account/jwt', { username, password }, header)
+    .then((logRes) => {
+      const id = logRes.data.data.account_id;
+      const { token } = logRes.data.data;
+      console.log(id, token);
+      // getUserInfo(id, token);
+    })
+    .catch((err) => {
+      dispatch({
+        type: userConstants.AUTH_FAIL,
+        errors: err,
+      });
+    });
+};
+
+export const userLogout = (history) => (dispatch) => {
   dispatch({
     type: userConstants.AUTH_LOGOUT,
   });
+
+  history.push('/login');
 };
 
 export const userForgetPassword = (email) => (dispatch) => {
