@@ -11,10 +11,6 @@ import { getUserInfo } from '../actions/auth';
 
 import '../styles/index.css';
 
-// const propTypes = {
-//   cookies: instanceOf(Cookies).isRequired,
-// };
-
 class Index extends Component {
   static propTypes = {
     cookies: instanceOf(Cookies).isRequired,

@@ -12,6 +12,10 @@ import Trademark from '../../components/auth/Trademark';
 import '../../styles/auth.css';
 import '../../styles/index.css';
 
+const propTypes = {
+  cookies: instanceOf(Cookies).isRequired,
+};
+
 class Login extends Component {
   static propTypes = {
     cookies: instanceOf(Cookies).isRequired,
