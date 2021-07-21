@@ -30,12 +30,12 @@ class Login extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.auth.isAuthenticated) {
-      this.props.cookies.set('id', nextProps.auth.user.account_id, {
+      nextProps.cookies.set('id', nextProps.auth.user.id, {
         path: '/',
         expires: new Date(Date.now() + 86400), // cookie expires after 1 day
       });
 
-      this.props.cookies.set('token', nextProps.auth.user.token, {
+      nextProps.cookies.set('token', nextProps.auth.user.token, {
         path: '/',
         expires: new Date(Date.now() + 86400), // cookie expires after 1 day
       });

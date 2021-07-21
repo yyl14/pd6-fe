@@ -4,19 +4,18 @@ import {
 } from './constant';
 
 const getUserInfo = (id, token) => (dispatch) => {
-  const header = {
-    header: {
-      Authorization: `Bearer ${token}`,
+  const auth = {
+    headers: {
+      'Auth-Token': token,
     },
   };
 
-  agent.get(`/account/${id}`, header)
+  agent.get(`/account/${id}`, auth)
     .then((userInfo) => {
-      console.log(userInfo);
       // dispatch({
       //   type: userConstants.AUTH_SUCCESS,
       //   user: {
-      //     ...userInfo.data,
+      //     ...userInfo.data.data,
       //     token,
       //   },
       // });
@@ -30,36 +29,29 @@ const getUserInfo = (id, token) => (dispatch) => {
 };
 
 const userSignIn = (username, password) => (dispatch) => {
-  const header = {
-    header: {
-      'Content-Type': 'application/json',
-    },
-  };
-
-  agent.post('/account/jwt', { username, password }, header)
+  agent.post('/account/jwt', { username, password })
     .then((logRes) => {
       const id = logRes.data.data.account_id;
       const { token } = logRes.data.data;
-      console.log(id, token);
+
       return { id, token };
     })
-    .then((id, token) => {
+    .then(({ id, token }) => {
       const auth = {
-        header: {
-          Authorization: `Bearer ${token}`,
+        headers: {
+          'Auth-Token': token,
         },
       };
 
-      agent.get(`/account/${id}`, header)
+      agent.get(`/account/${id}`, auth)
         .then((userInfo) => {
-          console.log(userInfo);
-          // dispatch({
-          //   type: userConstants.AUTH_SUCCESS,
-          //   user: {
-          //     ...userInfo.data,
-          //     token,
-          //   },
-          // });
+          dispatch({
+            type: userConstants.AUTH_SUCCESS,
+            user: {
+              ...userInfo.data.data,
+              token,
+            },
+          });
         })
         .catch((err) => {
           dispatch({
