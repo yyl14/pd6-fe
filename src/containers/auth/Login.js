@@ -51,7 +51,7 @@ class Login extends Component {
 
   signIn = (username, password) => {
     this.props.userSignIn(username, password);
-  }
+  };
 
   render() {
     return (

@@ -178,7 +178,19 @@ const overrides = {
     },
   },
 
+  MuiIconButton: {
+    root: {
+      color: '#000000',
+    },
+  },
+
   // "Input"
+  MuiInputBase: {
+    root: {
+      height: '45px',
+    },
+  },
+
   MuiTextField: {
     // root: {
     //   margin: '1vh 5px 2.2vh 5px',
@@ -190,7 +202,23 @@ const overrides = {
     },
   },
   MuiSelect: {
-    outlined: { padding: '13px 0px 14px 15px' },
+    outlined: { padding: '10px 0px 10px 15px' },
+    selectMenu: {
+      // height: '1.1876em',
+    },
+  },
+  // Base of "List"
+  MuiPopover: {
+    paper: { boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)' },
+  },
+
+  MuiMenuItem: {
+    root: {
+      paddingTop: '12px',
+      paddingBottom: '12px',
+      borderRadius: '5px',
+      height: '45px',
+    },
   },
   MuiOutlinedInput: {
     root: {
@@ -219,7 +247,7 @@ const overrides = {
   },
   MuiInputLabel: {
     outlined: {
-      transform: 'translate(15px, 11px) scale(1)',
+      transform: 'translate(15px, 13px) scale(1)',
       '&$shrink': { transform: 'translate(14px, -18px) scale(0.89)', fontWeight: 400 },
     },
   },
@@ -246,19 +274,6 @@ const overrides = {
   },
   MuiDialogActions: {
     root: { padding: '0 24px 0 0' },
-  },
-
-  // Base of "List"
-  MuiPopover: {
-    paper: { boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)' },
-  },
-
-  MuiMenuItem: {
-    root: {
-      paddingTop: '12px',
-      paddingBottom: '12px',
-      borderRadius: '5px',
-    },
   },
 
   // "Mask"
