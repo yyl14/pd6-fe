@@ -49,10 +49,11 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 30px;
+  width: 100%;
 }
 
 .auth-form-input {
-  width: 18vw;
+  width: 60%;
 }
 
 .auth-form-input-email {
