@@ -3,22 +3,23 @@ import {
   userConstants,
 } from './constant';
 
-export const getUserInfo = (id, token) => (dispatch) => {
+const getUserInfo = (id, token) => (dispatch) => {
   const header = {
     header: {
-      Authorization: `Barear ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   };
 
   agent.get(`/account/${id}`, header)
     .then((userInfo) => {
-      dispatch({
-        type: userConstants.AUTH_SUCCESS,
-        user: {
-          ...userInfo.data,
-          token,
-        },
-      });
+      console.log(userInfo);
+      // dispatch({
+      //   type: userConstants.AUTH_SUCCESS,
+      //   user: {
+      //     ...userInfo.data,
+      //     token,
+      //   },
+      // });
     })
     .catch((err) => {
       dispatch({
@@ -28,7 +29,7 @@ export const getUserInfo = (id, token) => (dispatch) => {
     });
 };
 
-export const userSignIn = (username, password) => (dispatch) => {
+const userSignIn = (username, password) => (dispatch) => {
   const header = {
     header: {
       'Content-Type': 'application/json',
@@ -40,7 +41,32 @@ export const userSignIn = (username, password) => (dispatch) => {
       const id = logRes.data.data.account_id;
       const { token } = logRes.data.data;
       console.log(id, token);
-      // getUserInfo(id, token);
+      return { id, token };
+    })
+    .then((id, token) => {
+      const auth = {
+        header: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      agent.get(`/account/${id}`, header)
+        .then((userInfo) => {
+          console.log(userInfo);
+          // dispatch({
+          //   type: userConstants.AUTH_SUCCESS,
+          //   user: {
+          //     ...userInfo.data,
+          //     token,
+          //   },
+          // });
+        })
+        .catch((err) => {
+          dispatch({
+            type: userConstants.AUTH_FAIL,
+            errors: err,
+          });
+        });
     })
     .catch((err) => {
       dispatch({
@@ -50,7 +76,7 @@ export const userSignIn = (username, password) => (dispatch) => {
     });
 };
 
-export const userLogout = (history) => (dispatch) => {
+const userLogout = (history) => (dispatch) => {
   dispatch({
     type: userConstants.AUTH_LOGOUT,
   });
@@ -58,7 +84,7 @@ export const userLogout = (history) => (dispatch) => {
   history.push('/login');
 };
 
-export const userForgetPassword = (email) => (dispatch) => {
+const userForgetPassword = (email) => (dispatch) => {
   console.log('Forget Password');
   dispatch({
     type: userConstants.FORGET_PASSWORD_REQUEST,
@@ -75,4 +101,11 @@ export const userForgetPassword = (email) => (dispatch) => {
   //     errors: err
   //   })
   // })
+};
+
+export {
+  getUserInfo,
+  userSignIn,
+  userLogout,
+  userForgetPassword,
 };
