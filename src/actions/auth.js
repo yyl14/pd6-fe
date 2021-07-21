@@ -3,36 +3,80 @@ import {
   userConstants,
 } from './constant';
 
-export const userSignIn = (userId, password) => (dispatch) => {
-  console.log('user signin function');
-  console.log(userId);
-  // Todo: encrypt password
+const getUserInfo = (id, token) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
 
-  dispatch({
-    type: userConstants.AUTH_START, payload: userId,
-  });
-  // agent.post('/signin', { userId: userId })
-  // .then(res => {
-  //   dispatch({
-  //     type: userConstants.AUTH_SUCCESS,
-  //     payload: res.data
-  //   })
-  // })
-  // .catch(err => {
-  //   dispatch({
-  //     type: userConstants.AUTH_FAIL,
-  //     errors: err
-  //   })
-  // })
+  agent.get(`/account/${id}`, auth)
+    .then((userInfo) => {
+      // dispatch({
+      //   type: userConstants.AUTH_SUCCESS,
+      //   user: {
+      //     ...userInfo.data.data,
+      //     token,
+      //   },
+      // });
+    })
+    .catch((err) => {
+      dispatch({
+        type: userConstants.AUTH_FAIL,
+        errors: err,
+      });
+    });
 };
 
-export const userLogout = () => (dispatch) => {
+const userSignIn = (username, password) => (dispatch) => {
+  agent.post('/account/jwt', { username, password })
+    .then((logRes) => {
+      const id = logRes.data.data.account_id;
+      const { token } = logRes.data.data;
+
+      return { id, token };
+    })
+    .then(({ id, token }) => {
+      const auth = {
+        headers: {
+          'Auth-Token': token,
+        },
+      };
+
+      agent.get(`/account/${id}`, auth)
+        .then((userInfo) => {
+          dispatch({
+            type: userConstants.AUTH_SUCCESS,
+            user: {
+              ...userInfo.data.data,
+              token,
+            },
+          });
+        })
+        .catch((err) => {
+          dispatch({
+            type: userConstants.AUTH_FAIL,
+            errors: err,
+          });
+        });
+    })
+    .catch((err) => {
+      dispatch({
+        type: userConstants.AUTH_FAIL,
+        errors: err,
+      });
+    });
+};
+
+const userLogout = (history) => (dispatch) => {
   dispatch({
     type: userConstants.AUTH_LOGOUT,
   });
+
+  history.push('/login');
 };
 
-export const userForgetPassword = (email) => (dispatch) => {
+const userForgetPassword = (email) => (dispatch) => {
   console.log('Forget Password');
   dispatch({
     type: userConstants.FORGET_PASSWORD_REQUEST,
@@ -49,4 +93,11 @@ export const userForgetPassword = (email) => (dispatch) => {
   //     errors: err
   //   })
   // })
+};
+
+export {
+  getUserInfo,
+  userSignIn,
+  userLogout,
+  userForgetPassword,
 };

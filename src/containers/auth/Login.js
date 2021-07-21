@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { withCookies, Cookies } from 'react-cookie';
+import { instanceOf } from 'prop-types';
 import { Grid, Typography } from '@material-ui/core';
 import agent from '../../actions/agent';
 import { userSignIn } from '../../actions/auth';
@@ -11,13 +12,46 @@ import Trademark from '../../components/auth/Trademark';
 import '../../styles/auth.css';
 import '../../styles/index.css';
 
+const propTypes = {
+  cookies: instanceOf(Cookies).isRequired,
+};
+
 class Login extends Component {
+  static propTypes = {
+    cookies: instanceOf(Cookies).isRequired,
+  };
+
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      loading: false,
+    };
   }
 
-  componentDidMount() {}
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.auth.isAuthenticated) {
+      nextProps.cookies.set('id', nextProps.auth.user.id, {
+        path: '/',
+        expires: new Date(Date.now() + 86400), // cookie expires after 1 day
+      });
+
+      nextProps.cookies.set('token', nextProps.auth.user.token, {
+        path: '/',
+        expires: new Date(Date.now() + 86400), // cookie expires after 1 day
+      });
+      nextProps.history.push('/');
+    }
+
+    return null;
+  }
+
+  componentDidMount() {
+    document.title = 'Login';
+  }
+
+  signIn = (username, password) => {
+    this.props.userSignIn(username, password);
+  }
 
   render() {
     return (
@@ -25,7 +59,7 @@ class Login extends Component {
         <Grid className="auth-page-container" container direction="row" justifyContent="center" alignItems="center">
           <Grid container item xs={6} className="auth-page-col auth-page-col-left" justifyContent="center" />
           <Grid container item xs={6} className="auth-page-col auth-page-col-right" justifyContent="center">
-            <LoginForm />
+            <LoginForm userSignIn={this.signIn} />
           </Grid>
           <Typography className="auth-title" variant="h1">
             Login and train your puppy!
@@ -37,4 +71,9 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  error: state.error,
+});
+
+export default connect(mapStateToProps, { userSignIn })(withRouter(withCookies(Login)));
