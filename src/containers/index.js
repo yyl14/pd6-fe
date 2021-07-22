@@ -4,7 +4,8 @@ import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 
 import React, { Component } from 'react';
-import Home from './home';
+import Normal from './normal';
+import Admin from './admin';
 import NoMatch from '../components/noMatch';
 
 import { getUserInfo } from '../actions/auth';
@@ -42,7 +43,8 @@ class Index extends Component {
     return (
       <div className="wrapper">
         <Switch>
-          <Route exact path="/" component={Home} />
+          <Route exact path="/" component={Normal} />
+          <Route path="/admin" component={Admin} />
           <Route component={NoMatch} />
         </Switch>
       </div>

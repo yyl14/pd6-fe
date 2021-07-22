@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import { withRouter } from 'react-router-dom';
 
-class Home extends Component {
+class Account extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -15,4 +16,9 @@ class Home extends Component {
   }
 }
 
-export default withRouter(Home);
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  error: state.error,
+});
+
+export default connect(mapStateToProps, {})(withRouter(Account));
