@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { withRouter } from 'react-router-dom';
 
-class Normal extends Component {
+class Announcement extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -21,4 +21,4 @@ const mapStateToProps = (state) => ({
   error: state.error,
 });
 
-export default connect(mapStateToProps, {})(withRouter(Normal));
+export default connect(mapStateToProps, {})(withRouter(Announcement));
