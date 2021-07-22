@@ -27,7 +27,7 @@ class Register extends Component {
           <Grid container item xs={6} className="auth-page-col auth-page-col-right" justifyContent="center">
             <RegisterForm />
           </Grid>
-          <Typography className="auth-title" variant="h1">
+          <Typography className="auth-title" variant="h3">
             Register and adopt a puppy...
           </Typography>
           <Trademark />

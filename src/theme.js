@@ -76,9 +76,27 @@ const palette = {
 const typography = {
   /* Note: to change default html font size (basis of 'rem'), go to src/styles/index.css */
 
-  // UI/UX terminology
-  // Big Title
+  // UI/UX style name
+  // H1
   h1: {
+    fontSize: '5.33rem',
+    fontWeight: 500,
+    letterSpacing: '-1%',
+    lineHeight: 131 / 96,
+    fontFamily: 'Noto Sans',
+  },
+
+  // H2
+  h2: {
+    fontSize: '3.33rem',
+    fontWeight: 500,
+    letterSpacing: '-1%',
+    lineHeight: 82 / 60,
+    fontFamily: 'Noto Sans',
+  },
+
+  // Big Title
+  h3: {
     fontSize: '2.67rem',
     fontWeight: 700,
     lineHeight: 65 / 48,
@@ -87,7 +105,7 @@ const typography = {
   },
 
   // Title
-  h2: {
+  h4: {
     fontSize: '1.56rem',
     fontWeight: 700,
     lineHeight: 33 / 24,
