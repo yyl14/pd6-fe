@@ -237,7 +237,7 @@ const overrides = {
     root: {
       paddingTop: '12px',
       paddingBottom: '12px',
-      // borderRadius: '5px',
+      borderRadius: '10px',
       height: '45px',
     },
   },
