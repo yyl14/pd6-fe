@@ -61,7 +61,7 @@ class Login extends Component {
           <Grid container item xs={6} className="auth-page-col auth-page-col-right" justifyContent="center">
             <LoginForm userSignIn={this.signIn} />
           </Grid>
-          <Typography className="auth-title" variant="h1">
+          <Typography className="auth-title" variant="h3">
             Login and train your puppy!
           </Typography>
           <Trademark />

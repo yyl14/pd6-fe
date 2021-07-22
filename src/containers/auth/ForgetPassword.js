@@ -29,7 +29,7 @@ class ForgetPassword extends Component {
           <Grid container item xs={6} className="auth-page-col auth-page-col-right" justifyContent="center">
             <ForgetPasswordForm />
           </Grid>
-          <Typography className="auth-title" variant="h1">
+          <Typography className="auth-title" variant="h3">
             Lost your puppy? Reset Password
           </Typography>
           <Trademark />
