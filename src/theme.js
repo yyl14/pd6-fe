@@ -9,11 +9,13 @@ import ErrorText from './components/ErrorText';
 
 /*  Colors  */
 const mono = {
+  white: '#FFFFFF',
   veryLightGray: '#F8F8F8',
   lightGray: '#EAEAEA',
   gray: '#CACACA',
   semiDarkGray: '#AAAAAA',
   darkGray: '#656565',
+  black: '#000000',
 };
 
 const blue = {
