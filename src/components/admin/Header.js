@@ -1,12 +1,9 @@
 import React from 'react';
 import {
-  makeStyles,
-  Typography,
-  AppBar,
-  Toolbar,
-  Avatar,
+  makeStyles, Typography, AppBar, Toolbar, Avatar,
 } from '@material-ui/core';
-import { AddCircleOutline, SubjectOutlined, Notifications } from '@material-ui/icons';
+import { AddCircleOutline, SubjectOutlined } from '@material-ui/icons';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useHistory, useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -19,21 +16,26 @@ const useStyles = makeStyles((theme) => ({
   },
   main: theme.mixins.toolbar,
   item: {
-    marginRight: '2.604vw',
+    marginRight: '3.5vw',
   },
   notification: {
+    float: 'left',
     height: '3.28vh',
     width: '3.28vh',
-    marginLeft: '52vw',
-    marginRight: '0vw',
+    // marginRight: '2vw',
   },
   name: {
-    marginLeft: 'auto',
+    float: 'left',
+    marginLeft: '2vw',
     marginRight: '1vw',
   },
+  right: {
+    marginLeft: 'auto',
+    marginRight: 0,
+  },
   avatar: {
-    marginLeft: '0.7vw',
-    marginRight: '2.604vw',
+    marginLeft: '2vw',
+    marginRight: '3.5vw',
     height: '6.14vh',
     width: '6.14vh',
   },
@@ -46,19 +48,20 @@ export default function Header(props) {
 
   return (
     <div>
-
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
           <Avatar
-            src="https://img.ltn.com.tw/Upload/ent/page/800/2020/04/02/3120679_1.jpg"
+            src="https://pdogs.ntu.im/judge/image/LOGO.png"
             className={classes.avatar}
           />
           <Typography className={classes.item}>Courses</Typography>
           <Typography className={classes.item}>Account</Typography>
           <Typography className={classes.item}>System </Typography>
           <Typography className={classes.item}>About</Typography>
-          <Notifications className={classes.notification} />
-          <Typography className={classes.name}>shiba</Typography>
+          <div className={classes.right}>
+            <NotificationsIcon className={classes.notification} />
+            <Typography className={classes.name}>shiba</Typography>
+          </div>
         </Toolbar>
       </AppBar>
     </div>
