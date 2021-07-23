@@ -9,11 +9,19 @@ import {
   ListItemText,
   Avatar,
   Divider,
+  Button,
 } from '@material-ui/core';
 import SchoolIcon from '@material-ui/icons/School';
 import PersonIcon from '@material-ui/icons/Person';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import SettingsIcon from '@material-ui/icons/Settings';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import PeopleIcon from '@material-ui/icons/People';
 import { useHistory, useLocation } from 'react-router-dom';
+
+import Account from './sidebar/Account';
+import Course from './sidebar/Course';
+import System from './sidebar/System';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -34,9 +42,14 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     float: 'left',
-    marginTop: '9.34vh',
+    marginTop: '5vh',
     marginBottom: '1.23vh',
     // marginRight: '9vw',
+  },
+  secondTitle: {
+    float: 'left',
+    marginTop: '3vh',
+    marginBottom: '1.23vh',
   },
   icon: {
     color: '#090909',
@@ -46,73 +59,67 @@ const useStyles = makeStyles((theme) => ({
   titleIcon: {
     float: 'left',
     color: '#090909',
-    marginTop: '10.44vh',
+    marginTop: '6.1vh',
     marginBottom: '1.23vh',
     marginLeft: '1.6vw',
     marginRight: '0.97vw',
     // padding: '14px',
   },
+  secondTitleIcon: {
+    float: 'left',
+    color: '#090909',
+    marginTop: '4vh',
+    marginBottom: '1.23vh',
+    marginLeft: '1.6vw',
+    marginRight: '0.97vw',
+  },
   divider: {
     marginBottom: '2.21vh',
   },
+  arrow: {
+    marginTop: '4vh',
+    marginLeft: '1.6vw',
+    marginRight: 'auto',
+  },
+  button: {
+    marginLeft: 'auto',
+    marginRight: '1vw',
+    width: '90px',
+    height: '36px',
+    fontSize: '18px',
+    alignItems: 'center',
+    textAlign: 'center',
+    display: 'flex',
+  },
 }));
 
-export default function Sidebar(props) {
+export default function Sidebar({ mode = 'system' }) {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
-  console.log(props);
 
-  const menuItems = [
-    {
-      text: 'Institute',
-      path: '/institute',
-      icon: <SchoolIcon className={
-        location.pathname === '/institute' ? classes.activeIcon : classes.icon
-      }
-      />,
-    },
-    {
-      text: 'Account',
-      icon: <PersonIcon className={
-        location.pathname === '/account' ? classes.activeIcon : classes.icon
-      }
-      />,
-      path: '/account',
-    },
-  ];
+  const menuItems = null;
+
+  if (mode === 'course') {
+    return (
+      <div>
+        <Course menuItems={menuItems} classes={classes} history={history} location={location} mode1="class" course="PBC / 111-1" />
+      </div>
+    );
+  } if (mode === 'account') {
+    return (
+      <div>
+        <Account menuItems={menuItems} classes={classes} history={history} location={location} mode1="account" institute="NTNU" account="B05705066" />
+      </div>
+    );
+  } if (mode === 'system') {
+    return (
+      <div>
+        <System menuItems={menuItems} classes={classes} history={history} location={location} mode1="language" announcement="管院停電" language="Python 3.8.1" />
+      </div>
+    );
+  }
   return (
-    <div>
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        anchor="left"
-        classes={{ paper: classes.drawerPaper }}
-      >
-        <div>
-          <PlayArrowIcon className={classes.titleIcon} />
-          <Typography variant="h2" className={classes.title}>
-            Account
-          </Typography>
-        </div>
-        <Divider variant="middle" className={classes.divider} />
-
-        <List>
-          {menuItems.map((item) => (
-            <ListItem
-              button
-              key={item.text}
-              onClick={() => history.push(item.path)}
-              className={
-                location.pathname === item.path ? classes.active : null
-              }
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-    </div>
+    <div />
   );
 }
