@@ -1,22 +1,5 @@
 import React from 'react';
-import {
-  makeStyles,
-  Drawer,
-  Typography,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Avatar,
-  Divider,
-  Button,
-} from '@material-ui/core';
-import SchoolIcon from '@material-ui/icons/School';
-import PersonIcon from '@material-ui/icons/Person';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import SettingsIcon from '@material-ui/icons/Settings';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import PeopleIcon from '@material-ui/icons/People';
+import { makeStyles } from '@material-ui/core';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import Account from './sidebar/Account';
@@ -93,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Sidebar({ mode = 'system' }) {
+export default function Sidebar({ mode = 'course' }) {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
@@ -103,23 +86,46 @@ export default function Sidebar({ mode = 'system' }) {
   if (mode === 'course') {
     return (
       <div>
-        <Course menuItems={menuItems} classes={classes} history={history} location={location} mode1="class" course="PBC / 111-1" />
-      </div>
-    );
-  } if (mode === 'account') {
-    return (
-      <div>
-        <Account menuItems={menuItems} classes={classes} history={history} location={location} mode1="account" institute="NTNU" account="B05705066" />
-      </div>
-    );
-  } if (mode === 'system') {
-    return (
-      <div>
-        <System menuItems={menuItems} classes={classes} history={history} location={location} mode1="language" announcement="管院停電" language="Python 3.8.1" />
+        <Course
+          menuItems={menuItems}
+          classes={classes}
+          history={history}
+          location={location}
+          mode1="main"
+          course="PBC / 111-1"
+        />
       </div>
     );
   }
-  return (
-    <div />
-  );
+  if (mode === 'account') {
+    return (
+      <div>
+        <Account
+          menuItems={menuItems}
+          classes={classes}
+          history={history}
+          location={location}
+          mode1="account"
+          institute="NTNU"
+          account="B05705066"
+        />
+      </div>
+    );
+  }
+  if (mode === 'system') {
+    return (
+      <div>
+        <System
+          menuItems={menuItems}
+          classes={classes}
+          history={history}
+          location={location}
+          mode1="language"
+          announcement="管院停電"
+          language="Python 3.8.1"
+        />
+      </div>
+    );
+  }
+  return <div />;
 }

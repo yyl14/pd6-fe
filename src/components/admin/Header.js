@@ -39,28 +39,113 @@ const useStyles = makeStyles((theme) => ({
     height: '6.14vh',
     width: '6.14vh',
   },
+  a: {
+    color: 'inherit',
+    textDecoration: 'none',
+  },
+  active: {
+    textDecoration: 'none',
+    color: '#1EA5FF',
+  },
 }));
 
-export default function Header(props) {
+export default function Header({ role = 'a' }) {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
+  let itemList = null;
+
+  if (role === 'a') {
+    itemList = [
+      {
+        text: 'Course',
+        path: '/',
+      },
+      {
+        text: 'Account',
+        path: '/account',
+      },
+      {
+        text: 'System',
+        path: '/system',
+      },
+      {
+        text: 'About',
+        path: '/about',
+      },
+    ];
+  } else if (role === 'b') {
+    itemList = [
+      {
+        text: 'Problem Set',
+        path: '/',
+      },
+      {
+        text: 'About',
+        path: '/about',
+      },
+    ];
+  } else if (role === 'c') {
+    itemList = [
+      {
+        text: 'Your Class',
+        path: '/',
+      },
+      {
+        text: 'Problem Set',
+        path: '/problem_set',
+      },
+      {
+        text: 'PDAO',
+        path: '/pdao',
+      },
+      {
+        text: 'About',
+        path: '/about',
+      },
+    ];
+  } else if (role === 'd') {
+    itemList = [
+      {
+        text: 'Your Class',
+        path: '/',
+      },
+      {
+        text: 'Problem Set',
+        path: '/problem_set',
+      },
+      {
+        text: 'PDAO',
+        path: '/pdao',
+      },
+      {
+        text: 'System',
+        path: '/system',
+      },
+      {
+        text: 'About',
+        path: '/about',
+      },
+    ];
+  }
 
   return (
     <div>
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
-          <Avatar
-            src="https://pdogs.ntu.im/judge/image/LOGO.png"
-            className={classes.avatar}
-          />
-          <Typography className={classes.item}>Courses</Typography>
-          <Typography className={classes.item}>Account</Typography>
-          <Typography className={classes.item}>System </Typography>
-          <Typography className={classes.item}>About</Typography>
+          <Avatar src="https://pdogs.ntu.im/judge/image/LOGO.png" className={classes.avatar} />
+          {itemList.map((item) => (
+            <Typography variant="h6" className={classes.item} key={item.text}>
+              <a href={item.path} className={location.pathname === item.path ? classes.active : classes.a}>
+                {item.text}
+              </a>
+            </Typography>
+          ))}
           <div className={classes.right}>
             <NotificationsIcon className={classes.notification} />
-            <Typography className={classes.name}>shiba</Typography>
+            <Typography variant="h6" className={classes.name}>
+              shiba
+            </Typography>
           </div>
         </Toolbar>
       </AppBar>
