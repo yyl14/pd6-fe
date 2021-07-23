@@ -8,7 +8,7 @@ export const userConstants = {
 
   AUTH_LOGOUT: 'AUTH_LOGOUT',
 
-  SIGHUP_REQUEST: 'SIGNUP_REQUEST',
+  SIGNUP_REQUEST: 'SIGNUP_REQUEST',
   SIGNUP_SUCCESS: 'SIGNUP_SUCCESS',
   SIGNUP_FAIL: 'SIGNUP_FAIL',
 
@@ -20,3 +20,5 @@ export const userConstants = {
   RESET_PASSWORD_SUCCESS: 'RESET_PASSWORD_SUCCESS',
   RESET_PASSWORD_FAIL: 'RESET_PASSWORD_FAIL',
 };
+
+export const courseConstants = {};
