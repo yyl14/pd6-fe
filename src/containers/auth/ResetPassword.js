@@ -27,7 +27,7 @@ class ResetPassword extends Component {
           <Grid container item xs={6} className="auth-page-col auth-page-col-right" justify="center">
             <ResetPasswordForm />
           </Grid>
-          <Typography className="auth-title" variant="h1">
+          <Typography className="auth-title" variant="h3">
             Go find your puppy!
           </Typography>
           <Trademark />
