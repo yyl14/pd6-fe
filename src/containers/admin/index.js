@@ -17,13 +17,15 @@ class Admin extends Component {
     this.state = {};
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      if (this.props.auth.user.role.indexOf('MANAGER') === -1) {
+        this.props.history.push('/notFound');
+      }
+    }
+  }
 
   render() {
-    if (this.props.auth.user.role.index('MANAGER') === -1) {
-      this.props.history.push('/notFound');
-    }
-
     return (
       <Switch>
         <Route path="/admin/course/overview" component={CourseOverview} />

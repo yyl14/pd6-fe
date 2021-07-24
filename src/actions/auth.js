@@ -12,13 +12,13 @@ const getUserInfo = (id, token) => (dispatch) => {
 
   agent.get(`/account/${id}`, auth)
     .then((userInfo) => {
-      // dispatch({
-      //   type: userConstants.AUTH_SUCCESS,
-      //   user: {
-      //     ...userInfo.data.data,
-      //     token,
-      //   },
-      // });
+      dispatch({
+        type: userConstants.AUTH_SUCCESS,
+        user: {
+          ...userInfo.data.data,
+          token,
+        },
+      });
     })
     .catch((err) => {
       dispatch({
