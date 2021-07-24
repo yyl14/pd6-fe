@@ -20,7 +20,8 @@ class Admin extends Component {
   componentDidMount() {}
 
   render() {
-    if (this.props.auth.user.role.index('MANAGER') === -1) {
+    console.log(this.props.auth.user.role);
+    if (this.props.auth.user.role.indexOf('MANAGER') === -1 && this.props.auth.user.role !== 'MANAGER') {
       this.props.history.push('/notFound');
     }
 

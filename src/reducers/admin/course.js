@@ -40,14 +40,12 @@ const initialState = {
 
 export default function course(state = initialState, action) {
   switch (action.type) {
-    // Course
-
+    // Courses
     case courseConstants.FETCH_COURSES_START:
       return {
         ...state,
         courses: { ...state.courses, loading: true },
       };
-
     case courseConstants.FETCH_COURSES_SUCCESS: {
       const { data } = action.payload;
       return {
@@ -60,7 +58,6 @@ export default function course(state = initialState, action) {
         },
       };
     }
-
     case courseConstants.FETCH_COURSES_FAIL: {
       const { error } = action.payload;
       return {
@@ -74,17 +71,17 @@ export default function course(state = initialState, action) {
       };
     }
 
-    case courseConstants.FETCH_COURSES_START:
+    // Classes
+    case courseConstants.FETCH_CLASSES_START:
       return {
         ...state,
-        courses: { ...state.courses, loading: true },
+        classes: { ...state.classes, loading: true },
       };
-
-    case courseConstants.FETCH_COURSES_SUCCESS: {
+    case courseConstants.FETCH_CLASSES_SUCCESS: {
       const { data } = action.payload;
       return {
         ...state,
-        courses: {
+        classes: {
           byId: data.reduce((acc, item) => ({ ...acc, [item.key]: item }), {}),
           allIds: data.map((item) => item.id),
           error: null,
@@ -92,12 +89,11 @@ export default function course(state = initialState, action) {
         },
       };
     }
-
-    case courseConstants.FETCH_COURSES_FAIL: {
+    case courseConstants.FETCH_CLASSES_FAIL: {
       const { error } = action.payload;
       return {
         ...state,
-        courses: {
+        classes: {
           byId: {},
           allIds: [],
           error,

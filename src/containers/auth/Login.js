@@ -39,7 +39,12 @@ class Login extends Component {
         path: '/',
         expires: new Date(Date.now() + 86400), // cookie expires after 1 day
       });
-      nextProps.history.push('/');
+
+      if (nextProps.auth.user.role.indexOf('MANAGER') !== -1 || nextProps.auth.user.role === 'MANAGER') {
+        nextProps.history.push('/admin/course/overview');
+      } else {
+        nextProps.history.push('/');
+      }
     }
 
     return null;
