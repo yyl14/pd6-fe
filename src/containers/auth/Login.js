@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, useHistory } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import { Grid, Typography } from '@material-ui/core';
@@ -51,6 +51,7 @@ class Login extends Component {
 
   signIn = (username, password) => {
     this.props.userSignIn(username, password);
+    this.props.history.push('/components/admin/system/announcement');
   };
 
   render() {
