@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import { withRouter } from 'react-router-dom';
 
+import ClassSetting from '../../../components/admin/course/ClassSetting';
+
 class ClassInfo extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +14,7 @@ class ClassInfo extends Component {
   componentDidMount() {}
 
   render() {
-    return <div />;
+    return <ClassSetting />;
   }
 }
 
