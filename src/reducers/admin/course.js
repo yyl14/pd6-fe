@@ -15,32 +15,17 @@ const initialState = {
     loading: false,
   },
 
-  // challenges: {
-  //   byId: {},
-  //   allIds: {},
-  // },
-
   members: {
     byId: {},
     allIds: [],
     error: null,
     loading: false,
   },
-
-  // teams: {
-  //   byId: {},
-  //   allIds: {},
-  // },
-
-  // grades: {
-  //   byId: {},
-  //   allIds: {},
-  // },
 };
 
 export default function course(state = initialState, action) {
   switch (action.type) {
-    // Courses
+    /* Courses */
     case courseConstants.FETCH_COURSES_START:
       return {
         ...state,
@@ -51,7 +36,7 @@ export default function course(state = initialState, action) {
       return {
         ...state,
         courses: {
-          byId: data.reduce((acc, item) => ({ ...acc, [item.key]: item }), {}),
+          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, classIds: [] } }), state.courses),
           allIds: data.map((item) => item.id),
           error: null,
           loading: false,
@@ -71,31 +56,86 @@ export default function course(state = initialState, action) {
       };
     }
 
-    // Classes
+    /* Classes */
     case courseConstants.FETCH_CLASSES_START:
       return {
         ...state,
         classes: { ...state.classes, loading: true },
       };
+
     case courseConstants.FETCH_CLASSES_SUCCESS: {
-      const { data } = action.payload;
+      const { courseId, data } = action.payload;
       return {
         ...state,
+
+        // add class ids to course
+        courses: state.courses.byId.filter((item) => (item.id === courseId ? { ...item, classIds: data.map((dataItem) => dataItem.id) } : item)),
+
+        // add class data
         classes: {
-          byId: data.reduce((acc, item) => ({ ...acc, [item.key]: item }), {}),
+          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, memberIds: [] } }), state.classes),
           allIds: data.map((item) => item.id),
           error: null,
           loading: false,
         },
       };
     }
+
     case courseConstants.FETCH_CLASSES_FAIL: {
-      const { error } = action.payload;
+      const { courseId, error } = action.payload;
       return {
         ...state,
+
+        // clear all class ids of the course
+        courses: state.courses.map((item) => (item.id === courseId ? { ...item, classIds: [] } : item)),
+
+        // class data will NOT be cleared
         classes: {
-          byId: {},
-          allIds: [],
+          ...state.classes,
+          error,
+          loading: false,
+        },
+      };
+    }
+
+    /* Members */
+    case courseConstants.FETCH_MEMBERS_START: {
+      return {
+        ...state,
+        members: {
+          ...state.members,
+          loading: true,
+        },
+      };
+    }
+    case courseConstants.FETCH_MEMBERS_SUCCESS: {
+      const { classId, data } = action.payload;
+      return {
+        ...state,
+        // add member ids to class
+        classes: state.classes.byId.filter((item) => (item.id === classId ? { ...item, memberIds: data.map((dataItem) => dataItem.id) } : item)),
+
+        // add member data
+        members: {
+          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: item }), state.members),
+          allIds: data.map((item) => item.id),
+          error: null,
+          loading: false,
+        },
+      };
+    }
+
+    case courseConstants.FETCH_MEMBERS_FAIL: {
+      const { classId, error } = action.payload;
+      return {
+        ...state,
+
+        // clear all members ids of the class
+        classes: state.courses.map((item) => (item.id === classId ? { ...item, memberIds: [] } : item)),
+
+        // member data will NOT be cleared
+        members: {
+          ...state.members,
           error,
           loading: false,
         },
