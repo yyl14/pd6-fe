@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Drawer,
   Typography,
@@ -16,8 +16,13 @@ import PeopleIcon from '@material-ui/icons/People';
 import { useHistory, useLocation } from 'react-router-dom';
 
 export default function Course({
-  menuItems, classes, history, location, mode1, course, semester,
+  menuItems, classes, history, location,
 }) {
+  const baseURL = '/admin/course';
+  const [mode1, setMode1] = useState('main');
+  const [course, setCourse] = useState('');
+  // const [mode2, setMode2] = useState('');
+
   let title1 = null;
   let title2 = null;
   let itemList = [];
@@ -29,30 +34,30 @@ export default function Course({
     itemList = [
       {
         text: 'PBC',
-        path: '/pbc',
-        icon: <PeopleIcon className={location.pathname === '/pbc' ? classes.activeIcon : classes.icon} />,
+        icon: <PeopleIcon className={location.pathname === `${baseURL}/PBC` ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/PBC`,
       },
       {
         text: 'DSAP',
-        icon: <PeopleIcon className={location.pathname === '/dsap' ? classes.activeIcon : classes.icon} />,
-        path: '/dsap',
+        icon: <PeopleIcon className={location.pathname === `${baseURL}/DSAP` ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/DSAP`,
       },
       {
         text: 'PD',
-        icon: <PeopleIcon className={location.pathname === '/pd' ? classes.activeIcon : classes.icon} />,
-        path: '/pd',
+        icon: <PeopleIcon className={location.pathname === `${baseURL}/PD` ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/PD`,
       },
       {
         text: 'OR',
-        icon: <PeopleIcon className={location.pathname === '/or' ? classes.activeIcon : classes.icon} />,
-        path: '/or',
+        icon: <PeopleIcon className={location.pathname === `${baseURL}/OR` ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/OR`,
       },
     ];
     secondItemList = [
       {
         text: 'PDAO',
-        path: '/pdao',
-        icon: <PeopleIcon className={location.pathname === '/pdao' ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/PDAO`,
+        icon: <PeopleIcon className={location.pathname === `${baseURL}/PDAO` ? classes.activeIcon : classes.icon} />,
       }];
   } else if (mode1 === 'setting') {
     arrow = <ArrowBackIcon className={classes.arrow} />;
@@ -60,8 +65,8 @@ export default function Course({
     itemList = [
       {
         text: 'Course Setting',
-        path: '/course_setting',
-        icon: <SettingsIcon className={location.pathname === '/course_setting' ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/${course}`,
+        icon: <SettingsIcon className={location.pathname === `${baseURL}/${course}` ? classes.activeIcon : classes.icon} />,
       },
     ];
   } else if (mode1 === 'class') {
@@ -70,16 +75,33 @@ export default function Course({
     itemList = [
       {
         text: 'Members',
-        path: '/member',
-        icon: <PeopleIcon className={location.pathname === '/member' ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/${course}/member`,
+        icon: <PeopleIcon className={location.pathname.includes('ember') ? classes.activeIcon : classes.icon} />,
       },
       {
         text: 'Class Setting',
-        path: '/class_setting',
-        icon: <SettingsIcon className={location.pathname === '/class_setting' ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/${course}/setting`,
+        icon: <SettingsIcon className={location.pathname.includes('etting') ? classes.activeIcon : classes.icon} />,
       },
     ];
   }
+
+  useEffect(() => {
+    // console.log('Current route', location.pathname);
+    const slashNum = (location.pathname.match(new RegExp('/', 'g')) || []).length;
+    if (slashNum === 2 || location.pathname.includes('overview')) {
+      setMode1('main');
+    } else if (slashNum === 3) {
+      setMode1('setting');
+      const courseName = location.pathname.substring(location.pathname.lastIndexOf('/') + 1, location.pathname.length);
+      setCourse(courseName);
+    } else if (slashNum === 4 || slashNum === 5 || slashNum === 6) {
+      setMode1('class');
+      const split = location.pathname.split('/');
+      setCourse(`${split[3]}/${split[4]}`);
+    }
+  }, [location]);
+
   return (
     <div>
       <Drawer

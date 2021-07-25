@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Drawer,
   Typography,
@@ -19,8 +19,12 @@ import AddIcon from '@material-ui/icons/Add';
 import { useHistory, useLocation } from 'react-router-dom';
 
 export default function System({
-  menuItems, classes, history, location, mode1, announcement, language,
+  menuItems, classes, history, location,
 }) {
+  const baseURL = '/admin/system';
+  const [mode1, setMode1] = useState('main');
+  const [announcement, setAnnouncement] = useState('');
+  const [language, setLanguage] = useState('');
   let title = null;
   let itemList = [];
   let arrow = null;
@@ -29,18 +33,18 @@ export default function System({
     itemList = [
       {
         text: 'Access Log',
-        path: '/access_log',
-        icon: <DescriptionIcon className={location.pathname === '/access_log' ? classes.activeIcon : classes.icon} />,
+        icon: <DescriptionIcon className={location.pathname === `${baseURL}/accesslog` ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/accesslog`,
       },
       {
         text: 'Announcement',
-        icon: <NotificationsIcon className={location.pathname === '/announcement' ? classes.activeIcon : classes.icon} />,
-        path: '/announcement',
+        icon: <NotificationsIcon className={location.pathname === `${baseURL}/announcement` ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/announcement`,
       },
       {
         text: 'Submission Language',
-        icon: <CodeIcon className={location.pathname === '/submission_language' ? classes.activeIcon : classes.icon} />,
-        path: '/submission_language',
+        icon: <CodeIcon className={location.pathname === `${baseURL}/submitlang` ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/submitlang`,
       },
     ];
   } else if (mode1 === 'create') {
@@ -49,8 +53,8 @@ export default function System({
     itemList = [
       {
         text: 'Create',
-        path: '/create_announcement',
-        icon: <AddIcon className={location.pathname === '/create_announcement' ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/announcement/create`,
+        icon: <AddIcon className={location.pathname === `${baseURL}/announcement/create` ? classes.activeIcon : classes.icon} />,
       },
     ];
   } else if (mode1 === 'announcement') {
@@ -59,8 +63,8 @@ export default function System({
     itemList = [
       {
         text: 'Setting',
-        path: '/announcement_setting',
-        icon: <SettingsIcon className={location.pathname === '/announcement_setting' ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/announcement/${announcement}/setting`,
+        icon: <SettingsIcon className={location.pathname === `${baseURL}/announcement/${announcement}/setting` ? classes.activeIcon : classes.icon} />,
       },
     ];
   } else if (mode1 === 'language') {
@@ -69,11 +73,30 @@ export default function System({
     itemList = [
       {
         text: 'Setting',
-        path: '/language_setting',
-        icon: <SettingsIcon className={location.pathname === '/language_setting' ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/submitlang/${language}/setting`,
+        icon: <SettingsIcon className={location.pathname === `${baseURL}/submitlang/${language}/setting` ? classes.activeIcon : classes.icon} />,
       },
     ];
   }
+
+  useEffect(() => {
+    // console.log('Current route', location.pathname);
+    const slashNum = (location.pathname.match(new RegExp('/', 'g')) || []).length;
+    if (slashNum === 2 || slashNum === 3) {
+      setMode1('main');
+    } else if (location.pathname.includes('announcement/create')) {
+      setMode1('create');
+    } else if (location.pathname.includes('announcement')) {
+      setMode1('announcement');
+      const announcementName = location.pathname.match('announcement/(.*)/setting');
+      setAnnouncement(announcementName[1]);
+    } else if (location.pathname.includes('submitlang')) {
+      setMode1('language');
+      const languageName = location.pathname.match('submitlang/(.*)/setting');
+      setLanguage(languageName[1]);
+    }
+  }, [location]);
+
   return (
     <div>
       <Drawer

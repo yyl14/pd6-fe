@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Drawer,
   Typography,
@@ -16,8 +16,12 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { useHistory, useLocation } from 'react-router-dom';
 
 export default function Account({
-  menuItems, classes, history, location, mode1, institute, account,
+  menuItems, classes, history, location,
 }) {
+  const baseURL = '/admin/account';
+  const [mode1, setMode1] = useState('main');
+  const [institute, setInstitute] = useState('');
+  const [account, setAccount] = useState('');
   let title = null;
   let itemList = [];
   let arrow = null;
@@ -26,13 +30,13 @@ export default function Account({
     itemList = [
       {
         text: 'Institute',
-        path: '/institute',
-        icon: <SchoolIcon className={location.pathname === '/institute' ? classes.activeIcon : classes.icon} />,
+        icon: <SchoolIcon className={location.pathname === `${baseURL}/institute` ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/institute`,
       },
       {
         text: 'Account',
-        icon: <PersonIcon className={location.pathname === '/account' ? classes.activeIcon : classes.icon} />,
-        path: '/account',
+        icon: <PersonIcon className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/account`,
       },
     ];
   } else if (mode1 === 'institute') {
@@ -41,8 +45,8 @@ export default function Account({
     itemList = [
       {
         text: 'Institute Setting',
-        path: '/institute_setting',
-        icon: <SettingsIcon className={location.pathname === '/institute_setting' ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/institute/${institute}/setting`,
+        icon: <SettingsIcon className={location.pathname === `${baseURL}/institute/${institute}/setting` ? classes.activeIcon : classes.icon} />,
       },
     ];
   } else if (mode1 === 'account') {
@@ -51,11 +55,26 @@ export default function Account({
     itemList = [
       {
         text: 'Account Setting',
-        path: '/account_setting',
-        icon: <SettingsIcon className={location.pathname === '/account_setting' ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/account/${account}/setting`,
+        icon: <SettingsIcon className={location.pathname === `${baseURL}/account/${account}/setting` ? classes.activeIcon : classes.icon} />,
       },
     ];
   }
+  useEffect(() => {
+    // console.log('Current route', location.pathname);
+    const slashNum = (location.pathname.match(new RegExp('/', 'g')) || []).length;
+    if (slashNum === 2 || slashNum === 3) {
+      setMode1('main');
+    } else if (location.pathname.includes('institute')) {
+      setMode1('institute');
+      const instituteName = location.pathname.match('institute/(.*)/setting');
+      setInstitute(instituteName[1]);
+    } else if (location.pathname.includes('account')) {
+      setMode1('account');
+      const accountName = location.pathname.match('account/account/(.*)/setting');
+      setAccount(accountName[1]);
+    }
+  }, [location]);
   return (
     <div>
       <Drawer

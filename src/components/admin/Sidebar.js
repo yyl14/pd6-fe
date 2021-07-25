@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core';
 import { useHistory, useLocation } from 'react-router-dom';
 
@@ -76,12 +76,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Sidebar({ mode = 'course' }) {
+export default function Sidebar() {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
+  const [mode, setMode] = useState('course');
 
-  const menuItems = null;
+  useEffect(() => {
+    if (location.pathname.includes('course')) {
+      setMode('course');
+    } else if (location.pathname.includes('account')) {
+      setMode('account');
+    } else if (location.pathname.includes('system')) {
+      setMode('system');
+    }
+  }, [location]);
+
+  const menuItems = []; // to be done, get data from redux
 
   if (mode === 'course') {
     return (
@@ -91,8 +102,6 @@ export default function Sidebar({ mode = 'course' }) {
           classes={classes}
           history={history}
           location={location}
-          mode1="main"
-          course="PBC / 111-1"
         />
       </div>
     );
@@ -105,9 +114,6 @@ export default function Sidebar({ mode = 'course' }) {
           classes={classes}
           history={history}
           location={location}
-          mode1="account"
-          institute="NTNU"
-          account="B05705066"
         />
       </div>
     );
@@ -120,9 +126,6 @@ export default function Sidebar({ mode = 'course' }) {
           classes={classes}
           history={history}
           location={location}
-          mode1="language"
-          announcement="管院停電"
-          language="Python 3.8.1"
         />
       </div>
     );

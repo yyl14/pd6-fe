@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   makeStyles, Typography, AppBar, Toolbar, Avatar,
 } from '@material-ui/core';
@@ -49,32 +49,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header({ role = 'a' }) {
+export default function Header({ role }) {
+  const baseURL = '';
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
-  let itemList = null;
+  let itemList = [];
 
-  if (role === 'a') {
+  if (role === 'MANAGER') {
     itemList = [
       {
         text: 'Course',
-        path: '/',
+        path: '/admin/course',
       },
       {
         text: 'Account',
-        path: '/account',
+        path: '/admin/account',
       },
       {
         text: 'System',
-        path: '/system',
+        path: '/admin/system',
       },
       {
         text: 'About',
         path: '/about',
       },
     ];
-  } else if (role === 'b') {
+  } else if (role === 'NORMAL') {
     itemList = [
       {
         text: 'Problem Set',
@@ -85,7 +86,7 @@ export default function Header({ role = 'a' }) {
         path: '/about',
       },
     ];
-  } else if (role === 'c') {
+  } else if (role === 'GUEST') {
     itemList = [
       {
         text: 'Your Class',
@@ -104,7 +105,7 @@ export default function Header({ role = 'a' }) {
         path: '/about',
       },
     ];
-  } else if (role === 'd') {
+  } else if (role === 'TA') {
     itemList = [
       {
         text: 'Your Class',
@@ -129,6 +130,10 @@ export default function Header({ role = 'a' }) {
     ];
   }
 
+  useEffect(() => {
+    console.log('Current route', location.pathname);
+  }, [location]);
+
   return (
     <div>
       <AppBar className={classes.appbar} elevation={0}>
@@ -136,7 +141,7 @@ export default function Header({ role = 'a' }) {
           <Avatar src="https://pdogs.ntu.im/judge/image/LOGO.png" className={classes.avatar} />
           {itemList.map((item) => (
             <Typography variant="h6" className={classes.item} key={item.text}>
-              <a href={item.path} className={location.pathname === item.path ? classes.active : classes.a}>
+              <a href={baseURL + item.path} className={location.pathname === (item.path) ? classes.active : classes.a}>
                 {item.text}
               </a>
             </Typography>
