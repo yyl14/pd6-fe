@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Drawer,
-  Typography,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-  Button,
+  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button,
 } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import DetailsIcon from '@material-ui/icons/Details';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PeopleIcon from '@material-ui/icons/People';
@@ -22,6 +16,12 @@ export default function Course({
   const [mode1, setMode1] = useState('main');
   const [course, setCourse] = useState('');
   // const [mode2, setMode2] = useState('');
+  const [display, setDisplay] = useState('unfold');
+  const [display1, setDisplay1] = useState('unfold');
+
+  const goBack = () => {
+    history.goBack();
+  };
 
   let title1 = null;
   let title2 = null;
@@ -58,19 +58,22 @@ export default function Course({
         text: 'PDAO',
         path: `${baseURL}/PDAO`,
         icon: <PeopleIcon className={location.pathname === `${baseURL}/PDAO` ? classes.activeIcon : classes.icon} />,
-      }];
+      },
+    ];
   } else if (mode1 === 'setting') {
-    arrow = <ArrowBackIcon className={classes.arrow} />;
+    arrow = <ArrowBackIcon className={classes.arrow} onClick={goBack} />;
     title1 = course;
     itemList = [
       {
         text: 'Course Setting',
         path: `${baseURL}/${course}`,
-        icon: <SettingsIcon className={location.pathname === `${baseURL}/${course}` ? classes.activeIcon : classes.icon} />,
+        icon: (
+          <SettingsIcon className={location.pathname === `${baseURL}/${course}` ? classes.activeIcon : classes.icon} />
+        ),
       },
     ];
   } else if (mode1 === 'class') {
-    arrow = <ArrowBackIcon className={classes.arrow} />;
+    arrow = <ArrowBackIcon className={classes.arrow} onClick={goBack} />;
     title1 = course;
     itemList = [
       {
@@ -85,6 +88,22 @@ export default function Course({
       },
     ];
   }
+
+  const foldLesson = () => {
+    setDisplay('fold');
+  };
+
+  const unfoldLesson = () => {
+    setDisplay('unfold');
+  };
+
+  const foldContest = () => {
+    setDisplay1('fold');
+  };
+
+  const unfoldContest = () => {
+    setDisplay1('unfold');
+  };
 
   useEffect(() => {
     // console.log('Current route', location.pathname);
@@ -115,54 +134,71 @@ export default function Course({
           <Button color="primary" className={classes.button}>
             New
           </Button>
-        ) : arrow }
+        ) : (
+          arrow
+        )}
 
         <div>
+          {display === 'unfold' ? (
+            <PlayArrowIcon className={classes.titleIcon} onClick={foldLesson} />
+          ) : (
+            <DetailsIcon className={classes.titleIcon} onClick={unfoldLesson} />
+          )}
 
-          <PlayArrowIcon className={classes.titleIcon} />
           <Typography variant="h2" className={classes.title}>
             {title1}
           </Typography>
         </div>
         <Divider variant="middle" className={classes.divider} />
+        {display === 'unfold' ? (
+          <List>
+            {itemList.map((item) => (
+              <ListItem
+                button
+                key={item.text}
+                onClick={() => history.push(item.path)}
+                className={location.pathname === item.path ? classes.active : null}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            ))}
+          </List>
+        ) : ''}
 
-        <List>
-          {itemList.map((item) => (
-            <ListItem
-              button
-              key={item.text}
-              onClick={() => history.push(item.path)}
-              className={location.pathname === item.path ? classes.active : null}
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
         {mode1 === 'main' ? (
           <>
             <div>
-              <PlayArrowIcon className={classes.secondTitleIcon} />
+              {display1 === 'unfold' ? (
+                <PlayArrowIcon className={classes.secondTitleIcon} onClick={foldContest} />
+              ) : (
+                <DetailsIcon className={classes.secondTitleIcon} onClick={unfoldContest} />
+              )}
               <Typography variant="h2" className={classes.secondTitle}>
                 {title2}
               </Typography>
             </div>
             <Divider variant="middle" className={classes.divider} />
-            <List>
-              {secondItemList.map((item) => (
-                <ListItem
-                  button
-                  key={item.text}
-                  onClick={() => history.push(item.path)}
-                  className={location.pathname === item.path ? classes.active : null}
-                >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText primary={item.text} />
-                </ListItem>
-              ))}
-            </List>
+            {display1 === 'unfold' ? (
+              <List>
+                {secondItemList.map((item) => (
+                  <ListItem
+                    button
+                    key={item.text}
+                    onClick={() => history.push(item.path)}
+                    className={location.pathname === item.path ? classes.active : null}
+                  >
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText primary={item.text} />
+                  </ListItem>
+                ))}
+              </List>
+            ) : ''}
+
           </>
-        ) : ''}
+        ) : (
+          ''
+        )}
       </Drawer>
     </div>
   );

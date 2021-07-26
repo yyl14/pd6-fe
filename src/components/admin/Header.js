@@ -8,11 +8,13 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
-    height: '9.21vh',
+    height: '75px',
+    // height: '9.21vh',
     background: '#090909',
   },
   toolbar: {
-    height: '9.21vh',
+    height: '75px',
+    // height: '9.21vh',
   },
   main: theme.mixins.toolbar,
   item: {

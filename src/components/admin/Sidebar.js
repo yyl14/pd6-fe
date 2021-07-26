@@ -8,11 +8,13 @@ import System from './sidebar/System';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
-    top: '9.21vh',
+    top: '75px',
+    // top: '9.21vh',
     width: '300px',
   },
   drawerPaper: {
-    top: '9.21vh',
+    top: '75px',
+    // top: '9.21vh',
     width: '300px',
   },
   active: {

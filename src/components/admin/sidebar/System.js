@@ -10,6 +10,7 @@ import {
   Button,
 } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import DetailsIcon from '@material-ui/icons/Details';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import DescriptionIcon from '@material-ui/icons/Description';
@@ -25,6 +26,11 @@ export default function System({
   const [mode1, setMode1] = useState('main');
   const [announcement, setAnnouncement] = useState('');
   const [language, setLanguage] = useState('');
+  const [display, setDisplay] = useState('unfold');
+  const goBack = () => {
+    history.goBack();
+  };
+
   let title = null;
   let itemList = [];
   let arrow = null;
@@ -48,7 +54,7 @@ export default function System({
       },
     ];
   } else if (mode1 === 'create') {
-    arrow = <ArrowBackIcon className={classes.arrow} />;
+    arrow = <ArrowBackIcon className={classes.arrow} onClick={goBack} />;
     title = 'Announcement';
     itemList = [
       {
@@ -58,7 +64,7 @@ export default function System({
       },
     ];
   } else if (mode1 === 'announcement') {
-    arrow = <ArrowBackIcon className={classes.arrow} />;
+    arrow = <ArrowBackIcon className={classes.arrow} onClick={goBack} />;
     title = announcement;
     itemList = [
       {
@@ -68,7 +74,7 @@ export default function System({
       },
     ];
   } else if (mode1 === 'language') {
-    arrow = <ArrowBackIcon className={classes.arrow} />;
+    arrow = <ArrowBackIcon className={classes.arrow} onClick={goBack} />;
     title = language;
     itemList = [
       {
@@ -78,6 +84,14 @@ export default function System({
       },
     ];
   }
+
+  const foldSystem = () => {
+    setDisplay('fold');
+  };
+
+  const unfoldSystem = () => {
+    setDisplay('unfold');
+  };
 
   useEffect(() => {
     // console.log('Current route', location.pathname);
@@ -109,26 +123,32 @@ export default function System({
         {arrow}
         <div>
 
-          <PlayArrowIcon className={classes.titleIcon} />
+          {display === 'unfold' ? (
+            <PlayArrowIcon className={classes.titleIcon} onClick={foldSystem} />
+          ) : (
+            <DetailsIcon className={classes.titleIcon} onClick={unfoldSystem} />
+          )}
           <Typography variant="h2" className={classes.title}>
             {title}
           </Typography>
         </div>
         <Divider variant="middle" className={classes.divider} />
+        {display === 'unfold' ? (
+          <List>
+            {itemList.map((item) => (
+              <ListItem
+                button
+                key={item.text}
+                onClick={() => history.push(item.path)}
+                className={location.pathname === item.path ? classes.active : null}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            ))}
+          </List>
+        ) : ''}
 
-        <List>
-          {itemList.map((item) => (
-            <ListItem
-              button
-              key={item.text}
-              onClick={() => history.push(item.path)}
-              className={location.pathname === item.path ? classes.active : null}
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
       </Drawer>
     </div>
   );

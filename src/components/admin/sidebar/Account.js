@@ -11,6 +11,7 @@ import {
 import SchoolIcon from '@material-ui/icons/School';
 import PersonIcon from '@material-ui/icons/Person';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import DetailsIcon from '@material-ui/icons/Details';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -22,6 +23,12 @@ export default function Account({
   const [mode1, setMode1] = useState('main');
   const [institute, setInstitute] = useState('');
   const [account, setAccount] = useState('');
+  const [display, setDisplay] = useState('unfold');
+
+  const goBack = () => {
+    history.goBack();
+  };
+
   let title = null;
   let itemList = [];
   let arrow = null;
@@ -40,7 +47,7 @@ export default function Account({
       },
     ];
   } else if (mode1 === 'institute') {
-    arrow = <ArrowBackIcon className={classes.arrow} />;
+    arrow = <ArrowBackIcon className={classes.arrow} onClick={goBack} />;
     title = institute;
     itemList = [
       {
@@ -50,7 +57,7 @@ export default function Account({
       },
     ];
   } else if (mode1 === 'account') {
-    arrow = <ArrowBackIcon className={classes.arrow} />;
+    arrow = <ArrowBackIcon className={classes.arrow} onClick={goBack} />;
     title = account;
     itemList = [
       {
@@ -60,6 +67,15 @@ export default function Account({
       },
     ];
   }
+
+  const foldAccount = () => {
+    setDisplay('fold');
+  };
+
+  const unfoldAccount = () => {
+    setDisplay('unfold');
+  };
+
   useEffect(() => {
     // console.log('Current route', location.pathname);
     const slashNum = (location.pathname.match(new RegExp('/', 'g')) || []).length;
@@ -87,26 +103,32 @@ export default function Account({
         {arrow}
         <div>
 
-          <PlayArrowIcon className={classes.titleIcon} />
+          {display === 'unfold' ? (
+            <PlayArrowIcon className={classes.titleIcon} onClick={foldAccount} />
+          ) : (
+            <DetailsIcon className={classes.titleIcon} onClick={unfoldAccount} />
+          )}
           <Typography variant="h2" className={classes.title}>
             {title}
           </Typography>
         </div>
         <Divider variant="middle" className={classes.divider} />
+        {display === 'unfold' ? (
+          <List>
+            {itemList.map((item) => (
+              <ListItem
+                button
+                key={item.text}
+                onClick={() => history.push(item.path)}
+                className={location.pathname === item.path ? classes.active : null}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            ))}
+          </List>
+        ) : ''}
 
-        <List>
-          {itemList.map((item) => (
-            <ListItem
-              button
-              key={item.text}
-              onClick={() => history.push(item.path)}
-              className={location.pathname === item.path ? classes.active : null}
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
       </Drawer>
     </div>
   );
