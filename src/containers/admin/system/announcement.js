@@ -21,10 +21,11 @@ class AnnouncementInfo extends Component {
   render() {
     return (
       <Switch>
-        <Route exact path="/admin/system/announcement" component={AnnouncementHome} />
         <Route path="/admin/system/announcement/add" component={AnnouncementAdd} />
         <Route path="/admin/system/announcement/setting" component={AnnouncementSetting} />
         <Route path="/admin/system/announcement/setting/edit" component={AnnouncementEdit} />
+        <Route exact path="/admin/system/announcement" component={AnnouncementHome} />
+
         <Route component={NoMatch} />
       </Switch>
     );
