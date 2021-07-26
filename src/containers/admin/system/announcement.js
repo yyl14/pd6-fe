@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { withRouter } from 'react-router-dom';
+import { withRouter, Switch, Route } from 'react-router-dom';
+import AnnouncementAdd from '../../../components/admin/system/AnnouncementAdd';
+import AnnouncementEdit from '../../../components/admin/system/AnnouncementEdit';
+import AnnouncementHome from '../../../components/admin/system/AnnouncementHome';
+import AnnouncementSetting from '../../../components/admin/system/AnnouncementSetting';
+import NoMatch from '../../../components/noMatch';
 
-class Announcement extends Component {
+// import AnnouncementAdd from '../../../components/admin/system/AnnouncementAdd';
+
+class AnnouncementInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -13,7 +20,13 @@ class Announcement extends Component {
 
   render() {
     return (
-      <div />
+      <Switch>
+        <Route exact path="/admin/system/announcement" component={AnnouncementHome} />
+        <Route path="/admin/system/announcement/add" component={AnnouncementAdd} />
+        <Route path="/admin/system/announcement/setting" component={AnnouncementSetting} />
+        <Route path="/admin/system/announcement/setting/edit" component={AnnouncementEdit} />
+        <Route component={NoMatch} />
+      </Switch>
     );
   }
 }
@@ -23,4 +36,4 @@ const mapStateToProps = (state) => ({
   error: state.error,
 });
 
-export default connect(mapStateToProps, {})(withRouter(Announcement));
+export default connect(mapStateToProps, {})(withRouter(AnnouncementInfo));

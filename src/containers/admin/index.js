@@ -9,7 +9,7 @@ import CourseOverview from './course/courseOverview';
 import AccessLog from './system/accessLog';
 import SubmitLang from './system/submitLang';
 import NoMatch from '../../components/noMatch';
-import Announcement from '../../components/admin/system/Announcement';
+import AnnouncementHome from '../../components/admin/system/AnnouncementHome';
 
 class Admin extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class Admin extends Component {
         <Route path="/admin/account/institute" component={Institute} />
         <Route path="/admin/account/account" component={Account} />
         <Route path="/admin/system/accesslog" component={AccessLog} />
-        <Route path="/admin/system/announcement" component={Announcement} />
+        <Route path="/admin/system/announcement" component={AnnouncementHome} />
         <Route path="/admin/system/submitlang" component={SubmitLang} />
         <Route component={NoMatch} />
       </Switch>

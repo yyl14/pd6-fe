@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 
-const AnnouncementSetting = () => {
+const AnnouncementEdit = () => {
   const [popUp, setPopUp] = useState(false);
   const [popUpDelete, setPopUpDelete] = useState(false);
   const handleClick = () => {
@@ -30,9 +30,9 @@ const AnnouncementSetting = () => {
 
   return (
     <div>
-      <h1>Setting</h1>
+      <h1>Edit</h1>
     </div>
   );
 };
 
-export default AnnouncementSetting;
+export default AnnouncementEdit;
