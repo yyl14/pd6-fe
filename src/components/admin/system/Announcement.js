@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { withRouter } from 'react-router-dom';
+import BasicTextFields from './search';
+import ContainedButtons from './AddButton';
+import StickyHeadTable from './Table';
 
 class Announcement extends Component {
   constructor(props) {
@@ -13,7 +16,11 @@ class Announcement extends Component {
 
   render() {
     return (
-      <div />
+      <div>
+        <BasicTextFields />
+        <ContainedButtons />
+        <StickyHeadTable />
+      </div>
     );
   }
 }

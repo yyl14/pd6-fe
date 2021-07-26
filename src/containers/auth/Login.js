@@ -55,7 +55,7 @@ class Login extends Component {
 
   signIn = (username, password) => {
     this.props.userSignIn(username, password);
-    this.props.history.push('/components/admin/system/announcement');
+    this.props.history.push('/admin/system/announcement');
   };
 
   render() {
