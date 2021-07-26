@@ -4,25 +4,48 @@ const initialState = {
   courses: {
     byId: {},
     allIds: [],
-    error: null,
-    loading: false,
-    addLoading: false,
-    editLoading: false,
-    deleteLoading: false,
   },
 
   classes: {
     byId: {},
     allIds: [],
-    error: null,
     loading: false,
   },
 
   members: {
     byId: {},
     allIds: [],
-    error: null,
     loading: false,
+  },
+
+  loading: {
+    fetchCourse: false,
+    addCourse: false,
+    renameCourse: false,
+    deleteCourse: false,
+
+    fetchClasses: false,
+    addClass: false,
+    renameClass: false,
+    deleteClass: false,
+
+    fetchMembers: false,
+    editMembers: false,
+  },
+
+  error: {
+    fetchCourse: null,
+    addCourse: null,
+    editCourse: null,
+    deleteCourse: null,
+
+    fetchClasses: null,
+    addClass: null,
+    renameClass: null,
+    deleteClass: null,
+
+    fetchMembers: null,
+    editMembers: null,
   },
 };
 
@@ -32,7 +55,10 @@ export default function course(state = initialState, action) {
     case courseConstants.FETCH_COURSES_START:
       return {
         ...state,
-        courses: { ...state.courses, loading: true },
+        loading: {
+          ...state.loading,
+          fetchCourse: true,
+        },
       };
     case courseConstants.FETCH_COURSES_SUCCESS: {
       const { data } = action.payload;
@@ -41,8 +67,14 @@ export default function course(state = initialState, action) {
         courses: {
           byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, classIds: [] } }), state.courses),
           allIds: data.map((item) => item.id),
-          error: null,
-          loading: false,
+        },
+        loading: {
+          ...state.loading,
+          fetchCourse: false,
+        },
+        error: {
+          ...state.error,
+          fetchCourse: null,
         },
       };
     }
@@ -53,8 +85,14 @@ export default function course(state = initialState, action) {
         courses: {
           byId: {},
           allIds: [],
-          error,
-          loading: false,
+        },
+        loading: {
+          ...state.loading,
+          fetchCourse: false,
+        },
+        error: {
+          ...state.error,
+          fetchCourse: error,
         },
       };
     }
@@ -62,7 +100,7 @@ export default function course(state = initialState, action) {
     case courseConstants.ADD_COURSE_START: {
       return {
         ...state,
-        courses: { ...state.courses, addLoading: true },
+        loading: { ...state.loading, addCourse: true },
       };
     }
     case courseConstants.ADD_COURSE_SUCCESS: {
@@ -73,7 +111,14 @@ export default function course(state = initialState, action) {
           ...state.courses,
           byId: { [courseId]: data },
           allIds: state.course.allIds.concat([[courseId]]),
-          addLoading: false,
+        },
+        loading: {
+          ...state.loading,
+          addCourse: false,
+        },
+        error: {
+          ...state.error,
+          addCourse: null,
         },
       };
     }
@@ -86,47 +131,56 @@ export default function course(state = initialState, action) {
           addLoading: false,
           error,
         },
+        loading: {
+          ...state.loading,
+          addCourse: false,
+        },
+        error: {
+          ...state.error,
+          addCourse: error,
+        },
       };
     }
 
-    case courseConstants.EDIT_COURSE_START: {
+    case courseConstants.RENAME_COURSE_START: {
       return {
         ...state,
-        courses: { ...state.courses, editLoading: true },
+        loading: { ...state.loading, renameCourse: true },
       };
     }
-    case courseConstants.EDIT_COURSE_SUCCESS: {
-      const { courseId, data } = action.payload;
+    case courseConstants.RENAME_COURSE_SUCCESS: {
+      const { courseId, newName } = action.payload;
       return {
         ...state,
         courses: {
           ...state.courses,
-          byId: { [courseId]: data },
-          editLoading: false,
+          byId: { [courseId]: { ...state.courses.byId[courseId] }, name: newName },
         },
+        loading: { ...state.loading, renameCourse: false },
+        error: { ...state.error, renameCourse: null },
       };
     }
-    case courseConstants.EDIT_COURSE_FAIL: {
+    case courseConstants.RENAME_COURSE_FAIL: {
       const { error } = action.payload;
       return {
         ...state,
-        courses: {
-          ...state.courses,
-          editLoading: false,
-          error,
-        },
+        loading: { ...state.loading, renameCourse: false },
+        error: { ...state.error, renameCourse: error },
       };
     }
 
     case courseConstants.DELETE_COURSE_START: {
       return {
         ...state,
-        courses: { ...state.courses, deleteLoading: true },
+        loading: {
+          ...state.loading,
+          deleteCourse: true,
+        },
       };
     }
     case courseConstants.DELETE_COURSE_SUCCESS: {
       const { courseId } = action.payload;
-      const newById = state.courses.byId;
+      const newById = { ...state.courses.byId };
       delete newById[courseId];
       return {
         ...state,
@@ -134,7 +188,14 @@ export default function course(state = initialState, action) {
           ...state.courses,
           byId: newById,
           allIds: state.courses.allIds.filter((item) => item !== courseId),
-          deleteLoading: false,
+        },
+        loading: {
+          ...state.loading,
+          deleteCourse: true,
+        },
+        error: {
+          ...state.error,
+          deleteCourse: null,
         },
       };
     }
@@ -144,8 +205,14 @@ export default function course(state = initialState, action) {
         ...state,
         courses: {
           ...state.courses,
-          deleteLoading: false,
-          error,
+        },
+        loading: {
+          ...state.loading,
+          deleteCourse: true,
+        },
+        error: {
+          ...state.error,
+          deleteCourse: error,
         },
       };
     }
@@ -154,7 +221,7 @@ export default function course(state = initialState, action) {
     case courseConstants.FETCH_CLASSES_START:
       return {
         ...state,
-        classes: { ...state.classes, loading: true },
+        loading: { ...state.loading, fetchClasses: true },
       };
 
     case courseConstants.FETCH_CLASSES_SUCCESS: {
@@ -169,8 +236,12 @@ export default function course(state = initialState, action) {
         classes: {
           byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, memberIds: [] } }), state.classes),
           allIds: data.map((item) => item.id),
-          error: null,
-          loading: false,
+        },
+
+        loading: { ...state.loading, fetchClasses: false },
+        error: {
+          ...state.error,
+          fetchClasses: null,
         },
       };
     }
@@ -184,10 +255,124 @@ export default function course(state = initialState, action) {
         courses: state.courses.map((item) => (item.id === courseId ? { ...item, classIds: [] } : item)),
 
         // class data will NOT be cleared
+
+        loading: { ...state.loading, fetchClasses: false },
+        error: {
+          ...state.error,
+          fetchClasses: error,
+        },
+      };
+    }
+
+    case courseConstants.ADD_CLASS_START: {
+      return {
+        ...state,
+        loading: { ...state.loading, addClass: true },
+      };
+    }
+    case courseConstants.ADD_CLASS_SUCCESS: {
+      const { classId, data } = action.payload;
+      return {
+        ...state,
         classes: {
           ...state.classes,
-          error,
-          loading: false,
+          byId: { [classId]: data },
+          allIds: state.course.allIds.concat([[classId]]),
+        },
+        loading: {
+          ...state.loading,
+          addClass: false,
+        },
+        error: {
+          ...state.error,
+          addClass: null,
+        },
+      };
+    }
+    case courseConstants.ADD_CLASS_FAIL: {
+      const { error } = action.payload;
+      return {
+        ...state,
+
+        loading: {
+          ...state.loading,
+          addClass: false,
+        },
+        error: {
+          ...state.error,
+          addClass: error,
+        },
+      };
+    }
+
+    case courseConstants.RENAME_CLASS_START: {
+      return {
+        ...state,
+        loading: { ...state.loading, renameClass: true },
+      };
+    }
+    case courseConstants.RENAME_CLASS_SUCCESS: {
+      const { classId, newName } = action.payload;
+      return {
+        ...state,
+        classes: {
+          ...state.classes,
+          byId: { [classId]: { ...state.courses.byId[classId] }, name: newName },
+        },
+        loading: { ...state.loading, renameClass: false },
+        error: { ...state.error, renameClass: null },
+      };
+    }
+    case courseConstants.RENAME_CLASS_FAIL: {
+      const { error } = action.payload;
+      return {
+        ...state,
+        loading: { ...state.loading, renameClass: false },
+        error: { ...state.error, renameClass: error },
+      };
+    }
+
+    case courseConstants.DELETE_CLASS_START: {
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          deleteClass: true,
+        },
+      };
+    }
+    case courseConstants.DELETE_CLASS_SUCCESS: {
+      const { classId } = action.payload;
+      const newById = { ...state.classes.byId };
+      delete newById[classId];
+      return {
+        ...state,
+        classes: {
+          ...state.classes,
+          byId: newById,
+          allIds: state.classes.allIds.filter((item) => item !== classId),
+        },
+        loading: {
+          ...state.loading,
+          deleteClass: true,
+        },
+        error: {
+          ...state.error,
+          deleteClass: null,
+        },
+      };
+    }
+    case courseConstants.DELETE_CLASS_FAIL: {
+      const { error } = action.payload;
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          deleteClass: true,
+        },
+        error: {
+          ...state.error,
+          deleteClass: error,
         },
       };
     }
@@ -196,9 +381,9 @@ export default function course(state = initialState, action) {
     case courseConstants.FETCH_MEMBERS_START: {
       return {
         ...state,
-        members: {
-          ...state.members,
-          loading: true,
+        loading: {
+          ...state.loading,
+          fetchMembers: true,
         },
       };
     }
@@ -213,8 +398,15 @@ export default function course(state = initialState, action) {
         members: {
           byId: data.reduce((acc, item) => ({ ...acc, [item.id]: item }), state.members),
           allIds: data.map((item) => item.id),
-          error: null,
-          loading: false,
+        },
+
+        loading: {
+          ...state.loading,
+          fetchMembers: false,
+        },
+        error: {
+          ...state.error,
+          fetchMembers: null,
         },
       };
     }
@@ -228,13 +420,18 @@ export default function course(state = initialState, action) {
         classes: state.courses.map((item) => (item.id === classId ? { ...item, memberIds: [] } : item)),
 
         // member data will NOT be cleared
-        members: {
-          ...state.members,
-          error,
-          loading: false,
+        loading: {
+          ...state.loading,
+          fetchMembers: false,
+        },
+        error: {
+          ...state.error,
+          fetchMembers: error,
         },
       };
     }
+
+    // TODO: edit member list
 
     default: {
       return state;
