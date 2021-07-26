@@ -6,6 +6,9 @@ const initialState = {
     allIds: [],
     error: null,
     loading: false,
+    addLoading: false,
+    editLoading: false,
+    deleteLoading: false,
   },
 
   classes: {
@@ -52,6 +55,97 @@ export default function course(state = initialState, action) {
           allIds: [],
           error,
           loading: false,
+        },
+      };
+    }
+
+    case courseConstants.ADD_COURSE_START: {
+      return {
+        ...state,
+        courses: { ...state.courses, addLoading: true },
+      };
+    }
+    case courseConstants.ADD_COURSE_SUCCESS: {
+      const { courseId, data } = action.payload;
+      return {
+        ...state,
+        courses: {
+          ...state.courses,
+          byId: { [courseId]: data },
+          allIds: state.course.allIds.concat([[courseId]]),
+          addLoading: false,
+        },
+      };
+    }
+    case courseConstants.ADD_COURSE_FAIL: {
+      const { error } = action.payload;
+      return {
+        ...state,
+        courses: {
+          ...state.courses,
+          addLoading: false,
+          error,
+        },
+      };
+    }
+
+    case courseConstants.EDIT_COURSE_START: {
+      return {
+        ...state,
+        courses: { ...state.courses, editLoading: true },
+      };
+    }
+    case courseConstants.EDIT_COURSE_SUCCESS: {
+      const { courseId, data } = action.payload;
+      return {
+        ...state,
+        courses: {
+          ...state.courses,
+          byId: { [courseId]: data },
+          editLoading: false,
+        },
+      };
+    }
+    case courseConstants.EDIT_COURSE_FAIL: {
+      const { error } = action.payload;
+      return {
+        ...state,
+        courses: {
+          ...state.courses,
+          editLoading: false,
+          error,
+        },
+      };
+    }
+
+    case courseConstants.DELETE_COURSE_START: {
+      return {
+        ...state,
+        courses: { ...state.courses, deleteLoading: true },
+      };
+    }
+    case courseConstants.DELETE_COURSE_SUCCESS: {
+      const { courseId } = action.payload;
+      const newById = state.courses.byId;
+      delete newById[courseId];
+      return {
+        ...state,
+        courses: {
+          ...state.courses,
+          byId: newById,
+          allIds: state.courses.allIds.filter((item) => item !== courseId),
+          deleteLoading: false,
+        },
+      };
+    }
+    case courseConstants.DELETE_COURSE_FAIL: {
+      const { error } = action.payload;
+      return {
+        ...state,
+        courses: {
+          ...state.courses,
+          deleteLoading: false,
+          error,
         },
       };
     }
