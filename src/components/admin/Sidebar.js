@@ -48,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '1.23vh',
     marginLeft: '1.6vw',
     marginRight: '0.97vw',
+    '&:hover': {
+      cursor: 'pointer',
+    },
     // padding: '14px',
   },
   secondTitleIcon: {
@@ -57,6 +60,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '1.23vh',
     marginLeft: '1.6vw',
     marginRight: '0.97vw',
+    '&:hover': {
+      cursor: 'pointer',
+    },
   },
   divider: {
     marginBottom: '2.21vh',
@@ -65,6 +71,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '4vh',
     marginLeft: '1.6vw',
     marginRight: 'auto',
+    '&:hover': {
+      cursor: 'pointer',
+    },
   },
   button: {
     marginLeft: 'auto',
