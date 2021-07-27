@@ -6,7 +6,7 @@ const initialState = {
     allIds: [],
   },
 
-  account: {
+  accounts: {
     byId: {},
     allIds: [],
   },
@@ -156,7 +156,7 @@ export default function account(state = initialState, action) {
       };
 
     // account
-    case accountConstants.FETCH_ACCOUNT_REQUEST:
+    case accountConstants.FETCH_ACCOUNTS_REQUEST:
       return {
         ...state,
         loading: {
@@ -164,11 +164,11 @@ export default function account(state = initialState, action) {
           fetchAccount: true,
         },
       };
-    case accountConstants.FETCH_ACCOUNT_SUCCESS:
+    case accountConstants.FETCH_ACCOUNTS_SUCCESS:
       return {
         ...state,
-        account: {
-          byId: action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.institutes),
+        accounts: {
+          byId: action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [] } }), state.institutes),
           allIds: action.payload.map((item) => item.id),
         },
         loading: {
@@ -180,7 +180,7 @@ export default function account(state = initialState, action) {
           fetchAccount: null,
         },
       };
-    case accountConstants.FETCH_ACCOUNT_FAIL:
+    case accountConstants.FETCH_ACCOUNTS_FAIL:
       return {
         ...state,
         loading: {
@@ -206,7 +206,7 @@ export default function account(state = initialState, action) {
       editedAccount.alternative_email = action.payload.alternative_email;
       return {
         ...state,
-        account: { ...state.account, [action.payload.id]: editedAccount },
+        accounts: { ...state.account, [action.payload.id]: editedAccount },
         loading: {
           ...state.loading,
           editAccount: false,
@@ -242,7 +242,7 @@ export default function account(state = initialState, action) {
       delete newById[action.payload.id];
       return {
         ...state,
-        account: {
+        accounts: {
           ...state.account,
           byId: newById,
           allIds: state.account.allIds.filter((item) => item !== action.payload.id),
