@@ -15,7 +15,7 @@ const AnnouncementHome = () => {
     <div>
       <h1>HomePage</h1>
       <TextField />
-      <Button variant="contained" color="primary" onClick={add}>Add Announcement</Button>
+      <Button variant="contained" color="primary" onClick={add} placeholder="Search">Add Announcement</Button>
       <StickyHeadTable />
     </div>
   );

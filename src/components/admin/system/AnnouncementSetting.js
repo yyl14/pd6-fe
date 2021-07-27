@@ -31,9 +31,10 @@ const AnnouncementSetting = () => {
       <h1>管院停電 / Announcement Setting</h1>
       <Typography className="announcement-title" variant="h6">Announcement</Typography>
       <Button onClick={handleClickEdit}>Edit</Button>
+      <Typography className="announcement-body" variant="body1">place for details of Specific Announcement</Typography>
       <Typography className="delete-announcement-title" variant="h6">Delete Announcement</Typography>
-      <Typography className="delete-announcement-body" variant="body1">Once you delete this announcement, there is no going back. Please be certain.</Typography>
       <Button color="secondary" onClick={handleClickDelete}>Delete</Button>
+      <Typography className="delete-announcement-body" variant="body1">Once you delete this announcement, there is no going back. Please be certain.</Typography>
 
       {/* Delete dialog */}
       <Dialog
