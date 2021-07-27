@@ -3,7 +3,6 @@ import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button,
 } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import DetailsIcon from '@material-ui/icons/Details';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PeopleIcon from '@material-ui/icons/People';
@@ -142,7 +141,7 @@ export default function Course({
           {display === 'unfold' ? (
             <PlayArrowIcon className={classes.titleIcon} onClick={foldLesson} />
           ) : (
-            <DetailsIcon className={classes.titleIcon} onClick={unfoldLesson} />
+            <PlayArrowIcon className={`${classes.titleIcon} ${classes.rotate90}`} onClick={unfoldLesson} />
           )}
 
           <Typography variant="h2" className={classes.title}>
@@ -172,7 +171,7 @@ export default function Course({
               {display1 === 'unfold' ? (
                 <PlayArrowIcon className={classes.secondTitleIcon} onClick={foldContest} />
               ) : (
-                <DetailsIcon className={classes.secondTitleIcon} onClick={unfoldContest} />
+                <PlayArrowIcon className={`${classes.secondTitleIcon} ${classes.rotate90}`} onClick={unfoldContest} />
               )}
               <Typography variant="h2" className={classes.secondTitle}>
                 {title2}

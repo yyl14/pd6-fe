@@ -11,7 +11,6 @@ import {
 import SchoolIcon from '@material-ui/icons/School';
 import PersonIcon from '@material-ui/icons/Person';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import DetailsIcon from '@material-ui/icons/Details';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -106,7 +105,7 @@ export default function Account({
           {display === 'unfold' ? (
             <PlayArrowIcon className={classes.titleIcon} onClick={foldAccount} />
           ) : (
-            <DetailsIcon className={classes.titleIcon} onClick={unfoldAccount} />
+            <PlayArrowIcon className={`${classes.titleIcon} ${classes.rotate90}`} onClick={unfoldAccount} />
           )}
           <Typography variant="h2" className={classes.title}>
             {title}

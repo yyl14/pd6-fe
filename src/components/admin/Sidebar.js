@@ -76,14 +76,18 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   button: {
+    marginTop: '2.5vh',
     marginLeft: 'auto',
-    marginRight: '1vw',
+    marginRight: '1.5vw',
     width: '90px',
     height: '36px',
     fontSize: '18px',
     alignItems: 'center',
     textAlign: 'center',
     display: 'flex',
+  },
+  rotate90: {
+    transform: 'rotate(90deg)',
   },
 }));
 

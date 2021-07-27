@@ -10,7 +10,6 @@ import {
   Button,
 } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import DetailsIcon from '@material-ui/icons/Details';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import DescriptionIcon from '@material-ui/icons/Description';
@@ -126,7 +125,7 @@ export default function System({
           {display === 'unfold' ? (
             <PlayArrowIcon className={classes.titleIcon} onClick={foldSystem} />
           ) : (
-            <DetailsIcon className={classes.titleIcon} onClick={unfoldSystem} />
+            <PlayArrowIcon className={`${classes.titleIcon} ${classes.rotate90}`} onClick={unfoldSystem} />
           )}
           <Typography variant="h2" className={classes.title}>
             {title}
@@ -143,7 +142,15 @@ export default function System({
                 className={location.pathname === item.path ? classes.active : null}
               >
                 <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
+                <ListItemText
+                  primary={item.text}
+                  style={{
+                    width: '50px',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                />
               </ListItem>
             ))}
           </List>
