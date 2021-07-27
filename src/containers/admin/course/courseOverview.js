@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import { withRouter } from 'react-router-dom';
+import { Button } from '@material-ui/core';
+import SimpleBar from '../../../components/ui/SimpleBar';
 
 class CourseOverview extends Component {
   constructor(props) {
@@ -12,7 +13,14 @@ class CourseOverview extends Component {
   componentDidMount() {}
 
   render() {
-    return <div />;
+    return (
+      <div>
+        <SimpleBar title="Change Course Name">
+          <Button color="secondary">Rename</Button>
+          <Button color="secondary">Rename</Button>
+        </SimpleBar>
+      </div>
+    );
   }
 }
 
