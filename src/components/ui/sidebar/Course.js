@@ -145,7 +145,7 @@ export default function Course({
             <DetailsIcon className={classes.titleIcon} onClick={unfoldLesson} />
           )}
 
-          <Typography variant="h2" className={classes.title}>
+          <Typography variant="h4" className={classes.title}>
             {title1}
           </Typography>
         </div>
@@ -164,7 +164,9 @@ export default function Course({
               </ListItem>
             ))}
           </List>
-        ) : ''}
+        ) : (
+          ''
+        )}
 
         {mode1 === 'main' ? (
           <>
@@ -174,7 +176,7 @@ export default function Course({
               ) : (
                 <DetailsIcon className={classes.secondTitleIcon} onClick={unfoldContest} />
               )}
-              <Typography variant="h2" className={classes.secondTitle}>
+              <Typography variant="h4" className={classes.secondTitle}>
                 {title2}
               </Typography>
             </div>
@@ -193,8 +195,9 @@ export default function Course({
                   </ListItem>
                 ))}
               </List>
-            ) : ''}
-
+            ) : (
+              ''
+            )}
           </>
         ) : (
           ''

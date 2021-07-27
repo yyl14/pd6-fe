@@ -1,6 +1,6 @@
 import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import { borderRadius } from '@material-ui/system';
-import ErrorText from './components/ErrorText';
+import ErrorText from './components/ui/ErrorText';
 
 // UI/UX Standard
 /*
