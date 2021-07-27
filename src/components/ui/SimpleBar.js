@@ -12,13 +12,18 @@ const useStyles = makeStyles((theme) => ({
   title: {
     transform: 'translate(0px, 12px)',
   },
-  children: {},
+  buttons: {
+    height: '60px',
+  },
   divider: {
     margin: '0px',
   },
+  children: {
+    margin: '16px 0px 50px 50px',
+  },
 }));
 
-export default function SimpleBar({ title, children }) {
+export default function SimpleBar({ title, buttons, children }) {
   const classes = useStyles();
   return (
     <>
@@ -26,9 +31,10 @@ export default function SimpleBar({ title, children }) {
         <Typography variant="h4" className={classes.title}>
           {title}
         </Typography>
-        <div className={classes.children}>{children}</div>
+        <div className={classes.buttons}>{buttons}</div>
       </div>
       <hr className={classes.divider} />
+      <div className={classes.children}>{children}</div>
     </>
   );
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import SimpleBar from '../../../components/ui/SimpleBar';
 
 class CourseOverview extends Component {
@@ -14,12 +14,19 @@ class CourseOverview extends Component {
 
   render() {
     return (
-      <div>
-        <SimpleBar title="Change Course Name">
-          <Button color="secondary">Rename</Button>
-          <Button color="secondary">Rename</Button>
+      <>
+        <SimpleBar
+          title="Change Course Name"
+          buttons={(
+            <>
+              <Button color="secondary">Rename</Button>
+              <Button color="secondary">Rename</Button>
+            </>
+          )}
+        >
+          <Typography variant="body1">Username</Typography>
         </SimpleBar>
-      </div>
+      </>
     );
   }
 }
