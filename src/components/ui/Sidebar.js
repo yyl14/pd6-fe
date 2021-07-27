@@ -108,36 +108,21 @@ export default function Sidebar() {
   if (mode === 'course') {
     return (
       <div>
-        <Course
-          menuItems={menuItems}
-          classes={classes}
-          history={history}
-          location={location}
-        />
+        <Course menuItems={menuItems} classes={classes} history={history} location={location} />
       </div>
     );
   }
   if (mode === 'account') {
     return (
       <div>
-        <Account
-          menuItems={menuItems}
-          classes={classes}
-          history={history}
-          location={location}
-        />
+        <Account menuItems={menuItems} classes={classes} history={history} location={location} />
       </div>
     );
   }
   if (mode === 'system') {
     return (
       <div>
-        <System
-          menuItems={menuItems}
-          classes={classes}
-          history={history}
-          location={location}
-        />
+        <System menuItems={menuItems} classes={classes} history={history} location={location} />
       </div>
     );
   }
