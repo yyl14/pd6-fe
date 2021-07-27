@@ -139,9 +139,9 @@ export default function Course({
 
         <div>
           {display === 'unfold' ? (
-            <PlayArrowIcon className={classes.titleIcon} onClick={foldLesson} />
+            <PlayArrowIcon className={`${classes.titleIcon} ${classes.rotate90}`} onClick={foldLesson} />
           ) : (
-            <PlayArrowIcon className={`${classes.titleIcon} ${classes.rotate90}`} onClick={unfoldLesson} />
+            <PlayArrowIcon className={classes.titleIcon} onClick={unfoldLesson} />
           )}
 
           <Typography variant="h2" className={classes.title}>
@@ -169,9 +169,9 @@ export default function Course({
           <>
             <div>
               {display1 === 'unfold' ? (
-                <PlayArrowIcon className={classes.secondTitleIcon} onClick={foldContest} />
+                <PlayArrowIcon className={`${classes.secondTitleIcon} ${classes.rotate90}`} onClick={foldContest} />
               ) : (
-                <PlayArrowIcon className={`${classes.secondTitleIcon} ${classes.rotate90}`} onClick={unfoldContest} />
+                <PlayArrowIcon className={classes.secondTitleIcon} onClick={unfoldContest} />
               )}
               <Typography variant="h2" className={classes.secondTitle}>
                 {title2}

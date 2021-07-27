@@ -123,9 +123,9 @@ export default function System({
         <div>
 
           {display === 'unfold' ? (
-            <PlayArrowIcon className={classes.titleIcon} onClick={foldSystem} />
+            <PlayArrowIcon className={`${classes.titleIcon} ${classes.rotate90}`} onClick={foldSystem} />
           ) : (
-            <PlayArrowIcon className={`${classes.titleIcon} ${classes.rotate90}`} onClick={unfoldSystem} />
+            <PlayArrowIcon className={classes.titleIcon} onClick={unfoldSystem} />
           )}
           <Typography variant="h2" className={classes.title}>
             {title}

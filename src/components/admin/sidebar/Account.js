@@ -103,9 +103,9 @@ export default function Account({
         <div>
 
           {display === 'unfold' ? (
-            <PlayArrowIcon className={classes.titleIcon} onClick={foldAccount} />
+            <PlayArrowIcon className={`${classes.titleIcon} ${classes.rotate90}`} onClick={foldAccount} />
           ) : (
-            <PlayArrowIcon className={`${classes.titleIcon} ${classes.rotate90}`} onClick={unfoldAccount} />
+            <PlayArrowIcon className={classes.titleIcon} onClick={unfoldAccount} />
           )}
           <Typography variant="h2" className={classes.title}>
             {title}
