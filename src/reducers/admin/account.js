@@ -8,6 +8,12 @@ const initialState = {
   },
 
   account: {
+    info: {},
+    error: null,
+    loading: false,
+  },
+
+  studentCard: {
     byId: {},
     allIds: [],
     error: null,
