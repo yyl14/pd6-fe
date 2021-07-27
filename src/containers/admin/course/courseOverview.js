@@ -20,11 +20,22 @@ class CourseOverview extends Component {
           buttons={(
             <>
               <Button color="secondary">Rename</Button>
-              <Button color="secondary">Rename</Button>
             </>
           )}
         >
-          <Typography variant="body1">Username</Typography>
+          <Typography variant="body1">
+            Once you change the course name, all related classes will be change their names. Please be certain.
+          </Typography>
+        </SimpleBar>
+        <SimpleBar
+          title="Delete Course"
+          buttons={(
+            <>
+              <Button color="secondary">Delete</Button>
+            </>
+          )}
+        >
+          <Typography variant="body1">Once you delete a course, there is no going back. Please be certain.</Typography>
         </SimpleBar>
       </>
     );

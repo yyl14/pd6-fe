@@ -28,12 +28,13 @@ const useStyles = makeStyles((theme) => ({
   },
   name: {
     float: 'left',
-    marginLeft: '2vw',
-    marginRight: '1vw',
+    margin: 'auto 1vw auto 2vw',
   },
   right: {
     marginLeft: 'auto',
     marginRight: 0,
+    display: 'flex',
+    alignItems: 'center',
   },
   avatar: {
     marginLeft: '2vw',
@@ -143,17 +144,17 @@ export default function Header({ role }) {
           <Avatar src="https://pdogs.ntu.im/judge/image/LOGO.png" className={classes.avatar} />
           {itemList.map((item) => (
             <Typography variant="h6" className={classes.item} key={item.text}>
-              <a href={baseURL + item.path} className={location.pathname === (item.path) ? classes.active : classes.a}>
+              <a href={baseURL + item.path} className={location.pathname === item.path ? classes.active : classes.a}>
                 {item.text}
               </a>
             </Typography>
           ))}
-          <div className={classes.right}>
+          <section className={classes.right}>
             <NotificationsIcon className={classes.notification} />
             <Typography variant="h6" className={classes.name}>
               shiba
             </Typography>
-          </div>
+          </section>
         </Toolbar>
       </AppBar>
     </div>
