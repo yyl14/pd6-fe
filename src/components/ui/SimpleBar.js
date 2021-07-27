@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
   },
   title: {
-    transform: 'translate(0px, 12px)',
+    transform: 'translate(0px, 20px)',
   },
   buttons: {
     height: '60px',

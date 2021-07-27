@@ -15,6 +15,9 @@ class CourseOverview extends Component {
   render() {
     return (
       <>
+        <Typography variant="h3" style={{ marginBottom: '50px' }}>
+          PBC
+        </Typography>
         <SimpleBar
           title="Change Course Name"
           buttons={(
