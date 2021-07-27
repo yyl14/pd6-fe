@@ -108,7 +108,7 @@ const typography = {
 
   // Title
   h4: {
-    fontSize: '1.56rem',
+    fontSize: '1.33rem',
     fontWeight: 700,
     lineHeight: 33 / 24,
     // letterSpacing: '-0.01rem',
