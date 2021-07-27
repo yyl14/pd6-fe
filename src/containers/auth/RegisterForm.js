@@ -292,7 +292,7 @@ export default function RegisterForm() {
           aria-describedby="alert-dialog-slide-description"
         >
           <DialogTitle id="alert-dialog-slide-title">
-            <Typography variant="h2">Verification email sent</Typography>
+            <Typography variant="h4">Verification email sent</Typography>
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">

@@ -1,6 +1,6 @@
 import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import { borderRadius } from '@material-ui/system';
-import ErrorText from './components/ErrorText';
+import ErrorText from './components/ui/ErrorText';
 
 // UI/UX Standard
 /*
@@ -108,7 +108,7 @@ const typography = {
 
   // Title
   h4: {
-    fontSize: '1.56rem',
+    fontSize: '1.33rem',
     fontWeight: 700,
     lineHeight: 33 / 24,
     // letterSpacing: '-0.01rem',
