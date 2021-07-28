@@ -10,6 +10,8 @@ import DeleteAccount from './DeleteAccount';
 
 import './userinfo.css';
 
+// only two student ID cards is allowed now
+
 class UserInfo extends Component {
   constructor(props) {
     super(props);
