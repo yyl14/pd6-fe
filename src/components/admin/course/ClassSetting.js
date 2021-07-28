@@ -3,19 +3,28 @@ import {
   Typography, Button, Grid,
   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField,
 } from '@material-ui/core';
+import SchoolIcon from '@material-ui/icons/School';
 import Divider from '@material-ui/core/Divider';
 
 const ClassSetting = () => {
-  const [popUp, setPopUp] = useState(false);
+  const [popUpRename, setPopUpRename] = useState(false);
   const [popUpDelete, setPopUpDelete] = useState(false);
-  const handleClick = () => {
-    setPopUp(true);
+  const [className, setClassName] = useState([]);
+  const handleClickRename = () => {
+    setPopUpRename(true);
   };
-  const handleClosePopUp = () => {
-    setPopUp(false);
+  const handleClosePopUpRename = () => {
+    setPopUpRename(false);
   };
-  const handleSubmit = (e) => {
+  const handleClassNameChange = (e) => {
+    /* if(){
 
+    } */
+    setClassName(e.target.value);
+  };
+  const handleSubmitRename = () => {
+    setPopUpRename(false);
+    // and sth......
   };
 
   const handleClickDelete = () => {
@@ -24,60 +33,70 @@ const ClassSetting = () => {
   const handleClosePopUpDelete = () => {
     setPopUpDelete(false);
   };
-  const handleSubmitDelete = (e) => {
-
+  const handleSubmitDelete = () => {
+    setPopUpDelete(false);
+    // and sth......
   };
 
   return (
     <div className="class-setting">
       <Grid container className="class-setting-container" direction="column" justifyContent="center" alignItems="center">
-        <Grid container item className="class-setting-col-top" xs={6} justifyContent="center">
-          <Typography className="class-setting-title" variant="h3">PBC / 111-1 / Class Setting</Typography>
-          <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3.75 7.885V10.885L9 13.75L14.25 10.885V7.885L9 10.75L3.75 7.885ZM9 0.25L0.75 4.75L9 9.25L15.75 5.5675V10.75H17.25V4.75L9 0.25Z" fill="#656565" />
-          </svg>
-          <Typography variant="h4">National Taiwan University</Typography>
+        <Grid container item className="class-setting-col-top" direction="column" xs={6} justifyContent="center" alignItems="flex-start">
+          <Typography variant="h3">PBC / 111-1 / Class Setting</Typography>
+          <Grid container item direction="row" justifyContent="flex-start" alignItems="center" spacing={1}>
+            <Grid item><SchoolIcon color="action" /></Grid>
+            <Grid item><Typography variant="h4">National Taiwan University</Typography></Grid>
+          </Grid>
         </Grid>
-        <Grid container item className="class-setting-col-mid" xs={6} justifyContent="center">
-          <Typography className="change-class-name-title" variant="h6">Change Class Name</Typography>
-          <Button onClick={handleClick} color="secondary">Rename</Button>
+        <Grid container item className="class-setting-col-mid" direction="column" xs={6} justifyContent="center" alignItems="flex-start">
+          <Grid container item direction="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="h6">Change Class Name</Typography>
+            <Button onClick={handleClickRename} color="secondary">Rename</Button>
+          </Grid>
           <Divider variant="fullWidth" style={{ width: '100%' }} />
-          <Typography className="change-class-name-body" variant="body1">Once you change the class name, all related classes will be change their names. Please be certain.</Typography>
+          <Grid item>
+            <Typography variant="body1">Once you change the class name, all related classes will be change their names. Please be certain.</Typography>
+          </Grid>
         </Grid>
-        <Grid container item className="class-setting-col-bottom" xs={6} justifyContent="center">
-          <Typography className="delete-class-title" variant="h6">Delete Class</Typography>
-          <Button onClick={handleClickDelete} color="secondary">Delete</Button>
+        <Grid container item className="class-setting-col-bottom" direction="column" xs={6} justifyContent="center" alignItems="flex-start">
+          <Grid container item direction="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="h6">Delete Class</Typography>
+            <Button onClick={handleClickDelete} color="secondary">Delete</Button>
+          </Grid>
           <Divider variant="fullWidth" style={{ width: '100%' }} />
-          <Typography className="delete-class-body" variant="body1">Once you delete a class, there is no going back. Please be certain.</Typography>
+          <Grid item>
+            <Typography variant="body1">Once you delete a class, there is no going back. Please be certain.</Typography>
+          </Grid>
         </Grid>
       </Grid>
 
       {/* Rename class form dialog */}
       <Dialog
-        open={popUp}
+        open={popUpRename}
         keepMounted
-        onClose={handleClosePopUp}
+        onClose={handleClosePopUpRename}
       >
         <DialogTitle>
           <Typography variant="h4">Rename class</Typography>
         </DialogTitle>
         <DialogContent>
-          <Grid container className="rename-class-form" direction="row" justifyContent="center" alignContent="center">
-            <Grid container item className="rename-class-form-left" xs={6}>
-              <Typography variant="body1">Type</Typography>
-              <Typography variant="body1">Course</Typography>
-              <Typography variant="body1" color="secondary">Current Name</Typography>
-              <Typography variant="body1">New Name</Typography>
+          <Grid container className="rename-class-form" direction="row" justifyContent="space-between" alignContent="center">
+            <Grid container item className="rename-class-form-left" xs={4} spacing={2} direction="column" justifyContent="flex-start" alignContent="flex-start">
+              <Grid item><Typography variant="body1">Type</Typography></Grid>
+              <Grid item><Typography variant="body1">Course</Typography></Grid>
+              <Grid item><Typography variant="body1" color="secondary">Current Name</Typography></Grid>
+              <Grid item><Typography variant="body1">New Name</Typography></Grid>
             </Grid>
-            <Grid container item className="rename-class-form-right" xs={6}>
-              <Typography variant="body1">Type</Typography>
-              <Typography variant="body1">Course</Typography>
-              <Typography variant="body1" color="secondary">Current Name</Typography>
+            <Grid container item className="rename-class-form-right" xs={8} spacing={2} direction="column" justifyContent="flex-start" alignContent="flex-start">
+              <Grid item><Typography variant="body1">Type</Typography></Grid>
+              <Grid item><Typography variant="body1">Course</Typography></Grid>
+              <Grid item><Typography variant="body1" color="secondary">Current Name</Typography></Grid>
               <TextField
                 autoFocus
                 id="new-class-name"
-                fullWidth
+                style={{ width: '96%' }}
                 variant="outlined"
+                onChange={(e) => handleClassNameChange(e)}
               />
             </Grid>
           </Grid>
@@ -86,8 +105,8 @@ const ClassSetting = () => {
           <Typography variant="body2">Once you change class name, all related information will be affected. Please be certain.</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClosePopUp}>Cancel</Button>
-          <Button onClick={(e) => handleSubmit()} color="secondary">Rename</Button>
+          <Button onClick={handleClosePopUpRename}>Cancel</Button>
+          <Button onClick={handleSubmitRename} color="secondary">Rename</Button>
         </DialogActions>
       </Dialog>
 
@@ -101,16 +120,16 @@ const ClassSetting = () => {
           <Typography variant="h4">Delete class</Typography>
         </DialogTitle>
         <DialogContent>
-          <Grid container className="delete-class-detail" direction="row" justifyContent="center" alignContent="center">
-            <Grid container item className="delete-class-detail-left" xs={6}>
-              <Typography variant="body1">Type</Typography>
-              <Typography variant="body1">Course</Typography>
-              <Typography variant="body1" color="secondary">Class</Typography>
+          <Grid container className="delete-class-detail" direction="row" justifyContent="space-between" alignContent="center">
+            <Grid container item className="delete-class-detail-left" direction="column" xs={4} spacing={2} justifyContent="flex-start" alignContent="flex-start">
+              <Grid item><Typography variant="body1">Type</Typography></Grid>
+              <Grid item><Typography variant="body1">Course</Typography></Grid>
+              <Grid item><Typography variant="body1" color="secondary">Current Name</Typography></Grid>
             </Grid>
-            <Grid container item className="delete-class-detail-right" xs={6}>
-              <Typography variant="body1">Type</Typography>
-              <Typography variant="body1">Course</Typography>
-              <Typography variant="body1" color="secondary">Current Name</Typography>
+            <Grid container item className="delete-class-detail-right" direction="column" xs={8} spacing={2} justifyContent="flex-start" alignContent="flex-start">
+              <Grid item><Typography variant="body1">Type</Typography></Grid>
+              <Grid item><Typography variant="body1">Course</Typography></Grid>
+              <Grid item><Typography variant="body1" color="secondary">Current Name</Typography></Grid>
             </Grid>
           </Grid>
         </DialogContent>
@@ -119,7 +138,7 @@ const ClassSetting = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePopUpDelete}>Cancel</Button>
-          <Button onClick={(e) => handleSubmitDelete()} color="secondary">Delete</Button>
+          <Button onClick={handleSubmitDelete} color="secondary">Delete</Button>
         </DialogActions>
       </Dialog>
     </div>
