@@ -1,0 +1,60 @@
+.userinfo-page {
+  width: 1200px;
+}
+
+.userinfo-page-info-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 6vh;
+}
+
+.userinfo-page-basicinfo-content, .userinfo-page-studentinfo-content{
+  padding-top: 5vh;
+  padding-left: 5vw;
+}
+
+.userinfo-page-editbasicinfo-content {
+  padding-top: 2vh;
+  padding-left: 5vw;
+}
+
+.userinfo-page-editbasicinfo-content-left{
+  padding-top: 3vh;
+}
+
+.userinfo-page-editbasicinfo-content-right{
+  display: flex;
+  width: 350px;
+}
+
+.userinfo-page-studentinfo-content {
+  width: 600px;
+  display: flex;
+}
+
+.userinfo-page-studentinfo-block{
+  margin-bottom: 3vh;
+}
+
+.studentinfo-default-star {
+  margin-right: 10px;
+}
+
+.studentinfo-card-words{
+  padding-top: 1vh;
+  padding-left: 17px;
+}
+
+.studentinfo-default-school-header{
+  margin-bottom: 10px;
+}
+
+.studentinfo-card-defaultbutton{
+  align-self: flex-end;
+}
+
+.userinfo-page-editinfo-addbutton {
+  align-self: center;
+}
