@@ -7,6 +7,7 @@ import {
 
 import LangTable from '../../../components/admin/system/LangTable';
 import LangSetting from '../../../components/admin/system/LangSetting';
+
 class SubmitLang extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +26,8 @@ class SubmitLang extends Component {
           </Switch>
         </Router>
       </div>
-    );  }
+    );
+  }
 }
 
 const mapStateToProps = (state) => ({
