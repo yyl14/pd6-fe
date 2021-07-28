@@ -12,7 +12,6 @@ export default function BasicInfo(props) {
       </Grid>
       <Divider />
       <Grid container direction="row" className="userinfo-page-basicinfo-content">
-        {/* <Grid > */}
         <Grid container xs={3} spacing={2} direction="column" item className="userinfo-page-basicinfo-content-left">
           <Grid item>
             <Typography variant="body1">Real name</Typography>
@@ -27,8 +26,6 @@ export default function BasicInfo(props) {
             <Typography variant="body1">Alternative Email</Typography>
           </Grid>
         </Grid>
-        {/* </Grid> */}
-        {/* <Grid item className="userinfo-page-basicinfo-content-right"> */}
         <Grid container xs={1} spacing={2} direction="column" item className="userinfo-page-basicinfo-content-right">
           <Grid item>
             <Typography variant="body1">{props.realName}</Typography>
@@ -43,7 +40,6 @@ export default function BasicInfo(props) {
             <Typography variant="body1">{props.altMail}</Typography>
           </Grid>
         </Grid>
-        {/* </Grid> */}
       </Grid>
     </div>
   );
