@@ -1,16 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  Grid, Typography, Table, TableHead, TableBody, TableFooter, TablePagination, TableRow, TableCell, TableContainer,
-  Icon, Paper, TextField, Button,
+  Grid,
+  Typography,
+  Table,
+  TableHead,
+  TableBody,
+  TableFooter,
+  TablePagination,
+  TableRow,
+  TableCell,
+  TableContainer,
+  Icon,
+  Paper,
+  TextField,
+  Button,
 } from '@material-ui/core';
 import SchoolIcon from '@material-ui/icons/School';
 import SortRoundedIcon from '@material-ui/icons/SortRounded';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
-import { withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import MemberEdit from '../../../components/admin/course/MemberEdit';
+import MemberList from '../../../components/admin/course/MemberList';
 
 class ClassInfo extends Component {
   constructor(props) {
@@ -20,46 +33,124 @@ class ClassInfo extends Component {
       rowsPerPage: 10,
       searched: '',
       showMemberEdit: false,
-      columns: [{
-        id: 'id', label: 'Student ID', minWidth: 170, sort: false,
-      },
-      {
-        id: 'realName', label: 'Real Name', minWidth: 170, sort: false,
-      },
-      {
-        id: 'username', label: 'Username', minWidth: 170, sort: false,
-      },
-      {
-        id: 'school', label: 'School', minWidth: 170, sort: true,
-      },
-      {
-        id: 'role', label: 'Role', minWidth: 170, sort: true,
-      }],
-      rows: [{
-        id: 'B087050801', realName: '南部陽一郎', username: 'shinymarshmello', school: 'NTUST', role: 'Guest Student',
-      }, {
-        id: 'B087050801', realName: '南部陽一郎', username: 'shinymarshmello', school: 'NTUST', role: 'Guest Student',
-      }, {
-        id: 'B087050801', realName: '南部陽一郎', username: 'shinymarshmello', school: 'NTUST', role: 'Guest Student',
-      }, {
-        id: 'B087050801', realName: '南部陽一郎', username: 'shinymarshmello', school: 'NTUST', role: 'Guest Student',
-      }, {
-        id: 'B087050801', realName: '南部陽一郎', username: 'shinymarshmello', school: 'NTUST', role: 'Guest Student',
-      }, {
-        id: 'B087050801', realName: '南部陽一郎', username: 'shinymarshmello', school: 'NTUST', role: 'Guest Student',
-      }, {
-        id: 'B087050801', realName: '南部陽一郎', username: 'shinymarshmello', school: 'NTUST', role: 'Guest Student',
-      }, {
-        id: 'B087050801', realName: '南部陽一郎', username: 'shinymarshmello', school: 'NTUST', role: 'Guest Student',
-      }, {
-        id: 'B087050801', realName: '南部陽一郎', username: 'shinymarshmello', school: 'NTUST', role: 'Guest Student',
-      }, {
-        id: 'B087050801', realName: '南部陽一郎', username: 'shinymarshmello', school: 'NTUST', role: 'Guest Student',
-      }, {
-        id: 'B087050801', realName: '南部陽一郎', username: 'shinymarshmello', school: 'NTUST', role: 'Guest Student',
-      }, {
-        id: 'B087050801', realName: '南部陽一郎', username: 'shinymarshmello', school: 'NTUST', role: 'Guest Student',
-      }],
+      columns: [
+        {
+          id: 'id',
+          label: 'Student ID',
+          minWidth: 170,
+          sort: false,
+        },
+        {
+          id: 'realName',
+          label: 'Real Name',
+          minWidth: 170,
+          sort: false,
+        },
+        {
+          id: 'username',
+          label: 'Username',
+          minWidth: 170,
+          sort: false,
+        },
+        {
+          id: 'school',
+          label: 'School',
+          minWidth: 170,
+          sort: true,
+        },
+        {
+          id: 'role',
+          label: 'Role',
+          minWidth: 170,
+          sort: true,
+        },
+      ],
+      rows: [
+        {
+          id: 'B087050801',
+          realName: '南部陽一郎',
+          username: 'shinymarshmello',
+          school: 'NTUST',
+          role: 'Guest Student',
+        },
+        {
+          id: 'B087050801',
+          realName: '南部陽一郎',
+          username: 'shinymarshmello',
+          school: 'NTUST',
+          role: 'Guest Student',
+        },
+        {
+          id: 'B087050801',
+          realName: '南部陽一郎',
+          username: 'shinymarshmello',
+          school: 'NTUST',
+          role: 'Guest Student',
+        },
+        {
+          id: 'B087050801',
+          realName: '南部陽一郎',
+          username: 'shinymarshmello',
+          school: 'NTUST',
+          role: 'Guest Student',
+        },
+        {
+          id: 'B087050801',
+          realName: '南部陽一郎',
+          username: 'shinymarshmello',
+          school: 'NTUST',
+          role: 'Guest Student',
+        },
+        {
+          id: 'B087050801',
+          realName: '南部陽一郎',
+          username: 'shinymarshmello',
+          school: 'NTUST',
+          role: 'Guest Student',
+        },
+        {
+          id: 'B087050801',
+          realName: '南部陽一郎',
+          username: 'shinymarshmello',
+          school: 'NTUST',
+          role: 'Guest Student',
+        },
+        {
+          id: 'B087050801',
+          realName: '南部陽一郎',
+          username: 'shinymarshmello',
+          school: 'NTUST',
+          role: 'Guest Student',
+        },
+        {
+          id: 'B087050801',
+          realName: '南部陽一郎',
+          username: 'shinymarshmello',
+          school: 'NTUST',
+          role: 'Guest Student',
+        },
+        {
+          id: 'B087050801',
+          realName: '南部陽一郎',
+          username: 'shinymarshmello',
+          school: 'NTUST',
+          role: 'Guest Student',
+        },
+        {
+          id: 'B087050801',
+          realName: '南部陽一郎',
+          username: 'shinymarshmello',
+          school: 'NTUST',
+          role: 'Guest Student',
+        },
+        {
+          id: 'B087050801',
+          realName: '南部陽一郎',
+          username: 'shinymarshmello',
+          school: 'NTUST',
+          role: 'Guest Student',
+        },
+      ],
     };
   }
 
@@ -67,11 +158,9 @@ class ClassInfo extends Component {
 
   handleClickEdit = () => {
     this.setState({ showMemberEdit: true });
-  }
+  };
 
-  handleClickMemberDetail = () => {
-
-  }
+  handleClickMemberDetail = () => {};
 
   handleChangePage = (event, newPage) => {
     this.setState({ page: newPage });
@@ -84,12 +173,15 @@ class ClassInfo extends Component {
 
   changeShowEditState = () => {
     this.setState({ showMemberEdit: false });
-  }
+  };
 
   render() {
     return (
       <div>
-        {this.state.showMemberEdit
+        <Switch>
+          <Route path="/admin/course/:courseId/:classId/member-list" component={MemberList} />
+        </Switch>
+        {/* {this.state.showMemberEdit
           ? <MemberEdit backToClassInfo={this.changeShowEditState} TAList={[]} studentList={[]} guestList={[]} /> : (
             <Grid container className="class-info-container" direction="column" justifyContent="center" alignItems="center">
               <Grid container item className="class-setting-col-top" direction="column" xs={6} justifyContent="center" alignItems="flex-start">
@@ -153,7 +245,7 @@ class ClassInfo extends Component {
                           <Typography variant="body1">rows     </Typography>
                           <Button><ArrowBackIosIcon style={{ height: '10px' }} /></Button>
                           <TextField defaultValue={1} onChange={(e) => { this.setState({ page: e.target.value - 1 }); }} />
-                          {/* e.target.value === undefined ? this.setState({ page: this.state.page }) : */}
+
                           <Typography variant="body1">
                             of
                             {' '}
@@ -170,7 +262,7 @@ class ClassInfo extends Component {
                 </Paper>
               </Grid>
             </Grid>
-          )}
+          )} */}
       </div>
     );
   }

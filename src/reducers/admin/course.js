@@ -1,21 +1,168 @@
 import { courseConstants } from '../../actions/constant';
 
+// const initialState = {
+//   courses: {
+//     byId: {},
+//     allIds: [],
+//   },
+
+//   classes: {
+//     byId: {},
+//     allIds: [],
+//   },
+
+//   members: {
+//     byId: {},
+//     allIds: [],
+//   },
+
+//   loading: {
+//     fetchCourse: false,
+//     addCourse: false,
+//     renameCourse: false,
+//     deleteCourse: false,
+
+//     fetchClasses: false,
+//     addClass: false,
+//     renameClass: false,
+//     deleteClass: false,
+
+//     fetchMembers: false,
+//     editMembers: false,
+//   },
+
+//   error: {
+//     fetchCourse: null,
+//     addCourse: null,
+//     editCourse: null,
+//     deleteCourse: null,
+
+//     fetchClasses: null,
+//     addClass: null,
+//     renameClass: null,
+//     deleteClass: null,
+
+//     fetchMembers: null,
+//     editMembers: null,
+//   },
+// };
+
 const initialState = {
   courses: {
-    byId: {},
-    allIds: [],
+    byId: {
+      2345: {
+        id: 2345,
+        name: 'DSAP',
+        type: 'LESSON',
+        is_hidden: false,
+        is_deleted: false,
+        classIds: [12, 14, 16, 18, 20],
+      },
+      6789: {
+        id: 6789,
+        name: 'PBC',
+        type: 'LESSON',
+        is_hidden: false,
+        is_deleted: false,
+        classIds: [21, 45678],
+      },
+
+      1111: {
+        id: 1111,
+        name: 'PDAO',
+        type: 'Contest',
+        is_hidden: false,
+        is_deleted: false,
+        classIds: [],
+      },
+    },
+    allIds: [2345, 6789, 3456, 1111],
   },
 
   classes: {
-    byId: {},
-    allIds: [],
-    loading: false,
+    byId: {
+      12: {
+        id: 12,
+        name: '108-2',
+        course_id: 2345,
+        is_hidden: false,
+        is_deleted: false,
+        memberIds: [111, 222, 333],
+      },
+      14: {
+        id: 14,
+        name: '108-1',
+        course_id: 2345,
+        is_hidden: false,
+        is_deleted: false,
+      },
+      16: {
+        id: 16,
+        name: '109-1',
+        course_id: 2345,
+        is_hidden: false,
+        is_deleted: false,
+      },
+      18: {
+        id: 18,
+        name: '109-2',
+        course_id: 2345,
+        is_hidden: false,
+        is_deleted: false,
+      },
+      20: {
+        id: 20,
+        name: '110-1',
+        course_id: 2345,
+        is_hidden: false,
+        is_deleted: false,
+      },
+      21: {
+        id: 21,
+        name: '110-1',
+        course_id: 6789,
+        is_hidden: false,
+        is_deleted: false,
+      },
+      45678: {
+        id: 45678,
+        name: '109-2',
+        course_id: 6789,
+        is_hidden: false,
+        is_deleted: false,
+      },
+    },
+    allIds: [12, 14, 16, 18, 20, 21, 45678],
   },
 
   members: {
-    byId: {},
-    allIds: [],
-    loading: false,
+    byId: {
+      111: {
+        id: 111,
+        student_id: 'B087050801',
+        realName: '南部陽一郎',
+        username: 'shinymarshmello',
+        institute: 'NTUST',
+        role: 'Guest',
+      },
+      222: {
+        id: 222,
+        student_id: 'B087050802',
+        realName: '南部陽二郎',
+        username: 'shinymarshmello',
+        institute: 'NTU',
+        role: 'Guest',
+      },
+      78978: {
+        id: 78978,
+        student_id: 'B087050803',
+        realName: '南部陽三郎',
+        username: 'shinymarshmello',
+        institute: 'NTNU',
+        role: 'Guest',
+      },
+    },
+    allIds: [111, 222, 78978],
   },
 
   loading: {
