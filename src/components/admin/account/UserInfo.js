@@ -8,9 +8,9 @@ import StudentInfo from './StudentInfo';
 import EditStudentInfo from './EditStudentInfo';
 import DeleteAccount from './DeleteAccount';
 
-import './userinfo.css';
+import '../../../styles/userinfo.css';
 
-// only two student ID cards is allowed now
+// only two student ID cards are allowed now
 
 class UserInfo extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ class UserInfo extends Component {
     this.state = {
       editBasicInfo: false,
       editStudInfo: false,
-      realName: 'hhh', // this.props.realName
+      realName: 'hhh', // this.props.realName?
       userName: 'h',
       nickName: 'h',
       altMail: 'h@gmail.com',
