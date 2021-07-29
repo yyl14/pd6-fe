@@ -51,6 +51,7 @@ class Institute extends Component {
     return (
       <>
         <CustomTable
+          searchPlaceholder="Institute/Email"
           buttons={(
             <>
               <Button color="primary">Add Institute</Button>
@@ -59,7 +60,7 @@ class Institute extends Component {
           data={this.state.fakeData}
           columns={[
             {
-              id: 'institute', label: 'Institute', minWidth: 150, align: 'center',
+              id: 'institute', label: 'Institute', minWidth: 120, align: 'center',
             },
             {
               id: 'email_domain', label: 'Email', minWidth: 100, align: 'center',
@@ -68,6 +69,8 @@ class Institute extends Component {
               id: 'is_disabled', label: 'Status', minWidth: 100, align: 'center',
             },
           ]}
+          hasFilter={[false, false, true]}
+          dataColumnName={['institute', 'email_domain', 'is_disabled']}
         />
       </>
     );

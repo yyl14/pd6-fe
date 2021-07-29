@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import { ArrowForward, FilterList } from '@material-ui/icons';
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useState, useEffect } from 'react';
@@ -59,6 +60,9 @@ const useStyles = makeStyles((theme) => ({
   detailButton: {
     background: 'none',
     border: 'none',
+  },
+  filterIcon: {
+    height: '15px',
   },
 }));
 
@@ -109,9 +113,9 @@ const BootstrapInputRow = withStyles((theme) => ({
 }))(InputBase);
 
 export default function CustomTable({
-  buttons, columns, data, path, children,
+  searchPlaceholder, buttons, columns, hasFilter, dataColumnName, data, path, children,
 }) {
-  const baseUrl = 'localhost:3000/admin/account/institute';
+  const baseUrl = '';
   const classes = useStyles();
   const [curPage, setPage] = useState(0);
   const [pageInput, setPageInput] = useState(1);
@@ -136,13 +140,26 @@ export default function CustomTable({
   }, [filterData.length, pageInput, rowsPerPage]);
 
   useEffect(() => {
-    // setFilterData(data.filter())
-  }, [data, search]);
+    if (search !== '') {
+      const newData = data.filter((row) => {
+        let cnt = 0;
+        dataColumnName.forEach((name) => {
+          if (row[name].indexOf(search) >= 0) {
+            cnt += 1;
+          }
+        });
+        return cnt > 0;
+      });
+      setFilterData(newData);
+    } else {
+      setFilterData(data);
+    }
+  }, [data, dataColumnName, search]);
 
   return (
     <>
       <div className={classes.topContent}>
-        <TextField id="search" className={classes.search} onChange={(e) => { setSearch(e.target.value); }} value={search} placeholder="Search" variant="outlined" />
+        <TextField id="search" className={classes.search} onChange={(e) => { setSearch(e.target.value); }} value={search} placeholder={searchPlaceholder} variant="outlined" />
         <div className={classes.buttons}>{buttons}</div>
       </div>
       {/* <hr className={classes.divider} /> */}
@@ -158,6 +175,7 @@ export default function CustomTable({
                     style={{ minWidth: column.minWidth }}
                   >
                     {column.label}
+                    {hasFilter[columns.findIndex((x) => x.id === column.id)] ? <FilterList className={classes.filterIcon} /> : <></>}
                   </TableCell>
                 ))}
                 <TableCell
@@ -179,8 +197,8 @@ export default function CustomTable({
                     );
                   })}
                   <TableCell key="show" align="right">
-                    <button type="button" className={classes.detailButton} onClick={() => { window.location = `${baseUrl}/333`; }}>
-                      <ArrowForwardIosIcon style={{ height: '10px' }} />
+                    <button type="button" className={classes.detailButton} onClick={() => { }}>
+                      <ArrowForward style={{ height: '20px' }} />
                     </button>
                   </TableCell>
                 </TableRow>
