@@ -14,19 +14,33 @@ class Institute extends Component {
         {
           institute: 'National Taiwan University',
           email_domain: 'ntu.edu.tw',
-          is_disabled: true,
+          is_disabled: 'Enabled',
         },
         {
           institute: 'National Taiwan University',
           email_domain: 'ntu.edu.tw',
-          is_disabled: true,
+          is_disabled: 'Enabled',
         },
         {
           institute: 'National Taiwan University',
           email_domain: 'ntu.edu.tw',
-          is_disabled: false,
+          is_disabled: 'Disabled',
         },
-
+        {
+          institute: 'National Taiwan University',
+          email_domain: 'ntu.edu.tw',
+          is_disabled: 'Enabled',
+        },
+        {
+          institute: 'National Taiwan University',
+          email_domain: 'ntu.edu.tw',
+          is_disabled: 'Enabled',
+        },
+        {
+          institute: 'National Taiwan University',
+          email_domain: 'ntu.edu.tw',
+          is_disabled: 'Disabled',
+        },
       ],
     };
   }
@@ -39,13 +53,21 @@ class Institute extends Component {
         <CustomTable
           buttons={(
             <>
-              <Button color="default">Edit</Button>
+              <Button color="primary">Add Institute</Button>
             </>
           )}
-          columnName={['Institute', 'Email', 'Status']}
-          dataColumnName={['institute', 'email_domain', 'is_disabled']}
-          width={[170, 100, 100]}
           data={this.state.fakeData}
+          columns={[
+            {
+              id: 'institute', label: 'Institute', minWidth: 150, align: 'center',
+            },
+            {
+              id: 'email_domain', label: 'Email', minWidth: 100, align: 'center',
+            },
+            {
+              id: 'is_disabled', label: 'Status', minWidth: 100, align: 'center',
+            },
+          ]}
         />
       </>
     );

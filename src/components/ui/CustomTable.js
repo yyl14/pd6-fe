@@ -19,7 +19,7 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   topContent: {
@@ -38,12 +38,6 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     height: '60px',
   },
-  head: {
-    height: '45px',
-  },
-  divider: {
-    margin: '0px',
-  },
   children: {
     margin: '16px 0px 50px 50px',
   },
@@ -57,6 +51,14 @@ const useStyles = makeStyles((theme) => ({
     height: '75px',
     display: 'flex',
     alignItems: 'center',
+    padding: '10px',
+  },
+  bottomItem: {
+    padding: '5px',
+  },
+  detailButton: {
+    background: 'none',
+    border: 'none',
   },
 }));
 
@@ -67,26 +69,37 @@ const BootstrapInput = withStyles((theme) => ({
     },
   },
   input: {
+    width: '30px',
     borderRadius: 4,
     position: 'relative',
     backgroundColor: theme.palette.background.paper,
     border: '1px solid #ced4da',
     fontSize: 16,
-    padding: '10px 26px 10px 12px',
+    padding: '10px 0px 10px 12px',
     transition: theme.transitions.create(['border-color', 'box-shadow']),
-    // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(','),
+    '&:focus': {
+      borderRadius: 4,
+      borderColor: '#80bdff',
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+    },
+  },
+}))(InputBase);
+
+const BootstrapInputRow = withStyles((theme) => ({
+  root: {
+    'label + &': {
+      marginTop: theme.spacing(3),
+    },
+  },
+  input: {
+    width: '20px',
+    borderRadius: 4,
+    position: 'relative',
+    backgroundColor: theme.palette.background.paper,
+    border: '1px solid #ced4da',
+    fontSize: 16,
+    padding: '10px 0px 10px 12px',
+    transition: theme.transitions.create(['border-color', 'box-shadow']),
     '&:focus': {
       borderRadius: 4,
       borderColor: '#80bdff',
@@ -96,27 +109,21 @@ const BootstrapInput = withStyles((theme) => ({
 }))(InputBase);
 
 export default function CustomTable({
-  buttons, columnName, dataColumnName, width, data, path, children,
+  buttons, columns, data, path, children,
 }) {
+  const baseUrl = 'localhost:3000/admin/account/institute';
   const classes = useStyles();
-  const [curPage, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [curPage, setPage] = useState(0);
+  const [pageInput, setPageInput] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [search, setSearch] = useState('');
-
-  const columns = [
-    {
-      id: dataColumnName[0], label: columnName[0], minWidth: width[0], align: 'center',
-    },
-    {
-      id: dataColumnName[1], label: columnName[1], minWidth: width[1], align: 'center',
-    },
-    {
-      id: dataColumnName[2], label: columnName[2], minWidth: width[2], align: 'center',
-    },
-  ];
+  const [filterData, setFilterData] = useState(data);
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    if (newPage + 1 <= Math.ceil(filterData.length / rowsPerPage) && newPage >= 0) {
+      // setPage(newPage);
+      setPageInput(newPage + 1);
+    }
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -124,10 +131,18 @@ export default function CustomTable({
     setPage(0);
   };
 
+  useEffect(() => {
+    if (pageInput <= Math.ceil(filterData.length / rowsPerPage) && pageInput >= 1) { setPage(pageInput - 1); }
+  }, [filterData.length, pageInput, rowsPerPage]);
+
+  useEffect(() => {
+    // setFilterData(data.filter())
+  }, [data, search]);
+
   return (
     <>
       <div className={classes.topContent}>
-        <TextField id="search" className={classes.search} placeholder="Search" variant="outlined" />
+        <TextField id="search" className={classes.search} onChange={(e) => { setSearch(e.target.value); }} value={search} placeholder="Search" variant="outlined" />
         <div className={classes.buttons}>{buttons}</div>
       </div>
       {/* <hr className={classes.divider} /> */}
@@ -148,12 +163,12 @@ export default function CustomTable({
                 <TableCell
                   key="link"
                   align="right"
-                  style={{ minWidth: 30 }}
+                  style={{ minWidth: 20 }}
                 />
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
+              {filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
                 <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                   {columns.map((column) => {
                     const value = row[column.id];
@@ -164,63 +179,45 @@ export default function CustomTable({
                     );
                   })}
                   <TableCell key="show" align="right">
-                    Link
+                    <button type="button" className={classes.detailButton} onClick={() => { window.location = `${baseUrl}/333`; }}>
+                      <ArrowForwardIosIcon style={{ height: '10px' }} />
+                    </button>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-        <div className={classes.bottom}>
+        <Grid
+          container
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="center"
+          className={classes.bottom}
+        >
           <Select
+            className={classes.bottomItem}
             labelId="rows-per-page"
             id="rows-per-page"
             value={rowsPerPage}
             onChange={(e) => { setRowsPerPage(e.target.value); }}
-            input={<BootstrapInput />}
+            input={<BootstrapInputRow />}
           >
             <MenuItem value={5}>5</MenuItem>
             <MenuItem value={10}>10</MenuItem>
             <MenuItem value={25}>25</MenuItem>
             <MenuItem value={50}>50</MenuItem>
           </Select>
-          <Typography variant="body1">rows</Typography>
-          <Button><ArrowBackIosIcon style={{ height: '20px' }} /></Button>
-          <BootstrapInput value={1} onChange={(e) => { setPage(e.target.value - 1); }} />
-          <Typography variant="body1">
+          <Typography className={classes.bottomItem} variant="body1">rows</Typography>
+          <Button className={classes.bottomItem} onClick={(e) => { handleChangePage(e, curPage - 1); }}><ArrowBackIosIcon style={{ height: '30px' }} /></Button>
+          <BootstrapInput value={pageInput} onChange={(e) => { setPageInput(e.target.value); }} />
+          <Typography className={classes.bottomItem} variant="body1">
             of
             {' '}
-            {Math.ceil(data.length / rowsPerPage)}
+            {Math.ceil(filterData.length / rowsPerPage)}
           </Typography>
-          <Button onClick={handleChangePage} disabled="true"><ArrowForwardIosIcon style={{ height: '20px' }} /></Button>
-        </div>
-        {/* <TablePagination
-          className={classes.bottom}
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
-          component="div"
-          count={data.length}
-          labelRowsPerPage=""
-          rowsPerPage={rowsPerPage}
-          page={curPage}
-          // onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          backIconButtonProps={{ size: 'medium' }}
-          nextIconButtonProps={{ size: 'medium' }}
-          labelDisplayedRows={({ to, count, page }) => (
-            <Grid container direction="row" alignItems="center" justifyContent="center">
-              <Typography variant="body1">rows  </Typography>
-              <Button><ArrowBackIosIcon style={{ height: '10px' }} /></Button>
-              <TextField defaultValue={1} onChange={(e) => { setPage(e.target.value - 1); }} />
-
-              <Typography variant="body1">
-                of
-                {' '}
-                {Math.ceil(data.length / rowsPerPage)}
-              </Typography>
-              <Button onClick={handleChangePage}><ArrowForwardIosIcon style={{ height: '10px' }} /></Button>
-            </Grid>
-          )}
-        /> */}
+          <Button className={classes.bottomItem} onClick={(e) => { handleChangePage(e, curPage + 1); }}><ArrowForwardIosIcon style={{ height: '30px' }} /></Button>
+        </Grid>
       </Paper>
       <div className={classes.children}>{children}</div>
     </>
