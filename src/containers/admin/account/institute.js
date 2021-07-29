@@ -37,13 +37,6 @@ class Institute extends Component {
     return (
       <>
         <CustomTable
-          search={
-            (
-              <>
-                <TextField id="search" placeholder="Search" variant="outlined" />
-              </>
-            )
-          }
           buttons={(
             <>
               <Button color="default">Edit</Button>
@@ -51,6 +44,7 @@ class Institute extends Component {
           )}
           columnName={['Institute', 'Email', 'Status']}
           dataColumnName={['institute', 'email_domain', 'is_disabled']}
+          width={[170, 100, 100]}
           data={this.state.fakeData}
         />
       </>
