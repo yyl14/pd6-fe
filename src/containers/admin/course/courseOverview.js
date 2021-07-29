@@ -12,7 +12,12 @@ class CourseOverview extends Component {
     this.state = {};
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    // push to default page component: class list
+    if (this.props.courses.allIds.length) {
+      this.props.history.push(`/admin/course/${this.props.courses.byId[this.props.courses.allIds[0]].id}/class-list`);
+    }
+  }
 
   render() {
     return (
@@ -29,6 +34,7 @@ class CourseOverview extends Component {
 const mapStateToProps = (state) => ({
   auth: state.auth,
   error: state.error,
+  courses: state.admin.course.courses,
 });
 
 export default connect(mapStateToProps, {})(withRouter(CourseOverview));

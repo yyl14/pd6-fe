@@ -1,5 +1,5 @@
 import { makeStyles, TextField } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DateRange } from 'react-date-range';
 import theme from '../../theme';
 
@@ -20,6 +20,7 @@ const useStyles = makeStyles((muiTheme) => ({
   //   flexDirection: 'row',
   // },
   fieldsWrapper: {
+    marginTop: '10px',
     marginLeft: '45px',
   },
 
@@ -53,19 +54,31 @@ value: {
   }
 }
 */
+const monthNames = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
 
-export default function DateRangePicker({ value, onChange }) {
-  const [state, setState] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: 'selection',
-    },
-  ]);
+export default function DateRangePicker({ value, setValue }) {
   const classes = useStyles();
-  console.log(state);
 
-  const [startDate, setStartDate] = useState(`${new Date()}`);
+  const [startDate, setStartDate] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [endTime, setEndTime] = useState('');
+
+  useEffect(() => {
+    setStartDate(
+      `${
+        monthNames[value[0].startDate.getMonth()]
+      } ${value[0].startDate.getDate()}, ${value[0].startDate.getFullYear()}`,
+    );
+    setEndDate(
+      `${monthNames[value[0].endDate.getMonth()]} ${value[0].endDate.getDate()}, ${value[0].endDate.getFullYear()}`,
+    );
+    setStartTime(value[0].startDate.toLocaleString('en-GB').substring(12, 17));
+    setEndTime(value[0].startDate.toLocaleString('en-GB').substring(12, 17));
+  }, [value]);
+
+  const [startError, setStartError] = useState(null);
+  const [endError, setEndError] = useState(null);
 
   return (
     <div className={classes.wrapper}>
@@ -73,9 +86,9 @@ export default function DateRangePicker({ value, onChange }) {
         showDateDisplay={false}
         showMonthAndYearPickers={false}
         editableDateInputs
-        onChange={(item) => setState([item.selection])}
+        onChange={(item) => setValue([item.selection])}
         moveRangeOnFirstSelection={false}
-        ranges={state}
+        ranges={value}
         color="#FFFFFF"
       />
       <div className={classes.fieldsWrapper}>
@@ -85,13 +98,19 @@ export default function DateRangePicker({ value, onChange }) {
             label="Start Date"
             InputLabelProps={{ shrink: true }}
             InputProps={{ notched: false }}
-            // value={}
+            value={startDate}
           />
-          <TextField className={classes.timeField} />
+          <TextField className={classes.timeField} value={startTime} />
         </div>
         <div>
-          <TextField className={classes.dateField} />
-          <TextField className={classes.timeField} />
+          <TextField
+            className={classes.dateField}
+            label="End Date"
+            InputLabelProps={{ shrink: true }}
+            InputProps={{ notched: false }}
+            value={endDate}
+          />
+          <TextField className={classes.timeField} value={endTime} />
         </div>
       </div>
     </div>

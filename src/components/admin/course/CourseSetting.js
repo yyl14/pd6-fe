@@ -23,7 +23,7 @@ export default function CourseSetting() {
   return (
     <>
       <Typography variant="h3" style={{ marginBottom: '50px' }}>
-        {`${courses[courseId].name}/ Setting`}
+        {`${courses[courseId].name} / Setting`}
       </Typography>
       <SimpleBar title="Course Information">
         <p>
