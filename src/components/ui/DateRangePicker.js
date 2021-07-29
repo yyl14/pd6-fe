@@ -10,19 +10,62 @@ const useStyles = makeStyles((muiTheme) => ({
     border: '1px solid #CACACA',
     padding: '20px 30px 20px 30px',
     width: '720px',
+    display: 'flex',
+    flexDirection: 'row',
   },
   wrapperVertical: {},
+
+  // startDate: {
+  //   display: 'flex',
+  //   flexDirection: 'row',
+  // },
+  fieldsWrapper: {
+    marginLeft: '45px',
+  },
+
+  dateField: {
+    width: '147px',
+    marginRight: '4px',
+    '& div': {
+      borderTopRightRadius: 0,
+      borderBottomRightRadius: 0,
+    },
+  },
+
+  timeField: {
+    width: '79px',
+    marginLeft: '0',
+    '& div': {
+      borderTopLeftRadius: 0,
+      borderBottomLeftRadius: 0,
+    },
+  },
 }));
 
-export default function DateRangePicker({ vertical }) {
+/*
+value: {
+  date: {
+    startDate: Date,
+    endDate: Date,
+  },
+  time: {
+
+  }
+}
+*/
+
+export default function DateRangePicker({ value, onChange }) {
   const [state, setState] = useState([
     {
       startDate: new Date(),
-      endDate: null,
+      endDate: new Date(),
       key: 'selection',
     },
   ]);
   const classes = useStyles();
+  console.log(state);
+
+  const [startDate, setStartDate] = useState(`${new Date()}`);
 
   return (
     <div className={classes.wrapper}>
@@ -35,10 +78,22 @@ export default function DateRangePicker({ vertical }) {
         ranges={state}
         color="#FFFFFF"
       />
-      <TextField />
-      <TextField />
-      <TextField />
-      <TextField />
+      <div className={classes.fieldsWrapper}>
+        <div>
+          <TextField
+            className={classes.dateField}
+            label="Start Date"
+            InputLabelProps={{ shrink: true }}
+            InputProps={{ notched: false }}
+            // value={}
+          />
+          <TextField className={classes.timeField} />
+        </div>
+        <div>
+          <TextField className={classes.dateField} />
+          <TextField className={classes.timeField} />
+        </div>
+      </div>
     </div>
   );
 }
