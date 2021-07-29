@@ -219,7 +219,7 @@ const overrides = {
   },
   MuiFormControl: {
     root: {
-      margin: '10px 5px 50px 5px',
+      margin: '16px 5px 22px 5px',
     },
   },
   MuiSelect: {
