@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Button, Typography } from '@material-ui/core';
 import SimpleBar from '../../../components/ui/SimpleBar';
+import DateRangePicker from '../../../components/ui/DateRangePicker';
 
 class CourseOverview extends Component {
   constructor(props) {
@@ -39,6 +40,7 @@ class CourseOverview extends Component {
           )}
         >
           <Typography variant="body1">Once you delete a course, there is no going back. Please be certain.</Typography>
+          <DateRangePicker />
         </SimpleBar>
       </>
     );

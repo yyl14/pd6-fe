@@ -201,7 +201,7 @@ const overrides = {
 
   MuiIconButton: {
     root: {
-      color: '#000000',
+      color: mono.black,
     },
   },
 

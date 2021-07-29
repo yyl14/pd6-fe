@@ -3,6 +3,8 @@ import { Provider } from 'react-redux';
 import { MuiThemeProvider, withStyles } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
 
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import theme from './theme';
@@ -16,6 +18,7 @@ import NoMatch from './components/noMatch';
 import store from './store';
 
 import './App.css';
+import './styles/ui.css';
 
 const GlobalCss = withStyles({
   // @global is handled by jss-plugin-global.
