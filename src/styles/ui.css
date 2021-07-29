@@ -8,12 +8,11 @@
   height: 45px;
 }
 .rdrMonthAndYearPickers {
+  font-size: 1rem;
   font-family: Noto Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 22px;
-  font-weight: 400;
+  font-weight: 500;
+  line-height: 1.3888888888888888;
+  letter-spacing: 0.00938em;
 }
 .rdrWeekDays {
   width: 294px;
@@ -26,12 +25,11 @@
   height: 42px;
 }
 .rdrDayNumber {
+  font-size: 1rem;
   font-family: Noto Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 22px;
-  font-weight: 400;
+  font-weight: 500;
+  line-height: 1.3888888888888888;
+  letter-spacing: 0.00938em;
 }
 .rdrInRange {
   height: 42px;
@@ -110,6 +108,7 @@
   /* border: none; */
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
+  border-color: #1ea5ff;
   /* background: #aaaaaa; */
 }
 .rdrDayInPreview {
@@ -117,6 +116,7 @@
   top: -0.5px;
   /* border: none; */
   /* background: #eaeaea; */
+  border-color: #1ea5ff;
 }
 .rdrDayEndPreview {
   height: 43px;
@@ -125,6 +125,7 @@
   /* border: none; */
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
+  border-color: #1ea5ff;
   /* background: #cacaca; */
 }
 
@@ -133,4 +134,32 @@
 .rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span,
 .rdrDay:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span {
   color: rgba(255, 255, 255);
+}
+
+.rdrNextPrevButton {
+  display: block;
+  width: 24px;
+  height: 24px;
+  margin: 0 0.833em;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+}
+
+.rdrNextPrevButton:hover {
+  background: #eaeaea;
+}
+
+.rdrPprevButton i {
+  border-width: 4px 6px 4px 4px;
+  border-color: transparent #000000 transparent transparent;
+  transform: translate(-3px, 0px);
+}
+
+.rdrNextButton i {
+  margin: 0 0 0 7px;
+  border-width: 4px 4px 4px 6px;
+  border-color: transparent transparent transparent #000000;
+  transform: translate(3px, 0px);
 }
