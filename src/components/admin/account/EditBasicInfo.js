@@ -1,17 +1,43 @@
 import {
-  Button, Divider, Grid, TextField, Typography, Box,
+  Button, Divider, Grid, TextField, Typography, Box, makeStyles,
 } from '@material-ui/core';
 import React, { useState } from 'react';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: '58px',
+    marginLeft: '170px',
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  content: {
+    marginTop: '1vh',
+    marginLeft: '55px',
+  },
+  contentLeft: {
+    paddingTop: '23px',
+    marginRight: '18px',
+  },
+  contentRight: {
+    display: 'flex',
+    width: '350px',
+  },
+}));
 
 export default function EditBasicInfo(props) {
   const [realName, setRealName] = useState(props.realName);
   const [userName, setUserName] = useState(props.userName);
   const [nickName, setNickName] = useState(props.nickName);
   const [altMail, setAltMail] = useState(props.altMail);
+  const classes = useStyles();
 
   return (
-    <div>
-      <Grid className="userinfo-page-info-header">
+    <div className={classes.root}>
+      <Grid className={classes.header}>
         <Typography variant="h5">Basic Information</Typography>
         <div>
           <Button onClick={() => props.handleBack()}>Cancel</Button>
@@ -29,8 +55,8 @@ export default function EditBasicInfo(props) {
       </Grid>
       <Divider />
 
-      <Grid container direction="row" className="userinfo-page-editbasicinfo-content">
-        <Grid container item spacing={10} xs={3} direction="column" className="userinfo-page-editbasicinfo-content-left">
+      <Grid container direction="row" className={classes.content}>
+        <Grid container item spacing={10} xs={3} direction="column" className={classes.contentLeft}>
           <Grid item>
             <Typography variant="body1">Real name</Typography>
           </Grid>
@@ -44,7 +70,7 @@ export default function EditBasicInfo(props) {
             <Typography variant="body1">Alternative Email</Typography>
           </Grid>
         </Grid>
-        <Grid item className="userinfo-page-editbasicinfo-content-right" direction="column">
+        <Grid item className={classes.contentRight} direction="column">
           <TextField
             value={realName}
             variant="outlined"

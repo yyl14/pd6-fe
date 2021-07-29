@@ -1,13 +1,36 @@
 import React, { useState } from 'react';
 import {
-  Button, Divider, Grid, Typography, Card, CardContent,
+  Button, Divider, Grid, Typography, Card, CardContent, makeStyles,
 } from '@material-ui/core';
 import StarIcon from '@material-ui/icons/Star';
 import StudentInfoCard from './StudentInfoCard';
 
-export default function EditStudentInfo(props) {
-  const editMode = true;
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: '2vh',
+    marginLeft: '170px',
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  content: {
+    marginTop: '3vh',
+    marginLeft: '55px',
+    display: 'flex',
+    width: '600px',
+  },
+  addButton: {
+    alignSelf: 'center',
+  },
+}));
 
+export default function EditStudentInfo(props) {
+  const classes = useStyles();
+
+  const editMode = true;
   const [defaultId, setDefaultId] = useState(props.defaultId);
   const [defaultMail, setDefaultMail] = useState(props.defaultMail);
   const [defaultSchool, setDefaultSchool] = useState(props.defaultSchool);
@@ -27,8 +50,8 @@ export default function EditStudentInfo(props) {
     setSchool2(school);
   };
   return (
-    <div>
-      <Grid className="userinfo-page-info-header">
+    <div className={classes.root}>
+      <Grid className={classes.header}>
         <Typography variant="h5">Student Information</Typography>
         <div>
           <Button onClick={() => {
@@ -51,7 +74,7 @@ export default function EditStudentInfo(props) {
         </div>
       </Grid>
       <Divider />
-      <Grid spacing={3} direction="column" className="userinfo-page-studentinfo-content">
+      <Grid spacing={3} direction="column" className={classes.content}>
         <StudentInfoCard
           editMode
           isDefault={1}
@@ -71,7 +94,7 @@ export default function EditStudentInfo(props) {
           setDefaultStatus={setDefaultStatus}
           setSecondStatus={setSecondStatus}
         />
-        <div className="userinfo-page-editinfo-addbutton">
+        <div className={classes.addButton}>
           <Button>+</Button>
         </div>
       </Grid>

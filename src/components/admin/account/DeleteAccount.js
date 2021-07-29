@@ -1,18 +1,37 @@
 import {
-  Button, Dialog, DialogTitle, DialogContent, Divider, Grid, Typography, DialogContentText, DialogActions,
+  Button, Dialog, DialogTitle, DialogContent, Divider, Grid, Typography, DialogContentText, DialogActions, makeStyles,
 } from '@material-ui/core';
 import React, { useState } from 'react';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: '2vh',
+    marginLeft: '170px',
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  content: {
+    marginTop: '3vh',
+    marginLeft: '55px',
+  },
+}));
+
 export default function DeleteAccount(props) {
+  const classes = useStyles();
   const [popUp, setPopUp] = useState(false);
+
   return (
-    <div>
-      <Grid className="userinfo-page-info-header">
+    <div className={classes.root}>
+      <Grid className={classes.header}>
         <Typography variant="h5">Delete Account</Typography>
         <Button color="secondary" onClick={() => { setPopUp(true); }}>Delete</Button>
       </Grid>
       <Divider />
-      <Typography className="userinfo-page-basicinfo-content">
+      <Typography className={classes.content}>
         Once you delete this account, there is no going back. Please be certain.
       </Typography>
       <Dialog

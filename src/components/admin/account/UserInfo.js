@@ -1,6 +1,7 @@
 import {
   Button, Grid, Typography,
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import React, { Component } from 'react';
 import BasicInfo from './BasicInfo';
 import EditBasicInfo from './EditBasicInfo';
@@ -8,9 +9,16 @@ import StudentInfo from './StudentInfo';
 import EditStudentInfo from './EditStudentInfo';
 import DeleteAccount from './DeleteAccount';
 
-import '../../../styles/userinfo.css';
-
 // only two student ID cards are allowed now
+const useStyles = (theme) => ({
+  root: {
+    width: '1280px',
+  },
+  header: {
+    marginTop: '50px',
+    marginLeft: '170px',
+  },
+});
 
 class UserInfo extends Component {
   constructor(props) {
@@ -29,7 +37,6 @@ class UserInfo extends Component {
       mail2: '2@ntu.edu.tw',
       school2: 'Another University',
     };
-
     this.handleBasicEdit = this.handleBasicEdit.bind(this);
     this.handleBasicBack = this.handleBasicBack.bind(this);
     this.setBasicInfo = this.setBasicInfo.bind(this);
@@ -89,17 +96,18 @@ class UserInfo extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
-      <div className="userinfo-page">
+      <div className={classes.root}>
         <Grid
           container
           xs={12}
           className="userinfo-page-container"
           direction="column"
         >
-          <Grid item className="userinfo-page-header" xs={12}>
+          <Grid item className={classes.header} xs={12}>
             <Typography variant="h3">
-              {this.state.defaultId}
+              {this.state.userName}
               {' '}
               / Account Setting
             </Typography>
@@ -163,4 +171,4 @@ class UserInfo extends Component {
   }
 }
 
-export default UserInfo;
+export default withStyles(useStyles)(UserInfo);
