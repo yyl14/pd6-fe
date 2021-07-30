@@ -10,6 +10,10 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormControlLabel,
+  Switch,
+  Grid,
+  OutlinedInput,
 } from '@material-ui/core';
 
 import SimpleBar from '../../../components/ui/SimpleBar';
@@ -22,6 +26,10 @@ class InstituteSetting extends Component {
       changeInitialism: false,
       changeEmail: false,
       changeStatus: false,
+      newStatus: false,
+      newName: '',
+      newInitialism: '',
+      newEmail: '',
     };
   }
 
@@ -36,11 +44,19 @@ class InstituteSetting extends Component {
     });
   };
 
+  handleChange = (prop) => (event) => {
+    this.setState({ [prop]: event.target.value });
+  };
+
+  handleChangeStatus = (event) => {
+    this.setState({ [event.target.name]: event.target.checked });
+  };
+
   render() {
     return (
       <>
         <Typography variant="h3" style={{ marginBottom: '50px' }}>
-          Institute: NTNU / Setting
+          Institute: NTU / Setting
         </Typography>
         <SimpleBar
           title="Change Institute Full Name"
@@ -51,7 +67,7 @@ class InstituteSetting extends Component {
           )}
         >
           <Typography variant="body1">
-            Once you change the institute name, all related members will be affected. Please be certain.
+            Once you change the institute’s name, all related members will be affected. Please be certain.
           </Typography>
         </SimpleBar>
         <SimpleBar
@@ -63,7 +79,7 @@ class InstituteSetting extends Component {
           )}
         >
           <Typography variant="body1">
-            Once you change the institute initialism, all related members will be affected. Please be certain.
+            Once you change the institute’s initialism, all related members will be affected. Please be certain.
           </Typography>
         </SimpleBar>
         <SimpleBar
@@ -75,7 +91,7 @@ class InstituteSetting extends Component {
           )}
         >
           <Typography variant="body1">
-            Once you change the institute email, future members may not be able to register with certain email. Please be certain.
+            Once you change the institute’s email, future members may not be able to register with certain email. Please be certain.
           </Typography>
         </SimpleBar>
         <SimpleBar
@@ -87,7 +103,7 @@ class InstituteSetting extends Component {
           )}
         >
           <Typography variant="body1">
-            Once you change the institute status, future members from this institute may not be able to register. Please be certain.
+            Once you change the institute’s status, future members from this institute may not be able to register. Please be certain.
           </Typography>
         </SimpleBar>
         <Dialog
@@ -101,9 +117,37 @@ class InstituteSetting extends Component {
             <Typography variant="h4">Rename institute</Typography>
           </DialogTitle>
           <DialogContent>
-
+            <Grid container spacing={3}>
+              <Grid item xs={5}>
+                <Typography variant="body1" style={{ color: 'red' }}>
+                  Current Name
+                </Typography>
+              </Grid>
+              <Grid item xs={7}>
+                <Typography variant="body1" style={{ color: 'red' }}>
+                  National Taiwan University
+                </Typography>
+              </Grid>
+              <Grid item xs={5}>
+                <Typography variant="body1">
+                  New Name
+                </Typography>
+              </Grid>
+              <Grid item xs={7}>
+                <OutlinedInput
+                  id="outlined-adornment"
+                  value={this.state.newName}
+                  onChange={this.handleChange('newName')}
+                  aria-describedby="outlined-weight-helper-text"
+                  inputProps={{
+                    'aria-label': 'newName',
+                  }}
+                  labelWidth={0}
+                />
+              </Grid>
+            </Grid>
             <Typography variant="body1">
-              Once you change the institute name, all related members will be affected. Please be certain.
+              Once you change the institute’s name, all related members will be affected. Please be certain.
             </Typography>
           </DialogContent>
           <DialogActions>
@@ -115,6 +159,42 @@ class InstituteSetting extends Component {
             </Button>
           </DialogActions>
         </Dialog>
+        <Dialog
+          open={this.state.changeStatus}
+          keepMounted
+          onClose={() => this.handleClosePopUp()}
+          aria-labelledby="dialog-slide-title"
+          aria-describedby="dialog-slide-description"
+        >
+          <DialogTitle id="dialog-slide-title">
+            <Typography variant="h4">Rename institute</Typography>
+          </DialogTitle>
+          <DialogContent>
+            <FormControlLabel
+              control={(
+                <Switch
+                  checked={this.state.newStatus}
+                  onChange={this.handleChangeStatus}
+                  name="newStatus"
+                  color="primary"
+                />
+              )}
+              label={this.state.newStatus ? 'Enabled' : 'Disabled'}
+            />
+            <Typography variant="body1">
+              Once you change the institute’s status, future members from this institute may not be able to register. Please be certain.
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => this.handleClosePopUp()} color="default">
+              Cancel
+            </Button>
+            <Button onClick={() => this.handleClosePopUp()} color="secondary">
+              Modify
+            </Button>
+          </DialogActions>
+        </Dialog>
+
       </>
     );
   }
