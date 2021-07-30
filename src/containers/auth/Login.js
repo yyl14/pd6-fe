@@ -40,7 +40,7 @@ class Login extends Component {
         expires: new Date(Date.now() + 86400), // cookie expires after 1 day
       });
       if (nextProps.auth.user.role.indexOf('MANAGER') !== -1 || nextProps.auth.user.role === 'MANAGER') {
-        nextProps.history.push('/admin/course/overview');
+        nextProps.history.push('/admin/course/course');
       } else {
         nextProps.history.push('/');
       }

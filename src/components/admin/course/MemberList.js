@@ -23,7 +23,7 @@ export default function MemberList() {
       ) : (
         <>
           {/* member list */}
-          <Typography variant="h4">Member list</Typography>
+          <Typography variant="h4">This is Member list</Typography>
         </>
       )}
     </>

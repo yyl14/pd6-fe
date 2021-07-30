@@ -16,7 +16,9 @@ class Course extends Component {
   componentDidMount() {
     // push to default page component: class list
     if (this.props.courses.allIds.length) {
-      this.props.history.push(`/admin/course/${this.props.courses.byId[this.props.courses.allIds[0]].id}/class-list`);
+      this.props.history.push(
+        `/admin/course/course/${this.props.courses.byId[this.props.courses.allIds[0]].id}/class-list`,
+      );
     }
   }
 
@@ -24,8 +26,8 @@ class Course extends Component {
     return (
       <>
         <Switch>
-          <Route path="/admin/course/:courseId/class-list" component={ClassList} />
-          <Route path="/admin/course/:courseId/setting" component={CourseSetting} />
+          <Route path="/admin/course/course/:courseId/class-list" component={ClassList} />
+          <Route path="/admin/course/course/:courseId/setting" component={CourseSetting} />
         </Switch>
       </>
     );

@@ -41,8 +41,8 @@ class Admin extends Component {
           <div className="layout-content-container">
             <div className="layout-content">
               <Switch>
-                <Route path="/admin/course/" component={Course} />
-                <Route path="/admin/class/:courseId/:classId" component={Class} />
+                <Route path="/admin/course/course" component={Course} />
+                <Route path="/admin/course/class" component={Class} />
                 <Route path="/admin/account/institute" component={Institute} />
                 <Route path="/admin/account/account" component={Account} />
                 <Route path="/admin/system/accesslog" component={AccessLog} />

@@ -39,8 +39,8 @@ class ClassInfo extends Component {
     return (
       <div>
         <Switch>
-          <Route path="/admin/class/:courseId/:classId/member" component={MemberList} />
-          <Route path="/admin/class/:courseId/:classId/setting" component={ClassSetting} />
+          <Route path="/admin/course/class/:courseId/:classId/member" component={MemberList} />
+          <Route path="/admin/course/class/:courseId/:classId/setting" component={ClassSetting} />
         </Switch>
       </div>
     );

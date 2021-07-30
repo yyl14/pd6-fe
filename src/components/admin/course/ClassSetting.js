@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
 import {
   Typography,
   Button,
@@ -15,6 +18,10 @@ import Divider from '@material-ui/core/Divider';
 
 /* This is a level 4 component (page component) */
 const ClassSetting = () => {
+  const { courseId, classId } = useParams();
+  const courses = useSelector((state) => state.admin.course.courses.byId);
+  const classes = useSelector((state) => state.admin.course.classes.byId);
+
   const [popUpRename, setPopUpRename] = useState(false);
   const [popUpDelete, setPopUpDelete] = useState(false);
   const [className, setClassName] = useState([]);
@@ -48,6 +55,11 @@ const ClassSetting = () => {
 
   return (
     <div className="class-setting">
+      <Typography variant="h3" style={{ marginBottom: '50px' }}>
+        {`${courses[courseId].name} / ${classes[classId].name} / Setting`}
+      </Typography>
+
+      <Typography variant="h4">This is Class Setting</Typography>
       {/* TODO: rewrite the editor with <div />'s, use redux state, actions, and remove title */}
       {/* <Grid container className="class-setting-container" direction="column" justifyContent="center" alignItems="center">
         <Grid container item className="class-setting-col-top" direction="column" xs={6} justifyContent="center" alignItems="flex-start">
@@ -78,7 +90,6 @@ const ClassSetting = () => {
           </Grid>
         </Grid>
       </Grid> */}
-
       {/* Rename class form dialog */}
       <Dialog open={popUpRename} keepMounted onClose={handleClosePopUpRename}>
         <DialogTitle>
@@ -160,7 +171,6 @@ const ClassSetting = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
       {/* Delete dialog */}
       <Dialog open={popUpDelete} keepMounted onClose={handleClosePopUpDelete}>
         <DialogTitle>

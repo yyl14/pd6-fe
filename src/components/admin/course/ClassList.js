@@ -24,7 +24,7 @@ export default function ClassList() {
       <Typography variant="h3" style={{ marginBottom: '50px' }}>
         {`${courses[courseId].name}`}
       </Typography>
-      <DateRangePicker value={state} setValue={setState} />
+      <Typography variant="h4">This is Class List</Typography>
     </>
   );
 }
