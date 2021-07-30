@@ -13,7 +13,9 @@ const useStyles = makeStyles((muiTheme) => ({
     display: 'flex',
     flexDirection: 'row',
   },
-  wrapperVertical: {},
+  wrapperVertical: {
+    flexDirection: 'row',
+  },
 
   // startDate: {
   //   display: 'flex',
@@ -56,7 +58,7 @@ value: {
 */
 const monthNames = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
 
-export default function DateRangePicker({ value, setValue }) {
+export default function DateRangePicker({ value, setValue, vertical }) {
   const classes = useStyles();
 
   const [startDate, setStartDate] = useState('');
