@@ -94,7 +94,6 @@ export default function CustomTable({
   path,
   children,
 }) {
-  const baseUrl = '';
   const classes = useStyles();
   const [curPage, setPage] = useState(0);
   const [pageInput, setPageInput] = useState(1);
