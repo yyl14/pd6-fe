@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { withRouter } from 'react-router-dom';
-
+import { Route, Switch, withRouter } from 'react-router-dom';
 import InstituteSetting from '../../../components/admin/account/InstituteSetting';
+import InstituteList from '../../../components/admin/account/InstituteList';
 
 class Institute extends Component {
   constructor(props) {
@@ -14,7 +14,14 @@ class Institute extends Component {
   componentDidMount() {}
 
   render() {
-    return <InstituteSetting />;
+    return (
+      <div>
+        <Switch>
+          <Route path="/admin/account/institute/:instituteId/setting" component={InstituteSetting} />
+          <Route path="/admin/account/institute" component={InstituteList} />
+        </Switch>
+      </div>
+    );
   }
 }
 

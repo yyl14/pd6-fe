@@ -16,6 +16,7 @@ import {
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import SimpleBar from '../../ui/SimpleBar';
+import FieldWithAlignedText from '../../ui/FieldWithAlignedText';
 
 const useStyles = makeStyles((theme) => ({
 }));
