@@ -13,11 +13,13 @@ import {
   Grid,
   MenuItem,
   InputBase,
+  FormControl,
   Select,
 } from '@material-ui/core';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+
 import { ArrowForward, FilterList } from '@material-ui/icons';
+
+import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from 'react-icons/md';
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useState, useEffect } from 'react';
@@ -28,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     // maxWidth: '1280px',
     background: '#EAEAEA',
     borderRadius: '10px 10px 0px 0px',
-    padding: '10px',
+    padding: '5px 15px 15px 15px',
     display: 'flex',
     justifyContent: 'space-between',
     height: '75px',
@@ -37,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
     height: '60px',
   },
   buttons: {
+    marginTop: '3px',
     height: '60px',
   },
   children: {
@@ -48,11 +51,22 @@ const useStyles = makeStyles((theme) => ({
   container: {
     maxHeight: 800,
   },
+  tableHead: {
+    height: '45px',
+  },
+  row: {
+    height: '60px',
+  },
   bottom: {
     height: '75px',
     display: 'flex',
     alignItems: 'center',
     padding: '10px',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  pageIndexTextField: {
+    width: '100px',
   },
   bottomItem: {
     padding: '5px',
@@ -64,56 +78,21 @@ const useStyles = makeStyles((theme) => ({
   filterIcon: {
     height: '15px',
   },
+  arrowIcon: {
+    height: '35px',
+    margin: 'auto',
+  },
 }));
 
-const BootstrapInput = withStyles((theme) => ({
-  root: {
-    'label + &': {
-      marginTop: theme.spacing(3),
-    },
-  },
-  input: {
-    width: '30px',
-    borderRadius: 4,
-    position: 'relative',
-    backgroundColor: theme.palette.background.paper,
-    border: '1px solid #ced4da',
-    fontSize: 16,
-    padding: '10px 0px 10px 12px',
-    transition: theme.transitions.create(['border-color', 'box-shadow']),
-    '&:focus': {
-      borderRadius: 4,
-      borderColor: '#80bdff',
-      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
-    },
-  },
-}))(InputBase);
-
-const BootstrapInputRow = withStyles((theme) => ({
-  root: {
-    'label + &': {
-      marginTop: theme.spacing(3),
-    },
-  },
-  input: {
-    width: '20px',
-    borderRadius: 4,
-    position: 'relative',
-    backgroundColor: theme.palette.background.paper,
-    border: '1px solid #ced4da',
-    fontSize: 16,
-    padding: '10px 0px 10px 12px',
-    transition: theme.transitions.create(['border-color', 'box-shadow']),
-    '&:focus': {
-      borderRadius: 4,
-      borderColor: '#80bdff',
-      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
-    },
-  },
-}))(InputBase);
-
 export default function CustomTable({
-  searchPlaceholder, buttons, columns, hasFilter, dataColumnName, data, path, children,
+  searchPlaceholder,
+  buttons,
+  columns,
+  hasFilter,
+  dataColumnName,
+  data,
+  path,
+  children,
 }) {
   const baseUrl = '';
   const classes = useStyles();
@@ -136,7 +115,9 @@ export default function CustomTable({
   };
 
   useEffect(() => {
-    if (pageInput <= Math.ceil(filterData.length / rowsPerPage) && pageInput >= 1) { setPage(pageInput - 1); }
+    if (pageInput <= Math.ceil(filterData.length / rowsPerPage) && pageInput >= 1) {
+      setPage(pageInput - 1);
+    }
   }, [filterData.length, pageInput, rowsPerPage]);
 
   useEffect(() => {
@@ -159,35 +140,37 @@ export default function CustomTable({
   return (
     <>
       <div className={classes.topContent}>
-        <TextField id="search" className={classes.search} onChange={(e) => { setSearch(e.target.value); }} value={search} placeholder={searchPlaceholder} variant="outlined" />
+        <TextField
+          id="search"
+          className={classes.search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+          value={search}
+          placeholder={searchPlaceholder}
+        />
         <div className={classes.buttons}>{buttons}</div>
       </div>
-      {/* <hr className={classes.divider} /> */}
-      <Paper className={classes.root}>
+
+      <Paper className={classes.root} elevation={0}>
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">
-            <TableHead className={classes.head}>
-              <TableRow>
+            <TableHead>
+              <TableRow className={classes.tableHead}>
                 {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                  >
+                  <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
                     {column.label}
-                    {hasFilter[columns.findIndex((x) => x.id === column.id)] ? <FilterList className={classes.filterIcon} /> : <></>}
+                    {hasFilter[columns.findIndex((x) => x.id === column.id)] && (
+                      <FilterList className={classes.filterIcon} />
+                    )}
                   </TableCell>
                 ))}
-                <TableCell
-                  key="link"
-                  align="right"
-                  style={{ minWidth: 20 }}
-                />
+                <TableCell key="link" align="right" style={{ minWidth: 20 }} />
               </TableRow>
             </TableHead>
             <TableBody>
               {filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.code} className={classes.row}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
@@ -197,7 +180,7 @@ export default function CustomTable({
                     );
                   })}
                   <TableCell key="show" align="right">
-                    <button type="button" className={classes.detailButton} onClick={() => { }}>
+                    <button type="button" className={classes.detailButton} onClick={() => {}}>
                       <ArrowForward style={{ height: '20px' }} />
                     </button>
                   </TableCell>
@@ -206,36 +189,56 @@ export default function CustomTable({
             </TableBody>
           </Table>
         </TableContainer>
-        <Grid
-          container
-          direction="row"
-          justifyContent="flex-end"
-          alignItems="center"
-          className={classes.bottom}
-        >
-          <Select
+        <div className={classes.bottom}>
+          <FormControl variant="outlined" className="">
+            <Select
+              className={classes.bottomItem}
+              labelId="rows-per-page"
+              id="rows-per-page"
+              value={rowsPerPage}
+              onChange={(e) => {
+                setRowsPerPage(e.target.value);
+              }}
+            >
+              <MenuItem value={5}>5</MenuItem>
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={25}>25</MenuItem>
+              <MenuItem value={50}>50</MenuItem>
+            </Select>
+          </FormControl>
+
+          <Typography className={classes.bottomItem} variant="body1">
+            rows
+          </Typography>
+          <Button
             className={classes.bottomItem}
-            labelId="rows-per-page"
-            id="rows-per-page"
-            value={rowsPerPage}
-            onChange={(e) => { setRowsPerPage(e.target.value); }}
-            input={<BootstrapInputRow />}
+            onClick={(e) => {
+              handleChangePage(e, curPage - 1);
+            }}
           >
-            <MenuItem value={5}>5</MenuItem>
-            <MenuItem value={10}>10</MenuItem>
-            <MenuItem value={25}>25</MenuItem>
-            <MenuItem value={50}>50</MenuItem>
-          </Select>
-          <Typography className={classes.bottomItem} variant="body1">rows</Typography>
-          <Button className={classes.bottomItem} onClick={(e) => { handleChangePage(e, curPage - 1); }}><ArrowBackIosIcon style={{ height: '30px' }} /></Button>
-          <BootstrapInput value={pageInput} onChange={(e) => { setPageInput(e.target.value); }} />
+            <MdKeyboardArrowLeft className={classes.arrowIcon} />
+          </Button>
+          <TextField
+            className={classes.pageIndexTextField}
+            value={pageInput}
+            onChange={(e) => {
+              setPageInput(e.target.value);
+            }}
+          />
           <Typography className={classes.bottomItem} variant="body1">
             of
             {' '}
             {Math.ceil(filterData.length / rowsPerPage)}
           </Typography>
-          <Button className={classes.bottomItem} onClick={(e) => { handleChangePage(e, curPage + 1); }}><ArrowForwardIosIcon style={{ height: '30px' }} /></Button>
-        </Grid>
+          <Button
+            className={classes.bottomItem}
+            onClick={(e) => {
+              handleChangePage(e, curPage + 1);
+            }}
+          >
+            <MdKeyboardArrowRight className={classes.arrowIcon} />
+          </Button>
+        </div>
       </Paper>
       <div className={classes.children}>{children}</div>
     </>
