@@ -6,7 +6,8 @@ import SimpleBar from '../../../components/ui/SimpleBar';
 import ClassList from '../../../components/admin/course/ClassList';
 import CourseSetting from '../../../components/admin/course/CourseSetting';
 
-class CourseOverview extends Component {
+/* This is a level 3 container (main page container) */
+class Course extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -37,4 +38,4 @@ const mapStateToProps = (state) => ({
   courses: state.admin.course.courses,
 });
 
-export default connect(mapStateToProps, {})(withRouter(CourseOverview));
+export default connect(mapStateToProps, {})(withRouter(Course));
