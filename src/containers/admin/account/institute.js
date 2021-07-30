@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import { withRouter } from 'react-router-dom';
 
+import InstituteSetting from '../../../components/admin/account/InstituteSetting';
+
 class Institute extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +14,7 @@ class Institute extends Component {
   componentDidMount() {}
 
   render() {
-    return <div />;
+    return <InstituteSetting />;
   }
 }
 

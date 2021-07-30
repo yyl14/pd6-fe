@@ -7,7 +7,6 @@ import {
 import { Container } from '@material-ui/core';
 import Account from './account/account';
 import Institute from './account/institute';
-import InstituteSetting from './account/instituteSetting';
 import ClassInfo from './course/classInfo';
 import CourseOverview from './course/courseOverview';
 import AccessLog from './system/accessLog';
@@ -43,7 +42,7 @@ class Admin extends Component {
               <Switch>
                 <Route path="/admin/course/" component={CourseOverview} />
                 <Route path="/admin/course/:courseId/class/:classId" component={ClassInfo} />
-                <Route path="/admin/account/institute" component={InstituteSetting} />
+                <Route path="/admin/account/institute" component={Institute} />
                 <Route path="/admin/account/account" component={Account} />
                 <Route path="/admin/system/accesslog" component={AccessLog} />
                 <Route path="/admin/system/announcement" component={Announcement} />
