@@ -22,7 +22,7 @@ class Institute extends Component {
     return (
       <div>
         <Switch>
-          <Route path="/admin/account/institute/:instituteId/setting" component={InstituteSetting} />
+          <Route path="/admin/account/institute/:institute" component={InstituteSetting} />
           <Route path="/admin/account/institute" component={InstituteList} />
         </Switch>
       </div>

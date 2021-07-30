@@ -22,7 +22,8 @@ import { ArrowForward, FilterList } from '@material-ui/icons';
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from 'react-icons/md';
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLocation } from 'react';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   topContent: {
@@ -71,9 +72,8 @@ const useStyles = makeStyles((theme) => ({
   bottomItem: {
     padding: '5px',
   },
-  detailButton: {
-    background: 'none',
-    border: 'none',
+  detailLink: {
+    color: 'black',
   },
   filterIcon: {
     height: '15px',
@@ -91,6 +91,7 @@ export default function CustomTable({
   hasFilter,
   dataColumnName,
   data,
+  hasLink,
   path,
   children,
 }) {
@@ -178,11 +179,14 @@ export default function CustomTable({
                       </TableCell>
                     );
                   })}
+                  {hasLink
+                  && (
                   <TableCell key="show" align="right">
-                    <button type="button" className={classes.detailButton} onClick={() => {}}>
+                    <Link to={path[filterData.indexOf(row)]} className={classes.detailLink}>
                       <ArrowForward style={{ height: '20px' }} />
-                    </button>
+                    </Link>
                   </TableCell>
+                  )}
                 </TableRow>
               ))}
             </TableBody>

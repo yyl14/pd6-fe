@@ -22,8 +22,8 @@ export default function InstituteList() {
       is_disabled: 'Enabled',
     },
     {
-      institute: 'National Taiwan University',
-      email_domain: 'ntu.edu.tw',
+      institute: 'National Taiwan Normal University',
+      email_domain: 'ntnu.edu.tw',
       is_disabled: 'Enabled',
     },
     {
@@ -32,8 +32,8 @@ export default function InstituteList() {
       is_disabled: 'Disabled',
     },
     {
-      institute: 'National Taiwan University',
-      email_domain: 'ntu.edu.tw',
+      institute: 'National Taiwan Normal University',
+      email_domain: 'ntnu.edu.tw',
       is_disabled: 'Enabled',
     },
     {
@@ -42,8 +42,8 @@ export default function InstituteList() {
       is_disabled: 'Enabled',
     },
     {
-      institute: 'National Taiwan University',
-      email_domain: 'ntu.edu.tw',
+      institute: 'National Taiwan Normal University',
+      email_domain: 'ntnu.edu.tw',
       is_disabled: 'Disabled',
     },
   ];
@@ -71,6 +71,8 @@ export default function InstituteList() {
         ]}
         hasFilter={[false, false, true]}
         dataColumnName={['institute', 'email_domain', 'is_disabled']}
+        hasLink
+        path={['institute/NTU', 'institute/NTNU', 'institute/NTU', 'institute/NTNU', 'institute/NTU', 'institute/NTNU', 'institute/NTU']}
       />
     </>
   );

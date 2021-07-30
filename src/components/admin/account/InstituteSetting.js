@@ -165,6 +165,59 @@ export default function InstituteSetting() {
         </DialogActions>
       </Dialog>
       <Dialog
+        open={settingStatus.changeInitialism}
+        keepMounted
+        onClose={() => handleClosePopUp()}
+        aria-labelledby="dialog-slide-title"
+        aria-describedby="dialog-slide-description"
+      >
+        <DialogTitle id="dialog-slide-title">
+          <Typography variant="h4">Change institute Initialism</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Grid container spacing={3}>
+            <Grid item xs={5}>
+              <Typography variant="body1" style={{ color: 'red' }}>
+                Current Initialism
+              </Typography>
+            </Grid>
+            <Grid item xs={7}>
+              <Typography variant="body1" style={{ color: 'red' }}>
+                NTU
+              </Typography>
+            </Grid>
+            <Grid item xs={5}>
+              <Typography variant="body1">
+                New Initialism
+              </Typography>
+            </Grid>
+            <Grid item xs={7}>
+              <OutlinedInput
+                id="outlined-adornment"
+                value={newSetting.newInitialism}
+                onChange={handleChange('newInitialism')}
+                aria-describedby="outlined-weight-helper-text"
+                inputProps={{
+                  'aria-label': 'newInitialism',
+                }}
+                labelWidth={0}
+              />
+            </Grid>
+          </Grid>
+          <Typography variant="body1">
+            Once you change the institute’s initialism, all related members will be affected. Please be certain.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleClosePopUp()} color="default">
+            Cancel
+          </Button>
+          <Button onClick={() => handleClosePopUp()} color="secondary">
+            Rename
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
         open={settingStatus.changeStatus}
         keepMounted
         onClose={() => handleClosePopUp()}
