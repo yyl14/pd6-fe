@@ -14,20 +14,8 @@ class AccessLog extends Component {
 
   render() {
     return (
-      <div className="page">
-        <div className="main-bar center">
-          main bar
-        </div>
-        <div className="horizontal container">
-          <div className="side-bar center">
-            side-bar
-          </div>
-          <div className="content center">
-            <div className="panel">
-              <CustomTable />
-            </div>
-          </div>
-        </div>
+      <div>
+        <CustomTable />
       </div>
     );
   }
