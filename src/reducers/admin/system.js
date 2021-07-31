@@ -1,3 +1,7 @@
+import {
+  systemConstants,
+} from '../../actions/constant';
+
 const initialState = {
   logs: {
     byId: {},
@@ -14,7 +18,7 @@ const initialState = {
 export default function system(state = initialState, action) {
   switch (action.type) {
     /* Access Logs */
-    case 'FETCH_ACCESS_LOG_START':
+    case systemConstants.FETCH_ACCESS_LOG_START:
       return {
         ...state,
         loading: {
@@ -22,7 +26,7 @@ export default function system(state = initialState, action) {
           fetchCourse: true,
         },
       };
-    case 'FETCH_ACCESS_LOG_SUCCESS': {
+    case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
       const { data } = action.payload;
       return {
         ...state,
@@ -40,7 +44,7 @@ export default function system(state = initialState, action) {
         },
       };
     }
-    case 'FETCH_ACCESS_LOG_FAIL': {
+    case systemConstants.FETCH_ACCESS_LOG_FAIL: {
       const { error } = action.payload;
       return {
         ...state,
