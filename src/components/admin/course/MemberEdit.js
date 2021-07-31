@@ -12,13 +12,17 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  makeStyles,
 } from '@material-ui/core';
 import SchoolIcon from '@material-ui/icons/School';
 
 // TODO: use makestyles() to do layout
+const useStyles = makeStyles((theme) => ({}));
 
+/* This is a level 4 component (page component) */
 const MemberEdit = (props) => {
   // TODO: initialize field content with redux state
+  const classes = useStyles();
   const [TA, setTA] = useState(props.TAList);
   const [student, setStudent] = useState(props.studentList);
   const [guest, setGuest] = useState(props.guestList);

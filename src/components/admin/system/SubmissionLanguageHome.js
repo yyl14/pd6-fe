@@ -2,45 +2,61 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
-  Table, TableBody, TableHead, TableCell, TableContainer, TableFooter,
-  TablePagination, TableRow, Paper, IconButton, SvgIcon, TextField, Typography, Grid,
+  Table,
+  TableBody,
+  TableHead,
+  TableCell,
+  TableContainer,
+  TableFooter,
+  TablePagination,
+  TableRow,
+  Paper,
+  IconButton,
+  SvgIcon,
+  TextField,
+  Typography,
+  Grid,
 } from '@material-ui/core';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import PaginationBar from './PaginationBar';
 
 const useStyle = makeStyles((theme) => ({
-  header: {
-    marginLeft: '173.5px',
-    marginTop: '70px',
-  },
-  root: {
-    width: '1280px',
-    marginLeft: '166px',
-    marginTop: '50px',
-    borderRadius: 0,
-    borderTopLeftRadius: '10px',
-    borderTopRightRadius: '10px',
-    boxShadow: 'none',
-  },
-  searchBar: {
-    fontSize: '18px',
-    paddingLeft: '15px',
-    width: '350px',
-    height: '45px',
-    marginLeft: '20px',
-    marginTop: '15px',
-    borderRadius: '10px',
-    borderWidth: '3px',
-    border: '#CACACA',
-  },
-  searchBarBackground: {
-    width: '1280px',
-    height: '75px',
-    backgroundColor: '#EAEAEA',
-  },
-  tableTitle: {
-    height: '45px',
+  // header: {
+  //   marginLeft: '173.5px',
+  //   marginTop: '70px',
+  // },
+  // root: {
+  //   width: '1280px',
+  //   marginLeft: '166px',
+  //   marginTop: '50px',
+  //   borderRadius: 0,
+  //   borderTopLeftRadius: '10px',
+  //   borderTopRightRadius: '10px',
+  //   boxShadow: 'none',
+  // },
+  // searchBar: {
+  //   fontSize: '18px',
+  //   paddingLeft: '15px',
+  //   width: '350px',
+  //   height: '45px',
+  //   marginLeft: '20px',
+  //   marginTop: '15px',
+  //   borderRadius: '10px',
+  //   borderWidth: '3px',
+  //   border: '#CACACA',
+  // },
+  // searchBarBackground: {
+  //   width: '1280px',
+  //   height: '75px',
+  //   backgroundColor: '#EAEAEA',
+  // },
+  // tableTitle: {
+  //   height: '45px',
+  // },
+
+  pageHeader: {
+    marginBottom: '50px',
   },
 }));
 
@@ -71,6 +87,7 @@ createData.PropTypes = {
   Status: PropTypes.string.isRequired,
 };
 
+// TODO : use icon library
 function ArrowIcon() {
   return (
     <SvgIcon>
@@ -79,7 +96,9 @@ function ArrowIcon() {
   );
 }
 
-export default function LangTable() {
+// TODO: use ui/CustomTable to implement announcement table directly in this component
+
+export default function SubmissionLanguageHome() {
   const classes = useStyle();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -102,8 +121,13 @@ export default function LangTable() {
 
   return (
     <div>
-      <Typography className={classes.header} variant="h3">Submission Language</Typography>
-      <TableContainer component={Paper} className={classes.root}>
+      <Typography variant="h3" className={classes.pageHeader}>
+        Submission Language
+      </Typography>
+      <Typography variant="h4">This is Submission Language Home</Typography>
+      {/*
+      TODO: use ui/CustomTable
+       <TableContainer component={Paper} className={classes.root}>
         <Grid className={classes.searchBarBackground}>
           <TableRow>
             <input
@@ -161,8 +185,7 @@ export default function LangTable() {
         setPage={setPage}
         rowsPerPage={rowsPerPage}
         setRowsPerPage={setRowsPerPage}
-      />
-
+      /> */}
     </div>
   );
 }

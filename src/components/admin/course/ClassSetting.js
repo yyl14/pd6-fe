@@ -12,12 +12,20 @@ import {
   DialogContentText,
   DialogTitle,
   TextField,
+  makeStyles,
 } from '@material-ui/core';
 import SchoolIcon from '@material-ui/icons/School';
 import Divider from '@material-ui/core/Divider';
 
+const useStyles = makeStyles((theme) => ({
+  pageHeader: {
+    marginBottom: '50px',
+  },
+}));
+
 /* This is a level 4 component (page component) */
 const ClassSetting = () => {
+  const classNames = useStyles();
   const { courseId, classId } = useParams();
   const courses = useSelector((state) => state.admin.course.courses.byId);
   const classes = useSelector((state) => state.admin.course.classes.byId);
@@ -55,7 +63,7 @@ const ClassSetting = () => {
 
   return (
     <div className="class-setting">
-      <Typography variant="h3" style={{ marginBottom: '50px' }}>
+      <Typography variant="h3" className={classNames.pageHeader}>
         {`${courses[courseId].name} / ${classes[classId].name} / Setting`}
       </Typography>
 

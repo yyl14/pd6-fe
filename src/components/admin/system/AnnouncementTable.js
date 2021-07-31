@@ -13,6 +13,7 @@ import { Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import CustomTable from '../../ui/CustomTable';
 
+// DO NOT USE THIS COMPONENT
 const columns = [
   {
     id: 'ID',
@@ -42,7 +43,10 @@ const columns = [
 
 function createData(ID, Title, PostTime, EndTime) {
   return {
-    ID, Title, PostTime, EndTime,
+    ID,
+    Title,
+    PostTime,
+    EndTime,
   };
 }
 
@@ -123,9 +127,15 @@ export default function AnnouncementTable() {
   //     onRowsPerPageChange={handleChangeRowsPerPage}
   //   />
   // </Paper>
+
+    // TODO: move this to AnnouncementHome.js
     <CustomTable
       searchPlaceholder="Search"
-      buttons={(<Button variant="contained" color="primary" onClick={add} placeholder="Search">Add Announcement</Button>)}
+      buttons={(
+        <Button variant="contained" color="primary" onClick={add} placeholder="Search">
+          Add Announcement
+        </Button>
+      )}
       data={rows}
       columns={columns}
       hasFilter={[false, false, false, false]}

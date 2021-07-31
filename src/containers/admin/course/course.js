@@ -5,6 +5,7 @@ import { Button, Typography } from '@material-ui/core';
 import SimpleBar from '../../../components/ui/SimpleBar';
 import ClassList from '../../../components/admin/course/ClassList';
 import CourseSetting from '../../../components/admin/course/CourseSetting';
+import NoMatch from '../../../components/noMatch';
 
 /* This is a level 3 container (main page container) */
 class Course extends Component {
@@ -28,6 +29,7 @@ class Course extends Component {
         <Switch>
           <Route path="/admin/course/course/:courseId/class-list" component={ClassList} />
           <Route path="/admin/course/course/:courseId/setting" component={CourseSetting} />
+          <Route component={NoMatch} />
         </Switch>
       </>
     );

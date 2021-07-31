@@ -19,6 +19,9 @@ import SimpleBar from '../../ui/SimpleBar';
 import FieldWithAlignedText from '../../ui/FieldWithAlignedText';
 
 const useStyles = makeStyles((theme) => ({
+  pageHeader: {
+    marginBottom: '50px',
+  },
 }));
 
 export default function InstituteSetting() {
@@ -60,16 +63,23 @@ export default function InstituteSetting() {
 
   return (
     <>
-      <Typography variant="h3" style={{ marginBottom: '50px' }}>
+      <Typography variant="h3" className={classes.pageHeader}>
         Institute: NTU / Setting
       </Typography>
       <SimpleBar
         title="Change Institute Full Name"
         buttons={(
           <>
-            <Button color="secondary" onClick={() => { setSettingStatus(((input) => ({ ...input, changeName: true }))); }}>Rename</Button>
+            <Button
+              color="secondary"
+              onClick={() => {
+                setSettingStatus((input) => ({ ...input, changeName: true }));
+              }}
+            >
+              Rename
+            </Button>
           </>
-          )}
+        )}
       >
         <Typography variant="body1">
           Once you change the institute’s name, all related members will be affected. Please be certain.
@@ -79,9 +89,16 @@ export default function InstituteSetting() {
         title="Change Institute Initialism"
         buttons={(
           <>
-            <Button color="secondary" onClick={(prevState) => { setSettingStatus(((input) => ({ ...input, changeInitialism: true }))); }}>Rename</Button>
+            <Button
+              color="secondary"
+              onClick={(prevState) => {
+                setSettingStatus((input) => ({ ...input, changeInitialism: true }));
+              }}
+            >
+              Rename
+            </Button>
           </>
-          )}
+        )}
       >
         <Typography variant="body1">
           Once you change the institute’s initialism, all related members will be affected. Please be certain.
@@ -91,26 +108,43 @@ export default function InstituteSetting() {
         title="Change Institute Email"
         buttons={(
           <>
-            <Button color="secondary" onClick={(prevState) => { setSettingStatus(((input) => ({ ...input, changeEmail: true }))); }}>Change Email</Button>
+            <Button
+              color="secondary"
+              onClick={(prevState) => {
+                setSettingStatus((input) => ({ ...input, changeEmail: true }));
+              }}
+            >
+              Change Email
+            </Button>
           </>
-          )}
+        )}
       >
         <Typography variant="body1">
-          Once you change the institute’s email, future members may not be able to register with certain email. Please be certain.
+          Once you change the institute’s email, future members may not be able to register with certain email. Please
+          be certain.
         </Typography>
       </SimpleBar>
       <SimpleBar
         title="Change Institute Status"
         buttons={(
           <>
-            <Button color="secondary" onClick={(prevState) => { setSettingStatus(((input) => ({ ...input, changeStatus: true }))); }}>Change Status</Button>
+            <Button
+              color="secondary"
+              onClick={(prevState) => {
+                setSettingStatus((input) => ({ ...input, changeStatus: true }));
+              }}
+            >
+              Change Status
+            </Button>
           </>
-          )}
+        )}
       >
         <Typography variant="body1">
-          Once you change the institute’s status, future members from this institute may not be able to register. Please be certain.
+          Once you change the institute’s status, future members from this institute may not be able to register. Please
+          be certain.
         </Typography>
       </SimpleBar>
+
       <Dialog
         open={settingStatus.changeName}
         keepMounted
@@ -134,9 +168,7 @@ export default function InstituteSetting() {
               </Typography>
             </Grid>
             <Grid item xs={5}>
-              <Typography variant="body1">
-                New Name
-              </Typography>
+              <Typography variant="body1">New Name</Typography>
             </Grid>
             <Grid item xs={7}>
               <OutlinedInput
@@ -187,9 +219,7 @@ export default function InstituteSetting() {
               </Typography>
             </Grid>
             <Grid item xs={5}>
-              <Typography variant="body1">
-                New Initialism
-              </Typography>
+              <Typography variant="body1">New Initialism</Typography>
             </Grid>
             <Grid item xs={7}>
               <OutlinedInput
@@ -229,18 +259,14 @@ export default function InstituteSetting() {
         </DialogTitle>
         <DialogContent>
           <FormControlLabel
-            control={(
-              <Switch
-                checked={newSetting.newStatus}
-                onChange={handleChangeStatus}
-                name="newStatus"
-                color="primary"
-              />
-              )}
+            control={
+              <Switch checked={newSetting.newStatus} onChange={handleChangeStatus} name="newStatus" color="primary" />
+            }
             label={newSetting.newStatus ? 'Enabled' : 'Disabled'}
           />
           <Typography variant="body1">
-            Once you change the institute’s status, future members from this institute may not be able to register. Please be certain.
+            Once you change the institute’s status, future members from this institute may not be able to register.
+            Please be certain.
           </Typography>
         </DialogContent>
         <DialogActions>
@@ -252,7 +278,6 @@ export default function InstituteSetting() {
           </Button>
         </DialogActions>
       </Dialog>
-
     </>
   );
 }

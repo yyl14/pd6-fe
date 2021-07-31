@@ -11,8 +11,8 @@ import Class from './course/class';
 import Course from './course/course';
 import AccessLog from './system/accessLog';
 import SubmitLang from './system/submitLang';
-import NoMatch from '../../components/noMatch';
 import Announcement from './system/announcement';
+import NoMatch from '../../components/noMatch';
 
 import Header from '../../components/ui/Header';
 import Sidebar from '../../components/ui/Sidebar';

@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { Switch, Route, withRouter } from 'react-router-dom';
-import UserInfo from '../../../components/admin/account/UserInfo';
+import UserInfo from '../../../components/admin/account/AccountSetting';
+import NoMatch from '../../../components/noMatch';
 
+/* This is a level 3 container (main page container) */
 class Account extends Component {
   constructor(props) {
     super(props);
@@ -14,12 +16,13 @@ class Account extends Component {
 
   render() {
     return (
-      <div>
+      <>
         <Switch>
-          <Route path="/admin/account/account/:accountId" component={UserInfo} />
-          <Route path="/admin/account/account" component={UserInfo} />
+          <Route path="/admin/account/account/:accountId/setting" component={UserInfo} />
+          <Route path="/admin/account/account/" component={UserInfo} />
+          <Route component={NoMatch} />
         </Switch>
-      </div>
+      </>
     );
   }
 }

@@ -10,6 +10,7 @@ import NoMatch from '../../../components/noMatch';
 
 // import AnnouncementAdd from '../../../components/admin/system/AnnouncementAdd';
 
+/* This is a level 3 container (main page container) */
 class AnnouncementInfo extends Component {
   constructor(props) {
     super(props);
@@ -20,14 +21,15 @@ class AnnouncementInfo extends Component {
 
   render() {
     return (
-      <Switch>
-        <Route path="/admin/system/announcement/add" component={AnnouncementAdd} />
-        <Route path="/admin/system/announcement/setting/edit" component={AnnouncementEdit} />
-        <Route path="/admin/system/announcement/setting" component={AnnouncementSetting} />
-        <Route exact path="/admin/system/announcement" component={AnnouncementHome} />
-
-        <Route component={NoMatch} />
-      </Switch>
+      <>
+        <Switch>
+          <Route path="/admin/system/announcement/add" component={AnnouncementAdd} />
+          <Route path="/admin/system/announcement/setting/edit" component={AnnouncementEdit} />
+          <Route path="/admin/system/announcement/setting" component={AnnouncementSetting} />
+          <Route exact path="/admin/system/announcement" component={AnnouncementHome} />
+          <Route component={NoMatch} />
+        </Switch>
+      </>
     );
   }
 }

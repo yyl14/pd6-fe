@@ -20,7 +20,7 @@ import './App.css';
 import './styles/ui.css';
 
 const GlobalCss = withStyles({
-  // @global is handled by jss-plugin-global.
+
   '@global': {
     // You should target [class*="MuiButton-root"] instead if you nest themes.
     // '.MuiButton-root': {
@@ -32,10 +32,6 @@ const GlobalCss = withStyles({
     },
   },
 })(() => null);
-
-// …
-
-// <GlobalCss />;
 
 class App extends Component {
   constructor(props) {

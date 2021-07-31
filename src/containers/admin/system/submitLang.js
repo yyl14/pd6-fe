@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 
 import { Route, Switch, withRouter } from 'react-router-dom';
 
-import LangTable from '../../../components/admin/system/LangTable';
-import LangSetting from '../../../components/admin/system/LangSetting';
+import SubmissionLanguageHome from '../../../components/admin/system/SubmissionLanguageHome';
+import LangSetting from '../../../components/admin/system/SubmissionLanguageSetting';
+import NoMatch from '../../../components/noMatch';
 
+/* This is a level 3 container (main page container) */
 class SubmitLang extends Component {
   constructor(props) {
     super(props);
@@ -16,12 +18,13 @@ class SubmitLang extends Component {
 
   render() {
     return (
-      <div>
+      <>
         <Switch>
           <Route path="/admin/system/submitlang/:language/setting" component={LangSetting} />
-          <Route exact path="/admin/system/submitlang" component={LangTable} />
+          <Route exact path="/admin/system/submitlang" component={SubmissionLanguageHome} />
+          <Route component={NoMatch} />
         </Switch>
-      </div>
+      </>
     );
   }
 }

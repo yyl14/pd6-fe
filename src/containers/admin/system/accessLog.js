@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Switch, Route } from 'react-router-dom';
 
-import CustomTable from '../../../components/admin/system/accessLog/CustomTable';
+// TODO: do fetch action in level 4 component (remove this import afterwards)
 import { fetchAccessLog } from '../../../actions/admin/system';
 
+import AccessLogComponent from '../../../components/admin/system/AccessLog';
+import NoMatch from '../../../components/noMatch';
+
+/* This is a level 3 container (main page container) */
 class AccessLog extends Component {
   constructor(props) {
     super(props);
@@ -13,15 +17,19 @@ class AccessLog extends Component {
 
   componentDidMount() {
     const { token } = this.props.auth.user;
-    this.props.fetchAccessLog(0, 10, token);
+
+    // TODO: do fetch action in level 4 component
+    // this.props.fetchAccessLog(0, 10, token);
   }
 
   render() {
     return (
-      <div className="page">
-        <h1>Access Log</h1>
-        <CustomTable />
-      </div>
+      <>
+        <Switch>
+          <Route path='path="/admin/system/accesslog' component={AccessLogComponent} />
+          <Route component={NoMatch} />
+        </Switch>
+      </>
     );
   }
 }

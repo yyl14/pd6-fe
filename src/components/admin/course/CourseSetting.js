@@ -12,8 +12,13 @@ const useStyles = makeStyles((theme) => ({
   informationItem: {
     width: '250px',
   },
+
+  pageHeader: {
+    marginBottom: '50px',
+  },
 }));
 
+/* This is a level 4 component (page component) */
 export default function CourseSetting() {
   const classes = useStyles();
 
@@ -22,7 +27,7 @@ export default function CourseSetting() {
 
   return (
     <>
-      <Typography variant="h3" style={{ marginBottom: '50px' }}>
+      <Typography variant="h3" className={classes.pageHeader}>
         {`${courses[courseId].name} / Setting`}
       </Typography>
       <SimpleBar title="Course Information">

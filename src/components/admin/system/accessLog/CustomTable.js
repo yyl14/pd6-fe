@@ -8,9 +8,18 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
 
+/* DO NOT USE THIS COMPONENT */
+
 function createData(LogID, StudentID, RealName, Username, IP, ResourcePath, RequestMethod, AccessTime) {
   return {
-    LogID, StudentID, RealName, Username, IP, ResourcePath, RequestMethod, AccessTime,
+    LogID,
+    StudentID,
+    RealName,
+    Username,
+    IP,
+    ResourcePath,
+    RequestMethod,
+    AccessTime,
   };
 }
 

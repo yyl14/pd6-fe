@@ -15,6 +15,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
+// DO NOT USE THIS COMPONENT
 const PaginationBar = ({
   data, page, setPage, rowsPerPage, setRowsPerPage,
 }) => {
@@ -48,12 +49,13 @@ const PaginationBar = ({
   function handleKeyUp(e) {
     const { value } = e.target;
     const code = e.keyCode;
-    if (code === 13 && (e.target.value <= totalPage)) { // enter
+    if (code === 13 && e.target.value <= totalPage) {
+      // enter
       handleChangePage(e, pageNumber - 1);
     }
   }
 
-  const emptyAction = () => ('');
+  const emptyAction = () => '';
 
   return (
     <TablePagination
@@ -66,7 +68,9 @@ const PaginationBar = ({
       labelRowsPerPage=""
       labelDisplayedRows={({ count }) => (
         <Grid container direction="row" justifyContent="flex-end" alignItems="center" style={{ marginTop: '17.5px' }}>
-          <Typography variant="body1" style={{ margin: '0 10px' }}>rows</Typography>
+          <Typography variant="body1" style={{ margin: '0 10px' }}>
+            rows
+          </Typography>
           <Button onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
             <KeyboardArrowLeft />
           </Button>
@@ -76,7 +80,10 @@ const PaginationBar = ({
             onChange={pageNumberChange}
             onKeyUp={(e) => handleKeyUp(e)}
             style={{
-              width: 100, height: 45, fontSize: 18, margin: '0 0 0 10px',
+              width: 100,
+              height: 45,
+              fontSize: 18,
+              margin: '0 0 0 10px',
             }}
           />
           <Typography variant="body1" style={{ margin: '0 10px' }}>
