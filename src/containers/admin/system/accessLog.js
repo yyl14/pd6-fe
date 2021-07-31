@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import { withRouter } from 'react-router-dom';
+import '../../../styles/admin/accessLog.css';
+import CustomTable from '../../../components/admin/system/accessLog/CustomTable';
 
 class AccessLog extends Component {
   constructor(props) {
@@ -12,7 +13,23 @@ class AccessLog extends Component {
   componentDidMount() {}
 
   render() {
-    return <div />;
+    return (
+      <div className="page">
+        <div className="main-bar center">
+          main bar
+        </div>
+        <div className="horizontal container">
+          <div className="side-bar center">
+            side-bar
+          </div>
+          <div className="content center">
+            <div className="panel">
+              <CustomTable />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 }
 
