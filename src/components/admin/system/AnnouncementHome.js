@@ -3,22 +3,16 @@ import { connect } from 'react-redux';
 import {
   withRouter, Switch, Route, useHistory,
 } from 'react-router-dom';
-import { Button, TextField } from '@material-ui/core';
-import StickyHeadTable from './Table';
+import { Button, Typography } from '@material-ui/core';
+import AnnouncementTable from './AnnouncementTable';
 
-const AnnouncementHome = () => {
-  const history = useHistory();
-  const add = () => {
-    history.push('/admin/system/announcement/add');
-  };
-  return (
-    <div>
-      <h1>HomePage</h1>
-      <TextField />
-      <Button variant="contained" color="primary" onClick={add} placeholder="Search">Add Announcement</Button>
-      <StickyHeadTable />
-    </div>
-  );
-};
+const AnnouncementHome = () => (
+  <div>
+    <Typography variant="h3" style={{ marginBottom: '30px' }}>
+      HomePage
+    </Typography>
+    <AnnouncementTable />
+  </div>
+);
 
 export default AnnouncementHome;

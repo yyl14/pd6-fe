@@ -165,7 +165,9 @@ export default function CustomTable({
                     )}
                   </TableCell>
                 ))}
-                <TableCell key="link" align="right" style={{ minWidth: 20 }} />
+                {hasLink
+                  && (<TableCell key="link" align="right" style={{ minWidth: 20 }} />
+                  )}
               </TableRow>
             </TableHead>
             <TableBody>
