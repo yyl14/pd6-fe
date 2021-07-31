@@ -14,7 +14,6 @@ import ForgetPassword from './containers/auth/ForgetPassword';
 import ResetPassword from './containers/auth/ResetPassword';
 import Index from './containers';
 import NoMatch from './components/noMatch';
-
 import store from './store';
 
 import './App.css';

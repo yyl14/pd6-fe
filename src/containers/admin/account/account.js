@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { withRouter } from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
+import UserInfo from '../../../components/admin/account/UserInfo';
 
 class Account extends Component {
   constructor(props) {
@@ -12,7 +13,14 @@ class Account extends Component {
   componentDidMount() {}
 
   render() {
-    return <div />;
+    return (
+      <div>
+        <Switch>
+          <Route path="/admin/account/account/:accountId" component={UserInfo} />
+          <Route path="/admin/account/account" component={UserInfo} />
+        </Switch>
+      </div>
+    );
   }
 }
 
