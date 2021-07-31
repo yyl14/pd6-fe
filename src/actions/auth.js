@@ -31,7 +31,6 @@ const userSignIn = (username, password) => (dispatch) => {
   agent
     .post('/account/jwt', { username, password })
     .then((logRes) => {
-      console.log(logRes);
       const id = logRes.data.data.account_id;
       const { token } = logRes.data.data;
 

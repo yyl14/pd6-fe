@@ -11,7 +11,14 @@ import NoMatch from '../../../components/noMatch';
 // temp data, will be replaced by the data from the api.
 function createData(LogID, StudentID, RealName, Username, IP, ResourcePath, RequestMethod, AccessTime) {
   return {
-    LogID, StudentID, RealName, Username, IP, ResourcePath, RequestMethod, AccessTime,
+    LogID,
+    StudentID,
+    RealName,
+    Username,
+    IP,
+    ResourcePath,
+    RequestMethod,
+    AccessTime,
   };
 }
 
@@ -23,7 +30,6 @@ const data = [
   createData(22, 'B07705002', '黃祥祥', 'shiba', '106.114.0.1', 22, 22, '2021-06-20, 09:21:44'),
   createData(22, 'B07705002', '黃祥祥', 'shiba', '106.114.0.1', 22, 22, '2021-06-20, 09:21:44'),
 ];
-
 
 /* This is a level 3 container (main page container) */
 class AccessLog extends Component {
@@ -43,7 +49,7 @@ class AccessLog extends Component {
     return (
       <>
         <Switch>
-          <Route path='path="/admin/system/accesslog' component={AccessLogComponent} />
+          <Route path="/admin/system/accesslog" component={AccessLogComponent} />
           <Route component={NoMatch} />
         </Switch>
       </>

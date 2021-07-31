@@ -20,7 +20,7 @@ class SubmitLang extends Component {
     return (
       <>
         <Switch>
-          <Route path="/admin/system/submitlang/:language/setting" component={LangSetting} />
+          <Route path="/admin/system/submitlang/:languageId/setting" component={LangSetting} />
           <Route exact path="/admin/system/submitlang" component={SubmissionLanguageHome} />
           <Route component={NoMatch} />
         </Switch>
