@@ -1,9 +1,12 @@
 import agent from '../agent';
+import {
+  systemConstants,
+} from '../constant';
 
 const fetchAccessLog = (offset, limit, token) => (dispatch) => {
   const fetch = { headers: { 'auth-token': token } };
   dispatch({
-    type: 'FETCH_ACCESS_LOG_START',
+    type: systemConstants.FETCH_ACCESS_LOG_START,
   });
 
   agent.get(`/access-log?offset=${offset}&limit=${limit}`, fetch)
@@ -11,7 +14,7 @@ const fetchAccessLog = (offset, limit, token) => (dispatch) => {
       const { data } = res.data;
       console.log('use api :', data);
       dispatch({
-        type: 'FETCH_ACCESS_LOG_SUCCESS',
+        type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
         payload: {
           ...data,
         },
@@ -19,7 +22,7 @@ const fetchAccessLog = (offset, limit, token) => (dispatch) => {
     })
     .catch((err) => {
       dispatch({
-        type: 'FETCH_ACCESS_LOG_FAIL',
+        type: systemConstants.FETCH_ACCESS_LOG_FAIL,
         payload: { err },
       });
     });

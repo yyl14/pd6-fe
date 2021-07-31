@@ -31,8 +31,7 @@ const rows = [
   createData(22, 'B07705002', '黃祥祥', 'shiba', '106.114.0.1', 22, 22, '2021-06-20, 09:21:44'),
   createData(22, 'B07705002', '黃祥祥', 'shiba', '106.114.0.1', 22, 22, '2021-06-20, 09:21:44'),
 ];
-
-const CustomTable = () => {
+const CustomTable = ({data}) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -62,7 +61,7 @@ const CustomTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+            {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
               <TableRow key={row.name}>
                 <TableCell align="center">{row.LogID}</TableCell>
                 <TableCell align="center">{row.StudentID}</TableCell>
@@ -80,7 +79,7 @@ const CustomTable = () => {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={rows.length}
+        count={data.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
