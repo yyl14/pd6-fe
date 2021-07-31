@@ -7,6 +7,8 @@ import {
 import Divider from '@material-ui/core/Divider';
 import { makeStyles } from '@material-ui/core/styles';
 
+import SimpleBar from '../../ui/SimpleBar';
+
 const useStyle = makeStyles((theme) => ({
   root: {
     marginLeft: '170px',
@@ -23,14 +25,9 @@ const useStyle = makeStyles((theme) => ({
     marginTop: '30px',
     marginLeft: '50px',
   },
-  button: {
-    position: 'absolute',
-    top: '198px',
-    right: '170px',
-  },
 }));
 
-const LangSetting = () => {
+export default function LangSetting() {
   const classes = useStyle();
   const [popUp, setPopUp] = useState(false);
   const [popUpDelete, setPopUpDelete] = useState(false);
@@ -46,18 +43,17 @@ const LangSetting = () => {
 
   return (
     <div className="language-setting">
-      <Grid container className={classes.root}>
-        <Grid container item className={classes.header}>
-          <Typography className="language-setting-title" variant="h3">Python 3.8.1 / Submission Language Setting</Typography>
-        </Grid>
-
-        <Grid container item xs={6} direction="row" alignItems="center">
-          <Typography className={classes.title} variant="h4">Change Institute Status</Typography>
-          <Button className={classes.button} onClick={handleClick} color="secondary">Change Status</Button>
-          <Divider variant="fullWidth" style={{ width: '1280px' }} />
-          <Typography className={classes.body} variant="body1">Once you change the status, future submission will be affected. Please be certain.</Typography>
-        </Grid>
-      </Grid>
+      <Typography className="language-setting-title" variant="h3">Python 3.8.1 / Submission Language Setting</Typography>
+      <SimpleBar
+        title="Change Institute Status"
+        buttons={(
+          <>
+            <Button onClick={handleClick} color="secondary">Change Status</Button>
+          </>
+          )}
+      >
+        <Typography className={classes.body} variant="body1">Once you change the status, future submission will be affected. Please be certain.</Typography>
+      </SimpleBar>
 
       <Dialog open={popUp} keepMounted onClose={handleClosePopUp}>
         <DialogTitle>
@@ -82,6 +78,4 @@ const LangSetting = () => {
       </Dialog>
     </div>
   );
-};
-
-export default LangSetting;
+}

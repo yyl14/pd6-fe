@@ -79,7 +79,7 @@ function ArrowIcon() {
   );
 }
 
-const LangTable = () => {
+export default function LangTable() {
   const classes = useStyle();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -140,7 +140,7 @@ const LangTable = () => {
                     {data.Status}
                   </TableCell>
                   <TableCell align="right">
-                    <Link to={`/admin/system/submitlang/${data.Language.toLowerCase()}/setting`}><ArrowIcon /></Link>
+                    <Link to={`submitlang/${data.Language.toLowerCase()}/setting`}><ArrowIcon /></Link>
                   </TableCell>
                 </TableRow>
               </Router>
@@ -165,6 +165,4 @@ const LangTable = () => {
 
     </div>
   );
-};
-
-export default LangTable;
+}

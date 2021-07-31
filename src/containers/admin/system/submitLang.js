@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import {
-  withRouter, BrowserRouter as Router, Route, Switch,
-} from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 
 import LangTable from '../../../components/admin/system/LangTable';
 import LangSetting from '../../../components/admin/system/LangSetting';
@@ -19,12 +17,10 @@ class SubmitLang extends Component {
   render() {
     return (
       <div>
-        <Router>
-          <Switch>
-            <Route exact path="/admin/system/submitlang" component={LangTable} />
-            <Route path="/admin/system/submitlang/:language?/setting" component={LangSetting} />
-          </Switch>
-        </Router>
+        <Switch>
+          <Route path="/admin/system/submitlang/:language/setting" component={LangSetting} />
+          <Route exact path="/admin/system/submitlang" component={LangTable} />
+        </Switch>
       </div>
     );
   }

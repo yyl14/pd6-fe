@@ -158,7 +158,7 @@ export default function CustomTable({
             <TableHead>
               <TableRow className={classes.tableHead}>
                 {columns.map((column) => (
-                  <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
+                  <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth, width: column.width }}>
                     {column.label}
                     {hasFilter[columns.findIndex((x) => x.id === column.id)] && (
                       <FilterList className={classes.filterIcon} />
