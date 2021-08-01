@@ -3,7 +3,6 @@ import { FormHelperText, Typography } from '@material-ui/core';
 import { MdError } from 'react-icons/md';
 
 export default function ErrorText({ children, className }) {
-  console.log(className);
   return (
     children && (
       <div className={className} style={{ position: 'absolute', transform: 'translate(2px, 40px)' }}>

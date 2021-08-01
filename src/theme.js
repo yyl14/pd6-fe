@@ -169,6 +169,7 @@ const overrides = {
   MuiButton: {
     root: {
       borderRadius: '5px',
+      height: '40px',
       transition: 'background 0.4s',
       margin: '10px 5px 10px 5px',
       padding: '8.5px 25px 10px 25px',
@@ -201,7 +202,7 @@ const overrides = {
 
   MuiIconButton: {
     root: {
-      color: '#000000',
+      color: mono.black,
     },
   },
 
@@ -209,6 +210,7 @@ const overrides = {
   MuiInputBase: {
     root: {
       height: '45px',
+      backgroundColor: mono.white,
     },
   },
 
@@ -219,7 +221,7 @@ const overrides = {
   },
   MuiFormControl: {
     root: {
-      margin: '10px 5px 50px 5px',
+      margin: '10px 5px 10px 5px',
     },
   },
   MuiSelect: {
@@ -269,7 +271,7 @@ const overrides = {
   MuiInputLabel: {
     outlined: {
       transform: 'translate(15px, 13px) scale(1)',
-      '&$shrink': { transform: 'translate(14px, -18px) scale(0.89)', fontWeight: 400 },
+      '&$shrink': { transform: 'translate(14px, -20px) scale(0.89)', fontWeight: 400 },
     },
   },
 

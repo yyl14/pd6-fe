@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
+import globalError from './globalError';
 import auth from './auth';
-import error from './error';
+import admin from './admin/index';
 
 export default combineReducers({
+  globalError,
   auth,
-  error,
+  admin,
 });
