@@ -107,7 +107,7 @@ export default function Account({
           ) : (
             <PlayArrowIcon className={classes.titleIcon} onClick={unfoldAccount} />
           )}
-          <Typography variant="h2" className={classes.title}>
+          <Typography variant="h4" className={classes.title}>
             {title}
           </Typography>
         </div>

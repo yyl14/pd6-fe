@@ -127,7 +127,7 @@ export default function System({
           ) : (
             <PlayArrowIcon className={classes.titleIcon} onClick={unfoldSystem} />
           )}
-          <Typography variant="h2" className={classes.title}>
+          <Typography variant="h4" className={classes.title}>
             {title}
           </Typography>
         </div>

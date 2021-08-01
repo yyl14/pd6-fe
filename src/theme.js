@@ -1,6 +1,6 @@
 import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import { borderRadius } from '@material-ui/system';
-import ErrorText from './components/ErrorText';
+import ErrorText from './components/ui/ErrorText';
 
 // UI/UX Standard
 /*
@@ -9,11 +9,13 @@ import ErrorText from './components/ErrorText';
 
 /*  Colors  */
 const mono = {
+  white: '#FFFFFF',
   veryLightGray: '#F8F8F8',
   lightGray: '#EAEAEA',
   gray: '#CACACA',
   semiDarkGray: '#AAAAAA',
   darkGray: '#656565',
+  black: '#000000',
 };
 
 const blue = {
@@ -76,9 +78,27 @@ const palette = {
 const typography = {
   /* Note: to change default html font size (basis of 'rem'), go to src/styles/index.css */
 
-  // UI/UX terminology
-  // Big Title
+  // UI/UX style name
+  // H1
   h1: {
+    fontSize: '5.33rem',
+    fontWeight: 500,
+    letterSpacing: '-1%',
+    lineHeight: 131 / 96,
+    fontFamily: 'Noto Sans',
+  },
+
+  // H2
+  h2: {
+    fontSize: '3.33rem',
+    fontWeight: 500,
+    letterSpacing: '-1%',
+    lineHeight: 82 / 60,
+    fontFamily: 'Noto Sans',
+  },
+
+  // Big Title
+  h3: {
     fontSize: '2.67rem',
     fontWeight: 700,
     lineHeight: 65 / 48,
@@ -87,8 +107,8 @@ const typography = {
   },
 
   // Title
-  h2: {
-    fontSize: '1.56rem',
+  h4: {
+    fontSize: '1.33rem',
     fontWeight: 700,
     lineHeight: 33 / 24,
     // letterSpacing: '-0.01rem',
@@ -141,13 +161,14 @@ const typography = {
 };
 
 const shape = {
-  borderRadius: 5,
+  borderRadius: 10,
 };
 
 const overrides = {
   // "Button"
   MuiButton: {
     root: {
+      borderRadius: '5px',
       transition: 'background 0.4s',
       margin: '10px 5px 10px 5px',
       padding: '8.5px 25px 10px 25px',
@@ -216,14 +237,14 @@ const overrides = {
     root: {
       paddingTop: '12px',
       paddingBottom: '12px',
-      borderRadius: '5px',
+      borderRadius: '10px',
       height: '45px',
     },
   },
   MuiOutlinedInput: {
     root: {
       '& $notchedOutline': {
-        borderRadius: 10,
+        // borderRadius: 10,
       },
       '&:hover:not($disabled):not($focused):not($error) $notchedOutline': { borderColor: mono.gray }, // removes hover effect
 
@@ -258,7 +279,7 @@ const overrides = {
       border: `1px solid ${mono.gray}`,
     },
     rounded: {
-      borderRadius: '10px',
+      // borderRadius: '10px',
     },
   },
 

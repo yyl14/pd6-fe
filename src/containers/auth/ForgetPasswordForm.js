@@ -115,7 +115,7 @@ export default function ForgetPasswordForm() {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle id="alert-dialog-slide-title">
-          <Typography variant="h2">Password reset email sent</Typography>
+          <Typography variant="h4">Password reset email sent</Typography>
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
