@@ -8,12 +8,12 @@ import System from './sidebar/System';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
-    top: '75px',
+    top: '55px',
     // top: '9.21vh',
     width: '300px',
   },
   drawerPaper: {
-    top: '75px',
+    top: '55px',
     // top: '9.21vh',
     width: '300px',
   },
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   titleIcon: {
     float: 'left',
     color: '#090909',
-    marginTop: '6.1vh',
+    marginTop: '5.4vh',
     marginBottom: '1.23vh',
     marginLeft: '1.6vw',
     marginRight: '0.97vw',
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   secondTitleIcon: {
     float: 'left',
     color: '#090909',
-    marginTop: '4vh',
+    marginTop: '3.5vh',
     marginBottom: '1.23vh',
     marginLeft: '1.6vw',
     marginRight: '0.97vw',

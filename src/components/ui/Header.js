@@ -1,24 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   makeStyles, Typography, AppBar, Toolbar, Avatar,
 } from '@material-ui/core';
 import { AddCircleOutline, SubjectOutlined } from '@material-ui/icons';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useHistory, useLocation } from 'react-router-dom';
+import { format } from 'date-fns';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
-    height: '75px',
-    // height: '9.21vh',
+    height: '55px',
     background: '#090909',
   },
   toolbar: {
-    height: '75px',
-    // height: '9.21vh',
+    height: '55px',
   },
-  main: theme.mixins.toolbar,
   item: {
     marginRight: '3.5vw',
+  },
+  date: {
+    float: 'left',
+    height: '3.28vh',
+    marginRight: '2vw',
   },
   notification: {
     float: 'left',
@@ -38,8 +41,8 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     marginLeft: '2vw',
     marginRight: '3.5vw',
-    height: '6.14vh',
-    width: '6.14vh',
+    height: '4vh',
+    width: '4vh',
   },
   a: {
     color: 'inherit',
@@ -57,20 +60,21 @@ export default function Header({ role }) {
   const history = useHistory();
   const location = useLocation();
   let itemList = [];
+  const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d H:mm:ss'));
 
   if (role === 'MANAGER') {
     itemList = [
       {
         text: 'Course',
-        path: '/admin/course',
+        path: '/admin/course/overview',
       },
       {
         text: 'Account',
-        path: '/admin/account',
+        path: '/admin/account/institute',
       },
       {
         text: 'System',
-        path: '/admin/system',
+        path: '/admin/system/accesslog',
       },
       {
         text: 'About',
@@ -136,6 +140,13 @@ export default function Header({ role }) {
     console.log('Current route', location.pathname);
   }, [location]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(format(new Date(), 'MMM d H:mm'));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div>
       <AppBar className={classes.appbar} elevation={0}>
@@ -149,6 +160,9 @@ export default function Header({ role }) {
             </Typography>
           ))}
           <div className={classes.right}>
+            <Typography className={classes.date}>
+              {currentTime}
+            </Typography>
             <NotificationsIcon className={classes.notification} />
             <Typography variant="h6" className={classes.name}>
               shiba
