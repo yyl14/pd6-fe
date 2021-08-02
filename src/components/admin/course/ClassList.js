@@ -15,12 +15,13 @@ import { MdAdd } from 'react-icons/md';
 import SimpleBar from '../../ui/SimpleBar';
 import DateRangePicker from '../../ui/DateRangePicker';
 import CustomTable from '../../ui/CustomTable';
-import FieldWithAlignedText from '../../ui/FieldWithAlignedText';
+import AlignedText from '../../ui/AlignedText';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
   },
+  dialog: {},
 }));
 
 /* This is a level 4 component (page component) */
@@ -68,18 +69,22 @@ export default function ClassList() {
         hasLink
         path={courses.byId[courseId].classIds.map((classId) => `/admin/course/class/${courseId}/${classId}/member`)}
       />
-      <Dialog open>
+      <Dialog open fullWidth maxWidth="sm">
         <DialogTitle>
           <Typography variant="h4">Create a new course</Typography>
         </DialogTitle>
         <DialogContent>
-          <FieldWithAlignedText text="Type">
+          <AlignedText text="Type" childrenType="text">
             <Typography variant="body1">Lesson</Typography>
-          </FieldWithAlignedText>
-          <FieldWithAlignedText text="Course Name">
+          </AlignedText>
+          <AlignedText text="Course Name" childrenType="field">
             <TextField />
-          </FieldWithAlignedText>
+          </AlignedText>
         </DialogContent>
+        <DialogActions>
+          <Button>Cancel</Button>
+          <Button color="primary">Create</Button>
+        </DialogActions>
       </Dialog>
     </>
   );
