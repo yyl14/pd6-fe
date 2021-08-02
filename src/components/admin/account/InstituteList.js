@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import BiFilterAlt from 'react-icons/bi';
+import { BiFilterAlt } from 'react-icons/bi';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
 import { accountActions } from '../../../actions/index';
@@ -95,26 +95,26 @@ export default function InstituteList() {
           {
             id: 'full_name',
             label: 'Institute',
-            minWidth: 120,
+            minWidth: 150,
             align: 'center',
             width: 200,
           },
           {
             id: 'email_domain',
             label: 'Email',
-            minWidth: 100,
+            minWidth: 50,
             align: 'center',
             width: 80,
           },
           {
             id: 'is_disabled',
             label: 'Status',
-            minWidth: 100,
+            minWidth: 50,
             align: 'center',
             width: 80,
           },
         ]}
-        columnComponent={[null, null, <BiFilterAlt />]}
+        columnComponent={[null, null, (<BiFilterAlt key="filter" onClick={[]} />)]}
         hasLink
         path={path}
       />
