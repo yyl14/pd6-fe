@@ -13,40 +13,29 @@ const useStyles = makeStyles((theme) => ({
 export default function InstituteList() {
   const classes = useStyles();
 
-  // const institutes = useSelector((state) => state.admin.account.institutes.byId);
+  const institutes = useSelector((state) => state.admin.account.institutes.byId);
+  const institutesID = useSelector((state) => state.admin.account.institutes.allIds);
 
-  const fakeData = [
-    {
-      institute: 'National Taiwan University',
-      email_domain: 'ntu.edu.tw',
-      is_disabled: 'Enabled',
-    },
-    {
-      institute: 'National Taiwan Normal University',
-      email_domain: 'ntnu.edu.tw',
-      is_disabled: 'Enabled',
-    },
-    {
-      institute: 'National Taiwan University',
-      email_domain: 'ntu.edu.tw',
-      is_disabled: 'Disabled',
-    },
-    {
-      institute: 'National Taiwan Normal University',
-      email_domain: 'ntnu.edu.tw',
-      is_disabled: 'Enabled',
-    },
-    {
-      institute: 'National Taiwan University',
-      email_domain: 'ntu.edu.tw',
-      is_disabled: 'Enabled',
-    },
-    {
-      institute: 'National Taiwan Normal University',
-      email_domain: 'ntnu.edu.tw',
-      is_disabled: 'Disabled',
-    },
-  ];
+  const [tableData, setTableData] = useState([]);
+  const [path, setPath] = useState([]);
+
+  useEffect(() => {
+    const newData = [];
+    const newPath = [];
+
+    institutesID.forEach((key) => {
+      const item = institutes[key];
+      if (item.is_disabled === true) {
+        item.is_disabled = 'Disabled';
+      } else if (item.is_disabled === false) {
+        item.is_disabled = 'Enabled';
+      }
+      newData.push(item);
+      newPath.push(`institute/${item.id}/setting`);
+    });
+    setTableData(newData);
+    setPath(newPath);
+  }, [institutes, institutesID]);
 
   return (
     <>
@@ -60,10 +49,10 @@ export default function InstituteList() {
             <Button color="primary">Add Institute</Button>
           </>
         )}
-        data={fakeData}
+        data={tableData}
         columns={[
           {
-            id: 'institute',
+            id: 'full_name',
             label: 'Institute',
             minWidth: 120,
             align: 'center',
@@ -82,17 +71,9 @@ export default function InstituteList() {
           },
         ]}
         hasFilter={[false, false, true]}
-        dataColumnName={['institute', 'email_domain', 'is_disabled']}
+        dataColumnName={['full_name', 'email_domain', 'is_disabled']}
         hasLink
-        path={[
-          'institute/NTU',
-          'institute/NTNU',
-          'institute/NTU',
-          'institute/NTNU',
-          'institute/NTU',
-          'institute/NTNU',
-          'institute/NTU',
-        ]}
+        path={path}
       />
     </>
   );
