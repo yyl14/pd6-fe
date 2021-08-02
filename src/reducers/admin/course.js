@@ -95,6 +95,7 @@ const initialState = {
         course_id: 2345,
         is_hidden: false,
         is_deleted: false,
+        memberIds: [333, 78978],
       },
       16: {
         id: 16,
@@ -102,6 +103,7 @@ const initialState = {
         course_id: 2345,
         is_hidden: false,
         is_deleted: false,
+        memberIds: [],
       },
       18: {
         id: 18,
@@ -109,6 +111,7 @@ const initialState = {
         course_id: 2345,
         is_hidden: false,
         is_deleted: false,
+        memberIds: [],
       },
       20: {
         id: 20,
@@ -116,6 +119,7 @@ const initialState = {
         course_id: 2345,
         is_hidden: false,
         is_deleted: false,
+        memberIds: [],
       },
       21: {
         id: 21,
@@ -123,6 +127,7 @@ const initialState = {
         course_id: 6789,
         is_hidden: false,
         is_deleted: false,
+        memberIds: [],
       },
       45678: {
         id: 45678,
@@ -130,6 +135,7 @@ const initialState = {
         course_id: 6789,
         is_hidden: false,
         is_deleted: false,
+        memberIds: [],
       },
     },
     allIds: [12, 14, 16, 18, 20, 21, 45678],
@@ -147,6 +153,14 @@ const initialState = {
       },
       222: {
         id: 222,
+        student_id: 'B087050802',
+        realName: '南部陽二郎',
+        username: 'shinymarshmello',
+        institute: 'NTU',
+        role: 'Guest',
+      },
+      333: {
+        id: 333,
         student_id: 'B087050802',
         realName: '南部陽二郎',
         username: 'shinymarshmello',
