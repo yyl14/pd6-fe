@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 const AnnouncementHome = () => {
   const classes = useStyles();
   const history = useHistory();
-  const add = () => {
+  const handleClickAdd = () => {
     history.push('/admin/system/announcement/add');
   };
   const columns = [
@@ -63,9 +63,10 @@ const AnnouncementHome = () => {
         Announcement
       </Typography>
       <CustomTable
-        searchPlaceholder="Search"
+        hasSearch
+        searchPlaceholder="Title"
         buttons={(
-          <Button variant="contained" color="primary" onClick={add} placeholder="Search">
+          <Button variant="contained" color="primary" onClick={handleClickAdd} placeholder="Search">
             +
           </Button>
       )}

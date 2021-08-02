@@ -15,6 +15,9 @@ import { connect } from 'react-redux';
 import {
   withRouter, Switch, Route, useHistory,
 } from 'react-router-dom';
+import SimpleBar from '../../ui/SimpleBar';
+import AlignedText from '../../ui/AlignedText';
+import DateRangePicker from '../../ui/DateRangePicker';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -37,35 +40,56 @@ const AnnouncementSetting = () => {
 
   const history = useHistory();
   const handleClickEdit = () => {
-    history.push('/admin/system/announcement/setting/edit');
+    history.push('/admin/system/announcement/:announcementId/setting/edit');
   };
 
+  const [state, setState] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: 'selection',
+    },
+  ]);
   /* This is a level 4 component (page component) */
   return (
     <>
       <Typography variant="h3" className={classes.pageHeader}>
-        管院停電 / Announcement Setting
+        管院停電 / Setting
       </Typography>
-      <Typography variant="h4">This is Announcement Setting</Typography>
+      <div>
+        <SimpleBar
+          title="Announcement"
+          buttons={(
+            <>
+              <Button onClick={handleClickEdit}>Edit</Button>
+            </>
+        )}
+        >
+          <AlignedText text="Title" childrenType="field">
+            <TextField />
+          </AlignedText>
+          <AlignedText text="Duration" childrenType="field">
+            <DateRangePicker value={state} setValue={setState} />
+          </AlignedText>
+          <AlignedText text="Content" childrenType="field">
+            <TextField />
+          </AlignedText>
+        </SimpleBar>
+      </div>
+      <div>
+        <SimpleBar
+          title="Delete Announcement"
+        >
+          <Typography className="delete-announcement-body" variant="body1">
+            Once you delete this announcement, there is no going back. Please be certain.
+          </Typography>
+          <Button color="secondary" onClick={handleClickDelete}>
+            Delete
+          </Button>
 
+        </SimpleBar>
+      </div>
       {/* TODO: re-write with ui components SimpleBar and DatePicker  */}
-
-      {/* <Typography className="announcement-title" variant="h6">
-        Announcement
-      </Typography>
-      <Button onClick={handleClickEdit}>Edit</Button>
-      <Typography className="announcement-body" variant="body1">
-        place for details of Specific Announcement
-      </Typography>
-      <Typography className="delete-announcement-title" variant="h6">
-        Delete Announcement
-      </Typography>
-      <Button color="secondary" onClick={handleClickDelete}>
-        Delete
-      </Button>
-      <Typography className="delete-announcement-body" variant="body1">
-        Once you delete this announcement, there is no going back. Please be certain.
-      </Typography> */}
 
       {/* Delete dialog */}
       <Dialog open={popUpDelete} keepMounted onClose={handleClosePopUpDelete}>

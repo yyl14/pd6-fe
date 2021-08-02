@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   Typography,
   Button,
@@ -12,6 +13,9 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
+import SimpleBar from '../../ui/SimpleBar';
+import DateRangePicker from '../../ui/DateRangePicker';
+import AlignedText from '../../ui/AlignedText';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -21,96 +25,40 @@ const useStyles = makeStyles((theme) => ({
 
 const AnnouncementEdit = () => {
   const classes = useStyles();
-  const [popUp, setPopUp] = useState(false);
-  const [popUpDelete, setPopUpDelete] = useState(false);
-  const handleClick = () => {
-    setPopUp(true);
+  const history = useHistory();
+  const handleClickSave = () => {
+    history.push('/admin/system/announcement/:announcementId/setting');
   };
-  const handleClosePopUp = () => {
-    setPopUp(false);
-  };
-  const handleSubmit = (e) => {};
-
-  const handleClickDelete = () => {
-    setPopUpDelete(true);
-  };
-  const handleClosePopUpDelete = () => {
-    setPopUpDelete(false);
-  };
-  const handleSubmitDelete = (e) => {};
-
+  const [state, setState] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: 'selection',
+    },
+  ]);
   /* This is a level 4 component (page component) */
   return (
     <>
       {/* TODO: Announcement name depends on route */}
+      {/* TODO: re-write with ui components SimpleBar and DatePicker  */}
       <Typography variant="h3" className={classes.pageHeader}>
-        管院停電 / Announcement Setting
+        Announcement: 管院停電 / Setting
       </Typography>
-      <Typography variant="h4">This is Announcement Setting</Typography>
-      {/*
-         TODO: re-write with ui components SimpleBar and DatePicker
-      <Typography className="announcement-title" variant="h6">
-        Announcement
-      </Typography>
+      <SimpleBar
+        title="Announcement"
+      >
+        <AlignedText text="Title" childrenType="field">
+          <TextField />
+        </AlignedText>
+        <AlignedText text="Duration" childrenType="field">
+          <DateRangePicker value={state} setValue={setState} />
+        </AlignedText>
+        <AlignedText text="Content" childrenType="field">
+          <TextField />
+        </AlignedText>
+      </SimpleBar>
       <Button>Cancel</Button>
-      <Button color="primary">Save</Button>
-      <form>
-        <p>Data should be fetched from database and displayed automatically.</p>
-        <p>Title</p>
-        <TextField />
-        <p>Duration</p>
-        <p>place for DateRangePicker</p>
-        <p>Content</p>
-        <TextField />
-      </form>
-
-      <Typography className="delete-announcement-title" variant="h6">
-        Delete Announcement
-      </Typography>
-      <Button color="secondary" onClick={handleClickDelete}>
-        Delete
-      </Button>
-      <Typography className="delete-announcement-body" variant="body1">
-        Once you delete this announcement, there is no going back. Please be certain.
-      </Typography> */}
-
-      {/* Delete dialog */}
-      <Dialog open={popUpDelete} keepMounted onClose={handleClosePopUpDelete}>
-        <DialogTitle>
-          <Typography variant="h4">Delete Announcement</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <Grid
-            container
-            className="delete-announcement-detail"
-            direction="row"
-            justifyContent="center"
-            alignContent="center"
-          >
-            <Grid container item className="delete-Announcement-detail-title" xs={6}>
-              <Typography variant="body1" color="secondary">
-                Title
-              </Typography>
-            </Grid>
-            <Grid container item className="delete-class-detail-content" xs={6}>
-              <Typography variant="body1" color="secondary">
-                管院停電
-              </Typography>
-            </Grid>
-          </Grid>
-        </DialogContent>
-        <DialogContent>
-          <Typography variant="body2">
-            Once you delete an announcement, there is no going back. Please be certain.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClosePopUpDelete}>Cancel</Button>
-          <Button onClick={(e) => handleSubmitDelete()} color="secondary">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Button color="primary" onClick={handleClickSave}>Save</Button>
     </>
   );
 };
