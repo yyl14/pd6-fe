@@ -1,4 +1,3 @@
-import institute from '../../containers/admin/account/institute';
 import agent from '../agent';
 import {
   accountConstants,
@@ -26,26 +25,29 @@ const getInstitutes = (token) => (dispatch) => {
     });
 };
 
-const addInstitute = (token, name, emailDomain, isDisabled) => (dispatch) => {
+const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled) => (dispatch) => {
   const request = {
     headers: {
       'Auth-Token': token,
     },
-    name,
+    abbreviated_name: abbreviatedName,
+    full_name: fullName,
     email_domain: emailDomain,
     is_disabled: isDisabled,
   };
-
+  console.log('adding institute');
   agent.post('/institute', request)
     .then((res) => {
+      console.log('adding institute suc');
       dispatch({
         type: accountConstants.ADD_INSTITUTE_SUCCESS,
         payload: {
-          id: res.data.data.id, name, email_domain: emailDomain, is_disabled: isDisabled,
+          id: res.data.data.id, abbreviated_name: abbreviatedName, full_name: fullName, email_domain: emailDomain, is_disabled: isDisabled,
         },
       });
     })
     .catch((err) => {
+      console.log('adding institute fail');
       dispatch({
         type: accountConstants.ADD_INSTITUTE_FAIL,
         error: err,
@@ -229,4 +231,8 @@ const addStudentCard = (token, id, instituteId, emailPrefix, department, student
 // TODO: Fetch all accounts
 const fetchAccounts = (token) => (dispatch) => {
 
+};
+
+export {
+  getInstitutes, addInstitute, editInstitute, fetchAccounts,
 };
