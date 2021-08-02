@@ -172,7 +172,7 @@ export default function CustomTable({
             </TableHead>
             <TableBody>
               {filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.code} className={classes.row}>
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.id} className={classes.row}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
