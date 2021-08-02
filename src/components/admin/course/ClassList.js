@@ -26,10 +26,12 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 export default function ClassList() {
-  const { courseId } = useParams();
+  const { courseId, addType } = useParams();
   const classNames = useStyles();
   const courses = useSelector((state) => state.admin.course.courses);
   const classes = useSelector((state) => state.admin.course.classes);
+
+  const [showAddCourseDialog, setShowAddCourseDialog] = useState(false);
 
   return (
     <>
@@ -69,7 +71,7 @@ export default function ClassList() {
         hasLink
         path={courses.byId[courseId].classIds.map((classId) => `/admin/course/class/${courseId}/${classId}/member`)}
       />
-      <Dialog open maxWidth="sm">
+      <Dialog open={addType !== 'null'} maxWidth="sm">
         <DialogTitle>
           <Typography variant="h4">Create a new course</Typography>
         </DialogTitle>
