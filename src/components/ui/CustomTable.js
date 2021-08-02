@@ -63,6 +63,9 @@ const useStyles = makeStyles((theme) => ({
   tableHead: {
     height: '60px',
   },
+  columnComponent: {
+    transform: 'translateX(10px)',
+  },
   row: {
     height: '60px',
   },
@@ -170,7 +173,9 @@ export default function CustomTable({
                 {columns.map((column) => (
                   <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth, width: column.width }}>
                     {column.label}
-                    {columnComponent[columns.findIndex((x) => x.id === column.id)]}
+                    <div className={classes.columnComponent}>
+                      { columnComponent && columnComponent[columns.findIndex((x) => x.id === column.id)]}
+                    </div>
                   </TableCell>
                 ))}
                 {hasLink
@@ -180,7 +185,7 @@ export default function CustomTable({
             </TableHead>
             <TableBody>
               {filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.id} className={classes.row}>
+                <TableRow hover role="checkbox" tabIndex={-1} key={row[columns[0].id]} className={classes.row}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
@@ -190,12 +195,12 @@ export default function CustomTable({
                     );
                   })}
                   {hasLink ? (
-                    <TableCell key="show" align="right">
+                    <TableCell key={`${row.id}-show`} align="right">
                       <Link to={path[filterData.indexOf(row)]} className={classes.detailLink}>
                         <ArrowForward style={{ height: '20px' }} />
                       </Link>
                     </TableCell>
-                  ) : (<TableCell key="blank" align="right" style={{ minWidth: 20 }} />)}
+                  ) : (<TableCell key={`${row.id}-blank`} align="right" style={{ minWidth: 20 }} />)}
                 </TableRow>
               ))}
             </TableBody>
