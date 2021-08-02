@@ -69,7 +69,7 @@ export default function ClassList() {
         hasLink
         path={courses.byId[courseId].classIds.map((classId) => `/admin/course/class/${courseId}/${classId}/member`)}
       />
-      <Dialog open fullWidth maxWidth="sm">
+      <Dialog open maxWidth="sm">
         <DialogTitle>
           <Typography variant="h4">Create a new course</Typography>
         </DialogTitle>
