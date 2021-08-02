@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Typography,
@@ -31,6 +31,7 @@ export default function ClassList() {
   const classNames = useStyles();
 
   const dispatch = useDispatch();
+  const statea = useSelector((state) => state);
   const authToken = useSelector((state) => state.auth.user.token);
   const courses = useSelector((state) => state.admin.course.courses);
   const classes = useSelector((state) => state.admin.course.classes);
@@ -40,6 +41,10 @@ export default function ClassList() {
 
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
 
+  useEffect(() => {
+    dispatch(courseActions.fetchClasses(authToken, courseId));
+  }, [authToken, courseId, dispatch]);
+
   const onClickAddClass = () => {
     setShowAddClassDialog(true);
   };
@@ -48,6 +53,7 @@ export default function ClassList() {
     setShowAddClassDialog(false);
     dispatch(courseActions.addClass(authToken, courseId, name, false));
   };
+  console.log(statea);
 
   return (
     <>
@@ -120,7 +126,7 @@ export default function ClassList() {
           </AlignedText>
         </DialogContent>
         <DialogActions>
-          <Button onclick={() => setShowAddClassDialog(false)}>Cancel</Button>
+          <Button onClick={() => setShowAddClassDialog(false)}>Cancel</Button>
           <Button color="primary" onClick={() => onAddClass(addClassName)} disabled={loading.addClass}>
             Create
           </Button>
