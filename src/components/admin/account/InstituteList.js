@@ -12,8 +12,9 @@ import {
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
+import BiFilterAlt from 'react-icons/bi';
 import CustomTable from '../../ui/CustomTable';
-import FieldWithAlignedText from '../../ui/FieldWithAlignedText';
+import AlignedText from '../../ui/AlignedText';
 import { accountActions } from '../../../actions/index';
 
 const useStyles = makeStyles((theme) => ({
@@ -82,6 +83,7 @@ export default function InstituteList() {
         Institute
       </Typography>
       <CustomTable
+        hasSearch
         searchPlaceholder="Institute/Email"
         buttons={(
           <>
@@ -95,22 +97,24 @@ export default function InstituteList() {
             label: 'Institute',
             minWidth: 120,
             align: 'center',
+            width: 200,
           },
           {
             id: 'email_domain',
             label: 'Email',
             minWidth: 100,
             align: 'center',
+            width: 80,
           },
           {
             id: 'is_disabled',
             label: 'Status',
             minWidth: 100,
             align: 'center',
+            width: 80,
           },
         ]}
-        hasFilter={[false, false, false]}
-        dataColumnName={['full_name', 'email_domain', 'is_disabled']}
+        columnComponent={[null, null, <BiFilterAlt />]}
         hasLink
         path={path}
       />
@@ -125,7 +129,7 @@ export default function InstituteList() {
           <Typography variant="h4">Add Institute</Typography>
         </DialogTitle>
         <DialogContent>
-          <FieldWithAlignedText text="Full Name">
+          <AlignedText text="Full Name">
             <TextField
               id="fullName"
               name="fullName"
@@ -135,8 +139,8 @@ export default function InstituteList() {
               error={error}
               helperText={errorText}
             />
-          </FieldWithAlignedText>
-          <FieldWithAlignedText text="Initialism">
+          </AlignedText>
+          <AlignedText text="Initialism">
             <TextField
               id="initialism"
               name="initialism"
@@ -144,8 +148,8 @@ export default function InstituteList() {
               value={inputs.initialism}
               onChange={(e) => handleChange(e)}
             />
-          </FieldWithAlignedText>
-          <FieldWithAlignedText text="Email">
+          </AlignedText>
+          <AlignedText text="Email">
             <TextField
               id="email"
               name="email"
@@ -153,15 +157,15 @@ export default function InstituteList() {
               value={inputs.email}
               onChange={(e) => handleChange(e)}
             />
-          </FieldWithAlignedText>
-          <FieldWithAlignedText text="Initialism">
+          </AlignedText>
+          <AlignedText text="Initialism">
             <FormControlLabel
               control={
                 <Switch checked={inputs.status} onChange={handleChangeStatus} name="status" color="primary" />
             }
               label={inputs.status ? 'Enabled' : 'Disabled'}
             />
-          </FieldWithAlignedText>
+          </AlignedText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setPopUp(false)} color="disabled">

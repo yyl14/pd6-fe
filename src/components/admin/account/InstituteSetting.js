@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import SimpleBar from '../../ui/SimpleBar';
-import FieldWithAlignedText from '../../ui/FieldWithAlignedText';
+import FieldWithAlignedText from '../../ui/AlignedText';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
