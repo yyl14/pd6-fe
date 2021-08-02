@@ -1,7 +1,7 @@
 import agent from '../agent';
 import { courseConstants } from '../constant';
 
-const fetchCourses = (token) => (dispatch) => {
+export const fetchCourses = (token) => (dispatch) => {
   const fetch = { headers: { 'auth-token': token } };
 
   dispatch({
@@ -22,7 +22,7 @@ const fetchCourses = (token) => (dispatch) => {
     });
 };
 
-const addCourse = (token, name, type, isHidden) => (dispatch) => {
+export const addCourse = (token, name, type, isHidden) => (dispatch) => {
   const request = {
     headers: { 'auth-token': token },
     name,
@@ -56,7 +56,7 @@ const addCourse = (token, name, type, isHidden) => (dispatch) => {
     });
 };
 
-const renameCourse = (token, courseId, newName) => (dispatch) => {
+export const renameCourse = (token, courseId, newName) => (dispatch) => {
   const request = { headers: { 'auth-token': token }, name: newName };
   dispatch({ type: courseConstants.RENAME_COURSE_START });
 
@@ -81,7 +81,7 @@ const renameCourse = (token, courseId, newName) => (dispatch) => {
     });
 };
 
-const deleteCourse = (token, courseId) => (dispatch) => {
+export const deleteCourse = (token, courseId) => (dispatch) => {
   const request = { headers: { 'auth-token': token } };
   dispatch({
     type: courseConstants.DELETE_COURSE_START,
@@ -107,7 +107,7 @@ const deleteCourse = (token, courseId) => (dispatch) => {
     });
 };
 
-const fetchClasses = (token, courseId) => (dispatch) => {
+export const fetchClasses = (token, courseId) => (dispatch) => {
   const fetch = { headers: { 'auth-token': token } };
 
   dispatch({ type: courseConstants.FETCH_CLASSES_START });
@@ -125,7 +125,7 @@ const fetchClasses = (token, courseId) => (dispatch) => {
     });
 };
 
-const addClass = (token, courseId, name, isHidden) => (dispatch) => {
+export const addClass = (token, courseId, name, isHidden) => (dispatch) => {
   const request = {
     headers: { 'auth-token': token },
     name,
@@ -157,7 +157,7 @@ const addClass = (token, courseId, name, isHidden) => (dispatch) => {
     });
 };
 
-const renameClass = (token, classId, newName) => (dispatch) => {
+export const renameClass = (token, classId, newName) => (dispatch) => {
   const request = { headers: { 'auth-token': token }, name: newName };
   dispatch({ type: courseConstants.RENAME_CLASS_START });
 
@@ -182,7 +182,7 @@ const renameClass = (token, classId, newName) => (dispatch) => {
     });
 };
 
-const deleteClass = (token, classId) => (dispatch) => {
+export const deleteClass = (token, classId) => (dispatch) => {
   const request = { headers: { 'auth-token': token } };
   dispatch({
     type: courseConstants.DELETE_CLASS_START,
@@ -208,7 +208,7 @@ const deleteClass = (token, classId) => (dispatch) => {
     });
 };
 
-const fetchMembers = (token, classId) => (dispatch) => {
+export const fetchMembers = (token, classId) => (dispatch) => {
   const request = { headers: { 'auth-token': token } };
   dispatch({ type: courseConstants.FETCH_MEMBERS_START });
 

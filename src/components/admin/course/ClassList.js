@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Typography,
   Button,
@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
+import * as courseActions from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import DateRangePicker from '../../ui/DateRangePicker';
 import CustomTable from '../../ui/CustomTable';
@@ -28,10 +29,25 @@ const useStyles = makeStyles((theme) => ({
 export default function ClassList() {
   const { courseId, addType } = useParams();
   const classNames = useStyles();
+
+  const dispatch = useDispatch();
+  const authToken = useSelector((state) => state.auth.user.token);
   const courses = useSelector((state) => state.admin.course.courses);
   const classes = useSelector((state) => state.admin.course.classes);
+  const loading = useSelector((state) => state.admin.course.loading);
 
-  const [showAddCourseDialog, setShowAddCourseDialog] = useState(false);
+  const [addClassName, setAddClassName] = useState('');
+
+  const [showAddClassDialog, setShowAddClassDialog] = useState(false);
+
+  const onClickAddClass = () => {
+    setShowAddClassDialog(true);
+  };
+  const onAddClass = (name) => {
+    setAddClassName('');
+    setShowAddClassDialog(false);
+    dispatch(courseActions.addClass(authToken, courseId, name, false));
+  };
 
   return (
     <>
@@ -43,7 +59,7 @@ export default function ClassList() {
         buttons={(
           <>
             <Button>Setting</Button>
-            <Button color="primary">
+            <Button color="primary" onClick={onClickAddClass}>
               <MdAdd />
             </Button>
           </>
@@ -71,7 +87,7 @@ export default function ClassList() {
         hasLink
         path={courses.byId[courseId].classIds.map((classId) => `/admin/course/class/${courseId}/${classId}/member`)}
       />
-      <Dialog open={addType !== 'null'} maxWidth="sm">
+      <Dialog open={addType} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Create a new course</Typography>
         </DialogTitle>
@@ -86,6 +102,28 @@ export default function ClassList() {
         <DialogActions>
           <Button>Cancel</Button>
           <Button color="primary">Create</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={showAddClassDialog || loading.addClass} maxWidth="md">
+        <DialogTitle>
+          <Typography variant="h4">Create a new class</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <AlignedText text="Type" childrenType="text">
+            <Typography variant="body1">Lesson</Typography>
+          </AlignedText>
+          <AlignedText text="Course" childrenType="text">
+            <Typography variant="body1">{courses.byId[courseId].name}</Typography>
+          </AlignedText>
+          <AlignedText text="Course Name" childrenType="field">
+            <TextField value={addClassName} onChange={(e) => setAddClassName(e.target.value)} />
+          </AlignedText>
+        </DialogContent>
+        <DialogActions>
+          <Button onclick={() => setShowAddClassDialog(false)}>Cancel</Button>
+          <Button color="primary" onClick={() => onAddClass(addClassName)} disabled={loading.addClass}>
+            Create
+          </Button>
         </DialogActions>
       </Dialog>
     </>

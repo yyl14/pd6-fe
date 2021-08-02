@@ -16,11 +16,11 @@ class Course extends Component {
 
   componentDidMount() {
     // push to default page component: class list
-    // if (this.props.courses.allIds.length) {
-    //   this.props.history.push(
-    //     `/admin/course/course/${this.props.courses.byId[this.props.courses.allIds[0]].id}/class-list/`,
-    //   );
-    // }
+    if (this.props.courses.allIds.length) {
+      this.props.history.push(
+        `/admin/course/course/${this.props.courses.byId[this.props.courses.allIds[0]].id}/class-list/`,
+      );
+    }
   }
 
   render() {
