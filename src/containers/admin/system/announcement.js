@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { withRouter } from 'react-router-dom';
+import { withRouter, Switch, Route } from 'react-router-dom';
+import AnnouncementAdd from '../../../components/admin/system/AnnouncementAdd';
+import AnnouncementEdit from '../../../components/admin/system/AnnouncementEdit';
+import AnnouncementHome from '../../../components/admin/system/AnnouncementHome';
+import AnnouncementSetting from '../../../components/admin/system/AnnouncementSetting';
+import NoMatch from '../../../components/noMatch';
 
-class Announcement extends Component {
+// import AnnouncementAdd from '../../../components/admin/system/AnnouncementAdd';
+
+/* This is a level 3 container (main page container) */
+class AnnouncementInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -12,7 +20,18 @@ class Announcement extends Component {
   componentDidMount() {}
 
   render() {
-    return <div />;
+    return (
+      <>
+        <Switch>
+          <Route path="/admin/system/announcement/add" component={AnnouncementAdd} />
+          {/* TODO: render edit page using state, not route */}
+          <Route path="/admin/system/announcement/:announcementId/setting/edit" component={AnnouncementEdit} />
+          <Route path="/admin/system/announcement/:announcementId/setting" component={AnnouncementSetting} />
+          <Route exact path="/admin/system/announcement" component={AnnouncementHome} />
+          <Route component={NoMatch} />
+        </Switch>
+      </>
+    );
   }
 }
 
@@ -21,4 +40,4 @@ const mapStateToProps = (state) => ({
   error: state.error,
 });
 
-export default connect(mapStateToProps, {})(withRouter(Announcement));
+export default connect(mapStateToProps, {})(withRouter(AnnouncementInfo));

@@ -1,15 +1,32 @@
 import React, { useState } from 'react';
 import {
-  Typography, Button, Grid,
-  Card, CardContent, TextField, InputBase,
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+  Typography,
+  Button,
+  Grid,
+  Card,
+  CardContent,
+  TextField,
+  InputBase,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  makeStyles,
 } from '@material-ui/core';
 import SchoolIcon from '@material-ui/icons/School';
 
+// TODO: use makestyles() to do layout
+const useStyles = makeStyles((theme) => ({}));
+
+/* This is a level 4 component (page component) */
 const MemberEdit = (props) => {
+  // TODO: initialize field content with redux state
+  const classes = useStyles();
   const [TA, setTA] = useState(props.TAList);
   const [student, setStudent] = useState(props.studentList);
   const [guest, setGuest] = useState(props.guestList);
+
   const [popUpUnsave, setPopUpUnsave] = useState(false);
   const [popUpSave, setPopUpSave] = useState(false);
   const handleChangeTA = (e) => {
@@ -18,6 +35,7 @@ const MemberEdit = (props) => {
     } */
     setTA(e.target.value);
   };
+
   const handleChangeStudent = (e) => {
     /* if(){
 
@@ -59,7 +77,9 @@ const MemberEdit = (props) => {
 
   return (
     <div>
-      <Grid container item className="member-edit-container" direction="column" justifyContent="center" alignItems="center" xs={12}>
+      <Typography variant="h4">Member edit</Typography>
+      {/* TODO: rewrite the editor with <div />'s, use redux state, actions, and remove title */}
+      {/* <Grid container item className="member-edit-container" direction="column" justifyContent="center" alignItems="center" xs={12}>
         <Grid container item className="member-edit-col-top" direction="column" justifyContent="center" alignItems="flex-start">
           <Typography variant="h3">PBC / 111-1 / Member</Typography>
           <Grid container item direction="row" justifyContent="flex-start" alignItems="center" spacing={1}>
@@ -98,24 +118,19 @@ const MemberEdit = (props) => {
                   onChange={(e) => handleChangeGuest(e)}
                 />
               </Grid>
-              {/* inputbase theme => height width */}
+
             </Grid>
           </Grid>
         </Card>
         <Grid container item className="member-edit-col-bottom" direction="row" justifyContent="flex-end" alignItems="center" style={{ width: '1280px' }} spacing={2}>
           <Grid item><Button onClick={handleClickCancel}>Cancel</Button></Grid>
-          {/* (save?) :
-          <Grid item><Button variant="contained" disabled>Save</Button></Grid> */}
+
           <Grid item><Button onClick={handleSubmitSave} color="primary">Save</Button></Grid>
         </Grid>
-      </Grid>
+      </Grid> */}
 
       {/* unsave member list dialog */}
-      <Dialog
-        open={popUpUnsave}
-        keepMounted
-        onClose={handleClosePopUpUnsave}
-      >
+      <Dialog open={popUpUnsave} keepMounted onClose={handleClosePopUpUnsave}>
         <DialogTitle>
           <Typography variant="h4">Unsaved changes to member list</Typography>
         </DialogTitle>
@@ -126,25 +141,27 @@ const MemberEdit = (props) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePopUpUnsave}>Cancel</Button>
-          <Button onClick={handleSubmitUnsave} color="secondary">Don’t Save</Button>
+          <Button onClick={handleSubmitUnsave} color="secondary">
+            Don’t Save
+          </Button>
         </DialogActions>
       </Dialog>
 
       {/* save member list dialog */}
-      <Dialog
-        open={popUpSave}
-        keepMounted
-        onClose={handleClosePopUpSave}
-      >
+      <Dialog open={popUpSave} keepMounted onClose={handleClosePopUpSave}>
         <DialogTitle>
           <Typography variant="h4">Save changes to member list</Typography>
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body1">Click save changes to modify member list. Click Cancel to go back to editing panel.</Typography>
+          <Typography variant="body1">
+            Click save changes to modify member list. Click Cancel to go back to editing panel.
+          </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePopUpSave}>Cancel</Button>
-          <Button onClick={handleSubmitSave} color="primary">Save Changes</Button>
+          <Button onClick={handleSubmitSave} color="primary">
+            Save Changes
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

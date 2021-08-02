@@ -1,7 +1,5 @@
 import agent from './agent';
-import {
-  userConstants,
-} from './constant';
+import { userConstants } from './constant';
 
 const getUserInfo = (id, token) => (dispatch) => {
   const auth = {
@@ -10,7 +8,8 @@ const getUserInfo = (id, token) => (dispatch) => {
     },
   };
 
-  agent.get(`/account/${id}`, auth)
+  agent
+    .get(`/account/${id}`, auth)
     .then((userInfo) => {
       dispatch({
         type: userConstants.AUTH_SUCCESS,
@@ -29,7 +28,8 @@ const getUserInfo = (id, token) => (dispatch) => {
 };
 
 const userSignIn = (username, password) => (dispatch) => {
-  agent.post('/account/jwt', { username, password })
+  agent
+    .post('/account/jwt', { username, password })
     .then((logRes) => {
       const id = logRes.data.data.account_id;
       const { token } = logRes.data.data;
@@ -43,7 +43,8 @@ const userSignIn = (username, password) => (dispatch) => {
         },
       };
 
-      agent.get(`/account/${id}`, auth)
+      agent
+        .get(`/account/${id}`, auth)
         .then((userInfo) => {
           dispatch({
             type: userConstants.AUTH_SUCCESS,
@@ -96,8 +97,5 @@ const userForgetPassword = (email) => (dispatch) => {
 };
 
 export {
-  getUserInfo,
-  userSignIn,
-  userLogout,
-  userForgetPassword,
+  getUserInfo, userSignIn, userLogout, userForgetPassword,
 };

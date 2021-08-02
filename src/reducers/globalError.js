@@ -4,7 +4,7 @@ const initialState = {
   errors: {},
 };
 
-export default function board(state = initialState, payload) {
+export default function globalError(state = initialState, payload) {
   switch (payload.type) {
     case userConstants.API_CALL_ERROR:
       return {
