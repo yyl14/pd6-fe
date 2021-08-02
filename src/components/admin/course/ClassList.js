@@ -77,6 +77,12 @@ export default function ClassList() {
           <AlignedText text="Type" childrenType="text">
             <Typography variant="body1">Lesson</Typography>
           </AlignedText>
+          <AlignedText text="Type" childrenType="text">
+            <Typography variant="body1">Lesson</Typography>
+          </AlignedText>
+          <AlignedText text="Type" childrenType="text">
+            <Typography variant="body1">Lesson</Typography>
+          </AlignedText>
           <AlignedText text="Course Name" childrenType="field">
             <TextField />
           </AlignedText>
