@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
+    width: '1280px',
   },
   editorCol: {
     display: 'flex',
@@ -31,17 +32,9 @@ const useStyles = makeStyles((theme) => ({
   editorItem: {
     marginBottom: '12px',
   },
-  /*   textField: {
+  textField: {
     width: '260px',
-    height: '439px',
-    marginTop: '3px',
-    padding: '15px 15px 0 15px',
-    // h6 - body format
-    fontSize: '1rem',
-    fontWeight: 500,
-    lineHeight: 25 / 18,
-    fontFamily: 'Noto Sans',
-  },  */
+  },
   buttonsBar: {
     display: 'flex',
     flexDirection: 'row',
@@ -51,11 +44,15 @@ const useStyles = makeStyles((theme) => ({
   leftButton: {
     marginRight: '18px',
   },
-
 }));
 
 /* This is a level 4 component (page component) */
-const MemberEdit = (props) => {
+const MemberEdit = ({
+  backToMemberList,
+  members,
+  onEditMembers,
+  loading, // TODO
+}) => {
   // TODO: initialize field content with redux state
   const classes = useStyles();
   const [TA, setTA] = useState([]);
@@ -95,13 +92,13 @@ const MemberEdit = (props) => {
 
   const handleSubmitUnsave = () => {
     setShowUnsaveDialog(false);
-    props.backToMemberList();
+    backToMemberList();
   };
 
   const handleSubmitSave = () => {
     setShowSaveDialog(false);
     // and sth.....
-    props.backToMemberList();
+    backToMemberList();
   };
 
   return (
@@ -119,6 +116,8 @@ const MemberEdit = (props) => {
             className={classes.textField}
             defaultValue={TA}
             onChange={(e) => handleChangeTA(e)}
+            multiline
+            rows={20}
           />
         </div>
 
@@ -133,6 +132,8 @@ const MemberEdit = (props) => {
             className={classes.textField}
             defaultValue={student}
             onChange={(e) => handleChangeStudent(e)}
+            multiline
+            rows={20}
           />
         </div>
 
@@ -147,12 +148,18 @@ const MemberEdit = (props) => {
             className={classes.textField}
             defaultValue={guest}
             onChange={(e) => handleChangeGuest(e)}
+            multiline
+            rows={20}
           />
         </div>
       </Card>
       <div className={classes.buttonsBar}>
-        <Button onClick={handleClickCancel} className={classes.leftButton}>Cancel</Button>
-        <Button onClick={handleSubmitSave} color="primary">Save</Button>
+        <Button onClick={handleClickCancel} className={classes.leftButton}>
+          Cancel
+        </Button>
+        <Button onClick={handleSubmitSave} color="primary">
+          Save
+        </Button>
         {/* TODO:disabled */}
       </div>
 
