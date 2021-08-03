@@ -34,16 +34,17 @@ export default function SubmissionLanguageHome() {
   const classes = useStyles();
 
   const submitLang = useSelector((state) => state.admin.system.submitLang.byId);
-  const submitLangId = useSelector((state) => state.admin.system.submitLang.allIds);
+  const submitLangID = useSelector((state) => state.admin.system.submitLang.allIds);
 
   const [tableData, setTableData] = useState([]);
   const [path, setPath] = useState([]);
 
+  const languageName = 'python';
+
   useEffect(() => {
     const newData = [];
     const newPath = [];
-
-    submitLangId.forEach((key) => {
+    submitLangID.forEach((key) => {
       const item = submitLang[key];
       if (item.is_disabled === true) {
         item.is_disabled = 'Disable';
@@ -51,17 +52,18 @@ export default function SubmissionLanguageHome() {
         item.is_disabled = 'Enable';
       }
       newData.push(item);
-      newPath.push(`submitLang/${item.id}/setting`);
+      newPath.push(`submitLang/${item.language}/setting`);
     });
     setTableData(newData);
     setPath(newPath);
-  }, [submitLang, submitLangId]);
+  }, [submitLang, submitLangID]);
 
   return (
     <div>
       <Typography variant="h3" className={classes.pageHeader}>
         Submission Language
       </Typography>
+      {/* <Typography variant="h4">This is Submission Language Home</Typography> */}
       <CustomTable
         hasSearch
         searchPlaceholder="Language / Version"
@@ -70,20 +72,20 @@ export default function SubmissionLanguageHome() {
           {
             id: 'language',
             label: 'Language',
+            // minWidth: 50,
             align: 'center',
-            width: '150px',
           },
           {
             id: 'version',
             label: 'Version',
+            // minWidth: 50,
             align: 'center',
-            width: '128px',
           },
           {
             id: 'is_disabled',
             label: 'Status',
+            // minWidth: 50,
             align: 'center',
-            width: '214px',
           },
         ]}
         columnComponent={[null, null, null]}
