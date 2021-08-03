@@ -169,6 +169,7 @@ const overrides = {
   MuiButton: {
     root: {
       borderRadius: '5px',
+      height: '40px',
       transition: 'background 0.4s',
       margin: '10px 5px 10px 5px',
       padding: '8.5px 25px 10px 25px',
@@ -201,7 +202,7 @@ const overrides = {
 
   MuiIconButton: {
     root: {
-      color: '#000000',
+      color: mono.black,
     },
   },
 
@@ -209,6 +210,7 @@ const overrides = {
   MuiInputBase: {
     root: {
       height: '45px',
+      backgroundColor: mono.white,
     },
   },
 
@@ -219,7 +221,7 @@ const overrides = {
   },
   MuiFormControl: {
     root: {
-      margin: '10px 5px 50px 5px',
+      margin: '10px 0 5px 0',
     },
   },
   MuiSelect: {
@@ -269,7 +271,7 @@ const overrides = {
   MuiInputLabel: {
     outlined: {
       transform: 'translate(15px, 13px) scale(1)',
-      '&$shrink': { transform: 'translate(14px, -18px) scale(0.89)', fontWeight: 400 },
+      '&$shrink': { transform: 'translate(14px, -20px) scale(0.89)', fontWeight: 400 },
     },
   },
 
@@ -285,7 +287,12 @@ const overrides = {
 
   // Box (dialog)
   MuiDialog: {
-    paper: { padding: '4px 6px 4px 6px', minWidth: '45vw', boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.25)' },
+    paper: {
+      padding: '4px 6px 4px 6px',
+      boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.25)',
+    },
+    paperWidthMd: { width: '600px' },
+    paperWidthSm: { width: '460px' },
   },
   MuiDialogTitle: {
     // root: { padding: '20px 30px 0 30px' },
@@ -294,7 +301,7 @@ const overrides = {
     // root: { padding: '20px 30px 12px 30px' },
   },
   MuiDialogActions: {
-    root: { padding: '0 24px 0 0' },
+    root: { padding: '0 19px 6px 0' },
   },
 
   // "Mask"

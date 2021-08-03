@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, useHistory } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import { Grid, Typography } from '@material-ui/core';
@@ -32,15 +32,15 @@ class Login extends Component {
     if (nextProps.auth.isAuthenticated) {
       nextProps.cookies.set('id', nextProps.auth.user.id, {
         path: '/',
-        expires: new Date(Date.now() + 86400), // cookie expires after 1 day
+        expires: new Date(Date.now() + 86400000), // cookie expires after 1 day
       });
 
       nextProps.cookies.set('token', nextProps.auth.user.token, {
         path: '/',
-        expires: new Date(Date.now() + 86400), // cookie expires after 1 day
+        expires: new Date(Date.now() + 86400000), // cookie expires after 1 day
       });
       if (nextProps.auth.user.role.indexOf('MANAGER') !== -1 || nextProps.auth.user.role === 'MANAGER') {
-        nextProps.history.push('/admin/course/overview');
+        nextProps.history.push('/admin/course/course');
       } else {
         nextProps.history.push('/');
       }

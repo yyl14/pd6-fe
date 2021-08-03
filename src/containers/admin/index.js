@@ -7,16 +7,17 @@ import {
 import { Container } from '@material-ui/core';
 import Account from './account/account';
 import Institute from './account/institute';
-import ClassInfo from './course/classInfo';
-import CourseOverview from './course/courseOverview';
+import Class from './course/class';
+import Course from './course/course';
 import AccessLog from './system/accessLog';
-import Announcement from './system/announcement';
 import SubmitLang from './system/submitLang';
+import Announcement from './system/announcement';
 import NoMatch from '../../components/noMatch';
 
 import Header from '../../components/ui/Header';
 import Sidebar from '../../components/ui/Sidebar';
 
+/* This is a level 2 container (role container) */
 class Admin extends Component {
   constructor(props) {
     super(props);
@@ -40,8 +41,8 @@ class Admin extends Component {
           <div className="layout-content-container">
             <div className="layout-content">
               <Switch>
-                <Route path="/admin/course/overview" component={CourseOverview} />
-                <Route path="/admin/course/:class" component={ClassInfo} />
+                <Route path="/admin/course/course" component={Course} />
+                <Route path="/admin/course/class" component={Class} />
                 <Route path="/admin/account/institute" component={Institute} />
                 <Route path="/admin/account/account" component={Account} />
                 <Route path="/admin/system/accesslog" component={AccessLog} />

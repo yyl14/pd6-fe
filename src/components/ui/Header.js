@@ -9,10 +9,12 @@ import { format } from 'date-fns';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
+    minHeight: '55px',
     height: '55px',
     background: '#090909',
   },
   toolbar: {
+    minHeight: '55px',
     height: '55px',
   },
   item: {
@@ -60,7 +62,7 @@ export default function Header({ role }) {
   const history = useHistory();
   const location = useLocation();
   let itemList = [];
-  const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d H:mm:ss'));
+  const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   H:mm'));
 
   if (role === 'MANAGER') {
     itemList = [
@@ -142,7 +144,7 @@ export default function Header({ role }) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTime(format(new Date(), 'MMM d H:mm'));
+      setCurrentTime(format(new Date(), 'MMM d   H:mm'));
     }, 1000);
     return () => clearInterval(interval);
   }, []);
@@ -151,7 +153,7 @@ export default function Header({ role }) {
     <div>
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
-          <Avatar src="https://pdogs.ntu.im/judge/image/LOGO.png" className={classes.avatar} />
+          {/* <Avatar src="https://pdogs.ntu.im/judge/image/LOGO.png" className={classes.avatar} /> */}
           {itemList.map((item) => (
             <Typography variant="h6" className={classes.item} key={item.text}>
               <a href={baseURL + item.path} className={location.pathname === (item.path) ? classes.active : classes.a}>
