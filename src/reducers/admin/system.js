@@ -13,6 +13,42 @@ const initialState = {
   error: {
     fetchAccessLog: null,
   },
+
+  submitLang: {
+    byId: {
+      1: {
+        language: 'Python',
+        version: '3.8.0',
+        is_disabled: false,
+      },
+      2: {
+        language: 'Python',
+        version: '3.8.1',
+        is_disabled: false,
+      },
+      3: {
+        language: 'Python',
+        version: '3.8.2',
+        is_disabled: false,
+      },
+      4: {
+        language: 'Python',
+        version: '3.8.3',
+        is_disabled: false,
+      },
+      5: {
+        language: 'Python',
+        version: '3.8.4',
+        is_disabled: true,
+      },
+      6: {
+        language: 'Python',
+        version: '3.8.5',
+        is_disabled: true,
+      },
+    },
+    allIds: [1, 2, 3, 4, 5, 6],
+  },
 };
 
 export default function system(state = initialState, action) {
