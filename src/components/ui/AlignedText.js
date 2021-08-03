@@ -12,12 +12,14 @@ const useStyles = makeStyles((theme) => ({
   },
   alignedText: {
     marginTop: '23px',
+    marginBottom: '16px',
   },
   textAlignedText: {
     marginTop: '0px',
+    marginBottom: '16px',
   },
   fieldAlignedText: {
-    marginTop: '23px',
+    marginTop: '18px',
   },
 }));
 
