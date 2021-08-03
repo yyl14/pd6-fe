@@ -17,6 +17,7 @@ import SimpleBar from '../../ui/SimpleBar';
 import DateRangePicker from '../../ui/DateRangePicker';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
+import NoMatch from '../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -53,9 +54,9 @@ export default function ClassList() {
     setShowAddClassDialog(false);
     dispatch(courseActions.addClass(authToken, courseId, name, false));
   };
-  console.log(statea);
+  console.log(courses.byId, classes.byId);
 
-  return (
+  return courses.byId[courseId] !== undefined ? (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
         {`${courses.byId[courseId].name}`}
@@ -133,5 +134,7 @@ export default function ClassList() {
         </DialogActions>
       </Dialog>
     </>
+  ) : (
+    <NoMatch />
   );
 }

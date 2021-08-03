@@ -422,15 +422,30 @@ export default function course(state = initialState, action) {
 
     case courseConstants.FETCH_CLASSES_FAIL: {
       const { courseId, error } = action.payload;
-      console.log(error);
+      // console.log(error);
+      if (state.courses.byId[courseId]) {
+        return {
+          ...state,
+
+          // clear all class ids of the course
+
+          courses: {
+            ...state.courses,
+            byId: { ...state.courses.byId, [courseId]: { ...state.courses.byId[courseId], classIds: [] } },
+          },
+
+          // class data will NOT be cleared
+
+          loading: { ...state.loading, fetchClasses: false },
+          error: {
+            ...state.error,
+            fetchClasses: error,
+          },
+        };
+      }
+
       return {
         ...state,
-
-        // clear all class ids of the course
-        courses: {
-          ...state.courses,
-          byId: { ...state.courses.byId, [courseId]: { ...state.courses.byId[courseId], classIds: [] } },
-        },
 
         // class data will NOT be cleared
 
@@ -455,9 +470,20 @@ export default function course(state = initialState, action) {
 
       return {
         ...state,
+        courses: {
+          ...state.courses,
+          byId: {
+            ...state.courses.byId,
+            [courseId]: {
+              ...state.courses.byId[courseId],
+              classIds: state.courses.byId[courseId].classIds.concat([id]),
+            },
+          },
+        },
         classes: {
           ...state.classes,
           byId: {
+            ...state.classes.byId,
             [id]: {
               id,
               courseId,
@@ -467,7 +493,7 @@ export default function course(state = initialState, action) {
               memberIds: [],
             },
           },
-          allIds: state.course.allIds.concat([[id]]),
+          allIds: state.classes.allIds.concat([id]),
         },
         loading: {
           ...state.loading,
@@ -483,6 +509,7 @@ export default function course(state = initialState, action) {
       console.log('add class fail');
 
       const { error } = action.payload;
+      console.log(error);
       return {
         ...state,
 
