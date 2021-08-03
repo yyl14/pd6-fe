@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import {
   Typography,
   Button,
@@ -11,28 +13,12 @@ import {
   TextField,
   FormControlLabel,
   Switch,
+  makeStyles,
 } from '@material-ui/core';
-import Divider from '@material-ui/core/Divider';
-import { makeStyles } from '@material-ui/core/styles';
-
 import SimpleBar from '../../ui/SimpleBar';
+import AlignedText from '../../ui/AlignedText';
 
 const useStyle = makeStyles((theme) => ({
-  // root: {
-  //   marginLeft: '170px',
-  // },
-  // header: {
-  //   marginTop: '95px',
-  // },
-  // title: {
-  //   marginTop: '58px',
-  //   marginBottom: '9px',
-  // },
-  // body: {
-  //   marginTop: '30px',
-  //   marginLeft: '50px',
-  // },
-
   pageHeader: {
     marginBottom: '50px',
   },
@@ -41,8 +27,12 @@ const useStyle = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 export default function LangSetting() {
   const classes = useStyle();
+  const { languageId } = useParams();
+  const submitLang = useSelector((state) => state.admin.system.submitLang.byId);
+
   const [popUp, setPopUp] = useState(false);
   const [popUpDelete, setPopUpDelete] = useState(false);
+
   const handleClick = () => {
     setPopUp(true);
   };
@@ -55,8 +45,25 @@ export default function LangSetting() {
     <>
       {/* TODO: use redux state to determine language name */}
       <Typography variant="h3" className={classes.pageHeader}>
-        Python 3.8.1 / Submission Language Setting
+        {`${submitLang[languageId].language} ${submitLang.[languageId].version} / Submission Language Setting`}
       </Typography>
+
+      <SimpleBar
+        title="Submission Language Information"
+      >
+        <Typography variant="body1">
+          <AlignedText text="Language" childrenType="text">
+            <Typography variant="body1">{submitLang[languageId].language}</Typography>
+          </AlignedText>
+          <AlignedText text="Version" childrenType="text">
+            <Typography variant="body1">{submitLang[languageId].version}</Typography>
+          </AlignedText>
+          <AlignedText text="Status" childrenType="text">
+            <Typography variant="body1">{submitLang[languageId].is_disabled}</Typography>
+          </AlignedText>
+        </Typography>
+      </SimpleBar>
+
       <SimpleBar
         title="Change Institute Status"
         buttons={(
@@ -67,7 +74,7 @@ export default function LangSetting() {
           </>
         )}
       >
-        <Typography className={classes.body} variant="body1">
+        <Typography variant="body1">
           Once you change the status, future submission will be affected. Please be certain.
         </Typography>
       </SimpleBar>
