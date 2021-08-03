@@ -33,7 +33,7 @@ export default function ClassList() {
   const classNames = useStyles();
 
   const dispatch = useDispatch();
-  const statea = useSelector((state) => state);
+
   const authToken = useSelector((state) => state.auth.user.token);
   const courses = useSelector((state) => state.admin.course.courses);
   const classes = useSelector((state) => state.admin.course.classes);
@@ -44,6 +44,7 @@ export default function ClassList() {
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
 
   useEffect(() => {
+    // dispatch(courseActions.fetchCourses(authToken));
     dispatch(courseActions.fetchClasses(authToken, courseId));
   }, [authToken, courseId, dispatch]);
 

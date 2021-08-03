@@ -611,12 +611,21 @@ export default function course(state = initialState, action) {
       return {
         ...state,
         // add member ids to class
-        classes: state.classes.byId.filter((item) => (item.id === classId ? { ...item, memberIds: data.map((dataItem) => dataItem.id) } : item)),
+        classes: {
+          ...state.classes,
+          byId: {
+            ...state.classes.byId,
+            [classId]: {
+              ...state.classes.byId[classId],
+              memberIds: data.map((item) => item.id),
+            },
+          },
+        },
 
         // add member data
         members: {
           byId: data.reduce((acc, item) => ({ ...acc, [item.id]: item }), state.members),
-          allIds: data.map((item) => item.id),
+          allIds: [...new Set([...data.map((item) => item.id), ...state.members.allIds])],
         },
 
         loading: {
@@ -636,7 +645,10 @@ export default function course(state = initialState, action) {
         ...state,
 
         // clear all members ids of the class
-        classes: state.courses.map((item) => (item.id === classId ? { ...item, memberIds: [] } : item)),
+        classes: {
+          ...state.classes,
+          byId: { ...state.classes.byId, [classId]: { ...state.courses.byId[classId], memberIds: [] } },
+        },
 
         // member data will NOT be cleared
         loading: {

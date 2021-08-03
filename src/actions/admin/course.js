@@ -2,14 +2,14 @@ import agent from '../agent';
 import { courseConstants } from '../constant';
 
 export const fetchCourses = (token) => (dispatch) => {
-  const fetch = { headers: { 'auth-token': token } };
+  const auth = { headers: { 'auth-token': token } };
 
   dispatch({
     type: courseConstants.FETCH_COURSES_START,
   });
 
   agent
-    .get('/course', fetch)
+    .get('/course', auth)
     .then((res) => {
       const { data } = res.data;
       dispatch({
@@ -57,12 +57,15 @@ export const addCourse = (token, name, type, isHidden) => (dispatch) => {
 };
 
 export const renameCourse = (token, courseId, newName) => (dispatch) => {
-  const request = { headers: { 'auth-token': token }, name: newName };
+  const auth = { headers: { 'auth-token': token } };
+  const body = { name: newName };
   dispatch({ type: courseConstants.RENAME_COURSE_START });
 
   agent
-    .patch(`/course/${courseId}`, request)
-    .then(() => {
+    .patch(`/course/${courseId}`, body, auth)
+    .then((res) => {
+      console.log(res);
+
       dispatch({
         type: courseConstants.RENAME_COURSE_SUCCESS,
         payload: {
@@ -72,6 +75,7 @@ export const renameCourse = (token, courseId, newName) => (dispatch) => {
       });
     })
     .catch((error) => {
+      console.log(error);
       dispatch({
         type: courseConstants.RENAME_COURSE_FAIL,
         payload: {
@@ -158,11 +162,12 @@ export const addClass = (token, courseId, name, isHidden) => (dispatch) => {
 };
 
 export const renameClass = (token, classId, newName) => (dispatch) => {
-  const request = { headers: { 'auth-token': token }, name: newName };
+  const auth = { headers: { 'auth-token': token } };
+  const name = newName;
   dispatch({ type: courseConstants.RENAME_CLASS_START });
 
   agent
-    .patch(`/class/${classId}`, request)
+    .patch(`/class/${classId}`, { name }, auth)
     .then(() => {
       dispatch({
         type: courseConstants.RENAME_CLASS_SUCCESS,
@@ -209,11 +214,11 @@ export const deleteClass = (token, classId) => (dispatch) => {
 };
 
 export const fetchMembers = (token, classId) => (dispatch) => {
-  const request = { headers: { 'auth-token': token } };
+  const auth = { headers: { 'auth-token': token } };
   dispatch({ type: courseConstants.FETCH_MEMBERS_START });
 
   agent
-    .get(`/class/${classId}/member`)
+    .get(`/class/${classId}/member`, auth)
     .then((res) => {
       const { data } = res.data;
       dispatch({ type: courseConstants.FETCH_MEMBERS_SUCCESS, payload: { classId, data } });

@@ -49,7 +49,7 @@ const ClassSetting = () => {
 
   const [showRenameDialog, setShowRenameDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [newClassName, setNewClassName] = useState([]);
+  const [newClassName, setNewClassName] = useState('');
   // TODO: data & button loading
   const handleSubmitRename = () => {
     setShowRenameDialog(false);

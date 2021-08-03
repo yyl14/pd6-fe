@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Button, makeStyles } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { BiFilterAlt } from 'react-icons/bi';
+import * as courseActions from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import CustomTable from '../../ui/CustomTable';
 import MemberEdit from './MemberEdit';
@@ -16,10 +17,22 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 export default function MemberList() {
   const { courseId, classId } = useParams();
+  const history = useHistory();
   const classNames = useStyles();
 
-  const courses = useSelector((state) => state.admin.course.courses.byId);
-  const classes = useSelector((state) => state.admin.course.classes.byId);
+  const dispatch = useDispatch();
+
+  const authToken = useSelector((state) => state.auth.user.token);
+  const courses = useSelector((state) => state.admin.course.courses);
+  const classes = useSelector((state) => state.admin.course.classes);
+  const loading = useSelector((state) => state.admin.course.loading);
+
+  useEffect(() => {
+    // dispatch(courseActions.fetchClasses(authToken, courseId));
+    dispatch(courseActions.fetchMembers(authToken, classId));
+  }, [authToken, classId, courseId, dispatch]);
+
+  console.log(courses.byId, classes, courseId, classId);
 
   const [edit, setEdit] = useState(false);
   // TODO: list of path, member data, table filter, link, search bar placeholder
@@ -33,7 +46,7 @@ export default function MemberList() {
   return (
     <>
       <Typography variant="h3" className={classNames.pageHeader}>
-        {`${courses[courseId].name} / ${classes[classId].name} / Member`}
+        {`${courses.byId[courseId].name} / ${classes.byId[classId].name} / Member`}
       </Typography>
       {edit ? (
         <MemberEdit classId={classId} backToMemberList={() => setEdit(false)} />
