@@ -427,15 +427,6 @@ export default function course(state = initialState, action) {
         return {
           ...state,
 
-          // clear all class ids of the course
-
-          courses: {
-            ...state.courses,
-            byId: { ...state.courses.byId, [courseId]: { ...state.courses.byId[courseId], classIds: [] } },
-          },
-
-          // class data will NOT be cleared
-
           loading: { ...state.loading, fetchClasses: false },
           error: {
             ...state.error,
@@ -644,13 +635,6 @@ export default function course(state = initialState, action) {
       return {
         ...state,
 
-        // clear all members ids of the class
-        classes: {
-          ...state.classes,
-          byId: { ...state.classes.byId, [classId]: { ...state.courses.byId[classId], memberIds: [] } },
-        },
-
-        // member data will NOT be cleared
         loading: {
           ...state.loading,
           fetchMembers: false,

@@ -26,6 +26,7 @@ export default function MemberList() {
   const authToken = useSelector((state) => state.auth.user.token);
   const courses = useSelector((state) => state.admin.course.courses);
   const classes = useSelector((state) => state.admin.course.classes);
+  const members = useSelector((state) => state.admin.course.members);
   const loading = useSelector((state) => state.admin.course.loading);
 
   useEffect(() => {
@@ -34,16 +35,22 @@ export default function MemberList() {
     dispatch(courseActions.fetchMembers(authToken, classId));
   }, [authToken, classId, courseId, dispatch]);
 
-  console.log(courses, classes, courseId, classId);
+  console.log(
+    classes.byId[classId].memberIds.map((id) => ({
+      ...members.byId[id],
+      studentId: members.byId[id].memberId,
+    })),
+    members,
+  );
 
   const [edit, setEdit] = useState(false);
   // TODO: list of path, member data, table filter, link, search bar placeholder
-  const path = [
-    //
-  ];
-  const memberData = [
-    //
-  ];
+  // const path = [
+  //   //
+  // ];
+  // const memberData = [
+  //   //
+  // ];
 
   if (courses.byId[courseId] === undefined || classes.byId[courseId] === undefined) {
     if (loading.fetchCourses || loading.fetchClasses) {
@@ -59,7 +66,10 @@ export default function MemberList() {
         {`${courses.byId[courseId].name} / ${classes.byId[classId].name} / Member`}
       </Typography>
       {edit ? (
-        <MemberEdit classId={classId} backToMemberList={() => setEdit(false)} />
+        <MemberEdit
+          members={classes.byId[classId].memberIds.map((id) => members.byId[id])}
+          backToMemberList={() => setEdit(false)}
+        />
       ) : (
         <>
           <CustomTable
@@ -70,7 +80,10 @@ export default function MemberList() {
                 <Button onClick={() => setEdit(true)}>Edit</Button>
               </>
             )}
-            data={memberData}
+            data={classes.byId[classId].memberIds.map((id) => ({
+              ...members.byId[id],
+              studentId: members.byId[id].student_id,
+            }))}
             columns={[
               {
                 id: 'username',
@@ -111,8 +124,8 @@ export default function MemberList() {
             // columnComponent={[null, null, null, (<BiFilterAlt key="filter" onClick={[]} />), (<BiFilterAlt key="filter" onClick={[]} />)]}
             hasFilter={[false, false, false, true, true]}
             dataColumnName={['username', 'studentId', 'realName', 'institute', 'role']}
-            hasLink
-            path={path}
+            // hasLink
+            // path={classes.byId[classId].memberIds.map((member) => `/admin/course/class/${courseId}/${classId}/member`)}
           />
         </>
       )}
