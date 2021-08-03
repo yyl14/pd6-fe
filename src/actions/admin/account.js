@@ -31,7 +31,6 @@ const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled)
       'Auth-Token': token,
     },
   };
-  console.log('adding institute');
   agent.post('/institute', {
     abbreviated_name: abbreviatedName,
     full_name: fullName,

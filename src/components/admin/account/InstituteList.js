@@ -14,7 +14,6 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
 import { BiFilterAlt } from 'react-icons/bi';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
@@ -43,11 +42,13 @@ const useStyles = makeStyles((theme) => ({
 export default function InstituteList() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { addInstitute, getInstitutes } = bindActionCreators(accountActions, dispatch);
 
   const institutes = useSelector((state) => state.admin.account.institutes.byId);
   const institutesID = useSelector((state) => state.admin.account.institutes.allIds);
   const authToken = useSelector((state) => state.auth.user.token);
+
+  console.log(institutes);
+  console.log(institutesID);
 
   const [tableData, setTableData] = useState([]);
   const [path, setPath] = useState([]);
@@ -67,6 +68,10 @@ export default function InstituteList() {
     filter: '(None)',
     sort: '(None)',
   });
+
+  useEffect(() => {
+    dispatch(accountActions.getInstitutes(authToken));
+  }, [authToken, dispatch]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -88,7 +93,7 @@ export default function InstituteList() {
       return;
     }
     setPopUp(false);
-    addInstitute('authToken', inputs.initialism, inputs.fullName, inputs.email, inputs.status);
+    dispatch(accountActions.addInstitute(authToken, inputs.initialism, inputs.fullName, inputs.email, !inputs.status));
     console.log('hello');
   };
 
@@ -118,9 +123,9 @@ export default function InstituteList() {
     } else {
       institutesID.forEach((key) => {
         const item = institutes[key];
-        if (item.is_disabled === true) {
+        if (item.is_disabled === true || item.is_disabled === 'Disabled') {
           item.is_disabled = 'Disabled';
-        } else if (item.is_disabled === false) {
+        } else if (item.is_disabled === false || item.is_disabled === 'Enabled') {
           item.is_disabled = 'Enabled';
         }
         newData.push(item);
@@ -182,9 +187,10 @@ export default function InstituteList() {
 
     institutesID.forEach((key) => {
       const item = institutes[key];
-      if (item.is_disabled === true) {
+      console.log('Renew: ', item);
+      if (item.is_disabled === true || item.is_disabled === 'Disabled') {
         item.is_disabled = 'Disabled';
-      } else if (item.is_disabled === false) {
+      } else if (item.is_disabled === false || item.is_disabled === 'Enabled') {
         item.is_disabled = 'Enabled';
       }
       newData.push(item);
@@ -193,10 +199,6 @@ export default function InstituteList() {
     setTableData(newData);
     setPath(newPath);
   }, [institutes, institutesID]);
-
-  // useEffect(() => {
-  //   getInstitutes(authToken);
-  // });
 
   return (
     <>

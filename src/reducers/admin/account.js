@@ -1,31 +1,36 @@
 import { accountConstants } from '../../actions/constant';
 
 const initialState = {
+  // institutes: {
+  //   byId: {
+  //     1111: {
+  //       id: 1111,
+  //       abbreviated_name: 'NTU',
+  //       full_name: 'National Taiwan University',
+  //       email_domain: 'ntu.edu.tw',
+  //       is_disabled: false,
+  //     },
+  //     1112: {
+  //       id: 1112,
+  //       abbreviated_name: 'NTNU',
+  //       full_name: 'National Taiwan Normal University',
+  //       email_domain: 'ntnu.edu.tw',
+  //       is_disabled: true,
+  //     },
+  //     1113: {
+  //       id: 1113,
+  //       abbreviated_name: 'NTUST',
+  //       full_name: 'National Taiwan University of Science and Technology',
+  //       email_domain: 'ntust.edu.tw',
+  //       is_disabled: false,
+  //     },
+  //   },
+  //   allIds: [1111, 1112, 1113],
+  // },
+
   institutes: {
-    byId: {
-      1111: {
-        id: 1111,
-        abbreviated_name: 'NTU',
-        full_name: 'National Taiwan University',
-        email_domain: 'ntu.edu.tw',
-        is_disabled: false,
-      },
-      1112: {
-        id: 1112,
-        abbreviated_name: 'NTNU',
-        full_name: 'National Taiwan Normal University',
-        email_domain: 'ntnu.edu.tw',
-        is_disabled: true,
-      },
-      1113: {
-        id: 1113,
-        abbreviated_name: 'NTUST',
-        full_name: 'National Taiwan University of Science and Technology',
-        email_domain: 'ntust.edu.tw',
-        is_disabled: false,
-      },
-    },
-    allIds: [1111, 1112, 1113],
+    byId: {},
+    allIds: [],
   },
 
   accounts: {
@@ -184,8 +189,8 @@ export default function account(state = initialState, action) {
         ...state,
         institutes: {
           ...state.institutes,
-          byId: { [action.payload.id]: action.payload },
-          allIds: state.institutes.allIds.concat([[action.payload.id]]),
+          byId: { ...state.institutes.byId, [action.payload.id]: action.payload },
+          allIds: state.institutes.allIds.concat([action.payload.id]),
         },
         loading: {
           ...state.loading,
