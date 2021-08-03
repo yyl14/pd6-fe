@@ -13,11 +13,14 @@ import {
   Switch,
   Grid,
   OutlinedInput,
+  TextField,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
+import { Translate } from '@material-ui/icons';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
+import { accountActions } from '../../../actions/index';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -52,6 +55,9 @@ const useStyles = makeStyles((theme) => ({
   textWrapper4: {
     width: '400px',
   },
+  warningText: {
+    marginTop: '10px',
+  },
 }));
 
 export default function InstituteSetting() {
@@ -59,6 +65,9 @@ export default function InstituteSetting() {
 
   const { instituteId } = useParams();
   const institutes = useSelector((state) => state.admin.account.institutes.byId);
+
+  const dispatch = useDispatch();
+  const { editInstitute } = bindActionCreators(accountActions, dispatch);
 
   const [settingStatus, setSettingStatus] = useState({
     changeName: false,
@@ -68,11 +77,14 @@ export default function InstituteSetting() {
   });
 
   const [newSetting, setNewSetting] = useState({
-    newStatus: false,
+    newStatus: institutes[instituteId].is_disabled === 'Enabled' || institutes[instituteId].is_disabled === false,
     newName: '',
     newInitialism: '',
     newEmail: '',
   });
+
+  const [error, setError] = useState(false);
+  const [errorText, setErrorText] = useState('');
 
   const handleClosePopUp = () => {
     setSettingStatus({
@@ -81,15 +93,34 @@ export default function InstituteSetting() {
       changeEmail: false,
       changeStatus: false,
     });
+    setNewSetting({
+      newStatus: institutes[instituteId].is_disabled === 'Enabled' || institutes[instituteId].is_disabled === false,
+      newName: '',
+      newInitialism: '',
+      newEmail: '',
+    });
   };
 
   const handleChange = (prop) => (event) => {
     setNewSetting((input) => ({ ...input, [prop]: event.target.value }));
-    console.log(instituteId);
+    if (prop === 'newEmail' && error === true) {
+      setError(false);
+      setErrorText('');
+    }
   };
 
   const handleChangeStatus = (event) => {
     setNewSetting((input) => ({ ...input, [event.target.name]: event.target.checked }));
+  };
+
+  const handleEditInstitute = (prop) => {
+    if (newSetting.newEmail === '' && prop === 'newEmail') {
+      setError(true);
+      setErrorText("Can't be empty!");
+      return;
+    }
+    // editInstitute();
+    handleClosePopUp();
   };
 
   return (
@@ -144,7 +175,7 @@ export default function InstituteSetting() {
           </div>
           <div className={classes.alignedTextWrapper2}>
             <Typography variant="body1" className={classes.alignedText}>
-              {institutes[instituteId].is_disabled ? 'Disabled' : 'Enabled'}
+              {(institutes[instituteId].is_disabled === true || institutes[instituteId].is_disabled === 'Disabled') ? 'Disabled' : 'Enabled'}
             </Typography>
           </div>
         </div>
@@ -261,7 +292,7 @@ export default function InstituteSetting() {
             </div>
             <div className={classes.textWrapper4}>
               <OutlinedInput
-                id="outlined-adornment"
+                id="outlined-adornment1"
                 value={newSetting.newName}
                 onChange={handleChange('newName')}
                 aria-describedby="outlined-weight-helper-text"
@@ -273,7 +304,7 @@ export default function InstituteSetting() {
               />
             </div>
           </div>
-          <Typography variant="body1">
+          <Typography variant="body1" className={classes.warningText}>
             Once you change the institute’s name, all related members will be affected. Please be certain.
           </Typography>
         </DialogContent>
@@ -281,7 +312,7 @@ export default function InstituteSetting() {
           <Button onClick={() => handleClosePopUp()} color="default">
             Cancel
           </Button>
-          <Button onClick={() => handleClosePopUp()} color="secondary">
+          <Button onClick={() => { handleEditInstitute('newName'); }} color="secondary">
             Rename
           </Button>
         </DialogActions>
@@ -299,23 +330,27 @@ export default function InstituteSetting() {
           <Typography variant="h4">Change institute Initialism</Typography>
         </DialogTitle>
         <DialogContent>
-          <Grid container spacing={3}>
-            <Grid item xs={5}>
-              <Typography variant="body1" style={{ color: 'red' }}>
+          <div className={classes.wrapper}>
+            <div className={classes.textWrapper1}>
+              <Typography variant="body1" className={classes.alignedText}>
                 Current Initialism
               </Typography>
-            </Grid>
-            <Grid item xs={7}>
-              <Typography variant="body1" style={{ color: 'red' }}>
+            </div>
+            <div className={classes.textWrapper2}>
+              <Typography variant="body1" className={classes.alignedText}>
                 {institutes[instituteId].abbreviated_name}
               </Typography>
-            </Grid>
-            <Grid item xs={5}>
-              <Typography variant="body1">New Initialism</Typography>
-            </Grid>
-            <Grid item xs={7}>
+            </div>
+          </div>
+          <div className={classes.wrapper}>
+            <div className={classes.textWrapper3}>
+              <Typography variant="body1" className={classes.alignedText}>
+                New Initialism
+              </Typography>
+            </div>
+            <div className={classes.textWrapper4}>
               <OutlinedInput
-                id="outlined-adornment"
+                id="outlined-adornment2"
                 value={newSetting.newInitialism}
                 onChange={handleChange('newInitialism')}
                 aria-describedby="outlined-weight-helper-text"
@@ -323,10 +358,11 @@ export default function InstituteSetting() {
                   'aria-label': 'newInitialism',
                 }}
                 labelWidth={0}
+                style={{ width: 360 }}
               />
-            </Grid>
-          </Grid>
-          <Typography variant="body1">
+            </div>
+          </div>
+          <Typography variant="body1" className={classes.warningText}>
             Once you change the institute’s initialism, all related members will be affected. Please be certain.
           </Typography>
         </DialogContent>
@@ -334,7 +370,63 @@ export default function InstituteSetting() {
           <Button onClick={() => handleClosePopUp()} color="default">
             Cancel
           </Button>
-          <Button onClick={() => handleClosePopUp()} color="secondary">
+          <Button onClick={() => { handleEditInstitute('newInitialism'); }} color="secondary">
+            Rename
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={settingStatus.changeEmail}
+        keepMounted
+        onClose={() => handleClosePopUp()}
+        aria-labelledby="dialog-slide-title"
+        aria-describedby="dialog-slide-description"
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle id="dialog-slide-title">
+          <Typography variant="h4">Change institute email</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <div className={classes.wrapper}>
+            <div className={classes.textWrapper1}>
+              <Typography variant="body1" className={classes.alignedText}>
+                Current Email
+              </Typography>
+            </div>
+            <div className={classes.textWrapper2}>
+              <Typography variant="body1" className={classes.alignedText}>
+                {institutes[instituteId].email_domain}
+              </Typography>
+            </div>
+          </div>
+          <div className={classes.wrapper}>
+            <div className={classes.textWrapper3}>
+              <Typography variant="body1" className={classes.alignedText}>
+                New Email
+              </Typography>
+            </div>
+            <div className={classes.textWrapper4}>
+              <TextField
+                id="new-email"
+                name="newEmail"
+                value={newSetting.newEmail}
+                onChange={handleChange('newEmail')}
+                error={error}
+                helperText={errorText}
+                style={{ width: 360 }}
+              />
+            </div>
+          </div>
+          <Typography variant="body1" className={classes.warningText}>
+            Once you change the institute’s email, future members may not be able to register with certain email. Please be certain.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleClosePopUp()} color="default">
+            Cancel
+          </Button>
+          <Button onClick={() => { handleEditInstitute('newEmail'); }} color="secondary">
             Rename
           </Button>
         </DialogActions>
@@ -358,7 +450,7 @@ export default function InstituteSetting() {
             }
             label={newSetting.newStatus ? 'Enabled' : 'Disabled'}
           />
-          <Typography variant="body1">
+          <Typography variant="body1" className={classes.warningText}>
             Once you change the institute’s status, future members from this institute may not be able to register.
             Please be certain.
           </Typography>
@@ -367,7 +459,7 @@ export default function InstituteSetting() {
           <Button onClick={() => handleClosePopUp()} color="default">
             Cancel
           </Button>
-          <Button onClick={() => handleClosePopUp()} color="secondary">
+          <Button onClick={() => handleEditInstitute('newStatus')} color="secondary">
             Modify
           </Button>
         </DialogActions>
