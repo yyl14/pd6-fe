@@ -52,7 +52,7 @@ export default function SubmissionLanguageHome() {
         item.is_disabled = 'Enable';
       }
       newData.push(item);
-      newPath.push(`submitLang/${item.language}/setting`);
+      newPath.push(`submitLang/${item.id}/setting`);
     });
     setTableData(newData);
     setPath(newPath);
