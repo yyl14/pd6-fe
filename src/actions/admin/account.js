@@ -4,13 +4,13 @@ import {
 } from '../constant';
 
 const getInstitutes = (token) => (dispatch) => {
-  const request = {
+  const auth = {
     headers: {
       'Auth-Token': token,
     },
   };
 
-  agent.get('/institute', request)
+  agent.get('/institute', auth)
     .then((res) => {
       dispatch({
         type: accountConstants.FETCH_INSTITUTE_SUCCESS,
@@ -26,17 +26,18 @@ const getInstitutes = (token) => (dispatch) => {
 };
 
 const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled) => (dispatch) => {
-  const request = {
+  const auth = {
     headers: {
       'Auth-Token': token,
     },
+  };
+  console.log('adding institute');
+  agent.post('/institute', {
     abbreviated_name: abbreviatedName,
     full_name: fullName,
     email_domain: emailDomain,
     is_disabled: isDisabled,
-  };
-  console.log('adding institute');
-  agent.post('/institute', request)
+  }, auth)
     .then((res) => {
       console.log('adding institute suc');
       dispatch({
@@ -56,16 +57,17 @@ const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled)
 };
 
 const editInstitute = (token, id, name, emailDomain, isDisabled) => (dispatch) => {
-  const request = {
+  const auth = {
     headers: {
       'Auth-Token': token,
     },
+  };
+
+  agent.patch(`/institute/${id}`, {
     name,
     email_domain: emailDomain,
     is_disabled: isDisabled,
-  };
-
-  agent.patch(`/institute/${id}`, request)
+  }, auth)
     .then((res) => {
       dispatch({
         type: accountConstants.EDIT_INSTITUTE_SUCCESS,
@@ -83,13 +85,13 @@ const editInstitute = (token, id, name, emailDomain, isDisabled) => (dispatch) =
 };
 
 const fetchAccount = (token, id) => (dispatch) => {
-  const request = {
+  const auth = {
     headers: {
       'Auth-Token': token,
     },
   };
 
-  agent.get(`/account/${id}`, request)
+  agent.get(`/account/${id}`, auth)
     .then((res) => {
       dispatch({
         type: accountConstants.FETCH_ACCOUNT_SUCCESS,
@@ -105,15 +107,13 @@ const fetchAccount = (token, id) => (dispatch) => {
 };
 
 const editAccount = (token, id, nickname, email) => (dispatch) => {
-  const request = {
+  const auth = {
     headers: {
       'Auth-Token': token,
     },
-    nickname,
-    alternative_email: email,
   };
 
-  agent.patch(`/account/${id}`, request)
+  agent.patch(`/account/${id}`, { nickname, alternative_email: email }, auth)
     .then((res) => {
       dispatch({
         type: accountConstants.EDIT_ACCOUNT_SUCCESS,
@@ -131,13 +131,13 @@ const editAccount = (token, id, nickname, email) => (dispatch) => {
 };
 
 const deleteAccount = (token, id) => (dispatch) => {
-  const request = {
+  const auth = {
     headers: {
       'Auth-Token': token,
     },
   };
 
-  agent.delete(`/account/${id}`, request)
+  agent.delete(`/account/${id}`, auth)
     .then((res) => {
       dispatch({
         type: accountConstants.DELETE_ACCOUNT_SUCCESS,
@@ -152,14 +152,13 @@ const deleteAccount = (token, id) => (dispatch) => {
 };
 
 const makeStudentCardDefault = (token, id, cardId) => (dispatch) => {
-  const request = {
+  const auth = {
     headers: {
       'Auth-Token': token,
     },
-    student_card_id: cardId,
   };
 
-  agent.put(`/account/${id}`, request)
+  agent.put(`/account/${id}`, { student_card_id: cardId }, auth)
     .then((res) => {
       dispatch({
         type: accountConstants.MAKE_STUDENT_CARD_DEFAULT_SUCCESS,
@@ -175,13 +174,13 @@ const makeStudentCardDefault = (token, id, cardId) => (dispatch) => {
 };
 
 const fetchStudentCard = (token, id) => (dispatch) => {
-  const request = {
+  const auth = {
     headers: {
       'Auth-Token': token,
     },
   };
 
-  agent.get(`/account/${id}/student-card`, request)
+  agent.get(`/account/${id}/student-card`, auth)
     .then((res) => {
       dispatch({
         type: accountConstants.FETCH_STUDENT_CARD_SUCCESS,
@@ -197,17 +196,18 @@ const fetchStudentCard = (token, id) => (dispatch) => {
 };
 
 const addStudentCard = (token, id, instituteId, emailPrefix, department, studentId) => (dispatch) => {
-  const request = {
+  const auth = {
     headers: {
       'Auth-Token': token,
     },
+  };
+
+  agent.post(`/account/${id}/student-card`, {
     institute_id: instituteId,
     institute_email_prefix: emailPrefix,
     department,
     student_id: studentId,
-  };
-
-  agent.post(`/account/${id}/student-card`, request)
+  }, auth)
     .then((res) => {
       dispatch({
         type: accountConstants.ADD_STUDENT_CARD_SUCCESS,
