@@ -33,7 +33,7 @@ const initialState = {
     allIds: [],
   },
 
-  studentCard: {
+  studentCards: {
     byId: {},
     allIds: [],
   },
@@ -114,7 +114,8 @@ export default function account(state = initialState, action) {
           addInstitute: true,
         },
       };
-    case accountConstants.ADD_INSTITUTE_SUCCESS:
+    case accountConstants.ADD_INSTITUTE_SUCCESS: {
+      console.log(action);
       return {
         ...state,
         institutes: {
@@ -131,6 +132,7 @@ export default function account(state = initialState, action) {
           addInstitute: null,
         },
       };
+    }
     case accountConstants.ADD_INSTITUTE_FAIL:
       return {
         ...state,
@@ -295,40 +297,111 @@ export default function account(state = initialState, action) {
     // student card
     case accountConstants.MAKE_STUDENT_CARD_DEFAULT_REQUEST:
       return {
-
+        ...state,
+        loading: { ...state.loading, makeStudentCardDefault: true },
       };
-    case accountConstants.MAKE_STUDENT_CARD_DEFAULT_SUCCESS:
+    case accountConstants.MAKE_STUDENT_CARD_DEFAULT_SUCCESS: {
+      const { cardId, data } = action.payload;
       return {
+        ...state,
 
+        studentCards: state.studentCards.map((item) => (item.id === cardId ? { ...item, default: true } : item)),
+
+        loading: { ...state.loading, makeStudentCardDefault: false },
+        error: {
+          ...state.error,
+          makeStudentCardDefault: null,
+        },
       };
+    }
     case accountConstants.MAKE_STUDENT_CARD_DEFAULT_FAIL:
       return {
-
+        ...state,
+        loading: { ...state.loading, makeStudentCardDefault: false },
+        error: {
+          ...state.error,
+          makeStudentCardDefault: action.payload.error,
+        },
       };
     case accountConstants.FETCH_STUDENT_CARD_REQUEST:
       return {
-
+        ...state,
+        loading: { ...state.loading, FETCH_STUDENT_CARD_REQUEST: true },
       };
-    case accountConstants.FETCH_STUDENT_CARD_SUCCESS:
+    case accountConstants.FETCH_STUDENT_CARD_SUCCESS: {
+      const { id, data } = action.payload;
       return {
+        ...state,
 
+        // add studentCard id to account
+        accounts: state.accounts.byId.filter((item) => (item.id === id ? { ...item, studentCard: data.map((dataItem) => dataItem.id) } : item)),
+
+        // add studentCard id
+        studentCards: {
+          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.studentCards),
+          allIds: data.map((item) => item.id),
+        },
+
+        loading: { ...state.loading, fetchStudentCard: false },
+        error: {
+          ...state.error,
+          fetchStudentCard: null,
+        },
       };
-    case accountConstants.FETCH_STUDENT_CARD_FAIL:
+    }
+    case accountConstants.FETCH_STUDENT_CARD_FAIL: {
+      const { id, error } = action.payload;
       return {
+        ...state,
 
+        // clear all student card ids of the account
+        accounts: state.accounts.map((item) => (item.id === id ? { ...item, studentCard: [] } : item)),
+
+        loading: { ...state.loading, fetchStudentCard: false },
+        error: {
+          ...state.error,
+          fetchStudentCard: error,
+        },
       };
+    }
     case accountConstants.ADD_STUDENT_CARD_REQUEST:
       return {
-
+        ...state,
+        loading: { ...state.loading, addStudentCard: true },
       };
-    case accountConstants.ADD_STUDENT_CARD_SUCCESS:
+    case accountConstants.ADD_STUDENT_CARD_SUCCESS: {
+      const { accountId, data } = action.payload;
       return {
+        ...state,
 
+        // add to account
+        accounts: state.accounts.byId.filter((item) => (item.id === data.id ? { ...item, studentCard: item.studentCard.concat([[data.id]]) } : item)),
+
+        // add to student card
+        studentCards: {
+          ...state.studentCards,
+          byId: { [data.id]: data },
+          allIds: state.studentCards.allIds.concat([[data.id]]),
+        },
+
+        loading: { ...state.loading, addStudentCard: false },
+        error: {
+          ...state.error,
+          addStudentCard: null,
+        },
       };
-    case accountConstants.ADD_STUDENT_CARD_FAIL:
+    }
+    case accountConstants.ADD_STUDENT_CARD_FAIL: {
+      const { id, error } = action.payload;
       return {
-
+        ...state,
+        loading: { ...state.loading, addStudentCard: false },
+        error: {
+          ...state.error,
+          addStudentCard: error,
+        },
       };
+    }
     default:
       return state;
   }
