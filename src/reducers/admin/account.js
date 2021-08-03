@@ -38,7 +38,7 @@ const initialState = {
         real_name: '陳以潼',
         student_id: 'b08705080',
         alternative_email: 'sdf@ergh',
-        studentCard: [11111],
+        studentCard: [11111, 11112],
       },
       1112: {
         id: 1112,
@@ -52,8 +52,8 @@ const initialState = {
       },
       1113: {
         id: 1113,
-        username: 'redred',
-        nickname: 'redred',
+        username: 'fredred',
+        nickname: 'fredred',
         role: 'manager',
         real_name: '祝浩文',
         student_id: 'b08705080',
@@ -65,8 +65,41 @@ const initialState = {
   },
 
   studentCards: {
-    byId: {},
-    allIds: [],
+    byId: {
+      11111: {
+        id: 11111,
+        institute_id: 0,
+        department: 'string',
+        student_id: 'b08705080',
+        email: 'b08705080@ntu.edu.tw',
+        is_default: true,
+      },
+      11112: {
+        id: 11112,
+        institute_id: 0,
+        department: 'string',
+        student_id: 'b08705081',
+        email: 'b08705081@ntu.edu.tw',
+        is_default: false,
+      },
+      11121: {
+        id: 11121,
+        institute_id: 0,
+        department: 'string',
+        student_id: 'b08705082',
+        email: 'b08705082@ntu.edu.tw',
+        is_default: true,
+      },
+      11131: {
+        id: 11131,
+        institute_id: 0,
+        department: 'string',
+        student_id: 'b08705083',
+        email: 'b08705083@ntu.edu.tw',
+        is_default: true,
+      },
+    },
+    allIds: [11111, 11112, 11121, 11131],
   },
 
   loading: {
