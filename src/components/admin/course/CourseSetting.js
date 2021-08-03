@@ -11,7 +11,7 @@ import {
   DialogTitle,
   makeStyles,
 } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import * as courseActions from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
@@ -36,13 +36,26 @@ export default function CourseSetting() {
   const classNames = useStyles();
 
   const { courseId } = useParams();
+  const history = useHistory();
   const authToken = useSelector((state) => state.auth.user.token);
   const courses = useSelector((state) => state.admin.course.courses.byId);
+  const loading = useSelector((state) => state.admin.course.loading);
   const dispatch = useDispatch();
 
   const [showRenameDialog, setShowRenameDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [newCourseName, setNewCourseName] = useState('');
+
+  const getCourseType = (courseType) => {
+    switch (courseType) {
+      case 'LESSON':
+        return 'Lesson';
+      case 'CONTEST':
+        return 'Contest';
+      default:
+        return 'Unknown';
+    }
+  };
 
   const onClickRename = () => {
     setShowRenameDialog(true);
@@ -57,6 +70,8 @@ export default function CourseSetting() {
   };
   const onDelete = () => {
     setShowDeleteDialog(false);
+    dispatch(courseActions.deleteCourse(authToken, courseId));
+    history.push('/admin/course/course/');
   };
 
   return (
@@ -66,7 +81,7 @@ export default function CourseSetting() {
       </Typography>
       <SimpleBar title="Course Information">
         <AlignedText text="Type" childrenType="text">
-          <Typography variant="body1">{courses[courseId].type}</Typography>
+          <Typography variant="body1">{getCourseType(courses[courseId].type)}</Typography>
         </AlignedText>
         <AlignedText text="Course Name" childrenType="text">
           <Typography variant="body1">{courses[courseId].name}</Typography>
@@ -99,9 +114,9 @@ export default function CourseSetting() {
       >
         <Typography variant="body1">Once you delete a course, there is no going back. Please be certain.</Typography>
       </SimpleBar>
-      <Dialog open={showRenameDialog} maxWidth="md">
+      <Dialog open={showRenameDialog || loading.renameCourse} maxWidth="md">
         <DialogTitle>
-          <Typography variant="h4">Rename class</Typography>
+          <Typography variant="h4">Rename course</Typography>
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Type" childrenType="text">
@@ -133,9 +148,9 @@ export default function CourseSetting() {
         </DialogActions>
       </Dialog>
 
-      <Dialog open={showDeleteDialog} maxWidth="md">
+      <Dialog open={showDeleteDialog || loading.deleteCourse} maxWidth="md">
         <DialogTitle>
-          <Typography variant="h4">Delete class</Typography>
+          <Typography variant="h4">Delete course</Typography>
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Type" childrenType="text">
@@ -144,21 +159,9 @@ export default function CourseSetting() {
           <AlignedText text="Course" childrenType="text">
             <Typography variant="body1">{courses[courseId].name}</Typography>
           </AlignedText>
-          <div className={classNames.dialogInformationRow}>
-            <div className={classNames.dialogInformationItem}>
-              <Typography variant="body1" color="secondary">
-                Class
-              </Typography>
-            </div>
-            <div className={classNames.dialogInformationItem}>
-              <Typography variant="body1" color="secondary">
-                {courses[courseId].name}
-              </Typography>
-            </div>
-          </div>
         </DialogContent>
         <DialogContent>
-          <Typography variant="body2">Once you delete a class, there is no going back. Please be certain.</Typography>
+          <Typography variant="body2">Once you delete a course, there is no going back. Please be certain.</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowDeleteDialog(false)}>Cancel</Button>

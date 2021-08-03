@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   Typography,
@@ -13,17 +13,19 @@ import {
   TextField,
   makeStyles,
 } from '@material-ui/core';
+import * as courseActions from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
+import NoMatch from '../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
-  informationRow: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  informationItem: {
-    width: '250px',
-  },
+  // informationRow: {
+  //   display: 'flex',
+  //   flexDirection: 'row',
+  // },
+  // informationItem: {
+  //   width: '250px',
+  // },
   dialogInformationRow: {
     display: 'flex',
     flexDirection: 'row',
@@ -44,66 +46,67 @@ const ClassSetting = () => {
   const classNames = useStyles();
   const { courseId, classId } = useParams();
 
-  const courses = useSelector((state) => state.admin.course.courses.byId);
-  const classes = useSelector((state) => state.admin.course.classes.byId);
+  const dispatch = useDispatch();
+  const authToken = useSelector((state) => state.auth.user.token);
+  const courses = useSelector((state) => state.admin.course.courses);
+  const classes = useSelector((state) => state.admin.course.classes);
+  const loading = useSelector((state) => state.admin.course.loading);
 
   const [showRenameDialog, setShowRenameDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [newClassName, setNewClassName] = useState('');
+
+  useEffect(() => {
+    dispatch(courseActions.fetchCourses(authToken));
+    dispatch(courseActions.fetchClasses(authToken, courseId));
+    dispatch(courseActions.fetchMembers(authToken, classId));
+  }, [authToken, classId, courseId, dispatch]);
+
+  const getCourseType = (courseType) => {
+    switch (courseType) {
+      case 'LESSON':
+        return 'Lesson';
+      case 'CONTEST':
+        return 'Contest';
+      default:
+        return 'Unknown';
+    }
+  };
+
   // TODO: data & button loading
-  const handleSubmitRename = () => {
+  const onRename = () => {
     setShowRenameDialog(false);
     //
   };
-  const handleSubmitDelete = () => {
+  const onDelete = () => {
     setShowDeleteDialog(false);
     //
   };
 
+  if (courses.byId[courseId] === undefined || classes.byId[courseId] === undefined) {
+    if (loading.fetchCourses || loading.fetchClasses) {
+      // still loading
+      return <div>loading</div>;
+    }
+    return <NoMatch />;
+  }
+
   return (
     <div className="class-setting">
       <Typography variant="h3" className={classNames.pageHeader}>
-        {`${courses[courseId].name} / ${classes[classId].name} / Setting`}
+        {`${courses.byId[courseId].name} / ${classes.byId[classId].name} / Setting`}
       </Typography>
 
       <SimpleBar title="Course Information">
         <AlignedText text="Type" childrenType="text">
-          <Typography variant="body1">{courses[courseId].type}</Typography>
+          <Typography variant="body1">{getCourseType(courses[courseId].type)}</Typography>
         </AlignedText>
         <AlignedText text="Course Name" childrenType="text">
-          <Typography variant="body1">{courses[courseId].name}</Typography>
+          <Typography variant="body1">{courses.byId[courseId].name}</Typography>
         </AlignedText>
         <AlignedText text="Class Name" childrenType="text">
-          <Typography variant="body1">{classes[classId].name}</Typography>
+          <Typography variant="body1">{classes.byId[classId].name}</Typography>
         </AlignedText>
-        {/* <p>
-          <div className={classNames.informationRow}>
-            <div className={classNames.informationItem}>
-              <Typography variant="body1">Type</Typography>
-            </div>
-            <div className={classNames.informationItem} />
-          </div>
-        </p>
-        <p>
-          <div className={classNames.informationRow}>
-            <div className={classNames.informationItem}>
-              <Typography variant="body1">Course Name</Typography>
-            </div>
-            <div className={classNames.informationItem}>
-
-            </div>
-          </div>
-        </p>
-        <p>
-          <div className={classNames.informationRow}>
-            <div className={classNames.informationItem}>
-              <Typography variant="body1">Class Name</Typography>
-            </div>
-            <div className={classNames.informationItem}>
-              <Typography variant="body1">{classes[classId].name}</Typography>
-            </div>
-          </div>
-        </p> */}
       </SimpleBar>
 
       <SimpleBar
@@ -140,10 +143,10 @@ const ClassSetting = () => {
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Type" childrenType="text">
-            <Typography variant="body1">{courses[courseId].type}</Typography>
+            <Typography variant="body1">{courses.byId[courseId].type}</Typography>
           </AlignedText>
           <AlignedText text="Course" childrenType="text">
-            <Typography variant="body1">{courses[courseId].name}</Typography>
+            <Typography variant="body1">{courses.byId[courseId].name}</Typography>
           </AlignedText>
           <div className={classNames.dialogInformationRow}>
             <div className={classNames.dialogInformationItem}>
@@ -153,7 +156,7 @@ const ClassSetting = () => {
             </div>
             <div className={classNames.dialogInformationItem}>
               <Typography variant="body1" color="secondary">
-                {classes[classId].name}
+                {classes.byId[classId].name}
               </Typography>
             </div>
           </div>
@@ -172,7 +175,7 @@ const ClassSetting = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowRenameDialog(false)}>Cancel</Button>
-          <Button onClick={handleSubmitRename} color="secondary">
+          <Button onClick={onRename} color="secondary">
             Rename
           </Button>
         </DialogActions>
@@ -184,10 +187,10 @@ const ClassSetting = () => {
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Type" childrenType="text">
-            <Typography variant="body1">{courses[courseId].type}</Typography>
+            <Typography variant="body1">{courses.byId[courseId].type}</Typography>
           </AlignedText>
           <AlignedText text="Course" childrenType="text">
-            <Typography variant="body1">{courses[courseId].name}</Typography>
+            <Typography variant="body1">{courses.byId[courseId].name}</Typography>
           </AlignedText>
           <div className={classNames.dialogInformationRow}>
             <div className={classNames.dialogInformationItem}>
@@ -197,7 +200,7 @@ const ClassSetting = () => {
             </div>
             <div className={classNames.dialogInformationItem}>
               <Typography variant="body1" color="secondary">
-                {classes[classId].name}
+                {classes.byId[classId].name}
               </Typography>
             </div>
           </div>
@@ -207,7 +210,7 @@ const ClassSetting = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowDeleteDialog(false)}>Cancel</Button>
-          <Button onClick={handleSubmitDelete} color="secondary">
+          <Button onClick={onDelete} color="secondary">
             Delete
           </Button>
         </DialogActions>

@@ -7,6 +7,7 @@ import * as courseActions from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import CustomTable from '../../ui/CustomTable';
 import MemberEdit from './MemberEdit';
+import NoMatch from '../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -28,11 +29,12 @@ export default function MemberList() {
   const loading = useSelector((state) => state.admin.course.loading);
 
   useEffect(() => {
-    // dispatch(courseActions.fetchClasses(authToken, courseId));
+    dispatch(courseActions.fetchCourses(authToken));
+    dispatch(courseActions.fetchClasses(authToken, courseId));
     dispatch(courseActions.fetchMembers(authToken, classId));
   }, [authToken, classId, courseId, dispatch]);
 
-  console.log(courses.byId, classes, courseId, classId);
+  console.log(courses, classes, courseId, classId);
 
   const [edit, setEdit] = useState(false);
   // TODO: list of path, member data, table filter, link, search bar placeholder
@@ -42,6 +44,14 @@ export default function MemberList() {
   const memberData = [
     //
   ];
+
+  if (courses.byId[courseId] === undefined || classes.byId[courseId] === undefined) {
+    if (loading.fetchCourses || loading.fetchClasses) {
+      // still loading
+      return <div>loading</div>;
+    }
+    return <NoMatch />;
+  }
 
   return (
     <>

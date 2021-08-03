@@ -44,7 +44,7 @@ export default function ClassList() {
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
 
   useEffect(() => {
-    // dispatch(courseActions.fetchCourses(authToken));
+    dispatch(courseActions.fetchCourses(authToken));
     dispatch(courseActions.fetchClasses(authToken, courseId));
   }, [authToken, courseId, dispatch]);
 
@@ -61,7 +61,15 @@ export default function ClassList() {
   };
   console.log(courses.byId, classes.byId);
 
-  return courses.byId[courseId] !== undefined ? (
+  if (courses.byId[courseId] === undefined) {
+    if (loading.fetchCourses) {
+      // still loading
+      return <div>loading</div>;
+    }
+    return <NoMatch />;
+  }
+
+  return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
         {`${courses.byId[courseId].name}`}
@@ -139,7 +147,5 @@ export default function ClassList() {
         </DialogActions>
       </Dialog>
     </>
-  ) : (
-    <NoMatch />
   );
 }
