@@ -26,7 +26,7 @@ import React, { useState, useEffect, useLocation } from 'react';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
-  topContent: {
+  topContent1: {
     // width: '80%',
     // maxWidth: '1280px',
     background: '#EAEAEA',
@@ -34,6 +34,14 @@ const useStyles = makeStyles((theme) => ({
     padding: '5px 15px 15px 15px',
     display: 'flex',
     justifyContent: 'space-between',
+    height: '75px',
+  },
+  topContent2: {
+    background: '#EAEAEA',
+    borderRadius: '10px 10px 0px 0px',
+    padding: '5px 15px 15px 15px',
+    display: 'flex',
+    justifyContent: 'flex-end',
     height: '75px',
   },
   search: {
@@ -53,7 +61,10 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: 800,
   },
   tableHead: {
-    height: '45px',
+    height: '60px',
+  },
+  columnComponent: {
+    transform: 'translateX(10px)',
   },
   row: {
     height: '60px',
@@ -85,11 +96,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CustomTable({
+  hasSearch,
   searchPlaceholder,
   buttons,
   columns,
-  hasFilter,
-  dataColumnName,
+  columnComponent,
   data,
   hasLink,
   path,
@@ -124,8 +135,8 @@ export default function CustomTable({
     if (search !== '') {
       const newData = data.filter((row) => {
         let cnt = 0;
-        dataColumnName.forEach((name) => {
-          if (row[name].indexOf(search) >= 0) {
+        columns.forEach((column) => {
+          if (row[column.id].indexOf(search) >= 0) {
             cnt += 1;
           }
         });
@@ -135,11 +146,12 @@ export default function CustomTable({
     } else {
       setFilterData(data);
     }
-  }, [data, dataColumnName, search]);
+  }, [columns, data, search]);
 
   return (
     <>
-      <div className={classes.topContent}>
+      <div className={hasSearch ? classes.topContent1 : classes.topContent2}>
+        { hasSearch && (
         <TextField
           id="search"
           className={classes.search}
@@ -149,6 +161,7 @@ export default function CustomTable({
           value={search}
           placeholder={searchPlaceholder}
         />
+        )}
         <div className={classes.buttons}>{buttons}</div>
       </div>
 
@@ -160,19 +173,19 @@ export default function CustomTable({
                 {columns.map((column) => (
                   <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth, width: column.width }}>
                     {column.label}
-                    {hasFilter[columns.findIndex((x) => x.id === column.id)] && (
-                      <FilterList className={classes.filterIcon} />
-                    )}
+                    <div className={classes.columnComponent}>
+                      { columnComponent && columnComponent[columns.findIndex((x) => x.id === column.id)]}
+                    </div>
                   </TableCell>
                 ))}
                 {hasLink
-                  && (<TableCell key="link" align="right" style={{ minWidth: 20 }} />
-                  )}
+                  ? (<TableCell key="link" align="right" style={{ minWidth: 20 }} />
+                  ) : (<TableCell key="blank" align="right" style={{ minWidth: 20 }} />)}
               </TableRow>
             </TableHead>
             <TableBody>
               {filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.id} className={classes.row}>
+                <TableRow hover role="checkbox" tabIndex={-1} key={row[columns[0].id]} className={classes.row}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
@@ -181,14 +194,13 @@ export default function CustomTable({
                       </TableCell>
                     );
                   })}
-                  {hasLink
-                  && (
-                  <TableCell key="show" align="right">
-                    <Link to={path[filterData.indexOf(row)]} className={classes.detailLink}>
-                      <ArrowForward style={{ height: '20px' }} />
-                    </Link>
-                  </TableCell>
-                  )}
+                  {hasLink ? (
+                    <TableCell key={`${row.id}-show`} align="right">
+                      <Link to={path[filterData.indexOf(row)]} className={classes.detailLink}>
+                        <ArrowForward style={{ height: '20px' }} />
+                      </Link>
+                    </TableCell>
+                  ) : (<TableCell key={`${row.id}-blank`} align="right" style={{ minWidth: 20 }} />)}
                 </TableRow>
               ))}
             </TableBody>
