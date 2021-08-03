@@ -66,13 +66,13 @@ const AnnouncementSetting = () => {
         )}
         >
           <AlignedText text="Title" childrenType="field">
-            <TextField />
+            <p>default Title</p>
           </AlignedText>
           <AlignedText text="Duration" childrenType="field">
-            <DateRangePicker value={state} setValue={setState} />
+            <p>default time range</p>
           </AlignedText>
           <AlignedText text="Content" childrenType="field">
-            <TextField />
+            <p>default Content</p>
           </AlignedText>
         </SimpleBar>
       </div>
