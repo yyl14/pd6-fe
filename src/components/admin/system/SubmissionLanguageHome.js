@@ -72,20 +72,20 @@ export default function SubmissionLanguageHome() {
           {
             id: 'language',
             label: 'Language',
-            // minWidth: 50,
             align: 'center',
+            width: '150px',
           },
           {
             id: 'version',
             label: 'Version',
-            // minWidth: 50,
             align: 'center',
+            width: '128px',
           },
           {
             id: 'is_disabled',
             label: 'Status',
-            // minWidth: 50,
             align: 'center',
+            width: '214px',
           },
         ]}
         columnComponent={[null, null, null]}
