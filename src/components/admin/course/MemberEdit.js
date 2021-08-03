@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   editorItem: {
     marginBottom: '12px',
   },
-  textField: {
+  /*   textField: {
     width: '260px',
     height: '439px',
     marginTop: '3px',
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     lineHeight: 25 / 18,
     fontFamily: 'Noto Sans',
-  },
+  },  */
   buttonsBar: {
     display: 'flex',
     flexDirection: 'row',
@@ -115,12 +115,10 @@ const MemberEdit = (props) => {
           <div className={classes.editorItem}>
             <Typography variant="caption">List of student ID</Typography>
           </div>
-          <OutlinedInput
+          <TextField
             className={classes.textField}
             defaultValue={TA}
             onChange={(e) => handleChangeTA(e)}
-            multiline
-            rows={17}
           />
         </div>
 
@@ -131,12 +129,10 @@ const MemberEdit = (props) => {
           <div className={classes.editorItem}>
             <Typography variant="caption">List of student ID</Typography>
           </div>
-          <OutlinedInput
+          <TextField
             className={classes.textField}
             defaultValue={student}
             onChange={(e) => handleChangeStudent(e)}
-            multiline
-            rows={17}
           />
         </div>
 
@@ -147,12 +143,10 @@ const MemberEdit = (props) => {
           <div className={classes.editorItem}>
             <Typography variant="caption">List of student ID</Typography>
           </div>
-          <OutlinedInput
+          <TextField
             className={classes.textField}
             defaultValue={guest}
             onChange={(e) => handleChangeGuest(e)}
-            multiline
-            rows={17}
           />
         </div>
       </Card>
