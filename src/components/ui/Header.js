@@ -18,7 +18,8 @@ const useStyles = makeStyles((theme) => ({
     height: '55px',
   },
   item: {
-    marginRight: '3.5vw',
+    marginLeft: '2.5vw',
+    marginRight: '2.3vw',
   },
   date: {
     float: 'left',
@@ -68,11 +69,11 @@ export default function Header({ role }) {
     itemList = [
       {
         text: 'Course',
-        path: '/admin/course/overview',
+        path: '/admin/course/course/',
       },
       {
         text: 'Account',
-        path: '/admin/account/institute',
+        path: '/admin/account/institute/',
       },
       {
         text: 'System',
