@@ -135,7 +135,7 @@ export default function ClassList() {
           <AlignedText text="Course" childrenType="text">
             <Typography variant="body1">{courses.byId[courseId].name}</Typography>
           </AlignedText>
-          <AlignedText text="Course Name" childrenType="field">
+          <AlignedText text="Class Name" childrenType="field">
             <TextField value={addClassName} onChange={(e) => setAddClassName(e.target.value)} />
           </AlignedText>
         </DialogContent>
