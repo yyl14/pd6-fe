@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Typography, Button, makeStyles } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import SimpleBar from '../../ui/SimpleBar';
+import AlignedText from '../../ui/AlignedText';
 
 const useStyles = makeStyles((theme) => ({
   informationRow: {
@@ -31,26 +32,12 @@ export default function CourseSetting() {
         {`${courses[courseId].name} / Setting`}
       </Typography>
       <SimpleBar title="Course Information">
-        <p>
-          <div className={classes.informationRow}>
-            <div className={classes.informationItem}>
-              <Typography variant="body1">Type</Typography>
-            </div>
-            <div className={classes.informationItem}>
-              <Typography variant="body1">{courses[courseId].type}</Typography>
-            </div>
-          </div>
-        </p>
-        <p>
-          <div className={classes.informationRow}>
-            <div className={classes.informationItem}>
-              <Typography variant="body1">Course Name</Typography>
-            </div>
-            <div className={classes.informationItem}>
-              <Typography variant="body1">{courses[courseId].name}</Typography>
-            </div>
-          </div>
-        </p>
+        <AlignedText text="Type" childrenType="text">
+          <Typography variant="body1">{courses[courseId].type}</Typography>
+        </AlignedText>
+        <AlignedText text="Course Name" childrenType="text">
+          <Typography variant="body1">{courses[courseId].name}</Typography>
+        </AlignedText>
       </SimpleBar>
 
       <SimpleBar

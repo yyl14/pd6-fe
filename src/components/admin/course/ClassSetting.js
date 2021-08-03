@@ -67,14 +67,21 @@ const ClassSetting = () => {
       </Typography>
 
       <SimpleBar title="Course Information">
-        <p>
+        <AlignedText text="Type" childrenType="text">
+          <Typography variant="body1">{courses[courseId].type}</Typography>
+        </AlignedText>
+        <AlignedText text="Course Name" childrenType="text">
+          <Typography variant="body1">{courses[courseId].name}</Typography>
+        </AlignedText>
+        <AlignedText text="Class Name" childrenType="text">
+          <Typography variant="body1">{classes[classId].name}</Typography>
+        </AlignedText>
+        {/* <p>
           <div className={classNames.informationRow}>
             <div className={classNames.informationItem}>
               <Typography variant="body1">Type</Typography>
             </div>
-            <div className={classNames.informationItem}>
-              <Typography variant="body1">{courses[courseId].type}</Typography>
-            </div>
+            <div className={classNames.informationItem} />
           </div>
         </p>
         <p>
@@ -83,7 +90,7 @@ const ClassSetting = () => {
               <Typography variant="body1">Course Name</Typography>
             </div>
             <div className={classNames.informationItem}>
-              <Typography variant="body1">{courses[courseId].name}</Typography>
+
             </div>
           </div>
         </p>
@@ -96,14 +103,16 @@ const ClassSetting = () => {
               <Typography variant="body1">{classes[classId].name}</Typography>
             </div>
           </div>
-        </p>
+        </p> */}
       </SimpleBar>
 
       <SimpleBar
         title="Rename Class"
         buttons={(
           <>
-            <Button onClick={() => setShowRenameDialog(true)} color="secondary">Rename</Button>
+            <Button onClick={() => setShowRenameDialog(true)} color="secondary">
+              Rename
+            </Button>
           </>
         )}
       >
@@ -116,13 +125,13 @@ const ClassSetting = () => {
         title="Delete Class"
         buttons={(
           <>
-            <Button onClick={() => setShowDeleteDialog(true)} color="secondary">Delete</Button>
+            <Button onClick={() => setShowDeleteDialog(true)} color="secondary">
+              Delete
+            </Button>
           </>
         )}
       >
-        <Typography variant="body1">
-          Once you delete a class, there is no going back. Please be certain.
-        </Typography>
+        <Typography variant="body1">Once you delete a class, there is no going back. Please be certain.</Typography>
       </SimpleBar>
 
       <Dialog open={showRenameDialog} maxWidth="md">
@@ -138,10 +147,14 @@ const ClassSetting = () => {
           </AlignedText>
           <div className={classNames.dialogInformationRow}>
             <div className={classNames.dialogInformationItem}>
-              <Typography variant="body1" color="secondary">Current Name</Typography>
+              <Typography variant="body1" color="secondary">
+                Current Name
+              </Typography>
             </div>
             <div className={classNames.dialogInformationItem}>
-              <Typography variant="body1" color="secondary">{classes[classId].name}</Typography>
+              <Typography variant="body1" color="secondary">
+                {classes[classId].name}
+              </Typography>
             </div>
           </div>
           <AlignedText text="New Name" childrenType="field">
@@ -159,7 +172,9 @@ const ClassSetting = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowRenameDialog(false)}>Cancel</Button>
-          <Button onClick={handleSubmitRename} color="secondary">Rename</Button>
+          <Button onClick={handleSubmitRename} color="secondary">
+            Rename
+          </Button>
         </DialogActions>
       </Dialog>
 
@@ -176,10 +191,14 @@ const ClassSetting = () => {
           </AlignedText>
           <div className={classNames.dialogInformationRow}>
             <div className={classNames.dialogInformationItem}>
-              <Typography variant="body1" color="secondary">Class</Typography>
+              <Typography variant="body1" color="secondary">
+                Class
+              </Typography>
             </div>
             <div className={classNames.dialogInformationItem}>
-              <Typography variant="body1" color="secondary">{classes[classId].name}</Typography>
+              <Typography variant="body1" color="secondary">
+                {classes[classId].name}
+              </Typography>
             </div>
           </div>
         </DialogContent>
@@ -188,7 +207,9 @@ const ClassSetting = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowDeleteDialog(false)}>Cancel</Button>
-          <Button onClick={handleSubmitDelete} color="secondary">Delete</Button>
+          <Button onClick={handleSubmitDelete} color="secondary">
+            Delete
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

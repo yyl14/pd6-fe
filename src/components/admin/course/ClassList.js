@@ -10,7 +10,7 @@ import {
   DialogContent,
   TextField,
 } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 import * as courseActions from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 export default function ClassList() {
   const { courseId, addType } = useParams();
+  const history = useHistory();
   const classNames = useStyles();
 
   const dispatch = useDispatch();
@@ -49,6 +50,9 @@ export default function ClassList() {
   const onClickAddClass = () => {
     setShowAddClassDialog(true);
   };
+  const onClickSetting = () => {
+    history.push(`/admin/course/course/${courseId}/setting`);
+  };
   const onAddClass = (name) => {
     setAddClassName('');
     setShowAddClassDialog(false);
@@ -65,7 +69,7 @@ export default function ClassList() {
         searchPlaceholder="Class"
         buttons={(
           <>
-            <Button>Setting</Button>
+            <Button onClick={onClickSetting}>Setting</Button>
             <Button color="primary" onClick={onClickAddClass}>
               <MdAdd />
             </Button>
