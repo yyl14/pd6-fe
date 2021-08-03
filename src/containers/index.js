@@ -35,6 +35,18 @@ class Index extends Component {
     }
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.auth.isAuthenticated && nextProps.history.location.pathname === '/') {
+      if (nextProps.auth.user.role.indexOf('MANAGER') !== -1 || nextProps.auth.user.role === 'MANAGER') {
+        nextProps.history.push('/admin/course/course');
+      } else {
+        nextProps.history.push('/');
+      }
+    }
+
+    return null;
+  }
+
   render() {
     if (!this.props.auth.isAuthenticated) {
       return <></>;
