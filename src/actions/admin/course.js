@@ -1,7 +1,7 @@
 import agent from '../agent';
 import { courseConstants } from '../constant';
 
-const fetchCourses = (token) => (dispatch) => {
+export const fetchCourses = (token) => (dispatch) => {
   const fetch = { headers: { 'auth-token': token } };
 
   dispatch({
@@ -22,7 +22,7 @@ const fetchCourses = (token) => (dispatch) => {
     });
 };
 
-const addCourse = (token, name, type, isHidden) => (dispatch) => {
+export const addCourse = (token, name, type, isHidden) => (dispatch) => {
   const request = {
     headers: { 'auth-token': token },
     name,
@@ -56,7 +56,7 @@ const addCourse = (token, name, type, isHidden) => (dispatch) => {
     });
 };
 
-const renameCourse = (token, courseId, newName) => (dispatch) => {
+export const renameCourse = (token, courseId, newName) => (dispatch) => {
   const request = { headers: { 'auth-token': token }, name: newName };
   dispatch({ type: courseConstants.RENAME_COURSE_START });
 
@@ -81,7 +81,7 @@ const renameCourse = (token, courseId, newName) => (dispatch) => {
     });
 };
 
-const deleteCourse = (token, courseId) => (dispatch) => {
+export const deleteCourse = (token, courseId) => (dispatch) => {
   const request = { headers: { 'auth-token': token } };
   dispatch({
     type: courseConstants.DELETE_COURSE_START,
@@ -107,17 +107,17 @@ const deleteCourse = (token, courseId) => (dispatch) => {
     });
 };
 
-const fetchClasses = (token, courseId) => (dispatch) => {
-  const fetch = { headers: { 'auth-token': token } };
+export const fetchClasses = (token, courseId) => (dispatch) => {
+  const auth = { headers: { 'auth-token': token } };
 
   dispatch({ type: courseConstants.FETCH_CLASSES_START });
 
   agent
-    .get(`/course/${courseId}/class`)
-    .then((data) => {
+    .get(`/course/${courseId}/class`, fetch)
+    .then((res) => {
       dispatch({
         type: courseConstants.FETCH_CLASSES_SUCCESS,
-        payload: { data },
+        payload: { courseId, data: res.data },
       });
     })
     .catch((error) => {
@@ -125,24 +125,23 @@ const fetchClasses = (token, courseId) => (dispatch) => {
     });
 };
 
-const addClass = (token, courseId, name, isHidden) => (dispatch) => {
-  const request = {
+export const addClass = (token, courseId, name, isHidden) => (dispatch) => {
+  const auth = {
     headers: { 'auth-token': token },
-    name,
-    is_hidden: isHidden,
   };
-
+  console.log(name);
   dispatch({ type: courseConstants.ADD_CLASS_START });
 
   agent
-    .post(`/course/${courseId}/class`, request)
+    .post(`/course/${courseId}/class`, { name }, auth)
     .then((res) => {
+      console.log(res);
       const { data } = res.data;
       const { id } = data;
       dispatch({
         type: courseConstants.ADD_CLASS_SUCCESS,
         payload: {
-          courseId: id,
+          courseId,
           data: {
             id,
             name,
@@ -153,11 +152,11 @@ const addClass = (token, courseId, name, isHidden) => (dispatch) => {
       });
     })
     .catch((error) => {
-      dispatch({ type: courseConstants.ADD_COURSE_FAIL, payload: { error } });
+      dispatch({ type: courseConstants.ADD_CLASS_FAIL, payload: { error } });
     });
 };
 
-const renameClass = (token, classId, newName) => (dispatch) => {
+export const renameClass = (token, classId, newName) => (dispatch) => {
   const request = { headers: { 'auth-token': token }, name: newName };
   dispatch({ type: courseConstants.RENAME_CLASS_START });
 
@@ -182,7 +181,7 @@ const renameClass = (token, classId, newName) => (dispatch) => {
     });
 };
 
-const deleteClass = (token, classId) => (dispatch) => {
+export const deleteClass = (token, classId) => (dispatch) => {
   const request = { headers: { 'auth-token': token } };
   dispatch({
     type: courseConstants.DELETE_CLASS_START,
@@ -208,7 +207,7 @@ const deleteClass = (token, classId) => (dispatch) => {
     });
 };
 
-const fetchMembers = (token, classId) => (dispatch) => {
+export const fetchMembers = (token, classId) => (dispatch) => {
   const request = { headers: { 'auth-token': token } };
   dispatch({ type: courseConstants.FETCH_MEMBERS_START });
 
