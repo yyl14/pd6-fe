@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
   buttons: {
     alignSelf: 'flex-end',
-    marginRight: '13px',
+    marginRight: '11px',
   },
 }));
 

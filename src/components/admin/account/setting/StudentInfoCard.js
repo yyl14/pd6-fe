@@ -13,13 +13,11 @@ const useStyles = makeStyles((theme) => ({
   defaultHeader: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: '10px',
   },
   defaultStar: {
     marginRight: '5px',
-  },
-  item: {
-    marginBottom: theme.spacing(2),
   },
   cardContent: {
     height: '106px',
@@ -64,12 +62,12 @@ export default function StudentInfoCard(props) {
       <Card variant="outlined">
         {props.editMode ? (
           <CardContent className={classes.editCardContent}>
-            <div className={classes.item}>
+            <div>
               <AlignedText text="Student ID" childrenType="text">
                 <Typography variant="body1">{props.id}</Typography>
               </AlignedText>
             </div>
-            <div className={classes.item}>
+            <div>
               <AlignedText text="Email" childrenType="text">
                 <Typography variant="body1">{props.email}</Typography>
               </AlignedText>
@@ -80,12 +78,12 @@ export default function StudentInfoCard(props) {
           </CardContent>
         ) : (
           <CardContent className={classes.cardContent}>
-            <div className={classes.item}>
+            <div>
               <AlignedText text="Student ID" childrenType="text">
                 <Typography variant="body1">{props.id}</Typography>
               </AlignedText>
             </div>
-            <div className={classes.item}>
+            <div>
               <AlignedText text="Email" childrenType="text">
                 <Typography variant="body1">{props.email}</Typography>
               </AlignedText>

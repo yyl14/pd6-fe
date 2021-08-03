@@ -15,19 +15,19 @@ const datas = [
   {
     studentId: 'b08705080',
     email: 'b08705080@ntu.edu.tw',
-    institute: 'national taiwan university',
+    institute: 'National Taiwan University',
     isDefault: true,
   },
   {
     studentId: 'r08705080',
     email: 'r08705080@ntu.edu.tw',
-    institute: 'ntu',
+    institute: 'National Taiwan University',
     isDefault: false,
   },
   {
     studentId: 'b05705024',
     email: 'b05705024@ntu.edu.tw',
-    institute: 'ntuntu',
+    institute: 'National Taiwan University',
     isDefault: false,
   },
 ];
