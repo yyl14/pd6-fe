@@ -29,8 +29,39 @@ const initialState = {
   },
 
   accounts: {
-    byId: {},
-    allIds: [],
+    byId: {
+      1111: {
+        id: 1111,
+        username: 'shiba',
+        nickname: 'shiba',
+        role: 'manager',
+        real_name: '陳以潼',
+        student_id: 'b08705080',
+        alternative_email: 'sdf@ergh',
+        studentCard: [11111],
+      },
+      1112: {
+        id: 1112,
+        username: 'banana',
+        nickname: 'banana',
+        role: 'manager',
+        real_name: '陳以潼',
+        student_id: 'b08705080',
+        alternative_email: 'sdf@ergh',
+        studentCard: [11121],
+      },
+      1113: {
+        id: 1113,
+        username: 'redred',
+        nickname: 'redred',
+        role: 'manager',
+        real_name: '祝浩文',
+        student_id: 'b08705080',
+        alternative_email: 'sdf@ergh',
+        studentCard: [11131],
+      },
+    },
+    allIds: [1111, 1112, 1113],
   },
 
   studentCards: {

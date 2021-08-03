@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
   search: {
     height: '60px',
+    width: 325,
   },
   buttons: {
     marginTop: '3px',

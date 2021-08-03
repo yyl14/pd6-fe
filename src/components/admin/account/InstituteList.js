@@ -71,6 +71,10 @@ export default function InstituteList() {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setInputs((input) => ({ ...input, [name]: value }));
+    if (name === 'fullName' && value !== '') {
+      setError(false);
+      setErrorText('');
+    }
   };
 
   const handleChangeStatus = (event) => {
@@ -78,6 +82,12 @@ export default function InstituteList() {
   };
 
   const add = () => {
+    if (inputs.fullName === '') {
+      setError(true);
+      setErrorText("Can't be empty");
+      return;
+    }
+    setPopUp(false);
     addInstitute('authToken', inputs.initialism, inputs.fullName, inputs.email, inputs.status);
     console.log('hello');
   };
@@ -283,7 +293,7 @@ export default function InstituteList() {
           <Button onClick={() => setPopUp(false)} color="default">
             Cancel
           </Button>
-          <Button onClick={() => { setPopUp(false); add(); }} color="primary">
+          <Button onClick={() => { add(); }} color="primary">
             Add
           </Button>
         </DialogActions>

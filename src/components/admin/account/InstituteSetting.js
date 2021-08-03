@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   makeStyles,
   Button,
@@ -15,8 +15,9 @@ import {
   OutlinedInput,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
 import SimpleBar from '../../ui/SimpleBar';
-import FieldWithAlignedText from '../../ui/AlignedText';
+import AlignedText from '../../ui/AlignedText';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -64,8 +65,13 @@ export default function InstituteSetting() {
   return (
     <>
       <Typography variant="h3" className={classes.pageHeader}>
-        Institute: NTU / Setting
+        NTU / Setting
       </Typography>
+      <SimpleBar
+        title="Institute Information"
+      >
+        <AlignedText text="Full Name" />
+      </SimpleBar>
       <SimpleBar
         title="Change Institute Full Name"
         buttons={(

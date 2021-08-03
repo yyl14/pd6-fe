@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import { Switch, Route, withRouter } from 'react-router-dom';
 import UserInfo from '../../../components/admin/account/AccountSetting';
+import AccountList from '../../../components/admin/account/AccountList';
 import NoMatch from '../../../components/noMatch';
 
 /* This is a level 3 container (main page container) */
@@ -19,7 +20,7 @@ class Account extends Component {
       <>
         <Switch>
           <Route path="/admin/account/account/:accountId/setting" component={UserInfo} />
-          <Route path="/admin/account/account/" component={UserInfo} />
+          <Route path="/admin/account/account/" component={AccountList} />
           <Route component={NoMatch} />
         </Switch>
       </>
