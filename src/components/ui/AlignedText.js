@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme) => ({
   wrapper: {
     display: 'flex',
     flexDirection: 'row',
-    verticalAlign: 'center',
+    // verticalAlign: 'center',
   },
   textColorPrimary: {
     color: theme.palette.primary.main,
