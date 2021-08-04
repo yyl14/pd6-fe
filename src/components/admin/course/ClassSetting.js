@@ -94,7 +94,7 @@ const ClassSetting = () => {
 
       <SimpleBar
         title="Rename Class"
-        buttons={(
+        childrenButtons={(
           <>
             <Button onClick={() => setShowRenameDialog(true)} color="secondary">
               Rename
@@ -109,7 +109,7 @@ const ClassSetting = () => {
 
       <SimpleBar
         title="Delete Class"
-        buttons={(
+        childrenButtons={(
           <>
             <Button onClick={() => setShowDeleteDialog(true)} color="secondary">
               Delete
