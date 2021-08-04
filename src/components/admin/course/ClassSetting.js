@@ -19,23 +19,6 @@ import AlignedText from '../../ui/AlignedText';
 import NoMatch from '../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
-  // informationRow: {
-  //   display: 'flex',
-  //   flexDirection: 'row',
-  // },
-  // informationItem: {
-  //   width: '250px',
-  // },
-  dialogInformationRow: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  dialogInformationItem: {
-    width: '190px',
-    marginTop: '0px',
-    marginBottom: '16px',
-  },
-
   pageHeader: {
     marginBottom: '50px',
   },
@@ -98,13 +81,13 @@ const ClassSetting = () => {
       </Typography>
 
       <SimpleBar title="Course Information">
-        <AlignedText text="Type" childrenType="text">
+        <AlignedText text="Type" maxWidth="lg" childrenType="text">
           <Typography variant="body1">{getCourseType(courses.byId[courseId].type)}</Typography>
         </AlignedText>
-        <AlignedText text="Course Name" childrenType="text">
+        <AlignedText text="Course Name" maxWidth="lg" childrenType="text">
           <Typography variant="body1">{courses.byId[courseId].name}</Typography>
         </AlignedText>
-        <AlignedText text="Class Name" childrenType="text">
+        <AlignedText text="Class Name" maxWidth="lg" childrenType="text">
           <Typography variant="body1">{classes.byId[classId].name}</Typography>
         </AlignedText>
       </SimpleBar>
@@ -126,7 +109,7 @@ const ClassSetting = () => {
 
       <SimpleBar
         title="Delete Class"
-        buttons={(
+        childrenButtons={(
           <>
             <Button onClick={() => setShowDeleteDialog(true)} color="secondary">
               Delete
@@ -142,25 +125,16 @@ const ClassSetting = () => {
           <Typography variant="h4">Rename class</Typography>
         </DialogTitle>
         <DialogContent>
-          <AlignedText text="Type" childrenType="text">
+          <AlignedText text="Type" maxWidth="md" childrenType="text">
             <Typography variant="body1">{courses.byId[courseId].type}</Typography>
           </AlignedText>
-          <AlignedText text="Course" childrenType="text">
+          <AlignedText text="Course" maxWidth="md" childrenType="text">
             <Typography variant="body1">{courses.byId[courseId].name}</Typography>
           </AlignedText>
-          <div className={classNames.dialogInformationRow}>
-            <div className={classNames.dialogInformationItem}>
-              <Typography variant="body1" color="secondary">
-                Current Name
-              </Typography>
-            </div>
-            <div className={classNames.dialogInformationItem}>
-              <Typography variant="body1" color="secondary">
-                {classes.byId[classId].name}
-              </Typography>
-            </div>
-          </div>
-          <AlignedText text="New Name" childrenType="field">
+          <AlignedText text="Current Name" maxWidth="md" textColor="secondary" childrenType="text">
+            <Typography variant="body1">{classes.byId[classId].name}</Typography>
+          </AlignedText>
+          <AlignedText text="New Name" maxWidth="md" childrenType="field">
             <TextField
               style={{ width: '350px' }}
               variant="outlined"
@@ -186,24 +160,15 @@ const ClassSetting = () => {
           <Typography variant="h4">Delete class</Typography>
         </DialogTitle>
         <DialogContent>
-          <AlignedText text="Type" childrenType="text">
+          <AlignedText text="Type" maxWidth="md" childrenType="text">
             <Typography variant="body1">{courses.byId[courseId].type}</Typography>
           </AlignedText>
-          <AlignedText text="Course" childrenType="text">
+          <AlignedText text="Course" maxWidth="md" childrenType="text">
             <Typography variant="body1">{courses.byId[courseId].name}</Typography>
           </AlignedText>
-          <div className={classNames.dialogInformationRow}>
-            <div className={classNames.dialogInformationItem}>
-              <Typography variant="body1" color="secondary">
-                Class
-              </Typography>
-            </div>
-            <div className={classNames.dialogInformationItem}>
-              <Typography variant="body1" color="secondary">
-                {classes.byId[classId].name}
-              </Typography>
-            </div>
-          </div>
+          <AlignedText text="Class" maxWidth="md" textColor="secondary" childrenType="text">
+            <Typography variant="body1">{classes.byId[classId].name}</Typography>
+          </AlignedText>
         </DialogContent>
         <DialogContent>
           <Typography variant="body2">Once you delete a class, there is no going back. Please be certain.</Typography>
