@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component, useState } from 'react';
+import { connect, useSelector } from 'react-redux';
 import {
   withRouter, Switch, Route, useHistory, useParams,
 } from 'react-router-dom';
@@ -11,6 +11,10 @@ const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
   },
+  filterButton: {
+    justifyContent: 'space-between',
+  },
+
 }));
 
 // TODO: use ui/CustomTable to implement announcement table directly in this component
@@ -24,6 +28,8 @@ const AnnouncementHome = () => {
     history.push('/admin/system/announcement/add');
   };
 
+  const [filter, setFilter] = useState(false);
+
   function createData(Title, PostTime, EndTime) {
     return {
       Title,
@@ -36,21 +42,21 @@ const AnnouncementHome = () => {
     {
       id: 'Title',
       label: 'Title',
-      minWidth: 200,
+      minWidth: 100,
       width: 100,
       align: 'center',
     },
     {
       id: 'PostTime',
-      label: 'PostTime',
-      minWidth: 200,
+      label: 'Post Time',
+      minWidth: 150,
       width: 150,
       align: 'center',
     },
     {
       id: 'EndTime',
-      label: 'EndTime',
-      minWidth: 200,
+      label: 'End Time',
+      minWidth: 150,
       width: 150,
       align: 'center',
     },
@@ -76,7 +82,7 @@ const AnnouncementHome = () => {
             )}
         data={rows}
         columns={columns}
-        columnComponent={[null, (<BiFilterAlt key="filter" onClick={[]} />), (<BiFilterAlt key="filter" onClick={[]} />)]}
+        columnComponent={[null, (<BiFilterAlt key="filter" onClick={() => { setFilter(true); }} />), (<BiFilterAlt key="filter" onClick={() => { setFilter(true); }} />)]}
         hasFilter={[false, true, true]}
         dataColumnName={['Title', 'PostTime', 'EndTime']}
         hasLink

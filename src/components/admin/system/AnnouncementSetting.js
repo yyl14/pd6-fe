@@ -46,6 +46,7 @@ const AnnouncementSetting = () => {
       key: 'selection',
     },
   ]);
+  /* TODO: re-write with ui components SimpleBar and DatePicker  */
   /* This is a level 4 component (page component) */
   return (
     <>
@@ -75,17 +76,17 @@ const AnnouncementSetting = () => {
       <div>
         <SimpleBar
           title="Delete Announcement"
+          childrenButtons={(
+            <>
+              <Button color="secondary" onClick={handleClickDelete}>Delete</Button>
+            </>
+          )}
         >
           <Typography className="delete-announcement-body" variant="body1">
             Once you delete this announcement, there is no going back. Please be certain.
           </Typography>
-          <Button color="secondary" onClick={handleClickDelete}>
-            Delete
-          </Button>
-
         </SimpleBar>
       </div>
-      {/* TODO: re-write with ui components SimpleBar and DatePicker  */}
 
       {/* Delete dialog */}
       <Dialog open={popUpDelete} keepMounted onClose={handleClosePopUpDelete}>
