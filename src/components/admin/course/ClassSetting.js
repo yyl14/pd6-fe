@@ -99,7 +99,7 @@ const ClassSetting = () => {
 
       <SimpleBar title="Course Information">
         <AlignedText text="Type" childrenType="text">
-          <Typography variant="body1">{getCourseType(courses[courseId].type)}</Typography>
+          <Typography variant="body1">{getCourseType(courses.byId[courseId].type)}</Typography>
         </AlignedText>
         <AlignedText text="Course Name" childrenType="text">
           <Typography variant="body1">{courses.byId[courseId].name}</Typography>
