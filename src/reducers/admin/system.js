@@ -4,14 +4,117 @@ import {
 
 const initialState = {
   logs: {
-    byId: {},
-    allIds: [],
+    byId: {
+      1: {
+        id: 1,
+        username: 'shiba',
+        studentID: 'B07705002',
+        realName: '黃祥祥',
+        IP: '106.114.0.1',
+        resourcePath: 22,
+        requestMethod: 'Get',
+        accessTime: '2021-06-20, 09:21:44',
+      },
+      2: {
+        id: 2,
+        username: 'shiba',
+        studentID: 'B07705002',
+        realName: '黃祥祥',
+        IP: '106.114.0.1',
+        resourcePath: 22,
+        requestMethod: 'Get',
+        accessTime: '2021-06-20, 09:21:44',
+      },
+      3: {
+        id: 3,
+        username: 'shiba',
+        studentID: 'B07705002',
+        realName: '黃祥祥',
+        IP: '106.114.0.1',
+        resourcePath: 22,
+        requestMethod: 'Get',
+        accessTime: '2021-06-20, 09:21:44',
+      },
+      4: {
+        id: 4,
+        username: 'shiba',
+        studentID: 'B07705002',
+        realName: '黃祥祥',
+        IP: '106.114.0.1',
+        resourcePath: 22,
+        requestMethod: 'Get',
+        accessTime: '2021-06-20, 09:21:44',
+      },
+      5: {
+        id: 5,
+        username: 'shiba',
+        studentID: 'B07705002',
+        realName: '黃祥祥',
+        IP: '106.114.0.1',
+        resourcePath: 22,
+        requestMethod: 'Get',
+        accessTime: '2021-06-20, 09:21:44',
+      },
+      6: {
+        id: 6,
+        username: 'shiba',
+        studentID: 'B07705002',
+        realName: '黃祥祥',
+        IP: '106.114.0.1',
+        resourcePath: 22,
+        requestMethod: 'Get',
+        accessTime: '2021-06-20, 09:21:44',
+      },
+    },
+    allIds: [1, 2, 3, 4, 5, 6],
   },
   loading: {
     fetchAccessLog: false,
   },
   error: {
     fetchAccessLog: null,
+  },
+
+  submitLang: {
+    byId: {
+      1: {
+        id: 1,
+        name: 'Python',
+        version: '3.8.0',
+        is_disabled: false,
+      },
+      2: {
+        id: 2,
+        name: 'Python',
+        version: '3.8.1',
+        is_disabled: false,
+      },
+      3: {
+        id: 3,
+        name: 'Python',
+        version: '3.8.2',
+        is_disabled: false,
+      },
+      4: {
+        id: 4,
+        name: 'Python',
+        version: '3.8.3',
+        is_disabled: false,
+      },
+      5: {
+        id: 5,
+        name: 'Python',
+        version: '3.8.4',
+        is_disabled: true,
+      },
+      6: {
+        id: 6,
+        name: 'Python',
+        version: '3.8.5',
+        is_disabled: true,
+      },
+    },
+    allIds: [1, 2, 3, 4, 5, 6],
   },
 };
 
