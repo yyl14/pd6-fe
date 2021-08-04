@@ -8,16 +8,14 @@ const useStyles = makeStyles((theme) => ({
     verticalAlign: 'center',
   },
   textColorPrimary: {
-    color: '#1EA5FF',
+    color: theme.palette.primary.main,
   },
   textColorSecondary: {
-    color: '#EA3222',
+    color: theme.palette.secondary.main,
   },
-  textColorDefault: {
-    color: '#000000',
-  },
+  textColorDefault: {},
   alignedTextWrapper: {
-    width: '190px',
+    boxSizing: 'content-box',
   },
   alignedTextWrapperMd: {
     width: '190px',
@@ -83,7 +81,7 @@ export default function AlignedText({
   };
   return (
     <div className={`${classes.wrapper} ${textColorSelect(textColor)}`}>
-      <div className={textWrapperWidth(maxWidth)}>
+      <div className={`${classes.alignedTextWrapper} ${textWrapperWidth(maxWidth)}`}>
         <Typography variant="body1" className={textTopMargin(childrenType)}>
           {text}
         </Typography>
