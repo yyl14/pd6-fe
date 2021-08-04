@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Button, makeStyles } from '@material-ui/core';
 import { useParams, useHistory } from 'react-router-dom';
 import { BiFilterAlt } from 'react-icons/bi';
-import * as courseActions from '../../../actions/admin/course';
+import { fetchCourses, fetchClasses, fetchMembers } from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import CustomTable from '../../ui/CustomTable';
 import MemberEdit from './MemberEdit';
@@ -30,9 +30,9 @@ export default function MemberList() {
   const loading = useSelector((state) => state.admin.course.loading);
 
   useEffect(() => {
-    dispatch(courseActions.fetchCourses(authToken));
-    dispatch(courseActions.fetchClasses(authToken, courseId));
-    dispatch(courseActions.fetchMembers(authToken, classId));
+    dispatch(fetchCourses(authToken));
+    dispatch(fetchClasses(authToken, courseId));
+    dispatch(fetchMembers(authToken, classId));
   }, [authToken, classId, courseId, dispatch]);
 
   // console.log(

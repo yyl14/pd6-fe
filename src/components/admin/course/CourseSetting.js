@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Typography,
@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 
-import * as courseActions from '../../../actions/admin/course';
+import { fetchCourses, renameCourse, deleteCourse } from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 
@@ -46,6 +46,11 @@ export default function CourseSetting() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [newCourseName, setNewCourseName] = useState('');
 
+  useEffect(() => {
+    dispatch(fetchCourses(authToken));
+    // dispatch(fetchClasses(authToken, courseId));
+  }, [authToken, courseId, dispatch]);
+
   const getCourseType = (courseType) => {
     switch (courseType) {
       case 'LESSON':
@@ -66,11 +71,11 @@ export default function CourseSetting() {
 
   const onRename = () => {
     setShowRenameDialog(false);
-    dispatch(courseActions.renameClass(authToken, courseId, newCourseName, false));
+    dispatch(renameCourse(authToken, courseId, newCourseName, false));
   };
   const onDelete = () => {
     setShowDeleteDialog(false);
-    dispatch(courseActions.deleteCourse(authToken, courseId));
+    dispatch(deleteCourse(authToken, courseId));
     history.push('/admin/course/course/');
   };
 

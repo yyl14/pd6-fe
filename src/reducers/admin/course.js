@@ -318,7 +318,7 @@ export default function course(state = initialState, action) {
         ...state,
         courses: {
           ...state.courses,
-          byId: { [courseId]: { ...state.courses.byId[courseId] }, name: newName },
+          byId: { [courseId]: { ...state.courses.byId[courseId], name: newName } },
         },
         loading: { ...state.loading, renameCourse: false },
         error: { ...state.error, renameCourse: null },
