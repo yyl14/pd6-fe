@@ -7,8 +7,23 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     verticalAlign: 'center',
   },
+  textColorPrimary: {
+    color: '#1EA5FF',
+  },
+  textColorSecondary: {
+    color: '#EA3222',
+  },
+  textColorDefault: {
+    color: '#090909',
+  },
   alignedTextWrapper: {
     width: '190px',
+  },
+  alignedTextWrapperMd: {
+    width: '190px',
+  },
+  alignedTextWrapperLg: {
+    width: '250px',
   },
   alignedText: {
     marginTop: '23px',
@@ -23,8 +38,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AlignedText({ text, children, childrenType }) {
+export default function AlignedText({
+  text, children, maxWidth, textColor, childrenType,
+}) {
   const classes = useStyles();
+  const textWrapperWidth = (type) => {
+    switch (type) {
+      case 'lg': {
+        return classes.alignedTextWrapperLg;
+      }
+      case 'md': {
+        return classes.alignedTextWrapperMd;
+      }
+      default: {
+        return classes.alignedTextWrapperMd;
+      }
+    }
+  };
+  const textColorSelect = (color) => {
+    switch (color) {
+      case 'primary': {
+        return classes.textColorPrimary;
+      }
+      case 'secondary': {
+        return classes.textColorSecondary;
+      }
+      default: {
+        return classes.textColorDefault;
+      }
+    }
+  };
   const textTopMargin = (type) => {
     switch (type) {
       case 'field': {
@@ -39,8 +82,8 @@ export default function AlignedText({ text, children, childrenType }) {
     }
   };
   return (
-    <div className={classes.wrapper}>
-      <div className={classes.alignedTextWrapper}>
+    <div className={`${classes.wrapper} ${textColorSelect(textColor)}`}>
+      <div className={textWrapperWidth(maxWidth)}>
         <Typography variant="body1" className={textTopMargin(childrenType)}>
           {text}
         </Typography>
