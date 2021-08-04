@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  makeStyles, Button, Typography, Dialog,
+  makeStyles,
+  Button,
+  Typography,
+  Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
@@ -212,7 +215,9 @@ export default function InstituteList() {
         searchPlaceholder="Institute/Email"
         buttons={(
           <>
-            <Button color="primary" onClick={() => setPopUp(true)}>Add Institute</Button>
+            <Button color="primary" onClick={() => setPopUp(true)}>
+              Add Institute
+            </Button>
           </>
         )}
         data={tableData}
@@ -239,7 +244,11 @@ export default function InstituteList() {
             width: 120,
           },
         ]}
+<<<<<<< HEAD
         columnComponent={[null, null, (<BiFilterAlt key="filter" onClick={() => { setFilter(true); }} />)]}
+=======
+        columnComponent={[null, null, <BiFilterAlt key="is_disabled" />]}
+>>>>>>> development
         hasLink
         path={path}
       />
@@ -291,9 +300,7 @@ export default function InstituteList() {
           </AlignedText>
           <AlignedText text="Initialism">
             <FormControlLabel
-              control={
-                <Switch checked={inputs.status} onChange={handleChangeStatus} name="status" color="primary" />
-            }
+              control={<Switch checked={inputs.status} onChange={handleChangeStatus} name="status" color="primary" />}
               label={inputs.status ? 'Enabled' : 'Disabled'}
             />
           </AlignedText>
@@ -302,7 +309,17 @@ export default function InstituteList() {
           <Button onClick={() => setPopUp(false)} color="default">
             Cancel
           </Button>
+<<<<<<< HEAD
           <Button onClick={() => { add(); }} color="primary">
+=======
+          <Button
+            onClick={() => {
+              setPopUp(false);
+              add();
+            }}
+            color="primary"
+          >
+>>>>>>> development
             Add
           </Button>
         </DialogActions>
