@@ -8,34 +8,28 @@ import System from './sidebar/System';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
-    top: '55px',
+    top: '75px',
+    // top: '9.21vh',
     width: '300px',
   },
   drawerPaper: {
-    top: '55px',
+    top: '75px',
+    // top: '9.21vh',
     width: '300px',
   },
   active: {
     color: '#1EA5FF',
   },
-  topSpace: {
-    marginTop: '10vh',
-  },
-  titleIcon: {
-    float: 'left',
-    color: '#090909',
-    marginTop: '5.4vh',
-    marginBottom: '1.23vh',
-    marginLeft: '1.6vw',
-    marginRight: '0.97vw',
-    '&:hover': {
-      cursor: 'pointer',
-    },
+  activeIcon: {
+    color: '#1EA5FF',
+    marginLeft: '2.75vw',
+    marginRight: '1.3vw',
   },
   title: {
     float: 'left',
     marginTop: '5vh',
     marginBottom: '1.23vh',
+    // marginRight: '9vw',
   },
   secondTitle: {
     float: 'left',
@@ -47,15 +41,22 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '2.75vw',
     marginRight: '1.3vw',
   },
-  activeIcon: {
-    color: '#1EA5FF',
-    marginLeft: '2.75vw',
-    marginRight: '1.3vw',
+  titleIcon: {
+    float: 'left',
+    color: '#090909',
+    marginTop: '6.1vh',
+    marginBottom: '1.23vh',
+    marginLeft: '1.6vw',
+    marginRight: '0.97vw',
+    '&:hover': {
+      cursor: 'pointer',
+    },
+    // padding: '14px',
   },
   secondTitleIcon: {
     float: 'left',
     color: '#090909',
-    marginTop: '3.5vh',
+    marginTop: '4vh',
     marginBottom: '1.23vh',
     marginLeft: '1.6vw',
     marginRight: '0.97vw',
@@ -67,21 +68,22 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '2.21vh',
   },
   arrow: {
-    marginTop: '7.3vh',
+    marginTop: '4vh',
     marginLeft: '1.6vw',
     marginRight: 'auto',
     '&:hover': {
       cursor: 'pointer',
     },
   },
-  rotate90: {
-    transform: 'rotate(90deg)',
-  },
-  wrapping: {
-    width: '30px',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
+  button: {
+    marginLeft: 'auto',
+    marginRight: '1vw',
+    width: '90px',
+    height: '36px',
+    fontSize: '18px',
+    alignItems: 'center',
+    textAlign: 'center',
+    display: 'flex',
   },
 }));
 
@@ -106,53 +108,23 @@ export default function Sidebar() {
   if (mode === 'course') {
     return (
       <div>
-        <Course
-          menuItems={menuItems}
-          classes={classes}
-          history={history}
-          location={location}
-        />
+        <Course menuItems={menuItems} classes={classes} history={history} location={location} />
       </div>
     );
   }
   if (mode === 'account') {
     return (
       <div>
-        <Account
-          menuItems={menuItems}
-          classes={classes}
-          history={history}
-          location={location}
-        />
+        <Account menuItems={menuItems} classes={classes} history={history} location={location} />
       </div>
     );
   }
   if (mode === 'system') {
     return (
       <div>
-        <System
-          menuItems={menuItems}
-          classes={classes}
-          history={history}
-          location={location}
-        />
+        <System menuItems={menuItems} classes={classes} history={history} location={location} />
       </div>
     );
   }
   return <div />;
 }
-
-// button: {
-//   marginTop: '2.5vh',
-//   marginLeft: 'auto',
-//   marginRight: '1.5vw',
-//   width: '90px',
-//   height: '36px',
-//   fontSize: '18px',
-//   alignItems: 'center',
-//   textAlign: 'center',
-//   display: 'flex',
-// },
-// itemPadding: {
-//   padding: '0px',
-// },

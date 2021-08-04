@@ -1,33 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   makeStyles, Typography, AppBar, Toolbar, Avatar,
 } from '@material-ui/core';
 import { AddCircleOutline, SubjectOutlined } from '@material-ui/icons';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useHistory, useLocation } from 'react-router-dom';
-import { format } from 'date-fns';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
-    minHeight: '55px',
-    height: '55px',
+    height: '75px',
+    // height: '9.21vh',
     background: '#090909',
   },
   toolbar: {
-    minHeight: '55px',
-    height: '55px',
+    height: '75px',
+    // height: '9.21vh',
   },
+  main: theme.mixins.toolbar,
   item: {
-    marginLeft: '2.5vw',
-    marginRight: '2.3vw',
-    '&:hover': {
-      cursor: 'pointer',
-    },
-  },
-  date: {
-    float: 'left',
-    height: '3.28vh',
-    marginRight: '2vw',
+    marginRight: '3.5vw',
   },
   notification: {
     float: 'left',
@@ -37,23 +28,23 @@ const useStyles = makeStyles((theme) => ({
   },
   name: {
     float: 'left',
-    marginLeft: '2vw',
-    marginRight: '1vw',
+    margin: 'auto 1vw auto 2vw',
   },
   right: {
     marginLeft: 'auto',
     marginRight: 0,
+    display: 'flex',
+    alignItems: 'center',
   },
   avatar: {
     marginLeft: '2vw',
     marginRight: '3.5vw',
-    height: '4vh',
-    width: '4vh',
+    height: '6.14vh',
+    width: '6.14vh',
   },
   a: {
     color: 'inherit',
     textDecoration: 'none',
-
   },
   active: {
     textDecoration: 'none',
@@ -67,24 +58,20 @@ export default function Header({ role }) {
   const history = useHistory();
   const location = useLocation();
   let itemList = [];
-  const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   H:mm'));
 
   if (role === 'MANAGER') {
     itemList = [
       {
         text: 'Course',
-        basePath: '/admin/course',
-        path: '/admin/course/course',
+        path: '/admin/course',
       },
       {
         text: 'Account',
-        basePath: '/admin/account',
-        path: '/admin/account/institute',
+        path: '/admin/account',
       },
       {
         text: 'System',
-        basePath: '/admin/system',
-        path: '/admin/system/accesslog',
+        path: '/admin/system',
       },
       {
         text: 'About',
@@ -150,34 +137,24 @@ export default function Header({ role }) {
     console.log('Current route', location.pathname);
   }, [location]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(format(new Date(), 'MMM d   H:mm'));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div>
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
-          {/* <Avatar src="https://pdogs.ntu.im/judge/image/LOGO.png" className={classes.avatar} /> */}
+          <Avatar src="https://pdogs.ntu.im/judge/image/LOGO.png" className={classes.avatar} />
           {itemList.map((item) => (
             <Typography variant="h6" className={classes.item} key={item.text}>
-              <a href={baseURL + item.path} className={location.pathname.includes(item.basePath) ? classes.active : classes.a}>
+              <a href={baseURL + item.path} className={location.pathname === item.path ? classes.active : classes.a}>
                 {item.text}
               </a>
             </Typography>
           ))}
-          <div className={classes.right}>
-            <Typography className={classes.date}>
-              {currentTime}
-            </Typography>
+          <section className={classes.right}>
             <NotificationsIcon className={classes.notification} />
             <Typography variant="h6" className={classes.name}>
               shiba
             </Typography>
-          </div>
+          </section>
         </Toolbar>
       </AppBar>
     </div>
