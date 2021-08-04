@@ -38,11 +38,7 @@ const AnnouncementSetting = () => {
   };
   const handleSubmitDelete = (e) => {};
 
-  const history = useHistory();
-  const handleClickEdit = () => {
-    history.push('/admin/system/announcement/:announcementId/setting/edit');
-  };
-
+  const [edit, setEdit] = useState(false);
   const [state, setState] = useState([
     {
       startDate: new Date(),
@@ -61,7 +57,7 @@ const AnnouncementSetting = () => {
           title="Announcement"
           buttons={(
             <>
-              <Button onClick={handleClickEdit}>Edit</Button>
+              <Button onClick={() => setEdit(true)}>Edit</Button>
             </>
         )}
         >

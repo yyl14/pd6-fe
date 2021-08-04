@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  withRouter, Switch, Route, useHistory,
+  withRouter, Switch, Route, useHistory, useParams,
 } from 'react-router-dom';
+import { BiFilterAlt } from 'react-icons/bi';
 import { Button, Typography, makeStyles } from '@material-ui/core';
 import CustomTable from '../../ui/CustomTable';
 
@@ -17,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 const AnnouncementHome = () => {
   const classes = useStyles();
+  const { AnnouncementID } = useParams();
   const history = useHistory();
   const handleClickAdd = () => {
     history.push('/admin/system/announcement/add');
@@ -58,11 +60,6 @@ const AnnouncementHome = () => {
     createData('系統維修BBB', '2021-05-20, 09:21', '2021-06-20, 09:21'),
     createData('系統維修CCC', '2021-06-20, 09:21', '2021-07-20, 09:21'),
   ];
-  const path = [ // list of path
-    '/admin/system/announcement/:announcementId/setting',
-    '/admin/system/announcement/:announcementId/setting',
-    '/admin/system/announcement/:announcementId/setting',
-  ];
 
   return (
     <>
@@ -79,11 +76,15 @@ const AnnouncementHome = () => {
             )}
         data={rows}
         columns={columns}
-        hasFilter={[true, true, true]}
-        columnComponent={[null, null, null]}
+        columnComponent={[null, (<BiFilterAlt key="filter" onClick={[]} />), (<BiFilterAlt key="filter" onClick={[]} />)]}
+        hasFilter={[false, true, true]}
         dataColumnName={['Title', 'PostTime', 'EndTime']}
         hasLink
-        path={path}
+        path={[
+          '/admin/system/announcement/:announcementId/setting',
+          '/admin/system/announcement/:announcementId/setting',
+          '/admin/system/announcement/:announcementId/setting',
+        ]}
       />
     </>
   );
