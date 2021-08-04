@@ -17,11 +17,10 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
 import { BiFilterAlt } from 'react-icons/bi';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
-import { accountActions } from '../../../actions/index';
+import { getInstitutes, addInstitute } from '../../../actions/admin/account';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -74,7 +73,7 @@ export default function InstituteList() {
   });
 
   useEffect(() => {
-    dispatch(accountActions.getInstitutes(authToken));
+    dispatch(getInstitutes(authToken));
   }, [authToken, dispatch]);
 
   const handleChange = (event) => {
@@ -97,7 +96,7 @@ export default function InstituteList() {
       return;
     }
     setPopUp(false);
-    dispatch(accountActions.addInstitute(authToken, inputs.initialism, inputs.fullName, inputs.email, !inputs.status));
+    dispatch(addInstitute(authToken, inputs.initialism, inputs.fullName, inputs.email, !inputs.status));
     console.log('hello');
   };
 
@@ -306,13 +305,7 @@ export default function InstituteList() {
           <Button onClick={() => setPopUp(false)} color="default">
             Cancel
           </Button>
-          <Button
-            onClick={() => {
-              setPopUp(false);
-              add();
-            }}
-            color="primary"
-          >
+          <Button onClick={() => { add(); }} color="primary">
             Add
           </Button>
         </DialogActions>
