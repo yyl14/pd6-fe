@@ -8,14 +8,6 @@ import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 
 const useStyles = makeStyles((theme) => ({
-  row: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  item: {
-    width: '250px',
-  },
   textfield: {
     width: '350px',
   },
@@ -48,33 +40,7 @@ export default function NewPassword() {
           title="Password"
         >
           <p>
-            <div className={classes.row}>
-              <div className={classes.item}>
-                <Typography>New Password</Typography>
-              </div>
-              <div className={classes.item}>
-                <TextField
-                  className={classes.textfield}
-                  value={password}
-                  variant="outlined"
-                  type={showPassword ? 'text' : 'password'}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setDisabled(false);
-                  }}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={() => { setShowPassword(!showPassword); }} edge="end">
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </div>
-            </div>
-            {/* <AlignedText text="New Password" childrenType="field">
+            <AlignedText text="New Password" childrenType="field" maxWidth="lg">
               <TextField
                 className={classes.textfield}
                 value={password}
@@ -94,7 +60,7 @@ export default function NewPassword() {
                   ),
                 }}
               />
-            </AlignedText> */}
+            </AlignedText>
           </p>
           <Button
             onClick={handleCancel}

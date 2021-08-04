@@ -64,9 +64,8 @@ const useStyles = makeStyles((theme) => ({
 export default function StudentInfoEdit(props) {
   const classes = useStyles();
   const editMode = true;
-  const [datas, setDatas] = useState(props.datas);
+  const [cards, setCards] = useState(props.cards);
   const [disabledSave, setDisabledSave] = useState(true);
-  // const top = datas.find((p) => p.isDefault === true);
 
   const [addCard, setAddCard] = useState(false);
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
@@ -77,12 +76,12 @@ export default function StudentInfoEdit(props) {
   });
 
   const updateStatus = (id) => {
-    const updated = datas.map((p) => (p.studentId === id ? { ...p, isDefault: true } : { ...p, isDefault: false }));
-    setDatas(updated);
+    const updated = cards.map((p) => (p.student_id === id ? { ...p, is_default: true } : { ...p, is_default: false }));
+    setCards(updated);
   };
 
   const handleSave = () => {
-    props.updateStatus(datas);
+    props.updateStatus(cards);
     props.handleBack();
   };
 
@@ -93,12 +92,25 @@ export default function StudentInfoEdit(props) {
 
   const handleAddSave = () => {
     // save new card to the system
-    setDatas(
-      [...datas, {
-        studentId: addInputs.studentId,
+    let instituteId = 1;
+    switch (addInputs.institute) {
+      case 'National Taiwan University':
+        instituteId = 1;
+        break;
+      case 'National Taiwan Normal University':
+        instituteId = 2;
+        break;
+      case 'National Taiwan University of Science and Technology':
+        instituteId = 3;
+        break;
+      default: instituteId = 1;
+    }
+    setCards(
+      [...cards, {
+        student_id: addInputs.studentId,
         email: `${addInputs.email}${emailTail}`,
-        institute: addInputs.institute,
-        isDefault: false,
+        institute_id: instituteId,
+        is_default: false,
       }],
     );
 
@@ -133,35 +145,49 @@ export default function StudentInfoEdit(props) {
       <SimpleBar
         title="Student Information"
       >
-        <StudentInfoCard
-          editMode
-          isDefault={datas.find((p) => p.isDefault === true).isDefault}
-          id={datas.find((p) => p.isDefault === true).studentId}
-          email={datas.find((p) => p.isDefault === true).email}
-          institute={datas.find((p) => p.isDefault === true).institute}
-        />
-        {datas.map((p) => {
-          if (p.isDefault === false) {
-            return (
-              <p key={p.id}>
-                <StudentInfoCard
-                  editMode
-                  isDefault={p.isDefault}
-                  id={p.studentId}
-                  email={p.email}
-                  institute={p.institute}
-                  updateStatus={updateStatus}
-                  setDisabledSave={setDisabledSave}
-                />
-              </p>
-            );
-          }
-          return <></>;
-        })}
+        {(props.cards)
+          ? (
+            <div>
+              {cards.map((p) => {
+                if (p.is_default === true) {
+                  return (
+                    <p>
+                      <StudentInfoCard
+                        editMode
+                        isDefault={p.is_default}
+                        id={p.student_id}
+                        email={p.email}
+                        instituteId={p.institute_id}
+                      />
+                    </p>
+                  );
+                }
+                return <></>;
+              })}
+              {cards.map((p) => {
+                if (p.is_default === false) {
+                  return (
+                    <p>
+                      <StudentInfoCard
+                        editMode
+                        isDefault={p.is_default}
+                        id={p.student_id}
+                        email={p.email}
+                        instituteId={p.institute_id}
+                        updateStatus={updateStatus}
+                        setDisabledSave={setDisabledSave}
+                      />
+                    </p>
+                  );
+                }
+                return <></>;
+              })}
+            </div>
+          ) : <></> }
 
         {addCard
           ? (
-            <div>
+            <p>
               <Card variant="outlined" className={classes.addCard}>
                 <CardContent>
                   <div className={classes.row}>
@@ -207,7 +233,7 @@ export default function StudentInfoEdit(props) {
                   <Button color="primary" onClick={handleAddSave}>Save</Button>
                 </div>
               </Card>
-            </div>
+            </p>
           )
           : <></>}
         <p className={classes.buttonContainer}>

@@ -7,8 +7,6 @@ import StudentInfoCard from './StudentInfoCard';
 import SimpleBar from '../../../ui/SimpleBar';
 
 export default function StudentInfo(props) {
-  const top = props.datas.find((p) => p.isDefault === true);
-
   return (
     <div>
       <SimpleBar
@@ -19,17 +17,38 @@ export default function StudentInfo(props) {
           </>
         )}
       >
-        <StudentInfoCard isDefault={top.isDefault} id={top.studentId} email={top.email} institute={top.institute} />
-        {props.datas.map((p) => {
-          if (p.isDefault === false) {
-            return (
-              <p key={p.id}>
-                <StudentInfoCard isDefault={p.isDefault} id={p.studentId} email={p.email} institute={p.institute} />
-              </p>
-            );
-          }
-          return <></>;
-        })}
+        {(props.cards) ? (
+          <div>
+            {/* <StudentInfoCard
+              isDefault={props.cards.find((p) => p.is_default === true).is_default}
+              id={props.cards.find((p) => p.is_default === true).student_id}
+              email={props.cards.find((p) => p.is_default === true).email}
+              institute={props.cards.find((p) => p.is_default === true).institute_id}
+            /> */}
+            {props.cards.map((p) => {
+              if (p.is_default === true) {
+                return (
+                  <p>
+                    <StudentInfoCard isDefault={p.is_default} id={p.student_id} email={p.email} instituteId={p.institute_id} />
+                  </p>
+                );
+              }
+              return <></>;
+            })}
+            {props.cards.map((p) => {
+              if (p.is_default === false) {
+                return (
+                  <p>
+                    <StudentInfoCard isDefault={p.is_default} id={p.student_id} email={p.email} instituteId={p.institute_id} />
+                  </p>
+                );
+              }
+              return <></>;
+            })}
+          </div>
+        )
+          : <></>}
+
       </SimpleBar>
     </div>
   );

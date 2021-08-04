@@ -6,14 +6,6 @@ import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 
 const useStyles = makeStyles((theme) => ({
-  row: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  item: {
-    width: '250px',
-  },
   textfield: {
     width: '350px',
   },
@@ -39,75 +31,12 @@ export default function BasicInfoEdit(props) {
         title="Basic Information"
       >
         <p>
-          <div className={classes.row}>
-            <div className={classes.item}>
-              <Typography>Username</Typography>
-            </div>
-            <div className={classes.item}>
-              <Typography variant="body1">{props.userName}</Typography>
-            </div>
-          </div>
-        </p>
-        <p>
-          <div className={classes.row}>
-            <div className={classes.item}>
-              <Typography>Real name</Typography>
-            </div>
-            <div className={classes.item}>
-              <TextField
-                value={realName}
-                variant="outlined"
-                onChange={(e) => {
-                  setRealName(e.target.value);
-                  setDisabled(false);
-                }}
-                className={classes.textfield}
-              />
-            </div>
-          </div>
-        </p>
-        <p>
-          <div className={classes.row}>
-            <div className={classes.item}>
-              <Typography>Nickname</Typography>
-            </div>
-            <div className={classes.item}>
-              <TextField
-                value={nickName}
-                onChange={(e) => {
-                  setNickName(e.target.value);
-                  setDisabled(false);
-                }}
-                className={classes.textfield}
-              />
-            </div>
-          </div>
-        </p>
-        <p>
-          <div className={classes.row}>
-            <div className={classes.item}>
-              <Typography>Alternative Email</Typography>
-            </div>
-            <div className={classes.item}>
-              <TextField
-                value={altMail}
-                onChange={(e) => {
-                  setAltMail(e.target.value);
-                  setDisabled(false);
-                }}
-                className={classes.textfield}
-              />
-            </div>
-          </div>
-        </p>
-
-        {/* <p>
-          <AlignedText text="Username" childrenType="text">
+          <AlignedText text="Username" childrenType="text" maxWidth="lg">
             <Typography variant="body1">{props.userName}</Typography>
           </AlignedText>
         </p>
         <p>
-          <AlignedText text="Real name" childrenType="field">
+          <AlignedText text="Real name" childrenType="field" maxWidth="lg">
             <TextField
               value={realName}
               variant="outlined"
@@ -120,7 +49,7 @@ export default function BasicInfoEdit(props) {
           </AlignedText>
         </p>
         <p>
-          <AlignedText text="Nickname" childrenType="field">
+          <AlignedText text="Nickname" childrenType="field" maxWidth="lg">
             <TextField
               value={nickName}
               onChange={(e) => {
@@ -132,7 +61,7 @@ export default function BasicInfoEdit(props) {
           </AlignedText>
         </p>
         <p>
-          <AlignedText text="Alternative Email" childrenType="field">
+          <AlignedText text="Alternative Email" childrenType="field" maxWidth="lg">
             <TextField
               value={altMail}
               onChange={(e) => {
@@ -142,7 +71,7 @@ export default function BasicInfoEdit(props) {
               className={classes.textfield}
             />
           </AlignedText>
-        </p> */}
+        </p>
         <Button onClick={() => props.handleBack()}>Cancel</Button>
         <Button
           color="primary"

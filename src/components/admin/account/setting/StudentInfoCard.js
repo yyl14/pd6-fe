@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button, Card, CardContent, Divider, Grid, Typography, makeStyles,
 } from '@material-ui/core';
@@ -51,12 +51,24 @@ export default function StudentInfoCard(props) {
     props.updateStatus(props.id);
   };
 
+  const transform = (instituteId) => {
+    switch (instituteId) {
+      case 1:
+        return ('National Taiwan University');
+      case 2:
+        return ('National Taiwan Normal University');
+      case 3:
+        return ('National Taiwan University of Science and Technology');
+      default: return ('National Taiwan University');
+    }
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.defaultHeader}>
         {props.isDefault ? <StarIcon style={{ color: 'ffe81e' }} className={classes.defaultStar} /> : <></>}
         <Typography variant="body1">
-          {props.institute}
+          {transform(props.instituteId)}
         </Typography>
       </div>
       <Card variant="outlined">

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Button, GrstudentId, Typography } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { isThisHour } from 'date-fns';
 import { accountActions } from '../../../../actions/index';
 import SimpleBar from '../../../ui/SimpleBar';
 
@@ -13,27 +12,6 @@ import StudentInfo from './StudentInfo';
 import StudentInfoEdit from './StudentInfoEdit';
 import AccountDelete from './AccountDelete';
 import NewPassword from './NewPassword';
-
-const datas = [
-  {
-    studentId: 'b08705080',
-    email: 'b08705080@ntu.edu.tw',
-    institute: 'National Taiwan University',
-    isDefault: true,
-  },
-  {
-    studentId: 'r08705080',
-    email: 'r08705080@ntu.edu.tw',
-    institute: 'National Taiwan University',
-    isDefault: false,
-  },
-  {
-    studentId: 'b05705024',
-    email: 'b05705024@ntu.edu.tw',
-    institute: 'National Taiwan University',
-    isDefault: false,
-  },
-];
 
 const useStyles = (theme) => ({
   pageHeader: {
@@ -50,11 +28,11 @@ class AccountSetting extends Component {
       accountId: null,
       editBasicInfo: false,
       editStudInfo: false,
-      realName: '黑阿柴',
-      userName: 'shiba',
-      nickName: '柴柴',
-      altMail: 'shiba@gmail.com',
-      datas,
+      realName: '',
+      userName: '',
+      nickName: '',
+      altMail: '',
+      cards: [],
     };
     this.handleBasicEdit = this.handleBasicEdit.bind(this);
     this.handleBasicBack = this.handleBasicBack.bind(this);
@@ -75,6 +53,12 @@ class AccountSetting extends Component {
       nickName: account.nickname,
       altMail: account.alternative_email,
     });
+
+    account.studentCard.forEach(
+      (cardId) => {
+        this.setState((prevState) => ({ cards: [...prevState.cards, this.props.studentCards[cardId]] }));
+      },
+    );
   }
 
   setBasicInfo = (newRealName, newUserName, newNickName, newAltMail) => {
@@ -126,6 +110,7 @@ class AccountSetting extends Component {
           / Setting
         </Typography>
 
+        {this.state.cards && console.log(this.state.cards)}
         {this.state.editBasicInfo ? (
           <BasicInfoEdit
             handleBack={this.handleBasicBack}
@@ -148,20 +133,20 @@ class AccountSetting extends Component {
         {this.state.editStudInfo ? (
           <StudentInfoEdit
             handleBack={this.handleStudBack}
-            datas={this.state.datas}
+            cards={this.state.cards}
             updateStatus={this.updateStatus}
           />
         ) : (
           <StudentInfo
             handleEdit={this.handleStudEdit}
-            datas={this.state.datas}
+            cards={this.state.cards}
           />
         )}
 
         <NewPassword />
         <AccountDelete
           userName={this.state.userName}
-          datas={this.state.datas}
+          cards={this.state.cards}
           realName={this.state.realName}
         />
       </>
