@@ -112,10 +112,10 @@ export default function ClassList() {
           <Typography variant="h4">Create a new course</Typography>
         </DialogTitle>
         <DialogContent>
-          <AlignedText text="Type" childrenType="text">
+          <AlignedText text="Type" maxWidth="md" childrenType="text">
             <Typography variant="body1">Lesson</Typography>
           </AlignedText>
-          <AlignedText text="Course Name" childrenType="field">
+          <AlignedText text="Course Name" maxWidth="md" childrenType="field">
             <TextField />
           </AlignedText>
         </DialogContent>
