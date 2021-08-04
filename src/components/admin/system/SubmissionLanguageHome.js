@@ -70,7 +70,7 @@ export default function SubmissionLanguageHome() {
         data={tableData}
         columns={[
           {
-            id: 'language',
+            id: 'name',
             label: 'Language',
             align: 'center',
             width: '150px',

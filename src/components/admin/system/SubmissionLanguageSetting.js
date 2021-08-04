@@ -45,7 +45,7 @@ export default function LangSetting() {
     <>
       {/* TODO: use redux state to determine language name */}
       <Typography variant="h3" className={classes.pageHeader}>
-        {`${submitLang[languageId].language} ${submitLang.[languageId].version} / Submission Language Setting`}
+        {`${submitLang[languageId].name} ${submitLang.[languageId].version} / Submission Language Setting`}
       </Typography>
 
       <SimpleBar
@@ -53,7 +53,7 @@ export default function LangSetting() {
       >
         <Typography variant="body1">
           <AlignedText text="Language" childrenType="text">
-            <Typography variant="body1">{submitLang[languageId].language}</Typography>
+            <Typography variant="body1">{submitLang[languageId].name}</Typography>
           </AlignedText>
           <AlignedText text="Version" childrenType="text">
             <Typography variant="body1">{submitLang[languageId].version}</Typography>
