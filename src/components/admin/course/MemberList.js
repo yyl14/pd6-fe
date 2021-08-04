@@ -44,13 +44,7 @@ export default function MemberList() {
   // );
 
   const [edit, setEdit] = useState(false);
-  // TODO: list of path, member data, table filter, link, search bar placeholder
-  // const path = [
-  //   //
-  // ];
-  // const memberData = [
-  //   //
-  // ];
+  // TODO: path of arrows, table filter, username link, search bar length
 
   if (courses.byId[courseId] === undefined || classes.byId[courseId] === undefined) {
     if (loading.fetchCourses || loading.fetchClasses) {
@@ -69,6 +63,7 @@ export default function MemberList() {
         <MemberEdit
           members={classes.byId[classId].memberIds.map((id) => members.byId[id])}
           backToMemberList={() => setEdit(false)}
+          loading={loading}
         />
       ) : (
         <>
@@ -122,8 +117,7 @@ export default function MemberList() {
               },
             ]}
             // columnComponent={[null, null, null, (<BiFilterAlt key="filter" onClick={[]} />), (<BiFilterAlt key="filter" onClick={[]} />)]}
-            hasFilter={[false, false, false, true, true]}
-            dataColumnName={['username', 'studentId', 'realName', 'institute', 'role']}
+            // hasFilter={[false, false, false, true, true]}
             // hasLink
             // path={classes.byId[classId].memberIds.map((member) => `/admin/course/class/${courseId}/${classId}/member`)}
           />
