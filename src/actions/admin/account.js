@@ -55,32 +55,52 @@ const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled)
     });
 };
 
-const editInstitute = (token, id, name, emailDomain, isDisabled) => (dispatch) => {
+const editInstitute = (token, id, abbreviatedName, fullName, emailDomain, isDisabled) => (dispatch) => {
   const auth = {
     headers: {
       'Auth-Token': token,
     },
   };
-
-  agent.patch(`/institute/${id}`, {
-    name,
+  dispatch({ type: accountConstants.EDIT_INSTITUTE_REQUEST });
+  const body = {
+    abbreviated_name: abbreviatedName,
+    full_name: fullName,
     email_domain: emailDomain,
     is_disabled: isDisabled,
-  }, auth)
-    .then((res) => {
-      dispatch({
-        type: accountConstants.EDIT_INSTITUTE_SUCCESS,
-        payload: {
-          id, name, email_domain: emailDomain, is_disabled: isDisabled,
-        },
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: accountConstants.EDIT_INSTITUTE_FAIL,
-        error: err,
-      });
-    });
+  };
+
+  dispatch({
+    type: accountConstants.EDIT_INSTITUTE_SUCCESS,
+    payload: {
+      id: parseInt(id, 10),
+      abbreviated_name: abbreviatedName,
+      full_name: fullName,
+      email_domain: emailDomain,
+      is_disabled: isDisabled,
+    },
+  });
+
+  // agent.patch(`/institute/${id}`, body, auth)
+  //   .then((res) => {
+  //     console.log('editing institute suc');
+  //     dispatch({
+  //       type: accountConstants.EDIT_INSTITUTE_SUCCESS,
+  //       payload: {
+  //         id: parseInt(id, 10),
+  //         abbreviated_name: abbreviatedName,
+  //         full_name: fullName,
+  //         email_domain: emailDomain,
+  //         is_disabled: isDisabled,
+  //       },
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     console.log('editing institute fail');
+  //     dispatch({
+  //       type: accountConstants.EDIT_INSTITUTE_FAIL,
+  //       error: err,
+  //     });
+  //   });
 };
 
 const fetchAccount = (token, id) => (dispatch) => {

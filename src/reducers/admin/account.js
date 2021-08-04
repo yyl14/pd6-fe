@@ -184,7 +184,6 @@ export default function account(state = initialState, action) {
         },
       };
     case accountConstants.ADD_INSTITUTE_SUCCESS: {
-      console.log(action);
       return {
         ...state,
         institutes: {
@@ -222,10 +221,10 @@ export default function account(state = initialState, action) {
           editInstitute: true,
         },
       };
-    case accountConstants.EDIT_INSTITUTE_SUCCESS:
+    case accountConstants.EDIT_INSTITUTE_SUCCESS: {
       return {
         ...state,
-        institutes: { ...state.institutes, [action.payload.id]: action.payload },
+        institutes: { ...state.institutes, byId: { ...state.institutes.byId, [action.payload.id]: action.payload } },
         loading: {
           ...state.loading,
           editInstitute: false,
@@ -235,6 +234,7 @@ export default function account(state = initialState, action) {
           editInstitute: null,
         },
       };
+    }
     case accountConstants.EDIT_INSTITUTE_FAIL:
       return {
         ...state,

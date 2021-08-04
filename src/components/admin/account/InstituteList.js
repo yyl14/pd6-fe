@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
     border: 'solid',
     borderColor: '#DDDDDD',
   },
+  inputField: {
+    width: 340,
+  },
 }));
 
 export default function InstituteList() {
@@ -46,9 +49,6 @@ export default function InstituteList() {
   const institutes = useSelector((state) => state.admin.account.institutes.byId);
   const institutesID = useSelector((state) => state.admin.account.institutes.allIds);
   const authToken = useSelector((state) => state.auth.user.token);
-
-  console.log(institutes);
-  console.log(institutesID);
 
   const [tableData, setTableData] = useState([]);
   const [path, setPath] = useState([]);
@@ -187,7 +187,6 @@ export default function InstituteList() {
 
     institutesID.forEach((key) => {
       const item = institutes[key];
-      console.log('Renew: ', item);
       if (item.is_disabled === true || item.is_disabled === 'Disabled') {
         item.is_disabled = 'Disabled';
       } else if (item.is_disabled === false || item.is_disabled === 'Enabled') {
@@ -248,6 +247,8 @@ export default function InstituteList() {
         className={classes.popUpLayout}
         aria-labelledby="dialog-slide-title"
         aria-describedby="dialog-slide-description"
+        fullWidth
+        maxWidth="sm"
       >
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Add Institute</Typography>
@@ -262,6 +263,7 @@ export default function InstituteList() {
               onChange={(e) => handleChange(e)}
               error={error}
               helperText={errorText}
+              className={classes.inputField}
             />
           </AlignedText>
           <AlignedText text="Initialism" childrenType="field">
@@ -271,6 +273,7 @@ export default function InstituteList() {
               placeholder="e.g. NTU"
               value={inputs.initialism}
               onChange={(e) => handleChange(e)}
+              className={classes.inputField}
             />
           </AlignedText>
           <AlignedText text="Email" childrenType="field">
@@ -280,6 +283,7 @@ export default function InstituteList() {
               placeholder="e.g. ntu.edu.tw"
               value={inputs.email}
               onChange={(e) => handleChange(e)}
+              className={classes.inputField}
             />
           </AlignedText>
           <AlignedText text="Initialism">

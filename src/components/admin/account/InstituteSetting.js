@@ -41,22 +41,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '10px',
     marginBottom: '10px',
   },
-  textWrapper1: {
-    width: '200px',
-    color: 'red',
-  },
-  textWrapper2: {
-    width: '400px',
-    color: 'red',
-  },
-  textWrapper3: {
-    width: '200px',
-  },
-  textWrapper4: {
-    width: '400px',
-  },
   warningText: {
     marginTop: '10px',
+  },
+  inputField: {
+    width: 330,
   },
 }));
 
@@ -65,9 +54,11 @@ export default function InstituteSetting() {
 
   const { instituteId } = useParams();
   const institutes = useSelector((state) => state.admin.account.institutes.byId);
+  const authToken = useSelector((state) => state.auth.user.token);
+  const pageError = useSelector((state) => state.admin.account.error);
+  const loading = useSelector((state) => state.admin.account.loading);
 
   const dispatch = useDispatch();
-  const { editInstitute } = bindActionCreators(accountActions, dispatch);
 
   const [settingStatus, setSettingStatus] = useState({
     changeName: false,
@@ -77,7 +68,7 @@ export default function InstituteSetting() {
   });
 
   const [newSetting, setNewSetting] = useState({
-    newStatus: institutes[instituteId].is_disabled === 'Enabled' || institutes[instituteId].is_disabled === false,
+    newStatus: institutes === {} ? (institutes[instituteId].is_disabled === 'Enabled' || institutes[instituteId].is_disabled === false) : false,
     newName: '',
     newInitialism: '',
     newEmail: '',
@@ -119,7 +110,22 @@ export default function InstituteSetting() {
       setErrorText("Can't be empty!");
       return;
     }
-    // editInstitute();
+    switch (prop) {
+      case 'newName':
+        dispatch(accountActions.editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, newSetting.newName, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
+        break;
+      case 'newInitialism':
+        dispatch(accountActions.editInstitute(authToken, instituteId, newSetting.newInitialism, institutes[instituteId].full_name, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
+        break;
+      case 'newEmail':
+        dispatch(accountActions.editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, newSetting.newEmail, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
+        break;
+      case 'newStatus':
+        dispatch(accountActions.editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, institutes[instituteId].email_domain, newSetting.newStatus));
+        break;
+      default:
+        dispatch(accountActions.editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
+    }
     handleClosePopUp();
   };
 
@@ -272,38 +278,22 @@ export default function InstituteSetting() {
           <Typography variant="h4">Rename institute</Typography>
         </DialogTitle>
         <DialogContent>
-          <div className={classes.wrapper}>
-            <div className={classes.textWrapper1}>
-              <Typography variant="body1" className={classes.alignedText}>
-                Full Name
-              </Typography>
-            </div>
-            <div className={classes.textWrapper2}>
-              <Typography variant="body1" className={classes.alignedText}>
+          <div style={{ color: 'red' }}>
+            <AlignedText text="Full Name" childrenType="text">
+              <Typography variant="body1">
                 {institutes[instituteId].full_name}
               </Typography>
-            </div>
+            </AlignedText>
           </div>
-          <div className={classes.wrapper}>
-            <div className={classes.textWrapper3}>
-              <Typography variant="body1" className={classes.alignedText}>
-                New Name
-              </Typography>
-            </div>
-            <div className={classes.textWrapper4}>
-              <OutlinedInput
-                id="outlined-adornment1"
-                value={newSetting.newName}
-                onChange={handleChange('newName')}
-                aria-describedby="outlined-weight-helper-text"
-                inputProps={{
-                  'aria-label': 'newName',
-                }}
-                labelWidth={0}
-                style={{ width: 360 }}
-              />
-            </div>
-          </div>
+          <AlignedText text="New Name" childrenType="field">
+            <TextField
+              id="newName"
+              name="newName"
+              value={newSetting.newName}
+              onChange={handleChange('newName')}
+              className={classes.inputField}
+            />
+          </AlignedText>
           <Typography variant="body1" className={classes.warningText}>
             Once you change the institute’s name, all related members will be affected. Please be certain.
           </Typography>
@@ -330,38 +320,22 @@ export default function InstituteSetting() {
           <Typography variant="h4">Change institute Initialism</Typography>
         </DialogTitle>
         <DialogContent>
-          <div className={classes.wrapper}>
-            <div className={classes.textWrapper1}>
-              <Typography variant="body1" className={classes.alignedText}>
-                Current Initialism
-              </Typography>
-            </div>
-            <div className={classes.textWrapper2}>
-              <Typography variant="body1" className={classes.alignedText}>
+          <div style={{ color: 'red' }}>
+            <AlignedText text="Current Initialism" childrenType="text">
+              <Typography variant="body1">
                 {institutes[instituteId].abbreviated_name}
               </Typography>
-            </div>
+            </AlignedText>
           </div>
-          <div className={classes.wrapper}>
-            <div className={classes.textWrapper3}>
-              <Typography variant="body1" className={classes.alignedText}>
-                New Initialism
-              </Typography>
-            </div>
-            <div className={classes.textWrapper4}>
-              <OutlinedInput
-                id="outlined-adornment2"
-                value={newSetting.newInitialism}
-                onChange={handleChange('newInitialism')}
-                aria-describedby="outlined-weight-helper-text"
-                inputProps={{
-                  'aria-label': 'newInitialism',
-                }}
-                labelWidth={0}
-                style={{ width: 360 }}
-              />
-            </div>
-          </div>
+          <AlignedText text="New Initialism" childrenType="field">
+            <TextField
+              id="newInitialism"
+              name="newInitialism"
+              value={newSetting.newInitialism}
+              onChange={handleChange('newInitialism')}
+              className={classes.inputField}
+            />
+          </AlignedText>
           <Typography variant="body1" className={classes.warningText}>
             Once you change the institute’s initialism, all related members will be affected. Please be certain.
           </Typography>
@@ -388,36 +362,24 @@ export default function InstituteSetting() {
           <Typography variant="h4">Change institute email</Typography>
         </DialogTitle>
         <DialogContent>
-          <div className={classes.wrapper}>
-            <div className={classes.textWrapper1}>
-              <Typography variant="body1" className={classes.alignedText}>
-                Current Email
-              </Typography>
-            </div>
-            <div className={classes.textWrapper2}>
-              <Typography variant="body1" className={classes.alignedText}>
+          <div style={{ color: 'red' }}>
+            <AlignedText text="Current Email" childrenType="text">
+              <Typography variant="body1">
                 {institutes[instituteId].email_domain}
               </Typography>
-            </div>
+            </AlignedText>
           </div>
-          <div className={classes.wrapper}>
-            <div className={classes.textWrapper3}>
-              <Typography variant="body1" className={classes.alignedText}>
-                New Email
-              </Typography>
-            </div>
-            <div className={classes.textWrapper4}>
-              <TextField
-                id="new-email"
-                name="newEmail"
-                value={newSetting.newEmail}
-                onChange={handleChange('newEmail')}
-                error={error}
-                helperText={errorText}
-                style={{ width: 360 }}
-              />
-            </div>
-          </div>
+          <AlignedText text="New Email" childrenType="field">
+            <TextField
+              id="newEmail"
+              name="newEmail"
+              value={newSetting.newEmail}
+              onChange={handleChange('newEmail')}
+              error={error}
+              helperText={errorText}
+              className={classes.inputField}
+            />
+          </AlignedText>
           <Typography variant="body1" className={classes.warningText}>
             Once you change the institute’s email, future members may not be able to register with certain email. Please be certain.
           </Typography>
