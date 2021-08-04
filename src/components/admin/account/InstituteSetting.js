@@ -54,7 +54,7 @@ export default function InstituteSetting() {
   });
 
   const [newSetting, setNewSetting] = useState({
-    newStatus: institutes === {} ? (institutes[instituteId].is_disabled === 'Enabled' || institutes[instituteId].is_disabled === false) : false,
+    newStatus: false,
     newName: '',
     newInitialism: '',
     newEmail: '',
@@ -82,7 +82,7 @@ export default function InstituteSetting() {
       changeStatus: false,
     });
     setNewSetting({
-      newStatus: institutes[instituteId].is_disabled === 'Enabled' || institutes[instituteId].is_disabled === false,
+      newStatus: institutes[instituteId].is_disabled === false,
       newName: '',
       newInitialism: '',
       newEmail: '',
@@ -109,19 +109,19 @@ export default function InstituteSetting() {
     }
     switch (prop) {
       case 'newName':
-        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, newSetting.newName, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
+        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, newSetting.newName, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === true));
         break;
       case 'newInitialism':
-        dispatch(editInstitute(authToken, instituteId, newSetting.newInitialism, institutes[instituteId].full_name, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
+        dispatch(editInstitute(authToken, instituteId, newSetting.newInitialism, institutes[instituteId].full_name, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === true));
         break;
       case 'newEmail':
-        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, newSetting.newEmail, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
+        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, newSetting.newEmail, institutes[instituteId].is_disabled === true));
         break;
       case 'newStatus':
         dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, institutes[instituteId].email_domain, !newSetting.newStatus));
         break;
       default:
-        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
+        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === true));
     }
     handleClosePopUp();
   };
@@ -144,7 +144,7 @@ export default function InstituteSetting() {
           <Typography variant="body1">{institutes[instituteId].email_domain}</Typography>
         </AlignedText>
         <AlignedText text="Status" maxWidth="lg" childrenType="text">
-          <Typography variant="body1">{(institutes[instituteId].is_disabled === true || institutes[instituteId].is_disabled === 'Disabled') ? 'Disabled' : 'Enabled'}</Typography>
+          <Typography variant="body1">{(institutes[instituteId].is_disabled === true) ? 'Disabled' : 'Enabled'}</Typography>
         </AlignedText>
       </SimpleBar>
       <SimpleBar
