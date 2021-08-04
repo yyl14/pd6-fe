@@ -26,7 +26,8 @@ export const addCourse = (token, name, type) => (dispatch) => {
   const auth = {
     headers: { 'auth-token': token },
   };
-  const body = { name, type };
+  const body = { name, type: 'LESSON' };
+  console.log(body);
 
   dispatch({ type: courseConstants.ADD_COURSE_START });
 

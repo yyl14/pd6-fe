@@ -281,7 +281,7 @@ export default function course(state = initialState, action) {
         ...state,
         courses: {
           ...state.courses,
-          byId: { [courseId]: data },
+          byId: { ...state.courses.byId, [courseId]: data },
           allIds: state.course.allIds.concat([[courseId]]),
         },
         loading: {
@@ -300,8 +300,6 @@ export default function course(state = initialState, action) {
         ...state,
         courses: {
           ...state.courses,
-          addLoading: false,
-          error,
         },
         loading: {
           ...state.loading,

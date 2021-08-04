@@ -93,7 +93,7 @@ export default function ClassList() {
     return <NoMatch />;
   }
 
-  console.log(authToken);
+  console.log(courses);
 
   return (
     <>
@@ -147,7 +147,7 @@ export default function ClassList() {
             <Typography variant="body1">{getCourseType(addType)}</Typography>
           </AlignedText>
           <AlignedText text="Course Name" maxWidth="md" childrenType="field">
-            <TextField />
+            <TextField value={addCourseName} onChange={(e) => setAddCourseName(e.target.value)} />
           </AlignedText>
         </DialogContent>
         <DialogActions>
