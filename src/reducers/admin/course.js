@@ -352,13 +352,14 @@ export default function course(state = initialState, action) {
     }
     case courseConstants.DELETE_COURSE_SUCCESS: {
       const { courseId } = action.payload;
-      const newById = { ...state.courses.byId };
-      delete newById[courseId];
+
       return {
         ...state,
         courses: {
           ...state.courses,
-          byId: newById,
+          byId: state.courses.allIds
+            .filter((item) => item !== courseId)
+            .reduce((acc, item) => ({ ...acc, [item]: state.courses.byId[item] }), {}),
           allIds: state.courses.allIds.filter((item) => item !== courseId),
         },
         loading: {
@@ -571,13 +572,14 @@ export default function course(state = initialState, action) {
     }
     case courseConstants.DELETE_CLASS_SUCCESS: {
       const { classId } = action.payload;
-      const newById = { ...state.classes.byId };
-      delete newById[classId];
+
       return {
         ...state,
         classes: {
           ...state.classes,
-          byId: newById,
+          byId: state.classes.allIds
+            .filter((item) => item !== classId)
+            .reduce((acc, item) => ({ ...acc, [item]: state.classes.byId[item] })),
           allIds: state.classes.allIds.filter((item) => item !== classId),
         },
         loading: {
