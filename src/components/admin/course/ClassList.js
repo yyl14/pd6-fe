@@ -13,7 +13,12 @@ import {
 import { useHistory, useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 import {
-  fetchCourses, fetchClasses, addClass, renameClass, deleteClass,
+  fetchCourses,
+  fetchClasses,
+  addClass,
+  renameClass,
+  deleteClass,
+  fetchMembers,
 } from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import DateRangePicker from '../../ui/DateRangePicker';

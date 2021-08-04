@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    width: '1280px',
+    width: '100%',
   },
   editorCol: {
     display: 'flex',
