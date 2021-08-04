@@ -13,7 +13,7 @@ import {
   TextField,
   makeStyles,
 } from '@material-ui/core';
-import * as courseActions from '../../../actions/admin/course';
+import { fetchCourses, fetchClasses, fetchMembers } from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 import NoMatch from '../../noMatch';
@@ -40,9 +40,9 @@ const ClassSetting = () => {
   const [newClassName, setNewClassName] = useState('');
 
   useEffect(() => {
-    dispatch(courseActions.fetchCourses(authToken));
-    dispatch(courseActions.fetchClasses(authToken, courseId));
-    dispatch(courseActions.fetchMembers(authToken, classId));
+    dispatch(fetchCourses(authToken));
+    dispatch(fetchClasses(authToken, courseId));
+    // dispatch(fetchMembers(authToken, classId));
   }, [authToken, classId, courseId, dispatch]);
 
   const getCourseType = (courseType) => {

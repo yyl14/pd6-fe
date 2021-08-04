@@ -12,7 +12,9 @@ import {
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
-import * as courseActions from '../../../actions/admin/course';
+import {
+  fetchCourses, fetchClasses, addClass, renameClass, deleteClass,
+} from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import DateRangePicker from '../../ui/DateRangePicker';
 import CustomTable from '../../ui/CustomTable';
@@ -44,8 +46,8 @@ export default function ClassList() {
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
 
   useEffect(() => {
-    dispatch(courseActions.fetchCourses(authToken));
-    dispatch(courseActions.fetchClasses(authToken, courseId));
+    dispatch(fetchCourses(authToken));
+    dispatch(fetchClasses(authToken, courseId));
   }, [authToken, courseId, dispatch]);
 
   const onClickAddClass = () => {
@@ -57,7 +59,7 @@ export default function ClassList() {
   const onAddClass = (name) => {
     setAddClassName('');
     setShowAddClassDialog(false);
-    dispatch(courseActions.addClass(authToken, courseId, name, false));
+    dispatch(addClass(authToken, courseId, name, false));
   };
   console.log(courses.byId, classes.byId);
 
@@ -84,10 +86,14 @@ export default function ClassList() {
             </Button>
           </>
         )}
-        data={courses.byId[courseId].classIds.map((classId) => ({
-          name: classes.byId[classId].name,
-          memberCount: classes.byId[classId].memberIds.length,
-        }))}
+        data={
+          courses.byId[courseId] !== undefined
+            ? courses.byId[courseId].classIds.map((classId) => ({
+              name: classes.byId[classId].name,
+              memberCount: classes.byId[classId].memberIds.length,
+            }))
+            : {}
+        }
         columns={[
           {
             id: 'name',
