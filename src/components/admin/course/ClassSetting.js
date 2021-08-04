@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import {
   Typography,
   Button,
@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
 const ClassSetting = () => {
   const classNames = useStyles();
   const { courseId, classId } = useParams();
+  const history = useHistory();
 
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.user.token);
@@ -56,14 +57,15 @@ const ClassSetting = () => {
     }
   };
 
-  // TODO: data & button loading
+  // TODO: dispatch
   const onRename = () => {
     setShowRenameDialog(false);
-    //
+    // dispatch(courseActions.renameClass(authToken, classId, newClassName, false));
   };
   const onDelete = () => {
     setShowDeleteDialog(false);
-    //
+    // dispatch(courseActions.deleteClass(authToken, classId));
+    // history.push(`/admin/course/class/${courseId}/class-list/${addType?}`);
   };
 
   if (courses.byId[courseId] === undefined || classes.byId[courseId] === undefined) {
@@ -120,7 +122,7 @@ const ClassSetting = () => {
         <Typography variant="body1">Once you delete a class, there is no going back. Please be certain.</Typography>
       </SimpleBar>
 
-      <Dialog open={showRenameDialog} maxWidth="md">
+      <Dialog open={showRenameDialog || loading.renameClass} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Rename class</Typography>
         </DialogTitle>
@@ -149,13 +151,13 @@ const ClassSetting = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowRenameDialog(false)}>Cancel</Button>
-          <Button onClick={onRename} color="secondary">
+          <Button onClick={onRename} color="secondary" disabled={loading.renameClass}>
             Rename
           </Button>
         </DialogActions>
       </Dialog>
 
-      <Dialog open={showDeleteDialog} maxWidth="md">
+      <Dialog open={showDeleteDialog || loading.deleteClass} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Delete class</Typography>
         </DialogTitle>
@@ -175,7 +177,7 @@ const ClassSetting = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowDeleteDialog(false)}>Cancel</Button>
-          <Button onClick={onDelete} color="secondary">
+          <Button onClick={onDelete} color="secondary" disabled={loading.deleteClass}>
             Delete
           </Button>
         </DialogActions>
