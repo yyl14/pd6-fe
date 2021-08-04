@@ -19,7 +19,7 @@ export default function AccessLog() {
 
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.user.token);
-  const loading = useSelector((state) => state.admin.system.loading);
+  const loading = useSelector((state) => state.admin.system.loading.fetchAccessLog);
 
   const logs = useSelector((state) => state.admin.system.logs.byId);
   const logsID = useSelector((state) => state.admin.system.logs.allIds);
@@ -31,7 +31,19 @@ export default function AccessLog() {
     } else {
       console.log('logsID : ', logsID);
       console.log('logs : ', logs);
-      setTableData(logs);
+
+      const newData = logs.map((log) => ({
+        id: log.id,
+        username: 'shiba',
+        studentID: 'B07705002',
+        realName: '黃祥祥',
+        IP: log.ip,
+        resourcePath: log.resource_path,
+        requestMethod: log.request_method,
+        accessTime: log.access_time,
+      }));
+
+      setTableData(newData);
     }
   }, [logsID, logs, authToken, dispatch]);
 

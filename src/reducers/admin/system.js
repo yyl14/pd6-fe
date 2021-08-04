@@ -7,6 +7,10 @@ const initialState = {
     byId: {},
     allIds: [],
   },
+  announcements: {
+    byId: {},
+    allIds: [],
+  },
   submitLang: {
     byId: {
       1: {
@@ -50,10 +54,12 @@ const initialState = {
   },
   loading: {
     fetchAccessLog: false,
+    fetchAnnouncement: false,
     fetchSubmitLang: false,
   },
   error: {
     fetchAccessLog: null,
+    fetchAnnouncement: null,
     fetchSubmitLang: null,
   },
 };
@@ -67,24 +73,16 @@ export default function system(state = initialState, action) {
         ...state,
         loading: {
           ...state.loading,
-          fetchCourse: true,
+          fetchAccessLog: true,
         },
       };
     case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
       const data = Object.values(action.payload);
       return {
+        ...state,
         logs: {
-          byId: data.map((log) => ({
-            id: log.id,
-            username: 'shiba',
-            studentID: 'B07705002',
-            realName: '黃祥祥',
-            IP: log.ip,
-            resourcePath: log.resource_path,
-            requestMethod: log.request_method,
-            accessTime: log.access_time,
-          })),
-          allIds: data.map((log) => log.id),
+          byId: data,
+          allIds: data.map((item) => item.id),
         },
         loading: {
           ...state.loading,
@@ -99,6 +97,7 @@ export default function system(state = initialState, action) {
     case systemConstants.FETCH_ACCESS_LOG_FAIL: {
       const error = action.payload;
       return {
+        ...state,
         logs: {
           byId: {},
           allIds: [],
@@ -110,6 +109,96 @@ export default function system(state = initialState, action) {
         error: {
           ...state.error,
           fetchAccessLog: error,
+        },
+      };
+    }
+    /* Announcement */
+    case systemConstants.FETCH_ANNOUNCEMENT_START:
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          fetchAnnouncement: true,
+        },
+      };
+    case systemConstants.FETCH_ANNOUNCEMENT_SUCCESS: {
+      const data = Object.values(action.payload);
+      return {
+        ...state,
+        announcements: {
+          byId: data,
+          allIds: data.map((item) => item.id),
+        },
+        loading: {
+          ...state.loading,
+          fetchAnnouncement: false,
+        },
+        error: {
+          ...state.error,
+          fetchAnnouncement: null,
+        },
+      };
+    }
+    case systemConstants.FETCH_ANNOUNCEMENT_FAIL: {
+      const error = action.payload;
+      return {
+        ...state,
+        announcements: {
+          byId: {},
+          allIds: [],
+        },
+        loading: {
+          ...state.loading,
+          fetchAnnouncement: false,
+        },
+        error: {
+          ...state.error,
+          fetchAnnouncement: error,
+        },
+      };
+    }
+    /* SubmitLang */
+    case systemConstants.FETCH_SUBMIT_LANG_START:
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          fetchSubmitLang: true,
+        },
+      };
+    case systemConstants.FETCH_SUBMIT_LANG_SUCCESS: {
+      const data = Object.values(action.payload);
+      return {
+        ...state,
+        submitLang: {
+          byId: data,
+          allIds: data.map((item) => item.id),
+        },
+        loading: {
+          ...state.loading,
+          fetchSubmitLang: false,
+        },
+        error: {
+          ...state.error,
+          fetchSubmitLang: null,
+        },
+      };
+    }
+    case systemConstants.FETCH_SUBMIT_LANG_FAIL: {
+      const error = action.payload;
+      return {
+        ...state,
+        submitLang: {
+          byId: {},
+          allIds: [],
+        },
+        loading: {
+          ...state.loading,
+          fetchSubmitLang: false,
+        },
+        error: {
+          ...state.error,
+          fetchSubmitLang: error,
         },
       };
     }
