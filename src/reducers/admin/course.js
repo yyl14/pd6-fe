@@ -50,33 +50,36 @@ import { courseConstants } from '../../actions/constant';
 const initialState = {
   courses: {
     byId: {
-      2345: {
-        id: 2345,
-        name: 'DSAP',
-        type: 'LESSON',
-        is_hidden: false,
-        is_deleted: false,
-        classIds: [12, 14, 16, 18, 20],
-      },
-      6789: {
-        id: 6789,
+      1: {
+        id: 1,
         name: 'PBC',
         type: 'LESSON',
-        is_hidden: false,
         is_deleted: false,
-        classIds: [21, 45678],
+        classIds: [],
       },
-
-      1111: {
-        id: 1111,
+      2: {
+        id: 2,
+        name: 'PD',
+        type: 'LESSON',
+        is_deleted: false,
+        classIds: [],
+      },
+      3: {
+        id: 3,
+        name: 'DSAP',
+        type: 'LESSON',
+        is_deleted: false,
+        classIds: [],
+      },
+      4: {
+        id: 4,
         name: 'PDAO',
-        type: 'Contest',
-        is_hidden: false,
+        type: 'CONTEST',
         is_deleted: false,
         classIds: [],
       },
     },
-    allIds: [2345, 6789, 3456, 1111],
+    allIds: [1, 2, 3, 4],
   },
 
   classes: {
@@ -386,17 +389,27 @@ export default function course(state = initialState, action) {
       };
 
     case courseConstants.FETCH_CLASSES_SUCCESS: {
-      const { courseId, data } = action.payload;
+      const {
+        courseId,
+        data: { data },
+      } = action.payload;
+
       return {
         ...state,
 
         // add class ids to course
-        courses: state.courses.byId.filter((item) => (item.id === courseId ? { ...item, classIds: data.map((dataItem) => dataItem.id) } : item)),
+        courses: {
+          ...state.courses,
+          byId: {
+            ...state.courses.byId,
+            [courseId]: { ...state.courses.byId[courseId], classIds: data.map((item) => item.id) },
+          },
+        },
 
         // add class data
         classes: {
-          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, memberIds: [] } }), state.classes),
-          allIds: data.map((item) => item.id),
+          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, memberIds: [] } }), state.classes.byId),
+          allIds: [...new Set([...data.map((item) => item.id), ...state.classes.allIds])],
         },
 
         loading: { ...state.loading, fetchClasses: false },
@@ -409,11 +422,21 @@ export default function course(state = initialState, action) {
 
     case courseConstants.FETCH_CLASSES_FAIL: {
       const { courseId, error } = action.payload;
+      // console.log(error);
+      if (state.courses.byId[courseId]) {
+        return {
+          ...state,
+
+          loading: { ...state.loading, fetchClasses: false },
+          error: {
+            ...state.error,
+            fetchClasses: error,
+          },
+        };
+      }
+
       return {
         ...state,
-
-        // clear all class ids of the course
-        courses: state.courses.map((item) => (item.id === courseId ? { ...item, classIds: [] } : item)),
 
         // class data will NOT be cleared
 
@@ -432,13 +455,36 @@ export default function course(state = initialState, action) {
       };
     }
     case courseConstants.ADD_CLASS_SUCCESS: {
-      const { classId, data } = action.payload;
+      const { courseId, data } = action.payload;
+      console.log('add class success', courseId, data);
+      const { id, name, is_hidden: isHidden } = data;
+
       return {
         ...state,
+        courses: {
+          ...state.courses,
+          byId: {
+            ...state.courses.byId,
+            [courseId]: {
+              ...state.courses.byId[courseId],
+              classIds: state.courses.byId[courseId].classIds.concat([id]),
+            },
+          },
+        },
         classes: {
           ...state.classes,
-          byId: { [classId]: data },
-          allIds: state.course.allIds.concat([[classId]]),
+          byId: {
+            ...state.classes.byId,
+            [id]: {
+              id,
+              courseId,
+              name,
+              isHidden,
+              isDeleted: false,
+              memberIds: [],
+            },
+          },
+          allIds: state.classes.allIds.concat([id]),
         },
         loading: {
           ...state.loading,
@@ -451,7 +497,10 @@ export default function course(state = initialState, action) {
       };
     }
     case courseConstants.ADD_CLASS_FAIL: {
+      console.log('add class fail');
+
       const { error } = action.payload;
+      console.log(error);
       return {
         ...state,
 
@@ -553,12 +602,21 @@ export default function course(state = initialState, action) {
       return {
         ...state,
         // add member ids to class
-        classes: state.classes.byId.filter((item) => (item.id === classId ? { ...item, memberIds: data.map((dataItem) => dataItem.id) } : item)),
+        classes: {
+          ...state.classes,
+          byId: {
+            ...state.classes.byId,
+            [classId]: {
+              ...state.classes.byId[classId],
+              memberIds: data.map((item) => item.id),
+            },
+          },
+        },
 
         // add member data
         members: {
           byId: data.reduce((acc, item) => ({ ...acc, [item.id]: item }), state.members),
-          allIds: data.map((item) => item.id),
+          allIds: [...new Set([...data.map((item) => item.id), ...state.members.allIds])],
         },
 
         loading: {
@@ -577,10 +635,6 @@ export default function course(state = initialState, action) {
       return {
         ...state,
 
-        // clear all members ids of the class
-        classes: state.courses.map((item) => (item.id === classId ? { ...item, memberIds: [] } : item)),
-
-        // member data will NOT be cleared
         loading: {
           ...state.loading,
           fetchMembers: false,

@@ -212,6 +212,9 @@ const overrides = {
       height: '45px',
       backgroundColor: mono.white,
     },
+    multiline: {
+      height: 'unset',
+    },
   },
 
   MuiTextField: {
@@ -255,6 +258,11 @@ const overrides = {
         fontWeight: 500,
         fontSize: '1rem',
       },
+    },
+    multiline: {
+      padding: '10px 0px 10px 15px',
+      fontWeight: 500,
+      fontSize: '1rem',
     },
   },
   MuiFormHelperText: {
