@@ -75,6 +75,53 @@ const initialState = {
     fetchAccessLog: null,
   },
 
+  announcement: {
+    byId: {
+      1: {
+        id: 1,
+        title: '系統維修A',
+        PostTime: '2021-01-01, 09:21',
+        EndTime: '2021-03-30, 09:21',
+        Content: '1111111111111',
+      },
+      2: {
+        id: 2,
+        title: '系統維修B',
+        PostTime: '2021-04-20, 09:21',
+        EndTime: '2021-08-10, 09:21',
+        Content: '2222222222222222',
+      },
+      3: {
+        id: 3,
+        title: '系統維修C',
+        PostTime: '2021-03-01, 09:21',
+        EndTime: '2021-03-02, 09:21',
+        Content: '3333333333333333',
+      },
+      4: {
+        id: 4,
+        title: 'Robin心情很好',
+        PostTime: '2021-05-01, 09:21',
+        EndTime: '2021-06-01, 09:21',
+        Content: '44444444444444',
+      },
+      5: {
+        id: 5,
+        title: '作業太難',
+        PostTime: '2021-03-01, 09:21',
+        EndTime: '2021-03-19, 09:21',
+        Content: '55555555555555',
+      },
+      6: {
+        id: 6,
+        title: '小傑生日不用寫作業',
+        PostTime: '2021-06-06, 09:21',
+        EndTime: '2021-06-07, 09:21',
+        Content: '6666666666',
+      },
+    },
+    allIds: [1, 2, 3, 4, 5, 6],
+  },
   submitLang: {
     byId: {
       1: {

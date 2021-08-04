@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Typography,
   Button,
@@ -11,9 +11,9 @@ import {
   TextField,
   makeStyles,
 } from '@material-ui/core';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
-  withRouter, Switch, Route, useHistory,
+  withRouter, Switch, Route, useHistory, useParams,
 } from 'react-router-dom';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
@@ -26,8 +26,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /* This is a level 4 component (page component) */
-const AnnouncementSetting = () => {
+export default function AnnouncementSetting() {
   const classes = useStyles();
+  const { announcementID } = useParams();
+  const announcement = useSelector((state) => state.admin.system.announcement.byId);
+
   const [popUpDelete, setPopUpDelete] = useState(false);
 
   const handleClickDelete = () => {
@@ -51,7 +54,7 @@ const AnnouncementSetting = () => {
   return (
     <>
       <Typography variant="h3" className={classes.pageHeader}>
-        管院停電 / Setting
+        {`${announcement.title} / Setting`}
       </Typography>
       <div>
         <SimpleBar
@@ -62,15 +65,17 @@ const AnnouncementSetting = () => {
             </>
         )}
         >
-          <AlignedText text="Title" childrenType="field">
-            <p>default Title</p>
-          </AlignedText>
-          <AlignedText text="Duration" childrenType="field">
-            <p>default time range</p>
-          </AlignedText>
-          <AlignedText text="Content" childrenType="field">
-            <p>default Content</p>
-          </AlignedText>
+          <Typography variant="body1">
+            <AlignedText text="Title" childrenType="field">
+              <Typography variant="body1">{announcement.title}</Typography>
+            </AlignedText>
+            <AlignedText text="Duration" childrenType="field">
+              <Typography variant="body1">{`${announcement.PostTime} to ${announcement.EndTime}`}</Typography>
+            </AlignedText>
+            <AlignedText text="Content" childrenType="field">
+              <Typography variant="body1">{announcement.Content}</Typography>
+            </AlignedText>
+          </Typography>
         </SimpleBar>
       </div>
       <div>
@@ -127,6 +132,4 @@ const AnnouncementSetting = () => {
       </Dialog>
     </>
   );
-};
-
-export default AnnouncementSetting;
+}

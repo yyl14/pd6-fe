@@ -1,7 +1,7 @@
-import React, { Component, useState } from 'react';
-import { connect, useSelector } from 'react-redux';
+import React, { Component, useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import {
-  withRouter, Switch, Route, useHistory, useParams,
+  withRouter, Switch, Route, useHistory, useParams, BrowserRouter as Router, Link,
 } from 'react-router-dom';
 import { BiFilterAlt } from 'react-icons/bi';
 import { Button, Typography, makeStyles } from '@material-ui/core';
@@ -20,9 +20,28 @@ const useStyles = makeStyles((theme) => ({
 // TODO: use ui/CustomTable to implement announcement table directly in this component
 
 /* This is a level 4 component (page component) */
-const AnnouncementHome = () => {
+export default function AnnouncementHome() {
   const classes = useStyles();
-  const { AnnouncementID } = useParams();
+
+  const announcement = useSelector((state) => state.admin.system.announcement.byId);
+  const announcementID = useSelector((state) => state.admin.system.announcement.allIds);
+
+  const [tableData, setTableData] = useState([]);
+  const [path, setPath] = useState([]);
+
+  useEffect(() => {
+    const newData = [];
+    const newPath = [];
+
+    announcementID.forEach((key) => {
+      const item = announcement[key];
+      newData.push(item);
+      newPath.push(`announcement/${item.id}/setting`);
+    });
+    setTableData(newData);
+    setPath(newPath);
+  }, [announcement, announcementID]);
+
   const history = useHistory();
   const handleClickAdd = () => {
     history.push('/admin/system/announcement/add');
@@ -30,20 +49,12 @@ const AnnouncementHome = () => {
 
   const [filter, setFilter] = useState(false);
 
-  function createData(Title, PostTime, EndTime) {
-    return {
-      Title,
-      PostTime,
-      EndTime,
-    };
-  }
-
   const columns = [
     {
-      id: 'Title',
+      id: 'title',
       label: 'Title',
-      minWidth: 100,
-      width: 100,
+      minWidth: 200,
+      width: 200,
       align: 'center',
     },
     {
@@ -61,11 +72,6 @@ const AnnouncementHome = () => {
       align: 'center',
     },
   ];
-  const rows = [
-    createData('系統維修AAA', '2021-04-20, 09:21', '2021-05-20, 09:21'),
-    createData('系統維修BBB', '2021-05-20, 09:21', '2021-06-20, 09:21'),
-    createData('系統維修CCC', '2021-06-20, 09:21', '2021-07-20, 09:21'),
-  ];
 
   return (
     <>
@@ -80,20 +86,14 @@ const AnnouncementHome = () => {
             +
           </Button>
             )}
-        data={rows}
+        data={tableData}
         columns={columns}
         columnComponent={[null, (<BiFilterAlt key="filter" onClick={() => { setFilter(true); }} />), (<BiFilterAlt key="filter" onClick={() => { setFilter(true); }} />)]}
         hasFilter={[false, true, true]}
         dataColumnName={['Title', 'PostTime', 'EndTime']}
         hasLink
-        path={[
-          '/admin/system/announcement/:announcementId/setting',
-          '/admin/system/announcement/:announcementId/setting',
-          '/admin/system/announcement/:announcementId/setting',
-        ]}
+        path={path}
       />
     </>
   );
-};
-
-export default AnnouncementHome;
+}
