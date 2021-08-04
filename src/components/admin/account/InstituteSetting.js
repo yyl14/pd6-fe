@@ -20,26 +20,11 @@ import { bindActionCreators } from 'redux';
 import { Translate } from '@material-ui/icons';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
-import { accountActions } from '../../../actions/index';
+import { editInstitute } from '../../../actions/admin/account';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
-  },
-  wrapper: {
-    display: 'flex',
-    flexDirection: 'row',
-    verticalAlign: 'center',
-  },
-  alignedTextWrapper1: {
-    width: '190px',
-  },
-  alignedTextWrapper2: {
-    width: '600px',
-  },
-  alignedText: {
-    marginTop: '10px',
-    marginBottom: '10px',
   },
   warningText: {
     marginTop: '10px',
@@ -112,19 +97,19 @@ export default function InstituteSetting() {
     }
     switch (prop) {
       case 'newName':
-        dispatch(accountActions.editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, newSetting.newName, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
+        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, newSetting.newName, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
         break;
       case 'newInitialism':
-        dispatch(accountActions.editInstitute(authToken, instituteId, newSetting.newInitialism, institutes[instituteId].full_name, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
+        dispatch(editInstitute(authToken, instituteId, newSetting.newInitialism, institutes[instituteId].full_name, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
         break;
       case 'newEmail':
-        dispatch(accountActions.editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, newSetting.newEmail, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
+        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, newSetting.newEmail, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
         break;
       case 'newStatus':
-        dispatch(accountActions.editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, institutes[instituteId].email_domain, newSetting.newStatus));
+        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, institutes[instituteId].email_domain, !newSetting.newStatus));
         break;
       default:
-        dispatch(accountActions.editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
+        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
     }
     handleClosePopUp();
   };
@@ -137,58 +122,22 @@ export default function InstituteSetting() {
       <SimpleBar
         title="Institute Information"
       >
-        <div className={classes.wrapper}>
-          <div className={classes.alignedTextWrapper1}>
-            <Typography variant="body1" className={classes.alignedText}>
-              Full Name
-            </Typography>
-          </div>
-          <div className={classes.alignedTextWrapper2}>
-            <Typography variant="body1" className={classes.alignedText}>
-              {institutes[instituteId].full_name}
-            </Typography>
-          </div>
-        </div>
-        <div className={classes.wrapper}>
-          <div className={classes.alignedTextWrapper1}>
-            <Typography variant="body1" className={classes.alignedText}>
-              Initialism
-            </Typography>
-          </div>
-          <div className={classes.alignedTextWrapper2}>
-            <Typography variant="body1" className={classes.alignedText}>
-              {institutes[instituteId].abbreviated_name}
-            </Typography>
-          </div>
-        </div>
-        <div className={classes.wrapper}>
-          <div className={classes.alignedTextWrapper1}>
-            <Typography variant="body1" className={classes.alignedText}>
-              Email
-            </Typography>
-          </div>
-          <div className={classes.alignedTextWrapper2}>
-            <Typography variant="body1" className={classes.alignedText}>
-              {institutes[instituteId].email_domain}
-            </Typography>
-          </div>
-        </div>
-        <div className={classes.wrapper}>
-          <div className={classes.alignedTextWrapper1}>
-            <Typography variant="body1" className={classes.alignedText}>
-              Status
-            </Typography>
-          </div>
-          <div className={classes.alignedTextWrapper2}>
-            <Typography variant="body1" className={classes.alignedText}>
-              {(institutes[instituteId].is_disabled === true || institutes[instituteId].is_disabled === 'Disabled') ? 'Disabled' : 'Enabled'}
-            </Typography>
-          </div>
-        </div>
+        <AlignedText text="Full Name" maxWidth="lg" childrenType="text">
+          <Typography variant="body1">{institutes[instituteId].full_name}</Typography>
+        </AlignedText>
+        <AlignedText text="Initialism" maxWidth="lg" childrenType="text">
+          <Typography variant="body1">{institutes[instituteId].abbreviated_name}</Typography>
+        </AlignedText>
+        <AlignedText text="Email" maxWidth="lg" childrenType="text">
+          <Typography variant="body1">{institutes[instituteId].email_domain}</Typography>
+        </AlignedText>
+        <AlignedText text="Status" maxWidth="lg" childrenType="text">
+          <Typography variant="body1">{(institutes[instituteId].is_disabled === true || institutes[instituteId].is_disabled === 'Disabled') ? 'Disabled' : 'Enabled'}</Typography>
+        </AlignedText>
       </SimpleBar>
       <SimpleBar
         title="Change Institute Full Name"
-        buttons={(
+        childrenButtons={(
           <>
             <Button
               color="secondary"
@@ -207,7 +156,7 @@ export default function InstituteSetting() {
       </SimpleBar>
       <SimpleBar
         title="Change Institute Initialism"
-        buttons={(
+        childrenButtons={(
           <>
             <Button
               color="secondary"
@@ -226,7 +175,7 @@ export default function InstituteSetting() {
       </SimpleBar>
       <SimpleBar
         title="Change Institute Email"
-        buttons={(
+        childrenButtons={(
           <>
             <Button
               color="secondary"
@@ -246,7 +195,7 @@ export default function InstituteSetting() {
       </SimpleBar>
       <SimpleBar
         title="Change Institute Status"
-        buttons={(
+        childrenButtons={(
           <>
             <Button
               color="secondary"

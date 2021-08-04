@@ -18,7 +18,7 @@ import { bindActionCreators } from 'redux';
 import { BiFilterAlt } from 'react-icons/bi';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
-import { accountActions } from '../../../actions/index';
+import { fetchAccounts } from '../../../actions/admin/account';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -52,7 +52,7 @@ export default function AccountList() {
   const [path, setPath] = useState([]);
 
   useEffect(() => {
-    // dispatch(accountActions.fetchAccounts(authToken));
+    // dispatch(fetchAccounts(authToken));
   }, [authToken, dispatch]);
 
   useEffect(() => {

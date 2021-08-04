@@ -9,6 +9,7 @@ const getInstitutes = (token) => (dispatch) => {
       'Auth-Token': token,
     },
   };
+  dispatch({ type: accountConstants.FETCH_INSTITUTE_REQUEST });
 
   agent.get('/institute', auth)
     .then((res) => {
@@ -31,6 +32,8 @@ const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled)
       'Auth-Token': token,
     },
   };
+  dispatch({ type: accountConstants.ADD_INSTITUTE_REQUEST });
+
   agent.post('/institute', {
     abbreviated_name: abbreviatedName,
     full_name: fullName,
@@ -109,6 +112,7 @@ const fetchAccount = (token, id) => (dispatch) => {
       'Auth-Token': token,
     },
   };
+  dispatch({ type: accountConstants.FETCH_ACCOUNT_REQUEST });
 
   // agent.get(`/account/${id}`, auth)
   //   .then((res) => {
@@ -131,6 +135,7 @@ const editAccount = (token, id, nickname, email) => (dispatch) => {
       'Auth-Token': token,
     },
   };
+  dispatch({ type: accountConstants.EDIT_ACCOUNT_REQUEST });
 
   // agent.patch(`/account/${id}`, { nickname, alternative_email: email }, auth)
   //   .then((res) => {
@@ -155,6 +160,7 @@ const deleteAccount = (token, id) => (dispatch) => {
       'Auth-Token': token,
     },
   };
+  dispatch({ type: accountConstants.DELETE_ACCOUNT_REQUEST });
 
   // agent.delete(`/account/${id}`, auth)
   //   .then((res) => {
@@ -176,6 +182,7 @@ const makeStudentCardDefault = (token, id, cardId) => (dispatch) => {
       'Auth-Token': token,
     },
   };
+  dispatch({ type: accountConstants.MAKE_STUDENT_CARD_DEFAULT_REQUEST });
 
   // agent.put(`/account/${id}`, { student_card_id: cardId }, auth)
   //   .then((res) => {
@@ -198,6 +205,7 @@ const fetchStudentCard = (token, id) => (dispatch) => {
       'Auth-Token': token,
     },
   };
+  dispatch({ type: accountConstants.FETCH_STUDENT_CARD_REQUEST });
 
   // agent.get(`/account/${id}/student-card`, auth)
   //   .then((res) => {
@@ -220,6 +228,7 @@ const addStudentCard = (token, id, instituteId, emailPrefix, department, student
       'Auth-Token': token,
     },
   };
+  dispatch({ type: accountConstants.ADD_STUDENT_CARD_REQUEST });
 
   // agent.post(`/account/${id}/student-card`, {
   //   institute_id: instituteId,
@@ -253,5 +262,5 @@ const fetchAccounts = (token) => (dispatch) => {
 };
 
 export {
-  getInstitutes, addInstitute, editInstitute, fetchAccounts,
+  getInstitutes, addInstitute, editInstitute, fetchAccount, deleteAccount, makeStudentCardDefault, fetchStudentCard, addStudentCard, fetchAccounts,
 };
