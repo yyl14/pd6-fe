@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Typography,
   Button,
@@ -13,22 +13,59 @@ import {
   DialogContentText,
   DialogTitle,
   makeStyles,
+  OutlinedInput,
 } from '@material-ui/core';
 import SchoolIcon from '@material-ui/icons/School';
 
-// TODO: use makestyles() to do layout
-const useStyles = makeStyles((theme) => ({}));
+const useStyles = makeStyles((theme) => ({
+  card: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '1280px',
+  },
+  editorCol: {
+    display: 'flex',
+    flexDirection: 'column',
+    margin: '16px 23px 16px 23px',
+  },
+  editorItem: {
+    marginBottom: '12px',
+  },
+  textField: {
+    width: '260px',
+  },
+  buttonsBar: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: '50px',
+  },
+  leftButton: {
+    marginRight: '18px',
+  },
+}));
 
 /* This is a level 4 component (page component) */
-const MemberEdit = (props) => {
+const MemberEdit = ({
+  backToMemberList,
+  members,
+  onEditMembers,
+  loading, // TODO
+}) => {
   // TODO: initialize field content with redux state
   const classes = useStyles();
-  const [TA, setTA] = useState(props.TAList);
-  const [student, setStudent] = useState(props.studentList);
-  const [guest, setGuest] = useState(props.guestList);
+  const [TA, setTA] = useState([]);
+  const [student, setStudent] = useState([]);
+  const [guest, setGuest] = useState([]);
 
-  const [popUpUnsave, setPopUpUnsave] = useState(false);
-  const [popUpSave, setPopUpSave] = useState(false);
+  const [showUnsaveDialog, setShowUnsaveDialog] = useState(false);
+  const [showSaveDialog, setShowSaveDialog] = useState(false);
+
+  useEffect(() => {
+    // setTA(members.filter((item) => item.role === 'TA'));
+  }, [members]);
+
   const handleChangeTA = (e) => {
     /* if(){
 
@@ -50,87 +87,88 @@ const MemberEdit = (props) => {
   };
   const handleClickCancel = () => {
     /* if(){
-      setPopUpUnsave(true);
+      setShowUnsaveDialog(true);
     }
     else{
-      setPopUpSave(true);
+      setShowSaveDialog(true);
     } */
-    setPopUpSave(true);
+    setShowSaveDialog(true);
   };
 
-  const handleClosePopUpUnsave = () => {
-    setPopUpUnsave(false);
-  };
   const handleSubmitUnsave = () => {
-    setPopUpUnsave(false);
-    props.backToClassInfo();
+    setShowUnsaveDialog(false);
+    backToMemberList();
   };
 
-  const handleClosePopUpSave = () => {
-    setPopUpSave(false);
-  };
   const handleSubmitSave = () => {
-    setPopUpSave(false);
-    props.backToClassInfo();
+    setShowSaveDialog(false);
     // and sth.....
+    backToMemberList();
   };
 
   return (
     <div>
-      <Typography variant="h4">Member edit</Typography>
-      {/* TODO: rewrite the editor with <div />'s, use redux state, actions, and remove title */}
-      {/* <Grid container item className="member-edit-container" direction="column" justifyContent="center" alignItems="center" xs={12}>
-        <Grid container item className="member-edit-col-top" direction="column" justifyContent="center" alignItems="flex-start">
-          <Typography variant="h3">PBC / 111-1 / Member</Typography>
-          <Grid container item direction="row" justifyContent="flex-start" alignItems="center" spacing={1}>
-            <Grid item><SchoolIcon color="action" /></Grid>
-            <Grid item><Typography variant="h4">National Taiwan University</Typography></Grid>
-          </Grid>
-        </Grid>
-        <Card className="member-edit-form" variant="outlined" style={{ width: '1280px', height: '716px' }}>
-          <Grid container item direction="row" alignItems="center" justifyContent="center" spacing={6} style={{ width: '100%', height: '110%' }}>
-            <Grid container item direction="column" alignItem="center" justifyContent="center" style={{ width: '350px' }} spacing={2}>
-              <Grid item><Typography variant="body1">TA</Typography></Grid>
-              <Grid item><Typography variant="caption">List of student ID</Typography></Grid>
-              <Grid item>
-                <TextField
-                  defaultValue={TA}
-                  onChange={(e) => handleChangeTA(e)}
-                />
-              </Grid>
-            </Grid>
-            <Grid container item direction="column" alignItem="center" justifyContent="center" style={{ width: '350px' }} spacing={2}>
-              <Grid item><Typography variant="body1">Student</Typography></Grid>
-              <Grid item><Typography variant="caption">List of student ID</Typography></Grid>
-              <Grid item>
-                <TextField
-                  defaultValue={student}
-                  onChange={(e) => handleChangeStudent(e)}
-                />
-              </Grid>
-            </Grid>
-            <Grid container item direction="column" alignItem="center" justifyContent="center" style={{ width: '350px' }} spacing={2}>
-              <Grid item><Typography variant="body1">Guest</Typography></Grid>
-              <Grid item><Typography variant="caption">List of student ID</Typography></Grid>
-              <Grid item>
-                <TextField
-                  defaultValue={guest}
-                  onChange={(e) => handleChangeGuest(e)}
-                />
-              </Grid>
+      {/* TODO: rewrite the editor with <div />'s, use redux state, actions */}
+      <Card className={classes.card} variant="outlined">
+        <div className={classes.editorCol}>
+          <div className={classes.editorItem}>
+            <Typography variant="body1">TA</Typography>
+          </div>
+          <div className={classes.editorItem}>
+            <Typography variant="caption">List of student ID</Typography>
+          </div>
+          <TextField
+            className={classes.textField}
+            defaultValue={TA}
+            onChange={(e) => handleChangeTA(e)}
+            multiline
+            rows={20}
+          />
+        </div>
 
-            </Grid>
-          </Grid>
-        </Card>
-        <Grid container item className="member-edit-col-bottom" direction="row" justifyContent="flex-end" alignItems="center" style={{ width: '1280px' }} spacing={2}>
-          <Grid item><Button onClick={handleClickCancel}>Cancel</Button></Grid>
+        <div className={classes.editorCol}>
+          <div className={classes.editorItem}>
+            <Typography variant="body1">Student</Typography>
+          </div>
+          <div className={classes.editorItem}>
+            <Typography variant="caption">List of student ID</Typography>
+          </div>
+          <TextField
+            className={classes.textField}
+            defaultValue={student}
+            onChange={(e) => handleChangeStudent(e)}
+            multiline
+            rows={20}
+          />
+        </div>
 
-          <Grid item><Button onClick={handleSubmitSave} color="primary">Save</Button></Grid>
-        </Grid>
-      </Grid> */}
+        <div className={classes.editorCol}>
+          <div className={classes.editorItem}>
+            <Typography variant="body1">Guest</Typography>
+          </div>
+          <div className={classes.editorItem}>
+            <Typography variant="caption">List of student ID</Typography>
+          </div>
+          <TextField
+            className={classes.textField}
+            defaultValue={guest}
+            onChange={(e) => handleChangeGuest(e)}
+            multiline
+            rows={20}
+          />
+        </div>
+      </Card>
+      <div className={classes.buttonsBar}>
+        <Button onClick={handleClickCancel} className={classes.leftButton}>
+          Cancel
+        </Button>
+        <Button onClick={handleSubmitSave} color="primary">
+          Save
+        </Button>
+        {/* TODO:disabled */}
+      </div>
 
-      {/* unsave member list dialog */}
-      <Dialog open={popUpUnsave} keepMounted onClose={handleClosePopUpUnsave}>
+      <Dialog open={showUnsaveDialog} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Unsaved changes to member list</Typography>
         </DialogTitle>
@@ -140,15 +178,14 @@ const MemberEdit = (props) => {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClosePopUpUnsave}>Cancel</Button>
+          <Button onClick={() => setShowUnsaveDialog(false)}>Cancel</Button>
           <Button onClick={handleSubmitUnsave} color="secondary">
             Don’t Save
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* save member list dialog */}
-      <Dialog open={popUpSave} keepMounted onClose={handleClosePopUpSave}>
+      <Dialog open={showSaveDialog} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Save changes to member list</Typography>
         </DialogTitle>
@@ -158,7 +195,7 @@ const MemberEdit = (props) => {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClosePopUpSave}>Cancel</Button>
+          <Button onClick={() => setShowSaveDialog(false)}>Cancel</Button>
           <Button onClick={handleSubmitSave} color="primary">
             Save Changes
           </Button>
