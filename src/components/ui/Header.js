@@ -73,14 +73,17 @@ export default function Header({ role }) {
     itemList = [
       {
         text: 'Course',
+        basePath: '/admin/course',
         path: '/admin/course/course',
       },
       {
         text: 'Account',
+        basePath: '/admin/account',
         path: '/admin/account/institute',
       },
       {
         text: 'System',
+        basePath: '/admin/system',
         path: '/admin/system/accesslog',
       },
       {
@@ -161,7 +164,7 @@ export default function Header({ role }) {
           {/* <Avatar src="https://pdogs.ntu.im/judge/image/LOGO.png" className={classes.avatar} /> */}
           {itemList.map((item) => (
             <Typography variant="h6" className={classes.item} key={item.text}>
-              <a href={baseURL + item.path} className={location.pathname.includes(item.path) ? classes.active : classes.a}>
+              <a href={baseURL + item.path} className={location.pathname.includes(item.basePath) ? classes.active : classes.a}>
                 {item.text}
               </a>
             </Typography>
