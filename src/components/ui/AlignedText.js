@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#EA3222',
   },
   textColorDefault: {
-    color: '#090909',
+    color: '#000000',
   },
   alignedTextWrapper: {
     width: '190px',
