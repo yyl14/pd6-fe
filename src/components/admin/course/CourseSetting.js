@@ -16,6 +16,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { fetchCourses, renameCourse, deleteCourse } from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
+import NoMatch from '../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
   informationRow: {
@@ -48,7 +49,6 @@ export default function CourseSetting() {
 
   useEffect(() => {
     dispatch(fetchCourses(authToken));
-    // dispatch(fetchClasses(authToken, courseId));
   }, [authToken, courseId, dispatch]);
 
   const getCourseType = (courseType) => {
@@ -78,6 +78,14 @@ export default function CourseSetting() {
     dispatch(deleteCourse(authToken, courseId));
     history.push('/admin/course/course/');
   };
+
+  if (courses.byId[courseId] === undefined) {
+    if (loading.fetchCourses) {
+      // still loading
+      return <div>loading</div>;
+    }
+    return <NoMatch />;
+  }
 
   return (
     <>

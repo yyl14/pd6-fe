@@ -66,7 +66,6 @@ export default function ClassList() {
     setShowAddClassDialog(false);
     dispatch(addClass(authToken, courseId, name, false));
   };
-  console.log(courses.byId, classes.byId);
 
   if (courses.byId[courseId] === undefined) {
     if (loading.fetchCourses) {

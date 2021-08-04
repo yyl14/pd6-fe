@@ -35,22 +35,8 @@ export default function MemberList() {
     dispatch(fetchMembers(authToken, classId));
   }, [authToken, classId, courseId, dispatch]);
 
-  // console.log(
-  //   classes.byId[classId].memberIds.map((id) => ({
-  //     ...members.byId[id],
-  //     studentId: members.byId[id].memberId,
-  //   })),
-  //   members,
-  // );
-
   const [edit, setEdit] = useState(false);
   // TODO: list of path, member data, table filter, link, search bar placeholder
-  // const path = [
-  //   //
-  // ];
-  // const memberData = [
-  //   //
-  // ];
 
   if (courses.byId[courseId] === undefined || classes.byId[courseId] === undefined) {
     if (loading.fetchCourses || loading.fetchClasses) {
