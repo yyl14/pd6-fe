@@ -12,7 +12,6 @@ const fetchAccessLog = (offset, limit, token) => (dispatch) => {
   agent.get(`/access-log?offset=${offset}&limit=${limit}`, fetch)
     .then((res) => {
       const { data } = res.data;
-      console.log('use api :', data);
       dispatch({
         type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
         payload: {
@@ -23,7 +22,7 @@ const fetchAccessLog = (offset, limit, token) => (dispatch) => {
     .catch((err) => {
       dispatch({
         type: systemConstants.FETCH_ACCESS_LOG_FAIL,
-        payload: { err },
+        payload: err,
       });
     });
 };

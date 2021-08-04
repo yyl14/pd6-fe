@@ -4,77 +4,9 @@ import {
 
 const initialState = {
   logs: {
-    byId: {
-      1: {
-        id: 1,
-        username: 'shiba',
-        studentID: 'B07705002',
-        realName: '黃祥祥',
-        IP: '106.114.0.1',
-        resourcePath: 22,
-        requestMethod: 'Get',
-        accessTime: '2021-06-20, 09:21:44',
-      },
-      2: {
-        id: 2,
-        username: 'shiba',
-        studentID: 'B07705002',
-        realName: '黃祥祥',
-        IP: '106.114.0.1',
-        resourcePath: 22,
-        requestMethod: 'Get',
-        accessTime: '2021-06-20, 09:21:44',
-      },
-      3: {
-        id: 3,
-        username: 'shiba',
-        studentID: 'B07705002',
-        realName: '黃祥祥',
-        IP: '106.114.0.1',
-        resourcePath: 22,
-        requestMethod: 'Get',
-        accessTime: '2021-06-20, 09:21:44',
-      },
-      4: {
-        id: 4,
-        username: 'shiba',
-        studentID: 'B07705002',
-        realName: '黃祥祥',
-        IP: '106.114.0.1',
-        resourcePath: 22,
-        requestMethod: 'Get',
-        accessTime: '2021-06-20, 09:21:44',
-      },
-      5: {
-        id: 5,
-        username: 'shiba',
-        studentID: 'B07705002',
-        realName: '黃祥祥',
-        IP: '106.114.0.1',
-        resourcePath: 22,
-        requestMethod: 'Get',
-        accessTime: '2021-06-20, 09:21:44',
-      },
-      6: {
-        id: 6,
-        username: 'shiba',
-        studentID: 'B07705002',
-        realName: '黃祥祥',
-        IP: '106.114.0.1',
-        resourcePath: 22,
-        requestMethod: 'Get',
-        accessTime: '2021-06-20, 09:21:44',
-      },
-    },
-    allIds: [1, 2, 3, 4, 5, 6],
+    byId: {},
+    allIds: [],
   },
-  loading: {
-    fetchAccessLog: false,
-  },
-  error: {
-    fetchAccessLog: null,
-  },
-
   submitLang: {
     byId: {
       1: {
@@ -116,9 +48,18 @@ const initialState = {
     },
     allIds: [1, 2, 3, 4, 5, 6],
   },
+  loading: {
+    fetchAccessLog: false,
+    fetchSubmitLang: false,
+  },
+  error: {
+    fetchAccessLog: null,
+    fetchSubmitLang: null,
+  },
 };
 
 export default function system(state = initialState, action) {
+  // console.log('system reducer is called! :', action.type);
   switch (action.type) {
     /* Access Logs */
     case systemConstants.FETCH_ACCESS_LOG_START:
@@ -130,12 +71,20 @@ export default function system(state = initialState, action) {
         },
       };
     case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
-      const { data } = action.payload;
+      const data = Object.values(action.payload);
       return {
-        ...state,
         logs: {
-          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, logIds: [] } }), state.logs),
-          allIds: data.map((item) => item.id),
+          byId: data.map((log) => ({
+            id: log.id,
+            username: 'shiba',
+            studentID: 'B07705002',
+            realName: '黃祥祥',
+            IP: log.ip,
+            resourcePath: log.resource_path,
+            requestMethod: log.request_method,
+            accessTime: log.access_time,
+          })),
+          allIds: data.map((log) => log.id),
         },
         loading: {
           ...state.loading,
@@ -148,9 +97,8 @@ export default function system(state = initialState, action) {
       };
     }
     case systemConstants.FETCH_ACCESS_LOG_FAIL: {
-      const { error } = action.payload;
+      const error = action.payload;
       return {
-        ...state,
         logs: {
           byId: {},
           allIds: [],

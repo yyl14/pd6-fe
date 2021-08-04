@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, makeStyles } from '@material-ui/core';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 /* TODO: Use component/ui/CustomTable to implement access log (remove this import afterwards) */
 import CustomTable from '../../ui/CustomTable';
+import { fetchAccessLog } from '../../../actions/admin/system';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -16,19 +17,23 @@ export default function AccessLog() {
   const classes = useStyles();
   const [tableData, setTableData] = useState([]);
 
+  const dispatch = useDispatch();
+  const authToken = useSelector((state) => state.auth.user.token);
+  const loading = useSelector((state) => state.admin.system.loading);
+
   const logs = useSelector((state) => state.admin.system.logs.byId);
-  const logsID = useSelector((state) => state.admin.system.submitLang.allIds);
+  const logsID = useSelector((state) => state.admin.system.logs.allIds);
 
   useEffect(() => {
-    const newData = [];
-    logsID.forEach((key) => {
-      const item = logs[key];
-      newData.push(item);
-    });
-
-    setTableData(newData);
-    console.log('set data');
-  }, [logs, logsID]);
+    if (logsID.length === 0) {
+      dispatch(fetchAccessLog(0, 10, authToken));
+      console.log('call fetchAccessLog');
+    } else {
+      console.log('logsID : ', logsID);
+      console.log('logs : ', logs);
+      setTableData(logs);
+    }
+  }, [logsID, logs, authToken, dispatch]);
 
   return (
     <>
