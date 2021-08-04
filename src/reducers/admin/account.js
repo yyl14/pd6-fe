@@ -1,33 +1,6 @@
 import { accountConstants } from '../../actions/constant';
 
 const initialState = {
-  // institutes: {
-  //   byId: {
-  //     1111: {
-  //       id: 1111,
-  //       abbreviated_name: 'NTU',
-  //       full_name: 'National Taiwan University',
-  //       email_domain: 'ntu.edu.tw',
-  //       is_disabled: false,
-  //     },
-  //     1112: {
-  //       id: 1112,
-  //       abbreviated_name: 'NTNU',
-  //       full_name: 'National Taiwan Normal University',
-  //       email_domain: 'ntnu.edu.tw',
-  //       is_disabled: true,
-  //     },
-  //     1113: {
-  //       id: 1113,
-  //       abbreviated_name: 'NTUST',
-  //       full_name: 'National Taiwan University of Science and Technology',
-  //       email_domain: 'ntust.edu.tw',
-  //       is_disabled: false,
-  //     },
-  //   },
-  //   allIds: [1111, 1112, 1113],
-  // },
-
   institutes: {
     byId: {},
     allIds: [],
@@ -35,76 +8,50 @@ const initialState = {
 
   accounts: {
     byId: {
-      1111: {
-        id: 1111,
-        username: 'shiba',
-        nickname: 'shiba',
-        role: 'manager',
-        real_name: '陳以潼',
-        student_id: 'b08705080',
-        alternative_email: 'sdf@ergh',
-        studentCard: [11111, 11112],
+      1: {
+        id: 1,
+        username: 'admin',
+        nickname: 'admin123',
+        role: 'MANAGER',
+        real_name: 'admin',
+        alternative_email: null,
+        student_id: 'admin',
+        studentCard: [],
       },
-      1112: {
-        id: 1112,
-        username: 'banana',
-        nickname: 'banana',
-        role: 'manager',
-        real_name: '陳以潼',
-        student_id: 'b08705080',
-        alternative_email: 'sdf@ergh',
-        studentCard: [11121],
-      },
-      1113: {
-        id: 1113,
-        username: 'fredred',
-        nickname: 'fredred',
-        role: 'manager',
-        real_name: '祝浩文',
-        student_id: 'b08705080',
-        alternative_email: 'sdf@ergh',
-        studentCard: [11131],
+      2: {
+        id: 2,
+        username: 'student1',
+        nickname: 'student1',
+        role: 'NORMAL',
+        real_name: 'student1',
+        alternative_email: 'student1@gmail.com',
+        student_id: 'B10705001',
+        studentCard: [1, 2],
       },
     },
-    allIds: [1111, 1112, 1113],
+    allIds: [1, 2],
   },
 
   studentCards: {
     byId: {
-      11111: {
-        id: 11111,
-        institute_id: 0,
-        department: 'string',
-        student_id: 'b08705080',
-        email: 'b08705080@ntu.edu.tw',
+      1: {
+        id: 1,
+        institute_id: 1,
+        department: 'IM',
+        student_id: 'B10705001',
+        email: 'B10705001@ntu.edu.tw',
         is_default: true,
       },
-      11112: {
-        id: 11112,
-        institute_id: 0,
-        department: 'string',
-        student_id: 'b08705081',
-        email: 'b08705081@ntu.edu.tw',
+      2: {
+        id: 2,
+        institute_id: 1,
+        department: 'IM',
+        student_id: 'R10705001',
+        email: 'R10705001@ntu.edu.tw',
         is_default: false,
       },
-      11121: {
-        id: 11121,
-        institute_id: 0,
-        department: 'string',
-        student_id: 'b08705082',
-        email: 'b08705082@ntu.edu.tw',
-        is_default: true,
-      },
-      11131: {
-        id: 11131,
-        institute_id: 0,
-        department: 'string',
-        student_id: 'b08705083',
-        email: 'b08705083@ntu.edu.tw',
-        is_default: true,
-      },
     },
-    allIds: [11111, 11112, 11121, 11131],
+    allIds: [1, 2],
   },
 
   loading: {

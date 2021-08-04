@@ -110,19 +110,19 @@ const fetchAccount = (token, id) => (dispatch) => {
     },
   };
 
-  agent.get(`/account/${id}`, auth)
-    .then((res) => {
-      dispatch({
-        type: accountConstants.FETCH_ACCOUNT_SUCCESS,
-        payload: res.data,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: accountConstants.FETCH_ACCOUNT_FAIL,
-        error: err,
-      });
-    });
+  // agent.get(`/account/${id}`, auth)
+  //   .then((res) => {
+  //     dispatch({
+  //       type: accountConstants.FETCH_ACCOUNT_SUCCESS,
+  //       payload: res.data,
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     dispatch({
+  //       type: accountConstants.FETCH_ACCOUNT_FAIL,
+  //       error: err,
+  //     });
+  //   });
 };
 
 const editAccount = (token, id, nickname, email) => (dispatch) => {
@@ -132,21 +132,21 @@ const editAccount = (token, id, nickname, email) => (dispatch) => {
     },
   };
 
-  agent.patch(`/account/${id}`, { nickname, alternative_email: email }, auth)
-    .then((res) => {
-      dispatch({
-        type: accountConstants.EDIT_ACCOUNT_SUCCESS,
-        payload: {
-          nickname, alternative_email: email,
-        },
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: accountConstants.EDIT_ACCOUNT_FAIL,
-        error: err,
-      });
-    });
+  // agent.patch(`/account/${id}`, { nickname, alternative_email: email }, auth)
+  //   .then((res) => {
+  //     dispatch({
+  //       type: accountConstants.EDIT_ACCOUNT_SUCCESS,
+  //       payload: {
+  //         nickname, alternative_email: email,
+  //       },
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     dispatch({
+  //       type: accountConstants.EDIT_ACCOUNT_FAIL,
+  //       error: err,
+  //     });
+  //   });
 };
 
 const deleteAccount = (token, id) => (dispatch) => {
@@ -156,18 +156,18 @@ const deleteAccount = (token, id) => (dispatch) => {
     },
   };
 
-  agent.delete(`/account/${id}`, auth)
-    .then((res) => {
-      dispatch({
-        type: accountConstants.DELETE_ACCOUNT_SUCCESS,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: accountConstants.DELETE_ACCOUNT_FAIL,
-        error: err,
-      });
-    });
+  // agent.delete(`/account/${id}`, auth)
+  //   .then((res) => {
+  //     dispatch({
+  //       type: accountConstants.DELETE_ACCOUNT_SUCCESS,
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     dispatch({
+  //       type: accountConstants.DELETE_ACCOUNT_FAIL,
+  //       error: err,
+  //     });
+  //   });
 };
 
 const makeStudentCardDefault = (token, id, cardId) => (dispatch) => {
@@ -177,19 +177,19 @@ const makeStudentCardDefault = (token, id, cardId) => (dispatch) => {
     },
   };
 
-  agent.put(`/account/${id}`, { student_card_id: cardId }, auth)
-    .then((res) => {
-      dispatch({
-        type: accountConstants.MAKE_STUDENT_CARD_DEFAULT_SUCCESS,
-        payload: { cardId },
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: accountConstants.MAKE_STUDENT_CARD_DEFAULT_FAIL,
-        error: err,
-      });
-    });
+  // agent.put(`/account/${id}`, { student_card_id: cardId }, auth)
+  //   .then((res) => {
+  //     dispatch({
+  //       type: accountConstants.MAKE_STUDENT_CARD_DEFAULT_SUCCESS,
+  //       payload: { cardId },
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     dispatch({
+  //       type: accountConstants.MAKE_STUDENT_CARD_DEFAULT_FAIL,
+  //       error: err,
+  //     });
+  //   });
 };
 
 const fetchStudentCard = (token, id) => (dispatch) => {
@@ -199,19 +199,19 @@ const fetchStudentCard = (token, id) => (dispatch) => {
     },
   };
 
-  agent.get(`/account/${id}/student-card`, auth)
-    .then((res) => {
-      dispatch({
-        type: accountConstants.FETCH_STUDENT_CARD_SUCCESS,
-        payload: res.data.data,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: accountConstants.FETCH_STUDENT_CARD_FAIL,
-        error: err,
-      });
-    });
+  // agent.get(`/account/${id}/student-card`, auth)
+  //   .then((res) => {
+  //     dispatch({
+  //       type: accountConstants.FETCH_STUDENT_CARD_SUCCESS,
+  //       payload: res.data.data,
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     dispatch({
+  //       type: accountConstants.FETCH_STUDENT_CARD_FAIL,
+  //       error: err,
+  //     });
+  //   });
 };
 
 const addStudentCard = (token, id, instituteId, emailPrefix, department, studentId) => (dispatch) => {
@@ -221,30 +221,30 @@ const addStudentCard = (token, id, instituteId, emailPrefix, department, student
     },
   };
 
-  agent.post(`/account/${id}/student-card`, {
-    institute_id: instituteId,
-    institute_email_prefix: emailPrefix,
-    department,
-    student_id: studentId,
-  }, auth)
-    .then((res) => {
-      dispatch({
-        type: accountConstants.ADD_STUDENT_CARD_SUCCESS,
-        payload: {
-          id: res.data.id, // to be checked
-          institute_id: instituteId,
-          institute_email_prefix: emailPrefix,
-          department,
-          student_id: studentId,
-        },
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: accountConstants.ADD_STUDENT_CARD_FAIL,
-        error: err,
-      });
-    });
+  // agent.post(`/account/${id}/student-card`, {
+  //   institute_id: instituteId,
+  //   institute_email_prefix: emailPrefix,
+  //   department,
+  //   student_id: studentId,
+  // }, auth)
+  //   .then((res) => {
+  //     dispatch({
+  //       type: accountConstants.ADD_STUDENT_CARD_SUCCESS,
+  //       payload: {
+  //         id: res.data.id, // to be checked
+  //         institute_id: instituteId,
+  //         institute_email_prefix: emailPrefix,
+  //         department,
+  //         student_id: studentId,
+  //       },
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     dispatch({
+  //       type: accountConstants.ADD_STUDENT_CARD_FAIL,
+  //       error: err,
+  //     });
+  //   });
 };
 
 // TODO: Fetch all accounts

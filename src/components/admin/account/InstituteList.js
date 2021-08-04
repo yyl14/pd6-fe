@@ -102,34 +102,36 @@ export default function InstituteList() {
     const newPath = [];
 
     if (filterInput.filter === 'Disabled') {
-      console.log('hello');
       institutesID.forEach((key) => {
         const item = institutes[key];
+        const temp = { ...item };
         if (item.is_disabled === true || item.is_disabled === 'Disabled') {
-          item.is_disabled = 'Disabled';
-          newData.push(item);
-          newPath.push(`institute/${item.id}/setting`);
+          temp.is_disabled = 'Disabled';
+          newData.push(temp);
+          newPath.push(`institute/${temp.id}/setting`);
         }
       });
     } else if (filterInput.filter === 'Enabled') {
       institutesID.forEach((key) => {
         const item = institutes[key];
+        const temp = { ...item };
         if (item.is_disabled === false || item.is_disabled === 'Enabled') {
-          item.is_disabled = 'Enabled';
-          newData.push(item);
-          newPath.push(`institute/${item.id}/setting`);
+          temp.is_disabled = 'Enabled';
+          newData.push(temp);
+          newPath.push(`institute/${temp.id}/setting`);
         }
       });
     } else {
       institutesID.forEach((key) => {
         const item = institutes[key];
+        const temp = { ...item };
         if (item.is_disabled === true || item.is_disabled === 'Disabled') {
-          item.is_disabled = 'Disabled';
+          temp.is_disabled = 'Disabled';
         } else if (item.is_disabled === false || item.is_disabled === 'Enabled') {
-          item.is_disabled = 'Enabled';
+          temp.is_disabled = 'Enabled';
         }
-        newData.push(item);
-        newPath.push(`institute/${item.id}/setting`);
+        newData.push(temp);
+        newPath.push(`institute/${temp.id}/setting`);
       });
     }
 
@@ -187,13 +189,14 @@ export default function InstituteList() {
 
     institutesID.forEach((key) => {
       const item = institutes[key];
+      const temp = { ...item };
       if (item.is_disabled === true || item.is_disabled === 'Disabled') {
-        item.is_disabled = 'Disabled';
+        temp.is_disabled = 'Disabled';
       } else if (item.is_disabled === false || item.is_disabled === 'Enabled') {
-        item.is_disabled = 'Enabled';
+        temp.is_disabled = 'Enabled';
       }
-      newData.push(item);
-      newPath.push(`institute/${item.id}/setting`);
+      newData.push(temp);
+      newPath.push(`institute/${temp.id}/setting`);
     });
     setTableData(newData);
     setPath(newPath);

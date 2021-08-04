@@ -43,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
 export default function AccountList() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  // const { addInstitute, getInstitutes } = bindActionCreators(accountActions, dispatch);
 
   const accounts = useSelector((state) => state.admin.account.accounts.byId);
   const accountsID = useSelector((state) => state.admin.account.accounts.allIds);
@@ -51,6 +50,10 @@ export default function AccountList() {
 
   const [tableData, setTableData] = useState([]);
   const [path, setPath] = useState([]);
+
+  useEffect(() => {
+    // dispatch(accountActions.fetchAccounts(authToken));
+  }, [authToken, dispatch]);
 
   useEffect(() => {
     const newData = [];

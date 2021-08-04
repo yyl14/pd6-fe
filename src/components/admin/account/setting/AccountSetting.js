@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import { Button, GrstudentId, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { isThisHour } from 'date-fns';
+import { accountActions } from '../../../../actions/index';
 import SimpleBar from '../../../ui/SimpleBar';
 
 import BasicInfo from './BasicInfo';
@@ -44,6 +47,7 @@ class AccountSetting extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      accountId: null,
       editBasicInfo: false,
       editStudInfo: false,
       realName: '黑阿柴',
@@ -58,6 +62,19 @@ class AccountSetting extends Component {
     this.handleStudBack = this.handleStudBack.bind(this);
     this.handleStudEdit = this.handleStudEdit.bind(this);
     this.updateStatus = this.updateStatus.bind(this);
+  }
+
+  componentDidMount() {
+    const { accountId } = this.props.match.params;
+    console.log('hello', this.props.accounts);
+    const account = this.props.accounts[accountId];
+    this.setState({
+      accountId,
+      realName: account.real_name,
+      userName: account.username,
+      nickName: account.nickname,
+      altMail: account.alternative_email,
+    });
   }
 
   setBasicInfo = (newRealName, newUserName, newNickName, newAltMail) => {
@@ -152,4 +169,12 @@ class AccountSetting extends Component {
   }
 }
 
-export default withStyles(useStyles)(AccountSetting);
+const mapStateToProps = (store) => (
+  {
+    accounts: store.admin.account.accounts.byId,
+    studentCards: store.admin.account.studentCards.byId,
+    studentCardsId: store.admin.account.studentCards.allId,
+  }
+);
+
+export default connect(mapStateToProps, accountActions)(withStyles(useStyles)(AccountSetting));
