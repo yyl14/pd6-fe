@@ -23,17 +23,17 @@ export const fetchCourses = (token) => (dispatch) => {
 };
 
 export const addCourse = (token, name, type, isHidden) => (dispatch) => {
-  const request = {
+  const auth = {
     headers: { 'auth-token': token },
-    name,
-    type,
-    is_hidden: isHidden,
+    // name,
+    // type,
+    // is_hidden: isHidden,
   };
 
   dispatch({ type: courseConstants.ADD_COURSE_START });
 
   agent
-    .post('/course', request)
+    .post('/course', auth)
     .then((res) => {
       const { data } = res.data;
       const { id } = data;
@@ -86,14 +86,15 @@ export const renameCourse = (token, courseId, newName) => (dispatch) => {
 };
 
 export const deleteCourse = (token, courseId) => (dispatch) => {
-  const request = { headers: { 'auth-token': token } };
+  const auth = { headers: { 'auth-token': token } };
   dispatch({
     type: courseConstants.DELETE_COURSE_START,
   });
 
   agent
-    .delete(`/course/${courseId}`)
-    .then(() => {
+    .delete(`/course/${courseId}`, auth)
+    .then((res) => {
+      console.log(res);
       dispatch({
         type: courseConstants.DELETE_COURSE_SUCCESS,
         payload: {
@@ -188,13 +189,13 @@ export const renameClass = (token, classId, newName) => (dispatch) => {
 };
 
 export const deleteClass = (token, classId) => (dispatch) => {
-  const request = { headers: { 'auth-token': token } };
+  const auth = { headers: { 'auth-token': token } };
   dispatch({
     type: courseConstants.DELETE_CLASS_START,
   });
 
   agent
-    .delete(`/class/${classId}`)
+    .delete(`/class/${classId}`, auth)
     .then(() => {
       dispatch({
         type: courseConstants.DELETE_CLASS_START,

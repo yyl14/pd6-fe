@@ -1,185 +1,19 @@
 import { courseConstants } from '../../actions/constant';
 
-// const initialState = {
-//   courses: {
-//     byId: {},
-//     allIds: [],
-//   },
-
-//   classes: {
-//     byId: {},
-//     allIds: [],
-//   },
-
-//   members: {
-//     byId: {},
-//     allIds: [],
-//   },
-
-//   loading: {
-//     fetchCourse: false,
-//     addCourse: false,
-//     renameCourse: false,
-//     deleteCourse: false,
-
-//     fetchClasses: false,
-//     addClass: false,
-//     renameClass: false,
-//     deleteClass: false,
-
-//     fetchMembers: false,
-//     editMembers: false,
-//   },
-
-//   error: {
-//     fetchCourse: null,
-//     addCourse: null,
-//     editCourse: null,
-//     deleteCourse: null,
-
-//     fetchClasses: null,
-//     addClass: null,
-//     renameClass: null,
-//     deleteClass: null,
-
-//     fetchMembers: null,
-//     editMembers: null,
-//   },
-// };
-
 const initialState = {
   courses: {
-    byId: {
-      1: {
-        id: 1,
-        name: 'PBC',
-        type: 'LESSON',
-        is_deleted: false,
-        classIds: [],
-      },
-      2: {
-        id: 2,
-        name: 'PD',
-        type: 'LESSON',
-        is_deleted: false,
-        classIds: [],
-      },
-      3: {
-        id: 3,
-        name: 'DSAP',
-        type: 'LESSON',
-        is_deleted: false,
-        classIds: [],
-      },
-      4: {
-        id: 4,
-        name: 'PDAO',
-        type: 'CONTEST',
-        is_deleted: false,
-        classIds: [],
-      },
-    },
-    allIds: [1, 2, 3, 4],
+    byId: {},
+    allIds: [],
   },
 
   classes: {
-    byId: {
-      12: {
-        id: 12,
-        name: '108-2',
-        course_id: 2345,
-        is_hidden: false,
-        is_deleted: false,
-        memberIds: [111, 222, 333],
-      },
-      14: {
-        id: 14,
-        name: '108-1',
-        course_id: 2345,
-        is_hidden: false,
-        is_deleted: false,
-        memberIds: [333, 78978],
-      },
-      16: {
-        id: 16,
-        name: '109-1',
-        course_id: 2345,
-        is_hidden: false,
-        is_deleted: false,
-        memberIds: [],
-      },
-      18: {
-        id: 18,
-        name: '109-2',
-        course_id: 2345,
-        is_hidden: false,
-        is_deleted: false,
-        memberIds: [],
-      },
-      20: {
-        id: 20,
-        name: '110-1',
-        course_id: 2345,
-        is_hidden: false,
-        is_deleted: false,
-        memberIds: [],
-      },
-      21: {
-        id: 21,
-        name: '110-1',
-        course_id: 6789,
-        is_hidden: false,
-        is_deleted: false,
-        memberIds: [],
-      },
-      45678: {
-        id: 45678,
-        name: '109-2',
-        course_id: 6789,
-        is_hidden: false,
-        is_deleted: false,
-        memberIds: [],
-      },
-    },
-    allIds: [12, 14, 16, 18, 20, 21, 45678],
+    byId: {},
+    allIds: [],
   },
 
   members: {
-    byId: {
-      111: {
-        id: 111,
-        student_id: 'B087050801',
-        realName: '南部陽一郎',
-        username: 'shinymarshmello',
-        institute: 'NTUST',
-        role: 'Guest',
-      },
-      222: {
-        id: 222,
-        student_id: 'B087050802',
-        realName: '南部陽二郎',
-        username: 'shinymarshmello',
-        institute: 'NTU',
-        role: 'Guest',
-      },
-      333: {
-        id: 333,
-        student_id: 'B087050802',
-        realName: '南部陽二郎',
-        username: 'shinymarshmello',
-        institute: 'NTU',
-        role: 'Guest',
-      },
-      78978: {
-        id: 78978,
-        student_id: 'B087050803',
-        realName: '南部陽三郎',
-        username: 'shinymarshmello',
-        institute: 'NTNU',
-        role: 'Guest',
-      },
-    },
-    allIds: [111, 222, 78978],
+    byId: {},
+    allIds: [],
   },
 
   loading: {
@@ -213,6 +47,172 @@ const initialState = {
   },
 };
 
+// const initialState = {
+//   courses: {
+//     byId: {
+//       1: {
+//         id: 1,
+//         name: 'PBC',
+//         type: 'LESSON',
+//         is_deleted: false,
+//         classIds: [],
+//       },
+//       2: {
+//         id: 2,
+//         name: 'PD',
+//         type: 'LESSON',
+//         is_deleted: false,
+//         classIds: [],
+//       },
+//       3: {
+//         id: 3,
+//         name: 'DSAP',
+//         type: 'LESSON',
+//         is_deleted: false,
+//         classIds: [],
+//       },
+//       4: {
+//         id: 4,
+//         name: 'PDAO',
+//         type: 'CONTEST',
+//         is_deleted: false,
+//         classIds: [],
+//       },
+//     },
+//     allIds: [1, 2, 3, 4],
+//   },
+
+//   classes: {
+//     byId: {
+//       12: {
+//         id: 12,
+//         name: '108-2',
+//         course_id: 2345,
+//         is_hidden: false,
+//         is_deleted: false,
+//         memberIds: [111, 222, 333],
+//       },
+//       14: {
+//         id: 14,
+//         name: '108-1',
+//         course_id: 2345,
+//         is_hidden: false,
+//         is_deleted: false,
+//         memberIds: [333, 78978],
+//       },
+//       16: {
+//         id: 16,
+//         name: '109-1',
+//         course_id: 2345,
+//         is_hidden: false,
+//         is_deleted: false,
+//         memberIds: [],
+//       },
+//       18: {
+//         id: 18,
+//         name: '109-2',
+//         course_id: 2345,
+//         is_hidden: false,
+//         is_deleted: false,
+//         memberIds: [],
+//       },
+//       20: {
+//         id: 20,
+//         name: '110-1',
+//         course_id: 2345,
+//         is_hidden: false,
+//         is_deleted: false,
+//         memberIds: [],
+//       },
+//       21: {
+//         id: 21,
+//         name: '110-1',
+//         course_id: 6789,
+//         is_hidden: false,
+//         is_deleted: false,
+//         memberIds: [],
+//       },
+//       45678: {
+//         id: 45678,
+//         name: '109-2',
+//         course_id: 6789,
+//         is_hidden: false,
+//         is_deleted: false,
+//         memberIds: [],
+//       },
+//     },
+//     allIds: [12, 14, 16, 18, 20, 21, 45678],
+//   },
+
+//   members: {
+//     byId: {
+//       111: {
+//         id: 111,
+//         student_id: 'B087050801',
+//         realName: '南部陽一郎',
+//         username: 'shinymarshmello',
+//         institute: 'NTUST',
+//         role: 'Guest',
+//       },
+//       222: {
+//         id: 222,
+//         student_id: 'B087050802',
+//         realName: '南部陽二郎',
+//         username: 'shinymarshmello',
+//         institute: 'NTU',
+//         role: 'Guest',
+//       },
+//       333: {
+//         id: 333,
+//         student_id: 'B087050802',
+//         realName: '南部陽二郎',
+//         username: 'shinymarshmello',
+//         institute: 'NTU',
+//         role: 'Guest',
+//       },
+//       78978: {
+//         id: 78978,
+//         student_id: 'B087050803',
+//         realName: '南部陽三郎',
+//         username: 'shinymarshmello',
+//         institute: 'NTNU',
+//         role: 'Guest',
+//       },
+//     },
+//     allIds: [111, 222, 78978],
+//   },
+
+//   loading: {
+//     fetchCourse: false,
+//     addCourse: false,
+//     renameCourse: false,
+//     deleteCourse: false,
+
+//     fetchClasses: false,
+//     addClass: false,
+//     renameClass: false,
+//     deleteClass: false,
+
+//     fetchMembers: false,
+//     editMembers: false,
+//   },
+
+//   error: {
+//     fetchCourse: null,
+//     addCourse: null,
+//     editCourse: null,
+//     deleteCourse: null,
+
+//     fetchClasses: null,
+//     addClass: null,
+//     renameClass: null,
+//     deleteClass: null,
+
+//     fetchMembers: null,
+//     editMembers: null,
+//   },
+// };
+
 export default function course(state = initialState, action) {
   switch (action.type) {
     /* Courses */
@@ -226,10 +226,18 @@ export default function course(state = initialState, action) {
       };
     case courseConstants.FETCH_COURSES_SUCCESS: {
       const { data } = action.payload;
+
       return {
         ...state,
         courses: {
-          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, classIds: [] } }), state.courses),
+          byId: data.reduce(
+            (acc, item) => ({
+              ...acc,
+              // classIds of existing courses are unchanged
+              [item.id]: { ...item, classIds: state.courses.byId[item.id] ? state.courses.byId[item.id].classIds : [] },
+            }),
+            {},
+          ),
           allIds: data.map((item) => item.id),
         },
         loading: {
@@ -246,14 +254,14 @@ export default function course(state = initialState, action) {
       const { error } = action.payload;
       return {
         ...state,
-        courses: {
-          byId: {},
-          allIds: [],
-        },
-        loading: {
-          ...state.loading,
-          fetchCourse: false,
-        },
+        // courses: {
+        //   byId: {},
+        //   allIds: [],
+        // },
+        // loading: {
+        //   ...state.loading,
+        //   fetchCourse: false,
+        // },
         error: {
           ...state.error,
           fetchCourse: error,
@@ -408,7 +416,17 @@ export default function course(state = initialState, action) {
 
         // add class data
         classes: {
-          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, memberIds: [] } }), state.classes.byId),
+          byId: data.reduce(
+            (acc, item) => ({
+              ...acc,
+              [item.id]: {
+                ...item,
+                // memberIds of existing classes are unchanged
+                memberIds: state.classes.byId[item.id] ? state.classes.byId[item.id].memberIds : [],
+              },
+            }),
+            state.classes.byId,
+          ),
           allIds: [...new Set([...data.map((item) => item.id), ...state.classes.allIds])],
         },
 
