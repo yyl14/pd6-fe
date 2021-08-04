@@ -282,7 +282,7 @@ export default function course(state = initialState, action) {
         courses: {
           ...state.courses,
           byId: { ...state.courses.byId, [courseId]: data },
-          allIds: state.course.allIds.concat([[courseId]]),
+          allIds: state.courses.allIds.concat([courseId]),
         },
         loading: {
           ...state.loading,
