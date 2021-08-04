@@ -90,7 +90,7 @@ export default function CourseSetting() {
 
       <SimpleBar
         title="Change Course Name"
-        buttons={(
+        childrenButtons={(
           <>
             <Button color="secondary" onClick={onClickRename}>
               Rename
@@ -104,7 +104,7 @@ export default function CourseSetting() {
       </SimpleBar>
       <SimpleBar
         title="Delete Course"
-        buttons={(
+        childrenButtons={(
           <>
             <Button color="secondary" onClick={onClickDelete}>
               Delete

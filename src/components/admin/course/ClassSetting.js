@@ -111,7 +111,7 @@ const ClassSetting = () => {
 
       <SimpleBar
         title="Rename Class"
-        buttons={(
+        childrenButtons={(
           <>
             <Button onClick={() => setShowRenameDialog(true)} color="secondary">
               Rename
