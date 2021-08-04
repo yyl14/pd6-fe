@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     margin: '0px',
   },
-  buttomContent: {
+  bottomContent: {
     display: 'flex',
     justifyContent: 'space-between',
   },
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SimpleBar({
-  title, buttons, buttonsBelowDivider, children,
+  title, buttons, childrenButtons, children,
 }) {
   const classes = useStyles();
   return (
@@ -47,9 +47,9 @@ export default function SimpleBar({
         <div className={classes.buttons}>{buttons}</div>
       </div>
       <hr className={classes.divider} />
-      <div className={classes.buttomContent}>
+      <div className={classes.bottomContent}>
         <div className={classes.children}>{children}</div>
-        <div className={`${classes.buttons} ${classes.buttonsBelow}`}>{buttonsBelowDivider}</div>
+        <div className={`${classes.buttons} ${classes.buttonsBelow}`}>{childrenButtons}</div>
       </div>
     </>
   );
