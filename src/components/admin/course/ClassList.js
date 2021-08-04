@@ -15,6 +15,7 @@ import { MdAdd } from 'react-icons/md';
 import {
   fetchCourses,
   fetchClasses,
+  addCourse,
   addClass,
   renameClass,
   deleteClass,
@@ -46,6 +47,7 @@ export default function ClassList() {
   const classes = useSelector((state) => state.admin.course.classes);
   const loading = useSelector((state) => state.admin.course.loading);
 
+  const [addCourseName, setAddCourseName] = useState('');
   const [addClassName, setAddClassName] = useState('');
 
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
@@ -55,11 +57,27 @@ export default function ClassList() {
     dispatch(fetchClasses(authToken, courseId));
   }, [authToken, courseId, dispatch]);
 
+  const getCourseType = (courseType) => {
+    switch (courseType) {
+      case 'lesson':
+        return 'Lesson';
+      case 'contest':
+        return 'Contest';
+      default:
+        return 'Unknown';
+    }
+  };
+
   const onClickAddClass = () => {
     setShowAddClassDialog(true);
   };
   const onClickSetting = () => {
     history.push(`/admin/course/course/${courseId}/setting`);
+  };
+  const onAddCourse = (name) => {
+    setAddCourseName('');
+    history.push(`/admin/course/course/${courseId}/class-list`);
+    dispatch(addCourse(authToken, name, getCourseType(addType).toUpperCase()));
   };
   const onAddClass = (name) => {
     setAddClassName('');
@@ -75,7 +93,7 @@ export default function ClassList() {
     return <NoMatch />;
   }
 
-  // console.log(courses, classes);
+  console.log(authToken);
 
   return (
     <>
@@ -119,21 +137,28 @@ export default function ClassList() {
         hasLink
         path={courses.byId[courseId].classIds.map((classId) => `/admin/course/class/${courseId}/${classId}/member`)}
       />
+      {/* add course is controlled by optional route param "addType" */}
       <Dialog open={addType} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Create a new course</Typography>
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Type" maxWidth="md" childrenType="text">
-            <Typography variant="body1">Lesson</Typography>
+            <Typography variant="body1">{getCourseType(addType)}</Typography>
           </AlignedText>
           <AlignedText text="Course Name" maxWidth="md" childrenType="field">
             <TextField />
           </AlignedText>
         </DialogContent>
         <DialogActions>
-          <Button>Cancel</Button>
-          <Button color="primary">Create</Button>
+          <Button onClick={() => history.push(`/admin/course/course/${courseId}/class-list`)}>Cancel</Button>
+          <Button
+            onClick={() => onAddCourse(addCourseName)}
+            color="primary"
+            disabled={getCourseType(addType) === 'Unknown'}
+          >
+            Create
+          </Button>
         </DialogActions>
       </Dialog>
       <Dialog open={showAddClassDialog || loading.addClass} maxWidth="md">

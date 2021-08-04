@@ -22,19 +22,18 @@ export const fetchCourses = (token) => (dispatch) => {
     });
 };
 
-export const addCourse = (token, name, type, isHidden) => (dispatch) => {
+export const addCourse = (token, name, type) => (dispatch) => {
   const auth = {
     headers: { 'auth-token': token },
-    // name,
-    // type,
-    // is_hidden: isHidden,
   };
+  const body = { name, type };
 
   dispatch({ type: courseConstants.ADD_COURSE_START });
 
   agent
-    .post('/course', auth)
+    .post('/course', body, auth)
     .then((res) => {
+      console.log(res);
       const { data } = res.data;
       const { id } = data;
       dispatch({
@@ -45,7 +44,7 @@ export const addCourse = (token, name, type, isHidden) => (dispatch) => {
             id,
             name,
             type,
-            is_hidden: isHidden,
+            is_hidden: false,
             is_deleted: false,
           },
         },
