@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Typography,
@@ -13,9 +13,10 @@ import {
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 
-import * as courseActions from '../../../actions/admin/course';
+import { fetchCourses, renameCourse, deleteCourse } from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
+import NoMatch from '../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
   informationRow: {
@@ -38,13 +39,17 @@ export default function CourseSetting() {
   const { courseId } = useParams();
   const history = useHistory();
   const authToken = useSelector((state) => state.auth.user.token);
-  const courses = useSelector((state) => state.admin.course.courses.byId);
+  const courses = useSelector((state) => state.admin.course.courses);
   const loading = useSelector((state) => state.admin.course.loading);
   const dispatch = useDispatch();
 
   const [showRenameDialog, setShowRenameDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [newCourseName, setNewCourseName] = useState('');
+
+  useEffect(() => {
+    dispatch(fetchCourses(authToken));
+  }, [authToken, courseId, dispatch]);
 
   const getCourseType = (courseType) => {
     switch (courseType) {
@@ -66,31 +71,39 @@ export default function CourseSetting() {
 
   const onRename = () => {
     setShowRenameDialog(false);
-    dispatch(courseActions.renameClass(authToken, courseId, newCourseName, false));
+    dispatch(renameCourse(authToken, courseId, newCourseName, false));
   };
   const onDelete = () => {
     setShowDeleteDialog(false);
-    dispatch(courseActions.deleteCourse(authToken, courseId));
+    dispatch(deleteCourse(authToken, courseId));
     history.push('/admin/course/course/');
   };
+
+  if (courses.byId[courseId] === undefined) {
+    if (loading.fetchCourses) {
+      // still loading
+      return <div>loading</div>;
+    }
+    return <NoMatch />;
+  }
 
   return (
     <>
       <Typography variant="h3" className={classNames.pageHeader}>
-        {`${courses[courseId].name} / Setting`}
+        {`${courses.byId[courseId].name} / Setting`}
       </Typography>
       <SimpleBar title="Course Information">
         <AlignedText text="Type" childrenType="text">
-          <Typography variant="body1">{getCourseType(courses[courseId].type)}</Typography>
+          <Typography variant="body1">{getCourseType(courses.byId[courseId].type)}</Typography>
         </AlignedText>
         <AlignedText text="Course Name" childrenType="text">
-          <Typography variant="body1">{courses[courseId].name}</Typography>
+          <Typography variant="body1">{courses.byId[courseId].name}</Typography>
         </AlignedText>
       </SimpleBar>
 
       <SimpleBar
         title="Change Course Name"
-        buttons={(
+        childrenButtons={(
           <>
             <Button color="secondary" onClick={onClickRename}>
               Rename
@@ -104,7 +117,7 @@ export default function CourseSetting() {
       </SimpleBar>
       <SimpleBar
         title="Delete Course"
-        buttons={(
+        childrenButtons={(
           <>
             <Button color="secondary" onClick={onClickDelete}>
               Delete
@@ -120,11 +133,11 @@ export default function CourseSetting() {
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Type" childrenType="text">
-            <Typography variant="body1">{courses[courseId].type}</Typography>
+            <Typography variant="body1">{getCourseType(courses.byId[courseId].type)}</Typography>
           </AlignedText>
 
           <AlignedText text="Current Name" textColor="secondary" childrenType="text">
-            <Typography variant="body1">{courses[courseId].name}</Typography>
+            <Typography variant="body1">{courses.byId[courseId].name}</Typography>
           </AlignedText>
 
           <AlignedText text="New Name" childrenType="field">
@@ -154,10 +167,10 @@ export default function CourseSetting() {
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Type" childrenType="text">
-            <Typography variant="body1">{courses[courseId].type}</Typography>
+            <Typography variant="body1">{getCourseType(courses.byId[courseId].type)}</Typography>
           </AlignedText>
           <AlignedText text="Course" childrenType="text">
-            <Typography variant="body1">{courses[courseId].name}</Typography>
+            <Typography variant="body1">{courses.byId[courseId].name}</Typography>
           </AlignedText>
         </DialogContent>
         <DialogContent>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import {
   Typography,
   Button,
@@ -13,29 +13,18 @@ import {
   TextField,
   makeStyles,
 } from '@material-ui/core';
-import * as courseActions from '../../../actions/admin/course';
+import {
+  fetchCourses,
+  fetchClasses,
+  fetchMembers,
+  renameClass,
+  deleteClass,
+} from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 import NoMatch from '../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
-  // informationRow: {
-  //   display: 'flex',
-  //   flexDirection: 'row',
-  // },
-  // informationItem: {
-  //   width: '250px',
-  // },
-  dialogInformationRow: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  dialogInformationItem: {
-    width: '190px',
-    marginTop: '0px',
-    marginBottom: '16px',
-  },
-
   pageHeader: {
     marginBottom: '50px',
   },
@@ -45,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 const ClassSetting = () => {
   const classNames = useStyles();
   const { courseId, classId } = useParams();
+  const history = useHistory();
 
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.user.token);
@@ -57,9 +47,9 @@ const ClassSetting = () => {
   const [newClassName, setNewClassName] = useState('');
 
   useEffect(() => {
-    dispatch(courseActions.fetchCourses(authToken));
-    dispatch(courseActions.fetchClasses(authToken, courseId));
-    dispatch(courseActions.fetchMembers(authToken, classId));
+    dispatch(fetchCourses(authToken));
+    dispatch(fetchClasses(authToken, courseId));
+    // dispatch(fetchMembers(authToken, classId));
   }, [authToken, classId, courseId, dispatch]);
 
   const getCourseType = (courseType) => {
@@ -73,14 +63,14 @@ const ClassSetting = () => {
     }
   };
 
-  // TODO: data & button loading
   const onRename = () => {
     setShowRenameDialog(false);
-    //
+    dispatch(renameClass(authToken, classId, newClassName, false));
   };
   const onDelete = () => {
     setShowDeleteDialog(false);
-    //
+    dispatch(deleteClass(authToken, classId));
+    history.push(`/admin/course/course/${courseId}/class-list/`);
   };
 
   if (courses.byId[courseId] === undefined || classes.byId[courseId] === undefined) {
@@ -98,20 +88,20 @@ const ClassSetting = () => {
       </Typography>
 
       <SimpleBar title="Course Information">
-        <AlignedText text="Type" childrenType="text">
+        <AlignedText text="Type" maxWidth="lg" childrenType="text">
           <Typography variant="body1">{getCourseType(courses.byId[courseId].type)}</Typography>
         </AlignedText>
-        <AlignedText text="Course Name" childrenType="text">
+        <AlignedText text="Course Name" maxWidth="lg" childrenType="text">
           <Typography variant="body1">{courses.byId[courseId].name}</Typography>
         </AlignedText>
-        <AlignedText text="Class Name" childrenType="text">
+        <AlignedText text="Class Name" maxWidth="lg" childrenType="text">
           <Typography variant="body1">{classes.byId[classId].name}</Typography>
         </AlignedText>
       </SimpleBar>
 
       <SimpleBar
         title="Rename Class"
-        buttons={(
+        childrenButtons={(
           <>
             <Button onClick={() => setShowRenameDialog(true)} color="secondary">
               Rename
@@ -126,7 +116,7 @@ const ClassSetting = () => {
 
       <SimpleBar
         title="Delete Class"
-        buttons={(
+        childrenButtons={(
           <>
             <Button onClick={() => setShowDeleteDialog(true)} color="secondary">
               Delete
@@ -137,30 +127,21 @@ const ClassSetting = () => {
         <Typography variant="body1">Once you delete a class, there is no going back. Please be certain.</Typography>
       </SimpleBar>
 
-      <Dialog open={showRenameDialog} maxWidth="md">
+      <Dialog open={showRenameDialog || loading.renameClass} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Rename class</Typography>
         </DialogTitle>
         <DialogContent>
-          <AlignedText text="Type" childrenType="text">
+          <AlignedText text="Type" maxWidth="md" childrenType="text">
             <Typography variant="body1">{courses.byId[courseId].type}</Typography>
           </AlignedText>
-          <AlignedText text="Course" childrenType="text">
+          <AlignedText text="Course" maxWidth="md" childrenType="text">
             <Typography variant="body1">{courses.byId[courseId].name}</Typography>
           </AlignedText>
-          <div className={classNames.dialogInformationRow}>
-            <div className={classNames.dialogInformationItem}>
-              <Typography variant="body1" color="secondary">
-                Current Name
-              </Typography>
-            </div>
-            <div className={classNames.dialogInformationItem}>
-              <Typography variant="body1" color="secondary">
-                {classes.byId[classId].name}
-              </Typography>
-            </div>
-          </div>
-          <AlignedText text="New Name" childrenType="field">
+          <AlignedText text="Current Name" maxWidth="md" textColor="secondary" childrenType="text">
+            <Typography variant="body1">{classes.byId[classId].name}</Typography>
+          </AlignedText>
+          <AlignedText text="New Name" maxWidth="md" childrenType="field">
             <TextField
               style={{ width: '350px' }}
               variant="outlined"
@@ -175,42 +156,33 @@ const ClassSetting = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowRenameDialog(false)}>Cancel</Button>
-          <Button onClick={onRename} color="secondary">
+          <Button onClick={onRename} color="secondary" disabled={loading.renameClass}>
             Rename
           </Button>
         </DialogActions>
       </Dialog>
 
-      <Dialog open={showDeleteDialog} maxWidth="md">
+      <Dialog open={showDeleteDialog || loading.deleteClass} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Delete class</Typography>
         </DialogTitle>
         <DialogContent>
-          <AlignedText text="Type" childrenType="text">
+          <AlignedText text="Type" maxWidth="md" childrenType="text">
             <Typography variant="body1">{courses.byId[courseId].type}</Typography>
           </AlignedText>
-          <AlignedText text="Course" childrenType="text">
+          <AlignedText text="Course" maxWidth="md" childrenType="text">
             <Typography variant="body1">{courses.byId[courseId].name}</Typography>
           </AlignedText>
-          <div className={classNames.dialogInformationRow}>
-            <div className={classNames.dialogInformationItem}>
-              <Typography variant="body1" color="secondary">
-                Class
-              </Typography>
-            </div>
-            <div className={classNames.dialogInformationItem}>
-              <Typography variant="body1" color="secondary">
-                {classes.byId[classId].name}
-              </Typography>
-            </div>
-          </div>
+          <AlignedText text="Class" maxWidth="md" textColor="secondary" childrenType="text">
+            <Typography variant="body1">{classes.byId[classId].name}</Typography>
+          </AlignedText>
         </DialogContent>
         <DialogContent>
           <Typography variant="body2">Once you delete a class, there is no going back. Please be certain.</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowDeleteDialog(false)}>Cancel</Button>
-          <Button onClick={onDelete} color="secondary">
+          <Button onClick={onDelete} color="secondary" disabled={loading.deleteClass}>
             Delete
           </Button>
         </DialogActions>

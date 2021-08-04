@@ -15,25 +15,22 @@ import {
   makeStyles,
   OutlinedInput,
 } from '@material-ui/core';
-import SchoolIcon from '@material-ui/icons/School';
 
 const useStyles = makeStyles((theme) => ({
   card: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    width: '1280px',
+    width: '100%',
   },
   editorCol: {
     display: 'flex',
     flexDirection: 'column',
     margin: '16px 23px 16px 23px',
+    width: '26.4%',
   },
   editorItem: {
     marginBottom: '12px',
-  },
-  textField: {
-    width: '260px',
   },
   buttonsBar: {
     display: 'flex',
@@ -51,7 +48,7 @@ const MemberEdit = ({
   backToMemberList,
   members,
   onEditMembers,
-  loading, // TODO
+  loading,
 }) => {
   // TODO: initialize field content with redux state
   const classes = useStyles();
@@ -64,6 +61,8 @@ const MemberEdit = ({
 
   useEffect(() => {
     // setTA(members.filter((item) => item.role === 'TA'));
+    // setStudent(members.filter((item) => item.role === 'Student'));
+    // setGuest(members.filter((item) => item.role === 'Guest'));
   }, [members]);
 
   const handleChangeTA = (e) => {
@@ -90,9 +89,9 @@ const MemberEdit = ({
       setShowUnsaveDialog(true);
     }
     else{
-      setShowSaveDialog(true);
+      backToMemberList();
     } */
-    setShowSaveDialog(true);
+    setShowUnsaveDialog(true);
   };
 
   const handleSubmitUnsave = () => {
@@ -108,7 +107,6 @@ const MemberEdit = ({
 
   return (
     <div>
-      {/* TODO: rewrite the editor with <div />'s, use redux state, actions */}
       <Card className={classes.card} variant="outlined">
         <div className={classes.editorCol}>
           <div className={classes.editorItem}>
@@ -118,7 +116,6 @@ const MemberEdit = ({
             <Typography variant="caption">List of student ID</Typography>
           </div>
           <TextField
-            className={classes.textField}
             defaultValue={TA}
             onChange={(e) => handleChangeTA(e)}
             multiline
@@ -134,7 +131,6 @@ const MemberEdit = ({
             <Typography variant="caption">List of student ID</Typography>
           </div>
           <TextField
-            className={classes.textField}
             defaultValue={student}
             onChange={(e) => handleChangeStudent(e)}
             multiline
@@ -150,7 +146,6 @@ const MemberEdit = ({
             <Typography variant="caption">List of student ID</Typography>
           </div>
           <TextField
-            className={classes.textField}
             defaultValue={guest}
             onChange={(e) => handleChangeGuest(e)}
             multiline
@@ -162,10 +157,10 @@ const MemberEdit = ({
         <Button onClick={handleClickCancel} className={classes.leftButton}>
           Cancel
         </Button>
-        <Button onClick={handleSubmitSave} color="primary">
+        <Button onClick={() => setShowSaveDialog(true)} color="primary">
           Save
         </Button>
-        {/* TODO:disabled */}
+        {/* TODO:button variant */}
       </div>
 
       <Dialog open={showUnsaveDialog} maxWidth="md">
@@ -196,7 +191,7 @@ const MemberEdit = ({
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowSaveDialog(false)}>Cancel</Button>
-          <Button onClick={handleSubmitSave} color="primary">
+          <Button onClick={handleSubmitSave} color="primary" disabled={loading.editMembers}>
             Save Changes
           </Button>
         </DialogActions>

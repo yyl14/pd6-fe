@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Button, makeStyles } from '@material-ui/core';
 import { useParams, useHistory } from 'react-router-dom';
 import { BiFilterAlt } from 'react-icons/bi';
-import * as courseActions from '../../../actions/admin/course';
+import { fetchCourses, fetchClasses, fetchMembers } from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import CustomTable from '../../ui/CustomTable';
 import MemberEdit from './MemberEdit';
@@ -30,27 +30,13 @@ export default function MemberList() {
   const loading = useSelector((state) => state.admin.course.loading);
 
   useEffect(() => {
-    dispatch(courseActions.fetchCourses(authToken));
-    dispatch(courseActions.fetchClasses(authToken, courseId));
-    dispatch(courseActions.fetchMembers(authToken, classId));
+    dispatch(fetchCourses(authToken));
+    dispatch(fetchClasses(authToken, courseId));
+    dispatch(fetchMembers(authToken, classId));
   }, [authToken, classId, courseId, dispatch]);
 
-  // console.log(
-  //   classes.byId[classId].memberIds.map((id) => ({
-  //     ...members.byId[id],
-  //     studentId: members.byId[id].memberId,
-  //   })),
-  //   members,
-  // );
-
   const [edit, setEdit] = useState(false);
-  // TODO: list of path, member data, table filter, link, search bar placeholder
-  // const path = [
-  //   //
-  // ];
-  // const memberData = [
-  //   //
-  // ];
+  // TODO: path of arrows, table filter, username link, search bar length
 
   if (courses.byId[courseId] === undefined || classes.byId[courseId] === undefined) {
     if (loading.fetchCourses || loading.fetchClasses) {
@@ -69,6 +55,7 @@ export default function MemberList() {
         <MemberEdit
           members={classes.byId[classId].memberIds.map((id) => members.byId[id])}
           backToMemberList={() => setEdit(false)}
+          loading={loading}
         />
       ) : (
         <>
@@ -122,8 +109,7 @@ export default function MemberList() {
               },
             ]}
             // columnComponent={[null, null, null, (<BiFilterAlt key="filter" onClick={[]} />), (<BiFilterAlt key="filter" onClick={[]} />)]}
-            hasFilter={[false, false, false, true, true]}
-            dataColumnName={['username', 'studentId', 'realName', 'institute', 'role']}
+            // hasFilter={[false, false, false, true, true]}
             // hasLink
             // path={classes.byId[classId].memberIds.map((member) => `/admin/course/class/${courseId}/${classId}/member`)}
           />
