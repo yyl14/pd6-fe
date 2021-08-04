@@ -20,7 +20,7 @@ import { bindActionCreators } from 'redux';
 import { Translate } from '@material-ui/icons';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
-import { accountActions } from '../../../actions/index';
+import { editInstitute } from '../../../actions/admin/account';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -112,19 +112,19 @@ export default function InstituteSetting() {
     }
     switch (prop) {
       case 'newName':
-        dispatch(accountActions.editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, newSetting.newName, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
+        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, newSetting.newName, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
         break;
       case 'newInitialism':
-        dispatch(accountActions.editInstitute(authToken, instituteId, newSetting.newInitialism, institutes[instituteId].full_name, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
+        dispatch(editInstitute(authToken, instituteId, newSetting.newInitialism, institutes[instituteId].full_name, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
         break;
       case 'newEmail':
-        dispatch(accountActions.editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, newSetting.newEmail, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
+        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, newSetting.newEmail, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
         break;
       case 'newStatus':
-        dispatch(accountActions.editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, institutes[instituteId].email_domain, newSetting.newStatus));
+        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, institutes[instituteId].email_domain, newSetting.newStatus));
         break;
       default:
-        dispatch(accountActions.editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
+        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === 'Disabled' || institutes[instituteId].is_disabled === true));
     }
     handleClosePopUp();
   };
