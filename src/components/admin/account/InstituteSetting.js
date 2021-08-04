@@ -20,7 +20,8 @@ import { bindActionCreators } from 'redux';
 import { Translate } from '@material-ui/icons';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
-import { editInstitute } from '../../../actions/admin/account';
+import { getInstitute, editInstitute } from '../../../actions/admin/account';
+import NoMatch from '../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -61,6 +62,17 @@ export default function InstituteSetting() {
 
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState('');
+
+  useEffect(() => {
+    dispatch(getInstitute(authToken, instituteId));
+  }, [authToken, dispatch, instituteId]);
+
+  if (institutes[instituteId] === undefined) {
+    if (loading.getInstitute) {
+      return <div>loading...</div>;
+    }
+    return <NoMatch />;
+  }
 
   const handleClosePopUp = () => {
     setSettingStatus({

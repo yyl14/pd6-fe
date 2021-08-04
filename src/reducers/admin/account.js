@@ -55,6 +55,7 @@ const initialState = {
   },
 
   loading: {
+    fetchInstitutes: false,
     fetchInstitute: false,
     addInstitute: false,
     editInstitute: false,
@@ -69,6 +70,7 @@ const initialState = {
   },
 
   error: {
+    fetchInstitutes: null,
     fetchInstitute: null,
     addInstitute: null,
     editInstitute: null,
@@ -86,6 +88,42 @@ const initialState = {
 export default function account(state = initialState, action) {
   switch (action.type) {
     // institute
+    case accountConstants.FETCH_INSTITUTES_REQUEST:
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          fetchInstitutes: true,
+        },
+      };
+    case accountConstants.FETCH_INSTITUTES_SUCCESS:
+      return {
+        ...state,
+        institutes: {
+          byId: action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.institutes),
+          allIds: action.payload.map((item) => item.id),
+        },
+        loading: {
+          ...state.loading,
+          fetchInstitutes: false,
+        },
+        error: {
+          ...state.error,
+          fetchInstitutes: null,
+        },
+      };
+    case accountConstants.FETCH_INSTITUTES_FAIL:
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          fetchInstitutes: false,
+        },
+        error: {
+          ...state.error,
+          fetchInstitutes: action.error,
+        },
+      };
     case accountConstants.FETCH_INSTITUTE_REQUEST:
       return {
         ...state,
@@ -98,8 +136,8 @@ export default function account(state = initialState, action) {
       return {
         ...state,
         institutes: {
-          byId: action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.institutes),
-          allIds: action.payload.map((item) => item.id),
+          byId: { ...state.institutes.byId, [action.payload.id]: action.payload },
+          allId: state.institutes.allIds.includes(action.payload.id) ? state.institutes.allIds : state.institutes.allIds.concat([action.payload.id]),
         },
         loading: {
           ...state.loading,
@@ -397,7 +435,7 @@ export default function account(state = initialState, action) {
         studentCards: {
           ...state.studentCards,
           byId: { [data.id]: data },
-          allIds: state.studentCards.allIds.concat([[data.id]]),
+          allIds: state.studentCards.allIds.concat([data.id]),
         },
 
         loading: { ...state.loading, addStudentCard: false },
