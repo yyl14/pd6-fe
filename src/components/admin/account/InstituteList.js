@@ -244,11 +244,7 @@ export default function InstituteList() {
             width: 120,
           },
         ]}
-<<<<<<< HEAD
         columnComponent={[null, null, (<BiFilterAlt key="filter" onClick={() => { setFilter(true); }} />)]}
-=======
-        columnComponent={[null, null, <BiFilterAlt key="is_disabled" />]}
->>>>>>> development
         hasLink
         path={path}
       />
@@ -309,17 +305,7 @@ export default function InstituteList() {
           <Button onClick={() => setPopUp(false)} color="default">
             Cancel
           </Button>
-<<<<<<< HEAD
           <Button onClick={() => { add(); }} color="primary">
-=======
-          <Button
-            onClick={() => {
-              setPopUp(false);
-              add();
-            }}
-            color="primary"
-          >
->>>>>>> development
             Add
           </Button>
         </DialogActions>
