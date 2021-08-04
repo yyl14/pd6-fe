@@ -35,13 +35,13 @@ export default function MemberList() {
     dispatch(courseActions.fetchMembers(authToken, classId));
   }, [authToken, classId, courseId, dispatch]);
 
-  console.log(
-    classes.byId[classId].memberIds.map((id) => ({
-      ...members.byId[id],
-      studentId: members.byId[id].memberId,
-    })),
-    members,
-  );
+  // console.log(
+  //   classes.byId[classId].memberIds.map((id) => ({
+  //     ...members.byId[id],
+  //     studentId: members.byId[id].memberId,
+  //   })),
+  //   members,
+  // );
 
   const [edit, setEdit] = useState(false);
   // TODO: list of path, member data, table filter, link, search bar placeholder

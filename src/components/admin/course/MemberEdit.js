@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Typography,
   Button,
@@ -61,6 +61,11 @@ const MemberEdit = ({
 
   const [showUnsaveDialog, setShowUnsaveDialog] = useState(false);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
+
+  useEffect(() => {
+    // setTA(members.filter((item) => item.role === 'TA'));
+  }, [members]);
+
   const handleChangeTA = (e) => {
     /* if(){
 
