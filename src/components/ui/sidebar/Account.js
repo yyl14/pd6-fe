@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import {
   Drawer,
   Typography,
@@ -11,18 +12,20 @@ import {
 import SchoolIcon from '@material-ui/icons/School';
 import PersonIcon from '@material-ui/icons/Person';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import DetailsIcon from '@material-ui/icons/Details';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { useHistory, useLocation } from 'react-router-dom';
 
 export default function Account({
   menuItems, classes, history, location,
 }) {
+  const instituteList = useSelector((state) => state.admin.account.institutes);
+  const accountList = useSelector((state) => state.admin.account.accounts);
   const baseURL = '/admin/account';
   const [mode1, setMode1] = useState('main');
-  const [institute, setInstitute] = useState('');
-  const [account, setAccount] = useState('');
+  const [institute, setInstitute] = useState(instituteList.byId[instituteList.allIds[0]].abbreviated_name);
+  const [instituteID, setInstituteID] = useState(instituteList.byId[instituteList.allIds[0]].id);
+  const [account, setAccount] = useState(accountList.byId[accountList.allIds[0]].username);
+  const [accountID, setAccountID] = useState(accountList.byId[accountList.allIds[0]].id);
   const [display, setDisplay] = useState('unfold');
 
   const goBack = () => {
@@ -51,9 +54,9 @@ export default function Account({
     title = institute;
     itemList = [
       {
-        text: 'Institute Setting',
-        path: `${baseURL}/institute/${institute}/setting`,
-        icon: <SettingsIcon className={location.pathname === `${baseURL}/institute/${institute}/setting` ? classes.activeIcon : classes.icon} />,
+        text: 'Setting',
+        path: `${baseURL}/institute/${instituteID}/setting`,
+        icon: <SettingsIcon className={location.pathname === `${baseURL}/institute/${instituteID}/setting` ? classes.activeIcon : classes.icon} />,
       },
     ];
   } else if (mode1 === 'account') {
@@ -61,9 +64,9 @@ export default function Account({
     title = account;
     itemList = [
       {
-        text: 'Account Setting',
-        path: `${baseURL}/account/${account}/setting`,
-        icon: <SettingsIcon className={location.pathname === `${baseURL}/account/${account}/setting` ? classes.activeIcon : classes.icon} />,
+        text: 'Setting',
+        path: `${baseURL}/account/${accountID}/setting`,
+        icon: <SettingsIcon className={location.pathname === `${baseURL}/account/${accountID}/setting` ? classes.activeIcon : classes.icon} />,
       },
     ];
   }
@@ -77,20 +80,23 @@ export default function Account({
   };
 
   useEffect(() => {
+    // console.log(instituteList, accountList);
     // console.log('Current route', location.pathname);
-    const slashNum = (location.pathname.match(new RegExp('/', 'g')) || []).length;
-    if (slashNum === 2 || slashNum === 3) {
+    const split = location.pathname.split('/');
+    const slashNum = split.length - 1;
+    // console.log(split, slashNum);
+    if (slashNum === 3) {
       setMode1('main');
-    } else if (location.pathname.includes('institute')) {
+    } else if (split[3] === 'institute' && split[5] === 'setting') {
+      setInstituteID(split[4]);
+      setInstitute(instituteList.byId[split[4]].abbreviated_name);
       setMode1('institute');
-      const instituteName = location.pathname.match('institute/(.*)/setting');
-      setInstitute(instituteName[1]);
-    } else if (location.pathname.includes('account')) {
+    } else if (split[3] === 'account' && split[5] === 'setting') {
+      setInstituteID(split[4]);
+      setInstitute(accountList.byId[split[4]].username);
       setMode1('account');
-      const accountName = location.pathname.match('account/account/(.*)/setting');
-      setAccount(accountName[1]);
     }
-  }, [location]);
+  }, [accountList, instituteList, location]);
   return (
     <div>
       <Drawer
@@ -100,15 +106,19 @@ export default function Account({
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classes.drawerPaper }}
       >
-        {arrow}
+        {mode1 === 'main' ? (
+          <div className={classes.topSpace} />
+        ) : (
+          arrow
+        )}
         <div>
 
           {display === 'unfold' ? (
-            <PlayArrowIcon className={classes.titleIcon} onClick={foldAccount} />
+            <PlayArrowIcon className={`${classes.titleIcon} ${classes.rotate90}`} onClick={foldAccount} />
           ) : (
-            <DetailsIcon className={classes.titleIcon} onClick={unfoldAccount} />
+            <PlayArrowIcon className={classes.titleIcon} onClick={unfoldAccount} />
           )}
-          <Typography variant="h2" className={classes.title}>
+          <Typography variant="h4" className={classes.title}>
             {title}
           </Typography>
         </div>

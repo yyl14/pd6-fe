@@ -15,28 +15,15 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     height: '60px',
   },
-  buttonsBelow: {
-    marginTop: '6px',
-    width: '21.8%',
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
   divider: {
     margin: '0px',
   },
-  bottomContent: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
   children: {
     margin: '16px 0px 50px 50px',
-    width: '70.9%',
   },
 }));
 
-export default function SimpleBar({
-  title, buttons, childrenButtons, children,
-}) {
+export default function SimpleBar({ title, buttons, children }) {
   const classes = useStyles();
   return (
     <>
@@ -47,10 +34,7 @@ export default function SimpleBar({
         <div className={classes.buttons}>{buttons}</div>
       </div>
       <hr className={classes.divider} />
-      <div className={classes.bottomContent}>
-        <div className={classes.children}>{children}</div>
-        <div className={`${classes.buttons} ${classes.buttonsBelow}`}>{childrenButtons}</div>
-      </div>
+      <div className={classes.children}>{children}</div>
     </>
   );
 }
