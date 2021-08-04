@@ -26,6 +26,7 @@ class Index extends Component {
     if (!this.props.auth.isAuthenticated) {
       const cookieId = this.props.cookies.get('id');
       const cookieToken = this.props.cookies.get('token');
+      console.log(cookieId, cookieToken);
 
       if (cookieId !== null && cookieId !== undefined && cookieToken !== null && cookieToken !== undefined) {
         this.props.getUserInfo(cookieId, cookieToken);
