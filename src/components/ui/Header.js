@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
   item: {
     marginLeft: '2.5vw',
     marginRight: '2.3vw',
+    '&:hover': {
+      cursor: 'pointer',
+    },
   },
   date: {
     float: 'left',
@@ -50,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
   a: {
     color: 'inherit',
     textDecoration: 'none',
+
   },
   active: {
     textDecoration: 'none',
@@ -69,11 +73,11 @@ export default function Header({ role }) {
     itemList = [
       {
         text: 'Course',
-        path: '/admin/course/course/',
+        path: '/admin/course/course',
       },
       {
         text: 'Account',
-        path: '/admin/account/institute/',
+        path: '/admin/account/institute',
       },
       {
         text: 'System',
@@ -157,7 +161,7 @@ export default function Header({ role }) {
           {/* <Avatar src="https://pdogs.ntu.im/judge/image/LOGO.png" className={classes.avatar} /> */}
           {itemList.map((item) => (
             <Typography variant="h6" className={classes.item} key={item.text}>
-              <a href={baseURL + item.path} className={location.pathname === (item.path) ? classes.active : classes.a}>
+              <a href={baseURL + item.path} className={location.pathname.includes(item.path) ? classes.active : classes.a}>
                 {item.text}
               </a>
             </Typography>

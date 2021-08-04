@@ -34,10 +34,10 @@ class Admin extends Component {
 
   render() {
     return (
-      <div>
-        <Header role={this.props.auth.user.role} />
-        <Sidebar />
-        <Router>
+      <Router>
+        <div>
+          <Header role={this.props.auth.user.role} />
+          <Sidebar />
           <div className="layout-content-container">
             <div className="layout-content">
               <Switch>
@@ -52,8 +52,8 @@ class Admin extends Component {
               </Switch>
             </div>
           </div>
-        </Router>
-      </div>
+        </div>
+      </Router>
     );
   }
 }

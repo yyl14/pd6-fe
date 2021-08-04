@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import {
-  Drawer,
-  Typography,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-  Button,
+  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button,
 } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -16,15 +10,18 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import CodeIcon from '@material-ui/icons/Code';
 import AddIcon from '@material-ui/icons/Add';
-import { useHistory, useLocation } from 'react-router-dom';
 
 export default function System({
   menuItems, classes, history, location,
 }) {
+  const announcementList = useSelector((state) => state.admin.system.announcements);
+  const languageList = useSelector((state) => state.admin.system.submitLang);
   const baseURL = '/admin/system';
   const [mode1, setMode1] = useState('main');
-  const [announcement, setAnnouncement] = useState('');
-  const [language, setLanguage] = useState('');
+  const [announcement, setAnnouncement] = useState(announcementList.byId[announcementList.allIds[0]].title);
+  const [announcementID, setAnnouncementID] = useState(announcementList.byId[announcementList.allIds[0]].id);
+  const [language, setLanguage] = useState(languageList.byId[languageList.allIds[0]].name);
+  const [languageID, setLanguageID] = useState(languageList.byId[languageList.allIds[0]].id);
   const [display, setDisplay] = useState('unfold');
   const goBack = () => {
     history.goBack();
@@ -38,17 +35,27 @@ export default function System({
     itemList = [
       {
         text: 'Access Log',
-        icon: <DescriptionIcon className={location.pathname === `${baseURL}/accesslog` ? classes.activeIcon : classes.icon} />,
+        icon: (
+          <DescriptionIcon
+            className={location.pathname === `${baseURL}/accesslog` ? classes.activeIcon : classes.icon}
+          />
+        ),
         path: `${baseURL}/accesslog`,
       },
       {
         text: 'Announcement',
-        icon: <NotificationsIcon className={location.pathname === `${baseURL}/announcement` ? classes.activeIcon : classes.icon} />,
+        icon: (
+          <NotificationsIcon
+            className={location.pathname === `${baseURL}/announcement` ? classes.activeIcon : classes.icon}
+          />
+        ),
         path: `${baseURL}/announcement`,
       },
       {
         text: 'Submission Language',
-        icon: <CodeIcon className={location.pathname === `${baseURL}/submitlang` ? classes.activeIcon : classes.icon} />,
+        icon: (
+          <CodeIcon className={location.pathname === `${baseURL}/submitlang` ? classes.activeIcon : classes.icon} />
+        ),
         path: `${baseURL}/submitlang`,
       },
     ];
@@ -59,7 +66,11 @@ export default function System({
       {
         text: 'Create',
         path: `${baseURL}/announcement/create`,
-        icon: <AddIcon className={location.pathname === `${baseURL}/announcement/create` ? classes.activeIcon : classes.icon} />,
+        icon: (
+          <AddIcon
+            className={location.pathname === `${baseURL}/announcement/create` ? classes.activeIcon : classes.icon}
+          />
+        ),
       },
     ];
   } else if (mode1 === 'announcement') {
@@ -68,8 +79,16 @@ export default function System({
     itemList = [
       {
         text: 'Setting',
-        path: `${baseURL}/announcement/${announcement}/setting`,
-        icon: <SettingsIcon className={location.pathname === `${baseURL}/announcement/${announcement}/setting` ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/announcement/${announcementID}/setting`,
+        icon: (
+          <SettingsIcon
+            className={
+              location.pathname === `${baseURL}/announcement/${announcementID}/setting`
+                ? classes.activeIcon
+                : classes.icon
+            }
+          />
+        ),
       },
     ];
   } else if (mode1 === 'language') {
@@ -78,8 +97,14 @@ export default function System({
     itemList = [
       {
         text: 'Setting',
-        path: `${baseURL}/submitlang/${language}/setting`,
-        icon: <SettingsIcon className={location.pathname === `${baseURL}/submitlang/${language}/setting` ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/submitlang/${languageID}/setting`,
+        icon: (
+          <SettingsIcon
+            className={
+              location.pathname === `${baseURL}/submitlang/${languageID}/setting` ? classes.activeIcon : classes.icon
+            }
+          />
+        ),
       },
     ];
   }
@@ -93,22 +118,22 @@ export default function System({
   };
 
   useEffect(() => {
-    // console.log('Current route', location.pathname);
-    const slashNum = (location.pathname.match(new RegExp('/', 'g')) || []).length;
-    if (slashNum === 2 || slashNum === 3) {
+    const split = location.pathname.split('/');
+    const slashNum = split.length - 1;
+    if (slashNum === 3) {
       setMode1('main');
-    } else if (location.pathname.includes('announcement/create')) {
+    } else if (split[2] === 'system' && split[4] === 'create') {
       setMode1('create');
-    } else if (location.pathname.includes('announcement')) {
+    } else if (split[3] === 'announcement' && split[5] === 'setting') {
+      setAnnouncementID(split[4]);
+      setAnnouncement(announcementList.byId[split[4]].title);
       setMode1('announcement');
-      const announcementName = location.pathname.match('announcement/(.*)/setting');
-      setAnnouncement(announcementName[1]);
-    } else if (location.pathname.includes('submitlang')) {
+    } else if (split[3] === 'submitlang' && split[5] === 'setting') {
+      setLanguageID(split[4]);
+      setLanguage(`${languageList.byId[split[4]].name} ${languageList.byId[split[4]].version}`);
       setMode1('language');
-      const languageName = location.pathname.match('submitlang/(.*)/setting');
-      setLanguage(languageName[1]);
     }
-  }, [location]);
+  }, [announcementList, announcementList.byId, languageList, languageList.byId, location]);
 
   return (
     <div>
@@ -119,9 +144,8 @@ export default function System({
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classes.drawerPaper }}
       >
-        {arrow}
+        {mode1 === 'main' ? <div className={classes.topSpace} /> : arrow}
         <div>
-
           {display === 'unfold' ? (
             <PlayArrowIcon className={`${classes.titleIcon} ${classes.rotate90}`} onClick={foldSystem} />
           ) : (
@@ -142,20 +166,13 @@ export default function System({
                 className={location.pathname === item.path ? classes.active : null}
               >
                 <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  style={{
-                    width: '50px',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                  }}
-                />
+                <ListItemText primary={item.text} className={classes.wrapping} />
               </ListItem>
             ))}
           </List>
-        ) : ''}
-
+        ) : (
+          ''
+        )}
       </Drawer>
     </div>
   );

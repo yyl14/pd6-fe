@@ -4,17 +4,18 @@ import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button,
 } from '@material-ui/core';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import SettingsIcon from '@material-ui/icons/Settings';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PeopleIcon from '@material-ui/icons/People';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 export default function Course({
   menuItems, classes, history, location,
 }) {
   const courseList = useSelector((state) => state.admin.course.courses);
   const classList = useSelector((state) => state.admin.course.classes);
-  const baseURL = '/admin/course/course';
+  const baseURL = '/admin/course';
   const [mode1, setMode1] = useState('main');
   const [course, setCourse] = useState(courseList.byId[courseList.allIds[0]].name);
   const [courseID, setCourseID] = useState(courseList.byId[courseList.allIds[0]].id);
@@ -40,19 +41,31 @@ export default function Course({
       itemList[i] = {
         type: item.type,
         text: item.name,
-        icon: <PeopleIcon className={location.pathname === `${baseURL}/${item.id}/class-list` ? classes.activeIcon : classes.icon} />,
-        path: `${baseURL}/${item.id}/class-list`,
+        icon: <PeopleIcon className={location.pathname === `${baseURL}/course/${item.id}/class-list` ? classes.activeIcon : classes.icon} />,
+        path: `${baseURL}/course/${item.id}/class-list`,
       };
     }
+    itemList.push({
+      type: 'LESSON',
+      text: 'Lesson',
+      icon: <AddBoxIcon className={location.pathname.substr(location.pathname.length - 6) === 'course' ? classes.activeIcon : classes.icon} />,
+      path: `${baseURL}/course/${courseID}/class-list/course`,
+    });
+    itemList.push({
+      type: 'Contest',
+      text: 'Contest',
+      icon: <AddBoxIcon className={location.pathname.substr(location.pathname.length - 7) === 'contest' ? classes.activeIcon : classes.icon} />,
+      path: `${baseURL}/course/${courseID}/class-list/contest`,
+    });
   } else if (mode1 === 'setting') {
     arrow = <ArrowBackIcon className={classes.arrow} onClick={goBack} />;
     title1 = course;
     itemList = [
       {
-        text: 'Course Setting',
-        path: `${baseURL}/${courseID}/setting`,
+        text: 'Setting',
+        path: `${baseURL}/course/${courseID}/setting`,
         icon: (
-          <SettingsIcon className={location.pathname === `${baseURL}/${courseID}/setting` ? classes.activeIcon : classes.icon} />
+          <SettingsIcon className={location.pathname === `${baseURL}/course/${courseID}/setting` ? classes.activeIcon : classes.icon} />
         ),
       },
     ];
@@ -61,14 +74,14 @@ export default function Course({
     title1 = `${course} / ${semester}`;
     itemList = [
       {
-        text: 'Members',
-        path: `${baseURL}/${courseID}/${semesterID}/member`,
-        icon: <PeopleIcon className={location.pathname === `${baseURL}/${courseID}/${semesterID}/member` ? classes.activeIcon : classes.icon} />,
+        text: 'Member',
+        path: `${baseURL}/class/${courseID}/${semesterID}/member`,
+        icon: <PeopleIcon className={location.pathname === `${baseURL}/class/${courseID}/${semesterID}/member` ? classes.activeIcon : classes.icon} />,
       },
       {
-        text: 'Class Setting',
-        path: `${baseURL}/${courseID}/${semesterID}/setting`,
-        icon: <SettingsIcon className={location.pathname === `${baseURL}/${courseID}/${semesterID}/setting` ? classes.activeIcon : classes.icon} />,
+        text: 'Setting',
+        path: `${baseURL}/class/${courseID}/${semesterID}/setting`,
+        icon: <SettingsIcon className={location.pathname === `${baseURL}/class/${courseID}/${semesterID}/setting` ? classes.activeIcon : classes.icon} />,
       },
     ];
   }
@@ -91,27 +104,28 @@ export default function Course({
 
   useEffect(() => {
     // /admin/course/course/
-    if (location.pathname === '/admin/course/course/') {
+    if (location.pathname === '/admin/course/course') {
       history.push(
         `/admin/course/course/${courseList.byId[courseList.allIds[0]].id}/class-list`,
       );
     }
     // console.log('Current route', location.pathname);
-    console.log(courseList, classList);
+    // console.log(courseList, classList);
     const split = location.pathname.split('/');
     const slashNum = split.length - 1;
-    console.log(split, slashNum);
+    // console.log(split, slashNum);
     if (split[5] === 'class-list') {
       // /admin/course/course/:courseId/class-list
       setCourseID(split[4]);
       setCourse(courseList.byId[split[4]].name);
       setMode1('main');
-    } else if (split[5] === 'setting') {
+    } else if (split[3] === 'course' && split[5] === 'setting') {
       // /admin/course/course/:courseId/setting
       setCourseID(split[4]);
       setCourse(courseList.byId[split[4]].name);
       setMode1('setting');
-    } else if (split[6] === 'member' || split[6] === 'setting') {
+    } else if (split[3] === 'class' && (split[6] === 'member' || split[6] === 'setting')) {
+      // /admin/course/class/:courseId/:classId
       setCourseID(split[4]);
       setCourse(courseList.byId[split[4]].name);
       setSemesterID(split[5]);
@@ -130,9 +144,7 @@ export default function Course({
         classes={{ paper: classes.drawerPaper }}
       >
         {mode1 === 'main' ? (
-          <Button color="primary" className={classes.button}>
-            New
-          </Button>
+          <div className={classes.topSpace} />
         ) : (
           arrow
         )}

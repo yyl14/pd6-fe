@@ -9,37 +9,17 @@ import System from './sidebar/System';
 const useStyles = makeStyles((theme) => ({
   drawer: {
     top: '55px',
-    // top: '9.21vh',
     width: '300px',
   },
   drawerPaper: {
     top: '55px',
-    // top: '9.21vh',
     width: '300px',
   },
   active: {
     color: '#1EA5FF',
   },
-  activeIcon: {
-    color: '#1EA5FF',
-    marginLeft: '2.75vw',
-    marginRight: '1.3vw',
-  },
-  title: {
-    float: 'left',
-    marginTop: '5vh',
-    marginBottom: '1.23vh',
-    // marginRight: '9vw',
-  },
-  secondTitle: {
-    float: 'left',
-    marginTop: '3vh',
-    marginBottom: '1.23vh',
-  },
-  icon: {
-    color: '#090909',
-    marginLeft: '2.75vw',
-    marginRight: '1.3vw',
+  topSpace: {
+    marginTop: '10vh',
   },
   titleIcon: {
     float: 'left',
@@ -51,7 +31,26 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       cursor: 'pointer',
     },
-    // padding: '14px',
+  },
+  title: {
+    float: 'left',
+    marginTop: '5vh',
+    marginBottom: '1.23vh',
+  },
+  secondTitle: {
+    float: 'left',
+    marginTop: '3vh',
+    marginBottom: '1.23vh',
+  },
+  icon: {
+    color: '#090909',
+    marginLeft: '2.75vw',
+    marginRight: '1.3vw',
+  },
+  activeIcon: {
+    color: '#1EA5FF',
+    marginLeft: '2.75vw',
+    marginRight: '1.3vw',
   },
   secondTitleIcon: {
     float: 'left',
@@ -68,26 +67,21 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '2.21vh',
   },
   arrow: {
-    marginTop: '4vh',
+    marginTop: '7.3vh',
     marginLeft: '1.6vw',
     marginRight: 'auto',
     '&:hover': {
       cursor: 'pointer',
     },
   },
-  button: {
-    marginTop: '2.5vh',
-    marginLeft: 'auto',
-    marginRight: '1.5vw',
-    width: '90px',
-    height: '36px',
-    fontSize: '18px',
-    alignItems: 'center',
-    textAlign: 'center',
-    display: 'flex',
-  },
   rotate90: {
     transform: 'rotate(90deg)',
+  },
+  wrapping: {
+    width: '30px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
 }));
 
@@ -147,3 +141,18 @@ export default function Sidebar() {
   }
   return <div />;
 }
+
+// button: {
+//   marginTop: '2.5vh',
+//   marginLeft: 'auto',
+//   marginRight: '1.5vw',
+//   width: '90px',
+//   height: '36px',
+//   fontSize: '18px',
+//   alignItems: 'center',
+//   textAlign: 'center',
+//   display: 'flex',
+// },
+// itemPadding: {
+//   padding: '0px',
+// },
