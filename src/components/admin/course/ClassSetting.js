@@ -13,7 +13,13 @@ import {
   TextField,
   makeStyles,
 } from '@material-ui/core';
-import { fetchCourses, fetchClasses, fetchMembers } from '../../../actions/admin/course';
+import {
+  fetchCourses,
+  fetchClasses,
+  fetchMembers,
+  renameClass,
+  deleteClass,
+} from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 import NoMatch from '../../noMatch';
@@ -57,15 +63,14 @@ const ClassSetting = () => {
     }
   };
 
-  // TODO: dispatch
   const onRename = () => {
     setShowRenameDialog(false);
-    // dispatch(courseActions.renameClass(authToken, classId, newClassName, false));
+    dispatch(renameClass(authToken, classId, newClassName, false));
   };
   const onDelete = () => {
     setShowDeleteDialog(false);
-    // dispatch(courseActions.deleteClass(authToken, classId));
-    // history.push(`/admin/course/class/${courseId}/class-list/${addType?}`);
+    dispatch(deleteClass(authToken, classId));
+    history.push(`/admin/course/course/${courseId}/class-list/`);
   };
 
   if (courses.byId[courseId] === undefined || classes.byId[courseId] === undefined) {
