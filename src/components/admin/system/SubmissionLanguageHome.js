@@ -1,21 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableCell,
-  TableContainer,
-  TableFooter,
-  TablePagination,
-  TableRow,
-  Paper,
-  IconButton,
-  SvgIcon,
-  TextField,
-  Typography,
-  Grid,
-} from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import CustomTable from '../../ui/CustomTable';
@@ -63,7 +48,7 @@ export default function SubmissionLanguageHome() {
   }, [submitLang, submitLangId]);
 
   return (
-    <div>
+    <>
       <Typography variant="h3" className={classes.pageHeader}>
         Submission Language
       </Typography>
@@ -95,6 +80,6 @@ export default function SubmissionLanguageHome() {
         hasLink
         path={path}
       />
-    </div>
+    </>
   );
 }

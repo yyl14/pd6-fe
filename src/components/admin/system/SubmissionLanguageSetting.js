@@ -4,13 +4,11 @@ import { useParams } from 'react-router-dom';
 import {
   Typography,
   Button,
-  Grid,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TextField,
   FormControlLabel,
   Switch,
   makeStyles,
@@ -34,18 +32,24 @@ export default function LangSetting() {
   const { languageId } = useParams();
   const authToken = useSelector((state) => state.auth.user.token);
   const submitLang = useSelector((state) => state.admin.system.submitLang.byId);
-  const loading = useSelector((state) => state.admin.system.submitLang.loading);
+  const submitLangId = useSelector((state) => state.admin.system.submitLang.allIds);
+  const loading = useSelector((state) => state.admin.system.loading.fetchSubmitLanguage);
 
   const [popUp, setPopUp] = useState(false);
-  const [languageStatus, setLanguageStatus] = useState(submitLang[languageId].is_disabled);
+  const [languageStatus, setLanguageStatus] = useState(false);
   const [changeLanguageStatus, setChangeLanguageStatus] = useState(false);
   const [submit, setSubmit] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchSubmitLanguage(authToken));
-    setSubmit(false);
-    setPopUp(false);
-  }, [authToken, dispatch, submit]);
+    if (submitLangId.length === 0 || submit) {
+      dispatch(fetchSubmitLanguage(authToken));
+      console.log('call fetchSubmitLanguage');
+      setSubmit(false);
+      setPopUp(false);
+    } else {
+      setLanguageStatus(submitLang[languageId].is_disabled);
+    }
+  }, [authToken, dispatch, languageId, submitLang, submitLangId, submit]);
 
   if (submitLang[languageId] === undefined) {
     if (loading.fetchSubmitLanguage) {
@@ -63,23 +67,21 @@ export default function LangSetting() {
   return (
     <>
       <Typography variant="h3" className={classes.pageHeader}>
-        {`${submitLang[languageId].name} ${submitLang.[languageId].version} / Submission Language Setting`}
+        {`${submitLang[languageId].name} ${submitLang[languageId].version} / Submission Language Setting`}
       </Typography>
 
       <SimpleBar
         title="Submission Language Information"
       >
-        <Typography variant="body1">
-          <AlignedText text="Language" childrenType="text">
-            <Typography variant="body1">{submitLang[languageId].name}</Typography>
-          </AlignedText>
-          <AlignedText text="Version" childrenType="text">
-            <Typography variant="body1">{submitLang[languageId].version}</Typography>
-          </AlignedText>
-          <AlignedText text="Status" childrenType="text">
-            <Typography variant="body1">{(submitLang[languageId].is_disabled) ? 'Disabled' : 'Enabled'}</Typography>
-          </AlignedText>
-        </Typography>
+        <AlignedText text="Language" childrenType="text">
+          <Typography variant="body1">{submitLang[languageId].name}</Typography>
+        </AlignedText>
+        <AlignedText text="Version" childrenType="text">
+          <Typography variant="body1">{submitLang[languageId].version}</Typography>
+        </AlignedText>
+        <AlignedText text="Status" childrenType="text">
+          <Typography variant="body1">{(submitLang[languageId].is_disabled) ? 'Disabled' : 'Enabled'}</Typography>
+        </AlignedText>
       </SimpleBar>
 
       <SimpleBar
@@ -102,18 +104,16 @@ export default function LangSetting() {
           <Typography variant="h4">Change Submission Language</Typography>
         </DialogTitle>
         <DialogContent>
-          <Grid container className="change-language-form" direction="row">
-            <FormControlLabel
-              control={(
-                <Switch
-                  checked={!languageStatus} // true = Disable
-                  onChange={() => { setLanguageStatus(!languageStatus); setChangeLanguageStatus(languageStatus === submitLang[languageId].is_disabled); }}
-                  color="primary"
-                />
+          <FormControlLabel
+            control={(
+              <Switch
+                checked={!languageStatus} // true = Disable
+                onChange={() => { setLanguageStatus(!languageStatus); setChangeLanguageStatus(languageStatus === submitLang[languageId].is_disabled); }}
+                color="primary"
+              />
               )}
-              label={languageStatus ? 'Disabled' : 'Enabled'}
-            />
-          </Grid>
+            label={languageStatus ? 'Disabled' : 'Enabled'}
+          />
         </DialogContent>
         <DialogContent>
           <Typography variant="body2">
