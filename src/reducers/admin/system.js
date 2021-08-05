@@ -7,6 +7,10 @@ const initialState = {
     byId: {},
     allIds: [],
   },
+  accounts: {
+    byId: {},
+    allIds: [],
+  },
   announcements: {
     byId: {},
     allIds: [],
@@ -17,6 +21,7 @@ const initialState = {
   },
   loading: {
     fetchAccessLog: false,
+    fetchAccount: false,
     fetchAnnouncement: false,
     editAnnouncement: false,
     addAnnouncement: false,
@@ -26,6 +31,7 @@ const initialState = {
   },
   error: {
     fetchAccessLog: null,
+    fetchAccount: null,
     fetchAnnouncement: null,
     editAnnouncement: null,
     addAnnouncement: null,
@@ -80,6 +86,50 @@ export default function system(state = initialState, action) {
         error: {
           ...state.error,
           fetchAccessLog: error,
+        },
+      };
+    }
+    case systemConstants.FETCH_LOG_ACCOUNTS_START:
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          fetchAccount: true,
+        },
+      };
+    case systemConstants.FETCH_LOG_ACCOUNTS_SUCCESS: {
+      const data = Object.values(action.payload);
+      return {
+        ...state,
+        accounts: {
+          byId: data,
+          allIds: data.map((item) => item.id),
+        },
+        loading: {
+          ...state.loading,
+          fetchAccount: false,
+        },
+        error: {
+          ...state.error,
+          fetchAccount: null,
+        },
+      };
+    }
+    case systemConstants.FETCH_LOG_ACCOUNTS_FAIL: {
+      const error = action.payload;
+      return {
+        ...state,
+        accounts: {
+          byId: {},
+          allIds: [],
+        },
+        loading: {
+          ...state.loading,
+          fetchAccount: false,
+        },
+        error: {
+          ...state.error,
+          fetchAccount: error,
         },
       };
     }
