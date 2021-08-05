@@ -47,6 +47,10 @@ export default function AccessLog() {
     }
   }, [logsID, logs, authToken, dispatch]);
 
+  if (loading) {
+    return <div>loading...</div>;
+  }
+
   return (
     <>
       <Typography variant="h3" className={classes.pageHeader}>

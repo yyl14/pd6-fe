@@ -34,24 +34,26 @@ export default function AnnouncementHome() {
   const [path, setPath] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchAnnouncement(authToken));
-    console.log('call fetch announcement : ', announcements);
-  }, [announcements, authToken, dispatch]);
-
-  useEffect(() => {
-    const newData = [];
-    const newPath = [];
-
-    announcementId.forEach((key) => {
-      const item = announcements[key];
-      console.log('item', item);
-      const temp = { ...item };
-      newData.push(temp);
-      newPath.push(`announcement/${item.id}/setting`);
-    });
-    setTableData(newData);
-    setPath(newPath);
-  }, [announcements, announcementId]);
+    if (announcementId.length === 0) {
+      dispatch(fetchAnnouncement(authToken));
+      console.log('call fetchAnnouncement');
+    } else {
+      const newData = [];
+      const newPath = [];
+      announcements.forEach((item) => {
+        // console.log('item', item);
+        const temp = {
+          title: item.title,
+          PostTime: item.post_time,
+          EndTime: item.expire_time,
+        };
+        newData.push(temp);
+        newPath.push(`announcement/${item.id}/setting`);
+      });
+      setTableData(newData);
+      setPath(newPath);
+    }
+  }, [dispatch, authToken, announcements, announcementId]);
 
   const history = useHistory();
   const handleClickAdd = () => {
