@@ -47,6 +47,8 @@ export default function AccountList() {
   const accounts = useSelector((state) => state.admin.account.accounts.byId);
   const accountsID = useSelector((state) => state.admin.account.accounts.allIds);
   const authToken = useSelector((state) => state.auth.user.token);
+  const error = useSelector((state) => state.admin.account.error);
+  const loading = useSelector((state) => state.admin.account.loading);
 
   const [tableData, setTableData] = useState([]);
   const [path, setPath] = useState([]);
@@ -67,6 +69,10 @@ export default function AccountList() {
     setTableData(newData);
     setPath(newPath);
   }, [accounts, accountsID]);
+
+  if (loading.fetchAccounts) {
+    return <div>loading...</div>;
+  }
 
   return (
     <>
