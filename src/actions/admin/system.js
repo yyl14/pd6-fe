@@ -69,21 +69,21 @@ const fetchSubmitLanguage = (token) => (dispatch) => {
     .catch((err) => {
       dispatch({
         type: systemConstants.FETCH_SUBMIT_LANGUAGE_FAIL,
-        payload: { err },
+        payload: err,
       });
     });
 };
 
 const editSubmitLanguage = (token, id, name, version, isDisabled) => (dispatch) => {
   const fetch = { headers: { 'auth-token': token } };
+  dispatch({
+    type: systemConstants.EDIT_SUBMIT_LANGUAGE_START,
+  });
   const body = {
     name,
     version,
     is_disabled: isDisabled,
   };
-  dispatch({
-    type: systemConstants.EDIT_SUBMIT_LANGUAGE_START,
-  });
 
   agent.patch(`submission/language/${id}`, body, fetch)
     .then((res) => {
@@ -101,7 +101,7 @@ const editSubmitLanguage = (token, id, name, version, isDisabled) => (dispatch) 
     .catch((err) => {
       dispatch({
         type: systemConstants.EDIT_SUBMIT_LANGUAGE_FAIL,
-        payload: { err },
+        payload: err,
       });
     });
 };

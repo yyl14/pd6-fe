@@ -218,7 +218,7 @@ export default function system(state = initialState, action) {
       return {
         ...state,
         submitLang: {
-          ...state.logs,
+          ...state.submitLang,
           byId: { ...state.submitLang.byId, [data.id]: action.payload },
         },
         loading: {

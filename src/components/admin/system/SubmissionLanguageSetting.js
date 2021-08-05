@@ -39,10 +39,13 @@ export default function LangSetting() {
   const [popUp, setPopUp] = useState(false);
   const [languageStatus, setLanguageStatus] = useState(submitLang[languageId].is_disabled);
   const [changeLanguageStatus, setChangeLanguageStatus] = useState(false);
+  const [submit, setSubmit] = useState(false);
 
   useEffect(() => {
     dispatch(fetchSubmitLanguage(authToken));
-  }, [authToken, dispatch, languageStatus]);
+    setSubmit(false);
+    setPopUp(false);
+  }, [authToken, dispatch, submit]);
 
   if (submitLang[languageId] === undefined) {
     if (loading.fetchSubmitLanguage) {
@@ -54,7 +57,7 @@ export default function LangSetting() {
   const handleEditSubmitLanguage = () => {
     dispatch(editSubmitLanguage(authToken, languageId, submitLang[languageId].name, submitLang[languageId].version, languageStatus));
     setChangeLanguageStatus(false);
-    setPopUp(false);
+    setSubmit(true);
   };
 
   return (
