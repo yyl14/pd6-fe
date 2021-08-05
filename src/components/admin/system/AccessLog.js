@@ -26,7 +26,7 @@ export default function AccessLog() {
 
   useEffect(() => {
     if (logsID.length === 0) {
-      dispatch(fetchAccessLog(0, 10, authToken));
+      dispatch(fetchAccessLog(authToken, 0, 10));
       console.log('call fetchAccessLog');
     } else {
       console.log('logsID : ', logsID);
