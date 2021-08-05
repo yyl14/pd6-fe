@@ -15,11 +15,11 @@ import { MdAdd } from 'react-icons/md';
 import {
   fetchCourses,
   fetchClasses,
+  fetchMembers,
   addCourse,
   addClass,
   renameClass,
   deleteClass,
-  fetchMembers,
 } from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import DateRangePicker from '../../ui/DateRangePicker';
@@ -57,6 +57,13 @@ export default function ClassList() {
     dispatch(fetchClasses(authToken, courseId));
   }, [authToken, courseId, dispatch]);
 
+  // fetch members under all classes to get member count
+  useEffect(() => {
+    if (courses.byId[courseId]) {
+      courses.byId[courseId].classIds.map((id) => dispatch(fetchMembers(authToken, id)));
+    }
+  }, [authToken, courseId, courses.byId, dispatch]);
+
   const getCourseType = (courseType) => {
     switch (courseType) {
       case 'lesson':
@@ -92,8 +99,6 @@ export default function ClassList() {
     }
     return <NoMatch />;
   }
-
-  console.log(courses);
 
   return (
     <>
