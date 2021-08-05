@@ -34,6 +34,24 @@ export default function auth(state = initialState, payload) {
         user: {},
         error: null,
       };
+    case userConstants.FORGET_PASSWORD_SUCCESS:
+      return {
+        ...state,
+      };
+    case userConstants.FORGET_PASSWORD_FAIL:
+      return {
+        ...state,
+        error: null,
+      };
+    case userConstants.SIGNUP_SUCCESS:
+      return {
+        ...state,
+      };
+    case userConstants.SIGNUP_FAIL:
+      return {
+        ...state,
+        error: payload.error,
+      };
     default:
       return state;
   }
