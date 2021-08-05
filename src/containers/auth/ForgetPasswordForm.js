@@ -37,7 +37,11 @@ function checkEmailFormat(email) {
 }
 
 const useStyles = makeStyles((theme) => ({
+  authForm: {
+    width: '50%',
+  },
   authTextFields: {
+    width: '100%',
     marginTop: '55px',
   },
   authButtons: {
@@ -78,7 +82,9 @@ export default function ForgetPasswordForm() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
     if (error) {
       return;
     }
@@ -94,28 +100,26 @@ export default function ForgetPasswordForm() {
     <>
       <Card className="auth-form login-form" variant="outlined">
         <CardContent className="auth-form-content">
-          <TextField
-            // required
-            className={`auth-form-input ${classNames.authTextFields}`}
-            error={error}
-            helperText={errorText}
-            label="Registered / Alternative Email"
-            value={email}
-            onChange={(e) => handleChange(e)}
-            onKeyPress={(event) => {
-              if (event.key === 'Enter') handleSubmit();
-            }}
-          />
-          <Button
-            className={classNames.authButtons}
-            disabled={disabled}
-            type="submit"
-            color="primary"
-            onClick={() => handleSubmit()}
-            onKeyPress={() => handleSubmit()}
-          >
-            Send
-          </Button>
+          <form className={`auth-form-content ${classNames.authForm}`} onSubmit={(e) => handleSubmit(e)}>
+            <TextField
+              // required
+              className={`auth-form-input ${classNames.authTextFields}`}
+              error={error}
+              helperText={errorText}
+              label="Registered / Alternative Email"
+              value={email}
+              onChange={(e) => handleChange(e)}
+            />
+            <Button
+              className={classNames.authButtons}
+              disabled={disabled}
+              type="submit"
+              color="primary"
+              onClick={(e) => handleSubmit(e)}
+            >
+              Send
+            </Button>
+          </form>
         </CardContent>
       </Card>
 

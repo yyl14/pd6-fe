@@ -21,12 +21,29 @@ import {
   DialogContentText,
   DialogTitle,
   Link,
+  makeStyles,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { borders, borderRadius } from '@material-ui/system';
 
 import { Link as RouterLink } from 'react-router-dom';
 import { authActions } from '../../actions/index';
+
+const useStyles = makeStyles((theme) => ({
+  authForm: {
+    width: '50%',
+  },
+  authTextFields: {
+    width: '100%',
+    marginTop: '55px',
+  },
+  authButtons: {
+    marginTop: '57px',
+  },
+  authLink: {
+    color: theme.palette.grey.A400,
+  },
+}));
 
 function checkPassword(password1, password2) {
   if (password1 === password2) {
@@ -36,6 +53,7 @@ function checkPassword(password1, password2) {
 }
 
 export default function RegisterForm() {
+  const classNames = useStyles();
   const dispatch = useDispatch();
   const { userRegister } = bindActionCreators(authActions, dispatch);
   // const loginState = useSelector((state) => state.auth);
@@ -274,7 +292,7 @@ export default function RegisterForm() {
               Register
             </Button>
           </div>
-          <Typography variant="body2" className="register-caption">
+          <Typography variant="body2" className={classNames.authLink}>
             Already have a puppy?
             {' '}
             <Link component={RouterLink} to="/login">
@@ -283,7 +301,7 @@ export default function RegisterForm() {
           </Typography>
         </CardContent>
       </Card>
-      {popUp ? (
+      {popUp && (
         <Dialog
           open={popUp}
           keepMounted
@@ -305,8 +323,6 @@ export default function RegisterForm() {
             </Button>
           </DialogActions>
         </Dialog>
-      ) : (
-        <></>
       )}
     </>
   );

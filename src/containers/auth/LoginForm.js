@@ -18,11 +18,18 @@ import { borders, borderRadius } from '@material-ui/system';
 import { Link as RouterLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
+  authForm: {
+    width: '50%',
+  },
   authTextFields: {
+    width: '100%',
     marginTop: '55px',
   },
   authButtons: {
     marginTop: '57px',
+  },
+  authLink: {
+    color: theme.palette.grey.A400,
   },
 }));
 
@@ -41,7 +48,7 @@ export default function LoginForm(props) {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const onsubmit = () => {
+  const handleSubmit = () => {
     const newUserName = username.trim();
     const newPassword = password.trim();
 
@@ -82,7 +89,7 @@ export default function LoginForm(props) {
   return (
     <Card className="auth-form login-form" variant="outlined">
       <CardContent className="auth-form-content">
-        <div className="auth-form-inputs">
+        <form className={`auth-form-content ${classNames.authForm}`} onSubmit={(e) => handleSubmit(e)}>
           <TextField
             id="login-username"
             className={`auth-form-input ${classNames.authTextFields}`}
@@ -112,12 +119,12 @@ export default function LoginForm(props) {
             }}
           />
 
-          <Button className={classNames.authButtons} color="primary" onClick={onsubmit}>
+          <Button className={classNames.authButtons} color="primary" onClick={(e) => handleSubmit(e)}>
             Login
           </Button>
-        </div>
+        </form>
 
-        <Typography variant="body2" className="auth-link">
+        <Typography variant="body2" className={classNames.authLink}>
           Need a new puppy?
           {' '}
           <Link component={RouterLink} to="/register">
@@ -125,7 +132,7 @@ export default function LoginForm(props) {
           </Link>
           {' '}
         </Typography>
-        <Typography variant="body2" className="auth-link">
+        <Typography variant="body2" className={classNames.authLink}>
           Lost your puppy?
           {' '}
           <Link component={RouterLink} to="/forget-password">
