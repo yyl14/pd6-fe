@@ -15,150 +15,25 @@ const initialState = {
     byId: {},
     allIds: [],
   },
-  // submitLang: {
-  //   byId: {
-  //     1: {
-  //       id: 1,
-  //       name: 'Python',
-  //       version: '3.8.0',
-  //       is_disabled: false,
-  //     },
-  //     2: {
-  //       id: 2,
-  //       name: 'Python',
-  //       version: '3.8.1',
-  //       is_disabled: false,
-  //     },
-  //     3: {
-  //       id: 3,
-  //       name: 'Python',
-  //       version: '3.8.2',
-  //       is_disabled: false,
-  //     },
-  //     4: {
-  //       id: 4,
-  //       name: 'Python',
-  //       version: '3.8.3',
-  //       is_disabled: false,
-  //     },
-  //     5: {
-  //       id: 5,
-  //       name: 'Python',
-  //       version: '3.8.4',
-  //       is_disabled: true,
-  //     },
-  //     6: {
-  //       id: 6,
-  //       name: 'Python',
-  //       version: '3.8.5',
-  //       is_disabled: true,
-  //     },
-  //   },
-  //   allIds: [1, 2, 3, 4, 5, 6],
-  // },
   loading: {
     fetchAccessLog: false,
     fetchAnnouncement: false,
+    editAnnouncement: false,
+    addAnnouncement: false,
+    deleteAnnouncement: false,
     fetchSubmitLanguage: false,
     editSubmitLanguage: false,
   },
   error: {
     fetchAccessLog: null,
     fetchAnnouncement: null,
+    editAnnouncement: null,
+    addAnnouncement: null,
+    deleteAnnouncement: null,
     fetchSubmitLanguage: null,
     editSubmitLanguage: null,
   },
 };
-//   },
-
-//   announcement: {
-//     byId: {
-//       1: {
-//         id: 1,
-//         title: '系統維修A',
-//         PostTime: '2021-01-01, 09:21',
-//         EndTime: '2021-03-30, 09:21',
-//         Content: '1111111111111',
-//       },
-//       2: {
-//         id: 2,
-//         title: '系統維修B',
-//         PostTime: '2021-04-20, 09:21',
-//         EndTime: '2021-08-10, 09:21',
-//         Content: '2222222222222222',
-//       },
-//       3: {
-//         id: 3,
-//         title: '系統維修C',
-//         PostTime: '2021-03-01, 09:21',
-//         EndTime: '2021-03-02, 09:21',
-//         Content: '3333333333333333',
-//       },
-//       4: {
-//         id: 4,
-//         title: 'Robin心情很好',
-//         PostTime: '2021-05-01, 09:21',
-//         EndTime: '2021-06-01, 09:21',
-//         Content: '44444444444444',
-//       },
-//       5: {
-//         id: 5,
-//         title: '作業太難',
-//         PostTime: '2021-03-01, 09:21',
-//         EndTime: '2021-03-19, 09:21',
-//         Content: '55555555555555',
-//       },
-//       6: {
-//         id: 6,
-//         title: '小傑生日不用寫作業',
-//         PostTime: '2021-06-06, 09:21',
-//         EndTime: '2021-06-07, 09:21',
-//         Content: '6666666666',
-//       },
-//     },
-//     allIds: [1, 2, 3, 4, 5, 6],
-//   },
-//   submitLang: {
-//     byId: {
-//       1: {
-//         id: 1,
-//         name: 'Python',
-//         version: '3.8.0',
-//         is_disabled: false,
-//       },
-//       2: {
-//         id: 2,
-//         name: 'Python',
-//         version: '3.8.1',
-//         is_disabled: false,
-//       },
-//       3: {
-//         id: 3,
-//         name: 'Python',
-//         version: '3.8.2',
-//         is_disabled: false,
-//       },
-//       4: {
-//         id: 4,
-//         name: 'Python',
-//         version: '3.8.3',
-//         is_disabled: false,
-//       },
-//       5: {
-//         id: 5,
-//         name: 'Python',
-//         version: '3.8.4',
-//         is_disabled: true,
-//       },
-//       6: {
-//         id: 6,
-//         name: 'Python',
-//         version: '3.8.5',
-//         is_disabled: true,
-//       },
-//     },
-//     allIds: [1, 2, 3, 4, 5, 6],
-// =======
 
 export default function system(state = initialState, action) {
   // console.log('system reducer is called! :', action.type);
@@ -250,6 +125,111 @@ export default function system(state = initialState, action) {
         error: {
           ...state.error,
           fetchAnnouncement: error,
+        },
+      };
+    }
+    case systemConstants.EDIT_ANNOUNCEMENT_START: {
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          editAnnouncement: true,
+        },
+      };
+    }
+    case systemConstants.EDIT_ANNOUNCEMENT_SUCCESS: {
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          editAnnouncement: false,
+        },
+        error: {
+          ...state.error,
+          editAnnouncement: null,
+        },
+      };
+    }
+    case systemConstants.EDIT_ANNOUNCEMENT_FAIL: {
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          addAnnouncement: false,
+        },
+        error: {
+          ...state.error,
+          addAnnouncement: action.error,
+        },
+      };
+    }
+    case systemConstants.ADD_ANNOUNCEMENT_START: {
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          addAnnouncement: true,
+        },
+      };
+    }
+    case systemConstants.ADD_ANNOUNCEMENT_SUCCESS: {
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          addAnnouncement: false,
+        },
+        error: {
+          ...state.error,
+          addAnnouncement: null,
+        },
+      };
+    }
+    case systemConstants.ADD_ANNOUNCEMENT_FAIL: {
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          addAnnouncement: false,
+        },
+        error: {
+          ...state.error,
+          addAnnouncement: action.error,
+        },
+      };
+    }
+    case systemConstants.DELETE_ANNOUNCEMENT_START: {
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          deleteAnnouncement: true,
+        },
+      };
+    }
+    case systemConstants.DELETE_ANNOUNCEMENT_SUCCESS: {
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          deleteAnnouncement: false,
+        },
+        error: {
+          ...state.error,
+          deleteAnnouncement: null,
+        },
+      };
+    }
+    case systemConstants.DELETE_ANNOUNCEMENT_FAIL: {
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          deleteAnnouncement: false,
+        },
+        error: {
+          ...state.error,
+          deleteAnnouncement: action.error,
         },
       };
     }

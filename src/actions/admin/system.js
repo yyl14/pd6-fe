@@ -3,7 +3,8 @@ import {
   systemConstants,
 } from '../constant';
 
-const fetchAccessLog = (offset, limit, token) => (dispatch) => {
+// Access log
+const fetchAccessLog = (token, offset, limit) => (dispatch) => {
   const fetch = { headers: { 'auth-token': token } };
   dispatch({
     type: systemConstants.FETCH_ACCESS_LOG_START,
@@ -27,6 +28,7 @@ const fetchAccessLog = (offset, limit, token) => (dispatch) => {
     });
 };
 
+// Announcement
 const fetchAnnouncement = (token) => (dispatch) => {
   const fetch = { headers: { 'auth-token': token } };
   dispatch({
@@ -51,6 +53,73 @@ const fetchAnnouncement = (token) => (dispatch) => {
     });
 };
 
+const editAnnouncement = (token, id, body) => (dispatch) => {
+  const fetch = { headers: { 'auth-token': token } };
+  dispatch({
+    type: systemConstants.EDIT_ANNOUNCEMENT_START,
+  });
+
+  agent.patch(`/announcement/${id}`, body, fetch)
+    .then((res) => {
+      const { success } = res.data;
+      dispatch({
+        type: systemConstants.EDIT_ANNOUNCEMENT_SUCCESS,
+        payload: success,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: systemConstants.EDIT_ANNOUNCEMENT_FAIL,
+        payload: err,
+      });
+    });
+};
+
+const addAnnouncement = (token, body) => (dispatch) => {
+  const fetch = { headers: { 'auth-token': token } };
+  dispatch({
+    type: systemConstants.ADD_ANNOUNCEMENT_START,
+  });
+
+  agent.post('/announcement', body, fetch)
+    .then((res) => {
+      const { success } = res.data;
+      dispatch({
+        type: systemConstants.ADD_ANNOUNCEMENT_SUCCESS,
+        payload: success,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: systemConstants.ADD_ANNOUNCEMENT_FAIL,
+        payload: err,
+      });
+    });
+};
+
+const deleteAnnouncement = (token, id) => (dispatch) => {
+  const fetch = { headers: { 'auth-token': token } };
+  dispatch({
+    type: systemConstants.DELETE_ANNOUNCEMENT_START,
+  });
+
+  agent.delete(`/announcement/${id}`, fetch)
+    .then((res) => {
+      const { success } = res.data;
+      dispatch({
+        type: systemConstants.DELETE_ANNOUNCEMENT_SUCCESS,
+        payload: success,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: systemConstants.DELETE_ANNOUNCEMENT_FAIL,
+        payload: err,
+      });
+    });
+};
+
+// Submit language
 const fetchSubmitLanguage = (token) => (dispatch) => {
   const fetch = { headers: { 'auth-token': token } };
   dispatch({
@@ -109,6 +178,9 @@ const editSubmitLanguage = (token, id, name, version, isDisabled) => (dispatch) 
 export {
   fetchAccessLog,
   fetchAnnouncement,
+  editAnnouncement,
+  addAnnouncement,
+  deleteAnnouncement,
   fetchSubmitLanguage,
   editSubmitLanguage,
 };
