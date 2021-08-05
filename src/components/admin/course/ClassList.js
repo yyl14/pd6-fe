@@ -85,7 +85,7 @@ export default function ClassList() {
     dispatch(addClass(authToken, courseId, name, false));
   };
 
-  if (courses.byId[courseId] === undefined) {
+  if (courses.byId[courseId] === undefined || courses.byId[courseId].name === undefined) {
     if (loading.fetchCourses) {
       // still loading
       return <div>loading</div>;
