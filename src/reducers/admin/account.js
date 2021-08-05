@@ -282,12 +282,13 @@ export default function account(state = initialState, action) {
       const editedAccount = state.accounts.byId[action.payload.id];
       editedAccount.nickname = action.payload.nickname;
       editedAccount.alternative_email = action.payload.alternative_email;
-      editedAccount.real_name = action.payload.real_name;
-      editedAccount.username = action.payload.username;
-      console.log(editedAccount);
+      // editedAccount.real_name = action.payload.real_name;
+      // editedAccount.username = action.payload.username;
       return {
         ...state,
-        accounts: { ...state.account, [action.payload.id]: editedAccount },
+        accounts: {
+          ...state.accounts, byId: { ...state.accounts.byId, [action.payload.id]: editedAccount },
+        },
         loading: {
           ...state.loading,
           editAccount: false,
@@ -319,14 +320,14 @@ export default function account(state = initialState, action) {
         },
       };
     case accountConstants.DELETE_ACCOUNT_SUCCESS: {
-      const newById = { ...state.account.byId };
+      const newById = { ...state.accounts.byId };
       delete newById[action.payload.id];
       return {
         ...state,
         accounts: {
-          ...state.account,
+          ...state.accounts,
           byId: newById,
-          allIds: state.account.allIds.filter((item) => item !== action.payload.id),
+          allIds: state.accounts.allIds.filter((item) => item !== action.payload.id),
         },
         loading: {
           ...state.loading,
@@ -358,11 +359,19 @@ export default function account(state = initialState, action) {
         loading: { ...state.loading, makeStudentCardDefault: true },
       };
     case accountConstants.MAKE_STUDENT_CARD_DEFAULT_SUCCESS: {
-      const { cardId, data } = action.payload;
+      const { cardId, id } = action.payload;
+      const array = state.accounts.byId[id].studentCard.filter((item) => (item !== cardId));
+      // console.log(array);
       return {
         ...state,
-
-        studentCards: state.studentCards.map((item) => (item.id === cardId ? { ...item, default: true } : item)),
+        studentCards: {
+          ...state.studentCards,
+          byId: {
+            ...state.studentCards.byId,
+            [cardId]: { ...state.studentCards.byId[cardId], is_default: true },
+            // array.forEach((item) => {...state.studentCards.byId[item], is_default: false})
+          },
+        },
 
         loading: { ...state.loading, makeStudentCardDefault: false },
         error: {
@@ -377,13 +386,13 @@ export default function account(state = initialState, action) {
         loading: { ...state.loading, makeStudentCardDefault: false },
         error: {
           ...state.error,
-          makeStudentCardDefault: action.payload.error,
+          makeStudentCardDefault: action.error,
         },
       };
     case accountConstants.FETCH_STUDENT_CARD_REQUEST:
       return {
         ...state,
-        loading: { ...state.loading, FETCH_STUDENT_CARD_REQUEST: true },
+        loading: { ...state.loading, fetchStudentCard: true },
       };
     case accountConstants.FETCH_STUDENT_CARD_SUCCESS: {
       const { id, data } = action.payload;
@@ -407,17 +416,22 @@ export default function account(state = initialState, action) {
       };
     }
     case accountConstants.FETCH_STUDENT_CARD_FAIL: {
-      const { id, error } = action.payload;
+      // console.log(action.payload);
+      const { id } = action.payload;
       return {
         ...state,
 
         // clear all student card ids of the account
-        accounts: state.accounts.map((item) => (item.id === id ? { ...item, studentCard: [] } : item)),
+        // accounts: state.accounts.byId.map((item) => (item.id === id ? { ...item, studentCard: [] } : item)),
+        accounts: {
+          ...state.accounts,
+          byId: { ...state.accounts.byId, [id]: { ...state.accounts.byId[id], studentCard: [] } },
+        },
 
         loading: { ...state.loading, fetchStudentCard: false },
         error: {
           ...state.error,
-          fetchStudentCard: error,
+          fetchStudentCard: action.error,
         },
       };
     }
@@ -428,7 +442,6 @@ export default function account(state = initialState, action) {
       };
     case accountConstants.ADD_STUDENT_CARD_SUCCESS: {
       const { accountId, data } = action.payload;
-      console.log('catch');
       return {
         ...state,
 
@@ -448,17 +461,17 @@ export default function account(state = initialState, action) {
         },
       };
     }
-    // case accountConstants.ADD_STUDENT_CARD_FAIL: {
-    //   const { id, error } = action.payload;
-    //   return {
-    //     ...state,
-    //     loading: { ...state.loading, addStudentCard: false },
-    //     error: {
-    //       ...state.error,
-    //       addStudentCard: error,
-    //     },
-    //   };
-    // }
+    case accountConstants.ADD_STUDENT_CARD_FAIL: {
+      const { id, error } = action.payload;
+      return {
+        ...state,
+        loading: { ...state.loading, addStudentCard: false },
+        error: {
+          ...state.error,
+          addStudentCard: error,
+        },
+      };
+    }
     default:
       return state;
   }

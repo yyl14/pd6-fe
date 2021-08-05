@@ -29,7 +29,7 @@ export default function StudentInfo(props) {
               if (p.is_default === true) {
                 return (
                   <p>
-                    <StudentInfoCard isDefault={p.is_default} id={p.student_id} email={p.email} instituteId={p.institute_id} />
+                    <StudentInfoCard isDefault={p.is_default} studentId={p.student_id} email={p.email} instituteId={p.institute_id} />
                   </p>
                 );
               }
@@ -39,7 +39,7 @@ export default function StudentInfo(props) {
               if (p.is_default === false) {
                 return (
                   <p>
-                    <StudentInfoCard isDefault={p.is_default} id={p.student_id} email={p.email} instituteId={p.institute_id} />
+                    <StudentInfoCard isDefault={p.is_default} studentId={p.student_id} email={p.email} instituteId={p.institute_id} />
                   </p>
                 );
               }

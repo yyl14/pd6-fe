@@ -1,12 +1,13 @@
-import {
-  Button, Divider, Grid, TextField, Typography, Box, makeStyles,
-} from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import {
+  Button, TextField, Typography, makeStyles,
+} from '@material-ui/core';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import { editAccount } from '../../../../actions/admin/account';
+// import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
@@ -24,14 +25,28 @@ export default function BasicInfoEdit(props) {
 
   const { accountId } = useParams();
   const authToken = useSelector((state) => state.auth.user.token);
+  // const loading = useSelector((state) => state.admin.account.loading);
   const dispatch = useDispatch();
 
   const handleSave = () => {
     dispatch(editAccount(authToken, accountId, userName, realName, nickName, altMail));
-    // save revised datas to the system
-    props.setBasicInfo(realName, userName, nickName, altMail);
     props.handleBack();
   };
+
+  // useEffect(() => {
+  //   dispatch(fetchAccount(authToken, accountId));
+  //   setRealName(accounts[accountId].real_name);
+  //   setNickName(accounts[accountId].nickname);
+  //   setAltMail(accounts[accountId].alternative_email);
+  //   setUserName(accounts[accountId].username);
+  // }, [accountId, accounts, authToken, dispatch]);
+
+  // if (accounts[accountId] === undefined) {
+  //   if (loading.editAccount) {
+  //     return <div>loading...</div>;
+  //   }
+  //   return <NoMatch />;
+  // }
 
   return (
     <div>
@@ -40,7 +55,7 @@ export default function BasicInfoEdit(props) {
       >
         <p>
           <AlignedText text="Username" childrenType="text" maxWidth="lg">
-            <Typography variant="body1">{props.userName}</Typography>
+            <Typography variant="body1">{userName}</Typography>
           </AlignedText>
         </p>
         <p>

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import {
   Button,
   Divider,
@@ -16,9 +18,7 @@ import {
 } from '@material-ui/core';
 
 import StarIcon from '@material-ui/icons/Star';
-import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { addStudentCard } from '../../../../actions/admin/account';
+import { addStudentCard, makeStudentCardDefault } from '../../../../actions/admin/account';
 import StudentInfoCard from './StudentInfoCard';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
@@ -68,10 +68,12 @@ const useStyles = makeStyles((theme) => ({
 export default function StudentInfoEdit(props) {
   const classes = useStyles();
   const editMode = true;
-  let instituteId = 1;
-  const [cards, setCards] = useState(props.cards);
+  const [cards, setCards] = useState(props.cards); // new card isn't here
+  const [newCard, setNewCard] = useState(null); // new card saved in here
+  const [defaultCardId, setDefaultCardId] = useState(null);
   const [disabledSave, setDisabledSave] = useState(true);
   const [disabledTwoCards, setDisabledTwoCards] = useState(false);
+  const [add, setAdd] = useState(false); // addCard block
   const [addCard, setAddCard] = useState(false);
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
   const [addInputs, setAddInputs] = useState({
@@ -79,29 +81,39 @@ export default function StudentInfoEdit(props) {
     studentId: '',
     email: '',
   });
+  let instituteId = 1;
 
   const { accountId } = useParams();
   const authToken = useSelector((state) => state.auth.user.token);
   const dispatch = useDispatch();
 
-  const updateStatus = (id) => {
-    const updated = cards.map((p) => (p.student_id === id ? { ...p, is_default: true } : { ...p, is_default: false }));
+  const updateStatus = (studentId, cardId) => {
+    const updated = cards.map((p) => (p.student_id === studentId ? { ...p, is_default: true } : { ...p, is_default: false }));
     setCards(updated);
+    setDefaultCardId(cardId);
   };
 
   const handleSave = () => {
-    dispatch(addStudentCard(authToken, accountId, instituteId, addInputs.email, addInputs.studentId));
-    props.updateStatus(cards);
+    if (addCard) {
+      console.log('add request success');
+      dispatch(addStudentCard(authToken, accountId, instituteId, addInputs.email, 'IM', addInputs.studentId));
+    }
+    if (defaultCardId !== null) {
+      console.log('default card change');
+      dispatch(makeStudentCardDefault(authToken, accountId, defaultCardId));
+    }
+    // deal with loading
+    // console.log(props.cards);
     props.handleBack();
   };
 
   const handleAddCancel = () => {
-    setAddCard(false);
+    setAdd(false);
     setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
+    setDisabledTwoCards(false);
   };
 
   const handleAddSave = () => {
-    // save new card to the system
     switch (addInputs.institute) {
       case 'National Taiwan University':
         instituteId = 1;
@@ -114,18 +126,17 @@ export default function StudentInfoEdit(props) {
         break;
       default: instituteId = 1;
     }
-    setCards(
-      [...cards, {
+    setNewCard(
+      {
         student_id: addInputs.studentId,
         email: `${addInputs.email}${emailTail}`,
         institute_id: instituteId,
         is_default: false,
-      }],
+      },
     );
-
-    setAddCard(false);
-    // setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
+    setAdd(false);
     setDisabledSave(false);
+    setAddCard(true);
   };
 
   const handleChange = (e) => {
@@ -154,7 +165,7 @@ export default function StudentInfoEdit(props) {
       <SimpleBar
         title="Student Information"
       >
-        {(props.cards)
+        {cards
           ? (
             <div>
               {cards.map((p) => {
@@ -164,7 +175,7 @@ export default function StudentInfoEdit(props) {
                       <StudentInfoCard
                         editMode
                         isDefault={p.is_default}
-                        id={p.student_id}
+                        studentId={p.student_id}
                         email={p.email}
                         instituteId={p.institute_id}
                       />
@@ -179,8 +190,9 @@ export default function StudentInfoEdit(props) {
                     <p>
                       <StudentInfoCard
                         editMode
+                        id={p.id}
                         isDefault={p.is_default}
-                        id={p.student_id}
+                        studentId={p.student_id}
                         email={p.email}
                         instituteId={p.institute_id}
                         updateStatus={updateStatus}
@@ -193,8 +205,20 @@ export default function StudentInfoEdit(props) {
               })}
             </div>
           ) : <></> }
-
-        {addCard
+        {newCard
+          ? (
+            <p>
+              <StudentInfoCard
+                editMode
+                isDefault={newCard.is_default}
+                studentId={newCard.student_id}
+                email={newCard.email}
+                instituteId={newCard.institute_id}
+              />
+            </p>
+          )
+          : <></>}
+        {add
           ? (
             <p>
               <Card variant="outlined" className={classes.addCard}>
@@ -247,11 +271,12 @@ export default function StudentInfoEdit(props) {
           : <></>}
         <p className={classes.buttonContainer}>
           <div className={classes.addButton}>
-            <Button onClick={() => { setAddCard(true); setDisabledTwoCards(true); }} disabled={disabledTwoCards}>+</Button>
+            <Button onClick={() => { setAdd(true); setDisabledTwoCards(true); }} disabled={disabledTwoCards}>+</Button>
           </div>
         </p>
         <Button onClick={() => {
           props.handleBack();
+          console.log(cards);
         }}
         >
           Cancel

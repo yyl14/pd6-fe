@@ -48,7 +48,7 @@ export default function StudentInfoCard(props) {
   const disabled = props.isDefault;
 
   const handleClick = () => {
-    props.updateStatus(props.id);
+    props.updateStatus(props.studentId, props.id);
   };
 
   const transform = (instituteId) => {
@@ -76,7 +76,7 @@ export default function StudentInfoCard(props) {
           <CardContent className={classes.editCardContent}>
             <div>
               <AlignedText text="Student ID" childrenType="text">
-                <Typography variant="body1">{props.id}</Typography>
+                <Typography variant="body1">{props.studentId}</Typography>
               </AlignedText>
             </div>
             <div>
@@ -92,7 +92,7 @@ export default function StudentInfoCard(props) {
           <CardContent className={classes.cardContent}>
             <div>
               <AlignedText text="Student ID" childrenType="text">
-                <Typography variant="body1">{props.id}</Typography>
+                <Typography variant="body1">{props.studentId}</Typography>
               </AlignedText>
             </div>
             <div>
