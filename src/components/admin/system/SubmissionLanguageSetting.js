@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   Typography,
@@ -17,6 +17,8 @@ import {
 } from '@material-ui/core';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
+import NoMatch from '../../noMatch';
+import { editSubmitLanguage, fetchSubmitLanguage } from '../../../actions/admin/system';
 
 const useStyle = makeStyles((theme) => ({
   pageHeader: {
@@ -27,23 +29,36 @@ const useStyle = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 export default function LangSetting() {
   const classes = useStyle();
+
+  const dispatch = useDispatch();
   const { languageId } = useParams();
+  const authToken = useSelector((state) => state.auth.user.token);
   const submitLang = useSelector((state) => state.admin.system.submitLang.byId);
+  const loading = useSelector((state) => state.admin.system.submitLang.loading);
 
   const [popUp, setPopUp] = useState(false);
-  const [popUpDelete, setPopUpDelete] = useState(false);
+  const [languageStatus, setLanguageStatus] = useState(submitLang[languageId].is_disabled);
+  const [changeLanguageStatus, setChangeLanguageStatus] = useState(false);
 
-  const handleClick = () => {
-    setPopUp(true);
-  };
-  const handleClosePopUp = () => {
+  useEffect(() => {
+    dispatch(fetchSubmitLanguage(authToken));
+  }, [authToken, dispatch, languageStatus]);
+
+  if (submitLang[languageId] === undefined) {
+    if (loading.fetchSubmitLanguage) {
+      return <div>loading...</div>;
+    }
+    return <NoMatch />;
+  }
+
+  const handleEditSubmitLanguage = () => {
+    dispatch(editSubmitLanguage(authToken, languageId, submitLang[languageId].name, submitLang[languageId].version, languageStatus));
+    setChangeLanguageStatus(false);
     setPopUp(false);
   };
-  const handleSubmit = (e) => {};
 
   return (
     <>
-      {/* TODO: use redux state to determine language name */}
       <Typography variant="h3" className={classes.pageHeader}>
         {`${submitLang[languageId].name} ${submitLang.[languageId].version} / Submission Language Setting`}
       </Typography>
@@ -59,16 +74,16 @@ export default function LangSetting() {
             <Typography variant="body1">{submitLang[languageId].version}</Typography>
           </AlignedText>
           <AlignedText text="Status" childrenType="text">
-            <Typography variant="body1">{submitLang[languageId].is_disabled}</Typography>
+            <Typography variant="body1">{(submitLang[languageId].is_disabled) ? 'Disabled' : 'Enabled'}</Typography>
           </AlignedText>
         </Typography>
       </SimpleBar>
 
       <SimpleBar
         title="Change Institute Status"
-        buttons={(
+        childrenButtons={(
           <>
-            <Button onClick={handleClick} color="secondary">
+            <Button onClick={() => setPopUp(true)} color="secondary">
               Change Status
             </Button>
           </>
@@ -79,14 +94,22 @@ export default function LangSetting() {
         </Typography>
       </SimpleBar>
 
-      <Dialog open={popUp} keepMounted onClose={handleClosePopUp}>
+      <Dialog open={popUp}>
         <DialogTitle>
           <Typography variant="h4">Change Submission Language</Typography>
         </DialogTitle>
         <DialogContent>
           <Grid container className="change-language-form" direction="row">
-            <FormControlLabel control={<Switch color="primary" />} />
-            <Typography variant="body1">Enable</Typography>
+            <FormControlLabel
+              control={(
+                <Switch
+                  checked={!languageStatus} // true = Disable
+                  onChange={() => { setLanguageStatus(!languageStatus); setChangeLanguageStatus(languageStatus === submitLang[languageId].is_disabled); }}
+                  color="primary"
+                />
+              )}
+              label={languageStatus ? 'Disabled' : 'Enabled'}
+            />
           </Grid>
         </DialogContent>
         <DialogContent>
@@ -95,8 +118,8 @@ export default function LangSetting() {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClosePopUp}>Cancel</Button>
-          <Button onClick={(e) => handleSubmit()} color="secondary">
+          <Button onClick={() => setPopUp(false)} color="default">Cancel</Button>
+          <Button onClick={(e) => handleEditSubmitLanguage()} color="secondary" disabled={changeLanguageStatus === false}>
             Modify
           </Button>
         </DialogActions>

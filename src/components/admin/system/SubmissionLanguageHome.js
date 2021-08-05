@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, BrowserRouter as Router, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Table,
   TableBody,
@@ -21,6 +19,7 @@ import {
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import CustomTable from '../../ui/CustomTable';
+import { fetchSubmitLanguage } from '../../../actions/admin/system';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -28,42 +27,46 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// TODO: use ui/CustomTable to implement announcement table directly in this component
-
+/* This is a level 4 component (page component) */
 export default function SubmissionLanguageHome() {
   const classes = useStyles();
 
+  const dispatch = useDispatch();
+  const authToken = useSelector((state) => state.auth.user.token);
   const submitLang = useSelector((state) => state.admin.system.submitLang.byId);
-  const submitLangID = useSelector((state) => state.admin.system.submitLang.allIds);
+  const submitLangId = useSelector((state) => state.admin.system.submitLang.allIds);
 
   const [tableData, setTableData] = useState([]);
   const [path, setPath] = useState([]);
 
-  const languageName = 'python';
+  useEffect(() => {
+    dispatch(fetchSubmitLanguage(authToken));
+  }, [authToken, dispatch]);
 
   useEffect(() => {
     const newData = [];
     const newPath = [];
-    submitLangID.forEach((key) => {
+
+    submitLangId.forEach((key) => {
       const item = submitLang[key];
+      const temp = { ...item };
       if (item.is_disabled === true) {
-        item.is_disabled = 'Disable';
+        temp.is_disabled = 'Disabled';
       } else if (item.is_disabled === false) {
-        item.is_disabled = 'Enable';
+        temp.is_disabled = 'Enabled';
       }
-      newData.push(item);
-      newPath.push(`submitLang/${item.id}/setting`);
+      newData.push(temp);
+      newPath.push(`submitlang/${item.id}/setting`);
     });
     setTableData(newData);
     setPath(newPath);
-  }, [submitLang, submitLangID]);
+  }, [submitLang, submitLangId]);
 
   return (
     <div>
       <Typography variant="h3" className={classes.pageHeader}>
         Submission Language
       </Typography>
-      {/* <Typography variant="h4">This is Submission Language Home</Typography> */}
       <CustomTable
         hasSearch
         searchPlaceholder="Language / Version"
