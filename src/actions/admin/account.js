@@ -114,22 +114,22 @@ const fetchAccount = (token, id) => (dispatch) => {
   };
   dispatch({ type: accountConstants.FETCH_ACCOUNT_REQUEST });
 
-  // agent.get(`/account/${id}`, auth)
-  //   .then((res) => {
-  //     dispatch({
-  //       type: accountConstants.FETCH_ACCOUNT_SUCCESS,
-  //       payload: res.data,
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     dispatch({
-  //       type: accountConstants.FETCH_ACCOUNT_FAIL,
-  //       error: err,
-  //     });
-  //   });
+  agent.get(`/account/${id}`, auth)
+    .then((res) => {
+      dispatch({
+        type: accountConstants.FETCH_ACCOUNT_SUCCESS,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: accountConstants.FETCH_ACCOUNT_FAIL,
+        error: err,
+      });
+    });
 };
 
-const editAccount = (token, id, nickname, email) => (dispatch) => {
+const editAccount = (token, id, userName, realName, nickName, email) => (dispatch) => {
   const auth = {
     headers: {
       'Auth-Token': token,
@@ -137,6 +137,23 @@ const editAccount = (token, id, nickname, email) => (dispatch) => {
   };
   dispatch({ type: accountConstants.EDIT_ACCOUNT_REQUEST });
 
+  const body = {
+    username: userName,
+    real_name: realName,
+    nickname: nickName,
+    alternative_email: email,
+  };
+
+  dispatch({
+    type: accountConstants.EDIT_ACCOUNT_SUCCESS,
+    payload: {
+      id,
+      username: userName,
+      real_name: realName,
+      nickname: nickName,
+      alternative_email: email,
+    },
+  });
   // agent.patch(`/account/${id}`, { nickname, alternative_email: email }, auth)
   //   .then((res) => {
   //     dispatch({
@@ -222,13 +239,40 @@ const fetchStudentCard = (token, id) => (dispatch) => {
   //   });
 };
 
-const addStudentCard = (token, id, instituteId, emailPrefix, department, studentId) => (dispatch) => {
+const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (dispatch) => {
   const auth = {
     headers: {
       'Auth-Token': token,
     },
   };
   dispatch({ type: accountConstants.ADD_STUDENT_CARD_REQUEST });
+  // console.log('here');
+  console.log(id, instituteId, emailPrefix, studentId); // success
+  agent.post(`/account/${id}/student-card`, {
+    institute_id: instituteId,
+    institute_email_prefix: emailPrefix,
+    department: 'IM',
+    student_id: studentId,
+  }, auth)
+    .then((res) => {
+      // console.log(res.data.id); // this is undefined
+      dispatch({
+        type: accountConstants.ADD_STUDENT_CARD_SUCCESS,
+        payload: {
+          id, // to be checked
+          institute_id: instituteId,
+          institute_email_prefix: emailPrefix,
+          department: 'IM',
+          student_id: studentId,
+        },
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: accountConstants.ADD_STUDENT_CARD_FAIL,
+        error: err,
+      });
+    });
 
   // agent.post(`/account/${id}/student-card`, {
   //   institute_id: instituteId,
@@ -262,5 +306,5 @@ const fetchAccounts = (token) => (dispatch) => {
 };
 
 export {
-  getInstitutes, addInstitute, editInstitute, fetchAccount, deleteAccount, makeStudentCardDefault, fetchStudentCard, addStudentCard, fetchAccounts,
+  getInstitutes, addInstitute, editInstitute, fetchAccount, editAccount, deleteAccount, makeStudentCardDefault, fetchStudentCard, addStudentCard, fetchAccounts,
 };

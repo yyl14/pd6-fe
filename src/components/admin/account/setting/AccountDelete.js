@@ -6,12 +6,6 @@ import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 
 const useStyles = makeStyles((theme) => ({
-  row: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
   dialogItem: {
     marginBottom: theme.spacing(2),
   },
@@ -30,17 +24,18 @@ export default function AccountDelete(props) {
     <div>
       <SimpleBar
         title="Delete Account"
+        childrenButtons={(
+          <>
+            <Button
+              color="secondary"
+              onClick={() => { setPopUp(true); }}
+            >
+              Delete
+            </Button>
+          </>
+        )}
       >
-        <div className={classes.row}>
-          <Typography>Once you delete this account, there is no going back. Please be certain.</Typography>
-          <Button
-            color="secondary"
-            onClick={() => { setPopUp(true); }}
-            style={{ margin: '0px 5px 10px 5px' }} // override theme.js to get rid of top margin
-          >
-            Delete
-          </Button>
-        </div>
+        <Typography>Once you delete this account, there is no going back. Please be certain.</Typography>
       </SimpleBar>
       <Dialog
         open={popUp}

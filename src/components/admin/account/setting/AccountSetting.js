@@ -54,11 +54,23 @@ class AccountSetting extends Component {
       altMail: account.alternative_email,
     });
 
-    account.studentCard.forEach(
-      (cardId) => {
+    account.studentCard.forEach((cardId) => {
+      this.setState((prevState) => ({ cards: [...prevState.cards, this.props.studentCards[cardId]] }));
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    const { accountId } = this.props.match.params;
+    // console.log(this.props.studentCards);
+    // console.log(prevProps.studentCards);
+    // console.log('rerender');
+    if (this.props.studentCards !== prevProps.studentCards) {
+      // console.log('refetch');
+      const account = this.props.accounts[accountId];
+      account.studentCard.forEach((cardId) => {
         this.setState((prevState) => ({ cards: [...prevState.cards, this.props.studentCards[cardId]] }));
-      },
-    );
+      });
+    }
   }
 
   setBasicInfo = (newRealName, newUserName, newNickName, newAltMail) => {
@@ -110,7 +122,7 @@ class AccountSetting extends Component {
           / Setting
         </Typography>
 
-        {this.state.cards && console.log(this.state.cards)}
+        {/* {this.props.accounts && console.log(this.props.accounts)} */}
         {this.state.editBasicInfo ? (
           <BasicInfoEdit
             handleBack={this.handleBasicBack}
@@ -163,3 +175,38 @@ const mapStateToProps = (store) => (
 );
 
 export default connect(mapStateToProps, accountActions)(withStyles(useStyles)(AccountSetting));
+
+// export default function AccountSetting() {
+//   const [accountid, setAccountid] = useState(null);
+//   const [editBasicInfo, setEditBasicInfo] = useState(false);
+//   const [editStudInfo, setEditStudInfo] = useState(false);
+//   const [realName, setRealName] = useState('');
+//   const [userName, setUserName] = useState('');
+//   const [nickName, setNickName] = useState('');
+//   const [altMail, setAltMail] = useState('');
+//   const [cards, setCards] = useState([]);
+//   const classes = useStyles();
+
+//   const { accountId } = useParams();
+//   const accounts = useSelector((state) => state.admin.account.accounts.byId);
+//   const studentCards = useSelector((state) => state.admin.account.studentCards.byId);
+
+//   useEffect(() => {
+//     const account = accounts[accountId];
+//     setAccountid(accountId);
+//     setRealName(account.real_name);
+//     setUserName(account.username);
+//     setNickName(account.nickname);
+//     setAltMail(account.alternative_email);
+//     account.studentCard.forEach((cardId) => {
+//       setCards((prevState) => ([...prevState.cards, studentCards[cardId]]));
+//     });
+//   }, [accountId, accounts, studentCards]);
+//   return (
+//     <div>
+//       {accountId}
+//       {realName}
+//       {cards}
+//     </div>
+//   );
+// }

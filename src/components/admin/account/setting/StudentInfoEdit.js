@@ -14,7 +14,11 @@ import {
   MenuItem,
   CardActions,
 } from '@material-ui/core';
+
 import StarIcon from '@material-ui/icons/Star';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { addStudentCard } from '../../../../actions/admin/account';
 import StudentInfoCard from './StudentInfoCard';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
@@ -64,9 +68,10 @@ const useStyles = makeStyles((theme) => ({
 export default function StudentInfoEdit(props) {
   const classes = useStyles();
   const editMode = true;
+  let instituteId = 1;
   const [cards, setCards] = useState(props.cards);
   const [disabledSave, setDisabledSave] = useState(true);
-
+  const [disabledTwoCards, setDisabledTwoCards] = useState(false);
   const [addCard, setAddCard] = useState(false);
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
   const [addInputs, setAddInputs] = useState({
@@ -75,12 +80,17 @@ export default function StudentInfoEdit(props) {
     email: '',
   });
 
+  const { accountId } = useParams();
+  const authToken = useSelector((state) => state.auth.user.token);
+  const dispatch = useDispatch();
+
   const updateStatus = (id) => {
     const updated = cards.map((p) => (p.student_id === id ? { ...p, is_default: true } : { ...p, is_default: false }));
     setCards(updated);
   };
 
   const handleSave = () => {
+    dispatch(addStudentCard(authToken, accountId, instituteId, addInputs.email, addInputs.studentId));
     props.updateStatus(cards);
     props.handleBack();
   };
@@ -92,7 +102,6 @@ export default function StudentInfoEdit(props) {
 
   const handleAddSave = () => {
     // save new card to the system
-    let instituteId = 1;
     switch (addInputs.institute) {
       case 'National Taiwan University':
         instituteId = 1;
@@ -115,7 +124,7 @@ export default function StudentInfoEdit(props) {
     );
 
     setAddCard(false);
-    setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
+    // setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
     setDisabledSave(false);
   };
 
@@ -238,7 +247,7 @@ export default function StudentInfoEdit(props) {
           : <></>}
         <p className={classes.buttonContainer}>
           <div className={classes.addButton}>
-            <Button onClick={() => setAddCard(true)}>+</Button>
+            <Button onClick={() => { setAddCard(true); setDisabledTwoCards(true); }} disabled={disabledTwoCards}>+</Button>
           </div>
         </p>
         <Button onClick={() => {

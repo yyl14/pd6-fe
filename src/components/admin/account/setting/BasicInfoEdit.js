@@ -2,8 +2,11 @@ import {
   Button, Divider, Grid, TextField, Typography, Box, makeStyles,
 } from '@material-ui/core';
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
+import { editAccount } from '../../../../actions/admin/account';
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
@@ -19,7 +22,12 @@ export default function BasicInfoEdit(props) {
   const [disabled, setDisabled] = useState(true);
   const classes = useStyles();
 
+  const { accountId } = useParams();
+  const authToken = useSelector((state) => state.auth.user.token);
+  const dispatch = useDispatch();
+
   const handleSave = () => {
+    dispatch(editAccount(authToken, accountId, userName, realName, nickName, altMail));
     // save revised datas to the system
     props.setBasicInfo(realName, userName, nickName, altMail);
     props.handleBack();

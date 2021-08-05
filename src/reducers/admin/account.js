@@ -241,9 +241,12 @@ export default function account(state = initialState, action) {
         },
       };
     case accountConstants.EDIT_ACCOUNT_SUCCESS: {
-      const editedAccount = state.account.byId[action.payload.id];
+      const editedAccount = state.accounts.byId[action.payload.id];
       editedAccount.nickname = action.payload.nickname;
       editedAccount.alternative_email = action.payload.alternative_email;
+      editedAccount.real_name = action.payload.real_name;
+      editedAccount.username = action.payload.username;
+      console.log(editedAccount);
       return {
         ...state,
         accounts: { ...state.account, [action.payload.id]: editedAccount },
@@ -387,12 +390,12 @@ export default function account(state = initialState, action) {
       };
     case accountConstants.ADD_STUDENT_CARD_SUCCESS: {
       const { accountId, data } = action.payload;
+      console.log('catch');
       return {
         ...state,
 
         // add to account
         accounts: state.accounts.byId.filter((item) => (item.id === data.id ? { ...item, studentCard: item.studentCard.concat([[data.id]]) } : item)),
-
         // add to student card
         studentCards: {
           ...state.studentCards,
@@ -407,17 +410,17 @@ export default function account(state = initialState, action) {
         },
       };
     }
-    case accountConstants.ADD_STUDENT_CARD_FAIL: {
-      const { id, error } = action.payload;
-      return {
-        ...state,
-        loading: { ...state.loading, addStudentCard: false },
-        error: {
-          ...state.error,
-          addStudentCard: error,
-        },
-      };
-    }
+    // case accountConstants.ADD_STUDENT_CARD_FAIL: {
+    //   const { id, error } = action.payload;
+    //   return {
+    //     ...state,
+    //     loading: { ...state.loading, addStudentCard: false },
+    //     error: {
+    //       ...state.error,
+    //       addStudentCard: error,
+    //     },
+    //   };
+    // }
     default:
       return state;
   }
