@@ -9,9 +9,32 @@ const getInstitutes = (token) => (dispatch) => {
       'Auth-Token': token,
     },
   };
-  dispatch({ type: accountConstants.FETCH_INSTITUTE_REQUEST });
+  dispatch({ type: accountConstants.FETCH_INSTITUTES_REQUEST });
 
   agent.get('/institute', auth)
+    .then((res) => {
+      dispatch({
+        type: accountConstants.FETCH_INSTITUTES_SUCCESS,
+        payload: res.data.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: accountConstants.FETCH_INSTITUTES_FAIL,
+        error: err,
+      });
+    });
+};
+
+const getInstitute = (token, instituteId) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  dispatch({ type: accountConstants.FETCH_INSTITUTE_REQUEST });
+
+  agent.get(`/institute/${instituteId}`, auth)
     .then((res) => {
       dispatch({
         type: accountConstants.FETCH_INSTITUTE_SUCCESS,
@@ -41,7 +64,6 @@ const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled)
     is_disabled: isDisabled,
   }, auth)
     .then((res) => {
-      console.log('adding institute suc');
       dispatch({
         type: accountConstants.ADD_INSTITUTE_SUCCESS,
         payload: {
@@ -50,7 +72,6 @@ const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled)
       });
     })
     .catch((err) => {
-      console.log('adding institute fail');
       dispatch({
         type: accountConstants.ADD_INSTITUTE_FAIL,
         error: err,
@@ -306,5 +327,5 @@ const fetchAccounts = (token) => (dispatch) => {
 };
 
 export {
-  getInstitutes, addInstitute, editInstitute, fetchAccount, editAccount, deleteAccount, makeStudentCardDefault, fetchStudentCard, addStudentCard, fetchAccounts,
+  getInstitutes, getInstitute, addInstitute, editInstitute, fetchAccount, editAccount, deleteAccount, makeStudentCardDefault, fetchStudentCard, addStudentCard, fetchAccounts,
 };

@@ -68,10 +68,6 @@ export default function AccountList() {
     setPath(newPath);
   }, [accounts, accountsID]);
 
-  // useEffect(() => {
-  //   getInstitutes(authToken);
-  // });
-
   return (
     <>
       <Typography variant="h3" className={classes.pageHeader}>

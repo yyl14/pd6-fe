@@ -189,18 +189,19 @@ export default function InstituteList() {
   useEffect(() => {
     const newData = [];
     const newPath = [];
-
-    institutesID.forEach((key) => {
-      const item = institutes[key];
-      const temp = { ...item };
-      if (item.is_disabled === true || item.is_disabled === 'Disabled') {
-        temp.is_disabled = 'Disabled';
-      } else if (item.is_disabled === false || item.is_disabled === 'Enabled') {
-        temp.is_disabled = 'Enabled';
-      }
-      newData.push(temp);
-      newPath.push(`institute/${temp.id}/setting`);
-    });
+    if (institutesID !== undefined) {
+      institutesID.forEach((key) => {
+        const item = institutes[key];
+        const temp = { ...item };
+        if (item.is_disabled === true || item.is_disabled === 'Disabled') {
+          temp.is_disabled = 'Disabled';
+        } else if (item.is_disabled === false || item.is_disabled === 'Enabled') {
+          temp.is_disabled = 'Enabled';
+        }
+        newData.push(temp);
+        newPath.push(`institute/${temp.id}/setting`);
+      });
+    }
     setTableData(newData);
     setPath(newPath);
   }, [institutes, institutesID]);
