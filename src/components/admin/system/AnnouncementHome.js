@@ -34,7 +34,7 @@ export default function AnnouncementHome() {
   const [path, setPath] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchAnnouncement(authToken));
+    dispatch(fetchAnnouncement(0, 10, authToken));
     console.log('call fetch announcement : ', announcements);
   }, [announcements, authToken, dispatch]);
 
