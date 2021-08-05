@@ -15,47 +15,6 @@ const initialState = {
     byId: {},
     allIds: [],
   },
-  // submitLang: {
-  //   byId: {
-  //     1: {
-  //       id: 1,
-  //       name: 'Python',
-  //       version: '3.8.0',
-  //       is_disabled: false,
-  //     },
-  //     2: {
-  //       id: 2,
-  //       name: 'Python',
-  //       version: '3.8.1',
-  //       is_disabled: false,
-  //     },
-  //     3: {
-  //       id: 3,
-  //       name: 'Python',
-  //       version: '3.8.2',
-  //       is_disabled: false,
-  //     },
-  //     4: {
-  //       id: 4,
-  //       name: 'Python',
-  //       version: '3.8.3',
-  //       is_disabled: false,
-  //     },
-  //     5: {
-  //       id: 5,
-  //       name: 'Python',
-  //       version: '3.8.4',
-  //       is_disabled: true,
-  //     },
-  //     6: {
-  //       id: 6,
-  //       name: 'Python',
-  //       version: '3.8.5',
-  //       is_disabled: true,
-  //     },
-  //   },
-  //   allIds: [1, 2, 3, 4, 5, 6],
-  // },
   loading: {
     fetchAccessLog: false,
     fetchAnnouncement: false,
