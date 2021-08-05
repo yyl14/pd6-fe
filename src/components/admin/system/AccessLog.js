@@ -43,14 +43,14 @@ export default function AccessLog() {
   const [path, setPath] = useState([]);
 
   useEffect(() => {
-    if (logsID.length === 0) {
+    if (Object.keys(logsID).length === 0) {
       dispatch(fetchAccessLog(authToken, 0, 10));
       console.log('call fetchAccessLog');
     } else {
       console.log('logsID : ', logsID);
       console.log('logs : ', logs);
 
-      const newAccountsId = logs.map((log) => (log.account_id));
+      const newAccountsId = logsID.map((logID) => (logs[logID].account_id));
 
       setAccountsId(newAccountsId);
     }
@@ -63,16 +63,19 @@ export default function AccessLog() {
         console.log('call fetchAccounts');
       } else {
         console.log('accounts : ', accounts);
-        const newData = logs.map((log, i) => ({
-          id: log.id,
-          username: accounts[i].username,
-          studentID: log.account_id,
-          realName: accounts[i].real_name,
-          IP: log.ip,
-          resourcePath: log.resource_path,
-          requestMethod: log.request_method,
-          accessTime: log.access_time,
-        }));
+        const newData = logsID.map((logID) => {
+          const log = logs[logID];
+          return ({
+            id: log.id,
+            username: accounts[log.account_id].username,
+            studentID: log.account_id,
+            realName: accounts[log.account_id].real_name,
+            IP: log.ip,
+            resourcePath: log.resource_path,
+            requestMethod: log.request_method,
+            accessTime: log.access_time,
+          });
+        });
         setTableData(newData);
         const newPath = [];
 
@@ -83,7 +86,7 @@ export default function AccessLog() {
         setPath(newPath);
       }
     }
-  }, [accountsId, accounts, logs, authToken, dispatch]);
+  }, [accountsId, accounts, logs, logsID, authToken, dispatch]);
 
   if (loading) {
     return <div>loading...</div>;

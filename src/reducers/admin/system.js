@@ -58,7 +58,7 @@ export default function system(state = initialState, action) {
       return {
         ...state,
         logs: {
-          byId: data,
+          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.logs),
           allIds: data.map((item) => item.id),
         },
         loading: {
@@ -102,7 +102,7 @@ export default function system(state = initialState, action) {
       return {
         ...state,
         accounts: {
-          byId: data,
+          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.accounts),
           allIds: data.map((item) => item.id),
         },
         loading: {
@@ -147,7 +147,7 @@ export default function system(state = initialState, action) {
       return {
         ...state,
         announcements: {
-          byId: data,
+          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.announcements),
           allIds: data.map((item) => item.id),
         },
         loading: {
@@ -223,6 +223,7 @@ export default function system(state = initialState, action) {
       };
     }
     case systemConstants.ADD_ANNOUNCEMENT_SUCCESS: {
+      console.log('add success : ', action.payload);
       return {
         ...state,
         loading: {

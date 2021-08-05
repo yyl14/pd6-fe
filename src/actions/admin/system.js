@@ -118,10 +118,11 @@ const addAnnouncement = (token, body) => (dispatch) => {
   dispatch({
     type: systemConstants.ADD_ANNOUNCEMENT_START,
   });
-
+  console.log('call addAnnouncement : ', body);
   agent.post('/announcement', body, fetch)
     .then((res) => {
       const { success } = res.data;
+      console.log('response : ', res);
       dispatch({
         type: systemConstants.ADD_ANNOUNCEMENT_SUCCESS,
         payload: success,

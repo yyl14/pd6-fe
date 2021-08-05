@@ -23,6 +23,7 @@ const AnnouncementAdd = () => {
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.user.token);
   const loading = useSelector((state) => state.admin.system.loading);
+  const userId = useSelector((state) => state.auth.user.id);
 
   const [addTitle, setAddTitle] = useState('');
   const [addContent, setAddContent] = useState('');
@@ -40,7 +41,7 @@ const AnnouncementAdd = () => {
     const body = {
       title: addTitle,
       content: addContent,
-      author_id: 0,
+      author_id: userId,
       post_time: dateRangePicker[0].startDate,
       expire_time: dateRangePicker[0].endDate,
     };
