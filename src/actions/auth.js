@@ -80,20 +80,40 @@ const userLogout = (history) => (dispatch) => {
 const userForgetPassword = (email) => (dispatch) => {
   console.log('Forget Password');
   dispatch({
-    type: userConstants.FORGET_PASSWORD_REQUEST,
+    type: userConstants.FORGET_PASSWORD_START,
   });
-  // agent.post('/forget_password', { email: email })
-  // .then(res => {
-  //   dispatch({
-  //     type: userConstants.FORGET_PASSWORD_SUCCESS,
-  //   })
-  // })
-  // .catch(err => {
-  //   dispatch({
-  //     type: userConstants.FORGET_PASSWORD_FAIL,
-  //     errors: err
-  //   })
-  // })
+  agent.post('/forget-password', { email })
+    .then((res) => {
+      dispatch({
+        type: userConstants.FORGET_PASSWORD_SUCCESS,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: userConstants.FORGET_PASSWORD_FAIL,
+        errors: err,
+      });
+    });
+};
+
+const userRegister = (username, password, nickname, realName, emailPrefix, instituteId, department, studentId) => (dispatch) => {
+  console.log('Register');
+  const body = {
+
+  };
+
+  agent.post('account', body)
+    .then((res) => {
+      dispatch({
+        type: userConstants.FORGET_PASSWORD_SUCCESS,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: userConstants.FORGET_PASSWORD_FAIL,
+        errors: err,
+      });
+    });
 };
 
 export {
