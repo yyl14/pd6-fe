@@ -18,7 +18,10 @@ export default function publicState(state = initialState, action) {
       };
     case publicConstants.GET_INSTITUTE_SUCCESS:
       return {
-
+        institutes: {
+          byId: action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.institutes),
+          allIds: action.payload.map((item) => item.id),
+        },
         error: null,
         loading: false,
       };
