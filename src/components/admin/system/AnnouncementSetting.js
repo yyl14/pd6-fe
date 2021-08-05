@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 export default function AnnouncementSetting() {
   const classes = useStyles();
-  const { announcementID } = useParams();
+  const { announcementId } = useParams();
   const announcement = useSelector((state) => state.admin.system.announcement.byId);
 
   const [popUpDelete, setPopUpDelete] = useState(false);
@@ -54,7 +54,7 @@ export default function AnnouncementSetting() {
   return (
     <>
       <Typography variant="h3" className={classes.pageHeader}>
-        {`${announcement.title} / Setting`}
+        {`${announcement[announcementId].title} / Setting`}
       </Typography>
       <div>
         <SimpleBar
@@ -66,14 +66,14 @@ export default function AnnouncementSetting() {
         )}
         >
           <Typography variant="body1">
-            <AlignedText text="Title" childrenType="field">
-              <Typography variant="body1">{announcement.title}</Typography>
+            <AlignedText text="Title" childrenType="text">
+              <Typography variant="body1">{announcement[announcementId].title}</Typography>
             </AlignedText>
-            <AlignedText text="Duration" childrenType="field">
-              <Typography variant="body1">{`${announcement.PostTime} to ${announcement.EndTime}`}</Typography>
+            <AlignedText text="Duration" childrenType="text">
+              <Typography variant="body1">{`${announcement[announcementId].PostTime} to ${announcement[announcementId].EndTime}`}</Typography>
             </AlignedText>
-            <AlignedText text="Content" childrenType="field">
-              <Typography variant="body1">{announcement.Content}</Typography>
+            <AlignedText text="Content" childrenType="text">
+              <Typography variant="body1">{announcement[announcementId].Content}</Typography>
             </AlignedText>
           </Typography>
         </SimpleBar>
@@ -113,7 +113,7 @@ export default function AnnouncementSetting() {
             </Grid>
             <Grid container item className="delete-class-detail-content" xs={6}>
               <Typography variant="body1" color="secondary">
-                管院停電
+                {announcement[announcementId].title}
               </Typography>
             </Grid>
           </Grid>
