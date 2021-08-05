@@ -60,6 +60,7 @@ const initialState = {
     addInstitute: false,
     editInstitute: false,
 
+    fetchAccounts: false,
     fetchAccount: false,
     editAccount: false,
     deleteAccount: false,
@@ -75,6 +76,7 @@ const initialState = {
     addInstitute: null,
     editInstitute: null,
 
+    fetchAccounts: null,
     fetchAccount: null,
     editAccount: null,
     deleteAccount: null,

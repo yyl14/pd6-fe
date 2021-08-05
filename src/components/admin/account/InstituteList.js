@@ -52,6 +52,8 @@ export default function InstituteList() {
   const institutes = useSelector((state) => state.admin.account.institutes.byId);
   const institutesID = useSelector((state) => state.admin.account.institutes.allIds);
   const authToken = useSelector((state) => state.auth.user.token);
+  const pageError = useSelector((state) => state.admin.account.error);
+  const loading = useSelector((state) => state.admin.account.loading);
 
   const [tableData, setTableData] = useState([]);
   const [path, setPath] = useState([]);
@@ -205,6 +207,10 @@ export default function InstituteList() {
     setTableData(newData);
     setPath(newPath);
   }, [institutes, institutesID]);
+
+  if (loading.fetchInstitutes) {
+    return <div>loading...</div>;
+  }
 
   return (
     <>

@@ -68,7 +68,7 @@ export default function InstituteSetting() {
   }, [authToken, dispatch, instituteId]);
 
   if (institutes[instituteId] === undefined) {
-    if (loading.getInstitute) {
+    if (loading.fetchInstitute) {
       return <div>loading...</div>;
     }
     return <NoMatch />;
