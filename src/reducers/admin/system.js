@@ -4,69 +4,16 @@ import {
 
 const initialState = {
   logs: {
-    byId: {
-      1: {
-        id: 1,
-        username: 'shiba',
-        studentID: 'B07705002',
-        realName: '黃祥祥',
-        IP: '106.114.0.1',
-        resourcePath: 22,
-        requestMethod: 'Get',
-        accessTime: '2021-06-20, 09:21:44',
-      },
-      2: {
-        id: 2,
-        username: 'shiba',
-        studentID: 'B07705002',
-        realName: '黃祥祥',
-        IP: '106.114.0.1',
-        resourcePath: 22,
-        requestMethod: 'Get',
-        accessTime: '2021-06-20, 09:21:44',
-      },
-      3: {
-        id: 3,
-        username: 'shiba',
-        studentID: 'B07705002',
-        realName: '黃祥祥',
-        IP: '106.114.0.1',
-        resourcePath: 22,
-        requestMethod: 'Get',
-        accessTime: '2021-06-20, 09:21:44',
-      },
-      4: {
-        id: 4,
-        username: 'shiba',
-        studentID: 'B07705002',
-        realName: '黃祥祥',
-        IP: '106.114.0.1',
-        resourcePath: 22,
-        requestMethod: 'Get',
-        accessTime: '2021-06-20, 09:21:44',
-      },
-      5: {
-        id: 5,
-        username: 'shiba',
-        studentID: 'B07705002',
-        realName: '黃祥祥',
-        IP: '106.114.0.1',
-        resourcePath: 22,
-        requestMethod: 'Get',
-        accessTime: '2021-06-20, 09:21:44',
-      },
-      6: {
-        id: 6,
-        username: 'shiba',
-        studentID: 'B07705002',
-        realName: '黃祥祥',
-        IP: '106.114.0.1',
-        resourcePath: 22,
-        requestMethod: 'Get',
-        accessTime: '2021-06-20, 09:21:44',
-      },
-    },
-    allIds: [1, 2, 3, 4, 5, 6],
+    byId: {},
+    allIds: [],
+  },
+  announcements: {
+    byId: {},
+    allIds: [],
+  },
+  submitLang: {
+    byId: {},
+    allIds: [],
   },
   // submitLang: {
   //   byId: {
@@ -109,25 +56,22 @@ const initialState = {
   //   },
   //   allIds: [1, 2, 3, 4, 5, 6],
   // },
-  submitLang: {
-    byId: {},
-    allIds: [],
-  },
   loading: {
     fetchAccessLog: false,
-
+    fetchAnnouncement: false,
     fetchSubmitLanguage: false,
     editSubmitLanguage: false,
   },
   error: {
     fetchAccessLog: null,
-
+    fetchAnnouncement: null,
     fetchSubmitLanguage: null,
     editSubmitLanguage: null,
   },
 };
 
 export default function system(state = initialState, action) {
+  // console.log('system reducer is called! :', action.type);
   switch (action.type) {
     /* Access Logs */
     case systemConstants.FETCH_ACCESS_LOG_START:
@@ -135,15 +79,15 @@ export default function system(state = initialState, action) {
         ...state,
         loading: {
           ...state.loading,
-          fetchCourse: true,
+          fetchAccessLog: true,
         },
       };
     case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
-      const { data } = action.payload;
+      const data = Object.values(action.payload);
       return {
         ...state,
         logs: {
-          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, logIds: [] } }), state.logs),
+          byId: data,
           allIds: data.map((item) => item.id),
         },
         loading: {
@@ -157,7 +101,7 @@ export default function system(state = initialState, action) {
       };
     }
     case systemConstants.FETCH_ACCESS_LOG_FAIL: {
-      const { error } = action.payload;
+      const error = action.payload;
       return {
         ...state,
         logs: {
@@ -174,11 +118,52 @@ export default function system(state = initialState, action) {
         },
       };
     }
-    default: {
-      return state;
+    /* Announcement */
+    case systemConstants.FETCH_ANNOUNCEMENT_START:
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          fetchAnnouncement: true,
+        },
+      };
+    case systemConstants.FETCH_ANNOUNCEMENT_SUCCESS: {
+      const data = Object.values(action.payload);
+      return {
+        ...state,
+        announcements: {
+          byId: data,
+          allIds: data.map((item) => item.id),
+        },
+        loading: {
+          ...state.loading,
+          fetchAnnouncement: false,
+        },
+        error: {
+          ...state.error,
+          fetchAnnouncement: null,
+        },
+      };
     }
-
-    // Submission Language
+    case systemConstants.FETCH_ANNOUNCEMENT_FAIL: {
+      const error = action.payload;
+      return {
+        ...state,
+        announcements: {
+          byId: {},
+          allIds: [],
+        },
+        loading: {
+          ...state.loading,
+          fetchAnnouncement: false,
+        },
+        error: {
+          ...state.error,
+          fetchAnnouncement: error,
+        },
+      };
+    }
+    /* SubmitLang */
     case systemConstants.FETCH_SUBMIT_LANGUAGE_START: {
       return {
         ...state,
@@ -258,6 +243,9 @@ export default function system(state = initialState, action) {
           editSubmitLanguage: action.error,
         },
       };
+    }
+    default: {
+      return state;
     }
   }
 }

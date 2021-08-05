@@ -12,7 +12,6 @@ const fetchAccessLog = (offset, limit, token) => (dispatch) => {
   agent.get(`/access-log?offset=${offset}&limit=${limit}`, fetch)
     .then((res) => {
       const { data } = res.data;
-      console.log('use api :', data);
       dispatch({
         type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
         payload: {
@@ -23,7 +22,31 @@ const fetchAccessLog = (offset, limit, token) => (dispatch) => {
     .catch((err) => {
       dispatch({
         type: systemConstants.FETCH_ACCESS_LOG_FAIL,
-        payload: { err },
+        payload: err,
+      });
+    });
+};
+
+const fetchAnnouncement = (token) => (dispatch) => {
+  const fetch = { headers: { 'auth-token': token } };
+  dispatch({
+    type: systemConstants.FETCH_ANNOUNCEMENT_START,
+  });
+
+  agent.get('/announcement', fetch)
+    .then((res) => {
+      const { data } = res.data;
+      dispatch({
+        type: systemConstants.FETCH_ANNOUNCEMENT_SUCCESS,
+        payload: {
+          ...data,
+        },
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: systemConstants.FETCH_ANNOUNCEMENT_FAIL,
+        payload: err,
       });
     });
 };
@@ -85,6 +108,7 @@ const editSubmitLanguage = (token, id, name, version, isDisabled) => (dispatch) 
 
 export {
   fetchAccessLog,
+  fetchAnnouncement,
   fetchSubmitLanguage,
   editSubmitLanguage,
 };
