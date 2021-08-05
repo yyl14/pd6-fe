@@ -14,6 +14,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  makeStyles,
 } from '@material-ui/core';
 import { borders, borderRadius } from '@material-ui/system';
 import { EmailOutlined, TrainRounded } from '@material-ui/icons';
@@ -35,7 +36,17 @@ function checkEmailFormat(email) {
   return '';
 }
 
+const useStyles = makeStyles((theme) => ({
+  authTextFields: {
+    marginTop: '55px',
+  },
+  authButtons: {
+    marginTop: '57px',
+  },
+}));
+
 export default function ForgetPasswordForm() {
+  const classNames = useStyles();
   const dispatch = useDispatch();
   const { userForgetPassword } = bindActionCreators(authActions, dispatch);
   const loginState = useSelector((state) => state.auth);
@@ -85,10 +96,10 @@ export default function ForgetPasswordForm() {
         <CardContent className="auth-form-content">
           <TextField
             // required
-            className="auth-form-input"
+            className={`auth-form-input ${classNames.authTextFields}`}
             error={error}
             helperText={errorText}
-            label="Email"
+            label="Registered / Alternative Email"
             value={email}
             onChange={(e) => handleChange(e)}
             onKeyPress={(event) => {
@@ -96,6 +107,7 @@ export default function ForgetPasswordForm() {
             }}
           />
           <Button
+            className={classNames.authButtons}
             disabled={disabled}
             type="submit"
             color="primary"
@@ -118,9 +130,7 @@ export default function ForgetPasswordForm() {
           <Typography variant="h4">Password reset email sent</Typography>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Please check your mailbox to reset your password.
-          </DialogContentText>
+          <Typography variant="body1">Please check your mailbox to the account.</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => handleClosePopUp()} color="primary">

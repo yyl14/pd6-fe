@@ -10,13 +10,24 @@ import {
   InputAdornment,
   IconButton,
   Typography,
+  makeStyles,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { borders, borderRadius } from '@material-ui/system';
 
 import { Link as RouterLink } from 'react-router-dom';
 
+const useStyles = makeStyles((theme) => ({
+  authTextFields: {
+    marginTop: '55px',
+  },
+  authButtons: {
+    marginTop: '57px',
+  },
+}));
+
 export default function LoginForm(props) {
+  const classNames = useStyles();
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({
@@ -74,7 +85,7 @@ export default function LoginForm(props) {
         <div className="auth-form-inputs">
           <TextField
             id="login-username"
-            className="auth-form-input"
+            className={`auth-form-input ${classNames.authTextFields}`}
             label="Username"
             value={username}
             onChange={(e) => handleUsernameChange(e)}
@@ -84,7 +95,7 @@ export default function LoginForm(props) {
           <TextField
             id="login-password"
             type={showPassword ? 'text' : 'password'}
-            className="auth-form-input"
+            className={`auth-form-input ${classNames.authTextFields}`}
             label="Password"
             value={password}
             onChange={(e) => handlePasswordChange(e)}
@@ -101,7 +112,7 @@ export default function LoginForm(props) {
             }}
           />
 
-          <Button color="primary" onClick={onsubmit}>
+          <Button className={classNames.authButtons} color="primary" onClick={onsubmit}>
             Login
           </Button>
         </div>
