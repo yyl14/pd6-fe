@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
 export default function AnnouncementHome() {
   const classes = useStyles();
 
-  const announcement = useSelector((state) => state.admin.system.announcement.byId);
-  const announcementID = useSelector((state) => state.admin.system.announcement.allIds);
+  const announcement = useSelector((state) => state.admin.system.announcements.byId);
+  const announcementID = useSelector((state) => state.admin.system.announcements.allIds);
 
   const [tableData, setTableData] = useState([]);
   const [path, setPath] = useState([]);

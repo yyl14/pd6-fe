@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 export default function AnnouncementSetting() {
   const classes = useStyles();
   const { announcementId } = useParams();
-  const announcement = useSelector((state) => state.admin.system.announcement.byId);
+  const announcement = useSelector((state) => state.admin.system.announcements.byId);
 
   const [popUpDelete, setPopUpDelete] = useState(false);
 
