@@ -217,7 +217,7 @@ export default function system(state = initialState, action) {
       const { data } = action.payload;
       return {
         ...state,
-        logs: {
+        submitLang: {
           ...state.logs,
           byId: { ...state.logs.byId, [data.id]: action.payload },
         },
