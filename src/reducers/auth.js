@@ -17,6 +17,7 @@ const initialState = {
     addStudentCard: false,
     makeStudentCardDefault: false,
     resetPassword: false,
+    editPassword: false,
   },
   error: {
     logout: null,
@@ -28,6 +29,7 @@ const initialState = {
     addStudentCard: null,
     makeStudentCardDefault: null,
     resetPassword: null,
+    editPassword: null,
   },
 };
 
@@ -113,8 +115,6 @@ export default function auth(state = initialState, action) {
       const editedAccount = state.user;
       editedAccount.nickname = action.payload.nickname;
       editedAccount.alternative_email = action.payload.alternative_email;
-      // editedAccount.real_name = action.payload.real_name;
-      // editedAccount.username = action.payload.username;
       return {
         ...state,
         user: editedAccount,
@@ -246,13 +246,37 @@ export default function auth(state = initialState, action) {
       };
     }
     case userConstants.ADD_SELF_STUDENT_CARD_FAIL: {
-      const { id, error } = action.payload;
       return {
         ...state,
         loading: { ...state.loading, addStudentCard: false },
         error: {
           ...state.error,
-          addStudentCard: error,
+          addStudentCard: action.error,
+        },
+      };
+    }
+    case userConstants.EDIT_SELF_PASSWORD_START:
+      return {
+        ...state,
+        loading: { ...state.loading, editPassword: true },
+      };
+    case userConstants.EDIT_SELF_PASSWORD_SUCCESS: {
+      return {
+        ...state,
+        loading: { ...state.loading, editPassword: false },
+        error: {
+          ...state.error,
+          editPassword: null,
+        },
+      };
+    }
+    case userConstants.EDIT_SELF_PASSWORD_FAIL: {
+      return {
+        ...state,
+        loading: { ...state.loading, editPassword: false },
+        error: {
+          ...state.error,
+          editPassword: action.error,
         },
       };
     }
