@@ -188,7 +188,7 @@ export const renameClass = (token, classId, newName) => (dispatch) => {
     });
 };
 
-export const deleteClass = (token, classId) => (dispatch) => {
+export const deleteClass = (token, courseId, classId) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
   dispatch({
     type: courseConstants.DELETE_CLASS_START,
@@ -196,10 +196,12 @@ export const deleteClass = (token, classId) => (dispatch) => {
 
   agent
     .delete(`/class/${classId}`, auth)
-    .then(() => {
+    .then((res) => {
+      console.log(res);
       dispatch({
-        type: courseConstants.DELETE_CLASS_START,
+        type: courseConstants.DELETE_CLASS_SUCCESS,
         payload: {
+          courseId,
           classId,
         },
       });
