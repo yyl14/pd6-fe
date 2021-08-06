@@ -41,9 +41,8 @@ export default function LangSetting() {
   const [submit, setSubmit] = useState(false);
 
   useEffect(() => {
-    if (submitLangId.length === 0 || submit) {
+    if (submitLangId === null || submit) {
       dispatch(fetchSubmitLanguage(authToken));
-      console.log('call fetchSubmitLanguage');
       setSubmit(false);
       setPopUp(false);
     } else {

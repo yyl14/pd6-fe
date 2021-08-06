@@ -6,14 +6,12 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
-  TextField,
   makeStyles,
 } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  withRouter, Switch, Route, useHistory, useParams,
+  useHistory, useParams,
 } from 'react-router-dom';
 
 import NoMatch from '../../noMatch';
@@ -39,19 +37,22 @@ export default function AnnouncementSetting() {
   const announcements = useSelector((state) => state.admin.system.announcements.byId);
   const allIds = useSelector((state) => state.admin.system.announcements.allIds);
   const loading = useSelector((state) => state.admin.system.loading.fetchAnnouncement);
+  const editLoading = useSelector((state) => state.admin.system.loading.editAnnouncement);
 
   const [popUpDelete, setPopUpDelete] = useState(false);
   const [announcement, setAnnouncement] = useState(null);
 
   useEffect(() => {
-    if (allIds.length === 0) {
+    if (!editLoading) {
       dispatch(fetchAnnouncement(authToken));
-      console.log('call fetchAnnouncement');
+    }
+  }, [authToken, dispatch, editLoading]);
+
+  useEffect(() => {
+    if (allIds === null) {
+      dispatch(fetchAnnouncement(authToken));
     } else {
-      console.log('announcements :', announcements);
-      console.log('announcementId :', announcementId);
       const item = announcements[announcementId];
-      console.log('item :', item);
       setAnnouncement({
         title: item.title,
         PostTime: item.post_time,
@@ -76,7 +77,7 @@ export default function AnnouncementSetting() {
   /* TODO: re-write with ui components SimpleBar and DatePicker  */
   /* This is a level 4 component (page component) */
   if (announcement === null) {
-    if (loading.fetchAnnouncement) {
+    if (loading) {
       return <div>loading...</div>;
     }
     return <NoMatch />;
@@ -85,10 +86,11 @@ export default function AnnouncementSetting() {
   return (
     <>
       <Typography variant="h3" className={classes.pageHeader}>
-        {`${announcement.title} / Setting`}
+        {edit ? `${announcement.title} / Setting` : `Announcement: ${announcement.title} / Setting`}
       </Typography>
       {edit ? (
         <AnnouncementEdit
+          announcementId={announcementId}
           setEdit={setEdit}
           editTitle={announcement.title}
           editStartDate={announcement.PostTime}

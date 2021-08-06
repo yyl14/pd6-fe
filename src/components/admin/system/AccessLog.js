@@ -1,36 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, makeStyles } from '@material-ui/core';
+import {
+  Typography,
+  makeStyles,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+} from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
+import { BiFilterAlt } from 'react-icons/bi';
 
 /* TODO: Use component/ui/CustomTable to implement access log (remove this import afterwards) */
 import CustomTable from '../../ui/CustomTable';
+import DateRangePicker from '../../ui/DateRangePicker';
 import { fetchAccessLog, fetchAccounts } from '../../../actions/admin/system';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
   },
-  popUpLayout: {
-    width: '100%',
-  },
-  selectField: {
-    minWidth: 300,
-  },
-  filterButton: {
-    justifyContent: 'space-between',
-  },
-  clearButton: {
-    backgroundColor: '#FFFFFF',
-    border: 'solid',
-    borderColor: '#DDDDDD',
+  paper: {
+    minWidth: '800px',
+    minHeight: '550px',
   },
 }));
 
 /* This is a level 4 component (page component) */
 export default function AccessLog() {
   const classes = useStyles();
-  const [tableData, setTableData] = useState([]);
-
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.user.token);
   const loading = useSelector((state) => state.admin.system.loading.fetchAccessLog);
@@ -42,47 +40,86 @@ export default function AccessLog() {
   const [accountsId, setAccountsId] = useState([]);
   const [path, setPath] = useState([]);
 
+  const [tableData, setTableData] = useState([]);
+  const [filterOrNot, setFilterOrNot] = useState(false);
+  const [dateRange, setDateRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: 'selection',
+    },
+  ]);
+  const filter = () => {
+    const newData = [];
+    const start = dateRange[0].startDate.getTime();
+    const end = dateRange[0].endDate.getTime();
+    logsID.forEach((key) => {
+      const log = logs[key];
+      const accessDate = new Date(log.access_time);
+      const accessTime = accessDate.getTime();
+      if (start <= accessTime && accessTime <= end) {
+        let studentID = log.account_id;
+        if (typeof (studentID) === 'number') {
+          studentID = studentID.toString();
+        }
+        const temp = {
+          username: accounts[log.account_id].username,
+          studentID,
+          realName: accounts[log.account_id].real_name,
+          IP: log.ip,
+          resourcePath: log.resource_path,
+          requestMethod: log.request_method,
+          accessTime: log.access_time,
+        };
+        newData.push(temp);
+      }
+    });
+    setTableData(newData);
+    setFilterOrNot(false);
+  };
+
   useEffect(() => {
-    if (Object.keys(logsID).length === 0) {
-      dispatch(fetchAccessLog(authToken, 0, 10));
-      console.log('call fetchAccessLog');
+    if (logsID === null) {
+      dispatch(fetchAccessLog(authToken, 0, 100));
+      setDateRange([
+        {
+          startDate: new Date(),
+          endDate: new Date(),
+          key: 'selection',
+        },
+      ]);
     } else {
-      console.log('logsID : ', logsID);
-      console.log('logs : ', logs);
-
       const newAccountsId = logsID.map((logID) => (logs[logID].account_id));
-
       setAccountsId(newAccountsId);
     }
   }, [logsID, logs, authToken, dispatch]);
 
   useEffect(() => {
     if (accountsId.length !== 0) {
-      if (Object.keys(accounts).length === 0) {
+      if (accounts === null) {
         dispatch(fetchAccounts(authToken, accountsId));
-        console.log('call fetchAccounts');
       } else {
-        console.log('accounts : ', accounts);
-        const newData = logsID.map((logID) => {
-          const log = logs[logID];
-          return ({
-            id: log.id,
+        const newData = [];
+        const newPath = [];
+        logsID.forEach((key) => {
+          const log = logs[key];
+          let studentID = log.account_id;
+          if (typeof (studentID) === 'number') {
+            studentID = studentID.toString();
+          }
+          const temp = {
             username: accounts[log.account_id].username,
-            studentID: log.account_id,
+            studentID,
             realName: accounts[log.account_id].real_name,
             IP: log.ip,
             resourcePath: log.resource_path,
             requestMethod: log.request_method,
             accessTime: log.access_time,
-          });
+          };
+          newData.push(temp);
+          newPath.push(`account/${log.account_id}/setting`);
         });
         setTableData(newData);
-        const newPath = [];
-
-        accountsId.forEach((key) => {
-          const item = accounts[key];
-          newPath.push(`account/${item.id}/setting`);
-        });
         setPath(newPath);
       }
     }
@@ -106,46 +143,70 @@ export default function AccessLog() {
             id: 'username',
             label: 'Username',
             align: 'center',
-            width: '130px',
+            width: 150,
           },
           {
             id: 'studentID',
             label: 'Student ID',
             align: 'center',
-            width: '150px',
+            width: 150,
           },
           {
             id: 'realName',
             label: 'Real Name',
             align: 'center',
-            width: '150px',
+            width: 150,
           },
           {
             id: 'IP',
             label: 'IP',
             align: 'center',
-            width: '150px',
+            width: 150,
           },
           {
             id: 'resourcePath',
             label: 'Resource Path',
             align: 'center',
-            width: '150px',
+            width: 150,
           },
           {
             id: 'requestMethod',
             label: 'Request Method',
             align: 'center',
-            width: '200px',
+            width: 200,
           },
           {
             id: 'accessTime',
             label: 'Access Time',
             align: 'center',
-            width: '200px',
+            width: 300,
           },
         ]}
+        columnComponent={[null, null, null, null, null, null, (<BiFilterAlt key="filter" onClick={() => setFilterOrNot(true)} />)]}
       />
+      <Dialog
+        open={filterOrNot}
+        keepMounted
+        onClose={() => setFilterOrNot(false)}
+        aria-labelledby="dialog-slide-title"
+        aria-describedby="dialog-slide-description"
+        classes={{ paper: classes.paper }}
+      >
+        <DialogTitle id="dialog-slide-title">
+          <Typography variant="h4">Access time range</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DateRangePicker value={dateRange} setValue={setDateRange} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setFilterOrNot(false)} color="default">
+            Cancel
+          </Button>
+          <Button onClick={() => { filter(); }} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

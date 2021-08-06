@@ -39,7 +39,7 @@ const fetchAccounts = (token, ids) => async (dispatch) => {
     await agent.get(`/account/${id}`, fetch)
       .then((res) => {
         const { data } = res.data;
-        console.log('account :', id, data);
+        // console.log('account :', id, data);
         response = data;
       })
       .catch((err) => {
@@ -49,7 +49,7 @@ const fetchAccounts = (token, ids) => async (dispatch) => {
     return response;
   }));
 
-  console.log('payload : ', accounts);
+  // console.log('payload : ', accounts);
   if (error === null) {
     dispatch({
       type: systemConstants.FETCH_LOG_ACCOUNTS_SUCCESS,
@@ -118,11 +118,9 @@ const addAnnouncement = (token, body) => (dispatch) => {
   dispatch({
     type: systemConstants.ADD_ANNOUNCEMENT_START,
   });
-  console.log('call addAnnouncement : ', body);
   agent.post('/announcement', body, fetch)
     .then((res) => {
       const { success } = res.data;
-      console.log('response : ', res);
       dispatch({
         type: systemConstants.ADD_ANNOUNCEMENT_SUCCESS,
         payload: success,
@@ -168,7 +166,7 @@ const fetchSubmitLanguage = (token) => (dispatch) => {
   agent.get('submission/language', fetch)
     .then((res) => {
       const { data } = res.data;
-      console.log('use api :', data);
+      // console.log('use api :', data);
       dispatch({
         type: systemConstants.FETCH_SUBMIT_LANGUAGE_SUCCESS,
         payload: { data },
@@ -195,7 +193,7 @@ const editSubmitLanguage = (token, id, name, version, isDisabled) => (dispatch) 
 
   agent.patch(`submission/language/${id}`, body, fetch)
     .then((res) => {
-      console.log('edit submit language :', body);
+      // console.log('edit submit language :', body);
       dispatch({
         type: systemConstants.EDIT_SUBMIT_LANGUAGE_SUCCESS,
         payload: {

@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Button, TextField, Typography, makeStyles,
 } from '@material-ui/core';
-import Divider from '@material-ui/core/Divider';
 import DateRangePicker from '../../ui/DateRangePicker';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
-import { addAnnouncement, fetchAnnouncement } from '../../../actions/admin/system';
-import NoMatch from '../../noMatch';
+import { addAnnouncement } from '../../../actions/admin/system';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -19,12 +17,10 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 const AnnouncementAdd = () => {
-  const { announcementId } = useParams();
   const classes = useStyles();
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.user.token);
-  const loading = useSelector((state) => state.admin.system.loading);
-  const userId = useSelector((state) => state.auth.user);
+  const userId = useSelector((state) => state.auth.user.id);
 
   const [addTitle, setAddTitle] = useState('');
   const [addContent, setAddContent] = useState('');
@@ -38,17 +34,19 @@ const AnnouncementAdd = () => {
   ]);
 
   const history = useHistory();
+  const backToHomePage = () => {
+    history.push('/admin/system/announcement');
+  };
   const handleClickSave = () => {
     const body = {
       title: addTitle,
       content: addContent,
       author_id: userId,
-      post_time: dateRangePicker[0].startDate,
-      expire_time: dateRangePicker[0].endDate,
+      post_time: dateRangePicker[0].startDate.toISOString().replace('Z', ''),
+      expire_time: dateRangePicker[0].endDate.toISOString().replace('Z', ''),
     };
-    console.log(body);
     dispatch(addAnnouncement(authToken, body));
-    history.push('/admin/system/announcement');
+    backToHomePage();
   };
 
   return (
@@ -74,7 +72,7 @@ const AnnouncementAdd = () => {
         </AlignedText>
       </SimpleBar>
       {/* TODO: re-write with ui components SimpleBar and DatePicker  */}
-      <Button>Cancel</Button>
+      <Button onClick={backToHomePage}>Cancel</Button>
       <Button color="primary" onClick={handleClickSave}>Save</Button>
     </>
   );

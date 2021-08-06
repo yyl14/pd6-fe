@@ -4,20 +4,20 @@ import {
 
 const initialState = {
   logs: {
-    byId: {},
-    allIds: [],
+    byId: null,
+    allIds: null,
   },
   accounts: {
-    byId: {},
-    allIds: [],
+    byId: null,
+    allIds: null,
   },
   announcements: {
-    byId: {},
-    allIds: [],
+    byId: null,
+    allIds: null,
   },
   submitLang: {
-    byId: {},
-    allIds: [],
+    byId: null,
+    allIds: null,
   },
   loading: {
     fetchAccessLog: false,
@@ -188,7 +188,7 @@ export default function system(state = initialState, action) {
       };
     }
     case systemConstants.EDIT_ANNOUNCEMENT_SUCCESS: {
-      console.log('edit api response', action.payload);
+      // console.log('edit api response', action.payload);
       return {
         ...state,
         loading: {
@@ -224,7 +224,7 @@ export default function system(state = initialState, action) {
       };
     }
     case systemConstants.ADD_ANNOUNCEMENT_SUCCESS: {
-      console.log('add success : ', action.payload);
+      // console.log('add success : ', action.payload);
       return {
         ...state,
         loading: {
@@ -260,7 +260,7 @@ export default function system(state = initialState, action) {
       };
     }
     case systemConstants.DELETE_ANNOUNCEMENT_SUCCESS: {
-      console.log('delete api response', action.payload);
+      // console.log('delete api response', action.payload);
       return {
         ...state,
         loading: {

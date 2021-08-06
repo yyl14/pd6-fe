@@ -29,22 +29,24 @@ export default function SubmissionLanguageHome() {
   }, [authToken, dispatch]);
 
   useEffect(() => {
-    const newData = [];
-    const newPath = [];
+    if (submitLangId !== null) {
+      const newData = [];
+      const newPath = [];
 
-    submitLangId.forEach((key) => {
-      const item = submitLang[key];
-      const temp = { ...item };
-      if (item.is_disabled === true) {
-        temp.is_disabled = 'Disabled';
-      } else if (item.is_disabled === false) {
-        temp.is_disabled = 'Enabled';
-      }
-      newData.push(temp);
-      newPath.push(`submitlang/${item.id}/setting`);
-    });
-    setTableData(newData);
-    setPath(newPath);
+      submitLangId.forEach((key) => {
+        const item = submitLang[key];
+        const temp = { ...item };
+        if (item.is_disabled === true) {
+          temp.is_disabled = 'Disabled';
+        } else if (item.is_disabled === false) {
+          temp.is_disabled = 'Enabled';
+        }
+        newData.push(temp);
+        newPath.push(`submitlang/${item.id}/setting`);
+      });
+      setTableData(newData);
+      setPath(newPath);
+    }
   }, [submitLang, submitLangId]);
 
   return (
