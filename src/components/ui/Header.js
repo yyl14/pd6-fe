@@ -27,12 +27,10 @@ const useStyles = makeStyles((theme) => ({
   },
   date: {
     float: 'left',
-    height: '3.28vh',
     marginRight: '2vw',
   },
   notification: {
     float: 'left',
-    height: '3.28vh',
     width: '3.28vh',
   },
   name: {
