@@ -35,7 +35,7 @@ export default function Course({
   const loading = useSelector((state) => state.admin.course.loading);
 
   useEffect(() => {
-    // console.log(courseId, classId);
+    // console.log(mode, courseId, classId);
     const goBack = () => {
       history.push('/admin/course/course');
     };
@@ -200,7 +200,8 @@ export default function Course({
     }
   }, [classId, classList, courseId, courseList, history, location]);
 
-  if (courseList.byId[courseId] === undefined || (classId !== undefined && classList.byId[courseId] === undefined)) {
+  // console.log(courseList.byId[courseId]);
+  if (courseList.byId[courseId] === undefined || (classId && classList.byId[classId] === undefined)) {
     // console.log(classList.byId[classId]);
     return (
       <div>

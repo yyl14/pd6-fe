@@ -96,7 +96,7 @@ export default function Sidebar() {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
-  const [mode, setMode] = useState('course');
+  // const [mode, setMode] = useState('course');
 
   return (
     <Switch>
