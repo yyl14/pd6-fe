@@ -165,12 +165,13 @@ const editAccount = (token, id, userName, realName, nickName, email) => (dispatc
     alternative_email: email,
   };
 
-  agent.patch(`/account/${id}`, { nickName, alternative_email: email }, auth)
+  agent.patch(`/account/${id}`, { real_name: realName, nickname: nickName, alternative_email: email }, auth)
     .then((res) => {
       dispatch({
         type: accountConstants.EDIT_ACCOUNT_SUCCESS,
         payload: {
           id,
+          real_name: realName,
           nickname: nickName,
           alternative_email: email,
         },

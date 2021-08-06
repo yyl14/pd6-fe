@@ -267,7 +267,7 @@ export default function account(state = initialState, action) {
       const editedAccount = state.accounts.byId[action.payload.id];
       editedAccount.nickname = action.payload.nickname;
       editedAccount.alternative_email = action.payload.alternative_email;
-      // editedAccount.real_name = action.payload.real_name;
+      editedAccount.real_name = action.payload.real_name;
       // editedAccount.username = action.payload.username;
       return {
         ...state,
