@@ -38,8 +38,8 @@ export default function AnnouncementEdit(props) {
     const body = {
       title: editTitle,
       content: editContent,
-      post_time: dateRangePicker[0].startDate.toISOString().replace('Z', ''),
-      expire_time: dateRangePicker[0].endDate.toISOString().replace('Z', ''),
+      post_time: dateRangePicker[0].startDate.toISOString(),
+      expire_time: dateRangePicker[0].endDate.toISOString(),
     };
     dispatch(editAnnouncement(authToken, props.announcementId, body));
     props.setEdit(false);
