@@ -46,7 +46,7 @@ const AnnouncementAdd = () => {
     };
     console.log(body);
     dispatch(addAnnouncement(authToken, body));
-    history.push('/admin/system/announcement');
+    history.push(`/admin/system/announcement/${body.author_id}/setting`);
   };
 
   return (
