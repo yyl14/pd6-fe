@@ -72,7 +72,6 @@ export default function StudentInfoEdit(props) {
   const [disabledSave, setDisabledSave] = useState(true);
   const [disabledTwoCards, setDisabledTwoCards] = useState(false);
   const [add, setAdd] = useState(false); // addCard block
-  const [addCard, setAddCard] = useState(false);
   const [popUp, setPopUp] = useState(false);
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
   const [addInputs, setAddInputs] = useState({
@@ -96,7 +95,6 @@ export default function StudentInfoEdit(props) {
     if (defaultCardId !== null) {
       dispatch(makeStudentCardDefault(authToken, accountId, defaultCardId));
     }
-    // deal with loading
     props.handleBack();
   };
 
@@ -123,7 +121,6 @@ export default function StudentInfoEdit(props) {
     setPopUp(true);
     setAdd(false);
     setDisabledSave(false);
-    setAddCard(true);
   };
 
   const handleChange = (e) => {
