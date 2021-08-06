@@ -429,19 +429,8 @@ export default function account(state = initialState, action) {
         loading: { ...state.loading, addStudentCard: true },
       };
     case accountConstants.ADD_STUDENT_CARD_SUCCESS: {
-      const { accountId, data } = action.payload;
       return {
         ...state,
-
-        // // add to account
-        // accounts: state.accounts.byId.filter((item) => (item.id === data.id ? { ...item, studentCard: item.studentCard.concat([[data.id]]) } : item)),
-        // // add to student card
-        // studentCards: {
-        //   ...state.studentCards,
-        //   byId: { [data.id]: data },
-        //   allIds: state.studentCards.allIds.concat([data.id]),
-        // },
-
         loading: { ...state.loading, addStudentCard: false },
         error: {
           ...state.error,

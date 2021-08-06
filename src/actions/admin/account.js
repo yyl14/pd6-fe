@@ -261,33 +261,21 @@ const addStudentCard = (token, id, instituteId, emailPrefix, department, student
     },
   };
   dispatch({ type: accountConstants.ADD_STUDENT_CARD_REQUEST });
-  // console.log('here');
-  // console.log(id, instituteId, emailPrefix, studentId); // success
-
-  // agent.post(`/account/${id}/student-card`, {
-  //   institute_id: instituteId,
-  //   institute_email_prefix: emailPrefix,
-  //   department,
-  //   student_id: studentId,
-  // }, auth)
-  //   .then((res) => {
-  //     dispatch({
-  //       type: accountConstants.ADD_STUDENT_CARD_SUCCESS,
-  //       payload: {
-  //         id: res.data.id, // to be checked
-  //         institute_id: instituteId,
-  //         institute_email_prefix: emailPrefix,
-  //         department,
-  //         student_id: studentId,
-  //       },
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     dispatch({
-  //       type: accountConstants.ADD_STUDENT_CARD_FAIL,
-  //       error: err,
-  //     });
-  //   });
+  agent.post(`/account/${id}/student-card`, {
+    institute_id: instituteId,
+    institute_email_prefix: emailPrefix,
+    department,
+    student_id: studentId,
+  }, auth)
+    .then((res) => {
+      dispatch({ type: accountConstants.ADD_STUDENT_CARD_SUCCESS });
+    })
+    .catch((err) => {
+      dispatch({
+        type: accountConstants.ADD_STUDENT_CARD_FAIL,
+        error: err,
+      });
+    });
 };
 
 // TODO: Fetch all accounts

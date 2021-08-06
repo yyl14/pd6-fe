@@ -118,7 +118,7 @@ export default function StudentInfoEdit(props) {
       default: instituteId = 1;
     }
 
-    dispatch(addStudentCard(authToken, accountId, instituteId, `${addInputs.email}${emailTail}`, 'IM', addInputs.studentId));
+    dispatch(addStudentCard(authToken, accountId, instituteId, addInputs.email, 'IM', addInputs.studentId));
     setPopUp(true);
     setAdd(false);
     setDisabledSave(false);
