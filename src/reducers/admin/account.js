@@ -447,14 +447,14 @@ export default function account(state = initialState, action) {
       return {
         ...state,
 
-        // add to account
-        accounts: state.accounts.byId.filter((item) => (item.id === data.id ? { ...item, studentCard: item.studentCard.concat([[data.id]]) } : item)),
-        // add to student card
-        studentCards: {
-          ...state.studentCards,
-          byId: { [data.id]: data },
-          allIds: state.studentCards.allIds.concat([data.id]),
-        },
+        // // add to account
+        // accounts: state.accounts.byId.filter((item) => (item.id === data.id ? { ...item, studentCard: item.studentCard.concat([[data.id]]) } : item)),
+        // // add to student card
+        // studentCards: {
+        //   ...state.studentCards,
+        //   byId: { [data.id]: data },
+        //   allIds: state.studentCards.allIds.concat([data.id]),
+        // },
 
         loading: { ...state.loading, addStudentCard: false },
         error: {
