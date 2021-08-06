@@ -49,7 +49,7 @@ export default function AnnouncementSetting() {
     } else {
       console.log('announcements :', announcements);
       console.log('announcementId :', announcementId);
-      const item = announcements[announcementId - 1];
+      const item = announcements[announcementId];
       console.log('item :', item);
       setAnnouncement({
         title: item.title,

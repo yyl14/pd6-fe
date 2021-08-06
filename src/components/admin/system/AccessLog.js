@@ -4,11 +4,25 @@ import { useSelector, useDispatch } from 'react-redux';
 
 /* TODO: Use component/ui/CustomTable to implement access log (remove this import afterwards) */
 import CustomTable from '../../ui/CustomTable';
-import { fetchAccessLog } from '../../../actions/admin/system';
+import { fetchAccessLog, fetchAccounts } from '../../../actions/admin/system';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
+  },
+  popUpLayout: {
+    width: '100%',
+  },
+  selectField: {
+    minWidth: 300,
+  },
+  filterButton: {
+    justifyContent: 'space-between',
+  },
+  clearButton: {
+    backgroundColor: '#FFFFFF',
+    border: 'solid',
+    borderColor: '#DDDDDD',
   },
 }));
 
@@ -24,28 +38,55 @@ export default function AccessLog() {
   const logs = useSelector((state) => state.admin.system.logs.byId);
   const logsID = useSelector((state) => state.admin.system.logs.allIds);
 
+  const accounts = useSelector((state) => state.admin.system.accounts.byId);
+  const [accountsId, setAccountsId] = useState([]);
+  const [path, setPath] = useState([]);
+
   useEffect(() => {
-    if (logsID.length === 0) {
+    if (Object.keys(logsID).length === 0) {
       dispatch(fetchAccessLog(authToken, 0, 10));
       console.log('call fetchAccessLog');
     } else {
       console.log('logsID : ', logsID);
       console.log('logs : ', logs);
 
-      const newData = logs.map((log) => ({
-        id: log.id,
-        username: 'shiba',
-        studentID: 'B07705002',
-        realName: '黃祥祥',
-        IP: log.ip,
-        resourcePath: log.resource_path,
-        requestMethod: log.request_method,
-        accessTime: log.access_time,
-      }));
+      const newAccountsId = logsID.map((logID) => (logs[logID].account_id));
 
-      setTableData(newData);
+      setAccountsId(newAccountsId);
     }
   }, [logsID, logs, authToken, dispatch]);
+
+  useEffect(() => {
+    if (accountsId.length !== 0) {
+      if (Object.keys(accounts).length === 0) {
+        dispatch(fetchAccounts(authToken, accountsId));
+        console.log('call fetchAccounts');
+      } else {
+        console.log('accounts : ', accounts);
+        const newData = logsID.map((logID) => {
+          const log = logs[logID];
+          return ({
+            id: log.id,
+            username: accounts[log.account_id].username,
+            studentID: log.account_id,
+            realName: accounts[log.account_id].real_name,
+            IP: log.ip,
+            resourcePath: log.resource_path,
+            requestMethod: log.request_method,
+            accessTime: log.access_time,
+          });
+        });
+        setTableData(newData);
+        const newPath = [];
+
+        accountsId.forEach((key) => {
+          const item = accounts[key];
+          newPath.push(`account/${item.id}/setting`);
+        });
+        setPath(newPath);
+      }
+    }
+  }, [accountsId, accounts, logs, logsID, authToken, dispatch]);
 
   if (loading) {
     return <div>loading...</div>;
@@ -104,6 +145,8 @@ export default function AccessLog() {
             width: '200px',
           },
         ]}
+        hasLink
+        path={path}
       />
     </>
   );

@@ -27,7 +27,45 @@ const fetchAccessLog = (token, offset, limit) => (dispatch) => {
       });
     });
 };
+const fetchAccounts = (token, ids) => async (dispatch) => {
+  const fetch = { headers: { 'auth-token': token } };
+  dispatch({
+    type: systemConstants.FETCH_LOG_ACCOUNTS_START,
+  });
 
+  let error = null;
+  const accounts = await Promise.all(ids.map(async (id) => {
+    let response = null;
+    await agent.get(`/account/${id}`, fetch)
+      .then((res) => {
+        const { data } = res.data;
+        console.log('account :', id, data);
+        response = data;
+      })
+      .catch((err) => {
+        error = err;
+        response = null;
+      });
+    return response;
+  }));
+
+  console.log('payload : ', accounts);
+  if (error === null) {
+    dispatch({
+      type: systemConstants.FETCH_LOG_ACCOUNTS_SUCCESS,
+      payload: {
+        ...accounts,
+      },
+    });
+  } else {
+    dispatch({
+      type: systemConstants.FETCH_LOG_ACCOUNTS_FAIL,
+      payload: {
+        error,
+      },
+    });
+  }
+};
 // Announcement
 const fetchAnnouncement = (token) => (dispatch) => {
   const fetch = { headers: { 'auth-token': token } };
@@ -80,10 +118,11 @@ const addAnnouncement = (token, body) => (dispatch) => {
   dispatch({
     type: systemConstants.ADD_ANNOUNCEMENT_START,
   });
-
+  console.log('call addAnnouncement : ', body);
   agent.post('/announcement', body, fetch)
     .then((res) => {
       const { success } = res.data;
+      console.log('response : ', res);
       dispatch({
         type: systemConstants.ADD_ANNOUNCEMENT_SUCCESS,
         payload: success,
@@ -177,6 +216,7 @@ const editSubmitLanguage = (token, id, name, version, isDisabled) => (dispatch) 
 
 export {
   fetchAccessLog,
+  fetchAccounts,
   fetchAnnouncement,
   editAnnouncement,
   addAnnouncement,

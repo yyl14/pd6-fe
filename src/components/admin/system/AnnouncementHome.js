@@ -38,9 +38,11 @@ export default function AnnouncementHome() {
       dispatch(fetchAnnouncement(authToken));
       console.log('call fetchAnnouncement');
     } else {
+      console.log('announcements :', announcements);
       const newData = [];
       const newPath = [];
-      announcements.forEach((item) => {
+      announcementId.forEach((key) => {
+        const item = announcements[key];
         // console.log('item', item);
         const temp = {
           title: item.title,

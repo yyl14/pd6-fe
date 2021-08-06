@@ -7,6 +7,10 @@ const initialState = {
     byId: {},
     allIds: [],
   },
+  accounts: {
+    byId: {},
+    allIds: [],
+  },
   announcements: {
     byId: {},
     allIds: [],
@@ -17,6 +21,7 @@ const initialState = {
   },
   loading: {
     fetchAccessLog: false,
+    fetchAccount: false,
     fetchAnnouncement: false,
     editAnnouncement: false,
     addAnnouncement: false,
@@ -26,6 +31,7 @@ const initialState = {
   },
   error: {
     fetchAccessLog: null,
+    fetchAccount: null,
     fetchAnnouncement: null,
     editAnnouncement: null,
     addAnnouncement: null,
@@ -52,7 +58,7 @@ export default function system(state = initialState, action) {
       return {
         ...state,
         logs: {
-          byId: data,
+          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.logs),
           allIds: data.map((item) => item.id),
         },
         loading: {
@@ -83,6 +89,50 @@ export default function system(state = initialState, action) {
         },
       };
     }
+    case systemConstants.FETCH_LOG_ACCOUNTS_START:
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          fetchAccount: true,
+        },
+      };
+    case systemConstants.FETCH_LOG_ACCOUNTS_SUCCESS: {
+      const data = Object.values(action.payload);
+      return {
+        ...state,
+        accounts: {
+          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.accounts),
+          allIds: data.map((item) => item.id),
+        },
+        loading: {
+          ...state.loading,
+          fetchAccount: false,
+        },
+        error: {
+          ...state.error,
+          fetchAccount: null,
+        },
+      };
+    }
+    case systemConstants.FETCH_LOG_ACCOUNTS_FAIL: {
+      const error = action.payload;
+      return {
+        ...state,
+        accounts: {
+          byId: {},
+          allIds: [],
+        },
+        loading: {
+          ...state.loading,
+          fetchAccount: false,
+        },
+        error: {
+          ...state.error,
+          fetchAccount: error,
+        },
+      };
+    }
     /* Announcement */
     case systemConstants.FETCH_ANNOUNCEMENT_START:
       return {
@@ -97,7 +147,7 @@ export default function system(state = initialState, action) {
       return {
         ...state,
         announcements: {
-          byId: data,
+          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.announcements),
           allIds: data.map((item) => item.id),
         },
         loading: {
@@ -173,6 +223,7 @@ export default function system(state = initialState, action) {
       };
     }
     case systemConstants.ADD_ANNOUNCEMENT_SUCCESS: {
+      console.log('add success : ', action.payload);
       return {
         ...state,
         loading: {
