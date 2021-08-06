@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-  Button, TextField, Typography, makeStyles,
+  Button, TextField, Typography, makeStyles, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
 } from '@material-ui/core';
 import SimpleBar from '../ui/SimpleBar';
 import AlignedText from '../ui/AlignedText';
 import { editAccount } from '../../actions/auth';
-// import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
@@ -19,34 +18,28 @@ export default function BasicInfoEdit(props) {
   const [realName, setRealName] = useState(props.realName);
   const [userName, setUserName] = useState(props.userName);
   const [nickName, setNickName] = useState(props.nickName);
-  const [altMail, setAltMail] = useState(props.altMail);
+  const [altMail, setAltMail] = useState(props.altMail ? props.altMail : '');
   const [disabled, setDisabled] = useState(true);
   const classes = useStyles();
 
-  const { accountId } = useParams();
+  const accountId = useSelector((state) => state.auth.user.id);
   const authToken = useSelector((state) => state.auth.user.token);
-  // const loading = useSelector((state) => state.admin.account.loading);
   const dispatch = useDispatch();
+
+  const [popUp, setPopUp] = useState(false);
 
   const handleSave = () => {
     dispatch(editAccount(authToken, accountId, userName, realName, nickName, altMail));
+    if (altMail !== props.altMail) {
+      setPopUp(true);
+      return;
+    }
     props.handleBack();
   };
 
-  // useEffect(() => {
-  //   dispatch(fetchAccount(authToken, accountId));
-  //   setRealName(accounts[accountId].real_name);
-  //   setNickName(accounts[accountId].nickname);
-  //   setAltMail(accounts[accountId].alternative_email);
-  //   setUserName(accounts[accountId].username);
-  // }, [accountId, accounts, authToken, dispatch]);
-
-  // if (accounts[accountId] === undefined) {
-  //   if (loading.editAccount) {
-  //     return <div>loading...</div>;
-  //   }
-  //   return <NoMatch />;
-  // }
+  const done = () => {
+    props.handleBack();
+  };
 
   return (
     <div>
@@ -57,16 +50,8 @@ export default function BasicInfoEdit(props) {
           <AlignedText text="Username" childrenType="text" maxWidth="lg">
             <Typography variant="body1">{userName}</Typography>
           </AlignedText>
-          <AlignedText text="Real name" childrenType="field" maxWidth="lg">
-            <TextField
-              value={realName}
-              variant="outlined"
-              onChange={(e) => {
-                setRealName(e.target.value);
-                setDisabled(false);
-              }}
-              className={classes.textfield}
-            />
+          <AlignedText text="Real name" childrenType="text" maxWidth="lg">
+            <Typography variant="body1">{realName}</Typography>
           </AlignedText>
           <AlignedText text="Nickname" childrenType="field" maxWidth="lg">
             <TextField
@@ -99,6 +84,27 @@ export default function BasicInfoEdit(props) {
           </Button>
         </>
       </SimpleBar>
+      <Dialog
+        open={popUp}
+        keepMounted
+        onClose={() => setPopUp(false)}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">
+          <Typography variant="h4">Verification email sent</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Please check your mailbox to activate this alternative email, then it will appear here.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setPopUp(false); done(); }} color="default">
+            Done
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

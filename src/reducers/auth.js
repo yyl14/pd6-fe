@@ -114,7 +114,7 @@ export default function auth(state = initialState, action) {
     case userConstants.EDIT_SELF_ACCOUNT_SUCCESS: {
       const editedAccount = state.user;
       editedAccount.nickname = action.payload.nickname;
-      editedAccount.alternative_email = action.payload.alternative_email;
+      // editedAccount.alternative_email = action.payload.alternative_email;
       return {
         ...state,
         user: editedAccount,
