@@ -137,8 +137,6 @@ export default function ClassList() {
             align: 'center',
           },
         ]}
-        hasFilter={[false, false]}
-        dataColumnName={['name', 'memberCount']}
         hasLink
         path={courses.byId[courseId].classIds.map((classId) => `/admin/course/class/${courseId}/${classId}/member`)}
       />
