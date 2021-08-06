@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '10px',
   },
   defaultStar: {
-    marginRight: '5px',
+    marginRight: ' 8px',
   },
   cardContent: {
     height: '106px',

@@ -38,48 +38,40 @@ export default function BasicInfoEdit(props) {
       <SimpleBar
         title="Basic Information"
       >
-        <p>
-          <AlignedText text="Username" childrenType="text" maxWidth="lg">
-            <Typography variant="body1">{userName}</Typography>
-          </AlignedText>
-        </p>
-        <p>
-          <AlignedText text="Real name" childrenType="field" maxWidth="lg">
-            <TextField
-              value={realName}
-              variant="outlined"
-              onChange={(e) => {
-                setRealName(e.target.value);
-                setDisabled(false);
-              }}
-              className={classes.textfield}
-            />
-          </AlignedText>
-        </p>
-        <p>
-          <AlignedText text="Nickname" childrenType="field" maxWidth="lg">
-            <TextField
-              value={nickName}
-              onChange={(e) => {
-                setNickName(e.target.value);
-                setDisabled(false);
-              }}
-              className={classes.textfield}
-            />
-          </AlignedText>
-        </p>
-        <p>
-          <AlignedText text="Alternative Email" childrenType="field" maxWidth="lg">
-            <TextField
-              value={altMail}
-              onChange={(e) => {
-                setAltMail(e.target.value);
-                setDisabled(false);
-              }}
-              className={classes.textfield}
-            />
-          </AlignedText>
-        </p>
+        <AlignedText text="Username" childrenType="text" maxWidth="lg">
+          <Typography variant="body1">{userName}</Typography>
+        </AlignedText>
+        <AlignedText text="Real name" childrenType="field" maxWidth="lg">
+          <TextField
+            value={realName}
+            variant="outlined"
+            onChange={(e) => {
+              setRealName(e.target.value);
+              setDisabled(false);
+            }}
+            className={classes.textfield}
+          />
+        </AlignedText>
+        <AlignedText text="Nickname" childrenType="field" maxWidth="lg">
+          <TextField
+            value={nickName}
+            onChange={(e) => {
+              setNickName(e.target.value);
+              setDisabled(false);
+            }}
+            className={classes.textfield}
+          />
+        </AlignedText>
+        <AlignedText text="Alternative Email" childrenType="field" maxWidth="lg">
+          <TextField
+            value={altMail}
+            onChange={(e) => {
+              setAltMail(e.target.value);
+              setDisabled(false);
+            }}
+            className={classes.textfield}
+          />
+        </AlignedText>
         <Button onClick={() => props.handleBack()}>Cancel</Button>
         <Button
           color="primary"

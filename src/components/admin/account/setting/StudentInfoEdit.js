@@ -68,12 +68,10 @@ export default function StudentInfoEdit(props) {
   const classes = useStyles();
   const editMode = true;
   const [cards, setCards] = useState(props.cards); // new card isn't here
-  // const [newCard, setNewCard] = useState(null); // new card saved in here
   const [defaultCardId, setDefaultCardId] = useState(null);
   const [disabledSave, setDisabledSave] = useState(true);
   const [disabledTwoCards, setDisabledTwoCards] = useState(false);
   const [add, setAdd] = useState(false); // addCard block
-  const [addCard, setAddCard] = useState(false);
   const [popUp, setPopUp] = useState(false);
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
   const [addInputs, setAddInputs] = useState({
@@ -94,15 +92,9 @@ export default function StudentInfoEdit(props) {
   };
 
   const handleSave = () => {
-    if (addCard) {
-      console.log('add request success');
-      dispatch(addStudentCard(authToken, accountId, instituteId, addInputs.email, 'IM', addInputs.studentId));
-    }
     if (defaultCardId !== null) {
-      console.log('default card change');
       dispatch(makeStudentCardDefault(authToken, accountId, defaultCardId));
     }
-    // deal with loading
     props.handleBack();
   };
 
@@ -133,10 +125,10 @@ export default function StudentInfoEdit(props) {
     //     is_default: false,
     //   },
     // );
+    dispatch(addStudentCard(authToken, accountId, instituteId, addInputs.email, 'IM', addInputs.studentId));
     setPopUp(true);
     setAdd(false);
     setDisabledSave(false);
-    setAddCard(true);
   };
 
   const handleChange = (e) => {
@@ -205,20 +197,6 @@ export default function StudentInfoEdit(props) {
               })}
             </div>
           ) : <></> }
-        {/* {newCard
-          ? (
-            <p>
-              <StudentInfoCard
-                editMode
-                isNew
-                isDefault={newCard.is_default}
-                studentId={newCard.student_id}
-                email={newCard.email}
-                instituteId={newCard.institute_id}
-              />
-            </p>
-          )
-          : <></>} */}
         {add
           ? (
             <p>
