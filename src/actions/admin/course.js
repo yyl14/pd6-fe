@@ -27,14 +27,14 @@ export const addCourse = (token, name, type) => (dispatch) => {
     headers: { 'auth-token': token },
   };
   const body = { name, type: 'LESSON' };
-  console.log(body);
+  // console.log(body);
 
   dispatch({ type: courseConstants.ADD_COURSE_START });
 
   agent
     .post('/course', body, auth)
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       const { data } = res.data;
       const { id } = data;
       dispatch({
@@ -75,7 +75,7 @@ export const renameCourse = (token, courseId, newName) => (dispatch) => {
       });
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
       dispatch({
         type: courseConstants.RENAME_COURSE_FAIL,
         payload: {
@@ -94,7 +94,7 @@ export const deleteCourse = (token, courseId) => (dispatch) => {
   agent
     .delete(`/course/${courseId}`, auth)
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       dispatch({
         type: courseConstants.DELETE_COURSE_SUCCESS,
         payload: {
@@ -120,7 +120,7 @@ export const fetchClasses = (token, courseId) => (dispatch) => {
   agent
     .get(`/course/${courseId}/class`, auth)
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       dispatch({
         type: courseConstants.FETCH_CLASSES_SUCCESS,
         payload: { courseId, data: res.data },
@@ -135,13 +135,13 @@ export const addClass = (token, courseId, name, isHidden) => (dispatch) => {
   const auth = {
     headers: { 'auth-token': token },
   };
-  console.log(name);
+
   dispatch({ type: courseConstants.ADD_CLASS_START });
 
   agent
     .post(`/course/${courseId}/class`, { name }, auth)
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       const { data } = res.data;
       const { id } = data;
       dispatch({
@@ -197,7 +197,7 @@ export const deleteClass = (token, courseId, classId) => (dispatch) => {
   agent
     .delete(`/class/${classId}`, auth)
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       dispatch({
         type: courseConstants.DELETE_CLASS_SUCCESS,
         payload: {

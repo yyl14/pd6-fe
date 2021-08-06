@@ -158,7 +158,7 @@ export default function course(state = initialState, action) {
         ...state,
         courses: {
           ...state.courses,
-          byId: { [courseId]: { ...state.courses.byId[courseId], name: newName } },
+          byId: { ...state.courses.byId, [courseId]: { ...state.courses.byId[courseId], name: newName } },
         },
         loading: { ...state.loading, renameCourse: false },
         error: { ...state.error, renameCourse: null },
@@ -376,7 +376,7 @@ export default function course(state = initialState, action) {
         ...state,
         classes: {
           ...state.classes,
-          byId: { [classId]: { ...state.courses.byId[classId], name: newName } },
+          byId: { ...state.classes.byId, [classId]: { ...state.courses.byId[classId], name: newName } },
         },
         loading: { ...state.loading, renameClass: false },
         error: { ...state.error, renameClass: null },
