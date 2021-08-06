@@ -188,6 +188,7 @@ export default function system(state = initialState, action) {
       };
     }
     case systemConstants.EDIT_ANNOUNCEMENT_SUCCESS: {
+      console.log('edit api response', action.payload);
       return {
         ...state,
         loading: {
@@ -259,6 +260,7 @@ export default function system(state = initialState, action) {
       };
     }
     case systemConstants.DELETE_ANNOUNCEMENT_SUCCESS: {
+      console.log('delete api response', action.payload);
       return {
         ...state,
         loading: {
