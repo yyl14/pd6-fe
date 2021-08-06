@@ -1,5 +1,5 @@
 import {
-  Button, Dialog, DialogTitle, DialogContent, Divider, Grid, Typography, DialogContentText, DialogActions, makeStyles,
+  Button, Dialog, DialogTitle, DialogContent, Typography, DialogContentText, DialogActions, makeStyles,
 } from '@material-ui/core';
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -50,7 +50,6 @@ export default function AccountDelete(props) {
           <div>
             <Dialog
               open={popUp}
-              keepMounted
               onClose={() => setPopUp(false)}
               maxWidth="md"
             >

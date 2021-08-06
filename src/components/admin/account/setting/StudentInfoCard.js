@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Button, Card, CardContent, Divider, Grid, Typography, makeStyles,
+  Button, Card, CardContent, Typography, makeStyles,
 } from '@material-ui/core';
 import StarIcon from '@material-ui/icons/Star';
 import { yellow } from '@material-ui/core/colors';
@@ -85,7 +85,7 @@ export default function StudentInfoCard(props) {
               </AlignedText>
             </div>
             <div className={classes.defaultButton}>
-              <Button disabled={disabled || props.isNew} onClick={() => { handleClick(); props.setDisabledSave(false); }}>Set as Default</Button>
+              <Button disabled={disabled} onClick={() => { handleClick(); props.setDisabledSave(false); }}>Set as Default</Button>
             </div>
           </CardContent>
         ) : (

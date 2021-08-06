@@ -3,8 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   Button,
-  Divider,
-  Grid,
   Typography,
   Card,
   CardContent,
@@ -15,6 +13,7 @@ import {
   Select,
   MenuItem,
   CardActions,
+  Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
 } from '@material-ui/core';
 
 import StarIcon from '@material-ui/icons/Star';
@@ -69,12 +68,13 @@ export default function StudentInfoEdit(props) {
   const classes = useStyles();
   const editMode = true;
   const [cards, setCards] = useState(props.cards); // new card isn't here
-  const [newCard, setNewCard] = useState(null); // new card saved in here
+  // const [newCard, setNewCard] = useState(null); // new card saved in here
   const [defaultCardId, setDefaultCardId] = useState(null);
   const [disabledSave, setDisabledSave] = useState(true);
   const [disabledTwoCards, setDisabledTwoCards] = useState(false);
   const [add, setAdd] = useState(false); // addCard block
   const [addCard, setAddCard] = useState(false);
+  const [popUp, setPopUp] = useState(false);
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
   const [addInputs, setAddInputs] = useState({
     institute: 'National Taiwan University',
@@ -125,14 +125,15 @@ export default function StudentInfoEdit(props) {
         break;
       default: instituteId = 1;
     }
-    setNewCard(
-      {
-        student_id: addInputs.studentId,
-        email: `${addInputs.email}${emailTail}`,
-        institute_id: instituteId,
-        is_default: false,
-      },
-    );
+    // setNewCard(
+    //   {
+    //     student_id: addInputs.studentId,
+    //     email: `${addInputs.email}${emailTail}`,
+    //     institute_id: instituteId,
+    //     is_default: false,
+    //   },
+    // );
+    setPopUp(true);
     setAdd(false);
     setDisabledSave(false);
     setAddCard(true);
@@ -204,7 +205,7 @@ export default function StudentInfoEdit(props) {
               })}
             </div>
           ) : <></> }
-        {newCard
+        {/* {newCard
           ? (
             <p>
               <StudentInfoCard
@@ -217,7 +218,7 @@ export default function StudentInfoEdit(props) {
               />
             </p>
           )
-          : <></>}
+          : <></>} */}
         {add
           ? (
             <p>
@@ -269,14 +270,41 @@ export default function StudentInfoEdit(props) {
             </p>
           )
           : <></>}
-        <p className={classes.buttonContainer}>
-          <div className={classes.addButton}>
-            <Button onClick={() => { setAdd(true); setDisabledTwoCards(true); }} disabled={disabledTwoCards}>+</Button>
-          </div>
-        </p>
+        {!disabledTwoCards ? (
+          <p className={classes.buttonContainer}>
+            <div className={classes.addButton}>
+              <Button onClick={() => { setAdd(true); setDisabledTwoCards(true); }}>+</Button>
+            </div>
+          </p>
+        ) : <></>}
+        {popUp
+          ? (
+            <div>
+              <Dialog
+                open={popUp}
+                onClose={() => setPopUp(false)}
+                maxWidth="md"
+              >
+                <DialogTitle>
+                  <Typography variant="h4">Verification email sent</Typography>
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    <Typography variant="body1" color="textPrimary">
+                      Please check your mailbox to activate this student information, then it will appear here.
+                    </Typography>
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={() => setPopUp(false)}>Done</Button>
+                </DialogActions>
+              </Dialog>
+            </div>
+          )
+          : <></>}
+
         <Button onClick={() => {
           props.handleBack();
-          console.log(cards);
         }}
         >
           Cancel

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Button, Card, CardContent, Divider, Grid, Typography,
+  Button, Card, CardContent, Typography,
 } from '@material-ui/core';
 import StarIcon from '@material-ui/icons/Star';
 import StudentInfoCard from './StudentInfoCard';
