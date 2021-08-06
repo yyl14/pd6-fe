@@ -14,11 +14,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import {
-  fetchCourses,
-  fetchClasses,
-  fetchMembers,
-  renameClass,
-  deleteClass,
+  fetchCourses, fetchClasses, fetchMembers, renameClass, deleteClass,
 } from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
@@ -37,6 +33,7 @@ const ClassSetting = () => {
   const history = useHistory();
 
   const dispatch = useDispatch();
+  const thisState = useSelector((state) => state);
   const authToken = useSelector((state) => state.auth.user.token);
   const courses = useSelector((state) => state.admin.course.courses);
   const classes = useSelector((state) => state.admin.course.classes);
@@ -69,11 +66,11 @@ const ClassSetting = () => {
   };
   const onDelete = () => {
     setShowDeleteDialog(false);
-    dispatch(deleteClass(authToken, classId));
+    dispatch(deleteClass(authToken, courseId, classId));
     history.push(`/admin/course/course/${courseId}/class-list/`);
   };
 
-  if (courses.byId[courseId] === undefined || classes.byId[courseId] === undefined) {
+  if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
     if (loading.fetchCourses || loading.fetchClasses) {
       // still loading
       return <div>loading</div>;

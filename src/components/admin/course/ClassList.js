@@ -53,9 +53,13 @@ export default function ClassList() {
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchCourses(authToken));
-    dispatch(fetchClasses(authToken, courseId));
-  }, [authToken, courseId, dispatch]);
+    if (!loading.deleteCourse) {
+      dispatch(fetchCourses(authToken));
+    }
+    if (!loading.deleteClass) {
+      dispatch(fetchClasses(authToken, courseId));
+    }
+  }, [authToken, courseId, dispatch, loading.deleteClass, loading.deleteCourse]);
 
   // fetch members under all classes to get member count
   useEffect(() => {
@@ -139,8 +143,6 @@ export default function ClassList() {
             align: 'center',
           },
         ]}
-        hasFilter={[false, false]}
-        dataColumnName={['name', 'memberCount']}
         hasLink
         path={courses.byId[courseId].classIds.map((classId) => `/admin/course/class/${courseId}/${classId}/member`)}
       />
