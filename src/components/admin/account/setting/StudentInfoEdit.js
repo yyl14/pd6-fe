@@ -209,6 +209,7 @@ export default function StudentInfoEdit(props) {
             <p>
               <StudentInfoCard
                 editMode
+                isNew
                 isDefault={newCard.is_default}
                 studentId={newCard.student_id}
                 email={newCard.email}
