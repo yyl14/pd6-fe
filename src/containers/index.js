@@ -6,6 +6,7 @@ import { instanceOf } from 'prop-types';
 import React, { Component } from 'react';
 import Normal from './normal';
 import Admin from './admin';
+import Account from './account';
 import NoMatch from '../components/noMatch';
 
 import { getUserInfo } from '../actions/auth';
@@ -58,6 +59,7 @@ class Index extends Component {
         <Switch>
           <Route exact path="/" component={Normal} />
           <Route path="/admin" component={Admin} />
+          <Route path="/account/setting" component={Account} />
           <Route component={NoMatch} />
         </Switch>
       </div>

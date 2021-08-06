@@ -100,6 +100,8 @@ export default function ClassList() {
     return <NoMatch />;
   }
 
+  // console.log(courses, classes);
+
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">

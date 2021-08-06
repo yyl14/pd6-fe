@@ -15,6 +15,7 @@ const mono = {
   gray: '#CACACA',
   semiDarkGray: '#AAAAAA',
   darkGray: '#656565',
+  lightBlack: '#090909',
   black: '#000000',
 };
 
@@ -44,6 +45,11 @@ const palette = {
     A100: mono.lightGray,
     A400: mono.darkGray,
     A700: mono.semiDarkGray,
+  },
+
+  black: {
+    main: mono.lightBlack,
+    dark: mono.black,
   },
 
   // primary: blue
