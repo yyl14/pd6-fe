@@ -17,7 +17,7 @@ import {
   Select,
 } from '@material-ui/core';
 
-import { ArrowForward, FilterList } from '@material-ui/icons';
+import { ArrowForward, CenterFocusStrong, FilterList } from '@material-ui/icons';
 
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from 'react-icons/md';
 
@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
   search: {
     height: '60px',
+    width: 325,
   },
   buttons: {
     marginTop: '3px',
@@ -62,6 +63,10 @@ const useStyles = makeStyles((theme) => ({
   },
   tableHead: {
     height: '60px',
+  },
+  column: {
+    display: 'flex',
+    justifyContent: 'center',
   },
   columnComponent: {
     transform: 'translateX(10px)',
@@ -172,9 +177,11 @@ export default function CustomTable({
               <TableRow className={classes.tableHead}>
                 {columns.map((column) => (
                   <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth, width: column.width }}>
-                    {column.label}
-                    <div className={classes.columnComponent}>
-                      { columnComponent && columnComponent[columns.findIndex((x) => x.id === column.id)]}
+                    <div className={classes.column}>
+                      {column.label}
+                      <div className={classes.columnComponent}>
+                        { columnComponent && columnComponent[columns.findIndex((x) => x.id === column.id)]}
+                      </div>
                     </div>
                   </TableCell>
                 ))}
