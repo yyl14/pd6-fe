@@ -21,6 +21,7 @@ export default function AccountDelete(props) {
   const { accountId } = useParams();
   const authToken = useSelector((state) => state.auth.user.token);
   const dispatch = useDispatch();
+  const card = props.cards.filter((p) => p.is_default === true);
 
   const handleDelete = () => {
     setPopUp(false);
@@ -65,7 +66,7 @@ export default function AccountDelete(props) {
                   </div>
                   <div className={classes.dialogItem}>
                     <AlignedText text="Student ID" childrenType="text">
-                      {props.cards.map((p) => { if (p.is_default === true) { return (<Typography>{p.student_id}</Typography>); } return <></>; })}
+                      {card.length > 0 && <Typography>{card[0].student_id}</Typography>}
                     </AlignedText>
                   </div>
                   <div className={classes.dialogItem}>
@@ -75,7 +76,7 @@ export default function AccountDelete(props) {
                   </div>
                   <div className={classes.dialogItem}>
                     <AlignedText text="Email" childrenType="text">
-                      {props.cards.map((p) => { if (p.is_default === true) { return (<Typography>{p.email}</Typography>); } return <></>; })}
+                      {card.length > 0 && <Typography>{card[0].email}</Typography>}
                     </AlignedText>
                   </div>
                   <Typography variant="body2" color="textPrimary">

@@ -7,6 +7,8 @@ import StudentInfoCard from './StudentInfoCard';
 import SimpleBar from '../../../ui/SimpleBar';
 
 export default function StudentInfo(props) {
+  const defaultCard = props.cards.filter((p) => p.is_default === true);
+  const unDefaultCard = props.cards.filter((p) => p.is_default === false);
   return (
     <div>
       <SimpleBar
@@ -19,31 +21,12 @@ export default function StudentInfo(props) {
       >
         {(props.cards) ? (
           <div>
-            {props.cards.map((p) => {
-              if (p.is_default === true) {
-                return (
-                  <>
-                    <StudentInfoCard isDefault={p.is_default} studentId={p.student_id} email={p.email} instituteId={p.institute_id} />
-                  </>
-                );
-              }
-              return <></>;
-            })}
+            {defaultCard.map((p) => <StudentInfoCard key={p.id} isDefault={p.is_default} studentId={p.student_id} email={p.email} instituteId={p.institute_id} />)}
             <p> </p>
-            {props.cards.map((p) => {
-              if (p.is_default === false) {
-                return (
-                  <>
-                    <StudentInfoCard isDefault={p.is_default} studentId={p.student_id} email={p.email} instituteId={p.institute_id} />
-                  </>
-                );
-              }
-              return <></>;
-            })}
+            {unDefaultCard.map((p) => <StudentInfoCard key={p.id} isDefault={p.is_default} studentId={p.student_id} email={p.email} instituteId={p.institute_id} />)}
           </div>
         )
           : <></>}
-
       </SimpleBar>
     </div>
   );

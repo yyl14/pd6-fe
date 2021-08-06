@@ -42,8 +42,6 @@ export default function AccountSetting() {
   }, [authToken, accountId, dispatch]);
 
   useEffect(() => {
-    // console.log(accounts[accountId]);
-    // console.log(accounts[accountId].studentCard);
     let update = [];
     accounts[accountId].studentCard.forEach((key) => {
       update = [...update, studentCards[key]];
