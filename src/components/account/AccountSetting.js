@@ -33,9 +33,6 @@ export default function AccountSetting() {
   const studentCards = useSelector((state) => state.auth.studentCards);
   const loading = useSelector((state) => state.auth.loading);
 
-  console.log(account);
-  console.log(accountId);
-  console.log(studentCards);
   useEffect(() => {
     dispatch(fetchStudentCard(authToken, accountId));
   }, [authToken, accountId, dispatch]);
@@ -109,7 +106,7 @@ export default function AccountSetting() {
         />
       )}
 
-      {/* <NewPassword /> */}
+      <NewPassword />
     </div>
   );
 }

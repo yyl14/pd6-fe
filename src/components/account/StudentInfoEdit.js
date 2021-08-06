@@ -207,73 +207,69 @@ export default function StudentInfoEdit(props) {
           ) : <></> }
         {newCard
           ? (
-            <p>
-              <StudentInfoCard
-                editMode
-                isDefault={newCard.is_default}
-                studentId={newCard.student_id}
-                email={newCard.email}
-                instituteId={newCard.institute_id}
-              />
-            </p>
+            <StudentInfoCard
+              editMode
+              isDefault={newCard.is_default}
+              studentId={newCard.student_id}
+              email={newCard.email}
+              instituteId={newCard.institute_id}
+            />
           )
           : <></>}
         {add
           ? (
-            <p>
-              <Card variant="outlined" className={classes.addCard}>
-                <CardContent>
-                  <div className={classes.row}>
-                    <div className={classes.item}><Typography>Institute</Typography></div>
-                    <FormControl variant="outlined" className={classes.textfield}>
-                      <Select value={addInputs.institute} name="institute" onChange={(e) => handleChange(e)}>
-                        <MenuItem value="National Taiwan University">National Taiwan University</MenuItem>
-                        <MenuItem value="National Taiwan Normal University">National Taiwan Normal University</MenuItem>
-                        <MenuItem value="National Taiwan University of Science and Technology">
-                          National Taiwan University of Science and Technology
-                        </MenuItem>
-                      </Select>
-                    </FormControl>
-                  </div>
-                  <div className={classes.row}>
-                    <AlignedText text="Student ID" childrenType="field">
-                      <TextField
-                        variant="outlined"
-                        name="studentId"
-                        className={classes.textfield}
-                        value={addInputs.studentId}
-                        onChange={(e) => handleChange(e)}
-                      />
-                    </AlignedText>
-                  </div>
-                  <div className={classes.mailrow}>
-                    <div className={classes.item}>
-                      <Typography>Email</Typography>
-                    </div>
+            <Card variant="outlined" className={classes.addCard}>
+              <CardContent>
+                <div className={classes.row}>
+                  <div className={classes.item}><Typography>Institute</Typography></div>
+                  <FormControl variant="outlined" className={classes.textfield}>
+                    <Select value={addInputs.institute} name="institute" onChange={(e) => handleChange(e)}>
+                      <MenuItem value="National Taiwan University">National Taiwan University</MenuItem>
+                      <MenuItem value="National Taiwan Normal University">National Taiwan Normal University</MenuItem>
+                      <MenuItem value="National Taiwan University of Science and Technology">
+                        National Taiwan University of Science and Technology
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+                <div className={classes.row}>
+                  <AlignedText text="Student ID" childrenType="field">
                     <TextField
                       variant="outlined"
-                      name="email"
-                      className={classes.mailfield}
-                      value={addInputs.email}
+                      name="studentId"
+                      className={classes.textfield}
+                      value={addInputs.studentId}
                       onChange={(e) => handleChange(e)}
-                      style={{ marginLeft: '0px', marginRight: '10px' }}
                     />
-                    <Typography>{emailTail}</Typography>
-                  </div>
-                </CardContent>
-                <div className={classes.buttons}>
-                  <Button onClick={handleAddCancel}>Cancel</Button>
-                  <Button color="primary" onClick={handleAddSave}>Save</Button>
+                  </AlignedText>
                 </div>
-              </Card>
-            </p>
+                <div className={classes.mailrow}>
+                  <div className={classes.item}>
+                    <Typography>Email</Typography>
+                  </div>
+                  <TextField
+                    variant="outlined"
+                    name="email"
+                    className={classes.mailfield}
+                    value={addInputs.email}
+                    onChange={(e) => handleChange(e)}
+                    style={{ marginLeft: '0px', marginRight: '10px' }}
+                  />
+                  <Typography>{emailTail}</Typography>
+                </div>
+              </CardContent>
+              <div className={classes.buttons}>
+                <Button onClick={handleAddCancel}>Cancel</Button>
+                <Button color="primary" onClick={handleAddSave}>Save</Button>
+              </div>
+            </Card>
           )
           : <></>}
-        <p className={classes.buttonContainer}>
+        <div className={classes.buttonContainer}>
           <div className={classes.addButton}>
             <Button onClick={() => { setAdd(true); setDisabledTwoCards(true); }} disabled={disabledTwoCards}>+</Button>
           </div>
-        </p>
+        </div>
         <Button onClick={() => {
           props.handleBack();
           console.log(cards);

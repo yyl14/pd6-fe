@@ -193,6 +193,29 @@ const addStudentCard = (token, id, instituteId, emailPrefix, department, student
     });
 };
 
+const editPassword = (token, id, oldPassword, newPassword) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  dispatch({ type: userConstants.EDIT_SELF_PASSWORD_START });
+
+  agent.put(`/account/${id}/pass_hash`, {
+    old_password: oldPassword,
+    new_password: newPassword,
+  }, auth)
+    .then((res) => {
+      dispatch({ type: userConstants.EDIT_SELF_PASSWORD_SUCCESS });
+    })
+    .catch((err) => {
+      dispatch({
+        type: userConstants.EDIT_SELF_PASSWORD_FAIL,
+        error: err,
+      });
+    });
+};
+
 export {
-  getUserInfo, userSignIn, userLogout, userForgetPassword, editAccount, makeStudentCardDefault, fetchStudentCard, addStudentCard,
+  getUserInfo, userSignIn, userLogout, userForgetPassword, editAccount, makeStudentCardDefault, fetchStudentCard, addStudentCard, editPassword,
 };
