@@ -14,7 +14,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  CardActions,
+  CardActions, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
 } from '@material-ui/core';
 
 import StarIcon from '@material-ui/icons/Star';
@@ -69,10 +69,8 @@ export default function StudentInfoEdit(props) {
   const classes = useStyles();
   const editMode = true;
   const [cards, setCards] = useState(props.cards); // new card isn't here
-  const [newCard, setNewCard] = useState(null); // new card saved in here
   const [defaultCardId, setDefaultCardId] = useState(null);
   const [disabledSave, setDisabledSave] = useState(true);
-  const [disabledTwoCards, setDisabledTwoCards] = useState(false);
   const [add, setAdd] = useState(false); // addCard block
   const [addCard, setAddCard] = useState(false);
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
@@ -82,8 +80,9 @@ export default function StudentInfoEdit(props) {
     email: '',
   });
   let instituteId = 1;
+  const [popUp, setPopUp] = useState(false);
 
-  const { accountId } = useParams();
+  const accountId = useSelector((state) => state.auth.user.id);
   const authToken = useSelector((state) => state.auth.user.token);
   const dispatch = useDispatch();
 
@@ -94,23 +93,15 @@ export default function StudentInfoEdit(props) {
   };
 
   const handleSave = () => {
-    if (addCard) {
-      console.log('add request success');
-      dispatch(addStudentCard(authToken, accountId, instituteId, addInputs.email, 'IM', addInputs.studentId));
-    }
     if (defaultCardId !== null) {
-      console.log('default card change');
       dispatch(makeStudentCardDefault(authToken, accountId, defaultCardId));
     }
-    // deal with loading
-    // console.log(props.cards);
     props.handleBack();
   };
 
   const handleAddCancel = () => {
     setAdd(false);
     setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
-    setDisabledTwoCards(false);
   };
 
   const handleAddSave = () => {
@@ -126,14 +117,9 @@ export default function StudentInfoEdit(props) {
         break;
       default: instituteId = 1;
     }
-    setNewCard(
-      {
-        student_id: addInputs.studentId,
-        email: `${addInputs.email}${emailTail}`,
-        institute_id: instituteId,
-        is_default: false,
-      },
-    );
+
+    dispatch(addStudentCard(authToken, accountId, instituteId, `${addInputs.email}${emailTail}`, 'IM', addInputs.studentId));
+    setPopUp(true);
     setAdd(false);
     setDisabledSave(false);
     setAddCard(true);
@@ -171,7 +157,7 @@ export default function StudentInfoEdit(props) {
               {cards.map((p) => {
                 if (p.is_default === true) {
                   return (
-                    <p>
+                    <>
                       <StudentInfoCard
                         editMode
                         isDefault={p.is_default}
@@ -179,7 +165,7 @@ export default function StudentInfoEdit(props) {
                         email={p.email}
                         instituteId={p.institute_id}
                       />
-                    </p>
+                    </>
                   );
                 }
                 return <></>;
@@ -187,7 +173,7 @@ export default function StudentInfoEdit(props) {
               {cards.map((p) => {
                 if (p.is_default === false) {
                   return (
-                    <p>
+                    <>
                       <StudentInfoCard
                         editMode
                         id={p.id}
@@ -198,24 +184,13 @@ export default function StudentInfoEdit(props) {
                         updateStatus={updateStatus}
                         setDisabledSave={setDisabledSave}
                       />
-                    </p>
+                    </>
                   );
                 }
                 return <></>;
               })}
             </div>
           ) : <></> }
-        {newCard
-          ? (
-            <StudentInfoCard
-              editMode
-              isDefault={newCard.is_default}
-              studentId={newCard.student_id}
-              email={newCard.email}
-              instituteId={newCard.institute_id}
-            />
-          )
-          : <></>}
         {add
           ? (
             <Card variant="outlined" className={classes.addCard}>
@@ -267,12 +242,11 @@ export default function StudentInfoEdit(props) {
           : <></>}
         <div className={classes.buttonContainer}>
           <div className={classes.addButton}>
-            <Button onClick={() => { setAdd(true); setDisabledTwoCards(true); }} disabled={disabledTwoCards}>+</Button>
+            <Button onClick={() => { setAdd(true); }}>+</Button>
           </div>
         </div>
         <Button onClick={() => {
           props.handleBack();
-          console.log(cards);
         }}
         >
           Cancel
@@ -286,6 +260,27 @@ export default function StudentInfoEdit(props) {
           Save
         </Button>
       </SimpleBar>
+      <Dialog
+        open={popUp}
+        keepMounted
+        onClose={() => setPopUp(false)}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">
+          <Typography variant="h4">Verification email sent</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Please check your mailbox to activate this alternative email, then it will appear here.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setPopUp(false); }} color="default">
+            Done
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

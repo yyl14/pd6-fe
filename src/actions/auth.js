@@ -104,7 +104,7 @@ const editAccount = (token, id, userName, realName, nickName, email) => (dispatc
   };
   dispatch({ type: userConstants.EDIT_SELF_ACCOUNT_REQUEST });
 
-  agent.patch(`/account/${id}`, { nickName, alternative_email: email }, auth)
+  agent.patch(`/account/${id}`, { nickname: nickName, alternative_email: email }, auth)
     .then((res) => {
       dispatch({
         type: userConstants.EDIT_SELF_ACCOUNT_SUCCESS,
