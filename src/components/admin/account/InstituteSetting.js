@@ -82,7 +82,7 @@ export default function InstituteSetting() {
       changeStatus: false,
     });
     setNewSetting({
-      newStatus: institutes[instituteId].is_disabled === false,
+      ...newSetting,
       newName: '',
       newInitialism: '',
       newEmail: '',
@@ -109,19 +109,64 @@ export default function InstituteSetting() {
     }
     switch (prop) {
       case 'newName':
-        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, newSetting.newName, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === true));
+        dispatch(
+          editInstitute(
+            authToken,
+            instituteId,
+            institutes[instituteId].abbreviated_name,
+            newSetting.newName,
+            institutes[instituteId].email_domain,
+            institutes[instituteId].is_disabled === true,
+          ),
+        );
         break;
       case 'newInitialism':
-        dispatch(editInstitute(authToken, instituteId, newSetting.newInitialism, institutes[instituteId].full_name, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === true));
+        dispatch(
+          editInstitute(
+            authToken,
+            instituteId,
+            newSetting.newInitialism,
+            institutes[instituteId].full_name,
+            institutes[instituteId].email_domain,
+            institutes[instituteId].is_disabled === true,
+          ),
+        );
         break;
       case 'newEmail':
-        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, newSetting.newEmail, institutes[instituteId].is_disabled === true));
+        dispatch(
+          editInstitute(
+            authToken,
+            instituteId,
+            institutes[instituteId].abbreviated_name,
+            institutes[instituteId].full_name,
+            newSetting.newEmail,
+            institutes[instituteId].is_disabled === true,
+          ),
+        );
         break;
       case 'newStatus':
-        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, institutes[instituteId].email_domain, !newSetting.newStatus));
+        dispatch(
+          editInstitute(
+            authToken,
+            instituteId,
+            institutes[instituteId].abbreviated_name,
+            institutes[instituteId].full_name,
+            institutes[instituteId].email_domain,
+            !newSetting.newStatus,
+          ),
+        );
         break;
       default:
-        dispatch(editInstitute(authToken, instituteId, institutes[instituteId].abbreviated_name, institutes[instituteId].full_name, institutes[instituteId].email_domain, institutes[instituteId].is_disabled === true));
+        dispatch(
+          editInstitute(
+            authToken,
+            instituteId,
+            institutes[instituteId].abbreviated_name,
+            institutes[instituteId].full_name,
+            institutes[instituteId].email_domain,
+            institutes[instituteId].is_disabled === true,
+          ),
+        );
     }
     handleClosePopUp();
   };
@@ -131,9 +176,7 @@ export default function InstituteSetting() {
       <Typography variant="h3" className={classes.pageHeader}>
         {`${institutes[instituteId].abbreviated_name} / Setting`}
       </Typography>
-      <SimpleBar
-        title="Institute Information"
-      >
+      <SimpleBar title="Institute Information">
         <AlignedText text="Full Name" maxWidth="lg" childrenType="text">
           <Typography variant="body1">{institutes[instituteId].full_name}</Typography>
         </AlignedText>
@@ -144,7 +187,9 @@ export default function InstituteSetting() {
           <Typography variant="body1">{institutes[instituteId].email_domain}</Typography>
         </AlignedText>
         <AlignedText text="Status" maxWidth="lg" childrenType="text">
-          <Typography variant="body1">{(institutes[instituteId].is_disabled === true) ? 'Disabled' : 'Enabled'}</Typography>
+          <Typography variant="body1">
+            {institutes[instituteId].is_disabled === true ? 'Disabled' : 'Enabled'}
+          </Typography>
         </AlignedText>
       </SimpleBar>
       <SimpleBar
@@ -241,9 +286,7 @@ export default function InstituteSetting() {
         <DialogContent>
           <div style={{ color: 'red' }}>
             <AlignedText text="Full Name" childrenType="text">
-              <Typography variant="body1">
-                {institutes[instituteId].full_name}
-              </Typography>
+              <Typography variant="body1">{institutes[instituteId].full_name}</Typography>
             </AlignedText>
           </div>
           <AlignedText text="New Name" childrenType="field">
@@ -263,7 +306,12 @@ export default function InstituteSetting() {
           <Button onClick={() => handleClosePopUp()} color="default">
             Cancel
           </Button>
-          <Button onClick={() => { handleEditInstitute('newName'); }} color="secondary">
+          <Button
+            onClick={() => {
+              handleEditInstitute('newName');
+            }}
+            color="secondary"
+          >
             Rename
           </Button>
         </DialogActions>
@@ -283,9 +331,7 @@ export default function InstituteSetting() {
         <DialogContent>
           <div style={{ color: 'red' }}>
             <AlignedText text="Current Initialism" childrenType="text">
-              <Typography variant="body1">
-                {institutes[instituteId].abbreviated_name}
-              </Typography>
+              <Typography variant="body1">{institutes[instituteId].abbreviated_name}</Typography>
             </AlignedText>
           </div>
           <AlignedText text="New Initialism" childrenType="field">
@@ -305,7 +351,12 @@ export default function InstituteSetting() {
           <Button onClick={() => handleClosePopUp()} color="default">
             Cancel
           </Button>
-          <Button onClick={() => { handleEditInstitute('newInitialism'); }} color="secondary">
+          <Button
+            onClick={() => {
+              handleEditInstitute('newInitialism');
+            }}
+            color="secondary"
+          >
             Rename
           </Button>
         </DialogActions>
@@ -325,9 +376,7 @@ export default function InstituteSetting() {
         <DialogContent>
           <div style={{ color: 'red' }}>
             <AlignedText text="Current Email" childrenType="text">
-              <Typography variant="body1">
-                {institutes[instituteId].email_domain}
-              </Typography>
+              <Typography variant="body1">{institutes[instituteId].email_domain}</Typography>
             </AlignedText>
           </div>
           <AlignedText text="New Email" childrenType="field">
@@ -342,14 +391,20 @@ export default function InstituteSetting() {
             />
           </AlignedText>
           <Typography variant="body1" className={classes.warningText}>
-            Once you change the institute’s email, future members may not be able to register with certain email. Please be certain.
+            Once you change the institute’s email, future members may not be able to register with certain email. Please
+            be certain.
           </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => handleClosePopUp()} color="default">
             Cancel
           </Button>
-          <Button onClick={() => { handleEditInstitute('newEmail'); }} color="secondary">
+          <Button
+            onClick={() => {
+              handleEditInstitute('newEmail');
+            }}
+            color="secondary"
+          >
             Rename
           </Button>
         </DialogActions>
@@ -382,7 +437,11 @@ export default function InstituteSetting() {
           <Button onClick={() => handleClosePopUp()} color="default">
             Cancel
           </Button>
-          <Button onClick={() => handleEditInstitute('newStatus')} color="secondary">
+          <Button
+            disabled={institutes[instituteId].is_disabled !== newSetting.newStatus}
+            onClick={() => handleEditInstitute('newStatus')}
+            color="secondary"
+          >
             Modify
           </Button>
         </DialogActions>

@@ -14,7 +14,12 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  CardActions, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+  CardActions,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from '@material-ui/core';
 
 import StarIcon from '@material-ui/icons/Star';
@@ -50,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
     width: '190px',
   },
   addCard: {
+    marginTop: '16px',
     width: '600px',
     height: '329px',
     display: 'flex',
@@ -115,7 +121,8 @@ export default function StudentInfoEdit(props) {
       case 'National Taiwan University of Science and Technology':
         instituteId = 3;
         break;
-      default: instituteId = 1;
+      default:
+        instituteId = 1;
     }
 
     dispatch(addStudentCard(authToken, accountId, instituteId, addInputs.email, 'IM', addInputs.studentId));
@@ -148,124 +155,124 @@ export default function StudentInfoEdit(props) {
 
   return (
     <div>
-      <SimpleBar
-        title="Student Information"
-      >
-        {cards
-          ? (
-            <div>
-              {cards.map((p) => {
-                if (p.is_default === true) {
-                  return (
-                    <>
-                      <StudentInfoCard
-                        editMode
-                        isDefault={p.is_default}
-                        studentId={p.student_id}
-                        email={p.email}
-                        instituteId={p.institute_id}
-                      />
-                    </>
-                  );
-                }
-                return <></>;
-              })}
-              {cards.map((p) => {
-                if (p.is_default === false) {
-                  return (
-                    <>
-                      <StudentInfoCard
-                        editMode
-                        id={p.id}
-                        isDefault={p.is_default}
-                        studentId={p.student_id}
-                        email={p.email}
-                        instituteId={p.institute_id}
-                        updateStatus={updateStatus}
-                        setDisabledSave={setDisabledSave}
-                      />
-                    </>
-                  );
-                }
-                return <></>;
-              })}
-            </div>
-          ) : <></> }
-        {add
-          ? (
-            <Card variant="outlined" className={classes.addCard}>
-              <CardContent>
-                <div className={classes.row}>
-                  <div className={classes.item}><Typography>Institute</Typography></div>
-                  <FormControl variant="outlined" className={classes.textfield}>
-                    <Select value={addInputs.institute} name="institute" onChange={(e) => handleChange(e)}>
-                      <MenuItem value="National Taiwan University">National Taiwan University</MenuItem>
-                      <MenuItem value="National Taiwan Normal University">National Taiwan Normal University</MenuItem>
-                      <MenuItem value="National Taiwan University of Science and Technology">
-                        National Taiwan University of Science and Technology
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                </div>
-                <div className={classes.row}>
-                  <AlignedText text="Student ID" childrenType="field">
-                    <TextField
-                      variant="outlined"
-                      name="studentId"
-                      className={classes.textfield}
-                      value={addInputs.studentId}
-                      onChange={(e) => handleChange(e)}
+      <SimpleBar title="Student Information">
+        {cards ? (
+          <div>
+            {cards.map((p) => {
+              if (p.is_default === true) {
+                return (
+                  <>
+                    <StudentInfoCard
+                      editMode
+                      isDefault={p.is_default}
+                      studentId={p.student_id}
+                      email={p.email}
+                      instituteId={p.institute_id}
                     />
-                  </AlignedText>
+                  </>
+                );
+              }
+              return <></>;
+            })}
+            {cards.map((p) => {
+              if (p.is_default === false) {
+                return (
+                  <>
+                    <StudentInfoCard
+                      editMode
+                      id={p.id}
+                      isDefault={p.is_default}
+                      studentId={p.student_id}
+                      email={p.email}
+                      instituteId={p.institute_id}
+                      updateStatus={updateStatus}
+                      setDisabledSave={setDisabledSave}
+                    />
+                  </>
+                );
+              }
+              return <></>;
+            })}
+          </div>
+        ) : (
+          <></>
+        )}
+        {add ? (
+          <Card variant="outlined" className={classes.addCard}>
+            <CardContent>
+              <div className={classes.row}>
+                <div className={classes.item}>
+                  <Typography>Institute</Typography>
                 </div>
-                <div className={classes.mailrow}>
-                  <div className={classes.item}>
-                    <Typography>Email</Typography>
-                  </div>
+                <FormControl variant="outlined" className={classes.textfield}>
+                  <Select value={addInputs.institute} name="institute" onChange={(e) => handleChange(e)}>
+                    <MenuItem value="National Taiwan University">National Taiwan University</MenuItem>
+                    <MenuItem value="National Taiwan Normal University">National Taiwan Normal University</MenuItem>
+                    <MenuItem value="National Taiwan University of Science and Technology">
+                      National Taiwan University of Science and Technology
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+              <div className={classes.row}>
+                <AlignedText text="Student ID" childrenType="field">
                   <TextField
                     variant="outlined"
-                    name="email"
-                    className={classes.mailfield}
-                    value={addInputs.email}
+                    name="studentId"
+                    className={classes.textfield}
+                    value={addInputs.studentId}
                     onChange={(e) => handleChange(e)}
-                    style={{ marginLeft: '0px', marginRight: '10px' }}
                   />
-                  <Typography>{emailTail}</Typography>
-                </div>
-              </CardContent>
-              <div className={classes.buttons}>
-                <Button onClick={handleAddCancel}>Cancel</Button>
-                <Button color="primary" onClick={handleAddSave}>Save</Button>
+                </AlignedText>
               </div>
-            </Card>
-          )
-          : <></>}
+              <div className={classes.mailrow}>
+                <div className={classes.item}>
+                  <Typography>Email</Typography>
+                </div>
+                <TextField
+                  variant="outlined"
+                  name="email"
+                  className={classes.mailfield}
+                  value={addInputs.email}
+                  onChange={(e) => handleChange(e)}
+                  style={{ marginLeft: '0px', marginRight: '10px' }}
+                />
+                <Typography>{emailTail}</Typography>
+              </div>
+            </CardContent>
+            <div className={classes.buttons}>
+              <Button onClick={handleAddCancel}>Cancel</Button>
+              <Button color="primary" onClick={handleAddSave}>
+                Save
+              </Button>
+            </div>
+          </Card>
+        ) : (
+          <></>
+        )}
         <div className={classes.buttonContainer}>
           <div className={classes.addButton}>
-            <Button onClick={() => { setAdd(true); }}>+</Button>
+            <Button
+              onClick={() => {
+                setAdd(true);
+              }}
+            >
+              +
+            </Button>
           </div>
         </div>
-        <Button onClick={() => {
-          props.handleBack();
-        }}
+        <Button
+          onClick={() => {
+            props.handleBack();
+          }}
         >
           Cancel
         </Button>
-        <Button
-          color="primary"
-          type="submit"
-          disabled={disabledSave}
-          onClick={handleSave}
-        >
+        <Button color="primary" type="submit" disabled={disabledSave} onClick={handleSave}>
           Save
         </Button>
       </SimpleBar>
-      <Dialog
-        open={popUp}
-        keepMounted
-        onClose={() => setPopUp(false)}
-        maxWidth="md"
-      >
+      <Dialog open={popUp} keepMounted onClose={() => setPopUp(false)} maxWidth="md">
         <DialogTitle id="alert-dialog-slide-title">
           <Typography variant="h4">Verification email sent</Typography>
         </DialogTitle>
@@ -275,7 +282,12 @@ export default function StudentInfoEdit(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => { setPopUp(false); }} color="default">
+          <Button
+            onClick={() => {
+              setPopUp(false);
+            }}
+            color="default"
+          >
             Done
           </Button>
         </DialogActions>
