@@ -19,12 +19,6 @@ export default function StudentInfo(props) {
       >
         {(props.cards) ? (
           <div>
-            {/* <StudentInfoCard
-              isDefault={props.cards.find((p) => p.is_default === true).is_default}
-              id={props.cards.find((p) => p.is_default === true).student_id}
-              email={props.cards.find((p) => p.is_default === true).email}
-              institute={props.cards.find((p) => p.is_default === true).institute_id}
-            /> */}
             {props.cards.map((p) => {
               if (p.is_default === true) {
                 return (

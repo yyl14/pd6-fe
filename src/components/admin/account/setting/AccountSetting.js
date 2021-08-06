@@ -55,7 +55,6 @@ export default function AccountSetting() {
     }
     return <NoMatch />;
   }
-
   const handleBasicBack = () => {
     setEditBasicInfo(false);
   };
@@ -99,15 +98,20 @@ export default function AccountSetting() {
         )}
 
       {editStudInfo ? (
-        <StudentInfoEdit
-          handleBack={handleStudBack}
-          cards={cards}
-        />
+        <div>
+          <StudentInfoEdit
+            handleBack={handleStudBack}
+            cards={cards}
+          />
+        </div>
       ) : (
-        <StudentInfo
-          handleEdit={handleStudEdit}
-          cards={cards}
-        />
+        <div>
+          <StudentInfo
+            handleEdit={handleStudEdit}
+            cards={cards}
+          />
+
+        </div>
       )}
 
       {/* <NewPassword /> */}

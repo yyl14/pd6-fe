@@ -103,7 +103,6 @@ export default function StudentInfoEdit(props) {
       dispatch(makeStudentCardDefault(authToken, accountId, defaultCardId));
     }
     // deal with loading
-    // console.log(props.cards);
     props.handleBack();
   };
 

@@ -362,19 +362,21 @@ export default function account(state = initialState, action) {
       };
     case accountConstants.MAKE_STUDENT_CARD_DEFAULT_SUCCESS: {
       const { cardId, id } = action.payload;
-      const array = state.accounts.byId[id].studentCard.filter((item) => (item !== cardId));
-      // console.log(array);
+      const newById = state.studentCards.byId;
+
+      state.accounts.byId[id].studentCard.forEach((item) => {
+        if (item === cardId) {
+          newById[item].is_default = true;
+        } else {
+          newById[item].is_default = false;
+        }
+      });
       return {
         ...state,
         studentCards: {
           ...state.studentCards,
-          byId: {
-            ...state.studentCards.byId,
-            [cardId]: { ...state.studentCards.byId[cardId], is_default: true },
-            // array.forEach((item) => {...state.studentCards.byId[item], is_default: false})
-          },
+          byId: newById,
         },
-
         loading: { ...state.loading, makeStudentCardDefault: false },
         error: {
           ...state.error,
@@ -424,7 +426,6 @@ export default function account(state = initialState, action) {
         ...state,
 
         // clear all student card ids of the account
-        // accounts: state.accounts.byId.map((item) => (item.id === id ? { ...item, studentCard: [] } : item)),
         accounts: {
           ...state.accounts,
           byId: { ...state.accounts.byId, [id]: { ...state.accounts.byId[id], studentCard: [] } },

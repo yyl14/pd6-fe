@@ -33,21 +33,6 @@ export default function BasicInfoEdit(props) {
     props.handleBack();
   };
 
-  // useEffect(() => {
-  //   dispatch(fetchAccount(authToken, accountId));
-  //   setRealName(accounts[accountId].real_name);
-  //   setNickName(accounts[accountId].nickname);
-  //   setAltMail(accounts[accountId].alternative_email);
-  //   setUserName(accounts[accountId].username);
-  // }, [accountId, accounts, authToken, dispatch]);
-
-  // if (accounts[accountId] === undefined) {
-  //   if (loading.editAccount) {
-  //     return <div>loading...</div>;
-  //   }
-  //   return <NoMatch />;
-  // }
-
   return (
     <div>
       <SimpleBar

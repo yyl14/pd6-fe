@@ -6,7 +6,6 @@ import {
 } from '@material-ui/core';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
-// import { fetchAccount } from '../../../../actions/admin/account'; // not neccessary?
 
 export default function BasicInfo(props) {
   return (
