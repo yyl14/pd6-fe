@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 import { BiFilterAlt } from 'react-icons/bi';
 import { Button, Typography, makeStyles } from '@material-ui/core';
+import NoMatch from '../../noMatch';
 import CustomTable from '../../ui/CustomTable';
 import { fetchAnnouncement } from '../../../actions/admin/system';
 
@@ -64,6 +65,12 @@ export default function AnnouncementHome() {
 
   const [filter, setFilter] = useState(false);
 
+  if (announcements === null) {
+    if (loading.fetchAnnouncement) {
+      return <div>loading...</div>;
+    }
+    return <NoMatch />;
+  }
   return (
     <>
       <Typography variant="h3" className={classes.pageHeader}>

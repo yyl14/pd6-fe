@@ -19,8 +19,8 @@ import {
 import NoMatch from '../../noMatch';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
-import DateRangePicker from '../../ui/DateRangePicker';
-import { fetchAnnouncement } from '../../../actions/admin/system';
+import { fetchAnnouncement, deleteAnnouncement } from '../../../actions/admin/system';
+import AnnouncementEdit from './AnnouncementEdit';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 export default function AnnouncementSetting() {
   const classes = useStyles();
   const { announcementId } = useParams();
+  const history = useHistory();
 
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.user.token);
@@ -66,21 +67,16 @@ export default function AnnouncementSetting() {
   const handleClosePopUpDelete = () => {
     setPopUpDelete(false);
   };
-  const handleSubmitDelete = (e) => {};
+  const handleSubmitDelete = (e) => {
+    dispatch(deleteAnnouncement(authToken, announcementId));
+    history.push('/admin/system/announcement');
+  };
 
   const [edit, setEdit] = useState(false);
-  const [state, setState] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: 'selection',
-    },
-  ]);
   /* TODO: re-write with ui components SimpleBar and DatePicker  */
   /* This is a level 4 component (page component) */
-
   if (announcement === null) {
-    if (loading.fetchSubmitLanguage) {
+    if (loading.fetchAnnouncement) {
       return <div>loading...</div>;
     }
     return <NoMatch />;
@@ -91,42 +87,50 @@ export default function AnnouncementSetting() {
       <Typography variant="h3" className={classes.pageHeader}>
         {`${announcement.title} / Setting`}
       </Typography>
-      <div>
-        <SimpleBar
-          title="Announcement"
-          buttons={(
-            <>
-              <Button onClick={() => setEdit(true)}>Edit</Button>
-            </>
-        )}
-        >
-          <Typography variant="body1">
-            <AlignedText text="Title" childrenType="text">
-              <Typography variant="body1">{announcement.title}</Typography>
-            </AlignedText>
-            <AlignedText text="Duration" childrenType="text">
-              <Typography variant="body1">{`${announcement.PostTime} to ${announcement.EndTime}`}</Typography>
-            </AlignedText>
-            <AlignedText text="Content" childrenType="text">
-              <Typography variant="body1">{announcement.Content}</Typography>
-            </AlignedText>
-          </Typography>
-        </SimpleBar>
-      </div>
-      <div>
-        <SimpleBar
-          title="Delete Announcement"
-          childrenButtons={(
-            <>
-              <Button color="secondary" onClick={handleClickDelete}>Delete</Button>
-            </>
-          )}
-        >
-          <Typography className="delete-announcement-body" variant="body1">
-            Once you delete this announcement, there is no going back. Please be certain.
-          </Typography>
-        </SimpleBar>
-      </div>
+      {edit ? (
+        <AnnouncementEdit
+          setEdit={setEdit}
+          editTitle={announcement.title}
+          editStartDate={announcement.PostTime}
+          editEndDate={announcement.EndTime}
+          editContent={announcement.Content}
+        />
+      ) : (
+        <>
+          <SimpleBar
+            title="Announcement"
+            buttons={(
+              <>
+                <Button onClick={() => setEdit(true)}>Edit</Button>
+              </>
+              )}
+          >
+            <Typography variant="body1">
+              <AlignedText text="Title" childrenType="text">
+                <Typography variant="body1">{announcement.title}</Typography>
+              </AlignedText>
+              <AlignedText text="Duration" childrenType="text">
+                <Typography variant="body1">{`${announcement.PostTime} to ${announcement.EndTime}`}</Typography>
+              </AlignedText>
+              <AlignedText text="Content" childrenType="text">
+                <Typography variant="body1">{announcement.Content}</Typography>
+              </AlignedText>
+            </Typography>
+          </SimpleBar>
+          <SimpleBar
+            title="Delete Announcement"
+            childrenButtons={(
+              <>
+                <Button color="secondary" onClick={handleClickDelete}>Delete</Button>
+              </>
+            )}
+          >
+            <Typography className="delete-announcement-body" variant="body1">
+              Once you delete this announcement, there is no going back. Please be certain.
+            </Typography>
+          </SimpleBar>
+        </>
+      )}
 
       {/* Delete dialog */}
       <Dialog open={popUpDelete} keepMounted onClose={handleClosePopUpDelete}>

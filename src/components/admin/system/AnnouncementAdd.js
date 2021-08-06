@@ -9,6 +9,7 @@ import DateRangePicker from '../../ui/DateRangePicker';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 import { addAnnouncement, fetchAnnouncement } from '../../../actions/admin/system';
+import NoMatch from '../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -65,7 +66,11 @@ const AnnouncementAdd = () => {
           <DateRangePicker value={dateRangePicker} setValue={setDateRangePicker} />
         </AlignedText>
         <AlignedText text="Content" childrenType="field">
-          <TextField value={addContent} onChange={(e) => setAddContent(e.target.value)} />
+          <TextField
+            value={addContent}
+            onChange={(e) => setAddContent(e.target.value)}
+            multiline
+          />
         </AlignedText>
       </SimpleBar>
       {/* TODO: re-write with ui components SimpleBar and DatePicker  */}
