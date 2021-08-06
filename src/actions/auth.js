@@ -96,6 +96,103 @@ const userForgetPassword = (email) => (dispatch) => {
   // })
 };
 
+const editAccount = (token, id, userName, realName, nickName, email) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  dispatch({ type: userConstants.EDIT_SELF_ACCOUNT_REQUEST });
+
+  agent.patch(`/account/${id}`, { nickName, alternative_email: email }, auth)
+    .then((res) => {
+      dispatch({
+        type: userConstants.EDIT_SELF_ACCOUNT_SUCCESS,
+        payload: {
+          id,
+          nickname: nickName,
+          alternative_email: email,
+        },
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: userConstants.EDIT_SELF_ACCOUNT_FAIL,
+        error: err,
+      });
+    });
+};
+
+const makeStudentCardDefault = (token, id, cardId) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  dispatch({ type: userConstants.MAKE_SELF_STUDENT_CARD_DEFAULT_REQUEST });
+  agent.put(`/account/${id}/default-student-card`, { student_card_id: cardId }, auth)
+    .then((res) => {
+      dispatch({
+        type: userConstants.MAKE_SELF_STUDENT_CARD_DEFAULT_SUCCESS,
+        payload: { cardId, id },
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: userConstants.MAKE_SELF_STUDENT_CARD_DEFAULT_FAIL,
+        error: err,
+      });
+    });
+};
+
+const fetchStudentCard = (token, id) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  dispatch({ type: userConstants.GET_SELF_STUDENT_CARD_REQUEST });
+
+  agent.get(`/account/${id}/student-card`, auth)
+    .then((res) => {
+      dispatch({
+        type: userConstants.GET_SELF_STUDENT_CARD_SUCCESS,
+        payload: res.data.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: userConstants.GET_SELF_STUDENT_CARD_FAIL,
+        error: err,
+      });
+    });
+};
+
+const addStudentCard = (token, id, instituteId, emailPrefix, department, studentId) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  dispatch({ type: userConstants.ADD_SELF_STUDENT_CARD_REQUEST });
+
+  agent.post(`/account/${id}/student-card`, {
+    institute_id: instituteId,
+    institute_email_prefix: emailPrefix,
+    department,
+    student_id: studentId,
+  }, auth)
+    .then((res) => {
+      dispatch({ type: userConstants.ADD_SELF_STUDENT_CARD_SUCCESS });
+    })
+    .catch((err) => {
+      dispatch({
+        type: userConstants.ADD_SELF_STUDENT_CARD_FAIL,
+        error: err,
+      });
+    });
+};
+
 export {
-  getUserInfo, userSignIn, userLogout, userForgetPassword,
+  getUserInfo, userSignIn, userLogout, userForgetPassword, editAccount, makeStudentCardDefault, fetchStudentCard, addStudentCard,
 };
