@@ -66,7 +66,6 @@ export default function AccountDelete(props) {
                   <div className={classes.dialogItem}>
                     <AlignedText text="Student ID" childrenType="text">
                       {props.cards.map((p) => { if (p.is_default === true) { return (<Typography>{p.student_id}</Typography>); } return <></>; })}
-                      {/* {(props.cards) ? <Typography>{props.cards.find((p) => p.is_default === true).student_id}</Typography> : <></>} */}
                     </AlignedText>
                   </div>
                   <div className={classes.dialogItem}>
@@ -77,7 +76,6 @@ export default function AccountDelete(props) {
                   <div className={classes.dialogItem}>
                     <AlignedText text="Email" childrenType="text">
                       {props.cards.map((p) => { if (p.is_default === true) { return (<Typography>{p.email}</Typography>); } return <></>; })}
-                      {/* {(props.cards) ? <Typography>{props.cards.find((p) => p.is_default === true).email}</Typography> : <></>} */}
                     </AlignedText>
                   </div>
                   <Typography variant="body2" color="textPrimary">

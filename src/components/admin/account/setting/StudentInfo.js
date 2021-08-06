@@ -22,19 +22,20 @@ export default function StudentInfo(props) {
             {props.cards.map((p) => {
               if (p.is_default === true) {
                 return (
-                  <p>
+                  <>
                     <StudentInfoCard isDefault={p.is_default} studentId={p.student_id} email={p.email} instituteId={p.institute_id} />
-                  </p>
+                  </>
                 );
               }
               return <></>;
             })}
+            <p> </p>
             {props.cards.map((p) => {
               if (p.is_default === false) {
                 return (
-                  <p>
+                  <>
                     <StudentInfoCard isDefault={p.is_default} studentId={p.student_id} email={p.email} instituteId={p.institute_id} />
-                  </p>
+                  </>
                 );
               }
               return <></>;

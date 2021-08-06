@@ -242,7 +242,7 @@ const fetchStudentCard = (token, id) => (dispatch) => {
     .then((res) => {
       dispatch({
         type: accountConstants.FETCH_STUDENT_CARD_SUCCESS,
-        payload: res.data.data,
+        payload: { id, data: res.data.data },
       });
     })
     .catch((err) => {

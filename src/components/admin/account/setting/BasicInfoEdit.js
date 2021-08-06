@@ -19,7 +19,7 @@ export default function BasicInfoEdit(props) {
   const [realName, setRealName] = useState(props.realName);
   const [userName, setUserName] = useState(props.userName);
   const [nickName, setNickName] = useState(props.nickName);
-  const [altMail, setAltMail] = useState(props.altMail);
+  const [altMail, setAltMail] = useState(props.altMail ? props.altMail : '');
   const [disabled, setDisabled] = useState(true);
   const classes = useStyles();
 
@@ -38,12 +38,10 @@ export default function BasicInfoEdit(props) {
       <SimpleBar
         title="Basic Information"
       >
-        <p>
+        <>
           <AlignedText text="Username" childrenType="text" maxWidth="lg">
             <Typography variant="body1">{userName}</Typography>
           </AlignedText>
-        </p>
-        <p>
           <AlignedText text="Real name" childrenType="field" maxWidth="lg">
             <TextField
               value={realName}
@@ -55,8 +53,6 @@ export default function BasicInfoEdit(props) {
               className={classes.textfield}
             />
           </AlignedText>
-        </p>
-        <p>
           <AlignedText text="Nickname" childrenType="field" maxWidth="lg">
             <TextField
               value={nickName}
@@ -67,8 +63,6 @@ export default function BasicInfoEdit(props) {
               className={classes.textfield}
             />
           </AlignedText>
-        </p>
-        <p>
           <AlignedText text="Alternative Email" childrenType="field" maxWidth="lg">
             <TextField
               value={altMail}
@@ -79,16 +73,16 @@ export default function BasicInfoEdit(props) {
               className={classes.textfield}
             />
           </AlignedText>
-        </p>
-        <Button onClick={() => props.handleBack()}>Cancel</Button>
-        <Button
-          color="primary"
-          type="submit"
-          disabled={disabled}
-          onClick={handleSave}
-        >
-          Save
-        </Button>
+          <Button onClick={() => props.handleBack()}>Cancel</Button>
+          <Button
+            color="primary"
+            type="submit"
+            disabled={disabled}
+            onClick={handleSave}
+          >
+            Save
+          </Button>
+        </>
       </SimpleBar>
     </div>
   );

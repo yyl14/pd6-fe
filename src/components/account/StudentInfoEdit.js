@@ -264,8 +264,7 @@ export default function StudentInfoEdit(props) {
         open={popUp}
         keepMounted
         onClose={() => setPopUp(false)}
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
+        maxWidth="md"
       >
         <DialogTitle id="alert-dialog-slide-title">
           <Typography variant="h4">Verification email sent</Typography>

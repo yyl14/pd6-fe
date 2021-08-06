@@ -26,32 +26,15 @@ const initialState = {
         real_name: 'student1',
         alternative_email: 'student1@gmail.com',
         student_id: 'B10705001',
-        studentCard: [1, 2],
+        studentCard: [],
       },
     },
     allIds: [1, 2],
   },
 
   studentCards: {
-    byId: {
-      1: {
-        id: 1,
-        institute_id: 1,
-        department: 'IM',
-        student_id: 'B10705001',
-        email: 'B10705001@ntu.edu.tw',
-        is_default: true,
-      },
-      2: {
-        id: 2,
-        institute_id: 1,
-        department: 'IM',
-        student_id: 'R10705001',
-        email: 'R10705001@ntu.edu.tw',
-        is_default: false,
-      },
-    },
-    allIds: [1, 2],
+    byId: {},
+    allIds: [],
   },
 
   loading: {
@@ -404,12 +387,14 @@ export default function account(state = initialState, action) {
         ...state,
 
         // add studentCard id to account
-        accounts: state.accounts.byId.filter((item) => (item.id === id ? { ...item, studentCard: data.map((dataItem) => dataItem.id) } : item)),
-
+        accounts: {
+          ...state.accounts,
+          byId: { ...state.accounts.byId, [id]: { ...state.accounts.byId[id], studentCard: data.map((dataItem) => dataItem.id) } },
+        },
         // add studentCard id
         studentCards: {
           byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.studentCards),
-          allIds: data.map((item) => item.id),
+          allIds: state.studentCards.allIds.concat(data.map((item) => item.id)),
         },
 
         loading: { ...state.loading, fetchStudentCard: false },

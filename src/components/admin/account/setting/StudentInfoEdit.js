@@ -68,7 +68,6 @@ export default function StudentInfoEdit(props) {
   const classes = useStyles();
   const editMode = true;
   const [cards, setCards] = useState(props.cards); // new card isn't here
-  // const [newCard, setNewCard] = useState(null); // new card saved in here
   const [defaultCardId, setDefaultCardId] = useState(null);
   const [disabledSave, setDisabledSave] = useState(true);
   const [disabledTwoCards, setDisabledTwoCards] = useState(false);
@@ -94,12 +93,7 @@ export default function StudentInfoEdit(props) {
   };
 
   const handleSave = () => {
-    if (addCard) {
-      console.log('add request success');
-      dispatch(addStudentCard(authToken, accountId, instituteId, addInputs.email, 'IM', addInputs.studentId));
-    }
     if (defaultCardId !== null) {
-      console.log('default card change');
       dispatch(makeStudentCardDefault(authToken, accountId, defaultCardId));
     }
     // deal with loading
@@ -125,14 +119,7 @@ export default function StudentInfoEdit(props) {
         break;
       default: instituteId = 1;
     }
-    // setNewCard(
-    //   {
-    //     student_id: addInputs.studentId,
-    //     email: `${addInputs.email}${emailTail}`,
-    //     institute_id: instituteId,
-    //     is_default: false,
-    //   },
-    // );
+    dispatch(addStudentCard(authToken, accountId, instituteId, `${addInputs.email}${emailTail}`, 'IM', addInputs.studentId));
     setPopUp(true);
     setAdd(false);
     setDisabledSave(false);
@@ -171,7 +158,7 @@ export default function StudentInfoEdit(props) {
               {cards.map((p) => {
                 if (p.is_default === true) {
                   return (
-                    <p>
+                    <>
                       <StudentInfoCard
                         editMode
                         isDefault={p.is_default}
@@ -179,15 +166,16 @@ export default function StudentInfoEdit(props) {
                         email={p.email}
                         instituteId={p.institute_id}
                       />
-                    </p>
+                    </>
                   );
                 }
                 return <></>;
               })}
+              <p> </p>
               {cards.map((p) => {
                 if (p.is_default === false) {
                   return (
-                    <p>
+                    <>
                       <StudentInfoCard
                         editMode
                         id={p.id}
@@ -198,30 +186,16 @@ export default function StudentInfoEdit(props) {
                         updateStatus={updateStatus}
                         setDisabledSave={setDisabledSave}
                       />
-                    </p>
+                    </>
                   );
                 }
                 return <></>;
               })}
             </div>
           ) : <></> }
-        {/* {newCard
-          ? (
-            <p>
-              <StudentInfoCard
-                editMode
-                isNew
-                isDefault={newCard.is_default}
-                studentId={newCard.student_id}
-                email={newCard.email}
-                instituteId={newCard.institute_id}
-              />
-            </p>
-          )
-          : <></>} */}
         {add
           ? (
-            <p>
+            <>
               <Card variant="outlined" className={classes.addCard}>
                 <CardContent>
                   <div className={classes.row}>
@@ -267,42 +241,35 @@ export default function StudentInfoEdit(props) {
                   <Button color="primary" onClick={handleAddSave}>Save</Button>
                 </div>
               </Card>
-            </p>
+            </>
           )
           : <></>}
         {!disabledTwoCards ? (
-          <p className={classes.buttonContainer}>
+          <div className={classes.buttonContainer}>
             <div className={classes.addButton}>
               <Button onClick={() => { setAdd(true); setDisabledTwoCards(true); }}>+</Button>
             </div>
-          </p>
+          </div>
         ) : <></>}
-        {popUp
-          ? (
-            <div>
-              <Dialog
-                open={popUp}
-                onClose={() => setPopUp(false)}
-                maxWidth="md"
-              >
-                <DialogTitle>
-                  <Typography variant="h4">Verification email sent</Typography>
-                </DialogTitle>
-                <DialogContent>
-                  <DialogContentText>
-                    <Typography variant="body1" color="textPrimary">
-                      Please check your mailbox to activate this student information, then it will appear here.
-                    </Typography>
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={() => setPopUp(false)}>Done</Button>
-                </DialogActions>
-              </Dialog>
-            </div>
-          )
-          : <></>}
-
+        <Dialog
+          open={popUp}
+          onClose={() => setPopUp(false)}
+          maxWidth="md"
+        >
+          <DialogTitle>
+            <Typography variant="h4">Verification email sent</Typography>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              <Typography variant="body1" color="textPrimary">
+                Please check your mailbox to activate this student information, then it will appear here.
+              </Typography>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setPopUp(false)}>Done</Button>
+          </DialogActions>
+        </Dialog>
         <Button onClick={() => {
           props.handleBack();
         }}
