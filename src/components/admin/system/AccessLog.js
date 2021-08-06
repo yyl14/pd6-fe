@@ -145,8 +145,6 @@ export default function AccessLog() {
             width: '200px',
           },
         ]}
-        hasLink
-        path={path}
       />
     </>
   );

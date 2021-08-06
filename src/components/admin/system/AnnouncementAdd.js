@@ -23,7 +23,7 @@ const AnnouncementAdd = () => {
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.user.token);
   const loading = useSelector((state) => state.admin.system.loading);
-  const userId = useSelector((state) => state.auth.user.id);
+  const userId = useSelector((state) => state.auth.user);
 
   const [addTitle, setAddTitle] = useState('');
   const [addContent, setAddContent] = useState('');
