@@ -96,21 +96,28 @@ const userForgetPassword = (email) => (dispatch) => {
     });
 };
 
-const userRegister = (username, password, nickname, realName, emailPrefix, instituteId, department, studentId) => (dispatch) => {
+const userRegister = (username, password, nickname, realName, emailPrefix, instituteId, studentId) => (dispatch) => {
   console.log('Register');
   const body = {
-
+    username,
+    password,
+    nickname,
+    real_name: realName,
+    alternative_email: '',
+    institute_id: instituteId,
+    student_id: studentId,
+    institute_email_prefix: emailPrefix,
   };
 
   agent.post('account', body)
     .then((res) => {
       dispatch({
-        type: userConstants.FORGET_PASSWORD_SUCCESS,
+        type: userConstants.SIGNUP_SUCCESS,
       });
     })
     .catch((err) => {
       dispatch({
-        type: userConstants.FORGET_PASSWORD_FAIL,
+        type: userConstants.SIGNUP_FAIL,
         errors: err,
       });
     });
