@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
   },
   children: {
     margin: '16px 0px 50px 50px',
+  },
+  childrenWithChildrenButtons: {
+    margin: '16px 0px 50px 50px',
     width: '70.9%',
   },
 }));
@@ -48,7 +51,7 @@ export default function SimpleBar({
       </div>
       <hr className={classes.divider} />
       <div className={classes.bottomContent}>
-        <div className={classes.children}>{children}</div>
+        <div className={childrenButtons ? classes.childrenWithChildrenButtons : classes.children}>{children}</div>
         <div className={`${classes.buttons} ${classes.buttonsBelow}`}>{childrenButtons}</div>
       </div>
     </>

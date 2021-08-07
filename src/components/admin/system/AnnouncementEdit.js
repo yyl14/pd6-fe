@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Button,
-  TextField,
-  makeStyles,
-} from '@material-ui/core';
+import { Button, TextField, makeStyles } from '@material-ui/core';
 import SimpleBar from '../../ui/SimpleBar';
 import DateRangePicker from '../../ui/DateRangePicker';
 import AlignedText from '../../ui/AlignedText';
@@ -14,6 +10,13 @@ import { editAnnouncement } from '../../../actions/admin/system';
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
+  },
+  contentField: {
+    width: '720px',
+  },
+  dateRangePicker: {
+    marginTop: '15px',
+    marginBottom: '9px',
   },
 }));
 
@@ -48,33 +51,33 @@ export default function AnnouncementEdit(props) {
   /* This is a level 4 component (page component) */
   return (
     <>
-      {/* TODO: Announcement name depends on route */}
-      {/* TODO: re-write with ui components SimpleBar and DatePicker  */}
-      <SimpleBar
-        title="Announcement"
-      >
+      <SimpleBar title="Announcement">
         <AlignedText text="Title" childrenType="field">
-          <TextField
-            defaultValue={editTitle}
-            onChange={(e) => setEditTitle(e.target.value)}
-          />
+          <TextField defaultValue={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
         </AlignedText>
         <AlignedText text="Duration" childrenType="field">
-          <DateRangePicker
-            value={dateRangePicker}
-            setValue={setDateRangePicker}
-          />
+          <DateRangePicker className={classes.dateRangePicker} value={dateRangePicker} setValue={setDateRangePicker} />
         </AlignedText>
         <AlignedText text="Content" childrenType="field">
           <TextField
+            className={classes.contentField}
             defaultValue={editContent}
             onChange={(e) => setEditContent(e.target.value)}
             multiline
+            rows={4}
           />
         </AlignedText>
       </SimpleBar>
-      <Button onClick={() => { props.setEdit(false); }}>Cancel</Button>
-      <Button color="primary" onClick={handleClickSave}>Save</Button>
+      <Button
+        onClick={() => {
+          props.setEdit(false);
+        }}
+      >
+        Cancel
+      </Button>
+      <Button color="primary" onClick={handleClickSave}>
+        Save
+      </Button>
     </>
   );
 }
