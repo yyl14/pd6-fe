@@ -10,9 +10,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  useHistory, useParams,
-} from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import NoMatch from '../../noMatch';
@@ -24,6 +22,9 @@ import AnnouncementEdit from './AnnouncementEdit';
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
+  },
+  duration: {
+    transform: 'translate(0, -4px)',
   },
 }));
 
@@ -106,17 +107,23 @@ export default function AnnouncementSetting() {
               <>
                 <Button onClick={() => setEdit(true)}>Edit</Button>
               </>
-              )}
+            )}
           >
             <Typography variant="body1">
               <AlignedText text="Title" childrenType="text">
                 <Typography variant="body1">{announcement.title}</Typography>
               </AlignedText>
               <AlignedText text="Duration" childrenType="text">
-                <Typography variant="body1">
-                  {announcement.PostTime}
+                <Typography variant="body1" className={classes.duration}>
+                  {`${announcement.PostTime.getFullYear()}/${announcement.PostTime.getMonth()}/${announcement.PostTime.getDate()} ${announcement.PostTime.toLocaleTimeString(
+                    [],
+                    { hour: '2-digit', minute: '2-digit', hour12: false },
+                  )}`}
                   <ArrowRightIcon style={{ transform: 'translate(0, 5px)' }} />
-                  {announcement.EndTime}
+                  {`${announcement.EndTime.getFullYear()}/${announcement.EndTime.getMonth()}/${announcement.EndTime.getDate()} ${announcement.EndTime.toLocaleTimeString(
+                    [],
+                    { hour: '2-digit', minute: '2-digit', hour12: false },
+                  )}`}
                 </Typography>
               </AlignedText>
               <AlignedText text="Content" childrenType="text">
@@ -128,7 +135,9 @@ export default function AnnouncementSetting() {
             title="Delete Announcement"
             childrenButtons={(
               <>
-                <Button color="secondary" onClick={handleClickDelete}>Delete</Button>
+                <Button color="secondary" onClick={handleClickDelete}>
+                  Delete
+                </Button>
               </>
             )}
           >
