@@ -15,11 +15,25 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  makeStyles,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { borders, borderRadius } from '@material-ui/system';
 
 import { authActions } from '../../actions/index';
+
+const useStyles = makeStyles((theme) => ({
+  authForm: {
+    width: '50%',
+  },
+  authTextFields: {
+    width: '100%',
+    marginTop: '55px',
+  },
+  authButtons: {
+    marginTop: '57px',
+  },
+}));
 
 function checkPassword(password1, password2) {
   if (password1 === password2) {
@@ -29,6 +43,7 @@ function checkPassword(password1, password2) {
 }
 
 export default function ResetPassword() {
+  const classNames = useStyles();
   const dispatch = useDispatch();
   const { userResetPassword } = bindActionCreators(authActions, dispatch);
   // const loginState = useSelector((state) => state.auth);
@@ -42,7 +57,8 @@ export default function ResetPassword() {
   const [showPassword1, setShowPassword1] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
 
-  const onSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
     const newPassword = password1.trim();
     const confirmPassword = password2.trim();
     const status = checkPassword(newPassword, confirmPassword);
@@ -95,13 +111,12 @@ export default function ResetPassword() {
   return (
     <>
       <Card className="auth-form login-form" variant="outlined">
-        {/* className login-form applies here */}
         <CardContent className="auth-form-content">
-          <form className="auth-form-content" onSubmit={() => onSubmit()}>
+          <form className={`auth-form-content ${classNames.authForm}`} onSubmit={(e) => handleSubmit(e)}>
             <TextField
               // required
               label="New Password"
-              className="auth-form-input"
+              className={`auth-form-input ${classNames.authTextFields}`}
               type={showPassword1 ? 'text' : 'password'}
               // placeholder="New  Password"
               value={password1}
@@ -120,15 +135,12 @@ export default function ResetPassword() {
               // required
               error={error}
               type={showPassword2 ? 'text' : 'password'}
-              label="Confirmed Password"
-              className="auth-form-input"
+              label="Confirm New Password"
+              className={`auth-form-input ${classNames.authTextFields}`}
               // placeholder="Confirmed Password"
               value={password2}
               helperText={errorText}
               onChange={(e) => handleChange(e)}
-              onKeyPress={(event) => {
-                if (event.key === 'Enter') onSubmit();
-              }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -139,7 +151,12 @@ export default function ResetPassword() {
                 ),
               }}
             />
-            <Button disabled={disabled} onClick={() => onSubmit()} color="primary">
+            <Button
+              className={classNames.authButtons}
+              disabled={disabled}
+              onClick={(e) => handleSubmit(e)}
+              color="primary"
+            >
               Send
             </Button>
           </form>
@@ -154,15 +171,11 @@ export default function ResetPassword() {
           aria-describedby="alert-dialog-slide-description"
         >
           <DialogTitle id="alert-dialog-slide-title">
-            <Typography variant="h2">Password reset success</Typography>
+            <Typography variant="h4">Password reset success</Typography>
           </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-slide-description">Go train your puppy right now!</DialogContentText>
-          </DialogContent>
+          <DialogContent>Please check your mailbox to the account.</DialogContent>
           <DialogActions>
-            <Button onClick={() => handleClosePopUp()} color="primary">
-              Done
-            </Button>
+            <Button onClick={() => handleClosePopUp()}>Done</Button>
           </DialogActions>
         </Dialog>
       ) : (

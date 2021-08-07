@@ -92,16 +92,30 @@ export default function auth(state = initialState, action) {
     case userConstants.FORGET_PASSWORD_FAIL:
       return {
         ...state,
-        error: null,
+        error: {
+          ...state.error,
+          forgetPassword: action.errors,
+        },
       };
     case userConstants.SIGNUP_SUCCESS:
       return {
         ...state,
+        loading: {
+          ...state.loading,
+          signup: false,
+        },
       };
     case userConstants.SIGNUP_FAIL:
       return {
         ...state,
-        error: action.errors,
+        loading: {
+          ...state.loading,
+          signup: false,
+        },
+        error: {
+          ...state.error,
+          signup: action.errors,
+        },
       };
     case userConstants.EDIT_SELF_ACCOUNT_REQUEST:
       return {

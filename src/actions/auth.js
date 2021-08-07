@@ -80,20 +80,46 @@ const userLogout = (history) => (dispatch) => {
 const userForgetPassword = (email) => (dispatch) => {
   console.log('Forget Password');
   dispatch({
-    type: userConstants.FORGET_PASSWORD_REQUEST,
+    type: userConstants.FORGET_PASSWORD_START,
   });
-  // agent.post('/forget_password', { email: email })
-  // .then(res => {
-  //   dispatch({
-  //     type: userConstants.FORGET_PASSWORD_SUCCESS,
-  //   })
-  // })
-  // .catch(err => {
-  //   dispatch({
-  //     type: userConstants.FORGET_PASSWORD_FAIL,
-  //     errors: err
-  //   })
-  // })
+  agent.post('/forget-password', { email })
+    .then((res) => {
+      dispatch({
+        type: userConstants.FORGET_PASSWORD_SUCCESS,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: userConstants.FORGET_PASSWORD_FAIL,
+        errors: err,
+      });
+    });
+};
+
+const userRegister = (username, password, nickname, realName, emailPrefix, instituteId, studentId) => (dispatch) => {
+  const body = {
+    username,
+    password,
+    nickname,
+    real_name: realName,
+    alternative_email: '',
+    institute_id: instituteId,
+    student_id: studentId,
+    institute_email_prefix: emailPrefix,
+  };
+
+  agent.post('account', body)
+    .then((res) => {
+      dispatch({
+        type: userConstants.SIGNUP_SUCCESS,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: userConstants.SIGNUP_FAIL,
+        errors: err,
+      });
+    });
 };
 
 const editAccount = (token, id, userName, realName, nickName, email) => (dispatch) => {
@@ -216,5 +242,5 @@ const editPassword = (token, id, oldPassword, newPassword) => (dispatch) => {
 };
 
 export {
-  getUserInfo, userSignIn, userLogout, userForgetPassword, editAccount, makeStudentCardDefault, fetchStudentCard, addStudentCard, editPassword,
+  getUserInfo, userSignIn, userLogout, userForgetPassword, userRegister, editAccount, makeStudentCardDefault, fetchStudentCard, addStudentCard, editPassword,
 };
