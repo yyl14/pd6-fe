@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /* This is a level 4 component (page component) */
+// TODO: path of arrows, username link, multiple choice, select/diseclect, role lowercase
 export default function MemberList() {
   const { courseId, classId } = useParams();
   const history = useHistory();
@@ -71,11 +72,159 @@ export default function MemberList() {
   });
 
   useEffect(() => {
-    setTableData(classes.byId[classId].memberIds.map((id) => ({
-      ...members.byId[id],
-      studentId: members.byId[id].student_id,
-    })));
+    if (classes.byId[classId]) {
+      setTableData(classes.byId[classId].memberIds.map((id) => ({
+        ...members.byId[id],
+        studentId: members.byId[id].student_id,
+      })));
+    }
   }, [classes.byId, classId, members.byId]);
+
+  const instituteFilterStatus = () => {
+    const newData = [];
+    // const newPath = [];
+
+    if (instituteFilterInput.filter === 'NTU') {
+      classes.byId[classId].memberIds.forEach((id) => {
+        const item = members.byId[id];
+        if (item.institute === 'NTU') {
+          newData.push(item);
+        }
+      });
+    } else if (instituteFilterInput.filter === 'NTNU') {
+      classes.byId[classId].memberIds.forEach((id) => {
+        const item = members.byId[id];
+        if (item.institute === 'NTNU') {
+          newData.push(item);
+        }
+      });
+    } else if (instituteFilterInput.filter === 'NTUST') {
+      classes.byId[classId].memberIds.forEach((id) => {
+        const item = members.byId[id];
+        if (item.institute === 'NTUST') {
+          newData.push(item);
+        }
+      });
+    } else {
+      classes.byId[classId].memberIds.forEach((id) => {
+        const item = members.byId[id];
+        newData.push(item);
+      });
+    }
+
+    // sort
+    if (instituteFilterInput.filter === '(None)' || instituteFilterInput.filter === 'Select all') {
+      if (instituteFilterInput.sort === 'Z to A') {
+        // newPath.splice(0, newPath.length);
+        newData.sort((a, b) => {
+          const instituteA = a.institute;
+          const instituteB = b.institute;
+          if (instituteA > instituteB) {
+            return -1;
+          }
+          if (instituteA < instituteB) {
+            return 1;
+          }
+          return 0;
+        });
+        /* newData.forEach((data) => {
+          newPath.push(`institute/${data.id}/setting`);
+        }); */
+      } else if (instituteFilterInput.sort === 'A to Z') {
+        // newPath.splice(0, newPath.length);
+        newData.sort((a, b) => {
+          const instituteA = a.institute;
+          const instituteB = b.institute;
+          if (instituteA < instituteB) {
+            return -1;
+          }
+          if (instituteA > instituteB) {
+            return 1;
+          }
+          return 0;
+        });
+        /* newData.forEach((data) => {
+          newPath.push(`institute/${data.id}/setting`);
+        }); */
+      }
+    }
+
+    setTableData(newData);
+    // setPath(newPath);
+  };
+
+  const roleFilterStatus = () => {
+    const newData = [];
+    // const newPath = [];
+
+    if (roleFilterInput.filter === 'Manager') {
+      classes.byId[classId].memberIds.forEach((id) => {
+        const item = members.byId[id];
+        if (item.role === 'MANAGER') {
+          newData.push(item);
+        }
+      });
+    } else if (roleFilterInput.filter === 'Normal') {
+      classes.byId[classId].memberIds.forEach((id) => {
+        const item = members.byId[id];
+        if (item.role === 'NORMAL') {
+          newData.push(item);
+        }
+      });
+    } else if (roleFilterInput.filter === 'Guest') {
+      classes.byId[classId].memberIds.forEach((id) => {
+        const item = members.byId[id];
+        if (item.role === 'GUEST') {
+          newData.push(item);
+        }
+      });
+    } else {
+      classes.byId[classId].memberIds.forEach((id) => {
+        const item = members.byId[id];
+        newData.push(item);
+      });
+    }
+
+    // sort
+    if (roleFilterInput.filter === '(None)' || roleFilterInput.filter === 'Select all') {
+      if (roleFilterInput.sort === 'Z to A') {
+        // newPath.splice(0, newPath.length);
+        newData.sort((a, b) => {
+          const roleA = a.role;
+          const roleB = b.role;
+          if (roleA > roleB) {
+            return -1;
+          }
+          if (roleA < roleB) {
+            return 1;
+          }
+          return 0;
+        });
+        /* newData.forEach((data) => {
+          newPath.push(`institute/${data.id}/setting`);
+        }); */
+      } else if (roleFilterInput.sort === 'A to Z') {
+        // newPath.splice(0, newPath.length);
+        newData.sort((a, b) => {
+          const roleA = a.role;
+          const roleB = b.role;
+          if (roleA < roleB) {
+            return -1;
+          }
+          if (roleA > roleB) {
+            return 1;
+          }
+          return 0;
+        });
+        /* newData.forEach((data) => {
+          newPath.push(`institute/${data.id}/setting`);
+        }); */
+      }
+    }
+
+    setTableData(newData);
+    // setPath(newPath);
+  };
 
   const instituteFilterClear = () => {
     setInstituteFilterInput({
@@ -92,12 +241,13 @@ export default function MemberList() {
 
   const handleClickInstituteFilterSave = () => {
     setShowInstituteFilterDialog(false);
+    instituteFilterStatus();
   };
   const handleClickRoleFilterSave = () => {
     setShowRoleFilterDialog(false);
+    roleFilterStatus();
   };
 
-  // TODO: path of arrows, username link
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
     if (loading.fetchCourses || loading.fetchClasses) {
       // still loading
@@ -243,8 +393,8 @@ export default function MemberList() {
                     }}
                   >
                     <MenuItem value="(None)">(None)</MenuItem>
-                    <MenuItem value="TA">TA</MenuItem>
-                    <MenuItem value="Student">Student</MenuItem>
+                    <MenuItem value="Manager">Manager</MenuItem>
+                    <MenuItem value="Normal">Normal</MenuItem>
                     <MenuItem value="Guest">Guest</MenuItem>
                   </Select>
                 </FormControl>
