@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import React, { useSelector, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
@@ -23,19 +23,6 @@ import { authActions } from '../../actions/index';
 import '../../styles/auth.css';
 import '../../styles/index.css';
 
-function checkEmailFormat(email) {
-  const index1 = email.indexOf('@ntu.edu.tw'); // 台大
-  const index2 = email.indexOf('@mail.ntust.edu.tw'); // 台科大
-  const index3 = email.indexOf('@ntnu.edu.tw'); // 台師大
-  if (email === '') {
-    return '';
-  }
-  if (index1 <= 0 && index2 <= 0 && index3 <= 0) {
-    return 'Invalid email address';
-  }
-  return '';
-}
-
 const useStyles = makeStyles((theme) => ({
   authForm: {
     width: '50%',
@@ -54,6 +41,7 @@ export default function ForgetPasswordForm() {
   const dispatch = useDispatch();
   const { userForgetPassword } = bindActionCreators(authActions, dispatch);
   const loginState = useSelector((state) => state.auth);
+  const serverError = useSelector((state) => state.auth.error.forgetPassword);
   const [email, setEmail] = useState('');
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -68,10 +56,10 @@ export default function ForgetPasswordForm() {
       setDisabled(true);
       return;
     }
-    const status = checkEmailFormat(event.target.value);
-    if (status === 'Invalid email address') {
+    const status = event.target.value.indexOf('@') > 0;
+    if (!status) {
       setEmail(event.target.value);
-      setErrorText(status);
+      setErrorText('Invalid email address');
       setError(true);
       setDisabled(true);
     } else {
@@ -95,6 +83,18 @@ export default function ForgetPasswordForm() {
   const handleClosePopUp = () => {
     setPopUp(false);
   };
+
+  useEffect(() => {
+    if (serverError === null) {
+      setErrorText(serverError);
+      setError(true);
+      setDisabled(true);
+    } else {
+      setErrorText('');
+      setError(false);
+      setDisabled(false);
+    }
+  }, [serverError]);
 
   return (
     <>
