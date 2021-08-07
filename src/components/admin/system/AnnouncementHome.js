@@ -65,6 +65,15 @@ export default function AnnouncementHome() {
     },
   ]);
 
+  const modifyRawData = (item) => {
+    const temp = {
+      title: item.title,
+      PostTime: item.post_time.toISOString().slice(0, 16).replace('T', ' '),
+      EndTime: item.expire_time.toISOString().slice(0, 16).replace('T', ' '),
+    };
+    return temp;
+  };
+
   const filter = () => {
     const newData = [];
 
@@ -75,22 +84,15 @@ export default function AnnouncementHome() {
 
     announcementId.forEach((key) => {
       const item = announcements[key];
-      const postDate = new Date(item.post_time);
-      const postTime = postDate.getTime();
-      const endDate = new Date(item.expire_time);
-      const endTime = endDate.getTime();
+      const postTime = item.post_time.getTime();
+      const endTime = item.expire_time.getTime();
       if (filterPostOrNot && (postStart > postTime || postTime > postEnd)) {
         return;
       }
       if (filterEndOrNot && (endStart > endTime || endTime > endEnd)) {
         return;
       }
-      const temp = {
-        title: item.title,
-        PostTime: item.post_time,
-        EndTime: item.expire_time,
-      };
-      newData.push(temp);
+      newData.push(modifyRawData(item));
     });
     setTableData(newData);
     setFilterPostOrNot(false);
@@ -111,12 +113,7 @@ export default function AnnouncementHome() {
       const newPath = [];
       announcementId.forEach((key) => {
         const item = announcements[key];
-        const temp = {
-          title: item.title,
-          PostTime: item.post_time,
-          EndTime: item.expire_time,
-        };
-        newData.push(temp);
+        newData.push(modifyRawData(item));
         newPath.push(`announcement/${item.id}/setting`);
       });
       setTableData(newData);

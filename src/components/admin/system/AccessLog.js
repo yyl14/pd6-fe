@@ -49,29 +49,33 @@ export default function AccessLog() {
       key: 'selection',
     },
   ]);
+
+  const modifyRawData = (item) => {
+    let studentID = item.account_id;
+    if (typeof (studentID) === 'number') {
+      studentID = studentID.toString();
+    }
+    const temp = {
+      username: accounts[item.account_id].username,
+      studentID,
+      realName: accounts[item.account_id].real_name,
+      IP: item.ip,
+      resourcePath: item.resource_path,
+      requestMethod: item.request_method,
+      accessTime: item.access_time.toISOString().slice(0, 16).replace('T', ' '),
+    };
+    return temp;
+  };
+
   const filter = () => {
     const newData = [];
     const start = dateRange[0].startDate.getTime();
     const end = dateRange[0].endDate.getTime();
     logsID.forEach((key) => {
-      const log = logs[key];
-      const accessDate = new Date(log.access_time);
-      const accessTime = accessDate.getTime();
+      const item = logs[key];
+      const accessTime = item.access_time.getTime();
       if (start <= accessTime && accessTime <= end) {
-        let studentID = log.account_id;
-        if (typeof (studentID) === 'number') {
-          studentID = studentID.toString();
-        }
-        const temp = {
-          username: accounts[log.account_id].username,
-          studentID,
-          realName: accounts[log.account_id].real_name,
-          IP: log.ip,
-          resourcePath: log.resource_path,
-          requestMethod: log.request_method,
-          accessTime: log.access_time,
-        };
-        newData.push(temp);
+        newData.push(modifyRawData(item));
       }
     });
     setTableData(newData);
@@ -102,22 +106,9 @@ export default function AccessLog() {
         const newData = [];
         const newPath = [];
         logsID.forEach((key) => {
-          const log = logs[key];
-          let studentID = log.account_id;
-          if (typeof (studentID) === 'number') {
-            studentID = studentID.toString();
-          }
-          const temp = {
-            username: accounts[log.account_id].username,
-            studentID,
-            realName: accounts[log.account_id].real_name,
-            IP: log.ip,
-            resourcePath: log.resource_path,
-            requestMethod: log.request_method,
-            accessTime: log.access_time,
-          };
-          newData.push(temp);
-          newPath.push(`account/${log.account_id}/setting`);
+          const item = logs[key];
+          newData.push(modifyRawData(item));
+          newPath.push(`account/${item.account_id}/setting`);
         });
         setTableData(newData);
         setPath(newPath);

@@ -55,10 +55,20 @@ export default function system(state = initialState, action) {
       };
     case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
       const data = Object.values(action.payload);
+      const newData = data.map((item) => (
+        {
+          id: item.id,
+          access_time: new Date(item.access_time),
+          request_method: item.request_method,
+          resource_path: item.resource_path,
+          ip: item.ip,
+          account_id: item.account_id,
+        }
+      ));
       return {
         ...state,
         logs: {
-          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.logs),
+          byId: newData.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.logs),
           allIds: data.map((item) => item.id),
         },
         loading: {
@@ -144,10 +154,21 @@ export default function system(state = initialState, action) {
       };
     case systemConstants.FETCH_ANNOUNCEMENT_SUCCESS: {
       const data = Object.values(action.payload);
+      const newData = data.map((item) => (
+        {
+          id: item.id,
+          title: item.title,
+          content: item.content,
+          author_id: item.author_id,
+          post_time: new Date(item.post_time),
+          expire_time: new Date(item.expire_time),
+          is_deleted: item.is_deleted,
+        }
+      ));
       return {
         ...state,
         announcements: {
-          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.announcements),
+          byId: newData.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.announcements),
           allIds: data.map((item) => item.id),
         },
         loading: {

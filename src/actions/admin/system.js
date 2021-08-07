@@ -9,10 +9,10 @@ const fetchAccessLog = (token, offset, limit) => (dispatch) => {
   dispatch({
     type: systemConstants.FETCH_ACCESS_LOG_START,
   });
-
   agent.get(`/access-log?offset=${offset}&limit=${limit}`, fetch)
     .then((res) => {
       const { data } = res.data;
+      console.log('response :', data);
       dispatch({
         type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
         payload: {
