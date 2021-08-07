@@ -23,18 +23,19 @@ export const fetchCourses = (token) => (dispatch) => {
 };
 
 export const addCourse = (token, name, type) => (dispatch) => {
+  console.log(type);
   const auth = {
     headers: { 'auth-token': token },
   };
-  const body = { name, type: 'LESSON' };
-  // console.log(body);
+  const body = { name, type };
+  console.log(body);
 
   dispatch({ type: courseConstants.ADD_COURSE_START });
 
   agent
     .post('/course', body, auth)
     .then((res) => {
-      // console.log(res);
+      console.log(res);
       const { data } = res.data;
       const { id } = data;
       dispatch({
