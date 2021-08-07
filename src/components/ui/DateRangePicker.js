@@ -35,6 +35,13 @@ const useStyles = makeStyles((muiTheme) => ({
     },
   },
 
+  startDateField: {
+    marginTop: '5px',
+  },
+  endDateField: {
+    marginTop: '40px',
+  },
+
   timeField: {
     width: '79px',
     marginLeft: '0',
@@ -58,7 +65,9 @@ value: {
 */
 const monthNames = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
 
-export default function DateRangePicker({ value, setValue, vertical }) {
+export default function DateRangePicker({
+  className, value, setValue, vertical,
+}) {
   const classes = useStyles();
 
   const [startDate, setStartDate] = useState('');
@@ -83,7 +92,7 @@ export default function DateRangePicker({ value, setValue, vertical }) {
   const [endError, setEndError] = useState(null);
 
   return (
-    <div className={classes.wrapper}>
+    <div className={`${className} ${classes.wrapper}`}>
       <DateRange
         showDateDisplay={false}
         showMonthAndYearPickers={false}
@@ -94,7 +103,7 @@ export default function DateRangePicker({ value, setValue, vertical }) {
         color="#FFFFFF"
       />
       <div className={classes.fieldsWrapper}>
-        <div>
+        <div className={classes.startDateField}>
           <TextField
             className={classes.dateField}
             label="Start Date"
@@ -104,7 +113,7 @@ export default function DateRangePicker({ value, setValue, vertical }) {
           />
           <TextField className={classes.timeField} value={startTime} />
         </div>
-        <div>
+        <div className={classes.endDateField}>
           <TextField
             className={classes.dateField}
             label="End Date"

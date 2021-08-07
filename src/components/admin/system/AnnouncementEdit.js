@@ -1,66 +1,83 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  Typography,
-  Button,
-  Grid,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  TextField,
-  makeStyles,
-} from '@material-ui/core';
-import Divider from '@material-ui/core/Divider';
+import { useSelector, useDispatch } from 'react-redux';
+import { Button, TextField, makeStyles } from '@material-ui/core';
 import SimpleBar from '../../ui/SimpleBar';
 import DateRangePicker from '../../ui/DateRangePicker';
 import AlignedText from '../../ui/AlignedText';
+import { editAnnouncement } from '../../../actions/admin/system';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
   },
+  contentField: {
+    width: '720px',
+  },
+  dateRangePicker: {
+    marginTop: '15px',
+    marginBottom: '9px',
+  },
 }));
 
-const AnnouncementEdit = () => {
+export default function AnnouncementEdit(props) {
   const classes = useStyles();
-  const history = useHistory();
-  const handleClickSave = () => {
-    history.push('/admin/system/announcement/:announcementId/setting');
-  };
-  const [state, setState] = useState([
+
+  const dispatch = useDispatch();
+  const authToken = useSelector((state) => state.auth.user.token);
+
+  const [editTitle, setEditTitle] = useState(props.editTitle);
+  const [dateRangePicker, setDateRangePicker] = useState([
     {
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: new Date(props.editStartDate),
+      endDate: new Date(props.editEndDate),
       key: 'selection',
     },
   ]);
+  const [editContent, setEditContent] = useState(props.editContent);
+
+  const history = useHistory();
+  const handleClickSave = () => {
+    const body = {
+      title: editTitle,
+      content: editContent,
+      post_time: dateRangePicker[0].startDate.toISOString(),
+      expire_time: dateRangePicker[0].endDate.toISOString(),
+    };
+    dispatch(editAnnouncement(authToken, props.announcementId, body));
+    props.setEdit(false);
+  };
+
   /* This is a level 4 component (page component) */
   return (
     <>
-      {/* TODO: Announcement name depends on route */}
-      {/* TODO: re-write with ui components SimpleBar and DatePicker  */}
-      <Typography variant="h3" className={classes.pageHeader}>
-        Announcement: 管院停電 / Setting
-      </Typography>
-      <SimpleBar
-        title="Announcement"
-      >
+      <SimpleBar title="Announcement">
         <AlignedText text="Title" childrenType="field">
-          <TextField />
+          <TextField defaultValue={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
         </AlignedText>
         <AlignedText text="Duration" childrenType="field">
-          <DateRangePicker value={state} setValue={setState} />
+          <DateRangePicker className={classes.dateRangePicker} value={dateRangePicker} setValue={setDateRangePicker} />
         </AlignedText>
         <AlignedText text="Content" childrenType="field">
-          <TextField />
+          <TextField
+            className={classes.contentField}
+            defaultValue={editContent}
+            onChange={(e) => setEditContent(e.target.value)}
+            multiline
+            rows={4}
+          />
         </AlignedText>
       </SimpleBar>
-      <Button>Cancel</Button>
-      <Button color="primary" onClick={handleClickSave}>Save</Button>
+      <Button
+        onClick={() => {
+          props.setEdit(false);
+        }}
+      >
+        Cancel
+      </Button>
+      <Button color="primary" onClick={handleClickSave}>
+        Save
+      </Button>
     </>
   );
-};
-
-export default AnnouncementEdit;
+}

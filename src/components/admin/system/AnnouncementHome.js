@@ -1,11 +1,22 @@
-import React, { Component, useState } from 'react';
-import { connect, useSelector } from 'react-redux';
+import React, { Component, useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
-  withRouter, Switch, Route, useHistory, useParams,
+  withRouter, Switch, Route, useHistory, useParams, BrowserRouter as Router, Link,
 } from 'react-router-dom';
 import { BiFilterAlt } from 'react-icons/bi';
-import { Button, Typography, makeStyles } from '@material-ui/core';
+import {
+  Button,
+  Typography,
+  makeStyles,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@material-ui/core';
+import NoMatch from '../../noMatch';
 import CustomTable from '../../ui/CustomTable';
+import DateRangePicker from '../../ui/DateRangePicker';
+import { fetchAnnouncement } from '../../../actions/admin/system';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -14,59 +25,113 @@ const useStyles = makeStyles((theme) => ({
   filterButton: {
     justifyContent: 'space-between',
   },
-
+  paper: {
+    minWidth: '800px',
+    minHeight: '550px',
+  },
 }));
 
 // TODO: use ui/CustomTable to implement announcement table directly in this component
 
 /* This is a level 4 component (page component) */
-const AnnouncementHome = () => {
+export default function AnnouncementHome() {
   const classes = useStyles();
-  const { AnnouncementID } = useParams();
+
+  const dispatch = useDispatch();
+  const authToken = useSelector((state) => state.auth.user.token);
+  const loading = useSelector((state) => state.admin.system.loading);
+  const announcements = useSelector((state) => state.admin.system.announcements.byId);
+  const announcementId = useSelector((state) => state.admin.system.announcements.allIds);
+  const addLoading = useSelector((state) => state.admin.system.loading.addAnnouncement);
+  const deleteLoading = useSelector((state) => state.admin.system.loading.deleteAnnouncement);
+
+  const [tableData, setTableData] = useState([]);
+  const [path, setPath] = useState([]);
+
+  const [filterPostOrNot, setFilterPostOrNot] = useState(false);
+  const [filterEndOrNot, setFilterEndOrNot] = useState(false);
+  const [postRange, setPostRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: 'selection',
+    },
+  ]);
+  const [endRange, setEndRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: 'selection',
+    },
+  ]);
+
+  const modifyRawData = (item) => {
+    const temp = {
+      title: item.title,
+      PostTime: item.post_time.toISOString().slice(0, 16).replace('T', ' '),
+      EndTime: item.expire_time.toISOString().slice(0, 16).replace('T', ' '),
+    };
+    return temp;
+  };
+
+  const filter = () => {
+    const newData = [];
+
+    const postStart = postRange[0].startDate.getTime();
+    const postEnd = postRange[0].endDate.getTime();
+    const endStart = endRange[0].startDate.getTime();
+    const endEnd = endRange[0].endDate.getTime();
+
+    announcementId.forEach((key) => {
+      const item = announcements[key];
+      const postTime = item.post_time.getTime();
+      const endTime = item.expire_time.getTime();
+      if (filterPostOrNot && (postStart > postTime || postTime > postEnd)) {
+        return;
+      }
+      if (filterEndOrNot && (endStart > endTime || endTime > endEnd)) {
+        return;
+      }
+      newData.push(modifyRawData(item));
+    });
+    setTableData(newData);
+    setFilterPostOrNot(false);
+    setFilterEndOrNot(false);
+  };
+
+  useEffect(() => {
+    if (!addLoading && !deleteLoading) {
+      dispatch(fetchAnnouncement(authToken));
+    }
+  }, [authToken, dispatch, addLoading, deleteLoading]);
+
+  useEffect(() => {
+    if (announcementId == null) {
+      dispatch(fetchAnnouncement(authToken));
+    } else {
+      const newData = [];
+      const newPath = [];
+      announcementId.forEach((key) => {
+        const item = announcements[key];
+        newData.push(modifyRawData(item));
+        newPath.push(`announcement/${item.id}/setting`);
+      });
+      setTableData(newData);
+      setPath(newPath);
+    }
+  }, [dispatch, authToken, announcements, announcementId]);
+
   const history = useHistory();
   const handleClickAdd = () => {
     history.push('/admin/system/announcement/add');
   };
 
-  const [filter, setFilter] = useState(false);
-
-  function createData(Title, PostTime, EndTime) {
-    return {
-      Title,
-      PostTime,
-      EndTime,
-    };
+  if (announcements === null) {
+    if (loading.fetchAnnouncement) {
+      return <div>loading...</div>;
+    }
+    return <NoMatch />;
   }
-
-  const columns = [
-    {
-      id: 'Title',
-      label: 'Title',
-      minWidth: 100,
-      width: 100,
-      align: 'center',
-    },
-    {
-      id: 'PostTime',
-      label: 'Post Time',
-      minWidth: 150,
-      width: 150,
-      align: 'center',
-    },
-    {
-      id: 'EndTime',
-      label: 'End Time',
-      minWidth: 150,
-      width: 150,
-      align: 'center',
-    },
-  ];
-  const rows = [
-    createData('系統維修AAA', '2021-04-20, 09:21', '2021-05-20, 09:21'),
-    createData('系統維修BBB', '2021-05-20, 09:21', '2021-06-20, 09:21'),
-    createData('系統維修CCC', '2021-06-20, 09:21', '2021-07-20, 09:21'),
-  ];
-
   return (
     <>
       <Typography variant="h3" className={classes.pageHeader}>
@@ -80,20 +145,80 @@ const AnnouncementHome = () => {
             +
           </Button>
             )}
-        data={rows}
-        columns={columns}
-        columnComponent={[null, (<BiFilterAlt key="filter" onClick={() => { setFilter(true); }} />), (<BiFilterAlt key="filter" onClick={() => { setFilter(true); }} />)]}
-        hasFilter={[false, true, true]}
-        dataColumnName={['Title', 'PostTime', 'EndTime']}
-        hasLink
-        path={[
-          '/admin/system/announcement/:announcementId/setting',
-          '/admin/system/announcement/:announcementId/setting',
-          '/admin/system/announcement/:announcementId/setting',
+        data={tableData}
+        columns={[
+          {
+            id: 'title',
+            label: 'Title',
+            minWidth: 200,
+            width: 200,
+            align: 'center',
+          },
+          {
+            id: 'PostTime',
+            label: 'Post Time',
+            minWidth: 300,
+            width: 300,
+            align: 'center',
+          },
+          {
+            id: 'EndTime',
+            label: 'End Time',
+            minWidth: 300,
+            width: 300,
+            align: 'center',
+          },
         ]}
+        columnComponent={[null, (<BiFilterAlt key="filterPost" onClick={() => { setFilterPostOrNot(true); }} />), (<BiFilterAlt key="filterEnd" onClick={() => { setFilterEndOrNot(true); }} />)]}
+        hasLink
+        path={path}
       />
+      <Dialog
+        open={filterPostOrNot}
+        keepMounted
+        onClose={() => setFilterPostOrNot(false)}
+        aria-labelledby="dialog-slide-title"
+        aria-describedby="dialog-slide-description"
+        classes={{ paper: classes.paper }}
+      >
+        <DialogTitle id="dialog-slide-title">
+          <Typography variant="h4">Post time range</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DateRangePicker value={postRange} setValue={setPostRange} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setFilterPostOrNot(false)} color="default">
+            Cancel
+          </Button>
+          <Button onClick={() => { filter(); }} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={filterEndOrNot}
+        keepMounted
+        onClose={() => setFilterEndOrNot(false)}
+        aria-labelledby="dialog-slide-title"
+        aria-describedby="dialog-slide-description"
+        classes={{ paper: classes.paper }}
+      >
+        <DialogTitle id="dialog-slide-title">
+          <Typography variant="h4">End time range</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DateRangePicker value={endRange} setValue={setEndRange} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setFilterEndOrNot(false)} color="default">
+            Cancel
+          </Button>
+          <Button onClick={() => { filter(); }} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
-};
-
-export default AnnouncementHome;
+}
