@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import React, { useSelector, useDispatch } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import {
   Button,
   TextField,
@@ -27,7 +26,8 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { borders, borderRadius } from '@material-ui/system';
 
 import { Link as RouterLink } from 'react-router-dom';
-import { authActions } from '../../actions/index';
+import { userRegister } from '../../actions/auth';
+import getInstitutes from '../../actions/public';
 
 const useStyles = makeStyles((theme) => ({
   authForm: {
@@ -55,8 +55,10 @@ function checkPassword(password1, password2) {
 export default function RegisterForm() {
   const classNames = useStyles();
   const dispatch = useDispatch();
-  const { userRegister } = bindActionCreators(authActions, dispatch);
-  // const loginState = useSelector((state) => state.auth);
+  const loading = useSelector((state) => state.publicState.loading);
+  const institutes = useSelector((state) => state.publicState.institutes.byId);
+  const institutesId = useSelector((state) => state.publicState.institutes.allIds);
+  const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
   const [inputs, setInputs] = useState({
     realName: '',
     school: 'National Taiwan University',
@@ -99,6 +101,21 @@ export default function RegisterForm() {
 
   const labelName = ['realName', 'school', 'username', 'nickname', 'studentId', 'email', 'password', 'confirmPassword'];
 
+  useEffect(() => {
+    dispatch(getInstitutes());
+  }, [dispatch]);
+
+  const transform = (school) => {
+    let id = 1;
+    enableInstitutesId.forEach((item) => {
+      if (institutes[item].full_name === school) {
+        id = item;
+      }
+    });
+
+    return id;
+  };
+
   const onSubmit = () => {
     let errorCnt = 0;
     const newInputs = {};
@@ -126,7 +143,10 @@ export default function RegisterForm() {
       }
     });
 
-    if (errorCnt === 0) setPopUp(true);
+    if (errorCnt === 0) {
+      dispatch(userRegister(inputs.username, inputs.password, inputs.nickname, inputs.realName, inputs.email, transform(inputs.school), inputs.studentId));
+      setPopUp(true);
+    }
   };
 
   const handleChange = (event) => {
@@ -150,21 +170,13 @@ export default function RegisterForm() {
 
     // change email tail
     if (name === 'school') {
-      switch (value) {
-        case 'National Taiwan University':
-          setEmailTail('@ntu.edu.tw');
-          break;
-        case 'National Taiwan Normal University':
-          setEmailTail('@ntnu.edu.tw');
-          break;
-        case 'National Taiwan University of Science and Technology':
-          setEmailTail('@mail.ntust.edu.tw');
-          break;
-        default:
-          setEmailTail('@ntu.edu.tw');
-      }
+      setEmailTail(`@${institutes[transform(value)].email_domain}`);
     }
   };
+
+  if (loading) {
+    return <div>loading...</div>;
+  }
 
   return (
     <>
@@ -185,11 +197,7 @@ export default function RegisterForm() {
             <FormControl variant="outlined" className="auth-form-input" error={errors.school}>
               <InputLabel id="demo-simple-select-outlined-label">School</InputLabel>
               <Select id="school" name="school" value={inputs.school} onChange={handleChange} label="School">
-                <MenuItem value="National Taiwan University">National Taiwan University</MenuItem>
-                <MenuItem value="National Taiwan Normal University">National Taiwan Normal University</MenuItem>
-                <MenuItem value="National Taiwan University of Science and Technology">
-                  National Taiwan University of Science and Technology
-                </MenuItem>
+                {enableInstitutesId.map((item) => (<MenuItem key={item} value={institutes[item].full_name}>{institutes[item].full_name}</MenuItem>))}
               </Select>
               {errors.school ? <FormHelperText>{errorTexts.school}</FormHelperText> : <></>}
             </FormControl>

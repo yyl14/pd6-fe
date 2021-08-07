@@ -97,7 +97,6 @@ const userForgetPassword = (email) => (dispatch) => {
 };
 
 const userRegister = (username, password, nickname, realName, emailPrefix, instituteId, studentId) => (dispatch) => {
-  console.log('Register');
   const body = {
     username,
     password,
@@ -243,5 +242,5 @@ const editPassword = (token, id, oldPassword, newPassword) => (dispatch) => {
 };
 
 export {
-  getUserInfo, userSignIn, userLogout, userForgetPassword, editAccount, makeStudentCardDefault, fetchStudentCard, addStudentCard, editPassword,
+  getUserInfo, userSignIn, userLogout, userForgetPassword, userRegister, editAccount, makeStudentCardDefault, fetchStudentCard, addStudentCard, editPassword,
 };
