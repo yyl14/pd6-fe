@@ -168,7 +168,7 @@ const fetchStudentCard = (token, id) => (dispatch) => {
     });
 };
 
-const addStudentCard = (token, id, instituteId, emailPrefix, department, studentId) => (dispatch) => {
+const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (dispatch) => {
   const auth = {
     headers: {
       'Auth-Token': token,
@@ -179,7 +179,6 @@ const addStudentCard = (token, id, instituteId, emailPrefix, department, student
   agent.post(`/account/${id}/student-card`, {
     institute_id: instituteId,
     institute_email_prefix: emailPrefix,
-    department,
     student_id: studentId,
   }, auth)
     .then((res) => {
