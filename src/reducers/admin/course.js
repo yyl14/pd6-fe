@@ -374,10 +374,10 @@ export default function course(state = initialState, action) {
       const { classId, newName } = action.payload;
       return {
         ...state,
-        classes: {
-          ...state.classes,
-          byId: { ...state.classes.byId, [classId]: { ...state.courses.byId[classId], name: newName } },
-        },
+        // classes: {
+        //   ...state.classes,
+        //   byId: { ...state.classes.byId, [classId]: { ...state.courses.byId[classId], name: newName } },
+        // },
         loading: { ...state.loading, renameClass: false },
         error: { ...state.error, renameClass: null },
       };

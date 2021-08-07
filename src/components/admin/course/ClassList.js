@@ -63,10 +63,10 @@ export default function ClassList() {
 
   // fetch members under all classes to get member count
   useEffect(() => {
-    if (courses.byId[courseId]) {
+    if (courses.byId[courseId] && !loading.renameClass && !loading.deleteClass && !loading.addClass) {
       courses.byId[courseId].classIds.map((id) => dispatch(fetchMembers(authToken, id)));
     }
-  }, [authToken, courseId, courses.byId, dispatch]);
+  }, [authToken, courseId, courses.byId, dispatch, loading.addClass, loading.deleteClass, loading.renameClass]);
 
   const getCourseType = (courseType) => {
     switch (courseType) {
