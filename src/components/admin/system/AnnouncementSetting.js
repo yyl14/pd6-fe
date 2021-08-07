@@ -14,6 +14,7 @@ import {
   useHistory, useParams,
 } from 'react-router-dom';
 
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import NoMatch from '../../noMatch';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
@@ -112,7 +113,11 @@ export default function AnnouncementSetting() {
                 <Typography variant="body1">{announcement.title}</Typography>
               </AlignedText>
               <AlignedText text="Duration" childrenType="text">
-                <Typography variant="body1">{`${announcement.PostTime} to ${announcement.EndTime}`}</Typography>
+                <Typography variant="body1">
+                  {announcement.PostTime}
+                  <ArrowRightIcon style={{ transform: 'translate(0, 5px)' }} />
+                  {announcement.EndTime}
+                </Typography>
               </AlignedText>
               <AlignedText text="Content" childrenType="text">
                 <Typography variant="body1">{announcement.Content}</Typography>

@@ -13,6 +13,9 @@ const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
   },
+  contentField: {
+    width: '720px',
+  },
 }));
 
 /* This is a level 4 component (page component) */
@@ -65,9 +68,11 @@ const AnnouncementAdd = () => {
         </AlignedText>
         <AlignedText text="Content" childrenType="field">
           <TextField
+            className={classes.contentField}
             value={addContent}
             onChange={(e) => setAddContent(e.target.value)}
             multiline
+            rows={4}
           />
         </AlignedText>
       </SimpleBar>
