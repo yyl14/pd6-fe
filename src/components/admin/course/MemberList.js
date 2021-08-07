@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /* This is a level 4 component (page component) */
-// TODO: path of arrows, username link, multiple choice, select/diseclect, role lowercase
+// TODO: path of arrows, username link, multiple choice, select/diseclect
 export default function MemberList() {
   const { courseId, classId } = useParams();
   const history = useHistory();
@@ -73,10 +73,21 @@ export default function MemberList() {
 
   useEffect(() => {
     if (classes.byId[classId]) {
-      setTableData(classes.byId[classId].memberIds.map((id) => ({
-        ...members.byId[id],
-        studentId: members.byId[id].student_id,
-      })));
+      const data = [];
+      classes.byId[classId].memberIds.forEach((id) => {
+        const item = members.byId[id];
+        const temp = { ...item };
+        if (item.role === 'MANAGER') {
+          temp.role = 'Manager';
+        } else if (item.role === 'NORMAL') {
+          temp.role = 'Normal';
+        } else if (item.role === 'GUEST') {
+          temp.role = 'Guest';
+        }
+        temp.studentId = item.student_id;
+        data.push(temp);
+      });
+      setTableData(data);
     }
   }, [classes.byId, classId, members.byId]);
 
@@ -87,28 +98,43 @@ export default function MemberList() {
     if (instituteFilterInput.filter === 'NTU') {
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
+        const temp = { ...item };
         if (item.institute === 'NTU') {
-          newData.push(item);
+          temp.studentId = item.student_id;
+          newData.push(temp);
         }
       });
     } else if (instituteFilterInput.filter === 'NTNU') {
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
+        const temp = { ...item };
         if (item.institute === 'NTNU') {
-          newData.push(item);
+          temp.studentId = item.student_id;
+          newData.push(temp);
         }
       });
     } else if (instituteFilterInput.filter === 'NTUST') {
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
+        const temp = { ...item };
         if (item.institute === 'NTUST') {
-          newData.push(item);
+          temp.studentId = item.student_id;
+          newData.push(temp);
         }
       });
     } else {
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
-        newData.push(item);
+        const temp = { ...item };
+        if (item.role === 'MANAGER') {
+          temp.role = 'Manager';
+        } else if (item.role === 'NORMAL') {
+          temp.role = 'Normal';
+        } else if (item.role === 'GUEST') {
+          temp.role = 'Guest';
+        }
+        temp.studentId = item.student_id;
+        newData.push(temp);
       });
     }
 
@@ -146,6 +172,20 @@ export default function MemberList() {
         /* newData.forEach((data) => {
           newPath.push(`institute/${data.id}/setting`);
         }); */
+      } else if (instituteFilterInput.filter !== '(None)') {
+        classes.byId[classId].memberIds.forEach((id) => {
+          const item = members.byId[id];
+          const temp = { ...item };
+          if (item.role === 'MANAGER') {
+            temp.role = 'Manager';
+          } else if (item.role === 'NORMAL') {
+            temp.role = 'Normal';
+          } else if (item.role === 'GUEST') {
+            temp.role = 'Guest';
+          }
+          temp.studentId = item.student_id;
+          newData.push(temp);
+        });
       }
     }
 
@@ -160,28 +200,46 @@ export default function MemberList() {
     if (roleFilterInput.filter === 'Manager') {
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
+        const temp = { ...item };
         if (item.role === 'MANAGER') {
-          newData.push(item);
+          temp.role = 'Manager';
+          temp.studentId = item.student_id;
+          newData.push(temp);
         }
       });
     } else if (roleFilterInput.filter === 'Normal') {
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
+        const temp = { ...item };
         if (item.role === 'NORMAL') {
-          newData.push(item);
+          temp.role = 'Normal';
+          temp.studentId = item.student_id;
+          newData.push(temp);
         }
       });
     } else if (roleFilterInput.filter === 'Guest') {
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
+        const temp = { ...item };
         if (item.role === 'GUEST') {
-          newData.push(item);
+          temp.role = 'Guest';
+          temp.studentId = item.student_id;
+          newData.push(temp);
         }
       });
     } else {
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
-        newData.push(item);
+        const temp = { ...item };
+        if (item.role === 'MANAGER') {
+          temp.role = 'Manager';
+        } else if (item.role === 'NORMAL') {
+          temp.role = 'Normal';
+        } else if (item.role === 'GUEST') {
+          temp.role = 'Guest';
+        }
+        temp.studentId = item.student_id;
+        newData.push(temp);
       });
     }
 
@@ -219,6 +277,20 @@ export default function MemberList() {
         /* newData.forEach((data) => {
           newPath.push(`institute/${data.id}/setting`);
         }); */
+      } else if (roleFilterInput.filter !== '(None)') {
+        classes.byId[classId].memberIds.forEach((id) => {
+          const item = members.byId[id];
+          const temp = { ...item };
+          if (item.role === 'MANAGER') {
+            temp.role = 'Manager';
+          } else if (item.role === 'NORMAL') {
+            temp.role = 'Normal';
+          } else if (item.role === 'GUEST') {
+            temp.role = 'Guest';
+          }
+          temp.studentId = item.student_id;
+          newData.push(temp);
+        });
       }
     }
 
