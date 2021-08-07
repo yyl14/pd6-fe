@@ -1,93 +1,175 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button,
 } from '@material-ui/core';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import DetailsIcon from '@material-ui/icons/Details';
-import SettingsIcon from '@material-ui/icons/Settings';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PeopleIcon from '@material-ui/icons/People';
-import { useHistory, useLocation } from 'react-router-dom';
+import StarIcon from '@material-ui/icons/Star';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import SettingsIcon from '@material-ui/icons/Settings';
+
+import { gridColumnLookupSelector } from '@material-ui/data-grid';
+import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
 
 export default function Course({
-  menuItems, classes, history, location,
+  classes, history, location, mode,
 }) {
+  const { courseId, classId } = useParams();
+  const courseList = useSelector((state) => state.admin.course.courses);
+  const classList = useSelector((state) => state.admin.course.classes);
   const baseURL = '/admin/course';
-  const [mode1, setMode1] = useState('main');
-  const [course, setCourse] = useState('');
-  // const [mode2, setMode2] = useState('');
   const [display, setDisplay] = useState('unfold');
   const [display1, setDisplay1] = useState('unfold');
 
-  const goBack = () => {
-    history.goBack();
-  };
+  const [title1, setTitle1] = useState('');
+  const [title2, setTitle2] = useState('');
+  const [itemList, setItemList] = useState([]);
+  const [arrow, setArrow] = useState(null);
 
-  let title1 = null;
-  let title2 = null;
-  let itemList = [];
-  let secondItemList = [];
-  let arrow = null;
-  if (mode1 === 'main') {
-    title1 = 'Lesson';
-    title2 = 'Contest';
-    itemList = [
-      {
-        text: 'PBC',
-        icon: <PeopleIcon className={location.pathname === `${baseURL}/PBC` ? classes.activeIcon : classes.icon} />,
-        path: `${baseURL}/PBC`,
-      },
-      {
-        text: 'DSAP',
-        icon: <PeopleIcon className={location.pathname === `${baseURL}/DSAP` ? classes.activeIcon : classes.icon} />,
-        path: `${baseURL}/DSAP`,
-      },
-      {
-        text: 'PD',
-        icon: <PeopleIcon className={location.pathname === `${baseURL}/PD` ? classes.activeIcon : classes.icon} />,
-        path: `${baseURL}/PD`,
-      },
-      {
-        text: 'OR',
-        icon: <PeopleIcon className={location.pathname === `${baseURL}/OR` ? classes.activeIcon : classes.icon} />,
-        path: `${baseURL}/OR`,
-      },
-    ];
-    secondItemList = [
-      {
-        text: 'PDAO',
-        path: `${baseURL}/PDAO`,
-        icon: <PeopleIcon className={location.pathname === `${baseURL}/PDAO` ? classes.activeIcon : classes.icon} />,
-      },
-    ];
-  } else if (mode1 === 'setting') {
-    arrow = <ArrowBackIcon className={classes.arrow} onClick={goBack} />;
-    title1 = course;
-    itemList = [
-      {
-        text: 'Course Setting',
-        path: `${baseURL}/${course}`,
-        icon: (
-          <SettingsIcon className={location.pathname === `${baseURL}/${course}` ? classes.activeIcon : classes.icon} />
-        ),
-      },
-    ];
-  } else if (mode1 === 'class') {
-    arrow = <ArrowBackIcon className={classes.arrow} onClick={goBack} />;
-    title1 = course;
-    itemList = [
-      {
-        text: 'Members',
-        path: `${baseURL}/${course}/member`,
-        icon: <PeopleIcon className={location.pathname.includes('ember') ? classes.activeIcon : classes.icon} />,
-      },
-      {
-        text: 'Class Setting',
-        path: `${baseURL}/${course}/setting`,
-        icon: <SettingsIcon className={location.pathname.includes('etting') ? classes.activeIcon : classes.icon} />,
-      },
-    ];
-  }
+  const dispatch = useDispatch();
+
+  const authToken = useSelector((state) => state.auth.user.token);
+  const loading = useSelector((state) => state.admin.course.loading);
+
+  useEffect(() => {
+    // console.log(mode, courseId, classId);
+    const goBack = () => {
+      history.push('/admin/course/course');
+    };
+
+    if (mode === 'class-list') {
+      setTitle1('Lesson');
+      setTitle2('Contest');
+      setItemList(
+        courseList.allIds
+          .map((id) => courseList.byId[id])
+          .map(({ id, type, name }) => {
+            switch (type) {
+              case 'LESSON':
+                return {
+                  type,
+                  text: name,
+                  icon: (
+                    <PeopleIcon
+                      className={
+                        location.pathname === `${baseURL}/course/${id}/class-list` ? classes.activeIcon : classes.icon
+                      }
+                    />
+                  ),
+                  path: `${baseURL}/course/${id}/class-list`,
+                };
+              case 'CONTEST':
+                return {
+                  type,
+                  text: name,
+                  icon: (
+                    <StarIcon
+                      className={
+                        location.pathname === `${baseURL}/course/${id}/class-list` ? classes.activeIcon : classes.icon
+                      }
+                    />
+                  ),
+                  path: `${baseURL}/course/${id}/class-list`,
+                };
+              default:
+                return {
+                  type,
+                  text: name,
+                  icon: (
+                    <PeopleIcon
+                      className={
+                        location.pathname === `${baseURL}/course/${id}/class-list` ? classes.activeIcon : classes.icon
+                      }
+                    />
+                  ),
+                  path: `${baseURL}/course/${id}/class-list`,
+                };
+            }
+          })
+          .concat([
+            {
+              type: 'LESSON',
+              text: 'Lesson',
+              icon: (
+                <AddBoxIcon
+                  className={
+                    location.pathname.substr(location.pathname.length - 6) === 'lesson'
+                      ? classes.activeIcon
+                      : classes.icon
+                  }
+                />
+              ),
+              path: `${baseURL}/course/${courseId}/class-list/lesson`,
+            },
+            {
+              type: 'CONTEST',
+              text: 'Contest',
+              icon: (
+                <AddBoxIcon
+                  className={
+                    location.pathname.substr(location.pathname.length - 7) === 'contest'
+                      ? classes.activeIcon
+                      : classes.icon
+                  }
+                />
+              ),
+              path: `${baseURL}/course/${courseId}/class-list/contest`,
+            },
+          ]),
+      );
+    } else if (mode === 'course-setting' && courseList.byId[courseId]) {
+      setArrow(<ArrowBackIcon className={classes.arrow} onClick={goBack} />);
+      setTitle1(courseList.byId[courseId].name);
+      setItemList([
+        {
+          text: 'Setting',
+          path: `${baseURL}/course/${courseId}/setting`,
+          icon: (
+            <SettingsIcon
+              className={
+                location.pathname === `${baseURL}/course/${courseId}/setting` ? classes.activeIcon : classes.icon
+              }
+            />
+          ),
+        },
+      ]);
+    } else if (mode === 'class' && courseList.byId[courseId] && classList.byId[classId]) {
+      setArrow(<ArrowBackIcon className={classes.arrow} onClick={goBack} />);
+      setTitle1(`${courseList.byId[courseId].name} / ${classList.byId[classId].name}`);
+      setItemList([
+        {
+          text: 'Member',
+          path: `${baseURL}/class/${courseId}/${classId}/member`,
+          icon: (
+            <PeopleIcon
+              className={
+                location.pathname === `${baseURL}/class/${courseId}/${classId}/member`
+                  ? classes.activeIcon
+                  : classes.icon
+              }
+            />
+          ),
+        },
+        {
+          text: 'Setting',
+          path: `${baseURL}/class/${courseId}/${classId}/setting`,
+          icon: (
+            <SettingsIcon
+              className={
+                location.pathname === `${baseURL}/class/${courseId}/${classId}/setting`
+                  ? classes.activeIcon
+                  : classes.icon
+              }
+            />
+          ),
+        },
+      ]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname, history, courseList, courseId, classList, classId, mode]);
 
   const foldLesson = () => {
     setDisplay('fold');
@@ -106,20 +188,33 @@ export default function Course({
   };
 
   useEffect(() => {
-    // console.log('Current route', location.pathname);
-    const slashNum = (location.pathname.match(new RegExp('/', 'g')) || []).length;
-    if (slashNum === 2 || location.pathname.includes('overview')) {
-      setMode1('main');
-    } else if (slashNum === 3) {
-      setMode1('setting');
-      const courseName = location.pathname.substring(location.pathname.lastIndexOf('/') + 1, location.pathname.length);
-      setCourse(courseName);
-    } else if (slashNum === 4 || slashNum === 5 || slashNum === 6) {
-      setMode1('class');
-      const split = location.pathname.split('/');
-      setCourse(`${split[3]}/${split[4]}`);
+    dispatch(fetchCourses(authToken));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (courseList.allIds.length !== 0) {
+      if (location.pathname === '/admin/course/course') {
+        history.push(`/admin/course/course/${courseList.byId[courseList.allIds[0]].id}/class-list`);
+      }
     }
-  }, [location]);
+  }, [classId, classList, courseId, courseList, history, location]);
+
+  // console.log(courseList.byId[courseId]);
+  if (courseList.byId[courseId] === undefined || (classId && classList.byId[classId] === undefined)) {
+    // console.log(classList.byId[classId]);
+    return (
+      <div>
+        <Drawer
+          className={classes.drawer}
+          variant="permanent"
+          anchor="left"
+          PaperProps={{ elevation: 5 }}
+          classes={{ paper: classes.drawerPaper }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -130,19 +225,13 @@ export default function Course({
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classes.drawerPaper }}
       >
-        {mode1 === 'main' ? (
-          <Button color="primary" className={classes.button}>
-            New
-          </Button>
-        ) : (
-          arrow
-        )}
+        {mode === 'class-list' ? <div className={classes.topSpace} /> : arrow}
 
         <div>
           {display === 'unfold' ? (
-            <PlayArrowIcon className={classes.titleIcon} onClick={foldLesson} />
+            <PlayArrowIcon className={`${classes.titleIcon} ${classes.rotate90}`} onClick={foldLesson} />
           ) : (
-            <DetailsIcon className={classes.titleIcon} onClick={unfoldLesson} />
+            <PlayArrowIcon className={classes.titleIcon} onClick={unfoldLesson} />
           )}
 
           <Typography variant="h4" className={classes.title}>
@@ -150,9 +239,10 @@ export default function Course({
           </Typography>
         </div>
         <Divider variant="middle" className={classes.divider} />
-        {display === 'unfold' ? (
+        {display === 'unfold' && (
           <List>
-            {itemList.map((item) => (
+            {itemList.map(
+              (item) => (item.type === 'LESSON' || mode !== 'class-list') && (
               <ListItem
                 button
                 key={item.text}
@@ -162,28 +252,28 @@ export default function Course({
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItem>
-            ))}
+              ),
+            )}
           </List>
-        ) : (
-          ''
         )}
 
-        {mode1 === 'main' ? (
+        {mode === 'class-list' && (
           <>
             <div>
               {display1 === 'unfold' ? (
-                <PlayArrowIcon className={classes.secondTitleIcon} onClick={foldContest} />
+                <PlayArrowIcon className={`${classes.secondTitleIcon} ${classes.rotate90}`} onClick={foldContest} />
               ) : (
-                <DetailsIcon className={classes.secondTitleIcon} onClick={unfoldContest} />
+                <PlayArrowIcon className={classes.secondTitleIcon} onClick={unfoldContest} />
               )}
               <Typography variant="h4" className={classes.secondTitle}>
                 {title2}
               </Typography>
             </div>
             <Divider variant="middle" className={classes.divider} />
-            {display1 === 'unfold' ? (
+            {display1 === 'unfold' && (
               <List>
-                {secondItemList.map((item) => (
+                {itemList.map(
+                  (item) => item.type === 'CONTEST' && (
                   <ListItem
                     button
                     key={item.text}
@@ -193,15 +283,13 @@ export default function Course({
                     <ListItemIcon>{item.icon}</ListItemIcon>
                     <ListItemText primary={item.text} />
                   </ListItem>
-                ))}
+                  ),
+                )}
               </List>
-            ) : (
-              ''
             )}
           </>
-        ) : (
-          ''
         )}
+        <div className={classes.bottomSpace} />
       </Drawer>
     </div>
   );

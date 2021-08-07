@@ -37,8 +37,7 @@ export default function MemberList() {
 
   const [edit, setEdit] = useState(false);
   // TODO: path of arrows, table filter, username link, search bar length
-
-  if (courses.byId[courseId] === undefined || classes.byId[courseId] === undefined) {
+  if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
     if (loading.fetchCourses || loading.fetchClasses) {
       // still loading
       return <div>loading</div>;

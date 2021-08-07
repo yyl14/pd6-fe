@@ -76,7 +76,7 @@ export default function CourseSetting() {
   const onDelete = () => {
     setShowDeleteDialog(false);
     dispatch(deleteCourse(authToken, courseId));
-    history.push('/admin/course/course/');
+    history.push('/admin/course/course');
   };
 
   if (courses.byId[courseId] === undefined) {

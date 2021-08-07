@@ -15,11 +15,11 @@ import { MdAdd } from 'react-icons/md';
 import {
   fetchCourses,
   fetchClasses,
+  fetchMembers,
   addCourse,
   addClass,
   renameClass,
   deleteClass,
-  fetchMembers,
 } from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import DateRangePicker from '../../ui/DateRangePicker';
@@ -53,9 +53,20 @@ export default function ClassList() {
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchCourses(authToken));
-    dispatch(fetchClasses(authToken, courseId));
-  }, [authToken, courseId, dispatch]);
+    if (!loading.deleteCourse) {
+      dispatch(fetchCourses(authToken));
+    }
+    if (!loading.deleteClass) {
+      dispatch(fetchClasses(authToken, courseId));
+    }
+  }, [authToken, courseId, dispatch, loading.deleteClass, loading.deleteCourse]);
+
+  // fetch members under all classes to get member count
+  useEffect(() => {
+    if (courses.byId[courseId]) {
+      courses.byId[courseId].classIds.map((id) => dispatch(fetchMembers(authToken, id)));
+    }
+  }, [authToken, courseId, courses.byId, dispatch]);
 
   const getCourseType = (courseType) => {
     switch (courseType) {
@@ -85,7 +96,7 @@ export default function ClassList() {
     dispatch(addClass(authToken, courseId, name, false));
   };
 
-  if (courses.byId[courseId] === undefined) {
+  if (courses.byId[courseId] === undefined || courses.byId[courseId].name === undefined) {
     if (loading.fetchCourses) {
       // still loading
       return <div>loading</div>;
@@ -93,7 +104,7 @@ export default function ClassList() {
     return <NoMatch />;
   }
 
-  console.log(courses);
+  // console.log(courses, classes);
 
   return (
     <>
@@ -132,8 +143,6 @@ export default function ClassList() {
             align: 'center',
           },
         ]}
-        hasFilter={[false, false]}
-        dataColumnName={['name', 'memberCount']}
         hasLink
         path={courses.byId[courseId].classIds.map((classId) => `/admin/course/class/${courseId}/${classId}/member`)}
       />
