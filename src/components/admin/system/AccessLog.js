@@ -1,12 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
-  Typography,
-  makeStyles,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Button,
+  Typography, makeStyles, Dialog, DialogActions, DialogContent, DialogTitle, Button,
 } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { BiFilterAlt } from 'react-icons/bi';
@@ -50,22 +44,25 @@ export default function AccessLog() {
     },
   ]);
 
-  const modifyRawData = (item) => {
-    let studentID = item.account_id;
-    if (typeof (studentID) === 'number') {
-      studentID = studentID.toString();
-    }
-    const temp = {
-      username: accounts[item.account_id].username,
-      studentID,
-      realName: accounts[item.account_id].real_name,
-      IP: item.ip,
-      resourcePath: item.resource_path,
-      requestMethod: item.request_method,
-      accessTime: item.access_time.toISOString().slice(0, 16).replace('T', ' '),
-    };
-    return temp;
-  };
+  const modifyRawData = useCallback(
+    (item) => {
+      let studentID = item.account_id;
+      if (typeof studentID === 'number') {
+        studentID = studentID.toString();
+      }
+      const temp = {
+        username: accounts[item.account_id].username,
+        studentID,
+        realName: accounts[item.account_id].real_name,
+        IP: item.ip,
+        resourcePath: item.resource_path,
+        requestMethod: item.request_method,
+        accessTime: item.access_time.toISOString().slice(0, 16).replace('T', ' '),
+      };
+      return temp;
+    },
+    [accounts],
+  );
 
   const filter = () => {
     const newData = [];
@@ -93,7 +90,7 @@ export default function AccessLog() {
         },
       ]);
     } else {
-      const newAccountsId = logsID.map((logID) => (logs[logID].account_id));
+      const newAccountsId = logsID.map((logID) => logs[logID].account_id);
       setAccountsId(newAccountsId);
     }
   }, [logsID, logs, authToken, dispatch]);
@@ -114,7 +111,7 @@ export default function AccessLog() {
         setPath(newPath);
       }
     }
-  }, [accountsId, accounts, logs, logsID, authToken, dispatch]);
+  }, [accountsId, accounts, logs, logsID, authToken, dispatch, modifyRawData]);
 
   if (loading) {
     return <div>loading...</div>;
@@ -173,7 +170,15 @@ export default function AccessLog() {
             width: 300,
           },
         ]}
-        columnComponent={[null, null, null, null, null, null, (<BiFilterAlt key="filter" onClick={() => setFilterOrNot(true)} />)]}
+        columnComponent={[
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          <BiFilterAlt key="filter" onClick={() => setFilterOrNot(true)} />,
+        ]}
       />
       <Dialog
         open={filterOrNot}
@@ -193,7 +198,12 @@ export default function AccessLog() {
           <Button onClick={() => setFilterOrNot(false)} color="default">
             Cancel
           </Button>
-          <Button onClick={() => { filter(); }} color="primary">
+          <Button
+            onClick={() => {
+              filter();
+            }}
+            color="primary"
+          >
             Save
           </Button>
         </DialogActions>
