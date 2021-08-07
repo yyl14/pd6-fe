@@ -26,7 +26,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '55px',
   },
   authButtons: {
-    marginTop: '57px',
+    marginTop: '44px',
+    marginBottom: '30px',
   },
   authLink: {
     color: theme.palette.grey.A400,
@@ -118,10 +119,11 @@ export default function LoginForm(props) {
               ),
             }}
           />
-
-          <Button className={classNames.authButtons} color="primary" onClick={(e) => handleSubmit(e)}>
-            Login
-          </Button>
+          <div className={classNames.authButtons}>
+            <Button color="primary" onClick={(e) => handleSubmit(e)}>
+              Login
+            </Button>
+          </div>
         </form>
 
         <Typography variant="body2" className={classNames.authLink}>

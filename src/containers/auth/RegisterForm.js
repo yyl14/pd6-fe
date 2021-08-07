@@ -25,7 +25,7 @@ import {
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { borders, borderRadius } from '@material-ui/system';
 
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { userRegister } from '../../actions/auth';
 import getInstitutes from '../../actions/public';
 
@@ -35,10 +35,15 @@ const useStyles = makeStyles((theme) => ({
   },
   authTextFields: {
     width: '100%',
-    marginTop: '55px',
+    marginTop: '50px',
+  },
+  authTextFieldsComplex: {
+    width: '100%',
+    marginTop: '40px',
   },
   authButtons: {
-    marginTop: '57px',
+    marginTop: '44px',
+    marginBottom: '30px',
   },
   authLink: {
     color: theme.palette.grey.A400,
@@ -54,11 +59,15 @@ function checkPassword(password1, password2) {
 
 export default function RegisterForm() {
   const classNames = useStyles();
+  const history = useHistory();
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.publicState.loading);
   const institutes = useSelector((state) => state.publicState.institutes.byId);
   const institutesId = useSelector((state) => state.publicState.institutes.allIds);
   const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
+
+  const [nextPage, setNextPage] = useState(false);
+
   const [inputs, setInputs] = useState({
     realName: '',
     school: 'National Taiwan University',
@@ -94,7 +103,7 @@ export default function RegisterForm() {
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
 
   const [disabled, setDisabled] = useState(false);
-  const [popUp, setPopUp] = useState(false);
+  const [popup, setPopup] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -144,8 +153,18 @@ export default function RegisterForm() {
     });
 
     if (errorCnt === 0) {
-      dispatch(userRegister(inputs.username, inputs.password, inputs.nickname, inputs.realName, inputs.email, transform(inputs.school), inputs.studentId));
-      setPopUp(true);
+      dispatch(
+        userRegister(
+          inputs.username,
+          inputs.password,
+          inputs.nickname,
+          inputs.realName,
+          inputs.email,
+          transform(inputs.school),
+          inputs.studentId,
+        ),
+      );
+      setPopup(true);
     }
   };
 
@@ -174,146 +193,184 @@ export default function RegisterForm() {
     }
   };
 
+  const onClosePopup = () => {
+    setPopup(false);
+    history.push('/login');
+  };
+
   if (loading) {
     return <div>loading...</div>;
   }
 
   return (
     <>
-      <Card className="auth-form register-form" variant="outlined">
-        {/* className login-form applies here */}
-        <CardContent className="auth-form-content">
-          <div className="auth-form-inputs">
-            <TextField
-              id="realName"
-              name="realName"
-              className="auth-form-input"
-              label="Real Name"
-              value={inputs.realName}
-              onChange={(e) => handleChange(e)}
-              error={errors.realName}
-              helperText={errorTexts.realName}
-            />
-            <FormControl variant="outlined" className="auth-form-input" error={errors.school}>
-              <InputLabel id="demo-simple-select-outlined-label">School</InputLabel>
-              <Select id="school" name="school" value={inputs.school} onChange={handleChange} label="School">
-                {enableInstitutesId.map((item) => (<MenuItem key={item} value={institutes[item].full_name}>{institutes[item].full_name}</MenuItem>))}
-              </Select>
-              {errors.school ? <FormHelperText>{errorTexts.school}</FormHelperText> : <></>}
-            </FormControl>
-            <TextField
-              id="username"
-              name="username"
-              className="auth-form-input"
-              label="Username"
-              value={inputs.username}
-              onChange={(e) => handleChange(e)}
-              error={errors.username}
-              helperText={errorTexts.username}
-            />
-            <TextField
-              id="nickname"
-              name="nickname"
-              className="auth-form-input"
-              label="Nickname"
-              value={inputs.nickname}
-              onChange={(e) => handleChange(e)}
-              error={errors.nickname}
-              helperText={errorTexts.nickname}
-            />
-            <TextField
-              id="studentId"
-              name="studentId"
-              className="auth-form-input"
-              label="Student ID"
-              value={inputs.studentId}
-              onChange={(e) => handleChange(e)}
-              error={errors.studentId}
-              helperText={errorTexts.studentId}
-            />
-            <div className="auth-form-input auth-form-input-email">
+      {!nextPage ? (
+        <Card className="auth-form register-form" variant="outlined">
+          <CardContent className="auth-form-content">
+            <form className={`auth-form-content ${classNames.authForm}`}>
               <TextField
-                id="email"
-                name="email"
-                className="auth-form-input-email-text"
-                label="Email"
-                value={inputs.email}
+                id="realName"
+                name="realName"
+                className={`auth-form-input ${classNames.authTextFields}`}
+                label="Real Name"
+                value={inputs.realName}
                 onChange={(e) => handleChange(e)}
-                error={errors.email}
-                helperText={errorTexts.email}
-                style={{ marginLeft: '0px', marginRight: '10px' }}
+                error={errors.realName}
+                helperText={errorTexts.realName}
               />
-              <Typography className="auth-form-input-email-tail" variant="h6">
-                {emailTail}
-              </Typography>
-            </div>
-            <TextField
-              // required
-              className="auth-form-input"
-              name="password"
-              label="Password"
-              type={showPassword ? 'text' : 'password'}
-              // placeholder="New Password"
-              value={inputs.password}
-              onChange={(e) => handleChange(e)}
-              error={errors.password}
-              helperText={errorTexts.password}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={() => setShowPassword(!showPassword)}
-                      edge="end"
-                    >
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <TextField
-              // required
-              className="auth-form-input"
-              name="confirmPassword"
-              error={errors.confirmPassword}
-              type={showConfirmPassword ? 'text' : 'password'}
-              label="Confirm Password"
-              value={inputs.confirmPassword}
-              helperText={errorTexts.confirmPassword}
-              onChange={(e) => handleChange(e)}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      edge="end"
-                    >
-                      {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <Button disabled={disabled} onClick={() => onSubmit()} color="primary">
-              Register
-            </Button>
-          </div>
-          <Typography variant="body2" className={classNames.authLink}>
-            Already have a puppy?
-            {' '}
-            <Link component={RouterLink} to="/login">
-              Log in
-            </Link>
-          </Typography>
-        </CardContent>
-      </Card>
-      {popUp && (
+              <FormControl
+                variant="outlined"
+                className={`auth-form-input ${classNames.authTextFields}`}
+                error={errors.school}
+              >
+                <InputLabel id="demo-simple-select-outlined-label">School</InputLabel>
+                <Select id="school" name="school" value={inputs.school} onChange={handleChange} label="School">
+                  {enableInstitutesId.map((item) => (
+                    <MenuItem key={item} value={institutes[item].full_name}>
+                      {institutes[item].full_name}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.school ? <FormHelperText>{errorTexts.school}</FormHelperText> : <></>}
+              </FormControl>
+              <TextField
+                className={`auth-form-input ${classNames.authTextFields}`}
+                id="studentId"
+                name="studentId"
+                label="Student ID"
+                value={inputs.studentId}
+                onChange={(e) => handleChange(e)}
+                error={errors.studentId}
+                helperText={errorTexts.studentId}
+              />
+              <div className={`auth-form-input ${classNames.authTextFieldsComplex} auth-form-input-email`}>
+                <TextField
+                  id="email"
+                  name="email"
+                  className="auth-form-input-email-text"
+                  label="Email"
+                  value={inputs.email}
+                  onChange={(e) => handleChange(e)}
+                  error={errors.email}
+                  helperText={errorTexts.email}
+                  style={{ marginLeft: '0px', marginRight: '10px' }}
+                />
+                <Typography className="auth-form-input-email-tail" variant="h6">
+                  {emailTail}
+                </Typography>
+              </div>
+              <div className={classNames.authButtons}>
+                <Button disabled={disabled} onClick={() => setNextPage(true)} color="primary">
+                  Next
+                </Button>
+              </div>
+            </form>
+            <Typography variant="body2" className={classNames.authLink}>
+              Already have a puppy?
+              {' '}
+              <Link component={RouterLink} to="/login">
+                Log in
+              </Link>
+            </Typography>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card className="auth-form register-form" variant="outlined">
+          <CardContent className="auth-form-content">
+            <form className={`auth-form-content ${classNames.authForm}`}>
+              <TextField
+                className={`auth-form-input ${classNames.authTextFields}`}
+                id="username"
+                name="username"
+                label="Username"
+                value={inputs.username}
+                onChange={(e) => handleChange(e)}
+                error={errors.username}
+                helperText={errorTexts.username}
+              />
+              <TextField
+                className={`auth-form-input ${classNames.authTextFields}`}
+                id="nickname"
+                name="nickname"
+                label="Nickname"
+                value={inputs.nickname}
+                onChange={(e) => handleChange(e)}
+                error={errors.nickname}
+                helperText={errorTexts.nickname}
+              />
+              <TextField
+                // required
+                className={`auth-form-input ${classNames.authTextFields}`}
+                name="password"
+                label="Password"
+                type={showPassword ? 'text' : 'password'}
+                // placeholder="New Password"
+                value={inputs.password}
+                onChange={(e) => handleChange(e)}
+                error={errors.password}
+                helperText={errorTexts.password}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <TextField
+                // required
+                className={`auth-form-input ${classNames.authTextFields}`}
+                name="confirmPassword"
+                error={errors.confirmPassword}
+                type={showConfirmPassword ? 'text' : 'password'}
+                label="Confirm Password"
+                value={inputs.confirmPassword}
+                helperText={errorTexts.confirmPassword}
+                onChange={(e) => handleChange(e)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <div className={classNames.authButtons}>
+                <Button disabled={disabled} onClick={() => setNextPage(false)}>
+                  Back
+                </Button>
+                <Button disabled={disabled} onClick={() => onSubmit()} color="primary">
+                  Register
+                </Button>
+              </div>
+            </form>
+            <Typography variant="body2" className={classNames.authLink}>
+              Already have a puppy?
+              {' '}
+              <Link component={RouterLink} to="/login">
+                Log in
+              </Link>
+            </Typography>
+          </CardContent>
+        </Card>
+      )}
+      {popup && (
         <Dialog
-          open={popUp}
+          open={popup}
           keepMounted
-          onClose={() => setPopUp(false)}
+          onClose={() => setPopup(false)}
           aria-labelledby="alert-dialog-slide-title"
           aria-describedby="alert-dialog-slide-description"
         >
@@ -326,7 +383,7 @@ export default function RegisterForm() {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setPopUp(false)} color="primary">
+            <Button onClick={onClosePopup} color="primary">
               Done
             </Button>
           </DialogActions>
