@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Typography, Button, makeStyles } from '@material-ui/core';
+import {
+  Typography,
+  Button,
+  makeStyles,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  Select,
+  MenuItem,
+} from '@material-ui/core';
 import { useParams, useHistory } from 'react-router-dom';
 import { BiFilterAlt } from 'react-icons/bi';
 import { fetchCourses, fetchClasses, fetchMembers } from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
+import AlignedText from '../../ui/AlignedText';
 import CustomTable from '../../ui/CustomTable';
 import MemberEdit from './MemberEdit';
 import NoMatch from '../../noMatch';
@@ -12,6 +24,16 @@ import NoMatch from '../../noMatch';
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
+  },
+
+  filterButton: {
+    justifyContent: 'space-between',
+  },
+  selectField: {
+    width: '350px',
+  },
+  clearButton: {
+    marginLeft: '24px',
   },
 }));
 
@@ -36,7 +58,46 @@ export default function MemberList() {
   }, [authToken, classId, courseId, dispatch]);
 
   const [edit, setEdit] = useState(false);
-  // TODO: path of arrows, table filter, username link, search bar length
+  const [tableData, setTableData] = useState([]);
+  const [showInstituteFilterDialog, setShowInstituteFilterDialog] = useState(false);
+  const [showRoleFilterDialog, setShowRoleFilterDialog] = useState(false);
+  const [instituteFilterInput, setInstituteFilterInput] = useState({
+    filter: '(None)',
+    sort: '(None)',
+  });
+  const [roleFilterInput, setRoleFilterInput] = useState({
+    filter: '(None)',
+    sort: '(None)',
+  });
+
+  useEffect(() => {
+    setTableData(classes.byId[classId].memberIds.map((id) => ({
+      ...members.byId[id],
+      studentId: members.byId[id].student_id,
+    })));
+  }, [classes.byId, classId, members.byId]);
+
+  const instituteFilterClear = () => {
+    setInstituteFilterInput({
+      filter: '(None)',
+      sort: '(None)',
+    });
+  };
+  const roleFilterClear = () => {
+    setRoleFilterInput({
+      filter: '(None)',
+      sort: '(None)',
+    });
+  };
+
+  const handleClickInstituteFilterSave = () => {
+    setShowInstituteFilterDialog(false);
+  };
+  const handleClickRoleFilterSave = () => {
+    setShowRoleFilterDialog(false);
+  };
+
+  // TODO: path of arrows, username link
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
     if (loading.fetchCourses || loading.fetchClasses) {
       // still loading
@@ -66,10 +127,7 @@ export default function MemberList() {
                 <Button onClick={() => setEdit(true)}>Edit</Button>
               </>
             )}
-            data={classes.byId[classId].memberIds.map((id) => ({
-              ...members.byId[id],
-              studentId: members.byId[id].student_id,
-            }))}
+            data={tableData}
             columns={[
               {
                 id: 'username',
@@ -107,11 +165,120 @@ export default function MemberList() {
                 align: 'center',
               },
             ]}
-            // columnComponent={[null, null, null, (<BiFilterAlt key="filter" onClick={[]} />), (<BiFilterAlt key="filter" onClick={[]} />)]}
-            // hasFilter={[false, false, false, true, true]}
+            columnComponent={[null, null, null, (<BiFilterAlt key="showInstituteFilterDialog" onClick={() => setShowInstituteFilterDialog(true)} />), (<BiFilterAlt key="showRoleFilterDialog" onClick={() => setShowRoleFilterDialog(true)} />)]}
             // hasLink
             // path={classes.byId[classId].memberIds.map((member) => `/admin/course/class/${courseId}/${classId}/member`)}
           />
+
+          <Dialog
+            open={showInstituteFilterDialog}
+            maxWidth="md"
+          >
+            <DialogTitle>
+              <Typography variant="h4">Filter: Institute</Typography>
+            </DialogTitle>
+            <DialogContent>
+              <AlignedText text="Filter by" maxWidth="md" childrenType="field">
+                <FormControl variant="outlined" className={classNames.selectField}>
+                  <Select
+                    labelId="status"
+                    value={instituteFilterInput.filter}
+                    onChange={(e) => {
+                      setInstituteFilterInput((input) => ({ ...input, filter: e.target.value }));
+                    }}
+                  >
+                    <MenuItem value="(None)">(None)</MenuItem>
+                    <MenuItem value="NTU">NTU</MenuItem>
+                    <MenuItem value="NTNU">NTNU</MenuItem>
+                    <MenuItem value="NTUST">NTUST</MenuItem>
+                  </Select>
+                </FormControl>
+              </AlignedText>
+              <AlignedText text="Sort by" maxWidth="md" childrenType="field">
+                <FormControl variant="outlined" className={classNames.selectField}>
+                  <Select
+                    labelId="sort"
+                    value={instituteFilterInput.sort}
+                    onChange={(e) => {
+                      setInstituteFilterInput((input) => ({ ...input, sort: e.target.value }));
+                    }}
+                  >
+                    <MenuItem value="(None)">(None)</MenuItem>
+                    <MenuItem value="A to Z">A to Z</MenuItem>
+                    <MenuItem value="Z to A">Z to A</MenuItem>
+                  </Select>
+                </FormControl>
+              </AlignedText>
+            </DialogContent>
+            <DialogActions className={classNames.filterButton}>
+              <Button variant="outlined" onClick={instituteFilterClear} className={classNames.clearButton}>
+                Clear
+              </Button>
+              <div>
+                <Button onClick={() => setShowInstituteFilterDialog(false)} color="default">
+                  Cancel
+                </Button>
+                <Button onClick={handleClickInstituteFilterSave} color="primary">
+                  Save
+                </Button>
+              </div>
+            </DialogActions>
+          </Dialog>
+
+          <Dialog
+            open={showRoleFilterDialog}
+            maxWidth="md"
+          >
+            <DialogTitle>
+              <Typography variant="h4">Filter: Role</Typography>
+            </DialogTitle>
+            <DialogContent>
+              <AlignedText text="Filter by" maxWidth="md" childrenType="field">
+                <FormControl variant="outlined" className={classNames.selectField}>
+                  <Select
+                    labelId="status"
+                    value={roleFilterInput.filter}
+                    onChange={(e) => {
+                      setRoleFilterInput((input) => ({ ...input, filter: e.target.value }));
+                    }}
+                  >
+                    <MenuItem value="(None)">(None)</MenuItem>
+                    <MenuItem value="TA">TA</MenuItem>
+                    <MenuItem value="Student">Student</MenuItem>
+                    <MenuItem value="Guest">Guest</MenuItem>
+                  </Select>
+                </FormControl>
+              </AlignedText>
+              <AlignedText text="Sort by" maxWidth="md" childrenType="field">
+                <FormControl variant="outlined" className={classNames.selectField}>
+                  <Select
+                    labelId="sort"
+                    value={roleFilterInput.sort}
+                    onChange={(e) => {
+                      setRoleFilterInput((input) => ({ ...input, sort: e.target.value }));
+                    }}
+                  >
+                    <MenuItem value="(None)">(None)</MenuItem>
+                    <MenuItem value="A to Z">A to Z</MenuItem>
+                    <MenuItem value="Z to A">Z to A</MenuItem>
+                  </Select>
+                </FormControl>
+              </AlignedText>
+            </DialogContent>
+            <DialogActions className={classNames.filterButton}>
+              <Button variant="outlined" onClick={roleFilterClear} className={classNames.clearButton}>
+                Clear
+              </Button>
+              <div>
+                <Button onClick={() => setShowRoleFilterDialog(false)} color="default">
+                  Cancel
+                </Button>
+                <Button onClick={handleClickRoleFilterSave} color="primary">
+                  Save
+                </Button>
+              </div>
+            </DialogActions>
+          </Dialog>
         </>
       )}
     </>
