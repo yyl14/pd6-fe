@@ -470,14 +470,14 @@ export default function course(state = initialState, action) {
             ...state.classes.byId,
             [classId]: {
               ...state.classes.byId[classId],
-              memberIds: data.map((item) => item.id),
+              memberIds: data.map((item) => item.member_id),
             },
           },
         },
 
         // add member data
         members: {
-          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: item }), state.members),
+          byId: data.reduce((acc, item) => ({ ...acc, [item.member_id]: item }), state.members),
           allIds: [...new Set([...data.map((item) => item.id), ...state.members.allIds])],
         },
 
