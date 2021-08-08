@@ -199,19 +199,18 @@ export default function auth(state = initialState, action) {
         loading: { ...state.loading, fetchStudentCard: true },
       };
     case userConstants.GET_SELF_STUDENT_CARD_SUCCESS: {
-      const { data } = action.payload;
       return {
         ...state,
 
         user: {
           ...state.user,
-          studentCard: data.map((item) => item.id),
+          studentCard: action.payload.map((item) => item.id),
         },
 
         // add studentCard id
         studentCards: {
-          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.studentCards),
-          allIds: data.map((item) => item.id),
+          byId: action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.studentCards),
+          allIds: action.payload.map((item) => item.id),
         },
 
         loading: { ...state.loading, fetchStudentCard: false },

@@ -54,7 +54,7 @@ export default function AccountList() {
   const [path, setPath] = useState([]);
 
   useEffect(() => {
-    // dispatch(fetchAccounts(authToken));
+    dispatch(fetchAccounts(authToken));
   }, [authToken, dispatch]);
 
   useEffect(() => {

@@ -279,9 +279,23 @@ const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (disp
     });
 };
 
-// TODO: Fetch all accounts
 const fetchAccounts = (token) => (dispatch) => {
-
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  dispatch({ type: accountConstants.FETCH_ACCOUNTS_REQUEST });
+  agent.get('/account', auth)
+    .then((res) => {
+      dispatch({ type: accountConstants.FETCH_ACCOUNTS_SUCCESS, payload: res.data.data });
+    })
+    .catch((err) => {
+      dispatch({
+        type: accountConstants.FETCH_ACCOUNTS_FAIL,
+        error: err,
+      });
+    });
 };
 
 export {
