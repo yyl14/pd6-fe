@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 
-// MAKE_STUDENT_CARD_DEFAULT_SUCCESS not yet finished
 export default function AccountSetting() {
   const [cards, setCards] = useState([]);
   const [editBasicInfo, setEditBasicInfo] = useState(false);
@@ -39,15 +38,12 @@ export default function AccountSetting() {
   useEffect(() => {
     dispatch(fetchAccount(authToken, accountId));
     dispatch(fetchStudentCard(authToken, accountId));
-  }, [authToken, accountId, dispatch]);
+  }, [authToken, accountId, dispatch, studentCards]);
 
   useEffect(() => {
-    let update = [];
-    accounts[accountId].studentCard.forEach((key) => {
-      update = [...update, studentCards[key]];
-    });
-    setCards(update);
-  }, [accounts, accountId, studentCards]);
+    setCards(Object.values(studentCards));
+    // console.log(Object.values(studentCards));
+  }, [studentCards, accountId]);
 
   if (accounts[accountId] === undefined || studentCards === undefined) {
     if (loading.fetchAccount || loading.fetchStudentCard) {
@@ -55,6 +51,7 @@ export default function AccountSetting() {
     }
     return <NoMatch />;
   }
+
   const handleBasicBack = () => {
     setEditBasicInfo(false);
   };
