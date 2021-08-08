@@ -42,31 +42,35 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: theme.spacing(3),
+    marginBottom: theme.spacing(2),
   },
   mailrow: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: theme.spacing(3),
   },
   item: {
     width: '190px',
   },
-  addCard: {
+  addBlock: {
     marginTop: '16px',
-    marginBottom: '6px',
+    marginBottom: '16px',
+    width: '600px',
+  },
+  addCard: {
     width: '600px',
     height: '329px',
     display: 'flex',
     flexDirection: 'column',
     padding: 0,
     '&:last-child': {
-      padding: '0 11px 20px 14px',
+      padding: '20px 0px 20px 30px',
     },
   },
   buttons: {
     alignSelf: 'flex-end',
-    marginRight: '11px',
+    marginRight: '23px',
   },
 }));
 
@@ -197,9 +201,9 @@ export default function StudentInfoEdit(props) {
           <></>
         )}
         {add ? (
-          <>
-            <Card variant="outlined" className={classes.addCard}>
-              <CardContent>
+          <div className={classes.addBlock}>
+            <Card variant="outlined">
+              <CardContent className={classes.addCard}>
                 <div className={classes.row}>
                   <div className={classes.item}>
                     <Typography>Institute</Typography>
@@ -239,15 +243,15 @@ export default function StudentInfoEdit(props) {
                   />
                   <Typography>{emailTail}</Typography>
                 </div>
+                <div className={classes.buttons}>
+                  <Button onClick={handleAddCancel}>Cancel</Button>
+                  <Button color="primary" onClick={handleAddSave}>
+                    Save
+                  </Button>
+                </div>
               </CardContent>
-              <div className={classes.buttons}>
-                <Button onClick={handleAddCancel}>Cancel</Button>
-                <Button color="primary" onClick={handleAddSave}>
-                  Save
-                </Button>
-              </div>
             </Card>
-          </>
+          </div>
         ) : (
           <></>
         )}
