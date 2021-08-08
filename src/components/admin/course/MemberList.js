@@ -366,7 +366,7 @@ export default function MemberList() {
                 align: 'center',
               },
               {
-                id: 'realName',
+                id: 'real_name',
                 label: 'Real Name',
                 minWidth: 90,
                 width: 144,
