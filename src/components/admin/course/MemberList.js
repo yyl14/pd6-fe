@@ -71,20 +71,26 @@ export default function MemberList() {
     sort: '(None)',
   });
 
+  const roleUpperToLowerCase = (role) => {
+    switch (role) {
+      case 'MANAGER':
+        return 'Manager';
+      case 'NORMAL':
+        return 'Normal';
+      case 'GUEST':
+        return 'Guest';
+      default:
+        return 'Unknown';
+    }
+  };
+
   useEffect(() => {
     if (classes.byId[classId]) {
       const data = [];
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
         const temp = { ...item };
-        if (item.role === 'MANAGER') {
-          temp.role = 'Manager';
-        } else if (item.role === 'NORMAL') {
-          temp.role = 'Normal';
-        } else if (item.role === 'GUEST') {
-          temp.role = 'Guest';
-        }
-        temp.studentId = item.student_id;
+        temp.role = roleUpperToLowerCase(item.role);
         data.push(temp);
       });
       setTableData(data);
@@ -100,7 +106,7 @@ export default function MemberList() {
         const item = members.byId[id];
         const temp = { ...item };
         if (item.institute_abbreviated_name === 'NTU') {
-          temp.studentId = item.student_id;
+          temp.role = roleUpperToLowerCase(item.role);
           newData.push(temp);
         }
       });
@@ -109,7 +115,7 @@ export default function MemberList() {
         const item = members.byId[id];
         const temp = { ...item };
         if (item.institute_abbreviated_name === 'NTNU') {
-          temp.studentId = item.student_id;
+          temp.role = roleUpperToLowerCase(item.role);
           newData.push(temp);
         }
       });
@@ -118,7 +124,7 @@ export default function MemberList() {
         const item = members.byId[id];
         const temp = { ...item };
         if (item.institute_abbreviated_name === 'NTUST') {
-          temp.studentId = item.student_id;
+          temp.role = roleUpperToLowerCase(item.role);
           newData.push(temp);
         }
       });
@@ -126,67 +132,44 @@ export default function MemberList() {
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
         const temp = { ...item };
-        if (item.role === 'MANAGER') {
-          temp.role = 'Manager';
-        } else if (item.role === 'NORMAL') {
-          temp.role = 'Normal';
-        } else if (item.role === 'GUEST') {
-          temp.role = 'Guest';
-        }
-        temp.studentId = item.student_id;
+        temp.role = roleUpperToLowerCase(item.role);
         newData.push(temp);
       });
     }
 
     // sort
-    if (instituteFilterInput.filter === '(None)' || instituteFilterInput.filter === 'Select all') {
-      if (instituteFilterInput.sort === 'Z to A') {
-        // newPath.splice(0, newPath.length);
-        newData.sort((a, b) => {
-          const instituteA = a.iinstitute_abbreviated_name;
-          const instituteB = b.institute_abbreviated_name;
-          if (instituteA > instituteB) {
-            return -1;
-          }
-          if (instituteA < instituteB) {
-            return 1;
-          }
-          return 0;
-        });
-        /* newData.forEach((data) => {
+    if (instituteFilterInput.sort === 'Z to A') {
+      // newPath.splice(0, newPath.length);
+      newData.sort((a, b) => {
+        const instituteA = a.institute_abbreviated_name;
+        const instituteB = b.institute_abbreviated_name;
+        if (instituteA > instituteB) {
+          return -1;
+        }
+        if (instituteA < instituteB) {
+          return 1;
+        }
+        return 0;
+      });
+      /* newData.forEach((data) => {
           newPath.push(`institute/${data.id}/setting`);
         }); */
-      } else if (instituteFilterInput.sort === 'A to Z') {
-        // newPath.splice(0, newPath.length);
-        newData.sort((a, b) => {
-          const instituteA = a.institute_abbreviated_name;
-          const instituteB = b.institute_abbreviated_name;
-          if (instituteA < instituteB) {
-            return -1;
-          }
-          if (instituteA > instituteB) {
-            return 1;
-          }
-          return 0;
-        });
-        /* newData.forEach((data) => {
+    } else if (instituteFilterInput.sort === 'A to Z') {
+      // newPath.splice(0, newPath.length);
+      newData.sort((a, b) => {
+        const instituteA = a.institute_abbreviated_name;
+        const instituteB = b.institute_abbreviated_name;
+        if (instituteA < instituteB) {
+          return -1;
+        }
+        if (instituteA > instituteB) {
+          return 1;
+        }
+        return 0;
+      });
+      /* newData.forEach((data) => {
           newPath.push(`institute/${data.id}/setting`);
         }); */
-      } else if (instituteFilterInput.filter !== '(None)') {
-        classes.byId[classId].memberIds.forEach((id) => {
-          const item = members.byId[id];
-          const temp = { ...item };
-          if (item.role === 'MANAGER') {
-            temp.role = 'Manager';
-          } else if (item.role === 'NORMAL') {
-            temp.role = 'Normal';
-          } else if (item.role === 'GUEST') {
-            temp.role = 'Guest';
-          }
-          temp.studentId = item.student_id;
-          newData.push(temp);
-        });
-      }
     }
 
     setTableData(newData);
@@ -203,7 +186,6 @@ export default function MemberList() {
         const temp = { ...item };
         if (item.role === 'MANAGER') {
           temp.role = 'Manager';
-          temp.studentId = item.student_id;
           newData.push(temp);
         }
       });
@@ -213,7 +195,6 @@ export default function MemberList() {
         const temp = { ...item };
         if (item.role === 'NORMAL') {
           temp.role = 'Normal';
-          temp.studentId = item.student_id;
           newData.push(temp);
         }
       });
@@ -223,7 +204,6 @@ export default function MemberList() {
         const temp = { ...item };
         if (item.role === 'GUEST') {
           temp.role = 'Guest';
-          temp.studentId = item.student_id;
           newData.push(temp);
         }
       });
@@ -231,67 +211,44 @@ export default function MemberList() {
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
         const temp = { ...item };
-        if (item.role === 'MANAGER') {
-          temp.role = 'Manager';
-        } else if (item.role === 'NORMAL') {
-          temp.role = 'Normal';
-        } else if (item.role === 'GUEST') {
-          temp.role = 'Guest';
-        }
-        temp.studentId = item.student_id;
+        temp.role = roleUpperToLowerCase(item.role);
         newData.push(temp);
       });
     }
 
     // sort
-    if (roleFilterInput.filter === '(None)' || roleFilterInput.filter === 'Select all') {
-      if (roleFilterInput.sort === 'Z to A') {
-        // newPath.splice(0, newPath.length);
-        newData.sort((a, b) => {
-          const roleA = a.role;
-          const roleB = b.role;
-          if (roleA > roleB) {
-            return -1;
-          }
-          if (roleA < roleB) {
-            return 1;
-          }
-          return 0;
-        });
-        /* newData.forEach((data) => {
+    if (roleFilterInput.sort === 'Z to A') {
+      // newPath.splice(0, newPath.length);
+      newData.sort((a, b) => {
+        const roleA = a.role;
+        const roleB = b.role;
+        if (roleA > roleB) {
+          return -1;
+        }
+        if (roleA < roleB) {
+          return 1;
+        }
+        return 0;
+      });
+      /* newData.forEach((data) => {
           newPath.push(`institute/${data.id}/setting`);
         }); */
-      } else if (roleFilterInput.sort === 'A to Z') {
-        // newPath.splice(0, newPath.length);
-        newData.sort((a, b) => {
-          const roleA = a.role;
-          const roleB = b.role;
-          if (roleA < roleB) {
-            return -1;
-          }
-          if (roleA > roleB) {
-            return 1;
-          }
-          return 0;
-        });
-        /* newData.forEach((data) => {
+    } else if (roleFilterInput.sort === 'A to Z') {
+      // newPath.splice(0, newPath.length);
+      newData.sort((a, b) => {
+        const roleA = a.role;
+        const roleB = b.role;
+        if (roleA < roleB) {
+          return -1;
+        }
+        if (roleA > roleB) {
+          return 1;
+        }
+        return 0;
+      });
+      /* newData.forEach((data) => {
           newPath.push(`institute/${data.id}/setting`);
         }); */
-      } else if (roleFilterInput.filter !== '(None)') {
-        classes.byId[classId].memberIds.forEach((id) => {
-          const item = members.byId[id];
-          const temp = { ...item };
-          if (item.role === 'MANAGER') {
-            temp.role = 'Manager';
-          } else if (item.role === 'NORMAL') {
-            temp.role = 'Normal';
-          } else if (item.role === 'GUEST') {
-            temp.role = 'Guest';
-          }
-          temp.studentId = item.student_id;
-          newData.push(temp);
-        });
-      }
     }
 
     setTableData(newData);
@@ -359,7 +316,7 @@ export default function MemberList() {
                 align: 'center',
               },
               {
-                id: 'studentId',
+                id: 'student_id',
                 label: 'Student ID',
                 minWidth: 105,
                 width: 155,
