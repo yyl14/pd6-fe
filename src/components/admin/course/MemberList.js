@@ -99,7 +99,7 @@ export default function MemberList() {
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
         const temp = { ...item };
-        if (item.institute === 'NTU') {
+        if (item.institute_abbreviated_name === 'NTU') {
           temp.studentId = item.student_id;
           newData.push(temp);
         }
@@ -108,7 +108,7 @@ export default function MemberList() {
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
         const temp = { ...item };
-        if (item.institute === 'NTNU') {
+        if (item.institute_abbreviated_name === 'NTNU') {
           temp.studentId = item.student_id;
           newData.push(temp);
         }
@@ -117,7 +117,7 @@ export default function MemberList() {
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
         const temp = { ...item };
-        if (item.institute === 'NTUST') {
+        if (item.institute_abbreviated_name === 'NTUST') {
           temp.studentId = item.student_id;
           newData.push(temp);
         }
@@ -143,8 +143,8 @@ export default function MemberList() {
       if (instituteFilterInput.sort === 'Z to A') {
         // newPath.splice(0, newPath.length);
         newData.sort((a, b) => {
-          const instituteA = a.institute;
-          const instituteB = b.institute;
+          const instituteA = a.iinstitute_abbreviated_name;
+          const instituteB = b.institute_abbreviated_name;
           if (instituteA > instituteB) {
             return -1;
           }
@@ -159,8 +159,8 @@ export default function MemberList() {
       } else if (instituteFilterInput.sort === 'A to Z') {
         // newPath.splice(0, newPath.length);
         newData.sort((a, b) => {
-          const instituteA = a.institute;
-          const instituteB = b.institute;
+          const instituteA = a.institute_abbreviated_name;
+          const instituteB = b.institute_abbreviated_name;
           if (instituteA < instituteB) {
             return -1;
           }
@@ -373,7 +373,7 @@ export default function MemberList() {
                 align: 'center',
               },
               {
-                id: 'institute',
+                id: 'institute_abbreviated_name',
                 label: 'Institute',
                 minWidth: 109,
                 width: 165,
