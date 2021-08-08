@@ -30,6 +30,8 @@ const initialState = {
       },
     },
     allIds: [1, 2],
+    // byId: {},
+    // allIds: [],
   },
 
   studentCards: {
@@ -224,7 +226,7 @@ export default function account(state = initialState, action) {
         ...state,
         loading: {
           ...state.loading,
-          fetchAccount: true,
+          fetchAccounts: true,
         },
       };
     case accountConstants.FETCH_ACCOUNTS_SUCCESS:
@@ -236,6 +238,44 @@ export default function account(state = initialState, action) {
         },
         loading: {
           ...state.loading,
+          fetchAccounts: false,
+        },
+        error: {
+          ...state.error,
+          fetchAccounts: null,
+        },
+      };
+    case accountConstants.FETCH_ACCOUNTS_FAIL:
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          fetchAccounts: false,
+        },
+        error: {
+          ...state.error,
+          fetchAccounts: action.error,
+        },
+      };
+    case accountConstants.FETCH_ACCOUNT_REQUEST:
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          fetchAccount: true,
+        },
+      };
+    case accountConstants.FETCH_ACCOUNT_SUCCESS:
+      // const data = action.payload;
+      // console.log(action.payload.id);
+      return {
+        ...state,
+        accounts: {
+          byId: { ...state.accounts.byId, [action.payload.id]: { ...action.payload, studentCard: [] } },
+          allIds: state.accounts.allIds.includes(action.payload.id) ? state.accounts.allIds : state.accounts.allIds.concat([action.payload.id]),
+        },
+        loading: {
+          ...state.loading,
           fetchAccount: false,
         },
         error: {
@@ -243,7 +283,7 @@ export default function account(state = initialState, action) {
           fetchAccount: null,
         },
       };
-    case accountConstants.FETCH_ACCOUNTS_FAIL:
+    case accountConstants.FETCH_ACCOUNT_FAIL:
       return {
         ...state,
         loading: {
@@ -383,6 +423,7 @@ export default function account(state = initialState, action) {
       };
     case accountConstants.FETCH_STUDENT_CARD_SUCCESS: {
       const { id, data } = action.payload;
+      // console.log(data);
       return {
         ...state,
 
@@ -393,7 +434,7 @@ export default function account(state = initialState, action) {
         },
         // add studentCard id
         studentCards: {
-          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.studentCards),
+          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.studentCards.byId),
           allIds: state.studentCards.allIds.concat(data.map((item) => item.id)),
         },
 
@@ -405,7 +446,6 @@ export default function account(state = initialState, action) {
       };
     }
     case accountConstants.FETCH_STUDENT_CARD_FAIL: {
-      // console.log(action.payload);
       const { id } = action.payload;
       return {
         ...state,
