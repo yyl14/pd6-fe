@@ -53,7 +53,7 @@ const ClassSetting = () => {
     if (!loading.renameClass) {
       dispatch(fetchClasses(authToken, courseId));
     }
-  });
+  }, [authToken, courseId, dispatch, loading.renameClass]);
 
   const getCourseType = (courseType) => {
     switch (courseType) {
