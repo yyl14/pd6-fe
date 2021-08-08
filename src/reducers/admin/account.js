@@ -7,31 +7,8 @@ const initialState = {
   },
 
   accounts: {
-    byId: {
-      1: {
-        id: 1,
-        username: 'admin',
-        nickname: 'admin123',
-        role: 'MANAGER',
-        real_name: 'admin',
-        alternative_email: null,
-        student_id: 'admin',
-        studentCard: [],
-      },
-      2: {
-        id: 2,
-        username: 'student1',
-        nickname: 'student1',
-        role: 'NORMAL',
-        real_name: 'student1',
-        alternative_email: 'student1@gmail.com',
-        student_id: 'B10705001',
-        studentCard: [],
-      },
-    },
-    allIds: [1, 2],
-    // byId: {},
-    // allIds: [],
+    byId: {},
+    allIds: [],
   },
 
   studentCards: {
@@ -233,7 +210,7 @@ export default function account(state = initialState, action) {
       return {
         ...state,
         accounts: {
-          byId: action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [] } }), state.institutes),
+          byId: action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [] } }), state.accounts.byId),
           allIds: action.payload.map((item) => item.id),
         },
         loading: {
