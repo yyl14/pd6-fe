@@ -421,6 +421,7 @@ export default function account(state = initialState, action) {
       };
     case accountConstants.FETCH_STUDENT_CARD_SUCCESS: {
       const { id, data } = action.payload;
+      // console.log(id, data);
       return {
         ...state,
 
@@ -431,8 +432,10 @@ export default function account(state = initialState, action) {
         },
         // add studentCard id
         studentCards: {
-          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.studentCards.byId),
-          allIds: state.studentCards.allIds.concat(data.map((item) => item.id)),
+          // byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.studentCards.byId),
+          byId: data,
+          // allIds: state.studentCards.allIds.concat(data.map((item) => item.id)),
+          allIds: data.map((item) => item.id),
         },
 
         loading: { ...state.loading, fetchStudentCard: false },

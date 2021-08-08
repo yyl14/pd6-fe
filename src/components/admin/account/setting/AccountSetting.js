@@ -38,7 +38,7 @@ export default function AccountSetting() {
   useEffect(() => {
     dispatch(fetchAccount(authToken, accountId));
     dispatch(fetchStudentCard(authToken, accountId));
-  }, [authToken, accountId, dispatch]);
+  }, [authToken, accountId, dispatch, studentCards]);
 
   useEffect(() => {
     setCards(Object.values(studentCards));
