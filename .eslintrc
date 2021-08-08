@@ -26,8 +26,8 @@
     "react/prop-types": "off",
     "max-len": "off"
   },
+  "parser": "babel-eslint",
   "parserOptions": {
-    "parser": "babel-eslint",
     "sourceType": "module",
     "allowImportExportEverywhere": "true"
   },
