@@ -266,8 +266,6 @@ export default function account(state = initialState, action) {
         },
       };
     case accountConstants.FETCH_ACCOUNT_SUCCESS:
-      // const data = action.payload;
-      // console.log(action.payload.id);
       return {
         ...state,
         accounts: {
@@ -423,7 +421,6 @@ export default function account(state = initialState, action) {
       };
     case accountConstants.FETCH_STUDENT_CARD_SUCCESS: {
       const { id, data } = action.payload;
-      // console.log(data);
       return {
         ...state,
 
