@@ -1,10 +1,24 @@
+/** Noto Sans **/
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&display=swap');
+
+/** Azonix **/
+@import url(//db.onlinewebfonts.com/c/50cd2aad9c8f35800bb6beac3ad42f16?family=Azonix);
+@font-face {
+  font-family: 'Azonix';
+  src: url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.eot');
+  src: url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.eot?#iefix') format('embedded-opentype'),
+    url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.woff2') format('woff2'),
+    url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.woff') format('woff'),
+    url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.ttf') format('truetype'),
+    url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.svg#Azonix') format('svg');
+}
+
 body {
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

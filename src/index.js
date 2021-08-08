@@ -1,26 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { CookiesProvider } from 'react-cookie';
+
 import reportWebVitals from './reportWebVitals';
 import App from './App';
 
 import './index.css';
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#1976d2',
-    },
-    secondary: {
-      main: '#DC004E',
-    },
-  },
-});
-
 ReactDOM.render(
-  <MuiThemeProvider theme={theme}>
+  <CookiesProvider>
     <App />
-  </MuiThemeProvider>,
+  </CookiesProvider>,
   document.getElementById('root'),
 );
 
