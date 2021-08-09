@@ -53,13 +53,13 @@ export default function ClassList() {
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
 
   useEffect(() => {
-    if (!loading.deleteCourse) {
+    if (!loading.deleteCourse && !loading.renameCourse) {
       dispatch(fetchCourses(authToken));
     }
     if (!loading.deleteClass) {
       dispatch(fetchClasses(authToken, courseId));
     }
-  }, [authToken, courseId, dispatch, loading.deleteClass, loading.deleteCourse]);
+  }, [authToken, courseId, dispatch, loading.deleteClass, loading.deleteCourse, loading.renameCourse]);
 
   // fetch members under all classes to get member count
   useEffect(() => {
