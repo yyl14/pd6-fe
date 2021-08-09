@@ -15,9 +15,11 @@ import {
   InputBase,
   FormControl,
   Select,
+  InputAdornment,
 } from '@material-ui/core';
 
 import { ArrowForward, CenterFocusStrong, FilterList } from '@material-ui/icons';
+import SearchIcon from '@material-ui/icons/Search';
 
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from 'react-icons/md';
 
@@ -46,7 +48,15 @@ const useStyles = makeStyles((theme) => ({
   },
   search: {
     height: '60px',
-    width: 340,
+    width: 250,
+  },
+  search2: {
+    height: '60px',
+    width: 360,
+  },
+  search3: {
+    height: '60px',
+    width: 550,
   },
   buttons: {
     marginTop: '3px',
@@ -102,6 +112,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CustomTable({
   hasSearch,
+  searchWidthOption = 1,
   searchPlaceholder,
   buttons,
   columns,
@@ -120,7 +131,6 @@ export default function CustomTable({
 
   const handleChangePage = (event, newPage) => {
     if (newPage + 1 <= Math.ceil(filterData.length / rowsPerPage) && newPage >= 0) {
-      // setPage(newPage);
       setPageInput(newPage + 1);
     }
   };
@@ -128,6 +138,19 @@ export default function CustomTable({
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+
+  const searchWidth = (searchWidthOptions) => {
+    switch (searchWidthOptions) {
+      case 1:
+        return classes.search;
+      case 2:
+        return classes.search2;
+      case 3:
+        return classes.search3;
+      default:
+        return classes.search;
+    }
   };
 
   useEffect(() => {
@@ -159,12 +182,19 @@ export default function CustomTable({
         { hasSearch && (
         <TextField
           id="search"
-          className={classes.search}
+          className={searchWidth(searchWidthOption)}
           onChange={(e) => {
             setSearch(e.target.value);
           }}
           value={search}
           placeholder={searchPlaceholder}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
         />
         )}
         <div className={classes.buttons}>{buttons}</div>
@@ -194,6 +224,15 @@ export default function CustomTable({
               {filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
                 <TableRow hover role="checkbox" tabIndex={-1} key={row[columns[0].id]} className={classes.row}>
                   {columns.map((column) => {
+                    if (column.type === 'link') {
+                      const link = row[column.link_id];
+                      const value = row[column.id];
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          <Link to={link}>{column.format && typeof value === 'number' ? column.format(value) : value}</Link>
+                        </TableCell>
+                      );
+                    }
                     const value = row[column.id];
                     return (
                       <TableCell key={column.id} align={column.align}>
