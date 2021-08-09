@@ -279,6 +279,27 @@ const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (disp
     });
 };
 
+const editPassword = (token, id, newPassword) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  dispatch({ type: accountConstants.EDIT_PASSWORD_REQUEST });
+  agent.put(`/account/${id}/pass_hash`, {
+    new_password: newPassword,
+  }, auth)
+    .then((res) => {
+      dispatch({ type: accountConstants.EDIT_PASSWORD_SUCCESS });
+    })
+    .catch((err) => {
+      dispatch({
+        type: accountConstants.EDIT_PASSWORD_FAIL,
+        error: err,
+      });
+    });
+};
+
 const fetchAccounts = (token) => (dispatch) => {
   const auth = {
     headers: {
@@ -299,5 +320,5 @@ const fetchAccounts = (token) => (dispatch) => {
 };
 
 export {
-  getInstitutes, getInstitute, addInstitute, editInstitute, fetchAccount, editAccount, deleteAccount, makeStudentCardDefault, fetchStudentCard, addStudentCard, fetchAccounts,
+  getInstitutes, getInstitute, addInstitute, editInstitute, fetchAccount, editAccount, deleteAccount, makeStudentCardDefault, fetchStudentCard, addStudentCard, editPassword, fetchAccounts,
 };

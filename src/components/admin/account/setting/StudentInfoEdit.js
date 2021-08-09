@@ -19,7 +19,6 @@ import {
   DialogContentText,
   DialogActions,
 } from '@material-ui/core';
-
 import StarIcon from '@material-ui/icons/Star';
 import { addStudentCard, makeStudentCardDefault } from '../../../../actions/admin/account';
 import StudentInfoCard from './StudentInfoCard';
