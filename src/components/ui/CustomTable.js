@@ -49,14 +49,17 @@ const useStyles = makeStyles((theme) => ({
   search: {
     height: '60px',
     width: 250,
+    marginLeft: '5px',
   },
   search2: {
     height: '60px',
     width: 360,
+    marginLeft: '5px',
   },
   search3: {
     height: '60px',
     width: 550,
+    marginLeft: '5px',
   },
   buttons: {
     marginTop: '3px',
