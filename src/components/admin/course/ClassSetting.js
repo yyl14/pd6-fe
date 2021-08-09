@@ -49,6 +49,12 @@ const ClassSetting = () => {
     // dispatch(fetchMembers(authToken, classId));
   }, [authToken, classId, courseId, dispatch]);
 
+  useEffect(() => {
+    if (!loading.renameClass) {
+      dispatch(fetchClasses(authToken, courseId));
+    }
+  }, [authToken, courseId, dispatch, loading.renameClass]);
+
   const getCourseType = (courseType) => {
     switch (courseType) {
       case 'LESSON':
