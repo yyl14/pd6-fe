@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   topContent1: {
     // width: '80%',
     // maxWidth: '1280px',
-    background: '#EAEAEA',
+    background: theme.palette.grey[100],
     borderRadius: '10px 10px 0px 0px',
     padding: '5px 15px 15px 15px',
     display: 'flex',
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     height: '75px',
   },
   topContent2: {
-    background: '#EAEAEA',
+    background: theme.palette.grey[100],
     borderRadius: '10px 10px 0px 0px',
     padding: '5px 15px 15px 15px',
     display: 'flex',
@@ -74,19 +74,32 @@ const useStyles = makeStyles((theme) => ({
   row: {
     height: '60px',
   },
+
   bottom: {
     height: '75px',
     display: 'flex',
-    alignItems: 'center',
-    padding: '10px',
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'flex-end',
+    paddingRight: '15px',
+    background: '#F8F8F8',
+  },
+  pageChangeButtons: {
+    width: '70px',
+    paddingTop: '11.5px',
+  },
+  pageRowSelect: {
+    width: '100px',
+    height: '50px',
+    margin: '0px 5px 5px 5px',
+  },
+  pageText: {
+    margin: '0px 5px 0px 5px',
   },
   pageIndexTextField: {
     width: '100px',
-  },
-  bottomItem: {
-    padding: '5px',
+    height: '45px',
+    margin: '0px 5px 0px 5px',
   },
   detailLink: {
     color: 'black',
@@ -214,9 +227,9 @@ export default function CustomTable({
           </Table>
         </TableContainer>
         <div className={classes.bottom}>
-          <FormControl variant="outlined" className="">
+          <FormControl variant="outlined">
             <Select
-              className={classes.bottomItem}
+              className={classes.pageRowSelect}
               labelId="rows-per-page"
               id="rows-per-page"
               value={rowsPerPage}
@@ -231,11 +244,11 @@ export default function CustomTable({
             </Select>
           </FormControl>
 
-          <Typography className={classes.bottomItem} variant="body1">
+          <Typography className={classes.pageText} variant="body1">
             rows
           </Typography>
           <Button
-            className={classes.bottomItem}
+            className={classes.pageChangeButtons}
             onClick={(e) => {
               handleChangePage(e, curPage - 1);
             }}
@@ -249,13 +262,13 @@ export default function CustomTable({
               setPageInput(e.target.value);
             }}
           />
-          <Typography className={classes.bottomItem} variant="body1">
+          <Typography className={classes.pageText} variant="body1">
             of
             {' '}
             {Math.ceil(filterData.length / rowsPerPage)}
           </Typography>
           <Button
-            className={classes.bottomItem}
+            className={classes.pageChangeButtons}
             onClick={(e) => {
               handleChangePage(e, curPage + 1);
             }}
