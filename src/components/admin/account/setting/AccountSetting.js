@@ -38,12 +38,17 @@ export default function AccountSetting() {
   useEffect(() => {
     dispatch(fetchAccount(authToken, accountId));
     dispatch(fetchStudentCard(authToken, accountId));
-  }, [authToken, accountId, dispatch, studentCards]);
+  }, [authToken, accountId, dispatch]);
+
+  useEffect(() => {
+    if (!loading.makeStudentCardDefault) {
+      dispatch(fetchStudentCard(authToken, accountId));
+    }
+  }, [accountId, authToken, dispatch, loading.makeStudentCardDefault]);
 
   useEffect(() => {
     setCards(Object.values(studentCards));
-    // console.log(Object.values(studentCards));
-  }, [studentCards, accountId]);
+  }, [studentCards]);
 
   if (accounts[accountId] === undefined || studentCards === undefined) {
     if (loading.fetchAccount || loading.fetchStudentCard) {
@@ -111,7 +116,7 @@ export default function AccountSetting() {
         </div>
       )}
 
-      {/* <NewPassword /> */}
+      <NewPassword />
       <AccountDelete
         userName={account.username}
         cards={cards}
