@@ -63,8 +63,10 @@ export default function AccountList() {
 
     accountsID.forEach((key) => {
       const item = accounts[key];
-      newData.push(item);
-      newPath.push(`account/${item.id}/setting`);
+      const temp = { ...item };
+      temp.path = `account/${temp.id}/setting`;
+      newData.push(temp);
+      newPath.push(temp.path);
     });
     setTableData(newData);
     setPath(newPath);
@@ -81,6 +83,7 @@ export default function AccountList() {
       </Typography>
       <CustomTable
         hasSearch
+        searchWidthOption={3}
         searchPlaceholder="Student Id / Real Name / Username"
         data={tableData}
         columns={[
@@ -90,6 +93,8 @@ export default function AccountList() {
             minWidth: 50,
             align: 'center',
             width: 120,
+            type: 'link',
+            link_id: 'path',
           },
           {
             id: 'student_id',
@@ -97,6 +102,7 @@ export default function AccountList() {
             minWidth: 50,
             align: 'center',
             width: 120,
+            type: 'string',
           },
           {
             id: 'real_name',
@@ -104,6 +110,7 @@ export default function AccountList() {
             minWidth: 50,
             align: 'center',
             width: 120,
+            type: 'string',
           },
         ]}
         hasLink

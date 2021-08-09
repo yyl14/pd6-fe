@@ -240,6 +240,7 @@ export default function InstituteList() {
             minWidth: 150,
             align: 'center',
             width: 500,
+            type: 'string',
           },
           {
             id: 'email_domain',
@@ -247,6 +248,7 @@ export default function InstituteList() {
             minWidth: 50,
             align: 'center',
             width: 150,
+            type: 'string',
           },
           {
             id: 'is_disabled',
@@ -254,6 +256,7 @@ export default function InstituteList() {
             minWidth: 50,
             align: 'center',
             width: 120,
+            type: 'string',
           },
         ]}
         columnComponent={[null, null, (<BiFilterAlt key="filter" onClick={() => { setFilter(true); }} />)]}
