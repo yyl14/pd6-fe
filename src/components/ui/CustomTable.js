@@ -101,6 +101,10 @@ const useStyles = makeStyles((theme) => ({
   detailLink: {
     color: 'black',
   },
+  textLink: {
+    color: 'rgba(30, 165, 255, 1)',
+    textDecorationLine: 'none',
+  },
   filterIcon: {
     height: '15px',
   },
@@ -229,7 +233,7 @@ export default function CustomTable({
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          <Link to={link}>{column.format && typeof value === 'number' ? column.format(value) : value}</Link>
+                          <Link to={link} className={classes.textLink}>{column.format && typeof value === 'number' ? column.format(value) : value}</Link>
                         </TableCell>
                       );
                     }
