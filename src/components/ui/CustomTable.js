@@ -76,9 +76,13 @@ const useStyles = makeStyles((theme) => ({
   },
   tableHead: {
     height: '60px',
+    background: 'white',
+    borderBottomWidth: '1px',
+    borderBottomColor: theme.palette.grey.A400,
   },
   column: {
     display: 'flex',
+    flexDirection: 'row',
     justifyContent: 'center',
   },
   columnComponent: {
@@ -224,9 +228,9 @@ export default function CustomTable({
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
-              <TableRow className={classes.tableHead}>
+              <TableRow>
                 {columns.map((column) => (
-                  <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth, width: column.width }}>
+                  <TableCell key={column.id} align={column.align} className={classes.tableHead} style={{ minWidth: column.minWidth, width: column.width }}>
                     <div className={classes.column}>
                       {column.label}
                       <div className={classes.columnComponent}>
@@ -236,8 +240,8 @@ export default function CustomTable({
                   </TableCell>
                 ))}
                 {hasLink
-                  ? (<TableCell key="link" align="right" style={{ minWidth: 20 }} />
-                  ) : (<TableCell key="blank" align="right" style={{ minWidth: 20 }} />)}
+                  ? (<TableCell key="link" align="right" className={classes.tableHead} style={{ minWidth: 20 }} />
+                  ) : (<TableCell key="blank" align="right" className={classes.tableHead} style={{ minWidth: 20 }} />)}
               </TableRow>
             </TableHead>
             <TableBody>
