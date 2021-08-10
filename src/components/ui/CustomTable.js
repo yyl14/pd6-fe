@@ -197,8 +197,8 @@ export default function CustomTable({
     }
   };
 
-  const labelMoveLeft = (icon, col) => {
-    if (icon && icon[col.findIndex((x) => x.id === col.id)]) {
+  const labelMoveLeft = (icon, cols, col) => {
+    if (icon && icon[cols.findIndex((x) => x.id === col.id)]) {
       return classes.columnLabelMoveLeft;
     }
     return classes.columnLabelDefault;
@@ -262,7 +262,7 @@ export default function CustomTable({
                     <TableCell className={`${classes.tableHeadCell} ${classes.tableColumnLeftSpacing}`} />
                     <TableCell key={column.id} align={column.align} className={classes.tableHeadCell} style={{ minWidth: column.minWidth, width: column.width }}>
                       <div className={classes.column}>
-                        <div className={labelMoveLeft(columnComponent, columns)}>
+                        <div className={labelMoveLeft(columnComponent, columns, column)}>
                           {column.label}
                         </div>
                         <div className={classes.columnComponent}>
