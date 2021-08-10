@@ -69,7 +69,7 @@ export default function InstituteSetting() {
 
   useEffect(() => {
     if (!loading.editInstitute) {
-      dispatch(fetchInstitute(authToken, instituteId));
+      dispatch(getInstitute(authToken, instituteId));
     }
   }, [authToken, dispatch, instituteId]);
 

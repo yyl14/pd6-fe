@@ -1,7 +1,7 @@
 import agent from '../agent';
 import {
   accountConstants,
-} from '../constant';
+} from './constants';
 
 const getInstitutes = (token) => (dispatch) => {
   const auth = {
