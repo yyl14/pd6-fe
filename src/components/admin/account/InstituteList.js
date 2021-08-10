@@ -20,6 +20,7 @@ import { useParams } from 'react-router-dom';
 import { BiFilterAlt } from 'react-icons/bi';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
+import TableFilterCard from '../../ui/TableFilterCard';
 import { getInstitutes, addInstitute } from '../../../actions/admin/account';
 
 const useStyles = makeStyles((theme) => ({
@@ -259,7 +260,15 @@ export default function InstituteList() {
             type: 'string',
           },
         ]}
-        columnComponent={[null, null, (<BiFilterAlt key="filter" onClick={() => { setFilter(true); }} />)]}
+        columnComponent={[null, null, (<TableFilterCard
+          key="filter"
+          popUp={filter}
+          setPopUp={setFilter}
+          filterInput={filterInput}
+          filterOptions={['Enabled', 'Disabled']}
+          setFilterInput={setFilterInput}
+          doFilter={filterStatus}
+        />)]}
         hasLink
         path={path}
       />
@@ -323,68 +332,6 @@ export default function InstituteList() {
           <Button onClick={() => { add(); }} color="primary">
             Add
           </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog
-        open={filter}
-        keepMounted
-        onClose={() => setFilter(false)}
-        className={classes.popUpLayout}
-        aria-labelledby="dialog-slide-title"
-        aria-describedby="dialog-slide-description"
-      >
-        <DialogTitle id="dialog-slide-title">
-          <Typography variant="h4">Filter: Status</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <AlignedText text="Filter by" childrenType="field">
-            <FormControl variant="outlined" className={classes.selectField}>
-              <Select
-                labelId="status"
-                id="status"
-                value={filterInput.filter}
-                onChange={(e) => {
-                  setFilterInput((input) => ({ ...input, filter: e.target.value }));
-                }}
-              >
-                <MenuItem value="(None)">(None)</MenuItem>
-                <MenuItem value="Select all">Select all</MenuItem>
-                <MenuItem value="Enabled">Enabled</MenuItem>
-                <MenuItem value="Disabled">Disabled</MenuItem>
-              </Select>
-            </FormControl>
-          </AlignedText>
-          <AlignedText text="Sort by">
-            <FormControl variant="outlined" className={classes.selectField}>
-              <Select
-                labelId="sort"
-                id="sort"
-                value={filterInput.sort}
-                onChange={(e) => {
-                  setFilterInput((input) => ({ ...input, sort: e.target.value }));
-                }}
-              >
-                <MenuItem value="(None)">(None)</MenuItem>
-                <MenuItem value="A to Z">A to Z</MenuItem>
-                <MenuItem value="Z to A">Z to A</MenuItem>
-              </Select>
-            </FormControl>
-          </AlignedText>
-        </DialogContent>
-        <DialogActions className={classes.filterButton}>
-          <div>
-            <Button onClick={() => filterClear()} className={classes.clearButton}>
-              Clear
-            </Button>
-          </div>
-          <div>
-            <Button onClick={() => setFilter(false)} color="default">
-              Cancel
-            </Button>
-            <Button onClick={() => { setFilter(false); filterStatus(); }} color="primary">
-              Save
-            </Button>
-          </div>
         </DialogActions>
       </Dialog>
     </>
