@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   topContent1: {
     // width: '80%',
     // maxWidth: '1280px',
-    background: '#EAEAEA',
+    background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
     padding: '5px 15px 15px 15px',
     display: 'flex',
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     height: '75px',
   },
   topContent2: {
-    background: '#EAEAEA',
+    background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
     padding: '5px 15px 15px 15px',
     display: 'flex',
@@ -102,8 +102,8 @@ const useStyles = makeStyles((theme) => ({
     color: 'black',
   },
   textLink: {
-    color: 'rgba(30, 165, 255, 1)',
-    textDecorationLine: 'none',
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
   },
   filterIcon: {
     height: '15px',
