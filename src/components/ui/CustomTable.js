@@ -141,6 +141,12 @@ const useStyles = makeStyles((theme) => ({
   textLink: {
     color: 'rgba(30, 165, 255, 1)',
     textDecorationLine: 'none',
+    '&:hover': {
+      color: '#6DC5FF',
+    },
+    '&:active': {
+      color: theme.palette.primary.dark,
+    },
   },
   filterIcon: {
     height: '15px',
