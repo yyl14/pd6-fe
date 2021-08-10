@@ -11,6 +11,8 @@ import member from './members';
 import problem from './problems';
 import submissions from './submissions';
 import team from './teams';
+import accounts from './accounts';
+import studentCards from './studentCards';
 
 export default combineReducers({
   globalError,
@@ -25,4 +27,6 @@ export default combineReducers({
   problem,
   submission: submissions,
   team,
+  accounts,
+  studentCards,
 });

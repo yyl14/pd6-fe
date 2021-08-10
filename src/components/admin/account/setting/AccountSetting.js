@@ -44,7 +44,10 @@ export default function AccountSetting() {
     if (!loading.makeStudentCardDefault) {
       dispatch(fetchStudentCard(authToken, accountId));
     }
-  }, [accountId, authToken, dispatch, loading.makeStudentCardDefault]);
+    if (!loading.editAccount) {
+      dispatch(fetchAccount(authToken, accountId));
+    }
+  }, [accountId, authToken, dispatch, loading.editAccount, loading.makeStudentCardDefault]);
 
   useEffect(() => {
     setCards(Object.values(studentCards));
