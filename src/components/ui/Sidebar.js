@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   topSpace: {
-    marginTop: '10vh',
+    marginTop: '80px',
   },
   bottomSpace: {
     marginBottom: '5vh',
@@ -74,12 +74,21 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '2.21vh',
   },
   arrow: {
-    marginTop: '7.3vh',
+    marginTop: '60px',
     marginLeft: '1.6vw',
     marginRight: 'auto',
     '&:hover': {
       cursor: 'pointer',
     },
+  },
+  item: {
+    paddingTop: '0px',
+    paddingBottom: '0px',
+  },
+  addItem: {
+    color: theme.palette.grey.A400,
+    paddingTop: '0px',
+    paddingBottom: '0px',
   },
   rotate90: {
     transform: 'rotate(90deg)',
