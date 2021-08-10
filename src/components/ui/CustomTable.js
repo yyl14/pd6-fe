@@ -74,8 +74,18 @@ const useStyles = makeStyles((theme) => ({
   container: {
     maxHeight: 800,
   },
-  tableHead: {
-    height: '60px',
+
+  tableRowContainerLeftSpacing: {
+    width: '15px',
+    padding: '0px',
+  },
+  tableColumnLeftSpacing: {
+    width: '10px',
+    padding: '0px',
+  },
+  tableHeadCell: {
+    height: '45px',
+    padding: '0px',
     background: 'white',
     borderBottomWidth: '1px',
     borderBottomColor: theme.palette.grey.A400,
@@ -229,8 +239,9 @@ export default function CustomTable({
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
+                <TableCell className={`${classes.tableHeadCell} ${classes.tableRowContainerLeftSpacing}`} />
                 {columns.map((column) => (
-                  <TableCell key={column.id} align={column.align} className={classes.tableHead} style={{ minWidth: column.minWidth, width: column.width }}>
+                  <TableCell key={column.id} align={column.align} className={classes.tableHeadCell} style={{ minWidth: column.minWidth, width: column.width }}>
                     <div className={classes.column}>
                       {column.label}
                       <div className={classes.columnComponent}>
@@ -240,13 +251,14 @@ export default function CustomTable({
                   </TableCell>
                 ))}
                 {hasLink
-                  ? (<TableCell key="link" align="right" className={classes.tableHead} style={{ minWidth: 20 }} />
-                  ) : (<TableCell key="blank" align="right" className={classes.tableHead} style={{ minWidth: 20 }} />)}
+                  ? (<TableCell key="link" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
+                  ) : (<TableCell key="blank" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />)}
               </TableRow>
             </TableHead>
             <TableBody>
               {filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
                 <TableRow hover role="checkbox" tabIndex={-1} key={row[columns[0].id]} className={classes.row}>
+                  <TableCell className={classes.tableRowContainerLeftSpacing} />
                   {columns.map((column) => {
                     if (column.type === 'link') {
                       const link = row[column.link_id];
