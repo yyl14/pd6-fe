@@ -1,30 +1,22 @@
-import { publicConstants } from '../actions/constant';
+import { combineReducers } from 'redux';
+import { commonConstants } from '../actions/common/constant';
 
-const byId = (state = {}, action) => {};
+const byId = (state = {}, action) => {
+  switch (action.type) {
+    case commonConstants.GET_INSTITUTE_SUCCESS:
+      return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }));
+    default:
+      return state;
+  }
+};
 
-// export default function institutes(state = initialState, action) {
-//   switch (action.type) {
-//     case publicConstants.GET_INSTITUTE_START:
-//       return {
-//         ...state,
-//         loading: true,
-//       };
-//     case publicConstants.GET_INSTITUTE_SUCCESS:
-//       return {
-//         institutes: {
-//           byId: action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.institutes),
-//           allIds: action.payload.map((item) => item.id),
-//         },
-//         error: null,
-//         loading: false,
-//       };
-//     case publicConstants.GET_INSTITUTE_FAIL:
-//       return {
-//         ...state,
-//         error: action.payload.error,
-//         loading: false,
-//       };
-//     default:
-//       return state;
-//   }
-// }
+const allIds = (state = {}, action) => {
+  switch (action.type) {
+    case commonConstants.GET_INSTITUTE_SUCCESS:
+      return action.payload.map((item) => item.id);
+    default:
+      return state;
+  }
+};
+
+export default combineReducers(byId, allIds);
