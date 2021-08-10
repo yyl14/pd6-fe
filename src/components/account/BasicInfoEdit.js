@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core';
 import SimpleBar from '../ui/SimpleBar';
 import AlignedText from '../ui/AlignedText';
-import { editAccount } from '../../actions/auth';
+import { editAccount } from '../../actions/user/user';
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
@@ -22,8 +22,8 @@ export default function BasicInfoEdit(props) {
   const [disabled, setDisabled] = useState(true);
   const classes = useStyles();
 
-  const accountId = useSelector((state) => state.auth.user.id);
-  const authToken = useSelector((state) => state.auth.user.token);
+  const accountId = useSelector((state) => state.user.id);
+  const authToken = useSelector((state) => state.user.token);
   const dispatch = useDispatch();
 
   const [popUp, setPopUp] = useState(false);

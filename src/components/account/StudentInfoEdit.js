@@ -23,7 +23,7 @@ import {
 } from '@material-ui/core';
 
 import StarIcon from '@material-ui/icons/Star';
-import { addStudentCard, makeStudentCardDefault } from '../../actions/auth';
+import { addStudentCard, makeStudentCardDefault } from '../../actions/user/user';
 import StudentInfoCard from './StudentInfoCard';
 import SimpleBar from '../ui/SimpleBar';
 import AlignedText from '../ui/AlignedText';
@@ -88,8 +88,8 @@ export default function StudentInfoEdit(props) {
   let instituteId = 1;
   const [popUp, setPopUp] = useState(false);
 
-  const accountId = useSelector((state) => state.auth.user.id);
-  const authToken = useSelector((state) => state.auth.user.token);
+  const accountId = useSelector((state) => state.user.id);
+  const authToken = useSelector((state) => state.user.token);
   const dispatch = useDispatch();
 
   const updateStatus = (studentId, cardId) => {

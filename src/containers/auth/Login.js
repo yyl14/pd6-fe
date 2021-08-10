@@ -5,7 +5,7 @@ import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import { Grid, Typography } from '@material-ui/core';
 import agent from '../../actions/agent';
-import { userSignIn } from '../../actions/auth';
+import { userSignIn } from '../../actions/user/auth';
 import LoginForm from './LoginForm';
 import Trademark from '../../components/auth/Trademark';
 
@@ -30,16 +30,16 @@ class Login extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.auth.isAuthenticated) {
-      nextProps.cookies.set('id', nextProps.auth.user.id, {
+      nextProps.cookies.set('id', nextProps.user.id, {
         path: '/',
         expires: new Date(Date.now() + 86400000), // cookie expires after 1 day
       });
 
-      nextProps.cookies.set('token', nextProps.auth.user.token, {
+      nextProps.cookies.set('token', nextProps.user.token, {
         path: '/',
         expires: new Date(Date.now() + 86400000), // cookie expires after 1 day
       });
-      if (nextProps.auth.user.role.indexOf('MANAGER') !== -1 || nextProps.auth.user.role === 'MANAGER') {
+      if (nextProps.user.role.indexOf('MANAGER') !== -1 || nextProps.user.role === 'MANAGER') {
         nextProps.history.push('/admin/course/course');
       } else {
         nextProps.history.push('/');
@@ -77,6 +77,7 @@ class Login extends Component {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  user: state.user,
   error: state.error,
 });
 

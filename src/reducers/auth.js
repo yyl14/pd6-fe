@@ -1,4 +1,5 @@
 import { userConstants } from '../actions/constant';
+import { authConstants } from '../actions/user/constants';
 
 const initialState = {
   isAuthenticated: false,
@@ -41,6 +42,19 @@ export default function auth(state = initialState, action) {
         loading: {
           ...state.loading,
           fetchAccount: true,
+        },
+      };
+    case authConstants.AUTH_SUCCESS:
+      return {
+        isAuthenticated: !!(action.user),
+        user: { ...action.user, studentCard: [] },
+        error: {
+          ...state.error,
+          fetchAccount: null,
+        },
+        loading: {
+          ...state.loading,
+          fetchAccount: false,
         },
       };
     case userConstants.AUTH_SUCCESS:

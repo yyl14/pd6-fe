@@ -13,6 +13,7 @@ import submissions from './submissions';
 import team from './teams';
 import accounts from './accounts';
 import studentCards from './studentCards';
+import user from './user';
 import loading from './loading/index';
 import error from './error/index';
 
@@ -31,6 +32,7 @@ export default combineReducers({
   team,
   accounts,
   studentCards,
+  user,
   loading,
   error,
 });
