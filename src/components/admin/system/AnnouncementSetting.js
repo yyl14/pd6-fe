@@ -51,10 +51,8 @@ export default function AnnouncementSetting() {
   }, [authToken, dispatch, editLoading]);
 
   useEffect(() => {
-    if (allIds === null) {
-      dispatch(fetchAnnouncement(authToken));
-    } else {
-      const item = announcements[announcementId];
+    const item = announcements[announcementId];
+    if (item !== undefined) {
       setAnnouncement({
         title: item.title,
         PostTime: item.post_time,
@@ -62,7 +60,7 @@ export default function AnnouncementSetting() {
         Content: item.content,
       });
     }
-  }, [authToken, dispatch, allIds, announcementId, announcements]);
+  }, [allIds, announcementId, announcements]);
 
   const handleClickDelete = () => {
     setPopUpDelete(true);
@@ -115,15 +113,9 @@ export default function AnnouncementSetting() {
               </AlignedText>
               <AlignedText text="Duration" childrenType="text">
                 <Typography variant="body1" className={classes.duration}>
-                  {`${announcement.PostTime.getFullYear()}/${announcement.PostTime.getMonth()}/${announcement.PostTime.getDate()} ${announcement.PostTime.toLocaleTimeString(
-                    [],
-                    { hour: '2-digit', minute: '2-digit', hour12: false },
-                  )}`}
+                  {announcement.PostTime.toISOString().slice(0, 16).replace('T', ' ').replaceAll('-', '/')}
                   <ArrowRightIcon style={{ transform: 'translate(0, 5px)' }} />
-                  {`${announcement.EndTime.getFullYear()}/${announcement.EndTime.getMonth()}/${announcement.EndTime.getDate()} ${announcement.EndTime.toLocaleTimeString(
-                    [],
-                    { hour: '2-digit', minute: '2-digit', hour12: false },
-                  )}`}
+                  {announcement.EndTime.toISOString().slice(0, 16).replace('T', ' ').replaceAll('-', '/')}
                 </Typography>
               </AlignedText>
               <AlignedText text="Content" childrenType="text">

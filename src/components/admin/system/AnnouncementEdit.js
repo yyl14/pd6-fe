@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, TextField, makeStyles } from '@material-ui/core';
@@ -38,6 +38,7 @@ export default function AnnouncementEdit(props) {
 
   const history = useHistory();
   const handleClickSave = () => {
+    console.log(dateRangePicker[0].startDate, dateRangePicker[0].endDate);
     const body = {
       title: editTitle,
       content: editContent,
