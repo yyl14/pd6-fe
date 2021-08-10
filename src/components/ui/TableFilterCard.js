@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
   },
   clearButton: {
     marginLeft: '24px',
+    backgroundColor: '#FFFFFF',
+    border: 'solid',
+    borderColor: '#DDDDDD',
   },
 }));
 
@@ -38,9 +41,22 @@ export default function TableFilterCard({
   const classes = useStyles();
   const filterClear = () => {
     setFilterInput({
-      filter: '(None)',
+      filter: ['Select all'],
       sort: '(None)',
     });
+  };
+
+  const onChangeFilterInput = (e) => {
+    if (e.target.value.length === 0) {
+      setFilterInput((input) => ({ ...input, filter: ['Select all'] }));
+    } else if (e.target.value[e.target.value.length - 1] === 'Select all') {
+      setFilterInput((input) => ({ ...input, filter: ['Select all'] }));
+    } else if (e.target.value[0] === 'Select all') {
+      const newArr = e.target.value.slice(1);
+      setFilterInput((input) => ({ ...input, filter: newArr }));
+    } else {
+      setFilterInput((input) => ({ ...input, filter: e.target.value }));
+    }
   };
 
   return (
@@ -59,11 +75,10 @@ export default function TableFilterCard({
                 labelId="status"
                 id="status"
                 value={filterInput.filter}
-                onChange={(e) => {
-                  setFilterInput((input) => ({ ...input, filter: e.target.value }));
-                }}
+                onChange={(e) => { onChangeFilterInput(e); }}
+                multiple
               >
-                <MenuItem value="(None)">(None)</MenuItem>
+                <MenuItem value="Select all">Select all</MenuItem>
                 {filterOptions.map((option) => <MenuItem key={option} value={option}>{option}</MenuItem>)}
               </Select>
             </FormControl>

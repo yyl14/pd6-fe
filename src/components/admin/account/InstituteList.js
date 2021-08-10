@@ -22,6 +22,8 @@ import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
 import TableFilterCard from '../../ui/TableFilterCard';
 import { getInstitutes, addInstitute } from '../../../actions/admin/account';
+import filterData from '../../../function/filter';
+import sortData from '../../../function/sort';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -29,17 +31,6 @@ const useStyles = makeStyles((theme) => ({
   },
   popUpLayout: {
     width: '100%',
-  },
-  selectField: {
-    minWidth: 210,
-  },
-  filterButton: {
-    justifyContent: 'space-between',
-  },
-  clearButton: {
-    backgroundColor: '#FFFFFF',
-    border: 'solid',
-    borderColor: '#DDDDDD',
   },
   inputField: {
     width: 340,
@@ -56,6 +47,7 @@ export default function InstituteList() {
   const pageError = useSelector((state) => state.admin.account.error);
   const loading = useSelector((state) => state.admin.account.loading);
 
+  const [transformedData, setTransformedData] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [path, setPath] = useState([]);
 
@@ -71,7 +63,7 @@ export default function InstituteList() {
 
   const [filter, setFilter] = useState(false);
   const [filterInput, setFilterInput] = useState({
-    filter: '(None)',
+    filter: ['Select all'],
     sort: '(None)',
   });
 
@@ -109,89 +101,15 @@ export default function InstituteList() {
   };
 
   const filterStatus = () => {
-    const newData = [];
+    const tempData = filterData(transformedData, 'is_disabled', filterInput.filter);
+    const tempData2 = sortData(tempData, 'is_disabled', filterInput.sort);
+
     const newPath = [];
-
-    if (filterInput.filter === 'Disabled') {
-      institutesID.forEach((key) => {
-        const item = institutes[key];
-        const temp = { ...item };
-        if (item.is_disabled === true || item.is_disabled === 'Disabled') {
-          temp.is_disabled = 'Disabled';
-          newData.push(temp);
-          newPath.push(`institute/${temp.id}/setting`);
-        }
-      });
-    } else if (filterInput.filter === 'Enabled') {
-      institutesID.forEach((key) => {
-        const item = institutes[key];
-        const temp = { ...item };
-        if (item.is_disabled === false || item.is_disabled === 'Enabled') {
-          temp.is_disabled = 'Enabled';
-          newData.push(temp);
-          newPath.push(`institute/${temp.id}/setting`);
-        }
-      });
-    } else {
-      institutesID.forEach((key) => {
-        const item = institutes[key];
-        const temp = { ...item };
-        if (item.is_disabled === true || item.is_disabled === 'Disabled') {
-          temp.is_disabled = 'Disabled';
-        } else if (item.is_disabled === false || item.is_disabled === 'Enabled') {
-          temp.is_disabled = 'Enabled';
-        }
-        newData.push(temp);
-        newPath.push(`institute/${temp.id}/setting`);
-      });
-    }
-
-    // sort
-    if (filterInput.filter === '(None)' || filterInput.filter === 'Select all') {
-      if (filterInput.sort === 'A to Z') {
-        newPath.splice(0, newPath.length);
-        newData.sort((a, b) => {
-          const statusA = a.is_disabled;
-          const statusB = b.is_disabled;
-          if (statusA > statusB) {
-            return -1;
-          }
-          if (statusA < statusB) {
-            return 1;
-          }
-          return 0;
-        });
-        newData.forEach((data) => {
-          newPath.push(`institute/${data.id}/setting`);
-        });
-      } else if (filterInput.sort === 'Z to A') {
-        newPath.splice(0, newPath.length);
-        newData.sort((a, b) => {
-          const statusA = a.is_disabled;
-          const statusB = b.is_disabled;
-          if (statusA < statusB) {
-            return -1;
-          }
-          if (statusA > statusB) {
-            return 1;
-          }
-          return 0;
-        });
-        newData.forEach((data) => {
-          newPath.push(`institute/${data.id}/setting`);
-        });
-      }
-    }
-
-    setTableData(newData);
-    setPath(newPath);
-  };
-
-  const filterClear = () => {
-    setFilterInput({
-      filter: '(None)',
-      sort: '(None)',
+    tempData2.forEach((data) => {
+      newPath.push(data.path);
     });
+    setTableData(tempData2);
+    setPath(newPath);
   };
 
   useEffect(() => {
@@ -206,10 +124,12 @@ export default function InstituteList() {
         } else if (item.is_disabled === false || item.is_disabled === 'Enabled') {
           temp.is_disabled = 'Enabled';
         }
+        temp.path = `institute/${temp.id}/setting`;
         newData.push(temp);
-        newPath.push(`institute/${temp.id}/setting`);
+        newPath.push(temp.path);
       });
     }
+    setTransformedData(newData);
     setTableData(newData);
     setPath(newPath);
   }, [institutes, institutesID]);
