@@ -97,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   columnComponent: {
-    transform: 'translateX(10px)',
+    // transform: 'translateX(10px)',
   },
   row: {
     height: '60px',
@@ -289,11 +289,9 @@ export default function CustomTable({
                   {hasLink ? (
                     <TableCell key={`${row.id}-show`} align="right">
                       <Link to={path[filterData.indexOf(row)]} className={classes.detailLink}>
-
                         <IconButton>
                           <ArrowForward style={{ height: '20px' }} />
                         </IconButton>
-
                       </Link>
                     </TableCell>
                   ) : (<TableCell key={`${row.id}-blank`} align="right" style={{ minWidth: 20 }} />)}
