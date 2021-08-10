@@ -65,7 +65,6 @@ export default function RegisterForm() {
   const institutes = useSelector((state) => state.institutes.byId);
   const institutesId = useSelector((state) => state.institutes.allIds);
   const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
-  console.log(useSelector((state) => state));
 
   const [nextPage, setNextPage] = useState(false);
 
