@@ -24,10 +24,9 @@ const allIds = (state = [], action) => {
       const { data } = action.payload;
       return data.map((item) => item.id);
     }
-
     default:
       return state;
   }
 };
 
-export default combineReducers(byId, allIds);
+export default combineReducers({ byId, allIds });

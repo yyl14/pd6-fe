@@ -27,7 +27,7 @@ import { borders, borderRadius } from '@material-ui/system';
 
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { userRegister } from '../../actions/auth';
-import getInstitutes from '../../actions/public';
+import { getInstitutes } from '../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
   authForm: {
@@ -61,10 +61,11 @@ export default function RegisterForm() {
   const classNames = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.publicState.loading);
-  const institutes = useSelector((state) => state.publicState.institutes.byId);
-  const institutesId = useSelector((state) => state.publicState.institutes.allIds);
+  const loading = useSelector((state) => state.loading.common.fetchInstitutes);
+  const institutes = useSelector((state) => state.institutes.byId);
+  const institutesId = useSelector((state) => state.institutes.allIds);
   const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
+  console.log(useSelector((state) => state));
 
   const [nextPage, setNextPage] = useState(false);
 

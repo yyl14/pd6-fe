@@ -63,9 +63,15 @@ export default function InstituteSetting() {
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState('');
 
+  // useEffect(() => {
+  //   dispatch(getInstitute(authToken, instituteId));
+  // }, [authToken, dispatch, instituteId]);
+
   useEffect(() => {
-    dispatch(getInstitute(authToken, instituteId));
-  }, [authToken, dispatch, instituteId]);
+    if (!loading.editInstitute) {
+      dispatch(getInstitute(authToken, instituteId));
+    }
+  }, [authToken, dispatch, instituteId, loading.editInstitute]);
 
   if (institutes[instituteId] === undefined) {
     if (loading.fetchInstitute) {

@@ -13,6 +13,8 @@ import submissions from './submissions';
 import team from './teams';
 import accounts from './accounts';
 import studentCards from './studentCards';
+import loading from './loading/index';
+import error from './error/index';
 
 export default combineReducers({
   globalError,
@@ -25,8 +27,10 @@ export default combineReducers({
   grades,
   member,
   problem,
-  submission: submissions,
+  submissions,
   team,
   accounts,
   studentCards,
+  loading,
+  error,
 });
