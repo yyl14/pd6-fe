@@ -40,4 +40,4 @@ const allIds = (state = [], action) => {
   }
 };
 
-export default combineReducers(byId, allIds);
+export default combineReducers({ byId, allIds });
