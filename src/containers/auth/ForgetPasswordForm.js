@@ -18,7 +18,7 @@ import {
 } from '@material-ui/core';
 import { borders, borderRadius } from '@material-ui/system';
 import { EmailOutlined, TrainRounded } from '@material-ui/icons';
-import { authActions } from '../../actions/index';
+import { userForgetPassword } from '../../actions/auth';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
 export default function ForgetPasswordForm() {
   const classNames = useStyles();
   const dispatch = useDispatch();
-  const { userForgetPassword } = bindActionCreators(authActions, dispatch);
   const loginState = useSelector((state) => state.auth);
   const serverError = useSelector((state) => state.auth.error.forgetPassword);
   const [email, setEmail] = useState('');

@@ -11,6 +11,8 @@ import member from './members';
 import problem from './problems';
 import submissions from './submissions';
 import team from './teams';
+import loading from './loading/index';
+import error from './error/index';
 
 export default combineReducers({
   globalError,
@@ -23,6 +25,8 @@ export default combineReducers({
   grades,
   member,
   problem,
-  submission: submissions,
+  submissions,
   team,
+  loading,
+  error,
 });
