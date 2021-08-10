@@ -51,18 +51,18 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     color: theme.palette.black.main,
-    marginLeft: '2.75vw',
-    marginRight: '1.3vw',
+    marginLeft: '35px',
+    marginRight: '21px',
   },
   activeIcon: {
     color: theme.palette.primary.main,
-    marginLeft: '2.75vw',
-    marginRight: '1.3vw',
+    marginLeft: '35px',
+    marginRight: '21px',
   },
   greyIcon: {
     color: theme.palette.grey.A400,
-    marginLeft: '2.75vw',
-    marginRight: '1.3vw',
+    marginLeft: '35px',
+    marginRight: '21px',
   },
   secondTitleIcon: {
     float: 'left',
