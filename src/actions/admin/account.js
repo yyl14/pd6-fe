@@ -138,8 +138,8 @@ const fetchAccount = (token, id) => (dispatch) => {
   agent.get(`/account/${id}`, auth)
     .then((res) => {
       dispatch({
-        type: accountConstants.FETCH_ACCOUNT_SUCCESS, // done
-        payload: res.data,
+        type: accountConstants.FETCH_ACCOUNT_SUCCESS,
+        payload: res.data.data,
       });
     })
     .catch((err) => {
@@ -308,9 +308,10 @@ const fetchAccounts = (token) => (dispatch) => {
   dispatch({ type: accountConstants.FETCH_ACCOUNTS_REQUEST });
   agent.get('/account', auth)
     .then((res) => {
-      dispatch({ type: accountConstants.FETCH_ACCOUNTS_SUCCESS, payload: res.data }); // done
+      dispatch({ type: accountConstants.FETCH_ACCOUNTS_SUCCESS, payload: res.data.data });
     })
     .catch((err) => {
+      console.log(err);
       dispatch({
         type: accountConstants.FETCH_ACCOUNTS_FAIL,
         error: err,

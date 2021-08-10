@@ -54,8 +54,10 @@ export default function AccountList() {
   const [path, setPath] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchAccounts(authToken));
-  }, [authToken, dispatch]);
+    if (!loading.editAccount || !loading.deleteAccount || !loading.makeStudentCardDefault) {
+      dispatch(fetchAccounts(authToken));
+    }
+  }, [authToken, dispatch, loading.deleteAccount, loading.editAccount, loading.makeStudentCardDefault]);
 
   useEffect(() => {
     const newData = [];
