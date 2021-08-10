@@ -248,7 +248,6 @@ export default function auth(state = initialState, action) {
         loading: { ...state.loading, addStudentCard: true },
       };
     case userConstants.ADD_SELF_STUDENT_CARD_SUCCESS: {
-      const { accountId, data } = action.payload;
       return {
         ...state,
         loading: { ...state.loading, addStudentCard: false },

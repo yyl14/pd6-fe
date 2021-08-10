@@ -93,17 +93,6 @@ const editInstitute = (token, id, abbreviatedName, fullName, emailDomain, isDisa
     is_disabled: isDisabled,
   };
 
-  // dispatch({
-  //   type: accountConstants.EDIT_INSTITUTE_SUCCESS,
-  //   payload: {
-  //     id: parseInt(id, 10),
-  //     abbreviated_name: abbreviatedName,
-  //     full_name: fullName,
-  //     email_domain: emailDomain,
-  //     is_disabled: isDisabled,
-  //   },
-  // });
-
   agent.patch(`/institute/${id}`, body, auth)
     .then((res) => {
       console.log('editing institute suc');
