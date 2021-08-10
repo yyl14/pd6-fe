@@ -54,9 +54,17 @@ export default function MemberList() {
 
   useEffect(() => {
     dispatch(fetchCourses(authToken));
+  }, [authToken, dispatch]);
+
+  useEffect(() => {
     dispatch(fetchClasses(authToken, courseId));
-    dispatch(fetchMembers(authToken, classId));
-  }, [authToken, classId, courseId, dispatch]);
+  }, [authToken, courseId, dispatch]);
+
+  useEffect(() => {
+    if (!loading.editMembers) {
+      dispatch(fetchMembers(authToken, classId));
+    }
+  }, [authToken, classId, dispatch, loading.editMembers]);
 
   const [edit, setEdit] = useState(false);
   const [tableData, setTableData] = useState([]);
@@ -344,15 +352,18 @@ export default function MemberList() {
                 align: 'center',
               },
             ]}
-            columnComponent={[null, null, null, (<BiFilterAlt key="showInstituteFilterDialog" onClick={() => setShowInstituteFilterDialog(true)} />), (<BiFilterAlt key="showRoleFilterDialog" onClick={() => setShowRoleFilterDialog(true)} />)]}
+            columnComponent={[
+              null,
+              null,
+              null,
+              <BiFilterAlt key="showInstituteFilterDialog" onClick={() => setShowInstituteFilterDialog(true)} />,
+              <BiFilterAlt key="showRoleFilterDialog" onClick={() => setShowRoleFilterDialog(true)} />,
+            ]}
             // hasLink
             // path={classes.byId[classId].memberIds.map((member) => `/admin/course/class/${courseId}/${classId}/member`)}
           />
 
-          <Dialog
-            open={showInstituteFilterDialog}
-            maxWidth="md"
-          >
+          <Dialog open={showInstituteFilterDialog} maxWidth="md">
             <DialogTitle>
               <Typography variant="h4">Filter: Institute</Typography>
             </DialogTitle>
@@ -404,10 +415,7 @@ export default function MemberList() {
             </DialogActions>
           </Dialog>
 
-          <Dialog
-            open={showRoleFilterDialog}
-            maxWidth="md"
-          >
+          <Dialog open={showRoleFilterDialog} maxWidth="md">
             <DialogTitle>
               <Typography variant="h4">Filter: Role</Typography>
             </DialogTitle>
