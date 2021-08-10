@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
-  makeStyles, Typography, AppBar, Toolbar, Avatar,
+  makeStyles, Button, Typography, AppBar, Toolbar, Avatar, ClickAwayListener, Grow, Paper, Popper, MenuItem, MenuList,
 } from '@material-ui/core';
-import { AddCircleOutline, SubjectOutlined } from '@material-ui/icons';
+import { AddCircleOutline, PlayCircleFilledWhite, SubjectOutlined } from '@material-ui/icons';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useHistory, useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
@@ -28,15 +28,29 @@ const useStyles = makeStyles((theme) => ({
   date: {
     float: 'left',
     marginRight: '2vw',
+    marginTop: '7px',
+    marginBottom: 'auto',
   },
   notification: {
     float: 'left',
     width: '3.28vh',
+    marginTop: '9px',
+    marginBottom: 'auto',
   },
   name: {
+    width: '65px',
+    height: '33px',
     float: 'left',
     marginLeft: '2vw',
     marginRight: '1vw',
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    fontSize: '1rem',
+    color: 'white',
+    backgroundColor: 'black',
+    '&:hover': {
+      backgroundColor: 'black',
+    },
   },
   right: {
     marginLeft: 'auto',
@@ -57,6 +71,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
 }));
+
 export default function Header({ role }) {
   const baseURL = '';
   const classes = useStyles();
@@ -90,12 +105,29 @@ export default function Header({ role }) {
   } else if (role === 'NORMAL') {
     itemList = [
       {
-        text: 'Problem Set',
-        path: '/',
+        text: 'My Class',
+        basePath: '/my-class',
+        path: '/my-class',
       },
       {
-        text: 'About',
-        path: '/about',
+        text: 'Problem Set',
+        basePath: '/problem-set',
+        path: '/problem-set',
+      },
+      {
+        text: 'PDAO',
+        basePath: '/PDAO',
+        path: '/PDAO',
+      },
+      {
+        text: 'Ranklist',
+        basePath: '/ranklist',
+        path: '/ranklist',
+      },
+      {
+        text: 'System',
+        basePath: '/system',
+        path: '/system',
       },
     ];
   } else if (role === 'GUEST') {
@@ -153,6 +185,38 @@ export default function Header({ role }) {
     return () => clearInterval(interval);
   }, []);
 
+  const [open, setOpen] = React.useState(false);
+  const anchorRef = React.useRef(null);
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  function handleListKeyDown(event) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      setOpen(false);
+    }
+  }
+
+  // return focus to the button when we transitioned from !open -> open
+  const prevOpen = useRef(open);
+  useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current.focus();
+    }
+
+    prevOpen.current = open;
+  }, [open]);
+
   return (
     <div>
       <AppBar className={classes.appbar} elevation={0}>
@@ -171,9 +235,36 @@ export default function Header({ role }) {
           <div className={classes.right}>
             <Typography className={classes.date}>{currentTime}</Typography>
             <NotificationsIcon className={classes.notification} />
-            <Typography variant="h6" className={classes.name}>
-              shiba
-            </Typography>
+            {/* <Typography variant="h6" className={classes.name}> */}
+            <Button
+              ref={anchorRef}
+              aria-controls={open ? 'menu-list-grow' : undefined}
+              aria-haspopup="true"
+              onClick={handleToggle}
+              className={classes.name}
+            >
+              Shiba
+            </Button>
+            <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+              {({ TransitionProps, placement }) => (
+                <Grow
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...TransitionProps}
+                  style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+                >
+                  <Paper>
+                    <ClickAwayListener onClickAway={handleClose}>
+                      <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
+                        <MenuItem onClick={handleClose}>My Submission</MenuItem>
+                        <MenuItem onClick={handleClose}>My profile</MenuItem>
+                        <MenuItem onClick={handleClose}>Log out</MenuItem>
+                      </MenuList>
+                    </ClickAwayListener>
+                  </Paper>
+                </Grow>
+              )}
+            </Popper>
+            {/* </Typography> */}
           </div>
         </Toolbar>
       </AppBar>
