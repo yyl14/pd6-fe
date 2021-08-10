@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   topSpace: {
-    marginTop: '80px',
+    marginTop: '82.5px',
   },
   bottomSpace: {
     marginBottom: '5vh',
@@ -59,6 +59,11 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '2.75vw',
     marginRight: '1.3vw',
   },
+  greyIcon: {
+    color: theme.palette.grey.A400,
+    marginLeft: '2.75vw',
+    marginRight: '1.3vw',
+  },
   secondTitleIcon: {
     float: 'left',
     color: theme.palette.black.main,
@@ -82,13 +87,13 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   item: {
-    paddingTop: '0px',
-    paddingBottom: '0px',
+    paddingTop: '7.5px',
+    paddingBottom: '7.5px',
   },
   addItem: {
     color: theme.palette.grey.A400,
-    paddingTop: '0px',
-    paddingBottom: '0px',
+    paddingTop: '7.5px',
+    paddingBottom: '7.5px',
   },
   rotate90: {
     transform: 'rotate(90deg)',
