@@ -67,6 +67,12 @@ export default function InstituteSetting() {
     dispatch(getInstitute(authToken, instituteId));
   }, [authToken, dispatch, instituteId]);
 
+  useEffect(() => {
+    if (!loading.editInstitute) {
+      dispatch(fetchInstitute(authToken, instituteId));
+    }
+  }, [authToken, dispatch, instituteId]);
+
   if (institutes[instituteId] === undefined) {
     if (loading.fetchInstitute) {
       return <div>loading...</div>;

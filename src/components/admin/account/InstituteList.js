@@ -74,8 +74,14 @@ export default function InstituteList() {
     sort: '(None)',
   });
 
+  // useEffect(() => {
+  //   dispatch(getInstitutes(authToken));
+  // }, [authToken, dispatch]);
+
   useEffect(() => {
-    dispatch(getInstitutes(authToken));
+    if (!loading.addInstitute) {
+      dispatch(getInstitutes(authToken));
+    }
   }, [authToken, dispatch]);
 
   const handleChange = (event) => {
