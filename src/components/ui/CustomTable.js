@@ -16,11 +16,12 @@ import {
   FormControl,
   Select,
   InputAdornment,
+  IconButton,
 } from '@material-ui/core';
 
 import { ArrowForward, CenterFocusStrong, FilterList } from '@material-ui/icons';
 import SearchIcon from '@material-ui/icons/Search';
-
+import Tooltip from '@material-ui/core/Tooltip';
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from 'react-icons/md';
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
@@ -100,6 +101,9 @@ const useStyles = makeStyles((theme) => ({
   },
   row: {
     height: '60px',
+    '&:hover': {
+      backgroundColor: '#000000',
+    },
   },
 
   bottom: {
@@ -241,14 +245,17 @@ export default function CustomTable({
               <TableRow>
                 <TableCell className={`${classes.tableHeadCell} ${classes.tableRowContainerLeftSpacing}`} />
                 {columns.map((column) => (
-                  <TableCell key={column.id} align={column.align} className={classes.tableHeadCell} style={{ minWidth: column.minWidth, width: column.width }}>
-                    <div className={classes.column}>
-                      {column.label}
-                      <div className={classes.columnComponent}>
-                        { columnComponent && columnComponent[columns.findIndex((x) => x.id === column.id)]}
+                  <>
+                    <TableCell className={`${classes.tableHeadCell} ${classes.tableColumnLeftSpacing}`} />
+                    <TableCell key={column.id} align={column.align} className={classes.tableHeadCell} style={{ minWidth: column.minWidth, width: column.width }}>
+                      <div className={classes.column}>
+                        {column.label}
+                        <div className={classes.columnComponent}>
+                          { columnComponent && columnComponent[columns.findIndex((x) => x.id === column.id)]}
+                        </div>
                       </div>
-                    </div>
-                  </TableCell>
+                    </TableCell>
+                  </>
                 ))}
                 {hasLink
                   ? (<TableCell key="link" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
@@ -271,15 +278,22 @@ export default function CustomTable({
                     }
                     const value = row[column.id];
                     return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.format && typeof value === 'number' ? column.format(value) : value}
-                      </TableCell>
+                      <>
+                        <TableCell className={classes.tableColumnLeftSpacing} />
+                        <TableCell key={column.id} align={column.align}>
+                          {column.format && typeof value === 'number' ? column.format(value) : value}
+                        </TableCell>
+                      </>
                     );
                   })}
                   {hasLink ? (
                     <TableCell key={`${row.id}-show`} align="right">
                       <Link to={path[filterData.indexOf(row)]} className={classes.detailLink}>
-                        <ArrowForward style={{ height: '20px' }} />
+
+                        <IconButton>
+                          <ArrowForward style={{ height: '20px' }} />
+                        </IconButton>
+
                       </Link>
                     </TableCell>
                   ) : (<TableCell key={`${row.id}-blank`} align="right" style={{ minWidth: 20 }} />)}
