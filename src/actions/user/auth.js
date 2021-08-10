@@ -78,11 +78,10 @@ const userLogout = (history) => (dispatch) => {
 };
 
 const userForgetPassword = (email) => (dispatch) => {
-  console.log('Forget Password');
   dispatch({
     type: authConstants.FORGET_PASSWORD_START,
   });
-  agent.post('/forget-password', { email })
+  agent.post('/account/forget-password', { email })
     .then((res) => {
       dispatch({
         type: authConstants.FORGET_PASSWORD_SUCCESS,
