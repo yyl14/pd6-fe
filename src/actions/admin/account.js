@@ -1,7 +1,7 @@
 import agent from '../agent';
 import {
   accountConstants,
-} from '../constant';
+} from './constants';
 
 const getInstitutes = (token) => (dispatch) => {
   const auth = {
@@ -137,10 +137,9 @@ const fetchAccount = (token, id) => (dispatch) => {
 
   agent.get(`/account/${id}`, auth)
     .then((res) => {
-      // console.log(res.data);
       dispatch({
-        type: accountConstants.FETCH_ACCOUNT_SUCCESS,
-        payload: res.data.data,
+        type: accountConstants.FETCH_ACCOUNT_SUCCESS, // done
+        payload: res.data,
       });
     })
     .catch((err) => {
@@ -309,7 +308,7 @@ const fetchAccounts = (token) => (dispatch) => {
   dispatch({ type: accountConstants.FETCH_ACCOUNTS_REQUEST });
   agent.get('/account', auth)
     .then((res) => {
-      dispatch({ type: accountConstants.FETCH_ACCOUNTS_SUCCESS, payload: res.data.data });
+      dispatch({ type: accountConstants.FETCH_ACCOUNTS_SUCCESS, payload: res.data }); // done
     })
     .catch((err) => {
       dispatch({

@@ -11,6 +11,8 @@ import member from './members';
 import problem from './problems';
 import submissions from './submissions';
 import team from './teams';
+import accounts from './accounts';
+import studentCards from './studentCards';
 import loading from './loading/index';
 import error from './error/index';
 
@@ -27,6 +29,8 @@ export default combineReducers({
   problem,
   submissions,
   team,
+  accounts,
+  studentCards,
   loading,
   error,
 });
