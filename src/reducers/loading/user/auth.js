@@ -50,6 +50,7 @@ export default function auth(state = initialState, action) {
         ...state,
         signup: true,
       };
+
     case authConstants.SIGNUP_SUCCESS:
       return {
         ...state,

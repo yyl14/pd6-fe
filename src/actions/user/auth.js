@@ -96,18 +96,19 @@ const userForgetPassword = (email) => (dispatch) => {
     });
 };
 
-const userRegister = (username, password, nickname, realName, emailPrefix, instituteId, studentId) => (dispatch) => {
+const userRegister = (username, password, nickname, realName, emailPrefix, instituteId, studentId, altMail) => (dispatch) => {
   const body = {
     username,
     password,
     nickname,
     real_name: realName,
-    alternative_email: '',
+    alternative_email: altMail,
     institute_id: instituteId,
     student_id: studentId,
     institute_email_prefix: emailPrefix,
   };
 
+  dispatch({ type: authConstants.SIGNUP_START });
   agent.post('account', body)
     .then((res) => {
       dispatch({
