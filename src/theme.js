@@ -288,6 +288,13 @@ const overrides = {
       '&$shrink': { transform: 'translate(14px, -20px) scale(0.89)', fontWeight: 400 },
     },
   },
+  MuiTableRow: {
+    hover: {
+      '&:hover': {
+        backgroundColor: `${mono.veryLightGray} !important`,
+      },
+    },
+  },
 
   MuiPaper: {
     // elevation: {  },
