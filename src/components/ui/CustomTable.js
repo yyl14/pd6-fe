@@ -96,8 +96,14 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     justifyContent: 'center',
   },
+  columnLabelMoveLeft: {
+    transform: 'translateX(-5px)',
+  },
+  columnLabelDefault: {
+    transform: 'translateX(0px)',
+  },
   columnComponent: {
-    // transform: 'translateX(10px)',
+    transform: 'translateX(5px) translateY(2px)',
   },
   row: {
     height: '60px',
@@ -191,6 +197,13 @@ export default function CustomTable({
     }
   };
 
+  const labelMoveLeft = (icon, col) => {
+    if (icon && icon[col.findIndex((x) => x.id === col.id)]) {
+      return classes.columnLabelMoveLeft;
+    }
+    return classes.columnLabelDefault;
+  };
+
   useEffect(() => {
     if (pageInput <= Math.ceil(filterData.length / rowsPerPage) && pageInput >= 1) {
       setPage(pageInput - 1);
@@ -249,7 +262,9 @@ export default function CustomTable({
                     <TableCell className={`${classes.tableHeadCell} ${classes.tableColumnLeftSpacing}`} />
                     <TableCell key={column.id} align={column.align} className={classes.tableHeadCell} style={{ minWidth: column.minWidth, width: column.width }}>
                       <div className={classes.column}>
-                        {column.label}
+                        <div className={labelMoveLeft(columnComponent, columns)}>
+                          {column.label}
+                        </div>
                         <div className={classes.columnComponent}>
                           { columnComponent && columnComponent[columns.findIndex((x) => x.id === column.id)]}
                         </div>
@@ -271,9 +286,12 @@ export default function CustomTable({
                       const link = row[column.link_id];
                       const value = row[column.id];
                       return (
-                        <TableCell key={column.id} align={column.align}>
-                          <Link to={link} className={classes.textLink}>{column.format && typeof value === 'number' ? column.format(value) : value}</Link>
-                        </TableCell>
+                        <>
+                          <TableCell className={classes.tableColumnLeftSpacing} />
+                          <TableCell key={column.id} align={column.align}>
+                            <Link to={link} className={classes.textLink}>{column.format && typeof value === 'number' ? column.format(value) : value}</Link>
+                          </TableCell>
+                        </>
                       );
                     }
                     const value = row[column.id];
