@@ -35,10 +35,10 @@ export default function AccountSetting() {
   const loading = useSelector((state) => state.admin.account.loading);
   const account = accounts[accountId];
 
-  useEffect(() => {
-    dispatch(fetchAccount(authToken, accountId));
-    dispatch(fetchStudentCard(authToken, accountId));
-  }, [authToken, accountId, dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchAccount(authToken, accountId));
+  //   dispatch(fetchStudentCard(authToken, accountId));
+  // }, [authToken, accountId, dispatch]);
 
   useEffect(() => {
     if (!loading.makeStudentCardDefault) {

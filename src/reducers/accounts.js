@@ -4,14 +4,12 @@ import { accountConstants } from '../actions/admin/constants';
 const byId = (state = {}, action) => {
   switch (action.type) {
     case accountConstants.FETCH_ACCOUNTS_SUCCESS: {
-      const { data } = action.payload;
-      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [] } }), state);
+      return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [] } }), state);
     }
 
     case accountConstants.FETCH_ACCOUNT_SUCCESS: {
-      const { data } = action.payload;
       return {
-        ...state, [data.id]: { ...data, studentCard: [] },
+        ...state, [action.payload.id]: { ...action.payload, studentCard: [] },
       };
     }
 
@@ -35,13 +33,11 @@ const byId = (state = {}, action) => {
 const allIds = (state = [], action) => {
   switch (action.type) {
     case accountConstants.FETCH_ACCOUNTS_SUCCESS: {
-      const { data } = action.payload;
-      return data.map((item) => item.id);
+      return action.payload.map((item) => item.id);
     }
 
     case accountConstants.FETCH_ACCOUNT_SUCCESS: {
-      const { data } = action.payload;
-      return (state.includes(data.id) ? state : state.concat([data.id]));
+      return (state.includes(action.payload.id) ? state : state.concat([action.payload.id]));
     }
 
     default:
