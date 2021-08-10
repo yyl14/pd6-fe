@@ -288,6 +288,8 @@ const overrides = {
       '&$shrink': { transform: 'translate(14px, -20px) scale(0.89)', fontWeight: 400 },
     },
   },
+
+  // Table
   MuiTableRow: {
     hover: {
       '&:hover': {
