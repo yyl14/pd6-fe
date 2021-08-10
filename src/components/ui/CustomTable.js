@@ -48,11 +48,11 @@ const useStyles = makeStyles((theme) => ({
   },
   search: {
     height: '60px',
-    width: 250,
+    width: 300,
   },
   search2: {
     height: '60px',
-    width: 360,
+    width: 380,
   },
   search3: {
     height: '60px',
