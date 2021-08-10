@@ -82,7 +82,7 @@ export default function InstituteList() {
     if (!loading.addInstitute) {
       dispatch(getInstitutes(authToken));
     }
-  }, [authToken, dispatch]);
+  }, [authToken, dispatch, loading.addInstitute]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;

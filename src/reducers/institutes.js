@@ -1,19 +1,17 @@
 import { combineReducers } from 'redux';
 import { commonConstants } from '../actions/common/constant';
-import { accountConstants } from '../actions/constant';
+import { accountConstants } from '../actions/admin/constants';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
     case commonConstants.GET_INSTITUTE_SUCCESS: {
       return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), {});
     }
-    case accountConstants.FETCH_ACCOUNTS_SUCCESS: {
-      const { data } = action.payload;
-      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.institutes);
+    case accountConstants.FETCH_INSTITUTES_SUCCESS: {
+      return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.institutes);
     }
     case accountConstants.FETCH_INSTITUTE_SUCCESS: {
-      const { data } = action.payload;
-      return { ...state.institutes.byId, [data.id]: data };
+      return { ...state.institutes.byId, [action.payload.id]: action.payload };
     }
     default:
       return state;
