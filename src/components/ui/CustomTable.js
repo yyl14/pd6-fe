@@ -107,9 +107,6 @@ const useStyles = makeStyles((theme) => ({
   },
   row: {
     height: '60px',
-    '&:hover': {
-      backgroundColor: '#000000',
-    },
   },
 
   bottom: {
@@ -147,6 +144,14 @@ const useStyles = makeStyles((theme) => ({
   },
   filterIcon: {
     height: '15px',
+  },
+  iconButton: {
+    '&:hover': {
+      backgroundColor: theme.palette.grey[100],
+    },
+    '&:active': {
+      backgroundColor: theme.palette.grey[300],
+    },
   },
   arrowIcon: {
     height: '35px',
@@ -307,7 +312,7 @@ export default function CustomTable({
                   {hasLink ? (
                     <TableCell key={`${row.id}-show`} align="right">
                       <Link to={path[filterData.indexOf(row)]} className={classes.detailLink}>
-                        <IconButton>
+                        <IconButton className={classes.iconButton}>
                           <ArrowForward style={{ height: '20px' }} />
                         </IconButton>
                       </Link>
