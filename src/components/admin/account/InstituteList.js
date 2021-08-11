@@ -32,9 +32,9 @@ const useStyles = makeStyles((theme) => ({
   popUpLayout: {
     width: '100%',
   },
-  inputField: {
-    width: 340,
-  },
+  // inputField: {
+  //   width: 340,
+  // },
 }));
 
 export default function InstituteList() {
@@ -180,15 +180,19 @@ export default function InstituteList() {
             type: 'string',
           },
         ]}
-        columnComponent={[null, null, (<TableFilterCard
-          key="filter"
-          popUp={filter}
-          setPopUp={setFilter}
-          filterInput={filterInput}
-          filterOptions={['Enabled', 'Disabled']}
-          setFilterInput={setFilterInput}
-          doFilter={filterStatus}
-        />)]}
+        columnComponent={[
+          null,
+          null,
+          <TableFilterCard
+            key="filter"
+            popUp={filter}
+            setPopUp={setFilter}
+            filterInput={filterInput}
+            filterOptions={['Enabled', 'Disabled']}
+            setFilterInput={setFilterInput}
+            doFilter={filterStatus}
+          />,
+        ]}
         hasLink
         path={path}
       />
@@ -249,7 +253,12 @@ export default function InstituteList() {
           <Button onClick={() => setPopUp(false)} color="default">
             Cancel
           </Button>
-          <Button onClick={() => { add(); }} color="primary">
+          <Button
+            onClick={() => {
+              add();
+            }}
+            color="primary"
+          >
             Add
           </Button>
         </DialogActions>

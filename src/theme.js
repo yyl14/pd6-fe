@@ -216,6 +216,7 @@ const overrides = {
   MuiInputBase: {
     root: {
       height: '45px',
+
       backgroundColor: mono.white,
     },
     multiline: {
@@ -223,14 +224,10 @@ const overrides = {
     },
   },
 
-  MuiTextField: {
-    // root: {
-    //   margin: '1vh 5px 2.2vh 5px',
-    // },
-  },
   MuiFormControl: {
     root: {
       margin: '10px 0 5px 0',
+      // width: '350px',
     },
   },
   MuiSelect: {
@@ -250,6 +247,11 @@ const overrides = {
       paddingBottom: '12px',
       borderRadius: '10px',
       height: '45px',
+    },
+  },
+  MuiTextField: {
+    root: {
+      width: '350px',
     },
   },
   MuiOutlinedInput: {
@@ -372,6 +374,7 @@ const props = {
 
   MuiTextField: {
     variant: 'outlined',
+    // style: { width: 350 },
   },
 
   MuiOutlinedInput: {
