@@ -43,7 +43,6 @@ export default function InstituteSetting() {
   const authToken = useSelector((state) => state.auth.user.token);
   const pageError = useSelector((state) => state.error.admin.account);
   const loading = useSelector((state) => state.loading.admin.account);
-  console.log(institutes, pageError, loading);
 
   const dispatch = useDispatch();
 
