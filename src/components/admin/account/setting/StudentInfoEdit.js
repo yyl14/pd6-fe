@@ -91,7 +91,7 @@ export default function StudentInfoEdit(props) {
   let instituteId = 1;
 
   const { accountId } = useParams();
-  const authToken = useSelector((state) => state.auth.user.token);
+  const authToken = useSelector((state) => state.user.token);
   const dispatch = useDispatch();
 
   const updateStatus = (studentId, cardId) => {

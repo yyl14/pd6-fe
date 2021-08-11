@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import globalError from './globalError';
 import auth from './auth';
 import admin from './admin/index';
 import institutes from './institutes';
@@ -18,7 +17,6 @@ import loading from './loading/index';
 import error from './error/index';
 
 export default combineReducers({
-  globalError,
   auth,
   admin,
   institutes,

@@ -8,13 +8,20 @@ const byId = (state = {}, action) => {
       const { id, data } = action.payload;
       return (data === null ? {} : data);
     }
+    case accountConstants.MAKE_STUDENT_CARD_DEFAULT_SUCCESS: {
+      const { cardId, id } = action.payload;
+      const newArray = { ...state };
+      Object.keys(newArray).forEach((key) => {
+        newArray[key].is_default = false;
+      });
+      newArray[cardId].is_default = true;
+      return newArray;
+    }
     case userConstants.MAKE_SELF_STUDENT_CARD_DEFAULT_SUCCESS: {
       const { cardId, id } = action.payload;
-      const newArray = [];
-      state.forEach((item) => {
-        const newItem = item;
-        newItem.is_default = false;
-        newArray.push(item);
+      const newArray = { ...state };
+      Object.keys(newArray).forEach((key) => {
+        newArray[key].is_default = false;
       });
       newArray[cardId].is_default = true;
       return newArray;

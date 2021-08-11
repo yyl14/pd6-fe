@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Grid, Typography } from '@material-ui/core';
 import agent from '../../actions/agent';
-import { userResetPassword } from '../../actions/auth';
+import { userResetPassword } from '../../actions/user/auth';
 import Trademark from '../../components/auth/Trademark';
 import ResetPasswordForm from './ResetPasswordForm';
 

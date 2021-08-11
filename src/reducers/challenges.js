@@ -13,7 +13,7 @@ const byId = (state = {}, action) => {
           specialJudgeIds: state[item.id] ? state[item.id].specialJudgeIds : [],
           essayIds: state[item.id] ? state[item.id].essayIds : [],
         },
-      }), state); // to be tested
+      }), state); // to be checked
     }
     default:
       return state;
