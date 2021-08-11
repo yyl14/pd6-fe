@@ -407,14 +407,14 @@ export default function account(state = initialState, action) {
         // add studentCard id to account
         accounts: {
           ...state.accounts,
-          byId: { ...state.accounts.byId, [id]: { ...state.accounts.byId[id], studentCard: data.map((dataItem) => dataItem.id) } },
+          byId: { ...state.accounts.byId, [id]: { ...state.accounts.byId[id], studentCard: (data === null ? [] : data.map((dataItem) => dataItem.id)) } },
         },
         // add studentCard id
         studentCards: {
           // byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.studentCards.byId),
-          byId: data,
+          byId: (data === null ? {} : data),
           // allIds: state.studentCards.allIds.concat(data.map((item) => item.id)),
-          allIds: data.map((item) => item.id),
+          allIds: (data === null ? [] : data.map((item) => item.id)),
         },
 
         loading: { ...state.loading, fetchStudentCard: false },

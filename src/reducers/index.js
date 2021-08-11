@@ -7,10 +7,13 @@ import challenges from './challenges';
 import grades from './grades';
 import courses from './courses';
 import classes from './classes';
-import member from './members';
+import members from './members';
 import problem from './problems';
 import submissions from './submissions';
 import team from './teams';
+import accounts from './accounts';
+import studentCards from './studentCards';
+import user from './user';
 import loading from './loading/index';
 import error from './error/index';
 
@@ -23,10 +26,13 @@ export default combineReducers({
   courses,
   classes,
   grades,
-  member,
+  members,
   problem,
   submissions,
   team,
+  accounts,
+  studentCards,
+  user,
   loading,
   error,
 });

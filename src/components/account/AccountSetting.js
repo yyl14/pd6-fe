@@ -3,7 +3,8 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Button, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { editAccount, getUserInfo, fetchStudentCard } from '../../actions/auth';
+import { editAccount, fetchStudentCard } from '../../actions/user/user';
+import { getUserInfo } from '../../actions/user/auth';
 import SimpleBar from '../ui/SimpleBar';
 import NoMatch from '../noMatch';
 import BasicInfo from './BasicInfo';
@@ -27,11 +28,11 @@ export default function AccountSetting() {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const accountId = useSelector((state) => state.auth.user.id);
-  const authToken = useSelector((state) => state.auth.user.token);
-  const account = useSelector((state) => state.auth.user);
-  const studentCards = useSelector((state) => state.auth.studentCards);
-  const loading = useSelector((state) => state.auth.loading);
+  const accountId = useSelector((state) => state.user.id);
+  const authToken = useSelector((state) => state.user.token);
+  const account = useSelector((state) => state.user);
+  const studentCards = useSelector((state) => state.studentCards);
+  const loading = useSelector((state) => state.loading.user);
 
   useEffect(() => {
     dispatch(fetchStudentCard(authToken, accountId));
@@ -39,14 +40,14 @@ export default function AccountSetting() {
 
   useEffect(() => {
     let update = [];
-    account.studentCard.forEach((key) => {
+    studentCards.allIds.forEach((key) => {
       update = [...update, studentCards.byId[key]];
     });
     setCards(update);
   }, [account, studentCards]);
 
   if (account === undefined || studentCards === undefined) {
-    if (loading.fetchAccount || loading.fetchStudentCard) {
+    if (loading.auth.fetchAccount || loading.user.fetchStudentCard) {
       return <div>loading...</div>;
     }
     return <NoMatch />;

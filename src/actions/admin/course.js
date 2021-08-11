@@ -142,7 +142,7 @@ export const addClass = (token, courseId, name, isHidden) => (dispatch) => {
   agent
     .post(`/course/${courseId}/class`, { name }, auth)
     .then((res) => {
-      // console.log(res);
+      console.log(res);
       const { data } = res.data;
       const { id } = data;
       dispatch({

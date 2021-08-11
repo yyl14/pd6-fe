@@ -93,17 +93,6 @@ const editInstitute = (token, id, abbreviatedName, fullName, emailDomain, isDisa
     is_disabled: isDisabled,
   };
 
-  // dispatch({
-  //   type: accountConstants.EDIT_INSTITUTE_SUCCESS,
-  //   payload: {
-  //     id: parseInt(id, 10),
-  //     abbreviated_name: abbreviatedName,
-  //     full_name: fullName,
-  //     email_domain: emailDomain,
-  //     is_disabled: isDisabled,
-  //   },
-  // });
-
   agent.patch(`/institute/${id}`, body, auth)
     .then((res) => {
       console.log('editing institute suc');
@@ -137,7 +126,6 @@ const fetchAccount = (token, id) => (dispatch) => {
 
   agent.get(`/account/${id}`, auth)
     .then((res) => {
-      // console.log(res.data);
       dispatch({
         type: accountConstants.FETCH_ACCOUNT_SUCCESS,
         payload: res.data.data,
@@ -312,6 +300,7 @@ const fetchAccounts = (token) => (dispatch) => {
       dispatch({ type: accountConstants.FETCH_ACCOUNTS_SUCCESS, payload: res.data.data });
     })
     .catch((err) => {
+      console.log(err);
       dispatch({
         type: accountConstants.FETCH_ACCOUNTS_FAIL,
         error: err,

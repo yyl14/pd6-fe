@@ -30,8 +30,6 @@ export default function AccessLog() {
   const logs = useSelector((state) => state.admin.system.logs.byId);
   const logsID = useSelector((state) => state.admin.system.logs.allIds);
 
-  const accounts = useSelector((state) => state.admin.system.accounts.byId);
-  const [accountsId, setAccountsId] = useState([]);
   const [path, setPath] = useState([]);
 
   const [tableData, setTableData] = useState([]);
@@ -44,25 +42,22 @@ export default function AccessLog() {
     },
   ]);
 
-  const modifyRawData = useCallback(
-    (item) => {
-      let studentID = item.account_id;
-      if (typeof studentID === 'number') {
-        studentID = studentID.toString();
-      }
-      const temp = {
-        username: accounts[item.account_id].username,
-        studentID,
-        realName: accounts[item.account_id].real_name,
-        IP: item.ip,
-        resourcePath: item.resource_path,
-        requestMethod: item.request_method,
-        accessTime: item.access_time.toISOString().slice(0, 16).replace('T', ' '),
-      };
-      return temp;
-    },
-    [accounts],
-  );
+  const modifyRawData = useCallback((item) => {
+    let studentID = item.account_id;
+    if (typeof studentID === 'number') {
+      studentID = studentID.toString();
+    }
+    const temp = {
+      username: item.username,
+      student_id: studentID,
+      real_name: item.real_name,
+      ip: item.ip,
+      resource_path: item.resource_path,
+      request_method: item.request_method,
+      access_time: item.access_time.toISOString().slice(0, 16).replace('T', ' '),
+    };
+    return temp;
+  }, []);
 
   const filter = () => {
     const newData = [];
@@ -80,38 +75,27 @@ export default function AccessLog() {
   };
 
   useEffect(() => {
-    if (logsID === null) {
-      dispatch(fetchAccessLog(authToken, 0, 100));
-      setDateRange([
-        {
-          startDate: new Date(),
-          endDate: new Date(),
-          key: 'selection',
-        },
-      ]);
-    } else {
-      const newAccountsId = logsID.map((logID) => logs[logID].account_id);
-      setAccountsId(newAccountsId);
-    }
-  }, [logsID, logs, authToken, dispatch]);
+    setDateRange([
+      {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: 'selection',
+      },
+    ]);
+    dispatch(fetchAccessLog(authToken, 0, 100));
+  }, [authToken, dispatch]);
 
   useEffect(() => {
-    if (accountsId.length !== 0) {
-      if (accounts === null) {
-        dispatch(fetchAccounts(authToken, accountsId));
-      } else {
-        const newData = [];
-        const newPath = [];
-        logsID.forEach((key) => {
-          const item = logs[key];
-          newData.push(modifyRawData(item));
-          newPath.push(`account/${item.account_id}/setting`);
-        });
-        setTableData(newData);
-        setPath(newPath);
-      }
-    }
-  }, [accountsId, accounts, logs, logsID, authToken, dispatch, modifyRawData]);
+    const newData = [];
+    const newPath = [];
+    logsID.forEach((key) => {
+      const item = logs[key];
+      newData.push(modifyRawData(item));
+      newPath.push(`account/${item.account_id}/setting`);
+    });
+    setTableData(newData);
+    setPath(newPath);
+  }, [logsID, logs, modifyRawData]);
 
   if (loading) {
     return <div>loading...</div>;
@@ -134,37 +118,37 @@ export default function AccessLog() {
             width: 150,
           },
           {
-            id: 'studentID',
+            id: 'student_id',
             label: 'Student ID',
             align: 'center',
             width: 150,
           },
           {
-            id: 'realName',
+            id: 'real_name',
             label: 'Real Name',
             align: 'center',
             width: 150,
           },
           {
-            id: 'IP',
+            id: 'ip',
             label: 'IP',
             align: 'center',
             width: 150,
           },
           {
-            id: 'resourcePath',
+            id: 'resource_path',
             label: 'Resource Path',
             align: 'center',
             width: 150,
           },
           {
-            id: 'requestMethod',
+            id: 'request_method',
             label: 'Request Method',
             align: 'center',
             width: 200,
           },
           {
-            id: 'accessTime',
+            id: 'access_time',
             label: 'Access Time',
             align: 'center',
             width: 300,

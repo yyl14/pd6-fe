@@ -8,7 +8,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import SimpleBar from '../ui/SimpleBar';
 import AlignedText from '../ui/AlignedText';
 
-import { editPassword } from '../../actions/auth';
+import { editPassword } from '../../actions/user/user';
 
 const useStyles = makeStyles((theme) => ({
   textField: {
@@ -29,10 +29,10 @@ export default function NewPassword() {
     confirmPassword: false,
   });
 
-  const authToken = useSelector((state) => state.auth.user.token);
-  const id = useSelector((state) => state.auth.user.id);
-  const loading = useSelector((state) => state.auth.loading.editPassword);
-  const serverError = useSelector((state) => state.auth.error.editPassword);
+  const authToken = useSelector((state) => state.user.token);
+  const id = useSelector((state) => state.user.id);
+  const loading = useSelector((state) => state.loading.user.user.editPassword);
+  const serverError = useSelector((state) => state.error.user.user.editPassword);
   const dispatch = useDispatch();
 
   const [errors, setErrors] = useState({

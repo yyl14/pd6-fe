@@ -1,4 +1,5 @@
 import { userConstants } from '../actions/constant';
+import { authConstants } from '../actions/user/constants';
 
 const initialState = {
   isAuthenticated: false,
@@ -41,6 +42,19 @@ export default function auth(state = initialState, action) {
         loading: {
           ...state.loading,
           fetchAccount: true,
+        },
+      };
+    case authConstants.AUTH_SUCCESS:
+      return {
+        isAuthenticated: !!(action.user),
+        user: { ...action.user, studentCard: [] },
+        error: {
+          ...state.error,
+          fetchAccount: null,
+        },
+        loading: {
+          ...state.loading,
+          fetchAccount: false,
         },
       };
     case userConstants.AUTH_SUCCESS:
@@ -248,7 +262,6 @@ export default function auth(state = initialState, action) {
         loading: { ...state.loading, addStudentCard: true },
       };
     case userConstants.ADD_SELF_STUDENT_CARD_SUCCESS: {
-      const { accountId, data } = action.payload;
       return {
         ...state,
         loading: { ...state.loading, addStudentCard: false },
