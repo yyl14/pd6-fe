@@ -289,6 +289,15 @@ const overrides = {
     },
   },
 
+  // Table
+  MuiTableRow: {
+    hover: {
+      '&:hover': {
+        backgroundColor: `${mono.veryLightGray} !important`,
+      },
+    },
+  },
+
   MuiPaper: {
     // elevation: {  },
     outlined: {
