@@ -6,7 +6,7 @@ import challenges from './challenges';
 import grades from './grades';
 import courses from './courses';
 import classes from './classes';
-import members from './members';
+import classMembers from './classMembers';
 import problem from './problems';
 import submissions from './submissions';
 import team from './teams';
@@ -24,7 +24,7 @@ export default combineReducers({
   courses,
   classes,
   grades,
-  members,
+  classMembers,
   problem,
   submissions,
   team,
