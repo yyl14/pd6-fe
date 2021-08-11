@@ -245,7 +245,7 @@ export default function Course({
               (item) => (item.type === 'LESSON' || mode !== 'class-list') && (
               <ListItem
                 button
-                key={item.text}
+                key={item.path}
                 onClick={() => history.push(item.path)}
                 className={item.text !== 'Lesson' ? classes.item : classes.addItem}
               >
@@ -279,7 +279,7 @@ export default function Course({
                   (item) => item.type === 'CONTEST' && (
                   <ListItem
                     button
-                    key={item.text}
+                    key={item.path}
                     onClick={() => history.push(item.path)}
                     className={item.text !== 'Contest' ? classes.item : classes.addItem}
                   >
