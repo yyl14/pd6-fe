@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   topContent1: {
     // width: '80%',
     // maxWidth: '1280px',
-    background: theme.palette.grey[100],
+    background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
     padding: '5px 15px 15px 15px',
     display: 'flex',
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     height: '75px',
   },
   topContent2: {
-    background: theme.palette.grey[100],
+    background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
     padding: '5px 15px 15px 15px',
     display: 'flex',
@@ -49,13 +49,11 @@ const useStyles = makeStyles((theme) => ({
   },
   search: {
     height: '60px',
-    width: 250,
-    marginLeft: '5px',
+    width: 300,
   },
   search2: {
     height: '60px',
-    width: 360,
-    marginLeft: '5px',
+    width: 380,
   },
   search3: {
     height: '60px',
@@ -139,8 +137,8 @@ const useStyles = makeStyles((theme) => ({
     color: 'black',
   },
   textLink: {
-    color: 'rgba(30, 165, 255, 1)',
-    textDecorationLine: 'none',
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
     '&:hover': {
       color: '#6DC5FF',
     },
