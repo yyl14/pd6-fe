@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography } from '@material-ui/core';
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import CustomTable from '../../ui/CustomTable';
 import { fetchSubmitLanguage } from '../../../actions/admin/system';
@@ -18,8 +17,8 @@ export default function SubmissionLanguageHome() {
 
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.user.token);
-  const submitLang = useSelector((state) => state.admin.system.submitLang.byId);
-  const submitLangId = useSelector((state) => state.admin.system.submitLang.allIds);
+  const submitLang = useSelector((state) => state.submitLangs.byId);
+  const submitLangId = useSelector((state) => state.submitLangs.allIds);
 
   const [tableData, setTableData] = useState([]);
   const [path, setPath] = useState([]);

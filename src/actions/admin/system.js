@@ -31,7 +31,7 @@ const fetchAccessLog = (token, offset, limit) => (dispatch) => {
       const newData = data.map((item) => (
         {
           id: item.id,
-          access_time: new Date(item.access_time),
+          access_time: item.access_time,
           request_method: item.request_method,
           resource_path: item.resource_path,
           ip: item.ip,

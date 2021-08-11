@@ -13,6 +13,9 @@ import team from './teams';
 import accounts from './accounts';
 import studentCards from './studentCards';
 import user from './user';
+import accessLogs from './accessLogs';
+import announcements from './announcements';
+import submitLangs from './submitLangs';
 import loading from './loading/index';
 import error from './error/index';
 
@@ -31,6 +34,9 @@ export default combineReducers({
   accounts,
   studentCards,
   user,
+  accessLogs,
+  announcements,
+  submitLangs,
   loading,
   error,
 });
