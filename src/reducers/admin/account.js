@@ -281,8 +281,10 @@ export default function account(state = initialState, action) {
     case accountConstants.EDIT_ACCOUNT_SUCCESS: {
       const editedAccount = state.accounts.byId[action.payload.id];
       editedAccount.nickname = action.payload.nickname;
-      editedAccount.alternative_email = action.payload.alternative_email;
       editedAccount.real_name = action.payload.real_name;
+      if (action.payload.alternative_email === '') {
+        editedAccount.alternative_email = action.payload.alternative_email;
+      }
       // editedAccount.username = action.payload.username;
       return {
         ...state,
@@ -456,13 +458,38 @@ export default function account(state = initialState, action) {
       };
     }
     case accountConstants.ADD_STUDENT_CARD_FAIL: {
-      const { id, error } = action.payload;
       return {
         ...state,
         loading: { ...state.loading, addStudentCard: false },
         error: {
           ...state.error,
-          addStudentCard: error,
+          addStudentCard: action.error,
+        },
+      };
+    }
+    case accountConstants.EDIT_PASSWORD_REQUEST: {
+      return {
+        ...state,
+        loading: { ...state.loading, editPassword: true },
+      };
+    }
+    case accountConstants.EDIT_PASSWORD_SUCCESS: {
+      return {
+        ...state,
+        loading: { ...state.loading, editPassword: false },
+        error: {
+          ...state.error,
+          editPassword: null,
+        },
+      };
+    }
+    case accountConstants.EDIT_PASSWORD_FAIL: {
+      return {
+        ...state,
+        loading: { ...state.loading, editPassword: false },
+        error: {
+          ...state.error,
+          editPassword: action.error,
         },
       };
     }

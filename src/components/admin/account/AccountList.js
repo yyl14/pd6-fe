@@ -84,7 +84,7 @@ export default function AccountList() {
       <CustomTable
         hasSearch
         searchWidthOption={3}
-        searchPlaceholder="Student Id / Real Name / Username"
+        searchPlaceholder="Student ID / Real Name / Username"
         data={tableData}
         columns={[
           {
