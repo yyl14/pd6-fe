@@ -26,28 +26,28 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '82.5px',
   },
   bottomSpace: {
-    marginBottom: '5vh',
+    marginBottom: '40px',
   },
   titleIcon: {
     float: 'left',
     color: theme.palette.black.main,
-    marginTop: '5.4vh',
-    marginBottom: '1.23vh',
-    marginLeft: '1.6vw',
-    marginRight: '0.97vw',
+    marginTop: '44px',
+    marginBottom: '6.33px',
+    marginLeft: '20px',
+    marginRight: '14px',
     '&:hover': {
       cursor: 'pointer',
     },
   },
   title: {
     float: 'left',
-    marginTop: '5vh',
-    marginBottom: '1.23vh',
+    marginTop: '40px',
+    marginBottom: '6.33px',
   },
   secondTitle: {
     float: 'left',
-    marginTop: '3vh',
-    marginBottom: '1.23vh',
+    marginTop: '25px',
+    marginBottom: '6.33px',
   },
   icon: {
     color: theme.palette.black.main,
@@ -67,20 +67,20 @@ const useStyles = makeStyles((theme) => ({
   secondTitleIcon: {
     float: 'left',
     color: theme.palette.black.main,
-    marginTop: '3.5vh',
-    marginBottom: '1.23vh',
-    marginLeft: '1.6vw',
-    marginRight: '0.97vw',
+    marginTop: '29px',
+    marginBottom: '6.33px',
+    marginLeft: '20px',
+    marginRight: '14px',
     '&:hover': {
       cursor: 'pointer',
     },
   },
   divider: {
-    marginBottom: '2.21vh',
+    marginBottom: '16px',
   },
   arrow: {
     marginTop: '60px',
-    marginLeft: '1.6vw',
+    marginLeft: '20px',
     marginRight: 'auto',
     '&:hover': {
       cursor: 'pointer',
