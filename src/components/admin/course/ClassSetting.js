@@ -4,7 +4,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import {
   Typography,
   Button,
-  Grid,
   Dialog,
   DialogActions,
   DialogContent,
