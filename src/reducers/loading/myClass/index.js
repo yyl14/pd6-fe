@@ -1,3 +1,4 @@
 import { combineReducers } from 'redux';
+import grade from './grade';
 
-export default combineReducers({});
+export default combineReducers({ grade });

@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { gradeConstants } from '../actions/myClass/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
