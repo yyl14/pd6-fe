@@ -47,3 +47,7 @@ const addChallenge = (token, classId) => (dispatch) => {
       });
     });
 };
+
+export {
+  fetchChallenges, addChallenge,
+};

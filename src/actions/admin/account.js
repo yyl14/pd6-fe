@@ -300,7 +300,6 @@ const fetchAccounts = (token) => (dispatch) => {
       dispatch({ type: accountConstants.FETCH_ACCOUNTS_SUCCESS, payload: res.data.data });
     })
     .catch((err) => {
-      console.log(err);
       dispatch({
         type: accountConstants.FETCH_ACCOUNTS_FAIL,
         error: err,
