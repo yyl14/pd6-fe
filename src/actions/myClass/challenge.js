@@ -15,7 +15,7 @@ const fetchChallenges = (token, classId) => (dispatch) => {
     .then((res) => {
       dispatch({
         type: challengeConstants.FETCH_CHALLENGES_SUCCESS,
-        payload: res.data, // to be tested
+        payload: res.data.data,
       });
     })
     .catch((err) => {

@@ -16,7 +16,11 @@ const byId = (state = {}, action) => {
     case accountConstants.FETCH_STUDENT_CARD_SUCCESS: {
       const { id, data } = action.payload;
       return {
-        ...state, [id]: { ...state[id], studentCard: data.map((dataItem) => dataItem.id) },
+        ...state,
+        [id]: {
+          ...state[id],
+          studentCard: (data === null ? [] : data.map((dataItem) => dataItem.id)),
+        },
       };
     }
 

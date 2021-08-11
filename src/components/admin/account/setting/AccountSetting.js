@@ -29,10 +29,10 @@ export default function AccountSetting() {
 
   const dispatch = useDispatch();
   const { accountId } = useParams();
-  const authToken = useSelector((state) => state.auth.user.token);
-  const accounts = useSelector((state) => state.admin.account.accounts.byId);
-  const studentCards = useSelector((state) => state.admin.account.studentCards.byId);
-  const loading = useSelector((state) => state.admin.account.loading);
+  const authToken = useSelector((state) => state.user.token);
+  const accounts = useSelector((state) => state.accounts.byId);
+  const studentCards = useSelector((state) => state.studentCards.byId);
+  const loading = useSelector((state) => state.loading.admin.account);
   const account = accounts[accountId];
 
   // useEffect(() => {
@@ -41,13 +41,17 @@ export default function AccountSetting() {
   // }, [authToken, accountId, dispatch]);
 
   useEffect(() => {
-    if (!loading.makeStudentCardDefault) {
-      dispatch(fetchStudentCard(authToken, accountId));
-    }
     if (!loading.editAccount) {
       dispatch(fetchAccount(authToken, accountId));
     }
-  }, [accountId, authToken, dispatch, loading.editAccount, loading.makeStudentCardDefault]);
+  }, [accountId, authToken, dispatch, loading.editAccount]);
+
+  useEffect(() => {
+    // console.log(!loading.fetchStudentCard);
+    if (!loading.makeStudentCardDefault) {
+      dispatch(fetchStudentCard(authToken, accountId));
+    }
+  }, [accountId, authToken, dispatch, loading.makeStudentCardDefault]);
 
   useEffect(() => {
     setCards(Object.values(studentCards));

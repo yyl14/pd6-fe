@@ -107,6 +107,7 @@ export default function account(state = initialState, action) {
       };
     }
     case accountConstants.FETCH_ACCOUNTS_FAIL: {
+      console.log('fail');
       return {
         ...state,
         fetchAccounts: false,
