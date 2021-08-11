@@ -7,7 +7,7 @@ import {
   RadioGroup,
   Radio,
 } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '16px',
   },
   optionText: {
-    marginLeft: '6px',
+    marginLeft: '10px',
   },
 
   radio: {
@@ -38,16 +38,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#F8F8F8',
     borderRadius: '50%',
     boxShadow: `inset 0 0 0 1.5px ${theme.palette.grey[300]}`,
-    padding: '2px',
-    '&$checked': {
-      color: theme.palette.grey[100],
-    },
-    '&:hover': {
-      backgroundColor: `${theme.palette.grey[100]} !important`,
-    },
-    '&:active': {
-      backgroundColor: theme.palette.grey[300],
-    },
   },
   icon: {
     'input:hover ~ &': {
@@ -58,12 +48,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     padding: '0px',
     '&:before': {
-      // display: 'block',
-      width: 20,
-      height: 20,
-      // backgroundImage: 'radial-gradient(circle at 100%,#1EA5FF)',
-      // backgroundImage: 'radial-gradient(#1EA5FF, #1EA5FF, transparent 50%)',
-      backgroundImage: 'radial-gradient(#1EA5FF,#1EA5FF 41%,transparent 43%)',
+      width: '20px',
+      height: '20px',
+      backgroundImage: `radial-gradient(${theme.palette.primary.main},${theme.palette.primary.main} 41%,transparent 43%)`,
       content: '""',
     },
   },
@@ -86,6 +73,13 @@ export default function RadioGroupForm({
     }
     return classes.columnOption;
   };
+  const handleClick = (e) => {
+    if (e.target.value === selectedValue) {
+      setSelectedValue('');
+    } else {
+      setSelectedValue(e.target.value);
+    }
+  };
 
   return (
     <FormControl className={classes.wrapper}>
@@ -94,7 +88,8 @@ export default function RadioGroupForm({
           {title}
         </Typography>
       </div>
-      <RadioGroup value={selectedValue} onChange={(e) => setSelectedValue(e.target.value)} row={directionSelect(flexDirection)}>
+      {/* onChange={(e) => setSelectedValue(e.target.value)} */}
+      <RadioGroup value={selectedValue} row={directionSelect(flexDirection)}>
         { options.map((option) => (
           <FormControlLabel
             className={marginDirectionSelect(flexDirection)}
@@ -105,8 +100,7 @@ export default function RadioGroupForm({
                 // className={classes.radio}
                 checkedIcon={<span className={`${classes.radio} ${classes.checkedIcon}`} />}
                 icon={<span className={`${classes.radio} ${classes.icon}`} />}
-                // checkedIcon={<span className={classes.radio} />}
-                // icon={<span className={classes.radio} />}
+                onClick={handleClick}
               />
             )}
             label={<Typography variant="body1" className={classes.optionText}>{option.label}</Typography>}

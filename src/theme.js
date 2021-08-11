@@ -288,6 +288,19 @@ const overrides = {
       '&$shrink': { transform: 'translate(14px, -20px) scale(0.89)', fontWeight: 400 },
     },
   },
+  MuiRadio: {
+    root: {
+      display: 'flex',
+      padding: '5px',
+
+      '&:hover': {
+        backgroundColor: mono.lightGray,
+      },
+      '&:active': {
+        backgroundColor: mono.gray,
+      },
+    },
+  },
 
   MuiPaper: {
     // elevation: {  },
