@@ -291,13 +291,24 @@ const overrides = {
   MuiRadio: {
     root: {
       display: 'flex',
-      padding: '5px',
-
+      padding: '4px',
       '&:hover': {
         backgroundColor: mono.lightGray,
       },
       '&:active': {
         backgroundColor: mono.gray,
+      },
+    },
+    colorSecondary: {
+      '&$checked': {
+        display: 'flex',
+        padding: '4px',
+        '&:hover': {
+          backgroundColor: mono.lightGray,
+        },
+        '&:active': {
+          backgroundColor: mono.gray,
+        },
       },
     },
   },
