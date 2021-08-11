@@ -35,7 +35,6 @@ const addChallenge = (token, classId, type, publicizeType, title, description, s
   dispatch({ type: challengeConstants.ADD_CHALLENGE_REQUEST });
 
   agent.post(`/class/${classId}/challenge`, {
-    class_id: classId,
     type,
     publicize_type: publicizeType,
     title,

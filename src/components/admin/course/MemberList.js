@@ -47,9 +47,9 @@ export default function MemberList() {
   const dispatch = useDispatch();
 
   const authToken = useSelector((state) => state.auth.user.token);
-  const courses = useSelector((state) => state.admin.course.courses);
-  const classes = useSelector((state) => state.admin.course.classes);
-  const members = useSelector((state) => state.admin.course.members);
+  const courses = useSelector((state) => state.courses);
+  const classes = useSelector((state) => state.classes);
+  const members = useSelector((state) => state.classMembers);
   const loading = useSelector((state) => state.admin.course.loading);
 
   useEffect(() => {
