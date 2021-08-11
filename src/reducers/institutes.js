@@ -11,7 +11,7 @@ const byId = (state = {}, action) => {
       return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.institutes);
     }
     case accountConstants.FETCH_INSTITUTE_SUCCESS: {
-      return { ...state.institutes.byId, [action.payload.id]: action.payload };
+      return { ...state, [action.payload.id]: action.payload };
     }
     default:
       return state;
@@ -27,7 +27,7 @@ const allIds = (state = [], action) => {
       return action.payload.map((item) => item.id);
 
     case accountConstants.FETCH_INSTITUTE_SUCCESS:
-      return state.institutes.allIds.includes(action.payload.id) ? state.institutes.allIds : state.institutes.allIds.concat([action.payload.id]);
+      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
 
     default:
       return state;
