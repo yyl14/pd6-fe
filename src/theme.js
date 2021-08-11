@@ -233,6 +233,11 @@ const overrides = {
       margin: '10px 0 5px 0',
     },
   },
+  MuiFormControlLabel: {
+    root: {
+      marginLeft: '0px',
+    },
+  },
   MuiSelect: {
     outlined: { padding: '10px 0px 10px 15px' },
     selectMenu: {
