@@ -1,7 +1,7 @@
 import agent from '../agent';
 import {
   systemConstants,
-} from '../constant';
+} from './constants';
 
 // Access log
 const fetchAccessLog = (token, offset, limit) => (dispatch) => {
@@ -10,13 +10,41 @@ const fetchAccessLog = (token, offset, limit) => (dispatch) => {
     type: systemConstants.FETCH_ACCESS_LOG_START,
   });
   agent.get(`/access-log?offset=${offset}&limit=${limit}`, fetch)
-    .then((res) => {
-      const { data } = res.data;
-      console.log('response :', data);
+    .then(async (response) => {
+      const { data } = response.data;
+      const ids = data.map((item) => (item.account_id));
+      const accounts = await Promise.all(ids.map(async (id) => {
+        let account = null;
+        await agent.get(`/account/${id}`, fetch)
+          .then((res) => {
+            account = res.data.data;
+          })
+          .catch((err) => {
+            dispatch({
+              type: systemConstants.FETCH_ACCESS_LOG_FAIL,
+              payload: err,
+            });
+          });
+        return account;
+      }));
+
+      const newData = data.map((item) => (
+        {
+          id: item.id,
+          access_time: new Date(item.access_time),
+          request_method: item.request_method,
+          resource_path: item.resource_path,
+          ip: item.ip,
+          account_id: item.account_id,
+          username: accounts[item.account_id].username,
+          real_name: accounts[item.account_id].real_name,
+        }
+      ));
+
       dispatch({
         type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
         payload: {
-          ...data,
+          ...newData,
         },
       });
     })
@@ -26,45 +54,6 @@ const fetchAccessLog = (token, offset, limit) => (dispatch) => {
         payload: err,
       });
     });
-};
-const fetchAccounts = (token, ids) => async (dispatch) => {
-  const fetch = { headers: { 'auth-token': token } };
-  dispatch({
-    type: systemConstants.FETCH_LOG_ACCOUNTS_START,
-  });
-
-  let error = null;
-  const accounts = await Promise.all(ids.map(async (id) => {
-    let response = null;
-    await agent.get(`/account/${id}`, fetch)
-      .then((res) => {
-        const { data } = res.data;
-        // console.log('account :', id, data);
-        response = data;
-      })
-      .catch((err) => {
-        error = err;
-        response = null;
-      });
-    return response;
-  }));
-
-  // console.log('payload : ', accounts);
-  if (error === null) {
-    dispatch({
-      type: systemConstants.FETCH_LOG_ACCOUNTS_SUCCESS,
-      payload: {
-        ...accounts,
-      },
-    });
-  } else {
-    dispatch({
-      type: systemConstants.FETCH_LOG_ACCOUNTS_FAIL,
-      payload: {
-        error,
-      },
-    });
-  }
 };
 // Announcement
 const fetchAnnouncement = (token) => (dispatch) => {
@@ -214,7 +203,6 @@ const editSubmitLanguage = (token, id, name, version, isDisabled) => (dispatch) 
 
 export {
   fetchAccessLog,
-  fetchAccounts,
   fetchAnnouncement,
   editAnnouncement,
   addAnnouncement,

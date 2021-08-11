@@ -1,27 +1,22 @@
 import {
   systemConstants,
-} from '../../actions/constant';
+} from '../../actions/admin/constants';
 
 const initialState = {
   logs: {
-    byId: null,
-    allIds: null,
-  },
-  accounts: {
-    byId: null,
-    allIds: null,
+    byId: {},
+    allIds: [],
   },
   announcements: {
-    byId: null,
-    allIds: null,
+    byId: {},
+    allIds: [],
   },
   submitLang: {
-    byId: null,
-    allIds: null,
+    byId: {},
+    allIds: [],
   },
   loading: {
     fetchAccessLog: false,
-    fetchAccount: false,
     fetchAnnouncement: false,
     editAnnouncement: false,
     addAnnouncement: false,
@@ -31,7 +26,6 @@ const initialState = {
   },
   error: {
     fetchAccessLog: null,
-    fetchAccount: null,
     fetchAnnouncement: null,
     editAnnouncement: null,
     addAnnouncement: null,
@@ -55,20 +49,10 @@ export default function system(state = initialState, action) {
       };
     case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
       const data = Object.values(action.payload);
-      const newData = data.map((item) => (
-        {
-          id: item.id,
-          access_time: new Date(item.access_time),
-          request_method: item.request_method,
-          resource_path: item.resource_path,
-          ip: item.ip,
-          account_id: item.account_id,
-        }
-      ));
       return {
         ...state,
         logs: {
-          byId: newData.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.logs),
+          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.logs),
           allIds: data.map((item) => item.id),
         },
         loading: {
@@ -96,50 +80,6 @@ export default function system(state = initialState, action) {
         error: {
           ...state.error,
           fetchAccessLog: error,
-        },
-      };
-    }
-    case systemConstants.FETCH_LOG_ACCOUNTS_START:
-      return {
-        ...state,
-        loading: {
-          ...state.loading,
-          fetchAccount: true,
-        },
-      };
-    case systemConstants.FETCH_LOG_ACCOUNTS_SUCCESS: {
-      const data = Object.values(action.payload);
-      return {
-        ...state,
-        accounts: {
-          byId: data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.accounts),
-          allIds: data.map((item) => item.id),
-        },
-        loading: {
-          ...state.loading,
-          fetchAccount: false,
-        },
-        error: {
-          ...state.error,
-          fetchAccount: null,
-        },
-      };
-    }
-    case systemConstants.FETCH_LOG_ACCOUNTS_FAIL: {
-      const error = action.payload;
-      return {
-        ...state,
-        accounts: {
-          byId: {},
-          allIds: [],
-        },
-        loading: {
-          ...state.loading,
-          fetchAccount: false,
-        },
-        error: {
-          ...state.error,
-          fetchAccount: error,
         },
       };
     }

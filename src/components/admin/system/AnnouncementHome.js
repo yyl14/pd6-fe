@@ -39,9 +39,9 @@ export default function AnnouncementHome() {
 
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.user.token);
-  const loading = useSelector((state) => state.admin.system.loading);
   const announcements = useSelector((state) => state.admin.system.announcements.byId);
   const announcementId = useSelector((state) => state.admin.system.announcements.allIds);
+  const loading = useSelector((state) => state.admin.system.loading.fetchAnnouncement);
   const addLoading = useSelector((state) => state.admin.system.loading.addAnnouncement);
   const deleteLoading = useSelector((state) => state.admin.system.loading.deleteAnnouncement);
 
@@ -106,20 +106,16 @@ export default function AnnouncementHome() {
   }, [authToken, dispatch, addLoading, deleteLoading]);
 
   useEffect(() => {
-    if (announcementId == null) {
-      dispatch(fetchAnnouncement(authToken));
-    } else {
-      const newData = [];
-      const newPath = [];
-      announcementId.forEach((key) => {
-        const item = announcements[key];
-        newData.push(modifyRawData(item));
-        newPath.push(`announcement/${item.id}/setting`);
-      });
-      setTableData(newData);
-      setPath(newPath);
-    }
-  }, [dispatch, authToken, announcements, announcementId]);
+    const newData = [];
+    const newPath = [];
+    announcementId.forEach((key) => {
+      const item = announcements[key];
+      newData.push(modifyRawData(item));
+      newPath.push(`announcement/${item.id}/setting`);
+    });
+    setTableData(newData);
+    setPath(newPath);
+  }, [announcements, announcementId]);
 
   const history = useHistory();
   const handleClickAdd = () => {

@@ -4,7 +4,7 @@ import { courseConstants } from '../actions/constant';
 const byId = (state = {}, action) => {
   switch (action.type) {
     case courseConstants.FETCH_CLASSES_SUCCESS: {
-      const { data } = action.payload;
+      const { data } = action.payload.data;
       return data.reduce(
         (acc, item) => ({
           ...acc,
@@ -14,13 +14,16 @@ const byId = (state = {}, action) => {
             memberIds: state[item.id] ? state[item.id].memberIds : [],
           },
         }),
-        {},
+        state,
       );
     }
 
     case courseConstants.FETCH_MEMBERS_SUCCESS: {
-      const { data } = action.payload;
-      return data.reduce((acc, item) => ({ ...acc, [item.id]: item }), {});
+      const {
+        classId,
+        data: { data },
+      } = action.payload;
+      return { ...state, [classId]: { ...state[classId], memberIds: data.map((item) => item.id) } };
     }
 
     default:
@@ -31,8 +34,8 @@ const byId = (state = {}, action) => {
 const allIds = (state = [], action) => {
   switch (action.type) {
     case courseConstants.FETCH_CLASSES_SUCCESS: {
-      const { data } = action.payload;
-      return data.map((item) => item.id);
+      const { data } = action.payload.data;
+      return [...new Set([...data.map((item) => item.id), ...state])];
     }
     default:
       return state;

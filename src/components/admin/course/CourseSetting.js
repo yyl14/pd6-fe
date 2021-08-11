@@ -39,8 +39,8 @@ export default function CourseSetting() {
   const { courseId } = useParams();
   const history = useHistory();
   const authToken = useSelector((state) => state.auth.user.token);
-  const courses = useSelector((state) => state.admin.course.courses);
-  const loading = useSelector((state) => state.admin.course.loading);
+  const courses = useSelector((state) => state.courses);
+  const loading = useSelector((state) => state.loading.admin.course);
   const dispatch = useDispatch();
 
   const [showRenameDialog, setShowRenameDialog] = useState(false);
@@ -48,8 +48,10 @@ export default function CourseSetting() {
   const [newCourseName, setNewCourseName] = useState('');
 
   useEffect(() => {
-    dispatch(fetchCourses(authToken));
-  }, [authToken, courseId, dispatch]);
+    if (!loading.renameCourse) {
+      dispatch(fetchCourses(authToken));
+    }
+  }, [authToken, courseId, dispatch, loading.renameCourse]);
 
   const getCourseType = (courseType) => {
     switch (courseType) {
