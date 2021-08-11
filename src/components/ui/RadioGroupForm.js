@@ -15,10 +15,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     margin: '0px',
   },
-  alignedTextWrapper: {
-    width: '250px',
-    marginTop: '0px',
-  },
 
   rowOption: {
     height: '25px',
@@ -58,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function RadioGroupForm({
-  title, options, selectedValue, setSelectedValue, flexDirection,
+  options, selectedValue, setSelectedValue, flexDirection,
 }) {
   const classes = useStyles();
   const directionSelect = (dir) => {
@@ -83,11 +79,6 @@ export default function RadioGroupForm({
 
   return (
     <FormControl className={classes.wrapper}>
-      <div className={classes.alignedTextWrapper}>
-        <Typography variant="body1">
-          {title}
-        </Typography>
-      </div>
       <RadioGroup value={selectedValue} row={directionSelect(flexDirection)}>
         { options.map((option) => (
           <FormControlLabel
