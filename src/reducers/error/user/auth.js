@@ -1,6 +1,7 @@
 import { authConstants } from '../../../actions/user/constants';
 
 const initialState = {
+  auth: null,
   login: null,
   logout: null,
   forgetPassword: null,
@@ -53,6 +54,11 @@ export default function auth(state = initialState, action) {
       return {
         ...state,
         signup: action.errors,
+      };
+    case authConstants.API_CALL_ERROR:
+      return {
+        ...state,
+        auth: action.errors,
       };
     default: {
       return state;
