@@ -145,7 +145,7 @@ export default function InstituteList() {
       </Typography>
       <CustomTable
         hasSearch
-        searchPlaceholder="Institute/Email"
+        searchPlaceholder="Institute / Email"
         buttons={(
           <>
             <Button color="primary" onClick={() => setPopUp(true)}>
