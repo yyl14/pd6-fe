@@ -46,18 +46,17 @@ export default function AccountList() {
 
   const accounts = useSelector((state) => state.accounts.byId);
   const accountsID = useSelector((state) => state.accounts.allIds);
-  const authToken = useSelector((state) => state.user.token);
+  const authToken = useSelector((state) => state.auth.user.token);
   // const error = useSelector((state) => state.admin.account.error);
   const loading = useSelector((state) => state.loading.admin.account);
   const [tableData, setTableData] = useState([]);
   const [path, setPath] = useState([]);
 
   useEffect(() => {
-    console.log(loading.fetchAccounts);
-    if (!loading.editAccount || !loading.deleteAccount || !loading.makeStudentCardDefault) {
+    if (!loading.editAccount && !loading.deleteAccount && !loading.makeStudentCardDefault) {
       dispatch(fetchAccounts(authToken));
     }
-  }, [authToken, dispatch, loading.deleteAccount, loading.editAccount, loading.fetchAccounts, loading.makeStudentCardDefault]);
+  }, [authToken, dispatch, loading.deleteAccount, loading.editAccount, loading.makeStudentCardDefault]);
 
   useEffect(() => {
     const newData = [];

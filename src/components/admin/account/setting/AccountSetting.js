@@ -29,16 +29,11 @@ export default function AccountSetting() {
 
   const dispatch = useDispatch();
   const { accountId } = useParams();
-  const authToken = useSelector((state) => state.user.token);
+  const authToken = useSelector((state) => state.auth.user.token);
   const accounts = useSelector((state) => state.accounts.byId);
   const studentCards = useSelector((state) => state.studentCards.byId);
   const loading = useSelector((state) => state.loading.admin.account);
   const account = accounts[accountId];
-
-  // useEffect(() => {
-  //   dispatch(fetchAccount(authToken, accountId));
-  //   dispatch(fetchStudentCard(authToken, accountId));
-  // }, [authToken, accountId, dispatch]);
 
   useEffect(() => {
     if (!loading.editAccount) {
@@ -47,7 +42,6 @@ export default function AccountSetting() {
   }, [accountId, authToken, dispatch, loading.editAccount]);
 
   useEffect(() => {
-    // console.log(!loading.fetchStudentCard);
     if (!loading.makeStudentCardDefault) {
       dispatch(fetchStudentCard(authToken, accountId));
     }
