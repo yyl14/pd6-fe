@@ -88,7 +88,6 @@ export default function RadioGroupForm({
           {title}
         </Typography>
       </div>
-      {/* onChange={(e) => setSelectedValue(e.target.value)} */}
       <RadioGroup value={selectedValue} row={directionSelect(flexDirection)}>
         { options.map((option) => (
           <FormControlLabel
@@ -97,7 +96,6 @@ export default function RadioGroupForm({
             value={option.value}
             control={(
               <Radio
-                // className={classes.radio}
                 checkedIcon={<span className={`${classes.radio} ${classes.checkedIcon}`} />}
                 icon={<span className={`${classes.radio} ${classes.icon}`} />}
                 onClick={handleClick}
