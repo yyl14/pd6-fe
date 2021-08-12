@@ -22,6 +22,11 @@ import DateRangePicker from './DateRangePicker';
 import AlignedText from './AlignedText';
 import SimpleBar from './SimpleBar';
 import RadioGroupForm from './RadioGroupForm';
+import CustomTable from './CustomTable';
+import TableFilterCard from './TableFilterCard';
+import ErrorText from './ErrorText';
+import Header from './Header';
+import Sidebar from './Sidebar';
 
 const useStyles = makeStyles((theme) => ({
   bigTitle: {
@@ -52,9 +57,18 @@ const useStyles = makeStyles((theme) => ({
   children: {
     marginRight: '40px',
   },
-  simpleBar: {
+  wideComponent: {
     marginLeft: '35px',
-    width: '1280px',
+    width: '900px',
+  },
+  errorText: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: '-60px',
+  },
+  errorMessage: {
+    marginLeft: '5px',
   },
 }));
 
@@ -63,7 +77,6 @@ export default function UIComponentUsage() {
   const [value, setValue] = useState('');
   const [selected, setSelected] = useState('C++');
   const [showDialog, setShowDialog] = useState(false);
-
   const [dateRangePicker, setDateRangePicker] = useState([
     {
       startDate: moment().startOf('week').toDate(),
@@ -71,6 +84,16 @@ export default function UIComponentUsage() {
       key: 'selection',
     },
   ]);
+  const [tableData, setTableData] = useState([{
+    full_name: 'National Taiwan University',
+    email_domain: 'ntu.edu.tw',
+    is_disabled: 'Enabled',
+  }]);
+  const [filterPopUp, setFilterPopUp] = useState(false);
+  const [filterInput, setFilterInput] = useState({
+    filter: ['Select all'],
+    sort: '(None)',
+  });
 
   return (
     <>
@@ -186,9 +209,73 @@ export default function UIComponentUsage() {
         </div>
       </div>
       <div className={classes.wrapper}>
+        <Typography variant="h4">Date Range Picker</Typography>
+        <hr className={classes.divider} />
+        <div className={classes.component}>
+          <DateRangePicker value={dateRangePicker} setValue={setDateRangePicker} />
+        </div>
+      </div>
+      <div className={classes.wrapper}>
+        <Typography variant="h4">Custom Table with Table Filter Card</Typography>
+        <hr className={classes.divider} style={{ width: '460px' }} />
+        <div className={classes.wideComponent}>
+          <CustomTable
+            hasSearch
+            searchPlaceholder="Institute / Email"
+            buttons={(
+              <>
+                <Button color="primary">Add institute</Button>
+              </>
+            )}
+            data={tableData}
+            columns={[
+              {
+                id: 'full_name',
+                label: 'Institute',
+                minWidth: 150,
+                align: 'center',
+                width: 500,
+                type: 'string',
+              },
+              {
+                id: 'email_domain',
+                label: 'Email',
+                minWidth: 50,
+                align: 'center',
+                width: 150,
+                type: 'string',
+              },
+              {
+                id: 'is_disabled',
+                label: 'Status',
+                minWidth: 50,
+                align: 'center',
+                width: 120,
+                type: 'string',
+              },
+            ]}
+            columnComponent={[null, null, (<TableFilterCard
+              key="filter"
+              popUp={filterPopUp}
+              setPopUp={setFilterPopUp}
+              filterInput={filterInput}
+              filterOptions={['Enabled', 'Disabled']}
+              setFilterInput={setFilterInput}
+            />)]}
+          />
+        </div>
+      </div>
+      <div className={classes.wrapper}>
+        <Typography variant="h4">Simple Table</Typography>
+        <hr className={classes.divider} />
+        <div className={classes.component}>
+          <p>This is a simple table</p>
+        </div>
+      </div>
+      <div className={classes.wrapper}>
         <Typography variant="h4">Simple Bar</Typography>
         <hr className={classes.divider} />
-        <div className={classes.simpleBar}>
+        <div className={classes.wideComponent}>
           <SimpleBar
             title="Basic Information"
             buttons={(
@@ -217,45 +304,40 @@ export default function UIComponentUsage() {
           </SimpleBar>
         </div>
       </div>
+
       <div className={classes.wrapper}>
-        <Typography variant="h4">Date Range Picker</Typography>
+        <Typography variant="h4">Error Text</Typography>
         <hr className={classes.divider} />
         <div className={classes.component}>
-          <DateRangePicker value={dateRangePicker} setValue={setDateRangePicker} />
+          <ErrorText className={classes.errorText}><Typography variant="body2" className={classes.errorMessage}>Error Text</Typography></ErrorText>
         </div>
       </div>
       <div className={classes.wrapper}>
-        <Typography variant="h4">Button</Typography>
+        <Typography variant="h4">Header</Typography>
         <hr className={classes.divider} />
         <div className={classes.component}>
-          <Button>Edit</Button>
-          <IconButton><ArrowForward style={{ height: '20px' }} /></IconButton>
+          {/* <Header role="GUEST" /> */}
         </div>
       </div>
       <div className={classes.wrapper}>
-        <Typography variant="h4">Button</Typography>
+        <Typography variant="h4">Sidebar</Typography>
         <hr className={classes.divider} />
         <div className={classes.component}>
-          <Button>Edit</Button>
-          <IconButton><ArrowForward style={{ height: '20px' }} /></IconButton>
-        </div>
-      </div>
-      <div className={classes.wrapper}>
-        <Typography variant="h4">Button</Typography>
-        <hr className={classes.divider} />
-        <div className={classes.component}>
-          <Button>Edit</Button>
-          <IconButton><ArrowForward style={{ height: '20px' }} /></IconButton>
-        </div>
-      </div>
-      <div className={classes.wrapper}>
-        <Typography variant="h4">Table</Typography>
-        <hr className={classes.divider} />
-        <div className={classes.component}>
-          <p>table</p>
+          {/* <Sidebar /> */}
         </div>
       </div>
 
+      {/* TODO: Simple Table,  */}
+      {/* module for adding a component
+      <div className={classes.wrapper}>
+        <Typography variant="h4">Button</Typography>
+        <hr className={classes.divider} />
+        <div className={classes.component}>
+          <Button>Edit</Button>
+          <IconButton><ArrowForward style={{ height: '20px' }} /></IconButton>
+        </div>
+      </div>
+      */}
     </>
   );
 }
