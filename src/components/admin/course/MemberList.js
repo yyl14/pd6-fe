@@ -132,6 +132,7 @@ export default function MemberList() {
           <CustomTable
             hasSearch
             searchPlaceholder="Username / Student ID / Real Name"
+            searchWidthOption={2}
             buttons={(
               <>
                 <Button onClick={() => setEdit(true)}>Edit</Button>
