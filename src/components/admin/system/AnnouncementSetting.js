@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
+import moment from 'moment-timezone';
 
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import NoMatch from '../../noMatch';
@@ -36,10 +37,10 @@ export default function AnnouncementSetting() {
 
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.user.token);
-  const announcements = useSelector((state) => state.admin.system.announcements.byId);
-  const allIds = useSelector((state) => state.admin.system.announcements.allIds);
-  const loading = useSelector((state) => state.admin.system.loading.fetchAnnouncement);
-  const editLoading = useSelector((state) => state.admin.system.loading.editAnnouncement);
+  const announcements = useSelector((state) => state.announcements.byId);
+  const allIds = useSelector((state) => state.announcements.allIds);
+  const loading = useSelector((state) => state.loading.admin.system.fetchAnnouncement);
+  const editLoading = useSelector((state) => state.loading.admin.system.editAnnouncement);
 
   const [popUpDelete, setPopUpDelete] = useState(false);
   const [announcement, setAnnouncement] = useState(null);
@@ -107,21 +108,19 @@ export default function AnnouncementSetting() {
               </>
             )}
           >
-            <Typography variant="body1">
-              <AlignedText text="Title" childrenType="text">
-                <Typography variant="body1">{announcement.title}</Typography>
-              </AlignedText>
-              <AlignedText text="Duration" childrenType="text">
-                <Typography variant="body1" className={classes.duration}>
-                  {announcement.PostTime.toISOString().slice(0, 16).replace('T', ' ').replaceAll('-', '/')}
-                  <ArrowRightIcon style={{ transform: 'translate(0, 5px)' }} />
-                  {announcement.EndTime.toISOString().slice(0, 16).replace('T', ' ').replaceAll('-', '/')}
-                </Typography>
-              </AlignedText>
-              <AlignedText text="Content" childrenType="text">
-                <Typography variant="body1">{announcement.Content}</Typography>
-              </AlignedText>
-            </Typography>
+            <AlignedText text="Title" childrenType="text">
+              <Typography variant="body1">{announcement.title}</Typography>
+            </AlignedText>
+            <AlignedText text="Duration" childrenType="text">
+              <Typography variant="body1" className={classes.duration}>
+                {moment(announcement.PostTime).format('YYYY/MM/DD HH:mm')}
+                <ArrowRightIcon style={{ transform: 'translate(0, 5px)' }} />
+                {moment(announcement.EndTime).format('YYYY/MM/DD HH:mm')}
+              </Typography>
+            </AlignedText>
+            <AlignedText text="Content" childrenType="text">
+              <Typography variant="body1">{announcement.Content}</Typography>
+            </AlignedText>
           </SimpleBar>
           <SimpleBar
             title="Delete Announcement"

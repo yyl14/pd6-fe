@@ -4,11 +4,12 @@ import {
 } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { BiFilterAlt } from 'react-icons/bi';
+import moment from 'moment';
 
 /* TODO: Use component/ui/CustomTable to implement access log (remove this import afterwards) */
 import CustomTable from '../../ui/CustomTable';
 import DateRangePicker from '../../ui/DateRangePicker';
-import { fetchAccessLog, fetchAccounts } from '../../../actions/admin/system';
+import { fetchAccessLog } from '../../../actions/admin/system';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -25,10 +26,10 @@ export default function AccessLog() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.user.token);
-  const loading = useSelector((state) => state.admin.system.loading.fetchAccessLog);
+  const loading = useSelector((state) => state.loading.admin.system.fetchAccessLog);
 
-  const logs = useSelector((state) => state.admin.system.logs.byId);
-  const logsID = useSelector((state) => state.admin.system.logs.allIds);
+  const logs = useSelector((state) => state.accessLogs.byId);
+  const logsID = useSelector((state) => state.accessLogs.allIds);
 
   const [path, setPath] = useState([]);
 
@@ -54,27 +55,12 @@ export default function AccessLog() {
       ip: item.ip,
       resource_path: item.resource_path,
       request_method: item.request_method,
-      access_time: item.access_time.toISOString().slice(0, 16).replace('T', ' '),
+      access_time: moment(item.access_time).format('YYYY-MM-DD, HH:mm'),
     };
     return temp;
   }, []);
 
-  const filter = () => {
-    const newData = [];
-    const start = dateRange[0].startDate.getTime();
-    const end = dateRange[0].endDate.getTime();
-    logsID.forEach((key) => {
-      const item = logs[key];
-      const accessTime = item.access_time.getTime();
-      if (start <= accessTime && accessTime <= end) {
-        newData.push(modifyRawData(item));
-      }
-    });
-    setTableData(newData);
-    setFilterOrNot(false);
-  };
-
-  useEffect(() => {
+  const storeAllAccessLog = useCallback(() => {
     setDateRange([
       {
         startDate: new Date(),
@@ -82,10 +68,6 @@ export default function AccessLog() {
         key: 'selection',
       },
     ]);
-    dispatch(fetchAccessLog(authToken, 0, 100));
-  }, [authToken, dispatch]);
-
-  useEffect(() => {
     const newData = [];
     const newPath = [];
     logsID.forEach((key) => {
@@ -96,6 +78,36 @@ export default function AccessLog() {
     setTableData(newData);
     setPath(newPath);
   }, [logsID, logs, modifyRawData]);
+
+  const filter = () => {
+    const newData = [];
+    const newPath = [];
+    const start = dateRange[0].startDate.getTime();
+    const end = dateRange[0].endDate.getTime();
+    logsID.forEach((key) => {
+      const item = logs[key];
+      const accessTime = moment(item.access_time).valueOf();
+      if (start <= accessTime && accessTime <= end) {
+        newData.push(modifyRawData(item));
+        newPath.push(`account/${item.account_id}/setting`);
+      }
+    });
+    setTableData(newData);
+    setFilterOrNot(false);
+  };
+
+  const clearFilter = () => {
+    storeAllAccessLog();
+    setFilterOrNot(false);
+  };
+
+  useEffect(() => {
+    dispatch(fetchAccessLog(authToken, 0, 100));
+  }, [authToken, dispatch]);
+
+  useEffect(() => {
+    storeAllAccessLog();
+  }, [storeAllAccessLog]);
 
   if (loading) {
     return <div>loading...</div>;
@@ -179,15 +191,14 @@ export default function AccessLog() {
           <DateRangePicker value={dateRange} setValue={setDateRange} />
         </DialogContent>
         <DialogActions>
+          <Button onClick={clearFilter} color="default">
+            Clear
+          </Button>
+          <div style={{ flex: '0.95 0 0' }} />
           <Button onClick={() => setFilterOrNot(false)} color="default">
             Cancel
           </Button>
-          <Button
-            onClick={() => {
-              filter();
-            }}
-            color="primary"
-          >
+          <Button onClick={filter} color="primary">
             Save
           </Button>
         </DialogActions>

@@ -1,7 +1,7 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  withRouter, Switch, Route, useHistory, useParams, BrowserRouter as Router, Link,
+  useHistory, useParams, BrowserRouter as Router, Link,
 } from 'react-router-dom';
 import { BiFilterAlt } from 'react-icons/bi';
 import {
@@ -13,6 +13,8 @@ import {
   DialogContent,
   DialogTitle,
 } from '@material-ui/core';
+import moment from 'moment';
+
 import NoMatch from '../../noMatch';
 import CustomTable from '../../ui/CustomTable';
 import DateRangePicker from '../../ui/DateRangePicker';
@@ -39,11 +41,11 @@ export default function AnnouncementHome() {
 
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.user.token);
-  const announcements = useSelector((state) => state.admin.system.announcements.byId);
-  const announcementId = useSelector((state) => state.admin.system.announcements.allIds);
-  const loading = useSelector((state) => state.admin.system.loading.fetchAnnouncement);
-  const addLoading = useSelector((state) => state.admin.system.loading.addAnnouncement);
-  const deleteLoading = useSelector((state) => state.admin.system.loading.deleteAnnouncement);
+  const announcements = useSelector((state) => state.announcements.byId);
+  const announcementId = useSelector((state) => state.announcements.allIds);
+  const loading = useSelector((state) => state.loading.admin.system.fetchAnnouncement);
+  const addLoading = useSelector((state) => state.loading.admin.system.addAnnouncement);
+  const deleteLoading = useSelector((state) => state.loading.admin.system.deleteAnnouncement);
 
   const [tableData, setTableData] = useState([]);
   const [path, setPath] = useState([]);
@@ -68,8 +70,8 @@ export default function AnnouncementHome() {
   const modifyRawData = (item) => {
     const temp = {
       title: item.title,
-      PostTime: item.post_time.toISOString().slice(0, 16).replace('T', ' '),
-      EndTime: item.expire_time.toISOString().slice(0, 16).replace('T', ' '),
+      PostTime: moment(item.post_time).format('YYYY-MM-DD, HH:mm'),
+      EndTime: moment(item.expire_time).format('YYYY-MM-DD, HH:mm'),
     };
     return temp;
   };
