@@ -1,8 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  makeStyles, Button, Typography, AppBar, Toolbar, Avatar, ClickAwayListener, Grow, Paper, Popper, MenuItem, MenuList,
+  makeStyles,
+  Button,
+  Typography,
+  AppBar,
+  Toolbar,
+  Avatar,
+  ClickAwayListener,
+  Grow,
+  Paper,
+  Popper,
+  MenuItem,
+  MenuList,
 } from '@material-ui/core';
-import { AddCircleOutline, PlayCircleFilledWhite, SubjectOutlined } from '@material-ui/icons';
+import {
+  AddCircleOutline,
+  CallMissedOutgoingRounded,
+  PlayCircleFilledWhite,
+  SubjectOutlined,
+} from '@material-ui/icons';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useHistory, useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
@@ -27,15 +43,16 @@ const useStyles = makeStyles((theme) => ({
   },
   date: {
     float: 'left',
-    marginRight: '2vw',
-    marginTop: '7px',
+    marginRight: '20px',
+    marginTop: '3px',
     marginBottom: 'auto',
   },
   notification: {
     float: 'left',
     width: '3.28vh',
-    marginTop: '9px',
+    marginTop: '3px',
     marginBottom: 'auto',
+    marginRight: '16px',
   },
   name: {
     width: '65px',
@@ -70,6 +87,49 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
     color: theme.palette.primary.main,
   },
+
+  // menu
+  dropdown: {
+    position: 'relative',
+    display: 'inline-block',
+    '&:hover': {
+      '& $dropdownContent': {
+        display: 'block',
+      },
+    },
+    marginRight: '20px',
+  },
+
+  dropbtn: {
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    backgroundColor: theme.palette.black.main,
+    color: theme.palette.primary.contrastText,
+    border: 'none',
+    '&:hover': {
+      cursor: 'pointer',
+    },
+  },
+
+  dropdownContent: {
+    display: 'none',
+    position: 'absolute',
+    backgroundColor: theme.palette.primary.contrastText,
+    marginLeft: '-40px',
+    minWidth: '140px',
+    zIndex: '1',
+    '& a': {
+      color: theme.palette.black.main,
+      padding: '12px',
+      textDecoration: 'none',
+      textAlign: 'center',
+      display: 'block',
+    },
+    '& a:hover': {
+      backgroundColor: theme.palette.grey.A100,
+    },
+  },
+
 }));
 
 export default function Header({ role }) {
@@ -79,6 +139,7 @@ export default function Header({ role }) {
   const location = useLocation();
   let itemList = [];
   const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   H:mm'));
+  let menuList = [];
 
   if (role === 'MANAGER') {
     itemList = [
@@ -102,6 +163,7 @@ export default function Header({ role }) {
         path: '/about',
       },
     ];
+    menuList = [{ title: 'Logout', link: '/login' }];
   } else if (role === 'NORMAL') {
     itemList = [
       {
@@ -130,6 +192,11 @@ export default function Header({ role }) {
         path: '/system',
       },
     ];
+    menuList = [
+      { title: 'My Submission', link: '/my-submission' },
+      { title: 'My Profile', link: '/my-profile' },
+      { title: 'Logout', link: '/login' },
+    ];
   } else if (role === 'GUEST') {
     itemList = [
       {
@@ -152,7 +219,7 @@ export default function Header({ role }) {
   } else if (role === 'TA') {
     itemList = [
       {
-        text: 'Your Class',
+        text: 'My Class',
         path: '/',
       },
       {
@@ -236,7 +303,19 @@ export default function Header({ role }) {
             <Typography className={classes.date}>{currentTime}</Typography>
             <NotificationsIcon className={classes.notification} />
             {/* <Typography variant="h6" className={classes.name}> */}
-            <Button
+            <div className={classes.dropdown}>
+              <button type="button" className={classes.dropbtn}>
+                <Typography variant="h6">Shiba</Typography>
+              </button>
+              <div className={classes.dropdownContent}>
+                {menuList.map((item, id) => (
+                  <a key={item.link} href={item.link}>
+                    {item.title}
+                  </a>
+                ))}
+              </div>
+            </div>
+            {/* <Button
               ref={anchorRef}
               aria-controls={open ? 'menu-list-grow' : undefined}
               aria-haspopup="true"
@@ -244,26 +323,28 @@ export default function Header({ role }) {
               className={classes.name}
             >
               Shiba
-            </Button>
-            <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+            </Button> */}
+            {/* <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
               {({ TransitionProps, placement }) => (
                 <Grow
-                    // eslint-disable-next-line react/jsx-props-no-spreading
+                  // eslint-disable-next-line react/jsx-props-no-spreading
                   {...TransitionProps}
                   style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
                 >
                   <Paper>
                     <ClickAwayListener onClickAway={handleClose}>
                       <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
-                        <MenuItem onClick={handleClose}>My Submission</MenuItem>
-                        <MenuItem onClick={handleClose}>My profile</MenuItem>
-                        <MenuItem onClick={handleClose}>Log out</MenuItem>
+                        {menuList.map((menu, id) => (
+                          <MenuItem onClick={handleClose} key={menu.title}>
+                            <a href={menu.link}>{menu.title}</a>
+                          </MenuItem>
+                        ))}
                       </MenuList>
                     </ClickAwayListener>
                   </Paper>
                 </Grow>
               )}
-            </Popper>
+            </Popper> */}
             {/* </Typography> */}
           </div>
         </Toolbar>
