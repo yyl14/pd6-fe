@@ -30,9 +30,9 @@ const useStyles = makeStyles((theme) => ({
   warningText: {
     marginTop: '10px',
   },
-  inputField: {
-    width: 330,
-  },
+  // inputField: {
+  //   width: 330,
+  // },
 }));
 
 export default function InstituteSetting() {

@@ -29,9 +29,9 @@ const useStyles = makeStyles((theme) => ({
   filterButton: {
     justifyContent: 'space-between',
   },
-  selectField: {
-    width: '350px',
-  },
+  // selectField: {
+  //   width: '350px',
+  // },
   clearButton: {
     marginLeft: '24px',
   },
@@ -344,15 +344,18 @@ export default function MemberList() {
                 align: 'center',
               },
             ]}
-            columnComponent={[null, null, null, (<BiFilterAlt key="showInstituteFilterDialog" onClick={() => setShowInstituteFilterDialog(true)} />), (<BiFilterAlt key="showRoleFilterDialog" onClick={() => setShowRoleFilterDialog(true)} />)]}
+            columnComponent={[
+              null,
+              null,
+              null,
+              <BiFilterAlt key="showInstituteFilterDialog" onClick={() => setShowInstituteFilterDialog(true)} />,
+              <BiFilterAlt key="showRoleFilterDialog" onClick={() => setShowRoleFilterDialog(true)} />,
+            ]}
             // hasLink
             // path={classes.byId[classId].memberIds.map((member) => `/admin/course/class/${courseId}/${classId}/member`)}
           />
 
-          <Dialog
-            open={showInstituteFilterDialog}
-            maxWidth="md"
-          >
+          <Dialog open={showInstituteFilterDialog} maxWidth="md">
             <DialogTitle>
               <Typography variant="h4">Filter: Institute</Typography>
             </DialogTitle>
@@ -404,10 +407,7 @@ export default function MemberList() {
             </DialogActions>
           </Dialog>
 
-          <Dialog
-            open={showRoleFilterDialog}
-            maxWidth="md"
-          >
+          <Dialog open={showRoleFilterDialog} maxWidth="md">
             <DialogTitle>
               <Typography variant="h4">Filter: Role</Typography>
             </DialogTitle>
