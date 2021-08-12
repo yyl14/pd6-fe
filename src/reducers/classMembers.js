@@ -1,9 +1,15 @@
 import { combineReducers } from 'redux';
 import { courseConstants } from '../actions/constant';
+import { memberConstants } from '../actions/myClass/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
     case courseConstants.FETCH_MEMBERS_SUCCESS: {
+      const { data } = action.payload;
+      return data.reduce((acc, item) => ({ ...acc, [item.member_id]: item }), state);
+    }
+
+    case memberConstants.FETCH_CLASS_MEMBER_SUCCESS: {
       const { data } = action.payload;
       return data.reduce((acc, item) => ({ ...acc, [item.member_id]: item }), state);
     }
@@ -15,6 +21,10 @@ const byId = (state = {}, action) => {
 const allIds = (state = [], action) => {
   switch (action.type) {
     case courseConstants.FETCH_MEMBERS_SUCCESS: {
+      const { data } = action.payload;
+      return [...new Set([...data.map((item) => item.id), ...state])];
+    }
+    case memberConstants.FETCH_CLASS_MEMBER_SUCCESS: {
       const { data } = action.payload;
       return [...new Set([...data.map((item) => item.id), ...state])];
     }
