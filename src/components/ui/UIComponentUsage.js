@@ -23,6 +23,7 @@ import AlignedText from './AlignedText';
 import SimpleBar from './SimpleBar';
 import RadioGroupForm from './RadioGroupForm';
 import CustomTable from './CustomTable';
+import SimpleTable from './SimpleTable';
 import TableFilterCard from './TableFilterCard';
 import ErrorText from './ErrorText';
 import Header from './Header';
@@ -209,6 +210,13 @@ export default function UIComponentUsage() {
         </div>
       </div>
       <div className={classes.wrapper}>
+        <Typography variant="h4">Error Text</Typography>
+        <hr className={classes.divider} />
+        <div className={classes.component}>
+          <ErrorText className={classes.errorText}><Typography variant="body2" className={classes.errorMessage}>Error Text</Typography></ErrorText>
+        </div>
+      </div>
+      <div className={classes.wrapper}>
         <Typography variant="h4">Date Range Picker</Typography>
         <hr className={classes.divider} />
         <div className={classes.component}>
@@ -269,7 +277,35 @@ export default function UIComponentUsage() {
         <Typography variant="h4">Simple Table</Typography>
         <hr className={classes.divider} />
         <div className={classes.component}>
-          <p>This is a simple table</p>
+          <SimpleTable
+            data={tableData}
+            columns={[
+              {
+                id: 'full_name',
+                label: 'Institute',
+                minWidth: 150,
+                align: 'center',
+                width: 500,
+                type: 'string',
+              },
+              {
+                id: 'email_domain',
+                label: 'Email',
+                minWidth: 50,
+                align: 'center',
+                width: 150,
+                type: 'string',
+              },
+              {
+                id: 'is_disabled',
+                label: 'Status',
+                minWidth: 50,
+                align: 'center',
+                width: 120,
+                type: 'string',
+              },
+            ]}
+          />
         </div>
       </div>
       <div className={classes.wrapper}>
@@ -305,36 +341,12 @@ export default function UIComponentUsage() {
         </div>
       </div>
 
-      <div className={classes.wrapper}>
-        <Typography variant="h4">Error Text</Typography>
-        <hr className={classes.divider} />
-        <div className={classes.component}>
-          <ErrorText className={classes.errorText}><Typography variant="body2" className={classes.errorMessage}>Error Text</Typography></ErrorText>
-        </div>
-      </div>
-      <div className={classes.wrapper}>
-        <Typography variant="h4">Header</Typography>
-        <hr className={classes.divider} />
-        <div className={classes.component}>
-          {/* <Header role="GUEST" /> */}
-        </div>
-      </div>
-      <div className={classes.wrapper}>
-        <Typography variant="h4">Sidebar</Typography>
-        <hr className={classes.divider} />
-        <div className={classes.component}>
-          {/* <Sidebar /> */}
-        </div>
-      </div>
-
-      {/* TODO: Simple Table,  */}
       {/* module for adding a component
       <div className={classes.wrapper}>
         <Typography variant="h4">Button</Typography>
         <hr className={classes.divider} />
         <div className={classes.component}>
-          <Button>Edit</Button>
-          <IconButton><ArrowForward style={{ height: '20px' }} /></IconButton>
+          { place ui-component here }
         </div>
       </div>
       */}
