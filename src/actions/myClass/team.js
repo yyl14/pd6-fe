@@ -1,28 +1,28 @@
 import agent from '../agent';
 import { teamConstants } from './constant';
 
-export const fetchClassTeam = (token, classId) => (dispatch) => {
+export const fetchTeams = (token, classId) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
-  dispatch({ type: teamConstants.FETCH_CLASS_TEAM_START });
+  dispatch({ type: teamConstants.FETCH_TEAMS_START });
   agent
     .get(`/class/${classId}/team`, auth)
     .then((res) => {
       dispatch({
-        type: teamConstants.FETCH_CLASS_TEAM_SUCCESS,
-        payload: res.data.data,
+        type: teamConstants.FETCH_TEAMS_SUCCESS,
+        payload: { classId, data: res.data.data},
       });
     })
     .catch((error) => {
       dispatch({
-        type: teamConstants.FETCH_CLASS_TEAM_FAIL,
+        type: teamConstants.FETCH_TEAMS_FAIL,
         error: error,
       });
     });
 };
 
-export const addClassTeam = (token, classId, teamName, newLabel) => (dispatch) => {
+export const addTeam = (token, classId, teamName, newLabel) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
-  dispatch({ type: teamConstants.ADD_CLASS_TEAM_START });
+  dispatch({ type: teamConstants.ADD_TEAM_START });
   const body = {
     name: teamName,
     label: newLabel,
@@ -31,32 +31,12 @@ export const addClassTeam = (token, classId, teamName, newLabel) => (dispatch) =
     .post(`/class/${classId}/team`, body, auth)
     .then(() => {
       dispatch({
-        type: teamConstants.ADD_CLASS_TEAM_SUCCESS,
+        type: teamConstants.ADD_TEAM_SUCCESS,
       });
     })
     .catch((error) => {
       dispatch({
-        type: teamConstants.ADD_CLASS_TEAM_FAIL,
-        error: error,
-      });
-    });
-};
-
-export const fetchTeam = (token, teamId) => (dispatch) => {
-  const auth = { headers: { 'auth-token': token } };
-  dispatch({ type: teamConstants.FETCH_TEAM_START });
-  agent
-    .get(`/team/${teamId}`, auth)
-    .then((res) => {
-      console.log(res);
-      dispatch({
-        type: teamConstants.FETCH_TEAM_SUCCESS,
-        payload: res.data.data,
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        type: teamConstants.FETCH_TEAM_FAIL,
+        type: teamConstants.ADD_TEAM_FAIL,
         error: error,
       });
     });
@@ -93,7 +73,7 @@ export const fetchTeamMember = (token, teamId) => (dispatch) => {
     .then((res) => {
       dispatch({
         type: teamConstants.FETCH_TEAM_MEMBER_SUCCESS,
-        payload: res.data.data,
+        payload: { teamId, data: res.data.data},
       });
     })
     .catch((error) => {
