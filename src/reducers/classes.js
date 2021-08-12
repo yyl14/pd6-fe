@@ -29,8 +29,7 @@ const byId = (state = {}, action) => {
     }
 
     case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {
-      const classId = action.payload.class_id;
-      const { data } = action.payload;
+      const { classId, data } = action.payload;
       return { ...state, [classId]: { ...state[classId], gradeIds: data.map((item) => item.id) } };
     }
 

@@ -9,7 +9,7 @@ export const fetchClassGrade = (token, classId) => (dispatch) => {
     .then((res) => {
       dispatch({
         type: gradeConstants.FETCH_CLASS_GRADE_SUCCESS,
-        payload: res.data.data,
+        payload: { classId, data: res.data.data },
       });
     })
     .catch((error) => {
@@ -44,7 +44,7 @@ export const fetchAccountGrade = (token, accountId) => (dispatch) => {
     .then((res) => {
       dispatch({
         type: gradeConstants.FETCH_ACCOUNT_GRADE_SUCCESS,
-        payload: res.data.data,
+        payload: { accountId, data: res.data.data },
       });
     })
     .catch((error) => {

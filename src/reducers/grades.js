@@ -4,13 +4,17 @@ import { gradeConstants } from '../actions/myClass/constant';
 const byId = (state = {}, action) => {
   switch (action.type) {
     case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {
-      return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+      const { data } = action.payload;
+      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
+
     case gradeConstants.FETCH_ACCOUNT_GRADE_SUCCESS: {
-      return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+      const { data } = action.payload;
+      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
+
     case gradeConstants.FETCH_GRADE_SUCCESS: {
-      return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+      return { ...state, [action.payload.id]: action.payload };
     }
 
     default:
@@ -21,11 +25,15 @@ const byId = (state = {}, action) => {
 const allIds = (state = [], action) => {
   switch (action.type) {
     case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {
-      return action.payload.map((item) => item.id);
+      const { data } = action.payload;
+      return data.map((item) => item.id);
     }
+
     case gradeConstants.FETCH_ACCOUNT_GRADE_SUCCESS: {
-      return action.payload.map((item) => item.id);
+      const { data } = action.payload;
+      return data.map((item) => item.id);
     }
+
     case gradeConstants.FETCH_GRADE_SUCCESS: {
       return action.payload.map((item) => item.id);
     }
