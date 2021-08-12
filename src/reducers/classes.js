@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import { courseConstants } from '../actions/constant';
-import { gradeConstants, memberConstants, teamConstants, challengeConstants } from '../actions/myClass/constant';
+import {
+  gradeConstants, memberConstants, teamConstants, challengeConstants,
+} from '../actions/myClass/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -30,7 +32,7 @@ const byId = (state = {}, action) => {
       return { ...state, [classId]: { ...state[classId], memberIds: data.map((item) => item.id) } };
     }
 
-    case memberConstants.FETCH_CLASS_MEMBER_SUCCESS: {
+    case memberConstants.FETCH_CLASS_MEMBERS_SUCCESS: {
       const { classId, data } = action.payload;
       return { ...state, [classId]: { ...state[classId], memberIds: data.map((item) => item.id) } };
     }

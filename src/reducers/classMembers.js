@@ -9,7 +9,7 @@ const byId = (state = {}, action) => {
       return data.reduce((acc, item) => ({ ...acc, [item.member_id]: item }), state);
     }
 
-    case memberConstants.FETCH_CLASS_MEMBER_SUCCESS: {
+    case memberConstants.FETCH_CLASS_MEMBERS_SUCCESS: {
       const { data } = action.payload;
       return data.reduce((acc, item) => ({ ...acc, [item.member_id]: item }), state);
     }
@@ -24,7 +24,7 @@ const allIds = (state = [], action) => {
       const { data } = action.payload;
       return [...new Set([...data.map((item) => item.id), ...state])];
     }
-    case memberConstants.FETCH_CLASS_MEMBER_SUCCESS: {
+    case memberConstants.FETCH_CLASS_MEMBERS_SUCCESS: {
       const { data } = action.payload;
       return [...new Set([...data.map((item) => item.id), ...state])];
     }
