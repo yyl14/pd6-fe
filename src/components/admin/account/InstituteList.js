@@ -21,7 +21,6 @@ import { BiFilterAlt } from 'react-icons/bi';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
 import { getInstitutes, addInstitute } from '../../../actions/admin/account';
-import { fetchTeam, editTeam } from '../../../actions/myClass/team';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -82,8 +81,6 @@ export default function InstituteList() {
   useEffect(() => {
     if (!loading.addInstitute) {
       dispatch(getInstitutes(authToken));
-      dispatch(fetchTeam(authToken, 3));
-      dispatch(editTeam(authToken, 3, 'newName', 1, 'newLabel'));
     }
   }, [authToken, dispatch, loading.addInstitute]);
 
