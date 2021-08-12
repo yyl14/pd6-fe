@@ -15,7 +15,7 @@ export const fetchClassTeam = (token, classId) => (dispatch) => {
     .catch((error) => {
       dispatch({
         type: teamConstants.FETCH_CLASS_TEAM_FAIL,
-        payload: error,
+        error: error,
       });
     });
 };
@@ -37,7 +37,7 @@ export const addClassTeam = (token, classId, teamName, newLabel) => (dispatch) =
     .catch((error) => {
       dispatch({
         type: teamConstants.ADD_CLASS_TEAM_FAIL,
-        payload: error,
+        error: error,
       });
     });
 };
@@ -57,7 +57,7 @@ export const fetchTeam = (token, teamId) => (dispatch) => {
     .catch((error) => {
       dispatch({
         type: teamConstants.FETCH_TEAM_FAIL,
-        payload: error,
+        error: error,
       });
     });
 };
@@ -73,8 +73,6 @@ export const editTeam = (token, teamId, teamName, classId, newLabel) => (dispatc
   agent
     .patch(`/team/${teamId}`, body, auth)
     .then((res) => {
-      console.log('edit team suc');
-      console.log(res);
       dispatch({
         type: teamConstants.EDIT_TEAM_SUCCESS,
       });
@@ -82,7 +80,7 @@ export const editTeam = (token, teamId, teamName, classId, newLabel) => (dispatc
     .catch((error) => {
       dispatch({
         type: teamConstants.EDIT_TEAM_FAIL,
-        payload: error,
+        error: error,
       });
     });
 };
@@ -101,7 +99,7 @@ export const fetchTeamMember = (token, teamId) => (dispatch) => {
     .catch((error) => {
       dispatch({
         type: teamConstants.FETCH_TEAM_MEMBER_FAIL,
-        payload: error,
+        error: error,
       });
     });
 };
@@ -123,7 +121,7 @@ export const editTeamMember = (token, teamId, memberId, role) => (dispatch) => {
     .catch((error) => {
       dispatch({
         type: teamConstants.EDIT_TEAM_MEMBER_FAIL,
-        payload: error,
+        error: error,
       });
     });
 };
@@ -141,7 +139,7 @@ export const deleteTeamMember = (token, teamId, memberId) => (dispatch) => {
     .catch((error) => {
       dispatch({
         type: teamConstants.DELETE_TEAM_MEMBER_FAIL,
-        payload: error,
+        error: error,
       });
     });
 };
