@@ -16,11 +16,12 @@ import {
   FormControl,
   Select,
   InputAdornment,
+  IconButton,
 } from '@material-ui/core';
 
 import { ArrowForward, CenterFocusStrong, FilterList } from '@material-ui/icons';
 import SearchIcon from '@material-ui/icons/Search';
-
+import Tooltip from '@material-ui/core/Tooltip';
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from 'react-icons/md';
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   topContent1: {
     // width: '80%',
     // maxWidth: '1280px',
-    background: '#EAEAEA',
+    background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
     padding: '5px 15px 15px 15px',
     display: 'flex',
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     height: '75px',
   },
   topContent2: {
-    background: '#EAEAEA',
+    background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
     padding: '5px 15px 15px 15px',
     display: 'flex',
@@ -48,15 +49,16 @@ const useStyles = makeStyles((theme) => ({
   },
   search: {
     height: '60px',
-    width: 250,
+    width: 300,
   },
   search2: {
     height: '60px',
-    width: 360,
+    width: 380,
   },
   search3: {
     height: '60px',
     width: 550,
+    marginLeft: '5px',
   },
   buttons: {
     marginTop: '3px',
@@ -71,42 +73,89 @@ const useStyles = makeStyles((theme) => ({
   container: {
     maxHeight: 800,
   },
-  tableHead: {
-    height: '60px',
+
+  tableRowContainerLeftSpacing: {
+    width: '15px',
+    padding: '0px',
+  },
+  tableColumnLeftSpacing: {
+    width: '10px',
+    padding: '0px',
+  },
+  tableHeadCell: {
+    height: '45px',
+    padding: '0px',
+    background: 'white',
+    borderBottomWidth: '1px',
+    borderBottomColor: theme.palette.grey.A400,
   },
   column: {
     display: 'flex',
+    flexDirection: 'row',
     justifyContent: 'center',
   },
+  columnLabelMoveLeft: {
+    transform: 'translateX(-5px)',
+  },
+  columnLabelDefault: {
+    transform: 'translateX(0px)',
+  },
   columnComponent: {
-    transform: 'translateX(10px)',
+    transform: 'translateX(5px) translateY(2px)',
   },
   row: {
     height: '60px',
   },
+
   bottom: {
     height: '75px',
     display: 'flex',
-    alignItems: 'center',
-    padding: '10px',
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'flex-end',
+    paddingRight: '15px',
+    background: '#F8F8F8',
+  },
+  pageChangeButtons: {
+    width: '70px',
+    paddingTop: '11.5px',
+  },
+  pageRowSelect: {
+    width: '100px',
+    height: '50px',
+    margin: '0px 5px 5px 5px',
+  },
+  pageText: {
+    margin: '0px 5px 0px 5px',
   },
   pageIndexTextField: {
     width: '100px',
-  },
-  bottomItem: {
-    padding: '5px',
+    height: '45px',
+    margin: '0px 5px 0px 5px',
   },
   detailLink: {
     color: 'black',
   },
   textLink: {
-    color: 'rgba(30, 165, 255, 1)',
-    textDecorationLine: 'none',
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+    '&:hover': {
+      color: '#6DC5FF',
+    },
+    '&:active': {
+      color: theme.palette.primary.dark,
+    },
   },
   filterIcon: {
     height: '15px',
+  },
+  iconButton: {
+    '&:hover': {
+      backgroundColor: theme.palette.grey[100],
+    },
+    '&:active': {
+      backgroundColor: theme.palette.grey[300],
+    },
   },
   arrowIcon: {
     height: '35px',
@@ -155,6 +204,13 @@ export default function CustomTable({
       default:
         return classes.search;
     }
+  };
+
+  const labelMoveLeft = (icon, cols, col) => {
+    if (icon && icon[cols.findIndex((x) => x.id === col.id)]) {
+      return classes.columnLabelMoveLeft;
+    }
+    return classes.columnLabelDefault;
   };
 
   useEffect(() => {
@@ -208,46 +264,61 @@ export default function CustomTable({
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
-              <TableRow className={classes.tableHead}>
+              <TableRow>
+                <TableCell className={`${classes.tableHeadCell} ${classes.tableRowContainerLeftSpacing}`} />
                 {columns.map((column) => (
-                  <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth, width: column.width }}>
-                    <div className={classes.column}>
-                      {column.label}
-                      <div className={classes.columnComponent}>
-                        { columnComponent && columnComponent[columns.findIndex((x) => x.id === column.id)]}
+                  <>
+                    <TableCell className={`${classes.tableHeadCell} ${classes.tableColumnLeftSpacing}`} />
+                    <TableCell key={column.id} align={column.align} className={classes.tableHeadCell} style={{ minWidth: column.minWidth, width: column.width }}>
+                      <div className={classes.column}>
+                        <div className={labelMoveLeft(columnComponent, columns, column)}>
+                          {column.label}
+                        </div>
+                        <div className={classes.columnComponent}>
+                          { columnComponent && columnComponent[columns.findIndex((x) => x.id === column.id)]}
+                        </div>
                       </div>
-                    </div>
-                  </TableCell>
+                    </TableCell>
+                  </>
                 ))}
                 {hasLink
-                  ? (<TableCell key="link" align="right" style={{ minWidth: 20 }} />
-                  ) : (<TableCell key="blank" align="right" style={{ minWidth: 20 }} />)}
+                  ? (<TableCell key="link" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
+                  ) : (<TableCell key="blank" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />)}
               </TableRow>
             </TableHead>
             <TableBody>
               {filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
                 <TableRow hover role="checkbox" tabIndex={-1} key={row[columns[0].id]} className={classes.row}>
+                  <TableCell className={classes.tableRowContainerLeftSpacing} />
                   {columns.map((column) => {
                     if (column.type === 'link') {
                       const link = row[column.link_id];
                       const value = row[column.id];
                       return (
-                        <TableCell key={column.id} align={column.align}>
-                          <Link to={link} className={classes.textLink}>{column.format && typeof value === 'number' ? column.format(value) : value}</Link>
-                        </TableCell>
+                        <>
+                          <TableCell className={classes.tableColumnLeftSpacing} />
+                          <TableCell key={column.id} align={column.align}>
+                            <Link to={link} className={classes.textLink}>{column.format && typeof value === 'number' ? column.format(value) : value}</Link>
+                          </TableCell>
+                        </>
                       );
                     }
                     const value = row[column.id];
                     return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.format && typeof value === 'number' ? column.format(value) : value}
-                      </TableCell>
+                      <>
+                        <TableCell className={classes.tableColumnLeftSpacing} />
+                        <TableCell key={column.id} align={column.align}>
+                          {column.format && typeof value === 'number' ? column.format(value) : value}
+                        </TableCell>
+                      </>
                     );
                   })}
                   {hasLink ? (
                     <TableCell key={`${row.id}-show`} align="right">
                       <Link to={path[filterData.indexOf(row)]} className={classes.detailLink}>
-                        <ArrowForward style={{ height: '20px' }} />
+                        <IconButton className={classes.iconButton}>
+                          <ArrowForward style={{ height: '20px' }} />
+                        </IconButton>
                       </Link>
                     </TableCell>
                   ) : (<TableCell key={`${row.id}-blank`} align="right" style={{ minWidth: 20 }} />)}
@@ -257,9 +328,9 @@ export default function CustomTable({
           </Table>
         </TableContainer>
         <div className={classes.bottom}>
-          <FormControl variant="outlined" className="">
+          <FormControl variant="outlined">
             <Select
-              className={classes.bottomItem}
+              className={classes.pageRowSelect}
               labelId="rows-per-page"
               id="rows-per-page"
               value={rowsPerPage}
@@ -274,11 +345,11 @@ export default function CustomTable({
             </Select>
           </FormControl>
 
-          <Typography className={classes.bottomItem} variant="body1">
+          <Typography className={classes.pageText} variant="body1">
             rows
           </Typography>
           <Button
-            className={classes.bottomItem}
+            className={classes.pageChangeButtons}
             onClick={(e) => {
               handleChangePage(e, curPage - 1);
             }}
@@ -292,13 +363,13 @@ export default function CustomTable({
               setPageInput(e.target.value);
             }}
           />
-          <Typography className={classes.bottomItem} variant="body1">
+          <Typography className={classes.pageText} variant="body1">
             of
             {' '}
             {Math.ceil(filterData.length / rowsPerPage)}
           </Typography>
           <Button
-            className={classes.bottomItem}
+            className={classes.pageChangeButtons}
             onClick={(e) => {
               handleChangePage(e, curPage + 1);
             }}
