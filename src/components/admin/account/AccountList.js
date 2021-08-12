@@ -64,9 +64,9 @@ export default function AccountList() {
     accountsID.forEach((key) => {
       const item = accounts[key];
       const temp = { ...item };
-      temp.path = `account/${temp.id}/setting`;
+      temp.path = `/admin/account/account/${temp.id}/setting`;
       newData.push(temp);
-      newPath.push(temp.path);
+      newPath.push(`/admin/account/account/${temp.id}/setting`);
     });
     setTableData(newData);
     setPath(newPath);

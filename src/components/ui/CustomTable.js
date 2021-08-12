@@ -298,7 +298,7 @@ export default function CustomTable({
                         <>
                           <TableCell className={classes.tableColumnLeftSpacing} />
                           <TableCell key={column.id} align={column.align}>
-                            <Link to={link} className={classes.textLink}>{column.format && typeof value === 'number' ? column.format(value) : value}</Link>
+                            <Link to={link} className={classes.textLink} replace>{column.format && typeof value === 'number' ? column.format(value) : value}</Link>
                           </TableCell>
                         </>
                       );
