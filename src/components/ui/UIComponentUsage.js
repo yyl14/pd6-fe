@@ -15,6 +15,7 @@ import {
   DialogActions,
   Card,
   CardContent,
+  Snackbar,
 } from '@material-ui/core';
 import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -90,6 +91,8 @@ export default function UIComponentUsage() {
   const [value, setValue] = useState('');
   const [selected, setSelected] = useState('C++');
   const [showDialog, setShowDialog] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [showSnackbarWithButton, setShowSnackbarWithButton] = useState(false);
   const [dateRangePicker, setDateRangePicker] = useState([
     {
       startDate: moment().startOf('week').toDate(),
@@ -111,10 +114,8 @@ export default function UIComponentUsage() {
   });
 
   return (
-    <>
-      <Typography variant="h3" className={classes.bigTitle}>
-        Themed Components
-      </Typography>
+    <div>
+      <Typography variant="h3" className={classes.bigTitle}>Themed Components</Typography>
       <div className={classes.row}>
         <div className={classes.wrapper}>
           <Typography variant="h4">Button</Typography>
@@ -191,9 +192,37 @@ export default function UIComponentUsage() {
           </div>
         </div>
       </div>
-      <Typography variant="h3" className={classes.bigTitle}>
-        Customized Components
-      </Typography>
+      <div className={classes.wrapper}>
+        <Typography variant="h4">Snackbar</Typography>
+        <hr className={classes.divider} />
+        <div className={classes.component}>
+          <div className={classes.children}>
+            <Button onClick={() => setShowSnackbar(true)}>Open the snackbar</Button>
+          </div>
+          <div className={classes.children}>
+            <Button onClick={() => setShowSnackbarWithButton(true)}>Open the snackbar with button</Button>
+          </div>
+          <Snackbar
+            open={showSnackbar}
+            autoHideDuration={3000}
+            message="This is a snackbar"
+            onClose={() => setShowSnackbar(false)}
+          />
+          <Snackbar
+            open={showSnackbarWithButton}
+            autoHideDuration={3000}
+            message="This is a snackbar with button"
+            onClose={() => setShowSnackbarWithButton(false)}
+            action={(
+              <Button variant="text" color="primary" onClick={() => setShowSnackbarWithButton(false)}>
+                <Typography variant="h6">Undo</Typography>
+              </Button>
+            )}
+          />
+        </div>
+      </div>
+
+      <Typography variant="h3" className={classes.bigTitle}>Customized Components</Typography>
       <div className={classes.row}>
         <div className={classes.wrapper}>
           <Typography variant="h4">Aligned Text</Typography>
@@ -394,6 +423,6 @@ export default function UIComponentUsage() {
         </div>
       </div>
       */}
-    </>
+    </div>
   );
 }
