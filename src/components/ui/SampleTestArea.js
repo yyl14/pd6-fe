@@ -32,7 +32,7 @@ const useStyles = makeStyles({
   },
   copyIcon: {
     marginLeft: '7.5px',
-    transform: 'translate(0, 2px)',
+    transform: 'translate(0, -1px)',
   },
   content: {
     // margin: '10px',
