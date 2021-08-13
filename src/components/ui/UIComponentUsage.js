@@ -72,8 +72,8 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '5px',
   },
   icon: {
-    height: '15px',
-    width: '15px',
+    height: '18px',
+    width: '18px',
     margin: '0px',
     transform: 'translateX(0.5px)',
   },
