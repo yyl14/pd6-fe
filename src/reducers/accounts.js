@@ -40,7 +40,7 @@ const byId = (state = {}, action) => {
         ...state,
         [accountId]: {
           ...state[accountId],
-          gradeIds: data === null ? [] : data.map((item) => item.id),
+          gradeIds: (data === null ? [] : data.map((item) => item.id)),
         },
       };
     }
