@@ -185,10 +185,10 @@ export default function UIComponentUsage() {
         <hr className={classes.divider} />
         <div className={classes.component}>
           <div className={classes.children}>
-            <Button onClick={() => setShowSnackbar(true)}>Open the Snackbar</Button>
+            <Button onClick={() => setShowSnackbar(true)}>Open the snackbar</Button>
           </div>
           <div className={classes.children}>
-            <Button onClick={() => setShowSnackbarWithButton(true)}>Open the Snackbar with button</Button>
+            <Button onClick={() => setShowSnackbarWithButton(true)}>Open the snackbar with button</Button>
           </div>
           <Snackbar
             open={showSnackbar}
