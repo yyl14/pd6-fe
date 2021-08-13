@@ -41,8 +41,10 @@ class Login extends Component {
       });
       if (nextProps.auth.user.role.indexOf('MANAGER') !== -1 || nextProps.auth.user.role === 'MANAGER') {
         nextProps.history.push('/admin/course/course');
+      } else if (nextProps.auth.user.role.indexOf('NORMAL') !== -1 || nextProps.auth.user.role === 'NORMAL') {
+        nextProps.history.push('/my-class');
       } else {
-        nextProps.history.push('/');
+        nextProps.history.push('/notFound');
       }
     }
 

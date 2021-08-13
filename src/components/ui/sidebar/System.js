@@ -166,14 +166,12 @@ export default function System({
         {display === 'unfold' ? (
           <List>
             {itemList.map((item) => (
-              <ListItem
-                button
-                key={item.text}
-                onClick={() => history.push(item.path)}
-                className={location.pathname === item.path ? classes.active : null}
-              >
+              <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classes.item}>
                 <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} className={classes.wrapping} />
+                <ListItemText
+                  primary={item.text}
+                  className={location.pathname === item.path ? classes.active : null}
+                />
               </ListItem>
             ))}
           </List>

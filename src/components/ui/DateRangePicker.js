@@ -14,7 +14,14 @@ const useStyles = makeStyles((muiTheme) => ({
     flexDirection: 'row',
   },
   wrapperVertical: {
-    flexDirection: 'row',
+    background: '#ffffff',
+    borderRadius: muiTheme.shape.borderRadius,
+    border: '1px solid #CACACA',
+    padding: '20px 30px 20px 30px',
+    width: '540px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 
   // startDate: {
@@ -24,6 +31,13 @@ const useStyles = makeStyles((muiTheme) => ({
   fieldsWrapper: {
     marginTop: '10px',
     marginLeft: '45px',
+  },
+  fieldsWrapperVertical: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: '22px',
+    // marginBottom: '10px',
+    // marginLeft: '45px',
   },
 
   dateField: {
@@ -40,6 +54,15 @@ const useStyles = makeStyles((muiTheme) => ({
   },
   endDateField: {
     marginTop: '40px',
+  },
+
+  startDateFieldVertical: {
+    // marginTop: '24px',
+    marginRight: '9px',
+  },
+  endDateFieldVertical: {
+    // marginTop: '24px',
+    marginLeft: '9px',
   },
 
   timeField: {
@@ -92,18 +115,21 @@ export default function DateRangePicker({
   const [endError, setEndError] = useState(null);
 
   return (
-    <div className={`${className} ${classes.wrapper}`}>
+    <div className={`${className} ${vertical ? classes.wrapperVertical : classes.wrapper}`}>
       <DateRange
         showDateDisplay={false}
         showMonthAndYearPickers={false}
         editableDateInputs
-        onChange={(item) => setValue([item.selection])}
+        onChange={(item) => {
+          console.log(item);
+          setValue([item.selection]);
+        }}
         moveRangeOnFirstSelection={false}
         ranges={value}
         color="#FFFFFF"
       />
-      <div className={classes.fieldsWrapper}>
-        <div className={classes.startDateField}>
+      <div className={vertical ? classes.fieldsWrapperVertical : classes.fieldsWrapper}>
+        <div className={`${vertical ? classes.startDateFieldVertical : classes.startDateField}`}>
           <TextField
             className={classes.dateField}
             label="Start Date"
@@ -113,7 +139,7 @@ export default function DateRangePicker({
           />
           <TextField className={classes.timeField} value={startTime} />
         </div>
-        <div className={classes.endDateField}>
+        <div className={`${vertical ? classes.endDateFieldVertical : classes.endDateField}`}>
           <TextField
             className={classes.dateField}
             label="End Date"
