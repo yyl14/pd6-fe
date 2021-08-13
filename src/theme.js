@@ -204,6 +204,26 @@ const overrides = {
         backgroundColor: red.dark,
       },
     },
+    textPrimary: {
+      margin: '10px 5px 10px 5px',
+      padding: '8.5px 25px 10px 25px',
+      '&:hover': {
+        backgroundColor: blue[60],
+      },
+      '&:active': {
+        backgroundColor: blue[80],
+      },
+    },
+    textSecondary: {
+      margin: '10px 5px 10px 5px',
+      padding: '8.5px 25px 10px 25px',
+      '&:hover': {
+        backgroundColor: red[60],
+      },
+      '&:active': {
+        backgroundColor: red[80],
+      },
+    },
   },
 
   MuiIconButton: {
