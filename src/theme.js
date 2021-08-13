@@ -204,6 +204,66 @@ const overrides = {
         backgroundColor: red.dark,
       },
     },
+    text: {
+      margin: '10px 5px 10px 5px',
+      padding: '8.5px 25px 10px 25px',
+    },
+    textPrimary: {
+      '&:hover': {
+        backgroundColor: blue[60],
+      },
+      '&:active': {
+        backgroundColor: blue[80],
+      },
+    },
+    textSecondary: {
+      '&:hover': {
+        backgroundColor: red[60],
+      },
+      '&:active': {
+        backgroundColor: red[80],
+      },
+    },
+    outlined: {
+      margin: '10px 5px 10px 5px',
+      padding: '8.5px 25px 10px 25px',
+      '&:hover': {
+        backgroundColor: mono.lightGray,
+      },
+      '&:active': {
+        backgroundColor: mono.semiDarkGray,
+      },
+    },
+    outlinedPrimary: {
+      '&:hover': {
+        color: mono.white,
+        backgroundColor: blue[60],
+      },
+      '&:active': {
+        color: mono.white,
+        backgroundColor: blue.dark,
+      },
+    },
+    outlinedSecondary: {
+      '&:hover': {
+        color: mono.white,
+        backgroundColor: red[60],
+      },
+      '&:active': {
+        color: mono.white,
+        backgroundColor: red.dark,
+      },
+    },
+    startIcon: {
+      marginRight: '10px',
+      height: '20px',
+      width: '20px',
+    },
+    endIcon: {
+      marginLeft: '10px',
+      height: '20px',
+      width: '20px',
+    },
   },
 
   MuiIconButton: {
