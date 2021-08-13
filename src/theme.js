@@ -55,6 +55,7 @@ const palette = {
   // primary: blue
   primary: {
     light: blue[60],
+    hover: blue[80],
     main: blue[100],
     dark: blue.dark,
     contrastText: 'white',

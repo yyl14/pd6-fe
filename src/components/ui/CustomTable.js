@@ -30,8 +30,6 @@ import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   topContent1: {
-    // width: '80%',
-    // maxWidth: '1280px',
     background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
     padding: '5px 15px 15px 15px',
@@ -114,7 +112,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingRight: '15px',
-    background: '#F8F8F8',
+    background: theme.palette.background.default,
   },
   pageChangeButtons: {
     width: '70px',
@@ -140,7 +138,7 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
     color: theme.palette.primary.main,
     '&:hover': {
-      color: '#6DC5FF',
+      color: theme.palette.primary.hover,
     },
     '&:active': {
       color: theme.palette.primary.dark,
@@ -272,7 +270,7 @@ export default function CustomTable({
                     <TableCell key={column.id} align={column.align} className={classes.tableHeadCell} style={{ minWidth: column.minWidth, width: column.width }}>
                       <div className={classes.column}>
                         <div className={labelMoveLeft(columnComponent, columns, column)}>
-                          {column.label}
+                          <b>{column.label}</b>
                         </div>
                         <div className={classes.columnComponent}>
                           { columnComponent && columnComponent[columns.findIndex((x) => x.id === column.id)]}
