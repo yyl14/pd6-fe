@@ -202,8 +202,8 @@ export default function UIComponentUsage() {
             message="This is a snackbar with button"
             onClose={() => setShowSnackbarWithButton(false)}
             action={(
-              <Button onClick={() => setShowSnackbarWithButton(false)}>
-                Undo
+              <Button variant="text" color="primary" onClick={() => setShowSnackbarWithButton(false)}>
+                <Typography variant="h6">Undo</Typography>
               </Button>
             )}
           />
