@@ -20,7 +20,10 @@ import { useParams } from 'react-router-dom';
 import { BiFilterAlt } from 'react-icons/bi';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
+import TableFilterCard from '../../ui/TableFilterCard';
 import { getInstitutes, addInstitute } from '../../../actions/admin/account';
+import filterData from '../../../function/filter';
+import sortData from '../../../function/sort';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -29,20 +32,9 @@ const useStyles = makeStyles((theme) => ({
   popUpLayout: {
     width: '100%',
   },
-  selectField: {
-    minWidth: 210,
-  },
-  filterButton: {
-    justifyContent: 'space-between',
-  },
-  clearButton: {
-    backgroundColor: '#FFFFFF',
-    border: 'solid',
-    borderColor: '#DDDDDD',
-  },
-  inputField: {
-    width: 340,
-  },
+  // inputField: {
+  //   width: 340,
+  // },
 }));
 
 export default function InstituteList() {
@@ -55,6 +47,7 @@ export default function InstituteList() {
   const pageError = useSelector((state) => state.admin.account.error);
   const loading = useSelector((state) => state.admin.account.loading);
 
+  const [transformedData, setTransformedData] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [path, setPath] = useState([]);
 
@@ -70,7 +63,7 @@ export default function InstituteList() {
 
   const [filter, setFilter] = useState(false);
   const [filterInput, setFilterInput] = useState({
-    filter: '(None)',
+    filter: ['Select all'],
     sort: '(None)',
   });
 
@@ -108,89 +101,15 @@ export default function InstituteList() {
   };
 
   const filterStatus = () => {
-    const newData = [];
+    const tempData = filterData(transformedData, 'is_disabled', filterInput.filter);
+    const tempData2 = sortData(tempData, 'is_disabled', filterInput.sort);
+
     const newPath = [];
-
-    if (filterInput.filter === 'Disabled') {
-      institutesID.forEach((key) => {
-        const item = institutes[key];
-        const temp = { ...item };
-        if (item.is_disabled === true || item.is_disabled === 'Disabled') {
-          temp.is_disabled = 'Disabled';
-          newData.push(temp);
-          newPath.push(`institute/${temp.id}/setting`);
-        }
-      });
-    } else if (filterInput.filter === 'Enabled') {
-      institutesID.forEach((key) => {
-        const item = institutes[key];
-        const temp = { ...item };
-        if (item.is_disabled === false || item.is_disabled === 'Enabled') {
-          temp.is_disabled = 'Enabled';
-          newData.push(temp);
-          newPath.push(`institute/${temp.id}/setting`);
-        }
-      });
-    } else {
-      institutesID.forEach((key) => {
-        const item = institutes[key];
-        const temp = { ...item };
-        if (item.is_disabled === true || item.is_disabled === 'Disabled') {
-          temp.is_disabled = 'Disabled';
-        } else if (item.is_disabled === false || item.is_disabled === 'Enabled') {
-          temp.is_disabled = 'Enabled';
-        }
-        newData.push(temp);
-        newPath.push(`institute/${temp.id}/setting`);
-      });
-    }
-
-    // sort
-    if (filterInput.filter === '(None)' || filterInput.filter === 'Select all') {
-      if (filterInput.sort === 'A to Z') {
-        newPath.splice(0, newPath.length);
-        newData.sort((a, b) => {
-          const statusA = a.is_disabled;
-          const statusB = b.is_disabled;
-          if (statusA > statusB) {
-            return -1;
-          }
-          if (statusA < statusB) {
-            return 1;
-          }
-          return 0;
-        });
-        newData.forEach((data) => {
-          newPath.push(`institute/${data.id}/setting`);
-        });
-      } else if (filterInput.sort === 'Z to A') {
-        newPath.splice(0, newPath.length);
-        newData.sort((a, b) => {
-          const statusA = a.is_disabled;
-          const statusB = b.is_disabled;
-          if (statusA < statusB) {
-            return -1;
-          }
-          if (statusA > statusB) {
-            return 1;
-          }
-          return 0;
-        });
-        newData.forEach((data) => {
-          newPath.push(`institute/${data.id}/setting`);
-        });
-      }
-    }
-
-    setTableData(newData);
-    setPath(newPath);
-  };
-
-  const filterClear = () => {
-    setFilterInput({
-      filter: '(None)',
-      sort: '(None)',
+    tempData2.forEach((data) => {
+      newPath.push(data.path);
     });
+    setTableData(tempData2);
+    setPath(newPath);
   };
 
   useEffect(() => {
@@ -205,10 +124,12 @@ export default function InstituteList() {
         } else if (item.is_disabled === false || item.is_disabled === 'Enabled') {
           temp.is_disabled = 'Enabled';
         }
+        temp.path = `/admin/account/institute/${temp.id}/setting`;
         newData.push(temp);
-        newPath.push(`institute/${temp.id}/setting`);
+        newPath.push(temp.path);
       });
     }
+    setTransformedData(newData);
     setTableData(newData);
     setPath(newPath);
   }, [institutes, institutesID]);
@@ -259,7 +180,19 @@ export default function InstituteList() {
             type: 'string',
           },
         ]}
-        columnComponent={[null, null, (<BiFilterAlt key="filter" onClick={() => { setFilter(true); }} />)]}
+        columnComponent={[
+          null,
+          null,
+          <TableFilterCard
+            key="filter"
+            popUp={filter}
+            setPopUp={setFilter}
+            filterInput={filterInput}
+            filterOptions={['Enabled', 'Disabled']}
+            setFilterInput={setFilterInput}
+            doFilter={filterStatus}
+          />,
+        ]}
         hasLink
         path={path}
       />
@@ -320,71 +253,14 @@ export default function InstituteList() {
           <Button onClick={() => setPopUp(false)} color="default">
             Cancel
           </Button>
-          <Button onClick={() => { add(); }} color="primary">
+          <Button
+            onClick={() => {
+              add();
+            }}
+            color="primary"
+          >
             Add
           </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog
-        open={filter}
-        keepMounted
-        onClose={() => setFilter(false)}
-        className={classes.popUpLayout}
-        aria-labelledby="dialog-slide-title"
-        aria-describedby="dialog-slide-description"
-      >
-        <DialogTitle id="dialog-slide-title">
-          <Typography variant="h4">Filter: Status</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <AlignedText text="Filter by" childrenType="field">
-            <FormControl variant="outlined" className={classes.selectField}>
-              <Select
-                labelId="status"
-                id="status"
-                value={filterInput.filter}
-                onChange={(e) => {
-                  setFilterInput((input) => ({ ...input, filter: e.target.value }));
-                }}
-              >
-                <MenuItem value="(None)">(None)</MenuItem>
-                <MenuItem value="Select all">Select all</MenuItem>
-                <MenuItem value="Enabled">Enabled</MenuItem>
-                <MenuItem value="Disabled">Disabled</MenuItem>
-              </Select>
-            </FormControl>
-          </AlignedText>
-          <AlignedText text="Sort by">
-            <FormControl variant="outlined" className={classes.selectField}>
-              <Select
-                labelId="sort"
-                id="sort"
-                value={filterInput.sort}
-                onChange={(e) => {
-                  setFilterInput((input) => ({ ...input, sort: e.target.value }));
-                }}
-              >
-                <MenuItem value="(None)">(None)</MenuItem>
-                <MenuItem value="A to Z">A to Z</MenuItem>
-                <MenuItem value="Z to A">Z to A</MenuItem>
-              </Select>
-            </FormControl>
-          </AlignedText>
-        </DialogContent>
-        <DialogActions className={classes.filterButton}>
-          <div>
-            <Button onClick={() => filterClear()} className={classes.clearButton}>
-              Clear
-            </Button>
-          </div>
-          <div>
-            <Button onClick={() => setFilter(false)} color="default">
-              Cancel
-            </Button>
-            <Button onClick={() => { setFilter(false); filterStatus(); }} color="primary">
-              Save
-            </Button>
-          </div>
         </DialogActions>
       </Dialog>
     </>

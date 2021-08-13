@@ -209,6 +209,12 @@ const overrides = {
   MuiIconButton: {
     root: {
       color: mono.black,
+      '&:hover': {
+        backgroundColor: mono.lightGray,
+      },
+      '&:active': {
+        backgroundColor: mono.gray,
+      },
     },
   },
 
@@ -216,6 +222,7 @@ const overrides = {
   MuiInputBase: {
     root: {
       height: '45px',
+
       backgroundColor: mono.white,
     },
     multiline: {
@@ -223,14 +230,15 @@ const overrides = {
     },
   },
 
-  MuiTextField: {
-    // root: {
-    //   margin: '1vh 5px 2.2vh 5px',
-    // },
-  },
   MuiFormControl: {
     root: {
       margin: '10px 0 5px 0',
+      // width: '350px',
+    },
+  },
+  MuiFormControlLabel: {
+    root: {
+      marginLeft: '0px',
     },
   },
   MuiSelect: {
@@ -250,6 +258,11 @@ const overrides = {
       paddingBottom: '12px',
       borderRadius: '10px',
       height: '45px',
+    },
+  },
+  MuiTextField: {
+    root: {
+      width: '350px',
     },
   },
   MuiOutlinedInput: {
@@ -286,6 +299,39 @@ const overrides = {
     outlined: {
       transform: 'translate(15px, 13px) scale(1)',
       '&$shrink': { transform: 'translate(14px, -20px) scale(0.89)', fontWeight: 400 },
+    },
+  },
+  MuiRadio: {
+    root: {
+      display: 'flex',
+      padding: '4px',
+      '&:hover': {
+        backgroundColor: mono.lightGray,
+      },
+      '&:active': {
+        backgroundColor: mono.gray,
+      },
+    },
+    colorSecondary: {
+      '&$checked': {
+        display: 'flex',
+        padding: '4px',
+        '&:hover': {
+          backgroundColor: mono.lightGray,
+        },
+        '&:active': {
+          backgroundColor: mono.gray,
+        },
+      },
+    },
+  },
+
+  // Table
+  MuiTableRow: {
+    hover: {
+      '&:hover': {
+        backgroundColor: `${mono.veryLightGray} !important`,
+      },
     },
   },
 
@@ -363,6 +409,7 @@ const props = {
 
   MuiTextField: {
     variant: 'outlined',
+    // style: { width: 350 },
   },
 
   MuiOutlinedInput: {
