@@ -15,8 +15,8 @@ import CopyToClipboardButton from './CopyToClipboardButton';
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 300,
-    height: 150,
+    width: 584,
+    height: 198,
   },
 });
 
@@ -29,18 +29,17 @@ export default function SampleTestArea({
     <Card className={classes.root}>
       <CardActionArea>
         <CardContent>
-          <AlignedText text="Input" childrenType="text">
-            <Typography variant="body1">
-              {input}
-            </Typography>
-            <CopyToClipboardButton text={input} />
-          </AlignedText>
+          <CopyToClipboardButton text={input} />
+          <Typography variant="body1">
+            {input}
+            input test data
+          </Typography>
           <AlignedText text="Output" childrenType="text">
-            <Typography variant="body1">
-              {output}
-            </Typography>
             <CopyToClipboardButton text={output} />
           </AlignedText>
+          <Typography variant="body1">
+            {output}
+          </Typography>
         </CardContent>
       </CardActionArea>
     </Card>

@@ -38,6 +38,7 @@
     "react-router-redux": "^4.0.8",
     "react-scripts": "^4.0.3",
     "react-select": "^4.3.0",
+    "react-syntax-highlighter": "^15.4.4",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "serve": "^11.3.2",

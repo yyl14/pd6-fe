@@ -17,6 +17,8 @@ import NoMatch from '../../noMatch';
 import CustomTable from '../../ui/CustomTable';
 import DateRangePicker from '../../ui/DateRangePicker';
 import { fetchAnnouncement } from '../../../actions/admin/system';
+import CodeArea from '../../ui/CodeArea';
+import SampleTestArea from '../../ui/SampleTestArea';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -137,6 +139,8 @@ export default function AnnouncementHome() {
       <Typography variant="h3" className={classes.pageHeader}>
         Announcement
       </Typography>
+      <SampleTestArea />
+      <CodeArea />
       <CustomTable
         hasSearch
         searchPlaceholder="Search"
