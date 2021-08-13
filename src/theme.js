@@ -219,19 +219,7 @@ const overrides = {
       },
     },
   },
-  /*
-  MuiToggleButton: {
-    root: {
-      color: mono.black,
-      '&:hover': {
-        backgroundColor: mono.lightGray,
-      },
-      '&:active': {
-        backgroundColor: mono.gray,
-      },
-    },
-  },
-*/
+
   // "Input"
   MuiInputBase: {
     root: {
