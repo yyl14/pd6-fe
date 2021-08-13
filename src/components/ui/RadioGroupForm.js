@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: `inset 0 0 0 1.5px ${theme.palette.grey[300]}`,
   },
   icon: {
+    backgroundColor: '#FFFFFF',
     'input:hover ~ &': {
       backgroundColor: theme.palette.grey[100],
     },
@@ -43,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
   checkedIcon: {
     display: 'flex',
     padding: '0px',
+    backgroundColor: '#FFFFFF',
     '&:before': {
       width: '20px',
       height: '20px',

@@ -16,6 +16,7 @@ import Index from './containers';
 import NoMatch from './components/noMatch';
 import store from './store';
 import IconUsage from './components/ui/IconUsage';
+import UIComponentUsage from './components/ui/UIComponentUsage';
 
 import './App.css';
 import './styles/ui.css';
@@ -54,6 +55,7 @@ class App extends Component {
           <Router>
             <Switch>
               <Route path="/icon" component={IconUsage} />
+              <Route path="/ui-component" component={UIComponentUsage} />
               <Route path="/login" component={Login} />
               <Route path="/forget-password" component={ForgetPassword} />
               <Route path="/reset-password" component={ResetPassword} />
