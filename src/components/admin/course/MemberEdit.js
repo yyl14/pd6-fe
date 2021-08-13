@@ -45,10 +45,7 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 const MemberEdit = ({
-  backToMemberList,
-  members,
-  onEditMembers,
-  loading,
+  backToMemberList, members, onEditMembers, loading,
 }) => {
   // TODO: initialize field content with redux state
   const classes = useStyles();
@@ -116,6 +113,7 @@ const MemberEdit = ({
             <Typography variant="caption">List of student ID</Typography>
           </div>
           <TextField
+            className={classes.textField}
             defaultValue={TA}
             onChange={(e) => handleChangeTA(e)}
             multiline
@@ -132,6 +130,7 @@ const MemberEdit = ({
           </div>
           <TextField
             defaultValue={student}
+            className={classes.textField}
             onChange={(e) => handleChangeStudent(e)}
             multiline
             rows={20}

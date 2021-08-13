@@ -4,8 +4,18 @@ import {
   Typography,
   Button,
   makeStyles,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  Select,
+  MenuItem,
 } from '@material-ui/core';
+import { BiFilterAlt } from 'react-icons/bi';
 import { useParams, useHistory } from 'react-router-dom';
+import SimpleBar from '../../ui/SimpleBar';
+import AlignedText from '../../ui/AlignedText';
 import { fetchCourses, fetchClasses, fetchMembers } from '../../../actions/admin/course';
 import CustomTable from '../../ui/CustomTable';
 import TableFilterCard from '../../ui/TableFilterCard';
@@ -198,116 +208,28 @@ export default function MemberList() {
               null,
               null,
               null,
-              <BiFilterAlt key="showInstituteFilterDialog" onClick={() => setShowInstituteFilterDialog(true)} />,
-              <BiFilterAlt key="showRoleFilterDialog" onClick={() => setShowRoleFilterDialog(true)} />,
+              <TableFilterCard
+                key="showInstituteFilterDialog"
+                popUp={showInstituteFilterDialog}
+                setPopUp={setShowInstituteFilterDialog}
+                filterInput={instituteFilterInput}
+                filterOptions={['NTU', 'NTNU', 'NTUST']}
+                setFilterInput={setInstituteFilterInput}
+                doFilter={instituteFilterStatus}
+              />,
+              <TableFilterCard
+                key="showRoleFilterDialog"
+                popUp={showRoleFilterDialog}
+                setPopUp={setShowRoleFilterDialog}
+                filterInput={roleFilterInput}
+                filterOptions={['Manager', 'Normal', 'Guest']}
+                setFilterInput={setRoleFilterInput}
+                doFilter={roleFilterStatus}
+              />,
             ]}
-            // hasLink
-            // path={classes.byId[classId].memberIds.map((member) => `/admin/course/class/${courseId}/${classId}/member`)}
+            hasLink
+            path={path}
           />
-
-          <Dialog open={showInstituteFilterDialog} maxWidth="md">
-            <DialogTitle>
-              <Typography variant="h4">Filter: Institute</Typography>
-            </DialogTitle>
-            <DialogContent>
-              <AlignedText text="Filter by" maxWidth="md" childrenType="field">
-                <FormControl variant="outlined" className={classNames.selectField}>
-                  <Select
-                    labelId="status"
-                    value={instituteFilterInput.filter}
-                    onChange={(e) => {
-                      setInstituteFilterInput((input) => ({ ...input, filter: e.target.value }));
-                    }}
-                  >
-                    <MenuItem value="(None)">(None)</MenuItem>
-                    <MenuItem value="NTU">NTU</MenuItem>
-                    <MenuItem value="NTNU">NTNU</MenuItem>
-                    <MenuItem value="NTUST">NTUST</MenuItem>
-                  </Select>
-                </FormControl>
-              </AlignedText>
-              <AlignedText text="Sort by" maxWidth="md" childrenType="field">
-                <FormControl variant="outlined" className={classNames.selectField}>
-                  <Select
-                    labelId="sort"
-                    value={instituteFilterInput.sort}
-                    onChange={(e) => {
-                      setInstituteFilterInput((input) => ({ ...input, sort: e.target.value }));
-                    }}
-                  >
-                    <MenuItem value="(None)">(None)</MenuItem>
-                    <MenuItem value="A to Z">A to Z</MenuItem>
-                    <MenuItem value="Z to A">Z to A</MenuItem>
-                  </Select>
-                </FormControl>
-              </AlignedText>
-            </DialogContent>
-            <DialogActions className={classNames.filterButton}>
-              <Button variant="outlined" onClick={instituteFilterClear} className={classNames.clearButton}>
-                Clear
-              </Button>
-              <div>
-                <Button onClick={() => setShowInstituteFilterDialog(false)} color="default">
-                  Cancel
-                </Button>
-                <Button onClick={handleClickInstituteFilterSave} color="primary">
-                  Save
-                </Button>
-              </div>
-            </DialogActions>
-          </Dialog>
-
-          <Dialog open={showRoleFilterDialog} maxWidth="md">
-            <DialogTitle>
-              <Typography variant="h4">Filter: Role</Typography>
-            </DialogTitle>
-            <DialogContent>
-              <AlignedText text="Filter by" maxWidth="md" childrenType="field">
-                <FormControl variant="outlined" className={classNames.selectField}>
-                  <Select
-                    labelId="status"
-                    value={roleFilterInput.filter}
-                    onChange={(e) => {
-                      setRoleFilterInput((input) => ({ ...input, filter: e.target.value }));
-                    }}
-                  >
-                    <MenuItem value="(None)">(None)</MenuItem>
-                    <MenuItem value="Manager">Manager</MenuItem>
-                    <MenuItem value="Normal">Normal</MenuItem>
-                    <MenuItem value="Guest">Guest</MenuItem>
-                  </Select>
-                </FormControl>
-              </AlignedText>
-              <AlignedText text="Sort by" maxWidth="md" childrenType="field">
-                <FormControl variant="outlined" className={classNames.selectField}>
-                  <Select
-                    labelId="sort"
-                    value={roleFilterInput.sort}
-                    onChange={(e) => {
-                      setRoleFilterInput((input) => ({ ...input, sort: e.target.value }));
-                    }}
-                  >
-                    <MenuItem value="(None)">(None)</MenuItem>
-                    <MenuItem value="A to Z">A to Z</MenuItem>
-                    <MenuItem value="Z to A">Z to A</MenuItem>
-                  </Select>
-                </FormControl>
-              </AlignedText>
-            </DialogContent>
-            <DialogActions className={classNames.filterButton}>
-              <Button variant="outlined" onClick={roleFilterClear} className={classNames.clearButton}>
-                Clear
-              </Button>
-              <div>
-                <Button onClick={() => setShowRoleFilterDialog(false)} color="default">
-                  Cancel
-                </Button>
-                <Button onClick={handleClickRoleFilterSave} color="primary">
-                  Save
-                </Button>
-              </div>
-            </DialogActions>
-          </Dialog>
         </>
       )}
     </>
