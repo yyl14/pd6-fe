@@ -120,7 +120,7 @@ export default function UIComponentUsage() {
             <Button color="secondary" startIcon={<DeleteIcon />}>Delete</Button>
             {/* <Button color="secondary" endIcon={<DeleteIcon />}>Delete</Button> */}
             {/* Icon size of toggle button and icon button are different!  */}
-            <Button color="secondary"><DeleteIcon className={classes.iconButtonIcon} /></Button>
+            <Button variant="outlined" color="secondary"><DeleteIcon className={classes.iconButtonIcon} /></Button>
             <IconButton><ArrowForwardRoundedIcon className={classes.toggleButtonIcon} /></IconButton>
           </div>
         </div>
