@@ -209,6 +209,8 @@ const overrides = {
   MuiIconButton: {
     root: {
       color: mono.black,
+      height: '30px',
+      width: '30px',
       '&:hover': {
         backgroundColor: mono.lightGray,
       },
@@ -217,7 +219,19 @@ const overrides = {
       },
     },
   },
-
+  /*
+  MuiToggleButton: {
+    root: {
+      color: mono.black,
+      '&:hover': {
+        backgroundColor: mono.lightGray,
+      },
+      '&:active': {
+        backgroundColor: mono.gray,
+      },
+    },
+  },
+*/
   // "Input"
   MuiInputBase: {
     root: {
