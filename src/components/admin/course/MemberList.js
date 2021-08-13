@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /* This is a level 4 component (page component) */
-// TODO: path of arrows, username link
 export default function MemberList() {
   const { courseId, classId } = useParams();
   const history = useHistory();
@@ -45,6 +44,7 @@ export default function MemberList() {
   const [edit, setEdit] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [transformedData, setTransformedData] = useState([]);
+  const [path, setPath] = useState([]);
   const [showInstituteFilterDialog, setShowInstituteFilterDialog] = useState(false);
   const [showRoleFilterDialog, setShowRoleFilterDialog] = useState(false);
   const [instituteFilterInput, setInstituteFilterInput] = useState({
@@ -71,41 +71,44 @@ export default function MemberList() {
 
   useEffect(() => {
     const newData = [];
-    // const newPath = [];
+    const newPath = [];
     if (classes.byId[classId]) {
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
         const temp = { ...item };
+        temp.path = `/admin/account/account/${temp.member_id}/setting`;
         temp.role = roleUpperToLowerCase(item.role);
         newData.push(temp);
+        newPath.push(temp.path);
       });
     }
     setTableData(newData);
     setTransformedData(newData);
+    setPath(newPath);
   }, [classes.byId, classId, members.byId]);
 
   const instituteFilterStatus = () => {
     const tempData = filterData(transformedData, 'institute_abbreviated_name', instituteFilterInput.filter);
     const tempData2 = sortData(tempData, 'institute_abbreviated_name', instituteFilterInput.sort);
 
-    // const newPath = [];
-    /* tempData2.forEach((data) => {
+    const newPath = [];
+    tempData2.forEach((data) => {
       newPath.push(data.path);
-    }); */
+    });
     setTableData(tempData2);
-    // setPath(newPath);
+    setPath(newPath);
   };
 
   const roleFilterStatus = () => {
     const tempData = filterData(transformedData, 'role', roleFilterInput.filter);
     const tempData2 = sortData(tempData, 'role', roleFilterInput.sort);
 
-    // const newPath = [];
-    /* tempData2.forEach((data) => {
+    const newPath = [];
+    tempData2.forEach((data) => {
       newPath.push(data.path);
-    }); */
+    });
     setTableData(tempData2);
-    // setPath(newPath);
+    setPath(newPath);
   };
 
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
@@ -146,6 +149,8 @@ export default function MemberList() {
                 minWidth: 150,
                 width: 200,
                 align: 'center',
+                type: 'link',
+                link_id: 'path',
               },
               {
                 id: 'student_id',
@@ -197,8 +202,8 @@ export default function MemberList() {
               setFilterInput={setRoleFilterInput}
               doFilter={roleFilterStatus}
             />)]}
-            // hasLink
-            // path={classes.byId[classId].memberIds.map((member) => `/admin/course/class/${courseId}/${classId}/member`)}
+            hasLink
+            path={path}
           />
         </>
       )}
