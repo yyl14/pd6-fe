@@ -364,6 +364,34 @@ const overrides = {
     root: { padding: '0 19px 6px 0' },
   },
 
+  MuiSnackbarContent: {
+    root: {
+      width: '600px',
+      padding: '0px 16px',
+      borderRadius: '12px',
+      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
+      backgroundColor: mono.black,
+
+      // message : body1
+      fontSize: '1rem',
+      fontWeight: 500,
+      lineHeight: 25 / 18,
+      // letterSpacing: '-0.01rem',
+      color: mono.veryLightGray,
+    },
+    message: {
+      display: 'flex',
+      alignItems: 'center',
+      height: '65px',
+      padding: '0px',
+    },
+    action: {
+      marginRight: '-5px',
+      marginBottom: '10px',
+      marginTop: '10px',
+    },
+  },
+
   // "Mask"
   MuiBackdrop: {
     root: {
