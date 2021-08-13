@@ -15,6 +15,7 @@ import {
   DialogActions,
   Card,
   CardContent,
+  Snackbar,
 } from '@material-ui/core';
 import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
 import moment from 'moment';
@@ -84,6 +85,8 @@ export default function UIComponentUsage() {
   const [value, setValue] = useState('');
   const [selected, setSelected] = useState('C++');
   const [showDialog, setShowDialog] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [showSnackbarWithButton, setShowSnackbarWithButton] = useState(false);
   const [dateRangePicker, setDateRangePicker] = useState([
     {
       startDate: moment().startOf('week').toDate(),
@@ -175,6 +178,33 @@ export default function UIComponentUsage() {
               </DialogActions>
             </Dialog>
           </div>
+        </div>
+      </div>
+      <div className={classes.wrapper}>
+        <Typography variant="h4">Snackbar</Typography>
+        <hr className={classes.divider} />
+        <div className={classes.component}>
+          <div className={classes.children}>
+            <Button onClick={() => setShowSnackbar(true)}>Open the Snackbar</Button>
+          </div>
+          <div className={classes.children}>
+            <Button onClick={() => setShowSnackbarWithButton(true)}>Open the Snackbar with button</Button>
+          </div>
+          <Snackbar
+            open={showSnackbar}
+            autoHideDuration={6000}
+            message="This is a snackbar"
+          />
+          <Snackbar
+            open={showSnackbarWithButton}
+            autoHideDuration={6000}
+            message="This is a snackbar with button"
+            action={(
+              <Button size="small">
+                Undo
+              </Button>
+            )}
+          />
         </div>
       </div>
 
