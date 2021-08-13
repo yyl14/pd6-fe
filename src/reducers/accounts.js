@@ -35,8 +35,8 @@ const byId = (state = {}, action) => {
       return {
         ...state,
         [accountId]: {
-           ...state[accountId],
-           gradeIds: (data === null ? [] : data.map((item) => item.id) ),
+          ...state[accountId],
+          gradeIds: (data === null ? [] : data.map((item) => item.id)),
         },
       };
     }
