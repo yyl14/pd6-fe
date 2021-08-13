@@ -106,7 +106,7 @@ export default function UIComponentUsage() {
   });
 
   return (
-    <>
+    <div>
       <Typography variant="h3" className={classes.bigTitle}>Themed Components</Typography>
       <div className={classes.row}>
         <div className={classes.wrapper}>
@@ -192,15 +192,17 @@ export default function UIComponentUsage() {
           </div>
           <Snackbar
             open={showSnackbar}
-            autoHideDuration={6000}
+            autoHideDuration={3000}
             message="This is a snackbar"
+            onClose={() => setShowSnackbar(false)}
           />
           <Snackbar
             open={showSnackbarWithButton}
-            autoHideDuration={6000}
+            autoHideDuration={3000}
             message="This is a snackbar with button"
+            onClose={() => setShowSnackbarWithButton(false)}
             action={(
-              <Button size="small">
+              <Button onClick={() => setShowSnackbarWithButton(false)}>
                 Undo
               </Button>
             )}
@@ -394,6 +396,6 @@ export default function UIComponentUsage() {
         </div>
       </div>
       */}
-    </>
+    </div>
   );
 }
