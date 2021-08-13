@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 import Normal from './normal';
 import Admin from './admin';
 import Account from './account';
+import MyClass from './myClass';
 import NoMatch from '../components/noMatch';
 
 import { getUserInfo } from '../actions/auth';
@@ -42,7 +43,7 @@ class Index extends Component {
       if (nextProps.auth.user.role.indexOf('MANAGER') !== -1 || nextProps.auth.user.role === 'MANAGER') {
         nextProps.history.push('/admin/course/course');
       } else {
-        nextProps.history.push('/');
+        nextProps.history.push('/my-class');
       }
     }
 
@@ -60,6 +61,7 @@ class Index extends Component {
           <Route exact path="/" component={Normal} />
           <Route path="/admin" component={Admin} />
           <Route path="/account/setting" component={Account} />
+          <Route path="/my-class" component={MyClass} />
           <Route component={NoMatch} />
         </Switch>
       </div>

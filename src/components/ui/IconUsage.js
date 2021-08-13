@@ -29,7 +29,7 @@ export default function IconList() {
 
   return (
     <div>
-      <pre>  visit /components/ui/IconUsage.js</pre>
+      <pre> visit /components/ui/IconUsage.js</pre>
       <Grid className={classes.root}>
         <StyledPaper>
           <Icon.Dots className={classes.svg} />

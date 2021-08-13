@@ -18,7 +18,10 @@ import {
   Snackbar,
 } from '@material-ui/core';
 import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
+import DeleteIcon from '@material-ui/icons/Delete';
 import moment from 'moment';
+import CopyToClipboardButton from './CopyToClipboardButton';
+import SampleTestArea from './SampleTestArea';
 import DateRangePicker from './DateRangePicker';
 import AlignedText from './AlignedText';
 import SimpleBar from './SimpleBar';
@@ -72,11 +75,14 @@ const useStyles = makeStyles((theme) => ({
   errorMessage: {
     marginLeft: '5px',
   },
-  icon: {
+  iconButtonIcon: {
+    height: '20px',
+    width: '20px',
+  },
+  toggleButtonIcon: {
     height: '18px',
     width: '18px',
-    margin: '0px',
-    transform: 'translateX(0.5px)',
+
   },
 }));
 
@@ -94,11 +100,13 @@ export default function UIComponentUsage() {
       key: 'selection',
     },
   ]);
-  const [tableData, setTableData] = useState([{
-    full_name: 'National Taiwan University',
-    email_domain: 'ntu.edu.tw',
-    is_disabled: 'Enabled',
-  }]);
+  const [tableData, setTableData] = useState([
+    {
+      full_name: 'National Taiwan University',
+      email_domain: 'ntu.edu.tw',
+      is_disabled: 'Enabled',
+    },
+  ]);
   const [filterPopUp, setFilterPopUp] = useState(false);
   const [filterInput, setFilterInput] = useState({
     filter: ['Select all'],
@@ -113,12 +121,14 @@ export default function UIComponentUsage() {
           <Typography variant="h4">Button</Typography>
           <hr className={classes.divider} />
           <div className={classes.component}>
-            <div className={classes.children}>
-              <Button>Edit</Button>
-            </div>
-            <div className={classes.children}>
-              <IconButton><ArrowForwardRoundedIcon className={classes.icon} /></IconButton>
-            </div>
+            <Button>Edit</Button>
+            <Button variant="text" color="primary">Submit</Button>
+            <Button variant="outlined" color="secondary">Delete</Button>
+            <Button color="secondary" startIcon={<DeleteIcon />}>Delete</Button>
+            {/* <Button color="secondary" endIcon={<DeleteIcon />}>Delete</Button> */}
+            {/* Icon size of toggle button and icon button are different!  */}
+            <Button variant="outlined" color="secondary"><DeleteIcon className={classes.iconButtonIcon} /></Button>
+            <IconButton><ArrowForwardRoundedIcon className={classes.toggleButtonIcon} /></IconButton>
           </div>
         </div>
         <div className={classes.wrapper}>
@@ -159,7 +169,9 @@ export default function UIComponentUsage() {
             <div className={classes.children}>
               <Card variant="outlined" style={{ width: '300px', height: '100px' }}>
                 <CardContent>
-                  <Typography variant="h4" style={{ marginBottom: '10px' }}>This is a flat card</Typography>
+                  <Typography variant="h4" style={{ marginBottom: '10px' }}>
+                    This is a flat card
+                  </Typography>
                   <Typography variant="body2">This is a flat card</Typography>
                 </CardContent>
               </Card>
@@ -221,7 +233,9 @@ export default function UIComponentUsage() {
                 <Typography variant="body1">PBC</Typography>
               </AlignedText>
               <AlignedText text="New Name" childrenType="field" maxWidth="md">
-                <Typography variant="body1"><TextField /></Typography>
+                <Typography variant="body1">
+                  <TextField />
+                </Typography>
               </AlignedText>
             </div>
           </div>
@@ -239,7 +253,8 @@ export default function UIComponentUsage() {
                 {
                   label: 'Highest Score',
                   value: 'highest',
-                }]}
+                },
+              ]}
               selectedValue={value}
               setSelectedValue={setValue}
               flexDirection="row"
@@ -251,7 +266,18 @@ export default function UIComponentUsage() {
         <Typography variant="h4">Error Text</Typography>
         <hr className={classes.divider} />
         <div className={classes.component}>
-          <ErrorText className={classes.errorText}><Typography variant="body2" className={classes.errorMessage}>Error Text</Typography></ErrorText>
+          <ErrorText className={classes.errorText}>
+            <Typography variant="body2" className={classes.errorMessage}>
+              Error Text
+            </Typography>
+          </ErrorText>
+        </div>
+      </div>
+      <div className={classes.wrapper}>
+        <Typography variant="h4">Sample Test Data Area</Typography>
+        <hr className={classes.divider} />
+        <div className={classes.component}>
+          <SampleTestArea input="Hello" output="World!" />
         </div>
       </div>
       <div className={classes.wrapper}>
@@ -305,14 +331,18 @@ export default function UIComponentUsage() {
                 type: 'string',
               },
             ]}
-            columnComponent={[null, null, (<TableFilterCard
-              key="filter"
-              popUp={filterPopUp}
-              setPopUp={setFilterPopUp}
-              filterInput={filterInput}
-              filterOptions={['Enabled', 'Disabled']}
-              setFilterInput={setFilterInput}
-            />)]}
+            columnComponent={[
+              null,
+              null,
+              <TableFilterCard
+                key="filter"
+                popUp={filterPopUp}
+                setPopUp={setFilterPopUp}
+                filterInput={filterInput}
+                filterOptions={['Enabled', 'Disabled']}
+                setFilterInput={setFilterInput}
+              />,
+            ]}
           />
         </div>
       </div>
@@ -371,9 +401,7 @@ export default function UIComponentUsage() {
             title="Rename Class"
             childrenButtons={(
               <>
-                <Button color="secondary">
-                  Rename
-                </Button>
+                <Button color="secondary">Rename</Button>
               </>
             )}
           >
@@ -383,7 +411,6 @@ export default function UIComponentUsage() {
           </SimpleBar>
         </div>
       </div>
-
       {/* module for adding a component
       <div className={classes.wrapper}>
         <Typography variant="h4">Button</Typography>
