@@ -72,11 +72,14 @@ const useStyles = makeStyles((theme) => ({
   errorMessage: {
     marginLeft: '5px',
   },
-  icon: {
+  iconButtonIcon: {
+    height: '20px',
+    width: '20px',
+  },
+  toggleButtonIcon: {
     height: '18px',
     width: '18px',
-    margin: '0px',
-    transform: 'translateX(0.5px)',
+
   },
 }));
 
@@ -115,8 +118,10 @@ export default function UIComponentUsage() {
             <Button variant="text" color="primary">Submit</Button>
             <Button variant="outlined" color="secondary">Delete</Button>
             <Button color="secondary" startIcon={<DeleteIcon />}>Delete</Button>
-            <Button color="secondary" endIcon={<DeleteIcon />}>Delete</Button>
-            <IconButton><ArrowForwardRoundedIcon className={classes.icon} /></IconButton>
+            {/* <Button color="secondary" endIcon={<DeleteIcon />}>Delete</Button> */}
+            {/* Icon size of toggle button and icon button are different!  */}
+            <Button color="secondary"><DeleteIcon className={classes.iconButtonIcon} /></Button>
+            <IconButton><ArrowForwardRoundedIcon className={classes.toggleButtonIcon} /></IconButton>
           </div>
         </div>
         <div className={classes.wrapper}>
