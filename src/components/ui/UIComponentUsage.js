@@ -226,7 +226,12 @@ export default function UIComponentUsage() {
         <Typography variant="h4">Date Range Picker</Typography>
         <hr className={classes.divider} />
         <div className={classes.component}>
-          <DateRangePicker value={dateRangePicker} setValue={setDateRangePicker} />
+          <div className={classes.children}>
+            <DateRangePicker value={dateRangePicker} setValue={setDateRangePicker} />
+          </div>
+          <div className={classes.children}>
+            <DateRangePicker vertical value={dateRangePicker} setValue={setDateRangePicker} />
+          </div>
         </div>
       </div>
       <div className={classes.wrapper}>
@@ -353,6 +358,9 @@ export default function UIComponentUsage() {
         <hr className={classes.divider} />
         <div className={classes.component}>
           { place ui-component here }
+          { or }
+          <div className={classes.children}>{ children }</div>
+          <div className={classes.children}>{ children }</div>
         </div>
       </div>
       */}
