@@ -5,11 +5,11 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case teamConstants.FETCH_TEAMS_SUCCESS: {
       const { data } = action.payload;
-      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, teamMemberIds: [] } }), state );
+      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, teamMemberIds: [] } }), state);
     }
 
     case teamConstants.FETCH_TEAM_MEMBER_SUCCESS: {
-      const { teamId , data } = action.payload;
+      const { teamId, data } = action.payload;
       return { ...state, [teamId]: { ...state[teamId], teamMemberIds: data.map((item) => item.member_id) } };
     }
 
