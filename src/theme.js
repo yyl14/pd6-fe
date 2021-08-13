@@ -270,6 +270,8 @@ const overrides = {
   MuiIconButton: {
     root: {
       color: mono.black,
+      height: '30px',
+      width: '30px',
       '&:hover': {
         backgroundColor: mono.lightGray,
       },

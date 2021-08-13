@@ -19,7 +19,8 @@ import {
   IconButton,
 } from '@material-ui/core';
 
-import { ArrowForward, CenterFocusStrong, FilterList } from '@material-ui/icons';
+import { CenterFocusStrong, FilterList } from '@material-ui/icons';
+import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
 import SearchIcon from '@material-ui/icons/Search';
 import Tooltip from '@material-ui/core/Tooltip';
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from 'react-icons/md';
@@ -144,16 +145,9 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.primary.dark,
     },
   },
-  filterIcon: {
-    height: '15px',
-  },
-  iconButton: {
-    '&:hover': {
-      backgroundColor: theme.palette.grey[100],
-    },
-    '&:active': {
-      backgroundColor: theme.palette.grey[300],
-    },
+  toggleButtonIcon: {
+    height: '18px',
+    width: '18px',
   },
   arrowIcon: {
     height: '35px',
@@ -314,8 +308,8 @@ export default function CustomTable({
                   {hasLink ? (
                     <TableCell key={`${row.id}-show`} align="right">
                       <Link to={path[filterData.indexOf(row)]} className={classes.detailLink}>
-                        <IconButton className={classes.iconButton}>
-                          <ArrowForward style={{ height: '20px' }} />
+                        <IconButton>
+                          <ArrowForwardRoundedIcon className={classes.toggleButtonIcon} />
                         </IconButton>
                       </Link>
                     </TableCell>
