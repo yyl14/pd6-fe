@@ -244,9 +244,7 @@ export default function UIComponentUsage() {
         <Typography variant="h4">Sample Test Data Area</Typography>
         <hr className={classes.divider} />
         <div className={classes.component}>
-          <div className={classes.children}>
-            <SampleTestArea input="Hello," output="World!" />
-          </div>
+          <SampleTestArea input="Hello" output="World!" />
         </div>
       </div>
       <div className={classes.wrapper}>

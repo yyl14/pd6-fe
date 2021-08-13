@@ -12,15 +12,10 @@ import bxCopy from '@iconify/icons-bx/bx-copy';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import AlignedText from './AlignedText';
 
-export default function CopyToClipboardButton({
-  text, onClick,
-}) {
+export default function CopyToClipboardButton({ text, onClick }) {
   return (
-    <CopyToClipboard
-      text={text}
-      onCopy={onClick}
-    >
-      <Icon icon={bxCopy} style={{ fontSize: '30px' }} />
+    <CopyToClipboard text={text} onCopy={onClick}>
+      <Icon icon={bxCopy} style={{ fontSize: '15px' }} />
     </CopyToClipboard>
   );
 }

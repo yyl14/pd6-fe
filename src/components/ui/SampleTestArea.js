@@ -19,53 +19,56 @@ const useStyles = makeStyles({
     width: '100%',
     height: 'auto',
   },
+  cardContent: {
+    '&:last-child': {
+      padding: '22.5px 30px 5.5px',
+    },
+  },
   title: {
     display: 'flex',
     flexDirection: 'row',
+    marginBottom: '18.5px',
     alignItems: 'center',
-    marginTop: '22.5px',
-    marginLeft: '30px',
   },
   copyIcon: {
     marginLeft: '7.5px',
+    transform: 'translate(0, 2px)',
   },
   content: {
-    margin: '10px',
-    marginTop: '18.5px',
-    marginLeft: '30px',
+    // margin: '10px',
+    marginBottom: '18.5px',
+    // marginLeft: '30px',
   },
 });
 
-export default function SampleTestArea({
-  input, output,
-}) {
+export default function SampleTestArea({ input, output }) {
   const classes = useStyles();
 
   return (
     <>
-      <Card className={classes.root}>
-        <CardContent>
-          <div className={classes.title}>
-            <h2>Input</h2>
-            <div className={classes.copyIcon}>
-              <CopyToClipboardButton text={input} />
+      <Card className={classes.root} variant="outlined">
+        <CardContent className={classes.cardContent}>
+          <div>
+            <div className={classes.title}>
+              <Typography variant="h6">Input</Typography>
+              <div className={classes.copyIcon}>
+                <CopyToClipboardButton text={input} />
+              </div>
+            </div>
+            <div className={classes.content}>
+              <Typography variant="body1">{input}</Typography>
             </div>
           </div>
-          <div className={classes.content}>
-            <Typography variant="body1">
-              {input}
-            </Typography>
-          </div>
-          <div className={classes.title}>
-            <h2>Output</h2>
-            <div className={classes.copyIcon}>
-              <CopyToClipboardButton text={output} />
+          <div>
+            <div className={classes.title}>
+              <Typography variant="h6">Output</Typography>
+              <div className={classes.copyIcon}>
+                <CopyToClipboardButton text={output} />
+              </div>
             </div>
-          </div>
-          <div className={classes.content}>
-            <Typography variant="body1">
-              {output}
-            </Typography>
+            <div className={classes.content}>
+              <Typography variant="body1">{output}</Typography>
+            </div>
           </div>
         </CardContent>
       </Card>
