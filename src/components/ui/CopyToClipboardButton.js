@@ -20,7 +20,7 @@ export default function CopyToClipboardButton({
       text={text}
       onCopy={onClick}
     >
-      <Icon icon={bxCopy} style={{ fontSize: '25px' }} />
+      <Icon icon={bxCopy} style={{ fontSize: '30px' }} />
     </CopyToClipboard>
   );
 }

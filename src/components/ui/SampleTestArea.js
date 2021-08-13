@@ -10,13 +10,29 @@ import Typography from '@material-ui/core/Typography';
 import { Icon, InlineIcon } from '@iconify/react';
 import bxCopy from '@iconify/icons-bx/bx-copy';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { CardHeader, Grid } from '@material-ui/core';
 import AlignedText from './AlignedText';
 import CopyToClipboardButton from './CopyToClipboardButton';
 
 const useStyles = makeStyles({
   root: {
-    width: 584,
-    height: 198,
+    width: '100%',
+    height: 'auto',
+  },
+  title: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: '22.5px',
+    marginLeft: '30px',
+  },
+  copyIcon: {
+    marginLeft: '7.5px',
+  },
+  content: {
+    margin: '10px',
+    marginTop: '18.5px',
+    marginLeft: '30px',
   },
 });
 
@@ -26,22 +42,33 @@ export default function SampleTestArea({
   const classes = useStyles();
 
   return (
-    <Card className={classes.root}>
-      <CardActionArea>
+    <>
+      <Card className={classes.root}>
         <CardContent>
-          <CopyToClipboardButton text={input} />
-          <Typography variant="body1">
-            {input}
-            input test data
-          </Typography>
-          <AlignedText text="Output" childrenType="text">
-            <CopyToClipboardButton text={output} />
-          </AlignedText>
-          <Typography variant="body1">
-            {output}
-          </Typography>
+          <div className={classes.title}>
+            <h2>Input</h2>
+            <div className={classes.copyIcon}>
+              <CopyToClipboardButton text={input} />
+            </div>
+          </div>
+          <div className={classes.content}>
+            <Typography variant="body1">
+              {input}
+            </Typography>
+          </div>
+          <div className={classes.title}>
+            <h2>Output</h2>
+            <div className={classes.copyIcon}>
+              <CopyToClipboardButton text={output} />
+            </div>
+          </div>
+          <div className={classes.content}>
+            <Typography variant="body1">
+              {output}
+            </Typography>
+          </div>
         </CardContent>
-      </CardActionArea>
-    </Card>
+      </Card>
+    </>
   );
 }
