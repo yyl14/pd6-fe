@@ -18,6 +18,8 @@ import {
 } from '@material-ui/core';
 import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
 import moment from 'moment';
+import CopyToClipboardButton from './CopyToClipboardButton';
+import SampleTestArea from './SampleTestArea';
 import DateRangePicker from './DateRangePicker';
 import AlignedText from './AlignedText';
 import SimpleBar from './SimpleBar';
@@ -91,11 +93,13 @@ export default function UIComponentUsage() {
       key: 'selection',
     },
   ]);
-  const [tableData, setTableData] = useState([{
-    full_name: 'National Taiwan University',
-    email_domain: 'ntu.edu.tw',
-    is_disabled: 'Enabled',
-  }]);
+  const [tableData, setTableData] = useState([
+    {
+      full_name: 'National Taiwan University',
+      email_domain: 'ntu.edu.tw',
+      is_disabled: 'Enabled',
+    },
+  ]);
   const [filterPopUp, setFilterPopUp] = useState(false);
   const [filterInput, setFilterInput] = useState({
     filter: ['Select all'],
@@ -104,7 +108,9 @@ export default function UIComponentUsage() {
 
   return (
     <>
-      <Typography variant="h3" className={classes.bigTitle}>Themed Components</Typography>
+      <Typography variant="h3" className={classes.bigTitle}>
+        Themed Components
+      </Typography>
       <div className={classes.row}>
         <div className={classes.wrapper}>
           <Typography variant="h4">Button</Typography>
@@ -114,7 +120,9 @@ export default function UIComponentUsage() {
               <Button>Edit</Button>
             </div>
             <div className={classes.children}>
-              <IconButton><ArrowForwardRoundedIcon className={classes.icon} /></IconButton>
+              <IconButton>
+                <ArrowForwardRoundedIcon className={classes.icon} />
+              </IconButton>
             </div>
           </div>
         </div>
@@ -156,7 +164,9 @@ export default function UIComponentUsage() {
             <div className={classes.children}>
               <Card variant="outlined" style={{ width: '300px', height: '100px' }}>
                 <CardContent>
-                  <Typography variant="h4" style={{ marginBottom: '10px' }}>This is a flat card</Typography>
+                  <Typography variant="h4" style={{ marginBottom: '10px' }}>
+                    This is a flat card
+                  </Typography>
                   <Typography variant="body2">This is a flat card</Typography>
                 </CardContent>
               </Card>
@@ -177,8 +187,9 @@ export default function UIComponentUsage() {
           </div>
         </div>
       </div>
-
-      <Typography variant="h3" className={classes.bigTitle}>Customized Components</Typography>
+      <Typography variant="h3" className={classes.bigTitle}>
+        Customized Components
+      </Typography>
       <div className={classes.row}>
         <div className={classes.wrapper}>
           <Typography variant="h4">Aligned Text</Typography>
@@ -189,7 +200,9 @@ export default function UIComponentUsage() {
                 <Typography variant="body1">PBC</Typography>
               </AlignedText>
               <AlignedText text="New Name" childrenType="field" maxWidth="md">
-                <Typography variant="body1"><TextField /></Typography>
+                <Typography variant="body1">
+                  <TextField />
+                </Typography>
               </AlignedText>
             </div>
           </div>
@@ -207,7 +220,8 @@ export default function UIComponentUsage() {
                 {
                   label: 'Highest Score',
                   value: 'highest',
-                }]}
+                },
+              ]}
               selectedValue={value}
               setSelectedValue={setValue}
               flexDirection="row"
@@ -219,7 +233,18 @@ export default function UIComponentUsage() {
         <Typography variant="h4">Error Text</Typography>
         <hr className={classes.divider} />
         <div className={classes.component}>
-          <ErrorText className={classes.errorText}><Typography variant="body2" className={classes.errorMessage}>Error Text</Typography></ErrorText>
+          <ErrorText className={classes.errorText}>
+            <Typography variant="body2" className={classes.errorMessage}>
+              Error Text
+            </Typography>
+          </ErrorText>
+        </div>
+      </div>
+      <div className={classes.wrapper}>
+        <Typography variant="h4">Sample Test Data Area</Typography>
+        <hr className={classes.divider} />
+        <div className={classes.component}>
+          <SampleTestArea input="Hello" output="World!" />
         </div>
       </div>
       <div className={classes.wrapper}>
@@ -273,14 +298,18 @@ export default function UIComponentUsage() {
                 type: 'string',
               },
             ]}
-            columnComponent={[null, null, (<TableFilterCard
-              key="filter"
-              popUp={filterPopUp}
-              setPopUp={setFilterPopUp}
-              filterInput={filterInput}
-              filterOptions={['Enabled', 'Disabled']}
-              setFilterInput={setFilterInput}
-            />)]}
+            columnComponent={[
+              null,
+              null,
+              <TableFilterCard
+                key="filter"
+                popUp={filterPopUp}
+                setPopUp={setFilterPopUp}
+                filterInput={filterInput}
+                filterOptions={['Enabled', 'Disabled']}
+                setFilterInput={setFilterInput}
+              />,
+            ]}
           />
         </div>
       </div>
@@ -339,9 +368,7 @@ export default function UIComponentUsage() {
             title="Rename Class"
             childrenButtons={(
               <>
-                <Button color="secondary">
-                  Rename
-                </Button>
+                <Button color="secondary">Rename</Button>
               </>
             )}
           >
@@ -351,7 +378,6 @@ export default function UIComponentUsage() {
           </SimpleBar>
         </div>
       </div>
-
       {/* module for adding a component
       <div className={classes.wrapper}>
         <Typography variant="h4">Button</Typography>
