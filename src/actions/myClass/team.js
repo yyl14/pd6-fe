@@ -29,7 +29,7 @@ export const addTeam = (token, classId, teamName, newLabel) => (dispatch) => {
   };
   agent
     .post(`/class/${classId}/team`, body, auth)
-    .then(() => {
+    .then((res) => {
       dispatch({
         type: teamConstants.ADD_TEAM_SUCCESS,
       });
@@ -84,6 +84,28 @@ export const fetchTeamMember = (token, teamId) => (dispatch) => {
     });
 };
 
+export const addTeamMember = (token, teamId, student, role) => (dispatch) => {
+  const auth = { headers: { 'auth-token': token } };
+  dispatch({ type: teamConstants.ADD_TEAM_MEMBER_START });
+  const body = {
+    account_referral: student,
+    role,
+  };
+  agent
+    .post(`/team/${teamId}/member`, body, auth)
+    then((res) => {
+      dispatch({
+        type: teamConstants.ADD_TEAM_MEMBER_SUCCESS,
+      });
+    })
+    .catch((error) => {
+      dispatch({
+        type: teamConstants.ADD_TEAM_MEMBER_FAIL,
+        error: error,
+      });
+    });
+};
+
 export const editTeamMember = (token, teamId, memberId, role) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
   dispatch({ type: teamConstants.EDIT_TEAM_MEMBER_START });
@@ -93,7 +115,7 @@ export const editTeamMember = (token, teamId, memberId, role) => (dispatch) => {
   };
   agent
     .patch(`/team/${teamId}/member`, body, auth)
-    .then(() => {
+    .then((res) => {
       dispatch({
         type: teamConstants.EDIT_TEAM_MEMBER_SUCCESS,
       });
@@ -111,7 +133,7 @@ export const deleteTeamMember = (token, teamId, memberId) => (dispatch) => {
   dispatch({ type: teamConstants.DELETE_TEAM_MEMBER_START });
   agent
     .delete(`/team/${teamId}/member/${memberId}`, auth)
-    .then(() => {
+    .then((res) => {
       dispatch({
         type: teamConstants.DELETE_TEAM_MEMBER_SUCCESS,
       });

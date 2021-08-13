@@ -6,6 +6,7 @@ const initialState = {
   editTeam: null,
 
   fetchTeamMember: null,
+  addTeamMember: null,
   editTeamMember: null,
   deleteTeamMember: null,
 };
@@ -58,6 +59,19 @@ export default function team(state = initialState, action) {
       };
     }
     case teamConstants.FETCH_TEAM_MEMBER_FAIL: {
+      return {
+        ...state,
+        fetchTeamMember: action.error,
+      };
+    }
+
+    case teamConstants.ADD_TEAM_MEMBER_SUCCESS: {
+      return {
+        ...state,
+        fetchTeamMember: null,
+      };
+    }
+    case teamConstants.ADD_TEAM_MEMBER_FAIL: {
       return {
         ...state,
         fetchTeamMember: action.error,

@@ -4,7 +4,6 @@ const initialState = {
   fetchClassGrade: null,
   addClassGrade: null,
   fetchAccountGrade: null,
-  fetchGrade: null,
   deleteGrade: null,
   editGrade: null,
 };
@@ -47,19 +46,6 @@ export default function grade(state = initialState, action) {
       return {
         ...state,
         fetchAccountGrade: action.error,
-      };
-    }
-
-    case gradeConstants.FETCH_GRADE_SUCCESS: {
-      return {
-        ...state,
-        fetchGrade: null,
-      };
-    }
-    case gradeConstants.FETCH_GRADE_FAIL: {
-      return {
-        ...state,
-        fetchGrade: action.error,
       };
     }
 

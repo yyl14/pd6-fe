@@ -55,25 +55,6 @@ export const fetchAccountGrade = (token, accountId) => (dispatch) => {
     });
 };
 
-export const fetchGrade = (token, gradeId) => (dispatch) => {
-  const auth = { headers: { 'auth-token': token } };
-  dispatch({ type: gradeConstants.FETCH_GRADE_START });
-  agent
-    .get(`/grade/${gradeId}`, auth)
-    .then((res) => {
-      dispatch({
-        type: gradeConstants.FETCH_GRADE_SUCCESS,
-        payload: res.data.data,
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        type: gradeConstants.FETCH_GRADE_FAIL,
-        error: error,
-      });
-    });
-};
-
 export const deleteGrade = (token, gradeId) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
   dispatch({ type: gradeConstants.DELETE_GRADE_START });
