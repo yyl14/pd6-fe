@@ -114,6 +114,9 @@ export default function UIComponentUsage() {
               <Button>Edit</Button>
             </div>
             <div className={classes.children}>
+              <Button variant="text" color="primary">Submit</Button>
+            </div>
+            <div className={classes.children}>
               <IconButton><ArrowForwardRoundedIcon className={classes.icon} /></IconButton>
             </div>
           </div>
