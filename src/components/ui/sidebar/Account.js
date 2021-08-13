@@ -85,7 +85,7 @@ export default function Account({
       ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, history, mode]);
+  }, [location.pathname, history, mode, accountList, instituteList, accountId, instituteId]);
 
   const foldAccount = () => {
     setDisplay('fold');
