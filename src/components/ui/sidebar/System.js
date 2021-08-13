@@ -114,7 +114,7 @@ export default function System({
       ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, history, mode]);
+  }, [location.pathname, history, mode, announcementList, languageList, announcementId, languageId]);
 
   const foldSystem = () => {
     setDisplay('fold');
