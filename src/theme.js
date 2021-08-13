@@ -254,6 +254,16 @@ const overrides = {
         backgroundColor: red.dark,
       },
     },
+    startIcon: {
+      marginRight: '10px',
+      height: '20px',
+      width: '20px',
+    },
+    endIcon: {
+      marginLeft: '10px',
+      height: '20px',
+      width: '20px',
+    },
   },
 
   MuiIconButton: {
