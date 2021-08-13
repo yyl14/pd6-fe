@@ -3,21 +3,21 @@ import {
   memberConstants,
 } from './constant';
 
-const fetchClassMember = (token, classId) => (dispatch) => {
+const fetchClassMembers = (token, classId) => (dispatch) => {
   const auth = {
     headers: {
       'Auth-Token': token,
     },
   };
-  dispatch({ type: memberConstants.FETCH_CLASS_MEMBER_REQUEST });
+  dispatch({ type: memberConstants.FETCH_CLASS_MEMBERS_REQUEST });
 
   agent.get(`/class/${classId}/member`, auth)
     .then((res) => {
-      dispatch({ type: memberConstants.FETCH_CLASS_MEMBER_SUCCESS, payload: { classId, data: res.data.data } });
+      dispatch({ type: memberConstants.FETCH_CLASS_MEMBERS_SUCCESS, payload: { classId, data: res.data.data } });
     })
     .catch((err) => {
       dispatch({
-        type: memberConstants.FETCH_CLASS_MEMBER_FAIL,
+        type: memberConstants.FETCH_CLASS_MEMBERS_FAIL,
         error: err,
       });
     });
@@ -68,5 +68,5 @@ const deleteClassMember = (token, classId, memberId) => (dispatch) => {
 };
 
 export {
-  fetchClassMember, editClassMember, deleteClassMember,
+  fetchClassMembers, editClassMember, deleteClassMember,
 };

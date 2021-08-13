@@ -1,29 +1,29 @@
 import { memberConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
-  fetchClassMember: false,
+  fetchClassMembers: false,
   editClassMember: false,
   deleteClassMember: false,
 };
 
 export default function member(state = initialState, action) {
   switch (action.type) {
-    case memberConstants.FETCH_CLASS_MEMBER_REQUEST: {
+    case memberConstants.FETCH_CLASS_MEMBERS_REQUEST: {
       return {
         ...state,
-        fetchClassMember: true,
+        fetchClassMembers: true,
       };
     }
-    case memberConstants.FETCH_CLASS_MEMBER_SUCCESS: {
+    case memberConstants.FETCH_CLASS_MEMBERS_SUCCESS: {
       return {
         ...state,
-        fetchClassMember: false,
+        fetchClassMembers: false,
       };
     }
-    case memberConstants.FETCH_CLASS_MEMBER_FAIL: {
+    case memberConstants.FETCH_CLASS_MEMBERS_FAIL: {
       return {
         ...state,
-        fetchClassMember: false,
+        fetchClassMembers: false,
       };
     }
 

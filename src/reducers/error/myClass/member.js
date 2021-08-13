@@ -1,23 +1,23 @@
 import { memberConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
-  fetchClassMember: null,
+  fetchClassMembers: null,
   editClassMember: null,
   deleteClassMember: null,
 };
 
 export default function member(state = initialState, action) {
   switch (action.type) {
-    case memberConstants.FETCH_CLASS_MEMBER_SUCCESS: {
+    case memberConstants.FETCH_CLASS_MEMBERS_SUCCESS: {
       return {
         ...state,
-        fetchClassMember: null,
+        fetchClassMembers: null,
       };
     }
-    case memberConstants.FETCH_CLASS_MEMBER_FAIL: {
+    case memberConstants.FETCH_CLASS_MEMBERS_FAIL: {
       return {
         ...state,
-        fetchClassMember: action.error,
+        fetchClassMembers: action.error,
       };
     }
     case memberConstants.EDIT_CLASS_MEMBER_SUCCESS: {
