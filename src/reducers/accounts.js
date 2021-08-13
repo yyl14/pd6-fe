@@ -5,12 +5,16 @@ import { gradeConstants } from '../actions/myClass/constant';
 const byId = (state = {}, action) => {
   switch (action.type) {
     case accountConstants.FETCH_ACCOUNTS_SUCCESS: {
-      return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [], gradeIds: [] } }), state);
+      return action.payload.reduce(
+        (acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [], gradeIds: [] } }),
+        state,
+      );
     }
 
     case accountConstants.FETCH_ACCOUNT_SUCCESS: {
       return {
-        ...state, [action.payload.id]: { ...action.payload, studentCard: [], gradeIds: [] },
+        ...state,
+        [action.payload.id]: { ...action.payload, studentCard: [], gradeIds: [] },
       };
     }
 
@@ -20,7 +24,7 @@ const byId = (state = {}, action) => {
         ...state,
         [id]: {
           ...state[id],
-          studentCard: (data === null ? [] : data.map((dataItem) => dataItem.id)),
+          studentCard: data === null ? [] : data.map((dataItem) => dataItem.id),
         },
       };
     }
@@ -53,7 +57,7 @@ const allIds = (state = [], action) => {
     }
 
     case accountConstants.FETCH_ACCOUNT_SUCCESS: {
-      return (state.includes(action.payload.id) ? state : state.concat([action.payload.id]));
+      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
     }
 
     default:
