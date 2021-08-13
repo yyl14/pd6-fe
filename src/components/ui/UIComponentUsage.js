@@ -16,7 +16,7 @@ import {
   Card,
   CardContent,
 } from '@material-ui/core';
-import { ArrowForward } from '@material-ui/icons';
+import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
 import moment from 'moment';
 import DateRangePicker from './DateRangePicker';
 import AlignedText from './AlignedText';
@@ -71,6 +71,12 @@ const useStyles = makeStyles((theme) => ({
   errorMessage: {
     marginLeft: '5px',
   },
+  icon: {
+    height: '15px',
+    width: '15px',
+    margin: '0px',
+    transform: 'translateX(0.5px)',
+  },
 }));
 
 export default function UIComponentUsage() {
@@ -108,7 +114,7 @@ export default function UIComponentUsage() {
               <Button>Edit</Button>
             </div>
             <div className={classes.children}>
-              <IconButton><ArrowForward style={{ height: '20px' }} /></IconButton>
+              <IconButton><ArrowForwardRoundedIcon className={classes.icon} /></IconButton>
             </div>
           </div>
         </div>
