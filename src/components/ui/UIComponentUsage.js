@@ -17,6 +17,7 @@ import {
   CardContent,
 } from '@material-ui/core';
 import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
+import DeleteIcon from '@material-ui/icons/Delete';
 import moment from 'moment';
 import DateRangePicker from './DateRangePicker';
 import AlignedText from './AlignedText';
@@ -110,18 +111,12 @@ export default function UIComponentUsage() {
           <Typography variant="h4">Button</Typography>
           <hr className={classes.divider} />
           <div className={classes.component}>
-            <div className={classes.children}>
-              <Button>Edit</Button>
-            </div>
-            <div className={classes.children}>
-              <Button variant="text" color="primary">Submit</Button>
-            </div>
-            <div className={classes.children}>
-              <Button variant="outlined" color="secondary">Submit</Button>
-            </div>
-            <div className={classes.children}>
-              <IconButton><ArrowForwardRoundedIcon className={classes.icon} /></IconButton>
-            </div>
+            <Button>Edit</Button>
+            <Button variant="text" color="primary">Submit</Button>
+            <Button variant="outlined" color="secondary">Delete</Button>
+            <Button color="secondary" startIcon={<DeleteIcon />}>Delete</Button>
+            <Button color="secondary" endIcon={<DeleteIcon />}>Delete</Button>
+            <IconButton><ArrowForwardRoundedIcon className={classes.icon} /></IconButton>
           </div>
         </div>
         <div className={classes.wrapper}>
