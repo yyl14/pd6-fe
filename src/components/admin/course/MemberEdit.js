@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
   editorItem: {
     marginBottom: '12px',
   },
+  textField: {
+    width: '100%',
+  },
   buttonsBar: {
     display: 'flex',
     flexDirection: 'row',
@@ -147,6 +150,7 @@ const MemberEdit = ({
             onChange={(e) => handleChangeGuest(e)}
             multiline
             rows={20}
+            className={classes.textField}
           />
         </div>
       </Card>
