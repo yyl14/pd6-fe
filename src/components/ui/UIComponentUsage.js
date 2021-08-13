@@ -75,11 +75,11 @@ const useStyles = makeStyles((theme) => ({
   errorMessage: {
     marginLeft: '5px',
   },
-  iconButtonIcon: {
-    height: '20px',
-    width: '20px',
+  textField: {
+    marginBottom: '20px',
+    marginLeft: '35px',
   },
-  toggleButtonIcon: {
+  icon: {
     height: '18px',
     width: '18px',
 
@@ -150,14 +150,8 @@ export default function UIComponentUsage() {
         <div className={classes.wrapper}>
           <Typography variant="h4">Input</Typography>
           <hr className={classes.divider} />
-          <div className={classes.component}>
-            <div className={classes.children}>
-              <TextField />
-            </div>
-            <div className={classes.children}>
-              <TextField label="Embedded Title" />
-            </div>
-          </div>
+          <TextField className={classes.textField} />
+          <TextField className={classes.textField} label="Embedded Title" />
         </div>
         <div className={classes.wrapper}>
           <Typography variant="h4">Card</Typography>
