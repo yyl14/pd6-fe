@@ -124,7 +124,7 @@ export default function InstituteList() {
         } else if (item.is_disabled === false || item.is_disabled === 'Enabled') {
           temp.is_disabled = 'Enabled';
         }
-        temp.path = `institute/${temp.id}/setting`;
+        temp.path = `/admin/account/institute/${temp.id}/setting`;
         newData.push(temp);
         newPath.push(temp.path);
       });
