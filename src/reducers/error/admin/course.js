@@ -1,4 +1,4 @@
-import { courseConstants } from '../../../actions/constant';
+import { courseConstants } from '../../../actions/admin/constant';
 
 const initialState = {
   fetchCourse: null,
@@ -129,23 +129,6 @@ export default function course(state = initialState, action) {
         deleteClass: error,
       };
     }
-
-    /* Members */
-    case courseConstants.FETCH_MEMBERS_SUCCESS: {
-      return {
-        fetchMembers: null,
-      };
-    }
-
-    case courseConstants.FETCH_MEMBERS_FAIL: {
-      const { error } = action.payload;
-      return {
-        ...state,
-        fetchMembers: error,
-      };
-    }
-
-    // TODO: edit member list
 
     default: {
       return state;

@@ -1,7 +1,5 @@
 import agent from '../agent';
-import {
-  problemConstants,
-} from './constant';
+import { problemConstants } from './constant';
 
 const browseChallengeOverview = (token, challengeId) => (dispatch) => {
   const auth = {
@@ -12,7 +10,8 @@ const browseChallengeOverview = (token, challengeId) => (dispatch) => {
   // TODO: read challenge, get problem, and then get grade
   dispatch({ type: problemConstants.READ_CHALLENGE_START });
 
-  agent.get(`/challenge/${challengeId}`, auth)
+  agent
+    .get(`/challenge/${challengeId}`, auth)
     .then((res) => {
       dispatch({
         type: problemConstants.READ_CHALLENGE_SUCCESS,

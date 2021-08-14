@@ -1,7 +1,5 @@
 import agent from '../agent';
-import {
-  accountConstants,
-} from './constants';
+import { accountConstants } from './constant';
 
 const getInstitutes = (token) => (dispatch) => {
   const auth = {
@@ -11,7 +9,8 @@ const getInstitutes = (token) => (dispatch) => {
   };
   dispatch({ type: accountConstants.FETCH_INSTITUTES_REQUEST });
 
-  agent.get('/institute', auth)
+  agent
+    .get('/institute', auth)
     .then((res) => {
       dispatch({
         type: accountConstants.FETCH_INSTITUTES_SUCCESS,
@@ -34,7 +33,8 @@ const getInstitute = (token, instituteId) => (dispatch) => {
   };
   dispatch({ type: accountConstants.FETCH_INSTITUTE_REQUEST });
 
-  agent.get(`/institute/${instituteId}`, auth)
+  agent
+    .get(`/institute/${instituteId}`, auth)
     .then((res) => {
       dispatch({
         type: accountConstants.FETCH_INSTITUTE_SUCCESS,
@@ -57,17 +57,26 @@ const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled)
   };
   dispatch({ type: accountConstants.ADD_INSTITUTE_REQUEST });
 
-  agent.post('/institute', {
-    abbreviated_name: abbreviatedName,
-    full_name: fullName,
-    email_domain: emailDomain,
-    is_disabled: isDisabled,
-  }, auth)
+  agent
+    .post(
+      '/institute',
+      {
+        abbreviated_name: abbreviatedName,
+        full_name: fullName,
+        email_domain: emailDomain,
+        is_disabled: isDisabled,
+      },
+      auth,
+    )
     .then((res) => {
       dispatch({
         type: accountConstants.ADD_INSTITUTE_SUCCESS,
         payload: {
-          id: res.data.data.id, abbreviated_name: abbreviatedName, full_name: fullName, email_domain: emailDomain, is_disabled: isDisabled,
+          id: res.data.data.id,
+          abbreviated_name: abbreviatedName,
+          full_name: fullName,
+          email_domain: emailDomain,
+          is_disabled: isDisabled,
         },
       });
     })
@@ -93,7 +102,8 @@ const editInstitute = (token, id, abbreviatedName, fullName, emailDomain, isDisa
     is_disabled: isDisabled,
   };
 
-  agent.patch(`/institute/${id}`, body, auth)
+  agent
+    .patch(`/institute/${id}`, body, auth)
     .then((res) => {
       console.log('editing institute suc');
       dispatch({
@@ -124,7 +134,8 @@ const fetchAccount = (token, id) => (dispatch) => {
   };
   dispatch({ type: accountConstants.FETCH_ACCOUNT_REQUEST });
 
-  agent.get(`/account/${id}`, auth)
+  agent
+    .get(`/account/${id}`, auth)
     .then((res) => {
       dispatch({
         type: accountConstants.FETCH_ACCOUNT_SUCCESS,
@@ -154,7 +165,8 @@ const editAccount = (token, id, userName, realName, nickName, email) => (dispatc
     alternative_email: email,
   };
 
-  agent.patch(`/account/${id}`, { real_name: realName, nickname: nickName, alternative_email: email }, auth)
+  agent
+    .patch(`/account/${id}`, { real_name: realName, nickname: nickName, alternative_email: email }, auth)
     .then((res) => {
       dispatch({
         type: accountConstants.EDIT_ACCOUNT_SUCCESS,
@@ -182,7 +194,8 @@ const deleteAccount = (token, id) => (dispatch) => {
     },
   };
   dispatch({ type: accountConstants.DELETE_ACCOUNT_REQUEST });
-  agent.delete(`/account/${id}`, auth)
+  agent
+    .delete(`/account/${id}`, auth)
     .then((res) => {
       dispatch({
         type: accountConstants.DELETE_ACCOUNT_SUCCESS,
@@ -205,7 +218,8 @@ const makeStudentCardDefault = (token, id, cardId) => (dispatch) => {
     },
   };
   dispatch({ type: accountConstants.MAKE_STUDENT_CARD_DEFAULT_REQUEST });
-  agent.put(`/account/${id}/default-student-card`, { student_card_id: cardId }, auth)
+  agent
+    .put(`/account/${id}/default-student-card`, { student_card_id: cardId }, auth)
     .then((res) => {
       dispatch({
         type: accountConstants.MAKE_STUDENT_CARD_DEFAULT_SUCCESS,
@@ -228,7 +242,8 @@ const fetchStudentCard = (token, id) => (dispatch) => {
   };
   dispatch({ type: accountConstants.FETCH_STUDENT_CARD_REQUEST });
 
-  agent.get(`/account/${id}/student-card`, auth)
+  agent
+    .get(`/account/${id}/student-card`, auth)
     .then((res) => {
       dispatch({
         type: accountConstants.FETCH_STUDENT_CARD_SUCCESS,
@@ -251,11 +266,16 @@ const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (disp
     },
   };
   dispatch({ type: accountConstants.ADD_STUDENT_CARD_REQUEST });
-  agent.post(`/account/${id}/student-card`, {
-    institute_id: instituteId,
-    institute_email_prefix: emailPrefix,
-    student_id: studentId,
-  }, auth)
+  agent
+    .post(
+      `/account/${id}/student-card`,
+      {
+        institute_id: instituteId,
+        institute_email_prefix: emailPrefix,
+        student_id: studentId,
+      },
+      auth,
+    )
     .then((res) => {
       dispatch({ type: accountConstants.ADD_STUDENT_CARD_SUCCESS });
     })
@@ -274,9 +294,14 @@ const editPassword = (token, id, newPassword) => (dispatch) => {
     },
   };
   dispatch({ type: accountConstants.EDIT_PASSWORD_REQUEST });
-  agent.put(`/account/${id}/pass_hash`, {
-    new_password: newPassword,
-  }, auth)
+  agent
+    .put(
+      `/account/${id}/pass_hash`,
+      {
+        new_password: newPassword,
+      },
+      auth,
+    )
     .then((res) => {
       dispatch({ type: accountConstants.EDIT_PASSWORD_SUCCESS });
     })
@@ -295,7 +320,8 @@ const fetchAccounts = (token) => (dispatch) => {
     },
   };
   dispatch({ type: accountConstants.FETCH_ACCOUNTS_REQUEST });
-  agent.get('/account', auth)
+  agent
+    .get('/account', auth)
     .then((res) => {
       dispatch({ type: accountConstants.FETCH_ACCOUNTS_SUCCESS, payload: res.data.data });
     })
@@ -308,5 +334,16 @@ const fetchAccounts = (token) => (dispatch) => {
 };
 
 export {
-  getInstitutes, getInstitute, addInstitute, editInstitute, fetchAccount, editAccount, deleteAccount, makeStudentCardDefault, fetchStudentCard, addStudentCard, editPassword, fetchAccounts,
+  getInstitutes,
+  getInstitute,
+  addInstitute,
+  editInstitute,
+  fetchAccount,
+  editAccount,
+  deleteAccount,
+  makeStudentCardDefault,
+  fetchStudentCard,
+  addStudentCard,
+  editPassword,
+  fetchAccounts,
 };

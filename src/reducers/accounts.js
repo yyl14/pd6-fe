@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { accountConstants } from '../actions/admin/constants';
+import { accountConstants } from '../actions/admin/constant';
 import { gradeConstants } from '../actions/myClass/constant';
 
 const byId = (state = {}, action) => {
@@ -40,7 +40,7 @@ const byId = (state = {}, action) => {
         ...state,
         [accountId]: {
           ...state[accountId],
-          gradeIds: (data === null ? [] : data.map((item) => item.id)),
+          gradeIds: data === null ? [] : data.map((item) => item.id),
         },
       };
     }

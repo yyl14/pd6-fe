@@ -1,8 +1,7 @@
 import { combineReducers } from 'redux';
-import { courseConstants } from '../actions/constant';
-import {
-  gradeConstants, memberConstants, teamConstants, challengeConstants,
-} from '../actions/myClass/constant';
+import { courseConstants } from '../actions/admin/constant';
+import { commonConstants } from '../actions/common/constant';
+import { gradeConstants, teamConstants, challengeConstants } from '../actions/myClass/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -24,17 +23,10 @@ const byId = (state = {}, action) => {
       );
     }
 
-    case courseConstants.FETCH_MEMBERS_SUCCESS: {
-      const {
-        classId,
-        data: { data },
-      } = action.payload;
-      return { ...state, [classId]: { ...state[classId], memberIds: data.map((item) => item.id) } };
-    }
-
-    case memberConstants.FETCH_CLASS_MEMBERS_SUCCESS: {
+    case commonConstants.FETCH_CLASS_MEMBERS_SUCCESS: {
       const { classId, data } = action.payload;
-      return { ...state, [classId]: { ...state[classId], memberIds: data.map((item) => item.id) } };
+      console.log(action.payload);
+      return { ...state, [classId]: { ...state[classId], memberIds: data.map((item) => item.member_id) } };
     }
 
     case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {

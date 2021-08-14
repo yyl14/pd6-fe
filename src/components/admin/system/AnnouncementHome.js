@@ -5,13 +5,7 @@ import {
 } from 'react-router-dom';
 import { BiFilterAlt } from 'react-icons/bi';
 import {
-  Button,
-  Typography,
-  makeStyles,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
+  Button, Typography, makeStyles, Dialog, DialogActions, DialogContent, DialogTitle,
 } from '@material-ui/core';
 import moment from 'moment';
 
@@ -142,7 +136,7 @@ export default function AnnouncementHome() {
           <Button variant="contained" color="primary" onClick={handleClickAdd} placeholder="Search">
             +
           </Button>
-            )}
+        )}
         data={tableData}
         columns={[
           {
@@ -167,7 +161,21 @@ export default function AnnouncementHome() {
             align: 'center',
           },
         ]}
-        columnComponent={[null, (<BiFilterAlt key="filterPost" onClick={() => { setFilterPostOrNot(true); }} />), (<BiFilterAlt key="filterEnd" onClick={() => { setFilterEndOrNot(true); }} />)]}
+        columnComponent={[
+          null,
+          <BiFilterAlt
+            key="filterPost"
+            onClick={() => {
+              setFilterPostOrNot(true);
+            }}
+          />,
+          <BiFilterAlt
+            key="filterEnd"
+            onClick={() => {
+              setFilterEndOrNot(true);
+            }}
+          />,
+        ]}
         hasLink
         path={path}
       />
@@ -189,7 +197,12 @@ export default function AnnouncementHome() {
           <Button onClick={() => setFilterPostOrNot(false)} color="default">
             Cancel
           </Button>
-          <Button onClick={() => { filter(); }} color="primary">
+          <Button
+            onClick={() => {
+              filter();
+            }}
+            color="primary"
+          >
             Save
           </Button>
         </DialogActions>
@@ -212,7 +225,12 @@ export default function AnnouncementHome() {
           <Button onClick={() => setFilterEndOrNot(false)} color="default">
             Cancel
           </Button>
-          <Button onClick={() => { filter(); }} color="primary">
+          <Button
+            onClick={() => {
+              filter();
+            }}
+            color="primary"
+          >
             Save
           </Button>
         </DialogActions>

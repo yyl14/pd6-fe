@@ -1,4 +1,4 @@
-import { systemConstants } from '../../../actions/admin/constants';
+import { systemConstants } from '../../../actions/admin/constant';
 
 const initialState = {
   fetchAccessLog: false,

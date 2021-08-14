@@ -2,6 +2,9 @@ import { commonConstants } from '../../../actions/common/constant';
 
 const initialState = {
   fetchInstitutes: null,
+  fetchClassMembers: null,
+  editClassMember: null,
+  // deleteClassMember: null,
 };
 
 export default function common(state = initialState, action) {
@@ -24,6 +27,43 @@ export default function common(state = initialState, action) {
         fetchInstitutes: action.error,
       };
     }
+    case commonConstants.FETCH_CLASS_MEMBERS_SUCCESS: {
+      return {
+        ...state,
+        fetchClassMembers: null,
+      };
+    }
+    case commonConstants.FETCH_CLASS_MEMBERS_FAIL: {
+      return {
+        ...state,
+        fetchClassMembers: action.error,
+      };
+    }
+    case commonConstants.EDIT_CLASS_MEMBER_SUCCESS: {
+      return {
+        ...state,
+        editClassMember: null,
+      };
+    }
+    case commonConstants.EDIT_CLASS_MEMBER_FAIL: {
+      return {
+        ...state,
+        editClassMember: action.error,
+      };
+    }
+    case commonConstants.DELETE_CLASS_MEMBER_SUCCESS: {
+      return {
+        ...state,
+        deleteClassMember: null,
+      };
+    }
+    case commonConstants.DELETE_CLASS_MEMBER_FAIL: {
+      return {
+        ...state,
+        deleteClassMember: action.error,
+      };
+    }
+
     default: {
       return state;
     }

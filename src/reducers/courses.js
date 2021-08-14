@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { courseConstants } from '../actions/constant';
+import { courseConstants } from '../actions/admin/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {

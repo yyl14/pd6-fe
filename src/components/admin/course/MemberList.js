@@ -14,7 +14,8 @@ import {
 } from '@material-ui/core';
 import { useParams, useHistory } from 'react-router-dom';
 import { BiFilterAlt } from 'react-icons/bi';
-import { fetchCourses, fetchClasses, fetchMembers } from '../../../actions/admin/course';
+import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
+import { fetchClassMembers } from '../../../actions/common/common';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 import CustomTable from '../../ui/CustomTable';
@@ -50,7 +51,7 @@ export default function MemberList() {
   const courses = useSelector((state) => state.courses);
   const classes = useSelector((state) => state.classes);
   const members = useSelector((state) => state.classMembers);
-  const loading = useSelector((state) => state.admin.course.loading);
+  const loading = useSelector((state) => state.loading.admin.course);
 
   useEffect(() => {
     dispatch(fetchCourses(authToken));
@@ -62,7 +63,7 @@ export default function MemberList() {
 
   useEffect(() => {
     if (!loading.editMembers) {
-      dispatch(fetchMembers(authToken, classId));
+      dispatch(fetchClassMembers(authToken, classId));
     }
   }, [authToken, classId, dispatch, loading.editMembers]);
 
@@ -97,7 +98,7 @@ export default function MemberList() {
       const data = [];
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
-        const temp = { ...item };
+        const temp = item;
         temp.role = roleUpperToLowerCase(item.role);
         data.push(temp);
       });

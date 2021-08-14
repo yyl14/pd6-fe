@@ -18,8 +18,8 @@ export default function Course({
   classes, history, location, mode,
 }) {
   const { courseId, classId } = useParams();
-  const courseList = useSelector((state) => state.admin.course.courses);
-  const classList = useSelector((state) => state.admin.course.classes);
+  const courseList = useSelector((state) => state.courses);
+  const classList = useSelector((state) => state.classes);
   const baseURL = '/admin/course';
   const [display, setDisplay] = useState('unfold');
   const [display1, setDisplay1] = useState('unfold');
@@ -32,7 +32,7 @@ export default function Course({
   const dispatch = useDispatch();
 
   const authToken = useSelector((state) => state.auth.user.token);
-  const loading = useSelector((state) => state.admin.course.loading);
+  const loading = useSelector((state) => state.loading.admin.course);
 
   useEffect(() => {
     // console.log(mode, courseId, classId);

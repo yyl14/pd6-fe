@@ -1,4 +1,4 @@
-import { accountConstants } from '../../../actions/admin/constants';
+import { accountConstants } from '../../../actions/admin/constant';
 
 const initialState = {
   fetchInstitutes: false,

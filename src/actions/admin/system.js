@@ -1,7 +1,5 @@
 import agent from '../agent';
-import {
-  systemConstants,
-} from './constants';
+import { systemConstants } from './constant';
 
 // Access log
 const fetchAccessLog = (token, offset, limit) => (dispatch) => {
@@ -9,37 +7,39 @@ const fetchAccessLog = (token, offset, limit) => (dispatch) => {
   dispatch({
     type: systemConstants.FETCH_ACCESS_LOG_START,
   });
-  agent.get(`/access-log?offset=${offset}&limit=${limit}`, fetch)
+  agent
+    .get(`/access-log?offset=${offset}&limit=${limit}`, fetch)
     .then(async (response) => {
       const { data } = response.data;
-      const ids = data.map((item) => (item.account_id));
-      const accounts = await Promise.all(ids.map(async (id) => {
-        let account = null;
-        await agent.get(`/account/${id}`, fetch)
-          .then((res) => {
-            account = res.data.data;
-          })
-          .catch((err) => {
-            dispatch({
-              type: systemConstants.FETCH_ACCESS_LOG_FAIL,
-              payload: err,
+      const ids = data.map((item) => item.account_id);
+      const accounts = await Promise.all(
+        ids.map(async (id) => {
+          let account = null;
+          await agent
+            .get(`/account/${id}`, fetch)
+            .then((res) => {
+              account = res.data.data;
+            })
+            .catch((err) => {
+              dispatch({
+                type: systemConstants.FETCH_ACCESS_LOG_FAIL,
+                payload: err,
+              });
             });
-          });
-        return account;
-      }));
+          return account;
+        }),
+      );
 
-      const newData = data.map((item) => (
-        {
-          id: item.id,
-          access_time: item.access_time,
-          request_method: item.request_method,
-          resource_path: item.resource_path,
-          ip: item.ip,
-          account_id: item.account_id,
-          username: accounts[item.account_id].username,
-          real_name: accounts[item.account_id].real_name,
-        }
-      ));
+      const newData = data.map((item) => ({
+        id: item.id,
+        access_time: item.access_time,
+        request_method: item.request_method,
+        resource_path: item.resource_path,
+        ip: item.ip,
+        account_id: item.account_id,
+        username: accounts[item.account_id].username,
+        real_name: accounts[item.account_id].real_name,
+      }));
 
       dispatch({
         type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
@@ -62,7 +62,8 @@ const fetchAnnouncement = (token) => (dispatch) => {
     type: systemConstants.FETCH_ANNOUNCEMENT_START,
   });
 
-  agent.get('/announcement', fetch)
+  agent
+    .get('/announcement', fetch)
     .then((res) => {
       const { data } = res.data;
       dispatch({
@@ -86,7 +87,8 @@ const editAnnouncement = (token, id, body) => (dispatch) => {
     type: systemConstants.EDIT_ANNOUNCEMENT_START,
   });
 
-  agent.patch(`/announcement/${id}`, body, fetch)
+  agent
+    .patch(`/announcement/${id}`, body, fetch)
     .then((res) => {
       const { success } = res.data;
       dispatch({
@@ -107,7 +109,8 @@ const addAnnouncement = (token, body) => (dispatch) => {
   dispatch({
     type: systemConstants.ADD_ANNOUNCEMENT_START,
   });
-  agent.post('/announcement', body, fetch)
+  agent
+    .post('/announcement', body, fetch)
     .then((res) => {
       const { success } = res.data;
       dispatch({
@@ -129,7 +132,8 @@ const deleteAnnouncement = (token, id) => (dispatch) => {
     type: systemConstants.DELETE_ANNOUNCEMENT_START,
   });
 
-  agent.delete(`/announcement/${id}`, fetch)
+  agent
+    .delete(`/announcement/${id}`, fetch)
     .then((res) => {
       const { success } = res.data;
       dispatch({
@@ -152,7 +156,8 @@ const fetchSubmitLanguage = (token) => (dispatch) => {
     type: systemConstants.FETCH_SUBMIT_LANGUAGE_START,
   });
 
-  agent.get('submission/language', fetch)
+  agent
+    .get('submission/language', fetch)
     .then((res) => {
       const { data } = res.data;
       // console.log('use api :', data);
@@ -180,7 +185,8 @@ const editSubmitLanguage = (token, id, name, version, isDisabled) => (dispatch) 
     is_disabled: isDisabled,
   };
 
-  agent.patch(`submission/language/${id}`, body, fetch)
+  agent
+    .patch(`submission/language/${id}`, body, fetch)
     .then((res) => {
       // console.log('edit submit language :', body);
       dispatch({

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { commonConstants } from '../actions/common/constant';
-import { accountConstants } from '../actions/admin/constants';
+import { accountConstants } from '../actions/admin/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {

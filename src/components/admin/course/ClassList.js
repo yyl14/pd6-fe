@@ -15,12 +15,12 @@ import { MdAdd } from 'react-icons/md';
 import {
   fetchCourses,
   fetchClasses,
-  fetchMembers,
   addCourse,
   addClass,
   renameClass,
   deleteClass,
 } from '../../../actions/admin/course';
+import { fetchClassMembers } from '../../../actions/common/common';
 import SimpleBar from '../../ui/SimpleBar';
 import DateRangePicker from '../../ui/DateRangePicker';
 import CustomTable from '../../ui/CustomTable';
@@ -68,7 +68,7 @@ export default function ClassList() {
   // fetch members under all classes to get member count
   useEffect(() => {
     if (courses.byId[courseId] && !loading.renameClass && !loading.deleteClass && !loading.addClass) {
-      courses.byId[courseId].classIds.map((id) => dispatch(fetchMembers(authToken, id)));
+      courses.byId[courseId].classIds.map((id) => dispatch(fetchClassMembers(authToken, id)));
     }
   }, [authToken, courseId, courses.byId, dispatch, loading.addClass, loading.deleteClass, loading.renameClass]);
 
