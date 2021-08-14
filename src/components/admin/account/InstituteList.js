@@ -74,10 +74,6 @@ export default function InstituteList() {
     sort: '(None)',
   });
 
-  // useEffect(() => {
-  //   dispatch(getInstitutes(authToken));
-  // }, [authToken, dispatch]);
-
   useEffect(() => {
     if (!loading.addInstitute) {
       dispatch(getInstitutes(authToken));
