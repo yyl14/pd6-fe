@@ -2,7 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-  Button, TextField, Typography, makeStyles, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+  Button,
+  TextField,
+  Typography,
+  makeStyles,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from '@material-ui/core';
 import SimpleBar from '../ui/SimpleBar';
 import AlignedText from '../ui/AlignedText';
@@ -23,7 +31,7 @@ export default function BasicInfoEdit(props) {
   const classes = useStyles();
 
   const accountId = useSelector((state) => state.user.id);
-  const authToken = useSelector((state) => state.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
 
   const [popUp, setPopUp] = useState(false);
@@ -36,7 +44,7 @@ export default function BasicInfoEdit(props) {
         return;
       }
     }
-    if ((altMail === '' && props.altMail === null) || (altMail === props.altMail)) {
+    if ((altMail === '' && props.altMail === null) || altMail === props.altMail) {
       dispatch(editAccount(authToken, accountId, userName, realName, nickName, null));
     } else {
       dispatch(editAccount(authToken, accountId, userName, realName, nickName, ''));
@@ -50,9 +58,7 @@ export default function BasicInfoEdit(props) {
 
   return (
     <div>
-      <SimpleBar
-        title="Basic Information"
-      >
+      <SimpleBar title="Basic Information">
         <>
           <AlignedText text="Username" childrenType="text" maxWidth="lg">
             <Typography variant="body1">{userName}</Typography>
@@ -81,12 +87,7 @@ export default function BasicInfoEdit(props) {
             />
           </AlignedText>
           <Button onClick={() => props.handleBack()}>Cancel</Button>
-          <Button
-            color="primary"
-            type="submit"
-            disabled={disabled}
-            onClick={handleSave}
-          >
+          <Button color="primary" type="submit" disabled={disabled} onClick={handleSave}>
             Save
           </Button>
         </>
@@ -107,7 +108,13 @@ export default function BasicInfoEdit(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => { setPopUp(false); done(); }} color="default">
+          <Button
+            onClick={() => {
+              setPopUp(false);
+              done();
+            }}
+            color="default"
+          >
             Done
           </Button>
         </DialogActions>

@@ -26,7 +26,7 @@ export default function AnnouncementEdit(props) {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.user.token);
+  const authToken = useSelector((state) => state.auth.token);
 
   const [editTitle, setEditTitle] = useState(props.editTitle);
   const [dateRangePicker, setDateRangePicker] = useState([

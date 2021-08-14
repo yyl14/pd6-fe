@@ -29,7 +29,7 @@ export default function LangSetting() {
 
   const dispatch = useDispatch();
   const { languageId } = useParams();
-  const authToken = useSelector((state) => state.auth.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   const submitLang = useSelector((state) => state.submitLangs.byId);
   const submitLangId = useSelector((state) => state.submitLangs.allIds);
   const loading = useSelector((state) => state.loading.admin.system.fetchAnnouncement);
@@ -59,7 +59,15 @@ export default function LangSetting() {
   }
 
   const handleEditSubmitLanguage = () => {
-    dispatch(editSubmitLanguage(authToken, languageId, submitLang[languageId].name, submitLang[languageId].version, languageStatus));
+    dispatch(
+      editSubmitLanguage(
+        authToken,
+        languageId,
+        submitLang[languageId].name,
+        submitLang[languageId].version,
+        languageStatus,
+      ),
+    );
     setChangeLanguageStatus(false);
     setSubmit(true);
   };
@@ -70,9 +78,7 @@ export default function LangSetting() {
         {`${submitLang[languageId].name} ${submitLang[languageId].version} / Submission Language Setting`}
       </Typography>
 
-      <SimpleBar
-        title="Submission Language Information"
-      >
+      <SimpleBar title="Submission Language Information">
         <AlignedText text="Language" childrenType="text">
           <Typography variant="body1">{submitLang[languageId].name}</Typography>
         </AlignedText>
@@ -80,7 +86,7 @@ export default function LangSetting() {
           <Typography variant="body1">{submitLang[languageId].version}</Typography>
         </AlignedText>
         <AlignedText text="Status" childrenType="text">
-          <Typography variant="body1">{(submitLang[languageId].is_disabled) ? 'Disabled' : 'Enabled'}</Typography>
+          <Typography variant="body1">{submitLang[languageId].is_disabled ? 'Disabled' : 'Enabled'}</Typography>
         </AlignedText>
       </SimpleBar>
 
@@ -108,10 +114,13 @@ export default function LangSetting() {
             control={(
               <Switch
                 checked={!languageStatus} // true = Disable
-                onChange={() => { setLanguageStatus(!languageStatus); setChangeLanguageStatus(languageStatus === submitLang[languageId].is_disabled); }}
+                onChange={() => {
+                  setLanguageStatus(!languageStatus);
+                  setChangeLanguageStatus(languageStatus === submitLang[languageId].is_disabled);
+                }}
                 color="primary"
               />
-              )}
+            )}
             label={languageStatus ? 'Disabled' : 'Enabled'}
           />
         </DialogContent>
@@ -121,8 +130,14 @@ export default function LangSetting() {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setPopUp(false)} color="default">Cancel</Button>
-          <Button onClick={(e) => handleEditSubmitLanguage()} color="secondary" disabled={changeLanguageStatus === false}>
+          <Button onClick={() => setPopUp(false)} color="default">
+            Cancel
+          </Button>
+          <Button
+            onClick={(e) => handleEditSubmitLanguage()}
+            color="secondary"
+            disabled={changeLanguageStatus === false}
+          >
             Modify
           </Button>
         </DialogActions>

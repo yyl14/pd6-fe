@@ -16,7 +16,7 @@ export default function SubmissionLanguageHome() {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   const submitLang = useSelector((state) => state.submitLangs.byId);
   const submitLangId = useSelector((state) => state.submitLangs.allIds);
 

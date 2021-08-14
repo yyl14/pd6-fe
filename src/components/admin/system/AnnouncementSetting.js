@@ -36,7 +36,7 @@ export default function AnnouncementSetting() {
   const history = useHistory();
 
   const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   const announcements = useSelector((state) => state.announcements.byId);
   const allIds = useSelector((state) => state.announcements.allIds);
   const loading = useSelector((state) => state.loading.admin.system.fetchAnnouncement);

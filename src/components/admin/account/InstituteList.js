@@ -43,7 +43,7 @@ export default function InstituteList() {
 
   const institutes = useSelector((state) => state.institutes.byId);
   const institutesID = useSelector((state) => state.institutes.allIds);
-  const authToken = useSelector((state) => state.auth.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   const pageError = useSelector((state) => state.error.admin.account);
   const loading = useSelector((state) => state.loading.admin.account);
 

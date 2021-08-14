@@ -6,6 +6,12 @@ import {
 
 import { Container } from '@material-ui/core';
 
+import Challenge from './challenge';
+import Submission from './submission';
+import Grade from './grade';
+import Team from './team';
+import Member from './member';
+
 import NoMatch from '../../../components/noMatch';
 
 import Header from '../../../components/ui/Header';
@@ -18,31 +24,31 @@ class MyClass extends Component {
     this.state = {};
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      if (this.props.user.classes.length === 0) {
+        this.props.history.push('/notFound');
+      }
+    }
+  }
 
   render() {
     return (
-      <Router>
-        <div>
-          <Header role={this.props.auth.user.role} />
-          <Sidebar />
-          <div className="layout-content-container">
-            <div className="layout-content">
-              <Switch>
-                {/* <Route path="/admin/course/course" component={Course} /> */}
-                <Route component={NoMatch} />
-              </Switch>
-            </div>
-          </div>
-        </div>
-      </Router>
+      <Switch>
+        <Route path="/my-class/:courseId/:classId/challenge" component={Challenge} />
+        <Route path="/my-class/:courseId/:classId/submission" component={Submission} />
+        <Route path="/my-class/:courseId/:classId/grade" component={Grade} />
+        <Route path="/my-class/:courseId/:classId/team" component={Team} />
+        <Route path="/my-class/:courseId/:classId/member" component={Member} />
+        <Route component={NoMatch} />
+      </Switch>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  error: state.error,
+  user: state.user,
 });
 
 export default connect(mapStateToProps, {})(withRouter(MyClass));

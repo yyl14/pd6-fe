@@ -26,7 +26,7 @@ class Admin extends Component {
 
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      if (this.props.auth.user.role.indexOf('MANAGER') === -1) {
+      if (this.props.user.role.indexOf('MANAGER') === -1) {
         this.props.history.push('/notFound');
       }
     }
@@ -35,7 +35,7 @@ class Admin extends Component {
   render() {
     return (
       <div>
-        <Header role={this.props.auth.user.role} />
+        <Header role={this.props.user.role} />
         <Sidebar />
         <div className="layout-content-container">
           <div className="layout-content">
@@ -58,6 +58,7 @@ class Admin extends Component {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  user: state.user,
   error: state.error,
 });
 

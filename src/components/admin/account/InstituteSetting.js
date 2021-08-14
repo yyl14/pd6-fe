@@ -40,7 +40,7 @@ export default function InstituteSetting() {
 
   const { instituteId } = useParams();
   const institutes = useSelector((state) => state.institutes.byId);
-  const authToken = useSelector((state) => state.auth.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   const pageError = useSelector((state) => state.error.admin.account);
   const loading = useSelector((state) => state.loading.admin.account);
 

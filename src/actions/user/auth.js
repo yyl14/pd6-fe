@@ -1,30 +1,29 @@
 import agent from '../agent';
 import { authConstants } from './constants';
 
-const getUserInfo = (id, token) => (dispatch) => {
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-
-  agent
-    .get(`/account/${id}`, auth)
-    .then((userInfo) => {
-      dispatch({
-        type: authConstants.AUTH_SUCCESS,
-        user: {
-          ...userInfo.data.data,
-          token,
-        },
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: authConstants.AUTH_FAIL,
-        errors: err,
-      });
+const getUserInfo = (id, token) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    const userInfo = await agent.get(`/account/${id}`, auth);
+    const userClasses = await agent.get(`/account/${id}/class`, auth);
+    dispatch({
+      type: authConstants.AUTH_SUCCESS,
+      user: {
+        token,
+        ...userInfo.data.data,
+        classes: userClasses.data.data,
+      },
     });
+  } catch (err) {
+    dispatch({
+      type: authConstants.AUTH_FAIL,
+      errors: err,
+    });
+  }
 };
 
 const userSignIn = (username, password) => async (dispatch) => {
@@ -38,11 +37,13 @@ const userSignIn = (username, password) => async (dispatch) => {
       },
     };
     const userInfo = await agent.get(`/account/${id}`, auth);
+    const userClasses = await agent.get(`/account/${id}/class`, auth);
     dispatch({
       type: authConstants.AUTH_SUCCESS,
       user: {
-        ...userInfo.data.data,
         token,
+        ...userInfo.data.data,
+        classes: userClasses.data.data,
       },
     });
   } catch (err) {

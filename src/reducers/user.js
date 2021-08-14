@@ -8,7 +8,7 @@ const initialState = {
   role: '',
   real_name: '',
   alternative_email: '',
-  my_class: [],
+  classes: [],
 };
 
 const user = (state = {}, action) => {

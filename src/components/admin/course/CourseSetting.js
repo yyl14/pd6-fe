@@ -38,7 +38,7 @@ export default function CourseSetting() {
 
   const { courseId } = useParams();
   const history = useHistory();
-  const authToken = useSelector((state) => state.auth.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   const courses = useSelector((state) => state.courses);
   const loading = useSelector((state) => state.loading.admin.course);
   const dispatch = useDispatch();

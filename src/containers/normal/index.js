@@ -17,16 +17,17 @@ class Normal extends Component {
 
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      if (this.props.auth.user.role.indexOf('NORMAL') === -1) {
+      if (this.props.user.role.indexOf('NORMAL') === -1) {
         this.props.history.push('/notFound');
       }
     }
   }
 
   render() {
+    console.log(this.props.user);
     return (
       <div>
-        <Header role={this.props.auth.user.role} />
+        <Header role={this.props.user.role} hasClass={this.props.user.classes.length !== 0} />
         <Sidebar />
         <div className="layout-content-container">
           <div className="layout-content">
@@ -43,6 +44,7 @@ class Normal extends Component {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  user: state.user,
   error: state.error,
 });
 
