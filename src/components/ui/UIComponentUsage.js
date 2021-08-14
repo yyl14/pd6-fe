@@ -16,6 +16,8 @@ import {
   Card,
   CardContent,
   Snackbar,
+  FormControlLabel,
+  Switch,
 } from '@material-ui/core';
 import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -93,6 +95,7 @@ export default function UIComponentUsage() {
   const [showDialog, setShowDialog] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [showSnackbarWithButton, setShowSnackbarWithButton] = useState(false);
+  const [switchStatus, setSwitchStatus] = useState(false);
   const [dateRangePicker, setDateRangePicker] = useState([
     {
       startDate: moment().startOf('week').toDate(),
@@ -186,33 +189,45 @@ export default function UIComponentUsage() {
           </div>
         </div>
       </div>
-      <div className={classes.wrapper}>
-        <Typography variant="h4">Snackbar</Typography>
-        <hr className={classes.divider} />
-        <div className={classes.component}>
-          <div className={classes.children}>
-            <Button onClick={() => setShowSnackbar(true)}>Open the snackbar</Button>
-          </div>
-          <div className={classes.children}>
-            <Button onClick={() => setShowSnackbarWithButton(true)}>Open the snackbar with button</Button>
-          </div>
-          <Snackbar
-            open={showSnackbar}
-            autoHideDuration={3000}
-            message="This is a snackbar"
-            onClose={() => setShowSnackbar(false)}
-          />
-          <Snackbar
-            open={showSnackbarWithButton}
-            autoHideDuration={3000}
-            message="This is a snackbar with button"
-            onClose={() => setShowSnackbarWithButton(false)}
-            action={(
-              <Button variant="text" color="primary" onClick={() => setShowSnackbarWithButton(false)}>
-                <Typography variant="h6">Undo</Typography>
-              </Button>
+      <div className={classes.row}>
+        <div className={classes.wrapper}>
+          <Typography variant="h4">Snackbar</Typography>
+          <hr className={classes.divider} />
+          <div className={classes.component}>
+            <div className={classes.children}>
+              <Button onClick={() => setShowSnackbar(true)}>Open snackbar</Button>
+            </div>
+            <div className={classes.children}>
+              <Button onClick={() => setShowSnackbarWithButton(true)}>Open snackbar with button</Button>
+            </div>
+            <Snackbar
+              open={showSnackbar}
+              autoHideDuration={3000}
+              message="This is a snackbar"
+              onClose={() => setShowSnackbar(false)}
+            />
+            <Snackbar
+              open={showSnackbarWithButton}
+              autoHideDuration={3000}
+              message="This is a snackbar with button"
+              onClose={() => setShowSnackbarWithButton(false)}
+              action={(
+                <Button variant="text" color="primary" onClick={() => setShowSnackbarWithButton(false)}>
+                  <Typography variant="h6">Undo</Typography>
+                </Button>
             )}
-          />
+            />
+          </div>
+        </div>
+        <div className={classes.wrapper}>
+          <Typography variant="h4">Switch</Typography>
+          <hr className={classes.divider} />
+          <div className={classes.component}>
+            <FormControlLabel
+              control={<Switch checked={switchStatus} onChange={(e) => setSwitchStatus(e.target.checked)} name="status" color="primary" />}
+              label={switchStatus ? 'Enabled' : 'Disabled'}
+            />
+          </div>
         </div>
       </div>
 
