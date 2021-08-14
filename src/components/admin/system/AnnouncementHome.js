@@ -42,8 +42,6 @@ export default function AnnouncementHome() {
   const deleteLoading = useSelector((state) => state.loading.admin.system.deleteAnnouncement);
 
   const [tableData, setTableData] = useState([]);
-  const [path, setPath] = useState([]);
-
   const [filterPostOrNot, setFilterPostOrNot] = useState(false);
   const [filterEndOrNot, setFilterEndOrNot] = useState(false);
   const [postRange, setPostRange] = useState([
@@ -66,6 +64,7 @@ export default function AnnouncementHome() {
       title: item.title,
       PostTime: moment(item.post_time).format('YYYY-MM-DD, HH:mm'),
       EndTime: moment(item.expire_time).format('YYYY-MM-DD, HH:mm'),
+      path: item.path,
     };
     return temp;
   };
@@ -103,14 +102,13 @@ export default function AnnouncementHome() {
 
   useEffect(() => {
     const newData = [];
-    const newPath = [];
+
     announcementId.forEach((key) => {
       const item = announcements[key];
+      item.path = `announcement/${item.id}/setting`;
       newData.push(modifyRawData(item));
-      newPath.push(`announcement/${item.id}/setting`);
     });
     setTableData(newData);
-    setPath(newPath);
   }, [announcements, announcementId]);
 
   const history = useHistory();
@@ -177,14 +175,12 @@ export default function AnnouncementHome() {
           />,
         ]}
         hasLink
-        path={path}
+        linkName="path"
       />
       <Dialog
         open={filterPostOrNot}
         keepMounted
         onClose={() => setFilterPostOrNot(false)}
-        aria-labelledby="dialog-slide-title"
-        aria-describedby="dialog-slide-description"
         classes={{ paper: classes.paper }}
       >
         <DialogTitle id="dialog-slide-title">
@@ -211,8 +207,6 @@ export default function AnnouncementHome() {
         open={filterEndOrNot}
         keepMounted
         onClose={() => setFilterEndOrNot(false)}
-        aria-labelledby="dialog-slide-title"
-        aria-describedby="dialog-slide-description"
         classes={{ paper: classes.paper }}
       >
         <DialogTitle id="dialog-slide-title">

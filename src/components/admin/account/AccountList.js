@@ -53,7 +53,6 @@ export default function AccountList() {
   // const error = useSelector((state) => state.admin.account.error);
   const loading = useSelector((state) => state.loading.admin.account);
   const [tableData, setTableData] = useState([]);
-  const [path, setPath] = useState([]);
 
   useEffect(() => {
     if (!loading.editAccount && !loading.deleteAccount && !loading.makeStudentCardDefault) {
@@ -63,17 +62,14 @@ export default function AccountList() {
 
   useEffect(() => {
     const newData = [];
-    const newPath = [];
 
     accountsID.forEach((key) => {
       const item = accounts[key];
       const temp = { ...item };
       temp.path = `/admin/account/account/${temp.id}/setting`;
       newData.push(temp);
-      newPath.push(`/admin/account/account/${temp.id}/setting`);
     });
     setTableData(newData);
-    setPath(newPath);
   }, [accounts, accountsID]);
 
   if (loading.fetchAccounts) {
@@ -118,7 +114,7 @@ export default function AccountList() {
           },
         ]}
         hasLink
-        path={path}
+        linkName="path"
       />
     </>
   );

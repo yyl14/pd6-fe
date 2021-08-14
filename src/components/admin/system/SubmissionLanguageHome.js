@@ -21,7 +21,6 @@ export default function SubmissionLanguageHome() {
   const submitLangId = useSelector((state) => state.submitLangs.allIds);
 
   const [tableData, setTableData] = useState([]);
-  const [path, setPath] = useState([]);
 
   useEffect(() => {
     dispatch(fetchSubmitLanguage(authToken));
@@ -30,7 +29,6 @@ export default function SubmissionLanguageHome() {
   useEffect(() => {
     if (submitLangId !== null) {
       const newData = [];
-      const newPath = [];
 
       submitLangId.forEach((key) => {
         const item = submitLang[key];
@@ -40,11 +38,10 @@ export default function SubmissionLanguageHome() {
         } else if (item.is_disabled === false) {
           temp.is_disabled = 'Enabled';
         }
+        temp.path = `submitlang/${item.id}/setting`;
         newData.push(temp);
-        newPath.push(`submitlang/${item.id}/setting`);
       });
       setTableData(newData);
-      setPath(newPath);
     }
   }, [submitLang, submitLangId]);
 
@@ -79,7 +76,7 @@ export default function SubmissionLanguageHome() {
         ]}
         columnComponent={[null, null, null]}
         hasLink
-        path={path}
+        linkName="path"
       />
     </>
   );

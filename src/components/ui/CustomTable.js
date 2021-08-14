@@ -164,7 +164,7 @@ export default function CustomTable({
   columnComponent,
   data,
   hasLink,
-  path,
+  linkName,
   children,
 }) {
   const classes = useStyles();
@@ -259,9 +259,9 @@ export default function CustomTable({
               <TableRow>
                 <TableCell className={`${classes.tableHeadCell} ${classes.tableRowContainerLeftSpacing}`} />
                 {columns.map((column) => (
-                  <>
+                  <React.Fragment key={`${column.id}-${column.label}`}>
                     <TableCell className={`${classes.tableHeadCell} ${classes.tableColumnLeftSpacing}`} />
-                    <TableCell key={column.id} align={column.align} className={classes.tableHeadCell} style={{ minWidth: column.minWidth, width: column.width }}>
+                    <TableCell align={column.align} className={classes.tableHeadCell} style={{ minWidth: column.minWidth, width: column.width }}>
                       <div className={classes.column}>
                         <div className={labelMoveLeft(columnComponent, columns, column)}>
                           <b>{column.label}</b>
@@ -271,7 +271,7 @@ export default function CustomTable({
                         </div>
                       </div>
                     </TableCell>
-                  </>
+                  </React.Fragment>
                 ))}
                 {hasLink
                   ? (<TableCell key="link" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
@@ -287,27 +287,27 @@ export default function CustomTable({
                       const link = row[column.link_id];
                       const value = row[column.id];
                       return (
-                        <>
+                        <React.Fragment key={`${column.id}-${column.label}`}>
                           <TableCell className={classes.tableColumnLeftSpacing} />
-                          <TableCell key={column.id} align={column.align}>
+                          <TableCell align={column.align}>
                             <Link to={link} className={classes.textLink} replace>{column.format && typeof value === 'number' ? column.format(value) : value}</Link>
                           </TableCell>
-                        </>
+                        </React.Fragment>
                       );
                     }
                     const value = row[column.id];
                     return (
-                      <>
+                      <React.Fragment key={`${column.id}-${column.label}`}>
                         <TableCell className={classes.tableColumnLeftSpacing} />
-                        <TableCell key={column.id} align={column.align}>
+                        <TableCell align={column.align}>
                           {column.format && typeof value === 'number' ? column.format(value) : value}
                         </TableCell>
-                      </>
+                      </React.Fragment>
                     );
                   })}
                   {hasLink ? (
                     <TableCell key={`${row.id}-show`} align="right">
-                      <Link to={path[filterData.indexOf(row)]} className={classes.detailLink}>
+                      <Link to={row[linkName]} className={classes.detailLink}>
                         <IconButton>
                           <ArrowForwardRoundedIcon className={classes.toggleButtonIcon} />
                         </IconButton>

@@ -31,8 +31,6 @@ export default function AccessLog() {
   const logs = useSelector((state) => state.accessLogs.byId);
   const logsID = useSelector((state) => state.accessLogs.allIds);
 
-  const [path, setPath] = useState([]);
-
   const [tableData, setTableData] = useState([]);
   const [filterOrNot, setFilterOrNot] = useState(false);
   const [dateRange, setDateRange] = useState([
@@ -56,6 +54,7 @@ export default function AccessLog() {
       resource_path: item.resource_path,
       request_method: item.request_method,
       access_time: moment(item.access_time).format('YYYY-MM-DD, HH:mm'),
+      path: item.path,
     };
     return temp;
   }, []);
@@ -69,27 +68,24 @@ export default function AccessLog() {
       },
     ]);
     const newData = [];
-    const newPath = [];
     logsID.forEach((key) => {
       const item = logs[key];
+      item.path = `/admin/account/account/${item.account_id}/setting`;
       newData.push(modifyRawData(item));
-      newPath.push(`account/${item.account_id}/setting`);
     });
     setTableData(newData);
-    setPath(newPath);
   }, [logsID, logs, modifyRawData]);
 
   const filter = () => {
     const newData = [];
-    const newPath = [];
     const start = dateRange[0].startDate.getTime();
     const end = dateRange[0].endDate.getTime();
     logsID.forEach((key) => {
       const item = logs[key];
+      item.path = `/admin/account/account/${item.account_id}/setting`;
       const accessTime = moment(item.access_time).valueOf();
       if (start <= accessTime && accessTime <= end) {
         newData.push(modifyRawData(item));
-        newPath.push(`account/${item.account_id}/setting`);
       }
     });
     setTableData(newData);
@@ -120,6 +116,7 @@ export default function AccessLog() {
       </Typography>
       <CustomTable
         hasSearch
+        searchWidthOption={3}
         searchPlaceholder="Student ID / Real Name / Username / IP"
         data={tableData}
         columns={[
@@ -128,6 +125,8 @@ export default function AccessLog() {
             label: 'Username',
             align: 'center',
             width: 150,
+            type: 'link',
+            link_id: 'path',
           },
           {
             id: 'student_id',
@@ -180,8 +179,6 @@ export default function AccessLog() {
         open={filterOrNot}
         keepMounted
         onClose={() => setFilterOrNot(false)}
-        aria-labelledby="dialog-slide-title"
-        aria-describedby="dialog-slide-description"
         classes={{ paper: classes.paper }}
       >
         <DialogTitle id="dialog-slide-title">

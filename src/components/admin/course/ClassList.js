@@ -130,6 +130,7 @@ export default function ClassList() {
             ? courses.byId[courseId].classIds.map((classId) => ({
               name: classes.byId[classId].name,
               memberCount: classes.byId[classId].memberIds.length,
+              path: `/admin/course/class/${courseId}/${classId}/member`,
             }))
             : {}
         }
@@ -138,20 +139,22 @@ export default function ClassList() {
             id: 'name',
             label: 'Class',
             minWidth: 100,
+            width: 120,
             align: 'center',
           },
           {
             id: 'memberCount',
             label: 'Member Count',
             minWidth: 180,
+            width: 120,
             align: 'center',
           },
         ]}
         hasLink
-        path={courses.byId[courseId].classIds.map((classId) => `/admin/course/class/${courseId}/${classId}/member`)}
+        linkName="path"
       />
       {/* add course is controlled by optional route param "addType" */}
-      <Dialog open={addType} maxWidth="md">
+      <Dialog open={addType !== undefined} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Create a new course</Typography>
         </DialogTitle>
