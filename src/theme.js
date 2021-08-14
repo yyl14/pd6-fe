@@ -310,6 +310,42 @@ const overrides = {
       // height: '1.1876em',
     },
   },
+  MuiSwitch: {
+    root: {
+      height: '28px',
+      width: '48px',
+      marginRight: '16px',
+      padding: '0px',
+    },
+    track: {
+      height: '15px',
+      width: '40px',
+      margin: '6.5px 4px 6.5px 4px',
+    },
+    thumb: {
+      height: '22px',
+      width: '22px',
+      boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.35)',
+      padding: '0px',
+      transform: 'translateX(3px) translateY(3px)',
+    },
+    switchBase: {
+      height: '22px',
+      width: '22px',
+      padding: '0px',
+      color: mono.veryLightGray,
+      '&:hover': {
+        backgroundColor: 'transparent',
+      },
+    },
+    colorPrimary: {
+      '&$checked': {
+        '&:hover': {
+          backgroundColor: 'transparent',
+        },
+      },
+    },
+  },
   // Base of "List"
   MuiPopover: {
     paper: { boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)' },
