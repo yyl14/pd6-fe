@@ -8,7 +8,7 @@ const byId = (state = {}, action) => {
       return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), {});
     }
     case accountConstants.FETCH_INSTITUTES_SUCCESS: {
-      return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.institutes);
+      return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
     case accountConstants.FETCH_INSTITUTE_SUCCESS: {
       return { ...state, [action.payload.id]: action.payload };
