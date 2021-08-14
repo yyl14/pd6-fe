@@ -36,6 +36,30 @@ export default function IconList() {
           <p>Dots</p>
         </StyledPaper>
         <StyledPaper>
+          <Icon.FilterIdle />
+          <p>FilterIdle</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.FilterSelected />
+          <p>FilterSelected</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.TriangleDown />
+          <p>TriangleDown</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.TriangleLeft />
+          <p>TriangleLeft</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.TriangleRight />
+          <p>TriangleRight</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.TriangleUp />
+          <p>TriangleUp</p>
+        </StyledPaper>
+        <StyledPaper>
           <Icon.Advancedsearch />
           <p>Advancedsearch</p>
         </StyledPaper>
