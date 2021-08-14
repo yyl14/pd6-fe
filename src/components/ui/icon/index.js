@@ -38,6 +38,12 @@ import { ReactComponent as StatusRF } from './Status_RF.svg';
 import { ReactComponent as StatusSE } from './Status_SE.svg';
 import { ReactComponent as StatusTLE } from './Status_TLE.svg';
 import { ReactComponent as StatusWA } from './Status_WA.svg';
+import { ReactComponent as FilterIdle } from './filter_idle.svg';
+import { ReactComponent as FilterSelected } from './filter_selected.svg';
+import { ReactComponent as TriangleDown } from './triangle_down.svg';
+import { ReactComponent as TriangleLeft } from './triangle_left.svg';
+import { ReactComponent as TriangleRight } from './triangle_right.svg';
+import { ReactComponent as TriangleUp } from './triangle_up.svg';
 
 export default {
   HistoryIcon,
@@ -80,4 +86,10 @@ export default {
   StatusSE,
   StatusTLE,
   StatusWA,
+  FilterIdle,
+  FilterSelected,
+  TriangleDown,
+  TriangleLeft,
+  TriangleRight,
+  TriangleUp,
 };
