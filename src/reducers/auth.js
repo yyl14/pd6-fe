@@ -2,21 +2,21 @@ import { authConstants } from '../actions/user/constants';
 
 const initialState = {
   isAuthenticated: false,
-  user: {},
+  token: '',
 };
 
 export default function auth(state = initialState, action) {
   switch (action.type) {
     case authConstants.AUTH_SUCCESS:
+      console.log(action);
       return {
-        isAuthenticated: !!(action.user),
-        user: { ...action.user },
+        isAuthenticated: !!action.user,
+        token: action.user.token,
       };
     case authConstants.AUTH_LOGOUT:
       return {
-        ...state,
         isAuthenticated: false,
-        user: {},
+        token: '',
       };
     default:
       return state;

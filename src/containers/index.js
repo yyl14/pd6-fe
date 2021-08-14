@@ -7,7 +7,6 @@ import React, { Component } from 'react';
 import Normal from './normal';
 import Admin from './admin';
 import Account from './account';
-import MyClass from './myClass';
 import NoMatch from '../components/noMatch';
 
 import { getUserInfo } from '../actions/user/auth';
@@ -58,11 +57,9 @@ class Index extends Component {
     return (
       <div className="wrapper">
         <Switch>
-          <Route exact path="/" component={Normal} />
           <Route path="/admin" component={Admin} />
-          <Route path="/account/setting" component={Account} />
-          <Route path="/my-class" component={MyClass} />
-          <Route component={NoMatch} />
+          <Route path="/account" component={Account} />
+          <Route path="/" component={Normal} />
         </Switch>
       </div>
     );

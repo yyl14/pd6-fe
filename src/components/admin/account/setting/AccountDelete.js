@@ -22,7 +22,7 @@ export default function AccountDelete(props) {
   const [popUp, setPopUp] = useState(false);
   const history = useHistory();
   const { accountId } = useParams();
-  const authToken = useSelector((state) => state.auth.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
   const card = props.cards.filter((p) => p.is_default === true);
 

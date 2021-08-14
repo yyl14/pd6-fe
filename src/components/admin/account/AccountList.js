@@ -49,7 +49,7 @@ export default function AccountList() {
 
   const accounts = useSelector((state) => state.accounts.byId);
   const accountsID = useSelector((state) => state.accounts.allIds);
-  const authToken = useSelector((state) => state.auth.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.admin.account.error);
   const loading = useSelector((state) => state.loading.admin.account);
   const [tableData, setTableData] = useState([]);

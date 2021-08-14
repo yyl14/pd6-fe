@@ -34,7 +34,7 @@ export default function AnnouncementHome() {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   const announcements = useSelector((state) => state.announcements.byId);
   const announcementId = useSelector((state) => state.announcements.allIds);
   const loading = useSelector((state) => state.loading.admin.system.fetchAnnouncement);

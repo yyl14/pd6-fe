@@ -33,7 +33,7 @@ const ClassSetting = () => {
 
   const dispatch = useDispatch();
   // const thisState = useSelector((state) => state);
-  const authToken = useSelector((state) => state.auth.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   const courses = useSelector((state) => state.courses);
   const classes = useSelector((state) => state.classes);
   const loading = useSelector((state) => state.loading.admin.course);

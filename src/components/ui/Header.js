@@ -129,17 +129,20 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.grey.A100,
     },
   },
-
 }));
 
-export default function Header({ role }) {
+export default function Header({ role, hasClass }) {
   const baseURL = '';
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
   let itemList = [];
   const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   H:mm'));
-  let menuList = [];
+  const menuList = [
+    { title: 'My Submission', link: '/my-submission' },
+    { title: 'My Profile', link: '/my-profile' },
+    { title: 'Logout', link: '/login' },
+  ];
 
   if (role === 'MANAGER') {
     itemList = [
@@ -163,82 +166,62 @@ export default function Header({ role }) {
         path: '/about',
       },
     ];
-    menuList = [{ title: 'Logout', link: '/login' }];
   } else if (role === 'NORMAL') {
-    itemList = [
-      {
-        text: 'My Class',
-        basePath: '/my-class',
-        path: '/my-class',
-      },
-      {
-        text: 'Problem Set',
-        basePath: '/problem-set',
-        path: '/problem-set',
-      },
-      {
-        text: 'PDAO',
-        basePath: '/PDAO',
-        path: '/PDAO',
-      },
-      {
-        text: 'Ranklist',
-        basePath: '/ranklist',
-        path: '/ranklist',
-      },
-      {
-        text: 'System',
-        basePath: '/system',
-        path: '/system',
-      },
-    ];
-    menuList = [
-      { title: 'My Submission', link: '/my-submission' },
-      { title: 'My Profile', link: '/my-profile' },
-      { title: 'Logout', link: '/login' },
-    ];
-  } else if (role === 'GUEST') {
-    itemList = [
-      {
-        text: 'Your Class',
-        path: '/',
-      },
-      {
-        text: 'Problem Set',
-        path: '/problem_set',
-      },
-      {
-        text: 'PDAO',
-        path: '/pdao',
-      },
-      {
-        text: 'About',
-        path: '/about',
-      },
-    ];
-  } else if (role === 'TA') {
-    itemList = [
-      {
-        text: 'My Class',
-        path: '/',
-      },
-      {
-        text: 'Problem Set',
-        path: '/problem_set',
-      },
-      {
-        text: 'PDAO',
-        path: '/pdao',
-      },
-      {
-        text: 'System',
-        path: '/system',
-      },
-      {
-        text: 'About',
-        path: '/about',
-      },
-    ];
+    if (hasClass) {
+      itemList = [
+        {
+          text: 'My Class',
+          basePath: '/my-class',
+          path: '/my-class',
+        },
+        {
+          text: 'Problem Set',
+          basePath: '/problem-set',
+          path: '/problem-set',
+        },
+        {
+          text: 'PDAO',
+          basePath: '/pdao',
+          path: '/pdao',
+        },
+        {
+          text: 'Ranklist',
+          basePath: '/ranklist',
+          path: '/ranklist',
+        },
+        {
+          text: 'System',
+          basePath: '/system',
+          path: '/system',
+        },
+      ];
+    } else {
+      itemList = [
+        {
+          text: 'Problem Set',
+          basePath: '/problem-set',
+          path: '/problem-set',
+        },
+        {
+          text: 'PDAO',
+          basePath: '/pdao',
+          path: '/pdao',
+        },
+        {
+          text: 'Ranklist',
+          basePath: '/ranklist',
+          path: '/ranklist',
+        },
+        {
+          text: 'System',
+          basePath: '/system',
+          path: '/system',
+        },
+      ];
+    }
+  } else {
+    // System Guest
+    itemList = [];
   }
 
   useEffect(() => {
@@ -247,7 +230,7 @@ export default function Header({ role }) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTime(format(new Date(), 'MMM d   H:mm'));
+      setCurrentTime(format(new Date(), 'MMM d  HH:mm'));
     }, 1000);
     return () => clearInterval(interval);
   }, []);

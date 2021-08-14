@@ -17,12 +17,12 @@ class Account extends Component {
     this.state = {};
   }
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   render() {
     return (
       <div>
-        <Header role={this.props.auth.user.role} />
+        <Header role={this.props.user.role} />
         <Sidebar />
         <Router>
           <div className="layout-content-container">
@@ -38,6 +38,7 @@ class Account extends Component {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  user: state.user,
   error: state.error,
 });
 

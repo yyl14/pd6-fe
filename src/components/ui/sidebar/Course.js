@@ -31,7 +31,7 @@ export default function Course({
 
   const dispatch = useDispatch();
 
-  const authToken = useSelector((state) => state.auth.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.admin.course);
 
   useEffect(() => {

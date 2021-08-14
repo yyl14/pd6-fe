@@ -26,7 +26,7 @@ class Admin extends Component {
 
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      if (this.props.auth.user.role.indexOf('MANAGER') === -1) {
+      if (this.props.user.role.indexOf('MANAGER') === -1) {
         this.props.history.push('/notFound');
       }
     }
@@ -34,32 +34,31 @@ class Admin extends Component {
 
   render() {
     return (
-      <Router>
-        <div>
-          <Header role={this.props.auth.user.role} />
-          <Sidebar />
-          <div className="layout-content-container">
-            <div className="layout-content">
-              <Switch>
-                <Route path="/admin/course/course" component={Course} />
-                <Route path="/admin/course/class" component={Class} />
-                <Route path="/admin/account/institute" component={Institute} />
-                <Route path="/admin/account/account" component={Account} />
-                <Route path="/admin/system/accesslog" component={AccessLog} />
-                <Route path="/admin/system/announcement" component={Announcement} />
-                <Route path="/admin/system/submitlang" component={SubmitLang} />
-                <Route component={NoMatch} />
-              </Switch>
-            </div>
+      <div>
+        <Header role={this.props.user.role} />
+        <Sidebar />
+        <div className="layout-content-container">
+          <div className="layout-content">
+            <Switch>
+              <Route path="/admin/course/course" component={Course} />
+              <Route path="/admin/course/class" component={Class} />
+              <Route path="/admin/account/institute" component={Institute} />
+              <Route path="/admin/account/account" component={Account} />
+              <Route path="/admin/system/accesslog" component={AccessLog} />
+              <Route path="/admin/system/announcement" component={Announcement} />
+              <Route path="/admin/system/submitlang" component={SubmitLang} />
+              <Route component={NoMatch} />
+            </Switch>
           </div>
         </div>
-      </Router>
+      </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  user: state.user,
   error: state.error,
 });
 
