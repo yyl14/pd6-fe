@@ -14,9 +14,10 @@ import {
 } from '@material-ui/core';
 import { BiFilterAlt } from 'react-icons/bi';
 import { useParams, useHistory } from 'react-router-dom';
+import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
+import { fetchClassMembers } from '../../../actions/common/common';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
-import { fetchCourses, fetchClasses, fetchMembers } from '../../../actions/admin/course';
 import CustomTable from '../../ui/CustomTable';
 import TableFilterCard from '../../ui/TableFilterCard';
 import MemberEdit from './MemberEdit';
@@ -49,16 +50,24 @@ export default function MemberList() {
   const dispatch = useDispatch();
 
   const authToken = useSelector((state) => state.auth.user.token);
-  const courses = useSelector((state) => state.admin.course.courses);
-  const classes = useSelector((state) => state.admin.course.classes);
-  const members = useSelector((state) => state.admin.course.members);
-  const loading = useSelector((state) => state.admin.course.loading);
+  const courses = useSelector((state) => state.courses);
+  const classes = useSelector((state) => state.classes);
+  const members = useSelector((state) => state.classMembers);
+  const loading = useSelector((state) => state.loading.admin.course);
 
   useEffect(() => {
     dispatch(fetchCourses(authToken));
+  }, [authToken, dispatch]);
+
+  useEffect(() => {
     dispatch(fetchClasses(authToken, courseId));
-    dispatch(fetchMembers(authToken, classId));
-  }, [authToken, classId, courseId, dispatch]);
+  }, [authToken, courseId, dispatch]);
+
+  useEffect(() => {
+    if (!loading.editMembers) {
+      dispatch(fetchClassMembers(authToken, classId));
+    }
+  }, [authToken, classId, dispatch, loading.editMembers]);
 
   const [edit, setEdit] = useState(false);
   const [tableData, setTableData] = useState([]);
@@ -94,7 +103,7 @@ export default function MemberList() {
     if (classes.byId[classId]) {
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
-        const temp = { ...item };
+        const temp = item;
         temp.path = `/admin/account/account/${temp.member_id}/setting`;
         temp.role = roleUpperToLowerCase(item.role);
         newData.push(temp);

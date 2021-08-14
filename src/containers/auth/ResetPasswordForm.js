@@ -20,7 +20,7 @@ import {
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { borders, borderRadius } from '@material-ui/system';
 
-import { authActions } from '../../actions/index';
+import { userResetPassword } from '../../actions/user/auth';
 
 const useStyles = makeStyles((theme) => ({
   authForm: {
@@ -45,8 +45,6 @@ function checkPassword(password1, password2) {
 export default function ResetPassword() {
   const classNames = useStyles();
   const dispatch = useDispatch();
-  const { userResetPassword } = bindActionCreators(authActions, dispatch);
-  // const loginState = useSelector((state) => state.auth);
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
   const [error, setError] = useState(false);
@@ -70,7 +68,7 @@ export default function ResetPassword() {
     }
     setError(false);
     setErrorText('');
-    // userResetPassword(confirmPassword);
+    // dispatch(userResetPassword(confirmPassword));
     setPopUp(true);
   };
 

@@ -39,10 +39,10 @@ export default function InstituteSetting() {
   const classes = useStyles();
 
   const { instituteId } = useParams();
-  const institutes = useSelector((state) => state.admin.account.institutes.byId);
+  const institutes = useSelector((state) => state.institutes.byId);
   const authToken = useSelector((state) => state.auth.user.token);
-  const pageError = useSelector((state) => state.admin.account.error);
-  const loading = useSelector((state) => state.admin.account.loading);
+  const pageError = useSelector((state) => state.error.admin.account);
+  const loading = useSelector((state) => state.loading.admin.account);
 
   const dispatch = useDispatch();
 
@@ -64,8 +64,10 @@ export default function InstituteSetting() {
   const [errorText, setErrorText] = useState('');
 
   useEffect(() => {
-    dispatch(getInstitute(authToken, instituteId));
-  }, [authToken, dispatch, instituteId]);
+    if (!loading.editInstitute) {
+      dispatch(getInstitute(authToken, instituteId));
+    }
+  }, [authToken, dispatch, instituteId, loading.editInstitute]);
 
   if (institutes[instituteId] === undefined) {
     if (loading.fetchInstitute) {

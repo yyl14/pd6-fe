@@ -16,8 +16,8 @@ export default function System({
   menuItems, classes, history, location, mode,
 }) {
   const { announcementId, languageId } = useParams();
-  const announcementList = useSelector((state) => state.admin.system.announcements);
-  const languageList = useSelector((state) => state.admin.system.submitLang);
+  const announcementList = useSelector((state) => state.announcements);
+  const languageList = useSelector((state) => state.submitLangs);
   const baseURL = '/admin/system';
   const [display, setDisplay] = useState('unfold');
   const [title, setTitle] = useState('');

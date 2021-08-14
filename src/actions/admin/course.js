@@ -1,5 +1,5 @@
 import agent from '../agent';
-import { courseConstants } from '../constant';
+import { courseConstants } from './constant';
 
 export const fetchCourses = (token) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
@@ -142,7 +142,7 @@ export const addClass = (token, courseId, name, isHidden) => (dispatch) => {
   agent
     .post(`/course/${courseId}/class`, { name }, auth)
     .then((res) => {
-      // console.log(res);
+      console.log(res);
       const { data } = res.data;
       const { id } = data;
       dispatch({
@@ -214,20 +214,5 @@ export const deleteClass = (token, courseId, classId) => (dispatch) => {
           error,
         },
       });
-    });
-};
-
-export const fetchMembers = (token, classId) => (dispatch) => {
-  const auth = { headers: { 'auth-token': token } };
-  dispatch({ type: courseConstants.FETCH_MEMBERS_START });
-
-  agent
-    .get(`/class/${classId}/member`, auth)
-    .then((res) => {
-      const { data } = res.data;
-      dispatch({ type: courseConstants.FETCH_MEMBERS_SUCCESS, payload: { classId, data } });
-    })
-    .catch((error) => {
-      dispatch({ type: courseConstants.FETCH_MEMBERS_FAIL, payload: { error } });
     });
 };

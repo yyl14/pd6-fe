@@ -14,8 +14,8 @@ export default function Account({
   menuItems, classes, history, location, mode,
 }) {
   const { instituteId, accountId } = useParams();
-  const instituteList = useSelector((state) => state.admin.account.institutes);
-  const accountList = useSelector((state) => state.admin.account.accounts);
+  const instituteList = useSelector((state) => state.institutes);
+  const accountList = useSelector((state) => state.accounts);
   const baseURL = '/admin/account';
   const [display, setDisplay] = useState('unfold');
 

@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
   mailfield: {
     width: '150px',
+    marginRight: '10px',
   },
   row: {
     display: 'flex',
@@ -91,7 +92,7 @@ export default function StudentInfoEdit(props) {
   let instituteId = 1;
 
   const { accountId } = useParams();
-  const authToken = useSelector((state) => state.auth.user.token);
+  const authToken = useSelector((state) => state.user.token);
   const dispatch = useDispatch();
 
   const updateStatus = (studentId, cardId) => {
@@ -162,38 +163,36 @@ export default function StudentInfoEdit(props) {
             {cards.map((p) => {
               if (p.is_default === true) {
                 return (
-                  <>
-                    <StudentInfoCard
-                      editMode
-                      isDefault={p.is_default}
-                      studentId={p.student_id}
-                      email={p.email}
-                      instituteId={p.institute_id}
-                    />
-                  </>
+                  <StudentInfoCard
+                    key={p.id}
+                    editMode
+                    isDefault={p.is_default}
+                    studentId={p.student_id}
+                    email={p.email}
+                    instituteId={p.institute_id}
+                  />
                 );
               }
-              return <></>;
+              return <div key={p.id} />;
             })}
-            <p> </p>
+            <p />
             {cards.map((p) => {
               if (p.is_default === false) {
                 return (
-                  <>
-                    <StudentInfoCard
-                      editMode
-                      id={p.id}
-                      isDefault={p.is_default}
-                      studentId={p.student_id}
-                      email={p.email}
-                      instituteId={p.institute_id}
-                      updateStatus={updateStatus}
-                      setDisabledSave={setDisabledSave}
-                    />
-                  </>
+                  <StudentInfoCard
+                    key={p.id}
+                    editMode
+                    id={p.id}
+                    isDefault={p.is_default}
+                    studentId={p.student_id}
+                    email={p.email}
+                    instituteId={p.institute_id}
+                    updateStatus={updateStatus}
+                    setDisabledSave={setDisabledSave}
+                  />
                 );
               }
-              return <></>;
+              return <div key={p.id} />;
             })}
           </div>
         ) : (
@@ -238,7 +237,6 @@ export default function StudentInfoEdit(props) {
                     className={classes.mailfield}
                     value={addInputs.email}
                     onChange={(e) => handleChange(e)}
-                    style={{ marginLeft: '0px', marginRight: '10px' }}
                   />
                   <Typography>{emailTail}</Typography>
                 </div>

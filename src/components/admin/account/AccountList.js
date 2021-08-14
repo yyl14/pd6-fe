@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  makeStyles, Button, Typography, Dialog,
+  makeStyles,
+  Button,
+  Typography,
+  Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
@@ -44,18 +47,19 @@ export default function AccountList() {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const accounts = useSelector((state) => state.admin.account.accounts.byId);
-  const accountsID = useSelector((state) => state.admin.account.accounts.allIds);
+  const accounts = useSelector((state) => state.accounts.byId);
+  const accountsID = useSelector((state) => state.accounts.allIds);
   const authToken = useSelector((state) => state.auth.user.token);
-  const error = useSelector((state) => state.admin.account.error);
-  const loading = useSelector((state) => state.admin.account.loading);
-
+  // const error = useSelector((state) => state.admin.account.error);
+  const loading = useSelector((state) => state.loading.admin.account);
   const [tableData, setTableData] = useState([]);
   const [path, setPath] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchAccounts(authToken));
-  }, [authToken, dispatch]);
+    if (!loading.editAccount && !loading.deleteAccount && !loading.makeStudentCardDefault) {
+      dispatch(fetchAccounts(authToken));
+    }
+  }, [authToken, dispatch, loading.deleteAccount, loading.editAccount, loading.makeStudentCardDefault]);
 
   useEffect(() => {
     const newData = [];

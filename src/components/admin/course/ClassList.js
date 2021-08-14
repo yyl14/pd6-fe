@@ -15,12 +15,12 @@ import { MdAdd } from 'react-icons/md';
 import {
   fetchCourses,
   fetchClasses,
-  fetchMembers,
   addCourse,
   addClass,
   renameClass,
   deleteClass,
 } from '../../../actions/admin/course';
+import { fetchClassMembers } from '../../../actions/common/common';
 import SimpleBar from '../../ui/SimpleBar';
 import DateRangePicker from '../../ui/DateRangePicker';
 import CustomTable from '../../ui/CustomTable';
@@ -41,30 +41,34 @@ export default function ClassList() {
   const classNames = useStyles();
 
   const dispatch = useDispatch();
-
+  const stateAll = useSelector((state) => state);
   const authToken = useSelector((state) => state.auth.user.token);
-  const courses = useSelector((state) => state.admin.course.courses);
-  const classes = useSelector((state) => state.admin.course.classes);
-  const loading = useSelector((state) => state.admin.course.loading);
+  const courses = useSelector((state) => state.courses);
+  const classes = useSelector((state) => state.classes);
+  const loading = useSelector((state) => state.loading.admin.course);
 
   const [addCourseName, setAddCourseName] = useState('');
   const [addClassName, setAddClassName] = useState('');
 
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
+  console.log(stateAll);
 
   useEffect(() => {
-    if (!loading.deleteCourse) {
+    if (!loading.addCourse && !loading.deleteCourse && !loading.renameCourse) {
       dispatch(fetchCourses(authToken));
     }
-    if (!loading.deleteClass) {
+  }, [authToken, dispatch, loading.addCourse, loading.deleteCourse, loading.renameCourse]);
+
+  useEffect(() => {
+    if (!loading.addClass && !loading.renameClass && !loading.deleteClass) {
       dispatch(fetchClasses(authToken, courseId));
     }
-  }, [authToken, courseId, dispatch, loading.deleteClass, loading.deleteCourse]);
+  }, [authToken, courseId, dispatch, loading.addClass, loading.deleteClass, loading.renameClass]);
 
   // fetch members under all classes to get member count
   useEffect(() => {
     if (courses.byId[courseId] && !loading.renameClass && !loading.deleteClass && !loading.addClass) {
-      courses.byId[courseId].classIds.map((id) => dispatch(fetchMembers(authToken, id)));
+      courses.byId[courseId].classIds.map((id) => dispatch(fetchClassMembers(authToken, id)));
     }
   }, [authToken, courseId, courses.byId, dispatch, loading.addClass, loading.deleteClass, loading.renameClass]);
 

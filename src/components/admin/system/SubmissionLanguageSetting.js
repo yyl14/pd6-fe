@@ -7,7 +7,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   FormControlLabel,
   Switch,
@@ -31,9 +30,9 @@ export default function LangSetting() {
   const dispatch = useDispatch();
   const { languageId } = useParams();
   const authToken = useSelector((state) => state.auth.user.token);
-  const submitLang = useSelector((state) => state.admin.system.submitLang.byId);
-  const submitLangId = useSelector((state) => state.admin.system.submitLang.allIds);
-  const loading = useSelector((state) => state.admin.system.loading.fetchAnnouncement);
+  const submitLang = useSelector((state) => state.submitLangs.byId);
+  const submitLangId = useSelector((state) => state.submitLangs.allIds);
+  const loading = useSelector((state) => state.loading.admin.system.fetchAnnouncement);
 
   const [popUp, setPopUp] = useState(false);
   const [languageStatus, setLanguageStatus] = useState(false);
@@ -41,14 +40,16 @@ export default function LangSetting() {
   const [submit, setSubmit] = useState(false);
 
   useEffect(() => {
-    if (submitLangId === null || submit) {
-      dispatch(fetchSubmitLanguage(authToken));
-      setSubmit(false);
-      setPopUp(false);
-    } else {
+    dispatch(fetchSubmitLanguage(authToken));
+    setSubmit(false);
+    setPopUp(false);
+  }, [authToken, dispatch, submit]);
+
+  useEffect(() => {
+    if (submitLangId.length !== 0) {
       setLanguageStatus(submitLang[languageId].is_disabled);
     }
-  }, [authToken, dispatch, languageId, submitLang, submitLangId, submit]);
+  }, [languageId, submitLang, submitLangId]);
 
   if (submitLang[languageId] === undefined) {
     if (loading.fetchSubmitLanguage) {

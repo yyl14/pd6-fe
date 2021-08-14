@@ -1,12 +1,42 @@
 import { combineReducers } from 'redux';
-import globalError from './globalError';
 import auth from './auth';
-import admin from './admin/index';
-import publicState from './public';
+import institutes from './institutes';
+import challenges from './challenges';
+import grades from './grades';
+import courses from './courses';
+import classes from './classes';
+import classMembers from './classMembers';
+import problem from './problems';
+import submissions from './submissions';
+import teamMembers from './teamMembers';
+import teams from './teams';
+import accounts from './accounts';
+import studentCards from './studentCards';
+import user from './user';
+import accessLogs from './accessLogs';
+import announcements from './announcements';
+import submitLangs from './submitLangs';
+import loading from './loading/index';
+import error from './error/index';
 
 export default combineReducers({
-  globalError,
   auth,
-  admin,
-  publicState,
+  institutes,
+  challenges,
+  courses,
+  classes,
+  grades,
+  classMembers,
+  problem,
+  submissions,
+  teamMembers,
+  teams,
+  accounts,
+  studentCards,
+  user,
+  accessLogs,
+  announcements,
+  submitLangs,
+  loading,
+  error,
 });

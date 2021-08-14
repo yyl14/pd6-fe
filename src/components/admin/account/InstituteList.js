@@ -41,11 +41,11 @@ export default function InstituteList() {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const institutes = useSelector((state) => state.admin.account.institutes.byId);
-  const institutesID = useSelector((state) => state.admin.account.institutes.allIds);
+  const institutes = useSelector((state) => state.institutes.byId);
+  const institutesID = useSelector((state) => state.institutes.allIds);
   const authToken = useSelector((state) => state.auth.user.token);
-  const pageError = useSelector((state) => state.admin.account.error);
-  const loading = useSelector((state) => state.admin.account.loading);
+  const pageError = useSelector((state) => state.error.admin.account);
+  const loading = useSelector((state) => state.loading.admin.account);
 
   const [transformedData, setTransformedData] = useState([]);
   const [tableData, setTableData] = useState([]);
@@ -68,8 +68,10 @@ export default function InstituteList() {
   });
 
   useEffect(() => {
-    dispatch(getInstitutes(authToken));
-  }, [authToken, dispatch]);
+    if (!loading.addInstitute) {
+      dispatch(getInstitutes(authToken));
+    }
+  }, [authToken, dispatch, loading.addInstitute]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;

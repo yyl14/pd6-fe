@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core';
 import SimpleBar from '../ui/SimpleBar';
 import AlignedText from '../ui/AlignedText';
-import { editAccount } from '../../actions/auth';
+import { editAccount } from '../../actions/user/user';
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
@@ -22,17 +22,24 @@ export default function BasicInfoEdit(props) {
   const [disabled, setDisabled] = useState(true);
   const classes = useStyles();
 
-  const accountId = useSelector((state) => state.auth.user.id);
-  const authToken = useSelector((state) => state.auth.user.token);
+  const accountId = useSelector((state) => state.user.id);
+  const authToken = useSelector((state) => state.user.token);
   const dispatch = useDispatch();
 
   const [popUp, setPopUp] = useState(false);
 
   const handleSave = () => {
-    dispatch(editAccount(authToken, accountId, userName, realName, nickName, altMail));
     if (altMail !== props.altMail) {
-      setPopUp(true);
-      return;
+      if (altMail !== '') {
+        dispatch(editAccount(authToken, accountId, userName, realName, nickName, altMail));
+        setPopUp(true);
+        return;
+      }
+    }
+    if ((altMail === '' && props.altMail === null) || (altMail === props.altMail)) {
+      dispatch(editAccount(authToken, accountId, userName, realName, nickName, null));
+    } else {
+      dispatch(editAccount(authToken, accountId, userName, realName, nickName, ''));
     }
     props.handleBack();
   };

@@ -10,7 +10,7 @@ import Account from './account';
 import MyClass from './myClass';
 import NoMatch from '../components/noMatch';
 
-import { getUserInfo } from '../actions/auth';
+import { getUserInfo } from '../actions/user/auth';
 
 import '../styles/index.css';
 
@@ -40,7 +40,7 @@ class Index extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.auth.isAuthenticated && nextProps.history.location.pathname === '/') {
-      if (nextProps.auth.user.role.indexOf('MANAGER') !== -1 || nextProps.auth.user.role === 'MANAGER') {
+      if (nextProps.user.role.indexOf('MANAGER') !== -1 || nextProps.user.role === 'MANAGER') {
         nextProps.history.push('/admin/course/course');
       } else {
         nextProps.history.push('/my-class');
@@ -71,6 +71,7 @@ class Index extends Component {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  user: state.user,
   error: state.error,
 });
 

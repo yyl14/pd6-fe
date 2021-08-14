@@ -26,8 +26,8 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { borders, borderRadius } from '@material-ui/system';
 
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { userRegister } from '../../actions/auth';
-import getInstitutes from '../../actions/public';
+import { userRegister } from '../../actions/user/auth';
+import { getInstitutes } from '../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
   authForm: {
@@ -61,9 +61,9 @@ export default function RegisterForm() {
   const classNames = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.publicState.loading);
-  const institutes = useSelector((state) => state.publicState.institutes.byId);
-  const institutesId = useSelector((state) => state.publicState.institutes.allIds);
+  const loadingInstitute = useSelector((state) => state.loading.common.fetchInstitutes);
+  const institutes = useSelector((state) => state.institutes.byId);
+  const institutesId = useSelector((state) => state.institutes.allIds);
   const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
 
   const [nextPage, setNextPage] = useState(false);
@@ -162,6 +162,7 @@ export default function RegisterForm() {
           inputs.email,
           transform(inputs.school),
           inputs.studentId,
+          `${inputs.email}${emailTail}`,
         ),
       );
       setPopup(true);
@@ -198,7 +199,7 @@ export default function RegisterForm() {
     history.push('/login');
   };
 
-  if (loading) {
+  if (loadingInstitute) {
     return <div>loading...</div>;
   }
 
