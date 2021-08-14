@@ -17,7 +17,7 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { BiFilterAlt } from 'react-icons/bi';
+import { MdAdd } from 'react-icons/md';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
 import TableFilterCard from '../../ui/TableFilterCard';
@@ -49,7 +49,6 @@ export default function InstituteList() {
 
   const [transformedData, setTransformedData] = useState([]);
   const [tableData, setTableData] = useState([]);
-  const [path, setPath] = useState([]);
 
   const [popUp, setPopUp] = useState(false);
   const [error, setError] = useState(false);
@@ -102,21 +101,15 @@ export default function InstituteList() {
     dispatch(addInstitute(authToken, inputs.initialism, inputs.fullName, inputs.email, !inputs.status));
   };
 
-  const filterStatus = () => {
-    const tempData = filterData(transformedData, 'is_disabled', filterInput.filter);
-    const tempData2 = sortData(tempData, 'is_disabled', filterInput.sort);
+  const filterStatus = (input) => {
+    const tempData = filterData(transformedData, 'is_disabled', input.filter);
+    const tempData2 = sortData(tempData, 'is_disabled', input.sort);
 
-    const newPath = [];
-    tempData2.forEach((data) => {
-      newPath.push(data.path);
-    });
     setTableData(tempData2);
-    setPath(newPath);
   };
 
   useEffect(() => {
     const newData = [];
-    const newPath = [];
     if (institutesID !== undefined) {
       institutesID.forEach((key) => {
         const item = institutes[key];
@@ -128,12 +121,10 @@ export default function InstituteList() {
         }
         temp.path = `/admin/account/institute/${temp.id}/setting`;
         newData.push(temp);
-        newPath.push(temp.path);
       });
     }
     setTransformedData(newData);
     setTableData(newData);
-    setPath(newPath);
   }, [institutes, institutesID]);
 
   if (loading.fetchInstitutes) {
@@ -151,7 +142,7 @@ export default function InstituteList() {
         buttons={(
           <>
             <Button color="primary" onClick={() => setPopUp(true)}>
-              Add Institute
+              <MdAdd />
             </Button>
           </>
         )}
@@ -196,7 +187,7 @@ export default function InstituteList() {
           />,
         ]}
         hasLink
-        path={path}
+        linkName="path"
       />
       <Dialog
         open={popUp}

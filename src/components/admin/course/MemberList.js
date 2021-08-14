@@ -72,7 +72,6 @@ export default function MemberList() {
   const [edit, setEdit] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [transformedData, setTransformedData] = useState([]);
-  const [path, setPath] = useState([]);
   const [showInstituteFilterDialog, setShowInstituteFilterDialog] = useState(false);
   const [showRoleFilterDialog, setShowRoleFilterDialog] = useState(false);
   const [instituteFilterInput, setInstituteFilterInput] = useState({
@@ -99,7 +98,6 @@ export default function MemberList() {
 
   useEffect(() => {
     const newData = [];
-    const newPath = [];
     if (classes.byId[classId]) {
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
@@ -107,36 +105,24 @@ export default function MemberList() {
         temp.path = `/admin/account/account/${temp.member_id}/setting`;
         temp.role = roleUpperToLowerCase(item.role);
         newData.push(temp);
-        newPath.push(temp.path);
       });
     }
     setTableData(newData);
     setTransformedData(newData);
-    setPath(newPath);
   }, [classes.byId, classId, members.byId]);
 
-  const instituteFilterStatus = () => {
-    const tempData = filterData(transformedData, 'institute_abbreviated_name', instituteFilterInput.filter);
-    const tempData2 = sortData(tempData, 'institute_abbreviated_name', instituteFilterInput.sort);
+  const instituteFilterStatus = (input) => {
+    const tempData = filterData(transformedData, 'institute_abbreviated_name', input.filter);
+    const tempData2 = sortData(tempData, 'institute_abbreviated_name', input.sort);
 
-    const newPath = [];
-    tempData2.forEach((data) => {
-      newPath.push(data.path);
-    });
     setTableData(tempData2);
-    setPath(newPath);
   };
 
-  const roleFilterStatus = () => {
-    const tempData = filterData(transformedData, 'role', roleFilterInput.filter);
-    const tempData2 = sortData(tempData, 'role', roleFilterInput.sort);
+  const roleFilterStatus = (input) => {
+    const tempData = filterData(transformedData, 'role', input.filter);
+    const tempData2 = sortData(tempData, 'role', input.sort);
 
-    const newPath = [];
-    tempData2.forEach((data) => {
-      newPath.push(data.path);
-    });
     setTableData(tempData2);
-    setPath(newPath);
   };
 
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
@@ -237,7 +223,7 @@ export default function MemberList() {
               />,
             ]}
             hasLink
-            path={path}
+            linkName="path"
           />
         </>
       )}

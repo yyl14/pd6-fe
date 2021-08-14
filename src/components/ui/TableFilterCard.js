@@ -11,8 +11,9 @@ import {
 } from '@material-ui/core';
 
 import { BiFilterAlt } from 'react-icons/bi';
+import { HiFilter } from 'react-icons/hi';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AlignedText from './AlignedText';
 
 const useStyles = makeStyles((theme) => ({
@@ -28,6 +29,11 @@ const useStyles = makeStyles((theme) => ({
     border: 'solid',
     borderColor: '#DDDDDD',
   },
+  filterIcon: {
+    '&:hover': {
+      cursor: 'pointer',
+    },
+  },
 }));
 
 export default function TableFilterCard({
@@ -39,29 +45,50 @@ export default function TableFilterCard({
   doFilter,
 }) {
   const classes = useStyles();
+  const [onFilter, setOnFilter] = useState(false);
+  const [tempInput, setTempInput] = useState({
+    filter: ['Select all'],
+    sort: '(None)',
+  });
   const filterClear = () => {
-    setFilterInput({
+    setTempInput({
       filter: ['Select all'],
       sort: '(None)',
     });
   };
 
+  const openFilter = () => {
+    setTempInput(filterInput);
+    setPopUp(true);
+  };
+
+  const saveFilter = () => {
+    setFilterInput(tempInput);
+    if (tempInput.filter[0] === 'Select all' && tempInput.sort === '(None)') {
+      setOnFilter(false);
+    } else {
+      setOnFilter(true);
+    }
+    setPopUp(false);
+    doFilter(tempInput);
+  };
+
   const onChangeFilterInput = (e) => {
     if (e.target.value.length === 0) {
-      setFilterInput((input) => ({ ...input, filter: ['Select all'] }));
+      setTempInput((input) => ({ ...input, filter: ['Select all'] }));
     } else if (e.target.value[e.target.value.length - 1] === 'Select all') {
-      setFilterInput((input) => ({ ...input, filter: ['Select all'] }));
+      setTempInput((input) => ({ ...input, filter: ['Select all'] }));
     } else if (e.target.value[0] === 'Select all') {
       const newArr = e.target.value.slice(1);
-      setFilterInput((input) => ({ ...input, filter: newArr }));
+      setTempInput((input) => ({ ...input, filter: newArr }));
     } else {
-      setFilterInput((input) => ({ ...input, filter: e.target.value }));
+      setTempInput((input) => ({ ...input, filter: e.target.value }));
     }
   };
 
   return (
     <>
-      <BiFilterAlt onClick={() => { setPopUp(true); }} />
+      {onFilter ? <HiFilter className={classes.filterIcon} onClick={() => { openFilter(); }} /> : <BiFilterAlt className={classes.filterIcon} onClick={() => { openFilter(); }} /> }
       <Dialog
         open={popUp}
         keepMounted
@@ -74,7 +101,7 @@ export default function TableFilterCard({
               <Select
                 labelId="status"
                 id="status"
-                value={filterInput.filter}
+                value={tempInput.filter}
                 onChange={(e) => { onChangeFilterInput(e); }}
                 multiple
               >
@@ -88,9 +115,9 @@ export default function TableFilterCard({
               <Select
                 labelId="sort"
                 id="sort"
-                value={filterInput.sort}
+                value={tempInput.sort}
                 onChange={(e) => {
-                  setFilterInput((input) => ({ ...input, sort: e.target.value }));
+                  setTempInput((input) => ({ ...input, sort: e.target.value }));
                 }}
               >
                 <MenuItem value="(None)">(None)</MenuItem>
@@ -110,7 +137,7 @@ export default function TableFilterCard({
             <Button onClick={() => setPopUp(false)} color="default">
               Cancel
             </Button>
-            <Button onClick={() => { setPopUp(false); doFilter(); }} color="primary">
+            <Button onClick={() => { saveFilter(); }} color="primary">
               Save
             </Button>
           </div>
