@@ -12,15 +12,18 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-import { useParams, useHistory } from 'react-router-dom';
 import { BiFilterAlt } from 'react-icons/bi';
+import { useParams, useHistory } from 'react-router-dom';
 import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
 import { fetchClassMembers } from '../../../actions/common/common';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 import CustomTable from '../../ui/CustomTable';
+import TableFilterCard from '../../ui/TableFilterCard';
 import MemberEdit from './MemberEdit';
 import NoMatch from '../../noMatch';
+import filterData from '../../../function/filter';
+import sortData from '../../../function/sort';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -30,16 +33,15 @@ const useStyles = makeStyles((theme) => ({
   filterButton: {
     justifyContent: 'space-between',
   },
-  selectField: {
-    width: '350px',
-  },
+  // selectField: {
+  //   width: '350px',
+  // },
   clearButton: {
     marginLeft: '24px',
   },
 }));
 
 /* This is a level 4 component (page component) */
-// TODO: path of arrows, username link, multiple choice, select/diseclect
 export default function MemberList() {
   const { courseId, classId } = useParams();
   const history = useHistory();
@@ -69,14 +71,16 @@ export default function MemberList() {
 
   const [edit, setEdit] = useState(false);
   const [tableData, setTableData] = useState([]);
+  const [transformedData, setTransformedData] = useState([]);
+  const [path, setPath] = useState([]);
   const [showInstituteFilterDialog, setShowInstituteFilterDialog] = useState(false);
   const [showRoleFilterDialog, setShowRoleFilterDialog] = useState(false);
   const [instituteFilterInput, setInstituteFilterInput] = useState({
-    filter: '(None)',
+    filter: ['Select all'],
     sort: '(None)',
   });
   const [roleFilterInput, setRoleFilterInput] = useState({
-    filter: '(None)',
+    filter: ['Select all'],
     sort: '(None)',
   });
 
@@ -94,196 +98,45 @@ export default function MemberList() {
   };
 
   useEffect(() => {
+    const newData = [];
+    const newPath = [];
     if (classes.byId[classId]) {
-      const data = [];
       classes.byId[classId].memberIds.forEach((id) => {
         const item = members.byId[id];
         const temp = item;
+        temp.path = `/admin/account/account/${temp.member_id}/setting`;
         temp.role = roleUpperToLowerCase(item.role);
-        data.push(temp);
+        newData.push(temp);
+        newPath.push(temp.path);
       });
-      setTableData(data);
     }
+    setTableData(newData);
+    setTransformedData(newData);
+    setPath(newPath);
   }, [classes.byId, classId, members.byId]);
 
   const instituteFilterStatus = () => {
-    const newData = [];
-    // const newPath = [];
+    const tempData = filterData(transformedData, 'institute_abbreviated_name', instituteFilterInput.filter);
+    const tempData2 = sortData(tempData, 'institute_abbreviated_name', instituteFilterInput.sort);
 
-    if (instituteFilterInput.filter === 'NTU') {
-      classes.byId[classId].memberIds.forEach((id) => {
-        const item = members.byId[id];
-        const temp = { ...item };
-        if (item.institute_abbreviated_name === 'NTU') {
-          temp.role = roleUpperToLowerCase(item.role);
-          newData.push(temp);
-        }
-      });
-    } else if (instituteFilterInput.filter === 'NTNU') {
-      classes.byId[classId].memberIds.forEach((id) => {
-        const item = members.byId[id];
-        const temp = { ...item };
-        if (item.institute_abbreviated_name === 'NTNU') {
-          temp.role = roleUpperToLowerCase(item.role);
-          newData.push(temp);
-        }
-      });
-    } else if (instituteFilterInput.filter === 'NTUST') {
-      classes.byId[classId].memberIds.forEach((id) => {
-        const item = members.byId[id];
-        const temp = { ...item };
-        if (item.institute_abbreviated_name === 'NTUST') {
-          temp.role = roleUpperToLowerCase(item.role);
-          newData.push(temp);
-        }
-      });
-    } else {
-      classes.byId[classId].memberIds.forEach((id) => {
-        const item = members.byId[id];
-        const temp = { ...item };
-        temp.role = roleUpperToLowerCase(item.role);
-        newData.push(temp);
-      });
-    }
-
-    // sort
-    if (instituteFilterInput.sort === 'Z to A') {
-      // newPath.splice(0, newPath.length);
-      newData.sort((a, b) => {
-        const instituteA = a.institute_abbreviated_name;
-        const instituteB = b.institute_abbreviated_name;
-        if (instituteA > instituteB) {
-          return -1;
-        }
-        if (instituteA < instituteB) {
-          return 1;
-        }
-        return 0;
-      });
-      /* newData.forEach((data) => {
-          newPath.push(`institute/${data.id}/setting`);
-        }); */
-    } else if (instituteFilterInput.sort === 'A to Z') {
-      // newPath.splice(0, newPath.length);
-      newData.sort((a, b) => {
-        const instituteA = a.institute_abbreviated_name;
-        const instituteB = b.institute_abbreviated_name;
-        if (instituteA < instituteB) {
-          return -1;
-        }
-        if (instituteA > instituteB) {
-          return 1;
-        }
-        return 0;
-      });
-      /* newData.forEach((data) => {
-          newPath.push(`institute/${data.id}/setting`);
-        }); */
-    }
-
-    setTableData(newData);
-    // setPath(newPath);
+    const newPath = [];
+    tempData2.forEach((data) => {
+      newPath.push(data.path);
+    });
+    setTableData(tempData2);
+    setPath(newPath);
   };
 
   const roleFilterStatus = () => {
-    const newData = [];
-    // const newPath = [];
+    const tempData = filterData(transformedData, 'role', roleFilterInput.filter);
+    const tempData2 = sortData(tempData, 'role', roleFilterInput.sort);
 
-    if (roleFilterInput.filter === 'Manager') {
-      classes.byId[classId].memberIds.forEach((id) => {
-        const item = members.byId[id];
-        const temp = { ...item };
-        if (item.role === 'MANAGER') {
-          temp.role = 'Manager';
-          newData.push(temp);
-        }
-      });
-    } else if (roleFilterInput.filter === 'Normal') {
-      classes.byId[classId].memberIds.forEach((id) => {
-        const item = members.byId[id];
-        const temp = { ...item };
-        if (item.role === 'NORMAL') {
-          temp.role = 'Normal';
-          newData.push(temp);
-        }
-      });
-    } else if (roleFilterInput.filter === 'Guest') {
-      classes.byId[classId].memberIds.forEach((id) => {
-        const item = members.byId[id];
-        const temp = { ...item };
-        if (item.role === 'GUEST') {
-          temp.role = 'Guest';
-          newData.push(temp);
-        }
-      });
-    } else {
-      classes.byId[classId].memberIds.forEach((id) => {
-        const item = members.byId[id];
-        const temp = { ...item };
-        temp.role = roleUpperToLowerCase(item.role);
-        newData.push(temp);
-      });
-    }
-
-    // sort
-    if (roleFilterInput.sort === 'Z to A') {
-      // newPath.splice(0, newPath.length);
-      newData.sort((a, b) => {
-        const roleA = a.role;
-        const roleB = b.role;
-        if (roleA > roleB) {
-          return -1;
-        }
-        if (roleA < roleB) {
-          return 1;
-        }
-        return 0;
-      });
-      /* newData.forEach((data) => {
-          newPath.push(`institute/${data.id}/setting`);
-        }); */
-    } else if (roleFilterInput.sort === 'A to Z') {
-      // newPath.splice(0, newPath.length);
-      newData.sort((a, b) => {
-        const roleA = a.role;
-        const roleB = b.role;
-        if (roleA < roleB) {
-          return -1;
-        }
-        if (roleA > roleB) {
-          return 1;
-        }
-        return 0;
-      });
-      /* newData.forEach((data) => {
-          newPath.push(`institute/${data.id}/setting`);
-        }); */
-    }
-
-    setTableData(newData);
-    // setPath(newPath);
-  };
-
-  const instituteFilterClear = () => {
-    setInstituteFilterInput({
-      filter: '(None)',
-      sort: '(None)',
+    const newPath = [];
+    tempData2.forEach((data) => {
+      newPath.push(data.path);
     });
-  };
-  const roleFilterClear = () => {
-    setRoleFilterInput({
-      filter: '(None)',
-      sort: '(None)',
-    });
-  };
-
-  const handleClickInstituteFilterSave = () => {
-    setShowInstituteFilterDialog(false);
-    instituteFilterStatus();
-  };
-  const handleClickRoleFilterSave = () => {
-    setShowRoleFilterDialog(false);
-    roleFilterStatus();
+    setTableData(tempData2);
+    setPath(newPath);
   };
 
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
@@ -310,6 +163,7 @@ export default function MemberList() {
           <CustomTable
             hasSearch
             searchPlaceholder="Username / Student ID / Real Name"
+            searchWidthOption={2}
             buttons={(
               <>
                 <Button onClick={() => setEdit(true)}>Edit</Button>
@@ -323,6 +177,8 @@ export default function MemberList() {
                 minWidth: 150,
                 width: 200,
                 align: 'center',
+                type: 'link',
+                link_id: 'path',
               },
               {
                 id: 'student_id',
@@ -330,13 +186,15 @@ export default function MemberList() {
                 minWidth: 105,
                 width: 155,
                 align: 'center',
+                type: 'string',
               },
               {
                 id: 'real_name',
                 label: 'Real Name',
-                minWidth: 90,
+                minWidth: 96,
                 width: 144,
                 align: 'center',
+                type: 'string',
               },
               {
                 id: 'institute_abbreviated_name',
@@ -344,6 +202,7 @@ export default function MemberList() {
                 minWidth: 109,
                 width: 165,
                 align: 'center',
+                type: 'string',
               },
               {
                 id: 'role',
@@ -351,122 +210,35 @@ export default function MemberList() {
                 minWidth: 71,
                 width: 127,
                 align: 'center',
+                type: 'string',
               },
             ]}
             columnComponent={[
               null,
               null,
               null,
-              <BiFilterAlt key="showInstituteFilterDialog" onClick={() => setShowInstituteFilterDialog(true)} />,
-              <BiFilterAlt key="showRoleFilterDialog" onClick={() => setShowRoleFilterDialog(true)} />,
+              <TableFilterCard
+                key="showInstituteFilterDialog"
+                popUp={showInstituteFilterDialog}
+                setPopUp={setShowInstituteFilterDialog}
+                filterInput={instituteFilterInput}
+                filterOptions={['NTU', 'NTNU', 'NTUST']}
+                setFilterInput={setInstituteFilterInput}
+                doFilter={instituteFilterStatus}
+              />,
+              <TableFilterCard
+                key="showRoleFilterDialog"
+                popUp={showRoleFilterDialog}
+                setPopUp={setShowRoleFilterDialog}
+                filterInput={roleFilterInput}
+                filterOptions={['Manager', 'Normal', 'Guest']}
+                setFilterInput={setRoleFilterInput}
+                doFilter={roleFilterStatus}
+              />,
             ]}
-            // hasLink
-            // path={classes.byId[classId].memberIds.map((member) => `/admin/course/class/${courseId}/${classId}/member`)}
+            hasLink
+            path={path}
           />
-
-          <Dialog open={showInstituteFilterDialog} maxWidth="md">
-            <DialogTitle>
-              <Typography variant="h4">Filter: Institute</Typography>
-            </DialogTitle>
-            <DialogContent>
-              <AlignedText text="Filter by" maxWidth="md" childrenType="field">
-                <FormControl variant="outlined" className={classNames.selectField}>
-                  <Select
-                    labelId="status"
-                    value={instituteFilterInput.filter}
-                    onChange={(e) => {
-                      setInstituteFilterInput((input) => ({ ...input, filter: e.target.value }));
-                    }}
-                  >
-                    <MenuItem value="(None)">(None)</MenuItem>
-                    <MenuItem value="NTU">NTU</MenuItem>
-                    <MenuItem value="NTNU">NTNU</MenuItem>
-                    <MenuItem value="NTUST">NTUST</MenuItem>
-                  </Select>
-                </FormControl>
-              </AlignedText>
-              <AlignedText text="Sort by" maxWidth="md" childrenType="field">
-                <FormControl variant="outlined" className={classNames.selectField}>
-                  <Select
-                    labelId="sort"
-                    value={instituteFilterInput.sort}
-                    onChange={(e) => {
-                      setInstituteFilterInput((input) => ({ ...input, sort: e.target.value }));
-                    }}
-                  >
-                    <MenuItem value="(None)">(None)</MenuItem>
-                    <MenuItem value="A to Z">A to Z</MenuItem>
-                    <MenuItem value="Z to A">Z to A</MenuItem>
-                  </Select>
-                </FormControl>
-              </AlignedText>
-            </DialogContent>
-            <DialogActions className={classNames.filterButton}>
-              <Button variant="outlined" onClick={instituteFilterClear} className={classNames.clearButton}>
-                Clear
-              </Button>
-              <div>
-                <Button onClick={() => setShowInstituteFilterDialog(false)} color="default">
-                  Cancel
-                </Button>
-                <Button onClick={handleClickInstituteFilterSave} color="primary">
-                  Save
-                </Button>
-              </div>
-            </DialogActions>
-          </Dialog>
-
-          <Dialog open={showRoleFilterDialog} maxWidth="md">
-            <DialogTitle>
-              <Typography variant="h4">Filter: Role</Typography>
-            </DialogTitle>
-            <DialogContent>
-              <AlignedText text="Filter by" maxWidth="md" childrenType="field">
-                <FormControl variant="outlined" className={classNames.selectField}>
-                  <Select
-                    labelId="status"
-                    value={roleFilterInput.filter}
-                    onChange={(e) => {
-                      setRoleFilterInput((input) => ({ ...input, filter: e.target.value }));
-                    }}
-                  >
-                    <MenuItem value="(None)">(None)</MenuItem>
-                    <MenuItem value="Manager">Manager</MenuItem>
-                    <MenuItem value="Normal">Normal</MenuItem>
-                    <MenuItem value="Guest">Guest</MenuItem>
-                  </Select>
-                </FormControl>
-              </AlignedText>
-              <AlignedText text="Sort by" maxWidth="md" childrenType="field">
-                <FormControl variant="outlined" className={classNames.selectField}>
-                  <Select
-                    labelId="sort"
-                    value={roleFilterInput.sort}
-                    onChange={(e) => {
-                      setRoleFilterInput((input) => ({ ...input, sort: e.target.value }));
-                    }}
-                  >
-                    <MenuItem value="(None)">(None)</MenuItem>
-                    <MenuItem value="A to Z">A to Z</MenuItem>
-                    <MenuItem value="Z to A">Z to A</MenuItem>
-                  </Select>
-                </FormControl>
-              </AlignedText>
-            </DialogContent>
-            <DialogActions className={classNames.filterButton}>
-              <Button variant="outlined" onClick={roleFilterClear} className={classNames.clearButton}>
-                Clear
-              </Button>
-              <div>
-                <Button onClick={() => setShowRoleFilterDialog(false)} color="default">
-                  Cancel
-                </Button>
-                <Button onClick={handleClickRoleFilterSave} color="primary">
-                  Save
-                </Button>
-              </div>
-            </DialogActions>
-          </Dialog>
         </>
       )}
     </>

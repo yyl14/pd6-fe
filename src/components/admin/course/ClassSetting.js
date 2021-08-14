@@ -4,7 +4,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import {
   Typography,
   Button,
-  Grid,
   Dialog,
   DialogActions,
   DialogContent,
@@ -157,7 +156,7 @@ const ClassSetting = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowRenameDialog(false)}>Cancel</Button>
-          <Button onClick={onRename} color="secondary" disabled={loading.renameClass}>
+          <Button onClick={onRename} color="secondary">
             Rename
           </Button>
         </DialogActions>
@@ -183,7 +182,7 @@ const ClassSetting = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowDeleteDialog(false)}>Cancel</Button>
-          <Button onClick={onDelete} color="secondary" disabled={loading.deleteClass}>
+          <Button onClick={onDelete} color="secondary">
             Delete
           </Button>
         </DialogActions>

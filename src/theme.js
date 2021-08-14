@@ -55,6 +55,7 @@ const palette = {
   // primary: blue
   primary: {
     light: blue[60],
+    hover: blue[80],
     main: blue[100],
     dark: blue.dark,
     contrastText: 'white',
@@ -204,11 +205,79 @@ const overrides = {
         backgroundColor: red.dark,
       },
     },
+    text: {
+      margin: '10px 5px 10px 5px',
+      padding: '8.5px 25px 10px 25px',
+    },
+    textPrimary: {
+      '&:hover': {
+        backgroundColor: blue[60],
+      },
+      '&:active': {
+        backgroundColor: blue[80],
+      },
+    },
+    textSecondary: {
+      '&:hover': {
+        backgroundColor: red[60],
+      },
+      '&:active': {
+        backgroundColor: red[80],
+      },
+    },
+    outlined: {
+      margin: '10px 5px 10px 5px',
+      padding: '8.5px 25px 10px 25px',
+      '&:hover': {
+        backgroundColor: mono.lightGray,
+      },
+      '&:active': {
+        backgroundColor: mono.semiDarkGray,
+      },
+    },
+    outlinedPrimary: {
+      '&:hover': {
+        color: mono.white,
+        backgroundColor: blue[60],
+      },
+      '&:active': {
+        color: mono.white,
+        backgroundColor: blue.dark,
+      },
+    },
+    outlinedSecondary: {
+      '&:hover': {
+        color: mono.white,
+        backgroundColor: red[60],
+      },
+      '&:active': {
+        color: mono.white,
+        backgroundColor: red.dark,
+      },
+    },
+    startIcon: {
+      marginRight: '10px',
+      height: '20px',
+      width: '20px',
+    },
+    endIcon: {
+      marginLeft: '10px',
+      height: '20px',
+      width: '20px',
+    },
   },
 
   MuiIconButton: {
     root: {
       color: mono.black,
+      height: '30px',
+      width: '30px',
+      '&:hover': {
+        backgroundColor: mono.lightGray,
+      },
+      '&:active': {
+        backgroundColor: mono.gray,
+      },
     },
   },
 
@@ -216,6 +285,7 @@ const overrides = {
   MuiInputBase: {
     root: {
       height: '45px',
+
       backgroundColor: mono.white,
     },
     multiline: {
@@ -223,14 +293,15 @@ const overrides = {
     },
   },
 
-  MuiTextField: {
-    // root: {
-    //   margin: '1vh 5px 2.2vh 5px',
-    // },
-  },
   MuiFormControl: {
     root: {
       margin: '10px 0 5px 0',
+      // width: '350px',
+    },
+  },
+  MuiFormControlLabel: {
+    root: {
+      marginLeft: '0px',
     },
   },
   MuiSelect: {
@@ -250,6 +321,11 @@ const overrides = {
       paddingBottom: '12px',
       borderRadius: '10px',
       height: '45px',
+    },
+  },
+  MuiTextField: {
+    root: {
+      width: '350px',
     },
   },
   MuiOutlinedInput: {
@@ -288,6 +364,39 @@ const overrides = {
       '&$shrink': { transform: 'translate(14px, -20px) scale(0.89)', fontWeight: 400 },
     },
   },
+  MuiRadio: {
+    root: {
+      display: 'flex',
+      padding: '4px',
+      '&:hover': {
+        backgroundColor: mono.lightGray,
+      },
+      '&:active': {
+        backgroundColor: mono.gray,
+      },
+    },
+    colorSecondary: {
+      '&$checked': {
+        display: 'flex',
+        padding: '4px',
+        '&:hover': {
+          backgroundColor: mono.lightGray,
+        },
+        '&:active': {
+          backgroundColor: mono.gray,
+        },
+      },
+    },
+  },
+
+  // Table
+  MuiTableRow: {
+    hover: {
+      '&:hover': {
+        backgroundColor: `${mono.veryLightGray} !important`,
+      },
+    },
+  },
 
   MuiPaper: {
     // elevation: {  },
@@ -316,6 +425,34 @@ const overrides = {
   },
   MuiDialogActions: {
     root: { padding: '0 19px 6px 0' },
+  },
+
+  MuiSnackbarContent: {
+    root: {
+      width: '600px',
+      padding: '0px 16px',
+      borderRadius: '12px',
+      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
+      backgroundColor: mono.black,
+
+      // message : body1
+      fontSize: '1rem',
+      fontWeight: 500,
+      lineHeight: 25 / 18,
+      // letterSpacing: '-0.01rem',
+      color: mono.veryLightGray,
+    },
+    message: {
+      display: 'flex',
+      alignItems: 'center',
+      height: '65px',
+      padding: '0px',
+    },
+    action: {
+      marginRight: '-5px',
+      marginBottom: '10px',
+      marginTop: '10px',
+    },
   },
 
   // "Mask"
@@ -363,6 +500,7 @@ const props = {
 
   MuiTextField: {
     variant: 'outlined',
+    // style: { width: 350 },
   },
 
   MuiOutlinedInput: {

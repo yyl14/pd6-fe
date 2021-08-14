@@ -85,7 +85,7 @@ export default function Account({
       ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, history, mode]);
+  }, [location.pathname, history, mode, accountList, instituteList, accountId, instituteId]);
 
   const foldAccount = () => {
     setDisplay('fold');
@@ -136,14 +136,12 @@ export default function Account({
         {display === 'unfold' ? (
           <List>
             {itemList.map((item) => (
-              <ListItem
-                button
-                key={item.text}
-                onClick={() => history.push(item.path)}
-                className={location.pathname === item.path ? classes.active : null}
-              >
+              <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classes.item}>
                 <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
+                <ListItemText
+                  primary={item.text}
+                  className={location.pathname === item.path ? classes.active : null}
+                />
               </ListItem>
             ))}
           </List>

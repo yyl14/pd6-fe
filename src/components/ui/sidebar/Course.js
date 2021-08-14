@@ -98,7 +98,7 @@ export default function Course({
                   className={
                     location.pathname.substr(location.pathname.length - 6) === 'lesson'
                       ? classes.activeIcon
-                      : classes.icon
+                      : classes.greyIcon
                   }
                 />
               ),
@@ -112,7 +112,7 @@ export default function Course({
                   className={
                     location.pathname.substr(location.pathname.length - 7) === 'contest'
                       ? classes.activeIcon
-                      : classes.icon
+                      : classes.greyIcon
                   }
                 />
               ),
@@ -245,12 +245,15 @@ export default function Course({
               (item) => (item.type === 'LESSON' || mode !== 'class-list') && (
               <ListItem
                 button
-                key={item.text}
+                key={item.path}
                 onClick={() => history.push(item.path)}
-                className={location.pathname === item.path ? classes.active : null}
+                className={item.text !== 'Lesson' ? classes.item : classes.addItem}
               >
                 <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
+                <ListItemText
+                  primary={item.text}
+                  className={location.pathname === item.path ? classes.active : null}
+                />
               </ListItem>
               ),
             )}
@@ -276,12 +279,15 @@ export default function Course({
                   (item) => item.type === 'CONTEST' && (
                   <ListItem
                     button
-                    key={item.text}
+                    key={item.path}
                     onClick={() => history.push(item.path)}
-                    className={location.pathname === item.path ? classes.active : null}
+                    className={item.text !== 'Contest' ? classes.item : classes.addItem}
                   >
                     <ListItemIcon>{item.icon}</ListItemIcon>
-                    <ListItemText primary={item.text} />
+                    <ListItemText
+                      primary={item.text}
+                      className={location.pathname === item.path ? classes.active : null}
+                    />
                   </ListItem>
                   ),
                 )}

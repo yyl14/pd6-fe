@@ -15,11 +15,7 @@ import { deleteAccount } from '../../../../actions/admin/account';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 
-const useStyles = makeStyles((theme) => ({
-  dialogItem: {
-    marginBottom: theme.spacing(2),
-  },
-}));
+const useStyles = makeStyles((theme) => ({}));
 
 export default function AccountDelete(props) {
   const classes = useStyles();
@@ -56,46 +52,36 @@ export default function AccountDelete(props) {
         <Typography>Once you delete this account, there is no going back. Please be certain.</Typography>
       </SimpleBar>
       {props.cards && (
-        <div>
-          <Dialog open={popUp} onClose={() => setPopUp(false)} maxWidth="md">
-            <DialogTitle>
-              <Typography variant="h4">Delete account</Typography>
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText variant="body1" color="secondary">
-                <div className={classes.dialogItem}>
-                  <AlignedText text="Username" childrenType="text">
-                    <Typography>{props.userName}</Typography>
-                  </AlignedText>
-                </div>
-                <div className={classes.dialogItem}>
-                  <AlignedText text="Student ID" childrenType="text">
-                    {card.length > 0 && <Typography>{card[0].student_id}</Typography>}
-                  </AlignedText>
-                </div>
-                <div className={classes.dialogItem}>
-                  <AlignedText text="Real name" childrenType="text">
-                    <Typography>{props.realName}</Typography>
-                  </AlignedText>
-                </div>
-                <div className={classes.dialogItem}>
-                  <AlignedText text="Email" childrenType="text">
-                    {card.length > 0 && <Typography>{card[0].email}</Typography>}
-                  </AlignedText>
-                </div>
-                <Typography variant="body2" color="textPrimary">
-                  Once you delete a student information, there is no going back. Please be certain.
-                </Typography>
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setPopUp(false)}>Cancel</Button>
-              <Button color="secondary" onClick={handleDelete}>
-                Delete
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </div>
+        <Dialog open={popUp} onClose={() => setPopUp(false)} maxWidth="md">
+          <DialogTitle>
+            <Typography variant="h4">Delete account</Typography>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText variant="body1" color="secondary">
+              <AlignedText text="Username" childrenType="text">
+                <Typography>{props.userName}</Typography>
+              </AlignedText>
+              <AlignedText text="Student ID" childrenType="text">
+                {card.length > 0 && <Typography>{card[0].student_id}</Typography>}
+              </AlignedText>
+              <AlignedText text="Real name" childrenType="text">
+                <Typography>{props.realName}</Typography>
+              </AlignedText>
+              <AlignedText text="Email" childrenType="text">
+                {card.length > 0 && <Typography>{card[0].email}</Typography>}
+              </AlignedText>
+              <Typography variant="body2" color="textPrimary">
+                Once you delete a student information, there is no going back. Please be certain.
+              </Typography>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setPopUp(false)}>Cancel</Button>
+            <Button color="secondary" onClick={handleDelete}>
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
       )}
     </div>
   );

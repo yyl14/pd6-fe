@@ -19,7 +19,8 @@
   /* margin-left: 6vw; */
   position: fixed;
   left: 6vw;
-  bottom: 45vh;
+  bottom: 50vh;
+  transform: translate(0, 50%);
   width: 42vw;
 }
 

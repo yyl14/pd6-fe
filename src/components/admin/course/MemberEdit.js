@@ -2,18 +2,15 @@ import React, { useState, useEffect } from 'react';
 import {
   Typography,
   Button,
-  Grid,
   Card,
   CardContent,
   TextField,
-  InputBase,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
   makeStyles,
-  OutlinedInput,
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -32,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
   editorItem: {
     marginBottom: '12px',
   },
+  textField: {
+    width: '100%',
+  },
   buttonsBar: {
     display: 'flex',
     flexDirection: 'row',
@@ -45,10 +45,7 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 const MemberEdit = ({
-  backToMemberList,
-  members,
-  onEditMembers,
-  loading,
+  backToMemberList, members, onEditMembers, loading,
 }) => {
   // TODO: initialize field content with redux state
   const classes = useStyles();
@@ -116,6 +113,7 @@ const MemberEdit = ({
             <Typography variant="caption">List of student ID</Typography>
           </div>
           <TextField
+            className={classes.textField}
             defaultValue={TA}
             onChange={(e) => handleChangeTA(e)}
             multiline
@@ -132,6 +130,7 @@ const MemberEdit = ({
           </div>
           <TextField
             defaultValue={student}
+            className={classes.textField}
             onChange={(e) => handleChangeStudent(e)}
             multiline
             rows={20}
@@ -150,6 +149,7 @@ const MemberEdit = ({
             onChange={(e) => handleChangeGuest(e)}
             multiline
             rows={20}
+            className={classes.textField}
           />
         </div>
       </Card>
