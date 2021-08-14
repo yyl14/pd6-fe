@@ -34,26 +34,24 @@ class Admin extends Component {
 
   render() {
     return (
-      <Router>
-        <div>
-          <Header role={this.props.auth.user.role} />
-          <Sidebar />
-          <div className="layout-content-container">
-            <div className="layout-content">
-              <Switch>
-                <Route path="/admin/course/course" component={Course} />
-                <Route path="/admin/course/class" component={Class} />
-                <Route path="/admin/account/institute" component={Institute} />
-                <Route path="/admin/account/account" component={Account} />
-                <Route path="/admin/system/accesslog" component={AccessLog} />
-                <Route path="/admin/system/announcement" component={Announcement} />
-                <Route path="/admin/system/submitlang" component={SubmitLang} />
-                <Route component={NoMatch} />
-              </Switch>
-            </div>
+      <div>
+        <Header role={this.props.auth.user.role} />
+        <Sidebar />
+        <div className="layout-content-container">
+          <div className="layout-content">
+            <Switch>
+              <Route path="/admin/course/course" component={Course} />
+              <Route path="/admin/course/class" component={Class} />
+              <Route path="/admin/account/institute" component={Institute} />
+              <Route path="/admin/account/account" component={Account} />
+              <Route path="/admin/system/accesslog" component={AccessLog} />
+              <Route path="/admin/system/announcement" component={Announcement} />
+              <Route path="/admin/system/submitlang" component={SubmitLang} />
+              <Route component={NoMatch} />
+            </Switch>
           </div>
         </div>
-      </Router>
+      </div>
     );
   }
 }

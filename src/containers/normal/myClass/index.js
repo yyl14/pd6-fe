@@ -6,10 +6,10 @@ import {
 
 import { Container } from '@material-ui/core';
 
-import NoMatch from '../../components/noMatch';
+import NoMatch from '../../../components/noMatch';
 
-import Header from '../../components/ui/Header';
-import Sidebar from '../../components/ui/Sidebar';
+import Header from '../../../components/ui/Header';
+import Sidebar from '../../../components/ui/Sidebar';
 
 /* This is a level 2 container (role container) */
 class MyClass extends Component {
@@ -18,13 +18,7 @@ class MyClass extends Component {
     this.state = {};
   }
 
-  componentDidMount() {
-    if (this.props.auth.isAuthenticated) {
-      if (this.props.auth.user.role.indexOf('NORMAL') === -1) {
-        this.props.history.push('/notFound');
-      }
-    }
-  }
+  componentDidMount() {}
 
   render() {
     return (

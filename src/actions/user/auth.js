@@ -27,46 +27,30 @@ const getUserInfo = (id, token) => (dispatch) => {
     });
 };
 
-const userSignIn = (username, password) => (dispatch) => {
-  agent
-    .post('/account/jwt', { username, password })
-    .then((logRes) => {
-      const id = logRes.data.data.account_id;
-      const { token } = logRes.data.data;
-
-      return { id, token };
-    })
-    .then(({ id, token }) => {
-      const auth = {
-        headers: {
-          'Auth-Token': token,
-        },
-      };
-
-      agent
-        .get(`/account/${id}`, auth)
-        .then((userInfo) => {
-          dispatch({
-            type: authConstants.AUTH_SUCCESS,
-            user: {
-              ...userInfo.data.data,
-              token,
-            },
-          });
-        })
-        .catch((err) => {
-          dispatch({
-            type: authConstants.AUTH_FAIL,
-            errors: err,
-          });
-        });
-    })
-    .catch((err) => {
-      dispatch({
-        type: authConstants.AUTH_FAIL,
-        errors: err,
-      });
+const userSignIn = (username, password) => async (dispatch) => {
+  try {
+    const logRes = await agent.post('/account/jwt', { username, password });
+    const id = logRes.data.data.account_id;
+    const { token } = logRes.data.data;
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    const userInfo = await agent.get(`/account/${id}`, auth);
+    dispatch({
+      type: authConstants.AUTH_SUCCESS,
+      user: {
+        ...userInfo.data.data,
+        token,
+      },
     });
+  } catch (err) {
+    dispatch({
+      type: authConstants.AUTH_FAIL,
+      errors: err,
+    });
+  }
 };
 
 const userLogout = (history) => (dispatch) => {
@@ -81,7 +65,8 @@ const userForgetPassword = (email) => (dispatch) => {
   dispatch({
     type: authConstants.FORGET_PASSWORD_START,
   });
-  agent.post('/account/forget-password', { email })
+  agent
+    .post('/account/forget-password', { email })
     .then((res) => {
       dispatch({
         type: authConstants.FORGET_PASSWORD_SUCCESS,
@@ -108,7 +93,8 @@ const userRegister = (username, password, nickname, realName, emailPrefix, insti
   };
 
   dispatch({ type: authConstants.SIGNUP_START });
-  agent.post('account', body)
+  agent
+    .post('account', body)
     .then((res) => {
       dispatch({
         type: authConstants.SIGNUP_SUCCESS,
