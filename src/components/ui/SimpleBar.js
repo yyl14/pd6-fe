@@ -23,6 +23,8 @@ const useStyles = makeStyles((theme) => ({
   },
   divider: {
     margin: '0px',
+    border: `1px solid ${theme.palette.grey[300]}`,
+    backgroundColor: theme.palette.grey[300],
   },
   bottomContent: {
     display: 'flex',
