@@ -137,11 +137,7 @@ export default function Header({ role, hasClass }) {
   const location = useLocation();
   let itemList = [];
   const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   H:mm'));
-  const menuList = [
-    { title: 'My Submission', link: '/my-submission' },
-    { title: 'My Profile', link: '/my-profile' },
-    { title: 'Logout', link: '/logout' },
-  ];
+  let menuList = [];
 
   if (role === 'MANAGER') {
     itemList = [
@@ -164,6 +160,10 @@ export default function Header({ role, hasClass }) {
         text: 'About',
         path: '/about',
       },
+    ];
+    menuList = [
+      { title: 'My Profile', link: '/my-profile' },
+      { title: 'Logout', link: '/logout' },
     ];
   } else if (role === 'NORMAL') {
     if (hasClass) {
@@ -218,6 +218,11 @@ export default function Header({ role, hasClass }) {
         },
       ];
     }
+    menuList = [
+      { title: 'My Submission', link: '/my-submission' },
+      { title: 'My Profile', link: '/my-profile' },
+      { title: 'Logout', link: '/logout' },
+    ];
   } else {
     // System Guest
     itemList = [];
