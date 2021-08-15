@@ -41,14 +41,14 @@ const useStyles = makeStyles((theme) => ({
   leftButton: {
     marginRight: '18px',
   },
+  dialogContent: {
+    padding: '0px 24px 6px 24px',
+  },
   dialogButtons: {
     justifyContent: 'space-between',
   },
   backToEditButton: {
     marginLeft: '24px',
-    backgroundColor: '#FFFFFF',
-    border: 'solid',
-    borderColor: '#DDDDDD',
   },
 
 }));
@@ -180,14 +180,14 @@ const MemberEdit = ({
         <DialogTitle>
           <Typography variant="h4">Unsaved Changes</Typography>
         </DialogTitle>
-        <DialogContent>
+        <DialogContent className={classes.dialogContent}>
           <Typography variant="body1">
             You have unsaved changes, do you want to save your changes or back to edit?
           </Typography>
         </DialogContent>
         <DialogActions className={classes.dialogButtons}>
           <div>
-            <Button onClick={() => setShowUnsaveDialog(false)} className={classes.backToEditButton}>
+            <Button variant="outlined" onClick={() => setShowUnsaveDialog(false)} className={classes.backToEditButton}>
               Back to Edit
             </Button>
           </div>
