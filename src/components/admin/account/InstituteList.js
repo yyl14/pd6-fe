@@ -35,6 +35,9 @@ const useStyles = makeStyles((theme) => ({
   // inputField: {
   //   width: 340,
   // },
+  statusSwitch: {
+    marginTop: '8px',
+  },
 }));
 
 export default function InstituteList() {
@@ -239,6 +242,7 @@ export default function InstituteList() {
             <FormControlLabel
               control={<Switch checked={inputs.status} onChange={handleChangeStatus} name="status" color="primary" />}
               label={inputs.status ? 'Enabled' : 'Disabled'}
+              className={classes.statusSwitch}
             />
           </AlignedText>
         </DialogContent>
