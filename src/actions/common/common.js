@@ -31,7 +31,7 @@ const fetchClassMembers = (token, classId) => (dispatch) => {
   agent
     .get(`/class/${classId}/member`, auth)
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_SUCCESS, payload: { classId, data: res.data.data } });
     })
     .catch((err) => {

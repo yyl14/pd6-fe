@@ -2,7 +2,7 @@ import { courseConstants } from '../../../actions/admin/constant';
 import { commonConstants } from '../../../actions/common/constant';
 
 const initialState = {
-  fetchCourse: false,
+  fetchCourses: false,
   addCourse: false,
   renameCourse: false,
   deleteCourse: false,
@@ -22,7 +22,7 @@ export default function course(state = initialState, action) {
     case courseConstants.FETCH_COURSES_START:
       return {
         ...state,
-        fetchCourse: true,
+        fetchCourses: true,
       };
     case courseConstants.FETCH_COURSES_SUCCESS: {
       return {
