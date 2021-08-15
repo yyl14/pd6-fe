@@ -19,15 +19,11 @@ import {
   IconButton,
 } from '@material-ui/core';
 
-import { CenterFocusStrong, FilterList } from '@material-ui/icons';
-import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
-import SearchIcon from '@material-ui/icons/Search';
 import Tooltip from '@material-ui/core/Tooltip';
-import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from 'react-icons/md';
-
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useState, useEffect, useLocation } from 'react';
 import { Link } from 'react-router-dom';
+import Icon from './icon/index';
 
 const useStyles = makeStyles((theme) => ({
   topContent1: {
@@ -146,8 +142,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   toggleButtonIcon: {
-    height: '18px',
-    width: '18px',
+    height: '20px',
+    width: '20px',
   },
   arrowIcon: {
     height: '35px',
@@ -243,7 +239,7 @@ export default function CustomTable({
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <SearchIcon />
+                <Icon.SearchIcon />
               </InputAdornment>
             ),
           }}
@@ -309,7 +305,7 @@ export default function CustomTable({
                     <TableCell key={`${row.id}-show`} align="right">
                       <Link to={row[linkName]} className={classes.detailLink}>
                         <IconButton>
-                          <ArrowForwardRoundedIcon className={classes.toggleButtonIcon} />
+                          <Icon.ArrowForwardRoundedIcon className={classes.toggleButtonIcon} />
                         </IconButton>
                       </Link>
                     </TableCell>
@@ -346,7 +342,7 @@ export default function CustomTable({
               handleChangePage(e, curPage - 1);
             }}
           >
-            <MdKeyboardArrowLeft className={classes.arrowIcon} />
+            <Icon.ChevronLeftOutlinedIcon className={classes.arrowIcon} />
           </Button>
           <TextField
             className={classes.pageIndexTextField}
@@ -366,7 +362,7 @@ export default function CustomTable({
               handleChangePage(e, curPage + 1);
             }}
           >
-            <MdKeyboardArrowRight className={classes.arrowIcon} />
+            <Icon.ChevronRightOutlinedIcon className={classes.arrowIcon} />
           </Button>
         </div>
       </Paper>

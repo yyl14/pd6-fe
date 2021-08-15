@@ -4,13 +4,7 @@ import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button,
 } from '@material-ui/core';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import SettingsIcon from '@material-ui/icons/Settings';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import DescriptionIcon from '@material-ui/icons/Description';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import CodeIcon from '@material-ui/icons/Code';
-import AddIcon from '@material-ui/icons/Add';
+import Icon from '../icon/index';
 
 export default function System({
   menuItems, classes, history, location, mode,
@@ -41,7 +35,7 @@ export default function System({
         {
           text: 'Access Log',
           icon: (
-            <DescriptionIcon
+            <Icon.DescriptionIcon
               className={location.pathname === `${baseURL}/accesslog` ? classes.activeIcon : classes.icon}
             />
           ),
@@ -50,7 +44,7 @@ export default function System({
         {
           text: 'Announcement',
           icon: (
-            <NotificationsIcon
+            <Icon.NotificationsIcon
               className={location.pathname === `${baseURL}/announcement` ? classes.activeIcon : classes.icon}
             />
           ),
@@ -59,34 +53,34 @@ export default function System({
         {
           text: 'Submission Language',
           icon: (
-            <CodeIcon className={location.pathname === `${baseURL}/submitlang` ? classes.activeIcon : classes.icon} />
+            <Icon.CodeIcon className={location.pathname === `${baseURL}/submitlang` ? classes.activeIcon : classes.icon} />
           ),
           path: `${baseURL}/submitlang`,
         },
       ]);
     } else if (mode === 'create') {
-      setArrow(<ArrowBackIcon className={classes.arrow} onClick={goBackToAnnouncement} />);
+      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={goBackToAnnouncement} />);
       setTitle('(Draft)');
       setItemList([
         {
           text: 'Setting',
           path: `${baseURL}/announcement/add`,
           icon: (
-            <SettingsIcon
+            <Icon.SettingsIcon
               className={location.pathname === `${baseURL}/announcement/add` ? classes.activeIcon : classes.icon}
             />
           ),
         },
       ]);
     } else if (mode === 'announcement' && announcementList.byId[announcementId]) {
-      setArrow(<ArrowBackIcon className={classes.arrow} onClick={goBackToAnnouncement} />);
+      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={goBackToAnnouncement} />);
       setTitle(announcementList.byId[announcementId].title);
       setItemList([
         {
           text: 'Setting',
           path: `${baseURL}/announcement/${announcementId}/setting`,
           icon: (
-            <SettingsIcon
+            <Icon.SettingsIcon
               className={
                 location.pathname === `${baseURL}/announcement/${announcementId}/setting`
                   ? classes.activeIcon
@@ -97,14 +91,14 @@ export default function System({
         },
       ]);
     } else if (mode === 'language' && languageList.byId[languageId]) {
-      setArrow(<ArrowBackIcon className={classes.arrow} onClick={goBackToLanguage} />);
+      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={goBackToLanguage} />);
       setTitle(`${languageList.byId[languageId].name} ${languageList.byId[languageId].version}`);
       setItemList([
         {
           text: 'Setting',
           path: `${baseURL}/submitlang/${languageId}/setting`,
           icon: (
-            <SettingsIcon
+            <Icon.SettingsIcon
               className={
                 location.pathname === `${baseURL}/submitlang/${languageId}/setting` ? classes.activeIcon : classes.icon
               }
@@ -154,9 +148,9 @@ export default function System({
         {mode === 'main' ? <div className={classes.topSpace} /> : arrow}
         <div>
           {display === 'unfold' ? (
-            <PlayArrowIcon className={`${classes.titleIcon} ${classes.rotate90}`} onClick={foldSystem} />
+            <Icon.TriangleDown className={classes.titleIcon} onClick={foldSystem} />
           ) : (
-            <PlayArrowIcon className={classes.titleIcon} onClick={unfoldSystem} />
+            <Icon.TriangleRight className={classes.titleIcon} onClick={unfoldSystem} />
           )}
           <Typography variant="h4" className={classes.title}>
             {title}

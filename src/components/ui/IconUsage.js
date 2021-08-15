@@ -215,6 +215,46 @@ export default function IconList() {
           <Icon.LinkOutlinedIcon />
           <p>LinkOutlinedIcon</p>
         </StyledPaper>
+        <StyledPaper>
+          <Icon.SearchIcon />
+          <p>SearchIcon</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.NotificationsIcon />
+          <p>NotificationsIcon</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.SchoolIcon />
+          <p>SchoolIcon</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.PersonIcon />
+          <p>PersonIcon</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.SettingsIcon />
+          <p>SettingsIcon</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.AddBoxIcon />
+          <p>AddBoxIcon</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.PeopleIcon />
+          <p>PeopleIcon</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.DescriptionIcon />
+          <p>DescriptionIcon</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.CodeIcon />
+          <p>CodeIcon</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.ErrorIcon />
+          <p>ErrorIcon</p>
+        </StyledPaper>
       </Grid>
     </div>
   );
