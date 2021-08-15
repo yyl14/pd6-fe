@@ -20,6 +20,7 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import PeopleIcon from '@material-ui/icons/People';
 import DescriptionIcon from '@material-ui/icons/Description';
 import CodeIcon from '@material-ui/icons/Code';
+import ErrorIcon from '@material-ui/icons/Error';
 
 import { ReactComponent as Dots } from './9dots.svg';
 import { ReactComponent as Advancedsearch } from './advancedSearch.svg';
@@ -78,6 +79,7 @@ export default {
   PeopleIcon,
   DescriptionIcon,
   CodeIcon,
+  ErrorIcon,
   Dots,
   Advancedsearch,
   Challenge,

@@ -251,6 +251,10 @@ export default function IconList() {
           <Icon.CodeIcon />
           <p>CodeIcon</p>
         </StyledPaper>
+        <StyledPaper>
+          <Icon.ErrorIcon />
+          <p>ErrorIcon</p>
+        </StyledPaper>
       </Grid>
     </div>
   );
