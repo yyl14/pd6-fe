@@ -6,9 +6,10 @@ import {
 } from '@material-ui/core';
 import SchoolIcon from '@material-ui/icons/School';
 import PersonIcon from '@material-ui/icons/Person';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SettingsIcon from '@material-ui/icons/Settings';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import Icon from '../icon/index';
+// import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+// import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 export default function Account({
   menuItems, classes, history, location, mode,
@@ -52,7 +53,7 @@ export default function Account({
         },
       ]);
     } else if (mode === 'institute' && instituteList.byId[instituteId]) {
-      setArrow(<ArrowBackIcon className={classes.arrow} onClick={goBackToInstitute} />);
+      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={goBackToInstitute} />);
       setTitle(instituteList.byId[instituteId].abbreviated_name);
       setItemList([
         {
@@ -68,7 +69,7 @@ export default function Account({
         },
       ]);
     } else if (mode === 'account' && accountList.byId[accountId]) {
-      setArrow(<ArrowBackIcon className={classes.arrow} onClick={goBackToAccount} />);
+      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={goBackToAccount} />);
       setTitle(accountList.byId[accountId].username);
       setItemList([
         {
@@ -124,9 +125,9 @@ export default function Account({
         {mode === 'main' ? <div className={classes.topSpace} /> : arrow}
         <div>
           {display === 'unfold' ? (
-            <PlayArrowIcon className={`${classes.titleIcon} ${classes.rotate90}`} onClick={foldAccount} />
+            <Icon.TriangleDown className={classes.titleIcon} onClick={foldAccount} />
           ) : (
-            <PlayArrowIcon className={classes.titleIcon} onClick={unfoldAccount} />
+            <Icon.TriangleRight className={classes.titleIcon} onClick={unfoldAccount} />
           )}
           <Typography variant="h4" className={classes.title}>
             {title}

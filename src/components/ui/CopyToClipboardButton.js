@@ -5,17 +5,16 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import { Icon, InlineIcon } from '@iconify/react';
-import bxCopy from '@iconify/icons-bx/bx-copy';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { IconButton } from '@material-ui/core';
 import AlignedText from './AlignedText';
+import Icon from './icon/index';
 
 export default function CopyToClipboardButton({ text, onClick }) {
   return (
     <CopyToClipboard text={text} onCopy={onClick}>
       <IconButton>
-        <Icon icon={bxCopy} style={{ fontSize: '15px' }} />
+        <Icon.Copy />
       </IconButton>
     </CopyToClipboard>
   );

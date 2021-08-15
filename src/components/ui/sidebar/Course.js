@@ -5,14 +5,14 @@ import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button,
 } from '@material-ui/core';
 import AddBoxIcon from '@material-ui/icons/AddBox';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PeopleIcon from '@material-ui/icons/People';
-import StarIcon from '@material-ui/icons/Star';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SettingsIcon from '@material-ui/icons/Settings';
-
 import { gridColumnLookupSelector } from '@material-ui/data-grid';
+import Icon from '../icon/index';
 import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
+// import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+// import StarIcon from '@material-ui/icons/Star';
+// import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 
 export default function Course({
   classes, history, location, mode,
@@ -66,7 +66,7 @@ export default function Course({
                   type,
                   text: name,
                   icon: (
-                    <StarIcon
+                    <Icon.StarIcon
                       className={
                         location.pathname === `${baseURL}/course/${id}/class-list` ? classes.activeIcon : classes.icon
                       }
@@ -121,7 +121,7 @@ export default function Course({
           ]),
       );
     } else if (mode === 'course-setting' && courseList.byId[courseId]) {
-      setArrow(<ArrowBackIcon className={classes.arrow} onClick={goBack} />);
+      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={goBack} />);
       setTitle1(courseList.byId[courseId].name);
       setItemList([
         {
@@ -137,7 +137,7 @@ export default function Course({
         },
       ]);
     } else if (mode === 'class' && courseList.byId[courseId] && classList.byId[classId]) {
-      setArrow(<ArrowBackIcon className={classes.arrow} onClick={goBack} />);
+      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={goBack} />);
       setTitle1(`${courseList.byId[courseId].name} / ${classList.byId[classId].name}`);
       setItemList([
         {
@@ -229,9 +229,9 @@ export default function Course({
 
         <div>
           {display === 'unfold' ? (
-            <PlayArrowIcon className={`${classes.titleIcon} ${classes.rotate90}`} onClick={foldLesson} />
+            <Icon.TriangleDown className={classes.titleIcon} onClick={foldLesson} />
           ) : (
-            <PlayArrowIcon className={classes.titleIcon} onClick={unfoldLesson} />
+            <Icon.TriangleRight className={classes.titleIcon} onClick={unfoldLesson} />
           )}
 
           <Typography variant="h4" className={classes.title}>
@@ -264,9 +264,9 @@ export default function Course({
           <>
             <div>
               {display1 === 'unfold' ? (
-                <PlayArrowIcon className={`${classes.secondTitleIcon} ${classes.rotate90}`} onClick={foldContest} />
+                <Icon.TriangleDown className={classes.secondTitleIcon} onClick={foldContest} />
               ) : (
-                <PlayArrowIcon className={classes.secondTitleIcon} onClick={unfoldContest} />
+                <Icon.TriangleRight className={classes.secondTitleIcon} onClick={unfoldContest} />
               )}
               <Typography variant="h4" className={classes.secondTitle}>
                 {title2}

@@ -10,10 +10,8 @@ import {
   Button,
 } from '@material-ui/core';
 
-import { BiFilterAlt } from 'react-icons/bi';
-import { HiFilter } from 'react-icons/hi';
-
 import React, { useEffect, useState } from 'react';
+import Icon from './icon/index';
 import AlignedText from './AlignedText';
 
 const useStyles = makeStyles((theme) => ({
@@ -88,7 +86,7 @@ export default function TableFilterCard({
 
   return (
     <>
-      {onFilter ? <HiFilter className={classes.filterIcon} onClick={() => { openFilter(); }} /> : <BiFilterAlt className={classes.filterIcon} onClick={() => { openFilter(); }} /> }
+      {onFilter ? <Icon.FilterSelected className={classes.filterIcon} onClick={() => { openFilter(); }} /> : <Icon.FilterIdle className={classes.filterIcon} onClick={() => { openFilter(); }} /> }
       <Dialog
         open={popUp}
         keepMounted
