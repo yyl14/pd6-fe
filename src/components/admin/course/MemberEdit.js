@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useBeforeunload } from 'react-beforeunload';
 import {
   Typography,
   Button,
@@ -31,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
   textField: {
     width: '100%',
+    marginTop: '0px',
   },
   buttonsBar: {
     display: 'flex',
@@ -68,10 +70,17 @@ const MemberEdit = ({
   const [showUnsaveDialog, setShowUnsaveDialog] = useState(false);
 
   useEffect(() => {
-    // setTA(members.filter((item) => item.role === 'TA'));
-    // setStudent(members.filter((item) => item.role === 'Student'));
-    // setGuest(members.filter((item) => item.role === 'Guest'));
+    setTA(members.filter((item) => item.role === 'TA'));
+    setStudent(members.filter((item) => item.role === 'Student'));
+    setGuest(members.filter((item) => item.role === 'Guest'));
   }, [members]);
+
+  useBeforeunload((e) => {
+    if (TAChanged || studentChanged || guestChanged) {
+      e.preventDefault();
+      setShowUnsaveDialog(true);
+    }
+  });
 
   const handleChangeTA = (e) => {
     /* if(){
