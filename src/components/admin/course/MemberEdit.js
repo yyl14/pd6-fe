@@ -41,6 +41,16 @@ const useStyles = makeStyles((theme) => ({
   leftButton: {
     marginRight: '18px',
   },
+  dialogButtons: {
+    justifyContent: 'space-between',
+  },
+  backToEditButton: {
+    marginLeft: '24px',
+    backgroundColor: '#FFFFFF',
+    border: 'solid',
+    borderColor: '#DDDDDD',
+  },
+
 }));
 
 /* This is a level 4 component (page component) */
@@ -52,9 +62,10 @@ const MemberEdit = ({
   const [TA, setTA] = useState([]);
   const [student, setStudent] = useState([]);
   const [guest, setGuest] = useState([]);
-
+  const [TAChanged, setTAChanged] = useState(false);
+  const [studentChanged, setStudentChanged] = useState(false);
+  const [guestChanged, setGuestChanged] = useState(false);
   const [showUnsaveDialog, setShowUnsaveDialog] = useState(false);
-  const [showSaveDialog, setShowSaveDialog] = useState(false);
 
   useEffect(() => {
     // setTA(members.filter((item) => item.role === 'TA'));
@@ -67,6 +78,7 @@ const MemberEdit = ({
 
     } */
     setTA(e.target.value);
+    // setTAChanged(TA === )
   };
 
   const handleChangeStudent = (e) => {
@@ -74,12 +86,14 @@ const MemberEdit = ({
 
     } */
     setStudent(e.target.value);
+    // setStudentChanged(student === )
   };
   const handleChangeGuest = (e) => {
     /* if(){
 
     } */
     setGuest(e.target.value);
+    // setGuestChanged(guest === )
   };
   const handleClickCancel = () => {
     /* if(){
@@ -97,7 +111,7 @@ const MemberEdit = ({
   };
 
   const handleSubmitSave = () => {
-    setShowSaveDialog(false);
+    setShowUnsaveDialog(false);
     // and sth.....
     backToMemberList();
   };
@@ -157,43 +171,32 @@ const MemberEdit = ({
         <Button onClick={handleClickCancel} className={classes.leftButton}>
           Cancel
         </Button>
-        <Button onClick={() => setShowSaveDialog(true)} color="primary">
+        <Button onClick={handleSubmitSave} color="primary">
           Save
         </Button>
-        {/* TODO:button variant */}
       </div>
 
       <Dialog open={showUnsaveDialog} maxWidth="md">
         <DialogTitle>
-          <Typography variant="h4">Unsaved changes to member list</Typography>
+          <Typography variant="h4">Unsaved Changes</Typography>
         </DialogTitle>
         <DialogContent>
           <Typography variant="body1">
-            Changes are unsaved, nothing will change by clicking Don’t Save. Click Cancel to go back to editing panel.
+            You have unsaved changes, do you want to save your changes or back to edit?
           </Typography>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowUnsaveDialog(false)}>Cancel</Button>
-          <Button onClick={handleSubmitUnsave} color="secondary">
-            Don’t Save
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <Dialog open={showSaveDialog} maxWidth="md">
-        <DialogTitle>
-          <Typography variant="h4">Save changes to member list</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body1">
-            Click save changes to modify member list. Click Cancel to go back to editing panel.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowSaveDialog(false)}>Cancel</Button>
-          <Button onClick={handleSubmitSave} color="primary" disabled={loading.editMembers}>
-            Save Changes
-          </Button>
+        <DialogActions className={classes.dialogButtons}>
+          <div>
+            <Button onClick={() => setShowUnsaveDialog(false)} className={classes.backToEditButton}>
+              Back to Edit
+            </Button>
+          </div>
+          <div>
+            <Button onClick={handleSubmitUnsave}>Don’t Save</Button>
+            <Button onClick={handleSubmitSave} color="primary">
+              Save
+            </Button>
+          </div>
         </DialogActions>
       </Dialog>
     </div>
