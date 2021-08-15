@@ -79,10 +79,13 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '20px',
     marginLeft: '35px',
   },
-  icon: {
+  iconButtonIcon: {
+    height: '20px',
+    width: '20px',
+  },
+  toggleButtonIcon: {
     height: '18px',
     width: '18px',
-
   },
 }));
 

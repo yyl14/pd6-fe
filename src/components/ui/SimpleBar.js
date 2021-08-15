@@ -22,7 +22,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
   },
   divider: {
+    height: '1px',
     margin: '0px',
+    border: `0px solid ${theme.palette.grey[300]}`,
+    backgroundColor: theme.palette.grey[300],
   },
   bottomContent: {
     display: 'flex',
