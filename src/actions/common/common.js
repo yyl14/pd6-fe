@@ -20,26 +20,23 @@ const getInstitutes = () => (dispatch) => {
     });
 };
 
-const fetchClassMembers = (token, classId) => (dispatch) => {
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-  dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_REQUEST });
-
-  agent
-    .get(`/class/${classId}/member`, auth)
-    .then((res) => {
-      // console.log(res);
-      dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_SUCCESS, payload: { classId, data: res.data.data } });
-    })
-    .catch((err) => {
-      dispatch({
-        type: commonConstants.FETCH_CLASS_MEMBERS_FAIL,
-        error: err,
-      });
+const fetchClassMembers = (token, classId) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_REQUEST });
+    const res = await agent.get(`/class/${classId}/member`, auth);
+    console.log(res);
+    dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_SUCCESS, payload: { classId, data: res.data.data } });
+  } catch (err) {
+    dispatch({
+      type: commonConstants.FETCH_CLASS_MEMBERS_FAIL,
+      error: err,
     });
+  }
 };
 
 const editClassMember = (token, classId, editedList) => (dispatch) => {
