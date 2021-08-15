@@ -4,12 +4,7 @@ import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider,
 } from '@material-ui/core';
-import SchoolIcon from '@material-ui/icons/School';
-import PersonIcon from '@material-ui/icons/Person';
-import SettingsIcon from '@material-ui/icons/Settings';
 import Icon from '../icon/index';
-// import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-// import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 export default function Account({
   menuItems, classes, history, location, mode,
@@ -40,14 +35,14 @@ export default function Account({
         {
           text: 'Institute',
           icon: (
-            <SchoolIcon className={location.pathname === `${baseURL}/institute` ? classes.activeIcon : classes.icon} />
+            <Icon.SchoolIcon className={location.pathname === `${baseURL}/institute` ? classes.activeIcon : classes.icon} />
           ),
           path: `${baseURL}/institute`,
         },
         {
           text: 'Account',
           icon: (
-            <PersonIcon className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />
+            <Icon.PersonIcon className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />
           ),
           path: `${baseURL}/account`,
         },
@@ -60,7 +55,7 @@ export default function Account({
           text: 'Setting',
           path: `${baseURL}/institute/${instituteId}/setting`,
           icon: (
-            <SettingsIcon
+            <Icon.SettingsIcon
               className={
                 location.pathname === `${baseURL}/institute/${instituteId}/setting` ? classes.activeIcon : classes.icon
               }
@@ -76,7 +71,7 @@ export default function Account({
           text: 'Setting',
           path: `${baseURL}/account/${accountId}/setting`,
           icon: (
-            <SettingsIcon
+            <Icon.SettingsIcon
               className={
                 location.pathname === `${baseURL}/account/${accountId}/setting` ? classes.activeIcon : classes.icon
               }

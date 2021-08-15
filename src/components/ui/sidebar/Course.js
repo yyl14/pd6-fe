@@ -4,15 +4,9 @@ import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button,
 } from '@material-ui/core';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import PeopleIcon from '@material-ui/icons/People';
-import SettingsIcon from '@material-ui/icons/Settings';
 import { gridColumnLookupSelector } from '@material-ui/data-grid';
 import Icon from '../icon/index';
 import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
-// import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-// import StarIcon from '@material-ui/icons/Star';
-// import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 
 export default function Course({
   classes, history, location, mode,
@@ -53,7 +47,7 @@ export default function Course({
                   type,
                   text: name,
                   icon: (
-                    <PeopleIcon
+                    <Icon.PeopleIcon
                       className={
                         location.pathname === `${baseURL}/course/${id}/class-list` ? classes.activeIcon : classes.icon
                       }
@@ -79,7 +73,7 @@ export default function Course({
                   type,
                   text: name,
                   icon: (
-                    <PeopleIcon
+                    <Icon.PeopleIcon
                       className={
                         location.pathname === `${baseURL}/course/${id}/class-list` ? classes.activeIcon : classes.icon
                       }
@@ -94,7 +88,7 @@ export default function Course({
               type: 'LESSON',
               text: 'Lesson',
               icon: (
-                <AddBoxIcon
+                <Icon.AddBoxIcon
                   className={
                     location.pathname.substr(location.pathname.length - 6) === 'lesson'
                       ? classes.activeIcon
@@ -108,7 +102,7 @@ export default function Course({
               type: 'CONTEST',
               text: 'Contest',
               icon: (
-                <AddBoxIcon
+                <Icon.AddBoxIcon
                   className={
                     location.pathname.substr(location.pathname.length - 7) === 'contest'
                       ? classes.activeIcon
@@ -128,7 +122,7 @@ export default function Course({
           text: 'Setting',
           path: `${baseURL}/course/${courseId}/setting`,
           icon: (
-            <SettingsIcon
+            <Icon.SettingsIcon
               className={
                 location.pathname === `${baseURL}/course/${courseId}/setting` ? classes.activeIcon : classes.icon
               }
@@ -144,7 +138,7 @@ export default function Course({
           text: 'Member',
           path: `${baseURL}/class/${courseId}/${classId}/member`,
           icon: (
-            <PeopleIcon
+            <Icon.PeopleIcon
               className={
                 location.pathname === `${baseURL}/class/${courseId}/${classId}/member`
                   ? classes.activeIcon
@@ -157,7 +151,7 @@ export default function Course({
           text: 'Setting',
           path: `${baseURL}/class/${courseId}/${classId}/setting`,
           icon: (
-            <SettingsIcon
+            <Icon.SettingsIcon
               className={
                 location.pathname === `${baseURL}/class/${courseId}/${classId}/setting`
                   ? classes.activeIcon

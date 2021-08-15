@@ -13,15 +13,15 @@ import {
   MenuItem,
   MenuList,
 } from '@material-ui/core';
-import {
-  AddCircleOutline,
-  CallMissedOutgoingRounded,
-  PlayCircleFilledWhite,
-  SubjectOutlined,
-} from '@material-ui/icons';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useHistory, useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
+import Icon from './icon/index';
+// import {
+//   AddCircleOutline,
+//   CallMissedOutgoingRounded,
+//   PlayCircleFilledWhite,
+//   SubjectOutlined,
+// } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -284,7 +284,7 @@ export default function Header({ role, hasClass }) {
           ))}
           <div className={classes.right}>
             <Typography className={classes.date}>{currentTime}</Typography>
-            <NotificationsIcon className={classes.notification} />
+            <Icon.NotificationsIcon className={classes.notification} />
             {/* <Typography variant="h6" className={classes.name}> */}
             <div className={classes.dropdown}>
               <button type="button" className={classes.dropbtn}>

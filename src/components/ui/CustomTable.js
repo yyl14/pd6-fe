@@ -18,10 +18,6 @@ import {
   InputAdornment,
   IconButton,
 } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
-// import { CenterFocusStrong, FilterList } from '@material-ui/icons';
-// import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from 'react-icons/md';
-// import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
 
 import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
@@ -243,7 +239,7 @@ export default function CustomTable({
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <SearchIcon />
+                <Icon.SearchIcon />
               </InputAdornment>
             ),
           }}

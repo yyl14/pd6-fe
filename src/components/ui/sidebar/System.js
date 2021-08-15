@@ -4,14 +4,7 @@ import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button,
 } from '@material-ui/core';
-import SettingsIcon from '@material-ui/icons/Settings';
-import DescriptionIcon from '@material-ui/icons/Description';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import CodeIcon from '@material-ui/icons/Code';
 import Icon from '../icon/index';
-// import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-// import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-// import AddIcon from '@material-ui/icons/Add';
 
 export default function System({
   menuItems, classes, history, location, mode,
@@ -42,7 +35,7 @@ export default function System({
         {
           text: 'Access Log',
           icon: (
-            <DescriptionIcon
+            <Icon.DescriptionIcon
               className={location.pathname === `${baseURL}/accesslog` ? classes.activeIcon : classes.icon}
             />
           ),
@@ -51,7 +44,7 @@ export default function System({
         {
           text: 'Announcement',
           icon: (
-            <NotificationsIcon
+            <Icon.NotificationsIcon
               className={location.pathname === `${baseURL}/announcement` ? classes.activeIcon : classes.icon}
             />
           ),
@@ -60,7 +53,7 @@ export default function System({
         {
           text: 'Submission Language',
           icon: (
-            <CodeIcon className={location.pathname === `${baseURL}/submitlang` ? classes.activeIcon : classes.icon} />
+            <Icon.CodeIcon className={location.pathname === `${baseURL}/submitlang` ? classes.activeIcon : classes.icon} />
           ),
           path: `${baseURL}/submitlang`,
         },
@@ -73,7 +66,7 @@ export default function System({
           text: 'Setting',
           path: `${baseURL}/announcement/add`,
           icon: (
-            <SettingsIcon
+            <Icon.SettingsIcon
               className={location.pathname === `${baseURL}/announcement/add` ? classes.activeIcon : classes.icon}
             />
           ),
@@ -87,7 +80,7 @@ export default function System({
           text: 'Setting',
           path: `${baseURL}/announcement/${announcementId}/setting`,
           icon: (
-            <SettingsIcon
+            <Icon.SettingsIcon
               className={
                 location.pathname === `${baseURL}/announcement/${announcementId}/setting`
                   ? classes.activeIcon
@@ -105,7 +98,7 @@ export default function System({
           text: 'Setting',
           path: `${baseURL}/submitlang/${languageId}/setting`,
           icon: (
-            <SettingsIcon
+            <Icon.SettingsIcon
               className={
                 location.pathname === `${baseURL}/submitlang/${languageId}/setting` ? classes.activeIcon : classes.icon
               }

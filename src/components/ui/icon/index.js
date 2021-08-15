@@ -11,6 +11,16 @@ import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import BlockIcon from '@material-ui/icons/Block';
 import RefreshOutlinedIcon from '@material-ui/icons/RefreshOutlined';
 import LinkOutlinedIcon from '@material-ui/icons/LinkOutlined';
+import SearchIcon from '@material-ui/icons/Search';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import SchoolIcon from '@material-ui/icons/School';
+import PersonIcon from '@material-ui/icons/Person';
+import SettingsIcon from '@material-ui/icons/Settings';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import PeopleIcon from '@material-ui/icons/People';
+import DescriptionIcon from '@material-ui/icons/Description';
+import CodeIcon from '@material-ui/icons/Code';
+
 import { ReactComponent as Dots } from './9dots.svg';
 import { ReactComponent as Advancedsearch } from './advancedSearch.svg';
 import { ReactComponent as Challenge } from './challenge.svg';
@@ -59,6 +69,15 @@ export default {
   BlockIcon,
   RefreshOutlinedIcon,
   LinkOutlinedIcon,
+  SearchIcon,
+  NotificationsIcon,
+  SchoolIcon,
+  PersonIcon,
+  SettingsIcon,
+  AddBoxIcon,
+  PeopleIcon,
+  DescriptionIcon,
+  CodeIcon,
   Dots,
   Advancedsearch,
   Challenge,
