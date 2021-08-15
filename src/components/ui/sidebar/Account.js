@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider,
+  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
@@ -48,7 +48,7 @@ export default function Account({
         },
       ]);
     } else if (mode === 'institute' && instituteList.byId[instituteId]) {
-      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={goBackToInstitute} />);
+      setArrow(<IconButton className={classes.arrow} onClick={goBackToInstitute}><Icon.ArrowBackRoundedIcon /></IconButton>);
       setTitle(instituteList.byId[instituteId].abbreviated_name);
       setItemList([
         {
@@ -64,7 +64,7 @@ export default function Account({
         },
       ]);
     } else if (mode === 'account' && accountList.byId[accountId]) {
-      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={goBackToAccount} />);
+      setArrow(<IconButton className={classes.arrow} onClick={goBackToAccount}><Icon.ArrowBackRoundedIcon /></IconButton>);
       setTitle(accountList.byId[accountId].username);
       setItemList([
         {

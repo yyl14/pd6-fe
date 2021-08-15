@@ -79,12 +79,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '16px',
   },
   arrow: {
-    marginTop: '60px',
-    marginLeft: '20px',
+    marginTop: '65px',
+    marginLeft: '15px',
     marginRight: 'auto',
-    '&:hover': {
-      cursor: 'pointer',
-    },
   },
   item: {
     paddingTop: '7.5px',

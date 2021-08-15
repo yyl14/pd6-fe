@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   date: {
     float: 'left',
     marginRight: '20px',
-    marginTop: '3px',
+    marginTop: '2px',
     marginBottom: 'auto',
   },
   notification: {

@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button,
+  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button, IconButton,
 } from '@material-ui/core';
-import { gridColumnLookupSelector } from '@material-ui/data-grid';
 import Icon from '../icon/index';
 import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
 
@@ -115,7 +114,7 @@ export default function Course({
           ]),
       );
     } else if (mode === 'course-setting' && courseList.byId[courseId]) {
-      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={goBack} />);
+      setArrow(<IconButton className={classes.arrow} onClick={goBack}><Icon.ArrowBackRoundedIcon /></IconButton>);
       setTitle1(courseList.byId[courseId].name);
       setItemList([
         {
@@ -131,7 +130,7 @@ export default function Course({
         },
       ]);
     } else if (mode === 'class' && courseList.byId[courseId] && classList.byId[classId]) {
-      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={goBack} />);
+      setArrow(<IconButton className={classes.arrow} onClick={goBack}><Icon.ArrowBackRoundedIcon /></IconButton>);
       setTitle1(`${courseList.byId[courseId].name} / ${classList.byId[classId].name}`);
       setItemList([
         {
