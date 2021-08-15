@@ -8,6 +8,12 @@ import Account from './sidebar/Account';
 import Course from './sidebar/Course';
 import System from './sidebar/System';
 
+import Challenge from './sidebar/Challenge';
+import Submission from './sidebar/Submission';
+import Grade from './sidebar/Grade';
+import Team from './sidebar/Team';
+import Member from './sidebar/Member';
+
 const useStyles = makeStyles((theme) => ({
   drawer: {
     top: '55px',
@@ -111,6 +117,8 @@ export default function Sidebar() {
 
   return (
     <Switch>
+      {/* {Admin} */}
+      {/* {Course} */}
       <Route exact path="/admin/course/course/">
         {/* for fetchCourse and redirection */}
         <Course classes={classes} history={history} location={location} mode="class-list" />
@@ -124,6 +132,7 @@ export default function Sidebar() {
       <Route path="/admin/course/class/:courseId/:classId/">
         <Course classes={classes} history={history} location={location} mode="class" />
       </Route>
+      {/* {Account} */}
       <Route exact path="/admin/account/institute">
         <Account classes={classes} history={history} location={location} mode="main" />
       </Route>
@@ -153,6 +162,47 @@ export default function Sidebar() {
       </Route>
       <Route path="/admin/system/submitlang/:languageId/setting">
         <System classes={classes} history={history} location={location} mode="language" />
+      </Route>
+
+      {/* {My Class} */}
+      {/* {Challenge} */}
+      <Route exact path="/my-class">
+        {/* for fetchClass and redirection */}
+        <Challenge classes={classes} history={history} location={location} mode="main" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge">
+        <Challenge classes={classes} history={history} location={location} mode="main" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId">
+        <Challenge classes={classes} history={history} location={location} mode="main" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId">
+        <Challenge classes={classes} history={history} location={location} mode="main" />
+      </Route>
+      {/* {Submission} */}
+      <Route exact path="/my-class/:courseId/:classId/submission">
+        <Submission classes={classes} history={history} location={location} mode="main" />
+      </Route>
+      <Route path="/my-class/:courseId/:classId/submission/:submissionId">
+        <Submission classes={classes} history={history} location={location} mode="main" />
+      </Route>
+      {/* {Grade} */}
+      <Route exact path="/my-class/:courseId/:classId/grade">
+        <Grade classes={classes} history={history} location={location} mode="main" />
+      </Route>
+      <Route path="/my-class/:courseId/:classId/grade/:studentId">
+        <Grade classes={classes} history={history} location={location} mode="main" />
+      </Route>
+      {/* {Team} */}
+      <Route exact path="/my-class/:courseId/:classId/team">
+        <Team classes={classes} history={history} location={location} mode="main" />
+      </Route>
+      <Route path="/my-class/:courseId/:classId/team/:teamId">
+        <Team classes={classes} history={history} location={location} mode="main" />
+      </Route>
+      {/* {Member} */}
+      <Route path="/my-class/:courseId/:classId/member">
+        <Member classes={classes} history={history} location={location} mode="main" />
       </Route>
     </Switch>
   );
