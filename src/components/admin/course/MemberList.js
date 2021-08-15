@@ -222,8 +222,6 @@ export default function MemberList() {
                 doFilter={roleFilterStatus}
               />,
             ]}
-            hasLink
-            linkName="path"
           />
         </>
       )}
