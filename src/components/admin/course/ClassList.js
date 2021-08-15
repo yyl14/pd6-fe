@@ -99,11 +99,11 @@ export default function ClassList() {
     setShowAddClassDialog(false);
     dispatch(addClass(authToken, courseId, name, false));
   };
-
+  console.log(courses, loading.fetchCourses);
   if (courses.byId[courseId] === undefined || courses.byId[courseId].name === undefined) {
     if (loading.fetchCourses) {
       // still loading
-      return <div>loading</div>;
+      return <div>loading...</div>;
     }
     return <NoMatch />;
   }

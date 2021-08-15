@@ -25,7 +25,6 @@ const byId = (state = {}, action) => {
 
     case commonConstants.FETCH_CLASS_MEMBERS_SUCCESS: {
       const { classId, data } = action.payload;
-      console.log(action.payload);
       return { ...state, [classId]: { ...state[classId], memberIds: data.map((item) => item.member_id) } };
     }
 
