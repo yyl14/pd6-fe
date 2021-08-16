@@ -59,7 +59,6 @@ const useStyles = makeStyles((theme) => ({
 const MemberEdit = ({
   backToMemberList, members, onEditMembers, loading,
 }) => {
-  // TODO: initialize field content with redux state
   const classes = useStyles();
   const [TA, setTA] = useState([]);
   const [student, setStudent] = useState([]);
@@ -70,9 +69,9 @@ const MemberEdit = ({
   const [showUnsaveDialog, setShowUnsaveDialog] = useState(false);
 
   useEffect(() => {
-    setTA(members.filter((item) => item.role === 'TA'));
-    setStudent(members.filter((item) => item.role === 'Student'));
-    setGuest(members.filter((item) => item.role === 'Guest'));
+    setTA(members.filter((item) => item.role === 'MANAGER').map((member) => member.student_id).join('\n'));
+    setStudent(members.filter((item) => item.role === 'NORMAL').map((member) => member.student_id).join('\n'));
+    setGuest(members.filter((item) => item.role === 'GUEST').map((member) => member.student_id).join('\n'));
   }, [members]);
 
   useBeforeunload((e) => {
@@ -83,35 +82,24 @@ const MemberEdit = ({
   });
 
   const handleChangeTA = (e) => {
-    /* if(){
-
-    } */
     setTA(e.target.value);
-    // setTAChanged(TA === )
+    setTAChanged(TA !== members.filter((item) => item.role === 'MANAGER').map((member) => member.student_id).join('\n'));
   };
 
   const handleChangeStudent = (e) => {
-    /* if(){
-
-    } */
     setStudent(e.target.value);
-    // setStudentChanged(student === )
+    setStudentChanged(student !== members.filter((item) => item.role === 'NORMAL').map((member) => member.student_id).join('\n'));
   };
   const handleChangeGuest = (e) => {
-    /* if(){
-
-    } */
     setGuest(e.target.value);
-    // setGuestChanged(guest === )
+    setGuestChanged(guest !== members.filter((item) => item.role === 'GUEST').map((member) => member.student_id).join('\n'));
   };
   const handleClickCancel = () => {
-    /* if(){
+    if (TAChanged || studentChanged || guestChanged) {
       setShowUnsaveDialog(true);
-    }
-    else{
+    } else {
       backToMemberList();
-    } */
-    setShowUnsaveDialog(true);
+    }
   };
 
   const handleSubmitUnsave = () => {
@@ -121,7 +109,7 @@ const MemberEdit = ({
 
   const handleSubmitSave = () => {
     setShowUnsaveDialog(false);
-    // and sth.....
+    // dispatch and make defaultValue string to an array using str.split("\n")
     backToMemberList();
   };
 
@@ -143,7 +131,6 @@ const MemberEdit = ({
             rows={20}
           />
         </div>
-
         <div className={classes.editorCol}>
           <div className={classes.editorItem}>
             <Typography variant="body1">Student</Typography>
@@ -152,14 +139,13 @@ const MemberEdit = ({
             <Typography variant="caption">List of student ID</Typography>
           </div>
           <TextField
-            defaultValue={student}
             className={classes.textField}
+            defaultValue={student}
             onChange={(e) => handleChangeStudent(e)}
             multiline
             rows={20}
           />
         </div>
-
         <div className={classes.editorCol}>
           <div className={classes.editorItem}>
             <Typography variant="body1">Guest</Typography>
@@ -168,11 +154,11 @@ const MemberEdit = ({
             <Typography variant="caption">List of student ID</Typography>
           </div>
           <TextField
+            className={classes.textField}
             defaultValue={guest}
             onChange={(e) => handleChangeGuest(e)}
             multiline
             rows={20}
-            className={classes.textField}
           />
         </div>
       </Card>
