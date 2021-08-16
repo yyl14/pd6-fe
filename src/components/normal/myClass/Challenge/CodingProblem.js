@@ -51,13 +51,13 @@ export default function CodingProblem() {
         {problem.title}
       </Typography>
       <div>
-        <Button variant="outlined" color="primary" startIcon={<Icon.HistoryIcon />}>My Submission</Button>
-        <Button color="primary">Submit</Button>
+        <Button variant="outlined" color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)} startIcon={<Icon.HistoryIcon />}>My Submission</Button>
+        <Button color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}>Submit</Button>
       </div>
-      <SimpleBar title="Title">找零錢</SimpleBar>
-      <SimpleBar title="Description">Description</SimpleBar>
-      <SimpleBar title="About Input">找零錢</SimpleBar>
-      <SimpleBar title="About Output">找零錢</SimpleBar>
+      <SimpleBar title="Title">{problem.title}</SimpleBar>
+      <SimpleBar title="Description">{problem.description}</SimpleBar>
+      <SimpleBar title="About Input">I do not know where to get this info.</SimpleBar>
+      <SimpleBar title="About Output">I do not know where to get this info.</SimpleBar>
       <SimpleBar title="Sample">找零錢</SimpleBar>
       <SimpleBar title="Testing Data">找零錢</SimpleBar>
     </>

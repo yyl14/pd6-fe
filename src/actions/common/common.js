@@ -88,4 +88,27 @@ const editClassMember = (token, classId, editedList) => (dispatch) => {
 //     });
 // };
 
-export { getInstitutes, fetchClassMembers, editClassMember };
+const browseSubmitLang = (token) => async (dispatch) => {
+  dispatch({ type: commonConstants.BROWSE_SUBMISSION_LANG_START });
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    const submitLang = await agent.get('/submission/language', auth);
+    dispatch({
+      type: commonConstants.BROWSE_SUBMISSION_LANG_SUCCESS,
+      payload: submitLang.data.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: commonConstants.BROWSE_SUBMISSION_LANG_FAIL,
+      errors: err,
+    });
+  }
+};
+
+export {
+  getInstitutes, fetchClassMembers, editClassMember, browseSubmitLang,
+};
