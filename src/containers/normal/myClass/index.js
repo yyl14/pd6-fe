@@ -25,8 +25,12 @@ class MyClass extends Component {
   }
 
   componentDidMount() {
+    const { classId } = this.props.match.params;
+    // console.log(classId, this.props.user.classes);
     if (this.props.auth.isAuthenticated) {
-      if (this.props.user.classes.length === 0) {
+      const inClass = this.props.user.classes.reduce((acc, item) => acc || item.class_id === Number(classId), false);
+      if (!inClass) {
+        console.log('user not in class');
         this.props.history.push('/notFound');
       }
     }
