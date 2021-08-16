@@ -52,7 +52,6 @@ const useStyles = makeStyles((theme) => ({
   backToEditButton: {
     marginLeft: '24px',
   },
-
 }));
 
 /* This is a level 4 component (page component) */
@@ -69,9 +68,24 @@ const MemberEdit = ({
   const [showUnsaveDialog, setShowUnsaveDialog] = useState(false);
 
   useEffect(() => {
-    setTA(members.filter((item) => item.role === 'MANAGER').map((member) => member.student_id).join('\n'));
-    setStudent(members.filter((item) => item.role === 'NORMAL').map((member) => member.student_id).join('\n'));
-    setGuest(members.filter((item) => item.role === 'GUEST').map((member) => member.student_id).join('\n'));
+    setTA(
+      members
+        .filter((item) => item.role === 'MANAGER')
+        .map((member) => member.student_id)
+        .join('\n'),
+    );
+    setStudent(
+      members
+        .filter((item) => item.role === 'NORMAL')
+        .map((member) => member.student_id)
+        .join('\n'),
+    );
+    setGuest(
+      members
+        .filter((item) => item.role === 'GUEST')
+        .map((member) => member.student_id)
+        .join('\n'),
+    );
   }, [members]);
 
   useBeforeunload((e) => {
@@ -83,16 +97,34 @@ const MemberEdit = ({
 
   const handleChangeTA = (e) => {
     setTA(e.target.value);
-    setTAChanged(TA !== members.filter((item) => item.role === 'MANAGER').map((member) => member.student_id).join('\n'));
+    setTAChanged(
+      TA
+        !== members
+          .filter((item) => item.role === 'MANAGER')
+          .map((member) => member.student_id)
+          .join('\n'),
+    );
   };
 
   const handleChangeStudent = (e) => {
     setStudent(e.target.value);
-    setStudentChanged(student !== members.filter((item) => item.role === 'NORMAL').map((member) => member.student_id).join('\n'));
+    setStudentChanged(
+      student
+        !== members
+          .filter((item) => item.role === 'NORMAL')
+          .map((member) => member.student_id)
+          .join('\n'),
+    );
   };
   const handleChangeGuest = (e) => {
     setGuest(e.target.value);
-    setGuestChanged(guest !== members.filter((item) => item.role === 'GUEST').map((member) => member.student_id).join('\n'));
+    setGuestChanged(
+      guest
+        !== members
+          .filter((item) => item.role === 'GUEST')
+          .map((member) => member.student_id)
+          .join('\n'),
+    );
   };
   const handleClickCancel = () => {
     if (TAChanged || studentChanged || guestChanged) {
