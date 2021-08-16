@@ -11,8 +11,8 @@ import {
   TextField,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
-
-import CodingProblem from './CodingProblem';
+import SimpleBar from '../../../ui/SimpleBar';
+import Icon from '../../../ui/icon/index';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -21,11 +21,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /* This is a level 4 component (page component) */
-/* judge the problem type on this level */
-export default function Problem() {
-  const {
-    courseId, classId, challengeId, problemId,
-  } = useParams();
+export default function CodingProblem() {
+  const { courseId, classId } = useParams();
   const history = useHistory();
   const classNames = useStyles();
 
@@ -39,9 +36,18 @@ export default function Problem() {
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
-        this is problem
+        HW4 / Q1
       </Typography>
-      <CodingProblem />
+      <div>
+        <Button variant="outlined" color="primary" startIcon={<Icon.HistoryIcon />}>My Submission</Button>
+        <Button color="primary">Submit</Button>
+      </div>
+      <SimpleBar title="Title">找零錢</SimpleBar>
+      <SimpleBar title="Description">Description</SimpleBar>
+      <SimpleBar title="About Input">找零錢</SimpleBar>
+      <SimpleBar title="About Output">找零錢</SimpleBar>
+      <SimpleBar title="Sample">找零錢</SimpleBar>
+      <SimpleBar title="Testing Data">找零錢</SimpleBar>
     </>
   );
 }
