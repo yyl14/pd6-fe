@@ -25,7 +25,7 @@ const allIds = (state = [], action) => {
   switch (action.type) {
     case challengeConstants.FETCH_CHALLENGES_SUCCESS: {
       const { data } = action.payload;
-      return data.map((item) => item.id);
+      return [...new Set([...data.map((item) => item.id), ...state])];
     }
     default:
       return state;
