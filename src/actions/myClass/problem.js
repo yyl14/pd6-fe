@@ -25,3 +25,29 @@ const browseChallengeOverview = (token, challengeId) => (dispatch) => {
       });
     });
 };
+
+const readProblem = (token, problemId) => async (dispatch) => {
+  dispatch({ type: problemConstants.READ_PROBLEM_START });
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    const problemInfo = await agent.get(`/problem/${problemId}`, auth);
+    dispatch({
+      type: problemConstants.READ_PROBLEM_SUCCESS,
+      payload: problemInfo.data.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: problemConstants.READ_PROBLEM_FAIL,
+      errors: err,
+    });
+  }
+};
+
+export {
+  browseChallengeOverview,
+  readProblem,
+};

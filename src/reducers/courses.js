@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { courseConstants } from '../actions/admin/constant';
+import { commonConstants } from '../actions/common/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -13,6 +14,15 @@ const byId = (state = {}, action) => {
         }),
         {},
       );
+    }
+    case commonConstants.FETCH_COURSE_SUCCESS: {
+      return {
+        ...state,
+        [action.payload.id]: {
+          ...action.payload,
+          classIds: state[action.payload.id] ? state[action.payload.id].classIds : [],
+        },
+      };
     }
     case courseConstants.FETCH_CLASSES_SUCCESS: {
       const {
