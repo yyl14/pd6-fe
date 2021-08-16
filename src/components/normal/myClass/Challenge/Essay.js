@@ -11,10 +11,8 @@ import {
   TextField,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
-
-import CodingProblem from './CodingProblem';
-import Essay from './Essay';
-import { readProblem } from '../../../../actions/myClass/problem';
+import SimpleBar from '../../../ui/SimpleBar';
+import Icon from '../../../ui/icon/index';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -23,25 +21,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /* This is a level 4 component (page component) */
-/* judge the problem type on this level */
-export default function Problem() {
+export default function CodingProblem() {
   const {
     courseId, classId, challengeId, problemId,
   } = useParams();
   const history = useHistory();
   const classNames = useStyles();
 
+  const dispatch = useDispatch();
+
   const problem = useSelector((state) => state.problem.byId);
-  // const problemIDs = useSelector((state) => state.problem.allIds);
   const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(readProblem(authToken, problemId));
-  }, [authToken, dispatch, problemId]);
+  console.log(problem);
   // if (courses.byId[courseId] === undefined || courses.byId[courseId].name === undefined) {
 
   //   return <NoMatch />;
@@ -50,9 +44,10 @@ export default function Problem() {
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
-        this is problem
+        {problem.challenge_label}
+        {' '}
+        / Essay
       </Typography>
-      <Essay />
     </>
   );
 }
