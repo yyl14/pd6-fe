@@ -56,8 +56,7 @@ export default function CodingProblem() {
       </div>
       <SimpleBar title="Title">{problem.title}</SimpleBar>
       <SimpleBar title="Description">{problem.description}</SimpleBar>
-      <SimpleBar title="About Input">I do not know where to get this info.</SimpleBar>
-      <SimpleBar title="About Output">I do not know where to get this info.</SimpleBar>
+      <SimpleBar title="About Input/Output">I do not know where to get this info.</SimpleBar>
       <SimpleBar title="Sample">找零錢</SimpleBar>
       <SimpleBar title="Testing Data">找零錢</SimpleBar>
     </>

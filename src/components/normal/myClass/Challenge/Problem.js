@@ -48,9 +48,6 @@ export default function Problem() {
 
   return (
     <>
-      <Typography className={classNames.pageHeader} variant="h3">
-        this is problem
-      </Typography>
       <CodingProblem />
     </>
   );

@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '50px',
   },
   selectField: {
-    width: '400px',
+    width: '300px',
   },
 }));
 
@@ -86,6 +86,10 @@ export default function CodeSubmission() {
           </Select>
         </FormControl>
       </AlignedText>
+      <div>
+        <Button color="default">Cancel</Button>
+        <Button color="primary">Submit</Button>
+      </div>
     </>
   );
 }

@@ -47,7 +47,36 @@ const readProblem = (token, problemId) => async (dispatch) => {
   }
 };
 
+const readSubmissionDetailAll = (token, submissionId) => async (dispatch) => {
+  dispatch({ type: problemConstants.READ_SUBMISSION_START });
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    const res = await agent.get(`/submission/${submissionId}`, auth);
+    if (!res.data.success) {
+      dispatch({
+        type: problemConstants.READ_SUBMISSION_FAIL,
+        errors: res.data.error,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.READ_SUBMISSION_SUCCESS,
+        payload: res.data.data,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.READ_SUBMISSION_FAIL,
+      errors: err,
+    });
+  }
+};
+
 export {
   browseChallengeOverview,
   readProblem,
+  readSubmissionDetailAll,
 };
