@@ -15,7 +15,7 @@ export const fetchClassGrade = (token, classId) => (dispatch) => {
     .catch((error) => {
       dispatch({
         type: gradeConstants.FETCH_CLASS_GRADE_FAIL,
-        error: error,
+        error,
       });
     });
 };
@@ -50,7 +50,7 @@ export const fetchAccountGrade = (token, accountId) => (dispatch) => {
     .catch((error) => {
       dispatch({
         type: gradeConstants.FETCH_ACCOUNT_GRADE_FAIL,
-        error: error,
+        error,
       });
     });
 };
@@ -66,7 +66,7 @@ export const deleteGrade = (token, gradeId) => (dispatch) => {
     .catch((error) => {
       dispatch({
         type: gradeConstants.DELETE_GRADE_FAIL,
-        error: error,
+        error,
       });
     });
 };
@@ -82,7 +82,7 @@ export const editGrade = (token, gradeId, title, score, comment) => (dispatch) =
     .catch((error) => {
       dispatch({
         type: gradeConstants.EDIT_GRADE_FAIL,
-        error: error,
+        error,
       });
     });
 };
