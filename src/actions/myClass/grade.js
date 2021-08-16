@@ -12,10 +12,10 @@ export const fetchClassGrade = (token, classId) => (dispatch) => {
         payload: { classId, data: res.data.data },
       });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: gradeConstants.FETCH_CLASS_GRADE_FAIL,
-        error: error,
+        error: err,
       });
     });
 };
@@ -47,10 +47,10 @@ export const fetchAccountGrade = (token, accountId) => (dispatch) => {
         payload: { accountId, data: res.data.data },
       });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: gradeConstants.FETCH_ACCOUNT_GRADE_FAIL,
-        error: error,
+        error: err,
       });
     });
 };
@@ -63,10 +63,10 @@ export const deleteGrade = (token, gradeId) => (dispatch) => {
     .then((res) => {
       dispatch({ type: gradeConstants.DELETE_GRADE_SUCCESS });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: gradeConstants.DELETE_GRADE_FAIL,
-        error: error,
+        error: err,
       });
     });
 };
@@ -77,12 +77,13 @@ export const editGrade = (token, gradeId, title, score, comment) => (dispatch) =
   agent
     .patch(`/grade/${gradeId}`, { title, score, comment }, auth)
     .then((res) => {
+      console.log(res.data);
       dispatch({ type: gradeConstants.EDIT_GRADE_SUCCESS });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: gradeConstants.EDIT_GRADE_FAIL,
-        error: error,
+        error: err,
       });
     });
 };

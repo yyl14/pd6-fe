@@ -88,4 +88,80 @@ const editClassMember = (token, classId, editedList) => (dispatch) => {
 //     });
 // };
 
-export { getInstitutes, fetchClassMembers, editClassMember };
+const fetchCourse = (token, courseId) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  dispatch({ type: commonConstants.FETCH_COURSE_START });
+
+  agent
+    .get('/course', auth)
+    .then((res) => {
+      const { data } = res.data;
+      dispatch({
+        type: commonConstants.FETCH_COURSE_SUCCESS,
+        payload: { courseId, data: res.data },
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: commonConstants.FETCH_COURSE_FAIL,
+        error: err,
+      });
+    });
+};
+
+const fetchClass = (token, classId) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  dispatch({ type: commonConstants.FETCH_CLASS_START });
+
+  agent
+    .get(`/class/${classId}`, auth)
+    .then((res) => {
+      // console.log(res);
+      dispatch({
+        type: commonConstants.FETCH_CLASS_SUCCESS,
+        payload: { classId, data: res.data },
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: commonConstants.FETCH_CLASS_FAIL,
+        error: err,
+      });
+    });
+};
+
+const fetchAccount = (token, id) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  dispatch({ type: commonConstants.FETCH_ACCOUNT_REQUEST });
+
+  agent
+    .get(`/account/${id}`, auth)
+    .then((res) => {
+      dispatch({
+        type: commonConstants.FETCH_ACCOUNT_SUCCESS,
+        payload: res.data.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: commonConstants.FETCH_ACCOUNT_FAIL,
+        error: err,
+      });
+    });
+};
+
+export {
+  getInstitutes, fetchClassMembers, editClassMember, fetchCourse, fetchClass, fetchAccount,
+};

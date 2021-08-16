@@ -23,6 +23,15 @@ const byId = (state = {}, action) => {
       );
     }
 
+    case commonConstants.FETCH_CLASS_SUCCESS: {
+      return {
+        ...state,
+        [action.payload.id]: {
+          ...action.payload, memberIds: [], gradeIds: [], teamIds: [], challengeIds: [],
+        },
+      };
+    }
+
     case commonConstants.FETCH_CLASS_MEMBERS_SUCCESS: {
       const { classId, data } = action.payload;
       return { ...state, [classId]: { ...state[classId], memberIds: data.map((item) => item.member_id) } };

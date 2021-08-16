@@ -9,13 +9,13 @@ export const fetchTeams = (token, classId) => (dispatch) => {
     .then((res) => {
       dispatch({
         type: teamConstants.FETCH_TEAMS_SUCCESS,
-        payload: { classId, data: res.data.data},
+        payload: { classId, data: res.data.data },
       });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: teamConstants.FETCH_TEAMS_FAIL,
-        error: error,
+        error: err,
       });
     });
 };
@@ -23,21 +23,20 @@ export const fetchTeams = (token, classId) => (dispatch) => {
 export const addTeam = (token, classId, teamName, newLabel) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
   dispatch({ type: teamConstants.ADD_TEAM_START });
-  const body = {
-    name: teamName,
-    label: newLabel,
-  };
   agent
-    .post(`/class/${classId}/team`, body, auth)
+    .post(`/class/${classId}/team`, {
+      name: teamName,
+      label: newLabel,
+    }, auth)
     .then((res) => {
       dispatch({
         type: teamConstants.ADD_TEAM_SUCCESS,
       });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: teamConstants.ADD_TEAM_FAIL,
-        error: error,
+        error: err,
       });
     });
 };
@@ -45,22 +44,21 @@ export const addTeam = (token, classId, teamName, newLabel) => (dispatch) => {
 export const editTeam = (token, teamId, teamName, classId, newLabel) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
   dispatch({ type: teamConstants.EDIT_TEAM_START });
-  const body = {
-    name: teamName,
-    class_id: classId,
-    label: newLabel,
-  };
   agent
-    .patch(`/team/${teamId}`, body, auth)
+    .patch(`/team/${teamId}`, {
+      name: teamName,
+      class_id: classId,
+      label: newLabel,
+    }, auth)
     .then((res) => {
       dispatch({
         type: teamConstants.EDIT_TEAM_SUCCESS,
       });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: teamConstants.EDIT_TEAM_FAIL,
-        error: error,
+        error: err,
       });
     });
 };
@@ -73,13 +71,13 @@ export const fetchTeamMember = (token, teamId) => (dispatch) => {
     .then((res) => {
       dispatch({
         type: teamConstants.FETCH_TEAM_MEMBER_SUCCESS,
-        payload: { teamId, data: res.data.data},
+        payload: { teamId, data: res.data.data },
       });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: teamConstants.FETCH_TEAM_MEMBER_FAIL,
-        error: error,
+        error: err,
       });
     });
 };
@@ -87,21 +85,20 @@ export const fetchTeamMember = (token, teamId) => (dispatch) => {
 export const addTeamMember = (token, teamId, student, role) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
   dispatch({ type: teamConstants.ADD_TEAM_MEMBER_START });
-  const body = {
-    account_referral: student,
-    role,
-  };
   agent
-    .post(`/team/${teamId}/member`, body, auth)
-    then((res) => {
+    .post(`/team/${teamId}/member`, {
+      account_referral: student,
+      role,
+    }, auth)
+    .then((res) => {
       dispatch({
         type: teamConstants.ADD_TEAM_MEMBER_SUCCESS,
       });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: teamConstants.ADD_TEAM_MEMBER_FAIL,
-        error: error,
+        error: err,
       });
     });
 };
@@ -109,21 +106,20 @@ export const addTeamMember = (token, teamId, student, role) => (dispatch) => {
 export const editTeamMember = (token, teamId, memberId, role) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
   dispatch({ type: teamConstants.EDIT_TEAM_MEMBER_START });
-  const body = {
-    member_id: memberId,
-    role,
-  };
   agent
-    .patch(`/team/${teamId}/member`, body, auth)
+    .patch(`/team/${teamId}/member`, {
+      member_id: memberId,
+      role,
+    }, auth)
     .then((res) => {
       dispatch({
         type: teamConstants.EDIT_TEAM_MEMBER_SUCCESS,
       });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: teamConstants.EDIT_TEAM_MEMBER_FAIL,
-        error: error,
+        error: err,
       });
     });
 };
@@ -138,10 +134,10 @@ export const deleteTeamMember = (token, teamId, memberId) => (dispatch) => {
         type: teamConstants.DELETE_TEAM_MEMBER_SUCCESS,
       });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: teamConstants.DELETE_TEAM_MEMBER_FAIL,
-        error: error,
+        error: err,
       });
     });
 };
