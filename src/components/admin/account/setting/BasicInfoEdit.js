@@ -33,17 +33,14 @@ export default function BasicInfoEdit(props) {
   const handleSave = () => {
     if (altMail !== props.altMail) {
       if (altMail !== '') {
-        console.log('send mail');
         dispatch(editAccount(authToken, accountId, userName, realName, nickName, altMail));
         setPopUp(true);
         return;
       }
     }
     if ((altMail === '' && props.altMail === null) || (altMail === props.altMail)) {
-      console.log('not change');
       dispatch(editAccount(authToken, accountId, userName, realName, nickName, null));
     } else {
-      console.log('deleted, don"t send anything');
       dispatch(editAccount(authToken, accountId, userName, realName, nickName, ''));
     }
 

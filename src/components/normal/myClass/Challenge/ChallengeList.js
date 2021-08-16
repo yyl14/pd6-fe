@@ -9,6 +9,9 @@ import {
   DialogActions,
   DialogContent,
   TextField,
+  FormControl,
+  Select,
+  MenuItem,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import moment from 'moment';
@@ -17,6 +20,7 @@ import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';// change to local icon
 import CustomTable from '../../../ui/CustomTable';
 import TableFilterCard from '../../../ui/TableFilterCard';
+import DateRangePicker from '../../../ui/DateRangePicker';
 import filterData from '../../../../function/filter';
 import sortData from '../../../../function/sort';
 import { fetchChallenges, addChallenge } from '../../../../actions/myClass/challenge';
@@ -30,13 +34,29 @@ const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
   },
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: theme.spacing(2),
+  },
+  item: {
+    width: '190px',
+  },
+  textfield: {
+    width: '350px',
+  },
+  gap: {
+    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(2),
+  },
 }));
 
 /* This is a level 4 component (page component) */
 export default function ChallengeList() {
   const { courseId, classId } = useParams();
   const history = useHistory();
-  const classNames = useStyles();
+  const classes = useStyles();
   const dispatch = useDispatch();
 
   const [tableData, setTableData] = useState([]);
@@ -46,14 +66,20 @@ export default function ChallengeList() {
     filter: ['Select all'],
     sort: '(None)',
   });
+  const [dateRangePicker, setDateRangePicker] = useState([
+    {
+      startDate: moment().startOf('week').toDate(),
+      endDate: moment().endOf('week').toDate(),
+      key: 'selection',
+    },
+  ]);
 
   const [currentTime, setCurrentTime] = useState(moment());
   const [popUp, setPopUp] = useState(false);
   const [inputs, setInputs] = useState({
     title: '',
-    scoredBy: '',
-    inProblemSet: '',
-    language: '',
+    scoredBy: 'Last Score',
+    inProblemSet: 'On end time',
     startTime: '',
     endTime: '',
   });
@@ -119,9 +145,14 @@ export default function ChallengeList() {
     setTableData(tempData2);
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInputs((input) => ({ ...input, [name]: value }));
+  };
+
   return (
     <>
-      <Typography className={classNames.pageHeader} variant="h3">
+      <Typography className={classes.pageHeader} variant="h3">
         PBC 111-1 / Challenge
       </Typography>
       <CustomTable
@@ -202,9 +233,35 @@ export default function ChallengeList() {
           <AlignedText text="Title" childrenType="field" maxWidth="md">
             <TextField
               value={inputs.title}
-              // onChange={(e) => handleChange(e)}
+              name="title"
+              onChange={(e) => handleChange(e)}
             />
           </AlignedText>
+          <div className={classes.gap}>
+            <DateRangePicker vertical value={dateRangePicker} setValue={setDateRangePicker} />
+          </div>
+          <div className={classes.row}>
+            <div className={classes.item}>
+              <Typography>Scored by</Typography>
+            </div>
+            <FormControl variant="outlined" className={classes.textfield}>
+              <Select value={inputs.scoredBy} name="scoredBy" onChange={(e) => handleChange(e)}>
+                <MenuItem value="Last Score">Last Score</MenuItem>
+                <MenuItem value="Highest Score">Highest Score</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <div className={classes.row}>
+            <div className={classes.item}>
+              <Typography>In problem set</Typography>
+            </div>
+            <FormControl variant="outlined" className={classes.textfield}>
+              <Select value={inputs.inProblemSet} name="inProblemSet" onChange={(e) => handleChange(e)}>
+                <MenuItem value="On end time">On end time</MenuItem>
+                <MenuItem value="Highest Score">I dont know</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
         </DialogContent>
       </Dialog>
     </>
