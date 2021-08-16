@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { readSubmissionDetailAll } from '../../../../actions/myClass/problem';
+import { readSubmissionDetail } from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -31,12 +31,13 @@ export default function SubmissionDetail() {
   const dispatch = useDispatch();
 
   const submission = useSelector((state) => state.submissions.byId);
+  const accountId = useSelector((state) => state.submissions.byId[submissionId].account_id);
   const authToken = useSelector((state) => state.auth.token);
   const error = useSelector((state) => state.error.myClass.problem);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
   useEffect(() => {
-    dispatch(readSubmissionDetailAll(authToken, submissionId));
+    dispatch(readSubmissionDetail(authToken, submissionId));
   }, [authToken, dispatch, submissionId]);
 
   if (error.readSubmission) {

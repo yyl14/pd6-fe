@@ -47,7 +47,7 @@ const readProblem = (token, problemId) => async (dispatch) => {
   }
 };
 
-const readSubmissionDetailAll = (token, submissionId) => async (dispatch) => {
+const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_SUBMISSION_START });
   try {
     const auth = {
@@ -78,5 +78,5 @@ const readSubmissionDetailAll = (token, submissionId) => async (dispatch) => {
 export {
   browseChallengeOverview,
   readProblem,
-  readSubmissionDetailAll,
+  readSubmissionDetail,
 };
