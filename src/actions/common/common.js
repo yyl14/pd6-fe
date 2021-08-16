@@ -93,7 +93,7 @@ const fetchCourse = (token, courseId) => async (dispatch) => {
       },
     };
     dispatch({ type: commonConstants.FETCH_COURSE_START });
-    const res = await agent.get('/course', auth);
+    const res = await agent.get(`/course/${courseId}`, auth);
     dispatch({ type: commonConstants.FETCH_COURSE_SUCCESS, payload: res.data.data });
   } catch (err) {
     dispatch({

@@ -17,15 +17,14 @@ import { useHistory, useParams } from 'react-router-dom';
 import moment from 'moment';
 import { format } from 'date-fns';
 import AlignedText from '../../../ui/AlignedText';
-import Icon from '../../../ui/icon/index';// change to local icon
+import Icon from '../../../ui/icon/index';
 import CustomTable from '../../../ui/CustomTable';
 import TableFilterCard from '../../../ui/TableFilterCard';
 import DateRangePicker from '../../../ui/DateRangePicker';
 import filterData from '../../../../function/filter';
 import sortData from '../../../../function/sort';
 import { fetchChallenges, addChallenge } from '../../../../actions/myClass/challenge';
-
-// import { fetchClasses } from '../../../../actions/admin/course';
+import { fetchClass, fetchCourse } from '../../../../actions/common/common';
 
 // cm: hasSearch, searchPlaceHolder, buttons, columns, columnComponent, data, hasLink, linkName
 // cn: hasSearch, searchPlaceHolder, columns, columnComponent, data, hasLink, linkName
@@ -56,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ChallengeList() {
   const { courseId, classId } = useParams();
   const history = useHistory();
-  const classes = useStyles();
+  const className = useStyles();
   const dispatch = useDispatch();
 
   const [tableData, setTableData] = useState([]);
@@ -89,10 +88,13 @@ export default function ChallengeList() {
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.challenge);
 
-  // const classes = useSelector((state) => state.classes.byId);
-  // useEffect(() => {
-  //   dispatch(fetchClasses(authToken, classId));
-  // }, [dispatch, authToken, classId]);
+  const classes = useSelector((state) => state.classes.byId);
+  const courses = useSelector((state) => state.courses.byId);
+
+  useEffect(() => {
+    dispatch(fetchCourse(authToken, courseId));
+    dispatch(fetchClass(authToken, classId));
+  }, [dispatch, authToken, classId, courseId]);
   // console.log(classes[classId].name);
 
   // if (courses.byId[courseId] === undefined || courses.byId[courseId].name === undefined) {
@@ -152,9 +154,17 @@ export default function ChallengeList() {
 
   return (
     <>
-      <Typography className={classes.pageHeader} variant="h3">
-        PBC 111-1 / Challenge
+      {courses[courseId] && classes[classId]
+      && (
+      <Typography className={className.pageHeader} variant="h3">
+        {courses[courseId].name}
+        {' '}
+        {classes[classId].name}
+        {' '}
+        / Challenge
       </Typography>
+      )}
+
       <CustomTable
         hasSearch
         searchPlaceholder="Title"
@@ -237,25 +247,25 @@ export default function ChallengeList() {
               onChange={(e) => handleChange(e)}
             />
           </AlignedText>
-          <div className={classes.gap}>
+          <div className={className.gap}>
             <DateRangePicker vertical value={dateRangePicker} setValue={setDateRangePicker} />
           </div>
-          <div className={classes.row}>
-            <div className={classes.item}>
+          <div className={className.row}>
+            <div className={className.item}>
               <Typography>Scored by</Typography>
             </div>
-            <FormControl variant="outlined" className={classes.textfield}>
+            <FormControl variant="outlined" className={className.textfield}>
               <Select value={inputs.scoredBy} name="scoredBy" onChange={(e) => handleChange(e)}>
                 <MenuItem value="Last Score">Last Score</MenuItem>
                 <MenuItem value="Highest Score">Highest Score</MenuItem>
               </Select>
             </FormControl>
           </div>
-          <div className={classes.row}>
-            <div className={classes.item}>
+          <div className={className.row}>
+            <div className={className.item}>
               <Typography>In problem set</Typography>
             </div>
-            <FormControl variant="outlined" className={classes.textfield}>
+            <FormControl variant="outlined" className={className.textfield}>
               <Select value={inputs.inProblemSet} name="inProblemSet" onChange={(e) => handleChange(e)}>
                 <MenuItem value="On end time">On end time</MenuItem>
                 <MenuItem value="Highest Score">I dont know</MenuItem>
