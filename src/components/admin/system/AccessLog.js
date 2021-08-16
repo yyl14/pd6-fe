@@ -67,13 +67,10 @@ export default function AccessLog() {
         key: 'selection',
       },
     ]);
-    const newData = [];
-    logsID.forEach((key) => {
-      const item = logs[key];
-      item.path = `/admin/account/account/${item.account_id}/setting`;
-      newData.push(modifyRawData(item));
-    });
-    setTableData(newData);
+    setTableData(logsID.map((key) => ({
+      ...modifyRawData(logs[key]),
+      path: `/admin/account/account/${logs[key].account_id}/setting`,
+    })));
   }, [logsID, logs, modifyRawData]);
 
   const filter = () => {
@@ -98,7 +95,7 @@ export default function AccessLog() {
   };
 
   useEffect(() => {
-    dispatch(fetchAccessLog(authToken, 0, 100));
+    dispatch(fetchAccessLog(authToken, 0, 30));
   }, [authToken, dispatch]);
 
   useEffect(() => {
