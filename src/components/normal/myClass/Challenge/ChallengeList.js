@@ -16,8 +16,9 @@ import {
 import { useHistory, useParams } from 'react-router-dom';
 import moment from 'moment';
 import { format } from 'date-fns';
+import { MdAdd } from 'react-icons/md';
 import AlignedText from '../../../ui/AlignedText';
-import Icon from '../../../ui/icon/index';
+// import Icon from '../../../ui/icon/index';
 import CustomTable from '../../../ui/CustomTable';
 import TableFilterCard from '../../../ui/TableFilterCard';
 import DateRangePicker from '../../../ui/DateRangePicker';
@@ -108,17 +109,29 @@ export default function ChallengeList() {
         }
         return challenges[id].status;
       });
-      setTableData(
-        challengesID.map((id) => ({
-          title: challenges[id].title,
-          path: `/my-class/${courseId}/${classId}/challenge/${id}`,
-          startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
-          endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
-          status: challenges[id].status,
-        })),
-      );
+      if (isManager) {
+        setTableData(
+          challengesID.map((id) => ({
+            title: challenges[id].title,
+            path: `/my-class/${courseId}/${classId}/challenge/${id}`,
+            startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
+            endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
+            status: challenges[id].status,
+          })),
+        );
+      } else {
+        setTableData(
+          challengesID.filter((id) => challenges[id].status !== 'Not Yet').map((id) => ({
+            title: challenges[id].title,
+            path: `/my-class/${courseId}/${classId}/challenge/${id}`,
+            startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
+            endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
+            status: challenges[id].status,
+          })),
+        );
+      }
     }
-  }, [challenges, challengesID, classId, courseId, currentTime]);
+  }, [challenges, challengesID, classId, courseId, currentTime, isManager]);
 
   useEffect(() => {
     userClasses.map((item) => {
@@ -210,7 +223,7 @@ export default function ChallengeList() {
           isManager ? (
             <>
               <Button color="primary" onClick={() => setPopUp(true)}>
-                <Icon.Add />
+                <MdAdd />
               </Button>
             </>
           )
@@ -223,7 +236,7 @@ export default function ChallengeList() {
             label: 'Title',
             minWidth: 150,
             align: 'center',
-            width: 250,
+            width: 200,
             type: 'string',
           },
           {
@@ -231,7 +244,7 @@ export default function ChallengeList() {
             label: 'Start Time',
             minWidth: 50,
             align: 'center',
-            width: 200,
+            width: 180,
             type: 'string',
           },
           {
@@ -239,7 +252,7 @@ export default function ChallengeList() {
             label: 'End Time',
             minWidth: 50,
             align: 'center',
-            width: 200,
+            width: 180,
             type: 'string',
           },
           {
@@ -247,7 +260,7 @@ export default function ChallengeList() {
             label: 'Status',
             minWidth: 50,
             align: 'center',
-            width: 200,
+            width: 100,
             type: 'string',
           },
         ]}
