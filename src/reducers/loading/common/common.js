@@ -5,6 +5,9 @@ const initialState = {
   fetchClassMembers: false,
   editClassMember: false,
   // deleteClassMember: false,
+  fetchCourse: false,
+  fetchClass: false,
+  fetchAccount: false,
 };
 
 export default function common(state = initialState, action) {
@@ -82,6 +85,60 @@ export default function common(state = initialState, action) {
     //     deleteClassMember: false,
     //   };
     // }
+    case commonConstants.FETCH_COURSE_START: {
+      return {
+        ...state,
+        fetchCourse: true,
+      };
+    }
+    case commonConstants.FETCH_COURSE_SUCCESS: {
+      return {
+        ...state,
+        fetchCourse: false,
+      };
+    }
+    case commonConstants.FETCH_COURSE_FAIL: {
+      return {
+        ...state,
+        fetchCourse: false,
+      };
+    }
+    case commonConstants.FETCH_CLASS_START: {
+      return {
+        ...state,
+        fetchClass: true,
+      };
+    }
+    case commonConstants.FETCH_CLASS_SUCCESS: {
+      return {
+        ...state,
+        fetchClass: false,
+      };
+    }
+    case commonConstants.FETCH_CLASS_FAIL: {
+      return {
+        ...state,
+        fetchClass: false,
+      };
+    }
+    case commonConstants.FETCH_ACCOUNT_REQUEST: {
+      return {
+        ...state,
+        fetchAccount: true,
+      };
+    }
+    case commonConstants.FETCH_ACCOUNT_SUCCESS: {
+      return {
+        ...state,
+        fetchAccount: false,
+      };
+    }
+    case commonConstants.FETCH_ACCOUNT_FAIL: {
+      return {
+        ...state,
+        fetchAccount: false,
+      };
+    }
 
     default: {
       return state;

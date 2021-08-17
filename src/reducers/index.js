@@ -8,6 +8,7 @@ import classes from './classes';
 import classMembers from './classMembers';
 import problem from './problems';
 import submissions from './submissions';
+import judgments from './judgments';
 import teamMembers from './teamMembers';
 import teams from './teams';
 import accounts from './accounts';
@@ -29,6 +30,7 @@ export default combineReducers({
   classMembers,
   problem,
   submissions,
+  judgments,
   teamMembers,
   teams,
   accounts,

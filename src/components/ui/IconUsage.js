@@ -168,6 +168,58 @@ export default function IconList() {
           <p>StatusWA</p>
         </StyledPaper>
         <StyledPaper>
+          <Icon.Add />
+          <p>Add</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.Bell />
+          <p>Bell</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.Book />
+          <p>Book</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.Grade />
+          <p>Grade</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.History />
+          <p>History</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.Institute />
+          <p>Institute</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.Member />
+          <p>Member</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.Newadd />
+          <p>Newadd</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.Sort />
+          <p>Sort</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.Star />
+          <p>Star</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.Team />
+          <p>Team</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.Warning />
+          <p>Warning</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.Code />
+          <p>Code</p>
+        </StyledPaper>
+        <StyledPaper>
           <Icon.HistoryIcon />
           <p>HistoryIcon</p>
         </StyledPaper>

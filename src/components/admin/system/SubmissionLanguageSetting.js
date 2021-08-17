@@ -75,7 +75,7 @@ export default function LangSetting() {
   return (
     <>
       <Typography variant="h3" className={classes.pageHeader}>
-        {`${submitLang[languageId].name} ${submitLang[languageId].version} / Submission Language Setting`}
+        {`${submitLang[languageId].name} ${submitLang[languageId].version} / Setting`}
       </Typography>
 
       <SimpleBar title="Submission Language Information">
