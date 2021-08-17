@@ -26,9 +26,6 @@ import sortData from '../../../../function/sort';
 import { fetchChallenges, addChallenge } from '../../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse } from '../../../../actions/common/common';
 
-// isM hasSearch, searchPlaceHolder, buttons, columns, columnComponent, data, hasLink, linkName
-// cn: hasSearch, searchPlaceHolder, columns, columnComponent, data, hasLink, linkName
-
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',

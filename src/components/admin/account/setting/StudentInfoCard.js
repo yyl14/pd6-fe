@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import {
   Button, Card, CardContent, Typography, makeStyles,
 } from '@material-ui/core';
-import StarIcon from '@material-ui/icons/Star';
 import { yellow } from '@material-ui/core/colors';
 import AlignedText from '../../../ui/AlignedText';
+import Icon from '../../../ui/icon/index';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,7 +66,7 @@ export default function StudentInfoCard(props) {
   return (
     <div className={classes.root}>
       <div className={classes.defaultHeader}>
-        {props.isDefault ? <StarIcon style={{ color: 'ffe81e' }} className={classes.defaultStar} /> : <></>}
+        {props.isDefault ? <Icon.StarIcon style={{ color: 'ffe81e' }} className={classes.defaultStar} /> : <></>}
         <Typography variant="body1">
           {transform(props.instituteId)}
         </Typography>
