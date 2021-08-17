@@ -5,5 +5,5 @@ import common from './common';
 import user from './user';
 
 export default combineReducers({
-  admin, myClass, common, user,
+  admin, common, user, myClass,
 });

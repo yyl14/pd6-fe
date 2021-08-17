@@ -121,7 +121,7 @@ export const fetchClasses = (token, courseId) => (dispatch) => {
   agent
     .get(`/course/${courseId}/class`, auth)
     .then((res) => {
-      // console.log(res);
+      console.log(res);
       dispatch({
         type: courseConstants.FETCH_CLASSES_SUCCESS,
         payload: { courseId, data: res.data },

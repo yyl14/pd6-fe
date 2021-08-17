@@ -27,7 +27,11 @@ const byId = (state = {}, action) => {
       return {
         ...state,
         [action.payload.id]: {
-          ...action.payload, memberIds: [], gradeIds: [], teamIds: [], challengeIds: [],
+          ...action.payload,
+          memberIds: state[action.payload.id] ? state[action.payload.id].memberIds : [],
+          gradeIds: state[action.payload.id] ? state[action.payload.id].gradeIds : [],
+          teamIds: state[action.payload.id] ? state[action.payload.id].teamIds : [],
+          challengeIds: state[action.payload.id] ? state[action.payload.id].challengeIds : [],
         },
       };
     }

@@ -61,15 +61,12 @@ export default function AccountList() {
   }, [authToken, dispatch, loading.deleteAccount, loading.editAccount, loading.makeStudentCardDefault]);
 
   useEffect(() => {
-    const newData = [];
-
-    accountsID.forEach((key) => {
-      const item = accounts[key];
-      const temp = { ...item };
-      temp.path = `/admin/account/account/${temp.id}/setting`;
-      newData.push(temp);
-    });
-    setTableData(newData);
+    setTableData(
+      accountsID.map((id) => ({
+        ...accounts[id],
+        path: `/admin/account/account/${id}/setting`,
+      })),
+    );
   }, [accounts, accountsID]);
 
   if (loading.fetchAccounts) {
