@@ -15,10 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
   textFieldComment: {
     width: '980px',
-    height: '180px',
-  },
-  gap: {
-    marginTop: theme.spacing(2),
+    marginBottom: '16px',
   },
 }));
 
@@ -44,7 +41,7 @@ export default function BasicInfoEdit(props) {
       <SimpleBar title="Grade Information">
         <>
           <AlignedText text="Username" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">{props.userName}</Typography>
+            <Typography variant="body1">{props.username}</Typography>
           </AlignedText>
           <AlignedText text="Student ID" maxWidth="lg" childrenType="text">
             <Typography variant="body1">{props.studentId}</Typography>
@@ -57,28 +54,30 @@ export default function BasicInfoEdit(props) {
           </AlignedText>
           <AlignedText text="Score" maxWidth="lg" childrenType="field">
             <TextField
+              className={classes.textFieldScore}
               value={score}
               onChange={(e) => {
                 setScore(e.target.value);
                 setDisabled(false);
               }}
-              className={classes.textFieldScore}
             />
           </AlignedText>
           <AlignedText text="Comment" maxWidth="lg" childrenType="field">
             <TextField
+              className={classes.textFieldComment}
               value={comment}
               onChange={(e) => {
                 setComment(e.target.value);
                 setDisabled(false);
               }}
-              className={classes.textFieldComment}
+              multiline
+              rows={5}
             />
           </AlignedText>
           <AlignedText text="Submitted Time" maxWidth="lg" childrenType="text">
             <Typography variant="body1">{moment(props.time).format('YYYY-MM-DD, HH:mm')}</Typography>
           </AlignedText>
-          <div className={classes.gap}>
+          <div>
             <Button onClick={() => props.handleBack()}>Cancel</Button>
             <Button
               color="primary"

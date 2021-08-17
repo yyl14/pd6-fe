@@ -14,6 +14,7 @@ import GradeInfo from './detail/GradeInfo';
 import Grader from './detail/Grader';
 import GradeInfoEdit from './detail/GradeInfoEdit';
 import GradeDelete from './detail/GradeDelete';
+import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -37,6 +38,18 @@ export default function AccountSetting() {
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
 
+  const grade = grades[gradeId];
+  const grader = members[grade.grader_id];
+  const receiver = members[grade.receiver_id];
+
+  const [editGradeInfo, setEditGradeInfo] = useState(false);
+  const [popUp, setPopUp] = useState(false);
+
+  useEffect(() => {
+    dispatch(fetchClassGrade(authToken, classId));
+    dispatch(fetchClassMembers(authToken, classId));
+  }, [dispatch, authToken, classId]);
+
   useEffect(() => {
     user.classes.map((item) => {
       if (`${item.class_id}` === classId) {
@@ -48,20 +61,6 @@ export default function AccountSetting() {
     });
   }, [classId, user.classes]);
 
-  useEffect(() => {
-    dispatch(fetchClassGrade(authToken, classId));
-    dispatch(fetchClassMembers(authToken, classId));
-  }, [dispatch, authToken, classId]);
-
-  const grade = grades[gradeId];
-  // const graderId = grade.grader_id;
-  const grader = members[grade.grader_id];
-  // const receiverId = grade.receiver_id;
-  const receiver = members[grade.receiver_id];
-
-  const [editGradeInfo, setEditGradeInfo] = useState(false);
-  const [popUp, setPopUp] = useState(false);
-
   const handleBack = () => {
     setEditGradeInfo(false);
   };
@@ -70,8 +69,11 @@ export default function AccountSetting() {
     setEditGradeInfo(true);
   };
 
-  if (loading.fetchClassGrade || loading.editGrade || grades[gradeId] === undefined) {
-    return <div>loading...</div>;
+  if (grades[gradeId] === undefined) {
+    if (loading.fetchClassGrade || loading.editGrade) {
+      return <div>loading...</div>;
+    }
+    return <NoMatch />;
   }
 
   return (
@@ -110,12 +112,12 @@ export default function AccountSetting() {
         realName={grader.real_name}
       />
 
-      {isManager ? (
+      {isManager && (
         <GradeDelete
           username={receiver.username}
           title={grade.title}
         />
-      ) : <></>}
+      )}
     </>
   );
 }

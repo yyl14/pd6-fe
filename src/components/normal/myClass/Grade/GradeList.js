@@ -20,6 +20,7 @@ import {
   fetchClassGrade, addClassGrade, fetchAccountGrade, fetchGradeTemplate,
 } from '../../../../actions/myClass/grade';
 import { fetchCourse, fetchClass, fetchClassMembers } from '../../../../actions/common/common';
+import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -30,6 +31,18 @@ const useStyles = makeStyles((theme) => ({
   },
   formatText: {
     marginBottom: '16px',
+  },
+  formatTextContent: {
+    color: theme.palette.grey.A400,
+  },
+  divider: {
+    height: '1px',
+    margin: '0px',
+    border: `0px solid ${theme.palette.grey[300]}`,
+    backgroundColor: theme.palette.grey[300],
+  },
+  templateBtn: {
+    marginRight: '155px',
   },
 }));
 
@@ -52,6 +65,23 @@ export default function GradeList() {
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
 
+  const [tableData, setTableData] = useState([]);
+  const [popUp, setPopUp] = useState(false);
+  const [inputTitle, setInputTitle] = useState('');
+  const [gradeFile, setGradeFile] = useState('');
+
+  useEffect(() => {
+    dispatch(fetchCourse(authToken, courseId));
+    dispatch(fetchClass(authToken, classId));
+    dispatch(fetchClassMembers(authToken, classId));
+  }, [authToken, classId, courseId, dispatch]);
+
+  useEffect(() => {
+    if (!loading.addClassGrade) {
+      dispatch(fetchClassGrade(authToken, classId));
+    }
+  }, [authToken, classId, dispatch, loading.addClassGrade]);
+
   useEffect(() => {
     user.classes.map((item) => {
       if (`${item.class_id}` === classId) {
@@ -62,50 +92,15 @@ export default function GradeList() {
       return <></>;
     });
   }, [classId, user.classes]);
-  console.log(isManager);
-
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-  }, [authToken, courseId, dispatch]);
-
-  useEffect(() => {
-    dispatch(fetchClass(authToken, courseId));
-  }, [authToken, courseId, dispatch]);
-
-  useEffect(() => {
-    dispatch(fetchClassMembers(authToken, classId));
-  }, [authToken, classId, dispatch]);
-
-  useEffect(() => {
-    if (!loading.addClassGrade) {
-      dispatch(fetchClassGrade(authToken, classId));
-    }
-  }, [authToken, classId, dispatch, loading.addClassGrade]);
 
   // useEffect(() => {
-  //   dispatch(fetchAccountGrade(authToken, user.id));
-  // }, [authToken, user.id, dispatch]);
-
-  const [tableData, setTableData] = useState([]);
-
-  const [popUp, setPopUp] = useState(false);
-  const [inputTitle, setInputTitle] = useState('');
-  const [gradeFile, setGradeFile] = useState('');
-
-  const handleChange = (event) => {
-    setInputTitle(event.target.value);
-  };
-
-  const add = () => {
-    setPopUp(false);
-    setInputTitle('');
-    dispatch(addClassGrade(authToken, classId, gradeFile));
-  };
-
-  const downloadTemplate = () => {
-    setPopUp(false);
-    dispatch(fetchGradeTemplate(authToken));
-  };
+  //   setTableData(
+  //     accountsID.map((id) => ({
+  //       ...accounts[id],
+  //       path: `/admin/account/account/${id}/setting`,
+  //     })),
+  //   );
+  // }, []);
 
   useEffect(() => {
     const newData = [];
@@ -140,12 +135,29 @@ export default function GradeList() {
         }
       });
     }
-    console.log(newData);
     setTableData(newData);
   }, [members, memberIds, grades, courseId, classId, isManager, gradeIds, user.id]);
 
-  if (loading.fetchClassGrade || loading.addClassGrade || courses[courseId] === undefined || classes[classId] === undefined) {
-    return <div>loading...</div>;
+  const handleChange = (event) => {
+    setInputTitle(event.target.value);
+  };
+
+  const add = () => {
+    setPopUp(false);
+    setInputTitle('');
+    dispatch(addClassGrade(authToken, classId, gradeFile));
+  };
+
+  const downloadTemplate = () => {
+    setPopUp(false);
+    dispatch(fetchGradeTemplate(authToken));
+  };
+
+  if (courses[courseId] === undefined || classes[classId] === undefined) {
+    if (loading.fetchCourse || loading.fetchClass || loading.fetchClassGrade || loading.addClassGrade) {
+      return <div>loading...</div>;
+    }
+    return <NoMatch />;
   }
 
   return (
@@ -157,13 +169,13 @@ export default function GradeList() {
         hasSearch
         buttons={
           isManager
-            ? (
+              && (
               <>
                 <Button color="primary" onClick={() => setPopUp(true)}>
                   <MdAdd />
                 </Button>
               </>
-            ) : <></>
+              )
       }
         data={tableData}
         columns={[
@@ -234,14 +246,16 @@ export default function GradeList() {
           <Typography variant="body2" className={classNames.formatText}>
             Grading file format:
             <br />
+            <div className={classNames.formatTextContent}>
             &ensp;&ensp;Receiver: student id (NTU only) &gt;= institute email &gt; #username
-            <br />
+              <br />
             &ensp;&ensp;Score: number or string
-            <br />
+              <br />
             &ensp;&ensp;Comment: string (optional)
-            <br />
+              <br />
             &ensp;&ensp;Grader: same as receiver
-            <br />
+              <br />
+            </div>
             Download template file for more instructions.
           </Typography>
           <AlignedText text="Class" maxWidth="mg" childrenType="text">
@@ -262,9 +276,11 @@ export default function GradeList() {
           <AlignedText text="Grading File" maxWidth="mg" childrenType="field">
             <Button variant="outlined" color="primary" startIcon={<Icon.Folder />}>Browse</Button>
           </AlignedText>
+          <hr className={classes.divider} />
         </DialogContent>
         <DialogActions>
           <Button
+            className={classNames.templateBtn}
             variant="outlined"
             startIcon={<Icon.Download />}
             onClick={() => { downloadTemplate(); }}
