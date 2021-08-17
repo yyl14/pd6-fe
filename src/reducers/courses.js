@@ -45,6 +45,10 @@ const allIds = (state = [], action) => {
       const { data } = action.payload;
       return data.map((item) => item.id);
     }
+    case commonConstants.FETCH_COURSE_SUCCESS: {
+      const { id } = action.payload;
+      return [...new Set([...state, id])];
+    }
     default:
       return state;
   }
