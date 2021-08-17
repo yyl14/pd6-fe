@@ -107,6 +107,13 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
+  svg: {
+    '& path': {
+      fill: theme.palette.primary.main, // <-- our blue
+    },
+    marginLeft: '35px',
+    marginRight: '21px',
+  },
 }));
 
 export default function Sidebar() {
@@ -181,28 +188,28 @@ export default function Sidebar() {
       </Route>
       {/* {Submission} */}
       <Route exact path="/my-class/:courseId/:classId/submission">
-        <Submission classes={classes} history={history} location={location} mode="main" />
+        <Submission classNames={classes} history={history} location={location} mode="main" />
       </Route>
       <Route path="/my-class/:courseId/:classId/submission/:submissionId">
-        <Submission classes={classes} history={history} location={location} mode="main" />
+        <Submission classNames={classes} history={history} location={location} mode="main" />
       </Route>
       {/* {Grade} */}
       <Route exact path="/my-class/:courseId/:classId/grade">
-        <Grade classes={classes} history={history} location={location} mode="main" />
+        <Grade classNames={classes} history={history} location={location} mode="main" />
       </Route>
       <Route path="/my-class/:courseId/:classId/grade/:studentId">
-        <Grade classes={classes} history={history} location={location} mode="main" />
+        <Grade classNames={classes} history={history} location={location} mode="main" />
       </Route>
       {/* {Team} */}
       <Route exact path="/my-class/:courseId/:classId/team">
-        <Team classes={classes} history={history} location={location} mode="main" />
+        <Team classNames={classes} history={history} location={location} mode="main" />
       </Route>
       <Route path="/my-class/:courseId/:classId/team/:teamId">
-        <Team classes={classes} history={history} location={location} mode="main" />
+        <Team classNames={classes} history={history} location={location} mode="main" />
       </Route>
       {/* {Member} */}
       <Route path="/my-class/:courseId/:classId/member">
-        <Member classes={classes} history={history} location={location} mode="main" />
+        <Member classNames={classes} history={history} location={location} mode="main" />
       </Route>
     </Switch>
   );
