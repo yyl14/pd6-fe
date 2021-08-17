@@ -166,11 +166,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CustomTable({
   hasSearch,
-  searchWidthOption = 1, // will remove
-  searchPlaceholder, // will remove
+  // searchWidthOption = 1, // will remove
+  // searchPlaceholder, // will remove
   buttons,
   columns,
-  columnComponent, // will remove
+  // columnComponent, // will remove
   data,
   hasLink,
   linkName,
@@ -227,22 +227,22 @@ export default function CustomTable({
     }
   }, [filterData.length, pageInput, rowsPerPage]);
 
-  useEffect(() => {
-    if (search !== '') {
-      const newData = data.filter((row) => {
-        let cnt = 0;
-        columns.forEach((column) => {
-          if (row[column.id].indexOf(search) >= 0) {
-            cnt += 1;
-          }
-        });
-        return cnt > 0;
-      });
-      setFilterData(newData);
-    } else {
-      setFilterData(data);
-    }
-  }, [columns, data, search]);
+  // useEffect(() => {
+  //   if (search !== '') {
+  //     const newData = data.filter((row) => {
+  //       let cnt = 0;
+  //       columns.forEach((column) => {
+  //         if (row[column.id].indexOf(search) >= 0) {
+  //           cnt += 1;
+  //         }
+  //       });
+  //       return cnt > 0;
+  //     });
+  //     setFilterData(newData);
+  //   } else {
+  //     setFilterData(data);
+  //   }
+  // }, [columns, data, search]);
 
   return (
     <>
@@ -264,12 +264,12 @@ export default function CustomTable({
         {hasSearch && (
           <TextField
             id="search"
-            className={searchWidth(searchWidthOption)}
+            // className={searchWidth(searchWidthOption)}
             onChange={(e) => {
               setSearch(e.target.value);
             }}
             value={search}
-            placeholder={searchPlaceholder}
+            // placeholder={searchPlaceholder}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -296,14 +296,15 @@ export default function CustomTable({
                       className={classes.tableHeadCell}
                       style={{ minWidth: column.minWidth, width: column.width }}
                     >
-                      <div className={classes.column}>
+                      {column.label}
+                      {/* <div className={classes.column}>
                         <div className={labelMoveLeft(columnComponent, columns, column)}>
                           <b>{column.label}</b>
                         </div>
                         <div className={classes.columnComponent}>
                           {columnComponent && columnComponent[columns.findIndex((x) => x.id === column.id)]}
                         </div>
-                      </div>
+                      </div> */}
                     </TableCell>
                   </React.Fragment>
                 ))}
@@ -383,7 +384,7 @@ export default function CustomTable({
               <MenuItem value={10}>10</MenuItem>
               <MenuItem value={25}>25</MenuItem>
               <MenuItem value={50}>50</MenuItem>
-              <MenuItem value={10}>100</MenuItem>
+              <MenuItem value={100}>100</MenuItem>
             </Select>
           </FormControl>
 
