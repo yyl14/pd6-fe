@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button,
+  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button, IconButton,
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
@@ -59,7 +59,7 @@ export default function System({
         },
       ]);
     } else if (mode === 'create') {
-      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={goBackToAnnouncement} />);
+      setArrow(<IconButton className={classes.arrow} onClick={goBackToAnnouncement}><Icon.ArrowBackRoundedIcon /></IconButton>);
       setTitle('(Draft)');
       setItemList([
         {
@@ -73,7 +73,7 @@ export default function System({
         },
       ]);
     } else if (mode === 'announcement' && announcementList.byId[announcementId]) {
-      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={goBackToAnnouncement} />);
+      setArrow(<IconButton className={classes.arrow} onClick={goBackToAnnouncement}><Icon.ArrowBackRoundedIcon /></IconButton>);
       setTitle(announcementList.byId[announcementId].title);
       setItemList([
         {
@@ -91,7 +91,7 @@ export default function System({
         },
       ]);
     } else if (mode === 'language' && languageList.byId[languageId]) {
-      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={goBackToLanguage} />);
+      setArrow(<IconButton className={classes.arrow} onClick={goBackToLanguage}><Icon.ArrowBackRoundedIcon /></IconButton>);
       setTitle(`${languageList.byId[languageId].name} ${languageList.byId[languageId].version}`);
       setItemList([
         {
