@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button,
+  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button, IconButton,
 } from '@material-ui/core';
-import { gridColumnLookupSelector } from '@material-ui/data-grid';
 import Icon from '../icon/index';
 import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
 
