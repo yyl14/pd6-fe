@@ -34,22 +34,33 @@ export default function AccountSetting() {
   const members = useSelector((state) => state.classMembers.byId);
   const grades = useSelector((state) => state.grades.byId);
   const loading = useSelector((state) => state.loading.myClass.grade);
+  const user = useSelector((state) => state.user);
+  const [isManager, setIsManager] = useState(false);
 
-  const graderId = grades[gradeId].grader_id;
-  const grader = members[graderId];
-  const receiverId = grades[gradeId].receiver_id;
-  const receiver = members[receiverId];
+  useEffect(() => {
+    user.classes.map((item) => {
+      if (`${item.class_id}` === classId) {
+        if (item.role === 'MANAGER') {
+          setIsManager(true);
+        }
+      }
+      return <></>;
+    });
+  }, [classId, user.classes]);
+
+  useEffect(() => {
+    dispatch(fetchClassGrade(authToken, classId));
+    dispatch(fetchClassMembers(authToken, classId));
+  }, [dispatch, authToken, classId]);
+
   const grade = grades[gradeId];
+  // const graderId = grade.grader_id;
+  const grader = members[grade.grader_id];
+  // const receiverId = grade.receiver_id;
+  const receiver = members[grade.receiver_id];
 
   const [editGradeInfo, setEditGradeInfo] = useState(false);
   const [popUp, setPopUp] = useState(false);
-
-  useEffect(() => {
-    if (!loading.editGrade) {
-      dispatch(fetchClassGrade(authToken, classId));
-      dispatch(fetchClassMembers(authToken, classId));
-    }
-  }, [dispatch, authToken, classId, loading.editGrade]);
 
   const handleBack = () => {
     setEditGradeInfo(false);
@@ -59,12 +70,17 @@ export default function AccountSetting() {
     setEditGradeInfo(true);
   };
 
+  if (loading.fetchClassGrade || loading.editGrade || grades[gradeId] === undefined) {
+    return <div>loading...</div>;
+  }
+
   return (
     <>
       <Typography variant="h3" className={classes.pageHeader}>
         Grade / Detail
       </Typography>
-      {editGradeInfo ? (
+
+      {isManager && editGradeInfo ? (
         <GradeInfoEdit
           handleBack={handleBack}
           username={receiver.username}
@@ -94,10 +110,12 @@ export default function AccountSetting() {
         realName={grader.real_name}
       />
 
-      <GradeDelete
-        username={receiver.username}
-        title={grade.title}
-      />
+      {isManager ? (
+        <GradeDelete
+          username={receiver.username}
+          title={grade.title}
+        />
+      ) : <></>}
     </>
   );
 }
