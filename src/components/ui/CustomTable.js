@@ -269,7 +269,7 @@ export default function CustomTable({
               setSearch(e.target.value);
             }}
             value={search}
-            // placeholder={searchPlaceholder}
+            placeholder={"This doesn't work."}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
