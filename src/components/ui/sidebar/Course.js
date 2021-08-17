@@ -30,8 +30,8 @@ export default function Course({
 
   useEffect(() => {
     // console.log(mode, courseId, classId);
-    const goBack = () => {
-      history.push('/admin/course/course');
+    const goBack = (courseid) => {
+      history.push(`/admin/course/course/${courseid}/class-list`);
     };
 
     if (mode === 'class-list') {
@@ -115,7 +115,7 @@ export default function Course({
           ]),
       );
     } else if (mode === 'course-setting' && courseList.byId[courseId]) {
-      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={goBack} />);
+      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={() => goBack(courseId)} />);
       setTitle1(courseList.byId[courseId].name);
       setItemList([
         {
@@ -131,7 +131,7 @@ export default function Course({
         },
       ]);
     } else if (mode === 'class' && courseList.byId[courseId] && classList.byId[classId]) {
-      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={goBack} />);
+      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={() => goBack(courseId)} />);
       setTitle1(`${courseList.byId[courseId].name} / ${classList.byId[classId].name}`);
       setItemList([
         {

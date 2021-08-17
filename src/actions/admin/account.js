@@ -126,30 +126,6 @@ const editInstitute = (token, id, abbreviatedName, fullName, emailDomain, isDisa
     });
 };
 
-const fetchAccount = (token, id) => (dispatch) => {
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-  dispatch({ type: accountConstants.FETCH_ACCOUNT_REQUEST });
-
-  agent
-    .get(`/account/${id}`, auth)
-    .then((res) => {
-      dispatch({
-        type: accountConstants.FETCH_ACCOUNT_SUCCESS,
-        payload: res.data.data,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: accountConstants.FETCH_ACCOUNT_FAIL,
-        error: err,
-      });
-    });
-};
-
 const editAccount = (token, id, userName, realName, nickName, email) => (dispatch) => {
   const auth = {
     headers: {
@@ -338,7 +314,6 @@ export {
   getInstitute,
   addInstitute,
   editInstitute,
-  fetchAccount,
   editAccount,
   deleteAccount,
   makeStudentCardDefault,

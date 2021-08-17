@@ -24,6 +24,7 @@ import MemberEdit from './MemberEdit';
 import NoMatch from '../../noMatch';
 import filterData from '../../../function/filter';
 import sortData from '../../../function/sort';
+import systemRoleTransformation from '../../../function/systemRoleTransformation';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -54,7 +55,7 @@ export default function MemberList() {
   const classes = useSelector((state) => state.classes);
   const members = useSelector((state) => state.classMembers);
   const loading = useSelector((state) => state.loading.admin.course);
-
+  console.log(members);
   useEffect(() => {
     dispatch(fetchCourses(authToken));
   }, [authToken, dispatch]);
@@ -83,32 +84,19 @@ export default function MemberList() {
     sort: '(None)',
   });
 
-  const roleUpperToLowerCase = (role) => {
-    switch (role) {
-      case 'MANAGER':
-        return 'Manager';
-      case 'NORMAL':
-        return 'Normal';
-      case 'GUEST':
-        return 'Guest';
-      default:
-        return 'Unknown';
-    }
-  };
-
   useEffect(() => {
-    const newData = [];
     if (classes.byId[classId]) {
-      classes.byId[classId].memberIds.forEach((id) => {
-        const item = members.byId[id];
-        const temp = item;
-        temp.path = `/admin/account/account/${temp.member_id}/setting`;
-        temp.role = roleUpperToLowerCase(item.role);
-        newData.push(temp);
-      });
+      const newData = classes.byId[classId].memberIds.map((id) => ({
+        ...members.byId[id],
+        path: `/admin/account/account/${id}/setting`,
+        role: systemRoleTransformation(members.byId[id].role),
+      }));
+      setTableData(newData);
+      setTransformedData(newData);
+    } else {
+      setTableData([]);
+      setTransformedData([]);
     }
-    setTableData(newData);
-    setTransformedData(newData);
   }, [classes.byId, classId, members.byId]);
 
   const instituteFilterStatus = (input) => {

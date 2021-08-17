@@ -55,6 +55,19 @@ import { ReactComponent as TriangleDown } from './triangle_down.svg';
 import { ReactComponent as TriangleLeft } from './triangle_left.svg';
 import { ReactComponent as TriangleRight } from './triangle_right.svg';
 import { ReactComponent as TriangleUp } from './triangle_up.svg';
+import { ReactComponent as Add } from './add.svg';
+import { ReactComponent as Bell } from './bell.svg';
+import { ReactComponent as Book } from './book.svg';
+import { ReactComponent as Code } from './code.svg';
+import { ReactComponent as Grade } from './grade.svg';
+import { ReactComponent as History } from './history.svg';
+import { ReactComponent as Institute } from './institute.svg';
+import { ReactComponent as Member } from './member.svg';
+import { ReactComponent as Newadd } from './newAdd.svg';
+import { ReactComponent as Sort } from './sort.svg';
+import { ReactComponent as Star } from './star.svg';
+import { ReactComponent as Team } from './team.svg';
+import { ReactComponent as Warning } from './warning.svg';
 
 export default {
   HistoryIcon,
@@ -84,6 +97,7 @@ export default {
   Advancedsearch,
   Challenge,
   Class,
+  Code,
   Collapse,
   Confirmed,
   Copy,
@@ -113,4 +127,16 @@ export default {
   TriangleLeft,
   TriangleRight,
   TriangleUp,
+  Add,
+  Bell,
+  Book,
+  Grade,
+  History,
+  Institute,
+  Member,
+  Newadd,
+  Sort,
+  Star,
+  Team,
+  Warning,
 };

@@ -6,6 +6,9 @@ const initialState = {
   editClassMember: null,
   // deleteClassMember: null,
   browseSubmitLang: null,
+  fetchCourse: null,
+  fetchClass: null,
+  fetchAccount: null,
 };
 
 export default function common(state = initialState, action) {
@@ -76,6 +79,43 @@ export default function common(state = initialState, action) {
         browseSubmitLang: null,
       };
     }
+    case commonConstants.FETCH_COURSE_SUCCESS: {
+      return {
+        ...state,
+        fetchCourse: null,
+      };
+    }
+    case commonConstants.FETCH_COURSE_FAIL: {
+      return {
+        ...state,
+        fetchCourse: action.error,
+      };
+    }
+    case commonConstants.FETCH_CLASS_SUCCESS: {
+      return {
+        ...state,
+        fetchClass: null,
+      };
+    }
+    case commonConstants.FETCH_CLASS_FAIL: {
+      return {
+        ...state,
+        fetchClass: action.error,
+      };
+    }
+    case commonConstants.FETCH_ACCOUNT_SUCCESS: {
+      return {
+        ...state,
+        fetchAccount: null,
+      };
+    }
+    case commonConstants.FETCH_ACCOUNT_FAIL: {
+      return {
+        ...state,
+        fetchAccount: action.error,
+      };
+    }
+
     default: {
       return state;
     }
