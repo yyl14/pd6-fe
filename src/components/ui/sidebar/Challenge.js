@@ -44,7 +44,7 @@ export default function Challenge({
     // console.log(instituteId, accountId);
     console.log(userClasses);
     console.log(courses, classes);
-    console.log(courses[courseId].name, classes[classId].name);
+    // console.log(courses[courseId].name, classes[classId].name);
     const goBackToInstitute = () => {
       history.push('/admin/account/institute');
     };
@@ -78,7 +78,9 @@ export default function Challenge({
         {
           text: 'Grade',
           icon: (
-            <Icon.Grade className={location.pathname === `${baseURL}/account` ? classNames.activeIcon : classNames.icon} />
+            <Icon.Grade
+              className={location.pathname === `${baseURL}/account` ? classNames.activeIcon : classNames.icon}
+            />
           ),
           path: `${baseURL}/grade`,
         },
@@ -115,7 +117,9 @@ export default function Challenge({
           icon: (
             <Icon.SettingsIcon
               className={
-                location.pathname === `${baseURL}/institute/${instituteId}/setting` ? classNames.activeIcon : classNames.icon
+                location.pathname === `${baseURL}/institute/${instituteId}/setting`
+                  ? classNames.activeIcon
+                  : classNames.icon
               }
             />
           ),
@@ -135,7 +139,9 @@ export default function Challenge({
           icon: (
             <Icon.SettingsIcon
               className={
-                location.pathname === `${baseURL}/account/${accountId}/setting` ? classNames.activeIcon : classNames.icon
+                location.pathname === `${baseURL}/account/${accountId}/setting`
+                  ? classNames.activeIcon
+                  : classNames.icon
               }
             />
           ),
@@ -197,7 +203,10 @@ export default function Challenge({
             {itemList.map((item) => (
               <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
                 <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} className={location.pathname === item.path ? classNames.active : null} />
+                <ListItemText
+                  primary={item.text}
+                  className={location.pathname === item.path ? classNames.active : null}
+                />
               </ListItem>
             ))}
           </List>
