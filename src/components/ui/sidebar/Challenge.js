@@ -6,43 +6,29 @@ import {
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
-import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
+import { fetchChallenges, addChallenge } from '../../../actions/myClass/challenge';
+import { fetchClass, fetchCourse } from '../../../actions/common/common';
 
 export default function Challenge({
   classNames, history, location, mode,
 }) {
-  // const dispatch = useDispatch();
-  // const authToken = useSelector((state) => state.auth.token);
-  // const loading = useSelector((state) => state.loading.admin.course);
-  // const courseList = useSelector((state) => state.courses);
-  // const classList = useSelector((state) => state.classes);
+  const { courseId, classId } = useParams();
+  const dispatch = useDispatch();
+  const authToken = useSelector((state) => state.auth.token);
+  const loading = useSelector((state) => state.loading.myClass.challenge);
+  const challenges = useSelector((state) => state.challenges.byId);
+  const challengesID = useSelector((state) => state.challenges.allIds);
+  // const classes = useSelector((state) => state.classes.byId);
+  // const courses = useSelector((state) => state.courses.byId);
+  const classes = useSelector((state) => state.classes);
+  const courses = useSelector((state) => state.courses);
+  const userClasses = useSelector((state) => state.user.classes);
 
-  const userClass = useSelector((state) => state.user.classes);
-  // useEffect(() => {
-  //   if (!loading.addCourse && !loading.deleteCourse && !loading.renameCourse) {
-  //     dispatch(fetchCourses(authToken));
-  //   }
-  // }, [authToken, dispatch, loading.addCourse, loading.deleteCourse, loading.renameCourse]);
+  useEffect(() => {
+    dispatch(fetchCourse(authToken, courseId));
+    dispatch(fetchClass(authToken, classId));
+  }, [dispatch, authToken, classId, courseId]);
 
-  // useEffect(() => {
-  //   if (!loading.addClass && !loading.renameClass && !loading.deleteClass) {
-  //     dispatch(fetchClasses(authToken, '1'));
-  //   }
-  // }, [authToken, dispatch, loading.addClass, loading.deleteClass, loading.renameClass]);
-
-  // useEffect(() => {
-  //   console.log(userClass);
-  //   console.log(courseList, classList);
-  //   if (courseList.allIds.length !== 0) {
-  //     if (location.pathname === '/admin/course/course') {
-  //       history.push(`/admin/course/course/${courseList.byId[courseList.allIds[0]].id}/class-list`);
-  //     }
-  //   }
-  // }, [courseList, classList, history, location, userClass]);
-
-  // const {
-  //   courseId, classId, challengeId, problemId,
-  // } = useParams();
   const { instituteId, accountId } = useParams();
   const instituteList = useSelector((state) => state.institutes);
   const accountList = useSelector((state) => state.accounts);
@@ -56,7 +42,9 @@ export default function Challenge({
 
   useEffect(() => {
     // console.log(instituteId, accountId);
-    console.log(userClass);
+    console.log(userClasses);
+    console.log(courses, classes);
+    console.log(courses[courseId].name, classes[classId].name);
     const goBackToInstitute = () => {
       history.push('/admin/account/institute');
     };
@@ -155,7 +143,7 @@ export default function Challenge({
       ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, history, mode, accountList, instituteList, accountId, instituteId]);
+  }, [location.pathname, history, mode, courses, classes, accountId, instituteId]);
 
   const foldAccount = () => {
     setDisplay('fold');
