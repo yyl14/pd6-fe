@@ -26,6 +26,32 @@ const browseChallengeOverview = (token, challengeId) => (dispatch) => {
     });
 };
 
+const editChallenge = (token, challengeId, publicizeType, selectionType, title, description, startTime, endTime) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: problemConstants.EDIT_CHALLENGE_START });
+    const res = await agent.patch(`/challenge/${challengeId}`, {
+      publicize_type: publicizeType,
+      selection_type: selectionType,
+      title,
+      description,
+      start_time: startTime,
+      end_time: endTime,
+    }, auth);
+    console.log(res);
+    dispatch({ type: problemConstants.EDIT_CHALLENGE_SUCCESS, payload: res.data.data });
+  } catch (err) {
+    dispatch({
+      type: problemConstants.EDIT_CHALLENGE_FAIL,
+      error: err,
+    });
+  }
+};
+
 const readProblem = (token, problemId) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_PROBLEM_START });
   try {
@@ -50,4 +76,5 @@ const readProblem = (token, problemId) => async (dispatch) => {
 export {
   browseChallengeOverview,
   readProblem,
+  editChallenge,
 };
