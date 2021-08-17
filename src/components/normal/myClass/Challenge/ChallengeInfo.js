@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
+import { format } from 'date-fns';
 import {
   Typography,
   Button,
@@ -14,6 +15,7 @@ import {
 import { useHistory, useParams } from 'react-router-dom';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
+import SimpleTable from '../../../ui/SimpleTable';
 import { browseChallengeOverview, editChallenge } from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
@@ -74,14 +76,27 @@ export default function ChallengeInfo() {
       >
         <>
           <AlignedText text="Scored by" childrenType="text">
-            <Typography variant="body1">{challenges[challengeId].selection_type}</Typography>
+            <Typography variant="body1">
+              {challenges[challengeId].selection_type === 'LAST'
+                ? 'Last Score'
+                : 'Highest Score'}
+            </Typography>
           </AlignedText>
-
           <AlignedText text="Status" childrenType="text">
             <Typography variant="body1">{status}</Typography>
           </AlignedText>
-
+          <AlignedText text="Start time" childrenType="text">
+            <Typography variant="body1">{moment(challenges[challengeId].start_time).format('YYYY-MM-DD, HH:mm')}</Typography>
+          </AlignedText>
+          <AlignedText text="End time" childrenType="text">
+            <Typography variant="body1">{moment(challenges[challengeId].end_time).format('YYYY-MM-DD, HH:mm')}</Typography>
+          </AlignedText>
         </>
+      </SimpleBar>
+      <SimpleBar
+        title="Overview"
+      >
+        {/* <SimpleTable */}
       </SimpleBar>
     </>
   );
