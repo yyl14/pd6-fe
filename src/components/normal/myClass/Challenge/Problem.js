@@ -46,6 +46,10 @@ export default function Problem() {
   //   return <NoMatch />;
   // }
 
+  if (loading.readProblem) {
+    return <div>loading...</div>;
+  }
+
   return (
     <>
       <CodingProblem />

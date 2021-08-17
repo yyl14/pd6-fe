@@ -47,29 +47,90 @@ const readProblem = (token, problemId) => async (dispatch) => {
   }
 };
 
-const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
+const readSubmissionDetail = (token, submissionId, challengeId, problemId) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_SUBMISSION_START });
+  dispatch({ type: problemConstants.READ_SUBMISSION_JUDGE_START });
+  dispatch({ type: problemConstants.READ_CHALLENGE_START });
+  dispatch({ type: problemConstants.READ_PROBLEM_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  // try {
+  //   const subInfo = await agent.get(`/submission/${submissionId}`, auth);
+  //   if (subInfo.data.success) {
+  //     dispatch({
+  //       type: problemConstants.READ_SUBMISSION_SUCCESS,
+  //       payload: subInfo.data.data,
+  //     });
+  //   } else {
+  //     dispatch({
+  //       type: problemConstants.READ_SUBMISSION_FAIL,
+  //       errors: subInfo.data.error,
+  //     });
+  //   }
+  // } catch (err) {
+  //   dispatch({
+  //     type: problemConstants.READ_SUBMISSION_FAIL,
+  //     errors: err,
+  //   });
+  // }
+  // try {
+  //   const judgment = await agent.get(`/submission/${submissionId}/judgement`, auth);
+  //   if (judgment.data.success) {
+  //     dispatch({
+  //       type: problemConstants.READ_SUBMISSION_JUDGE_SUCCESS,
+  //       payload: judgment.data.data,
+  //     });
+  //   } else {
+  //     dispatch({
+  //       type: problemConstants.READ_SUBMISSION_JUDGE_FAIL,
+  //       errors: judgment.data.error,
+  //     });
+  //   }
+  // } catch (err) {
+  //   dispatch({
+  //     type: problemConstants.READ_SUBMISSION_JUDGE_FAIL,
+  //     errors: err,
+  //   });
+  // }
   try {
-    const auth = {
-      headers: {
-        'Auth-Token': token,
-      },
-    };
-    const res = await agent.get(`/submission/${submissionId}`, auth);
-    if (!res.data.success) {
+    const challenge = await agent.get(`/challenge/${challengeId}`, auth);
+    if (challenge.data.success) {
       dispatch({
-        type: problemConstants.READ_SUBMISSION_FAIL,
-        errors: res.data.error,
+        type: problemConstants.READ_CHALLENGE_SUCCESS,
+        payload: challenge.data.data,
       });
     } else {
       dispatch({
-        type: problemConstants.READ_SUBMISSION_SUCCESS,
-        payload: res.data.data,
+        type: problemConstants.READ_CHALLENGE_FAIL,
+        errors: challenge.data.error,
       });
     }
   } catch (err) {
     dispatch({
-      type: problemConstants.READ_SUBMISSION_FAIL,
+      type: problemConstants.READ_CHALLENGE_FAIL,
+      errors: err,
+    });
+  }
+
+  try {
+    const problem = await agent.get(`/problem/${problemId}`, auth);
+    if (problem.data.success) {
+      dispatch({
+        type: problemConstants.READ_PROBLEM_SUCCESS,
+        payload: problem.data.data,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.READ_PROBLEM_FAIL,
+        errors: problem.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.READ_PROBLEM_FAIL,
       errors: err,
     });
   }

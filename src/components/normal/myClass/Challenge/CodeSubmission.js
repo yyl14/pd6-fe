@@ -62,11 +62,9 @@ export default function CodeSubmission() {
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
+        HW4 /
+        {' '}
         {problem.challenge_label}
-        {' '}
-        /
-        {' '}
-        {problem.title}
         / Code Submission
       </Typography>
       <AlignedText text="Language" maxWidth="lg" childrenType="filed">
@@ -87,8 +85,8 @@ export default function CodeSubmission() {
         </FormControl>
       </AlignedText>
       <div>
-        <Button color="default">Cancel</Button>
-        <Button color="primary">Submit</Button>
+        <Button color="default" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`)}>Cancel</Button>
+        <Button color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`)}>Submit</Button>
       </div>
     </>
   );
