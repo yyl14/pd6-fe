@@ -32,6 +32,7 @@ import { ReactComponent as Copy } from './copy.svg';
 import { ReactComponent as Download } from './download.svg';
 import { ReactComponent as Expand } from './expand.svg';
 import { ReactComponent as Folder } from './folder.svg';
+import { ReactComponent as Grade } from './grade.svg';
 import { ReactComponent as Overview } from './overview.svg';
 import { ReactComponent as Paper } from './paper.svg';
 import { ReactComponent as Peerreview } from './peerReview.svg';
@@ -59,7 +60,6 @@ import { ReactComponent as Add } from './add.svg';
 import { ReactComponent as Bell } from './bell.svg';
 import { ReactComponent as Book } from './book.svg';
 import { ReactComponent as Code } from './code.svg';
-import { ReactComponent as Grade } from './grade.svg';
 import { ReactComponent as History } from './history.svg';
 import { ReactComponent as Institute } from './institute.svg';
 import { ReactComponent as Member } from './member.svg';
@@ -104,6 +104,7 @@ export default {
   Download,
   Expand,
   Folder,
+  Grade,
   Overview,
   Paper,
   Peerreview,
@@ -130,7 +131,6 @@ export default {
   Add,
   Bell,
   Book,
-  Grade,
   History,
   Institute,
   Member,
