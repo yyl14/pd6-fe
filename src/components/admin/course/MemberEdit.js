@@ -98,7 +98,7 @@ const MemberEdit = ({
   const handleChangeTA = (e) => {
     setTA(e.target.value);
     setTAChanged(
-      TA
+      e.target.value
         !== members
           .filter((item) => item.role === 'MANAGER')
           .map((member) => member.student_id)
@@ -109,7 +109,7 @@ const MemberEdit = ({
   const handleChangeStudent = (e) => {
     setStudent(e.target.value);
     setStudentChanged(
-      student
+      e.target.value
         !== members
           .filter((item) => item.role === 'NORMAL')
           .map((member) => member.student_id)
@@ -119,7 +119,7 @@ const MemberEdit = ({
   const handleChangeGuest = (e) => {
     setGuest(e.target.value);
     setGuestChanged(
-      guest
+      e.target.value
         !== members
           .filter((item) => item.role === 'GUEST')
           .map((member) => member.student_id)
