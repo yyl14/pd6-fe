@@ -26,7 +26,7 @@ const fetchChallenges = (token, classId) => (dispatch) => {
     });
 };
 
-const addChallenge = (token, classId, type, publicizeType, title, description, startTime, endTime) => (dispatch) => {
+const addChallenge = (token, classId, body) => (dispatch) => {
   const auth = {
     headers: {
       'Auth-Token': token,
@@ -35,12 +35,12 @@ const addChallenge = (token, classId, type, publicizeType, title, description, s
   dispatch({ type: challengeConstants.ADD_CHALLENGE_REQUEST });
 
   agent.post(`/class/${classId}/challenge`, {
-    type,
-    publicize_type: publicizeType,
-    title,
-    description,
-    start_time: startTime,
-    end_time: endTime,
+    publicize_type: body.inProblemSet,
+    selection_type: body.scoredBy,
+    title: body.title,
+    description: '',
+    start_time: body.startTime,
+    end_time: body.endTime,
   }, auth)
     .then((res) => {
       dispatch({

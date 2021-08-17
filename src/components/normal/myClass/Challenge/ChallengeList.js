@@ -26,7 +26,7 @@ import sortData from '../../../../function/sort';
 import { fetchChallenges, addChallenge } from '../../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse } from '../../../../actions/common/common';
 
-// cm: hasSearch, searchPlaceHolder, buttons, columns, columnComponent, data, hasLink, linkName
+// isM hasSearch, searchPlaceHolder, buttons, columns, columnComponent, data, hasLink, linkName
 // cn: hasSearch, searchPlaceHolder, columns, columnComponent, data, hasLink, linkName
 
 const useStyles = makeStyles((theme) => ({
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
   gap: {
     marginBottom: theme.spacing(2),
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(3),
   },
 }));
 
@@ -59,12 +59,6 @@ export default function ChallengeList() {
   const dispatch = useDispatch();
 
   const [tableData, setTableData] = useState([]);
-  const [transformedData, setTransformedData] = useState([]);
-  const [filter, setFilter] = useState(false);
-  const [filterInput, setFilterInput] = useState({
-    filter: ['Select all'],
-    sort: '(None)',
-  });
   const [dateRangePicker, setDateRangePicker] = useState([
     {
       startDate: moment().startOf('week').toDate(),
@@ -78,29 +72,27 @@ export default function ChallengeList() {
   const [inputs, setInputs] = useState({
     title: '',
     scoredBy: 'Last Score',
-    inProblemSet: 'On end time',
+    showTime: 'On End Time',
     startTime: '',
     endTime: '',
   });
+  const [error, setError] = useState(false);
+  const [errorText, setErrorText] = useState('');
+  const [isManager, setIsManager] = useState(false);
 
-  const challenges = useSelector((state) => state.challenges.byId);
-  const challengesID = useSelector((state) => state.challenges.allIds);
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.challenge);
-
+  const challenges = useSelector((state) => state.challenges.byId);
+  const challengesID = useSelector((state) => state.challenges.allIds);
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
+  const userClasses = useSelector((state) => state.user.classes);
 
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchClass(authToken, classId));
   }, [dispatch, authToken, classId, courseId]);
-  // console.log(classes[classId].name);
 
-  // if (courses.byId[courseId] === undefined || courses.byId[courseId].name === undefined) {
-
-  //   return <NoMatch />;
-  // }
   useEffect(() => {
     if (!loading.addChallenge) {
       dispatch(fetchChallenges(authToken, classId));
@@ -128,28 +120,79 @@ export default function ChallengeList() {
           status: challenges[id].status,
         })),
       );
-      setTransformedData(
-        challengesID.map((id) => ({
-          title: challenges[id].title,
-          path: `/my-class/${courseId}/${classId}/challenge/${id}`,
-          startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
-          endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
-          status: challenges[id].status,
-        })),
-      );
     }
   }, [challenges, challengesID, classId, courseId, currentTime]);
 
-  const filterStatus = (input) => {
-    const tempData = filterData(transformedData, 'status', input.filter);
-    const tempData2 = sortData(tempData, 'status', input.sort);
+  useEffect(() => {
+    userClasses.map((item) => {
+      if (`${item.class_id}` === classId) {
+        console.log(item.role);
+        if (item.role === 'MANAGER') {
+          setIsManager(true);
+        }
+      }
+      return <></>;
+    });
+  }, [classId, userClasses]);
 
-    setTableData(tempData2);
-  };
+  // if (courses[courseId] === undefined || classes[classId] === undefined || challenges === undefined) {
+  //   return <NoMatch />;
+  // }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInputs((input) => ({ ...input, [name]: value }));
+
+    if (name === 'title' && value !== '') {
+      setError(false);
+      setErrorText('');
+    }
+  };
+
+  const handleAdd = () => {
+    if (inputs.title === '') {
+      setError(true);
+      setErrorText("Can't be empty");
+      return;
+    }
+    // if (currentTime.isAfter(moment(dateRangePicker[0].startDate))) {
+    //   // where to put error message
+    //   console.log('Selected start date is invalid');
+    //   setErrorText('Selected start date is invalid');
+    //   return;
+    // }
+    setInputs({
+      ...inputs,
+      startTime: dateRangePicker[0].startDate.toISOString(),
+      endTime: dateRangePicker[0].endDate.toISOString(),
+    });
+    // dispatch(addChallenge(authToken, classId, inputs));
+    setPopUp(false);
+    setInputs({
+      title: '',
+      scoredBy: 'Last Score',
+      showTime: 'On End Time',
+      startTime: '',
+      endTime: '',
+    });
+  };
+
+  const handleCancel = () => {
+    setPopUp(false);
+    setInputs({
+      title: '',
+      scoredBy: 'Last Score',
+      showTime: 'On End Time',
+      startTime: '',
+      endTime: '',
+    });
+    setDateRangePicker([
+      {
+        startDate: moment().startOf('week').toDate(),
+        endDate: moment().endOf('week').toDate(),
+        key: 'selection',
+      },
+    ]);
   };
 
   return (
@@ -167,14 +210,16 @@ export default function ChallengeList() {
 
       <CustomTable
         hasSearch
-        searchPlaceholder="Title"
-        buttons={(
-          <>
-            <Button color="primary" onClick={() => setPopUp(true)}>
-              <Icon.Add />
-            </Button>
-          </>
-        )}
+        buttons={
+          isManager ? (
+            <>
+              <Button color="primary" onClick={() => setPopUp(true)}>
+                <Icon.Add />
+              </Button>
+            </>
+          )
+            : <></>
+        }
         data={tableData}
         columns={[
           {
@@ -210,23 +255,11 @@ export default function ChallengeList() {
             type: 'string',
           },
         ]}
-        columnComponent={[
-          null,
-          null,
-          null,
-          <TableFilterCard
-            key="filter"
-            popUp={filter}
-            setPopUp={setFilter}
-            filterInput={filterInput}
-            filterOptions={['Closed', 'Opened', 'Not Yet']}
-            setFilterInput={setFilterInput}
-            doFilter={filterStatus}
-          />,
-        ]}
         hasLink
         linkName="path"
       />
+      {courses[courseId] && classes[classId]
+      && (
       <Dialog
         open={popUp}
         keepMounted
@@ -238,13 +271,19 @@ export default function ChallengeList() {
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Class" childrenType="text" maxWidth="md">
-            <Typography>PD 111-1</Typography>
+            <Typography>
+              {courses[courseId].name}
+              {' '}
+              {classes[classId].name}
+            </Typography>
           </AlignedText>
           <AlignedText text="Title" childrenType="field" maxWidth="md">
             <TextField
               value={inputs.title}
               name="title"
               onChange={(e) => handleChange(e)}
+              error={error}
+              helperText={errorText}
             />
           </AlignedText>
           <div className={className.gap}>
@@ -263,17 +302,27 @@ export default function ChallengeList() {
           </div>
           <div className={className.row}>
             <div className={className.item}>
-              <Typography>In problem set</Typography>
+              <Typography>Shown in problem set</Typography>
             </div>
             <FormControl variant="outlined" className={className.textfield}>
-              <Select value={inputs.inProblemSet} name="inProblemSet" onChange={(e) => handleChange(e)}>
-                <MenuItem value="On end time">On end time</MenuItem>
-                <MenuItem value="Highest Score">I dont know</MenuItem>
+              <Select value={inputs.showTime} name="showTime" onChange={(e) => handleChange(e)}>
+                <MenuItem value="On End Time">On End Time</MenuItem>
+                <MenuItem value="On Start Time">On Start Time</MenuItem>
               </Select>
             </FormControl>
           </div>
         </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel} color="default">
+            Cancel
+          </Button>
+          <Button onClick={handleAdd} color="primary">
+            Create
+          </Button>
+        </DialogActions>
       </Dialog>
+      )}
+
     </>
   );
 }

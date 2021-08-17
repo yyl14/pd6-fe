@@ -16,7 +16,6 @@ const byId = (state = {}, action) => {
       );
     }
     case commonConstants.FETCH_COURSE_SUCCESS: {
-      console.log(action.payload);
       return {
         ...state,
         [action.payload.id]: {

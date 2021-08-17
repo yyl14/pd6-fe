@@ -24,7 +24,6 @@ const byId = (state = {}, action) => {
     }
 
     case commonConstants.FETCH_CLASS_SUCCESS: {
-      console.log(action.payload);
       return {
         ...state,
         [action.payload.id]: {
