@@ -123,7 +123,7 @@ export default function ChallengeList() {
   useEffect(() => {
     userClasses.map((item) => {
       if (`${item.class_id}` === classId) {
-        console.log(item.role);
+        // console.log(item.role);
         if (item.role === 'MANAGER') {
           setIsManager(true);
         }
@@ -159,11 +159,13 @@ export default function ChallengeList() {
     //   return;
     // }
     setInputs({
-      ...inputs,
+      title: inputs.title,
+      scoredBy: inputs.scoredBy === 'Last Score' ? 'LAST' : 'BEST',
+      showTime: inputs.showTime === 'On End Time' ? 'END_TIME' : 'START_TIME',
       startTime: dateRangePicker[0].startDate.toISOString(),
       endTime: dateRangePicker[0].endDate.toISOString(),
     });
-    // dispatch(addChallenge(authToken, classId, inputs));
+    dispatch(addChallenge(authToken, classId, inputs));
     setPopUp(false);
     setInputs({
       title: '',
