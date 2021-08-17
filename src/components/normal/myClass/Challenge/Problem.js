@@ -13,7 +13,7 @@ import {
 import { useHistory, useParams } from 'react-router-dom';
 
 import CodingProblem from './CodingProblem';
-import { readProblem } from '../../../../actions/myClass/problem';
+import { readProblemInfo } from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -39,8 +39,8 @@ export default function Problem() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(readProblem(authToken, problemId));
-  }, [authToken, dispatch, problemId]);
+    dispatch(readProblemInfo(authToken, problemId, challengeId));
+  }, [authToken, dispatch, problemId, challengeId]);
   // if (courses.byId[courseId] === undefined || courses.byId[courseId].name === undefined) {
 
   //   return <NoMatch />;

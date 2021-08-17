@@ -17,8 +17,10 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import AlignedText from '../../../ui/AlignedText';
 
-import { readProblem } from '../../../../actions/myClass/problem';
+import { readProblemInfo } from '../../../../actions/myClass/problem';
 import { browseSubmitLang } from '../../../../actions/common/common';
+
+import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -39,7 +41,8 @@ export default function CodeSubmission() {
 
   const dispatch = useDispatch();
 
-  const problem = useSelector((state) => state.problem.byId);
+  const problems = useSelector((state) => state.problem.byId);
+  const challenges = useSelector((state) => state.challenges.byId);
   const submitLang = useSelector((state) => state.submitLangs);
   const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
@@ -48,23 +51,24 @@ export default function CodeSubmission() {
   const [lang, setLang] = useState('');
 
   useEffect(() => {
-    dispatch(readProblem(authToken, problemId));
-  }, [authToken, dispatch, problemId]);
+    dispatch(readProblemInfo(authToken, problemId, challengeId));
+  }, [authToken, challengeId, dispatch, problemId]);
 
   useEffect(() => {
     dispatch(browseSubmitLang(authToken));
   }, [authToken, dispatch]);
-  // if (courses.byId[courseId] === undefined || courses.byId[courseId].name === undefined) {
-
-  //   return <NoMatch />;
-  // }
+  if (problems[problemId] === undefined || challenges[challengeId] === undefined) {
+    return <NoMatch />;
+  }
 
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
-        HW4 /
+        {challenges[challengeId].title}
         {' '}
-        {problem.challenge_label}
+        /
+        {' '}
+        {problems[problemId].challenge_label}
         / Code Submission
       </Typography>
       <AlignedText text="Language" maxWidth="lg" childrenType="filed">
@@ -83,6 +87,9 @@ export default function CodeSubmission() {
             {submitLang.allIds.map((key) => <MenuItem key={submitLang.byId[key].id} value={submitLang.byId[key].name}>{submitLang.byId[key].name}</MenuItem>)}
           </Select>
         </FormControl>
+      </AlignedText>
+      <AlignedText text="Content" maxWidth="lg" childrenType="filed">
+        <TextField />
       </AlignedText>
       <div>
         <Button color="default" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`)}>Cancel</Button>

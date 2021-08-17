@@ -26,14 +26,15 @@ const browseChallengeOverview = (token, challengeId) => (dispatch) => {
     });
 };
 
-const readProblem = (token, problemId) => async (dispatch) => {
+const readProblemInfo = (token, problemId, challengeId) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_PROBLEM_START });
+  dispatch({ type: problemConstants.READ_CHALLENGE_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
   try {
-    const auth = {
-      headers: {
-        'Auth-Token': token,
-      },
-    };
     const problemInfo = await agent.get(`/problem/${problemId}`, auth);
     dispatch({
       type: problemConstants.READ_PROBLEM_SUCCESS,
@@ -42,6 +43,26 @@ const readProblem = (token, problemId) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: problemConstants.READ_PROBLEM_FAIL,
+      errors: err,
+    });
+  }
+
+  try {
+    const challenge = await agent.get(`/challenge/${challengeId}`, auth);
+    if (challenge.data.success) {
+      dispatch({
+        type: problemConstants.READ_CHALLENGE_SUCCESS,
+        payload: challenge.data.data,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.READ_CHALLENGE_FAIL,
+        errors: challenge.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.READ_CHALLENGE_FAIL,
       errors: err,
     });
   }
@@ -138,6 +159,6 @@ const readSubmissionDetail = (token, submissionId, challengeId, problemId) => as
 
 export {
   browseChallengeOverview,
-  readProblem,
+  readProblemInfo,
   readSubmissionDetail,
 };
