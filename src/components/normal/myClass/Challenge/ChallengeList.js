@@ -132,9 +132,9 @@ export default function ChallengeList() {
     });
   }, [classId, userClasses]);
 
-  // if (courses[courseId] === undefined || classes[classId] === undefined || challenges === undefined) {
-  //   return <NoMatch />;
-  // }
+  if (loading.fetchChallenges || courses[courseId] === undefined || classes[classId] === undefined) {
+    return <div>loading...</div>;
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -194,8 +194,6 @@ export default function ChallengeList() {
 
   return (
     <>
-      {courses[courseId] && classes[classId]
-      && (
       <Typography className={className.pageHeader} variant="h3">
         {courses[courseId].name}
         {' '}
@@ -203,7 +201,6 @@ export default function ChallengeList() {
         {' '}
         / Challenge
       </Typography>
-      )}
 
       <CustomTable
         hasSearch
@@ -255,8 +252,6 @@ export default function ChallengeList() {
         hasLink
         linkName="path"
       />
-      {courses[courseId] && classes[classId]
-      && (
       <Dialog
         open={popUp}
         keepMounted
@@ -318,7 +313,6 @@ export default function ChallengeList() {
           </Button>
         </DialogActions>
       </Dialog>
-      )}
 
     </>
   );
