@@ -96,10 +96,6 @@ export default function IconList() {
           <p>Folder</p>
         </StyledPaper>
         <StyledPaper>
-          <Icon.Grade />
-          <p>Grade</p>
-        </StyledPaper>
-        <StyledPaper>
           <Icon.Overview />
           <p>Overview</p>
         </StyledPaper>

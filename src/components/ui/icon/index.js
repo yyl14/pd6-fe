@@ -60,7 +60,6 @@ import { ReactComponent as Add } from './add.svg';
 import { ReactComponent as Bell } from './bell.svg';
 import { ReactComponent as Book } from './book.svg';
 import { ReactComponent as Code } from './code.svg';
-import { ReactComponent as Grade } from './grade.svg';
 import { ReactComponent as History } from './history.svg';
 import { ReactComponent as Institute } from './institute.svg';
 import { ReactComponent as Member } from './member.svg';
@@ -132,7 +131,6 @@ export default {
   Add,
   Bell,
   Book,
-  Grade,
   History,
   Institute,
   Member,

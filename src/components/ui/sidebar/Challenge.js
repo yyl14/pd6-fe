@@ -9,7 +9,7 @@ import Icon from '../icon/index';
 import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
 
 export default function Challenge({
-  classes, history, location, mode,
+  classNames, history, location, mode,
 }) {
   // const dispatch = useDispatch();
   // const authToken = useSelector((state) => state.auth.token);
@@ -17,7 +17,7 @@ export default function Challenge({
   // const courseList = useSelector((state) => state.courses);
   // const classList = useSelector((state) => state.classes);
 
-  // const userClass = useSelector((state) => state.user.classes);
+  const userClass = useSelector((state) => state.user.classes);
   // useEffect(() => {
   //   if (!loading.addCourse && !loading.deleteCourse && !loading.renameCourse) {
   //     dispatch(fetchCourses(authToken));
@@ -56,6 +56,7 @@ export default function Challenge({
 
   useEffect(() => {
     // console.log(instituteId, accountId);
+    console.log(userClass);
     const goBackToInstitute = () => {
       history.push('/admin/account/institute');
     };
@@ -72,7 +73,7 @@ export default function Challenge({
           text: 'Challenge',
           icon: (
             <Icon.Challenge
-              className={location.pathname === `${baseURL}/institute` ? classes.activeIcon : classes.icon}
+              className={location.pathname === `${baseURL}/institute` ? classNames.activeIcon : classNames.icon}
             />
           ),
           path: `${baseURL}/institute`,
@@ -81,7 +82,7 @@ export default function Challenge({
           text: 'Submission',
           icon: (
             <Icon.Submission
-              className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon}
+              className={location.pathname === `${baseURL}/account` ? classNames.activeIcon : classNames.icon}
             />
           ),
           path: `${baseURL}/submission`,
@@ -89,15 +90,15 @@ export default function Challenge({
         {
           text: 'Grade',
           icon: (
-            <Icon.Grade className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />
+            <Icon.Grade className={location.pathname === `${baseURL}/account` ? classNames.activeIcon : classNames.icon} />
           ),
           path: `${baseURL}/grade`,
         },
         {
           text: 'Team',
           icon: (
-            <Icon.SupervisedUserCircleIcon
-              className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon}
+            <Icon.Team
+              className={location.pathname === `${baseURL}/account` ? classNames.activeIcon : classNames.icon}
             />
           ),
           path: `${baseURL}/team`,
@@ -105,8 +106,8 @@ export default function Challenge({
         {
           text: 'Member',
           icon: (
-            <Icon.PeopleIcon
-              className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon}
+            <Icon.Member
+              className={location.pathname === `${baseURL}/account` ? classNames.activeIcon : classNames.icon}
             />
           ),
           path: `${baseURL}/member`,
@@ -114,7 +115,7 @@ export default function Challenge({
       ]);
     } else if (mode === 'institute' && instituteList.byId[instituteId]) {
       setArrow(
-        <IconButton className={classes.arrow} onClick={goBackToInstitute}>
+        <IconButton className={classNames.arrow} onClick={goBackToInstitute}>
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
@@ -126,7 +127,7 @@ export default function Challenge({
           icon: (
             <Icon.SettingsIcon
               className={
-                location.pathname === `${baseURL}/institute/${instituteId}/setting` ? classes.activeIcon : classes.icon
+                location.pathname === `${baseURL}/institute/${instituteId}/setting` ? classNames.activeIcon : classNames.icon
               }
             />
           ),
@@ -134,7 +135,7 @@ export default function Challenge({
       ]);
     } else if (mode === 'account' && accountList.byId[accountId]) {
       setArrow(
-        <IconButton className={classes.arrow} onClick={goBackToAccount}>
+        <IconButton className={classNames.arrow} onClick={goBackToAccount}>
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
@@ -146,7 +147,7 @@ export default function Challenge({
           icon: (
             <Icon.SettingsIcon
               className={
-                location.pathname === `${baseURL}/account/${accountId}/setting` ? classes.activeIcon : classes.icon
+                location.pathname === `${baseURL}/account/${accountId}/setting` ? classNames.activeIcon : classNames.icon
               }
             />
           ),
@@ -171,11 +172,11 @@ export default function Challenge({
     return (
       <div>
         <Drawer
-          className={classes.drawer}
+          className={classNames.drawer}
           variant="permanent"
           anchor="left"
           PaperProps={{ elevation: 5 }}
-          classes={{ paper: classes.drawerPaper }}
+          classes={{ paper: classNames.drawerPaper }}
         />
       </div>
     );
@@ -184,38 +185,38 @@ export default function Challenge({
   return (
     <div>
       <Drawer
-        className={classes.drawer}
+        className={classNames.drawer}
         variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
-        classes={{ paper: classes.drawerPaper }}
+        classes={{ paper: classNames.drawerPaper }}
       >
-        {mode === 'main' ? <div className={classes.topSpace} /> : arrow}
+        {mode === 'main' ? <div className={classNames.topSpace} /> : arrow}
         <div>
           {display === 'unfold' ? (
-            <Icon.TriangleDown className={classes.titleIcon} onClick={foldAccount} />
+            <Icon.TriangleDown className={classNames.titleIcon} onClick={foldAccount} />
           ) : (
-            <Icon.TriangleRight className={classes.titleIcon} onClick={unfoldAccount} />
+            <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldAccount} />
           )}
-          <Typography variant="h4" className={classes.title}>
+          <Typography variant="h4" className={classNames.title}>
             {title}
             {TAicon}
           </Typography>
         </div>
-        <Divider variant="middle" className={classes.divider} />
+        <Divider variant="middle" className={classNames.divider} />
         {display === 'unfold' ? (
           <List>
             {itemList.map((item) => (
-              <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classes.item}>
+              <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
                 <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} className={location.pathname === item.path ? classes.active : null} />
+                <ListItemText primary={item.text} className={location.pathname === item.path ? classNames.active : null} />
               </ListItem>
             ))}
           </List>
         ) : (
           ''
         )}
-        <div className={classes.bottomSpace} />
+        <div className={classNames.bottomSpace} />
       </Drawer>
     </div>
   );

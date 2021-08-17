@@ -13,7 +13,7 @@ import {
   MenuItem,
   MenuList,
 } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { format } from 'date-fns';
@@ -131,6 +131,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Header({ role, hasClass }) {
+  const user = useSelector((state) => state.user);
   const baseURL = '';
   const classes = useStyles();
   const history = useHistory();
@@ -308,7 +309,7 @@ export default function Header({ role, hasClass }) {
             <Icon.NotificationsIcon className={classes.notification} />
             <div className={classes.dropdown}>
               <button type="button" className={classes.dropbtn}>
-                <Typography variant="h6">Shiba</Typography>
+                <Typography variant="h6">{user.username}</Typography>
               </button>
               <div className={classes.dropdownContent}>
                 {menuList.map((item, id) => (

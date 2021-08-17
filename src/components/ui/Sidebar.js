@@ -168,16 +168,16 @@ export default function Sidebar() {
       {/* {Challenge} */}
       <Route exact path="/my-class">
         {/* for fetchClass and redirection */}
-        <Challenge classes={classes} history={history} location={location} mode="main" />
+        <Challenge classNames={classes} history={history} location={location} mode="main" />
       </Route>
       <Route exact path="/my-class/:courseId/:classId/challenge">
-        <Challenge classes={classes} history={history} location={location} mode="main" />
+        <Challenge classNames={classes} history={history} location={location} mode="main" />
       </Route>
       <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId">
-        <Challenge classes={classes} history={history} location={location} mode="main" />
+        <Challenge classNames={classes} history={history} location={location} mode="main" />
       </Route>
       <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId">
-        <Challenge classes={classes} history={history} location={location} mode="main" />
+        <Challenge classNames={classes} history={history} location={location} mode="main" />
       </Route>
       {/* {Submission} */}
       <Route exact path="/my-class/:courseId/:classId/submission">
