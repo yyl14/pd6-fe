@@ -17,7 +17,10 @@ import CustomTable from '../../../ui/CustomTable';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
 import {
-  fetchClassGrade, addClassGrade, fetchAccountGrade, fetchGradeTemplate,
+  fetchClassGrade,
+  addClassGrade,
+  fetchAccountGrade,
+  fetchGradeTemplate,
 } from '../../../../actions/myClass/grade';
 import { fetchCourse, fetchClass, fetchClassMembers } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
@@ -168,15 +171,14 @@ export default function GradeList() {
       <CustomTable
         hasSearch
         buttons={
-          isManager
-              && (
-              <>
-                <Button color="primary" onClick={() => setPopUp(true)}>
-                  <MdAdd />
-                </Button>
-              </>
-              )
-      }
+          isManager && (
+            <>
+              <Button color="primary" onClick={() => setPopUp(true)}>
+                <MdAdd />
+              </Button>
+            </>
+          )
+        }
         data={tableData}
         columns={[
           {
@@ -266,15 +268,12 @@ export default function GradeList() {
             </Typography>
           </AlignedText>
           <AlignedText text="Title" maxWidth="mg" childrenType="field">
-            <TextField
-              id="title"
-              name="title"
-              value={inputTitle}
-              onChange={(e) => handleChange(e)}
-            />
+            <TextField id="title" name="title" value={inputTitle} onChange={(e) => handleChange(e)} />
           </AlignedText>
           <AlignedText text="Grading File" maxWidth="mg" childrenType="field">
-            <Button variant="outlined" color="primary" startIcon={<Icon.Folder />}>Browse</Button>
+            <Button variant="outlined" color="primary" startIcon={<Icon.Folder />}>
+              Browse
+            </Button>
           </AlignedText>
           <hr className={classes.divider} />
         </DialogContent>
@@ -283,7 +282,9 @@ export default function GradeList() {
             className={classNames.templateBtn}
             variant="outlined"
             startIcon={<Icon.Download />}
-            onClick={() => { downloadTemplate(); }}
+            onClick={() => {
+              downloadTemplate();
+            }}
           >
             Template
           </Button>
@@ -291,7 +292,9 @@ export default function GradeList() {
             Cancel
           </Button>
           <Button
-            onClick={() => { add(); }}
+            onClick={() => {
+              add();
+            }}
             color="primary"
           >
             Add
