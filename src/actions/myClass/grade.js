@@ -20,21 +20,23 @@ export const fetchClassGrade = (token, classId) => (dispatch) => {
     });
 };
 
-// export const addClassGrade = (token, classId) => (dispatch) => { //need required body
-//   const auth = { headers: { 'auth-token': token } };
-//   dispatch({ type: gradeConstants.ADD_CLASS_GRADE_START });
-//   agent
-//     .post(`/class/${classId}/grade`, auth)
-//     .then((res) => {
-//       dispatch({ type: gradeConstants.ADD_CLASS_GRADE_SUCCESS });
-//     })
-//     .catch((error) => {
-//       dispatch({
-//         type: gradeConstants.ADD_CLASS_GRADE_FAIL,
-//         payload: error,
-//       });
-//     });
-// };
+export const addClassGrade = (token, classId, gradeFile) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: gradeConstants.ADD_CLASS_GRADE_START });
+    const res = await agent.post(`/class/${classId}/grade`, { grade_file: gradeFile }, auth);
+    dispatch({ type: gradeConstants.ADD_CLASS_GRADE_SUCCESS });
+  } catch (err) {
+    dispatch({
+      type: gradeConstants.ADD_CLASS_GRADE_FAIL,
+      error: err,
+    });
+  }
+};
 
 export const fetchAccountGrade = (token, accountId) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
@@ -53,6 +55,24 @@ export const fetchAccountGrade = (token, accountId) => (dispatch) => {
         error: err,
       });
     });
+};
+
+export const fetchGradeTemplate = (token) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: gradeConstants.FETCH_GRADE_TEMPLATE_START });
+    const res = await agent.get('/grade/template', auth);
+    dispatch({ type: gradeConstants.FETCH_GRADE_TEMPLATE_SUCCESS, payload: res.data.data });
+  } catch (err) {
+    dispatch({
+      type: gradeConstants.FETCH_GRADE_TEMPLATE_FAIL,
+      error: err,
+    });
+  }
 };
 
 export const deleteGrade = (token, gradeId) => (dispatch) => {

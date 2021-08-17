@@ -13,6 +13,10 @@ const byId = (state = {}, action) => {
       return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
 
+    case gradeConstants.FETCH_GRADE_TEMPLATE_SUCCESS: {
+      return action.payload;
+    }
+
     default:
       return state;
   }
