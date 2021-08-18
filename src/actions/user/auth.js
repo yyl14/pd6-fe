@@ -17,11 +17,12 @@ const getUserInfo = (id, token) => async (dispatch) => {
         // eslint-disable-next-line no-await-in-loop
         const classInfo = await agent.get(`/class/${classId}`, auth);
         classDetail.push(userClasses.data.data[i]);
+        classDetail[i].class_name = classInfo.data.data.name;
         classDetail[i].course_id = classInfo.data.data.course_id;
         // eslint-disable-next-line no-await-in-loop
         const courseInfo = await agent.get(`/course/${classInfo.data.data.course_id}`, auth);
         classDetail[i].course_name = courseInfo.data.data.name;
-        console.log(classDetail);
+        // console.log(classDetail);
       }
       return classDetail;
     };
