@@ -148,7 +148,7 @@ export default function ChallengeInfo() {
               </div>
             </div>
           )
-          : <Typography variant="body1">{challenges[challengeId].description}</Typography>}
+          : <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>{challenges[challengeId].description}</Typography>}
       </SimpleBar>
       <SimpleBar
         title="Challenge Information"
