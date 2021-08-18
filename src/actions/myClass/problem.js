@@ -51,6 +51,24 @@ const editChallenge = (token, challengeId, body) => async (dispatch) => {
   }
 };
 
+const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_START });
+    const res = await agent.get(`/challenge/${challengeId}/task`, auth);
+    dispatch({ type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS, payload: res.data.data });
+  } catch (err) {
+    dispatch({
+      type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_FAIL,
+      error: err,
+    });
+  }
+};
+
 const readProblem = (token, problemId) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_PROBLEM_START });
   try {
@@ -74,6 +92,7 @@ const readProblem = (token, problemId) => async (dispatch) => {
 
 export {
   browseChallengeOverview,
-  readProblem,
   editChallenge,
+  browseTasksUnderChallenge,
+  readProblem,
 };

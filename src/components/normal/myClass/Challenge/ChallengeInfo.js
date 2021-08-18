@@ -17,7 +17,7 @@ import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
-import { browseChallengeOverview, editChallenge } from '../../../../actions/myClass/problem';
+import { browseChallengeOverview, editChallenge, browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -58,6 +58,10 @@ export default function ChallengeInfo() {
       dispatch(browseChallengeOverview(authToken, challengeId));
     }
   }, [authToken, challengeId, dispatch, loading.editChallenge]);
+
+  useEffect(() => {
+    // dispatch(browseTasksUnderChallenge(authToken, challengeId));
+  }, [authToken, challengeId, dispatch]);
 
   useEffect(() => {
     if (challenges[challengeId] !== undefined) {

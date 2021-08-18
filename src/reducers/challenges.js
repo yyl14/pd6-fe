@@ -30,6 +30,18 @@ const byId = (state = {}, action) => {
       };
     }
 
+    case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
+      return {
+        ...state,
+        [action.payload.id]: {
+          ...state[action.payload.id],
+          problemIds: action.payload.problem.map((item) => item.id),
+          peerReviewIds: action.payload.peer_review.map((item) => item.id),
+          essayIds: action.payload.essay.map((item) => item.id),
+        },
+      };
+    }
+
     default:
       return state;
   }
