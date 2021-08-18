@@ -36,10 +36,17 @@ const readProblemInfo = (token, problemId, challengeId) => async (dispatch) => {
   };
   try {
     const problemInfo = await agent.get(`/problem/${problemId}`, auth);
-    dispatch({
-      type: problemConstants.READ_PROBLEM_SUCCESS,
-      payload: problemInfo.data.data,
-    });
+    if (problemInfo.data.success) {
+      dispatch({
+        type: problemConstants.READ_PROBLEM_SUCCESS,
+        payload: problemInfo.data.data,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.READ_PROBLEM_FAIL,
+        errors: problemInfo.data.error,
+      });
+    }
   } catch (err) {
     dispatch({
       type: problemConstants.READ_PROBLEM_FAIL,

@@ -27,9 +27,13 @@ const useStyles = makeStyles((theme) => ({
   sampleArea: {
     marginTop: '50px',
   },
-  buttons: {
+  generalButtons: {
     display: 'flex',
     justifyContent: 'flex-end',
+  },
+  managerButtons: {
+    display: 'flex',
+    justifyContent: 'space-between',
   },
 }));
 
@@ -43,38 +47,68 @@ export default function CodingProblem() {
 
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.user.classes);
+  const userClasses = useSelector((state) => state.user.classes);
   const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   const authToken = useSelector((state) => state.auth.token);
-  // const error = useSelector((state) => state.error);
+  const error = useSelector((state) => state.error.myClass.problem);
   const loading = useSelector((state) => state.loading.myClass.problem);
+  const [role, setRole] = useState('Normal');
 
   const [edit, setEdit] = useState(false);
 
-  // console.log(problems[problemId]);
-  if (problems[problemId] === undefined || challenges[challengeId] === undefined) {
-    return <NoMatch />;
-  }
+  // console.log(userClasses);
+  useEffect(() => {
+    userClasses.forEach((value) => {
+      if (value.class_id === parseInt(classId, 10)) {
+        if (value.role === 'MANAGER') {
+          setRole('MANAGER');
+        }
+      }
+    });
+  }, [classId, userClasses]);
+  // userClasses.forEach((class) => {
+  //   if(class.class_id === classId){
+  //   }
+  // })
+
+  // if (error.readChallenge != null || error.readProblem != null) {
+  //   return <div>System Exception</div>;
+  // }
+
+  // if (problems[problemId] === undefined || challenges[challengeId] === undefined) {
+  //   return <NoMatch />;
+  // }
 
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
-        {challenges[challengeId].title}
+        {challenges[challengeId] === undefined ? 'error' : challenges[challengeId].title}
         {' '}
         /
         {' '}
-        {problems[problemId].challenge_label}
+        {problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label}
       </Typography>
-      <div>
-        <Button color="default" onClick={() => setEdit(true)}>Edit</Button>
-        <Button color="default">Rejudge</Button>
-      </div>
-      <div className={classNames.buttons}>
-        <Button variant="outlined" color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)} startIcon={<Icon.HistoryIcon />}>My Submission</Button>
-        <Button color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}>Submit</Button>
-      </div>
-      {edit ? <CodingProblemInfo /> : <CodingProblemEdit setEdit={setEdit()} />}
+      { role === 'MANAGER'
+        ? (
+          <div classNames={classNames.managerButtons}>
+            <div>
+              <Button color="default" onClick={() => setEdit(true)}>Edit</Button>
+              <Button color="default">Rejudge</Button>
+            </div>
+            <div>
+              <Button variant="outlined" color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)} startIcon={<Icon.HistoryIcon />}>My Submission</Button>
+              <Button color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}>Submit</Button>
+            </div>
+          </div>
+        )
+        : (
+          <div className={classNames.generalButtons}>
+            <Button variant="outlined" color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)} startIcon={<Icon.HistoryIcon />}>My Submission</Button>
+            <Button color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}>Submit</Button>
+          </div>
+        )}
+      {/* {edit ? <CodingProblemInfo /> : <CodingProblemEdit setEdit={setEdit()} />} */}
     </>
   );
 }
