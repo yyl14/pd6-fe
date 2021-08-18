@@ -11,11 +11,13 @@ export default function BasicInfo(props) {
     <div>
       <SimpleBar
         title="Grade Information"
-        buttons={(
+        buttons={
+          props.isManager && (
           <>
             <Button onClick={() => props.handleEdit()}>Edit</Button>
           </>
-        )}
+          )
+        }
       >
         <>
           <AlignedText text="Username" maxWidth="lg" childrenType="text">

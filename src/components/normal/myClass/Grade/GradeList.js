@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /* This is a level 4 component (page component) */
-// TODO: add, username link
+// TODO: add card, browse, test template, username link
 
 export default function GradeList() {
   const classNames = useStyles();
@@ -97,10 +97,10 @@ export default function GradeList() {
   }, [classId, user.classes]);
 
   // useEffect(() => {
-  //   setTableData(
-  //     accountsID.map((id) => ({
-  //       ...accounts[id],
-  //       path: `/admin/account/account/${id}/setting`,
+  //   setProfilePath(
+  //     memberIdd.map((id) => ({
+  //       ...members[id],
+  //       path: ``,
   //     })),
   //   );
   // }, []);
@@ -140,6 +140,7 @@ export default function GradeList() {
     }
     setTableData(newData);
   }, [members, memberIds, grades, courseId, classId, isManager, gradeIds, user.id]);
+  console.log(tableData);
 
   const handleChange = (event) => {
     setInputTitle(event.target.value);
@@ -188,6 +189,7 @@ export default function GradeList() {
             align: 'center',
             width: 150,
             type: 'string',
+            link_id: 'path',
           },
           {
             id: 'student_id',
@@ -274,6 +276,7 @@ export default function GradeList() {
             <Button variant="outlined" color="primary" startIcon={<Icon.Folder />}>
               Browse
             </Button>
+            <TextField type="file">test</TextField>
           </AlignedText>
           <hr className={classes.divider} />
         </DialogContent>

@@ -29,6 +29,7 @@ export const addClassGrade = (token, classId, gradeFile) => async (dispatch) => 
     };
     dispatch({ type: gradeConstants.ADD_CLASS_GRADE_START });
     const res = await agent.post(`/class/${classId}/grade`, { grade_file: gradeFile }, auth);
+    console.log(res);
     dispatch({ type: gradeConstants.ADD_CLASS_GRADE_SUCCESS });
   } catch (err) {
     dispatch({

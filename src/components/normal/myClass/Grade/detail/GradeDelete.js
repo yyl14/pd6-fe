@@ -9,7 +9,7 @@ import AlignedText from '../../../../ui/AlignedText';
 import { deleteGrade } from '../../../../../actions/myClass/grade';
 
 export default function GradeDelete(props) {
-  const { gradeId } = useParams();
+  const { courseId, classId, gradeId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
   const authToken = useSelector((state) => state.auth.token);
@@ -19,7 +19,7 @@ export default function GradeDelete(props) {
   const handleDelete = () => {
     setPopUp(false);
     // dispatch(deleteGrade(authToken, gradeId));
-    history.goBack();
+    history.push(`/my-class/${courseId}/${classId}/grade`);
   };
 
   return (

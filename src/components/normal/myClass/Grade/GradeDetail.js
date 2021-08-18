@@ -10,6 +10,7 @@ import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import { fetchClassMembers } from '../../../../actions/common/common';
 import { editGrade, fetchClassGrade } from '../../../../actions/myClass/grade';
+
 import GradeInfo from './detail/GradeInfo';
 import Grader from './detail/Grader';
 import GradeInfoEdit from './detail/GradeInfoEdit';
@@ -23,8 +24,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /* This is a level 4 component (page component) */
-// TODO: link x 2, comment textBox height, grader divider
-
 export default function AccountSetting() {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -46,9 +45,14 @@ export default function AccountSetting() {
   const [popUp, setPopUp] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchClassGrade(authToken, classId));
     dispatch(fetchClassMembers(authToken, classId));
-  }, [dispatch, authToken, classId]);
+  }, [dispatch, authToken, classId, editGradeInfo]);
+
+  useEffect(() => {
+    if (!loading.editGrade) {
+      dispatch(fetchClassGrade(authToken, classId));
+    }
+  }, [dispatch, authToken, loading.editGrade, classId]);
 
   useEffect(() => {
     user.classes.map((item) => {
@@ -69,8 +73,8 @@ export default function AccountSetting() {
     setEditGradeInfo(true);
   };
 
-  if (grades[gradeId] === undefined) {
-    if (loading.fetchClassGrade || loading.editGrade) {
+  if (grades[gradeId] === undefined || members === undefined) {
+    if (loading.fetchClassGrade || loading.fetchClassMembers || loading.editGrade) {
       return <div>loading...</div>;
     }
     return <NoMatch />;
@@ -82,7 +86,7 @@ export default function AccountSetting() {
         Grade / Detail
       </Typography>
 
-      {isManager && editGradeInfo ? (
+      {editGradeInfo ? (
         <GradeInfoEdit
           handleBack={handleBack}
           username={receiver.username}
@@ -103,6 +107,7 @@ export default function AccountSetting() {
           score={grade.score}
           comment={grade.comment}
           time={grade.update_time}
+          isManager={isManager}
         />
       )}
 
