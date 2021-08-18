@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useBeforeunload } from 'react-beforeunload';
 import {
   Typography,
@@ -66,6 +67,9 @@ const MemberEdit = ({
   const [studentChanged, setStudentChanged] = useState(false);
   const [guestChanged, setGuestChanged] = useState(false);
   const [showUnsaveDialog, setShowUnsaveDialog] = useState(false);
+  const unblockHandle = useRef();
+  const targetLocation = useRef();
+  const history = useHistory();
 
   useEffect(() => {
     setTA(
@@ -87,6 +91,17 @@ const MemberEdit = ({
         .join('\n'),
     );
   }, [members]);
+
+  useEffect(() => {
+    unblockHandle.current = history.block((tl) => {
+      if (TAChanged || studentChanged || guestChanged) {
+        setShowUnsaveDialog(true);
+        targetLocation.current = tl;
+        return false;
+      }
+      return true;
+    });
+  });
 
   useBeforeunload((e) => {
     if (TAChanged || studentChanged || guestChanged) {
@@ -137,12 +152,20 @@ const MemberEdit = ({
   const handleSubmitUnsave = () => {
     setShowUnsaveDialog(false);
     backToMemberList();
+    if (unblockHandle) {
+      unblockHandle.current();
+      history.push(targetLocation.current);
+    }
   };
 
   const handleSubmitSave = () => {
     setShowUnsaveDialog(false);
     // dispatch and make defaultValue string to an array using str.split("\n")
     backToMemberList();
+    if (unblockHandle) {
+      unblockHandle.current();
+      history.push(targetLocation.current);
+    }
   };
 
   return (
@@ -219,7 +242,9 @@ const MemberEdit = ({
             </Button>
           </div>
           <div>
-            <Button onClick={handleSubmitUnsave}>Don’t Save</Button>
+            <Button onClick={handleSubmitUnsave}>
+              Don’t Save
+            </Button>
             <Button onClick={handleSubmitSave} color="primary">
               Save
             </Button>
