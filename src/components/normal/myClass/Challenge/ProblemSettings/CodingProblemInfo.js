@@ -9,6 +9,7 @@ import {
   DialogActions,
   DialogContent,
   TextField,
+  Grid,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /* This is a level 4 component (page component) */
-export default function CodingProblemInfo() {
+export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const {
     courseId, classId, challengeId, problemId,
   } = useParams();
@@ -48,12 +49,8 @@ export default function CodingProblemInfo() {
 
   return (
     <>
-      <div className={classNames.buttons}>
-        <Button variant="outlined" color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)} startIcon={<Icon.HistoryIcon />}>My Submission</Button>
-        <Button color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}>Submit</Button>
-      </div>
-      <SimpleBar title="Title">{problems[problemId].title}</SimpleBar>
-      <SimpleBar title="Description">{problems[problemId].description}</SimpleBar>
+      <SimpleBar title="Title">{problems[problemId] === undefined ? 'error' : problems[problemId].title}</SimpleBar>
+      <SimpleBar title="Description">{problems[problemId] === undefined ? 'error' : problems[problemId].description}</SimpleBar>
       <SimpleBar title="About Input and Output">I do not know where to get this info.</SimpleBar>
       <SimpleBar title="Sample">
         <SimpleTable
@@ -88,8 +85,20 @@ export default function CodingProblemInfo() {
           data={[]}
         />
         <div className={classNames.sampleArea}>
-          <SampleTestArea input="286" output="1 2 0 1 0 4" />
-          <SampleTestArea input="286" output="1 2 0 1 0 476543333345678987654567898765456789098765654567899876545456789098765434567898" />
+          <Grid container spacing={3}>
+            <Grid item xs={6}>
+              <SampleTestArea input="286" output="1 2 0 1 0 4" />
+            </Grid>
+            <Grid item xs={6}>
+              <SampleTestArea input="286" output="1 2 0 1 0 4" />
+            </Grid>
+            <Grid item xs={6}>
+              <SampleTestArea input="286" output="1 2 0 1 0 4" />
+            </Grid>
+            <Grid item xs={6}>
+              <SampleTestArea input="286" output="1 2 0 1 0 476543333345678987654567898765456789098765654567899876545456789098765434567898" />
+            </Grid>
+          </Grid>
         </div>
       </SimpleBar>
       <SimpleBar title="Testing Data">

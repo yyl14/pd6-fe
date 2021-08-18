@@ -57,6 +57,10 @@ export default function CodingProblem() {
 
   const [edit, setEdit] = useState(false);
 
+  const handleCloseEdit = () => {
+    setEdit(false);
+  };
+
   // console.log(userClasses);
   useEffect(() => {
     userClasses.forEach((value) => {
@@ -67,6 +71,7 @@ export default function CodingProblem() {
       }
     });
   }, [classId, userClasses]);
+
   // userClasses.forEach((class) => {
   //   if(class.class_id === classId){
   //   }
@@ -89,7 +94,8 @@ export default function CodingProblem() {
         {' '}
         {problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label}
       </Typography>
-      { role === 'MANAGER'
+      {!edit
+      && role === 'MANAGER'
         ? (
           <div classNames={classNames.managerButtons}>
             <div>
@@ -102,13 +108,13 @@ export default function CodingProblem() {
             </div>
           </div>
         )
-        : (
+        : (!edit && (
           <div className={classNames.generalButtons}>
             <Button variant="outlined" color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)} startIcon={<Icon.HistoryIcon />}>My Submission</Button>
             <Button color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}>Submit</Button>
           </div>
-        )}
-      {/* {edit ? <CodingProblemInfo /> : <CodingProblemEdit setEdit={setEdit()} />} */}
+        ))}
+      {edit ? <CodingProblemEdit closeEdit={handleCloseEdit} role={role} /> : <CodingProblemInfo role={role} /> }
     </>
   );
 }
