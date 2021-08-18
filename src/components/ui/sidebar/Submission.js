@@ -21,6 +21,8 @@ export default function Submission({
   const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
 
+  const submissions = useSelector((state) => state.submissions);
+
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchClass(authToken, classId));
@@ -34,96 +36,23 @@ export default function Submission({
   const [TAicon, setTAicon] = useState(null);
 
   useEffect(() => {
-    console.log(userClasses);
-    if (
-      userClasses[0].course_id !== undefined
-      && userClasses[0].class_id !== undefined
-      && courseId === undefined
-      && classId === undefined
-    ) {
-      history.push(`/my-class/${userClasses[0].course_id}/${userClasses[0].class_id}/challenge`);
-    }
-  }, [classId, courseId, history, userClasses]);
-
-  useEffect(() => {
-    const goBackToChallenge = () => {
-      history.push(`${baseURL}/${courseId}/${classId}/challenge`);
+    const goBackToSubmission = () => {
+      history.push(`${baseURL}/${courseId}/${classId}/submission`);
     };
 
-    if (mode === 'main' && courses[courseId] !== undefined && classes[classId] !== undefined) {
-      setTitle(`${courses[courseId].name} ${classes[classId].name}`);
-      setTAicon(<Icon.TA style={{ marginLeft: '100px' }} />);
+    if (mode === 'detail') {
+      console.log(submissions);
+      setArrow(<IconButton className={classNames.arrow} onClick={goBackToSubmission}><Icon.ArrowBackRoundedIcon /></IconButton>);
+      setTitle('00111');
       setItemList([
         {
-          text: 'Challenge',
-          icon: (
-            <Icon.Challenge
-              className={
-                location.pathname === `${baseURL}/${courseId}/${classId}/challenge` ? classNames.svg : classNames.icon
-              }
-            />
-          ),
-          path: `${baseURL}/${courseId}/${classId}/challenge`,
-        },
-        {
-          text: 'Submission',
-          icon: (
-            <Icon.Submission
-              className={
-                location.pathname === `${baseURL}/${courseId}/${classId}/submission` ? classNames.svg : classNames.icon
-              }
-            />
-          ),
+          text: 'Submission Detail',
+          icon: <Icon.Submission />,
           path: `${baseURL}/${courseId}/${classId}/submission`,
-        },
-        {
-          text: 'Grade',
-          icon:
-            location.pathname === `${baseURL}/${courseId}/${classId}/grade` ? (
-              <Icon.GradeActive className={classNames.icon} />
-            ) : (
-              <Icon.Grade className={classNames.icon} />
-            ),
-          path: `${baseURL}/${courseId}/${classId}/grade`,
-        },
-        {
-          text: 'Team',
-          icon: (
-            <Icon.Team
-              className={
-                location.pathname === `${baseURL}/${courseId}/${classId}/team` ? classNames.svg : classNames.icon
-              }
-            />
-          ),
-          path: `${baseURL}/${courseId}/${classId}/team`,
-        },
-        {
-          text: 'Member',
-          icon: (
-            <Icon.Member
-              className={
-                location.pathname === `${baseURL}/${courseId}/${classId}/member` ? classNames.svg : classNames.icon
-              }
-            />
-          ),
-          path: `${baseURL}/${courseId}/${classId}/member`,
         },
       ]);
     }
-  }, [
-    location.pathname,
-    history,
-    mode,
-    courses,
-    classes,
-    userClasses,
-    courseId,
-    classId,
-    classNames.activeIcon,
-    classNames.icon,
-    classNames.arrow,
-    classNames.svg,
-  ]);
+  }, [location.pathname, history, mode, userClasses, courseId, classId, submissions, classes.arrow, classNames.arrow]);
 
   const foldAccount = () => {
     setDisplay('fold');
@@ -175,11 +104,11 @@ export default function Submission({
         {display === 'unfold' ? (
           <List>
             {itemList.map((item) => (
-              <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItem button key={item.text} className={classNames.item}>
+                <ListItemIcon className={location.pathname.includes(item.path) ? classNames.svg : classNames.icon}>{item.icon}</ListItemIcon>
                 <ListItemText
                   primary={item.text}
-                  className={location.pathname === item.path ? classNames.active : null}
+                  className={location.pathname.includes(item.path) ? classNames.active : null}
                 />
               </ListItem>
             ))}

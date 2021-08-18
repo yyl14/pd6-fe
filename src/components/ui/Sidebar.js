@@ -196,10 +196,10 @@ export default function Sidebar() {
         <MyClass classNames={classes} history={history} location={location} mode="main" />
       </Route>
       <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId">
-        <Challenge classNames={classes} history={history} location={location} mode="main" />
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
       <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId">
-        <Challenge classNames={classes} history={history} location={location} mode="main" />
+        <Challenge classNames={classes} history={history} location={location} mode="problem" />
       </Route>
       {/* {Submission} */}
       <Route exact path="/my-class/:courseId/:classId/submission">
@@ -213,14 +213,14 @@ export default function Sidebar() {
         <MyClass classNames={classes} history={history} location={location} mode="main" />
       </Route>
       <Route path="/my-class/:courseId/:classId/grade/:studentId">
-        <Grade classNames={classes} history={history} location={location} mode="main" />
+        <Grade classNames={classes} history={history} location={location} mode="detail" />
       </Route>
       {/* {Team} */}
       <Route exact path="/my-class/:courseId/:classId/team">
         <MyClass classNames={classes} history={history} location={location} mode="main" />
       </Route>
       <Route path="/my-class/:courseId/:classId/team/:teamId">
-        <Team classNames={classes} history={history} location={location} mode="main" />
+        <Team classNames={classes} history={history} location={location} mode="detail" />
       </Route>
       {/* {Member} */}
       <Route path="/my-class/:courseId/:classId/member">

@@ -12,11 +12,15 @@ import { fetchClass, fetchCourse } from '../../../actions/common/common';
 export default function Challenge({
   classNames, history, location, mode,
 }) {
-  const { courseId, classId } = useParams();
+  const {
+    courseId, classId, challengeId, problemId,
+  } = useParams();
   const baseURL = '/my-class';
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.challenge);
+  const challenges = useSelector((state) => state.challenges.byId);
+  const challengesID = useSelector((state) => state.challenges.allIds);
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
@@ -24,6 +28,7 @@ export default function Challenge({
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchClass(authToken, classId));
+    dispatch(fetchChallenges(authToken, classId));
   }, [dispatch, authToken, classId, courseId]);
 
   const [display, setDisplay] = useState('unfold');
@@ -31,105 +36,37 @@ export default function Challenge({
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
   const [arrow, setArrow] = useState(null);
-  const [TAicon, setTAicon] = useState(null);
 
   useEffect(() => {
-    console.log(userClasses);
-    if (
-      userClasses[0].course_id !== undefined
-      && userClasses[0].class_id !== undefined
-      && courseId === undefined
-      && classId === undefined
-    ) {
-      history.push(`/my-class/${userClasses[0].course_id}/${userClasses[0].class_id}/challenge`);
-    }
-  }, [classId, courseId, history, userClasses]);
-
-  useEffect(() => {
+    console.log(challenges);
     const goBackToChallenge = () => {
       history.push(`${baseURL}/${courseId}/${classId}/challenge`);
     };
 
-    if (mode === 'main' && courses[courseId] !== undefined && classes[classId] !== undefined) {
-      setTitle(`${courses[courseId].name} ${classes[classId].name}`);
-      setTAicon(<Icon.TA style={{ marginLeft: '100px' }} />);
+    if (mode === 'challenge' && challenges[challengeId] !== undefined) {
+      setArrow(<IconButton className={classNames.arrow} onClick={goBackToChallenge}><Icon.ArrowBackRoundedIcon /></IconButton>);
+      setTitle(challenges[challengeId].title);
       setItemList([
         {
-          text: 'Challenge',
+          text: 'Info',
           icon: (
-            <Icon.Challenge
+            <Icon.Info
               className={
-                location.pathname === `${baseURL}/${courseId}/${classId}/challenge` ? classNames.svg : classNames.icon
+                location.pathname === `${baseURL}/${courseId}/${classId}/challenge/${challengeId}` ? classNames.svg : classNames.icon
               }
             />
           ),
-          path: `${baseURL}/${courseId}/${classId}/challenge`,
-        },
-        {
-          text: 'Submission',
-          icon: (
-            <Icon.Submission
-              className={
-                location.pathname === `${baseURL}/${courseId}/${classId}/submission` ? classNames.svg : classNames.icon
-              }
-            />
-          ),
-          path: `${baseURL}/${courseId}/${classId}/submission`,
-        },
-        {
-          text: 'Grade',
-          icon:
-            location.pathname === `${baseURL}/${courseId}/${classId}/grade` ? (
-              <Icon.GradeActive className={classNames.icon} />
-            ) : (
-              <Icon.Grade className={classNames.icon} />
-            ),
-          path: `${baseURL}/${courseId}/${classId}/grade`,
-        },
-        {
-          text: 'Team',
-          icon: (
-            <Icon.Team
-              className={
-                location.pathname === `${baseURL}/${courseId}/${classId}/team` ? classNames.svg : classNames.icon
-              }
-            />
-          ),
-          path: `${baseURL}/${courseId}/${classId}/team`,
-        },
-        {
-          text: 'Member',
-          icon: (
-            <Icon.Member
-              className={
-                location.pathname === `${baseURL}/${courseId}/${classId}/member` ? classNames.svg : classNames.icon
-              }
-            />
-          ),
-          path: `${baseURL}/${courseId}/${classId}/member`,
+          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
         },
       ]);
     }
-  }, [
-    location.pathname,
-    history,
-    mode,
-    courses,
-    classes,
-    userClasses,
-    courseId,
-    classId,
-    classNames.activeIcon,
-    classNames.icon,
-    classNames.arrow,
-    classNames.svg,
-  ]);
+  }, [challengeId, challenges, classId, classNames.arrow, classNames.icon, classNames.svg, courseId, history, location.pathname, mode]);
 
-  const foldAccount = () => {
+  const foldChallenge = () => {
     setDisplay('fold');
   };
 
-  const unfoldAccount = () => {
+  const unfoldChallenge = () => {
     setDisplay('unfold');
   };
 
@@ -162,13 +99,12 @@ export default function Challenge({
         {mode === 'main' ? <div className={classNames.topSpace} /> : arrow}
         <div>
           {display === 'unfold' ? (
-            <Icon.TriangleDown className={classNames.titleIcon} onClick={foldAccount} />
+            <Icon.TriangleDown className={classNames.titleIcon} onClick={foldChallenge} />
           ) : (
-            <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldAccount} />
+            <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldChallenge} />
           )}
           <Typography variant="h4" className={classNames.title}>
             {title}
-            {TAicon}
           </Typography>
         </div>
         <Divider variant="middle" className={classNames.divider} />
