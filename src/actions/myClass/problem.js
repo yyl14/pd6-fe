@@ -26,7 +26,7 @@ const browseChallengeOverview = (token, challengeId) => (dispatch) => {
     });
 };
 
-const editChallenge = (token, challengeId, publicizeType, selectionType, title, description, startTime, endTime) => async (dispatch) => {
+const editChallenge = (token, challengeId, body) => async (dispatch) => {
   try {
     const auth = {
       headers: {
@@ -35,14 +35,13 @@ const editChallenge = (token, challengeId, publicizeType, selectionType, title, 
     };
     dispatch({ type: problemConstants.EDIT_CHALLENGE_START });
     const res = await agent.patch(`/challenge/${challengeId}`, {
-      publicize_type: publicizeType,
-      selection_type: selectionType,
-      title,
-      description,
-      start_time: startTime,
-      end_time: endTime,
+      publicize_type: body.publicizeType,
+      selection_type: body.selectionType,
+      title: body.title,
+      description: body.description,
+      start_time: body.startTime,
+      end_time: body.endTime,
     }, auth);
-    console.log(res);
     dispatch({ type: problemConstants.EDIT_CHALLENGE_SUCCESS, payload: res.data.data });
   } catch (err) {
     dispatch({
