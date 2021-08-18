@@ -71,8 +71,6 @@ export default function ChallengeList() {
     title: '',
     scoredBy: 'Last Score',
     showTime: 'On End Time',
-    startTime: '',
-    endTime: '',
   });
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -171,22 +169,27 @@ export default function ChallengeList() {
     //   setErrorText('Selected start date is invalid');
     //   return;
     // }
-    setInputs({
+    const body = ({
       title: inputs.title,
       scoredBy: inputs.scoredBy === 'Last Score' ? 'LAST' : 'BEST',
       showTime: inputs.showTime === 'On End Time' ? 'END_TIME' : 'START_TIME',
       startTime: dateRangePicker[0].startDate.toISOString(),
       endTime: dateRangePicker[0].endDate.toISOString(),
     });
-    dispatch(addChallenge(authToken, classId, inputs));
+    dispatch(addChallenge(authToken, classId, body));
     setPopUp(false);
     setInputs({
       title: '',
       scoredBy: 'Last Score',
       showTime: 'On End Time',
-      startTime: '',
-      endTime: '',
     });
+    setDateRangePicker([
+      {
+        startDate: moment().startOf('week').toDate(),
+        endDate: moment().endOf('week').toDate(),
+        key: 'selection',
+      },
+    ]);
   };
 
   const handleCancel = () => {
@@ -195,8 +198,6 @@ export default function ChallengeList() {
       title: '',
       scoredBy: 'Last Score',
       showTime: 'On End Time',
-      startTime: '',
-      endTime: '',
     });
     setDateRangePicker([
       {
