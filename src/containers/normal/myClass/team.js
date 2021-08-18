@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Switch, Route } from 'react-router-dom';
 import NoMatch from '../../../components/noMatch';
+import TeamList from '../../../components/normal/myClass/Team/TeamList';
+import TeamDetail from '../../../components/normal/myClass/Team/TeamDetail';
 
 /* This is a level 3 container (main page container) */
 class Team extends Component {
@@ -16,8 +18,8 @@ class Team extends Component {
     return (
       <>
         <Switch>
-          {/* <Route exact path="/my-class/:courseId/:classId/team" component={TeamList} />
-          <Route path="/my-class/:courseId/:classId/team/:teamId" component={TeamDetail} /> */}
+          <Route exact path="/my-class/:courseId/:classId/team" component={TeamList} />
+          <Route path="/my-class/:courseId/:classId/team/:teamId" component={TeamDetail} />
           <Route component={NoMatch} />
         </Switch>
       </>

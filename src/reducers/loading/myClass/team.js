@@ -1,4 +1,4 @@
-import { teamConstants } from "../../../actions/myClass/constant";
+import { teamConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
   fetchTeams: false,
@@ -149,4 +149,4 @@ export default function team(state = initialState, action) {
     default:
       return state;
   }
-};
+}

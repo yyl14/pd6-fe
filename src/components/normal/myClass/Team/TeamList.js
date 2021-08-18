@@ -1,0 +1,309 @@
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  makeStyles,
+  Button,
+  Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Card,
+  CardContent,
+  Select,
+  MenuItem,
+  FormControl,
+} from '@material-ui/core';
+import { useParams } from 'react-router-dom';
+import { MdAdd } from 'react-icons/md';
+import moment from 'moment-timezone';
+import CustomTable from '../../../ui/CustomTable';
+import AlignedText from '../../../ui/AlignedText';
+import Icon from '../../../ui/icon/index';
+import { fetchTeams, addTeam } from '../../../../actions/myClass/team';
+import { fetchCourse, fetchClass } from '../../../../actions/common/common';
+import NoMatch from '../../../noMatch';
+
+const useStyles = makeStyles((theme) => ({
+  pageHeader: {
+    marginBottom: '50px',
+  },
+  popUpLayout: {
+    width: '100%',
+  },
+  formatText: {
+    marginBottom: '16px',
+  },
+  formatTextContent: {
+    color: theme.palette.grey.A400,
+  },
+  importTextField: {
+    marginBottom: '22px',
+  },
+  select: {
+    width: '350px',
+  },
+  addTeamBtn: {
+    marginTop: '45px',
+    marginLeft: '245px',
+  },
+}));
+
+/* This is a level 4 component (page component) */
+export default function TeamList() {
+  const classNames = useStyles();
+  const dispatch = useDispatch();
+  const { courseId, classId } = useParams();
+
+  const authToken = useSelector((state) => state.auth.token);
+  const courses = useSelector((state) => state.courses.byId);
+  const classes = useSelector((state) => state.classes.byId);
+  const teams = useSelector((state) => state.teams.byId);
+  const teamIds = useSelector((state) => state.teams.allIds);
+  const loading = useSelector((state) => state.loading.myClass.team);
+
+  const user = useSelector((state) => state.user);
+  const [isManager, setIsManager] = useState(false);
+
+  const [tableData, setTableData] = useState([]);
+  const [showImportDialog, setShowImportDialog] = useState(false);
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [teamFile, setTeamFile] = useState('');
+  const [importInput, setImportInput] = useState('');
+  const [addInputs, setAddInputs] = useState({
+    label: '',
+    teamName: '',
+    student: '',
+    role: 'Normal',
+  });
+
+  useEffect(() => {
+    user.classes.map((item) => {
+      if (`${item.class_id}` === classId) {
+        if (item.role === 'MANAGER') {
+          setIsManager(true);
+        }
+      }
+      return <></>;
+    });
+  }, [classId, user.classes]);
+
+  useEffect(() => {
+    dispatch(fetchCourse(authToken, courseId));
+    dispatch(fetchClass(authToken, classId));
+  }, [authToken, classId, courseId, dispatch]);
+
+  useEffect(() => {
+    if (!loading.addTeam) {
+      dispatch(fetchTeams(authToken, classId));
+    }
+  }, [authToken, classId, dispatch, loading.addTeam]);
+
+  const handleImportChange = (event) => {
+    setImportInput(event.target.value);
+  };
+
+  const handleAddChange = (event) => {
+    const { name, value } = event.target;
+    setAddInputs((input) => ({ ...input, [name]: value }));
+  };
+
+  const clearImportInput = () => {
+    setImportInput('');
+  };
+
+  const clearAddInput = () => {
+    setAddInputs({
+      label: '',
+      teamName: '',
+      student: '',
+      role: 'Normal',
+    });
+  };
+
+  const submitAdd = () => {
+    if (addInputs.label === '' || addInputs.teamName === '' || addInputs.student === '') {
+      return;
+    }
+    setShowAddDialog(false);
+    clearAddInput();
+    dispatch(addTeam(authToken, classId, teamFile));
+  };
+
+  const submitImport = () => {
+    setShowImportDialog(false);
+    clearImportInput();
+    // dispatch(addTeam(authToken, classId, importInputs.label, importInputs.teamName));
+  };
+
+  const downloadTemplate = () => {
+    setShowImportDialog(false);
+    // dispatch(fetchGradeTemplate(authToken));
+  };
+
+  useEffect(() => {
+    setTableData(
+      teamIds.map((id) => ({
+        label: teams[id].label,
+        teamName: teams[id].name,
+        path: `/my-class/${courseId}/${classId}/team/${id}`,
+      })),
+    );
+  }, [classId, courseId, teamIds, teams]);
+
+  if (courses[courseId] === undefined || classes[classId] === undefined || teams[classId] === undefined) {
+    if (loading.fetchTeams || loading.addTeam) {
+      return <div>loading...</div>;
+    }
+    return <NoMatch />;
+  }
+
+  return (
+    <>
+      <Typography variant="h3" className={classNames.pageHeader}>
+        {`${courses[courseId].name} ${classes[classId].name} / Team`}
+      </Typography>
+      <CustomTable
+        hasSearch
+        buttons={
+          isManager && (
+            <>
+              <Button variant="outlined" color="primary" onClick={() => setShowImportDialog(true)} startIcon={<Icon.Folder />}>
+                Import
+              </Button>
+              <Button color="primary" onClick={() => setShowAddDialog(true)}>
+                <MdAdd />
+              </Button>
+            </>
+          )
+        }
+        data={tableData}
+        columns={[
+          {
+            id: 'label',
+            label: 'Label',
+            minWidth: 50,
+            align: 'center',
+            width: 150,
+            type: 'string',
+          },
+          {
+            id: 'teamName',
+            label: 'Team Name',
+            minWidth: 50,
+            align: 'center',
+            width: 150,
+            type: 'string',
+          },
+        ]}
+        hasLink
+        linkName="path"
+      />
+
+      <Dialog
+        open={showImportDialog}
+        keepMounted
+        onClose={() => setShowImportDialog(false)}
+        className={classNames.popUpLayout}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle id="dialog-slide-title">
+          <Typography variant="h4">Import Team</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" className={classNames.formatText}>
+            Team file format:
+            <br />
+            <div className={classNames.formatTextContent}>
+            &ensp;&ensp;Name: String
+              <br />
+            &ensp;&ensp;Manager: student id (NTU only) &gt;= institute email &gt; #username
+              <br />
+            &ensp;&ensp;Member N (N=2~10): Same as Team Manager
+              <br />
+            </div>
+            Download template file for more instructions.
+          </Typography>
+          <AlignedText text="Class" maxWidth="mg" childrenType="text">
+            <Typography variant="body1">{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
+          </AlignedText>
+          <AlignedText text="Title" maxWidth="mg" childrenType="field">
+            <TextField id="title" name="title" value={importInput} onChange={(e) => handleImportChange(e)} />
+          </AlignedText>
+          <AlignedText text="Grading File" maxWidth="mg" childrenType="field">
+            <Button variant="outlined" color="primary" startIcon={<Icon.Folder />}>
+              Browse
+            </Button>
+          </AlignedText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" startIcon={<Icon.Download />} onClick={() => { downloadTemplate(); }}>
+            Template
+          </Button>
+          <Button onClick={() => { setShowImportDialog(false); clearImportInput(); }} color="default">
+            Cancel
+          </Button>
+          <Button onClick={() => { submitImport(); }} color="primary">
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={showAddDialog}
+        keepMounted
+        onClose={() => setShowAddDialog(false)}
+        className={classNames.popUpLayout}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle id="dialog-slide-title">
+          <Typography variant="h4">Create New Team</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <AlignedText text="Class" maxWidth="lg" childrenType="text">
+            <Typography variant="body1">
+              {`${courses[courseId].name} ${classes[classId].name}`}
+            </Typography>
+          </AlignedText>
+          <AlignedText text="Label" maxWidth="lg" childrenType="field">
+            <TextField name="label" value={addInputs.label} onChange={(e) => handleAddChange(e)} />
+          </AlignedText>
+          <AlignedText text="Team Name" maxWidth="lg" childrenType="field">
+            <TextField name="teamName" value={addInputs.teamName} onChange={(e) => handleAddChange(e)} />
+          </AlignedText>
+          <AlignedText text="Team Member" />
+          <Card variant="outlined">
+            <CardContent>
+              <AlignedText text="Student" maxWidth="mg" childrenType="field">
+                <TextField name="student" placeholder="Student ID / Email / Username" value={addInputs.student} onChange={(e) => handleAddChange(e)} />
+              </AlignedText>
+              <AlignedText text="Role" maxWidth="mg" childrenType="field">
+                <FormControl variant="outlined" className={classNames.select}>
+                  <Select name="role" value={addInputs.role} onChange={(e) => handleAddChange(e)}>
+                    <MenuItem value="Normal">Normal</MenuItem>
+                    <MenuItem value="Manager">Manager</MenuItem>
+                  </Select>
+                </FormControl>
+              </AlignedText>
+              <Button className={classNames.addTeamBtn} variant="text" color="primary" startIcon={<Icon.Newadd />}>
+                Add Team Member
+              </Button>
+            </CardContent>
+          </Card>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={() => { setShowAddDialog(false); clearAddInput(); }} color="default">
+            Cancel
+          </Button>
+          <Button onClick={() => { submitAdd(); }} color="primary">
+            Create
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+}

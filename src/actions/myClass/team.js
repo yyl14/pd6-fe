@@ -9,13 +9,13 @@ export const fetchTeams = (token, classId) => (dispatch) => {
     .then((res) => {
       dispatch({
         type: teamConstants.FETCH_TEAMS_SUCCESS,
-        payload: { classId, data: res.data.data},
+        payload: { classId, data: res.data.data },
       });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: teamConstants.FETCH_TEAMS_FAIL,
-        error: error,
+        error: err,
       });
     });
 };
@@ -34,10 +34,10 @@ export const addTeam = (token, classId, teamName, newLabel) => (dispatch) => {
         type: teamConstants.ADD_TEAM_SUCCESS,
       });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: teamConstants.ADD_TEAM_FAIL,
-        error: error,
+        error: err,
       });
     });
 };
@@ -57,10 +57,10 @@ export const editTeam = (token, teamId, teamName, classId, newLabel) => (dispatc
         type: teamConstants.EDIT_TEAM_SUCCESS,
       });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: teamConstants.EDIT_TEAM_FAIL,
-        error: error,
+        error: err,
       });
     });
 };
@@ -73,13 +73,13 @@ export const fetchTeamMember = (token, teamId) => (dispatch) => {
     .then((res) => {
       dispatch({
         type: teamConstants.FETCH_TEAM_MEMBER_SUCCESS,
-        payload: { teamId, data: res.data.data},
+        payload: { teamId, data: res.data.data },
       });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: teamConstants.FETCH_TEAM_MEMBER_FAIL,
-        error: error,
+        error: err,
       });
     });
 };
@@ -93,15 +93,15 @@ export const addTeamMember = (token, teamId, student, role) => (dispatch) => {
   };
   agent
     .post(`/team/${teamId}/member`, body, auth)
-    then((res) => {
+    .then((res) => {
       dispatch({
         type: teamConstants.ADD_TEAM_MEMBER_SUCCESS,
       });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: teamConstants.ADD_TEAM_MEMBER_FAIL,
-        error: error,
+        error: err,
       });
     });
 };
@@ -120,10 +120,10 @@ export const editTeamMember = (token, teamId, memberId, role) => (dispatch) => {
         type: teamConstants.EDIT_TEAM_MEMBER_SUCCESS,
       });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: teamConstants.EDIT_TEAM_MEMBER_FAIL,
-        error: error,
+        error: err,
       });
     });
 };
@@ -138,10 +138,10 @@ export const deleteTeamMember = (token, teamId, memberId) => (dispatch) => {
         type: teamConstants.DELETE_TEAM_MEMBER_SUCCESS,
       });
     })
-    .catch((error) => {
+    .catch((err) => {
       dispatch({
         type: teamConstants.DELETE_TEAM_MEMBER_FAIL,
-        error: error,
+        error: err,
       });
     });
 };
