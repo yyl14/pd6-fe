@@ -1,3 +1,4 @@
 import { combineReducers } from 'redux';
+import autoTable from './autoTable';
 
-export default combineReducers({});
+export default combineReducers({ autoTable });

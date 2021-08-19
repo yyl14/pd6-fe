@@ -1,24 +1,25 @@
 import { combineReducers } from 'redux';
-import { customTableConstant } from '../../actions/component/constant';
+import { autoTableConstants } from '../../actions/component/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    case customTableConstant.CUSTOM_TABLE_MOUNT: {
+    case autoTableConstants.AUTO_TABLE_MOUNT: {
       const { tableId } = action.payload;
-      return { ...state, [tableId]: { id: tableId, displayedDataIds: new Map([]) } };
+      return { ...state, [tableId]: { id: tableId, totalCount: 0, displayedDataIds: new Map([]) } };
     }
-    case customTableConstant.CUSTOM_TABLE_UPDATE: {
+    case autoTableConstants.AUTO_TABLE_UPDATE: {
       const {
-        tableId, offset, limit, data, total_count,
+        tableId, offset, dataIds, total_count,
       } = action.payload;
-      if (tableId === state.id) {
+      if (state[tableId]) {
+        // exists table
         return {
           ...state,
           [tableId]: {
             ...state[tableId],
             // update data ids in range [offset, offset + limit - 1]
             totalCount: total_count,
-            displayedDataIds: data.reduce((acc, item, index) => {
+            displayedDataIds: dataIds.reduce((acc, item, index) => {
               acc.set(offset + index, item.id);
               return acc;
             }, state[tableId].displayedDataIds),
@@ -26,7 +27,7 @@ const byId = (state = {}, action) => {
         };
       }
 
-      // not own action
+      // not registered table
       return state;
     }
     default:
@@ -36,7 +37,7 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
-    case customTableConstant.CUSTOM_TABLE_MOUNT: {
+    case autoTableConstants.AUTO_TABLE_MOUNT: {
       const { tableId } = action.payload;
       return [...new Set([...state], [tableId])];
     }

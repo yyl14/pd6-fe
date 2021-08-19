@@ -1,5 +1,5 @@
-export const customTableConstant = {
-  CUSTOM_TABLE_MOUNT: 'CUSTOM_TABLE_MOUNT',
-  CUSTOM_TABLE_UPDATE: 'CUSTOM_TABLE_UPDATE',
+export const autoTableConstants = {
+  AUTO_TABLE_MOUNT: 'AUTO_TABLE_MOUNT',
+  AUTO_TABLE_UPDATE: 'AUTO_TABLE_UPDATE',
 };
-export const fileUploaderConstant = {};
+export const fileUploaderConstants = {};

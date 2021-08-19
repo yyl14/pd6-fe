@@ -1,59 +1,64 @@
 import agent from '../agent';
-import { systemConstants } from './constant';
+import { systemConstants, accountConstants } from './constant';
+import { autoTableConstants } from '../component/constant';
 
 // Access log
-const fetchAccessLog = (token, offset, limit) => (dispatch) => {
-  const fetch = { headers: { 'auth-token': token } };
-  dispatch({
-    type: systemConstants.FETCH_ACCESS_LOG_START,
-  });
-  agent
-    .get(`/access-log?offset=${offset}&limit=${limit}`, fetch)
-    .then(async (response) => {
-      const { data } = response.data;
-      const ids = data.map((item) => item.account_id);
-      const accounts = await Promise.all(
-        ids.map(async (id) => {
-          let account = null;
-          await agent
-            .get(`/account/${id}`, fetch)
-            .then((res) => {
-              account = res.data.data;
-            })
-            .catch((err) => {
-              dispatch({
-                type: systemConstants.FETCH_ACCESS_LOG_FAIL,
-                payload: err,
-              });
-            });
-          return account;
-        }),
-      );
-
-      const newData = data.map((item) => ({
-        id: item.id,
-        access_time: item.access_time,
-        request_method: item.request_method,
-        resource_path: item.resource_path,
-        ip: item.ip,
-        account_id: item.account_id,
-        username: accounts[item.account_id].username,
-        real_name: accounts[item.account_id].real_name,
-      }));
-
-      dispatch({
-        type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
-        payload: {
-          ...newData,
-        },
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: systemConstants.FETCH_ACCESS_LOG_FAIL,
-        payload: err,
-      });
+const fetchAccessLog = (token, browseParams, tableId = null) => async (dispatch) => {
+  try {
+    const config1 = {
+      headers: { 'auth-token': token },
+      params: browseParams,
+    };
+    dispatch({
+      type: systemConstants.FETCH_ACCESS_LOG_START,
     });
+
+    const res1 = await agent.get('/access-log', config1);
+    const { data, total_count } = res1.data;
+
+    const config2 = {
+      headers: { 'auth-token': token },
+    };
+    dispatch({
+      type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
+      payload: data,
+    });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: data.map((item) => item.id),
+        offset: browseParams.offset,
+      },
+    });
+
+    // TODO: Batch browse account
+
+    const accounts = await Promise.all(
+      data.map(async ({ account_id }) => {
+        await agent
+          .get(`/account/${account_id}`, config2)
+          .then((res2) => res2.data.data)
+          .catch((err) => {
+            dispatch({
+              type: systemConstants.FETCH_ACCESS_LOG_FAIL,
+              payload: err,
+            });
+          });
+      }),
+    );
+
+    dispatch({
+      type: accountConstants.FETCH_ACCOUNTS_SUCCESS,
+      payload: accounts,
+    });
+  } catch (error) {
+    dispatch({
+      type: systemConstants.FETCH_ACCESS_LOG_FAIL,
+      payload: error,
+    });
+  }
 };
 // Announcement
 const fetchAnnouncement = (token) => (dispatch) => {

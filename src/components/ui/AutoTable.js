@@ -18,11 +18,13 @@ import {
   InputAdornment,
   IconButton,
 } from '@material-ui/core';
-
+import { useDispatch, useSelector } from 'react-redux';
 import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useState, useEffect, useLocation } from 'react';
 import { Link } from 'react-router-dom';
+import { nanoid } from 'nanoid';
+import { customTableMount } from '../../actions/component/autoTable';
 import Icon from './icon/index';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
     height: '75px',
   },
-  search: {
+  search1: {
     height: '60px',
     width: 300,
   },
@@ -151,62 +153,114 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const tableRefetch = (limit, offset, filters, sorts) => dispatch(action(authToken, problemId, limit, offset, filter, sort))
+const itemsPerPage = [10, 25, 50, 100];
+
+// const tableRefetch = (limit, offset, filters, sorts) =>
+//            dispatch(action(authToken, problemId, ident, limit, offset, filter, sort))
 
 // TODO: new API
 
-// hasSearch,
-// tableRefetch,
+// ident
+// hasFilter,
+// refetch,
 // buttons,
 // columns,
 // data,
-// hasLink,
-// linkName,
 // children,
 
-export default function CustomTable({
-  hasSearch,
-  // searchWidthOption = 1, // will remove
-  // searchPlaceholder, // will remove
-  buttons,
-  columns,
-  // columnComponent, // will remove
-  data,
+// (item, allStates) => ({
+//   username: item.username,
+// })
+function AutoTable({
+  ident, // unique identifier for this table, used in dynamic redux state
+  hasFilter, // display filter in table head
+  filterConfig, // configuration of filter
+  /*
+  example value:
+  [
+    {
+      reduxStateId: 'username',
+      label: 'Username',
+      type: 'TEXT',
+      operation: 'LIKE',
+    },
+    {
+      reduxStateId: 'role',
+      label: 'Role',
+      type: 'ENUM',
+      options: [{value: 'MANAGER', label: 'Manager'}, {value: 'MEMBER', label: 'Member'}, {value: 'GUEST', label: 'Guest'}],
+      operation: 'IN',
+    },
+    {
+      reduxStateId: 'start_time',
+      label: 'Start Time',
+      type: 'DATE',
+      operation: 'BETWEEN'
+    }
+  ],
+  */
+  refetch, // function to call when table change page / filter/ sort
+  /*
+  example value:
+    (browseConfig, ident) => dispatch(fetchClassMembers(authToken, classId, browseParams: {limit, offset, filters, sorts}, ident))
+
+  (ident, browseParams) are required parameters
+  */
+  columns, // configurations of columns
+  /*
+  example value:
+  [
+    {
+      name: 'Institute',
+      align: 'center',
+      type: 'string',
+    },
+    {
+      name: 'Email',
+      align: 'center',
+      type: 'string',
+    },
+  ];
+*/
+  reduxData,
+  reduxDataToRows,
   hasLink,
-  linkName,
   children,
+  buttons,
 }) {
   const classes = useStyles();
-  const [curPage, setPage] = useState(0);
+  const [curPage, setPage] = useState(0); // curPage * rowsPerPage = offset
   const [pageInput, setPageInput] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [search, setSearch] = useState('');
-  const [filterData, setFilterData] = useState(data);
+  const [rowsPerPage, setRowsPerPage] = useState(10); // limit
 
   const [filters, setFilters] = useState([]);
+  const [sorts, setSorts] = useState([]);
 
+  const [rowData, setRowData] = useState([]);
+
+  const [dataComplete, setDataComplete] = useState(true);
+
+  const dispatch = useDispatch();
+  // const allStates = useSelector((state) => state);
+  const tableState = useSelector((state) => state.component.autoTable);
+
+  // page change from button
   const handleChangePage = (event, newPage) => {
-    if (newPage + 1 <= Math.ceil(filterData.length / rowsPerPage) && newPage >= 0) {
+    if (newPage + 1 <= Math.ceil(tableState.totalCount / rowsPerPage) && newPage >= 0) {
       setPageInput(newPage + 1);
     }
   };
 
+  // page change from input
+  useEffect(() => {
+    if (Number(pageInput) <= Math.ceil(tableState.totalCount / rowsPerPage) && pageInput >= 1) {
+      setPage(Number(pageInput) - 1);
+    }
+  }, [pageInput, rowsPerPage, tableState.totalCount]);
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
-  const searchWidth = (searchWidthOptions) => {
-    switch (searchWidthOptions) {
-      case 1:
-        return classes.search;
-      case 2:
-        return classes.search2;
-      case 3:
-        return classes.search3;
-      default:
-        return classes.search;
-    }
+    setPage(0); // TODO: calculate this
   };
 
   const labelMoveLeft = (icon, cols, col) => {
@@ -216,72 +270,28 @@ export default function CustomTable({
     return classes.columnLabelDefault;
   };
 
-  // TODO: table refetch
-  // useEffect(()=>{
-  //   tableRefetch(limit, offset, filter, sort)
-  // }, [limit, offset, filter, sort])
-
+  // table mount, create dynamic redux state
   useEffect(() => {
-    if (pageInput <= Math.ceil(filterData.length / rowsPerPage) && pageInput >= 1) {
-      setPage(pageInput - 1);
-    }
-  }, [filterData.length, pageInput, rowsPerPage]);
+    dispatch(customTableMount(ident));
+  }, [dispatch, ident]);
 
-  // useEffect(() => {
-  //   if (search !== '') {
-  //     const newData = data.filter((row) => {
-  //       let cnt = 0;
-  //       columns.forEach((column) => {
-  //         if (row[column.id].indexOf(search) >= 0) {
-  //           cnt += 1;
-  //         }
-  //       });
-  //       return cnt > 0;
-  //     });
-  //     setFilterData(newData);
-  //   } else {
-  //     setFilterData(data);
-  //   }
-  // }, [columns, data, search]);
+  // table refetch
+  useEffect(() => {
+    refetch(rowsPerPage, curPage * rowsPerPage, filters, sorts);
+  }, [refetch, rowsPerPage, curPage, filters, sorts]);
+
+  // switch page
+  useEffect(() => {
+    const displayedReduxData = Array.from({ length: rowsPerPage }, (_, id) => id + rowsPerPage * curPage)
+      .map((id) => tableState.displayedDataIds[id])
+      .map((id) => reduxData.byId[id]);
+
+    setDataComplete(displayedReduxData.reduce((acc, item) => acc && item !== undefined, true));
+    setRowData(displayedReduxData.map((item) => reduxDataToRows(item)));
+  }, [curPage, reduxData.byId, reduxDataToRows, rowsPerPage, tableState.displayedDataIds]);
 
   return (
     <>
-      {/*
-      TODO: Table head component
-
-      props:
-
-      filtersConfig: [
-        {column: 'Name', type: 'TextField', options:null, operation: 'LIKE'},
-        {column: 'Role', type: 'Dropdown' options:['a', 'b', 'c'], operation: 'IN'},
-        {column: 'Start Time', type: 'Date', options: null, operation: 'BETWEEN'}],
-      filters: [['Start Time', 'LIKE', 'something'], ['Name', 'IN', ['b', 'c']], ['Start Time', 'BETWEEN', ['2021-08-16T14:21:54Z', '2021-08-16T14:21:54Z']]]
-      setFilters,
-      buttons,
-      */}
-
-      <div className={hasSearch ? classes.topContent1 : classes.topContent2}>
-        {hasSearch && (
-          <TextField
-            id="search"
-            // className={searchWidth(searchWidthOption)}
-            onChange={(e) => {
-              setSearch(e.target.value);
-            }}
-            value={search}
-            placeholder={"This doesn't work."}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Icon.SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-        )}
-        <div className={classes.buttons}>{buttons}</div>
-      </div>
-
       <Paper className={classes.root} elevation={0}>
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">
@@ -289,7 +299,7 @@ export default function CustomTable({
               <TableRow>
                 <TableCell className={`${classes.tableHeadCell} ${classes.tableRowContainerLeftSpacing}`} />
                 {columns.map((column) => (
-                  <React.Fragment key={`${column.id}-${column.label}`}>
+                  <React.Fragment key={nanoid()}>
                     <TableCell className={`${classes.tableHeadCell} ${classes.tableColumnLeftSpacing}`} />
                     <TableCell
                       align={column.align}
@@ -325,7 +335,7 @@ export default function CustomTable({
               if => switch
               column.type: 'text', 'number', 'link', 'date'
               */
-                filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
+                rowData.map((row) => (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row[columns[0].id]} className={classes.row}>
                     <TableCell className={classes.tableRowContainerLeftSpacing} />
                     {columns.map((column) => {
@@ -355,7 +365,7 @@ export default function CustomTable({
                     })}
                     {hasLink ? (
                       <TableCell key={`${row.id}-show`} align="right">
-                        <Link to={row[linkName]} className={classes.detailLink}>
+                        <Link to={row.link} className={classes.detailLink}>
                           <IconButton>
                             <Icon.ArrowForwardRoundedIcon className={classes.toggleButtonIcon} />
                           </IconButton>
@@ -381,13 +391,13 @@ export default function CustomTable({
                 setRowsPerPage(e.target.value);
               }}
             >
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={25}>25</MenuItem>
-              <MenuItem value={50}>50</MenuItem>
-              <MenuItem value={100}>100</MenuItem>
+              {itemsPerPage.map((item) => (
+                <MenuItem key={nanoid()} value={item}>
+                  {item}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
-
           <Typography className={classes.pageText} variant="body1">
             rows
           </Typography>
@@ -409,7 +419,7 @@ export default function CustomTable({
           <Typography className={classes.pageText} variant="body1">
             of
             {' '}
-            {Math.ceil(filterData.length / rowsPerPage)}
+            {Math.ceil(tableState.totalCount / rowsPerPage)}
           </Typography>
           <Button
             className={classes.pageChangeButtons}
@@ -425,3 +435,5 @@ export default function CustomTable({
     </>
   );
 }
+
+export default AutoTable;
