@@ -87,13 +87,15 @@ export const fetchTeamMember = (token, teamId) => (dispatch) => {
 export const addTeamMember = (token, teamId, student, role) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
   dispatch({ type: teamConstants.ADD_TEAM_MEMBER_START });
-  const body = {
+  const body = [{
     account_referral: student,
     role,
-  };
+  }];
+  console.log(body);
   agent
     .post(`/team/${teamId}/member`, body, auth)
     .then((res) => {
+      console.log('add', res.data);
       dispatch({
         type: teamConstants.ADD_TEAM_MEMBER_SUCCESS,
       });
@@ -109,10 +111,10 @@ export const addTeamMember = (token, teamId, student, role) => (dispatch) => {
 export const editTeamMember = (token, teamId, memberId, role) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
   dispatch({ type: teamConstants.EDIT_TEAM_MEMBER_START });
-  const body = {
+  const body = [{
     member_id: memberId,
     role,
-  };
+  }];
   agent
     .patch(`/team/${teamId}/member`, body, auth)
     .then((res) => {
@@ -134,6 +136,7 @@ export const deleteTeamMember = (token, teamId, memberId) => (dispatch) => {
   agent
     .delete(`/team/${teamId}/member/${memberId}`, auth)
     .then((res) => {
+      console.log('delete suc');
       dispatch({
         type: teamConstants.DELETE_TEAM_MEMBER_SUCCESS,
       });
