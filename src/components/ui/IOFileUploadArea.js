@@ -1,6 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import {
-  makeStyles, Typography, Button, Input, Paper,
+  makeStyles,
+  Typography,
+  Button,
+  Input,
+  Paper,
   Table,
   TableContainer,
   TableBody,
@@ -115,7 +119,7 @@ export default function IOFileUploadArea({
               {selectedFile.map((row) => (
                 <TableRow hover role="checkbox" tabIndex={-1} key={row.name} className={classes.row}>
                   <TableCell align="left">
-                    {row === undefined ? 'error' : row.name}
+                    <Typography variant="body2">{row === undefined ? 'error' : row.name}</Typography>
                   </TableCell>
                   <TableCell key={`${row.id}-deleteIcon`} className={classes.deleteCell} align="right">
                     <Icon.Trash
