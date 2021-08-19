@@ -16,6 +16,7 @@ import {
   Card,
   CardContent,
   Snackbar,
+  Link,
   FormControlLabel,
   Switch,
 } from '@material-ui/core';
@@ -215,9 +216,9 @@ export default function UIComponentUsage() {
               message="This is a snackbar with button"
               onClose={() => setShowSnackbarWithButton(false)}
               action={(
-                <Button variant="text" color="primary" onClick={() => setShowSnackbarWithButton(false)}>
+                <Link href onClick={() => setShowSnackbarWithButton(false)}>
                   <Typography variant="h6">Undo</Typography>
-                </Button>
+                </Link>
             )}
             />
           </div>
