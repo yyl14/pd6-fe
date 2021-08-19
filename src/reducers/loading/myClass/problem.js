@@ -6,6 +6,7 @@ const initialState = {
   readChallenge: false,
   readJudgment: false,
   browseTestcase: false,
+  browseAssistingData: false,
 };
 
 export default function problem(state = initialState, action) {
@@ -84,6 +85,21 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         browseTestcase: false,
+      };
+    case problemConstants.BROWSE_ASSISTING_DATA_START:
+      return {
+        ...state,
+        browseAssistingData: true,
+      };
+    case problemConstants.BROWSE_ASSISTING_DATA_SUCCESS:
+      return {
+        ...state,
+        browseAssistingData: false,
+      };
+    case problemConstants.BROWSE_ASSISTING_DATA_FAIL:
+      return {
+        ...state,
+        browseAssistingData: false,
       };
     default: {
       return state;

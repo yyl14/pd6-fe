@@ -6,6 +6,7 @@ const initialState = {
   readChallenge: null,
   readJudgment: null,
   browseTestcase: null,
+  browseAssistingData: null,
 };
 
 export default function problem(state = initialState, action) {
@@ -34,6 +35,11 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         browseTestcase: action.errors,
+      };
+    case problemConstants.BROWSE_ASSISTING_DATA_FAIL:
+      return {
+        ...state,
+        browseAssistingData: action.errors,
       };
     default: {
       return state;

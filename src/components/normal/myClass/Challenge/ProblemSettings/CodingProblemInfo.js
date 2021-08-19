@@ -19,7 +19,7 @@ import Icon from '../../../../ui/icon/index';
 
 import NoMatch from '../../../../noMatch';
 
-import { browseTestcase } from '../../../../../actions/myClass/problem';
+import { browseTestcase, browseAssistingData } from '../../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -55,6 +55,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
 
   useEffect(() => {
     dispatch((browseTestcase(authToken, problemId)));
+    dispatch((browseAssistingData(authToken, problemId)));
   }, [authToken, dispatch, problemId]);
 
   return (

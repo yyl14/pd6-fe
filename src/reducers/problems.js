@@ -10,6 +10,7 @@ const byId = (state = {}, action) => {
         [data.id]: {
           ...data,
           testcaseIds: [],
+          assistingDataIds: [],
         },
       };
     }
@@ -21,6 +22,17 @@ const byId = (state = {}, action) => {
         [problemId]: {
           ...state[problemId],
           testcaseIds,
+        },
+      };
+    }
+    case problemConstants.BROWSE_ASSISTING_DATA_SUCCESS: {
+      const { problemId, assistingData } = action.payload;
+      const assistingDataIds = assistingData.map((item) => item.id);
+      return {
+        ...state,
+        [problemId]: {
+          ...state[problemId],
+          assistingDataIds,
         },
       };
     }

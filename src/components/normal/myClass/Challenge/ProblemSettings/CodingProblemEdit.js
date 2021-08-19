@@ -59,6 +59,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const problems = useSelector((state) => state.problem.byId);
   const authToken = useSelector((state) => state.auth.token);
 
+  const assistingData = useSelector((state) => state.assistingData.byId);
   const testcases = useSelector((state) => state.testcases.byId);
   const sampleDataIds = problems[problemId] === undefined ? [] : problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
   const testcaseDataIds = problems[problemId] === undefined ? [] : problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
@@ -282,7 +283,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button>
         </div>
         <SimpleTable
-          isEdit={false}
+          isEdit
           hasDelete
           columns={[
             {
@@ -290,11 +291,17 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
               label: 'File Name',
               minWidth: 40,
               align: 'center',
-              width: 100,
+              width: 200,
               type: 'string',
             },
           ]}
-          data={[]}
+          data={
+            problems[problemId] !== undefined
+              ? problems[problemId].assistingDataIds.map((id) => ({
+                filename: assistingData[id].filename,
+              }))
+              : []
+          }
         />
       </SimpleBar>
       <div className={classNames.buttons}>

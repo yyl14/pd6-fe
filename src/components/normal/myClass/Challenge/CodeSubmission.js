@@ -51,8 +51,8 @@ export default function CodeSubmission() {
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass);
 
-  const [lang, setLang] = useState(null);
-  const [langId, setLangId] = useState(null);
+  const [lang, setLang] = useState('');
+  const [langId, setLangId] = useState(-1);
   const [code, setCode] = useState('');
 
   useEffect(() => {
@@ -87,7 +87,7 @@ export default function CodeSubmission() {
               setLangId(e.target.key);
             }}
           >
-            <MenuItem key={null} value="">
+            <MenuItem key={-1} value="">
               <em>None</em>
             </MenuItem>
             {submitLang.allIds.map((key) => <MenuItem key={submitLang.byId[key].id} value={submitLang.byId[key].name}>{submitLang.byId[key].name}</MenuItem>)}

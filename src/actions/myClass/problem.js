@@ -192,9 +192,37 @@ const browseTestcase = (token, problemId) => async (dispatch) => {
   }
 };
 
+const browseAssistingData = (token, problemId) => async (dispatch) => {
+  dispatch({ type: problemConstants.BROWSE_ASSISTING_DATA_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const res = await agent.get(`/problem/${problemId}/assisting-data`, auth);
+    if (res.data.success) {
+      dispatch({
+        type: problemConstants.BROWSE_ASSISTING_DATA_SUCCESS,
+        payload: { problemId, assistingData: res.data.data },
+      });
+    } else {
+      dispatch({
+        type: problemConstants.BROWSE_ASSISTING_DATA_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.BROWSE_ASSISTING_DATA_FAIL,
+      errors: err,
+    });
+  }
+};
 export {
   browseChallengeOverview,
   readProblemInfo,
   readSubmissionDetail,
   browseTestcase,
+  browseAssistingData,
 };
