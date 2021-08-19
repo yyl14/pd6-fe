@@ -293,9 +293,15 @@ const overrides = {
       cursor: 'pointer',
       '&:hover': {
         color: blue[80],
+
       },
       '&:active': {
         color: blue.dark,
+      },
+    },
+    underlineHover: {
+      '&:hover': {
+        textDecoration: 'none',
       },
     },
   },
