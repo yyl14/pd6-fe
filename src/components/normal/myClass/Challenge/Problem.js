@@ -13,7 +13,10 @@ import {
 import { useHistory, useParams } from 'react-router-dom';
 
 import CodingProblem from './CodingProblem';
-import Essay from './Essay';
+import EssayManager from './EssayManager';
+import EssayManagerAdd from './EssayManagerAdd';
+import EssayManagerEdit from './EssayManagerEdit';
+import EssayNormal from './EssayNormal';
 import { readProblem } from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
@@ -52,7 +55,13 @@ export default function Problem() {
       <Typography className={classNames.pageHeader} variant="h3">
         this is problem
       </Typography>
-      <Essay />
+      <EssayManagerEdit />
+      {/* <div>Manager Add</div>
+      <EssayManagerAdd />
+      <div>Manager Edit</div>
+      <EssayManagerEdit />
+      <div>Essay Normal</div>
+      <EssayNormal /> */}
     </>
   );
 }
