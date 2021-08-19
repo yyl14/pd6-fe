@@ -28,5 +28,5 @@
   "C_Cpp_Runner.excludeSearch": [],
   "C_Cpp_Runner.enableWarnings": true,
   "C_Cpp_Runner.warningsAsError": false,
-  "cSpell.words": ["testcases"]
+  "cSpell.words": ["testcases", "textfield"]
 }

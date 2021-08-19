@@ -219,10 +219,54 @@ const browseAssistingData = (token, problemId) => async (dispatch) => {
     });
   }
 };
+
+const downloadAssistingFile = (token, file) => async (dispatch) => {
+  // in each file, you should contain uuid, filename, and as_attachment
+  // const auth = {
+  //   headers: {
+  //     'Auth-Token': token,
+  //   },
+  //   query: {
+  //     filename: file.filename,
+  //     as_attachment: file.as_attachment,
+  //   },
+  // };
+  // try {
+  //   console.log('try to download file');
+  //   dispatch({ type: problemConstants.DOWNLOAD_ASSISTING_FILE_START });
+  //   const res = await agent.get(`/s3-file/${file.uuid}/url`, auth);
+  //   console.log(res);
+  //   if (res.data.success) {
+  //     console.log('get url successfully');
+  //     fetch(res.data.url).then((t) => t.blob().then((b) => {
+  //       const a = document.createElement('a');
+  //       a.href = URL.createObjectURL(b);
+  //       a.setAttribute('download', file.filename);
+  //       a.click();
+  //     }));
+
+  //     dispatch({
+  //       type: problemConstants.DOWNLOAD_ASSISTING_FILE_SUCCESS,
+  //     });
+  //   } else {
+  //     dispatch({
+  //       type: problemConstants.DOWNLOAD_ASSISTING_FILE_FAIL,
+  //       errors: res.data.error,
+  //     });
+  //   }
+  // } catch (err) {
+  //   dispatch({
+  //     type: problemConstants.BROWSE_ASSISTING_DATA_FAIL,
+  //     errors: err,
+  //   });
+  // }
+};
+
 export {
   browseChallengeOverview,
   readProblemInfo,
   readSubmissionDetail,
   browseTestcase,
   browseAssistingData,
+  downloadAssistingFile,
 };

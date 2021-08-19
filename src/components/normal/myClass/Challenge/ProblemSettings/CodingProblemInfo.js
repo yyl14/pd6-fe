@@ -21,7 +21,7 @@ import Icon from '../../../../ui/icon/index';
 
 import NoMatch from '../../../../noMatch';
 
-import { browseTestcase, browseAssistingData } from '../../../../../actions/myClass/problem';
+import { browseTestcase, browseAssistingData, downloadAssistingFile } from '../../../../../actions/myClass/problem';
 import { fetchClass, fetchCourse } from '../../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
@@ -70,6 +70,17 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const handleRejudge = () => {
     // TODO: rejudge problem
     setRejudgePopUp(false);
+  };
+
+  const downloadAllAssistingFile = () => {
+    const files = problems[problemId].assistingDataIds.map((id) => ({
+      uuid: assistingData[id].s3_file_uuid,
+      filename: assistingData[id].filename,
+      as_attachment: false,
+    }));
+    files.forEach((file) => {
+      dispatch((downloadAssistingFile(authToken, file)));
+    });
   };
 
   useEffect(() => {
@@ -201,7 +212,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       { role === 'MANAGER'
         && (
         <SimpleBar title="Assisting Data (Optional)">
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button>
+          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllAssistingFile}>Download All Files</Button>
           <SimpleTable
             isEdit={false}
             hasDelete={false}
