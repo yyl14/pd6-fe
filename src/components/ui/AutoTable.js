@@ -365,14 +365,14 @@ function AutoTable({
                     <TableCell className={classes.tableRowContainerLeftSpacing} />
                     {columns.map((column) => {
                       if (column.type === 'link') {
-                        const link = row[column.link_id];
-                        const value = row[column.id];
                         return (
                           <React.Fragment key={`${column.id}-${column.label}`}>
                             <TableCell className={classes.tableColumnLeftSpacing} />
                             <TableCell align={column.align}>
-                              <Link to={link} className={classes.textLink} replace>
-                                {column.format && typeof value === 'number' ? column.format(value) : value}
+                              <Link to={row[column.name].path} className={classes.textLink} replace>
+                                {column.format && typeof row[column.name].text === 'number'
+                                  ? column.format(row[column.name].text)
+                                  : row[column.name].text}
                               </Link>
                             </TableCell>
                           </React.Fragment>

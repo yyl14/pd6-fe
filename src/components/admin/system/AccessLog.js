@@ -123,7 +123,10 @@ export default function AccessLog() {
         ]}
         reduxData={logs}
         reduxDataToRows={(item) => ({
-          Username: accounts.byId[item.account_id] ? accounts.byId[item.account_id].username : '',
+          Username: {
+            text: accounts.byId[item.account_id] ? accounts.byId[item.account_id].username : '',
+            path: `/admin/account/account/${item.account_id}/setting`,
+          },
           'Student ID': accounts.byId[item.account_id] ? accounts.byId[item.account_id].student_id : '',
           'Real Name': accounts.byId[item.account_id] ? accounts.byId[item.account_id].real_name : '',
           IP: item.ip,
