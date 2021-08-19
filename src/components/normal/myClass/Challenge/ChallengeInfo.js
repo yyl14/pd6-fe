@@ -24,12 +24,12 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '50px',
   },
   descriptionBlock: {
-    width: '1000px',
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
   },
   descriptionField: {
-    width: 'inherit',
+    width: '60vw',
   },
   buttons: {
     alignSelf: 'flex-end',
@@ -144,7 +144,9 @@ export default function ChallengeInfo() {
                 value={inputs}
                 onChange={(e) => setInputs(e.target.value)}
                 multiline
-                rows={10}
+                minRows={10}
+                maxRows={10}
+                variant="outlined"
               />
               <div className={classes.buttons}>
                 <Button onClick={handleCancel}>Cancel</Button>
@@ -179,7 +181,30 @@ export default function ChallengeInfo() {
       <SimpleBar
         title="Overview"
       >
-        {/* <SimpleTable */}
+        <SimpleTable
+          isEdit={false}
+          hasDelete={isManager}
+          columns={[
+            {
+              id: 'No.', //
+              label: 'Label',
+              minWidth: 40,
+              align: 'center',
+              width: 50,
+              type: 'string',
+            },
+            {
+              id: 'max_time',
+              label: 'Score',
+              minWidth: 50,
+              align: 'center',
+              width: 200,
+              type: 'string',
+            },
+          ]}
+          data={[]}
+        />
+
       </SimpleBar>
     </>
   );
