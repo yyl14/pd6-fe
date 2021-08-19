@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useBeforeunload } from 'react-beforeunload';
 import {
   Typography,
   Button,
@@ -31,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
   textField: {
     width: '100%',
+    marginTop: '0px',
   },
   buttonsBar: {
     display: 'flex',
@@ -41,65 +44,128 @@ const useStyles = makeStyles((theme) => ({
   leftButton: {
     marginRight: '18px',
   },
+  dialogContent: {
+    padding: '0px 24px 6px 24px',
+  },
+  dialogButtons: {
+    justifyContent: 'space-between',
+  },
+  backToEditButton: {
+    marginLeft: '24px',
+  },
 }));
 
 /* This is a level 4 component (page component) */
 const MemberEdit = ({
   backToMemberList, members, onEditMembers, loading,
 }) => {
-  // TODO: initialize field content with redux state
   const classes = useStyles();
   const [TA, setTA] = useState([]);
   const [student, setStudent] = useState([]);
   const [guest, setGuest] = useState([]);
-
+  const [TAChanged, setTAChanged] = useState(false);
+  const [studentChanged, setStudentChanged] = useState(false);
+  const [guestChanged, setGuestChanged] = useState(false);
   const [showUnsaveDialog, setShowUnsaveDialog] = useState(false);
-  const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const unblockHandle = useRef();
+  const targetLocation = useRef();
+  const history = useHistory();
 
   useEffect(() => {
-    // setTA(members.filter((item) => item.role === 'TA'));
-    // setStudent(members.filter((item) => item.role === 'Student'));
-    // setGuest(members.filter((item) => item.role === 'Guest'));
+    setTA(
+      members
+        .filter((item) => item.role === 'MANAGER')
+        .map((member) => member.student_id)
+        .join('\n'),
+    );
+    setStudent(
+      members
+        .filter((item) => item.role === 'NORMAL')
+        .map((member) => member.student_id)
+        .join('\n'),
+    );
+    setGuest(
+      members
+        .filter((item) => item.role === 'GUEST')
+        .map((member) => member.student_id)
+        .join('\n'),
+    );
   }, [members]);
 
-  const handleChangeTA = (e) => {
-    /* if(){
+  useEffect(() => {
+    unblockHandle.current = history.block((tl) => {
+      if (TAChanged || studentChanged || guestChanged) {
+        setShowUnsaveDialog(true);
+        targetLocation.current = tl;
+        return false;
+      }
+      return true;
+    });
+  });
 
-    } */
+  useBeforeunload((e) => {
+    if (TAChanged || studentChanged || guestChanged) {
+      e.preventDefault();
+      setShowUnsaveDialog(true);
+    }
+  });
+
+  const handleChangeTA = (e) => {
     setTA(e.target.value);
+    setTAChanged(
+      e.target.value
+        !== members
+          .filter((item) => item.role === 'MANAGER')
+          .map((member) => member.student_id)
+          .join('\n'),
+    );
   };
 
   const handleChangeStudent = (e) => {
-    /* if(){
-
-    } */
     setStudent(e.target.value);
+    setStudentChanged(
+      e.target.value
+        !== members
+          .filter((item) => item.role === 'NORMAL')
+          .map((member) => member.student_id)
+          .join('\n'),
+    );
   };
   const handleChangeGuest = (e) => {
-    /* if(){
-
-    } */
     setGuest(e.target.value);
+    setGuestChanged(
+      e.target.value
+        !== members
+          .filter((item) => item.role === 'GUEST')
+          .map((member) => member.student_id)
+          .join('\n'),
+    );
   };
   const handleClickCancel = () => {
-    /* if(){
+    if (TAChanged || studentChanged || guestChanged) {
       setShowUnsaveDialog(true);
-    }
-    else{
+    } else {
       backToMemberList();
-    } */
-    setShowUnsaveDialog(true);
+    }
   };
 
   const handleSubmitUnsave = () => {
     setShowUnsaveDialog(false);
     backToMemberList();
+    if (unblockHandle) {
+      unblockHandle.current();
+      history.push(targetLocation.current);
+    }
   };
 
   const handleSubmitSave = () => {
-    setShowSaveDialog(false);
-    // and sth.....
+    setShowUnsaveDialog(false);
+    // dispatch and make defaultValue string to an array using str.split("\n")
     backToMemberList();
+    if (unblockHandle) {
+      unblockHandle.current();
+      history.push(targetLocation.current);
+    }
   };
 
   return (
@@ -120,7 +186,6 @@ const MemberEdit = ({
             rows={20}
           />
         </div>
-
         <div className={classes.editorCol}>
           <div className={classes.editorItem}>
             <Typography variant="body1">Student</Typography>
@@ -129,14 +194,13 @@ const MemberEdit = ({
             <Typography variant="caption">List of student ID</Typography>
           </div>
           <TextField
-            defaultValue={student}
             className={classes.textField}
+            defaultValue={student}
             onChange={(e) => handleChangeStudent(e)}
             multiline
             rows={20}
           />
         </div>
-
         <div className={classes.editorCol}>
           <div className={classes.editorItem}>
             <Typography variant="body1">Guest</Typography>
@@ -145,11 +209,11 @@ const MemberEdit = ({
             <Typography variant="caption">List of student ID</Typography>
           </div>
           <TextField
+            className={classes.textField}
             defaultValue={guest}
             onChange={(e) => handleChangeGuest(e)}
             multiline
             rows={20}
-            className={classes.textField}
           />
         </div>
       </Card>
@@ -157,43 +221,34 @@ const MemberEdit = ({
         <Button onClick={handleClickCancel} className={classes.leftButton}>
           Cancel
         </Button>
-        <Button onClick={() => setShowSaveDialog(true)} color="primary">
+        <Button onClick={handleSubmitSave} color="primary">
           Save
         </Button>
-        {/* TODO:button variant */}
       </div>
 
       <Dialog open={showUnsaveDialog} maxWidth="md">
         <DialogTitle>
-          <Typography variant="h4">Unsaved changes to member list</Typography>
+          <Typography variant="h4">Unsaved Changes</Typography>
         </DialogTitle>
-        <DialogContent>
+        <DialogContent className={classes.dialogContent}>
           <Typography variant="body1">
-            Changes are unsaved, nothing will change by clicking Don’t Save. Click Cancel to go back to editing panel.
+            You have unsaved changes, do you want to save your changes or back to edit?
           </Typography>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowUnsaveDialog(false)}>Cancel</Button>
-          <Button onClick={handleSubmitUnsave} color="secondary">
-            Don’t Save
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <Dialog open={showSaveDialog} maxWidth="md">
-        <DialogTitle>
-          <Typography variant="h4">Save changes to member list</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body1">
-            Click save changes to modify member list. Click Cancel to go back to editing panel.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowSaveDialog(false)}>Cancel</Button>
-          <Button onClick={handleSubmitSave} color="primary" disabled={loading.editMembers}>
-            Save Changes
-          </Button>
+        <DialogActions className={classes.dialogButtons}>
+          <div>
+            <Button variant="outlined" onClick={() => setShowUnsaveDialog(false)} className={classes.backToEditButton}>
+              Back to Edit
+            </Button>
+          </div>
+          <div>
+            <Button onClick={handleSubmitUnsave}>
+              Don’t Save
+            </Button>
+            <Button onClick={handleSubmitSave} color="primary">
+              Save
+            </Button>
+          </div>
         </DialogActions>
       </Dialog>
     </div>
