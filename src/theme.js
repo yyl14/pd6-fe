@@ -188,6 +188,14 @@ const overrides = {
       '&:active': {
         backgroundColor: mono.semiDarkGray,
       },
+      '& path': {
+        fill: mono.black,
+      },
+      '&$disabled': {
+        '& path': {
+          fill: mono.lightGray,
+        },
+      },
     },
     containedPrimary: {
       '&:hover': {
@@ -195,6 +203,9 @@ const overrides = {
       },
       '&:active': {
         backgroundColor: blue.dark,
+      },
+      '& path': {
+        fill: mono.white,
       },
     },
     containedSecondary: {
@@ -204,10 +215,19 @@ const overrides = {
       '&:active': {
         backgroundColor: red.dark,
       },
+      '& path': {
+        fill: mono.white,
+      },
     },
     text: {
       margin: '10px 5px 10px 5px',
       padding: '8.5px 25px 10px 25px',
+      '&$disabled': {
+        color: mono.gray,
+        '& path': {
+          fill: mono.gray,
+        },
+      },
     },
     textPrimary: {
       '&:hover': {
@@ -215,6 +235,9 @@ const overrides = {
       },
       '&:active': {
         backgroundColor: blue[80],
+      },
+      '& path': {
+        fill: blue[100],
       },
     },
     textSecondary: {
@@ -224,46 +247,84 @@ const overrides = {
       '&:active': {
         backgroundColor: red[80],
       },
+      '& path': {
+        fill: red[100],
+      },
     },
     outlined: {
       margin: '10px 5px 10px 5px',
-      padding: '8.5px 25px 10px 25px',
+      padding: '7.5px 24px 9px 24px',
       '&:hover': {
         backgroundColor: mono.lightGray,
       },
       '&:active': {
         backgroundColor: mono.semiDarkGray,
       },
+      '& path': {
+        fill: mono.black,
+        height: '20px',
+        width: '20px',
+      },
+      '&$disabled': {
+        color: mono.gray,
+        '& path': {
+          fill: mono.gray,
+        },
+      },
     },
     outlinedPrimary: {
       '&:hover': {
         color: mono.white,
         backgroundColor: blue[60],
+        '& path': {
+          fill: mono.white,
+        },
       },
       '&:active': {
         color: mono.white,
         backgroundColor: blue.dark,
+        '& path': {
+          fill: mono.white,
+        },
+      },
+      '& path': {
+        fill: blue[100],
       },
     },
     outlinedSecondary: {
       '&:hover': {
         color: mono.white,
         backgroundColor: red[60],
+        '& path': {
+          fill: mono.white,
+        },
       },
       '&:active': {
         color: mono.white,
         backgroundColor: red.dark,
+        '& path': {
+          fill: mono.white,
+        },
+      },
+      '& path': {
+        fill: red[100],
       },
     },
     startIcon: {
-      marginRight: '10px',
       height: '20px',
       width: '20px',
+      marginRight: '10px',
+      marginLeft: '0px',
+      display: 'flex',
+      alignItems: 'center',
     },
     endIcon: {
-      marginLeft: '10px',
       height: '20px',
       width: '20px',
+      marginLeft: '10px',
+      marginRight: '0px',
+      display: 'flex',
+      alignItems: 'center',
     },
   },
 
@@ -277,6 +338,17 @@ const overrides = {
       },
       '&:active': {
         backgroundColor: mono.gray,
+        '& path': {
+          fill: mono.white,
+        },
+      },
+      '& path': {
+        fill: mono.black,
+      },
+      '&$disabled': {
+        '& path': {
+          fill: mono.gray,
+        },
       },
     },
   },

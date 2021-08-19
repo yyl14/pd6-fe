@@ -131,16 +131,6 @@ const useStyles = makeStyles((theme) => ({
   detailLink: {
     color: 'black',
   },
-  textLink: {
-    textDecoration: 'none',
-    color: theme.palette.primary.main,
-    '&:hover': {
-      color: theme.palette.primary.hover,
-    },
-    '&:active': {
-      color: theme.palette.primary.dark,
-    },
-  },
   toggleButtonIcon: {
     height: '20px',
     width: '20px',
