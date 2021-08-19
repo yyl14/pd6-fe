@@ -18,11 +18,12 @@ import {
   InputAdornment,
   IconButton,
 } from '@material-ui/core';
-
+import { createStore, useSelector, useDispatch } from 'redux';
 import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useState, useEffect, useLocation } from 'react';
 import { Link } from 'react-router-dom';
+import { customTableMount } from '../../actions/component/customTable';
 import Icon from './icon/index';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
     height: '75px',
   },
-  search: {
+  search1: {
     height: '60px',
     width: 300,
   },
@@ -151,12 +152,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const tableRefetch = (limit, offset, filters, sorts) => dispatch(action(authToken, problemId, limit, offset, filter, sort))
+// const tableRefetch = (limit, offset, filters, sorts) =>
+//            dispatch(action(authToken, problemId, ident, limit, offset, filter, sort))
 
 // TODO: new API
 
-// hasSearch,
-// tableRefetch,
+// ident
+// hasFilter,
+// refetch,
 // buttons,
 // columns,
 // data,
@@ -164,49 +167,32 @@ const useStyles = makeStyles((theme) => ({
 // linkName,
 // children,
 
-export default function CustomTable({
-  hasSearch,
-  // searchWidthOption = 1, // will remove
-  // searchPlaceholder, // will remove
-  buttons,
-  columns,
-  // columnComponent, // will remove
-  data,
-  hasLink,
-  linkName,
-  children,
+function CustomTable({
+  ident, hasFilter, refetch, columns, reduxData, reduxDataToRows, hasLink, children, buttons,
 }) {
   const classes = useStyles();
-  const [curPage, setPage] = useState(0);
+  const dispatch = useDispatch();
+  const [curPage, setPage] = useState(0); // curPage * rowsPerPage = offset
   const [pageInput, setPageInput] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [search, setSearch] = useState('');
-  const [filterData, setFilterData] = useState(data);
+  const [rowsPerPage, setRowsPerPage] = useState(10); // limit
 
   const [filters, setFilters] = useState([]);
+  const [sorts, setSorts] = useState([]);
+
+  const [rowData, setRowData] = useState([]);
+
+  const [dataComplete, setDataComplete] = useState(true);
+  const tableState = useSelector((state) => state.component.customTable);
 
   const handleChangePage = (event, newPage) => {
-    if (newPage + 1 <= Math.ceil(filterData.length / rowsPerPage) && newPage >= 0) {
+    if (newPage + 1 <= Math.ceil(tableState.totalCount / rowsPerPage) && newPage >= 0) {
       setPageInput(newPage + 1);
     }
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
-  const searchWidth = (searchWidthOptions) => {
-    switch (searchWidthOptions) {
-      case 1:
-        return classes.search;
-      case 2:
-        return classes.search2;
-      case 3:
-        return classes.search3;
-      default:
-        return classes.search;
-    }
+    setPage(0); // TODO: calculate this
   };
 
   const labelMoveLeft = (icon, cols, col) => {
@@ -216,34 +202,31 @@ export default function CustomTable({
     return classes.columnLabelDefault;
   };
 
-  // TODO: table refetch
-  // useEffect(()=>{
-  //   tableRefetch(limit, offset, filter, sort)
-  // }, [limit, offset, filter, sort])
-
+  // table mount, create dynamic redux state
   useEffect(() => {
-    if (pageInput <= Math.ceil(filterData.length / rowsPerPage) && pageInput >= 1) {
-      setPage(pageInput - 1);
-    }
-  }, [filterData.length, pageInput, rowsPerPage]);
+    dispatch(customTableMount(ident));
+  }, [dispatch, ident]);
 
+  // table refetch
   useEffect(() => {
-    // if (search !== '') {
-    //   const newData = data.filter((row) => {
-    //     let cnt = 0;
-    //     columns.forEach((column) => {
-    //       if (row[column.id].indexOf(search) >= 0) {
-    //         cnt += 1;
-    //       }
-    //     });
-    //     return cnt > 0;
-    //   });
-    //   setFilterData(newData);
-    // } else {
-    //   setFilterData(data);
-    // }
-    setFilterData(data);
-  }, [columns, data]);
+    refetch(rowsPerPage, curPage * rowsPerPage, filters, sorts);
+  }, [refetch, rowsPerPage, curPage, filters, sorts]);
+
+  // switch page
+  useEffect(() => {
+    const displayedReduxData = Array.from({ length: rowsPerPage }, (_, id) => id + rowsPerPage * curPage)
+      .map((id) => tableState.displayedDataIds[id])
+      .map((id) => reduxData.byId[id]);
+
+    setDataComplete(displayedReduxData.reduce((acc, item) => acc && item !== undefined, true));
+    setRowData(displayedReduxData.map((item) => reduxDataToRows(item)));
+  }, [curPage, reduxData.byId, reduxDataToRows, rowsPerPage, tableState.displayedDataIds]);
+
+  // useEffect(() => {
+  //   if (pageInput <= Math.ceil(filterData.length / rowsPerPage) && pageInput >= 1) {
+  //     setPage(pageInput - 1);
+  //   }
+  // }, [filterData.length, pageInput, rowsPerPage]);
 
   return (
     <>
@@ -260,7 +243,7 @@ export default function CustomTable({
       setFilters,
       buttons,
       */}
-
+      {/*
       <div className={hasSearch ? classes.topContent1 : classes.topContent2}>
         {hasSearch && (
           <TextField
@@ -281,7 +264,7 @@ export default function CustomTable({
           />
         )}
         <div className={classes.buttons}>{buttons}</div>
-      </div>
+      </div> */}
 
       <Paper className={classes.root} elevation={0}>
         <TableContainer className={classes.container}>
@@ -356,7 +339,7 @@ export default function CustomTable({
                     })}
                     {hasLink ? (
                       <TableCell key={`${row.id}-show`} align="right">
-                        <Link to={row[linkName]} className={classes.detailLink}>
+                        <Link to={row.link} className={classes.detailLink}>
                           <IconButton>
                             <Icon.ArrowForwardRoundedIcon className={classes.toggleButtonIcon} />
                           </IconButton>
@@ -426,3 +409,5 @@ export default function CustomTable({
     </>
   );
 }
+
+export default CustomTable;
