@@ -281,19 +281,6 @@ function AutoTable({
     dispatch(customTableMount(ident));
   }, [ident]);
 
-  // table refetch
-  useEffect(() => {
-    refetch(
-      {
-        limit: rowsPerPage,
-        offset: curPage * rowsPerPage,
-        filter,
-        sort,
-      },
-      ident,
-    );
-  }, [curPage, filter, ident, rowsPerPage, sort]);
-
   // switch page
   useEffect(() => {
     if (tableState.byId[ident]) {
@@ -305,6 +292,22 @@ function AutoTable({
       setDisplayedReduxData(newDisplayedReduxData);
     }
   }, [curPage, ident, reduxData.byId, rowsPerPage, tableState]);
+
+  // table refetch
+  useEffect(() => {
+    if (!dataComplete) {
+      console.log('refetch');
+      refetch(
+        {
+          limit: rowsPerPage,
+          offset: curPage * rowsPerPage,
+          filter,
+          sort,
+        },
+        ident,
+      );
+    }
+  }, [dataComplete, curPage, filter, ident, rowsPerPage, sort]);
 
   useEffect(() => {
     if (dataComplete) {

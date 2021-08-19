@@ -24,22 +24,20 @@ const fetchAccessLog = (token, browseParams, tableId = null) => async (dispatch)
     };
 
     const accounts = await Promise.all(
-      data.map(async ({ account_id }) => {
-        await agent
-          .get(`/account/${account_id}`, config2)
-          .then((res2) => res2.data.data)
-          .catch((err) => {
-            dispatch({
-              type: systemConstants.FETCH_ACCESS_LOG_FAIL,
-              payload: err,
-            });
+      data.map(async ({ account_id }) => agent
+        .get(`/account/${account_id}`, config2)
+        .then((res2) => res2.data.data)
+        .catch((err) => {
+          dispatch({
+            type: systemConstants.FETCH_ACCESS_LOG_FAIL,
+            payload: err,
           });
-      }),
+        })),
     );
 
     dispatch({
       type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
-      payload: { data, accounts },
+      payload: { data, accounts: accounts.filter((item) => item !== null) },
     });
     dispatch({
       type: autoTableConstants.AUTO_TABLE_UPDATE,
