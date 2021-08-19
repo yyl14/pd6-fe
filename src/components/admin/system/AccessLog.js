@@ -38,7 +38,7 @@ export default function AccessLog() {
         Access Log
       </Typography>
       <AutoTable
-        ident={nanoid()}
+        ident="Access Log Table"
         hasFilter
         filterConfig={[
           {
@@ -80,7 +80,9 @@ export default function AccessLog() {
           },
           // TODO account id ?
         ]}
-        refetch={(browseParams, ident) => dispatch(fetchAccessLog(authToken, browseParams, ident))}
+        refetch={(browseParams, ident) => {
+          dispatch(fetchAccessLog(authToken, browseParams, ident));
+        }}
         columns={[
           {
             name: 'Username',
@@ -98,7 +100,7 @@ export default function AccessLog() {
             type: 'string',
           },
           {
-            name: 'Student ID',
+            name: 'IP',
             align: 'center',
             type: 'string',
           },
@@ -121,6 +123,12 @@ export default function AccessLog() {
         reduxData={logs}
         reduxDataToRows={(item) => ({
           Username: accounts.byId[item.account_id] ? accounts.byId[item.account_id].username : '',
+          'Student ID': accounts.byId[item.account_id] ? accounts.byId[item.account_id].student_id : '',
+          'Real Name': accounts.byId[item.account_id] ? accounts.byId[item.account_id].real_name : '',
+          IP: item.ip,
+          'Resource Path': item.resource_path,
+          'Request Method': item.request_method,
+          'Access Time': moment(item.access_time).format('YYYY-MM-DD, HH:mm:ss'),
         })}
       />
     </>

@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { autoTableConstants } from '../../actions/component/constant';
 
 const byId = (state = {}, action) => {
+  console.log(action.type);
   switch (action.type) {
     case autoTableConstants.AUTO_TABLE_MOUNT: {
       const { tableId } = action.payload;
@@ -9,7 +10,7 @@ const byId = (state = {}, action) => {
     }
     case autoTableConstants.AUTO_TABLE_UPDATE: {
       const {
-        tableId, offset, dataIds, total_count,
+        tableId, offset, dataIds, totalCount,
       } = action.payload;
       if (state[tableId]) {
         // exists table
@@ -18,9 +19,9 @@ const byId = (state = {}, action) => {
           [tableId]: {
             ...state[tableId],
             // update data ids in range [offset, offset + limit - 1]
-            totalCount: total_count,
+            totalCount,
             displayedDataIds: dataIds.reduce((acc, item, index) => {
-              acc.set(offset + index, item.id);
+              acc.set(offset + index, item);
               return acc;
             }, state[tableId].displayedDataIds),
           },

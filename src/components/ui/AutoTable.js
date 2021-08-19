@@ -27,6 +27,8 @@ import { nanoid } from 'nanoid';
 import { customTableMount } from '../../actions/component/autoTable';
 import Icon from './icon/index';
 
+/* eslint react-hooks/exhaustive-deps: 0 */
+
 const useStyles = makeStyles((theme) => ({
   topContent1: {
     background: theme.palette.grey.A100,
@@ -233,9 +235,10 @@ function AutoTable({
   const [pageInput, setPageInput] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10); // limit
 
-  const [filters, setFilters] = useState([]);
-  const [sorts, setSorts] = useState([]);
+  const [filter, setFilter] = useState([]);
+  const [sort, setSort] = useState([]);
 
+  const [displayedReduxData, setDisplayedReduxData] = useState([]);
   const [rowData, setRowData] = useState([]);
 
   const [dataComplete, setDataComplete] = useState(true);
@@ -246,17 +249,21 @@ function AutoTable({
 
   // page change from button
   const handleChangePage = (event, newPage) => {
-    if (newPage + 1 <= Math.ceil(tableState.totalCount / rowsPerPage) && newPage >= 0) {
+    if (newPage + 1 <= Math.ceil(tableState.byId[ident].totalCount / rowsPerPage) && newPage >= 0) {
       setPageInput(newPage + 1);
     }
   };
 
   // page change from input
   useEffect(() => {
-    if (Number(pageInput) <= Math.ceil(tableState.totalCount / rowsPerPage) && pageInput >= 1) {
+    if (
+      tableState.byId[ident]
+      && Number(pageInput) <= Math.ceil(tableState.byId[ident].totalCount / rowsPerPage)
+      && pageInput >= 1
+    ) {
       setPage(Number(pageInput) - 1);
     }
-  }, [pageInput, rowsPerPage, tableState.totalCount]);
+  }, [ident, pageInput, rowsPerPage, tableState]);
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
@@ -273,23 +280,39 @@ function AutoTable({
   // table mount, create dynamic redux state
   useEffect(() => {
     dispatch(customTableMount(ident));
-  }, [dispatch, ident]);
+  }, [ident]);
 
   // table refetch
   useEffect(() => {
-    refetch(rowsPerPage, curPage * rowsPerPage, filters, sorts);
-  }, [refetch, rowsPerPage, curPage, filters, sorts]);
+    refetch(
+      {
+        limit: rowsPerPage,
+        offset: curPage * rowsPerPage,
+        filter,
+        sort,
+      },
+      ident,
+    );
+  }, [curPage, filter, ident, rowsPerPage, sort]);
 
   // switch page
   useEffect(() => {
-    const displayedReduxData = Array.from({ length: rowsPerPage }, (_, id) => id + rowsPerPage * curPage)
-      .map((id) => tableState.displayedDataIds[id])
-      .map((id) => reduxData.byId[id]);
+    if (tableState.byId[ident]) {
+      const newDisplayedReduxData = Array.from({ length: rowsPerPage }, (_, id) => id + rowsPerPage * curPage)
+        .map((id) => tableState.byId[ident].displayedDataIds[id])
+        .map((id) => reduxData.byId[id]);
 
-    setDataComplete(displayedReduxData.reduce((acc, item) => acc && item !== undefined, true));
-    setRowData(displayedReduxData.map((item) => reduxDataToRows(item)));
-  }, [curPage, reduxData.byId, reduxDataToRows, rowsPerPage, tableState.displayedDataIds]);
+      setDataComplete(newDisplayedReduxData.reduce((acc, item) => acc && item !== undefined, true));
+      setDisplayedReduxData(newDisplayedReduxData);
+    }
+  }, [curPage, ident, reduxData.byId, rowsPerPage, tableState]);
 
+  useEffect(() => {
+    if (dataComplete) {
+      setRowData(displayedReduxData.map((item) => reduxDataToRows(item)));
+    }
+  });
+  console.log(tableState.byId[ident]);
   return (
     <>
       <Paper className={classes.root} elevation={0}>
@@ -306,7 +329,7 @@ function AutoTable({
                       className={classes.tableHeadCell}
                       style={{ minWidth: column.minWidth, width: column.width }}
                     >
-                      {column.label}
+                      {column.name}
                       {/* <div className={classes.column}>
                         <div className={labelMoveLeft(columnComponent, columns, column)}>
                           <b>{column.label}</b>
@@ -353,9 +376,9 @@ function AutoTable({
                           </React.Fragment>
                         );
                       }
-                      const value = row[column.id];
+                      const value = row[column.name];
                       return (
-                        <React.Fragment key={`${column.id}-${column.label}`}>
+                        <React.Fragment key={nanoid()}>
                           <TableCell className={classes.tableColumnLeftSpacing} />
                           <TableCell align={column.align}>
                             {column.format && typeof value === 'number' ? column.format(value) : value}

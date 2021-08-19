@@ -14,14 +14,13 @@ const fetchAccessLog = (token, browseParams, tableId = null) => async (dispatch)
     });
 
     const res1 = await agent.get('/access-log', config1);
-    const { data, total_count } = res1.data;
 
-    const config2 = {
-      headers: { 'auth-token': token },
-    };
+    const { data, total_count } = res1.data.data;
+    console.log(data, total_count);
+
     dispatch({
       type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
-      payload: data,
+      payload: { data },
     });
     dispatch({
       type: autoTableConstants.AUTO_TABLE_UPDATE,
@@ -34,6 +33,9 @@ const fetchAccessLog = (token, browseParams, tableId = null) => async (dispatch)
     });
 
     // TODO: Batch browse account
+    const config2 = {
+      headers: { 'auth-token': token },
+    };
 
     const accounts = await Promise.all(
       data.map(async ({ account_id }) => {

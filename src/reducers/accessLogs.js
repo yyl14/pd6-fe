@@ -5,6 +5,7 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
       const { data } = action.payload;
+      console.log(data);
       return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
     default:
