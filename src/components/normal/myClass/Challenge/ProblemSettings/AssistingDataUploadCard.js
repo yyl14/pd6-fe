@@ -118,7 +118,7 @@ export default function AssistingDataUploadCard({
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2">
-            You have unsaved changes, do you want to save your chnages or back to edit?
+            You have unsaved changes, do you want to save your changes or back to edit?
           </Typography>
         </DialogContent>
         <DialogActions className={classes.filterButton}>

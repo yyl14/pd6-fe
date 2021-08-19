@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
   selectField: {
     width: '300px',
   },
+  codingField: {
+    width: '60vw',
+  },
 }));
 
 /* This is a level 4 component (page component) */
@@ -48,7 +51,9 @@ export default function CodeSubmission() {
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass);
 
-  const [lang, setLang] = useState('');
+  const [lang, setLang] = useState(null);
+  const [langId, setLangId] = useState(null);
+  const [code, setCode] = useState('');
 
   useEffect(() => {
     dispatch(readProblemInfo(authToken, problemId, challengeId));
@@ -79,9 +84,10 @@ export default function CodeSubmission() {
             value={lang}
             onChange={(e) => {
               setLang(e.target.value);
+              setLangId(e.target.key);
             }}
           >
-            <MenuItem value="">
+            <MenuItem key={null} value="">
               <em>None</em>
             </MenuItem>
             {submitLang.allIds.map((key) => <MenuItem key={submitLang.byId[key].id} value={submitLang.byId[key].name}>{submitLang.byId[key].name}</MenuItem>)}
@@ -89,7 +95,16 @@ export default function CodeSubmission() {
         </FormControl>
       </AlignedText>
       <AlignedText text="Content" maxWidth="lg" childrenType="filed">
-        <TextField />
+        <TextField
+          className={classNames.codingField}
+          value={code}
+          onChange={(e) => {
+            setCode(e.target.value);
+          }}
+          multiline
+          minRows={15}
+          maxRows={15}
+        />
       </AlignedText>
       <div>
         <Button color="default" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`)}>Cancel</Button>

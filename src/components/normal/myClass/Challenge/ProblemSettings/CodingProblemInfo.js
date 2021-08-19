@@ -19,6 +19,8 @@ import Icon from '../../../../ui/icon/index';
 
 import NoMatch from '../../../../noMatch';
 
+import { browseTestcase } from '../../../../../actions/myClass/problem';
+
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
@@ -43,22 +45,30 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const dispatch = useDispatch();
 
   const problems = useSelector((state) => state.problem.byId);
+  const testcases = useSelector((state) => state.testcases.byId);
+  const sampleDataIds = problems[problemId] === undefined ? [] : problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
+  const testcaseDataIds = problems[problemId] === undefined ? [] : problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
+
   const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
+
+  useEffect(() => {
+    dispatch((browseTestcase(authToken, problemId)));
+  }, [authToken, dispatch, problemId]);
 
   return (
     <>
       <SimpleBar title="Title">{problems[problemId] === undefined ? 'error' : problems[problemId].title}</SimpleBar>
       <SimpleBar title="Description">{problems[problemId] === undefined ? 'error' : problems[problemId].description}</SimpleBar>
-      <SimpleBar title="About Input and Output">I do not know where to get this info.</SimpleBar>
+      <SimpleBar title="About Input and Output">{problems[problemId] === undefined ? 'error' : problems[problemId].io_description}</SimpleBar>
       <SimpleBar title="Sample">
         <SimpleTable
           isEdit={false}
           hasDelete={false}
           columns={[
             {
-              id: 'No.',
+              id: 'id',
               label: 'No.',
               minWidth: 40,
               align: 'center',
@@ -66,7 +76,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
               type: 'string',
             },
             {
-              id: 'max_time',
+              id: 'time_limit',
               label: 'Max Time(ms)',
               minWidth: 50,
               align: 'center',
@@ -74,7 +84,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
               type: 'string',
             },
             {
-              id: 'max_memory',
+              id: 'memory_limit',
               label: 'Max Memory(kb)',
               minWidth: 50,
               align: 'center',
@@ -82,20 +92,22 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
               type: 'string',
             },
           ]}
-          data={[]}
+          data={
+            sampleDataIds.map((id) => ({
+              id: testcases[id].id,
+              time_limit: testcases[id].time_limit,
+              memory_limit: testcases[id].memory_limit,
+            }))
+          }
         />
         <div className={classNames.sampleArea}>
           <Grid container spacing={3}>
             <Grid item xs={6}>
+              <Typography variant="body2">Sample 1</Typography>
               <SampleTestArea input="286" output="1 2 0 1 0 4" />
             </Grid>
             <Grid item xs={6}>
-              <SampleTestArea input="286" output="1 2 0 1 0 4" />
-            </Grid>
-            <Grid item xs={6}>
-              <SampleTestArea input="286" output="1 2 0 1 0 4" />
-            </Grid>
-            <Grid item xs={6}>
+              <Typography variant="body2">Sample 2</Typography>
               <SampleTestArea input="286" output="1 2 0 1 0 476543333345678987654567898765456789098765654567899876545456789098765434567898" />
             </Grid>
           </Grid>
@@ -107,7 +119,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           hasDelete={false}
           columns={[
             {
-              id: 'No.',
+              id: 'id',
               label: 'No.',
               minWidth: 40,
               align: 'center',
@@ -115,7 +127,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
               type: 'string',
             },
             {
-              id: 'max_time',
+              id: 'time_limit',
               label: 'Max Time(ms)',
               minWidth: 50,
               align: 'center',
@@ -123,7 +135,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
               type: 'string',
             },
             {
-              id: 'max_memory',
+              id: 'memory_limit',
               label: 'Max Memory(kb)',
               minWidth: 50,
               align: 'center',
@@ -139,7 +151,14 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
               type: 'string',
             },
           ]}
-          data={[]}
+          data={
+            testcaseDataIds.map((id) => ({
+              id: testcases[id].id,
+              time_limit: testcases[id].time_limit,
+              memory_limit: testcases[id].memory_limit,
+              score: testcases[id].score,
+            }))
+          }
         />
       </SimpleBar>
     </>

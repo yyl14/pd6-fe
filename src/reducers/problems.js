@@ -9,10 +9,21 @@ const byId = (state = {}, action) => {
         ...state,
         [data.id]: {
           ...data,
+          testcaseIds: [],
         },
       };
     }
-
+    case problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_SUCCESS: {
+      const { problemId, testcases } = action.payload;
+      const testcaseIds = testcases.map((item) => item.id);
+      return {
+        ...state,
+        [problemId]: {
+          ...state[problemId],
+          testcaseIds,
+        },
+      };
+    }
     default:
       return state;
   }

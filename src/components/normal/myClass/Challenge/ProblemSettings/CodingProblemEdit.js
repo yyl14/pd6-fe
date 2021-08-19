@@ -58,14 +58,18 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
 
   const problems = useSelector((state) => state.problem.byId);
   const authToken = useSelector((state) => state.auth.token);
+
+  const testcases = useSelector((state) => state.testcases.byId);
+  const sampleDataIds = problems[problemId] === undefined ? [] : problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
+  const testcaseDataIds = problems[problemId] === undefined ? [] : problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
   const [label, setLabel] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label);
   const [title, setTitle] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].title);
-  const [description, setDescription] = useState(problems[problemId] === undefined ? '繳交作業時，請至 PDOGS（http://pdogs.ntu.im/judge/）為第一題上傳一份 Python 原始碼（以複製貼上原始碼的方式上傳）。每位學生都要上傳自己寫的解答。不接受紙本繳交；不接受遲交。\n \n 如果你在一家零售店幫消費的客人結帳，你可能需要快速地挑出合適且數量正確的鈔票與零錢。假設客人的消費金額 a 一定是 1 到 1000 之間的整數，而你有無限量的 500、100、50、10、5、1 這些面額的鈔票和零錢，我們希望你能依照下面的規則找錢： \n \n 此次作業包含一份手寫作業、一份程式作業、以及程式互改，前兩份作業分數總和為 110 分。作業四 的截止日期在 4 月 27 日。\n \n 此次作業包含一份手寫作業、一份程式作業、以及程式互改，前兩份作業分數總和為 110 分。作業四 的截止日期在 4 月 27 日。' : problems[problemId].description);
-  const [ioDescription, setIoDescription] = useState('nothing');
-  const [status, setStatus] = useState(false);
+  const [description, setDescription] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].description);
+  const [ioDescription, setIoDescription] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].io_description);
+  const [status, setStatus] = useState(problems[problemId] !== undefined && testcaseDataIds.length !== 0 ? !testcases[testcaseDataIds[0]].is_disabled : false);
 
   const [selectedFileS, setSelectedFileS] = useState([]);
   const [selectedFileT, setSelectedFileT] = useState([]);
@@ -128,16 +132,16 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
         />
       </SimpleBar>
       <SimpleBar title="Sample">
-        <div classNames={classNames.loadButtons}>
+        <div className={classNames.loadButtons}>
           <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setSamplePopUp(true)}>Upload</Button>
           <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button>
         </div>
         <SimpleTable
-          isEdit={false}
-          hasDelete={false}
+          isEdit
+          hasDelete
           columns={[
             {
-              id: 'No.',
+              id: 'id',
               label: 'No.',
               minWidth: 40,
               align: 'center',
@@ -145,23 +149,49 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
               type: 'string',
             },
             {
-              id: 'max_time',
+              id: 'time_limit',
               label: 'Max Time(ms)',
               minWidth: 50,
               align: 'center',
-              width: 200,
+              width: 150,
               type: 'string',
+              editType: 'input',
             },
             {
-              id: 'max_memory',
+              id: 'memory_limit',
               label: 'Max Memory(kb)',
               minWidth: 50,
               align: 'center',
-              width: 200,
+              width: 150,
+              type: 'string',
+              editType: 'input',
+            },
+            {
+              id: 'input_filename',
+              label: 'Input File',
+              minWidth: 50,
+              align: 'center',
+              width: 150,
+              type: 'string',
+            },
+            {
+              id: 'output_filename',
+              label: 'Output File',
+              minWidth: 50,
+              align: 'center',
+              width: 150,
               type: 'string',
             },
           ]}
-          data={[]}
+          data={
+            sampleDataIds.map((id) => ({
+              id: testcases[id].id,
+              time_limit: testcases[id].time_limit,
+              memory_limit: testcases[id].memory_limit,
+              input_filename: testcases[id].input_filename,
+              output_filename: testcases[id].output_filename,
+            }))
+          }
         />
       </SimpleBar>
       <SimpleBar
@@ -174,16 +204,16 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           />
         )}
       >
-        <div classNames={classNames.loadButtons}>
+        <div className={classNames.loadButtons}>
           <Button variant="outlined" color="primary" startIcon={<Icon.Upload />}>Upload</Button>
           <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button>
         </div>
         <SimpleTable
-          isEdit={false}
-          hasDelete={false}
+          isEdit
+          hasDelete
           columns={[
             {
-              id: 'No.',
+              id: 'id',
               label: 'No.',
               minWidth: 40,
               align: 'center',
@@ -191,35 +221,63 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
               type: 'string',
             },
             {
-              id: 'max_time',
+              id: 'time_limit',
               label: 'Max Time(ms)',
               minWidth: 50,
               align: 'center',
-              width: 300,
+              width: 150,
               type: 'string',
+              editType: 'input',
             },
             {
-              id: 'max_memory',
+              id: 'memory_limit',
               label: 'Max Memory(kb)',
               minWidth: 50,
               align: 'center',
-              width: 300,
+              width: 150,
               type: 'string',
+              editType: 'input',
             },
             {
               id: 'score',
               label: 'score',
               minWidth: 50,
               align: 'center',
-              width: 100,
+              width: 80,
+              type: 'string',
+              editType: 'input',
+            },
+            {
+              id: 'input_filename',
+              label: 'Input File',
+              minWidth: 50,
+              align: 'center',
+              width: 150,
+              type: 'string',
+            },
+            {
+              id: 'output_filename',
+              label: 'Output File',
+              minWidth: 50,
+              align: 'center',
+              width: 150,
               type: 'string',
             },
           ]}
-          data={[]}
+          data={
+            testcaseDataIds.map((id) => ({
+              id: testcases[id].id,
+              time_limit: testcases[id].time_limit,
+              memory_limit: testcases[id].memory_limit,
+              score: testcases[id].score,
+              input_filename: testcases[id].input_filename,
+              output_filename: testcases[id].output_filename,
+            }))
+          }
         />
       </SimpleBar>
       <SimpleBar title="Assisting Data (Optional)">
-        <div classNames={classNames.loadButtons}>
+        <div className={classNames.loadButtons}>
           <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setAssistPopUp(true)}>Upload</Button>
           <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button>
         </div>

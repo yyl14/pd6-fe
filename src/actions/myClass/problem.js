@@ -164,8 +164,37 @@ const readSubmissionDetail = (token, submissionId, challengeId, problemId) => as
   }
 };
 
+const browseTestcase = (token, problemId) => async (dispatch) => {
+  dispatch({ type: problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const testcases = await agent.get(`/problem/${problemId}/testcase`, auth);
+    if (testcases.data.success) {
+      dispatch({
+        type: problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_SUCCESS,
+        payload: { problemId, testcases: testcases.data.data },
+      });
+    } else {
+      dispatch({
+        type: problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_FAIL,
+        errors: testcases.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_FAIL,
+      errors: err,
+    });
+  }
+};
+
 export {
   browseChallengeOverview,
   readProblemInfo,
   readSubmissionDetail,
+  browseTestcase,
 };

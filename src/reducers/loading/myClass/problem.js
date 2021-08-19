@@ -5,6 +5,7 @@ const initialState = {
   readSubmission: false,
   readChallenge: false,
   readJudgment: false,
+  browseTestcase: false,
 };
 
 export default function problem(state = initialState, action) {
@@ -68,6 +69,21 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         readJudgment: false,
+      };
+    case problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_START:
+      return {
+        ...state,
+        browseTestcase: true,
+      };
+    case problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_SUCCESS:
+      return {
+        ...state,
+        browseTestcase: false,
+      };
+    case problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_FAIL:
+      return {
+        ...state,
+        browseTestcase: false,
       };
     default: {
       return state;

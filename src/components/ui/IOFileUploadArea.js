@@ -35,6 +35,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '0px',
     marginBottom: '16px',
   },
+  browseButton: {
+    marginRight: '10px',
+  },
   fieldAlignedText: {
     marginTop: '18px',
   },
@@ -51,8 +54,16 @@ const useStyles = makeStyles((theme) => ({
   container: {
     maxHeight: 800,
   },
+  fileNameCell: {
+    height: '40px',
+    padding: 'unset',
+    paddingLeft: '50px',
+    borderBottomColor: theme.palette.grey.A700,
+  },
   deleteCell: {
-    padding: '15px',
+    height: '40px',
+    padding: '8px 30px 4px 0',
+    borderBottomColor: theme.palette.grey.A700,
   },
   deleteIcon: {
     height: '20px',
@@ -61,18 +72,18 @@ const useStyles = makeStyles((theme) => ({
   },
   row: {
     height: '40px',
+    '&:first-child': {
+      borderTopColor: theme.palette.grey.A400,
+      borderTopStyle: 'solid',
+      borderTopWidth: '1px',
+    },
   },
 }));
 
 export default function IOFileUploadArea({
-  text, fileAcceptFormat, selectedFile, setSelectedFile, children,
+  text, selectedFile, setSelectedFile,
 }) {
   const classes = useStyles();
-  const [fileNum, setFileNum] = useState(0);
-
-  useEffect(() => {
-    setFileNum(selectedFile.length);
-  }, [selectedFile]);
 
   const handleUploadFile = (e) => {
     const newFiles = Object.keys(e.target.files).map((key) => e.target.files[key]);
@@ -98,19 +109,27 @@ export default function IOFileUploadArea({
             id="upload-file"
             name="upload-file"
             type="file"
-            accept={fileAcceptFormat}
+            accept=".in, .out"
             onChange={(e) => handleUploadFile(e)}
             multiple
           />
-          <Button variant="outlined" color="primary" component="span" startIcon={<Icon.Folder />}>
+          <Button
+            className={classes.browseButton}
+            variant="outlined"
+            color="primary"
+            component="span"
+            startIcon={<Icon.Folder />}
+          >
             Browse
           </Button>
         </label>
-        <Typography variant="body2" className={classes.fieldAlignedText}>
-          {fileNum}
-          {' '}
-          files selected
-        </Typography>
+        {selectedFile.length !== 0 && (
+          <Typography variant="body2" className={classes.fieldAlignedText}>
+            {selectedFile.length}
+            {' '}
+            files selected
+          </Typography>
+        )}
       </div>
       <Paper className={classes.root} elevation={0}>
         <TableContainer className={classes.container}>
@@ -118,7 +137,7 @@ export default function IOFileUploadArea({
             <TableBody>
               {selectedFile.map((row) => (
                 <TableRow hover role="checkbox" tabIndex={-1} key={row.name} className={classes.row}>
-                  <TableCell align="left">
+                  <TableCell align="left" className={classes.fileNameCell}>
                     <Typography variant="body2">{row === undefined ? 'error' : row.name}</Typography>
                   </TableCell>
                   <TableCell key={`${row.id}-deleteIcon`} className={classes.deleteCell} align="right">
@@ -135,7 +154,6 @@ export default function IOFileUploadArea({
           </Table>
         </TableContainer>
       </Paper>
-      <div>{children}</div>
     </>
   );
 }

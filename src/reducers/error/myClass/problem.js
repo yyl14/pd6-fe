@@ -5,6 +5,7 @@ const initialState = {
   readSubmission: null,
   readChallenge: null,
   readJudgment: null,
+  browseTestcase: null,
 };
 
 export default function problem(state = initialState, action) {
@@ -28,6 +29,11 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         readJudgment: action.errors,
+      };
+    case problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_FAIL:
+      return {
+        ...state,
+        browseTestcase: action.errors,
       };
     default: {
       return state;
