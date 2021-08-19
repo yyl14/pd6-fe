@@ -242,9 +242,7 @@ const MemberEdit = ({
             </Button>
           </div>
           <div>
-            <Button onClick={handleSubmitUnsave}>
-              Don’t Save
-            </Button>
+            <Button onClick={handleSubmitUnsave}>Don’t Save</Button>
             <Button onClick={handleSubmitSave} color="primary">
               Save
             </Button>
