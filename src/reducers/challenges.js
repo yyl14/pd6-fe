@@ -32,12 +32,11 @@ const byId = (state = {}, action) => {
 
     case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data, id } = action.payload;
-      const problemIds = data.problem.map((item) => item.id);
       return {
         ...state,
         [id]: {
           ...state[id],
-          problemIds,
+          problemIds: data.problem.map((item) => item.id),
           peerReviewIds: data.peer_review.map((item) => item.id),
           essayIds: data.essay.map((item) => item.id),
         },

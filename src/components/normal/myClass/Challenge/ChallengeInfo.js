@@ -83,7 +83,7 @@ export default function ChallengeInfo() {
   useEffect(() => {
     userClasses.map((item) => {
       if (`${item.class_id}` === classId) {
-        console.log(item.role);
+        // console.log(item.role);
         if (item.role === 'MANAGER') {
           setIsManager(true);
         }
