@@ -18,6 +18,7 @@ import SimpleTable from '../../../../ui/SimpleTable';
 import Icon from '../../../../ui/icon/index';
 
 import SampleUploadCard from './SampleUploadCard';
+import AssistingDataUploadCard from './AssistingDataUploadCard';
 import NoMatch from '../../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
@@ -67,11 +68,12 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const [status, setStatus] = useState(false);
 
   const [samplePopUp, setSamplePopUp] = useState(false);
+  const [assistPopUp, setAssistPopUp] = useState(false);
 
   const handleClosePopUp = () => {
     setSamplePopUp(false);
+    setAssistPopUp(false);
   };
-  console.log(typeof samplePopUp);
 
   return (
     <>
@@ -238,6 +240,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
         <Button color="primary" onClick={() => closeEdit()}>Save</Button>
       </div>
       <SampleUploadCard popUp={samplePopUp} closePopUp={handleClosePopUp} action={handleClosePopUp} />
+      <AssistingDataUploadCard popUp={assistPopUp} closePopUp={handleClosePopUp} action={handleClosePopUp} />
     </>
   );
 }
