@@ -205,32 +205,30 @@ export default function ChallengeInfo() {
       </SimpleBar>
       <SimpleBar
         title="Overview"
-      >
-        <SimpleTable
-          isEdit={false}
-          hasDelete={false}
-          columns={[
-            {
-              id: 'challenge_label',
-              label: 'Label',
-              minWidth: 50,
-              align: 'center',
-              width: 200,
-              type: 'string',
-            },
-            {
-              id: 'score',
-              label: 'Score',
-              minWidth: 50,
-              align: 'center',
-              width: 100,
-              type: 'string',
-            },
-          ]}
-          data={tableData}
-        />
-      </SimpleBar>
-      {console.log(tableData)}
+      />
+      <SimpleTable
+        isEdit={false}
+        hasDelete={false}
+        columns={[
+          {
+            id: 'challenge_label',
+            label: 'Label',
+            minWidth: 30,
+            align: 'center',
+            width: 30,
+            type: 'string',
+          },
+          {
+            id: 'score',
+            label: 'Score',
+            minWidth: 50,
+            align: 'center',
+            width: 500,
+            type: 'string',
+          },
+        ]}
+        data={tableData}
+      />
     </>
   );
 }
