@@ -286,6 +286,19 @@ const overrides = {
       },
     },
   },
+  MuiLink: {
+    root: {
+      textDecoration: 'none',
+      color: blue[100],
+      cursor: 'pointer',
+      '&:hover': {
+        color: blue[80],
+      },
+      '&:active': {
+        color: blue.dark,
+      },
+    },
+  },
 
   // "Input"
   MuiInputBase: {
@@ -472,7 +485,7 @@ const overrides = {
   MuiSnackbarContent: {
     root: {
       width: '600px',
-      padding: '0px 16px',
+      padding: '0px 20px',
       borderRadius: '12px',
       boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
       backgroundColor: mono.black,
@@ -482,18 +495,17 @@ const overrides = {
       fontWeight: 500,
       lineHeight: 25 / 18,
       // letterSpacing: '-0.01rem',
-      color: mono.veryLightGray,
+      color: mono.white,
     },
     message: {
       display: 'flex',
       alignItems: 'center',
-      height: '65px',
+      height: '57px',
       padding: '0px',
     },
     action: {
-      marginRight: '-5px',
-      marginBottom: '10px',
-      marginTop: '10px',
+      marginRight: '21px',
+      paddingLeft: '0px',
     },
   },
 
