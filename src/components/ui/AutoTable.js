@@ -155,7 +155,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const itemsPerPage = [10, 25, 50, 100];
+const itemsPerPage = [5, 10, 25, 50, 100];
 
 // const tableRefetch = (limit, offset, filters, sorts) =>
 //            dispatch(action(authToken, problemId, ident, limit, offset, filter, sort))
@@ -227,7 +227,6 @@ function AutoTable({
   reduxData,
   reduxDataToRows,
   hasLink,
-  children,
   buttons,
 }) {
   const classes = useStyles();
@@ -299,7 +298,7 @@ function AutoTable({
   useEffect(() => {
     if (tableState.byId[ident]) {
       const newDisplayedReduxData = Array.from({ length: rowsPerPage }, (_, id) => id + rowsPerPage * curPage)
-        .map((id) => tableState.byId[ident].displayedDataIds[id])
+        .map((id) => tableState.byId[ident].displayedDataIds.get(id))
         .map((id) => reduxData.byId[id]);
 
       setDataComplete(newDisplayedReduxData.reduce((acc, item) => acc && item !== undefined, true));
@@ -311,8 +310,8 @@ function AutoTable({
     if (dataComplete) {
       setRowData(displayedReduxData.map((item) => reduxDataToRows(item)));
     }
-  });
-  console.log(tableState.byId[ident]);
+  }, [dataComplete, displayedReduxData]);
+
   return (
     <>
       <Paper className={classes.root} elevation={0}>
@@ -442,7 +441,7 @@ function AutoTable({
           <Typography className={classes.pageText} variant="body1">
             of
             {' '}
-            {Math.ceil(tableState.totalCount / rowsPerPage)}
+            {Math.ceil((tableState.byId[ident] ? tableState.byId[ident].totalCount : 100) / rowsPerPage)}
           </Typography>
           <Button
             className={classes.pageChangeButtons}
@@ -454,7 +453,7 @@ function AutoTable({
           </Button>
         </div>
       </Paper>
-      <div className={classes.children}>{children}</div>
+      {dataComplete || <Typography>Loading</Typography>}
     </>
   );
 }

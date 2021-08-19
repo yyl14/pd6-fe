@@ -16,21 +16,7 @@ const fetchAccessLog = (token, browseParams, tableId = null) => async (dispatch)
     const res1 = await agent.get('/access-log', config1);
 
     const { data, total_count } = res1.data.data;
-    console.log(data, total_count);
-
-    dispatch({
-      type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
-      payload: { data },
-    });
-    dispatch({
-      type: autoTableConstants.AUTO_TABLE_UPDATE,
-      payload: {
-        tableId,
-        totalCount: total_count,
-        dataIds: data.map((item) => item.id),
-        offset: browseParams.offset,
-      },
-    });
+    // console.log(data, total_count);
 
     // TODO: Batch browse account
     const config2 = {
@@ -52,8 +38,17 @@ const fetchAccessLog = (token, browseParams, tableId = null) => async (dispatch)
     );
 
     dispatch({
-      type: accountConstants.FETCH_ACCOUNTS_SUCCESS,
-      payload: accounts,
+      type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
+      payload: { data, accounts },
+    });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: data.map((item) => item.id),
+        offset: browseParams.offset,
+      },
     });
   } catch (error) {
     dispatch({

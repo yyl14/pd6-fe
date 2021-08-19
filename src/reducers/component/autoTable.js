@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { autoTableConstants } from '../../actions/component/constant';
 
 const byId = (state = {}, action) => {
-  console.log(action.type);
+  console.log(action);
   switch (action.type) {
     case autoTableConstants.AUTO_TABLE_MOUNT: {
       const { tableId } = action.payload;
