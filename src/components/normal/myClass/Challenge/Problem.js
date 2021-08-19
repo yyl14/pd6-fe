@@ -13,8 +13,8 @@ import {
 import { useHistory, useParams } from 'react-router-dom';
 
 import CodingProblem from './CodingProblem';
-import EssayManager from './EssayManager';
 import EssayManagerAdd from './EssayManagerAdd';
+import EssayManagerSetting from './EssayManagerSetting';
 import EssayManagerEdit from './EssayManagerEdit';
 import EssayNormal from './EssayNormal';
 import { readProblem } from '../../../../actions/myClass/problem';
@@ -55,13 +55,7 @@ export default function Problem() {
       <Typography className={classNames.pageHeader} variant="h3">
         this is problem
       </Typography>
-      <EssayManagerEdit />
-      {/* <div>Manager Add</div>
-      <EssayManagerAdd />
-      <div>Manager Edit</div>
-      <EssayManagerEdit />
-      <div>Essay Normal</div>
-      <EssayNormal /> */}
+      <EssayNormal />
     </>
   );
 }

@@ -21,8 +21,14 @@ const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
   },
+  label: {
+    width: '500px',
+  },
+  title: {
+    width: '500px',
+  },
   description: {
-    width: '100%',
+    width: '500px',
   },
   button: {
     display: 'flex',
@@ -74,7 +80,7 @@ export default function EssayManagerAdd() {
     };
     console.log(body);
     // dispatch(addAnnouncement(authToken, body));
-    // history.push to homePage of viewing the essay
+    // history.push to EssayManagerEdit
   };
 
   return (
@@ -88,12 +94,20 @@ export default function EssayManagerAdd() {
         <SimpleBar
           title="Label"
         >
-          <TextField value={addLabel} onChange={(e) => setAddLabel(e.target.value)} />
+          <TextField
+            className={classNames.label}
+            value={addLabel}
+            onChange={(e) => setAddLabel(e.target.value)}
+          />
         </SimpleBar>
         <SimpleBar
           title="Title"
         >
-          <TextField value={addTitle} onChange={(e) => setAddTitle(e.target.value)} />
+          <TextField
+            className={classNames.title}
+            value={addTitle}
+            onChange={(e) => setAddTitle(e.target.value)}
+          />
         </SimpleBar>
         <SimpleBar
           title="Description"
@@ -103,7 +117,7 @@ export default function EssayManagerAdd() {
             value={addDescription}
             onChange={(e) => setAddDescription(e.target.value)}
             multiline
-            rows={8}
+            rows={4}
           />
         </SimpleBar>
         <AlignedText variant="body1" className={classNames.button}>
