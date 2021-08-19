@@ -97,12 +97,15 @@ export default function ChallengeInfo() {
       let arr1 = challenges[challengeId].problemIds.map((id) => ({
         challenge_label: problems[id].challenge_label,
         score: problems[id].full_score,
+        id: Math.random(),
       }));
       const arr2 = challenges[challengeId].essayIds.map((id) => ({
         challenge_label: essays[id].challenge_label,
+        id: Math.random(),
       }));
       const arr3 = challenges[challengeId].peerReviewIds.map((id) => ({
         challenge_label: peerReviews[id].challenge_label,
+        id: Math.random(),
       }));
       arr1 = arr1.concat(arr2);
       arr1 = arr1.concat(arr3);
@@ -210,9 +213,9 @@ export default function ChallengeInfo() {
             {
               id: 'challenge_label',
               label: 'Label',
-              minWidth: 100,
+              minWidth: 50,
               align: 'center',
-              width: 300,
+              width: 200,
               type: 'string',
             },
             {
@@ -220,7 +223,7 @@ export default function ChallengeInfo() {
               label: 'Score',
               minWidth: 50,
               align: 'center',
-              width: 150,
+              width: 100,
               type: 'string',
             },
           ]}
