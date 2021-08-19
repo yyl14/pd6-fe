@@ -60,10 +60,16 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const loading = useSelector((state) => state.loading.myClass.problem);
 
   const [deletePopUp, setDeletePopUp] = useState(false);
+  const [rejudgePopUp, setRejudgePopUp] = useState(false);
 
   const handleDelete = () => {
     // TODO: delete problem
     setDeletePopUp(false);
+  };
+
+  const handleRejudge = () => {
+    // TODO: rejudge problem
+    setRejudgePopUp(false);
   };
 
   useEffect(() => {
@@ -227,7 +233,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       )}
       <Dialog open={deletePopUp} onClose={() => setDeletePopUp(false)} maxWidth="md">
         <DialogTitle>
-          <Typography variant="h4">Delete problem</Typography>
+          <Typography variant="h4">Delete Problem</Typography>
         </DialogTitle>
         <DialogContent>
           <DialogContentText variant="body1" color="secondary">
@@ -249,6 +255,31 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           <Button onClick={() => setDeletePopUp(false)}>Cancel</Button>
           <Button color="secondary" onClick={handleDelete}>
             Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={rejudgePopUp} onClose={() => setRejudgePopUp(false)} maxWidth="md">
+        <DialogTitle>
+          <Typography variant="h4">Rejudge Problem</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <AlignedText text="Class" childrenType="text">
+            <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
+          </AlignedText>
+          <AlignedText text="Title" childrenType="text">
+            {problems[problemId] === undefined ? 'error' : problems[problemId].title}
+          </AlignedText>
+          <AlignedText text="Label" childrenType="text">
+            <Typography>{problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label}</Typography>
+          </AlignedText>
+          <Typography variant="body2" color="textPrimary">
+            Once you rejudge a problem, all related submissions will be judged again.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setRejudgePopUp(false)}>Cancel</Button>
+          <Button color="secondary" onClick={handleRejudge}>
+            Rejudge
           </Button>
         </DialogActions>
       </Dialog>
