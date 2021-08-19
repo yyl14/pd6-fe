@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
-<<<<<<< HEAD
-import { submissionConstants } from '../actions/myClass/constant';
+import { submissionConstants, problemConstants } from '../actions/myClass/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -11,17 +10,12 @@ const byId = (state = {}, action) => {
     case submissionConstants.FETCH_SUBMISSION_SUCCESS: {
       const { data } = action.payload;
       return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.submissions);
-=======
-import { problemConstants } from '../actions/myClass/constant';
-
-const byId = (state = {}, action) => {
-  switch (action.type) {
+    }
     case problemConstants.READ_SUBMISSION_SUCCESS: {
       return {
         ...state,
         [action.payload.id]: action.payload,
       };
->>>>>>> 77-page-problem-coding-problem
     }
     default:
       return state;
@@ -30,7 +24,6 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
-<<<<<<< HEAD
     case submissionConstants.FETCH_ALL_SUBMISSIONS_SUCCESS: {
       const { data } = action.payload;
       return data.map((item) => item.id);
@@ -39,10 +32,8 @@ const allIds = (state = [], action) => {
       const { data } = action.payload;
       return data.map((item) => item.id);
     }
-=======
     case problemConstants.READ_SUBMISSION_SUCCESS:
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
->>>>>>> 77-page-problem-coding-problem
     default:
       return state;
   }

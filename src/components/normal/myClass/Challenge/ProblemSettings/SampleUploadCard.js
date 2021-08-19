@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import AlignedText from '../../../../ui/AlignedText';
-import FileUploadArea from '../../../../ui/FileUploadArea';
+import IOFileUploadArea from '../../../../ui/IOFileUploadArea';
 import Icon from '../../../../ui/icon/index';
 import NoMatch from '../../../../noMatch';
 
@@ -79,7 +79,7 @@ export default function SampleUploadCard({ popUp = false, closePopUp, action }) 
               onChange={(e) => setMemory(e.target.value)}
             />
           </AlignedText>
-          <FileUploadArea text="Sample Data" fileAcceptFormat=".pdf" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
+          <IOFileUploadArea text="Sample Data" fileAcceptFormat=".pdf" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => closePopUp()} color="default">

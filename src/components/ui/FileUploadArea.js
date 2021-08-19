@@ -102,11 +102,14 @@ export default function FileUploadArea({
             Browse
           </Button>
         </label>
+        {fileNum !== 0
+        && (
         <Typography variant="body2" className={classes.fieldAlignedText}>
           {fileNum}
           {' '}
           files selected
         </Typography>
+        )}
       </div>
       <Paper className={classes.root} elevation={0}>
         <TableContainer className={classes.container}>
