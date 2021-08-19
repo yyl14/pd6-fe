@@ -257,13 +257,19 @@ const overrides = {
     },
     startIcon: {
       marginRight: '10px',
-      height: '20px',
-      width: '20px',
+      marginLeft: '0px',
+      '& path': {
+        height: '20px',
+        width: '20px',
+      },
     },
     endIcon: {
       marginLeft: '10px',
-      height: '20px',
-      width: '20px',
+      marginRight: '0px',
+      '& path': {
+        height: '20px',
+        width: '20px',
+      },
     },
   },
 
