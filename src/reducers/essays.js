@@ -3,12 +3,9 @@ import { problemConstants } from '../actions/myClass/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    case problemConstants.READ_PROBLEM_SUCCESS:
-      return action.payload;
-
     case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data } = action.payload;
-      return data.problem.reduce(
+      return data.essay.reduce(
         (acc, item) => ({ ...acc, [item.id]: { ...item } }), {},
       );
     }
@@ -22,9 +19,8 @@ const allIds = (state = [], action) => {
   switch (action.type) {
     case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data } = action.payload;
-      return data.problem.map((item) => item.id);
+      return data.essay.map((item) => item.id);
     }
-
     default:
       return state;
   }

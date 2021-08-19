@@ -47,11 +47,15 @@ export default function ChallengeInfo() {
   const [isManager, setIsManager] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [inputs, setInputs] = useState('');
+  const [tableData, setTableData] = useState([]);
 
   const authToken = useSelector((state) => state.user.token);
   const loading = useSelector((state) => state.loading.myClass.problem);
-  const challenges = useSelector((state) => state.challenges.byId);
   const userClasses = useSelector((state) => state.user.classes);
+  const challenges = useSelector((state) => state.challenges.byId);
+  const problems = useSelector((state) => state.problem.byId);
+  const essays = useSelector((state) => state.essays.byId);
+  const peerReviews = useSelector((state) => state.peerReviews.byId);
 
   useEffect(() => {
     if (!loading.editChallenge) {
@@ -60,7 +64,7 @@ export default function ChallengeInfo() {
   }, [authToken, challengeId, dispatch, loading.editChallenge]);
 
   useEffect(() => {
-    // dispatch(browseTasksUnderChallenge(authToken, challengeId));
+    dispatch(browseTasksUnderChallenge(authToken, challengeId));
   }, [authToken, challengeId, dispatch]);
 
   useEffect(() => {
@@ -87,6 +91,24 @@ export default function ChallengeInfo() {
       return <></>;
     });
   }, [classId, userClasses]);
+
+  useEffect(() => {
+    if (!loading.browseTasksUnderChallenge && challenges[challengeId] !== undefined) {
+      let arr1 = challenges[challengeId].problemIds.map((id) => ({
+        challenge_label: problems[id].challenge_label,
+        score: problems[id].full_score,
+      }));
+      const arr2 = challenges[challengeId].essayIds.map((id) => ({
+        challenge_label: essays[id].challenge_label,
+      }));
+      const arr3 = challenges[challengeId].peerReviewIds.map((id) => ({
+        challenge_label: peerReviews[id].challenge_label,
+      }));
+      arr1 = arr1.concat(arr2);
+      arr1 = arr1.concat(arr3);
+      setTableData(arr1);
+    }
+  }, [authToken, challengeId, challenges, essays, loading.browseTasksUnderChallenge, peerReviews, problems]);
 
   if (challenges[challengeId] === undefined) {
     if (!loading.browseChallengeOverview) {
@@ -183,29 +205,29 @@ export default function ChallengeInfo() {
       >
         <SimpleTable
           isEdit={false}
-          hasDelete={isManager}
+          hasDelete={false}
           columns={[
             {
-              id: 'No.', //
+              id: 'challenge_label',
               label: 'Label',
-              minWidth: 40,
+              minWidth: 100,
               align: 'center',
-              width: 50,
+              width: 300,
               type: 'string',
             },
             {
-              id: 'max_time',
+              id: 'score',
               label: 'Score',
               minWidth: 50,
               align: 'center',
-              width: 200,
+              width: 150,
               type: 'string',
             },
           ]}
-          data={[]}
+          data={tableData}
         />
-
       </SimpleBar>
+      {console.log(tableData)}
     </>
   );
 }

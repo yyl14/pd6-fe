@@ -31,13 +31,15 @@ const byId = (state = {}, action) => {
     }
 
     case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
+      const { data, id } = action.payload;
+      const problemIds = data.problem.map((item) => item.id);
       return {
         ...state,
-        [action.payload.id]: {
-          ...state[action.payload.id],
-          problemIds: action.payload.problem.map((item) => item.id),
-          peerReviewIds: action.payload.peer_review.map((item) => item.id),
-          essayIds: action.payload.essay.map((item) => item.id),
+        [id]: {
+          ...state[id],
+          problemIds,
+          peerReviewIds: data.peer_review.map((item) => item.id),
+          essayIds: data.essay.map((item) => item.id),
         },
       };
     }

@@ -60,7 +60,7 @@ const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
     };
     dispatch({ type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_START });
     const res = await agent.get(`/challenge/${challengeId}/task`, auth);
-    dispatch({ type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS, payload: res.data.data });
+    dispatch({ type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS, payload: { id: challengeId, data: res.data.data } });
   } catch (err) {
     dispatch({
       type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_FAIL,
