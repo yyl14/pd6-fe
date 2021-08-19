@@ -33,6 +33,8 @@ import TableFilterCard from './TableFilterCard';
 import ErrorText from './ErrorText';
 import Header from './Header';
 import Sidebar from './Sidebar';
+import MultiSelect from './MultiSelect';
+import CustomCheckbox from './CustomCheckbox';
 
 const useStyles = makeStyles((theme) => ({
   bigTitle: {
@@ -200,6 +202,15 @@ export default function UIComponentUsage() {
           </div>
         </div>
         <div className={classes.wrapper}>
+          <Typography variant="h4">Checkbox</Typography>
+          <hr className={classes.divider} />
+          <div className={classes.component}>
+            <CustomCheckbox isChecked />
+          </div>
+        </div>
+      </div>
+      <div className={classes.row}>
+        <div className={classes.wrapper}>
           <Typography variant="h4">Select</Typography>
           <hr className={classes.divider} />
           <div className={classes.component}>
@@ -211,6 +222,13 @@ export default function UIComponentUsage() {
                 <MenuItem value="Java">Java</MenuItem>
               </Select>
             </FormControl>
+          </div>
+        </div>
+        <div className={classes.wrapper}>
+          <Typography variant="h4">MultiSelect</Typography>
+          <hr className={classes.divider} />
+          <div className={classes.component}>
+            <MultiSelect options={['option 1', 'option 2', 'option 3']} />
           </div>
         </div>
       </div>
@@ -280,14 +298,16 @@ export default function UIComponentUsage() {
                 <Button variant="text" color="primary" onClick={() => setShowSnackbarWithButton(false)}>
                   <Typography variant="h6">Undo</Typography>
                 </Button>
-            )}
+              )}
             />
           </div>
         </div>
 
       </div>
 
-      <Typography variant="h3" className={classes.bigTitle}>Customized Components</Typography>
+      <Typography variant="h3" className={classes.bigTitle}>
+        Customized Components
+      </Typography>
       <div className={classes.row}>
         <div className={classes.wrapper}>
           <Typography variant="h4">Aligned Text</Typography>
@@ -441,6 +461,43 @@ export default function UIComponentUsage() {
                 align: 'center',
                 width: 120,
                 type: 'string',
+              },
+            ]}
+          />
+        </div>
+        <br />
+        <div className={classes.component}>
+          <SimpleTable
+            isEdit
+            hasDelete
+            data={tableData}
+            columns={[
+              {
+                id: 'full_name',
+                label: 'Institute',
+                minWidth: 150,
+                align: 'center',
+                width: 500,
+                type: 'string',
+              },
+              {
+                id: 'email_domain',
+                label: 'Email',
+                minWidth: 50,
+                align: 'center',
+                width: 150,
+                type: 'string',
+                editType: 'input',
+              },
+              {
+                id: 'is_disabled',
+                label: 'Status',
+                minWidth: 50,
+                align: 'center',
+                width: 120,
+                type: 'string',
+                editType: 'dropdown',
+                dropdownList: ['Enabled', 'Disabled'],
               },
             ]}
           />
