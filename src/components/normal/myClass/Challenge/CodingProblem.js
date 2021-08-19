@@ -97,7 +97,7 @@ export default function CodingProblem() {
       {!edit
       && role === 'MANAGER'
         ? (
-          <div classNames={classNames.managerButtons}>
+          <div className={classNames.managerButtons}>
             <div>
               <Button color="default" onClick={() => setEdit(true)}>Edit</Button>
               <Button color="default">Rejudge</Button>

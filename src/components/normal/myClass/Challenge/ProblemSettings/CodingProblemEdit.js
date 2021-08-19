@@ -67,6 +67,10 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const [ioDescription, setIoDescription] = useState('nothing');
   const [status, setStatus] = useState(false);
 
+  const [selectedFileS, setSelectedFileS] = useState([]);
+  const [selectedFileT, setSelectedFileT] = useState([]);
+  const [selectedFileA, setSelectedFileA] = useState([]);
+
   const [samplePopUp, setSamplePopUp] = useState(false);
   const [assistPopUp, setAssistPopUp] = useState(false);
 
@@ -216,7 +220,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       </SimpleBar>
       <SimpleBar title="Assisting Data (Optional)">
         <div classNames={classNames.loadButtons}>
-          <Button variant="outlined" color="primary" startIcon={<Icon.Upload />}>Upload</Button>
+          <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setAssistPopUp(true)}>Upload</Button>
           <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button>
         </div>
         <SimpleTable
@@ -240,7 +244,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
         <Button color="primary" onClick={() => closeEdit()}>Save</Button>
       </div>
       <SampleUploadCard popUp={samplePopUp} closePopUp={handleClosePopUp} action={handleClosePopUp} />
-      <AssistingDataUploadCard popUp={assistPopUp} closePopUp={handleClosePopUp} action={handleClosePopUp} />
+      <AssistingDataUploadCard popUp={assistPopUp} closePopUp={handleClosePopUp} action={handleClosePopUp} selectedFile={selectedFileA} setSelectedFile={setSelectedFileA} />
     </>
   );
 }
