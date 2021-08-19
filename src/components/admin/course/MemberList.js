@@ -8,16 +8,11 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
-  Select,
-  MenuItem,
 } from '@material-ui/core';
 import { BiFilterAlt } from 'react-icons/bi';
 import { useParams, useHistory } from 'react-router-dom';
 import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
 import { fetchClassMembers } from '../../../actions/common/common';
-import SimpleBar from '../../ui/SimpleBar';
-import AlignedText from '../../ui/AlignedText';
 import CustomTable from '../../ui/CustomTable';
 import TableFilterCard from '../../ui/TableFilterCard';
 import MemberEdit from './MemberEdit';
@@ -34,9 +29,6 @@ const useStyles = makeStyles((theme) => ({
   filterButton: {
     justifyContent: 'space-between',
   },
-  // selectField: {
-  //   width: '350px',
-  // },
   clearButton: {
     marginLeft: '24px',
   },
@@ -55,7 +47,7 @@ export default function MemberList() {
   const classes = useSelector((state) => state.classes);
   const members = useSelector((state) => state.classMembers);
   const loading = useSelector((state) => state.loading.admin.course);
-  console.log(members);
+
   useEffect(() => {
     dispatch(fetchCourses(authToken));
   }, [authToken, dispatch]);
