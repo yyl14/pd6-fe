@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
+  DialogContentText,
   TextField,
   Grid,
 } from '@material-ui/core';
@@ -15,11 +16,13 @@ import { useHistory, useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
 import SimpleTable from '../../../../ui/SimpleTable';
 import SampleTestArea from '../../../../ui/SampleTestArea';
+import AlignedText from '../../../../ui/AlignedText';
 import Icon from '../../../../ui/icon/index';
 
 import NoMatch from '../../../../noMatch';
 
 import { browseTestcase, browseAssistingData } from '../../../../../actions/myClass/problem';
+import { fetchClass, fetchCourse } from '../../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -44,26 +47,52 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
 
   const dispatch = useDispatch();
 
+  const classes = useSelector((state) => state.classes.byId);
+  const courses = useSelector((state) => state.courses.byId);
   const problems = useSelector((state) => state.problem.byId);
   const testcases = useSelector((state) => state.testcases.byId);
   const sampleDataIds = problems[problemId] === undefined ? [] : problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
   const testcaseDataIds = problems[problemId] === undefined ? [] : problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
+  const assistingData = useSelector((state) => state.assistingData.byId);
 
   const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
+
+  const [deletePopUp, setDeletePopUp] = useState(false);
+
+  const handleDelete = () => {
+    // TODO: delete problem
+    setDeletePopUp(false);
+  };
 
   useEffect(() => {
     dispatch((browseTestcase(authToken, problemId)));
     dispatch((browseAssistingData(authToken, problemId)));
   }, [authToken, dispatch, problemId]);
 
+  useEffect(() => {
+    dispatch((fetchClass(authToken, classId)));
+    dispatch((fetchCourse(authToken, courseId)));
+  }, [authToken, classId, courseId, dispatch]);
+
+  if (problems[problemId] === undefined || classes[classId] === undefined || courses[courseId] === undefined) {
+    return <NoMatch />;
+  }
+
   return (
     <>
-      <SimpleBar title="Title">{problems[problemId] === undefined ? 'error' : problems[problemId].title}</SimpleBar>
-      <SimpleBar title="Description">{problems[problemId] === undefined ? 'error' : problems[problemId].description}</SimpleBar>
-      <SimpleBar title="About Input and Output">{problems[problemId] === undefined ? 'error' : problems[problemId].io_description}</SimpleBar>
+      <SimpleBar title="Title">
+        <Typography variant="body2">{problems[problemId] === undefined ? 'error' : problems[problemId].title}</Typography>
+      </SimpleBar>
+      <SimpleBar title="Description">
+        <Typography variant="body2">{problems[problemId] === undefined ? 'error' : problems[problemId].description}</Typography>
+      </SimpleBar>
+      <SimpleBar title="About Input and Output">
+        <Typography variant="body2">{problems[problemId] === undefined ? 'error' : problems[problemId].io_description}</Typography>
+      </SimpleBar>
       <SimpleBar title="Sample">
+        {role === 'MANAGER' && <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button>}
         <SimpleTable
           isEdit={false}
           hasDelete={false}
@@ -115,6 +144,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         </div>
       </SimpleBar>
       <SimpleBar title="Testing Data">
+        {role === 'MANAGER' && <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button>}
         <SimpleTable
           isEdit={false}
           hasDelete={false}
@@ -162,6 +192,66 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           }
         />
       </SimpleBar>
+      { role === 'MANAGER'
+        && (
+        <SimpleBar title="Assisting Data (Optional)">
+          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button>
+          <SimpleTable
+            isEdit={false}
+            hasDelete={false}
+            columns={[
+              {
+                id: 'filename',
+                label: 'File Name',
+                minWidth: 40,
+                align: 'center',
+                width: 200,
+                type: 'string',
+              },
+            ]}
+            data={
+            problems[problemId] !== undefined
+              ? problems[problemId].assistingDataIds.map((id) => ({
+                filename: assistingData[id].filename,
+              }))
+              : []
+          }
+          />
+        </SimpleBar>
+        )}
+      { role === 'MANAGER'
+      && (
+      <SimpleBar title="Delete Task" childrenButtons={<Button color="secondary" onClick={() => setDeletePopUp(true)}>Delete</Button>}>
+        <Typography variant="body1">Once you delete a task, there is no going back. Please be certain.</Typography>
+      </SimpleBar>
+      )}
+      <Dialog open={deletePopUp} onClose={() => setDeletePopUp(false)} maxWidth="md">
+        <DialogTitle>
+          <Typography variant="h4">Delete problem</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText variant="body1" color="secondary">
+            <AlignedText text="Class" childrenType="text">
+              <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
+            </AlignedText>
+            <AlignedText text="Title" childrenType="text">
+              {problems[problemId] === undefined ? 'error' : problems[problemId].title}
+            </AlignedText>
+            <AlignedText text="Label" childrenType="text">
+              <Typography>{problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label}</Typography>
+            </AlignedText>
+            <Typography variant="body2" color="textPrimary">
+              Once you delete a problem, there is no going back. Please be certain.
+            </Typography>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeletePopUp(false)}>Cancel</Button>
+          <Button color="secondary" onClick={handleDelete}>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
