@@ -99,6 +99,9 @@ export default function MemberList() {
       </Typography>
       {edit ? (
         <MemberEdit
+          dispatch={dispatch}
+          authToken={authToken}
+          classId={classId}
           members={classes.byId[classId].memberIds.map((id) => members.byId[id])}
           backToMemberList={() => setEdit(false)}
           loading={loading}
