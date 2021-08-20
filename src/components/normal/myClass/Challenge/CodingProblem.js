@@ -15,6 +15,7 @@ import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
 import SampleTestArea from '../../../ui/SampleTestArea';
 import Icon from '../../../ui/icon/index';
+import AlignedText from '../../../ui/AlignedText';
 
 import CodingProblemInfo from './ProblemSettings/CodingProblemInfo';
 import CodingProblemEdit from './ProblemSettings/CodingProblemEdit';
@@ -47,6 +48,8 @@ export default function CodingProblem() {
 
   const dispatch = useDispatch();
 
+  const classes = useSelector((state) => state.classes.byId);
+  const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
   const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges.byId);
@@ -56,9 +59,15 @@ export default function CodingProblem() {
   const [role, setRole] = useState('Normal');
 
   const [edit, setEdit] = useState(false);
+  const [rejudgePopUp, setRejudgePopUp] = useState(false);
 
   const handleCloseEdit = () => {
     setEdit(false);
+  };
+
+  const handleRejudge = () => {
+    // TODO: rejudge problem
+    setRejudgePopUp(false);
   };
 
   // console.log(userClasses);
@@ -71,11 +80,6 @@ export default function CodingProblem() {
       }
     });
   }, [classId, userClasses]);
-
-  // userClasses.forEach((class) => {
-  //   if(class.class_id === classId){
-  //   }
-  // })
 
   // if (error.readChallenge != null || error.readProblem != null) {
   //   return <div>System Exception</div>;
@@ -97,10 +101,10 @@ export default function CodingProblem() {
       {!edit
       && role === 'MANAGER'
         ? (
-          <div classNames={classNames.managerButtons}>
+          <div className={classNames.managerButtons}>
             <div>
               <Button color="default" onClick={() => setEdit(true)}>Edit</Button>
-              <Button color="default">Rejudge</Button>
+              <Button color="default" onClick={() => setRejudgePopUp(true)}>Rejudge</Button>
             </div>
             <div>
               <Button variant="outlined" color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)} startIcon={<Icon.HistoryIcon />}>My Submission</Button>
@@ -115,6 +119,31 @@ export default function CodingProblem() {
           </div>
         ))}
       {edit ? <CodingProblemEdit closeEdit={handleCloseEdit} role={role} /> : <CodingProblemInfo role={role} /> }
+      <Dialog open={rejudgePopUp} onClose={() => setRejudgePopUp(false)} maxWidth="md">
+        <DialogTitle>
+          <Typography variant="h4">Rejudge Problem</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <AlignedText text="Class" childrenType="text">
+            <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
+          </AlignedText>
+          <AlignedText text="Title" childrenType="text">
+            <Typography>{problems[problemId] === undefined ? 'error' : problems[problemId].title}</Typography>
+          </AlignedText>
+          <AlignedText text="Label" childrenType="text">
+            <Typography>{problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label}</Typography>
+          </AlignedText>
+          <Typography variant="body2" color="textPrimary">
+            Once you rejudge a problem, all related submissions will be judged again.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setRejudgePopUp(false)}>Cancel</Button>
+          <Button color="secondary" onClick={handleRejudge}>
+            Rejudge
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

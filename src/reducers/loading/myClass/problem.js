@@ -5,6 +5,12 @@ const initialState = {
   readSubmission: false,
   readChallenge: false,
   readJudgment: false,
+  browseTestcase: false,
+  browseAssistingData: false,
+  editProblem: false,
+  deleteProblem: false,
+  deleteTestcase: false,
+  deleteAssistingData: false,
 };
 
 export default function problem(state = initialState, action) {
@@ -68,6 +74,96 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         readJudgment: false,
+      };
+    case problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_START:
+      return {
+        ...state,
+        browseTestcase: true,
+      };
+    case problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_SUCCESS:
+      return {
+        ...state,
+        browseTestcase: false,
+      };
+    case problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_FAIL:
+      return {
+        ...state,
+        browseTestcase: false,
+      };
+    case problemConstants.BROWSE_ASSISTING_DATA_START:
+      return {
+        ...state,
+        browseAssistingData: true,
+      };
+    case problemConstants.BROWSE_ASSISTING_DATA_SUCCESS:
+      return {
+        ...state,
+        browseAssistingData: false,
+      };
+    case problemConstants.BROWSE_ASSISTING_DATA_FAIL:
+      return {
+        ...state,
+        browseAssistingData: false,
+      };
+    case problemConstants.EDIT_PROBLEM_START:
+      return {
+        ...state,
+        editProblem: true,
+      };
+    case problemConstants.EDIT_PROBLEM_SUCCESS:
+      return {
+        ...state,
+        editProblem: false,
+      };
+    case problemConstants.EDIT_PROBLEM_FAIL:
+      return {
+        ...state,
+        editProblem: false,
+      };
+    case problemConstants.DELETE_PROBLEM_START:
+      return {
+        ...state,
+        deleteProblem: true,
+      };
+    case problemConstants.DELETE_PROBLEM_SUCCESS:
+      return {
+        ...state,
+        deleteProblem: false,
+      };
+    case problemConstants.DELETE_PROBLEM_FAIL:
+      return {
+        ...state,
+        deleteProblem: false,
+      };
+    case problemConstants.DELETE_TESTCASE_START:
+      return {
+        ...state,
+        deleteTestcase: true,
+      };
+    case problemConstants.DELETE_TESTCASE_SUCCESS:
+      return {
+        ...state,
+        deleteTestcase: false,
+      };
+    case problemConstants.DELETE_TESTCASE_FAIL:
+      return {
+        ...state,
+        deleteTestcase: false,
+      };
+    case problemConstants.DELETE_ASSISTING_DATA_START:
+      return {
+        ...state,
+        deleteAssistingData: true,
+      };
+    case problemConstants.DELETE_ASSISTING_DATA_SUCCESS:
+      return {
+        ...state,
+        deleteAssistingData: false,
+      };
+    case problemConstants.DELETE_ASSISTING_DATA_FAIL:
+      return {
+        ...state,
+        deleteAssistingData: false,
       };
     default: {
       return state;

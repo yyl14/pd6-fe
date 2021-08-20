@@ -9,10 +9,48 @@ const byId = (state = {}, action) => {
         ...state,
         [data.id]: {
           ...data,
+          testcaseIds: [],
+          assistingDataIds: [],
         },
       };
     }
-
+    case problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_SUCCESS: {
+      const { problemId, testcases } = action.payload;
+      const testcaseIds = testcases.map((item) => item.id);
+      return {
+        ...state,
+        [problemId]: {
+          ...state[problemId],
+          testcaseIds,
+        },
+      };
+    }
+    case problemConstants.BROWSE_ASSISTING_DATA_SUCCESS: {
+      const { problemId, assistingData } = action.payload;
+      const assistingDataIds = assistingData.map((item) => item.id);
+      return {
+        ...state,
+        [problemId]: {
+          ...state[problemId],
+          assistingDataIds,
+        },
+      };
+    }
+    case problemConstants.EDIT_PROBLEM_SUCCESS: {
+      const { problemId, content } = action.payload;
+      return {
+        ...state,
+        [problemId]: {
+          ...state[problemId],
+          title: content.title,
+          full_score: content.full_score,
+          description: content.description,
+          io_description: content.io_description,
+          source: content.source,
+          hint: content.hint,
+        },
+      };
+    }
     default:
       return state;
   }

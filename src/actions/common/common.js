@@ -160,6 +160,45 @@ const fetchAccount = (token, accountId) => async (dispatch) => {
   }
 };
 
+const downloadFile = (token, file) => async (dispatch) => {
+  // in each file, you should contain uuid, filename, and as_attachment
+  const config = {
+    headers: {
+      'Auth-Token': token,
+    },
+    params: {
+      filename: file.filename,
+      as_attachment: file.as_attachment,
+    },
+  };
+  try {
+    dispatch({ type: commonConstants.DOWNLOAD_FILE_START });
+    const res = await agent.get(`/s3-file/${file.uuid}/url`, config);
+    if (res.data.success) {
+      fetch(res.data.url).then((t) => t.blob().then((b) => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(b);
+        a.setAttribute('download', file.filename);
+        a.click();
+      }));
+
+      dispatch({
+        type: commonConstants.DOWNLOAD_FILE_SUCCESS,
+      });
+    } else {
+      dispatch({
+        type: commonConstants.DOWNLOAD_FILE_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: commonConstants.DOWNLOAD_FILE_FAIL,
+      errors: err,
+    });
+  }
+};
+
 export {
-  getInstitutes, fetchClassMembers, editClassMember, fetchCourse, fetchClass, fetchAccount, browseSubmitLang,
+  getInstitutes, fetchClassMembers, editClassMember, fetchCourse, fetchClass, fetchAccount, browseSubmitLang, downloadFile,
 };

@@ -1,8 +1,16 @@
 import { combineReducers } from 'redux';
-import { problemConstants } from '../actions/myClass/constant';
+import { submissionConstants, problemConstants } from '../actions/myClass/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
+    case submissionConstants.FETCH_ALL_SUBMISSIONS_SUCCESS: {
+      const { data } = action.payload;
+      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.submissions);
+    }
+    case submissionConstants.FETCH_SUBMISSION_SUCCESS: {
+      const { data } = action.payload;
+      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.submissions);
+    }
     case problemConstants.READ_SUBMISSION_SUCCESS: {
       return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), {});
     }
@@ -16,6 +24,16 @@ const allIds = (state = [], action) => {
     case problemConstants.READ_SUBMISSION_SUCCESS: {
       return action.payload.map((item) => item.id);
     }
+    case submissionConstants.FETCH_ALL_SUBMISSIONS_SUCCESS: {
+      const { data } = action.payload;
+      return data.map((item) => item.id);
+    }
+    case submissionConstants.FETCH_SUBMISSION_SUCCESS: {
+      const { data } = action.payload;
+      return data.map((item) => item.id);
+    }
+    // case problemConstants.READ_SUBMISSION_SUCCESS:
+    //   return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
 
     default:
       return state;
