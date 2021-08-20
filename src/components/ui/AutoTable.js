@@ -23,7 +23,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useState, useEffect, useLocation } from 'react';
 import { Link } from 'react-router-dom';
-// import { nanoid } from 'nanoid';
 import { customTableMount } from '../../actions/component/autoTable';
 import Icon from './icon/index';
 import AutoTableHead from './AutoTableHead';
@@ -284,6 +283,7 @@ function AutoTable({
   // change filter / sort
   useEffect(() => {
     setDataComplete(false);
+    setPage(0);
   }, [filter, sort]);
 
   // table refetch

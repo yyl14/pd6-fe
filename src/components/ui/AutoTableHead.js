@@ -5,6 +5,7 @@ import {
 } from '@material-ui/core';
 import { nanoid } from 'nanoid';
 import Icon from './icon/index';
+import SearchField from './SearchField';
 
 /*
       TODO: Table head component
@@ -24,20 +25,18 @@ const AutoTableHead = ({
   hasFilter, classes, buttons, filterConfig, filter, setFilter,
 }) => {
   const [tempFilterValue, setTempFilterValue] = useState('');
+  const [tempFilterOptionValues, setTempFilterOptionValues] = useState([]);
   const [filteringIndex, setFilteringIndex] = useState(0);
   const [advanceSearchActivated, setAdvanceSearchActivated] = useState(false);
 
-  useEffect(() => {
-    console.log(filterConfig);
-    const { type, options } = filterConfig[filteringIndex];
-    if (type === 'ENUM') {
-      setTempFilterValue(options[0].value);
-    } else {
-      setTempFilterValue('');
-    }
-  }, [filterConfig, filteringIndex]);
-
   const onSearch = () => {
+    if (filterConfig[filteringIndex].type === 'ENUM') {
+      // transformation from MultiSelect options (label) array to filter value array.
+      // this will return the first option with the matching label
+      const transformedTempFilterValue = tempFilterOptionValues.map(
+        (optionLabel) => filterConfig[filteringIndex].options.filter((option) => option.label === optionLabel)[0].value,
+      );
+    }
     const { reduxStateId, operation } = filterConfig[filteringIndex];
     setFilter([[reduxStateId, operation, tempFilterValue]]);
   };
@@ -48,71 +47,6 @@ const AutoTableHead = ({
   //     setTempFilter([[tempFilter[0][0], tempFilter[0][1], tempFilterValue]]);
   //   }
   // }, [tempFilter[], tempFilterValue]);
-
-  const SearchField = ({ type }) => {
-    switch (type) {
-      case 'TEXT': {
-        return (
-          <TextField
-            id="search"
-            className={classes.search}
-            onChange={(e) => {
-              setTempFilterValue(e.target.value);
-            }}
-            value={tempFilterValue}
-            placeholder="Search"
-            // InputProps={{
-            //   endAdornment: (
-            //     <InputAdornment position="end">
-            //       <Icon.SearchIcon />
-            //     </InputAdornment>
-            //   ),
-            // }}
-          />
-        );
-      }
-      case 'ENUM': {
-        return (
-          <FormControl variant="outlined" className={classes.search}>
-            <Select
-              value={tempFilterValue}
-              onChange={(e) => {
-                setTempFilterValue(e.target.value);
-              }}
-            >
-              {filterConfig[filteringIndex].options.map((item) => (
-                <MenuItem key={item.label} value={item.value}>
-                  {item.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        );
-      }
-      // case 'DATE':{
-      //   return
-      // }
-      default:
-        return (
-          <TextField
-            id="search"
-            className={classes.search}
-            onChange={(e) => {
-              setTempFilterValue(e.target.value);
-            }}
-            value={tempFilterValue}
-            placeholder="Search"
-            // InputProps={{
-            //   endAdornment: (
-            //     <InputAdornment position="end">
-            //       <Icon.SearchIcon />
-            //     </InputAdornment>
-            //   ),
-            // }}
-          />
-        );
-    }
-  };
 
   console.log(filter);
 
@@ -136,7 +70,14 @@ const AutoTableHead = ({
                 ))}
               </Select>
             </FormControl>
-            <SearchField type={filterConfig[filteringIndex].type} />
+            <SearchField
+              type={filterConfig[filteringIndex].type}
+              tempFilterValue={tempFilterOptionValues}
+              setTempFilterValue={setTempFilterOptionValues}
+              classes={classes}
+              filterConfig={filterConfig}
+              filteringIndex={filteringIndex}
+            />
           </div>
           <div className={classes.buttons}>
             <Button color="primary" onClick={onSearch}>
