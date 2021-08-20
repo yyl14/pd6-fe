@@ -84,10 +84,10 @@ export const fetchTeamMember = (token, teamId) => (dispatch) => {
     });
 };
 
-export const addTeamMember = (token, teamId, student, role) => (dispatch) => {
+export const addTeamMember = (token, teamId, student, role, isArray, array) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
   dispatch({ type: teamConstants.ADD_TEAM_MEMBER_START });
-  const body = [{
+  const body = isArray ? array : [{
     account_referral: student,
     role,
   }];

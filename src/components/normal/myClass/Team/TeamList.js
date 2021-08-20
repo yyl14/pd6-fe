@@ -32,11 +32,9 @@ const useStyles = makeStyles((theme) => ({
   popUpLayout: {
     width: '100%',
   },
-  formatText: {
-    marginBottom: '16px',
-  },
-  formatTextContent: {
-    color: theme.palette.grey.A400,
+  reminder: {
+    color: '#AAAAAA',
+    marginLeft: theme.spacing(2),
   },
   importTextField: {
     marginBottom: '22px',
@@ -62,6 +60,7 @@ export default function TeamList() {
   const teams = useSelector((state) => state.teams.byId);
   const teamIds = useSelector((state) => state.teams.allIds);
   const loading = useSelector((state) => state.loading.myClass.team);
+  const commonLoading = useSelector((state) => state.loading.common);
 
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
@@ -117,18 +116,17 @@ export default function TeamList() {
     setAddInputs({
       label: '',
       teamName: '',
-      student: '',
-      role: 'Normal',
+      // student: '',
+      // role: 'Normal',
     });
   };
 
   const submitAdd = () => {
-    if (addInputs.label === '' || addInputs.teamName === '' || addInputs.student === '') {
-      return;
+    if (addInputs.label !== '' && addInputs.teamName !== '') {
+      dispatch(addTeam(authToken, classId, addInputs.teamName, addInputs.label));
     }
     setShowAddDialog(false);
     clearAddInput();
-    dispatch(addTeam(authToken, classId, teamFile));
   };
 
   const submitImport = () => {
@@ -138,7 +136,7 @@ export default function TeamList() {
   };
 
   const downloadTemplate = () => {
-    setShowImportDialog(false);
+    // setShowImportDialog(false);
     // dispatch(fetchGradeTemplate(authToken));
   };
 
@@ -148,12 +146,13 @@ export default function TeamList() {
         label: teams[id].label,
         teamName: teams[id].name,
         path: `/my-class/${courseId}/${classId}/team/${id}`,
+        team_path: `/my-class/${courseId}/${classId}/team/${id}`,
       })),
     );
   }, [classId, courseId, teamIds, teams]);
 
   if (courses[courseId] === undefined || classes[classId] === undefined || teams[classId] === undefined) {
-    if (loading.fetchTeams || loading.addTeam) {
+    if (loading.fetchTeams || commonLoading.fetchCourse || commonLoading.fetchClass) {
       return <div>loading...</div>;
     }
     return <NoMatch />;
@@ -194,7 +193,8 @@ export default function TeamList() {
             minWidth: 50,
             align: 'center',
             width: 150,
-            type: 'string',
+            type: 'link',
+            link_id: 'team_path',
           },
         ]}
         hasLink
@@ -212,20 +212,14 @@ export default function TeamList() {
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Import Team</Typography>
         </DialogTitle>
+        <DialogContent variant="body2">
+          <Typography>Team file format:</Typography>
+          <Typography className={classNames.reminder}>Name: String</Typography>
+          <Typography className={classNames.reminder}>Manager: student id (NTU only) &gt;= institute email &gt; #username</Typography>
+          <Typography className={classNames.reminder}>Member N (N=2~10): Same as Team Manager</Typography>
+          <Typography> Download template file for more instructions.</Typography>
+        </DialogContent>
         <DialogContent>
-          <Typography variant="body2" className={classNames.formatText}>
-            Team file format:
-            <br />
-            <div className={classNames.formatTextContent}>
-            &ensp;&ensp;Name: String
-              <br />
-            &ensp;&ensp;Manager: student id (NTU only) &gt;= institute email &gt; #username
-              <br />
-            &ensp;&ensp;Member N (N=2~10): Same as Team Manager
-              <br />
-            </div>
-            Download template file for more instructions.
-          </Typography>
           <AlignedText text="Class" maxWidth="mg" childrenType="text">
             <Typography variant="body1">{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
           </AlignedText>
@@ -252,6 +246,42 @@ export default function TeamList() {
       </Dialog>
 
       <Dialog
+        open={showAddDialog}
+        keepMounted
+        onClose={() => setShowAddDialog(false)}
+        className={classNames.popUpLayout}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle id="dialog-slide-title">
+          <Typography variant="h4">Create New Team</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <AlignedText text="Class" maxWidth="lg" childrenType="text">
+            <Typography variant="body1">{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
+          </AlignedText>
+          <AlignedText text="Label" maxWidth="lg" childrenType="field">
+            <TextField name="label" value={addInputs.label} onChange={(e) => handleAddChange(e)} />
+          </AlignedText>
+          <AlignedText text="Team Name" maxWidth="lg" childrenType="field">
+            <TextField name="teamName" value={addInputs.teamName} onChange={(e) => handleAddChange(e)} />
+          </AlignedText>
+        </DialogContent>
+        <DialogContent>
+          <Typography variant="body2">Visit team page to add team member after creating.</Typography>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={() => { setShowAddDialog(false); clearAddInput(); }} color="default">
+            Cancel
+          </Button>
+          <Button onClick={() => { submitAdd(); }} color="primary">
+            Create
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* <Dialog
         open={showAddDialog}
         keepMounted
         onClose={() => setShowAddDialog(false)}
@@ -303,7 +333,7 @@ export default function TeamList() {
             Create
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </>
   );
 }
