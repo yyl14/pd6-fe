@@ -17,7 +17,7 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import AlignedText from '../../../ui/AlignedText';
 
-import { readProblemInfo } from '../../../../actions/myClass/problem';
+import { readProblemInfo, submitCode } from '../../../../actions/myClass/problem';
 import { browseSubmitLang } from '../../../../actions/common/common';
 
 import NoMatch from '../../../noMatch';
@@ -55,6 +55,15 @@ export default function CodeSubmission() {
   const [langId, setLangId] = useState(-1);
   const [code, setCode] = useState('');
 
+  const handleSubmit = () => {
+    if (langId === -1) {
+      return;
+    }
+    // TODO: Fix submit illegal type
+    // dispatch(submitCode(authToken, problemId, langId, code));
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`);
+  };
+
   useEffect(() => {
     dispatch(readProblemInfo(authToken, problemId, challengeId));
   }, [authToken, challengeId, dispatch, problemId]);
@@ -62,6 +71,7 @@ export default function CodeSubmission() {
   useEffect(() => {
     dispatch(browseSubmitLang(authToken));
   }, [authToken, dispatch]);
+
   if (problems[problemId] === undefined || challenges[challengeId] === undefined) {
     return <NoMatch />;
   }
@@ -102,13 +112,13 @@ export default function CodeSubmission() {
             setCode(e.target.value);
           }}
           multiline
-          minRows={15}
-          maxRows={15}
+          minRows={10}
+          maxRows={20}
         />
       </AlignedText>
       <div>
         <Button color="default" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`)}>Cancel</Button>
-        <Button color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`)}>Submit</Button>
+        <Button color="primary" onClick={handleSubmit}>Submit</Button>
       </div>
     </>
   );

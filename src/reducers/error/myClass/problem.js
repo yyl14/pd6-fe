@@ -13,6 +13,7 @@ const initialState = {
   deleteAssistingData: null,
   editAssistingData: null,
   addAssistingData: null,
+  submitCode: null,
 };
 
 export default function problem(state = initialState, action) {
@@ -76,6 +77,11 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         addAssistingData: action.errors,
+      };
+    case problemConstants.SUBMIT_PROBLEM_FAIL:
+      return {
+        ...state,
+        submitCode: action.errors,
       };
     default: {
       return state;

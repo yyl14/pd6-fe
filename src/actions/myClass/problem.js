@@ -417,7 +417,6 @@ const addAssistingData = (token, problemId, file) => async (dispatch) => {
 
   try {
     const res = await agent.post(`/problem/${problemId}/assisting-data`, formData, auth);
-    console.log('ADD', res);
     if (res.data.success) {
       dispatch({
         type: problemConstants.ADD_ASSISTING_DATA_SUCCESS,
@@ -436,6 +435,42 @@ const addAssistingData = (token, problemId, file) => async (dispatch) => {
   }
 };
 
+const submitCode = (token, problemId, languageId, content) => async (dispatch) => {
+  dispatch({ type: problemConstants.SUBMIT_PROBLEM_START });
+  const config = {
+    headers: {
+      'Auth-Token': token,
+      'Content-Type': 'multipart/form-data',
+    },
+    params: {
+      language_id: languageId,
+    },
+  };
+  const blob = new Blob([content]); // , { type: 'text/py' }); // haven't set designated type
+  const formData = new FormData();
+  formData.append('content_file', blob);
+
+  try {
+    const res = await agent.post(`/problem/${problemId}/submission`, formData, config);
+    console.log('submit', res);
+    if (res.data.success) {
+      dispatch({
+        type: problemConstants.SUBMIT_PROBLEM_SUCCESS,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.SUBMIT_PROBLEM_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.SUBMIT_PROBLEM_FAIL,
+      errors: err,
+    });
+  }
+};
+
 export {
   browseChallengeOverview,
   readProblemInfo,
@@ -449,4 +484,5 @@ export {
   deleteAssistingData,
   editAssistingData,
   addAssistingData,
+  submitCode,
 };
