@@ -131,16 +131,6 @@ const useStyles = makeStyles((theme) => ({
   detailLink: {
     color: 'black',
   },
-  textLink: {
-    textDecoration: 'none',
-    color: theme.palette.primary.main,
-    '&:hover': {
-      color: theme.palette.primary.hover,
-    },
-    '&:active': {
-      color: theme.palette.primary.dark,
-    },
-  },
   toggleButtonIcon: {
     height: '20px',
     width: '20px',
@@ -297,7 +287,7 @@ export default function CustomTable({
                       className={classes.tableHeadCell}
                       style={{ minWidth: column.minWidth, width: column.width }}
                     >
-                      {column.label}
+                      <b>{column.label}</b>
                       {/* <div className={classes.column}>
                         <div className={labelMoveLeft(columnComponent, columns, column)}>
                           <b>{column.label}</b>

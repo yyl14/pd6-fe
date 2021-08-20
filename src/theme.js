@@ -188,6 +188,14 @@ const overrides = {
       '&:active': {
         backgroundColor: mono.semiDarkGray,
       },
+      '& path': {
+        fill: mono.black,
+      },
+      '&$disabled': {
+        '& path': {
+          fill: mono.lightGray,
+        },
+      },
     },
     containedPrimary: {
       '&:hover': {
@@ -195,6 +203,9 @@ const overrides = {
       },
       '&:active': {
         backgroundColor: blue.dark,
+      },
+      '& path': {
+        fill: mono.white,
       },
     },
     containedSecondary: {
@@ -204,10 +215,19 @@ const overrides = {
       '&:active': {
         backgroundColor: red.dark,
       },
+      '& path': {
+        fill: mono.white,
+      },
     },
     text: {
       margin: '10px 5px 10px 5px',
       padding: '8.5px 25px 10px 25px',
+      '&$disabled': {
+        color: mono.gray,
+        '& path': {
+          fill: mono.gray,
+        },
+      },
     },
     textPrimary: {
       '&:hover': {
@@ -215,6 +235,9 @@ const overrides = {
       },
       '&:active': {
         backgroundColor: blue[80],
+      },
+      '& path': {
+        fill: blue[100],
       },
     },
     textSecondary: {
@@ -224,46 +247,84 @@ const overrides = {
       '&:active': {
         backgroundColor: red[80],
       },
+      '& path': {
+        fill: red[100],
+      },
     },
     outlined: {
       margin: '10px 5px 10px 5px',
-      padding: '8.5px 25px 10px 25px',
+      padding: '7.5px 24px 9px 24px',
       '&:hover': {
         backgroundColor: mono.lightGray,
       },
       '&:active': {
         backgroundColor: mono.semiDarkGray,
       },
+      '& path': {
+        fill: mono.black,
+        height: '20px',
+        width: '20px',
+      },
+      '&$disabled': {
+        color: mono.gray,
+        '& path': {
+          fill: mono.gray,
+        },
+      },
     },
     outlinedPrimary: {
       '&:hover': {
         color: mono.white,
         backgroundColor: blue[60],
+        '& path': {
+          fill: mono.white,
+        },
       },
       '&:active': {
         color: mono.white,
         backgroundColor: blue.dark,
+        '& path': {
+          fill: mono.white,
+        },
+      },
+      '& path': {
+        fill: blue[100],
       },
     },
     outlinedSecondary: {
       '&:hover': {
         color: mono.white,
         backgroundColor: red[60],
+        '& path': {
+          fill: mono.white,
+        },
       },
       '&:active': {
         color: mono.white,
         backgroundColor: red.dark,
+        '& path': {
+          fill: mono.white,
+        },
+      },
+      '& path': {
+        fill: red[100],
       },
     },
     startIcon: {
       marginRight: '10px',
-      height: '20px',
-      width: '20px',
+      marginLeft: '0px',
+      '& path': {
+        height: '20px',
+        width: '20px',
+      },
     },
     endIcon: {
       marginLeft: '10px',
-      height: '20px',
-      width: '20px',
+      marginRight: '0px',
+      '& path': {
+        height: '20px',
+        width: '20px',
+      },
     },
   },
 
@@ -277,6 +338,36 @@ const overrides = {
       },
       '&:active': {
         backgroundColor: mono.gray,
+        '& path': {
+          fill: mono.white,
+        },
+      },
+      '& path': {
+        fill: mono.black,
+      },
+      '&$disabled': {
+        '& path': {
+          fill: mono.gray,
+        },
+      },
+    },
+  },
+  MuiLink: {
+    root: {
+      textDecoration: 'none',
+      color: blue[100],
+      cursor: 'pointer',
+      '&:hover': {
+        color: blue[80],
+
+      },
+      '&:active': {
+        color: blue.dark,
+      },
+    },
+    underlineHover: {
+      '&:hover': {
+        textDecoration: 'none',
       },
     },
   },
@@ -466,7 +557,7 @@ const overrides = {
   MuiSnackbarContent: {
     root: {
       width: '600px',
-      padding: '0px 16px',
+      padding: '0px 20px',
       borderRadius: '12px',
       boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
       backgroundColor: mono.black,
@@ -476,18 +567,17 @@ const overrides = {
       fontWeight: 500,
       lineHeight: 25 / 18,
       // letterSpacing: '-0.01rem',
-      color: mono.veryLightGray,
+      color: mono.white,
     },
     message: {
       display: 'flex',
       alignItems: 'center',
-      height: '65px',
+      height: '57px',
       padding: '0px',
     },
     action: {
-      marginRight: '-5px',
-      marginBottom: '10px',
-      marginTop: '10px',
+      marginRight: '21px',
+      paddingLeft: '0px',
     },
   },
 
