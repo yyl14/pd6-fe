@@ -14,6 +14,7 @@ import {
   DialogTitle,
   makeStyles,
 } from '@material-ui/core';
+import { deleteClassMember } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -57,9 +58,10 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 const MemberEdit = ({
-  backToMemberList, members, onEditMembers, loading,
+  dispatch, authToken, classId, backToMemberList, members, onEditMembers, loading,
 }) => {
   const classes = useStyles();
+
   const [TA, setTA] = useState([]);
   const [student, setStudent] = useState([]);
   const [guest, setGuest] = useState([]);
@@ -160,7 +162,60 @@ const MemberEdit = ({
 
   const handleSubmitSave = () => {
     setShowUnsaveDialog(false);
-    // dispatch and make defaultValue string to an array using str.split("\n")
+    const TATransformedValue = TA.split('\n');
+    const studentTransformedValue = student.split('\n');
+    const guestTransformedValue = guest.split('\n');
+
+    // textfield有 後端沒有 => add
+    const TAAddList = TATransformedValue.filter((id) => members
+      .filter((item) => item.role === 'MANAGER')
+      .map((member) => member.student_id)
+      .indexOf(id)
+      === -1);
+    const studentAddList = studentTransformedValue.filter((id) => members
+      .filter((item) => item.role === 'NORMAL')
+      .map((member) => member.student_id)
+      .indexOf(id)
+      === -1);
+    const guestAddList = guestTransformedValue.filter((id) => members
+      .filter((item) => item.role === 'GUEST')
+      .map((member) => member.student_id)
+      .indexOf(id)
+      === -1);
+
+    if (TAAddList) {
+      // dispatch
+    }
+    if (studentAddList) {
+      // dispatch
+    }
+    if (guestAddList) {
+      // dispatch
+    }
+
+    // 後端有 textfield沒有 => delete
+    const TADeleteList = members
+      .filter((item) => item.role === 'MANAGER')
+      .map((member) => member.student_id)
+      .filter((id) => TATransformedValue.indexOf(id) === -1);
+    const studentDeleteList = members
+      .filter((item) => item.role === 'NORMAL')
+      .map((member) => member.student_id)
+      .filter((id) => studentTransformedValue.indexOf(id) === -1);
+    const guestDeleteList = members
+      .filter((item) => item.role === 'GUEST')
+      .map((member) => member.student_id)
+      .filter((id) => guestTransformedValue.indexOf(id) === -1);
+
+    if (TADeleteList) {
+      // TADeleteList.map((id) => dispatch(deleteClassMember(authToken, classId, id)));
+    }
+    if (studentDeleteList) {
+      // studentDeleteList.map((id) => dispatch(deleteClassMember(authToken, classId, id)));
+    }
+    if (guestDeleteList !== []) {
+      // guestDeleteList.map((id) => dispatch(deleteClassMember(authToken, classId, id)));
+    }
     backToMemberList();
     if (unblockHandle) {
       unblockHandle.current();
