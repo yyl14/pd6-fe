@@ -85,7 +85,7 @@ export default function StudentInfoCard(props) {
               </AlignedText>
             </div>
             <div className={classes.defaultButton}>
-              <Button disabled={disabled} onClick={() => { handleClick(); props.setDisabledSave(false); }}>Set as Default</Button>
+              <Button disabled={disabled} onClick={() => { handleClick(); props.setChanged(true); }}>Set as Default</Button>
             </div>
           </CardContent>
         ) : (
