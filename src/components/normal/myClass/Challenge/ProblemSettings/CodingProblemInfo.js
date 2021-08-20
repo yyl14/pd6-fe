@@ -21,8 +21,8 @@ import Icon from '../../../../ui/icon/index';
 
 import NoMatch from '../../../../noMatch';
 
-import { browseTestcase, browseAssistingData, downloadAssistingFile } from '../../../../../actions/myClass/problem';
-import { fetchClass, fetchCourse } from '../../../../../actions/common/common';
+import { browseTestcase, browseAssistingData } from '../../../../../actions/myClass/problem';
+import { fetchClass, fetchCourse, downloadFile } from '../../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -79,7 +79,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       as_attachment: false,
     }));
     files.forEach((file) => {
-      dispatch((downloadAssistingFile(authToken, file)));
+      dispatch((downloadFile(authToken, file)));
     });
   };
 

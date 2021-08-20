@@ -33,7 +33,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SampleUploadCard({ popUp = false, closePopUp, action }) {
+export default function SampleUploadCard({
+  popUp = false, closePopUp, selectedFile, setSelectedFile,
+}) {
   const {
     courseId, classId, challengeId, problemId,
   } = useParams();
@@ -47,9 +49,13 @@ export default function SampleUploadCard({ popUp = false, closePopUp, action }) 
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
-  const [time, setTime] = useState('');
-  const [memory, setMemory] = useState('');
-  const [selectedFile, setSelectedFile] = useState([]);
+  const [time, setTime] = useState(100000);
+  const [memory, setMemory] = useState(65535);
+  const [tempSelectedFile, setTempSelectedFile] = useState([]);
+
+  const handleConfirm = () => {
+    closePopUp();
+  };
 
   return (
     <>
@@ -79,14 +85,14 @@ export default function SampleUploadCard({ popUp = false, closePopUp, action }) 
               onChange={(e) => setMemory(e.target.value)}
             />
           </AlignedText>
-          <IOFileUploadArea text="Sample Data" fileAcceptFormat=".pdf" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
+          <IOFileUploadArea text="Sample Data" uploadCase="sample" selectedFile={tempSelectedFile} setSelectedFile={setTempSelectedFile} />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => closePopUp()} color="default">
             Cancel
           </Button>
           <Button
-            onClick={() => action()}
+            onClick={handleConfirm}
             color="primary"
           >
             Confirm

@@ -19,6 +19,7 @@ import Icon from '../../../../ui/icon/index';
 
 import SampleUploadCard from './SampleUploadCard';
 import AssistingDataUploadCard from './AssistingDataUploadCard';
+import TestingDataUploadCard from './TestingDataUploadCard';
 import NoMatch from '../../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
@@ -78,10 +79,12 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
 
   const [samplePopUp, setSamplePopUp] = useState(false);
   const [assistPopUp, setAssistPopUp] = useState(false);
+  const [testingPopUp, setTestingPopUp] = useState(false);
 
   const handleClosePopUp = () => {
     setSamplePopUp(false);
     setAssistPopUp(false);
+    setTestingPopUp(false);
   };
 
   return (
@@ -206,7 +209,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
         )}
       >
         <div className={classNames.loadButtons}>
-          <Button variant="outlined" color="primary" startIcon={<Icon.Upload />}>Upload</Button>
+          <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setTestingPopUp(true)}>Upload</Button>
           <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button>
         </div>
         <SimpleTable
@@ -308,8 +311,9 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
         <Button color="default" onClick={() => closeEdit()}>Cancel</Button>
         <Button color="primary" onClick={() => closeEdit()}>Save</Button>
       </div>
-      <SampleUploadCard popUp={samplePopUp} closePopUp={handleClosePopUp} action={handleClosePopUp} />
-      <AssistingDataUploadCard popUp={assistPopUp} closePopUp={handleClosePopUp} action={handleClosePopUp} selectedFile={selectedFileA} setSelectedFile={setSelectedFileA} />
+      <SampleUploadCard popUp={samplePopUp} closePopUp={handleClosePopUp} selectedFile={selectedFileS} setSelectedFile={setSelectedFileS} />
+      <AssistingDataUploadCard popUp={assistPopUp} closePopUp={handleClosePopUp} selectedFile={selectedFileA} setSelectedFile={setSelectedFileA} />
+      <TestingDataUploadCard popUp={testingPopUp} closePopUp={handleClosePopUp} selectedFile={selectedFileT} setSelectedFile={setSelectedFileT} />
     </>
   );
 }
