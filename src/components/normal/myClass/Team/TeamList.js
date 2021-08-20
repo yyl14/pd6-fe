@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /* This is a level 4 component (page component) */
-// TODO: download team file action and function
+// TODO: download team file, team member table
 export default function TeamList() {
   const classNames = useStyles();
   const dispatch = useDispatch();
@@ -62,7 +62,7 @@ export default function TeamList() {
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
 
-  const [selectedFile, setSelectedFile] = useState('');
+  const [selectedFile, setSelectedFile] = useState([]);
   const [importInput, setImportInput] = useState('');
   const [addInputs, setAddInputs] = useState({
     label: '',
@@ -101,6 +101,7 @@ export default function TeamList() {
 
   const clearImportInput = () => {
     setImportInput('');
+    setSelectedFile([]);
   };
 
   const clearAddInput = () => {
@@ -110,18 +111,18 @@ export default function TeamList() {
     });
   };
 
+  const submitImport = () => {
+    setShowImportDialog(false);
+    clearImportInput();
+    // dispatch
+  };
+
   const submitAdd = () => {
     if (addInputs.label !== '' && addInputs.teamName !== '') {
       dispatch(addTeam(authToken, classId, addInputs.teamName, addInputs.label));
     }
     setShowAddDialog(false);
     clearAddInput();
-  };
-
-  const submitImport = () => {
-    setShowImportDialog(false);
-    clearImportInput();
-    // dispatch(addTeam(authToken, classId, importInputs.label, importInputs.teamName));
   };
 
   const downloadTemplate = () => {
@@ -135,7 +136,7 @@ export default function TeamList() {
         label: teams[id].label,
         teamName: teams[id].name,
         path: `/my-class/${courseId}/${classId}/team/${id}`,
-        team_path: `/my-class/${courseId}/${classId}/team/${id}`,
+        team_path: '/team_path',
       })),
     );
   }, [classId, courseId, teamIds, teams]);
@@ -199,12 +200,12 @@ export default function TeamList() {
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Import Team</Typography>
         </DialogTitle>
-        <DialogContent variant="body2">
-          <Typography>Team file format:</Typography>
-          <Typography className={classNames.reminder}>Name: String</Typography>
-          <Typography className={classNames.reminder}>Manager: student id (NTU only) &gt;= institute email &gt; #username</Typography>
-          <Typography className={classNames.reminder}>Member N (N=2~10): Same as Team Manager</Typography>
-          <Typography> Download template file for more instructions.</Typography>
+        <DialogContent>
+          <Typography variant="body2">Team file format:</Typography>
+          <Typography variant="body2" className={classNames.reminder}>Name: String</Typography>
+          <Typography variant="body2" className={classNames.reminder}>Manager: student id (NTU only) &gt;= institute email &gt; #username</Typography>
+          <Typography variant="body2" className={classNames.reminder}>Member N (N=2~10): Same as Team Manager</Typography>
+          <Typography variant="body2"> Download template file for more instructions.</Typography>
         </DialogContent>
         <DialogContent>
           <AlignedText text="Class" maxWidth="mg" childrenType="text">
@@ -223,7 +224,7 @@ export default function TeamList() {
             Cancel
           </Button>
           <Button onClick={() => { submitImport(); }} color="primary">
-            Add
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>

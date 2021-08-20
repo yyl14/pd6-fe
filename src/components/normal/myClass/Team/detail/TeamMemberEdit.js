@@ -16,7 +16,7 @@ import { MdAdd } from 'react-icons/md';
 import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleTable from '../../../../ui/SimpleTable';
-import { addTeamMember, editTeamMember, deleteTeamMember } from '../../../../../actions/myClass/team';
+import { addTeamMember, deleteTeamMember } from '../../../../../actions/myClass/team';
 import systemRoleTransformation from '../../../../../function/systemRoleTransformation';
 
 const useStyles = makeStyles((theme) => ({
@@ -44,15 +44,17 @@ export default function TeamMemberEdit(props) {
   });
 
   useEffect(() => {
-    setTableData(
-      teamMemberIds.map((id) => ({
-        username: classMembers[id].username,
-        student_id: classMembers[id].student_id,
-        real_name: classMembers[id].real_name,
-        role: systemRoleTransformation(classMembers[id].role),
-      })),
-    );
-  }, [teamMemberIds, classMembers]);
+    if (!loading.addTeamMember) {
+      setTableData(
+        teamMemberIds.map((id) => ({
+          username: classMembers[id].username,
+          student_id: classMembers[id].student_id,
+          real_name: classMembers[id].real_name,
+          role: systemRoleTransformation(classMembers[id].role),
+        })),
+      );
+    }
+  }, [teamMemberIds, classMembers, loading.addTeamMember]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -82,7 +84,7 @@ export default function TeamMemberEdit(props) {
   };
 
   const handleSave = () => {
-    console.log(tableData, teamMemberIds);
+    console.log(tableData);
     teamMemberIds.map((id) => (dispatch(deleteTeamMember(authToken, teamId, id))));
     setTimeout(() => {
       const array = tableData.map((item) => ({
