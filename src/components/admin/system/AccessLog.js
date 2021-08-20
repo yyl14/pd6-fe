@@ -73,12 +73,7 @@ export default function AccessLog() {
             type: 'TEXT',
             operation: 'LIKE',
           },
-          {
-            reduxStateId: 'resource_path',
-            label: 'Resource Path',
-            type: 'TEXT',
-            operation: 'LIKE',
-          },
+
           // TODO account id ?
         ]}
         refetch={(browseParams, ident) => {

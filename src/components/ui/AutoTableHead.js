@@ -21,58 +21,67 @@ import Icon from './icon/index';
       */
 
 const AutoTableHead = ({
-  hasFilter, classes, buttons, filterConfig, filters, setFilters,
+  hasFilter, classes, buttons, filterConfig, filter, setFilter,
 }) => {
-  const [filterValue, setFilterValue] = useState('');
+  const [tempFilterValue, setTempFilterValue] = useState('');
   const [filteringIndex, setFilteringIndex] = useState(0);
   const [advanceSearchActivated, setAdvanceSearchActivated] = useState(false);
 
   useEffect(() => {
-    const {
-      reduxStateId, type, operation, optionsValue,
-    } = filterConfig[filteringIndex];
+    console.log(filterConfig);
+    const { type, options } = filterConfig[filteringIndex];
     if (type === 'ENUM') {
-      setFilters([[reduxStateId, operation, optionsValue[0]]]);
-      setFilterValue(optionsValue[0]);
+      setTempFilterValue(options[0].value);
     } else {
-      setFilters([[reduxStateId, operation, filterValue]]);
+      setTempFilterValue('');
     }
-  }, [filterConfig, filterValue, filteringIndex, setFilters]);
+  }, [filterConfig, filteringIndex]);
 
-  const searchField = (type) => {
+  const onSearch = () => {
+    const { reduxStateId, operation } = filterConfig[filteringIndex];
+    setFilter([[reduxStateId, operation, tempFilterValue]]);
+  };
+  // console.log(filterConfig, filteringIndex, tempFilter, tempFilterValue);
+  // filter value change
+  // useEffect(() => {
+  //   if (tempFilter[0]) {
+  //     setTempFilter([[tempFilter[0][0], tempFilter[0][1], tempFilterValue]]);
+  //   }
+  // }, [tempFilter[], tempFilterValue]);
+
+  const SearchField = ({ type }) => {
     switch (type) {
       case 'TEXT': {
         return (
           <TextField
             id="search"
-            // className={searchWidth(searchWidthOption)}
+            className={classes.search}
             onChange={(e) => {
-              setFilterValue(e.target.value);
+              setTempFilterValue(e.target.value);
             }}
-            value={filterValue}
-            placeholder={"This doesn't work."}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Icon.SearchIcon />
-                </InputAdornment>
-              ),
-            }}
+            value={tempFilterValue}
+            placeholder="Search"
+            // InputProps={{
+            //   endAdornment: (
+            //     <InputAdornment position="end">
+            //       <Icon.SearchIcon />
+            //     </InputAdornment>
+            //   ),
+            // }}
           />
         );
       }
       case 'ENUM': {
         return (
-          <FormControl variant="outlined">
+          <FormControl variant="outlined" className={classes.search}>
             <Select
-              className={classes.filterSelect}
-              value={filterValue}
+              value={tempFilterValue}
               onChange={(e) => {
-                setFilterValue(e.target.value);
+                setTempFilterValue(e.target.value);
               }}
             >
               {filterConfig[filteringIndex].options.map((item) => (
-                <MenuItem key={nanoid()} value={item.value}>
+                <MenuItem key={item.label} value={item.value}>
                   {item.label}
                 </MenuItem>
               ))}
@@ -87,49 +96,56 @@ const AutoTableHead = ({
         return (
           <TextField
             id="search"
-            // className={searchWidth(searchWidthOption)}
+            className={classes.search}
             onChange={(e) => {
-              setFilterValue(e.target.value);
+              setTempFilterValue(e.target.value);
             }}
-            value={filterValue}
-            placeholder={"This doesn't work."}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Icon.SearchIcon />
-                </InputAdornment>
-              ),
-            }}
+            value={tempFilterValue}
+            placeholder="Search"
+            // InputProps={{
+            //   endAdornment: (
+            //     <InputAdornment position="end">
+            //       <Icon.SearchIcon />
+            //     </InputAdornment>
+            //   ),
+            // }}
           />
         );
     }
   };
 
+  console.log(filter);
+
   return (
     <div className={hasFilter ? classes.topContent1 : classes.topContent2}>
       {hasFilter && (
-        <div>
-          <FormControl variant="outlined">
-            <Select
-              className={classes.filterSelect}
-              // labelId="rows-per-page"
-              // id="rows-per-page"
-              value={filters[0][0]}
-              onChange={(e) => {
-                setFilteringIndex(e.target.value);
-              }}
-            >
-              {filterConfig.map((item, index) => (
-                <MenuItem key={nanoid()} value={index}>
-                  {item.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          {searchField(filterConfig[filteringIndex].type)}
-          <Button variant="outlined" color="secondary" disabled>
-            <Icon.Advancedsearch className={classes.iconButtonIcon} />
-          </Button>
+        <div className={classes.filterWrapper}>
+          <div>
+            <FormControl variant="outlined">
+              <Select
+                className={classes.filterSelect}
+                value={filteringIndex}
+                onChange={(e) => {
+                  setFilteringIndex(e.target.value);
+                }}
+              >
+                {filterConfig.map((item, index) => (
+                  <MenuItem key={item.label} value={index}>
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <SearchField type={filterConfig[filteringIndex].type} />
+          </div>
+          <div className={classes.buttons}>
+            <Button color="primary" onClick={onSearch}>
+              <Icon.SearchIcon />
+            </Button>
+            <Button>
+              <Icon.Advancedsearch className={classes.iconButtonIcon} />
+            </Button>
+          </div>
         </div>
       )}
       <div className={classes.buttons}>{buttons}</div>

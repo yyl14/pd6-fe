@@ -23,9 +23,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useState, useEffect, useLocation } from 'react';
 import { Link } from 'react-router-dom';
-import { nanoid } from 'nanoid';
+// import { nanoid } from 'nanoid';
 import { customTableMount } from '../../actions/component/autoTable';
 import Icon from './icon/index';
+import AutoTableHead from './AutoTableHead';
 
 /* eslint react-hooks/exhaustive-deps: 0 */
 
@@ -46,18 +47,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
     height: '75px',
   },
-  search1: {
-    height: '60px',
+  search: {
+    marginRight: '5px',
     width: 300,
-  },
-  search2: {
-    height: '60px',
-    width: 380,
-  },
-  search3: {
-    height: '60px',
-    width: 550,
-    marginLeft: '5px',
   },
   buttons: {
     marginTop: '3px',
@@ -71,6 +63,9 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     maxHeight: 800,
+  },
+  filterSelect: {
+    marginRight: '10px',
   },
 
   tableRowContainerLeftSpacing: {
@@ -105,14 +100,18 @@ const useStyles = makeStyles((theme) => ({
   row: {
     height: '60px',
   },
-
+  bottomWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    paddingLeft: '15px',
+    background: theme.palette.background.default,
+    justifyContent: 'space-between',
+  },
   bottom: {
-    height: '75px',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    paddingRight: '15px',
     background: theme.palette.background.default,
   },
   pageChangeButtons: {
@@ -153,26 +152,15 @@ const useStyles = makeStyles((theme) => ({
     height: '35px',
     margin: 'auto',
   },
+  filterWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    // alignItems: 'center',
+  },
 }));
 
 const itemsPerPage = [5, 10, 25, 50, 100];
 
-// const tableRefetch = (limit, offset, filters, sorts) =>
-//            dispatch(action(authToken, problemId, ident, limit, offset, filter, sort))
-
-// TODO: new API
-
-// ident
-// hasFilter,
-// refetch,
-// buttons,
-// columns,
-// data,
-// children,
-
-// (item, allStates) => ({
-//   username: item.username,
-// })
 function AutoTable({
   ident, // unique identifier for this table, used in dynamic redux state
   hasFilter, // display filter in table head
@@ -232,7 +220,7 @@ function AutoTable({
   const classes = useStyles();
   const [curPage, setPage] = useState(0); // curPage * rowsPerPage = offset
   const [pageInput, setPageInput] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10); // limit
+  const [rowsPerPage, setRowsPerPage] = useState(5); // limit
 
   const [filter, setFilter] = useState([]);
   const [sort, setSort] = useState([]);
@@ -291,7 +279,12 @@ function AutoTable({
       setDataComplete(newDisplayedReduxData.reduce((acc, item) => acc && item !== undefined, true));
       setDisplayedReduxData(newDisplayedReduxData);
     }
-  }, [curPage, ident, reduxData.byId, rowsPerPage, tableState]);
+  }, [curPage, ident, reduxData.byId, rowsPerPage, tableState.byId[ident], tableState.byId[ident].displayedDataIds]);
+
+  // change filter / sort
+  useEffect(() => {
+    setDataComplete(false);
+  }, [filter, sort]);
 
   // table refetch
   useEffect(() => {
@@ -309,6 +302,7 @@ function AutoTable({
     }
   }, [dataComplete, curPage, filter, ident, rowsPerPage, sort]);
 
+  // refetch done
   useEffect(() => {
     if (dataComplete) {
       setRowData(displayedReduxData.map((item) => reduxDataToRows(item)));
@@ -317,6 +311,14 @@ function AutoTable({
 
   return (
     <>
+      <AutoTableHead
+        hasFilter={hasFilter}
+        classes={classes}
+        buttons={buttons}
+        filterConfig={filterConfig}
+        filter={filter}
+        setFilter={setFilter}
+      />
       <Paper className={classes.root} elevation={0}>
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">
@@ -324,7 +326,7 @@ function AutoTable({
               <TableRow>
                 <TableCell className={`${classes.tableHeadCell} ${classes.tableRowContainerLeftSpacing}`} />
                 {columns.map((column) => (
-                  <React.Fragment key={nanoid()}>
+                  <React.Fragment key={column.name}>
                     <TableCell className={`${classes.tableHeadCell} ${classes.tableColumnLeftSpacing}`} />
                     <TableCell
                       align={column.align}
@@ -366,7 +368,7 @@ function AutoTable({
                     {columns.map((column) => {
                       if (column.type === 'link') {
                         return (
-                          <React.Fragment key={`${column.id}-${column.label}`}>
+                          <React.Fragment key={`${row.id}-${column.name}`}>
                             <TableCell className={classes.tableColumnLeftSpacing} />
                             <TableCell align={column.align}>
                               <Link to={row[column.name].path} className={classes.textLink} replace>
@@ -380,7 +382,7 @@ function AutoTable({
                       }
                       const value = row[column.name];
                       return (
-                        <React.Fragment key={nanoid()}>
+                        <React.Fragment key={`${row.id}-${column.name}`}>
                           <TableCell className={classes.tableColumnLeftSpacing} />
                           <TableCell align={column.align}>
                             {column.format && typeof value === 'number' ? column.format(value) : value}
@@ -405,58 +407,60 @@ function AutoTable({
             </TableBody>
           </Table>
         </TableContainer>
-        <div className={classes.bottom}>
-          <FormControl variant="outlined">
-            <Select
-              className={classes.pageRowSelect}
-              labelId="rows-per-page"
-              id="rows-per-page"
-              value={rowsPerPage}
-              onChange={(e) => {
-                setRowsPerPage(e.target.value);
+        <div className={classes.bottomWrapper}>
+          <div>{dataComplete || <Typography>Loading... </Typography>}</div>
+          <div className={classes.bottom}>
+            <FormControl variant="outlined">
+              <Select
+                className={classes.pageRowSelect}
+                labelId="rows-per-page"
+                id="rows-per-page"
+                value={rowsPerPage}
+                onChange={(e) => {
+                  setRowsPerPage(e.target.value);
+                }}
+              >
+                {itemsPerPage.map((item) => (
+                  <MenuItem key={item} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Typography className={classes.pageText} variant="body1">
+              rows
+            </Typography>
+            <Button
+              className={classes.pageChangeButtons}
+              onClick={(e) => {
+                handleChangePage(e, curPage - 1);
               }}
             >
-              {itemsPerPage.map((item) => (
-                <MenuItem key={nanoid()} value={item}>
-                  {item}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Typography className={classes.pageText} variant="body1">
-            rows
-          </Typography>
-          <Button
-            className={classes.pageChangeButtons}
-            onClick={(e) => {
-              handleChangePage(e, curPage - 1);
-            }}
-          >
-            <Icon.ChevronLeftOutlinedIcon className={classes.arrowIcon} />
-          </Button>
-          <TextField
-            className={classes.pageIndexTextField}
-            value={pageInput}
-            onChange={(e) => {
-              setPageInput(e.target.value);
-            }}
-          />
-          <Typography className={classes.pageText} variant="body1">
-            of
-            {' '}
-            {Math.ceil((tableState.byId[ident] ? tableState.byId[ident].totalCount : 100) / rowsPerPage)}
-          </Typography>
-          <Button
-            className={classes.pageChangeButtons}
-            onClick={(e) => {
-              handleChangePage(e, curPage + 1);
-            }}
-          >
-            <Icon.ChevronRightOutlinedIcon className={classes.arrowIcon} />
-          </Button>
+              <Icon.ChevronLeftOutlinedIcon className={classes.arrowIcon} />
+            </Button>
+            <TextField
+              className={classes.pageIndexTextField}
+              value={pageInput}
+              onChange={(e) => {
+                setPageInput(e.target.value);
+              }}
+            />
+            <Typography className={classes.pageText} variant="body1">
+              of
+              {' '}
+              {Math.ceil((tableState.byId[ident] ? tableState.byId[ident].totalCount : 100) / rowsPerPage)}
+            </Typography>
+            <Button
+              className={classes.pageChangeButtons}
+              onClick={(e) => {
+                handleChangePage(e, curPage + 1);
+              }}
+            >
+              <Icon.ChevronRightOutlinedIcon className={classes.arrowIcon} />
+            </Button>
+          </div>
         </div>
       </Paper>
-      {dataComplete || <Typography>Loading</Typography>}
     </>
   );
 }
