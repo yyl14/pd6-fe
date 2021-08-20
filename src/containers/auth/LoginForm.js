@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   TextField,
@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { borders, borderRadius } from '@material-ui/system';
-
+import { useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -48,6 +48,14 @@ export default function LoginForm(props) {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const loginError = useSelector((state) => state.error.user.auth);
+
+  useEffect(() => {
+    if (loginError.fetchAccount) {
+      setErrors((ori) => ({ username: true, password: true }));
+      setErrorTexts((ori) => ({ ...ori, password: 'Login Failed' }));
+    }
+  }, [loginError.fetchAccount]);
 
   const handleSubmit = () => {
     const newUserName = username.trim();
@@ -66,7 +74,6 @@ export default function LoginForm(props) {
       props.userSignIn(newUserName, newPassword);
     }
   };
-
   const handleUsernameChange = (e) => {
     if (e.target.value !== '') {
       setErrors((ori) => ({ ...ori, username: false }));

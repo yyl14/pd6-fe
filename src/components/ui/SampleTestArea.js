@@ -13,7 +13,7 @@ import CopyToClipboardButton from './CopyToClipboardButton';
 
 const useStyles = makeStyles({
   root: {
-    width: '100%',
+    width: '90%',
     height: 'auto',
   },
   cardContent: {
