@@ -4,7 +4,7 @@ const initialState = {
   fetchClassGrade: null,
   addClassGrade: null,
   fetchAccountGrade: null,
-  fetchGradeTemplate: null,
+  downloadGradeFile: null,
   deleteGrade: null,
   editGrade: null,
 };
@@ -50,16 +50,16 @@ export default function grade(state = initialState, action) {
       };
     }
 
-    case gradeConstants.FETCH_GRADE_TEMPLATE_SUCCESS: {
+    case gradeConstants.DOWNLOAD_GRADE_FILE_SUCCESS: {
       return {
         ...state,
-        fetchGradeTemplate: null,
+        downloadGradeFile: null,
       };
     }
-    case gradeConstants.FETCH_GRADE_TEMPLATE_FAIL: {
+    case gradeConstants.DOWNLOAD_GRADE_FILE_FAIL: {
       return {
         ...state,
-        fetchGradeTemplate: action.error,
+        downloadGradeFile: action.error,
       };
     }
 

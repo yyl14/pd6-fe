@@ -1,20 +1,21 @@
 import { combineReducers } from 'redux';
 import { gradeConstants } from '../actions/myClass/constant';
+import { commonConstants } from '../actions/common/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
     case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {
       const { data } = action.payload;
-      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, template: {}, file_url: '' } }), state);
     }
 
     case gradeConstants.FETCH_ACCOUNT_GRADE_SUCCESS: {
       const { data } = action.payload;
-      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, template: {}, file_url: '' } }), state);
     }
 
-    case gradeConstants.FETCH_GRADE_TEMPLATE_SUCCESS: {
-      return action.payload;
+    case gradeConstants.DOWNLOAD_GRADE_FILE_SUCCESS: {
+      return { ...state, template: action.payload };
     }
 
     default:

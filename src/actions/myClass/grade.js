@@ -58,19 +58,22 @@ export const fetchAccountGrade = (token, accountId) => (dispatch) => {
     });
 };
 
-export const fetchGradeTemplate = (token) => async (dispatch) => {
+export const downloadGradeFile = (token, asAttachment) => async (dispatch) => {
   try {
     const auth = {
       headers: {
         'Auth-Token': token,
       },
     };
-    dispatch({ type: gradeConstants.FETCH_GRADE_TEMPLATE_START });
+    dispatch({ type: gradeConstants.DOWNLOAD_GRADE_FILE_START });
     const res = await agent.get('/grade/template', auth);
-    dispatch({ type: gradeConstants.FETCH_GRADE_TEMPLATE_SUCCESS, payload: res.data.data });
+    dispatch({
+      type: gradeConstants.DOWNLOAD_GRADE_FILE_SUCCESS,
+      payload: { uuid: res.data.data.s3_file_uuid, filename: res.data.data.filename, as_attachment: asAttachment },
+    });
   } catch (err) {
     dispatch({
-      type: gradeConstants.FETCH_GRADE_TEMPLATE_FAIL,
+      type: gradeConstants.DOWNLOAD_GRADE_FILE_FAIL,
       error: err,
     });
   }
