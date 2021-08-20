@@ -16,6 +16,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
 import Icon from '../../../../ui/icon/index';
 import NoMatch from '../../../../noMatch';
+import { editEssays } from '../../../../../actions/myClass/essay';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -61,6 +62,15 @@ export default function EssayEdit({ closeEdit, role = 'NORMAL' }) {
   const [title, setTitle] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].title);
   const [description, setDescription] = useState(problems[problemId] === undefined ? '繳交作業時，請至 PDOGS（http://pdogs.ntu.im/judge/）為第一題上傳一份 Python 原始碼（以複製貼上原始碼的方式上傳）。每位學生都要上傳自己寫的解答。不接受紙本繳交；不接受遲交。\n \n 如果你在一家零售店幫消費的客人結帳，你可能需要快速地挑出合適且數量正確的鈔票與零錢。假設客人的消費金額 a 一定是 1 到 1000 之間的整數，而你有無限量的 500、100、50、10、5、1 這些面額的鈔票和零錢，我們希望你能依照下面的規則找錢： \n \n 此次作業包含一份手寫作業、一份程式作業、以及程式互改，前兩份作業分數總和為 110 分。作業四 的截止日期在 4 月 27 日。\n \n 此次作業包含一份手寫作業、一份程式作業、以及程式互改，前兩份作業分數總和為 110 分。作業四 的截止日期在 4 月 27 日。' : problems[problemId].description);
 
+  const handleClickSave = () => {
+    const body = {
+      label: setLabel,
+      title: setTitle,
+      description: setDescription,
+    };
+    dispatch(editEssays(authToken, problemId));
+    closeEdit();
+  };
   return (
     <>
       <SimpleBar title="Label">
@@ -98,7 +108,7 @@ export default function EssayEdit({ closeEdit, role = 'NORMAL' }) {
       </SimpleBar>
       <div className={classNames.buttons}>
         <Button color="default" onClick={() => closeEdit()}>Cancel</Button>
-        <Button color="primary" onClick={() => closeEdit()}>Save</Button>
+        <Button color="primary" onClick={handleClickSave}>Save</Button>
       </div>
     </>
   );

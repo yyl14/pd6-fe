@@ -17,6 +17,7 @@ import user from './user';
 import accessLogs from './accessLogs';
 import announcements from './announcements';
 import submitLangs from './submitLangs';
+import essay from './essay';
 import loading from './loading/index';
 import error from './error/index';
 
@@ -41,4 +42,5 @@ export default combineReducers({
   submitLangs,
   loading,
   error,
+  essay,
 });

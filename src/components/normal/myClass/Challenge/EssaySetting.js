@@ -20,6 +20,7 @@ import NoMatch from '../../../noMatch';
 
 import EssayInfo from './ProblemSettings/EssayInfo';
 import EssayEdit from './ProblemSettings/EssayEdit';
+import { readEssays, deleteEssays } from '../../../../actions/myClass/essay';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -33,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EssaySetting() {
   const {
-    courseId, classId, challengeId, problemId,
+    courseId, classId, challengeId, problemId, essayId,
   } = useParams();
   const history = useHistory();
   const classNames = useStyles();
@@ -41,12 +42,12 @@ export default function EssaySetting() {
   const dispatch = useDispatch();
 
   const userClasses = useSelector((state) => state.user.classes);
-  const problems = useSelector((state) => state.problem.byId);
+  const essays = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   const authToken = useSelector((state) => state.auth.token);
   const error = useSelector((state) => state.error.myClass.problem);
   const loading = useSelector((state) => state.loading.myClass.problem);
-  // const editLoading = useSelector((state) => state.loading.admin.);
+  const editLoading = useSelector((state) => state.loading.myClass.problem.editEssays);
   const [role, setRole] = useState('Normal');
   const [edit, setEdit] = useState(false);
 
@@ -54,7 +55,7 @@ export default function EssaySetting() {
     setEdit(false);
   };
 
-  // const [problem, setProblem] = useState(null);
+  const [essay, setEssay] = useState(null);
   const [popUpUpload, setPopUpUpload] = useState(false);
 
   const handleClickUpload = () => {
@@ -69,10 +70,16 @@ export default function EssaySetting() {
   };
 
   const handleSubmitDelete = (e) => {
-    // dispatch(deleteProblem());
-    // history.push('/');
+    dispatch(deleteEssays(authToken, problemId));
+    history.push('/my-class');
   };
   const [selectedFile, setSelectedFile] = useState([]);
+
+  useEffect(() => {
+    if (!editLoading) {
+      dispatch(readEssays(authToken, problemId));
+    }
+  }, [authToken, dispatch, editLoading, problemId]);
 
   useEffect(() => {
     userClasses.forEach((value) => {
@@ -85,20 +92,15 @@ export default function EssaySetting() {
   }, [classId, userClasses]);
 
   // useEffect(() => {
-  //   if (!editLoading) {
-  //     dispatch(fetchProblem(authToken));
-  //   }
-  // }, [authToken, dispatch, editLoading]);
-
-  // useEffect(() => {
-  //   const item = problem[problemId];
+  //   const item = essay[essayId];
   //   if (item !== undefined) {
-  //     setProblems({
+  //     setEssay({
+  //       label: item.label,
   //       title: item.title,
   //       description: item.description,
   //     });
   //   }
-  // }, [problemId]);
+  // }, [essay, essayId]);
 
   // if (problems[problemId] === undefined || challenges[challengeId] === undefined) {
   //   return <NoMatch />;
@@ -111,7 +113,7 @@ export default function EssaySetting() {
         {' '}
         /
         {' '}
-        {problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label}
+        {essays[essayId] === undefined ? 'error' : essays[essayId].challenge_label}
       </Typography>
       {!edit && role === 'MANAGER' && (
         <div className={classNames.managerButtons}>
