@@ -7,6 +7,10 @@ const initialState = {
   readJudgment: null,
   browseTestcase: null,
   browseAssistingData: null,
+  editProblem: null,
+  deleteProblem: null,
+  deleteTestcase: null,
+  deleteAssistingData: null,
 };
 
 export default function problem(state = initialState, action) {
@@ -40,6 +44,26 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         browseAssistingData: action.errors,
+      };
+    case problemConstants.EDIT_PROBLEM_FAIL:
+      return {
+        ...state,
+        editProblem: action.errors,
+      };
+    case problemConstants.DELETE_PROBLEM_FAIL:
+      return {
+        ...state,
+        deleteProblem: action.errors,
+      };
+    case problemConstants.DELETE_TESTCASE_FAIL:
+      return {
+        ...state,
+        deleteTestcase: action.errors,
+      };
+    case problemConstants.DELETE_ASSISTING_DATA_FAIL:
+      return {
+        ...state,
+        deleteAssistingData: action.errors,
       };
     default: {
       return state;

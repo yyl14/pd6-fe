@@ -220,10 +220,135 @@ const browseAssistingData = (token, problemId) => async (dispatch) => {
   }
 };
 
+const editProblemInfo = (token, problemId, title, score, testcaseDisabled, description, ioDescription, source, hint) => async (dispatch) => {
+  dispatch({ type: problemConstants.EDIT_PROBLEM_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  const body = {
+    title,
+    full_score: score,
+    testcase_disabled: testcaseDisabled,
+    description,
+    io_description: ioDescription,
+    source,
+    hint,
+  };
+  try {
+    const res = await agent.patch(`/problem/${problemId}`, body, auth);
+    if (res.data.success) {
+      dispatch({
+        type: problemConstants.EDIT_PROBLEM_SUCCESS,
+        payload: { problemId, content: body },
+      });
+    } else {
+      dispatch({
+        type: problemConstants.EDIT_PROBLEM_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.EDIT_PROBLEM_FAIL,
+      errors: err,
+    });
+  }
+};
+
+const deleteProblem = (token, problemId) => async (dispatch) => {
+  dispatch({ type: problemConstants.DELETE_PROBLEM_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const res = await agent.delete(`/problem/${problemId}`, auth);
+    if (res.data.success) {
+      dispatch({
+        type: problemConstants.DELETE_PROBLEM_SUCCESS,
+        payload: problemId,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.DELETE_PROBLEM_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.DELETE_PROBLEM_FAIL,
+      errors: err,
+    });
+  }
+};
+
+const deleteTestcase = (token, testcaseId) => async (dispatch) => {
+  dispatch({ type: problemConstants.DELETE_TESTCASE_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const res = await agent.delete(`/testcase/${testcaseId}`, auth);
+    if (res.data.success) {
+      dispatch({
+        type: problemConstants.DELETE_TESTCASE_SUCCESS,
+        payload: testcaseId,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.DELETE_TESTCASE_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.DELETE_TESTCASE_FAIL,
+      errors: err,
+    });
+  }
+};
+
+const deleteAssistingData = (token, assistingId) => async (dispatch) => {
+  dispatch({ type: problemConstants.DELETE_ASSISTING_DATA_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const res = await agent.delete(`/assisting-data/${assistingId}`, auth);
+    if (res.data.success) {
+      dispatch({
+        type: problemConstants.DELETE_ASSISTING_DATA_SUCCESS,
+        payload: assistingId,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.DELETE_ASSISTING_DATA_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.DELETE_ASSISTING_DATA_FAIL,
+      errors: err,
+    });
+  }
+};
+
 export {
   browseChallengeOverview,
   readProblemInfo,
+  editProblemInfo,
+  deleteProblem,
   readSubmissionDetail,
   browseTestcase,
   browseAssistingData,
+  deleteTestcase,
+  deleteAssistingData,
 };

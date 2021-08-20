@@ -21,7 +21,9 @@ import Icon from '../../../../ui/icon/index';
 
 import NoMatch from '../../../../noMatch';
 
-import { browseTestcase, browseAssistingData } from '../../../../../actions/myClass/problem';
+import {
+  browseTestcase, browseAssistingData, deleteAssistingData, deleteTestcase, deleteProblem,
+} from '../../../../../actions/myClass/problem';
 import { fetchClass, fetchCourse, downloadFile } from '../../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
@@ -60,16 +62,19 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const loading = useSelector((state) => state.loading.myClass.problem);
 
   const [deletePopUp, setDeletePopUp] = useState(false);
-  const [rejudgePopUp, setRejudgePopUp] = useState(false);
 
   const handleDelete = () => {
-    // TODO: delete problem
-    setDeletePopUp(false);
-  };
+    // TODO: delete testcase, delete assisting data, delete problem
+    problems[problemId].assistingDataIds.forEach((id) => {
+      dispatch(deleteAssistingData(authToken, id));
+    });
+    problems[problemId].testcaseIds.forEach((id) => {
+      dispatch(deleteTestcase(authToken, id));
+    });
+    dispatch(deleteProblem(authToken, problemId));
 
-  const handleRejudge = () => {
-    // TODO: rejudge problem
-    setRejudgePopUp(false);
+    setDeletePopUp(false);
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
   };
 
   const downloadAllAssistingFile = () => {
@@ -266,31 +271,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           <Button onClick={() => setDeletePopUp(false)}>Cancel</Button>
           <Button color="secondary" onClick={handleDelete}>
             Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog open={rejudgePopUp} onClose={() => setRejudgePopUp(false)} maxWidth="md">
-        <DialogTitle>
-          <Typography variant="h4">Rejudge Problem</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <AlignedText text="Class" childrenType="text">
-            <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
-          </AlignedText>
-          <AlignedText text="Title" childrenType="text">
-            {problems[problemId] === undefined ? 'error' : problems[problemId].title}
-          </AlignedText>
-          <AlignedText text="Label" childrenType="text">
-            <Typography>{problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label}</Typography>
-          </AlignedText>
-          <Typography variant="body2" color="textPrimary">
-            Once you rejudge a problem, all related submissions will be judged again.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setRejudgePopUp(false)}>Cancel</Button>
-          <Button color="secondary" onClick={handleRejudge}>
-            Rejudge
           </Button>
         </DialogActions>
       </Dialog>

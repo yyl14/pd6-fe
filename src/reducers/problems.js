@@ -36,6 +36,21 @@ const byId = (state = {}, action) => {
         },
       };
     }
+    case problemConstants.EDIT_PROBLEM_SUCCESS: {
+      const { problemId, content } = action.payload;
+      return {
+        ...state,
+        [problemId]: {
+          ...state[problemId],
+          title: content.title,
+          full_score: content.full_score,
+          description: content.description,
+          io_description: content.io_description,
+          source: content.source,
+          hint: content.hint,
+        },
+      };
+    }
     default:
       return state;
   }

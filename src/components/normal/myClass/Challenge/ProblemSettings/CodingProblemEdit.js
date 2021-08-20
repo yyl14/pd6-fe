@@ -22,6 +22,8 @@ import AssistingDataUploadCard from './AssistingDataUploadCard';
 import TestingDataUploadCard from './TestingDataUploadCard';
 import NoMatch from '../../../../noMatch';
 
+import { editProblemInfo } from '../../../../../actions/myClass/problem';
+
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
@@ -85,6 +87,11 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
     setSamplePopUp(false);
     setAssistPopUp(false);
     setTestingPopUp(false);
+  };
+
+  const handleSave = () => {
+    dispatch(editProblemInfo(authToken, problemId, title, problems[problemId].full_score, !status, description, ioDescription, '', ''));
+    closeEdit();
   };
 
   return (
@@ -309,7 +316,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       </SimpleBar>
       <div className={classNames.buttons}>
         <Button color="default" onClick={() => closeEdit()}>Cancel</Button>
-        <Button color="primary" onClick={() => closeEdit()}>Save</Button>
+        <Button color="primary" onClick={handleSave}>Save</Button>
       </div>
       <SampleUploadCard popUp={samplePopUp} closePopUp={handleClosePopUp} selectedFile={selectedFileS} setSelectedFile={setSelectedFileS} />
       <AssistingDataUploadCard popUp={assistPopUp} closePopUp={handleClosePopUp} selectedFile={selectedFileA} setSelectedFile={setSelectedFileA} />
