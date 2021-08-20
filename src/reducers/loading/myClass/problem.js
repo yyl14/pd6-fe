@@ -11,6 +11,8 @@ const initialState = {
   deleteProblem: false,
   deleteTestcase: false,
   deleteAssistingData: false,
+  editAssistingData: false,
+  addAssistingData: false,
 };
 
 export default function problem(state = initialState, action) {
@@ -164,6 +166,36 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         deleteAssistingData: false,
+      };
+    case problemConstants.EDIT_ASSISTING_DATA_START:
+      return {
+        ...state,
+        editAssistingData: true,
+      };
+    case problemConstants.EDIT_ASSISTING_DATA_SUCCESS:
+      return {
+        ...state,
+        editAssistingData: false,
+      };
+    case problemConstants.EDIT_ASSISTING_DATA_FAIL:
+      return {
+        ...state,
+        editAssistingData: false,
+      };
+    case problemConstants.ADD_ASSISTING_DATA_START:
+      return {
+        ...state,
+        addAssistingData: true,
+      };
+    case problemConstants.ADD_ASSISTING_DATA_SUCCESS:
+      return {
+        ...state,
+        addAssistingData: false,
+      };
+    case problemConstants.ADD_ASSISTING_DATA_FAIL:
+      return {
+        ...state,
+        addAssistingData: false,
       };
     default: {
       return state;

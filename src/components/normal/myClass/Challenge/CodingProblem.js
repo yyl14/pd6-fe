@@ -85,9 +85,9 @@ export default function CodingProblem() {
   //   return <div>System Exception</div>;
   // }
 
-  // if (problems[problemId] === undefined || challenges[challengeId] === undefined) {
-  //   return <NoMatch />;
-  // }
+  if (problems[problemId] === undefined || challenges[challengeId] === undefined || courses[courseId] === undefined || classes[classId] === undefined) {
+    return <NoMatch />;
+  }
 
   return (
     <>

@@ -22,7 +22,9 @@ import AssistingDataUploadCard from './AssistingDataUploadCard';
 import TestingDataUploadCard from './TestingDataUploadCard';
 import NoMatch from '../../../../noMatch';
 
-import { editProblemInfo } from '../../../../../actions/myClass/problem';
+import {
+  editProblemInfo, deleteAssistingData, editAssistingData, addAssistingData,
+} from '../../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -46,6 +48,15 @@ const useStyles = makeStyles((theme) => ({
   },
   statusSwitch: {
     marginTop: '20px',
+  },
+  clearButton: {
+    marginLeft: '24px',
+    backgroundColor: '#FFFFFF',
+    border: 'solid',
+    borderColor: '#DDDDDD',
+  },
+  filterButton: {
+    justifyContent: 'space-between',
   },
 }));
 
@@ -75,6 +86,21 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const [ioDescription, setIoDescription] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].io_description);
   const [status, setStatus] = useState(problems[problemId] !== undefined && testcaseDataIds.length !== 0 ? !testcases[testcaseDataIds[0]].is_disabled : false);
 
+  const oriSampleData = [];
+  const oriTestcaseData = [];
+
+  const [sampleTableData, setSampleTableData] = useState();
+  const [testcaseTableData, setTestcaseTableData] = useState();
+  const [assistTableData, setAssistTableData] = useState(problems[problemId] !== undefined
+    ? problems[problemId].assistingDataIds.map((id) => ({
+      id: assistingData[id].filename,
+      filename: assistingData[id].filename,
+    }))
+    : []);
+
+  const [tempSelectedFileS, setTempSelectedFileS] = useState([]);
+  const [tempSelectedFileT, setTempSelectedFileT] = useState([]);
+  const [tempSelectedFileA, setTempSelectedFileA] = useState([]);
   const [selectedFileS, setSelectedFileS] = useState([]);
   const [selectedFileT, setSelectedFileT] = useState([]);
   const [selectedFileA, setSelectedFileA] = useState([]);
@@ -82,6 +108,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const [samplePopUp, setSamplePopUp] = useState(false);
   const [assistPopUp, setAssistPopUp] = useState(false);
   const [testingPopUp, setTestingPopUp] = useState(false);
+  const [warningPopUp, setWarningPopUp] = useState(false);
 
   const handleClosePopUp = () => {
     setSamplePopUp(false);
@@ -89,8 +116,67 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
     setTestingPopUp(false);
   };
 
+  const handleAssistTempUpload = () => {
+    // add file name to table;
+    const newData = assistTableData;
+    tempSelectedFileA.forEach((file) => {
+      let flag = false;
+      assistTableData.every((item) => {
+        if (item.filename === file.name) {
+          flag = true;
+          return false;
+        }
+        return true;
+      });
+      if (flag === false) {
+        newData.push({ id: file.name, filename: file.name });
+      }
+    });
+    setAssistTableData(newData);
+    setSelectedFileA(tempSelectedFileA);
+    setTempSelectedFileA([]);
+  };
+
   const handleSave = () => {
-    dispatch(editProblemInfo(authToken, problemId, title, problems[problemId].full_score, !status, description, ioDescription, '', ''));
+    // dispatch(editProblemInfo(authToken, problemId, title, problems[problemId].full_score, !status, description, ioDescription, '', ''));
+
+    // handle sample file, testcase file
+
+    // handle assisting file
+    let selectedFileABackUp = [...selectedFileA];
+    problems[problemId].assistingDataIds.forEach((id) => {
+      let flag = false;
+      assistTableData.every((item) => {
+        if (assistingData[id].filename === item.filename) {
+          // check exist in selectedFile or not
+          // if true, then edit and delete in selectedFileA
+          selectedFileA.every((file) => {
+            if (file.name === assistingData[id].filename) {
+              // edit
+              console.log(assistingData[id].filename, 'needs to be edited');
+              dispatch(editAssistingData(authToken, id, file));
+              selectedFileABackUp = selectedFileABackUp.filter((newFile) => !file);
+              return false;
+            }
+            return true;
+          });
+          flag = true;
+          return false;
+        }
+        return true;
+      });
+      if (flag === false) {
+        // delete
+        console.log(assistingData[id].filename, ' needs to be deleted.');
+        dispatch(deleteAssistingData(authToken, id));
+      }
+    });
+
+    selectedFileABackUp.forEach((file) => {
+      console.log(file.name, 'needs to be add');
+      dispatch(addAssistingData(authToken, problemId, file));
+    });
+
     closeEdit();
   };
 
@@ -301,26 +387,50 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
               label: 'File Name',
               minWidth: 40,
               align: 'center',
-              width: 200,
+              width: 400,
               type: 'string',
             },
           ]}
-          data={
-            problems[problemId] !== undefined
-              ? problems[problemId].assistingDataIds.map((id) => ({
-                filename: assistingData[id].filename,
-              }))
-              : []
-          }
+          data={assistTableData}
+          setData={setAssistTableData}
         />
       </SimpleBar>
       <div className={classNames.buttons}>
         <Button color="default" onClick={() => closeEdit()}>Cancel</Button>
         <Button color="primary" onClick={handleSave}>Save</Button>
       </div>
-      <SampleUploadCard popUp={samplePopUp} closePopUp={handleClosePopUp} selectedFile={selectedFileS} setSelectedFile={setSelectedFileS} />
-      <AssistingDataUploadCard popUp={assistPopUp} closePopUp={handleClosePopUp} selectedFile={selectedFileA} setSelectedFile={setSelectedFileA} />
-      <TestingDataUploadCard popUp={testingPopUp} closePopUp={handleClosePopUp} selectedFile={selectedFileT} setSelectedFile={setSelectedFileT} />
+      <SampleUploadCard popUp={samplePopUp} closePopUp={handleClosePopUp} selectedFile={tempSelectedFileS} setSelectedFile={setTempSelectedFileS} />
+      <AssistingDataUploadCard popUp={assistPopUp} closePopUp={handleClosePopUp} selectedFile={tempSelectedFileA} setSelectedFile={setTempSelectedFileA} handleTempUpload={handleAssistTempUpload} />
+      <TestingDataUploadCard popUp={testingPopUp} closePopUp={handleClosePopUp} selectedFile={tempSelectedFileT} setSelectedFile={setTempSelectedFileT} />
+      <Dialog
+        open={warningPopUp}
+        onClose={() => setWarningPopUp(false)}
+        fullWidth
+      >
+        <DialogTitle id="dialog-slide-title">
+          <Typography variant="h4">Unsaved Changes</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body2">
+            You have unsaved changes, do you want to save your changes or back to edit?
+          </Typography>
+        </DialogContent>
+        <DialogActions className={classNames.filterButton}>
+          <div>
+            <Button onClick={() => setWarningPopUp(false)} className={classNames.clearButton}>
+              Back to Edit
+            </Button>
+          </div>
+          <div>
+            <Button color="default">
+              Do not Save
+            </Button>
+            <Button color="primary">
+              Save
+            </Button>
+          </div>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

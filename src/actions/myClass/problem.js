@@ -372,6 +372,70 @@ const deleteAssistingData = (token, assistingId) => async (dispatch) => {
   }
 };
 
+const editAssistingData = (token, assistingId, file) => async (dispatch) => {
+  dispatch({ type: problemConstants.EDIT_ASSISTING_DATA_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+    'Content-Type': 'multipart/form-data',
+  };
+  const formData = new FormData();
+  formData.append('assisting_data', file);
+
+  try {
+    const res = await agent.put(`/assisting-data/${assistingId}`, formData, auth);
+    console.log(res);
+    if (res.data.success) {
+      dispatch({
+        type: problemConstants.EDIT_ASSISTING_DATA_SUCCESS,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.EDIT_ASSISTING_DATA_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.EDIT_ASSISTING_DATA_FAIL,
+      errors: err,
+    });
+  }
+};
+
+const addAssistingData = (token, problemId, file) => async (dispatch) => {
+  dispatch({ type: problemConstants.ADD_ASSISTING_DATA_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+      'Content-Type': 'multipart/form-data',
+    },
+  };
+  const formData = new FormData();
+  formData.append('assisting_data', file);
+
+  try {
+    const res = await agent.post(`/problem/${problemId}/assisting-data`, formData, auth);
+    console.log('ADD', res);
+    if (res.data.success) {
+      dispatch({
+        type: problemConstants.ADD_ASSISTING_DATA_SUCCESS,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.ADD_ASSISTING_DATA_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.ADD_ASSISTING_DATA_FAIL,
+      errors: err,
+    });
+  }
+};
+
 export {
   browseChallengeOverview,
   readProblemInfo,
@@ -383,4 +447,6 @@ export {
   browseAssistingData,
   deleteTestcase,
   deleteAssistingData,
+  editAssistingData,
+  addAssistingData,
 };

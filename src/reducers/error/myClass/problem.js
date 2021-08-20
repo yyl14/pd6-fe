@@ -11,6 +11,8 @@ const initialState = {
   deleteProblem: null,
   deleteTestcase: null,
   deleteAssistingData: null,
+  editAssistingData: null,
+  addAssistingData: null,
 };
 
 export default function problem(state = initialState, action) {
@@ -64,6 +66,16 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         deleteAssistingData: action.errors,
+      };
+    case problemConstants.EDIT_ASSISTING_DATA_FAIL:
+      return {
+        ...state,
+        editAssistingData: action.errors,
+      };
+    case problemConstants.ADD_ASSISTING_DATA_FAIL:
+      return {
+        ...state,
+        addAssistingData: action.errors,
       };
     default: {
       return state;
