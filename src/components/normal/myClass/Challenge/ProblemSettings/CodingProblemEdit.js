@@ -138,6 +138,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const handleSampleTempUpload = (newSelectedFiles) => {
     // TODO: set table data
     console.log(newSelectedFiles);
+    const newTableData = sampleTableData;
     // setSelectedFileS(tempSelectedFileS);
     setTempSelectedFileS([]);
   };
@@ -174,9 +175,9 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const handleSave = () => {
     dispatch(editProblemInfo(authToken, problemId, title, problems[problemId].full_score, !status, description, ioDescription, '', ''));
 
-    // handle sample file
+    // TODO: handle sample file
 
-    // handle testcase file
+    // TODO: handle testcase file
 
     // handle assisting file
     let selectedFileABackUp = [...selectedFileA];

@@ -34,30 +34,36 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function TestingDataUploadCard({
-  popUp = false, closePopUp, selectedFile, setSelectedFile,
+  popUp = false, closePopUp, selectedFile, setSelectedFile, handleTempUpload,
 }) {
   const {
     courseId, classId, challengeId, problemId,
   } = useParams();
-  const history = useHistory();
   const classes = useStyles();
 
-  const dispatch = useDispatch();
-
-  const problems = useSelector((state) => state.problem.byId);
-  const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
   const [time, setTime] = useState(100000);
   const [memory, setMemory] = useState(65535);
-  const [score, setScore] = useState(10);
-  const [tempSelectedFile, setTempSelectedFile] = useState([]);
+  const [score, setScore] = useState(2);
 
   const handleConfirm = () => {
+    const newSelectedFile = selectedFile.map((data) => ({
+      ...data,
+      no: data.id,
+      time_limit: time,
+      memory_limit: memory,
+    }));
+    setSelectedFile(newSelectedFile);
+    handleTempUpload(newSelectedFile);
     closePopUp();
   };
 
+  const handleCancel = () => {
+    setSelectedFile([]);
+    closePopUp();
+  };
   return (
     <>
       <Dialog
@@ -93,10 +99,10 @@ export default function TestingDataUploadCard({
               onChange={(e) => setScore(e.target.value)}
             />
           </AlignedText>
-          <IOFileUploadArea text="Sample Data" uploadCase="testcase" selectedFile={tempSelectedFile} setSelectedFile={setTempSelectedFile} />
+          <IOFileUploadArea text="Testing Data" uploadCase="testcase" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => closePopUp()} color="default">
+          <Button onClick={handleCancel} color="default">
             Cancel
           </Button>
           <Button
