@@ -61,29 +61,28 @@ const editClassMember = (token, classId, editedList) => (dispatch) => {
       });
     });
 };
+const deleteClassMember = (token, classId, memberId) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  dispatch({ type: commonConstants.DELETE_CLASS_MEMBER_REQUEST });
 
-// const deleteClassMember = (token, classId, memberId) => (dispatch) => {
-//   const auth = {
-//     headers: {
-//       'Auth-Token': token,
-//     },
-//   };
-//   dispatch({ type: commonConstants.DELETE_CLASS_MEMBER_REQUEST });
-
-//   agent
-//     .delete(`/class/${classId}/member/${memberId}`, auth)
-//     .then((res) => {
-//       dispatch({
-//         type: commonConstants.DELETE_CLASS_MEMBER_SUCCESS,
-//       });
-//     })
-//     .catch((err) => {
-//       dispatch({
-//         type: commonConstants.DELETE_CLASS_MEMBER_FAIL,
-//         error: err,
-//       });
-//     });
-// };
+  agent
+    .delete(`/class/${classId}/member/${memberId}`, auth)
+    .then((res) => {
+      dispatch({
+        type: commonConstants.DELETE_CLASS_MEMBER_SUCCESS,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: commonConstants.DELETE_CLASS_MEMBER_FAIL,
+        error: err,
+      });
+    });
+};
 
 const fetchCourse = (token, courseId) => async (dispatch) => {
   try {
