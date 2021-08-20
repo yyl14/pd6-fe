@@ -27,7 +27,7 @@ export default function BasicInfoEdit(props) {
   const classes = useStyles();
 
   const { accountId } = useParams();
-  const authToken = useSelector((state) => state.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
 
   const handleSave = () => {

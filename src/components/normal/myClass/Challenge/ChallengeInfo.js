@@ -49,7 +49,7 @@ export default function ChallengeInfo() {
   const [inputs, setInputs] = useState('');
   const [tableData, setTableData] = useState([]);
 
-  const authToken = useSelector((state) => state.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.problem);
   const userClasses = useSelector((state) => state.user.classes);
   const challenges = useSelector((state) => state.challenges.byId);
