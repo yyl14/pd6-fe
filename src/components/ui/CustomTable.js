@@ -131,16 +131,6 @@ const useStyles = makeStyles((theme) => ({
   detailLink: {
     color: 'black',
   },
-  textLink: {
-    textDecoration: 'none',
-    color: theme.palette.primary.main,
-    '&:hover': {
-      color: theme.palette.primary.hover,
-    },
-    '&:active': {
-      color: theme.palette.primary.dark,
-    },
-  },
   toggleButtonIcon: {
     height: '20px',
     width: '20px',
@@ -227,22 +217,23 @@ export default function CustomTable({
     }
   }, [filterData.length, pageInput, rowsPerPage]);
 
-  // useEffect(() => {
-  //   if (search !== '') {
-  //     const newData = data.filter((row) => {
-  //       let cnt = 0;
-  //       columns.forEach((column) => {
-  //         if (row[column.id].indexOf(search) >= 0) {
-  //           cnt += 1;
-  //         }
-  //       });
-  //       return cnt > 0;
-  //     });
-  //     setFilterData(newData);
-  //   } else {
-  //     setFilterData(data);
-  //   }
-  // }, [columns, data, search]);
+  useEffect(() => {
+    // if (search !== '') {
+    //   const newData = data.filter((row) => {
+    //     let cnt = 0;
+    //     columns.forEach((column) => {
+    //       if (row[column.id].indexOf(search) >= 0) {
+    //         cnt += 1;
+    //       }
+    //     });
+    //     return cnt > 0;
+    //   });
+    //   setFilterData(newData);
+    // } else {
+    //   setFilterData(data);
+    // }
+    setFilterData(data);
+  }, [columns, data]);
 
   return (
     <>
@@ -296,7 +287,7 @@ export default function CustomTable({
                       className={classes.tableHeadCell}
                       style={{ minWidth: column.minWidth, width: column.width }}
                     >
-                      {column.label}
+                      <b>{column.label}</b>
                       {/* <div className={classes.column}>
                         <div className={labelMoveLeft(columnComponent, columns, column)}>
                           <b>{column.label}</b>

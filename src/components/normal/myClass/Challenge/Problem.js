@@ -13,11 +13,9 @@ import {
 import { useHistory, useParams } from 'react-router-dom';
 
 import CodingProblem from './CodingProblem';
-import EssayManagerAdd from './EssayManagerAdd';
-import EssayManagerSetting from './EssayManagerSetting';
-import EssayManagerEdit from './EssayManagerEdit';
-import EssayNormal from './EssayNormal';
-import { readProblem } from '../../../../actions/myClass/problem';
+import EssayAdd from './EssayAdd';
+import EssaySetting from './EssaySetting';
+import { readProblem, readProblemInfo } from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -42,20 +40,24 @@ export default function Problem() {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(readProblem(authToken, problemId));
-  }, [authToken, dispatch, problemId]);
+  // useEffect(() => {
+  //   dispatch(readProblemInfo(authToken, problemId, challengeId));
+  // }, [authToken, dispatch, problemId, challengeId]);
   // if (courses.byId[courseId] === undefined || courses.byId[courseId].name === undefined) {
 
   //   return <NoMatch />;
   // }
+
+  if (loading.readProblem) {
+    return <div>loading...</div>;
+  }
 
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
         this is problem
       </Typography>
-      <EssayNormal />
+      <EssaySetting />
     </>
   );
 }

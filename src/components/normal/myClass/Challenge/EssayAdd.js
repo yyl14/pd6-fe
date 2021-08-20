@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EssayManagerAdd() {
+export default function EssayAdd() {
   const {
     courseId, classId, challengeId, problemId,
   } = useParams();
@@ -55,19 +55,6 @@ export default function EssayManagerAdd() {
   const [addTitle, setAddTitle] = useState('');
   const [addDescription, setAddDescription] = useState('');
 
-  const [popUpUpload, setPopUpUpload] = useState(false);
-
-  const handleClickUpload = () => {
-    setPopUpUpload(true);
-  };
-  const handleClosePopUpUpload = () => {
-    setPopUpUpload(false);
-  };
-
-  const handleUpload = (e) => {
-
-  };
-
   const [inputs, setInputs] = useState({
     title: '',
     description: '',
@@ -80,7 +67,12 @@ export default function EssayManagerAdd() {
     };
     console.log(body);
     // dispatch(addAnnouncement(authToken, body));
-    // history.push to EssayManagerEdit
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`);
+    // history.push to EssaySetting
+  };
+  const handleClickCancel = () => {
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`);
+    // history.push to EssaySetting
   };
 
   return (
@@ -88,7 +80,7 @@ export default function EssayManagerAdd() {
       <Typography className={classNames.pageHeader} variant="h3">
         {/* {problem.challenge_label} */}
         {' '}
-        CM Add / Essay
+        Add / Essay
       </Typography>
       <div>
         <SimpleBar
@@ -121,7 +113,7 @@ export default function EssayManagerAdd() {
           />
         </SimpleBar>
         <AlignedText variant="body1" className={classNames.button}>
-          <Button>Cancel</Button>
+          <Button onClick={handleClickCancel}>Cancel</Button>
           <Button color="primary" onClick={handleClickSave}>Save</Button>
         </AlignedText>
       </div>
