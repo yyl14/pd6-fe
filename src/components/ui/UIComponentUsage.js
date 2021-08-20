@@ -122,10 +122,13 @@ export default function UIComponentUsage() {
     filter: ['Select all'],
     sort: '(None)',
   });
+  const [multiSelect, setMultiSelect] = useState([]);
 
   return (
     <div>
-      <Typography variant="h3" className={classes.bigTitle}>Themed Components</Typography>
+      <Typography variant="h3" className={classes.bigTitle}>
+        Themed Components
+      </Typography>
       <div className={classes.buttonsWrapper}>
         <Typography variant="h4">Button</Typography>
         <hr className={classes.divider} />
@@ -139,54 +142,112 @@ export default function UIComponentUsage() {
             </div>
             <div className={classes.children}>
               <Button variant="outlined">Edit</Button>
-              <Button variant="outlined" color="primary">Edit</Button>
-              <Button variant="outlined" color="secondary">Edit</Button>
-              <Button variant="outlined" disabled>Edit</Button>
+              <Button variant="outlined" color="primary">
+                Edit
+              </Button>
+              <Button variant="outlined" color="secondary">
+                Edit
+              </Button>
+              <Button variant="outlined" disabled>
+                Edit
+              </Button>
             </div>
             <div className={classes.children}>
-              <Button variant="text" color="primary">Edit</Button>
-              <Button variant="text" color="secondary">Edit</Button>
-              <Button variant="text" disabled>Edit</Button>
+              <Button variant="text" color="primary">
+                Edit
+              </Button>
+              <Button variant="text" color="secondary">
+                Edit
+              </Button>
+              <Button variant="text" disabled>
+                Edit
+              </Button>
             </div>
             <div className={classes.children}>
               <Button startIcon={<Icon.Statistic />}>Submit</Button>
-              <Button color="primary" startIcon={<Icon.Statistic />}>Submit</Button>
-              <Button color="secondary" startIcon={<Icon.Statistic />}>Submit</Button>
-              <Button disabled startIcon={<Icon.Statistic />}>Submit</Button>
+              <Button color="primary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button color="secondary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button disabled startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
             </div>
             <div className={classes.children}>
-              <Button variant="outlined" startIcon={<Icon.Statistic />}>Submit</Button>
-              <Button variant="outlined" color="primary" startIcon={<Icon.Statistic />}>Submit</Button>
-              <Button variant="outlined" color="secondary" startIcon={<Icon.Statistic />}>Submit</Button>
-              <Button variant="outlined" disabled startIcon={<Icon.Statistic />}>Submit</Button>
+              <Button variant="outlined" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button variant="outlined" color="primary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button variant="outlined" color="secondary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button variant="outlined" disabled startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
             </div>
             <div className={classes.children}>
-              <Button variant="text" color="primary" startIcon={<Icon.Statistic />}>Submit</Button>
-              <Button variant="text" color="secondary" startIcon={<Icon.Statistic />}>Submit</Button>
-              <Button variant="text" disabled startIcon={<Icon.Statistic />}>Submit</Button>
+              <Button variant="text" color="primary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button variant="text" color="secondary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button variant="text" disabled startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
             </div>
           </div>
           <div className={classes.buttons}>
             <div className={classes.children}>
-              <Button><Icon.Statistic /></Button>
-              <Button color="primary"><Icon.Statistic /></Button>
-              <Button color="secondary"><Icon.Statistic /></Button>
-              <Button disabled><Icon.Statistic /></Button>
+              <Button>
+                <Icon.Statistic />
+              </Button>
+              <Button color="primary">
+                <Icon.Statistic />
+              </Button>
+              <Button color="secondary">
+                <Icon.Statistic />
+              </Button>
+              <Button disabled>
+                <Icon.Statistic />
+              </Button>
             </div>
             <div className={classes.children}>
-              <Button variant="outlined"><Icon.Statistic /></Button>
-              <Button variant="outlined" color="primary"><Icon.Statistic /></Button>
-              <Button variant="outlined" color="secondary"><Icon.Statistic /></Button>
-              <Button variant="outlined" disabled><Icon.Statistic /></Button>
+              <Button variant="outlined">
+                <Icon.Statistic />
+              </Button>
+              <Button variant="outlined" color="primary">
+                <Icon.Statistic />
+              </Button>
+              <Button variant="outlined" color="secondary">
+                <Icon.Statistic />
+              </Button>
+              <Button variant="outlined" disabled>
+                <Icon.Statistic />
+              </Button>
             </div>
             <div className={classes.children}>
-              <Button variant="text" color="primary"><Icon.Statistic /></Button>
-              <Button variant="text" color="secondary"><Icon.Statistic /></Button>
-              <Button variant="text" disabled><Icon.Statistic /></Button>
+              <Button variant="text" color="primary">
+                <Icon.Statistic />
+              </Button>
+              <Button variant="text" color="secondary">
+                <Icon.Statistic />
+              </Button>
+              <Button variant="text" disabled>
+                <Icon.Statistic />
+              </Button>
             </div>
             <div className={classes.children}>
-              <IconButton><Icon.ArrowForwardRoundedIcon /></IconButton>
-              <IconButton disabled><Icon.ArrowForwardRoundedIcon /></IconButton>
+              <IconButton>
+                <Icon.ArrowForwardRoundedIcon />
+              </IconButton>
+              <IconButton disabled>
+                <Icon.ArrowForwardRoundedIcon />
+              </IconButton>
             </div>
           </div>
         </div>
@@ -197,7 +258,14 @@ export default function UIComponentUsage() {
           <hr className={classes.divider} />
           <div className={classes.component}>
             <FormControlLabel
-              control={<Switch checked={switchStatus} onChange={(e) => setSwitchStatus(e.target.checked)} name="status" color="primary" />}
+              control={(
+                <Switch
+                  checked={switchStatus}
+                  onChange={(e) => setSwitchStatus(e.target.checked)}
+                  name="status"
+                  color="primary"
+                />
+              )}
               label={switchStatus ? 'Enabled' : 'Disabled'}
             />
           </div>
@@ -229,7 +297,7 @@ export default function UIComponentUsage() {
           <Typography variant="h4">MultiSelect</Typography>
           <hr className={classes.divider} />
           <div className={classes.component}>
-            <MultiSelect options={['option 1', 'option 2', 'option 3']} />
+            <MultiSelect options={['option 1', 'option 2', 'option 3']} value={multiSelect} setValue={setMultiSelect} />
           </div>
         </div>
       </div>
@@ -299,11 +367,10 @@ export default function UIComponentUsage() {
                 <Link href onClick={() => setShowSnackbarWithButton(false)}>
                   <Typography variant="h6">Undo</Typography>
                 </Link>
-            )}
+              )}
             />
           </div>
         </div>
-
       </div>
 
       <Typography variant="h3" className={classes.bigTitle}>
