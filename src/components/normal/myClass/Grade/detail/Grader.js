@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import {
   Button, Typography,
 } from '@material-ui/core';
@@ -12,13 +12,15 @@ export default function Grader(props) {
     <>
       <SimpleBar title="Grader">
         <AlignedText text="Username" maxWidth="lg" childrenType="text">
-          <Typography variant="body1">{props.username}</Typography>
+          <Typography variant="body1">
+            <Link to={props.link}>{props.grader.username}</Link>
+          </Typography>
         </AlignedText>
         <AlignedText text="Student ID" maxWidth="lg" childrenType="text">
-          <Typography variant="body1">{props.studentId}</Typography>
+          <Typography variant="body1">{props.grader.student_id}</Typography>
         </AlignedText>
         <AlignedText text="Real Name" maxWidth="lg" childrenType="text">
-          <Typography variant="body1">{props.realName}</Typography>
+          <Typography variant="body1">{props.grader.real_name}</Typography>
         </AlignedText>
       </SimpleBar>
     </>

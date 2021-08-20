@@ -18,7 +18,7 @@ export default function GradeDelete(props) {
 
   const handleDelete = () => {
     setPopUp(false);
-    // dispatch(deleteGrade(authToken, gradeId));
+    dispatch(deleteGrade(authToken, gradeId));
     history.push(`/my-class/${courseId}/${classId}/grade`);
   };
 

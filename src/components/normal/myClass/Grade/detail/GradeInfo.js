@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Button, Typography,
 } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import moment from 'moment-timezone';
 import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
@@ -21,25 +22,27 @@ export default function BasicInfo(props) {
       >
         <>
           <AlignedText text="Username" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">{props.username}</Typography>
+            <Typography variant="body1">
+              <Link to={props.link}>{props.receiver.username}</Link>
+            </Typography>
           </AlignedText>
           <AlignedText text="Student ID" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">{props.studentId}</Typography>
+            <Typography variant="body1">{props.receiver.student_id}</Typography>
           </AlignedText>
           <AlignedText text="Real Name" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">{props.realName}</Typography>
+            <Typography variant="body1">{props.receiver.real_name}</Typography>
           </AlignedText>
           <AlignedText text="Challenge Title" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">{props.title}</Typography>
+            <Typography variant="body1">{props.grade.title}</Typography>
           </AlignedText>
           <AlignedText text="Score" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">{props.score}</Typography>
+            <Typography variant="body1">{props.grade.score}</Typography>
           </AlignedText>
           <AlignedText text="Comment" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">{props.comment}</Typography>
+            <Typography variant="body1">{props.grade.comment}</Typography>
           </AlignedText>
           <AlignedText text="Submitted Time" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">{moment(props.time).format('YYYY-MM-DD, HH:mm')}</Typography>
+            <Typography variant="body1">{moment(props.grade.time).format('YYYY-MM-DD, HH:mm')}</Typography>
           </AlignedText>
         </>
       </SimpleBar>

@@ -25,43 +25,44 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 export default function AccountSetting() {
-  const classes = useStyles();
+  const classNames = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const { classId, gradeId } = useParams();
+  const { courseId, classId, gradeId } = useParams();
 
   const authToken = useSelector((state) => state.auth.token);
   const members = useSelector((state) => state.classMembers.byId);
   const grades = useSelector((state) => state.grades.byId);
   const loading = useSelector((state) => state.loading.myClass.grade);
+  const commonLoading = useSelector((state) => state.loading.common.common);
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
 
-  const grade = grades[gradeId];
-  const grader = members[grade.grader_id];
-  const receiver = members[grade.receiver_id];
+  const userLink = '/user_profile';
+  const graderLink = '/grader_profile';
 
   const [editGradeInfo, setEditGradeInfo] = useState(false);
   const [popUp, setPopUp] = useState(false);
 
   useEffect(() => {
+    console.log('fetch member');
     dispatch(fetchClassMembers(authToken, classId));
-  }, [dispatch, authToken, classId, editGradeInfo]);
+  }, [dispatch, authToken, classId]);
 
   useEffect(() => {
     if (!loading.editGrade) {
+      console.log('fetch grade');
       dispatch(fetchClassGrade(authToken, classId));
     }
-  }, [dispatch, authToken, loading.editGrade, classId]);
+  }, [dispatch, authToken, classId, loading.editGrade]);
 
   useEffect(() => {
-    user.classes.map((item) => {
-      if (`${item.class_id}` === classId) {
+    user.classes.forEach((item) => {
+      if (item.class_id === parseInt(classId, 10)) {
         if (item.role === 'MANAGER') {
           setIsManager(true);
         }
       }
-      return <></>;
     });
   }, [classId, user.classes]);
 
@@ -74,7 +75,7 @@ export default function AccountSetting() {
   };
 
   if (grades[gradeId] === undefined || members === undefined) {
-    if (loading.fetchClassGrade || loading.fetchClassMembers || loading.editGrade) {
+    if (loading.fetchClassGrade || commonLoading.fetchClassMembers) {
       return <div>loading...</div>;
     }
     return <NoMatch />;
@@ -82,45 +83,36 @@ export default function AccountSetting() {
 
   return (
     <>
-      <Typography variant="h3" className={classes.pageHeader}>
+      <Typography variant="h3" className={classNames.pageHeader}>
         Grade / Detail
       </Typography>
 
       {editGradeInfo ? (
         <GradeInfoEdit
+          receiver={members[grades[gradeId].receiver_id]}
+          grade={grades[gradeId]}
+          link={userLink}
           handleBack={handleBack}
-          username={receiver.username}
-          studentId={receiver.student_id}
-          realName={receiver.real_name}
-          title={grade.title}
-          score={grade.score}
-          comment={grade.comment}
-          time={grade.update_time}
         />
       ) : (
         <GradeInfo
-          handleEdit={handleEdit}
-          username={receiver.username}
-          studentId={receiver.student_id}
-          realName={receiver.real_name}
-          title={grade.title}
-          score={grade.score}
-          comment={grade.comment}
-          time={grade.update_time}
           isManager={isManager}
+          receiver={members[grades[gradeId].receiver_id]}
+          grade={grades[gradeId]}
+          link={userLink}
+          handleEdit={handleEdit}
         />
       )}
 
       <Grader
-        username={grader.username}
-        studentId={grader.student_id}
-        realName={grader.real_name}
+        grader={members[grades[gradeId].grader_id]}
+        link={graderLink}
       />
 
       {isManager && (
         <GradeDelete
-          username={receiver.username}
-          title={grade.title}
+          username={members[grades[gradeId].receiver_id].username}
+          title={grades[gradeId].title}
         />
       )}
     </>

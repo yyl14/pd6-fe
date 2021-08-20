@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import {
-  Button, TextField, Typography, makeStyles, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
+  makeStyles,
+  Button,
+  TextField,
+  Typography,
+  Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
 } from '@material-ui/core';
 import moment from 'moment-timezone';
 import SimpleBar from '../../../../ui/SimpleBar';
@@ -25,9 +29,8 @@ export default function BasicInfoEdit(props) {
   const { gradeId } = useParams();
 
   const authToken = useSelector((state) => state.auth.token);
-  const [score, setScore] = useState(props.score);
-  const [comment, setComment] = useState(props.comment);
-  const [disabled, setDisabled] = useState(true);
+  const [score, setScore] = useState(props.grade.score);
+  const [comment, setComment] = useState(props.grade.comment);
 
   const handleSave = () => {
     if (score !== '') {
@@ -41,48 +44,43 @@ export default function BasicInfoEdit(props) {
       <SimpleBar title="Grade Information">
         <>
           <AlignedText text="Username" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">{props.username}</Typography>
+            <Typography variant="body1">
+              <Link to={props.link}>{props.receiver.username}</Link>
+            </Typography>
           </AlignedText>
           <AlignedText text="Student ID" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">{props.studentId}</Typography>
+            <Typography variant="body1">{props.receiver.student_id}</Typography>
           </AlignedText>
           <AlignedText text="Real Name" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">{props.realName}</Typography>
+            <Typography variant="body1">{props.receiver.real_name}</Typography>
           </AlignedText>
           <AlignedText text="Challenge Title" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">{props.title}</Typography>
+            <Typography variant="body1">{props.grade.title}</Typography>
           </AlignedText>
           <AlignedText text="Score" maxWidth="lg" childrenType="field">
             <TextField
               className={classes.textFieldScore}
               value={score}
-              onChange={(e) => {
-                setScore(e.target.value);
-                setDisabled(false);
-              }}
+              onChange={(e) => setScore(e.target.value)}
             />
           </AlignedText>
           <AlignedText text="Comment" maxWidth="lg" childrenType="field">
             <TextField
               className={classes.textFieldComment}
               value={comment}
-              onChange={(e) => {
-                setComment(e.target.value);
-                setDisabled(false);
-              }}
+              onChange={(e) => setComment(e.target.value)}
               multiline
               rows={5}
             />
           </AlignedText>
           <AlignedText text="Submitted Time" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">{moment(props.time).format('YYYY-MM-DD, HH:mm')}</Typography>
+            <Typography variant="body1">{moment(props.grade.time).format('YYYY-MM-DD, HH:mm')}</Typography>
           </AlignedText>
           <div>
             <Button onClick={() => props.handleBack()}>Cancel</Button>
             <Button
               color="primary"
               type="submit"
-              disabled={disabled}
               onClick={handleSave}
             >
               Save

@@ -13,36 +13,23 @@ import {
 import { useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 import moment from 'moment-timezone';
-import CustomTable from '../../../ui/CustomTable';
 import AlignedText from '../../../ui/AlignedText';
+import CustomTable from '../../../ui/CustomTable';
+import FileUploadArea from '../../../ui/FileUploadArea';
 import Icon from '../../../ui/icon/index';
+import { fetchClassGrade, addClassGrade, downloadGradeFile } from '../../../../actions/myClass/grade';
 import {
-  fetchClassGrade,
-  addClassGrade,
-  fetchAccountGrade,
-  fetchGradeTemplate,
-} from '../../../../actions/myClass/grade';
-import { fetchCourse, fetchClass, fetchClassMembers } from '../../../../actions/common/common';
+  fetchCourse, fetchClass, fetchClassMembers, downloadFile,
+} from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
   },
-  popUpLayout: {
-    width: '100%',
-  },
-  formatText: {
-    marginBottom: '16px',
-  },
-  formatTextContent: {
-    color: theme.palette.grey.A400,
-  },
-  divider: {
-    height: '1px',
-    margin: '0px',
-    border: `0px solid ${theme.palette.grey[300]}`,
-    backgroundColor: theme.palette.grey[300],
+  reminder: {
+    color: '#AAAAAA',
+    marginLeft: theme.spacing(2),
   },
   templateBtn: {
     marginRight: '155px',
@@ -50,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /* This is a level 4 component (page component) */
-// TODO: add card, browse, test template, username link
+// TODO: browse, test template
 
 export default function GradeList() {
   const classNames = useStyles();
@@ -71,7 +58,7 @@ export default function GradeList() {
   const [tableData, setTableData] = useState([]);
   const [popUp, setPopUp] = useState(false);
   const [inputTitle, setInputTitle] = useState('');
-  const [gradeFile, setGradeFile] = useState('');
+  const [selectedFile, setSelectedFile] = useState([]);
 
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
@@ -86,24 +73,14 @@ export default function GradeList() {
   }, [authToken, classId, dispatch, loading.addClassGrade]);
 
   useEffect(() => {
-    user.classes.map((item) => {
-      if (`${item.class_id}` === classId) {
+    user.classes.forEach((item) => {
+      if (item.class_id === parseInt(classId, 10)) {
         if (item.role === 'MANAGER') {
           setIsManager(true);
         }
       }
-      return <></>;
     });
   }, [classId, user.classes]);
-
-  // useEffect(() => {
-  //   setProfilePath(
-  //     memberIdd.map((id) => ({
-  //       ...members[id],
-  //       path: ``,
-  //     })),
-  //   );
-  // }, []);
 
   useEffect(() => {
     const newData = [];
@@ -119,6 +96,7 @@ export default function GradeList() {
               temp.time = moment(grades[id].update_time).format('YYYY-MM-DD, HH:mm');
               temp.id = grades[id].id;
               temp.path = `/my-class/${courseId}/${classId}/grade/${temp.id}`;
+              temp.user_path = '/';
             }
           });
           newData.push(temp);
@@ -134,30 +112,38 @@ export default function GradeList() {
           temp.time = moment(grades[id].update_time).format('YYYY-MM-DD, HH:mm');
           temp.id = grades[id].id;
           temp.path = `/my-class/${courseId}/${classId}/grade/${temp.id}`;
+          temp.user_path = '/';
           newData.push(temp);
         }
       });
     }
     setTableData(newData);
-  }, [members, memberIds, grades, courseId, classId, isManager, gradeIds, user.id]);
-  console.log(tableData);
+  }, [members, memberIds, grades, courseId, classId, isManager, gradeIds, user.id, tableData]);
 
   const handleChange = (event) => {
     setInputTitle(event.target.value);
   };
 
-  const add = () => {
+  const handleAdd = () => {
     setPopUp(false);
     setInputTitle('');
-    dispatch(addClassGrade(authToken, classId, gradeFile));
+    setSelectedFile([]);
+    dispatch(addClassGrade(authToken, classId, selectedFile));
+  };
+
+  const handleCancel = () => {
+    setPopUp(false);
+    setInputTitle('');
+    setSelectedFile([]);
   };
 
   const downloadTemplate = () => {
     setPopUp(false);
-    dispatch(fetchGradeTemplate(authToken));
+    dispatch(downloadGradeFile(authToken, true));
+    dispatch(downloadFile(authToken, grades.template));
   };
 
-  if (courses[courseId] === undefined || classes[classId] === undefined) {
+  if (courses[courseId] === undefined || classes[classId] === undefined || grades === undefined) {
     if (loading.fetchCourse || loading.fetchClass || loading.fetchClassGrade || loading.addClassGrade) {
       return <div>loading...</div>;
     }
@@ -188,8 +174,8 @@ export default function GradeList() {
             minWidth: 50,
             align: 'center',
             width: 150,
-            type: 'string',
-            link_id: 'path',
+            type: 'link',
+            link_id: 'user_path',
           },
           {
             id: 'student_id',
@@ -235,50 +221,32 @@ export default function GradeList() {
         hasLink
         linkName="path"
       />
+
       <Dialog
         open={popUp}
         keepMounted
         onClose={() => setPopUp(false)}
-        className={classNames.popUpLayout}
         fullWidth
-        maxWidth="sm"
       >
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Add New Grades</Typography>
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body2" className={classNames.formatText}>
-            Grading file format:
-            <br />
-            <div className={classNames.formatTextContent}>
-            &ensp;&ensp;Receiver: student id (NTU only) &gt;= institute email &gt; #username
-              <br />
-            &ensp;&ensp;Score: number or string
-              <br />
-            &ensp;&ensp;Comment: string (optional)
-              <br />
-            &ensp;&ensp;Grader: same as receiver
-              <br />
-            </div>
-            Download template file for more instructions.
-          </Typography>
+          <Typography variant="body2">Grade file format:</Typography>
+          <Typography variant="body2">Receiver: student id (NTU only) &gt;= institute email &gt; #username</Typography>
+          <Typography variant="body2" className={classes.reminder}>Score: number or string</Typography>
+          <Typography variant="body2" className={classes.reminder}>Comment: string (optional)</Typography>
+          <Typography variant="body2" className={classes.reminder}>Grader: same as receiver</Typography>
+          <Typography variant="body2">Download template file for more instructions.</Typography>
           <AlignedText text="Class" maxWidth="mg" childrenType="text">
             <Typography variant="body1">
-              {courses[courseId].name}
-              {' '}
-              {classes[classId].name}
+              {`${courses[courseId].name}  ${classes[classId].name}`}
             </Typography>
           </AlignedText>
           <AlignedText text="Title" maxWidth="mg" childrenType="field">
             <TextField id="title" name="title" value={inputTitle} onChange={(e) => handleChange(e)} />
           </AlignedText>
-          <AlignedText text="Grading File" maxWidth="mg" childrenType="field">
-            <Button variant="outlined" color="primary" startIcon={<Icon.Folder />}>
-              Browse
-            </Button>
-            <TextField type="file">test</TextField>
-          </AlignedText>
-          <hr className={classes.divider} />
+          <FileUploadArea text="Grade File" uploadCase="sample" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
         </DialogContent>
         <DialogActions>
           <Button
@@ -291,15 +259,10 @@ export default function GradeList() {
           >
             Template
           </Button>
-          <Button onClick={() => setPopUp(false)} color="default">
+          <Button onClick={handleCancel} color="default">
             Cancel
           </Button>
-          <Button
-            onClick={() => {
-              add();
-            }}
-            color="primary"
-          >
+          <Button onClick={handleAdd} color="primary">
             Add
           </Button>
         </DialogActions>
