@@ -37,8 +37,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /* This is a level 4 component (page component) */
-// TODO: browse, test template
-
 export default function GradeList() {
   const classNames = useStyles();
   const dispatch = useDispatch();
@@ -64,6 +62,7 @@ export default function GradeList() {
     dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchClass(authToken, classId));
     dispatch(fetchClassMembers(authToken, classId));
+    dispatch(downloadGradeFile(authToken, true));
   }, [authToken, classId, courseId, dispatch]);
 
   useEffect(() => {
@@ -118,7 +117,7 @@ export default function GradeList() {
       });
     }
     setTableData(newData);
-  }, [members, memberIds, grades, courseId, classId, isManager, gradeIds, user.id, tableData]);
+  }, [members, memberIds, grades, courseId, classId, isManager, gradeIds, user.id]);
 
   const handleChange = (event) => {
     setInputTitle(event.target.value);
@@ -139,8 +138,8 @@ export default function GradeList() {
 
   const downloadTemplate = () => {
     setPopUp(false);
-    dispatch(downloadGradeFile(authToken, true));
-    dispatch(downloadFile(authToken, grades.template));
+    console.log(grades);
+    setTimeout(dispatch(downloadFile(authToken, grades.template)), 1000);
   };
 
   if (courses[courseId] === undefined || classes[classId] === undefined || grades === undefined) {
@@ -246,7 +245,7 @@ export default function GradeList() {
           <AlignedText text="Title" maxWidth="mg" childrenType="field">
             <TextField id="title" name="title" value={inputTitle} onChange={(e) => handleChange(e)} />
           </AlignedText>
-          <FileUploadArea text="Grade File" uploadCase="sample" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
+          <FileUploadArea text="Grade File" fileAcceptFormat=".csv" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
         </DialogContent>
         <DialogActions>
           <Button
