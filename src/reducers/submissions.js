@@ -4,10 +4,7 @@ import { problemConstants } from '../actions/myClass/constant';
 const byId = (state = {}, action) => {
   switch (action.type) {
     case problemConstants.READ_SUBMISSION_SUCCESS: {
-      return {
-        ...state,
-        [action.payload.id]: action.payload,
-      };
+      return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), {});
     }
     default:
       return state;
@@ -16,8 +13,10 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
-    case problemConstants.READ_SUBMISSION_SUCCESS:
-      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+    case problemConstants.READ_SUBMISSION_SUCCESS: {
+      return action.payload.map((item) => item.id);
+    }
+
     default:
       return state;
   }

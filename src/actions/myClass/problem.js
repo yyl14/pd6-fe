@@ -75,8 +75,37 @@ const readProblemInfo = (token, problemId, challengeId) => async (dispatch) => {
   }
 };
 
-const readSubmissionDetail = (token, submissionId, challengeId, problemId) => async (dispatch) => {
+const readSubmission = (token, accountId, problemId) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_SUBMISSION_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const subInfo = await agent.get(`/submission?account_id=${accountId}&problem_id=${parseInt(problemId, 10)}`, auth);
+    if (subInfo.data.success) {
+      dispatch({
+        type: problemConstants.READ_SUBMISSION_SUCCESS,
+        payload: subInfo.data.data,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.READ_SUBMISSION_FAIL,
+        errors: subInfo.data.error,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: problemConstants.READ_SUBMISSION_FAIL,
+      errors: err,
+    });
+  }
+};
+
+const readSubmissionDetail = (token, submissionId, problemId, challengeId) => async (dispatch) => {
+  // dispatch({ type: problemConstants.READ_SUBMISSION_START });
   dispatch({ type: problemConstants.READ_SUBMISSION_JUDGE_START });
   dispatch({ type: problemConstants.READ_CHALLENGE_START });
   dispatch({ type: problemConstants.READ_PROBLEM_START });
@@ -86,7 +115,7 @@ const readSubmissionDetail = (token, submissionId, challengeId, problemId) => as
     },
   };
   // try {
-  //   const subInfo = await agent.get(`/submission/${submissionId}`, auth);
+  //   const subInfo = await agent.get(`/submission?account_id=${accountId}&problem_id=${parseInt(problemId, 10)}`, auth);
   //   if (subInfo.data.success) {
   //     dispatch({
   //       type: problemConstants.READ_SUBMISSION_SUCCESS,
@@ -104,25 +133,27 @@ const readSubmissionDetail = (token, submissionId, challengeId, problemId) => as
   //     errors: err,
   //   });
   // }
-  // try {
-  //   const judgment = await agent.get(`/submission/${submissionId}/judgement`, auth);
-  //   if (judgment.data.success) {
-  //     dispatch({
-  //       type: problemConstants.READ_SUBMISSION_JUDGE_SUCCESS,
-  //       payload: judgment.data.data,
-  //     });
-  //   } else {
-  //     dispatch({
-  //       type: problemConstants.READ_SUBMISSION_JUDGE_FAIL,
-  //       errors: judgment.data.error,
-  //     });
-  //   }
-  // } catch (err) {
-  //   dispatch({
-  //     type: problemConstants.READ_SUBMISSION_JUDGE_FAIL,
-  //     errors: err,
-  //   });
-  // }
+
+  try {
+    const judgment = await agent.get(`/submission/${submissionId}/judgment`, auth);
+    if (judgment.data.success) {
+      dispatch({
+        type: problemConstants.READ_SUBMISSION_JUDGE_SUCCESS,
+        payload: judgment.data.data,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.READ_SUBMISSION_JUDGE_FAIL,
+        errors: judgment.data.error,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: problemConstants.READ_SUBMISSION_JUDGE_FAIL,
+      errors: err,
+    });
+  }
   try {
     const challenge = await agent.get(`/challenge/${challengeId}`, auth);
     if (challenge.data.success) {
@@ -168,4 +199,5 @@ export {
   browseChallengeOverview,
   readProblemInfo,
   readSubmissionDetail,
+  readSubmission,
 };
