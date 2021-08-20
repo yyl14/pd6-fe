@@ -14,6 +14,7 @@ import {
   DialogTitle,
   makeStyles,
 } from '@material-ui/core';
+import { deleteClassMember } from '../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -60,12 +61,21 @@ const MemberEdit = ({
   backToMemberList, members, onEditMembers, loading,
 }) => {
   const classes = useStyles();
+
   const [TA, setTA] = useState([]);
   const [student, setStudent] = useState([]);
   const [guest, setGuest] = useState([]);
   const [TAChanged, setTAChanged] = useState(false);
   const [studentChanged, setStudentChanged] = useState(false);
   const [guestChanged, setGuestChanged] = useState(false);
+
+  const [TAAddList, setTAAddList] = useState([]);
+  const [studentAddList, setStudentAddList] = useState([]);
+  const [guestAddList, setGuestAddList] = useState([]);
+  const [TADeleteList, setTADeleteList] = useState([]);
+  const [studentDeleteList, setStudentDeleteList] = useState([]);
+  const [guestDeleteList, setGuestDeleteList] = useState([]);
+
   const [showUnsaveDialog, setShowUnsaveDialog] = useState(false);
   const unblockHandle = useRef();
   const targetLocation = useRef();
@@ -119,6 +129,19 @@ const MemberEdit = ({
           .map((member) => member.student_id)
           .join('\n'),
     );
+    setTAAddList(e.target.value
+      .split('\n')
+      .filter((id) => members
+        .filter((item) => item.role === 'MANAGER')
+        .map((member) => member.student_id)
+        .indexOf(id)
+      === -1));
+    setTADeleteList(members
+      .filter((item) => item.role === 'MANAGER')
+      .map((member) => member.student_id)
+      .filter((id) => e.target.value
+        .split('\n')
+        .indexOf(id) === -1));
   };
 
   const handleChangeStudent = (e) => {
@@ -130,6 +153,19 @@ const MemberEdit = ({
           .map((member) => member.student_id)
           .join('\n'),
     );
+    setStudentAddList(e.target.value
+      .split('\n')
+      .filter((id) => members
+        .filter((item) => item.role === 'NORMAL')
+        .map((member) => member.student_id)
+        .indexOf(id)
+      === -1));
+    setStudentDeleteList(members
+      .filter((item) => item.role === 'NORMAL')
+      .map((member) => member.student_id)
+      .filter((id) => e.target.value
+        .split('\n')
+        .indexOf(id) === -1));
   };
   const handleChangeGuest = (e) => {
     setGuest(e.target.value);
@@ -140,7 +176,21 @@ const MemberEdit = ({
           .map((member) => member.student_id)
           .join('\n'),
     );
+    setGuestAddList(e.target.value
+      .split('\n')
+      .filter((id) => members
+        .filter((item) => item.role === 'GUEST')
+        .map((member) => member.student_id)
+        .indexOf(id)
+      === -1));
+    setGuestDeleteList(members
+      .filter((item) => item.role === 'GUEST')
+      .map((member) => member.student_id)
+      .filter((id) => e.target.value
+        .split('\n')
+        .indexOf(id) === -1));
   };
+
   const handleClickCancel = () => {
     if (TAChanged || studentChanged || guestChanged) {
       setShowUnsaveDialog(true);
@@ -148,7 +198,6 @@ const MemberEdit = ({
       backToMemberList();
     }
   };
-
   const handleSubmitUnsave = () => {
     setShowUnsaveDialog(false);
     backToMemberList();
@@ -160,7 +209,31 @@ const MemberEdit = ({
 
   const handleSubmitSave = () => {
     setShowUnsaveDialog(false);
-    // dispatch and make defaultValue string to an array using str.split("\n")
+    if (TAAddList.length >= 1 && TAAddList[0].length !== 0) {
+      // TAAddList.map((id) => dispatch(addClassMember(authToken, classId, id)));
+      console.log(TAAddList);
+    }
+    if (studentAddList.length >= 1 && studentAddList[0].length !== 0) {
+      // studentAddList.map((id) => dispatch(addClassMember(authToken, classId, id)));
+      console.log(studentAddList);
+    }
+    if (guestAddList.length >= 1 && guestAddList[0].length !== 0) {
+      // guestAddList.map((id) => dispatch(addClassMember(authToken, classId, id)));
+      console.log(guestAddList);
+    }
+    if (TADeleteList.length >= 1 && TADeleteList[0].length !== 0) {
+      // TADeleteList.map((id) => dispatch(deleteClassMember(authToken, classId, id)));
+      console.log(TADeleteList);
+    }
+    if (studentDeleteList.length >= 1 && studentDeleteList[0].length !== 0) {
+      // studentDeleteList.map((id) => dispatch(deleteClassMember(authToken, classId, id)));
+      console.log(studentDeleteList);
+    }
+    if (guestDeleteList.length >= 1 && guestDeleteList[0].length !== 0) {
+      // guestDeleteList.map((id) => dispatch(deleteClassMember(authToken, classId, id)));
+      console.log(guestDeleteList);
+    }
+
     backToMemberList();
     if (unblockHandle) {
       unblockHandle.current();
@@ -180,7 +253,7 @@ const MemberEdit = ({
           </div>
           <TextField
             className={classes.textField}
-            defaultValue={TA}
+            value={TA}
             onChange={(e) => handleChangeTA(e)}
             multiline
             rows={20}
@@ -195,7 +268,7 @@ const MemberEdit = ({
           </div>
           <TextField
             className={classes.textField}
-            defaultValue={student}
+            value={student}
             onChange={(e) => handleChangeStudent(e)}
             multiline
             rows={20}
@@ -210,7 +283,7 @@ const MemberEdit = ({
           </div>
           <TextField
             className={classes.textField}
-            defaultValue={guest}
+            value={guest}
             onChange={(e) => handleChangeGuest(e)}
             multiline
             rows={20}
