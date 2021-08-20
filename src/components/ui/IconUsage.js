@@ -32,7 +32,7 @@ export default function IconList() {
       <pre> visit /components/ui/IconUsage.js</pre>
       <Grid className={classes.root}>
         <StyledPaper>
-          <Icon.Dots className={classes.svg} />
+          <Icon.Dots style={{ color: 'orange' }} />
           <p>Dots</p>
         </StyledPaper>
         <StyledPaper>
@@ -92,7 +92,7 @@ export default function IconList() {
           <p>Expand</p>
         </StyledPaper>
         <StyledPaper>
-          <Icon.Folder />
+          <Icon.Folder style={{ color: 'orange' }} />
           <p>Folder</p>
         </StyledPaper>
         <StyledPaper>
@@ -176,7 +176,7 @@ export default function IconList() {
           <p>Book</p>
         </StyledPaper>
         <StyledPaper>
-          <Icon.Grade />
+          <Icon.Grade style={{ color: 'orange' }} />
           <p>Grade</p>
         </StyledPaper>
         <StyledPaper>
@@ -296,7 +296,7 @@ export default function IconList() {
           <p>PeopleIcon</p>
         </StyledPaper>
         <StyledPaper>
-          <Icon.DescriptionIcon />
+          <Icon.DescriptionIcon style={{ color: 'orange' }} />
           <p>DescriptionIcon</p>
         </StyledPaper>
         <StyledPaper>
