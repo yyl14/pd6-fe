@@ -68,7 +68,6 @@ const useStyles = makeStyles((theme) => ({
   container: {
     maxHeight: 800,
   },
-
   tableRowContainerLeftSpacing: {
     width: '15px',
     padding: '0px',
@@ -101,7 +100,6 @@ const useStyles = makeStyles((theme) => ({
   row: {
     height: '60px',
   },
-
   bottom: {
     height: '75px',
     display: 'flex',
@@ -138,6 +136,10 @@ const useStyles = makeStyles((theme) => ({
   arrowIcon: {
     height: '35px',
     margin: 'auto',
+  },
+  textLink: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
   },
 }));
 

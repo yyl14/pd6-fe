@@ -232,10 +232,10 @@ export default function GradeList() {
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2">Grade file format:</Typography>
-          <Typography variant="body2">Receiver: student id (NTU only) &gt;= institute email &gt; #username</Typography>
-          <Typography variant="body2" className={classes.reminder}>Score: number or string</Typography>
-          <Typography variant="body2" className={classes.reminder}>Comment: string (optional)</Typography>
-          <Typography variant="body2" className={classes.reminder}>Grader: same as receiver</Typography>
+          <Typography variant="body2" className={classNames.reminder}>Receiver: student id (NTU only) &gt;= institute email &gt; #username</Typography>
+          <Typography variant="body2" className={classNames.reminder}>Score: number or string</Typography>
+          <Typography variant="body2" className={classNames.reminder}>Comment: string (optional)</Typography>
+          <Typography variant="body2" className={classNames.reminder}>Grader: same as receiver</Typography>
           <Typography variant="body2">Download template file for more instructions.</Typography>
           <AlignedText text="Class" maxWidth="mg" childrenType="text">
             <Typography variant="body1">
