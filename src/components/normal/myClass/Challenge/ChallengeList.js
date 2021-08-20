@@ -16,9 +16,8 @@ import {
 import { useHistory, useParams } from 'react-router-dom';
 import moment from 'moment';
 import { format } from 'date-fns';
-import { MdAdd } from 'react-icons/md';
 import AlignedText from '../../../ui/AlignedText';
-// import Icon from '../../../ui/icon/index';
+import Icon from '../../../ui/icon/index';
 import CustomTable from '../../../ui/CustomTable';
 import TableFilterCard from '../../../ui/TableFilterCard';
 import DateRangePicker from '../../../ui/DateRangePicker';
@@ -163,12 +162,6 @@ export default function ChallengeList() {
       setErrorText("Can't be empty");
       return;
     }
-    // if (currentTime.isAfter(moment(dateRangePicker[0].startDate))) {
-    //   // where to put error message
-    //   console.log('Selected start date is invalid');
-    //   setErrorText('Selected start date is invalid');
-    //   return;
-    // }
     const body = ({
       title: inputs.title,
       scoredBy: inputs.scoredBy === 'Last Score' ? 'LAST' : 'BEST',
@@ -224,7 +217,7 @@ export default function ChallengeList() {
           isManager ? (
             <>
               <Button color="primary" onClick={() => setPopUp(true)}>
-                <MdAdd />
+                <Icon.Add style={{ color: 'white' }} />
               </Button>
             </>
           )
