@@ -20,36 +20,28 @@ import { MdAdd } from 'react-icons/md';
 import moment from 'moment-timezone';
 import AlignedText from '../../../ui/AlignedText';
 import CustomTable from '../../../ui/CustomTable';
-import IOFileUploadArea from '../../../ui/IOFileUploadArea';
+import FileUploadArea from '../../../ui/FileUploadArea';
 import Icon from '../../../ui/icon/index';
 import { fetchTeams, addTeam } from '../../../../actions/myClass/team';
-import { fetchCourse, fetchClass } from '../../../../actions/common/common';
+import { fetchCourse, fetchClass, downloadFile } from '../../../../actions/common/common';
+
 import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
   },
-  popUpLayout: {
-    width: '100%',
-  },
   reminder: {
     color: '#AAAAAA',
     marginLeft: theme.spacing(2),
   },
-  importTextField: {
-    marginBottom: '22px',
-  },
-  select: {
-    width: '350px',
-  },
-  addTeamBtn: {
-    marginTop: '45px',
-    marginLeft: '245px',
+  templateBtn: {
+    marginRight: '155px',
   },
 }));
 
 /* This is a level 4 component (page component) */
+// TODO: download team file action and function
 export default function TeamList() {
   const classNames = useStyles();
   const dispatch = useDispatch();
@@ -69,23 +61,21 @@ export default function TeamList() {
   const [tableData, setTableData] = useState([]);
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [teamFile, setTeamFile] = useState('');
+
+  const [selectedFile, setSelectedFile] = useState('');
   const [importInput, setImportInput] = useState('');
   const [addInputs, setAddInputs] = useState({
     label: '',
     teamName: '',
-    student: '',
-    role: 'Normal',
   });
 
   useEffect(() => {
-    user.classes.map((item) => {
-      if (`${item.class_id}` === classId) {
+    user.classes.forEach((item) => {
+      if (item.class_id === parseInt(classId, 10)) {
         if (item.role === 'MANAGER') {
           setIsManager(true);
         }
       }
-      return <></>;
     });
   }, [classId, user.classes]);
 
@@ -117,8 +107,6 @@ export default function TeamList() {
     setAddInputs({
       label: '',
       teamName: '',
-      // student: '',
-      // role: 'Normal',
     });
   };
 
@@ -204,9 +192,7 @@ export default function TeamList() {
 
       <Dialog
         open={showImportDialog}
-        keepMounted
         onClose={() => setShowImportDialog(false)}
-        className={classNames.popUpLayout}
         fullWidth
         maxWidth="sm"
       >
@@ -227,17 +213,10 @@ export default function TeamList() {
           <AlignedText text="Title" maxWidth="mg" childrenType="field">
             <TextField id="title" name="title" value={importInput} onChange={(e) => handleImportChange(e)} />
           </AlignedText>
-          {/* <IOFileUploadArea
-            text="Grading File"
-          /> */}
-          <AlignedText text="Grading File" maxWidth="mg" childrenType="field">
-            <Button variant="outlined" color="primary" startIcon={<Icon.Folder />}>
-              Browse
-            </Button>
-          </AlignedText>
+          <FileUploadArea text="Grading File" fileAcceptFormat=".csv" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" startIcon={<Icon.Download />} onClick={() => { downloadTemplate(); }} style={{ marginRight: '155px' }}>
+          <Button className={classNames.templateBtn} variant="outlined" startIcon={<Icon.Download />} onClick={() => { downloadTemplate(); }}>
             Template
           </Button>
           <Button onClick={() => { setShowImportDialog(false); clearImportInput(); }} color="default">
@@ -251,9 +230,7 @@ export default function TeamList() {
 
       <Dialog
         open={showAddDialog}
-        keepMounted
         onClose={() => setShowAddDialog(false)}
-        className={classNames.popUpLayout}
         fullWidth
         maxWidth="sm"
       >

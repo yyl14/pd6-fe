@@ -55,15 +55,14 @@ export default function ChallengeList() {
   const [originData, setOriginData] = useState([]);
 
   useEffect(() => {
-    user.classes.map((item) => {
-      if (`${item.class_id}` === classId) {
+    user.classes.forEach((item) => {
+      if (item.class_id === parseInt(classId, 10)) {
         if (item.role === 'MANAGER') {
           setIsManager(true);
         } else if (teamMembers[user.id] !== undefined && (item.role === 'NORMAL' && teamMembers[user.id].role === 'MANAGER')) {
           setIsTeamManager(true);
         }
       }
-      return <></>;
     });
   }, [classId, teamMembers, user.classes, user.id]);
 
