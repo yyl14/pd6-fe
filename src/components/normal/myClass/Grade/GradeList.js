@@ -223,9 +223,9 @@ export default function GradeList() {
 
       <Dialog
         open={popUp}
-        keepMounted
         onClose={() => setPopUp(false)}
         fullWidth
+        maxWidth="sm"
       >
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Add New Grades</Typography>
@@ -237,6 +237,8 @@ export default function GradeList() {
           <Typography variant="body2" className={classNames.reminder}>Comment: string (optional)</Typography>
           <Typography variant="body2" className={classNames.reminder}>Grader: same as receiver</Typography>
           <Typography variant="body2">Download template file for more instructions.</Typography>
+        </DialogContent>
+        <DialogContent>
           <AlignedText text="Class" maxWidth="mg" childrenType="text">
             <Typography variant="body1">
               {`${courses[courseId].name}  ${classes[classId].name}`}
