@@ -279,7 +279,7 @@ function AutoTable({
       setDataComplete(newDisplayedReduxData.reduce((acc, item) => acc && item !== undefined, true));
       setDisplayedReduxData(newDisplayedReduxData);
     }
-  }, [curPage, ident, reduxData.byId, rowsPerPage, tableState.byId[ident], tableState.byId[ident].displayedDataIds]);
+  }, [curPage, ident, reduxData.byId, rowsPerPage, tableState.byId[ident], tableState.byId[ident]]);
 
   // change filter / sort
   useEffect(() => {
