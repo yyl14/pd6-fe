@@ -66,7 +66,7 @@ export default function account(state = initialState, action) {
     case systemConstants.DELETE_ANNOUNCEMENT_START: {
       return {
         ...state,
-        deleteAnnouncement: true,
+        deleteAnnouncement: null,
       };
     }
     case systemConstants.DELETE_ANNOUNCEMENT_SUCCESS: {

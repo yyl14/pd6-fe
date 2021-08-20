@@ -85,6 +85,27 @@ const editClassMember = (token, classId, editedList) => (dispatch) => {
 //     });
 // };
 
+const browseSubmitLang = (token) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: commonConstants.BROWSE_SUBMISSION_LANG_START });
+    const submitLang = await agent.get('/submission/language', auth);
+    dispatch({
+      type: commonConstants.BROWSE_SUBMISSION_LANG_SUCCESS,
+      payload: submitLang.data.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: commonConstants.BROWSE_SUBMISSION_LANG_FAIL,
+      errors: err,
+    });
+  }
+};
+
 const fetchCourse = (token, courseId) => async (dispatch) => {
   try {
     const auth = {
@@ -140,5 +161,5 @@ const fetchAccount = (token, accountId) => async (dispatch) => {
 };
 
 export {
-  getInstitutes, fetchClassMembers, editClassMember, fetchCourse, fetchClass, fetchAccount,
+  getInstitutes, fetchClassMembers, editClassMember, fetchCourse, fetchClass, fetchAccount, browseSubmitLang,
 };

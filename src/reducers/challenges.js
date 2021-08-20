@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { challengeConstants } from '../actions/myClass/constant';
+import { challengeConstants, problemConstants } from '../actions/myClass/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -16,6 +16,19 @@ const byId = (state = {}, action) => {
         },
       }), state);
     }
+    case problemConstants.READ_CHALLENGE_SUCCESS: {
+      const data = action.payload;
+      return {
+        ...state,
+        [data.id]: {
+          ...data,
+          problemIds: state[data.id] ? state[data.id].problemIds : [],
+          peerReviewIds: state[data.id] ? state[data.id].peerReviewIds : [],
+          specialJudgeIds: state[data.id] ? state[data.id].specialJudgeIds : [],
+          essayIds: state[data.id] ? state[data.id].essayIds : [],
+        },
+      };
+    }
     default:
       return state;
   }
@@ -27,6 +40,8 @@ const allIds = (state = [], action) => {
       const { data } = action.payload;
       return data.map((item) => item.id);
     }
+    case problemConstants.READ_CHALLENGE_SUCCESS:
+      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
     default:
       return state;
   }

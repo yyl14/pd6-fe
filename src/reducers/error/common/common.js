@@ -5,6 +5,7 @@ const initialState = {
   fetchClassMembers: null,
   editClassMember: null,
   // deleteClassMember: null,
+  browseSubmitLang: null,
   fetchCourse: null,
   fetchClass: null,
   fetchAccount: null,
@@ -64,6 +65,18 @@ export default function common(state = initialState, action) {
       return {
         ...state,
         deleteClassMember: action.error,
+      };
+    }
+    case commonConstants.BROWSE_SUBMISSION_LANG_FAIL: {
+      return {
+        ...state,
+        browseSubmitLang: action.errors,
+      };
+    }
+    case commonConstants.BROWSE_SUBMISSION_LANG_SUCCESS: {
+      return {
+        ...state,
+        browseSubmitLang: null,
       };
     }
     case commonConstants.FETCH_COURSE_SUCCESS: {
