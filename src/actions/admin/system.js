@@ -16,7 +16,7 @@ const fetchAccessLog = (token, browseParams, tableId = null) => async (dispatch)
     const res1 = await agent.get('/access-log', config1);
 
     const { data, total_count } = res1.data.data;
-    console.log(browseParams);
+    console.log(res1);
 
     // TODO: Batch browse account
     const config2 = {

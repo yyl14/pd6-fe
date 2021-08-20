@@ -31,7 +31,6 @@ export default function AccessLog() {
   const dispatch = useDispatch();
   const logs = useSelector((state) => state.accessLogs);
   const accounts = useSelector((state) => state.accounts);
-  console.log(accounts);
 
   return (
     <>

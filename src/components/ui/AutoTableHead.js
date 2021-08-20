@@ -30,25 +30,18 @@ const AutoTableHead = ({
   const [advanceSearchActivated, setAdvanceSearchActivated] = useState(false);
 
   const onSearch = () => {
+    const { reduxStateId, operation } = filterConfig[filteringIndex];
     if (filterConfig[filteringIndex].type === 'ENUM') {
       // transformation from MultiSelect options (label) array to filter value array.
       // this will return the first option with the matching label
       const transformedTempFilterValue = tempFilterOptionValues.map(
         (optionLabel) => filterConfig[filteringIndex].options.filter((option) => option.label === optionLabel)[0].value,
       );
+      setFilter([[reduxStateId, operation, transformedTempFilterValue]]);
+    } else {
+      setFilter([[reduxStateId, operation, tempFilterValue]]);
     }
-    const { reduxStateId, operation } = filterConfig[filteringIndex];
-    setFilter([[reduxStateId, operation, tempFilterValue]]);
   };
-  // console.log(filterConfig, filteringIndex, tempFilter, tempFilterValue);
-  // filter value change
-  // useEffect(() => {
-  //   if (tempFilter[0]) {
-  //     setTempFilter([[tempFilter[0][0], tempFilter[0][1], tempFilterValue]]);
-  //   }
-  // }, [tempFilter[], tempFilterValue]);
-
-  console.log(filter);
 
   return (
     <div className={hasFilter ? classes.topContent1 : classes.topContent2}>
@@ -57,6 +50,7 @@ const AutoTableHead = ({
           <div>
             <FormControl variant="outlined">
               <Select
+                autoWidth
                 className={classes.filterSelect}
                 value={filteringIndex}
                 onChange={(e) => {
@@ -80,10 +74,11 @@ const AutoTableHead = ({
             />
           </div>
           <div className={classes.buttons}>
-            <Button color="primary" onClick={onSearch}>
+            <Button color="primary" onClick={onSearch} disabled={filterConfig[filteringIndex].type === 'DATE'}>
               <Icon.SearchIcon />
             </Button>
-            <Button>
+            <Button disabled>
+              {/* TODO Advanced search */}
               <Icon.Advancedsearch className={classes.iconButtonIcon} />
             </Button>
           </div>

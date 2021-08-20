@@ -27,8 +27,6 @@ import { customTableMount } from '../../actions/component/autoTable';
 import Icon from './icon/index';
 import AutoTableHead from './AutoTableHead';
 
-/* eslint react-hooks/exhaustive-deps: 0 */
-
 const useStyles = makeStyles((theme) => ({
   topContent1: {
     background: theme.palette.grey.A100,
@@ -48,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
   search: {
     marginRight: '5px',
-    width: 300,
+    width: '350px',
   },
   buttons: {
     marginTop: '3px',
@@ -65,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
   },
   filterSelect: {
     marginRight: '10px',
+    minWidth: '180px',
   },
 
   tableRowContainerLeftSpacing: {
@@ -224,6 +223,7 @@ function AutoTable({
   const [filter, setFilter] = useState([]);
   const [sort, setSort] = useState([]);
 
+  const [displayedRange, setDisplayedRange] = useState([]);
   const [displayedReduxData, setDisplayedReduxData] = useState([]);
   const [rowData, setRowData] = useState([]);
 
@@ -266,25 +266,30 @@ function AutoTable({
   // table mount, create dynamic redux state
   useEffect(() => {
     dispatch(customTableMount(ident));
-  }, [ident]);
+  }, [dispatch, ident]);
+
+  // change filter / sort
+  useEffect(() => {
+    setDataComplete(false);
+    setDisplayedRange(new Array(rowsPerPage));
+    setPage(0);
+  }, [filter, rowsPerPage, sort]);
+
+  useEffect(() => {
+    setDisplayedRange(Array.from({ length: rowsPerPage }, (_, id) => id + rowsPerPage * curPage));
+  }, [rowsPerPage, curPage]);
 
   // switch page
   useEffect(() => {
     if (tableState.byId[ident]) {
-      const newDisplayedReduxData = Array.from({ length: rowsPerPage }, (_, id) => id + rowsPerPage * curPage)
+      const newDisplayedReduxData = displayedRange
         .map((id) => tableState.byId[ident].displayedDataIds.get(id))
         .map((id) => reduxData.byId[id]);
 
       setDataComplete(newDisplayedReduxData.reduce((acc, item) => acc && item !== undefined, true));
       setDisplayedReduxData(newDisplayedReduxData);
     }
-  }, [curPage, ident, reduxData.byId, rowsPerPage, tableState.byId[ident], tableState.byId[ident]]);
-
-  // change filter / sort
-  useEffect(() => {
-    setDataComplete(false);
-    setPage(0);
-  }, [filter, sort]);
+  }, [curPage, displayedRange, ident, reduxData.byId, rowsPerPage, tableState.byId]);
 
   // table refetch
   useEffect(() => {
@@ -300,14 +305,14 @@ function AutoTable({
         ident,
       );
     }
-  }, [dataComplete, curPage, filter, ident, rowsPerPage, sort]);
+  }, [dataComplete, curPage, filter, ident, rowsPerPage, sort, refetch]);
 
   // refetch done
   useEffect(() => {
     if (dataComplete) {
       setRowData(displayedReduxData.map((item) => reduxDataToRows(item)));
     }
-  }, [dataComplete, displayedReduxData]);
+  }, [dataComplete, displayedReduxData, reduxDataToRows]);
 
   return (
     <>

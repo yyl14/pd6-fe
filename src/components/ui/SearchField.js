@@ -8,35 +8,25 @@ const SearchField = ({
   switch (type) {
     case 'TEXT': {
       return (
-        <div className={classes.search}>
-          <TextField
-            id="search"
-            onChange={(e) => {
-              setTempFilterValue(e.target.value);
-            }}
-            value={tempFilterValue}
-            placeholder="Search"
-            // InputProps={{
-            //   endAdornment: (
-            //     <InputAdornment position="end">
-            //       <Icon.SearchIcon />
-            //     </InputAdornment>
-            //   ),
-            // }}
-          />
-        </div>
+        <TextField
+          id="search"
+          onChange={(e) => {
+            setTempFilterValue(e.target.value);
+          }}
+          value={tempFilterValue}
+          placeholder="Search"
+          className={classes.search}
+        />
       );
     }
     case 'ENUM': {
       return (
-        <div className={classes.search}>
-          <MultiSelect
-            className={classes.search}
-            options={filterConfig[filteringIndex].options.map((item) => item.label)}
-            value={Array.isArray(tempFilterValue) ? tempFilterValue : []}
-            setValue={setTempFilterValue}
-          />
-        </div>
+        <MultiSelect
+          className={classes.search}
+          options={filterConfig[filteringIndex].options.map((item) => item.label)}
+          value={Array.isArray(tempFilterValue) ? tempFilterValue : []}
+          setValue={setTempFilterValue}
+        />
       );
     }
     // case 'DATE':{
