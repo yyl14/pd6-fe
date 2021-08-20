@@ -1,23 +1,25 @@
 import agent from '../agent';
 import { gradeConstants } from './constant';
 
-export const fetchClassGrade = (token, classId) => (dispatch) => {
-  const auth = { headers: { 'auth-token': token } };
-  dispatch({ type: gradeConstants.FETCH_CLASS_GRADE_START });
-  agent
-    .get(`/class/${classId}/grade`, auth)
-    .then((res) => {
-      dispatch({
-        type: gradeConstants.FETCH_CLASS_GRADE_SUCCESS,
-        payload: { classId, data: res.data.data },
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: gradeConstants.FETCH_CLASS_GRADE_FAIL,
-        error: err,
-      });
+export const fetchClassGrade = (token, classId) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: gradeConstants.FETCH_CLASS_GRADE_START });
+    const res = await agent.get(`/class/${classId}/grade`, auth);
+    dispatch({
+      type: gradeConstants.FETCH_CLASS_GRADE_SUCCESS,
+      payload: { classId, data: res.data.data },
     });
+  } catch (err) {
+    dispatch({
+      type: gradeConstants.FETCH_CLASS_GRADE_FAIL,
+      error: err,
+    });
+  }
 };
 
 export const addClassGrade = (token, classId, gradeFile) => async (dispatch) => {
