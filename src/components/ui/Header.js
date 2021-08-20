@@ -116,12 +116,15 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '-40px',
     minWidth: '140px',
     zIndex: '1',
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
+    borderRadius: '10px',
     '& span': {
       color: theme.palette.black.main,
       padding: '12px',
       textDecoration: 'none',
       textAlign: 'center',
       display: 'block',
+      borderRadius: '10px',
     },
     '& span:hover': {
       cursor: 'pointer',
