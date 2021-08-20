@@ -64,7 +64,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const [deletePopUp, setDeletePopUp] = useState(false);
 
   const handleDelete = () => {
-    // TODO: delete testcase, delete assisting data, delete problem
+    // comment due to dangerous behavior
     // problems[problemId].assistingDataIds.forEach((id) => {
     //   dispatch(deleteAssistingData(authToken, id));
     // });
@@ -120,7 +120,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           hasDelete={false}
           columns={[
             {
-              id: 'id',
+              id: 'no',
               label: 'No.',
               minWidth: 40,
               align: 'center',
@@ -147,6 +147,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           data={
             sampleDataIds.map((id) => ({
               id: testcases[id].id,
+              no: testcases[id].input_filename === null ? parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10) : parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10),
               time_limit: testcases[id].time_limit,
               memory_limit: testcases[id].memory_limit,
             }))
@@ -172,7 +173,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           hasDelete={false}
           columns={[
             {
-              id: 'id',
+              id: 'no',
               label: 'No.',
               minWidth: 40,
               align: 'center',
@@ -207,6 +208,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           data={
             testcaseDataIds.map((id) => ({
               id: testcases[id].id,
+              no: testcases[id].input_filename === null ? parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10) : parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10),
               time_limit: testcases[id].time_limit,
               memory_limit: testcases[id].memory_limit,
               score: testcases[id].score,

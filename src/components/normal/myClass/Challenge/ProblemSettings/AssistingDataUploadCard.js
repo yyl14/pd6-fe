@@ -39,7 +39,6 @@ export default function AssistingDataUploadCard({
   const {
     courseId, classId, challengeId, problemId,
   } = useParams();
-  const history = useHistory();
   const classes = useStyles();
 
   // const error = useSelector((state) => state.error);

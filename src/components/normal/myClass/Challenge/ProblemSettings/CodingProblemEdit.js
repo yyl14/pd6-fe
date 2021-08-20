@@ -89,8 +89,27 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const oriSampleData = [];
   const oriTestcaseData = [];
 
-  const [sampleTableData, setSampleTableData] = useState();
-  const [testcaseTableData, setTestcaseTableData] = useState();
+  const [sampleTableData, setSampleTableData] = useState(
+    sampleDataIds.map((id) => ({
+      id: testcases[id].id,
+      no: testcases[id].input_filename === null ? parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10) : parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10),
+      time_limit: testcases[id].time_limit,
+      memory_limit: testcases[id].memory_limit,
+      input_filename: testcases[id].input_filename,
+      output_filename: testcases[id].output_filename,
+    })),
+  );
+  const [testcaseTableData, setTestcaseTableData] = useState(
+    testcaseDataIds.map((id) => ({
+      id: testcases[id].id,
+      no: testcases[id].input_filename === null ? parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10) : parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10),
+      time_limit: testcases[id].time_limit,
+      memory_limit: testcases[id].memory_limit,
+      score: testcases[id].score,
+      input_filename: testcases[id].input_filename,
+      output_filename: testcases[id].output_filename,
+    })),
+  );
   const [assistTableData, setAssistTableData] = useState(problems[problemId] !== undefined
     ? problems[problemId].assistingDataIds.map((id) => ({
       id: assistingData[id].filename,
@@ -116,6 +135,21 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
     setTestingPopUp(false);
   };
 
+  const handleSampleTempUpload = (newSelectedFiles) => {
+    // TODO: set table data
+    console.log(newSelectedFiles);
+    // setSelectedFileS(tempSelectedFileS);
+    setTempSelectedFileS([]);
+  };
+
+  const handleTestingTempUpload = (newSelectedFiles) => {
+    // TODO: set table data
+
+    console.log(newSelectedFiles);
+    // setSelectedFileT(tempSelectedFileT);
+    setTempSelectedFileT([]);
+  };
+
   const handleAssistTempUpload = () => {
     // add file name to table;
     const newData = assistTableData;
@@ -138,9 +172,11 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   };
 
   const handleSave = () => {
-    // dispatch(editProblemInfo(authToken, problemId, title, problems[problemId].full_score, !status, description, ioDescription, '', ''));
+    dispatch(editProblemInfo(authToken, problemId, title, problems[problemId].full_score, !status, description, ioDescription, '', ''));
 
-    // handle sample file, testcase file
+    // handle sample file
+
+    // handle testcase file
 
     // handle assisting file
     let selectedFileABackUp = [...selectedFileA];
@@ -152,8 +188,6 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           // if true, then edit and delete in selectedFileA
           selectedFileA.every((file) => {
             if (file.name === assistingData[id].filename) {
-              // edit
-              console.log(assistingData[id].filename, 'needs to be edited');
               dispatch(editAssistingData(authToken, id, file));
               selectedFileABackUp = selectedFileABackUp.filter((newFile) => !file);
               return false;
@@ -166,14 +200,11 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
         return true;
       });
       if (flag === false) {
-        // delete
-        console.log(assistingData[id].filename, ' needs to be deleted.');
         dispatch(deleteAssistingData(authToken, id));
       }
     });
 
     selectedFileABackUp.forEach((file) => {
-      console.log(file.name, 'needs to be add');
       dispatch(addAssistingData(authToken, problemId, file));
     });
 
@@ -231,14 +262,14 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       <SimpleBar title="Sample">
         <div className={classNames.loadButtons}>
           <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setSamplePopUp(true)}>Upload</Button>
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button>
+          {/* <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button> */}
         </div>
         <SimpleTable
           isEdit
           hasDelete
           columns={[
             {
-              id: 'id',
+              id: 'no',
               label: 'No.',
               minWidth: 40,
               align: 'center',
@@ -280,15 +311,8 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
               type: 'string',
             },
           ]}
-          data={
-            sampleDataIds.map((id) => ({
-              id: testcases[id].id,
-              time_limit: testcases[id].time_limit,
-              memory_limit: testcases[id].memory_limit,
-              input_filename: testcases[id].input_filename,
-              output_filename: testcases[id].output_filename,
-            }))
-          }
+          data={sampleTableData}
+          setData={setSampleTableData}
         />
       </SimpleBar>
       <SimpleBar
@@ -303,14 +327,14 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       >
         <div className={classNames.loadButtons}>
           <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setTestingPopUp(true)}>Upload</Button>
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button>
+          {/* <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button> */}
         </div>
         <SimpleTable
           isEdit
           hasDelete
           columns={[
             {
-              id: 'id',
+              id: 'no',
               label: 'No.',
               minWidth: 40,
               align: 'center',
@@ -361,22 +385,14 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
               type: 'string',
             },
           ]}
-          data={
-            testcaseDataIds.map((id) => ({
-              id: testcases[id].id,
-              time_limit: testcases[id].time_limit,
-              memory_limit: testcases[id].memory_limit,
-              score: testcases[id].score,
-              input_filename: testcases[id].input_filename,
-              output_filename: testcases[id].output_filename,
-            }))
-          }
+          data={testcaseTableData}
+          setData={setTestcaseTableData}
         />
       </SimpleBar>
       <SimpleBar title="Assisting Data (Optional)">
         <div className={classNames.loadButtons}>
           <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setAssistPopUp(true)}>Upload</Button>
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button>
+          {/* <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button> */}
         </div>
         <SimpleTable
           isEdit
@@ -396,12 +412,12 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
         />
       </SimpleBar>
       <div className={classNames.buttons}>
-        <Button color="default" onClick={() => closeEdit()}>Cancel</Button>
+        <Button color="default" onClick={() => setWarningPopUp(true)}>Cancel</Button>
         <Button color="primary" onClick={handleSave}>Save</Button>
       </div>
-      <SampleUploadCard popUp={samplePopUp} closePopUp={handleClosePopUp} selectedFile={tempSelectedFileS} setSelectedFile={setTempSelectedFileS} />
+      <SampleUploadCard popUp={samplePopUp} closePopUp={handleClosePopUp} selectedFile={tempSelectedFileS} setSelectedFile={setTempSelectedFileS} handleTempUpload={handleSampleTempUpload} />
       <AssistingDataUploadCard popUp={assistPopUp} closePopUp={handleClosePopUp} selectedFile={tempSelectedFileA} setSelectedFile={setTempSelectedFileA} handleTempUpload={handleAssistTempUpload} />
-      <TestingDataUploadCard popUp={testingPopUp} closePopUp={handleClosePopUp} selectedFile={tempSelectedFileT} setSelectedFile={setTempSelectedFileT} />
+      <TestingDataUploadCard popUp={testingPopUp} closePopUp={handleClosePopUp} selectedFile={tempSelectedFileT} setSelectedFile={setTempSelectedFileT} handleTempUpload={handleTestingTempUpload} />
       <Dialog
         open={warningPopUp}
         onClose={() => setWarningPopUp(false)}
@@ -422,10 +438,10 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
             </Button>
           </div>
           <div>
-            <Button color="default">
+            <Button color="default" onClick={() => closeEdit()}>
               Do not Save
             </Button>
-            <Button color="primary">
+            <Button color="primary" onClick={handleSave}>
               Save
             </Button>
           </div>
