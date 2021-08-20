@@ -17,6 +17,7 @@ import Icon from '../../../ui/icon/index';
 import AlignedText from '../../../ui/AlignedText';
 import CustomTable from '../../../ui/CustomTable';
 import NoMatch from '../../../noMatch';
+import SimpleBar from '../../../ui/SimpleBar';
 import { readProblemInfo, readSubmission, readSubmissionDetail } from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
@@ -56,7 +57,6 @@ export default function SubmissionList() {
   }, [authToken, challengeId, dispatch, problemId, submissionIds]);
 
   useEffect(() => {
-    console.log(judgmentIds);
     if (judgmentIds !== []) {
       setTableData(
         judgmentIds.map((id) => ({
@@ -82,7 +82,7 @@ export default function SubmissionList() {
   }, [challengeId, classId, courseId, judgmentIds, judgments, problemId, submissions]);
 
   if (challenges[challengeId] === undefined || problems[problemId] === undefined || submissions === undefined || judgments === undefined) {
-    if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge) {
+    if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge && !loading.readJudgment) {
       return <NoMatch />;
     }
     return <div>loading...</div>;
@@ -99,9 +99,11 @@ export default function SubmissionList() {
         {' '}
         / My Submission
       </Typography>
-      <AlignedText text="Latest Score" childrenType="text">
-        <Typography variant="body1">N/A</Typography>
-      </AlignedText>
+      <SimpleBar title="Submission Information">
+        <AlignedText text="Your Latest Score" childrenType="text">
+          <Typography variant="body1">N/A</Typography>
+        </AlignedText>
+      </SimpleBar>
       <CustomTable
         hasSearch={false}
         buttons={(
@@ -126,7 +128,7 @@ export default function SubmissionList() {
             label: 'Status',
             minWidth: 50,
             align: 'center',
-            width: 120,
+            width: 170,
             type: 'string',
           },
           {

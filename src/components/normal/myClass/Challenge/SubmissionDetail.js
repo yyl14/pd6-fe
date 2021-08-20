@@ -10,7 +10,7 @@ import {
   DialogContent,
   TextField,
 } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, Link } from 'react-router-dom';
 import moment from 'moment';
 import { format } from 'date-fns';
 import SimpleBar from '../../../ui/SimpleBar';
@@ -23,6 +23,16 @@ const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
   },
+  textLink: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+    '&:hover': {
+      color: theme.palette.primary.hover,
+    },
+    '&:active': {
+      color: theme.palette.primary.dark,
+    },
+  },
 }));
 
 /* This is a level 4 component (page component) */
@@ -32,7 +42,7 @@ export default function SubmissionDetail() {
   } = useParams();
   const history = useHistory();
   const classNames = useStyles();
-
+  const [color, setColor] = useState('blue');
   const dispatch = useDispatch();
 
   const submissions = useSelector((state) => state.submissions.byId);
@@ -55,11 +65,10 @@ export default function SubmissionDetail() {
     dispatch(browseSubmitLang(authToken));
   }, [account.id, authToken, dispatch, problemId]);
 
-  // useEffect(() => {
-  //   dispatch(browseSubmitLang(authToken));
-  // }, [authToken, dispatch]);
-
   if (problems.byId[problemId] === undefined || challenges.byId[challengeId] === undefined || submitLangs === {} || submissions[submissionId] === undefined || judgmentIds === undefined) {
+    if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge && !loading.readJudgment) {
+      return <NoMatch />;
+    }
     return <div>loading...</div>;
   }
   // if (error.readSubmission) {
@@ -79,7 +88,9 @@ export default function SubmissionDetail() {
           <Typography variant="body1">{submissionId}</Typography>
         </AlignedText>
         <AlignedText text="Username" childrenType="text">
-          <Typography variant="body1">{account.username}</Typography>
+          <Link to="/my-profile" className={classNames.textLink}>
+            <Typography variant="body1">{account.username}</Typography>
+          </Link>
         </AlignedText>
         <AlignedText text="Student ID" childrenType="text">
           <Typography variant="body1">...</Typography>
@@ -88,18 +99,28 @@ export default function SubmissionDetail() {
           <Typography variant="body1">{account.real_name}</Typography>
         </AlignedText>
         <AlignedText text="Challenge" childrenType="text">
-          <Typography variant="body1">{challenges.byId[challengeId].title}</Typography>
+          <Link to={`/my-class/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
+            <Typography variant="body1">{challenges.byId[challengeId].title}</Typography>
+          </Link>
         </AlignedText>
         <AlignedText text="Task Label" childrenType="text">
-          <Typography variant="body1">{problems.byId[problemId].challenge_label}</Typography>
+          <Link to={`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`} className={classNames.textLink}>
+            <Typography variant="body1">{problems.byId[problemId].challenge_label}</Typography>
+          </Link>
         </AlignedText>
         <AlignedText text="Task Title" childrenType="text">
           <Typography variant="body1">{problems.byId[problemId].title}</Typography>
         </AlignedText>
         <AlignedText text="Status" childrenType="text">
-          <Typography variant="body1">
-            {judgmentIds.map((key) => (judgments[key].submission_id === parseInt(submissionId, 10) ? judgments[key].status : ''))}
-          </Typography>
+          {judgmentIds.map((key) => {
+            if (judgments[key].submission_id === parseInt(submissionId, 10)) {
+              if (judgments[key].status === 'ACCEPTED') {
+                return <Typography variant="body1" color="primary">{judgments[key].status}</Typography>;
+              }
+              return <Typography variant="body1" color="secondary">{judgments[key].status}</Typography>;
+            }
+            return '';
+          })}
         </AlignedText>
         <AlignedText text="Score" childrenType="text">
           <Typography variant="body1">
