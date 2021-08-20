@@ -8,5 +8,5 @@ import submissions from '../../submissions';
 import judgements from './judgements';
 
 export default combineReducers({
-  grade, challenge, member, problem, submissions, judgements,
+  grade, challenge, member, problem, team, submissions, judgements,
 });

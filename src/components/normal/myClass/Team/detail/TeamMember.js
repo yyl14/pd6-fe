@@ -5,8 +5,8 @@ import {
 import moment from 'moment-timezone';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
+import SimpleBar from '../../../../ui/SimpleBar';
 import SimpleTable from '../../../../ui/SimpleTable';
 import systemRoleTransformation from '../../../../../function/systemRoleTransformation';
 

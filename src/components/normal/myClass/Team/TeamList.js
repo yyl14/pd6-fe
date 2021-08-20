@@ -18,8 +18,9 @@ import {
 import { useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 import moment from 'moment-timezone';
-import CustomTable from '../../../ui/CustomTable';
 import AlignedText from '../../../ui/AlignedText';
+import CustomTable from '../../../ui/CustomTable';
+import IOFileUploadArea from '../../../ui/IOFileUploadArea';
 import Icon from '../../../ui/icon/index';
 import { fetchTeams, addTeam } from '../../../../actions/myClass/team';
 import { fetchCourse, fetchClass } from '../../../../actions/common/common';
@@ -226,6 +227,9 @@ export default function TeamList() {
           <AlignedText text="Title" maxWidth="mg" childrenType="field">
             <TextField id="title" name="title" value={importInput} onChange={(e) => handleImportChange(e)} />
           </AlignedText>
+          {/* <IOFileUploadArea
+            text="Grading File"
+          /> */}
           <AlignedText text="Grading File" maxWidth="mg" childrenType="field">
             <Button variant="outlined" color="primary" startIcon={<Icon.Folder />}>
               Browse
@@ -233,7 +237,7 @@ export default function TeamList() {
           </AlignedText>
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" startIcon={<Icon.Download />} onClick={() => { downloadTemplate(); }}>
+          <Button variant="outlined" startIcon={<Icon.Download />} onClick={() => { downloadTemplate(); }} style={{ marginRight: '155px' }}>
             Template
           </Button>
           <Button onClick={() => { setShowImportDialog(false); clearImportInput(); }} color="default">

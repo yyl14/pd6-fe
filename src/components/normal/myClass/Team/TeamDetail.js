@@ -84,7 +84,7 @@ export default function ChallengeList() {
   }, [authToken, dispatch, loading.addTeamMember, loading.deleteTeamMember, loading.editTeamMember, teamId]);
 
   useEffect(() => {
-    if (!loading.addTeamMember && !loading.editTeamMember && !loading.deleteTeamMember) {
+    if (classMembers !== undefined && !loading.addTeamMember && !loading.editTeamMember && !loading.deleteTeamMember) {
       setTableData(
         teamMemberIds.map((id) => ({
           username: classMembers[id].username,
