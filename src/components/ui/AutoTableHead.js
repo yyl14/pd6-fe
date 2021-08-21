@@ -22,26 +22,26 @@ import SearchField from './SearchField';
       */
 
 const AutoTableHead = ({
-  hasFilter, classes, buttons, filterConfig, filter, setFilter,
+  hasFilter, classes, buttons, filterConfig, filter, onSearch,
 }) => {
-  const [tempFilterValue, setTempFilterValue] = useState('');
-  const [tempFilterOptionValues, setTempFilterOptionValues] = useState([]);
+  const [tempFilterValue, setTempFilterValue] = useState(filterConfig.map((item) => (item.type === 'ENUM' ? [] : '')));
   const [filteringIndex, setFilteringIndex] = useState(0);
   const [advanceSearchActivated, setAdvanceSearchActivated] = useState(false);
 
-  const onSearch = () => {
+  const onClickSearch = () => {
     const { reduxStateId, operation } = filterConfig[filteringIndex];
     if (filterConfig[filteringIndex].type === 'ENUM') {
       // transformation from MultiSelect options (label) array to filter value array.
       // this will return the first option with the matching label
-      const transformedTempFilterValue = tempFilterOptionValues.map(
+      const transformedTempFilterValue = tempFilterValue[filteringIndex].map(
         (optionLabel) => filterConfig[filteringIndex].options.filter((option) => option.label === optionLabel)[0].value,
       );
-      setFilter([[reduxStateId, operation, transformedTempFilterValue]]);
+      onSearch([[reduxStateId, operation, transformedTempFilterValue]]);
     } else {
-      setFilter([[reduxStateId, operation, tempFilterValue]]);
+      onSearch([[reduxStateId, operation, tempFilterValue[filteringIndex]]]);
     }
   };
+  // console.log(tempFilterValue);
 
   return (
     <div className={hasFilter ? classes.topContent1 : classes.topContent2}>
@@ -65,16 +65,16 @@ const AutoTableHead = ({
               </Select>
             </FormControl>
             <SearchField
-              type={filterConfig[filteringIndex].type}
-              tempFilterValue={tempFilterOptionValues}
-              setTempFilterValue={setTempFilterOptionValues}
+              tempFilterValue={tempFilterValue}
+              setTempFilterValue={setTempFilterValue}
               classes={classes}
               filterConfig={filterConfig}
               filteringIndex={filteringIndex}
+              onSearch={onClickSearch}
             />
           </div>
           <div className={classes.buttons}>
-            <Button color="primary" onClick={onSearch} disabled={filterConfig[filteringIndex].type === 'DATE'}>
+            <Button color="primary" onClick={onClickSearch} disabled={filterConfig[filteringIndex].type === 'DATE'}>
               <Icon.SearchIcon />
             </Button>
             <Button disabled>

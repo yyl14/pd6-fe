@@ -3,17 +3,25 @@ import { TextField } from '@material-ui/core';
 import MultiSelect from './MultiSelect';
 
 const SearchField = ({
-  classes, tempFilterValue, setTempFilterValue, type, filterConfig, filteringIndex,
+  classes, tempFilterValue, setTempFilterValue, filterConfig, filteringIndex, onSearch,
 }) => {
-  switch (type) {
+  // console.log(filterConfig[filteringIndex]);
+  switch (filterConfig[filteringIndex].type) {
     case 'TEXT': {
       return (
         <TextField
           id="search"
           onChange={(e) => {
-            setTempFilterValue(e.target.value);
+            setTempFilterValue(
+              tempFilterValue.map((item, index) => (index === filteringIndex ? e.target.value : item)),
+            );
           }}
-          value={tempFilterValue}
+          onKeyDown={(e) => {
+            if (e.keyCode === 13) {
+              onSearch();
+            }
+          }}
+          value={tempFilterValue[filteringIndex]}
           placeholder="Search"
           className={classes.search}
         />
@@ -24,8 +32,10 @@ const SearchField = ({
         <MultiSelect
           className={classes.search}
           options={filterConfig[filteringIndex].options.map((item) => item.label)}
-          value={Array.isArray(tempFilterValue) ? tempFilterValue : []}
-          setValue={setTempFilterValue}
+          value={tempFilterValue[filteringIndex]}
+          setValue={(newValue) => {
+            setTempFilterValue(tempFilterValue.map((item, index) => (index === filteringIndex ? newValue : item)));
+          }}
         />
       );
     }

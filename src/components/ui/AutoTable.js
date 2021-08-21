@@ -23,9 +23,11 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useState, useEffect, useLocation } from 'react';
 import { Link } from 'react-router-dom';
-import { customTableMount } from '../../actions/component/autoTable';
+import { autoTableMount, autoTableFlush } from '../../actions/component/autoTable';
 import Icon from './icon/index';
 import AutoTableHead from './AutoTableHead';
+
+/* eslint react-hooks/exhaustive-deps: 0 */
 
 const useStyles = makeStyles((theme) => ({
   topContent1: {
@@ -216,7 +218,7 @@ function AutoTable({
   buttons,
 }) {
   const classes = useStyles();
-  const [curPage, setPage] = useState(0); // curPage * rowsPerPage = offset
+  const [curPage, setCurPage] = useState(0); // curPage * rowsPerPage = offset
   const [pageInput, setPageInput] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5); // limit
 
@@ -247,13 +249,19 @@ function AutoTable({
       && Number(pageInput) <= Math.ceil(tableState.byId[ident].totalCount / rowsPerPage)
       && pageInput >= 1
     ) {
-      setPage(Number(pageInput) - 1);
+      setCurPage(Number(pageInput) - 1);
+    } else if (tableState.byId[ident]) {
+      if (Number(curPage) > Math.ceil(tableState.byId[ident].totalCount / rowsPerPage)) {
+        setPageInput(String(Math.ceil(tableState.byId[ident].totalCount / rowsPerPage)));
+      }
+    } else {
+      setPageInput('1');
     }
   }, [ident, pageInput, rowsPerPage, tableState]);
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    setPage(0); // TODO: calculate this
+    setCurPage(0); // TODO: calculate this
   };
 
   const labelMoveLeft = (icon, cols, col) => {
@@ -265,24 +273,44 @@ function AutoTable({
 
   // table mount, create dynamic redux state
   useEffect(() => {
-    dispatch(customTableMount(ident));
-  }, [dispatch, ident]);
+    dispatch(autoTableMount(ident));
+  }, [ident]);
 
-  // change filter / sort
-  useEffect(() => {
+  // useEffect(() => {
+  //   if (tableState.byId[ident]) {
+  //     if (Number(curPage) > Math.ceil(tableState.byId[ident].totalCount / rowsPerPage)) {
+  //       setCurPage(Math.ceil(tableState.byId[ident].totalCount / rowsPerPage));
+  //     }
+  //   }
+  // }, [tableState.byId[ident], curPage, rowsPerPage]);
+
+  // change filter
+  const onSearch = (newFilter) => {
+    dispatch(autoTableFlush(ident));
+    setFilter(newFilter);
     setDataComplete(false);
-    setDisplayedRange(new Array(rowsPerPage));
-    setPage(0);
-  }, [filter, rowsPerPage, sort]);
+    setCurPage(0);
+    setPageInput('1');
+  };
 
   useEffect(() => {
-    setDisplayedRange(Array.from({ length: rowsPerPage }, (_, id) => id + rowsPerPage * curPage));
-  }, [rowsPerPage, curPage]);
+    if (tableState.byId[ident]) {
+      setDisplayedRange(
+        Array.from(
+          {
+            length: rowsPerPage,
+          },
+          (_, id) => id + rowsPerPage * curPage,
+        ),
+      );
+    }
+  }, [tableState.byId[ident], rowsPerPage, curPage]);
 
   // switch page
   useEffect(() => {
     if (tableState.byId[ident]) {
       const newDisplayedReduxData = displayedRange
+        .filter((id) => id < tableState.byId[ident].totalCount)
         .map((id) => tableState.byId[ident].displayedDataIds.get(id))
         .map((id) => reduxData.byId[id]);
 
@@ -305,7 +333,7 @@ function AutoTable({
         ident,
       );
     }
-  }, [dataComplete, curPage, filter, ident, rowsPerPage, sort, refetch]);
+  }, [dataComplete, curPage, filter, ident, rowsPerPage, sort]);
 
   // refetch done
   useEffect(() => {
@@ -322,7 +350,7 @@ function AutoTable({
         buttons={buttons}
         filterConfig={filterConfig}
         filter={filter}
-        setFilter={setFilter}
+        onSearch={onSearch}
       />
       <Paper className={classes.root} elevation={0}>
         <TableContainer className={classes.container}>
@@ -447,7 +475,17 @@ function AutoTable({
               className={classes.pageIndexTextField}
               value={pageInput}
               onChange={(e) => {
-                setPageInput(e.target.value);
+                const newInput = e.target.value;
+                if (
+                  tableState.byId[ident]
+                  && Number(newInput) <= Math.ceil(tableState.byId[ident].totalCount / rowsPerPage)
+                  && Number(newInput) >= 1
+                ) {
+                  setPageInput(newInput);
+                  setCurPage(Number(pageInput) - 1);
+                } else if (newInput === '') {
+                  setPageInput(newInput);
+                }
               }}
             />
             <Typography className={classes.pageText} variant="body1">

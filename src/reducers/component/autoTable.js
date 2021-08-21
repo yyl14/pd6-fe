@@ -6,7 +6,7 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case autoTableConstants.AUTO_TABLE_MOUNT: {
       const { tableId } = action.payload;
-      return { ...state, [tableId]: { id: tableId, totalCount: 0, displayedDataIds: new Map([]) } };
+      return { ...state, [tableId]: { id: tableId, totalCount: Infinity, displayedDataIds: new Map([]) } };
     }
     case autoTableConstants.AUTO_TABLE_UPDATE: {
       const {
@@ -27,7 +27,20 @@ const byId = (state = {}, action) => {
           },
         };
       }
-
+      // not registered table
+      return state;
+    }
+    case autoTableConstants.AUTO_TABLE_FLUSH: {
+      const { tableId } = action.payload;
+      if (state[tableId]) {
+        return {
+          ...state,
+          [tableId]: {
+            ...state[tableId],
+            displayedDataIds: new Map([]),
+          },
+        };
+      }
       // not registered table
       return state;
     }

@@ -1,17 +1,21 @@
 import agent from '../agent';
 import { systemConstants, accountConstants } from './constant';
 import { autoTableConstants } from '../component/constant';
+import browseParamsTransForm from '../../function/browseParamsTransform';
 
 // Access log
 const fetchAccessLog = (token, browseParams, tableId = null) => async (dispatch) => {
   try {
+    console.log(browseParams);
     const config1 = {
       headers: { 'auth-token': token },
-      params: browseParams,
+      params: browseParamsTransForm(browseParams),
+      // paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
     };
     dispatch({
       type: systemConstants.FETCH_ACCESS_LOG_START,
     });
+    // console.log(config1);
 
     const res1 = await agent.get('/access-log', config1);
 
