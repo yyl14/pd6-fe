@@ -55,6 +55,52 @@ const addChallenge = (token, classId, type, publicizeType, title, description, s
     });
 };
 
+const editChallenge = (token, challengeId, body) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  dispatch({ type: challengeConstants.EDIT_CHALLENGE_REQUEST });
+
+  agent.patch(`/challenge/${challengeId}`, body, auth)
+    .then((res) => {
+      console.log('edit challenge res:', res);
+      dispatch({
+        type: challengeConstants.EDIT_CHALLENGE_SUCCESS,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: challengeConstants.EDIT_CHALLENGE_FAIL,
+        error: err,
+      });
+    });
+};
+
+const deleteChallenge = (token, challengeId) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  dispatch({ type: challengeConstants.DELETE_CHALLENGE_REQUEST });
+
+  agent.delete(`/challenge/${challengeId}`, auth)
+    .then((res) => {
+      console.log('delete challenge res:', res);
+      dispatch({
+        type: challengeConstants.DELETE_CHALLENGE_SUCCESS,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: challengeConstants.DELETE_CHALLENGE_FAIL,
+        error: err,
+      });
+    });
+};
+
 export {
-  fetchChallenges, addChallenge,
+  fetchChallenges, addChallenge, editChallenge, deleteChallenge,
 };

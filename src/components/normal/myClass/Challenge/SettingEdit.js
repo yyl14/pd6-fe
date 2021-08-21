@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core';
 import moment from 'moment-timezone';
 
+import { editChallenge } from '../../../../actions/myClass/challenge';
 import RadioGroupForm from '../../../ui/RadioGroupForm';
 import DateRangePicker from '../../../ui/DateRangePicker';
 import AlignedText from '../../../ui/AlignedText';
@@ -55,8 +56,8 @@ export default function SettingEdit({ challengeId, challenge, setEdit }) {
       selection_type: selectionType,
       description: challenge.description,
     };
-    console.log('call edit challenge api', challengeId, body);
-    // dispatch(editAnnouncement(authToken, props.announcementId, body));
+    // console.log('call edit challenge api', challengeId, body);
+    dispatch(editChallenge(authToken, challengeId, body));
     setEdit(false);
   };
 

@@ -11,12 +11,12 @@ import {
 } from '@material-ui/core';
 import moment from 'moment';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
-import { fetchChallenges } from '../../../../actions/myClass/challenge';
-// import { fetchClass } from '../../../../actions/common/common';
+import { fetchChallenges, deleteChallenge } from '../../../../actions/myClass/challenge';
+import { fetchClass, fetchCourse } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
 import SettingEdit from './SettingEdit';
 
@@ -28,43 +28,52 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 export default function Setting() {
-  const { classId, challengeId } = useParams();
+  const { courseId, classId, challengeId } = useParams();
   const classNames = useStyles();
+  const history = useHistory();
 
   const dispatch = useDispatch();
 
   const authToken = useSelector((state) => state.auth.token);
-  const userClass = useSelector((state) => state.user.classes);
+  const userClasses = useSelector((state) => state.classes.byId);
+  const userCourses = useSelector((state) => state.courses.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   const loading = useSelector((state) => state.loading.myClass.challenge.fetchChallenges);
+  const editLoading = useSelector((state) => state.loading.myClass.challenge.editChallenge);
 
   const [challenge, setChallenge] = useState(undefined);
   const [classTitle, setClassTitle] = useState('');
 
   useEffect(() => {
-    dispatch(fetchChallenges(authToken, classId));
-    // dispatch(fetchClass(authToken, classId));
-  }, [authToken, dispatch, classId]);
+    console.log('editLoading :', editLoading);
+    if (!editLoading) {
+      console.log('refetch :');
+      dispatch(fetchChallenges(authToken, classId));
+    }
+  }, [authToken, dispatch, classId, editLoading]);
 
   useEffect(() => {
-    if (challenge === undefined) {
-      setChallenge(challenges[challengeId]);
-      console.log('challenge :', challenges[challengeId]);
-    }
+    dispatch(fetchCourse(authToken, courseId));
+    dispatch(fetchClass(authToken, classId));
+  }, [dispatch, authToken, classId, courseId]);
+
+  useEffect(() => {
+    setChallenge(challenges[challengeId]);
   }, [challenge, challenges, challengeId]);
 
   useEffect(() => {
-    if (userClass[classId] !== undefined) {
-      setClassTitle(userClass[classId].name);
+    if (userClasses[classId] !== undefined && userCourses[courseId] !== undefined) {
+      setClassTitle(`${userCourses[courseId].name} ${userClasses[classId].name}`);
     }
-  }, [userClass, classId]);
+  }, [userClasses, classId, userCourses, courseId]);
 
   const [edit, setEdit] = useState(false);
   const [warningPopUp, setWarningPopUp] = useState(false);
 
   const handleDelete = () => {
     console.log('call delete challenge api');
-    setWarningPopUp(false);
+    dispatch(deleteChallenge(authToken, challengeId));
+    history.push('/my-class/:courseId/:classId/challenge');
   };
 
   if (challenge === undefined) {
