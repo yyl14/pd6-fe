@@ -13,10 +13,13 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     width: '350px',
   },
+  label: {
+    marginTop: '38px',
+  },
 }));
 
 export default function BasicInfoEdit(props) {
-  const classes = useStyles();
+  const classNames = useStyles();
   const dispatch = useDispatch();
   const { classId, teamId } = useParams();
 
@@ -37,22 +40,26 @@ export default function BasicInfoEdit(props) {
         <>
           <AlignedText text="Team Name" maxWidth="lg" childrenType="field">
             <TextField
-              className={classes.textField}
+              className={classNames.textField}
               value={teamName}
               onChange={(e) => setTeamName(e.target.value)}
             />
           </AlignedText>
-          <AlignedText text="Label" maxWidth="lg" childrenType="field">
-            {props.isManager ? (
+          {props.isManager ? (
+            <AlignedText text="Label" maxWidth="lg" childrenType="field">
               <TextField
-                className={classes.textField}
+                className={classNames.textField}
                 value={label}
                 onChange={(e) => setLabel(e.target.value)}
               />
-            ) : (
-              <Typography variant="body1">{label}</Typography>
-            )}
-          </AlignedText>
+            </AlignedText>
+          ) : (
+            <div className={classNames.label}>
+              <AlignedText text="Label" maxWidth="lg" childrenType="text">
+                <Typography variant="body1">{label}</Typography>
+              </AlignedText>
+            </div>
+          )}
           <Button onClick={() => props.handleBack()}>Cancel</Button>
           <Button
             color="primary"

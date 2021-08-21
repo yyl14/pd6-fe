@@ -41,7 +41,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /* This is a level 4 component (page component) */
-// TODO: download team file, team member table
+
+// TODO: download team file, import team (upload file)
 export default function TeamList() {
   const classNames = useStyles();
   const dispatch = useDispatch();

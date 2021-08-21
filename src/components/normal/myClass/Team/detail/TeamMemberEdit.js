@@ -16,7 +16,7 @@ import { MdAdd } from 'react-icons/md';
 import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleTable from '../../../../ui/SimpleTable';
-import { addTeamMember, deleteTeamMember } from '../../../../../actions/myClass/team';
+import { addTeamMember, deleteTeamMember, fetchTeamMember } from '../../../../../actions/myClass/team';
 import systemRoleTransformation from '../../../../../function/systemRoleTransformation';
 
 const useStyles = makeStyles((theme) => ({
@@ -32,16 +32,23 @@ export default function TeamMemberEdit(props) {
 
   const authToken = useSelector((state) => state.auth.token);
   const classMembers = useSelector((state) => state.classMembers.byId);
+  const teamMembers = useSelector((state) => state.teamMembers.byId);
   const teamMemberIds = useSelector((state) => state.teamMembers.allIds);
   const loading = useSelector((state) => state.loading.myClass.team);
 
   const [tableData, setTableData] = useState(props.originData);
-  const [editedData, setEditedData] = useState([]);
   const [popUp, setPopUp] = useState(false);
   const [inputs, setInputs] = useState({
     student: '',
     role: 'Normal',
   });
+
+  useEffect(() => {
+    console.log('fetch');
+    if (!popUp && !loading.addTeamMember) {
+      dispatch(fetchTeamMember(authToken, teamId));
+    }
+  }, [authToken, dispatch, teamId, loading.addTeamMember, popUp]);
 
   useEffect(() => {
     if (!loading.addTeamMember) {
@@ -51,11 +58,11 @@ export default function TeamMemberEdit(props) {
           username: classMembers[id].username,
           student_id: classMembers[id].student_id,
           real_name: classMembers[id].real_name,
-          role: systemRoleTransformation(classMembers[id].role),
+          role: systemRoleTransformation(teamMembers[id].role),
         })),
       );
     }
-  }, [teamMemberIds, classMembers, loading.addTeamMember]);
+  }, [teamMemberIds, classMembers, teamMembers, loading.addTeamMember]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -70,34 +77,30 @@ export default function TeamMemberEdit(props) {
   };
 
   const handleCancel = () => {
-    // console.log(tableData, props.originData);
-    tableData
-      .map((item) => ({ ...item, id: teamMemberIds.filter((id) => classMembers[id].student_id === item.student_id) }))
-      .map((item) => dispatch(deleteTeamMember(authToken, teamId, item.id)));
+    console.log(tableData, props.originData);
+    tableData.map((item) => dispatch(deleteTeamMember(authToken, teamId, item.id)));
+    const array = props.originData.map((item) => ({
+      account_referral: `#${item.username}`,
+      role: item.role === 'Normal' ? 'NORMAL' : 'MANAGER',
+    }));
     setTimeout(() => {
-      const array = props.originData.map((item) => ({
-        account_referral: `#${item.username}`,
-        role: item.role === 'Normal' ? 'NORMAL' : 'MANAGER',
-      }));
       dispatch(addTeamMember(authToken, teamId, null, null, true, array));
     }, 1000);
     props.handleBack();
-    // setTimeout(() => { props.handleBack(); }, 300);
   };
 
   const handleSave = () => {
-    // console.log(tableData);
+    console.log(tableData);
     teamMemberIds.map((id) => (dispatch(deleteTeamMember(authToken, teamId, id))));
+    const array = tableData.map((item) => ({
+      account_referral: `#${item.username}`,
+      role: item.role === 'Normal' ? 'NORMAL' : 'MANAGER',
+    }));
     setTimeout(() => {
-      const array = tableData.map((item) => ({
-        account_referral: `#${item.username}`,
-        role: item.role === 'Normal' ? 'NORMAL' : 'MANAGER',
-      }));
       dispatch(addTeamMember(authToken, teamId, null, null, true, array));
     }, 1000);
-    props.setTableData(tableData);
+    props.setOriginData(tableData);
     props.handleBack();
-    // setTimeout(() => { props.handleBack(); }, 300);
   };
 
   const handleAdd = () => {
@@ -108,6 +111,10 @@ export default function TeamMemberEdit(props) {
       dispatch(addTeamMember(authToken, teamId, `#${inputs.student}`, role, false, null));
     }
   };
+
+  // if (loading.addTeamMember || loading.fetchTeamMember) {
+  //   return <div>loading...</div>;
+  // }
 
   return (
     <div>

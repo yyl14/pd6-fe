@@ -10,7 +10,7 @@ import {
   DialogContent,
   TextField,
 } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { fetchTeams, fetchTeamMember, editTeam } from '../../../../actions/myClass/team';
 import { fetchClassMembers } from '../../../../actions/common/common';
 import TeamInfo from './detail/TeamInfo';
@@ -28,11 +28,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /* This is a level 4 component (page component) */
-// TODO: delete member, edit member's role, layout
 export default function ChallengeList() {
   const classNames = useStyles();
   const dispatch = useDispatch();
-  const history = useHistory();
   const { classId, teamId } = useParams();
 
   const authToken = useSelector((state) => state.auth.token);
@@ -75,25 +73,23 @@ export default function ChallengeList() {
   }, [authToken, classId, dispatch, loading.editTeam]);
 
   useEffect(() => {
-    // if (!loading.addTeamMember) {
-    dispatch(fetchTeamMember(authToken, teamId));
-    // }
-  }, [authToken, dispatch, teamId]);
+    if (!loading.addTeamMember) {
+      dispatch(fetchTeamMember(authToken, teamId));
+    }
+  }, [authToken, dispatch, teamId, loading.addTeamMember]);
 
   useEffect(() => {
-    if (!loading.addTeamMember) {
-      setTableData(
-        teamMemberIds.map((id) => ({
-          id: classMembers[id].member_id,
-          username: classMembers[id].username,
-          student_id: classMembers[id].student_id,
-          real_name: classMembers[id].real_name,
-          role: systemRoleTransformation(classMembers[id].role),
-          path: '/',
-        })),
-      );
-    }
-  }, [teamMemberIds, classMembers, loading.addTeamMember]);
+    setTableData(
+      teamMemberIds.map((id) => ({
+        id: classMembers[id].member_id,
+        username: classMembers[id].username,
+        student_id: classMembers[id].student_id,
+        real_name: classMembers[id].real_name,
+        role: systemRoleTransformation(teamMembers[id].role),
+        path: '/',
+      })),
+    );
+  }, [teamMemberIds, classMembers, teamMembers]);
 
   const handleInfoBack = () => {
     setEditTeamInfo(false);
@@ -105,6 +101,7 @@ export default function ChallengeList() {
 
   const handleMemberBack = () => {
     setEditTeamMember(false);
+    console.log(teamMembers);
   };
 
   const handleMemberEdit = () => {
@@ -144,7 +141,7 @@ export default function ChallengeList() {
         <TeamMemberEdit
           isManager={isManager}
           originData={tableData}
-          setOriginData={setTableData()}
+          setOriginData={setTableData}
           handleBack={handleMemberBack}
         />
       ) : (
