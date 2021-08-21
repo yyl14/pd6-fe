@@ -604,8 +604,8 @@ const addTestcaseWithFile = (token, problemId, isSample, score, timeLimit, memor
       if (inputFile != null) {
         const formData = new FormData();
         formData.append('input_file', inputFile);
-        const inRes = await agent.put(`/testcase/${testcaseId}/input-data`, body, fileAuth);
-        console.log(inRes);
+        const inRes = await agent.put(`/testcase/${testcaseId}/input-data`, formData, fileAuth);
+        console.log('add testcase input file', inRes);
         if (!inRes.data.success) {
           dispatch({
             type: problemConstants.ADD_TESTCASE_FAIL,
@@ -616,8 +616,8 @@ const addTestcaseWithFile = (token, problemId, isSample, score, timeLimit, memor
       if (outputFile != null) {
         const formData = new FormData();
         formData.append('output_file', outputFile);
-        const outRes = await agent.put(`/testcase/${testcaseId}/output-data`, body, fileAuth);
-        console.log(outRes);
+        const outRes = await agent.put(`/testcase/${testcaseId}/output-data`, formData, fileAuth);
+        console.log('add testcase output file', outRes);
         if (!outRes.data.success) {
           dispatch({
             type: problemConstants.ADD_TESTCASE_FAIL,
