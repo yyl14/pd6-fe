@@ -18,7 +18,7 @@ import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import NoMatch from '../../../noMatch';
 import { readSubmissionDetail, readSubmission } from '../../../../actions/myClass/problem';
-import { browseSubmitLang } from '../../../../actions/common/common';
+// import { browseSubmitLang } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -53,7 +53,6 @@ export default function SubmissionDetail() {
   const submissions = useSelector((state) => state.submissions.byId);
   const judgments = useSelector((state) => state.judgments.byId);
   const judgmentIds = useSelector((state) => state.judgments.allIds);
-  const submitLangs = useSelector((state) => state.submitLangs.byId);
   const challenges = useSelector((state) => state.challenges);
   const problems = useSelector((state) => state.problem);
   const account = useSelector((state) => state.user);
@@ -67,10 +66,9 @@ export default function SubmissionDetail() {
 
   useEffect(() => {
     dispatch(readSubmission(authToken, account.id, problemId));
-    dispatch(browseSubmitLang(authToken));
   }, [account.id, authToken, dispatch, problemId]);
 
-  if (problems.byId[problemId] === undefined || challenges.byId[challengeId] === undefined || submitLangs === {} || submissions[submissionId] === undefined || judgmentIds === undefined) {
+  if (problems.byId[problemId] === undefined || challenges.byId[challengeId] === undefined || submissions[submissionId] === undefined || judgmentIds === undefined) {
     if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge && !loading.readJudgment) {
       return <NoMatch />;
     }
@@ -83,7 +81,6 @@ export default function SubmissionDetail() {
 
   const handleRefresh = () => {
     dispatch(readSubmission(authToken, account.id, problemId));
-    dispatch(browseSubmitLang(authToken));
     dispatch(readSubmissionDetail(authToken, submissionId, problemId, challengeId));
   };
 
@@ -145,10 +142,10 @@ export default function SubmissionDetail() {
         <AlignedText text="Submit Time" childrenType="text">
           <Typography variant="body1">{moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm')}</Typography>
         </AlignedText>
-        <AlignedText text="Language" childrenType="text">
+        {/* <AlignedText text="Language" childrenType="text">
           {submitLangs[submissions[submissionId].language_id]
             && <Typography variant="body1">{submitLangs[submissions[submissionId].language_id].name}</Typography>}
-        </AlignedText>
+        </AlignedText> */}
       </SimpleBar>
       <SimpleBar title="Submission Result" />
       <SimpleBar title="Code" />
