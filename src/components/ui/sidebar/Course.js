@@ -2,7 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button, IconButton,
+  Drawer,
+  Typography,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  Button,
+  IconButton,
 } from '@material-ui/core';
 import Icon from '../icon/index';
 import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
@@ -45,26 +53,14 @@ export default function Course({
                 return {
                   type,
                   text: name,
-                  icon: (
-                    <Icon.PeopleIcon
-                      className={
-                        location.pathname === `${baseURL}/course/${id}/class-list` ? classes.activeIcon : classes.icon
-                      }
-                    />
-                  ),
+                  icon: <Icon.PeopleIcon />,
                   path: `${baseURL}/course/${id}/class-list`,
                 };
               case 'CONTEST':
                 return {
                   type,
                   text: name,
-                  icon: (
-                    <Icon.StarIcon
-                      className={
-                        location.pathname === `${baseURL}/course/${id}/class-list` ? classes.activeIcon : classes.icon
-                      }
-                    />
-                  ),
+                  icon: <Icon.StarIcon />,
                   path: `${baseURL}/course/${id}/class-list`,
                 };
               default:
@@ -72,11 +68,7 @@ export default function Course({
                   type,
                   text: name,
                   icon: (
-                    <Icon.PeopleIcon
-                      className={
-                        location.pathname === `${baseURL}/course/${id}/class-list` ? classes.activeIcon : classes.icon
-                      }
-                    />
+                    <Icon.PeopleIcon />
                   ),
                   path: `${baseURL}/course/${id}/class-list`,
                 };
@@ -86,77 +78,53 @@ export default function Course({
             {
               type: 'LESSON',
               text: 'Lesson',
-              icon: (
-                <Icon.AddBoxIcon
-                  className={
-                    location.pathname.substr(location.pathname.length - 6) === 'lesson'
-                      ? classes.activeIcon
-                      : classes.greyIcon
-                  }
-                />
-              ),
+              icon: <Icon.AddBoxIcon />,
               path: `${baseURL}/course/${courseId}/class-list/lesson`,
             },
             {
               type: 'CONTEST',
               text: 'Contest',
-              icon: (
-                <Icon.AddBoxIcon
-                  className={
-                    location.pathname.substr(location.pathname.length - 7) === 'contest'
-                      ? classes.activeIcon
-                      : classes.greyIcon
-                  }
-                />
-              ),
+              icon: <Icon.AddBoxIcon />,
               path: `${baseURL}/course/${courseId}/class-list/contest`,
             },
           ]),
       );
     } else if (mode === 'course-setting' && courseList.byId[courseId]) {
-      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={() => goBack(courseId)} />);
+      setArrow(
+        <IconButton className={classes.arrow} onClick={() => goBack(courseId)}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
       setTitle1(courseList.byId[courseId].name);
       setItemList([
         {
           text: 'Setting',
           path: `${baseURL}/course/${courseId}/setting`,
           icon: (
-            <Icon.SettingsIcon
-              className={
-                location.pathname === `${baseURL}/course/${courseId}/setting` ? classes.activeIcon : classes.icon
-              }
-            />
+            <Icon.SettingsIcon />
           ),
         },
       ]);
     } else if (mode === 'class' && courseList.byId[courseId] && classList.byId[classId]) {
-      setArrow(<Icon.ArrowBackRoundedIcon className={classes.arrow} onClick={() => goBack(courseId)} />);
+      setArrow(
+        <IconButton className={classes.arrow} onClick={() => goBack(courseId)}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
       setTitle1(`${courseList.byId[courseId].name} / ${classList.byId[classId].name}`);
       setItemList([
         {
           text: 'Member',
           path: `${baseURL}/class/${courseId}/${classId}/member`,
           icon: (
-            <Icon.PeopleIcon
-              className={
-                location.pathname === `${baseURL}/class/${courseId}/${classId}/member`
-                  ? classes.activeIcon
-                  : classes.icon
-              }
-            />
+            <Icon.PeopleIcon />
           ),
         },
         {
           text: 'Setting',
           path: `${baseURL}/class/${courseId}/${classId}/setting`,
           icon: (
-            <Icon.SettingsIcon
-              className={
-                location.pathname === `${baseURL}/class/${courseId}/${classId}/setting`
-                  ? classes.activeIcon
-                  : classes.icon
-              }
-            />
+            <Icon.SettingsIcon />
           ),
         },
       ]);
@@ -220,14 +188,14 @@ export default function Course({
       >
         {mode === 'class-list' ? <div className={classes.topSpace} /> : arrow}
 
-        <div>
+        <div className={classes.title}>
           {display === 'unfold' ? (
             <Icon.TriangleDown className={classes.titleIcon} onClick={foldLesson} />
           ) : (
             <Icon.TriangleRight className={classes.titleIcon} onClick={unfoldLesson} />
           )}
 
-          <Typography variant="h4" className={classes.title}>
+          <Typography variant="h4" className={classes.titleText}>
             {title1}
           </Typography>
         </div>
@@ -242,10 +210,15 @@ export default function Course({
                 onClick={() => history.push(item.path)}
                 className={item.text !== 'Lesson' ? classes.item : classes.addItem}
               >
-                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemIcon
+                  className={classes.itemIcon}
+                  style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
+                >
+                  {item.icon}
+                </ListItemIcon>
                 <ListItemText
                   primary={item.text}
-                  className={location.pathname === item.path ? classes.active : null}
+                  className={location.pathname === item.path ? classes.activeItemText : classes.itemText}
                 />
               </ListItem>
               ),
@@ -255,13 +228,13 @@ export default function Course({
 
         {mode === 'class-list' && (
           <>
-            <div>
+            <div className={classes.title}>
               {display1 === 'unfold' ? (
-                <Icon.TriangleDown className={classes.secondTitleIcon} onClick={foldContest} />
+                <Icon.TriangleDown className={classes.titleIcon} onClick={foldContest} />
               ) : (
-                <Icon.TriangleRight className={classes.secondTitleIcon} onClick={unfoldContest} />
+                <Icon.TriangleRight className={classes.titleIcon} onClick={unfoldContest} />
               )}
-              <Typography variant="h4" className={classes.secondTitle}>
+              <Typography variant="h4" className={classes.titleText}>
                 {title2}
               </Typography>
             </div>
@@ -276,10 +249,16 @@ export default function Course({
                     onClick={() => history.push(item.path)}
                     className={item.text !== 'Contest' ? classes.item : classes.addItem}
                   >
-                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemIcon
+                      className={classes.itemIcon}
+                      style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
+                    >
+                      {item.icon}
+
+                    </ListItemIcon>
                     <ListItemText
                       primary={item.text}
-                      className={location.pathname === item.path ? classes.active : null}
+                      className={location.pathname === item.path ? classes.activeItemText : classes.itemText}
                     />
                   </ListItem>
                   ),
