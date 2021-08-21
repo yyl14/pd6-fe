@@ -12,11 +12,28 @@ import {
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import SimpleBar from '../../../ui/SimpleBar';
+import SimpleTable from '../../../ui/SimpleTable';
+import SampleTestArea from '../../../ui/SampleTestArea';
 import Icon from '../../../ui/icon/index';
+
+import CodingProblemInfo from './ProblemSettings/CodingProblemInfo';
+import CodingProblemEdit from './ProblemSettings/CodingProblemEdit';
+import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
+  },
+  sampleArea: {
+    marginTop: '50px',
+  },
+  generalButtons: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+  managerButtons: {
+    display: 'flex',
+    justifyContent: 'space-between',
   },
 }));
 
@@ -30,36 +47,74 @@ export default function CodingProblem() {
 
   const dispatch = useDispatch();
 
-  const problem = useSelector((state) => state.problem.byId);
+  const userClasses = useSelector((state) => state.user.classes);
+  const problems = useSelector((state) => state.problem.byId);
+  const challenges = useSelector((state) => state.challenges.byId);
   const authToken = useSelector((state) => state.auth.token);
-  // const error = useSelector((state) => state.error);
+  const error = useSelector((state) => state.error.myClass.problem);
   const loading = useSelector((state) => state.loading.myClass.problem);
+  const [role, setRole] = useState('Normal');
 
-  console.log(problem);
-  // if (courses.byId[courseId] === undefined || courses.byId[courseId].name === undefined) {
+  const [edit, setEdit] = useState(false);
 
+  const handleCloseEdit = () => {
+    setEdit(false);
+  };
+
+  // console.log(userClasses);
+  useEffect(() => {
+    userClasses.forEach((value) => {
+      if (value.class_id === parseInt(classId, 10)) {
+        if (value.role === 'MANAGER') {
+          setRole('MANAGER');
+        }
+      }
+    });
+  }, [classId, userClasses]);
+
+  // userClasses.forEach((class) => {
+  //   if(class.class_id === classId){
+  //   }
+  // })
+
+  // if (error.readChallenge != null || error.readProblem != null) {
+  //   return <div>System Exception</div>;
+  // }
+
+  // if (problems[problemId] === undefined || challenges[challengeId] === undefined) {
   //   return <NoMatch />;
   // }
 
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
-        {problem.challenge_label}
+        {challenges[challengeId] === undefined ? 'error' : challenges[challengeId].title}
         {' '}
         /
         {' '}
-        {problem.title}
+        {problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label}
       </Typography>
-      <div>
-        <Button variant="outlined" color="primary" startIcon={<Icon.HistoryIcon />}>My Submission</Button>
-        <Button color="primary">Submit</Button>
-      </div>
-      <SimpleBar title="Title">找零錢</SimpleBar>
-      <SimpleBar title="Description">Description</SimpleBar>
-      <SimpleBar title="About Input">找零錢</SimpleBar>
-      <SimpleBar title="About Output">找零錢</SimpleBar>
-      <SimpleBar title="Sample">找零錢</SimpleBar>
-      <SimpleBar title="Testing Data">找零錢</SimpleBar>
+      {!edit
+      && role === 'MANAGER'
+        ? (
+          <div className={classNames.managerButtons}>
+            <div>
+              <Button color="default" onClick={() => setEdit(true)}>Edit</Button>
+              <Button color="default">Rejudge</Button>
+            </div>
+            <div>
+              <Button variant="outlined" color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)} startIcon={<Icon.HistoryIcon />}>My Submission</Button>
+              <Button color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}>Submit</Button>
+            </div>
+          </div>
+        )
+        : (!edit && (
+          <div className={classNames.generalButtons}>
+            <Button variant="outlined" color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)} startIcon={<Icon.HistoryIcon />}>My Submission</Button>
+            <Button color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}>Submit</Button>
+          </div>
+        ))}
+      {edit ? <CodingProblemEdit closeEdit={handleCloseEdit} role={role} /> : <CodingProblemInfo role={role} /> }
     </>
   );
 }

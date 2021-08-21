@@ -4,8 +4,8 @@ import { systemConstants } from '../actions/admin/constant';
 const byId = (state = {}, action) => {
   switch (action.type) {
     case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
-      const data = Object.values(action.payload);
-      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.logs);
+      const { data } = action.payload;
+      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
     default:
       return state;
@@ -15,8 +15,8 @@ const byId = (state = {}, action) => {
 const allIds = (state = [], action) => {
   switch (action.type) {
     case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
-      const data = Object.values(action.payload);
-      return data.map((item) => item.id);
+      const { data } = action.payload;
+      return [...new Set([...data.map((item) => item.id), ...state])];
     }
     default:
       return state;
