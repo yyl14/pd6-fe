@@ -48,38 +48,47 @@ export default function SubmissionList() {
 
   useEffect(() => {
     dispatch(readSubmission(authToken, accountId, problemId));
-  }, [accountId, authToken, challengeId, dispatch, problemId]);
+  }, [accountId, authToken, dispatch, problemId]);
+
+  useEffect(() => {
+    dispatch(readProblemInfo(authToken, problemId, challengeId));
+  }, [authToken, challengeId, dispatch, problemId]);
 
   useEffect(() => {
     if (submissionIds !== []) {
-      submissionIds.map((id) => dispatch(readSubmissionDetail(authToken, id, problemId, challengeId)));
+      submissionIds.map((id) => dispatch(readSubmissionDetail(authToken, id)));
     }
   }, [authToken, challengeId, dispatch, problemId, submissionIds]);
 
   useEffect(() => {
     if (judgmentIds !== []) {
       setTableData(
-        judgmentIds.map((id) => ({
-          id: judgments[id].submission_id,
-          status: judgments[id].status,
-          score: judgments[id].score,
-          used_time: judgments[id].total_time,
-          used_memory: judgments[id].max_memory,
-          submit_time: moment(submissions[judgments[id].submission_id].submit_time).format('YYYY-MM-DD, HH:mm'),
-          path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${judgments[id].submission_id}`,
-        })),
-        // submissionIds.map((id) => ({
-        //   id,
-        //   submit_time: moment(submissions[id].submit_time).format('YYYY-MM-DD, HH:mm'),
-        //   status: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].status : '')),
-        //   score: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].score : '')),
-        //   used_time: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].total_time : '')),
-        //   used_memory: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].max_memory : '')),
-        //   path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${id}`,
+        // judgmentIds.map((id) => ({
+        //   id: judgments[id].submission_id,
+        //   status: judgments[id].status,
+        //   score: judgments[id].score,
+        //   used_time: judgments[id].total_time,
+        //   used_memory: judgments[id].max_memory,
+        //   submit_time: moment(submissions[judgments[id].submission_id].submit_time).format('YYYY-MM-DD, HH:mm'),
+        //   path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${judgments[id].submission_id}`,
         // })),
+        submissionIds.map((id) => ({
+          id,
+          submit_time: moment(submissions[id].submit_time).format('YYYY-MM-DD, HH:mm'),
+          status: judgmentIds.map((key) => {
+            if (judgments[key].submission_id === id) {
+              return judgments[key].status.toLowerCase().split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
+            }
+            return null;
+          }),
+          score: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].score : null)),
+          used_time: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].total_time : null)),
+          used_memory: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].max_memory : null)),
+          path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${id}`,
+        })),
       );
     }
-  }, [challengeId, classId, courseId, judgmentIds, judgments, problemId, submissions]);
+  }, [challengeId, classId, courseId, judgmentIds, judgments, problemId, submissionIds, submissions]);
 
   if (challenges[challengeId] === undefined || problems[problemId] === undefined || submissions === undefined || judgments === undefined) {
     if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge && !loading.readJudgment) {

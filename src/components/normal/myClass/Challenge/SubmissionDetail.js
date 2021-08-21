@@ -17,7 +17,7 @@ import Icon from '../../../ui/icon/index';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import NoMatch from '../../../noMatch';
-import { readSubmissionDetail, readSubmission } from '../../../../actions/myClass/problem';
+import { readSubmissionDetail, readSubmission, readProblemInfo } from '../../../../actions/myClass/problem';
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
@@ -61,7 +61,11 @@ export default function SubmissionDetail() {
   const loading = useSelector((state) => state.loading.myClass.problem);
 
   useEffect(() => {
-    dispatch(readSubmissionDetail(authToken, submissionId, problemId, challengeId));
+    dispatch(readProblemInfo(authToken, problemId, challengeId));
+  }, [authToken, challengeId, dispatch, problemId]);
+
+  useEffect(() => {
+    dispatch(readSubmissionDetail(authToken, submissionId));
   }, [authToken, challengeId, dispatch, problemId, submissionId]);
 
   useEffect(() => {
@@ -80,8 +84,7 @@ export default function SubmissionDetail() {
   // }
 
   const handleRefresh = () => {
-    dispatch(readSubmission(authToken, account.id, problemId));
-    dispatch(readSubmissionDetail(authToken, submissionId, problemId, challengeId));
+    dispatch(readSubmissionDetail(authToken, submissionId));
   };
 
   return (
@@ -127,9 +130,9 @@ export default function SubmissionDetail() {
           {judgmentIds.map((key) => {
             if (judgments[key].submission_id === parseInt(submissionId, 10)) {
               if (judgments[key].status === 'ACCEPTED') {
-                return <Typography variant="body1" color="primary" key={key}>{judgments[key].status}</Typography>;
+                return <Typography variant="body1" key={key}>{judgments[key].status.charAt(0).concat(judgments[key].status.slice(1).toLowerCase())}</Typography>;
               }
-              return <Typography variant="body1" color="secondary" key={key}>{judgments[key].status}</Typography>;
+              return <Typography variant="body1" color="secondary" key={key}>{judgments[key].status.toLowerCase().split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ')}</Typography>;
             }
             return '';
           })}

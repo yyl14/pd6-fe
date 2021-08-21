@@ -103,10 +103,8 @@ const readSubmission = (token, accountId, problemId) => async (dispatch) => {
   }
 };
 
-const readSubmissionDetail = (token, submissionId, problemId, challengeId) => async (dispatch) => {
+const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_SUBMISSION_JUDGE_START });
-  dispatch({ type: problemConstants.READ_CHALLENGE_START });
-  dispatch({ type: problemConstants.READ_PROBLEM_START });
   const auth = {
     headers: {
       'Auth-Token': token,
@@ -130,45 +128,6 @@ const readSubmissionDetail = (token, submissionId, problemId, challengeId) => as
     console.log(err);
     dispatch({
       type: problemConstants.READ_SUBMISSION_JUDGE_FAIL,
-      errors: err,
-    });
-  }
-  try {
-    const challenge = await agent.get(`/challenge/${challengeId}`, auth);
-    if (challenge.data.success) {
-      dispatch({
-        type: problemConstants.READ_CHALLENGE_SUCCESS,
-        payload: challenge.data.data,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.READ_CHALLENGE_FAIL,
-        errors: challenge.data.error,
-      });
-    }
-  } catch (err) {
-    dispatch({
-      type: problemConstants.READ_CHALLENGE_FAIL,
-      errors: err,
-    });
-  }
-
-  try {
-    const problem = await agent.get(`/problem/${problemId}`, auth);
-    if (problem.data.success) {
-      dispatch({
-        type: problemConstants.READ_PROBLEM_SUCCESS,
-        payload: problem.data.data,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.READ_PROBLEM_FAIL,
-        errors: problem.data.error,
-      });
-    }
-  } catch (err) {
-    dispatch({
-      type: problemConstants.READ_PROBLEM_FAIL,
       errors: err,
     });
   }
