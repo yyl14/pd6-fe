@@ -68,7 +68,6 @@ const useStyles = makeStyles((theme) => ({
   container: {
     maxHeight: 800,
   },
-
   tableRowContainerLeftSpacing: {
     width: '15px',
     padding: '0px',
@@ -101,7 +100,6 @@ const useStyles = makeStyles((theme) => ({
   row: {
     height: '60px',
   },
-
   bottom: {
     height: '75px',
     display: 'flex',
@@ -131,16 +129,6 @@ const useStyles = makeStyles((theme) => ({
   detailLink: {
     color: 'black',
   },
-  textLink: {
-    textDecoration: 'none',
-    color: theme.palette.primary.main,
-    '&:hover': {
-      color: theme.palette.primary.hover,
-    },
-    '&:active': {
-      color: theme.palette.primary.dark,
-    },
-  },
   toggleButtonIcon: {
     height: '20px',
     width: '20px',
@@ -148,6 +136,10 @@ const useStyles = makeStyles((theme) => ({
   arrowIcon: {
     height: '35px',
     margin: 'auto',
+  },
+  textLink: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
   },
 }));
 
@@ -297,7 +289,7 @@ export default function CustomTable({
                       className={classes.tableHeadCell}
                       style={{ minWidth: column.minWidth, width: column.width }}
                     >
-                      {column.label}
+                      <b>{column.label}</b>
                       {/* <div className={classes.column}>
                         <div className={labelMoveLeft(columnComponent, columns, column)}>
                           <b>{column.label}</b>
