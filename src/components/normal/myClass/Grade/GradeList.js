@@ -138,8 +138,7 @@ export default function GradeList() {
 
   const downloadTemplate = () => {
     setPopUp(false);
-    console.log(grades);
-    setTimeout(dispatch(downloadFile(authToken, grades.template)), 1000);
+    dispatch(downloadFile(authToken, grades.template));
   };
 
   if (courses[courseId] === undefined || classes[classId] === undefined || grades === undefined) {
