@@ -219,23 +219,22 @@ export default function CustomTable({
     }
   }, [filterData.length, pageInput, rowsPerPage]);
 
-  useEffect(() => {
-    // if (search !== '') {
-    //   const newData = data.filter((row) => {
-    //     let cnt = 0;
-    //     columns.forEach((column) => {
-    //       if (row[column.id].indexOf(search) >= 0) {
-    //         cnt += 1;
-    //       }
-    //     });
-    //     return cnt > 0;
-    //   });
-    //   setFilterData(newData);
-    // } else {
-    //   setFilterData(data);
-    // }
-    setFilterData(data);
-  }, [columns, data]);
+  // useEffect(() => {
+  //   if (search !== '') {
+  //     const newData = data.filter((row) => {
+  //       let cnt = 0;
+  //       columns.forEach((column) => {
+  //         if (row[column.id].indexOf(search) >= 0) {
+  //           cnt += 1;
+  //         }
+  //       });
+  //       return cnt > 0;
+  //     });
+  //     setFilterData(newData);
+  //   } else {
+  //     setFilterData(data);
+  //   }
+  // }, [columns, data, search]);
 
   return (
     <>
