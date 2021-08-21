@@ -14,6 +14,10 @@ const initialState = {
   editAssistingData: null,
   addAssistingData: null,
   submitCode: null,
+  editTestcase: null,
+  uploadTestcaseInput: null,
+  uploadTestcaseOutput: null,
+  addTestcase: null,
 };
 
 export default function problem(state = initialState, action) {
@@ -82,6 +86,26 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         submitCode: action.errors,
+      };
+    case problemConstants.EDIT_TESTCASE_FAIL:
+      return {
+        ...state,
+        editTestcase: action.errors,
+      };
+    case problemConstants.UPLOAD_TESTCASE_INPUT_FAIL:
+      return {
+        ...state,
+        uploadTestcaseInput: action.errors,
+      };
+    case problemConstants.UPLOAD_TESTCASE_OUTPUT_FAIL:
+      return {
+        ...state,
+        uploadTestcaseOutput: action.errors,
+      };
+    case problemConstants.ADD_TESTCASE_FAIL:
+      return {
+        ...state,
+        addTestcase: action.errors,
       };
     default: {
       return state;

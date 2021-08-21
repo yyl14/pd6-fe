@@ -471,6 +471,174 @@ const submitCode = (token, problemId, languageId, content) => async (dispatch) =
   }
 };
 
+const editTestcase = (token, testcaseId, isSample, score, timeLimit, memoryLimit, isDisabled) => async (dispatch) => {
+  // just edit basic info
+  dispatch({ type: problemConstants.EDIT_TESTCASE_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  const body = {
+    is_sample: isSample,
+    score,
+    time_limit: timeLimit,
+    memory_limit: memoryLimit,
+    is_disabled: isDisabled,
+  };
+  try {
+    const res = await agent.patch(`/testcase/${testcaseId}`, body, auth);
+    console.log('edit testcase info', res.data);
+    if (res.data.success) {
+      dispatch({
+        type: problemConstants.EDIT_TESTCASE_SUCCESS,
+        payload: testcaseId,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.EDIT_TESTCASE_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.EDIT_TESTCASE_FAIL,
+      errors: err,
+    });
+  }
+};
+
+const uploadTestcaseInput = (token, testcaseId, file) => async (dispatch) => {
+  // just upload input file
+  dispatch({ type: problemConstants.UPLOAD_TESTCASE_INPUT_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+      'Content-Type': 'multipart/form-data',
+    },
+  };
+  const formData = new FormData();
+  formData.append('input_file', file);
+
+  try {
+    const res = await agent.put(`/testcase/${testcaseId}/input-data`, formData, auth);
+    console.log('upload input data', res.data);
+    if (res.data.success) {
+      dispatch({
+        type: problemConstants.UPLOAD_TESTCASE_INPUT_SUCCESS,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.UPLOAD_TESTCASE_INPUT_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.UPLOAD_TESTCASE_INPUT_FAIL,
+      errors: err,
+    });
+  }
+};
+
+const uploadTestcaseOutput = (token, testcaseId, file) => async (dispatch) => {
+  // just upload output file
+  dispatch({ type: problemConstants.UPLOAD_TESTCASE_OUTPUT_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+      'Content-Type': 'multipart/form-data',
+    },
+  };
+  const formData = new FormData();
+  formData.append('output_file', file);
+
+  try {
+    const res = await agent.put(`/testcase/${testcaseId}/output-data`, formData, auth);
+    console.log('upload output data', res.data);
+    if (res.data.success) {
+      dispatch({
+        type: problemConstants.UPLOAD_TESTCASE_OUTPUT_SUCCESS,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.UPLOAD_TESTCASE_OUTPUT_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.UPLOAD_TESTCASE_OUTPUT_FAIL,
+      errors: err,
+    });
+  }
+};
+
+const addTestcaseWithFile = (token, problemId, isSample, score, timeLimit, memoryLimit, isDisabled, inputFile = null, outputFile = null) => async (dispatch) => {
+  // judge whether there exists inputFile or outputFile
+  dispatch({ type: problemConstants.ADD_TESTCASE_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  const body = {
+    is_sample: isSample,
+    score,
+    time_limit: timeLimit,
+    memory_limit: memoryLimit,
+    is_disabled: isDisabled,
+  };
+  try {
+    const res = await agent.post(`/problem/${problemId}/testcase`, body, auth);
+    console.log('add testcase info', res.data);
+    if (res.data.success) {
+      // try to upload file
+      const testcaseId = res.data.data.id;
+      const fileAuth = {
+        headers: {
+          'Auth-Token': token,
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+      if (inputFile != null) {
+        const formData = new FormData();
+        formData.append('input_file', inputFile);
+        const inRes = await agent.put(`/testcase/${testcaseId}/input-data`, body, fileAuth);
+        console.log(inRes);
+        if (!inRes.data.success) {
+          dispatch({
+            type: problemConstants.ADD_TESTCASE_FAIL,
+            errors: inRes.data.error,
+          });
+        }
+      }
+      if (outputFile != null) {
+        const formData = new FormData();
+        formData.append('output_file', outputFile);
+        const outRes = await agent.put(`/testcase/${testcaseId}/output-data`, body, fileAuth);
+        console.log(outRes);
+        if (!outRes.data.success) {
+          dispatch({
+            type: problemConstants.ADD_TESTCASE_FAIL,
+            errors: outRes.data.error,
+          });
+        }
+      }
+    } else {
+      dispatch({
+        type: problemConstants.ADD_TESTCASE_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.ADD_TESTCASE_FAIL,
+      errors: err,
+    });
+  }
+};
+
 export {
   browseChallengeOverview,
   readProblemInfo,
@@ -485,4 +653,8 @@ export {
   editAssistingData,
   addAssistingData,
   submitCode,
+  editTestcase,
+  uploadTestcaseInput,
+  uploadTestcaseOutput,
+  addTestcaseWithFile,
 };

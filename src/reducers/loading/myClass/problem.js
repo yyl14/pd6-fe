@@ -14,6 +14,10 @@ const initialState = {
   editAssistingData: false,
   addAssistingData: false,
   submitCode: false,
+  editTestcase: false,
+  uploadTestcaseInput: false,
+  uploadTestcaseOutput: false,
+  addTestcase: false,
 };
 
 export default function problem(state = initialState, action) {
@@ -212,6 +216,66 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         submitCode: false,
+      };
+    case problemConstants.EDIT_TESTCASE_SUCCESS:
+      return {
+        ...state,
+        editTestcase: false,
+      };
+    case problemConstants.EDIT_TESTCASE_FAIL:
+      return {
+        ...state,
+        editTestcase: false,
+      };
+    case problemConstants.EDIT_TESTCASE_START:
+      return {
+        ...state,
+        editTestcase: true,
+      };
+    case problemConstants.UPLOAD_TESTCASE_INPUT_START:
+      return {
+        ...state,
+        uploadTestcaseInput: true,
+      };
+    case problemConstants.UPLOAD_TESTCASE_INPUT_SUCCESS:
+      return {
+        ...state,
+        uploadTestcaseInput: false,
+      };
+    case problemConstants.UPLOAD_TESTCASE_INPUT_FAIL:
+      return {
+        ...state,
+        uploadTestcaseInput: false,
+      };
+    case problemConstants.UPLOAD_TESTCASE_OUTPUT_START:
+      return {
+        ...state,
+        uploadTestcaseOutput: true,
+      };
+    case problemConstants.UPLOAD_TESTCASE_OUTPUT_SUCCESS:
+      return {
+        ...state,
+        uploadTestcaseOutput: false,
+      };
+    case problemConstants.UPLOAD_TESTCASE_OUTPUT_FAIL:
+      return {
+        ...state,
+        uploadTestcaseOutput: false,
+      };
+    case problemConstants.ADD_TESTCASE_START:
+      return {
+        ...state,
+        addTestcase: true,
+      };
+    case problemConstants.ADD_TESTCASE_SUCCESS:
+      return {
+        ...state,
+        addTestcase: false,
+      };
+    case problemConstants.ADD_TESTCASE_FAIL:
+      return {
+        ...state,
+        addTestcase: false,
       };
     default: {
       return state;
