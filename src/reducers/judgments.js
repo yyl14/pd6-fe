@@ -8,7 +8,10 @@ const byId = (state = {}, action) => {
       return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.judgments);
     }
     case problemConstants.READ_SUBMISSION_JUDGE_SUCCESS: {
-      return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+      return {
+        ...state,
+        [action.payload.id]: action.payload,
+      };
     }
     default:
       return state;
@@ -18,13 +21,7 @@ const byId = (state = {}, action) => {
 const allIds = (state = [], action) => {
   switch (action.type) {
     case problemConstants.READ_SUBMISSION_JUDGE_SUCCESS: {
-      // return action.payload.map((item) => (state.includes(item.id) ? state : state.concat([item.id])));
-      return action.payload.reduce((acc, item) => {
-        if (state.includes(item.id)) {
-          return [...acc];
-        }
-        return [...acc, item.id];
-      }, state);
+      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
     }
     case submissionConstants.FETCH_JUDGEMENT_SUCCESS: {
       const { data } = action.payload;

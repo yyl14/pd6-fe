@@ -13,6 +13,7 @@ import {
 import { useHistory, useParams, Link } from 'react-router-dom';
 import moment from 'moment';
 import { format } from 'date-fns';
+import Icon from '../../../ui/icon/index';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import NoMatch from '../../../noMatch';
@@ -32,6 +33,10 @@ const useStyles = makeStyles((theme) => ({
     '&:active': {
       color: theme.palette.primary.dark,
     },
+  },
+  generalButtons: {
+    display: 'flex',
+    justifyContent: 'flex-end',
   },
 }));
 
@@ -76,6 +81,12 @@ export default function SubmissionDetail() {
   //   return (<div>{error.readSubmission}</div>);
   // }
 
+  const handleRefresh = () => {
+    dispatch(readSubmission(authToken, account.id, problemId));
+    dispatch(browseSubmitLang(authToken));
+    dispatch(readSubmissionDetail(authToken, submissionId, problemId, challengeId));
+  };
+
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
@@ -83,6 +94,10 @@ export default function SubmissionDetail() {
         {' '}
         / Submission Detail
       </Typography>
+      <div className={classNames.generalButtons}>
+        <Button>Rejudge</Button>
+        <Button color="primary" startIcon={<Icon.RefreshOutlinedIcon />} onClick={handleRefresh}>Refresh</Button>
+      </div>
       <SimpleBar title="Submission Information">
         <AlignedText text="Submission ID" childrenType="text">
           <Typography variant="body1">{submissionId}</Typography>
@@ -115,9 +130,9 @@ export default function SubmissionDetail() {
           {judgmentIds.map((key) => {
             if (judgments[key].submission_id === parseInt(submissionId, 10)) {
               if (judgments[key].status === 'ACCEPTED') {
-                return <Typography variant="body1" color="primary">{judgments[key].status}</Typography>;
+                return <Typography variant="body1" color="primary" key={key}>{judgments[key].status}</Typography>;
               }
-              return <Typography variant="body1" color="secondary">{judgments[key].status}</Typography>;
+              return <Typography variant="body1" color="secondary" key={key}>{judgments[key].status}</Typography>;
             }
             return '';
           })}
@@ -133,7 +148,6 @@ export default function SubmissionDetail() {
         <AlignedText text="Language" childrenType="text">
           {submitLangs[submissions[submissionId].language_id]
             && <Typography variant="body1">{submitLangs[submissions[submissionId].language_id].name}</Typography>}
-
         </AlignedText>
       </SimpleBar>
       <SimpleBar title="Submission Result" />

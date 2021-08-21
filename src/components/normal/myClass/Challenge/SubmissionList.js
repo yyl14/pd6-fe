@@ -88,6 +88,10 @@ export default function SubmissionList() {
     return <div>loading...</div>;
   }
 
+  const handleRefresh = () => {
+    dispatch(readSubmission(authToken, accountId, problemId));
+  };
+
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
@@ -108,7 +112,7 @@ export default function SubmissionList() {
         hasSearch={false}
         buttons={(
           <>
-            <Button color="primary" startIcon={<Icon.RefreshOutlinedIcon />}>
+            <Button color="primary" startIcon={<Icon.RefreshOutlinedIcon />} onClick={handleRefresh}>
               Refresh
             </Button>
           </>
