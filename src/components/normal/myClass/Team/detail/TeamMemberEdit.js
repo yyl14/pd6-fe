@@ -47,6 +47,7 @@ export default function TeamMemberEdit(props) {
     if (!loading.addTeamMember) {
       setTableData(
         teamMemberIds.map((id) => ({
+          id: classMembers[id].member_id,
           username: classMembers[id].username,
           student_id: classMembers[id].student_id,
           real_name: classMembers[id].real_name,
@@ -69,7 +70,7 @@ export default function TeamMemberEdit(props) {
   };
 
   const handleCancel = () => {
-    console.log(tableData, props.originData);
+    // console.log(tableData, props.originData);
     tableData
       .map((item) => ({ ...item, id: teamMemberIds.filter((id) => classMembers[id].student_id === item.student_id) }))
       .map((item) => dispatch(deleteTeamMember(authToken, teamId, item.id)));
@@ -80,11 +81,12 @@ export default function TeamMemberEdit(props) {
       }));
       dispatch(addTeamMember(authToken, teamId, null, null, true, array));
     }, 1000);
-    setTimeout(() => { props.handleBack(); }, 300);
+    props.handleBack();
+    // setTimeout(() => { props.handleBack(); }, 300);
   };
 
   const handleSave = () => {
-    console.log(tableData);
+    // console.log(tableData);
     teamMemberIds.map((id) => (dispatch(deleteTeamMember(authToken, teamId, id))));
     setTimeout(() => {
       const array = tableData.map((item) => ({
@@ -93,7 +95,9 @@ export default function TeamMemberEdit(props) {
       }));
       dispatch(addTeamMember(authToken, teamId, null, null, true, array));
     }, 1000);
-    setTimeout(() => { props.handleBack(); }, 300);
+    props.setTableData(tableData);
+    props.handleBack();
+    // setTimeout(() => { props.handleBack(); }, 300);
   };
 
   const handleAdd = () => {
@@ -120,6 +124,7 @@ export default function TeamMemberEdit(props) {
             )
           }
           data={tableData}
+          setData={setTableData}
           columns={[
             {
               id: 'username',
@@ -158,7 +163,6 @@ export default function TeamMemberEdit(props) {
           ]}
         />
       </>
-      {/* </SimpleBar> */}
       <Button onClick={handleCancel}>
         Cancel
       </Button>

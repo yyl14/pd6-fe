@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 // TODO: delete member, edit member's role, layout
-
 export default function ChallengeList() {
   const classNames = useStyles();
   const dispatch = useDispatch();
@@ -52,7 +51,6 @@ export default function ChallengeList() {
   const [editTeamMember, setEditTeamMember] = useState(false);
 
   const [tableData, setTableData] = useState([]);
-  const [originData, setOriginData] = useState([]);
 
   useEffect(() => {
     user.classes.forEach((item) => {
@@ -77,15 +75,16 @@ export default function ChallengeList() {
   }, [authToken, classId, dispatch, loading.editTeam]);
 
   useEffect(() => {
-    if (!loading.editTeamMember && !loading.addTeamMember && !loading.deleteTeamMember) {
-      dispatch(fetchTeamMember(authToken, teamId));
-    }
-  }, [authToken, dispatch, loading.addTeamMember, loading.deleteTeamMember, loading.editTeamMember, teamId]);
+    // if (!loading.addTeamMember) {
+    dispatch(fetchTeamMember(authToken, teamId));
+    // }
+  }, [authToken, dispatch, teamId]);
 
   useEffect(() => {
-    if (classMembers !== undefined && !loading.addTeamMember && !loading.editTeamMember && !loading.deleteTeamMember) {
+    if (!loading.addTeamMember) {
       setTableData(
         teamMemberIds.map((id) => ({
+          id: classMembers[id].member_id,
           username: classMembers[id].username,
           student_id: classMembers[id].student_id,
           real_name: classMembers[id].real_name,
@@ -94,7 +93,7 @@ export default function ChallengeList() {
         })),
       );
     }
-  }, [teamMemberIds, classMembers, loading.addTeamMember, loading.editTeamMember, loading.deleteTeamMember]);
+  }, [teamMemberIds, classMembers, loading.addTeamMember]);
 
   const handleInfoBack = () => {
     setEditTeamInfo(false);
@@ -109,7 +108,6 @@ export default function ChallengeList() {
   };
 
   const handleMemberEdit = () => {
-    setOriginData(tableData);
     setEditTeamMember(true);
   };
 
@@ -145,7 +143,8 @@ export default function ChallengeList() {
       {editTeamMember ? (
         <TeamMemberEdit
           isManager={isManager}
-          originData={originData}
+          originData={tableData}
+          setOriginData={setTableData()}
           handleBack={handleMemberBack}
         />
       ) : (

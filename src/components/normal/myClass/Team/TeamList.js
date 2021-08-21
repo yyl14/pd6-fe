@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2),
   },
   templateBtn: {
-    marginRight: '155px',
+    marginRight: '115px',
   },
 }));
 
