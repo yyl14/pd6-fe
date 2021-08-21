@@ -82,14 +82,20 @@ export default function Team({
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}
       >
-        {mode === 'main' ? <div className={classNames.topSpace} /> : arrow}
-        <div>
+        {arrow}
+        <div className={classNames.title}>
           {display === 'unfold' ? (
-            <Icon.TriangleDown className={classNames.titleIcon} onClick={foldTeam} />
+            <Icon.TriangleDown
+              className={classNames.titleIcon}
+              onClick={foldTeam}
+            />
           ) : (
-            <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldTeam} />
+            <Icon.TriangleRight
+              className={classNames.titleIcon}
+              onClick={unfoldTeam}
+            />
           )}
-          <Typography variant="h4" className={classNames.title}>
+          <Typography variant="h4" className={classNames.titleText}>
             {title}
           </Typography>
         </div>
@@ -97,13 +103,11 @@ export default function Team({
         {display === 'unfold' ? (
           <List>
             {itemList.map((item) => (
-              <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
-                <ListItemIcon className={location.pathname.includes(item.path) ? classNames.svg : classNames.icon}>
-                  {item.icon}
-                </ListItemIcon>
+              <ListItem button key={item.text} className={classNames.item}>
+                <ListItemIcon className={classNames.itemIcon} style={{ color: location.pathname.includes(item.path) ? '#1EA5FF' : '' }}>{item.icon}</ListItemIcon>
                 <ListItemText
                   primary={item.text}
-                  className={location.pathname.includes(item.path) ? classNames.active : null}
+                  className={location.pathname.includes(item.path) ? classNames.activeItemText : classNames.itemText}
                 />
               </ListItem>
             ))}

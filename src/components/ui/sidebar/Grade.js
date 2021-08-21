@@ -57,14 +57,20 @@ export default function Grade({
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}
       >
-        {mode === 'main' ? <div className={classNames.topSpace} /> : arrow}
-        <div>
+        { arrow}
+        <div className={classNames.title}>
           {display === 'unfold' ? (
-            <Icon.TriangleDown className={classNames.titleIcon} onClick={foldGrade} />
+            <Icon.TriangleDown
+              className={classNames.titleIcon}
+              onClick={foldGrade}
+            />
           ) : (
-            <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldGrade} />
+            <Icon.TriangleRight
+              className={classNames.titleIcon}
+              onClick={unfoldGrade}
+            />
           )}
-          <Typography variant="h4" className={classNames.title}>
+          <Typography variant="h4" className={classNames.titleText}>
             {title}
           </Typography>
         </div>
@@ -73,16 +79,10 @@ export default function Grade({
           <List>
             {itemList.map((item) => (
               <ListItem button key={item.text} className={classNames.item}>
-                <ListItemIcon>
-                  {location.pathname.includes(item.path) ? (
-                    <Icon.GradeActive className={classNames.icon} />
-                  ) : (
-                    <Icon.Grade className={classNames.icon} />
-                  )}
-                </ListItemIcon>
+                <ListItemIcon className={classNames.itemIcon} style={{ color: location.pathname.includes(item.path) ? '#1EA5FF' : '' }}>{item.icon}</ListItemIcon>
                 <ListItemText
                   primary={item.text}
-                  className={location.pathname.includes(item.path) ? classNames.active : null}
+                  className={location.pathname.includes(item.path) ? classNames.activeItemText : classNames.itemText}
                 />
               </ListItem>
             ))}

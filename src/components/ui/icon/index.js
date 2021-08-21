@@ -33,8 +33,6 @@ import { ReactComponent as Download } from './download.svg';
 import { ReactComponent as Expand } from './expand.svg';
 import { ReactComponent as Folder } from './folder.svg';
 import { ReactComponent as Grade } from './grade.svg';
-import { ReactComponent as GradeActive } from './grade_active.svg';
-import { ReactComponent as Info } from './info.svg';
 import { ReactComponent as Overview } from './overview.svg';
 import { ReactComponent as Paper } from './paper.svg';
 import { ReactComponent as Peerreview } from './peerReview.svg';
@@ -107,8 +105,6 @@ export default {
   Expand,
   Folder,
   Grade,
-  GradeActive,
-  Info,
   Overview,
   Paper,
   Peerreview,

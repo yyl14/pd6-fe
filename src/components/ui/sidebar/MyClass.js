@@ -16,22 +16,18 @@ export default function MyClass({
   const baseURL = '/my-class';
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.myClass.challenge);
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
-  const userClasses = useSelector((state) => state.user.classes);
+  const userClasses = useSelector((state) => state.user.classes.sort((a, b) => (a.course_id > b.course_id) - (a.course_id < b.course_id)));
 
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchClass(authToken, classId));
   }, [dispatch, authToken, classId, courseId]);
 
-  // const [display, setDisplay] = useState('unfold');
-
-  const [display, setDisplay] = useState([]);
+  const [display, setDisplay] = useState([]); // 0: fold, 1: unfold
   const [titles, setTitles] = useState([]);
   const [itemLists, setItemLists] = useState([]);
-  const [arrow, setArrow] = useState(null);
   const [TAicons, setTAicons] = useState([]);
 
   useEffect(() => {
@@ -47,10 +43,6 @@ export default function MyClass({
   }, [classId, courseId, history, userClasses]);
 
   useEffect(() => {
-    const goBackToChallenge = () => {
-      history.push(`${baseURL}/${courseId}/${classId}/challenge`);
-    };
-
     if (
       mode === 'main'
       && userClasses[0].course_id !== undefined
@@ -58,11 +50,13 @@ export default function MyClass({
       && courses[courseId] !== undefined
       && classes[classId] !== undefined
     ) {
+      setDisplay([]);
       userClasses.map((userClass, id) => {
         if (userClass.class_id === Number(classId)) {
-          display.push(1);
+          // current class
+          setDisplay((prevDisplay) => [...prevDisplay, 1]); // unfold
         } else {
-          display.push(0);
+          setDisplay((prevDisplay) => [...prevDisplay, 0]); // fold
         }
 
         setTitles((prevTitles) => [...prevTitles, `${userClass.course_name} ${userClass.class_name}`]);
@@ -86,7 +80,7 @@ export default function MyClass({
               },
               {
                 text: 'Grade',
-                icon: 'Grade',
+                icon: <Icon.Grade />,
                 path: `${baseURL}/${userClass.course_id}/${userClass.class_id}/grade`,
               },
               {
@@ -113,7 +107,7 @@ export default function MyClass({
               },
               {
                 text: 'Grade',
-                icon: 'Grade',
+                icon: <Icon.Grade />,
                 path: `${baseURL}/${userClass.course_id}/${userClass.class_id}/grade`,
               },
               {
@@ -146,30 +140,16 @@ export default function MyClass({
         return userClass;
       });
     }
-  }, [
-    location.pathname,
-    history,
-    mode,
-    courses,
-    classes,
-    userClasses,
-    courseId,
-    classId,
-    classNames.activeIcon,
-    classNames.icon,
-    classNames.arrow,
-    classNames.svg,
-    display,
-  ]);
+  }, [location.pathname, history, mode, courses, classes, userClasses, courseId, classId]);
 
-  const foldAccount = (id) => {
+  const foldMyClass = (id) => {
     console.log(id);
     const updatedDisplay = [...display];
     updatedDisplay[id] = 0;
     setDisplay(updatedDisplay);
   };
 
-  const unfoldAccount = (id) => {
+  const unfoldMyClass = (id) => {
     console.log(id);
     const updatedDisplay = [...display];
     updatedDisplay[id] = 1;
@@ -202,77 +182,55 @@ export default function MyClass({
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}
       >
-        {mode === 'main' ? <div className={classNames.topSpace} /> : arrow}
+        <div className={classNames.topSpace} />
 
-        {userClasses.map((userClass, id) => (
-          <div key={userClass.class_id}>
-            <div>
+        {userClasses.map((userClass, id) => {
+          console.log(userClass);
+          return (
+            <div key={userClass.class_id}>
+              <div className={classNames.title}>
+                {display[id] === 1 ? (
+                  <Icon.TriangleDown
+                    className={classNames.titleIcon}
+                    onClick={() => foldMyClass(id)}
+                  />
+                ) : (
+                  <Icon.TriangleRight
+                    className={classNames.titleIcon}
+                    onClick={() => unfoldMyClass(id)}
+                  />
+                )}
+                <Typography variant="h4" className={classNames.titleText}>
+                  {titles[id]}
+                  {TAicons[id]}
+                </Typography>
+              </div>
+              <Divider variant="middle" className={classNames.divider} />
               {display[id] === 1 ? (
-                <Icon.TriangleDown
-                  className={id === 0 ? classNames.titleIcon : classNames.secondTitleIcon}
-                  onClick={() => foldAccount(id)}
-                />
-              ) : (
-                <Icon.TriangleRight
-                  className={id === 0 ? classNames.titleIcon : classNames.secondTitleIcon}
-                  onClick={() => unfoldAccount(id)}
-                />
-              )}
-              <Typography variant="h4" className={id === 0 ? classNames.title : classNames.secondTitle}>
-                {titles[id]}
-                {TAicons[id]}
-              </Typography>
-            </div>
-            <Divider variant="middle" className={classNames.divider} />
-            {display[id] === 1 ? (
-              <List>
-                {itemLists[id].map((item) => {
-                  if (item.icon !== 'Grade') {
-                    return (
-                      <ListItem
-                        button
-                        key={item.text}
-                        onClick={() => history.push(item.path)}
-                        className={classNames.item}
-                      >
-                        <ListItemIcon className={location.pathname === item.path ? classNames.svg : classNames.icon}>
-                          {item.icon}
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={item.text}
-                          className={location.pathname === item.path ? classNames.active : null}
-                        />
-                      </ListItem>
-                    );
-                  }
-                  return (
+                <List>
+                  {itemLists[id].map((item) => (
                     <ListItem
                       button
                       key={item.text}
                       onClick={() => history.push(item.path)}
                       className={classNames.item}
                     >
-                      <ListItemIcon>
-                        {location.pathname === `${baseURL}/${userClass.course_id}/${userClass.class_id}/grade` ? (
-                          <Icon.GradeActive className={classNames.icon} />
-                        ) : (
-                          <Icon.Grade className={classNames.icon} />
-                        )}
+                      <ListItemIcon className={classNames.itemIcon} style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}>
+                        {item.icon}
                       </ListItemIcon>
                       <ListItemText
                         primary={item.text}
-                        className={location.pathname === item.path ? classNames.active : null}
+                        className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
                       />
                     </ListItem>
-                  );
-                })}
-              </List>
-            ) : (
-              ''
-            )}
-          </div>
-        ))}
-
+                  ))}
+                </List>
+              ) : (
+                ''
+              )}
+            </div>
+          );
+        })}
         <div className={classNames.bottomSpace} />
       </Drawer>
     </div>

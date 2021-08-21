@@ -33,7 +33,6 @@ export default function Submission({
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
   const [arrow, setArrow] = useState(null);
-  const [TAicon, setTAicon] = useState(null);
 
   useEffect(() => {
     const goBackToSubmission = () => {
@@ -88,16 +87,15 @@ export default function Submission({
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}
       >
-        {mode === 'main' ? <div className={classNames.topSpace} /> : arrow}
-        <div>
+        {arrow}
+        <div className={classNames.title}>
           {display === 'unfold' ? (
             <Icon.TriangleDown className={classNames.titleIcon} onClick={foldAccount} />
           ) : (
             <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldAccount} />
           )}
-          <Typography variant="h4" className={classNames.title}>
+          <Typography variant="h4" className={classNames.titleText}>
             {title}
-            {TAicon}
           </Typography>
         </div>
         <Divider variant="middle" className={classNames.divider} />
@@ -105,10 +103,10 @@ export default function Submission({
           <List>
             {itemList.map((item) => (
               <ListItem button key={item.text} className={classNames.item}>
-                <ListItemIcon className={location.pathname.includes(item.path) ? classNames.svg : classNames.icon}>{item.icon}</ListItemIcon>
+                <ListItemIcon className={classNames.itemIcon} style={{ color: location.pathname.includes(item.path) ? '#1EA5FF' : '' }}>{item.icon}</ListItemIcon>
                 <ListItemText
                   primary={item.text}
-                  className={location.pathname.includes(item.path) ? classNames.active : null}
+                  className={location.pathname.includes(item.path) ? classNames.activeItemText : classNames.itemText}
                 />
               </ListItem>
             ))}

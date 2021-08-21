@@ -44,23 +44,31 @@ export default function Challenge({
     };
 
     if (mode === 'challenge' && challenges[challengeId] !== undefined) {
-      setArrow(<IconButton className={classNames.arrow} onClick={goBackToChallenge}><Icon.ArrowBackRoundedIcon /></IconButton>);
+      // console.log(challenges[challengeId]);
+      setArrow(
+        <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
       setTitle(challenges[challengeId].title);
       setItemList([
         {
           text: 'Info',
-          icon: (
-            <Icon.Info
-              className={
-                location.pathname === `${baseURL}/${courseId}/${classId}/challenge/${challengeId}` ? classNames.svg : classNames.icon
-              }
-            />
-          ),
+          icon: <Icon.Warning />,
           path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
         },
       ]);
     }
-  }, [challengeId, challenges, classId, classNames.arrow, classNames.icon, classNames.svg, courseId, history, location.pathname, mode]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    challengeId,
+    challenges,
+    classId,
+    courseId,
+    history,
+    location.pathname,
+    mode,
+  ]);
 
   const foldChallenge = () => {
     setDisplay('fold');
@@ -96,14 +104,14 @@ export default function Challenge({
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}
       >
-        {mode === 'main' ? <div className={classNames.topSpace} /> : arrow}
-        <div>
+        {arrow}
+        <div className={classNames.title}>
           {display === 'unfold' ? (
             <Icon.TriangleDown className={classNames.titleIcon} onClick={foldChallenge} />
           ) : (
             <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldChallenge} />
           )}
-          <Typography variant="h4" className={classNames.title}>
+          <Typography variant="h4" className={classNames.titleText}>
             {title}
           </Typography>
         </div>
@@ -112,10 +120,15 @@ export default function Challenge({
           <List>
             {itemList.map((item) => (
               <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemIcon
+                  className={classNames.itemIcon}
+                  style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
+                >
+                  {item.icon}
+                </ListItemIcon>
                 <ListItemText
                   primary={item.text}
-                  className={location.pathname === item.path ? classNames.active : null}
+                  className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
                 />
               </ListItem>
             ))}

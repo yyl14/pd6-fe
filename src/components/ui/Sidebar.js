@@ -13,7 +13,6 @@ import Challenge from './sidebar/Challenge';
 import Submission from './sidebar/Submission';
 import Grade from './sidebar/Grade';
 import Team from './sidebar/Team';
-import Member from './sidebar/Member';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -26,76 +25,69 @@ const useStyles = makeStyles((theme) => ({
     height: 'calc(100% - 55px)',
     width: '300px',
   },
-  active: {
-    color: theme.palette.primary.main,
-  },
+
   topSpace: {
-    marginTop: '82.5px',
+    marginTop: '110px',
   },
   bottomSpace: {
     marginBottom: '40px',
   },
+  title: {
+    display: 'flex',
+    marginTop: '20px',
+    marginBottom: '6px',
+  },
   titleIcon: {
-    float: 'left',
+    margin: 'auto 0',
+    flex: '1',
     color: theme.palette.black.main,
-    marginTop: '44px',
-    marginBottom: '6.33px',
-    marginLeft: '20px',
-    marginRight: '14px',
     '&:hover': {
       cursor: 'pointer',
     },
   },
-  title: {
-    float: 'left',
-    marginTop: '40px',
-    marginBottom: '6.33px',
+
+  titleText: {
+    flex: '5',
   },
-  secondTitle: {
-    float: 'left',
-    marginTop: '25px',
-    marginBottom: '6.33px',
-  },
-  icon: {
+  itemIcon: {
+    flex: '1',
+    width: '18px',
     color: theme.palette.black.main,
     marginLeft: '35px',
-    marginRight: '21px',
+    marginRight: '-15px',
   },
-  myClassIcon: {
-    color: theme.palette.black.main,
-    marginLeft: '35px',
-    marginRight: '5px',
+  itemText: {
+    flex: '8',
+    width: '30px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
-  activeIcon: {
+  activeItemText: {
+    flex: '10',
     color: theme.palette.primary.main,
-    marginLeft: '35px',
-    marginRight: '21px',
+    width: '30px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
+
   greyIcon: {
     color: theme.palette.grey.A400,
     marginLeft: '35px',
     marginRight: '21px',
   },
-  secondTitleIcon: {
-    float: 'left',
-    color: theme.palette.black.main,
-    marginTop: '29px',
-    marginBottom: '6.33px',
-    marginLeft: '20px',
-    marginRight: '14px',
-    '&:hover': {
-      cursor: 'pointer',
-    },
-  },
   divider: {
     marginBottom: '16px',
   },
   arrow: {
-    marginTop: '65px',
-    marginLeft: '15px',
+    marginTop: '60px',
+    marginLeft: '10px',
     marginRight: 'auto',
+    marginBottom: '20px',
   },
   item: {
+    display: 'flex',
     paddingTop: '7.5px',
     paddingBottom: '7.5px',
   },
@@ -113,22 +105,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
-  svg: {
-    '& path': {
-      fill: theme.palette.primary.main, // <-- our blue
-    },
-    marginLeft: '35px',
-    marginRight: '21px',
-  },
-  myClassSvg: {
-    svg: {
-      '& path': {
-        fill: theme.palette.primary.main, // <-- our blue
-      },
-      marginLeft: '35px',
-      marginRight: '5px',
-    },
-  },
+
 }));
 
 export default function Sidebar() {
