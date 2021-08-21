@@ -68,7 +68,6 @@ const useStyles = makeStyles((theme) => ({
   container: {
     maxHeight: 800,
   },
-
   tableRowContainerLeftSpacing: {
     width: '15px',
     padding: '0px',
@@ -101,7 +100,6 @@ const useStyles = makeStyles((theme) => ({
   row: {
     height: '60px',
   },
-
   bottom: {
     height: '75px',
     display: 'flex',
@@ -131,16 +129,6 @@ const useStyles = makeStyles((theme) => ({
   detailLink: {
     color: 'black',
   },
-  textLink: {
-    textDecoration: 'none',
-    color: theme.palette.primary.main,
-    '&:hover': {
-      color: theme.palette.primary.hover,
-    },
-    '&:active': {
-      color: theme.palette.primary.dark,
-    },
-  },
   toggleButtonIcon: {
     height: '20px',
     width: '20px',
@@ -149,15 +137,32 @@ const useStyles = makeStyles((theme) => ({
     height: '35px',
     margin: 'auto',
   },
+  textLink: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+  },
 }));
+
+// const tableRefetch = (limit, offset, filters, sorts) => dispatch(action(authToken, problemId, limit, offset, filter, sort))
+
+// TODO: new API
+
+// hasSearch,
+// tableRefetch,
+// buttons,
+// columns,
+// data,
+// hasLink,
+// linkName,
+// children,
 
 export default function CustomTable({
   hasSearch,
-  searchWidthOption = 1,
-  searchPlaceholder,
+  // searchWidthOption = 1, // will remove
+  // searchPlaceholder, // will remove
   buttons,
   columns,
-  columnComponent,
+  // columnComponent, // will remove
   data,
   hasLink,
   linkName,
@@ -166,9 +171,11 @@ export default function CustomTable({
   const classes = useStyles();
   const [curPage, setPage] = useState(0);
   const [pageInput, setPageInput] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [search, setSearch] = useState('');
   const [filterData, setFilterData] = useState(data);
+
+  const [filters, setFilters] = useState([]);
 
   const handleChangePage = (event, newPage) => {
     if (newPage + 1 <= Math.ceil(filterData.length / rowsPerPage) && newPage >= 0) {
@@ -201,6 +208,11 @@ export default function CustomTable({
     return classes.columnLabelDefault;
   };
 
+  // TODO: table refetch
+  // useEffect(()=>{
+  //   tableRefetch(limit, offset, filter, sort)
+  // }, [limit, offset, filter, sort])
+
   useEffect(() => {
     if (pageInput <= Math.ceil(filterData.length / rowsPerPage) && pageInput >= 1) {
       setPage(pageInput - 1);
@@ -208,42 +220,57 @@ export default function CustomTable({
   }, [filterData.length, pageInput, rowsPerPage]);
 
   useEffect(() => {
-    if (search !== '') {
-      const newData = data.filter((row) => {
-        let cnt = 0;
-        columns.forEach((column) => {
-          if (row[column.id].indexOf(search) >= 0) {
-            cnt += 1;
-          }
-        });
-        return cnt > 0;
-      });
-      setFilterData(newData);
-    } else {
-      setFilterData(data);
-    }
-  }, [columns, data, search]);
+    // if (search !== '') {
+    //   const newData = data.filter((row) => {
+    //     let cnt = 0;
+    //     columns.forEach((column) => {
+    //       if (row[column.id].indexOf(search) >= 0) {
+    //         cnt += 1;
+    //       }
+    //     });
+    //     return cnt > 0;
+    //   });
+    //   setFilterData(newData);
+    // } else {
+    //   setFilterData(data);
+    // }
+    setFilterData(data);
+  }, [columns, data]);
 
   return (
     <>
+      {/*
+      TODO: Table head component
+
+      props:
+
+      filtersConfig: [
+        {column: 'Name', type: 'TextField', options:null, operation: 'LIKE'},
+        {column: 'Role', type: 'Dropdown' options:['a', 'b', 'c'], operation: 'IN'},
+        {column: 'Start Time', type: 'Date', options: null, operation: 'BETWEEN'}],
+      filters: [['Start Time', 'LIKE', 'something'], ['Name', 'IN', ['b', 'c']], ['Start Time', 'BETWEEN', ['2021-08-16T14:21:54Z', '2021-08-16T14:21:54Z']]]
+      setFilters,
+      buttons,
+      */}
+
       <div className={hasSearch ? classes.topContent1 : classes.topContent2}>
-        { hasSearch && (
-        <TextField
-          id="search"
-          className={searchWidth(searchWidthOption)}
-          onChange={(e) => {
-            setSearch(e.target.value);
-          }}
-          value={search}
-          placeholder={searchPlaceholder}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <Icon.SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
+        {hasSearch && (
+          <TextField
+            id="search"
+            // className={searchWidth(searchWidthOption)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+            value={search}
+            placeholder={"This doesn't work."}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Icon.SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
         )}
         <div className={classes.buttons}>{buttons}</div>
       </div>
@@ -257,61 +284,82 @@ export default function CustomTable({
                 {columns.map((column) => (
                   <React.Fragment key={`${column.id}-${column.label}`}>
                     <TableCell className={`${classes.tableHeadCell} ${classes.tableColumnLeftSpacing}`} />
-                    <TableCell align={column.align} className={classes.tableHeadCell} style={{ minWidth: column.minWidth, width: column.width }}>
-                      <div className={classes.column}>
+                    <TableCell
+                      align={column.align}
+                      className={classes.tableHeadCell}
+                      style={{ minWidth: column.minWidth, width: column.width }}
+                    >
+                      <b>{column.label}</b>
+                      {/* <div className={classes.column}>
                         <div className={labelMoveLeft(columnComponent, columns, column)}>
                           <b>{column.label}</b>
                         </div>
                         <div className={classes.columnComponent}>
-                          { columnComponent && columnComponent[columns.findIndex((x) => x.id === column.id)]}
+                          {columnComponent && columnComponent[columns.findIndex((x) => x.id === column.id)]}
                         </div>
-                      </div>
+                      </div> */}
                     </TableCell>
                   </React.Fragment>
                 ))}
-                {hasLink
-                  ? (<TableCell key="link" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
-                  ) : (<TableCell key="blank" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />)}
+
+                {
+                  // TODO: simplify this
+                  hasLink ? (
+                    <TableCell key="link" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
+                  ) : (
+                    <TableCell key="blank" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
+                  )
+                }
               </TableRow>
             </TableHead>
             <TableBody>
-              {filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row[columns[0].id]} className={classes.row}>
-                  <TableCell className={classes.tableRowContainerLeftSpacing} />
-                  {columns.map((column) => {
-                    if (column.type === 'link') {
-                      const link = row[column.link_id];
+              {
+                /* TODO
+              if => switch
+              column.type: 'text', 'number', 'link', 'date'
+              */
+                filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row[columns[0].id]} className={classes.row}>
+                    <TableCell className={classes.tableRowContainerLeftSpacing} />
+                    {columns.map((column) => {
+                      if (column.type === 'link') {
+                        const link = row[column.link_id];
+                        const value = row[column.id];
+                        return (
+                          <React.Fragment key={`${column.id}-${column.label}`}>
+                            <TableCell className={classes.tableColumnLeftSpacing} />
+                            <TableCell align={column.align}>
+                              <Link to={link} className={classes.textLink} replace>
+                                {column.format && typeof value === 'number' ? column.format(value) : value}
+                              </Link>
+                            </TableCell>
+                          </React.Fragment>
+                        );
+                      }
                       const value = row[column.id];
                       return (
                         <React.Fragment key={`${column.id}-${column.label}`}>
                           <TableCell className={classes.tableColumnLeftSpacing} />
                           <TableCell align={column.align}>
-                            <Link to={link} className={classes.textLink} replace>{column.format && typeof value === 'number' ? column.format(value) : value}</Link>
+                            {column.format && typeof value === 'number' ? column.format(value) : value}
                           </TableCell>
                         </React.Fragment>
                       );
-                    }
-                    const value = row[column.id];
-                    return (
-                      <React.Fragment key={`${column.id}-${column.label}`}>
-                        <TableCell className={classes.tableColumnLeftSpacing} />
-                        <TableCell align={column.align}>
-                          {column.format && typeof value === 'number' ? column.format(value) : value}
-                        </TableCell>
-                      </React.Fragment>
-                    );
-                  })}
-                  {hasLink ? (
-                    <TableCell key={`${row.id}-show`} align="right">
-                      <Link to={row[linkName]} className={classes.detailLink}>
-                        <IconButton>
-                          <Icon.ArrowForwardRoundedIcon className={classes.toggleButtonIcon} />
-                        </IconButton>
-                      </Link>
-                    </TableCell>
-                  ) : (<TableCell key={`${row.id}-blank`} align="right" style={{ minWidth: 20 }} />)}
-                </TableRow>
-              ))}
+                    })}
+                    {hasLink ? (
+                      <TableCell key={`${row.id}-show`} align="right">
+                        <Link to={row[linkName]} className={classes.detailLink}>
+                          <IconButton>
+                            <Icon.ArrowForwardRoundedIcon className={classes.toggleButtonIcon} />
+                          </IconButton>
+                        </Link>
+                      </TableCell>
+                    ) : (
+                      <TableCell key={`${row.id}-blank`} align="right" style={{ minWidth: 20 }} />
+                    )}
+                  </TableRow>
+                ))
+              }
             </TableBody>
           </Table>
         </TableContainer>
@@ -326,10 +374,10 @@ export default function CustomTable({
                 setRowsPerPage(e.target.value);
               }}
             >
-              <MenuItem value={5}>5</MenuItem>
               <MenuItem value={10}>10</MenuItem>
               <MenuItem value={25}>25</MenuItem>
               <MenuItem value={50}>50</MenuItem>
+              <MenuItem value={100}>100</MenuItem>
             </Select>
           </FormControl>
 

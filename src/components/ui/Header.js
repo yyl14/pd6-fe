@@ -13,15 +13,13 @@ import {
   MenuItem,
   MenuList,
 } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 import { format } from 'date-fns';
+import { GolfCourseTwoTone } from '@material-ui/icons';
 import Icon from './icon/index';
-// import {
-//   AddCircleOutline,
-//   CallMissedOutgoingRounded,
-//   PlayCircleFilledWhite,
-//   SubjectOutlined,
-// } from '@material-ui/icons';
+import { userLogout } from '../../actions/user/auth';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -44,12 +42,12 @@ const useStyles = makeStyles((theme) => ({
   date: {
     float: 'left',
     marginRight: '20px',
-    marginTop: '3px',
+    marginTop: '2px',
     marginBottom: 'auto',
   },
   notification: {
     float: 'left',
-    width: '3.28vh',
+    width: '20px',
     marginTop: '3px',
     marginBottom: 'auto',
     marginRight: '16px',
@@ -118,31 +116,32 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '-40px',
     minWidth: '140px',
     zIndex: '1',
-    '& a': {
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
+    borderRadius: '10px',
+    '& span': {
       color: theme.palette.black.main,
       padding: '12px',
       textDecoration: 'none',
       textAlign: 'center',
       display: 'block',
+      borderRadius: '10px',
     },
-    '& a:hover': {
+    '& span:hover': {
+      cursor: 'pointer',
       backgroundColor: theme.palette.grey.A100,
     },
   },
 }));
 
 export default function Header({ role, hasClass }) {
+  const user = useSelector((state) => state.user);
   const baseURL = '';
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
   let itemList = [];
   const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   H:mm'));
-  const menuList = [
-    { title: 'My Submission', link: '/my-submission' },
-    { title: 'My Profile', link: '/my-profile' },
-    { title: 'Logout', link: '/login' },
-  ];
+  let menuList = [];
 
   if (role === 'MANAGER') {
     itemList = [
@@ -165,6 +164,10 @@ export default function Header({ role, hasClass }) {
         text: 'About',
         path: '/about',
       },
+    ];
+    menuList = [
+      { title: 'My Profile', link: '/my-profile' },
+      { title: 'Logout', link: '/logout' },
     ];
   } else if (role === 'NORMAL') {
     if (hasClass) {
@@ -219,6 +222,11 @@ export default function Header({ role, hasClass }) {
         },
       ];
     }
+    menuList = [
+      { title: 'My Submission', link: '/my-submission' },
+      { title: 'My Profile', link: '/my-profile' },
+      { title: 'Logout', link: '/logout' },
+    ];
   } else {
     // System Guest
     itemList = [];
@@ -267,6 +275,23 @@ export default function Header({ role, hasClass }) {
     prevOpen.current = open;
   }, [open]);
 
+  const dispatch = useDispatch();
+  const [cookiesId, setCookieId, removeCookieId] = useCookies(['id']);
+  const [cookiesToken, setCookieToken, removeCookieToken] = useCookies(['token']);
+  // const [idCookies, setIdCookie] = useCookies(['id']);
+  // const [tokenCookies, setTokenCookie] = useCookies(['token']);
+
+  const goto = (link) => {
+    // console.log(link);
+    if (link === '/logout') {
+      removeCookieId('id');
+      removeCookieToken('token');
+      dispatch(userLogout(history));
+    } else {
+      history.push(link);
+    }
+  };
+
   return (
     <div>
       <AppBar className={classes.appbar} elevation={0}>
@@ -285,50 +310,24 @@ export default function Header({ role, hasClass }) {
           <div className={classes.right}>
             <Typography className={classes.date}>{currentTime}</Typography>
             <Icon.NotificationsIcon className={classes.notification} />
-            {/* <Typography variant="h6" className={classes.name}> */}
             <div className={classes.dropdown}>
               <button type="button" className={classes.dropbtn}>
-                <Typography variant="h6">Shiba</Typography>
+                <Typography variant="h6">{user.username}</Typography>
               </button>
               <div className={classes.dropdownContent}>
                 {menuList.map((item, id) => (
-                  <a key={item.link} href={item.link}>
+                  <span
+                    key={item.link}
+                    tabIndex={item.link}
+                    role="button"
+                    onClick={() => goto(item.link)}
+                    onKeyDown={() => goto(item.link)}
+                  >
                     {item.title}
-                  </a>
+                  </span>
                 ))}
               </div>
             </div>
-            {/* <Button
-              ref={anchorRef}
-              aria-controls={open ? 'menu-list-grow' : undefined}
-              aria-haspopup="true"
-              onClick={handleToggle}
-              className={classes.name}
-            >
-              Shiba
-            </Button> */}
-            {/* <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
-              {({ TransitionProps, placement }) => (
-                <Grow
-                  // eslint-disable-next-line react/jsx-props-no-spreading
-                  {...TransitionProps}
-                  style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-                >
-                  <Paper>
-                    <ClickAwayListener onClickAway={handleClose}>
-                      <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
-                        {menuList.map((menu, id) => (
-                          <MenuItem onClick={handleClose} key={menu.title}>
-                            <a href={menu.link}>{menu.title}</a>
-                          </MenuItem>
-                        ))}
-                      </MenuList>
-                    </ClickAwayListener>
-                  </Paper>
-                </Grow>
-              )}
-            </Popper> */}
-            {/* </Typography> */}
           </div>
         </Toolbar>
       </AppBar>

@@ -85,4 +85,81 @@ const editClassMember = (token, classId, editedList) => (dispatch) => {
 //     });
 // };
 
-export { getInstitutes, fetchClassMembers, editClassMember };
+const browseSubmitLang = (token) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: commonConstants.BROWSE_SUBMISSION_LANG_START });
+    const submitLang = await agent.get('/submission/language', auth);
+    dispatch({
+      type: commonConstants.BROWSE_SUBMISSION_LANG_SUCCESS,
+      payload: submitLang.data.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: commonConstants.BROWSE_SUBMISSION_LANG_FAIL,
+      errors: err,
+    });
+  }
+};
+
+const fetchCourse = (token, courseId) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: commonConstants.FETCH_COURSE_START });
+    const res = await agent.get(`/course/${courseId}`, auth);
+    dispatch({ type: commonConstants.FETCH_COURSE_SUCCESS, payload: res.data.data });
+  } catch (err) {
+    dispatch({
+      type: commonConstants.FETCH_COURSE_FAIL,
+      error: err,
+    });
+  }
+};
+
+const fetchClass = (token, classId) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: commonConstants.FETCH_CLASS_START });
+    const res = await agent.get(`/class/${classId}`, auth);
+    dispatch({ type: commonConstants.FETCH_CLASS_SUCCESS, payload: res.data.data });
+  } catch (err) {
+    dispatch({
+      type: commonConstants.FETCH_CLASS_FAIL,
+      error: err,
+    });
+  }
+};
+
+const fetchAccount = (token, accountId) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: commonConstants.FETCH_ACCOUNT_REQUEST });
+    const res = await agent.get(`/account/${accountId}`, auth);
+    dispatch({ type: commonConstants.FETCH_ACCOUNT_SUCCESS, payload: res.data.data });
+  } catch (err) {
+    dispatch({
+      type: commonConstants.FETCH_ACCOUNT_FAIL,
+      error: err,
+    });
+  }
+};
+
+export {
+  getInstitutes, fetchClassMembers, editClassMember, fetchCourse, fetchClass, fetchAccount, browseSubmitLang,
+};

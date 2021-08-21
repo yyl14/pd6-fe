@@ -3,7 +3,8 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Button, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { editAccount, fetchAccount, fetchStudentCard } from '../../../../actions/admin/account';
+import { editAccount, fetchStudentCard } from '../../../../actions/admin/account';
+import { fetchAccount } from '../../../../actions/common/common';
 import SimpleBar from '../../../ui/SimpleBar';
 import NoMatch from '../../../noMatch';
 import BasicInfo from './BasicInfo';
@@ -29,7 +30,7 @@ export default function AccountSetting() {
 
   const dispatch = useDispatch();
   const { accountId } = useParams();
-  const authToken = useSelector((state) => state.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   const accounts = useSelector((state) => state.accounts.byId);
   const studentCards = useSelector((state) => state.studentCards.byId);
   const loading = useSelector((state) => state.loading.admin.account);

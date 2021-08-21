@@ -132,7 +132,11 @@ export default function SimpleTable({
                     </div>
                   </TableCell>
                 ))}
-                <TableCell key="delete" align="right" className={isEdit && hasDelete ? classes.tableHeadCell : classes.hide} />
+                {
+                  isEdit && hasDelete
+                    ? <TableCell key="delete" align="right" className={classes.tableHeadCell} />
+                    : <TableCell key="blank" align="right" className={classes.tableHeadCell} />
+                }
               </TableRow>
             </TableHead>
             <TableBody>
@@ -194,14 +198,20 @@ export default function SimpleTable({
                       </TableCell>
                     );
                   })}
-                  <TableCell key={`${row.id}-deleteIcon`} className={isEdit && hasDelete ? classes.deleteCell : classes.hide} align="right">
-                    <Icon.Trash
-                      className={classes.deleteIcon}
-                      onClick={(e) => {
-                        handleDelete(e, row.id);
-                      }}
-                    />
-                  </TableCell>
+                  {
+                    isEdit && hasDelete
+                      ? (
+                        <TableCell key={`${row.id}-deleteIcon`} className={classes.deleteCell} align="right">
+                          <Icon.Trash
+                            className={classes.deleteIcon}
+                            onClick={(e) => {
+                              handleDelete(e, row.id);
+                            }}
+                          />
+                        </TableCell>
+                      )
+                      : <TableCell key="blank" align="right" />
+                  }
                 </TableRow>
               ))}
             </TableBody>

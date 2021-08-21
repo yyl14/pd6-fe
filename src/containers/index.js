@@ -58,7 +58,7 @@ class Index extends Component {
       <div className="wrapper">
         <Switch>
           <Route path="/admin" component={Admin} />
-          <Route path="/account" component={Account} />
+          <Route path="/my-profile" component={Account} />
           <Route path="/" component={Normal} />
         </Switch>
       </div>
