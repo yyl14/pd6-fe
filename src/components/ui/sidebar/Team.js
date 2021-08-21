@@ -85,15 +85,9 @@ export default function Team({
         {arrow}
         <div className={classNames.title}>
           {display === 'unfold' ? (
-            <Icon.TriangleDown
-              className={classNames.titleIcon}
-              onClick={foldTeam}
-            />
+            <Icon.TriangleDown className={classNames.titleIcon} onClick={foldTeam} />
           ) : (
-            <Icon.TriangleRight
-              className={classNames.titleIcon}
-              onClick={unfoldTeam}
-            />
+            <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldTeam} />
           )}
           <Typography variant="h4" className={classNames.titleText}>
             {title}
@@ -104,7 +98,12 @@ export default function Team({
           <List>
             {itemList.map((item) => (
               <ListItem button key={item.text} className={classNames.item}>
-                <ListItemIcon className={classNames.itemIcon} style={{ color: location.pathname.includes(item.path) ? '#1EA5FF' : '' }}>{item.icon}</ListItemIcon>
+                <ListItemIcon
+                  className={classNames.itemIcon}
+                  style={{ color: location.pathname.includes(item.path) ? '#1EA5FF' : '' }}
+                >
+                  {item.icon}
+                </ListItemIcon>
                 <ListItemText
                   primary={item.text}
                   className={location.pathname.includes(item.path) ? classNames.activeItemText : classNames.itemText}
