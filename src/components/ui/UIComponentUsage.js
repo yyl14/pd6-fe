@@ -16,12 +16,12 @@ import {
   Card,
   CardContent,
   Snackbar,
+  Link,
   FormControlLabel,
   Switch,
 } from '@material-ui/core';
-import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
-import DeleteIcon from '@material-ui/icons/Delete';
 import moment from 'moment';
+import Icon from './icon/index';
 import CopyToClipboardButton from './CopyToClipboardButton';
 import SampleTestArea from './SampleTestArea';
 import DateRangePicker from './DateRangePicker';
@@ -34,6 +34,8 @@ import TableFilterCard from './TableFilterCard';
 import ErrorText from './ErrorText';
 import Header from './Header';
 import Sidebar from './Sidebar';
+import MultiSelect from './MultiSelect';
+import CustomCheckbox from './CustomCheckbox';
 
 const useStyles = makeStyles((theme) => ({
   bigTitle: {
@@ -47,6 +49,10 @@ const useStyles = makeStyles((theme) => ({
     margin: '10px 20px 60px 80px',
     width: '50%',
   },
+  buttonsWrapper: {
+    margin: '10px 20px 60px 80px',
+    width: '80%',
+  },
   divider: {
     marginTop: '0px',
     marginBottom: '25px',
@@ -59,6 +65,12 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: '35px',
+  },
+  buttons: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
     marginLeft: '35px',
   },
   children: {
@@ -80,14 +92,6 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     marginBottom: '20px',
     marginLeft: '35px',
-  },
-  iconButtonIcon: {
-    height: '20px',
-    width: '20px',
-  },
-  toggleButtonIcon: {
-    height: '18px',
-    width: '18px',
   },
 }));
 
@@ -118,25 +122,163 @@ export default function UIComponentUsage() {
     filter: ['Select all'],
     sort: '(None)',
   });
+  const [multiSelect, setMultiSelect] = useState([]);
 
   return (
     <div>
-      <Typography variant="h3" className={classes.bigTitle}>Themed Components</Typography>
-      <div className={classes.row}>
-        <div className={classes.wrapper}>
-          <Typography variant="h4">Button</Typography>
-          <hr className={classes.divider} />
-          <div className={classes.component}>
-            <Button>Edit</Button>
-            <Button variant="text" color="primary">Submit</Button>
-            <Button variant="outlined" color="secondary">Delete</Button>
-            <Button color="secondary" startIcon={<DeleteIcon />}>Delete</Button>
-            {/* <Button color="secondary" endIcon={<DeleteIcon />}>Delete</Button> */}
-            {/* Icon size of toggle button and icon button are different!  */}
-            <Button variant="outlined" color="secondary"><DeleteIcon className={classes.iconButtonIcon} /></Button>
-            <IconButton><ArrowForwardRoundedIcon className={classes.toggleButtonIcon} /></IconButton>
+      <Typography variant="h3" className={classes.bigTitle}>
+        Themed Components
+      </Typography>
+      <div className={classes.buttonsWrapper}>
+        <Typography variant="h4">Button</Typography>
+        <hr className={classes.divider} />
+        <div className={classes.row}>
+          <div className={classes.buttons}>
+            <div className={classes.children}>
+              <Button>Edit</Button>
+              <Button color="primary">Edit</Button>
+              <Button color="secondary">Edit</Button>
+              <Button disabled>Edit</Button>
+            </div>
+            <div className={classes.children}>
+              <Button variant="outlined">Edit</Button>
+              <Button variant="outlined" color="primary">
+                Edit
+              </Button>
+              <Button variant="outlined" color="secondary">
+                Edit
+              </Button>
+              <Button variant="outlined" disabled>
+                Edit
+              </Button>
+            </div>
+            <div className={classes.children}>
+              <Button variant="text" color="primary">
+                Edit
+              </Button>
+              <Button variant="text" color="secondary">
+                Edit
+              </Button>
+              <Button variant="text" disabled>
+                Edit
+              </Button>
+            </div>
+            <div className={classes.children}>
+              <Button startIcon={<Icon.Statistic />}>Submit</Button>
+              <Button color="primary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button color="secondary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button disabled startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+            </div>
+            <div className={classes.children}>
+              <Button variant="outlined" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button variant="outlined" color="primary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button variant="outlined" color="secondary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button variant="outlined" disabled startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+            </div>
+            <div className={classes.children}>
+              <Button variant="text" color="primary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button variant="text" color="secondary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button variant="text" disabled startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+            </div>
+          </div>
+          <div className={classes.buttons}>
+            <div className={classes.children}>
+              <Button>
+                <Icon.Statistic />
+              </Button>
+              <Button color="primary">
+                <Icon.Statistic />
+              </Button>
+              <Button color="secondary">
+                <Icon.Statistic />
+              </Button>
+              <Button disabled>
+                <Icon.Statistic />
+              </Button>
+            </div>
+            <div className={classes.children}>
+              <Button variant="outlined">
+                <Icon.Statistic />
+              </Button>
+              <Button variant="outlined" color="primary">
+                <Icon.Statistic />
+              </Button>
+              <Button variant="outlined" color="secondary">
+                <Icon.Statistic />
+              </Button>
+              <Button variant="outlined" disabled>
+                <Icon.Statistic />
+              </Button>
+            </div>
+            <div className={classes.children}>
+              <Button variant="text" color="primary">
+                <Icon.Statistic />
+              </Button>
+              <Button variant="text" color="secondary">
+                <Icon.Statistic />
+              </Button>
+              <Button variant="text" disabled>
+                <Icon.Statistic />
+              </Button>
+            </div>
+            <div className={classes.children}>
+              <IconButton>
+                <Icon.ArrowForwardRoundedIcon />
+              </IconButton>
+              <IconButton disabled>
+                <Icon.ArrowForwardRoundedIcon />
+              </IconButton>
+            </div>
           </div>
         </div>
+      </div>
+      <div className={classes.row}>
+        <div className={classes.wrapper}>
+          <Typography variant="h4">Switch</Typography>
+          <hr className={classes.divider} />
+          <div className={classes.component}>
+            <FormControlLabel
+              control={(
+                <Switch
+                  checked={switchStatus}
+                  onChange={(e) => setSwitchStatus(e.target.checked)}
+                  name="status"
+                  color="primary"
+                />
+              )}
+              label={switchStatus ? 'Enabled' : 'Disabled'}
+            />
+          </div>
+        </div>
+        <div className={classes.wrapper}>
+          <Typography variant="h4">Checkbox</Typography>
+          <hr className={classes.divider} />
+          <div className={classes.component}>
+            <CustomCheckbox isChecked />
+          </div>
+        </div>
+      </div>
+      <div className={classes.row}>
         <div className={classes.wrapper}>
           <Typography variant="h4">Select</Typography>
           <hr className={classes.divider} />
@@ -149,6 +291,13 @@ export default function UIComponentUsage() {
                 <MenuItem value="Java">Java</MenuItem>
               </Select>
             </FormControl>
+          </div>
+        </div>
+        <div className={classes.wrapper}>
+          <Typography variant="h4">MultiSelect</Typography>
+          <hr className={classes.divider} />
+          <div className={classes.component}>
+            <MultiSelect options={['option 1', 'option 2', 'option 3']} value={multiSelect} setValue={setMultiSelect} />
           </div>
         </div>
       </div>
@@ -215,26 +364,18 @@ export default function UIComponentUsage() {
               message="This is a snackbar with button"
               onClose={() => setShowSnackbarWithButton(false)}
               action={(
-                <Button variant="text" color="primary" onClick={() => setShowSnackbarWithButton(false)}>
+                <Link href onClick={() => setShowSnackbarWithButton(false)}>
                   <Typography variant="h6">Undo</Typography>
-                </Button>
-            )}
-            />
-          </div>
-        </div>
-        <div className={classes.wrapper}>
-          <Typography variant="h4">Switch</Typography>
-          <hr className={classes.divider} />
-          <div className={classes.component}>
-            <FormControlLabel
-              control={<Switch checked={switchStatus} onChange={(e) => setSwitchStatus(e.target.checked)} name="status" color="primary" />}
-              label={switchStatus ? 'Enabled' : 'Disabled'}
+                </Link>
+              )}
             />
           </div>
         </div>
       </div>
 
-      <Typography variant="h3" className={classes.bigTitle}>Customized Components</Typography>
+      <Typography variant="h3" className={classes.bigTitle}>
+        Customized Components
+      </Typography>
       <div className={classes.row}>
         <div className={classes.wrapper}>
           <Typography variant="h4">Aligned Text</Typography>
@@ -388,6 +529,43 @@ export default function UIComponentUsage() {
                 align: 'center',
                 width: 120,
                 type: 'string',
+              },
+            ]}
+          />
+        </div>
+        <br />
+        <div className={classes.component}>
+          <SimpleTable
+            isEdit
+            hasDelete
+            data={tableData}
+            columns={[
+              {
+                id: 'full_name',
+                label: 'Institute',
+                minWidth: 150,
+                align: 'center',
+                width: 500,
+                type: 'string',
+              },
+              {
+                id: 'email_domain',
+                label: 'Email',
+                minWidth: 50,
+                align: 'center',
+                width: 150,
+                type: 'string',
+                editType: 'input',
+              },
+              {
+                id: 'is_disabled',
+                label: 'Status',
+                minWidth: 50,
+                align: 'center',
+                width: 120,
+                type: 'string',
+                editType: 'dropdown',
+                dropdownList: ['Enabled', 'Disabled'],
               },
             ]}
           />

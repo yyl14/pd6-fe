@@ -16,20 +16,6 @@ const byId = (state = {}, action) => {
         },
       }), state);
     }
-
-    case problemConstants.READ_CHALLENGE_SUCCESS: {
-      return {
-        ...state,
-        [action.payload.id]: {
-          ...action.payload,
-          problemIds: state[action.payload.id] ? state[action.payload.id].problemIds : [],
-          peerReviewIds: state[action.payload.id] ? state[action.payload.id].peerReviewIds : [],
-          specialJudgeIds: state[action.payload.id] ? state[action.payload.id].specialJudgeIds : [],
-          essayIds: state[action.payload.id] ? state[action.payload.id].essayIds : [],
-        },
-      };
-    }
-
     case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data, id } = action.payload;
       return {
@@ -42,7 +28,19 @@ const byId = (state = {}, action) => {
         },
       };
     }
-
+    case problemConstants.READ_CHALLENGE_SUCCESS: {
+      const data = action.payload;
+      return {
+        ...state,
+        [data.id]: {
+          ...data,
+          problemIds: state[data.id] ? state[data.id].problemIds : [],
+          peerReviewIds: state[data.id] ? state[data.id].peerReviewIds : [],
+          specialJudgeIds: state[data.id] ? state[data.id].specialJudgeIds : [],
+          essayIds: state[data.id] ? state[data.id].essayIds : [],
+        },
+      };
+    }
     default:
       return state;
   }
@@ -54,11 +52,8 @@ const allIds = (state = [], action) => {
       const { data } = action.payload;
       return data.map((item) => item.id);
     }
-
-    case problemConstants.READ_CHALLENGE_SUCCESS: {
+    case problemConstants.READ_CHALLENGE_SUCCESS:
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
-    }
-
     default:
       return state;
   }

@@ -23,16 +23,13 @@ const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
   },
-  descriptionBlock: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
   descriptionField: {
     width: '60vw',
   },
   buttons: {
-    alignSelf: 'flex-end',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginTop: '50px',
   },
 }));
 
@@ -163,21 +160,15 @@ export default function ChallengeInfo() {
       >
         {editMode
           ? (
-            <div className={classes.descriptionBlock}>
-              <TextField
-                className={classes.descriptionField}
-                value={inputs}
-                onChange={(e) => setInputs(e.target.value)}
-                multiline
-                minRows={10}
-                maxRows={10}
-                variant="outlined"
-              />
-              <div className={classes.buttons}>
-                <Button onClick={handleCancel}>Cancel</Button>
-                <Button onClick={handleSave} color="primary">Save</Button>
-              </div>
-            </div>
+            <TextField
+              className={classes.descriptionField}
+              value={inputs}
+              onChange={(e) => setInputs(e.target.value)}
+              multiline
+              minRows={10}
+              maxRows={10}
+              variant="outlined"
+            />
           )
           : <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>{challenges[challengeId].description}</Typography>}
       </SimpleBar>
@@ -215,7 +206,7 @@ export default function ChallengeInfo() {
             label: 'Label',
             minWidth: 30,
             align: 'center',
-            width: 30,
+            width: 400,
             type: 'string',
           },
           {
@@ -223,12 +214,19 @@ export default function ChallengeInfo() {
             label: 'Score',
             minWidth: 50,
             align: 'center',
-            width: 500,
+            width: 600,
             type: 'string',
           },
         ]}
         data={tableData}
       />
+      {editMode
+        && (
+        <div className={classes.buttons}>
+          <Button onClick={handleCancel}>Cancel</Button>
+          <Button onClick={handleSave} color="primary">Save</Button>
+        </div>
+        )}
     </>
   );
 }

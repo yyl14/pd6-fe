@@ -5,6 +5,9 @@ const initialState = {
   editChallenge: null,
   browseTasksUnderChallenge: null,
   readProblem: null,
+  readSubmission: null,
+  readChallenge: null,
+  readJudgment: null,
 };
 
 export default function problem(state = initialState, action) {
@@ -18,6 +21,7 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         browseChallengeOverview: action.error,
+        readChallenge: action.errors,
       };
 
     case problemConstants.EDIT_CHALLENGE_SUCCESS:
@@ -47,7 +51,21 @@ export default function problem(state = initialState, action) {
         ...state,
         readProblem: action.errors,
       };
-
+    case problemConstants.READ_SUBMISSION_FAIL:
+      return {
+        ...state,
+        readSubmission: action.errors,
+      };
+    // case problemConstants.READ_CHALLENGE_FAIL:
+    //   return {
+    //     ...state,
+    //     readChallenge: action.errors,
+    //   };
+    case problemConstants.READ_SUBMISSION_JUDGE_FAIL:
+      return {
+        ...state,
+        readJudgment: action.errors,
+      };
     default: {
       return state;
     }
