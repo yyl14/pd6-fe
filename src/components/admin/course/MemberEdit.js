@@ -68,14 +68,6 @@ const MemberEdit = ({
   const [TAChanged, setTAChanged] = useState(false);
   const [studentChanged, setStudentChanged] = useState(false);
   const [guestChanged, setGuestChanged] = useState(false);
-
-  const [TAAddList, setTAAddList] = useState([]);
-  const [studentAddList, setStudentAddList] = useState([]);
-  const [guestAddList, setGuestAddList] = useState([]);
-  const [TADeleteList, setTADeleteList] = useState([]);
-  const [studentDeleteList, setStudentDeleteList] = useState([]);
-  const [guestDeleteList, setGuestDeleteList] = useState([]);
-
   const [showUnsaveDialog, setShowUnsaveDialog] = useState(false);
   const unblockHandle = useRef();
   const targetLocation = useRef();
@@ -129,19 +121,6 @@ const MemberEdit = ({
           .map((member) => member.student_id)
           .join('\n'),
     );
-    setTAAddList(e.target.value
-      .split('\n')
-      .filter((id) => members
-        .filter((item) => item.role === 'MANAGER')
-        .map((member) => member.student_id)
-        .indexOf(id)
-      === -1));
-    setTADeleteList(members
-      .filter((item) => item.role === 'MANAGER')
-      .map((member) => member.student_id)
-      .filter((id) => e.target.value
-        .split('\n')
-        .indexOf(id) === -1));
   };
 
   const handleChangeStudent = (e) => {
@@ -153,19 +132,6 @@ const MemberEdit = ({
           .map((member) => member.student_id)
           .join('\n'),
     );
-    setStudentAddList(e.target.value
-      .split('\n')
-      .filter((id) => members
-        .filter((item) => item.role === 'NORMAL')
-        .map((member) => member.student_id)
-        .indexOf(id)
-      === -1));
-    setStudentDeleteList(members
-      .filter((item) => item.role === 'NORMAL')
-      .map((member) => member.student_id)
-      .filter((id) => e.target.value
-        .split('\n')
-        .indexOf(id) === -1));
   };
   const handleChangeGuest = (e) => {
     setGuest(e.target.value);
@@ -176,19 +142,6 @@ const MemberEdit = ({
           .map((member) => member.student_id)
           .join('\n'),
     );
-    setGuestAddList(e.target.value
-      .split('\n')
-      .filter((id) => members
-        .filter((item) => item.role === 'GUEST')
-        .map((member) => member.student_id)
-        .indexOf(id)
-      === -1));
-    setGuestDeleteList(members
-      .filter((item) => item.role === 'GUEST')
-      .map((member) => member.student_id)
-      .filter((id) => e.target.value
-        .split('\n')
-        .indexOf(id) === -1));
   };
 
   const handleClickCancel = () => {
@@ -209,31 +162,13 @@ const MemberEdit = ({
 
   const handleSubmitSave = () => {
     setShowUnsaveDialog(false);
-    if (TAAddList.length >= 1 && TAAddList[0].length !== 0) {
-      // TAAddList.map((id) => dispatch(addClassMember(authToken, classId, id)));
-      console.log(TAAddList);
-    }
-    if (studentAddList.length >= 1 && studentAddList[0].length !== 0) {
-      // studentAddList.map((id) => dispatch(addClassMember(authToken, classId, id)));
-      console.log(studentAddList);
-    }
-    if (guestAddList.length >= 1 && guestAddList[0].length !== 0) {
-      // guestAddList.map((id) => dispatch(addClassMember(authToken, classId, id)));
-      console.log(guestAddList);
-    }
-    if (TADeleteList.length >= 1 && TADeleteList[0].length !== 0) {
-      // TADeleteList.map((id) => dispatch(deleteClassMember(authToken, classId, id)));
-      console.log(TADeleteList);
-    }
-    if (studentDeleteList.length >= 1 && studentDeleteList[0].length !== 0) {
-      // studentDeleteList.map((id) => dispatch(deleteClassMember(authToken, classId, id)));
-      console.log(studentDeleteList);
-    }
-    if (guestDeleteList.length >= 1 && guestDeleteList[0].length !== 0) {
-      // guestDeleteList.map((id) => dispatch(deleteClassMember(authToken, classId, id)));
-      console.log(guestDeleteList);
-    }
-
+    console.log(TA.split('\n'));
+    console.log(student.split('\n'));
+    console.log(guest.split('\n'));
+    /* TA.split('\n').map((id) => dispatch(replaceClassMember(authToken, classId, id, 'MANAGER')));
+    student.split('\n').map((id) => dispatch(replaceClassMember(authToken, classId, id, 'NORMAL')));
+    guest.split('\n').map((id) => dispatch(replaceClassMember(authToken, classId, id, 'GUEST')));
+*/
     backToMemberList();
     if (unblockHandle) {
       unblockHandle.current();
