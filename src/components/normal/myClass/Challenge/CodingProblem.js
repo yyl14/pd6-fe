@@ -56,6 +56,7 @@ export default function CodingProblem() {
   const authToken = useSelector((state) => state.auth.token);
   const error = useSelector((state) => state.error.myClass.problem);
   const loading = useSelector((state) => state.loading.myClass.problem);
+  const commonLoading = useSelector((state) => state.loading.common);
   const [role, setRole] = useState('Normal');
 
   const [edit, setEdit] = useState(false);
@@ -86,6 +87,9 @@ export default function CodingProblem() {
   // }
 
   if (problems[problemId] === undefined || challenges[challengeId] === undefined || courses[courseId] === undefined || classes[classId] === undefined) {
+    if (commonLoading.fetchCourse || commonLoading.fetchClass) {
+      return <div>loading...</div>;
+    }
     return <NoMatch />;
   }
 

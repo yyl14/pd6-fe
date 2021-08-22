@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function FileUploadArea({
-  text, fileAcceptFormat = 'pdf', selectedFile, setSelectedFile,
+  text, fileAcceptFormat = '.pdf', selectedFile, setSelectedFile,
 }) {
   const classes = useStyles();
 

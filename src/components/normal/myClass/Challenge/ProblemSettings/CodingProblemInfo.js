@@ -88,6 +88,77 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     });
   };
 
+  const downloadAllSampleFile = () => {
+    const files = sampleDataIds.reduce((acc, id) => {
+      if (testcases[id].input_file_uuid !== null && testcases[id].output_file_uuid !== null) {
+        console.log('hello');
+        return [...acc, {
+          uuid: testcases[id].input_file_uuid,
+          filename: testcases[id].input_filename,
+          as_attachment: false,
+        }, {
+          uuid: testcases[id].output_file_uuid,
+          filename: testcases[id].output_filename,
+          as_attachment: false,
+        }];
+      }
+      if (testcases[id].input_file_uuid !== null) {
+        return [...acc, {
+          uuid: testcases[id].input_file_uuid,
+          filename: testcases[id].input_filename,
+          as_attachment: false,
+        }];
+      }
+      if (testcases[id].output_file_uuid !== null) {
+        return [...acc, {
+          uuid: testcases[id].output_file_uuid,
+          filename: testcases[id].output_filename,
+          as_attachment: false,
+        }];
+      }
+
+      return acc;
+    }, []);
+    console.log(files);
+    files.forEach((file) => {
+      dispatch((downloadFile(authToken, file)));
+    });
+  };
+
+  const downloadAllTestingFile = () => {
+    const files = testcaseDataIds.reduce((acc, id) => {
+      if (testcases[id].input_file_uuid !== null && testcases[id].output_file_uuid !== null) {
+        return [...acc, {
+          uuid: testcases[id].input_file_uuid,
+          filename: testcases[id].input_filename,
+          as_attachment: false,
+        }, {
+          uuid: testcases[id].output_file_uuid,
+          filename: testcases[id].output_filename,
+          as_attachment: false,
+        }];
+      }
+      if (testcases[id].input_file_uuid !== null) {
+        return [...acc, {
+          uuid: testcases[id].input_file_uuid,
+          filename: testcases[id].input_filename,
+          as_attachment: false,
+        }];
+      }
+      if (testcases[id].output_file_uuid !== null) {
+        return [...acc, {
+          uuid: testcases[id].output_file_uuid,
+          filename: testcases[id].output_filename,
+          as_attachment: false,
+        }];
+      }
+
+      return acc;
+    }, []);
+    files.forEach((file) => {
+      dispatch((downloadFile(authToken, file)));
+    });
+  };
   useEffect(() => {
     dispatch((browseTestcase(authToken, problemId)));
     dispatch((browseAssistingData(authToken, problemId)));
@@ -97,6 +168,10 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     dispatch((fetchClass(authToken, classId)));
     dispatch((fetchCourse(authToken, courseId)));
   }, [authToken, classId, courseId, dispatch]);
+
+  if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
+    return <div>loading...</div>;
+  }
 
   if (problems[problemId] === undefined || classes[classId] === undefined || courses[courseId] === undefined) {
     return <NoMatch />;
@@ -114,7 +189,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         <Typography variant="body2">{problems[problemId] === undefined ? 'error' : problems[problemId].io_description}</Typography>
       </SimpleBar>
       <SimpleBar title="Sample">
-        {role === 'MANAGER' && <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button>}
+        {role === 'MANAGER' && <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllSampleFile}>Download All Files</Button>}
         <SimpleTable
           isEdit={false}
           hasDelete={false}
@@ -147,7 +222,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           data={
             sampleDataIds.map((id) => ({
               id: testcases[id].id,
-              no: testcases[id].input_filename === null ? parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10) : parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10),
+              no: testcases[id].input_filename === null ? parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10) : parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10),
               time_limit: testcases[id].time_limit,
               memory_limit: testcases[id].memory_limit,
             }))
@@ -167,7 +242,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         </div>
       </SimpleBar>
       <SimpleBar title="Testing Data">
-        {role === 'MANAGER' && <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button>}
+        {role === 'MANAGER' && <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllTestingFile}>Download All Files</Button>}
         <SimpleTable
           isEdit={false}
           hasDelete={false}

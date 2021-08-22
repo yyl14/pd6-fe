@@ -52,6 +52,7 @@ export default function TestingDataUploadCard({
     const newSelectedFile = selectedFile.map((data) => ({
       ...data,
       no: data.id,
+      score,
       time_limit: time,
       memory_limit: memory,
     }));

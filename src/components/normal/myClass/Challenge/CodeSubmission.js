@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
   codingField: {
     width: '60vw',
   },
+  bottomButton: {
+    display: 'flex-end',
+  },
 }));
 
 /* This is a level 4 component (page component) */
@@ -116,7 +119,7 @@ export default function CodeSubmission() {
           maxRows={20}
         />
       </AlignedText>
-      <div>
+      <div className={classNames.bottomButton}>
         <Button color="default" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`)}>Cancel</Button>
         <Button color="primary" onClick={handleSubmit}>Submit</Button>
       </div>

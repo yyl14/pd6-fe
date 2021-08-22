@@ -24,6 +24,7 @@ import NoMatch from '../../../../noMatch';
 
 import {
   editProblemInfo, deleteAssistingData, editAssistingData, addAssistingData,
+  deleteTestcase, editTestcase, uploadTestcaseInput, uploadTestcaseOutput, addTestcaseWithFile,
 } from '../../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
@@ -80,6 +81,8 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
+  const [hasChange, setHasChange] = useState(false);
+
   const [label, setLabel] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label);
   const [title, setTitle] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].title);
   const [description, setDescription] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].description);
@@ -97,6 +100,9 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       memory_limit: testcases[id].memory_limit,
       input_filename: testcases[id].input_filename,
       output_filename: testcases[id].output_filename,
+      in_file: null,
+      out_file: null,
+      new: false,
     })),
   );
   const [testcaseTableData, setTestcaseTableData] = useState(
@@ -108,6 +114,9 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       score: testcases[id].score,
       input_filename: testcases[id].input_filename,
       output_filename: testcases[id].output_filename,
+      in_file: null,
+      out_file: null,
+      new: false,
     })),
   );
   const [assistTableData, setAssistTableData] = useState(problems[problemId] !== undefined
@@ -137,18 +146,95 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
 
   const handleSampleTempUpload = (newSelectedFiles) => {
     // TODO: set table data
-    console.log(newSelectedFiles);
-    const newTableData = sampleTableData;
+    // console.log(newSelectedFiles);
+    const newTableData = sampleTableData.reduce((acc, data) => {
+      const selectedData = newSelectedFiles.filter((file) => data.no === file.no);
+      if (selectedData.length === 0) {
+        return [...acc, data];
+      }
+      return [...acc,
+        {
+          id: data.id,
+          no: data.no,
+          time_limit: selectedData[0].time_limit,
+          memory_limit: selectedData[0].memory_limit,
+          input_filename: selectedData[0].in === null ? data.input_filename : selectedData[0].in.name,
+          output_filename: selectedData[0].out === null ? data.output_filename : selectedData[0].out.name,
+          in_file: selectedData[0].in === null ? data.in_file : selectedData[0].in,
+          out_file: selectedData[0].out === null ? data.out_file : selectedData[0].out,
+          new: data.new,
+        }];
+    }, []);
+
+    newSelectedFiles.map((item) => {
+      const selectedData = sampleTableData.filter((data) => data.no === item.no);
+      if (selectedData.length === 0) {
+        newTableData.push({
+          id: -item.no,
+          no: item.no,
+          time_limit: item.time_limit,
+          memory_limit: item.memory_limit,
+          input_filename: item.in === null ? null : item.in.name,
+          output_filename: item.out === null ? null : item.out.name,
+          in_file: item.in,
+          out_file: item.out,
+          new: true,
+        });
+      }
+      return item;
+    });
+    // console.log(newTableData);
     // setSelectedFileS(tempSelectedFileS);
+    setSampleTableData(newTableData);
     setTempSelectedFileS([]);
+    setHasChange(true);
   };
 
   const handleTestingTempUpload = (newSelectedFiles) => {
     // TODO: set table data
+    const newTableData = testcaseTableData.reduce((acc, data) => {
+      const selectedData = newSelectedFiles.filter((file) => data.no === file.no);
+      if (selectedData.length === 0) {
+        return [...acc, data];
+      }
+      return [...acc,
+        {
+          id: data.id,
+          no: data.no,
+          score: data.score,
+          time_limit: selectedData[0].time_limit,
+          memory_limit: selectedData[0].memory_limit,
+          input_filename: selectedData[0].in === null ? data.input_filename : selectedData[0].in.name,
+          output_filename: selectedData[0].out === null ? data.output_filename : selectedData[0].out.name,
+          in_file: selectedData[0].in === null ? data.in_file : selectedData[0].in,
+          out_file: selectedData[0].out === null ? data.out_file : selectedData[0].out,
+          new: data.new,
+        }];
+    }, []);
 
-    console.log(newSelectedFiles);
+    newSelectedFiles.map((item) => {
+      const selectedData = testcaseTableData.filter((data) => data.no === item.no);
+      if (selectedData.length === 0) {
+        newTableData.push({
+          id: -item.no,
+          no: item.no,
+          score: item.score,
+          time_limit: item.time_limit,
+          memory_limit: item.memory_limit,
+          input_filename: item.in === null ? null : item.in.name,
+          output_filename: item.out === null ? null : item.out.name,
+          in_file: item.in,
+          out_file: item.out,
+          new: true,
+        });
+      }
+      return item;
+    });
+    // console.log(newTableData);
+    setTestcaseTableData(newTableData);
     // setSelectedFileT(tempSelectedFileT);
     setTempSelectedFileT([]);
+    setHasChange(true);
   };
 
   const handleAssistTempUpload = () => {
@@ -170,14 +256,79 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
     setAssistTableData(newData);
     setSelectedFileA(tempSelectedFileA);
     setTempSelectedFileA([]);
+    setHasChange(true);
   };
 
   const handleSave = () => {
     dispatch(editProblemInfo(authToken, problemId, title, problems[problemId].full_score, !status, description, ioDescription, '', ''));
 
-    // TODO: handle sample file
+    // handle sample file
+    sampleDataIds.map((id) => {
+      const data = sampleTableData.filter((item) => item.id === id);
+      if (data.length === 0) {
+        // delete data
+        console.log(testcases[id].input_filename, ' should be deleted');
+        dispatch(deleteTestcase(authToken, id));
+      }
+      return id;
+    });
 
-    // TODO: handle testcase file
+    sampleTableData.map((data) => {
+      if (data.new) {
+        // add testcase with file
+        console.log(data.no, ' should be added.');
+        dispatch(addTestcaseWithFile(authToken, problemId, true, 0, data.time_limit, data.memory_limit, false, data.in_file, data.out_file));
+      } else {
+        console.log(data.no, ' is original testcase');
+        // check basic info
+        const id = sampleDataIds.filter((item) => item === data.id);
+        if (testcases[id[0]].time_limit !== data.time_limit || testcases[id[0]].memory_limit !== data.memory_limit || testcases[id[0]].is_disabled !== !status) {
+          dispatch(editTestcase(authToken, data.id, true, 0, data.time_limit, data.memory_limit, !status));
+        }
+        // upload file
+        if (data.in_file !== null) {
+          dispatch(uploadTestcaseInput(authToken, data.id, data.in_file));
+        }
+        if (data.out_file !== null) {
+          dispatch(uploadTestcaseOutput(authToken, data.id, data.out_file));
+        }
+      }
+      return data;
+    });
+
+    // handle testcase file
+    testcaseDataIds.map((id) => {
+      const data = testcaseTableData.filter((item) => item.id === id);
+      if (data.length === 0) {
+        // delete data
+        console.log(testcases[id].input_filename, ' should be deleted');
+        dispatch(deleteTestcase(authToken, id));
+      }
+      return id;
+    });
+
+    testcaseTableData.map((data) => {
+      if (data.new) {
+        // add testcase with file
+        console.log(data.no, ' should be added.');
+        dispatch(addTestcaseWithFile(authToken, problemId, false, data.score, data.time_limit, data.memory_limit, !status, data.in_file, data.out_file));
+      } else {
+        console.log(data.no, ' is original testcase');
+        // check basic info
+        const id = testcaseDataIds.filter((item) => item === data.id);
+        if (testcases[id[0]].time_limit !== data.time_limit || testcases[id[0]].memory_limit !== data.memory_limit || testcases[id[0]].score !== data.score || testcases[id[0]].is_disabled !== !status) {
+          dispatch(editTestcase(authToken, data.id, false, data.score, data.time_limit, data.memory_limit, !status));
+        }
+        // upload file
+        if (data.in_file !== null) {
+          dispatch(uploadTestcaseInput(authToken, data.id, data.in_file));
+        }
+        if (data.out_file !== null) {
+          dispatch(uploadTestcaseOutput(authToken, data.id, data.out_file));
+        }
+      }
+      return data;
+    });
 
     // handle assisting file
     let selectedFileABackUp = [...selectedFileA];
@@ -212,6 +363,14 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
     closeEdit();
   };
 
+  const handleCancel = () => {
+    if (hasChange) {
+      setWarningPopUp(true);
+    } else {
+      closeEdit();
+    }
+  };
+
   return (
     <>
       <SimpleBar title="Label">
@@ -220,6 +379,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           variant="outlined"
           onChange={(e) => {
             setLabel(e.target.value);
+            setHasChange(true);
           }}
           className={classNames.textfield}
         />
@@ -230,6 +390,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           variant="outlined"
           onChange={(e) => {
             setTitle(e.target.value);
+            setHasChange(true);
           }}
           className={classNames.textfield}
         />
@@ -240,6 +401,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           variant="outlined"
           onChange={(e) => {
             setDescription(e.target.value);
+            setHasChange(true);
           }}
           multiline
           minRows={10}
@@ -253,6 +415,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           variant="outlined"
           onChange={(e) => {
             setIoDescription(e.target.value);
+            setHasChange(true);
           }}
           multiline
           minRows={10}
@@ -413,7 +576,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
         />
       </SimpleBar>
       <div className={classNames.buttons}>
-        <Button color="default" onClick={() => setWarningPopUp(true)}>Cancel</Button>
+        <Button color="default" onClick={handleCancel}>Cancel</Button>
         <Button color="primary" onClick={handleSave}>Save</Button>
       </div>
       <SampleUploadCard popUp={samplePopUp} closePopUp={handleClosePopUp} selectedFile={tempSelectedFileS} setSelectedFile={setTempSelectedFileS} handleTempUpload={handleSampleTempUpload} />
