@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '50px',
   },
   reminder: {
-    color: '#AAAAAA',
+    color: theme.palette.grey.A400,
     marginLeft: theme.spacing(2),
   },
   templateBtn: {
