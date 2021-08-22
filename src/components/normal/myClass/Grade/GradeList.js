@@ -127,7 +127,9 @@ export default function GradeList() {
     setPopUp(false);
     setInputTitle('');
     setSelectedFile([]);
-    dispatch(addClassGrade(authToken, classId, selectedFile));
+    if (inputTitle !== '') {
+      dispatch(addClassGrade(authToken, classId, selectedFile));
+    }
   };
 
   const handleCancel = () => {
