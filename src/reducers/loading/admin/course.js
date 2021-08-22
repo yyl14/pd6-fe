@@ -11,9 +11,6 @@ const initialState = {
   addClass: false,
   renameClass: false,
   deleteClass: false,
-
-  fetchMembers: false,
-  editMembers: false,
 };
 
 export default function course(state = initialState, action) {

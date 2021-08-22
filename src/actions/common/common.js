@@ -61,6 +61,27 @@ const editClassMember = (token, classId, editedList) => (dispatch) => {
       });
     });
 };
+
+const replaceClassMembers = (token, classId, replacingList) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: commonConstants.REPLACE_CLASS_MEMBERS_REQUEST });
+    const res = await agent.put(`/class/${classId}/member`, replacingList, auth);
+    console.log(res);
+    dispatch({
+      type: commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS,
+    });
+  } catch (err) {
+    dispatch({
+      type: commonConstants.REPLACE_CLASS_MEMBERS_FAIL,
+      error: err,
+    });
+  }
+};
 // const deleteClassMember = (token, classId, memberId) => (dispatch) => {
 //   const auth = {
 //     headers: {
@@ -139,5 +160,5 @@ const fetchAccount = (token, accountId) => async (dispatch) => {
 };
 
 export {
-  getInstitutes, fetchClassMembers, editClassMember, fetchCourse, fetchClass, fetchAccount,
+  getInstitutes, fetchClassMembers, editClassMember, replaceClassMembers, fetchCourse, fetchClass, fetchAccount,
 };
