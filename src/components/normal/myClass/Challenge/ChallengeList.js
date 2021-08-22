@@ -108,7 +108,7 @@ export default function ChallengeList() {
       });
       if (isManager) {
         setTableData(
-          challengesID.map((id) => ({
+          challengesID.reverse().map((id) => ({
             title: challenges[id].title,
             path: `/my-class/${courseId}/${classId}/challenge/${id}`,
             startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
@@ -118,7 +118,7 @@ export default function ChallengeList() {
         );
       } else {
         setTableData(
-          challengesID.filter((id) => challenges[id].status !== 'Not Yet').map((id) => ({
+          challengesID.filter((id) => challenges[id].status !== 'Not Yet').reverse().map((id) => ({
             title: challenges[id].title,
             path: `/my-class/${courseId}/${classId}/challenge/${id}`,
             startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
