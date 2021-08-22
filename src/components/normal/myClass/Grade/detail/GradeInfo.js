@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Button, Typography,
+  makeStyles, Button, Typography,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import moment from 'moment-timezone';
 import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
 
+const useStyles = makeStyles((theme) => ({
+  textLink: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+  },
+}));
+
 export default function BasicInfo(props) {
+  const classNames = useStyles();
+
   return (
     <div>
       <SimpleBar
@@ -23,7 +32,7 @@ export default function BasicInfo(props) {
         <>
           <AlignedText text="Username" maxWidth="lg" childrenType="text">
             <Typography variant="body1">
-              <Link to={props.link}>{props.receiver.username}</Link>
+              <Link to={props.link} className={classNames.textLink}>{props.receiver.username}</Link>
             </Typography>
           </AlignedText>
           <AlignedText text="Student ID" maxWidth="lg" childrenType="text">

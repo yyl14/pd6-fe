@@ -21,10 +21,14 @@ const useStyles = makeStyles((theme) => ({
     width: '980px',
     marginBottom: '16px',
   },
+  textLink: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+  },
 }));
 
 export default function BasicInfoEdit(props) {
-  const classes = useStyles();
+  const classNames = useStyles();
   const dispatch = useDispatch();
   const { gradeId } = useParams();
 
@@ -45,7 +49,7 @@ export default function BasicInfoEdit(props) {
         <>
           <AlignedText text="Username" maxWidth="lg" childrenType="text">
             <Typography variant="body1">
-              <Link to={props.link}>{props.receiver.username}</Link>
+              <Link to={props.link} className={classNames.textLink}>{props.receiver.username}</Link>
             </Typography>
           </AlignedText>
           <AlignedText text="Student ID" maxWidth="lg" childrenType="text">
@@ -59,14 +63,14 @@ export default function BasicInfoEdit(props) {
           </AlignedText>
           <AlignedText text="Score" maxWidth="lg" childrenType="field">
             <TextField
-              className={classes.textFieldScore}
+              className={classNames.textFieldScore}
               value={score}
               onChange={(e) => setScore(e.target.value)}
             />
           </AlignedText>
           <AlignedText text="Comment" maxWidth="lg" childrenType="field">
             <TextField
-              className={classes.textFieldComment}
+              className={classNames.textFieldComment}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               multiline
