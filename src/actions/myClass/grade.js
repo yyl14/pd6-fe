@@ -22,17 +22,31 @@ export const fetchClassGrade = (token, classId) => async (dispatch) => {
   }
 };
 
-export const addClassGrade = (token, classId, gradeFile) => async (dispatch) => {
+export const addClassGrade = (token, classId, file) => async (dispatch) => {
+  dispatch({ type: gradeConstants.ADD_CLASS_GRADE_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+      'Content-Type': 'multipart/form-data',
+    },
+  };
+
+  const blob = new Blob([file]);
+  const formData = new FormData();
+  formData.append('grade_file', blob);
+
   try {
-    const auth = {
-      headers: {
-        'Auth-Token': token,
-      },
-    };
-    dispatch({ type: gradeConstants.ADD_CLASS_GRADE_START });
-    const res = await agent.post(`/class/${classId}/grade`, { grade_file: gradeFile }, auth);
-    console.log(res);
-    dispatch({ type: gradeConstants.ADD_CLASS_GRADE_SUCCESS });
+    const res = await agent.post(`/class/${classId}/grade`, formData, auth);
+    if (res.data.success) {
+      dispatch({
+        type: gradeConstants.ADD_CLASS_GRADE_SUCCESS,
+      });
+    } else {
+      dispatch({
+        type: gradeConstants.ADD_CLASS_GRADE_FAIL,
+        error: res.data.error,
+      });
+    }
   } catch (err) {
     dispatch({
       type: gradeConstants.ADD_CLASS_GRADE_FAIL,
