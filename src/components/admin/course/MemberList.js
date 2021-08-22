@@ -36,7 +36,7 @@ export default function MemberList() {
   const courses = useSelector((state) => state.courses);
   const classes = useSelector((state) => state.classes);
   const members = useSelector((state) => state.classMembers);
-  const loading = useSelector((state) => state.loading.admin.course);
+  const loading = useSelector((state) => state.loading.common.common);
 
   useEffect(() => {
     dispatch(fetchCourses(authToken));
@@ -47,10 +47,10 @@ export default function MemberList() {
   }, [authToken, courseId, dispatch]);
 
   useEffect(() => {
-    if (!loading.editMembers) {
+    if (!loading.replaceClassMembers) {
       dispatch(fetchClassMembers(authToken, classId));
     }
-  }, [authToken, classId, dispatch, loading.editMembers]);
+  }, [authToken, classId, dispatch, loading.replaceClassMembers]);
 
   const [edit, setEdit] = useState(false);
   const [tableData, setTableData] = useState([]);

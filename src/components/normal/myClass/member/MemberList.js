@@ -48,10 +48,10 @@ export default function MemberList() {
   }, [authToken, classId, dispatch]);
 
   useEffect(() => {
-    if (!loading.editClassMember) {
+    if (!loading.replaceClassMembers) {
       dispatch(fetchClassMembers(authToken, classId));
     }
-  }, [authToken, classId, dispatch, loading.editClassMember]);
+  }, [authToken, classId, dispatch, loading.replaceClassMembers]);
 
   const [edit, setEdit] = useState(false);
   const [tableData, setTableData] = useState([]);

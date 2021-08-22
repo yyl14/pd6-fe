@@ -14,7 +14,7 @@ import {
   DialogTitle,
   makeStyles,
 } from '@material-ui/core';
-import { deleteClassMember } from '../../../../actions/common/common';
+import { replaceClassMembers } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -159,15 +159,42 @@ const MemberEdit = ({
     }
   };
 
+  const handleBlankList = (list) => {
+    if (list.length === 1 && list[0].account_referral === '') {
+      return [];
+    }
+    return list;
+  };
+
   const handleSubmitSave = () => {
     setShowUnsaveDialog(false);
-    console.log(TA.split('\n'));
-    console.log(student.split('\n'));
-    console.log(guest.split('\n'));
-    /* TA.split('\n').map((id) => dispatch(replaceClassMember(authToken, classId, id, 'MANAGER')));
-    student.split('\n').map((id) => dispatch(replaceClassMember(authToken, classId, id, 'NORMAL')));
-    guest.split('\n').map((id) => dispatch(replaceClassMember(authToken, classId, id, 'GUEST')));
-*/
+
+    if (TAChanged || studentChanged || guestChanged) {
+      const TATransformedList = TA
+        .split('\n')
+        .map((accountReferral) => ({
+          account_referral: accountReferral,
+          role: 'MANAGER',
+        }));
+      const studentTransformedList = student
+        .split('\n')
+        .map((accountReferral) => ({
+          account_referral: accountReferral,
+          role: 'NORMAL',
+        }));
+      const guestTransformedList = guest
+        .split('\n')
+        .map((accountReferral) => ({
+          account_referral: accountReferral,
+          role: 'GUEST',
+        }));
+
+      const replacingList = handleBlankList(TATransformedList)
+        .concat(handleBlankList(studentTransformedList), handleBlankList(guestTransformedList));
+
+      dispatch(replaceClassMembers(authToken, classId, replacingList));
+    }
+
     backToMemberList();
     if (unblockHandle) {
       unblockHandle.current();
