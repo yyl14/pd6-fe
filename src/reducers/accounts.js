@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { accountConstants } from '../actions/admin/constant';
+import { accountConstants, systemConstants } from '../actions/admin/constant';
 import { gradeConstants } from '../actions/myClass/constant';
 import { commonConstants } from '../actions/common/constant';
 
@@ -10,6 +10,11 @@ const byId = (state = {}, action) => {
         (acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [], gradeIds: [] } }),
         state,
       );
+    }
+    case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
+      const { accounts } = action.payload;
+      // console.log(accounts);
+      return accounts.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [], gradeIds: [] } }), state);
     }
 
     case commonConstants.FETCH_ACCOUNT_SUCCESS: {
@@ -54,7 +59,12 @@ const byId = (state = {}, action) => {
 const allIds = (state = [], action) => {
   switch (action.type) {
     case accountConstants.FETCH_ACCOUNTS_SUCCESS: {
-      return action.payload.map((item) => item.id);
+      return [...new Set([...action.payload.map((item) => item.id), ...state])];
+    }
+    case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
+      const { accounts } = action.payload;
+      // console.log(accounts);
+      return [...new Set([...action.payload.accounts.map((item) => item.id), ...state])];
     }
 
     case commonConstants.FETCH_ACCOUNT_SUCCESS: {
