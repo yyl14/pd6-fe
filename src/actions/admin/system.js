@@ -30,17 +30,25 @@ const fetchAccessLog = (token, offset, limit) => (dispatch) => {
         }),
       );
 
-      const newData = data.map((item) => ({
-        id: item.id,
-        access_time: item.access_time,
-        request_method: item.request_method,
-        resource_path: item.resource_path,
-        ip: item.ip,
-        account_id: item.account_id,
-        username: accounts[item.account_id].username,
-        real_name: accounts[item.account_id].real_name,
-      }));
-
+      const newData = data.map((item) => {
+        let account = accounts[item.account_id];
+        if (account === undefined) {
+          account = {
+            username: '',
+            real_name: '',
+          };
+        }
+        return ({
+          id: item.id,
+          access_time: item.access_time,
+          request_method: item.request_method,
+          resource_path: item.resource_path,
+          ip: item.ip,
+          account_id: item.account_id,
+          username: account.username,
+          real_name: account.real_name,
+        });
+      });
       dispatch({
         type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
         payload: {
@@ -49,6 +57,7 @@ const fetchAccessLog = (token, offset, limit) => (dispatch) => {
       });
     })
     .catch((err) => {
+      // console.log('response :', err);
       dispatch({
         type: systemConstants.FETCH_ACCESS_LOG_FAIL,
         payload: err,
