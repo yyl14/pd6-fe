@@ -267,7 +267,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       const data = sampleTableData.filter((item) => item.id === id);
       if (data.length === 0) {
         // delete data
-        console.log(testcases[id].input_filename, ' should be deleted');
+        // console.log(testcases[id].input_filename, ' should be deleted');
         dispatch(deleteTestcase(authToken, id));
       }
       return id;
@@ -276,10 +276,10 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
     sampleTableData.map((data) => {
       if (data.new) {
         // add testcase with file
-        console.log(data.no, ' should be added.');
+        // console.log(data.no, ' should be added.');
         dispatch(addTestcaseWithFile(authToken, problemId, true, 0, data.time_limit, data.memory_limit, false, data.in_file, data.out_file));
       } else {
-        console.log(data.no, ' is original testcase');
+        // console.log(data.no, ' is original testcase');
         // check basic info
         const id = sampleDataIds.filter((item) => item === data.id);
         if (testcases[id[0]].time_limit !== data.time_limit || testcases[id[0]].memory_limit !== data.memory_limit || testcases[id[0]].is_disabled !== !status) {
@@ -301,7 +301,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       const data = testcaseTableData.filter((item) => item.id === id);
       if (data.length === 0) {
         // delete data
-        console.log(testcases[id].input_filename, ' should be deleted');
+        // console.log(testcases[id].input_filename, ' should be deleted');
         dispatch(deleteTestcase(authToken, id));
       }
       return id;
@@ -310,10 +310,10 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
     testcaseTableData.map((data) => {
       if (data.new) {
         // add testcase with file
-        console.log(data.no, ' should be added.');
+        // console.log(data.no, ' should be added.');
         dispatch(addTestcaseWithFile(authToken, problemId, false, data.score, data.time_limit, data.memory_limit, !status, data.in_file, data.out_file));
       } else {
-        console.log(data.no, ' is original testcase');
+        // console.log(data.no, ' is original testcase');
         // check basic info
         const id = testcaseDataIds.filter((item) => item === data.id);
         if (testcases[id[0]].time_limit !== data.time_limit || testcases[id[0]].memory_limit !== data.memory_limit || testcases[id[0]].score !== data.score || testcases[id[0]].is_disabled !== !status) {
