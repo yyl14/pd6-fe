@@ -64,14 +64,13 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const [deletePopUp, setDeletePopUp] = useState(false);
 
   const handleDelete = () => {
-    // comment due to dangerous behavior
-    // problems[problemId].assistingDataIds.forEach((id) => {
-    //   dispatch(deleteAssistingData(authToken, id));
-    // });
-    // problems[problemId].testcaseIds.forEach((id) => {
-    //   dispatch(deleteTestcase(authToken, id));
-    // });
-    // dispatch(deleteProblem(authToken, problemId));
+    problems[problemId].assistingDataIds.forEach((id) => {
+      dispatch(deleteAssistingData(authToken, id));
+    });
+    problems[problemId].testcaseIds.forEach((id) => {
+      dispatch(deleteTestcase(authToken, id));
+    });
+    dispatch(deleteProblem(authToken, problemId));
 
     setDeletePopUp(false);
     history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
