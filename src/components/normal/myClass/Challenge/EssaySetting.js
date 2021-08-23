@@ -92,21 +92,6 @@ export default function EssaySetting() {
     dispatch((readEssay(authToken, essayId)));
   }, [authToken, dispatch, essayId]);
 
-  // useEffect(() => {
-  //   const item = essay[essayId];
-  //   if (item !== undefined) {
-  //     setEssay({
-  //       label: item.label,
-  //       title: item.title,
-  //       description: item.description,
-  //     });
-  //   }
-  // }, [essay, essayId]);
-
-  // if (problems[problemId] === undefined) {
-  //   return <NoMatch />;
-  // }
-
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">

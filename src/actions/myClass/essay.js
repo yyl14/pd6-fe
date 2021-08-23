@@ -30,34 +30,34 @@ const readEssay = (token, essayId) => async (dispatch) => {
   }
 };
 
-const addEssay = (token, challengeId) => async (dispatch) => {
-  dispatch({ type: essayConstants.ADD_ESSAY_START });
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-  try {
-    const addEssaysInfo = await agent.post(`/challenge/${challengeId}/essay`, auth);
-    if (addEssaysInfo.data.success) {
-      dispatch({
-        type: essayConstants.ADD_ESSAY_SUCCESS,
-        payload: addEssaysInfo.data.data,
-      });
-      // console.log('addEssaysInfo', addEssaysInfo);
-    } else {
-      dispatch({
-        type: essayConstants.ADD_ESSAY_FAIL,
-        errors: addEssaysInfo.data.errors,
-      });
-    }
-  } catch (err) {
-    dispatch({
-      type: essayConstants.ADD_ESSAY_FAIL,
-      errors: err,
-    });
-  }
-};
+// const addEssay = (token, challengeId) => async (dispatch) => {
+//   dispatch({ type: essayConstants.ADD_ESSAY_START });
+//   const auth = {
+//     headers: {
+//       'Auth-Token': token,
+//     },
+//   };
+//   try {
+//     const addEssaysInfo = await agent.post(`/challenge/${challengeId}/essay`, auth);
+//     if (addEssaysInfo.data.success) {
+//       dispatch({
+//         type: essayConstants.ADD_ESSAY_SUCCESS,
+//         payload: addEssaysInfo.data.data,
+//       });
+//       // console.log('addEssaysInfo', addEssaysInfo);
+//     } else {
+//       dispatch({
+//         type: essayConstants.ADD_ESSAY_FAIL,
+//         errors: addEssaysInfo.data.errors,
+//       });
+//     }
+//   } catch (err) {
+//     dispatch({
+//       type: essayConstants.ADD_ESSAY_FAIL,
+//       errors: err,
+//     });
+//   }
+// };
 
 const editEssay = (token, essayId, label, title, description) => async (dispatch) => {
   dispatch({ type: essayConstants.EDIT_ESSAY_START });
@@ -68,7 +68,7 @@ const editEssay = (token, essayId, label, title, description) => async (dispatch
     },
   };
   const body = {
-    label,
+    challenge_label: label,
     title,
     description,
   };
@@ -239,7 +239,6 @@ const reUploadEssay = (token, essaySubmissionId) => async (dispatch) => {
 
 export {
   readEssay,
-  addEssay,
   editEssay,
   deleteEssay,
   browseEssaySubmission,
