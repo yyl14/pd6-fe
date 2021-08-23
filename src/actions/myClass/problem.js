@@ -176,63 +176,6 @@ const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
   }
 };
 
-// // Access log
-// const fetchAccessLog = (token, browseParams, tableId = null) => async (dispatch) => {
-//   try {
-//     console.log(browseParams);
-//     const config1 = {
-//       headers: { 'auth-token': token },
-//       params: browseParamsTransForm(browseParams),
-//       // paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
-//     };
-//     dispatch({
-//       type: systemConstants.FETCH_ACCESS_LOG_START,
-//     });
-//     // console.log(config1);
-
-//     const res1 = await agent.get('/access-log', config1);
-
-//     const { data, total_count } = res1.data.data;
-//     console.log(res1);
-
-//     // TODO: Batch browse account
-//     const config2 = {
-//       headers: { 'auth-token': token },
-//     };
-
-//     const accounts = await Promise.all(
-//       data.map(async ({ account_id }) => agent
-//         .get(`/account/${account_id}`, config2)
-//         .then((res2) => res2.data.data)
-//         .catch((err) => {
-//           dispatch({
-//             type: systemConstants.FETCH_ACCESS_LOG_FAIL,
-//             payload: err,
-//           });
-//         })),
-//     );
-
-//     dispatch({
-//       type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
-//       payload: { data, accounts: accounts.filter((item) => item !== null) },
-//     });
-//     dispatch({
-//       type: autoTableConstants.AUTO_TABLE_UPDATE,
-//       payload: {
-//         tableId,
-//         totalCount: total_count,
-//         dataIds: data.map((item) => item.id),
-//         offset: browseParams.offset,
-//       },
-//     });
-//   } catch (error) {
-//     dispatch({
-//       type: systemConstants.FETCH_ACCESS_LOG_FAIL,
-//       payload: error,
-//     });
-//   }
-// };
-
 const browseTestcase = (token, problemId) => async (dispatch) => {
   dispatch({ type: problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_START });
   const auth = {
