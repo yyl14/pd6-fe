@@ -300,10 +300,9 @@ const browseTestcase = (token, problemId) => async (dispatch) => {
               };
               const res1 = await agent.get(`/s3-file/${testcase.input_file_uuid}/url`, config1);
               if (res1.data.success) {
-                const inputRes = fetch(res1.data.data.url)
+                const input = await fetch(res1.data.data.url)
                   .then((r) => r.text())
                   .then((t) => t.toString());
-                const input = inputRes.data;
                 return {
                   ...testcase,
                   input,
@@ -328,10 +327,9 @@ const browseTestcase = (token, problemId) => async (dispatch) => {
               };
               const res2 = await agent.get(`/s3-file/${testcase.output_file_uuid}/url`, config2);
               if (res2.data.success) {
-                const outputRes = fetch(res2.data.data.url)
+                const output = await fetch(res2.data.data.url)
                   .then((r) => r.text())
                   .then((t) => t.toString());
-                const output = outputRes.data;
                 return {
                   ...testcase,
                   input: '',
