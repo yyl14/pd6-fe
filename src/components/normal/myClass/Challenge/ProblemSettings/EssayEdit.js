@@ -55,13 +55,17 @@ export default function EssayEdit({ closeEdit, role = 'NORMAL' }) {
 
   const handleClickSave = () => {
     const body = {
-      label: setLabel,
-      title: setTitle,
-      description: setDescription,
+      label,
+      title,
+      description,
     };
-    dispatch(editEssay(authToken, essayId));
+    console.log('body', body);
+    dispatch(editEssay(authToken, essayId, label, title, description));
     closeEdit();
   };
+
+  console.log('label', label, 'title', title, 'description', description);
+
   return (
     <>
       <SimpleBar title="Label">

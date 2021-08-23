@@ -38,7 +38,7 @@ const addEssay = (token, challengeId) => async (dispatch) => {
     },
   };
   try {
-    const addEssaysInfo = await agent.get(`/challenge/${challengeId}/essay`, auth);
+    const addEssaysInfo = await agent.post(`/challenge/${challengeId}/essay`, auth);
     if (addEssaysInfo.data.success) {
       dispatch({
         type: essayConstants.ADD_ESSAY_SUCCESS,
@@ -59,20 +59,26 @@ const addEssay = (token, challengeId) => async (dispatch) => {
   }
 };
 
-const editEssay = (token, essayId) => async (dispatch) => {
+const editEssay = (token, essayId, label, title, description) => async (dispatch) => {
   dispatch({ type: essayConstants.EDIT_ESSAY_START });
+  // console.log('editEssay', editEssay);
   const auth = {
     headers: {
       'Auth-Token': token,
     },
   };
+  const body = {
+    label,
+    title,
+    description,
+  };
   try {
-    const editEssaysInfo = await agent.get(`/essay/${essayId}`, auth);
+    const editEssaysInfo = await agent.patch(`/essay/${essayId}`, body, auth);
     // console.log('editEssaysInfo', editEssaysInfo);
     if (editEssaysInfo.data.success) {
       dispatch({
         type: essayConstants.EDIT_ESSAY_SUCCESS,
-        payload: editEssaysInfo.data.data,
+        payload: { essayId, content: body },
       });
     } else {
       dispatch({
@@ -88,28 +94,32 @@ const editEssay = (token, essayId) => async (dispatch) => {
   }
 };
 
-const deleteEssay = (token, essayId) => (dispatch) => {
+const deleteEssay = (token, essayId) => async (dispatch) => {
   dispatch({ type: essayConstants.DELETE_ESSAY_START });
   const auth = {
     headers: {
       'Auth-Token': token,
     },
   };
-
-  agent
-    .delete(`/essay/${essayId}`, auth)
-    .then((res) => {
+  try {
+    const res = await agent.delete(`/essay/${essayId}`, auth);
+    if (res.data.success) {
       dispatch({
         type: essayConstants.DELETE_ESSAY_SUCCESS,
+        payload: essayId,
       });
-      // console.log(res);
-    })
-    .catch((error) => {
+    } else {
       dispatch({
         type: essayConstants.DELETE_ESSAY_FAIL,
-        errors: error,
+        errors: res.data.error,
       });
+    }
+  } catch (err) {
+    dispatch({
+      type: essayConstants.DELETE_ESSAY_FAIL,
+      errors: err,
     });
+  }
 };
 
 const browseEssaySubmission = (token, essayId) => async (dispatch) => {
@@ -149,7 +159,7 @@ const uploadEssay = (token, essayId) => async (dispatch) => {
     },
   };
   try {
-    const uploadEssayInfo = await agent.get(`/essay/${essayId}/essay-submission`, auth);
+    const uploadEssayInfo = await agent.post(`/essay/${essayId}/essay-submission`, auth);
     console.log('uploadEssayInfo', uploadEssayInfo);
     if (uploadEssayInfo.data.success) {
       dispatch({
@@ -207,7 +217,7 @@ const reUploadEssay = (token, essaySubmissionId) => async (dispatch) => {
     },
   };
   try {
-    const reUploadEssayInfo = await agent.get(`/essay-submission/${essaySubmissionId}`, auth);
+    const reUploadEssayInfo = await agent.put(`/essay-submission/${essaySubmissionId}`, auth);
     if (reUploadEssayInfo.data.success) {
       dispatch({
         type: essayConstants.REUPLOAD_ESSAY_SUBMISSION_SUCCESS,

@@ -69,6 +69,10 @@ export default function EssaySetting() {
 
   };
 
+  const handleDownload = (e) => {
+
+  };
+
   // const handleSubmitDelete = (e) => {
   //   dispatch(deleteEssays(authToken, problemId));
   //   history.push('/my-class');
@@ -119,7 +123,7 @@ export default function EssaySetting() {
           >
             Edit
           </Button>
-          <Button variant="outlined" component="span" startIcon={<Icon.Download />}>
+          <Button variant="outlined" component="span" startIcon={<Icon.Download />} onClick={handleDownload}>
             Download
           </Button>
         </div>

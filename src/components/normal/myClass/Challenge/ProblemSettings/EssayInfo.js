@@ -16,7 +16,7 @@ import SimpleBar from '../../../../ui/SimpleBar';
 import Icon from '../../../../ui/icon/index';
 import NoMatch from '../../../../noMatch';
 import FileUploadArea from '../../../../ui/FileUploadArea';
-import deleteEssay from '../../../../../actions/myClass/essay';
+import { deleteEssay, readEssay } from '../../../../../actions/myClass/essay';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -38,7 +38,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
 
   const dispatch = useDispatch();
 
-  const problems = useSelector((state) => state.problem.byId);
+  const essay = useSelector((state) => state.essay.byId);
   const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
@@ -57,18 +57,22 @@ export default function EssayInfo({ role = 'NORMAL' }) {
     console.log(selectedFile[0]);
   };
   const handleSubmitDelete = (e) => {
-    // dispatch(deleteEssays(authToken, essayId));
-    // history.push('/');
+    dispatch(deleteEssay(authToken, essayId));
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
   };
 
-  if (problems[essayId] === undefined) {
+  useEffect(() => {
+    dispatch((readEssay(authToken, essayId)));
+  }, [authToken, dispatch, essayId]);
+
+  if (essay[essayId] === undefined) {
     return <NoMatch />;
   }
 
   return (
     <>
-      <SimpleBar title="Title">{problems[essayId] === undefined ? 'error' : problems[essayId].title}</SimpleBar>
-      <SimpleBar title="Description">{problems[essayId] === undefined ? 'error' : problems[essayId].description}</SimpleBar>
+      <SimpleBar title="Title">{essay[essayId] === undefined ? 'error' : essay[essayId].title}</SimpleBar>
+      <SimpleBar title="Description">{essay[essayId] === undefined ? 'error' : essay[essayId].description}</SimpleBar>
       <SimpleBar
         title="File"
       >
