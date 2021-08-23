@@ -158,6 +158,27 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       dispatch((downloadFile(authToken, file)));
     });
   };
+
+  const sampleTrans2no = (id) => {
+    if (testcases[id].input_filename !== null) {
+      return parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10);
+    }
+    if (testcases[id].output_filename !== null) {
+      return parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10);
+    }
+    return 0;
+  };
+
+  const testcaseTrans2no = (id) => {
+    if (testcases[id].input_filename !== null) {
+      return parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10);
+    }
+    if (testcases[id].output_filename !== null) {
+      return parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10);
+    }
+    return 0;
+  };
+
   useEffect(() => {
     dispatch((browseTestcase(authToken, problemId)));
     dispatch((browseAssistingData(authToken, problemId)));
@@ -221,7 +242,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           data={
             sampleDataIds.map((id) => ({
               id: testcases[id].id,
-              no: testcases[id].input_filename === null ? parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10) : parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10),
+              no: sampleTrans2no(id),
               time_limit: testcases[id].time_limit,
               memory_limit: testcases[id].memory_limit,
             }))
@@ -229,14 +250,12 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         />
         <div className={classNames.sampleArea}>
           <Grid container spacing={3}>
-            <Grid item xs={6}>
-              <Typography variant="body2">Sample 1</Typography>
-              <SampleTestArea input="286" output="1 2 0 1 0 4" />
-            </Grid>
-            <Grid item xs={6}>
-              <Typography variant="body2">Sample 2</Typography>
-              <SampleTestArea input="286" output="1 2 0 1 0 476543333345678987654567898765456789098765654567899876545456789098765434567898" />
-            </Grid>
+            {sampleDataIds.map((id) => (
+              <Grid item xs={6} key={id}>
+                <Typography variant="body2">{`Sample ${sampleTrans2no(id)}`}</Typography>
+                <SampleTestArea input={testcases[id].input} output={testcases[id].output} />
+              </Grid>
+            ))}
           </Grid>
         </div>
       </SimpleBar>
@@ -282,7 +301,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           data={
             testcaseDataIds.map((id) => ({
               id: testcases[id].id,
-              no: testcases[id].input_filename === null ? parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10) : parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10),
+              no: testcaseTrans2no(id),
               time_limit: testcases[id].time_limit,
               memory_limit: testcases[id].memory_limit,
               score: testcases[id].score,

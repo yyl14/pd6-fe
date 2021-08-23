@@ -176,6 +176,63 @@ const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
   }
 };
 
+// // Access log
+// const fetchAccessLog = (token, browseParams, tableId = null) => async (dispatch) => {
+//   try {
+//     console.log(browseParams);
+//     const config1 = {
+//       headers: { 'auth-token': token },
+//       params: browseParamsTransForm(browseParams),
+//       // paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
+//     };
+//     dispatch({
+//       type: systemConstants.FETCH_ACCESS_LOG_START,
+//     });
+//     // console.log(config1);
+
+//     const res1 = await agent.get('/access-log', config1);
+
+//     const { data, total_count } = res1.data.data;
+//     console.log(res1);
+
+//     // TODO: Batch browse account
+//     const config2 = {
+//       headers: { 'auth-token': token },
+//     };
+
+//     const accounts = await Promise.all(
+//       data.map(async ({ account_id }) => agent
+//         .get(`/account/${account_id}`, config2)
+//         .then((res2) => res2.data.data)
+//         .catch((err) => {
+//           dispatch({
+//             type: systemConstants.FETCH_ACCESS_LOG_FAIL,
+//             payload: err,
+//           });
+//         })),
+//     );
+
+//     dispatch({
+//       type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
+//       payload: { data, accounts: accounts.filter((item) => item !== null) },
+//     });
+//     dispatch({
+//       type: autoTableConstants.AUTO_TABLE_UPDATE,
+//       payload: {
+//         tableId,
+//         totalCount: total_count,
+//         dataIds: data.map((item) => item.id),
+//         offset: browseParams.offset,
+//       },
+//     });
+//   } catch (error) {
+//     dispatch({
+//       type: systemConstants.FETCH_ACCESS_LOG_FAIL,
+//       payload: error,
+//     });
+//   }
+// };
+
 const browseTestcase = (token, problemId) => async (dispatch) => {
   dispatch({ type: problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_START });
   const auth = {
@@ -186,9 +243,120 @@ const browseTestcase = (token, problemId) => async (dispatch) => {
   try {
     const testcases = await agent.get(`/problem/${problemId}/testcase`, auth);
     if (testcases.data.success) {
+      const { success, data, error } = testcases.data;
+      console.log('testcase ori data: ', data);
+      const newTestcases = await Promise.all(
+        data.map(async (testcase) => {
+          if (testcase.is_sample === true) {
+            if (testcase.input_file_uuid !== null || testcase.output_file_uuid !== null) {
+              const config1 = {
+                headers: {
+                  'Auth-Token': token,
+                },
+                params: {
+                  filename: testcase.input_filename,
+                  as_attachment: false,
+                },
+              };
+              const config2 = {
+                headers: {
+                  'Auth-Token': token,
+                },
+                params: {
+                  filename: testcase.output_filename,
+                  as_attachment: false,
+                },
+              };
+              const res1 = await agent.get(`/s3-file/${testcase.input_file_uuid}/url`, config1);
+              const res2 = await agent.get(`/s3-file/${testcase.output_file_uuid}/url`, config2);
+              if (res1.data.success && res2.data.success) {
+                const input = await fetch(res1.data.data.url)
+                  .then((r) => r.text())
+                  .then((t) => t.toString());
+                const output = await fetch(res2.data.data.url)
+                  .then((r) => r.text())
+                  .then((t) => t.toString());
+                return {
+                  ...testcase,
+                  input,
+                  output,
+                };
+              }
+              return {
+                ...testcase,
+                input: '',
+                output: '',
+              };
+            }
+            if (testcase.input_file_uuid !== null) {
+              const config1 = {
+                headers: {
+                  'Auth-Token': token,
+                },
+                params: {
+                  filename: testcase.input_filename,
+                  as_attachment: false,
+                },
+              };
+              const res1 = await agent.get(`/s3-file/${testcase.input_file_uuid}/url`, config1);
+              if (res1.data.success) {
+                const inputRes = fetch(res1.data.data.url)
+                  .then((r) => r.text())
+                  .then((t) => t.toString());
+                const input = inputRes.data;
+                return {
+                  ...testcase,
+                  input,
+                  output: '',
+                };
+              }
+              return {
+                ...testcase,
+                input: '',
+                output: '',
+              };
+            }
+            if (testcase.output_file_uuid !== null) {
+              const config2 = {
+                headers: {
+                  'Auth-Token': token,
+                },
+                params: {
+                  filename: testcase.output_filename,
+                  as_attachment: false,
+                },
+              };
+              const res2 = await agent.get(`/s3-file/${testcase.output_file_uuid}/url`, config2);
+              if (res2.data.success) {
+                const outputRes = fetch(res2.data.data.url)
+                  .then((r) => r.text())
+                  .then((t) => t.toString());
+                const output = outputRes.data;
+                return {
+                  ...testcase,
+                  input: '',
+                  output,
+                };
+              }
+              return {
+                ...testcase,
+                input: '',
+                output: '',
+              };
+            }
+            return {
+              ...testcase,
+              input: '',
+              output: '',
+            };
+          }
+          return testcase;
+        }),
+      );
+      console.log('newTestcases: ', newTestcases);
       dispatch({
         type: problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_SUCCESS,
-        payload: { problemId, testcases: testcases.data.data },
+        payload: { problemId, testcases: newTestcases },
       });
     } else {
       dispatch({
