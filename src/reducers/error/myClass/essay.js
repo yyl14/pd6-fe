@@ -1,9 +1,13 @@
 import { essayConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
-  readEssays: null,
-  editEssays: null,
-  deleteEssays: null,
+  readEssay: null,
+  editEssay: null,
+  deleteEssay: null,
+  browseEssaySubmission: null,
+  uploadEssay: null,
+  readEssayubmission: null,
+  reUploadEssay: null,
 };
 
 export default function essay(state = initialState, action) {
@@ -11,37 +15,85 @@ export default function essay(state = initialState, action) {
     case essayConstants.READ_ESSAY_SUCCESS: {
       return {
         ...state,
-        readEssays: null,
+        readEssay: null,
       };
     }
     case essayConstants.READ_ESSAY_FAIL: {
       return {
         ...state,
-        readEssays: action.error,
+        readEssay: action.error,
       };
     }
     case essayConstants.EDIT_ESSAY_SUCCESS: {
       return {
         ...state,
-        editEssays: null,
+        editEssay: null,
       };
     }
     case essayConstants.EDIT_ESSAY_FAIL: {
       return {
         ...state,
-        editEssays: action.error,
+        editEssay: action.error,
       };
     }
     case essayConstants.DELETE_ESSAY_SUCCESS: {
       return {
         ...state,
-        deleteEssays: null,
+        deleteEssay: null,
       };
     }
     case essayConstants.DELETE_ESSAY_FAIL: {
       return {
         ...state,
-        deleteEssays: action.error,
+        deleteEssay: action.error,
+      };
+    }
+    case essayConstants.BROWSE_ESSAY_SUBMISSION_SUCCESS: {
+      return {
+        ...state,
+        browseEssaySubmission: null,
+      };
+    }
+    case essayConstants.BROWSE_ESSAY_SUBMISSION_FAIL: {
+      return {
+        ...state,
+        browseEssaySubmission: action.error,
+      };
+    }
+    case essayConstants.UPLOAD_ESSAY_SUBMISSION_SUCCESS: {
+      return {
+        ...state,
+        uploadEssay: null,
+      };
+    }
+    case essayConstants.UPLOAD_ESSAY_SUBMISSION_FAIL: {
+      return {
+        ...state,
+        uploadEssay: action.error,
+      };
+    }
+    case essayConstants.READ_ESSAY_SUBMISSION_SUCCESS: {
+      return {
+        ...state,
+        readEssayubmission: null,
+      };
+    }
+    case essayConstants.READ_ESSAY_SUBMISSION_FAIL: {
+      return {
+        ...state,
+        readEssayubmission: action.error,
+      };
+    }
+    case essayConstants.REUPLOAD_ESSAY_SUBMISSION_SUCCESS: {
+      return {
+        ...state,
+        reUploadEssay: null,
+      };
+    }
+    case essayConstants.REUPLOAD_ESSAY_SUBMISSION_FAIL: {
+      return {
+        ...state,
+        reUploadEssay: action.error,
       };
     }
 

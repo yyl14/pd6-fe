@@ -9,6 +9,7 @@ import CodeSubmission from '../../../components/normal/myClass/Challenge/CodeSub
 import SubmissionList from '../../../components/normal/myClass/Challenge/SubmissionList';
 import SubmissionDetail from '../../../components/normal/myClass/Challenge/SubmissionDetail';
 import NoMatch from '../../../components/noMatch';
+import EssaySetting from '../../../components/normal/myClass/Challenge/EssaySetting';
 
 /* This is a level 3 container (main page container) */
 class Challenge extends Component {
@@ -30,6 +31,7 @@ class Challenge extends Component {
           <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/code-submission" component={CodeSubmission} />
           <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission" component={SubmissionList} />
           <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId" component={SubmissionDetail} />
+          <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/essay/:essayId" component={EssaySetting} />
           <Route component={NoMatch} />
         </Switch>
       </>

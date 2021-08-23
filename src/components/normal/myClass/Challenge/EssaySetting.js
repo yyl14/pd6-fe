@@ -20,7 +20,7 @@ import NoMatch from '../../../noMatch';
 
 import EssayInfo from './ProblemSettings/EssayInfo';
 import EssayEdit from './ProblemSettings/EssayEdit';
-import { readEssays, deleteEssays } from '../../../../actions/myClass/essay';
+import { readEssay } from '../../../../actions/myClass/essay';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -42,11 +42,11 @@ export default function EssaySetting() {
   const dispatch = useDispatch();
 
   const userClasses = useSelector((state) => state.user.classes);
-  const essays = useSelector((state) => state.problem.byId);
+  const essays = useSelector((state) => state.essay.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   const authToken = useSelector((state) => state.auth.token);
-  const error = useSelector((state) => state.error.myClass.problem);
-  const loading = useSelector((state) => state.loading.myClass.problem);
+  const error = useSelector((state) => state.error.myClass.essay);
+  const loading = useSelector((state) => state.loading.myClass.essay);
   const editLoading = useSelector((state) => state.loading.myClass.problem.editEssays);
   const [role, setRole] = useState('Normal');
   const [edit, setEdit] = useState(false);
@@ -69,17 +69,10 @@ export default function EssaySetting() {
 
   };
 
-  const handleSubmitDelete = (e) => {
-    dispatch(deleteEssays(authToken, problemId));
-    history.push('/my-class');
-  };
-  const [selectedFile, setSelectedFile] = useState([]);
-
-  useEffect(() => {
-    if (!editLoading) {
-      dispatch(readEssays(authToken, problemId));
-    }
-  }, [authToken, dispatch, editLoading, problemId]);
+  // const handleSubmitDelete = (e) => {
+  //   dispatch(deleteEssays(authToken, problemId));
+  //   history.push('/my-class');
+  // };
 
   useEffect(() => {
     userClasses.forEach((value) => {
@@ -90,6 +83,10 @@ export default function EssaySetting() {
       }
     });
   }, [classId, userClasses]);
+
+  useEffect(() => {
+    dispatch((readEssay(authToken, essayId)));
+  }, [authToken, dispatch, essayId]);
 
   // useEffect(() => {
   //   const item = essay[essayId];
@@ -102,7 +99,7 @@ export default function EssaySetting() {
   //   }
   // }, [essay, essayId]);
 
-  // if (problems[problemId] === undefined || challenges[challengeId] === undefined) {
+  // if (problems[problemId] === undefined) {
   //   return <NoMatch />;
   // }
 

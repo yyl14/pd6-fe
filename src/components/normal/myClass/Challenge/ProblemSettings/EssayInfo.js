@@ -16,6 +16,7 @@ import SimpleBar from '../../../../ui/SimpleBar';
 import Icon from '../../../../ui/icon/index';
 import NoMatch from '../../../../noMatch';
 import FileUploadArea from '../../../../ui/FileUploadArea';
+import deleteEssay from '../../../../../actions/myClass/essay';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 export default function EssayInfo({ role = 'NORMAL' }) {
   const {
-    courseId, classId, challengeId, problemId,
+    courseId, classId, challengeId, essayId,
   } = useParams();
   const history = useHistory();
   const classNames = useStyles();
@@ -53,17 +54,21 @@ export default function EssayInfo({ role = 'NORMAL' }) {
     setPopUpUpload(false);
   };
   const handleUpload = (e) => {
-
+    console.log(selectedFile[0]);
   };
   const handleSubmitDelete = (e) => {
-    // dispatch(deleteProblem());
+    // dispatch(deleteEssays(authToken, essayId));
     // history.push('/');
   };
 
+  if (problems[essayId] === undefined) {
+    return <NoMatch />;
+  }
+
   return (
     <>
-      <SimpleBar title="Title">{problems[problemId] === undefined ? 'error' : problems[problemId].title}</SimpleBar>
-      <SimpleBar title="Description">{problems[problemId] === undefined ? 'error' : problems[problemId].description}</SimpleBar>
+      <SimpleBar title="Title">{problems[essayId] === undefined ? 'error' : problems[essayId].title}</SimpleBar>
+      <SimpleBar title="Description">{problems[essayId] === undefined ? 'error' : problems[essayId].description}</SimpleBar>
       <SimpleBar
         title="File"
       >
