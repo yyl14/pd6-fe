@@ -38,13 +38,11 @@ export default function Challenge({
   const [arrow, setArrow] = useState(null);
 
   useEffect(() => {
-    console.log(challenges);
     const goBackToChallenge = () => {
       history.push(`${baseURL}/${courseId}/${classId}/challenge`);
     };
 
     if (mode === 'challenge' && challenges[challengeId] !== undefined) {
-      // console.log(challenges[challengeId]);
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
           <Icon.ArrowBackRoundedIcon />
