@@ -86,7 +86,12 @@ export default function CodingProblem() {
   //   return <div>System Exception</div>;
   // }
 
-  if (problems[problemId] === undefined || challenges[challengeId] === undefined || courses[courseId] === undefined || classes[classId] === undefined) {
+  if (
+    problems[problemId] === undefined
+    || challenges[challengeId] === undefined
+    || courses[courseId] === undefined
+    || classes[classId] === undefined
+  ) {
     if (commonLoading.fetchCourse || commonLoading.fetchClass) {
       return <div>loading...</div>;
     }
@@ -100,17 +105,32 @@ export default function CodingProblem() {
           problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label
         }`}
       </Typography>
-      {!edit
-      && role === 'MANAGER'
-        ? (
+      {!edit && role === 'MANAGER' ? (
+        <div>
           <div className={classNames.managerButtons}>
             <div>
-              <Button color="default" onClick={() => setEdit(true)}>Edit</Button>
-              <Button color="default" onClick={() => setRejudgePopUp(true)}>Rejudge</Button>
+              <Button color="default" onClick={() => setEdit(true)}>
+                Edit
+              </Button>
+              <Button color="default" onClick={() => setRejudgePopUp(true)}>
+                Rejudge
+              </Button>
             </div>
             <div>
-              <Button variant="outlined" color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)} startIcon={<Icon.HistoryIcon />}>My Submission</Button>
-              <Button color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}>Submit</Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)}
+                startIcon={<Icon.HistoryIcon />}
+              >
+                My Submission
+              </Button>
+              <Button
+                color="primary"
+                onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}
+              >
+                Submit
+              </Button>
             </div>
           </div>
           <div>
@@ -148,8 +168,9 @@ export default function CodingProblem() {
               Submit
             </Button>
           </div>
-        ))}
-      {edit ? <CodingProblemEdit closeEdit={handleCloseEdit} role={role} /> : <CodingProblemInfo role={role} /> }
+        )
+      )}
+      {edit ? <CodingProblemEdit closeEdit={handleCloseEdit} role={role} /> : <CodingProblemInfo role={role} />}
       <Dialog open={rejudgePopUp} onClose={() => setRejudgePopUp(false)} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Rejudge Problem</Typography>
