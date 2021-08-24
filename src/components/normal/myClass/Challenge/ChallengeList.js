@@ -297,7 +297,7 @@ export default function ChallengeList() {
             <FormControl variant="outlined" className={className.textfield}>
               <Select value={inputs.scoredBy} name="scoredBy" onChange={(e) => handleChange(e)}>
                 <MenuItem value="Last Score">Last Score</MenuItem>
-                <MenuItem value="Highest Score">Highest Score</MenuItem>
+                <MenuItem value="Best Score">Best Score</MenuItem>
               </Select>
             </FormControl>
           </div>
