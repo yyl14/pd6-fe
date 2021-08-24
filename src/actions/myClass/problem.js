@@ -187,7 +187,7 @@ const browseTestcase = (token, problemId) => async (dispatch) => {
     const testcases = await agent.get(`/problem/${problemId}/testcase`, auth);
     if (testcases.data.success) {
       const { success, data, error } = testcases.data;
-      console.log('testcase ori data: ', data);
+      // console.log('testcase ori data: ', data);
       const newTestcases = await Promise.all(
         data.map(async (testcase) => {
           if (testcase.is_sample === true) {
