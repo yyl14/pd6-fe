@@ -48,7 +48,16 @@ export default function ChallengeList() {
   const [editTeamInfo, setEditTeamInfo] = useState(false);
   const [editTeamMember, setEditTeamMember] = useState(false);
 
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState(
+    teamMemberIds.map((id) => (classMembers === undefined ? [] : {
+      id: classMembers[id].member_id,
+      username: classMembers[id].username,
+      student_id: classMembers[id].student_id,
+      real_name: classMembers[id].real_name,
+      role: systemRoleTransformation(teamMembers[id].role),
+      path: '/',
+    })),
+  );
 
   useEffect(() => {
     user.classes.forEach((item) => {
@@ -64,32 +73,25 @@ export default function ChallengeList() {
 
   useEffect(() => {
     dispatch(fetchClassMembers(authToken, classId));
+    dispatch(fetchTeams(authToken, classId));
   }, [authToken, classId, dispatch]);
 
   useEffect(() => {
-    if (!loading.editTeam) {
-      dispatch(fetchTeams(authToken, classId));
-    }
-  }, [authToken, classId, dispatch, loading.editTeam]);
+    dispatch(fetchTeamMember(authToken, teamId));
+  }, [authToken, dispatch, teamId]);
 
-  useEffect(() => {
-    if (!loading.addTeamMember) {
-      dispatch(fetchTeamMember(authToken, teamId));
-    }
-  }, [authToken, dispatch, teamId, loading.addTeamMember]);
-
-  useEffect(() => {
-    setTableData(
-      teamMemberIds.map((id) => ({
-        id: classMembers[id].member_id,
-        username: classMembers[id].username,
-        student_id: classMembers[id].student_id,
-        real_name: classMembers[id].real_name,
-        role: systemRoleTransformation(teamMembers[id].role),
-        path: '/',
-      })),
-    );
-  }, [teamMemberIds, classMembers, teamMembers]);
+  // useEffect(() => {
+  //   setTableData(
+  //     teamMemberIds.map((id) => ({
+  //       id: classMembers[id].member_id,
+  //       username: classMembers[id].username,
+  //       student_id: classMembers[id].student_id,
+  //       real_name: classMembers[id].real_name,
+  //       role: systemRoleTransformation(teamMembers[id].role),
+  //       path: '/',
+  //     })),
+  //   );
+  // }, [teamMemberIds, classMembers, teamMembers]);
 
   const handleInfoBack = () => {
     setEditTeamInfo(false);
@@ -101,7 +103,6 @@ export default function ChallengeList() {
 
   const handleMemberBack = () => {
     setEditTeamMember(false);
-    console.log(teamMembers);
   };
 
   const handleMemberEdit = () => {
@@ -114,6 +115,7 @@ export default function ChallengeList() {
     }
     return <NoMatch />;
   }
+  console.log(tableData);
 
   return (
     <>
@@ -140,7 +142,6 @@ export default function ChallengeList() {
       {editTeamMember ? (
         <TeamMemberEdit
           isManager={isManager}
-          originData={tableData}
           setOriginData={setTableData}
           handleBack={handleMemberBack}
         />

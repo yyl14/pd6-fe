@@ -16,7 +16,7 @@ import { MdAdd } from 'react-icons/md';
 import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleTable from '../../../../ui/SimpleTable';
-import { addTeamMember, deleteTeamMember, fetchTeamMember } from '../../../../../actions/myClass/team';
+import { addTeamMember, editTeamMember, deleteTeamMember } from '../../../../../actions/myClass/team';
 import systemRoleTransformation from '../../../../../function/systemRoleTransformation';
 
 const useStyles = makeStyles((theme) => ({
@@ -27,42 +27,31 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TeamMemberEdit(props) {
   const classNames = useStyles();
-  const { teamId } = useParams();
+  const { classId, teamId } = useParams();
   const dispatch = useDispatch();
 
   const authToken = useSelector((state) => state.auth.token);
   const classMembers = useSelector((state) => state.classMembers.byId);
   const teamMembers = useSelector((state) => state.teamMembers.byId);
   const teamMemberIds = useSelector((state) => state.teamMembers.allIds);
-  const loading = useSelector((state) => state.loading.myClass.team);
 
-  const [tableData, setTableData] = useState(props.originData);
+  const [tableData, setTableData] = useState(
+    teamMemberIds.map((id) => ({
+      id: classMembers[id].member_id,
+      username: classMembers[id].username,
+      student_id: classMembers[id].student_id,
+      real_name: classMembers[id].real_name,
+      role: systemRoleTransformation(teamMembers[id].role),
+      path: '/',
+    })),
+  );
+  const { setOriginData } = props;
+  const [tempAddData, setTempAddData] = useState([]);
   const [popUp, setPopUp] = useState(false);
   const [inputs, setInputs] = useState({
     student: '',
     role: 'Normal',
   });
-
-  useEffect(() => {
-    console.log('fetch');
-    if (!popUp && !loading.addTeamMember) {
-      dispatch(fetchTeamMember(authToken, teamId));
-    }
-  }, [authToken, dispatch, teamId, loading.addTeamMember, popUp]);
-
-  useEffect(() => {
-    if (!loading.addTeamMember) {
-      setTableData(
-        teamMemberIds.map((id) => ({
-          id: classMembers[id].member_id,
-          username: classMembers[id].username,
-          student_id: classMembers[id].student_id,
-          real_name: classMembers[id].real_name,
-          role: systemRoleTransformation(teamMembers[id].role),
-        })),
-      );
-    }
-  }, [teamMemberIds, classMembers, teamMembers, loading.addTeamMember]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -77,29 +66,30 @@ export default function TeamMemberEdit(props) {
   };
 
   const handleCancel = () => {
-    console.log(tableData, props.originData);
-    tableData.map((item) => dispatch(deleteTeamMember(authToken, teamId, item.id)));
-    const array = props.originData.map((item) => ({
-      account_referral: `#${item.username}`,
-      role: item.role === 'Normal' ? 'NORMAL' : 'MANAGER',
-    }));
-    setTimeout(() => {
-      dispatch(addTeamMember(authToken, teamId, null, null, true, array));
-    }, 1000);
+    // delete unsaved added members
+    tempAddData.forEach((item) => {
+      teamMemberIds.forEach((id) => {
+        console.log(item, classMembers[id]);
+        if (item === classMembers[id].username || item === classMembers[id].real_name || item === classMembers[id].student_id) {
+          dispatch(deleteTeamMember(authToken, teamId, classMembers[id].member_id));
+        }
+      });
+    });
     props.handleBack();
   };
 
   const handleSave = () => {
-    console.log(tableData);
-    teamMemberIds.map((id) => (dispatch(deleteTeamMember(authToken, teamId, id))));
-    const array = tableData.map((item) => ({
-      account_referral: `#${item.username}`,
-      role: item.role === 'Normal' ? 'NORMAL' : 'MANAGER',
-    }));
-    setTimeout(() => {
-      dispatch(addTeamMember(authToken, teamId, null, null, true, array));
-    }, 1000);
-    props.setOriginData(tableData);
+    // handle edit and delete members
+    teamMemberIds.forEach((id) => {
+      const data = tableData.find((item) => item.id === classMembers[id].member_id);
+      const role = data.role === 'Normal' ? 'NORMAL' : 'MANAGER';
+      if (data.length === 0) {
+        dispatch(deleteTeamMember(authToken, teamId, id));
+      } else if (classMembers[id].role !== role) {
+        dispatch(editTeamMember(authToken, teamId, id, role));
+      }
+    });
+    setOriginData(tableData);
     props.handleBack();
   };
 
@@ -109,12 +99,10 @@ export default function TeamMemberEdit(props) {
     if (inputs.student !== '') {
       const role = inputs.role === 'Normal' ? 'NORMAL' : 'MANAGER';
       dispatch(addTeamMember(authToken, teamId, `#${inputs.student}`, role, false, null));
+      const newTempAdd = [...tempAddData, inputs.student];
+      setTempAddData(newTempAdd);
     }
   };
-
-  // if (loading.addTeamMember || loading.fetchTeamMember) {
-  //   return <div>loading...</div>;
-  // }
 
   return (
     <div>
