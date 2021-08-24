@@ -1,28 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-  Grid,
-  Typography,
-  Table,
-  TableHead,
-  TableBody,
-  TableFooter,
-  TablePagination,
-  TableRow,
-  TableCell,
-  TableContainer,
-  Icon,
-  Paper,
-  TextField,
-  Button,
-} from '@material-ui/core';
-import SchoolIcon from '@material-ui/icons/School';
-import SortRoundedIcon from '@material-ui/icons/SortRounded';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
 import { Route, Switch, withRouter } from 'react-router-dom';
-
 import MemberList from '../../../components/admin/course/MemberList';
 import ClassSetting from '../../../components/admin/course/ClassSetting';
 import NoMatch from '../../../components/noMatch';

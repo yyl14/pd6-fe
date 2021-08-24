@@ -10,6 +10,9 @@ const initialState = {
   addClass: null,
   renameClass: null,
   deleteClass: null,
+
+  fetchMembers: null,
+  editMembers: null,
 };
 
 export default function course(state = initialState, action) {
