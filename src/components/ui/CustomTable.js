@@ -68,7 +68,6 @@ const useStyles = makeStyles((theme) => ({
   container: {
     maxHeight: 800,
   },
-
   tableRowContainerLeftSpacing: {
     width: '15px',
     padding: '0px',
@@ -101,7 +100,6 @@ const useStyles = makeStyles((theme) => ({
   row: {
     height: '60px',
   },
-
   bottom: {
     height: '75px',
     display: 'flex',
@@ -138,6 +136,10 @@ const useStyles = makeStyles((theme) => ({
   arrowIcon: {
     height: '35px',
     margin: 'auto',
+  },
+  textLink: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
   },
 }));
 
@@ -217,23 +219,22 @@ export default function CustomTable({
     }
   }, [filterData.length, pageInput, rowsPerPage]);
 
-  useEffect(() => {
-    // if (search !== '') {
-    //   const newData = data.filter((row) => {
-    //     let cnt = 0;
-    //     columns.forEach((column) => {
-    //       if (row[column.id].indexOf(search) >= 0) {
-    //         cnt += 1;
-    //       }
-    //     });
-    //     return cnt > 0;
-    //   });
-    //   setFilterData(newData);
-    // } else {
-    //   setFilterData(data);
-    // }
-    setFilterData(data);
-  }, [columns, data]);
+  // useEffect(() => {
+  //   if (search !== '') {
+  //     const newData = data.filter((row) => {
+  //       let cnt = 0;
+  //       columns.forEach((column) => {
+  //         if (row[column.id].indexOf(search) >= 0) {
+  //           cnt += 1;
+  //         }
+  //       });
+  //       return cnt > 0;
+  //     });
+  //     setFilterData(newData);
+  //   } else {
+  //     setFilterData(data);
+  //   }
+  // }, [columns, data, search]);
 
   return (
     <>

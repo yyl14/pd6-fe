@@ -7,93 +7,82 @@ import {
 import Icon from '../icon/index';
 
 export default function Grade({
-  classes, history, location, mode,
+  classNames, history, location, mode,
 }) {
-  const baseURL = '/admin/account';
+  const { courseId, classId } = useParams();
+  const baseURL = '/my-class';
+
+  const [display, setDisplay] = useState('unfold');
+
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
   const [arrow, setArrow] = useState(null);
-  const [display, setDisplay] = useState('unfold');
+
   useEffect(() => {
-    if (mode === 'main') {
-      setTitle('PBC 111-1');
+    const goBackToGrade = () => {
+      history.push(`${baseURL}/${courseId}/${classId}/grade`);
+    };
+
+    if (mode === 'detail') {
+      setArrow(
+        <IconButton className={classNames.arrow} onClick={goBackToGrade}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
+      setTitle('Grade');
       setItemList([
         {
-          text: 'Challenge',
-          icon: (
-            <Icon.Challenge className={location.pathname === `${baseURL}/institute` ? classes.activeIcon : classes.icon} />
-          ),
-          path: `${baseURL}/institute`,
-        },
-        {
-          text: 'Submission',
-          icon: (
-            <Icon.Submission className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />
-          ),
-          path: `${baseURL}/submission`,
-        },
-        {
-          text: 'Grade',
-          icon: (
-            <Icon.Grade className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />
-          ),
-          path: `${baseURL}/grade`,
-        },
-        {
-          text: 'Team',
-          icon: (
-            <Icon.SupervisedUserCircleIcon className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />
-          ),
-          path: `${baseURL}/team`,
-        },
-        {
-          text: 'Member',
-          icon: (
-            <Icon.PeopleIcon className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />
-          ),
-          path: `${baseURL}/member`,
+          text: 'Detail',
+          icon: <Icon.Grade />,
+          path: `${baseURL}/${courseId}/${classId}/grade`,
         },
       ]);
     }
-  }, [classes.activeIcon, classes.icon, location.pathname, mode]);
+  }, [classId, classNames.arrow, courseId, history, mode]);
 
-  const foldAccount = () => {
+  const foldGrade = () => {
     setDisplay('fold');
   };
 
-  const unfoldAccount = () => {
+  const unfoldGrade = () => {
     setDisplay('unfold');
   };
 
   return (
     <div>
       <Drawer
-        className={classes.drawer}
+        className={classNames.drawer}
         variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
-        classes={{ paper: classes.drawerPaper }}
+        classes={{ paper: classNames.drawerPaper }}
       >
-        {mode === 'main' ? <div className={classes.topSpace} /> : arrow}
-        <div>
+        { arrow}
+        <div className={classNames.title}>
           {display === 'unfold' ? (
-            <Icon.TriangleDown className={classes.titleIcon} onClick={foldAccount} />
+            <Icon.TriangleDown
+              className={classNames.titleIcon}
+              onClick={foldGrade}
+            />
           ) : (
-            <Icon.TriangleRight className={classes.titleIcon} onClick={unfoldAccount} />
+            <Icon.TriangleRight
+              className={classNames.titleIcon}
+              onClick={unfoldGrade}
+            />
           )}
-          <Typography variant="h4" className={classes.title}>
+          <Typography variant="h4" className={classNames.titleText}>
             {title}
           </Typography>
         </div>
-        <Divider variant="middle" className={classes.divider} />
+        <Divider variant="middle" className={classNames.divider} />
         {display === 'unfold' ? (
           <List>
             {itemList.map((item) => (
-              <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classes.item}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItem button key={item.text} className={classNames.item}>
+                <ListItemIcon className={classNames.itemIcon} style={{ color: location.pathname.includes(item.path) ? '#1EA5FF' : '' }}>{item.icon}</ListItemIcon>
                 <ListItemText
                   primary={item.text}
-                  className={location.pathname === item.path ? classes.active : null}
+                  className={location.pathname.includes(item.path) ? classNames.activeItemText : classNames.itemText}
                 />
               </ListItem>
             ))}
@@ -101,7 +90,7 @@ export default function Grade({
         ) : (
           ''
         )}
-        <div className={classes.bottomSpace} />
+        <div className={classNames.bottomSpace} />
       </Drawer>
     </div>
   );

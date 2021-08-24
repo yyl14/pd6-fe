@@ -20,6 +20,7 @@ import {
   FormControlLabel,
   Switch,
 } from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import Icon from './icon/index';
 import CopyToClipboardButton from './CopyToClipboardButton';
@@ -36,6 +37,8 @@ import Header from './Header';
 import Sidebar from './Sidebar';
 import MultiSelect from './MultiSelect';
 import CustomCheckbox from './CustomCheckbox';
+import AutoTable from './AutoTable';
+import { fetchAccessLog } from '../../actions/admin/system';
 
 const useStyles = makeStyles((theme) => ({
   bigTitle: {
@@ -97,6 +100,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UIComponentUsage() {
   const classes = useStyles();
+  const authToken = useSelector((state) => state.auth.token);
+  const logs = useSelector((state) => state.accessLogs);
+  const accounts = useSelector((state) => state.accounts);
+  const dispatch = useDispatch();
+
   const [value, setValue] = useState('');
   const [selected, setSelected] = useState('C++');
   const [showDialog, setShowDialog] = useState(false);
@@ -122,10 +130,13 @@ export default function UIComponentUsage() {
     filter: ['Select all'],
     sort: '(None)',
   });
+  const [multiSelect, setMultiSelect] = useState([]);
 
   return (
     <div>
-      <Typography variant="h3" className={classes.bigTitle}>Themed Components</Typography>
+      <Typography variant="h3" className={classes.bigTitle}>
+        Themed Components
+      </Typography>
       <div className={classes.buttonsWrapper}>
         <Typography variant="h4">Button</Typography>
         <hr className={classes.divider} />
@@ -139,54 +150,112 @@ export default function UIComponentUsage() {
             </div>
             <div className={classes.children}>
               <Button variant="outlined">Edit</Button>
-              <Button variant="outlined" color="primary">Edit</Button>
-              <Button variant="outlined" color="secondary">Edit</Button>
-              <Button variant="outlined" disabled>Edit</Button>
+              <Button variant="outlined" color="primary">
+                Edit
+              </Button>
+              <Button variant="outlined" color="secondary">
+                Edit
+              </Button>
+              <Button variant="outlined" disabled>
+                Edit
+              </Button>
             </div>
             <div className={classes.children}>
-              <Button variant="text" color="primary">Edit</Button>
-              <Button variant="text" color="secondary">Edit</Button>
-              <Button variant="text" disabled>Edit</Button>
+              <Button variant="text" color="primary">
+                Edit
+              </Button>
+              <Button variant="text" color="secondary">
+                Edit
+              </Button>
+              <Button variant="text" disabled>
+                Edit
+              </Button>
             </div>
             <div className={classes.children}>
               <Button startIcon={<Icon.Statistic />}>Submit</Button>
-              <Button color="primary" startIcon={<Icon.Statistic />}>Submit</Button>
-              <Button color="secondary" startIcon={<Icon.Statistic />}>Submit</Button>
-              <Button disabled startIcon={<Icon.Statistic />}>Submit</Button>
+              <Button color="primary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button color="secondary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button disabled startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
             </div>
             <div className={classes.children}>
-              <Button variant="outlined" startIcon={<Icon.Statistic />}>Submit</Button>
-              <Button variant="outlined" color="primary" startIcon={<Icon.Statistic />}>Submit</Button>
-              <Button variant="outlined" color="secondary" startIcon={<Icon.Statistic />}>Submit</Button>
-              <Button variant="outlined" disabled startIcon={<Icon.Statistic />}>Submit</Button>
+              <Button variant="outlined" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button variant="outlined" color="primary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button variant="outlined" color="secondary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button variant="outlined" disabled startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
             </div>
             <div className={classes.children}>
-              <Button variant="text" color="primary" startIcon={<Icon.Statistic />}>Submit</Button>
-              <Button variant="text" color="secondary" startIcon={<Icon.Statistic />}>Submit</Button>
-              <Button variant="text" disabled startIcon={<Icon.Statistic />}>Submit</Button>
+              <Button variant="text" color="primary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button variant="text" color="secondary" startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
+              <Button variant="text" disabled startIcon={<Icon.Statistic />}>
+                Submit
+              </Button>
             </div>
           </div>
           <div className={classes.buttons}>
             <div className={classes.children}>
-              <Button><Icon.Statistic /></Button>
-              <Button color="primary"><Icon.Statistic /></Button>
-              <Button color="secondary"><Icon.Statistic /></Button>
-              <Button disabled><Icon.Statistic /></Button>
+              <Button>
+                <Icon.Statistic />
+              </Button>
+              <Button color="primary">
+                <Icon.Statistic />
+              </Button>
+              <Button color="secondary">
+                <Icon.Statistic />
+              </Button>
+              <Button disabled>
+                <Icon.Statistic />
+              </Button>
             </div>
             <div className={classes.children}>
-              <Button variant="outlined"><Icon.Statistic /></Button>
-              <Button variant="outlined" color="primary"><Icon.Statistic /></Button>
-              <Button variant="outlined" color="secondary"><Icon.Statistic /></Button>
-              <Button variant="outlined" disabled><Icon.Statistic /></Button>
+              <Button variant="outlined">
+                <Icon.Statistic />
+              </Button>
+              <Button variant="outlined" color="primary">
+                <Icon.Statistic />
+              </Button>
+              <Button variant="outlined" color="secondary">
+                <Icon.Statistic />
+              </Button>
+              <Button variant="outlined" disabled>
+                <Icon.Statistic />
+              </Button>
             </div>
             <div className={classes.children}>
-              <Button variant="text" color="primary"><Icon.Statistic /></Button>
-              <Button variant="text" color="secondary"><Icon.Statistic /></Button>
-              <Button variant="text" disabled><Icon.Statistic /></Button>
+              <Button variant="text" color="primary">
+                <Icon.Statistic />
+              </Button>
+              <Button variant="text" color="secondary">
+                <Icon.Statistic />
+              </Button>
+              <Button variant="text" disabled>
+                <Icon.Statistic />
+              </Button>
             </div>
             <div className={classes.children}>
-              <IconButton><Icon.ArrowForwardRoundedIcon /></IconButton>
-              <IconButton disabled><Icon.ArrowForwardRoundedIcon /></IconButton>
+              <IconButton>
+                <Icon.ArrowForwardRoundedIcon />
+              </IconButton>
+              <IconButton disabled>
+                <Icon.ArrowForwardRoundedIcon />
+              </IconButton>
             </div>
           </div>
         </div>
@@ -197,7 +266,14 @@ export default function UIComponentUsage() {
           <hr className={classes.divider} />
           <div className={classes.component}>
             <FormControlLabel
-              control={<Switch checked={switchStatus} onChange={(e) => setSwitchStatus(e.target.checked)} name="status" color="primary" />}
+              control={(
+                <Switch
+                  checked={switchStatus}
+                  onChange={(e) => setSwitchStatus(e.target.checked)}
+                  name="status"
+                  color="primary"
+                />
+              )}
               label={switchStatus ? 'Enabled' : 'Disabled'}
             />
           </div>
@@ -229,7 +305,7 @@ export default function UIComponentUsage() {
           <Typography variant="h4">MultiSelect</Typography>
           <hr className={classes.divider} />
           <div className={classes.component}>
-            <MultiSelect options={['option 1', 'option 2', 'option 3']} />
+            <MultiSelect options={['option 1', 'option 2', 'option 3']} value={multiSelect} setValue={setMultiSelect} />
           </div>
         </div>
       </div>
@@ -299,11 +375,10 @@ export default function UIComponentUsage() {
                 <Link href onClick={() => setShowSnackbarWithButton(false)}>
                   <Typography variant="h6">Undo</Typography>
                 </Link>
-            )}
+              )}
             />
           </div>
         </div>
-
       </div>
 
       <Typography variant="h3" className={classes.bigTitle}>
@@ -429,6 +504,104 @@ export default function UIComponentUsage() {
                 setFilterInput={setFilterInput}
               />,
             ]}
+          />
+        </div>
+      </div>
+      <div className={classes.wrapper}>
+        <Typography variant="h4">Custom Table with Table Filter Card</Typography>
+        <hr className={classes.divider} style={{ width: '460px' }} />
+        <div className={classes.wideComponent}>
+          <AutoTable
+            ident="Access Log Table Example"
+            hasFilter
+            filterConfig={[
+              {
+                reduxStateId: 'access_time',
+                label: 'Access Time',
+                type: 'DATE',
+                operation: 'LIKE',
+              },
+              {
+                reduxStateId: 'request_method',
+                label: 'Request Method',
+                type: 'ENUM',
+                operation: 'IN',
+                options: [
+                  { value: 'GET', label: 'GET' },
+                  { value: 'POST', label: 'POST' },
+                  { value: 'PUT', label: 'PUT' },
+                  { value: 'PATCH', label: 'PATCH' },
+                  { value: 'DELETE', label: 'DELETE' },
+                ],
+              },
+              {
+                reduxStateId: 'resource_path',
+                label: 'Resource Path',
+                type: 'TEXT',
+                operation: 'LIKE',
+              },
+              {
+                reduxStateId: 'ip',
+                label: 'IP',
+                type: 'TEXT',
+                operation: 'LIKE',
+              },
+
+              // TODO account id ?
+            ]}
+            refetch={(browseParams, ident) => {
+              dispatch(fetchAccessLog(authToken, browseParams, ident));
+            }}
+            columns={[
+              {
+                name: 'Username',
+                align: 'center',
+                type: 'link',
+              },
+              {
+                name: 'Student ID',
+                align: 'center',
+                type: 'string',
+              },
+              {
+                name: 'Real Name',
+                align: 'center',
+                type: 'string',
+              },
+              {
+                name: 'IP',
+                align: 'center',
+                type: 'string',
+              },
+              {
+                name: 'Resource Path',
+                align: 'center',
+                type: 'string',
+              },
+              {
+                name: 'Request Method',
+                align: 'center',
+                type: 'string',
+              },
+              {
+                name: 'Access Time',
+                align: 'center',
+                type: 'string',
+              },
+            ]}
+            reduxData={logs}
+            reduxDataToRows={(item) => ({
+              Username: {
+                text: accounts.byId[item.account_id] ? accounts.byId[item.account_id].username : '',
+                path: `/admin/account/account/${item.account_id}/setting`,
+              },
+              'Student ID': accounts.byId[item.account_id] ? accounts.byId[item.account_id].student_id : '',
+              'Real Name': accounts.byId[item.account_id] ? accounts.byId[item.account_id].real_name : '',
+              IP: item.ip,
+              'Resource Path': item.resource_path,
+              'Request Method': item.request_method,
+              'Access Time': moment(item.access_time).format('YYYY-MM-DD, HH:mm:ss'),
+            })}
           />
         </div>
       </div>

@@ -8,6 +8,7 @@ import CustomCheckbox from './CustomCheckbox';
 const useStyles = makeStyles((theme) => ({
   selectField: {
     width: '350px',
+    marginRight: '5px',
   },
   listItem: {
     marginLeft: '10px',
@@ -25,16 +26,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MultiSelect({ options }) {
+export default function MultiSelect({ options, value, setValue }) {
   const classes = useStyles();
-  const [tempInput, setTempInput] = useState(options);
+  // const [tempInput, setTempInput] = useState(options);
 
   const handleChange = (event) => {
     let newList = event.target.value;
     if (newList.includes('Deselect all')) {
       newList = [];
     }
-    setTempInput(newList);
+    setValue(newList);
   };
 
   const displaySelection = (selected) => {
@@ -53,7 +54,7 @@ export default function MultiSelect({ options }) {
         <Select
           labelId="status"
           id="status"
-          value={tempInput}
+          value={value}
           onChange={handleChange}
           renderValue={displaySelection}
           multiple
@@ -61,7 +62,7 @@ export default function MultiSelect({ options }) {
           <MenuItem value="Deselect all">Deselect all</MenuItem>
           {options.map((option) => (
             <MenuItem key={option} value={option} className={classes.selectList}>
-              <CustomCheckbox isChecked={tempInput.indexOf(option) > -1} />
+              <CustomCheckbox isChecked={value.indexOf(option) > -1} />
               <ListItemText className={classes.listItem} primary={option} />
             </MenuItem>
           ))}

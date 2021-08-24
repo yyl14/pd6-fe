@@ -20,6 +20,7 @@ import submitLangs from './submitLangs';
 import essay from './essay';
 import loading from './loading/index';
 import error from './error/index';
+import component from './component';
 
 export default combineReducers({
   auth,
@@ -43,4 +44,5 @@ export default combineReducers({
   loading,
   error,
   essay,
+  component,
 });

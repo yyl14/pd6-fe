@@ -35,14 +35,14 @@ export default function Account({
         {
           text: 'Institute',
           icon: (
-            <Icon.SchoolIcon className={location.pathname === `${baseURL}/institute` ? classes.activeIcon : classes.icon} />
+            <Icon.SchoolIcon />
           ),
           path: `${baseURL}/institute`,
         },
         {
           text: 'Account',
           icon: (
-            <Icon.PersonIcon className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />
+            <Icon.PersonIcon />
           ),
           path: `${baseURL}/account`,
         },
@@ -55,11 +55,7 @@ export default function Account({
           text: 'Setting',
           path: `${baseURL}/institute/${instituteId}/setting`,
           icon: (
-            <Icon.SettingsIcon
-              className={
-                location.pathname === `${baseURL}/institute/${instituteId}/setting` ? classes.activeIcon : classes.icon
-              }
-            />
+            <Icon.SettingsIcon />
           ),
         },
       ]);
@@ -71,11 +67,7 @@ export default function Account({
           text: 'Setting',
           path: `${baseURL}/account/${accountId}/setting`,
           icon: (
-            <Icon.SettingsIcon
-              className={
-                location.pathname === `${baseURL}/account/${accountId}/setting` ? classes.activeIcon : classes.icon
-              }
-            />
+            <Icon.SettingsIcon />
           ),
         },
       ]);
@@ -118,13 +110,13 @@ export default function Account({
         classes={{ paper: classes.drawerPaper }}
       >
         {mode === 'main' ? <div className={classes.topSpace} /> : arrow}
-        <div>
+        <div className={classes.title}>
           {display === 'unfold' ? (
             <Icon.TriangleDown className={classes.titleIcon} onClick={foldAccount} />
           ) : (
             <Icon.TriangleRight className={classes.titleIcon} onClick={unfoldAccount} />
           )}
-          <Typography variant="h4" className={classes.title}>
+          <Typography variant="h4" className={classes.titleText}>
             {title}
           </Typography>
         </div>
@@ -133,10 +125,16 @@ export default function Account({
           <List>
             {itemList.map((item) => (
               <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classes.item}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemIcon
+                  className={classes.itemIcon}
+                  style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
+                >
+                  {item.icon}
+
+                </ListItemIcon>
                 <ListItemText
                   primary={item.text}
-                  className={location.pathname === item.path ? classes.active : null}
+                  className={location.pathname === item.path ? classes.activeItemText : classes.itemText}
                 />
               </ListItem>
             ))}
