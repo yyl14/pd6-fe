@@ -22,7 +22,9 @@ import AlignedText from '../../../ui/AlignedText';
 import CustomTable from '../../../ui/CustomTable';
 import FileUploadArea from '../../../ui/FileUploadArea';
 import Icon from '../../../ui/icon/index';
-import { fetchTeams, addTeam } from '../../../../actions/myClass/team';
+import {
+  fetchTeams, addTeam, importTeam, downloadTeamFile,
+} from '../../../../actions/myClass/team';
 import { fetchCourse, fetchClass, downloadFile } from '../../../../actions/common/common';
 
 import NoMatch from '../../../noMatch';
@@ -32,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '50px',
   },
   reminder: {
-    color: '#AAAAAA',
+    color: theme.palette.grey.A400,
     marginLeft: theme.spacing(2),
   },
   templateBtn: {
@@ -42,7 +44,8 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 
-// TODO: download team file, import team (upload file)
+// TODO: member edit needs check
+
 export default function TeamList() {
   const classNames = useStyles();
   const dispatch = useDispatch();
@@ -80,6 +83,8 @@ export default function TeamList() {
     });
   }, [classId, user.classes]);
 
+  dispatch(downloadTeamFile(authToken));
+
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchClass(authToken, classId));
@@ -115,7 +120,10 @@ export default function TeamList() {
   const submitImport = () => {
     setShowImportDialog(false);
     clearImportInput();
-    // dispatch
+    setSelectedFile([]);
+    if (importInput !== '' && selectedFile !== []) {
+      dispatch(importTeam(authToken, classId, selectedFile));
+    }
   };
 
   const submitAdd = () => {
@@ -127,8 +135,8 @@ export default function TeamList() {
   };
 
   const downloadTemplate = () => {
-    // setShowImportDialog(false);
-    // dispatch(fetchGradeTemplate(authToken));
+    setShowImportDialog(false);
+    dispatch(downloadFile(authToken, teams.template));
   };
 
   useEffect(() => {
