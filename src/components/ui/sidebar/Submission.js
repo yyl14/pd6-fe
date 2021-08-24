@@ -6,56 +6,52 @@ import {
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
+import { fetchChallenges, addChallenge } from '../../../actions/myClass/challenge';
+import { fetchClass, fetchCourse } from '../../../actions/common/common';
+
 export default function Submission({
-  classes, history, location, mode,
+  classNames, history, location, mode,
 }) {
-  const baseURL = '/admin/account';
+  const { courseId, classId } = useParams();
+  const baseURL = '/my-class';
+  const dispatch = useDispatch();
+  const authToken = useSelector((state) => state.auth.token);
+  const loading = useSelector((state) => state.loading.myClass.challenge);
+  const classes = useSelector((state) => state.classes.byId);
+  const courses = useSelector((state) => state.courses.byId);
+  const userClasses = useSelector((state) => state.user.classes);
+
+  const submissions = useSelector((state) => state.submissions);
+
+  useEffect(() => {
+    dispatch(fetchCourse(authToken, courseId));
+    dispatch(fetchClass(authToken, classId));
+  }, [dispatch, authToken, classId, courseId]);
+
+  const [display, setDisplay] = useState('unfold');
+
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
   const [arrow, setArrow] = useState(null);
-  const [display, setDisplay] = useState('unfold');
+
   useEffect(() => {
-    if (mode === 'main') {
-      setTitle('PBC 111-1');
+    const goBackToSubmission = () => {
+      history.push(`${baseURL}/${courseId}/${classId}/submission`);
+    };
+
+    if (mode === 'detail') {
+      console.log(submissions);
+      setArrow(<IconButton className={classNames.arrow} onClick={goBackToSubmission}><Icon.ArrowBackRoundedIcon /></IconButton>);
+      setTitle('00111');
       setItemList([
         {
-          text: 'Challenge',
-          icon: (
-            <Icon.Challenge className={location.pathname === `${baseURL}/institute` ? classes.activeIcon : classes.icon} />
-          ),
-          path: `${baseURL}/institute`,
-        },
-        {
-          text: 'Submission',
-          icon: (
-            <Icon.Submission className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />
-          ),
-          path: `${baseURL}/submission`,
-        },
-        {
-          text: 'Grade',
-          icon: (
-            <Icon.Grade className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />
-          ),
-          path: `${baseURL}/grade`,
-        },
-        {
-          text: 'Team',
-          icon: (
-            <Icon.SupervisedUserCircleIcon className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />
-          ),
-          path: `${baseURL}/team`,
-        },
-        {
-          text: 'Member',
-          icon: (
-            <Icon.PeopleIcon className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />
-          ),
-          path: `${baseURL}/member`,
+          text: 'Submission Detail',
+          icon: <Icon.Submission />,
+          path: `${baseURL}/${courseId}/${classId}/submission`,
         },
       ]);
     }
-  }, [classes.activeIcon, classes.icon, location.pathname, mode]);
+  }, [location.pathname, history, mode, userClasses, courseId, classId, submissions, classes.arrow, classNames.arrow]);
 
   const foldAccount = () => {
     setDisplay('fold');
@@ -65,35 +61,52 @@ export default function Submission({
     setDisplay('unfold');
   };
 
+  if (
+    (courseId !== undefined && courses[courseId] === undefined)
+    || (classId !== undefined && classes[classId] === undefined)
+  ) {
+    return (
+      <div>
+        <Drawer
+          className={classNames.drawer}
+          variant="permanent"
+          anchor="left"
+          PaperProps={{ elevation: 5 }}
+          classes={{ paper: classNames.drawerPaper }}
+        />
+      </div>
+    );
+  }
+
   return (
     <div>
       <Drawer
-        className={classes.drawer}
+        className={classNames.drawer}
         variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
-        classes={{ paper: classes.drawerPaper }}
+        classes={{ paper: classNames.drawerPaper }}
       >
-        {mode === 'main' ? <div className={classes.topSpace} /> : arrow}
-        <div>
+        {arrow}
+        <div className={classNames.title}>
           {display === 'unfold' ? (
-            <Icon.TriangleDown className={classes.titleIcon} onClick={foldAccount} />
+            <Icon.TriangleDown className={classNames.titleIcon} onClick={foldAccount} />
           ) : (
-            <Icon.TriangleRight className={classes.titleIcon} onClick={unfoldAccount} />
+            <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldAccount} />
           )}
-          <Typography variant="h4" className={classes.title}>
+          <Typography variant="h4" className={classNames.titleText}>
             {title}
           </Typography>
         </div>
-        <Divider variant="middle" className={classes.divider} />
+        <Divider variant="middle" className={classNames.divider} />
         {display === 'unfold' ? (
           <List>
             {itemList.map((item) => (
-              <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classes.item}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItem button key={item.text} className={classNames.item}>
+                <ListItemIcon className={classNames.itemIcon} style={{ color: location.pathname.includes(item.path) ? '#1EA5FF' : '' }}>{item.icon}</ListItemIcon>
                 <ListItemText
                   primary={item.text}
-                  className={location.pathname === item.path ? classes.active : null}
+                  className={location.pathname.includes(item.path) ? classNames.activeItemText : classNames.itemText}
                 />
               </ListItem>
             ))}
@@ -101,7 +114,7 @@ export default function Submission({
         ) : (
           ''
         )}
-        <div className={classes.bottomSpace} />
+        <div className={classNames.bottomSpace} />
       </Drawer>
     </div>
   );

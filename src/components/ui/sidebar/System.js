@@ -35,25 +35,21 @@ export default function System({
         {
           text: 'Access Log',
           icon: (
-            <Icon.DescriptionIcon
-              className={location.pathname === `${baseURL}/accesslog` ? classes.activeIcon : classes.icon}
-            />
+            <Icon.DescriptionIcon />
           ),
           path: `${baseURL}/accesslog`,
         },
         {
           text: 'Announcement',
           icon: (
-            <Icon.NotificationsIcon
-              className={location.pathname === `${baseURL}/announcement` ? classes.activeIcon : classes.icon}
-            />
+            <Icon.NotificationsIcon />
           ),
           path: `${baseURL}/announcement`,
         },
         {
           text: 'Submission Language',
           icon: (
-            <Icon.CodeIcon className={location.pathname === `${baseURL}/submitlang` ? classes.activeIcon : classes.icon} />
+            <Icon.CodeIcon />
           ),
           path: `${baseURL}/submitlang`,
         },
@@ -66,9 +62,7 @@ export default function System({
           text: 'Setting',
           path: `${baseURL}/announcement/add`,
           icon: (
-            <Icon.SettingsIcon
-              className={location.pathname === `${baseURL}/announcement/add` ? classes.activeIcon : classes.icon}
-            />
+            <Icon.SettingsIcon />
           ),
         },
       ]);
@@ -80,13 +74,7 @@ export default function System({
           text: 'Setting',
           path: `${baseURL}/announcement/${announcementId}/setting`,
           icon: (
-            <Icon.SettingsIcon
-              className={
-                location.pathname === `${baseURL}/announcement/${announcementId}/setting`
-                  ? classes.activeIcon
-                  : classes.icon
-              }
-            />
+            <Icon.SettingsIcon />
           ),
         },
       ]);
@@ -98,11 +86,7 @@ export default function System({
           text: 'Setting',
           path: `${baseURL}/submitlang/${languageId}/setting`,
           icon: (
-            <Icon.SettingsIcon
-              className={
-                location.pathname === `${baseURL}/submitlang/${languageId}/setting` ? classes.activeIcon : classes.icon
-              }
-            />
+            <Icon.SettingsIcon />
           ),
         },
       ]);
@@ -146,13 +130,13 @@ export default function System({
         classes={{ paper: classes.drawerPaper }}
       >
         {mode === 'main' ? <div className={classes.topSpace} /> : arrow}
-        <div>
+        <div className={classes.title}>
           {display === 'unfold' ? (
             <Icon.TriangleDown className={classes.titleIcon} onClick={foldSystem} />
           ) : (
             <Icon.TriangleRight className={classes.titleIcon} onClick={unfoldSystem} />
           )}
-          <Typography variant="h4" className={classes.title}>
+          <Typography variant="h4" className={classes.titleText}>
             {title}
           </Typography>
         </div>
@@ -161,10 +145,16 @@ export default function System({
           <List>
             {itemList.map((item) => (
               <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classes.item}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemIcon
+                  className={classes.itemIcon}
+                  style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
+                >
+                  {item.icon}
+
+                </ListItemIcon>
                 <ListItemText
                   primary={item.text}
-                  className={location.pathname === item.path ? classes.active : null}
+                  className={location.pathname === item.path ? classes.activeItemText : classes.itemText}
                 />
               </ListItem>
             ))}
