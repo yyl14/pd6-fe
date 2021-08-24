@@ -96,11 +96,9 @@ export default function CodingProblem() {
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
-        {challenges[challengeId] === undefined ? 'error' : challenges[challengeId].title}
-        {' '}
-        /
-        {' '}
-        {problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label}
+        {`${challenges[challengeId] === undefined ? 'error' : challenges[challengeId].title} / ${
+          problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label
+        }`}
       </Typography>
       {!edit
       && role === 'MANAGER'
@@ -115,11 +113,40 @@ export default function CodingProblem() {
               <Button color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}>Submit</Button>
             </div>
           </div>
-        )
-        : (!edit && (
+          <div>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)}
+              startIcon={<Icon.HistoryIcon />}
+            >
+              My Submission
+            </Button>
+            <Button
+              color="primary"
+              onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}
+            >
+              Submit
+            </Button>
+          </div>
+        </div>
+      ) : (
+        !edit && (
           <div className={classNames.generalButtons}>
-            <Button variant="outlined" color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)} startIcon={<Icon.HistoryIcon />}>My Submission</Button>
-            <Button color="primary" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}>Submit</Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)}
+              startIcon={<Icon.HistoryIcon />}
+            >
+              My Submission
+            </Button>
+            <Button
+              color="primary"
+              onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}
+            >
+              Submit
+            </Button>
           </div>
         ))}
       {edit ? <CodingProblemEdit closeEdit={handleCloseEdit} role={role} /> : <CodingProblemInfo role={role} /> }

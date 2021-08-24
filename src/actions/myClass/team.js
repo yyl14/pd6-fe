@@ -92,12 +92,12 @@ export const addTeamMember = (token, teamId, student, role) => (dispatch) => {
     role,
   };
   agent
-    .post(`/team/${teamId}/member`, body, auth);
-  then((res) => {
-    dispatch({
-      type: teamConstants.ADD_TEAM_MEMBER_SUCCESS,
-    });
-  })
+    .post(`/team/${teamId}/member`, body, auth)
+    .then((res) => {
+      dispatch({
+        type: teamConstants.ADD_TEAM_MEMBER_SUCCESS,
+      });
+    })
     .catch((error) => {
       dispatch({
         type: teamConstants.ADD_TEAM_MEMBER_FAIL,
