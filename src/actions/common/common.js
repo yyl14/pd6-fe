@@ -73,6 +73,7 @@ const replaceClassMembers = (token, classId, replacingList) => async (dispatch) 
     dispatch({ type: commonConstants.REPLACE_CLASS_MEMBERS_REQUEST });
 
     const res = await agent.put(`/class/${classId}/member`, replacingList, auth);
+    console.log(res);
     if (res.data.success) {
       dispatch({
         type: commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS,

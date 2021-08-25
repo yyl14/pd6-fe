@@ -77,12 +77,16 @@ const MemberEdit = ({
   const [TA, setTA] = useState([]);
   const [student, setStudent] = useState([]);
   const [guest, setGuest] = useState([]);
+  const [TAOriginal, setTAOriginal] = useState([]);
+  const [studentOriginal, setStudentOriginal] = useState([]);
+  const [guestOriginal, setGuestOriginal] = useState([]);
   const [TAChanged, setTAChanged] = useState(false);
   const [studentChanged, setStudentChanged] = useState(false);
   const [guestChanged, setGuestChanged] = useState(false);
   const [duplicateList, setDuplicateList] = useState([]);
   const [submitError, setSubmitError] = useState('');
   const [dispatchStart, setDispatchStart] = useState(false);
+  const [dispatchForOriginalListStart, setDispatchForOriginalListStart] = useState(false);
   const [showUnsavedChangesDialog, setShowUnsavedChangesDialog] = useState(false);
   const [showDuplicateIdentityDialog, setShowDuplicateIdentityDialog] = useState(false);
   const [showErrorDetectedDialog, setShowErrorDetectedDialog] = useState(false);
@@ -130,6 +134,29 @@ const MemberEdit = ({
   }, [dispatchStart, members]);
 
   useEffect(() => {
+    if (!(TAChanged || studentChanged || guestChanged)) {
+      setTAOriginal(handleBlankList(members
+        .filter((item) => item.role === 'MANAGER')
+        .map((member) => ({
+          account_referral: member.student_id,
+          role: 'MANAGER',
+        }))));
+      setStudentOriginal(handleBlankList(members
+        .filter((item) => item.role === 'NORMAL')
+        .map((member) => ({
+          account_referral: member.student_id,
+          role: 'NORMAL',
+        }))));
+      setGuestOriginal(handleBlankList(members
+        .filter((item) => item.role === 'GUEST')
+        .map((member) => ({
+          account_referral: member.student_id,
+          role: 'GUEST',
+        }))));
+    }
+  }, [TAChanged, studentChanged, guestChanged, members]);
+
+  useEffect(() => {
     unblockHandle.current = history.block((tl) => {
       if (TAChanged || studentChanged || guestChanged) {
         setShowUnsavedChangesDialog(true);
@@ -141,7 +168,7 @@ const MemberEdit = ({
   });
 
   useEffect(() => {
-    if (dispatchStart) {
+    if (dispatchStart && !dispatchForOriginalListStart) {
       if (!loading.replaceClassMembers) {
         if (error.replaceClassMembers) {
           setSubmitError(error.replaceClassMembers);
@@ -151,10 +178,14 @@ const MemberEdit = ({
         }
       }
     }
-  }, [backToMemberList, dispatchStart, error.replaceClassMembers, loading.replaceClassMembers]);
+  }, [backToMemberList, dispatchForOriginalListStart, dispatchStart, error.replaceClassMembers, loading.replaceClassMembers]);
 
   useBeforeunload((e) => {
-    if (showDuplicateIdentityDialog || showErrorDetectedDialog) {
+    if (showErrorDetectedDialog) {
+      e.preventDefault();
+      dispatch(replaceClassMembers(authToken, classId, TAOriginal.concat(studentOriginal, guestOriginal)));
+      setDispatchForOriginalListStart(true);
+    } else if (showDuplicateIdentityDialog) {
       e.preventDefault();
     } else if (TAChanged || studentChanged || guestChanged) {
       e.preventDefault();
