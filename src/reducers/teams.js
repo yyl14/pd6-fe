@@ -13,6 +13,10 @@ const byId = (state = {}, action) => {
       return { ...state, [teamId]: { ...state[teamId], teamMemberIds: data.map((item) => item.member_id) } };
     }
 
+    case teamConstants.DOWNLOAD_TEAM_FILE_SUCCESS: {
+      return { ...state, template: action.payload };
+    }
+
     default:
       return state;
   }

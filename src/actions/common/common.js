@@ -168,6 +168,7 @@ const downloadFile = (token, file) => async (dispatch) => {
     },
     params: {
       filename: file.filename,
+      as_attachment: file.as_attachment,
     },
   };
   try {

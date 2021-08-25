@@ -75,7 +75,7 @@ export const importTeam = (token, classId, file) => async (dispatch) => {
   }
 };
 
-export const downloadTeamFile = (token) => async (dispatch) => {
+export const downloadTeamFile = (token, asAttachment) => async (dispatch) => {
   try {
     const auth = {
       headers: {
@@ -86,7 +86,7 @@ export const downloadTeamFile = (token) => async (dispatch) => {
     const res = await agent.get('/team/template', auth);
     dispatch({
       type: teamConstants.DOWNLOAD_TEAM_FILE_SUCCESS,
-      payload: { uuid: res.data.data.s3_file_uuid, filename: res.data.data.filename },
+      payload: { uuid: res.data.data.s3_file_uuid, filename: res.data.data.filename, as_attachment: asAttachment },
     });
   } catch (err) {
     dispatch({
@@ -175,6 +175,7 @@ export const editTeamMember = (token, teamId, memberId, role) => (dispatch) => {
   agent
     .patch(`/team/${teamId}/member`, body, auth)
     .then((res) => {
+      console.log(body, res.data);
       dispatch({
         type: teamConstants.EDIT_TEAM_MEMBER_SUCCESS,
       });
