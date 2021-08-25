@@ -19,7 +19,7 @@ import FileUploadArea from '../../../ui/FileUploadArea';
 import Icon from '../../../ui/icon/index';
 import { fetchClassGrade, addClassGrade, downloadGradeFile } from '../../../../actions/myClass/grade';
 import {
-  fetchCourse, fetchClass, fetchClassMembers, downloadFile,
+  fetchCourse, fetchClass, fetchClassMembers,
 } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
 
@@ -62,7 +62,6 @@ export default function GradeList() {
     dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchClass(authToken, classId));
     dispatch(fetchClassMembers(authToken, classId));
-    dispatch(downloadGradeFile(authToken, true));
   }, [authToken, classId, courseId, dispatch]);
 
   useEffect(() => {
@@ -82,42 +81,50 @@ export default function GradeList() {
   }, [classId, user.classes]);
 
   useEffect(() => {
-    const newData = [];
-    if (isManager) {
-      if (memberIds !== undefined && gradeIds !== undefined) {
-        memberIds.forEach((key) => {
-          const item = members[key];
-          const temp = { ...item };
-          gradeIds.forEach((id) => {
-            if (grades[id].receiver_id === members[key].member_id) {
-              temp.title = grades[id].title;
-              temp.score = grades[id].score;
-              temp.time = moment(grades[id].update_time).format('YYYY-MM-DD, HH:mm');
-              temp.id = grades[id].id;
-              temp.path = `/my-class/${courseId}/${classId}/grade/${temp.id}`;
-              temp.user_path = '/';
-            }
-          });
-          newData.push(temp);
-        });
-      }
-    } else {
-      gradeIds.forEach((id) => {
-        if (`${grades[id].class_id}` === classId) {
-          const item = members[user.id];
-          const temp = { ...item };
-          temp.title = grades[id].title;
-          temp.score = grades[id].score;
-          temp.time = moment(grades[id].update_time).format('YYYY-MM-DD, HH:mm');
-          temp.id = grades[id].id;
-          temp.path = `/my-class/${courseId}/${classId}/grade/${temp.id}`;
-          temp.user_path = '/';
-          newData.push(temp);
-        }
-      });
-    }
+    const newData = gradeIds.map((id) => ({
+      ...members[grades[id].receiver_id],
+      title: grades[id].title,
+      score: grades[id].score,
+      time: moment(grades[id].update_time).format('YYYY-MM-DD, HH:mm'),
+      id: grades[id].id,
+      path: `/my-class/${courseId}/${classId}/grade/${grades[id].id}`,
+      user_path: '/',
+    }));
+    // if (isManager) {
+    //   if (memberIds !== undefined && gradeIds !== undefined) {
+    //     memberIds.forEach((key) => {
+    //       const item = members[key];
+    //       const temp = { ...item };
+    //       gradeIds.forEach((id) => {
+    //         if (grades[id].receiver_id === members[key].member_id) {
+    //           temp.title = grades[id].title;
+    //           temp.score = grades[id].score;
+    //           temp.time = moment(grades[id].update_time).format('YYYY-MM-DD, HH:mm');
+    //           temp.id = grades[id].id;
+    //           temp.path = `/my-class/${courseId}/${classId}/grade/${temp.id}`;
+    //           temp.user_path = '/';
+    //         }
+    //       });
+    //       newData.push(temp);
+    //     });
+    //   }
+    // } else {
+    // gradeIds.forEach((id) => {
+    //   if (`${grades[id].class_id}` === classId) {
+    //     const item = members[grades[id].receiver_id];
+    //     const temp = { ...item };
+    //     temp.title = grades[id].title;
+    //     temp.score = grades[id].score;
+    //     temp.time = moment(grades[id].update_time).format('YYYY-MM-DD, HH:mm');
+    //     temp.id = grades[id].id;
+    //     temp.path = `/my-class/${courseId}/${classId}/grade/${temp.id}`;
+    //     temp.user_path = '/';
+    //     newData.push(temp);
+    //   }
+    // });
+    // }
     setTableData(newData);
-  }, [members, memberIds, grades, courseId, classId, isManager, gradeIds, user.id]);
+  }, [members, memberIds, grades, courseId, classId, isManager, gradeIds]);
 
   const handleChange = (event) => {
     setInputTitle(event.target.value);
@@ -139,8 +146,8 @@ export default function GradeList() {
   };
 
   const downloadTemplate = () => {
+    dispatch(downloadGradeFile(authToken));
     setPopUp(false);
-    dispatch(downloadFile(authToken, grades.template));
   };
 
   if (courses[courseId] === undefined || classes[classId] === undefined || grades === undefined) {

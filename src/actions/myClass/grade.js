@@ -37,6 +37,7 @@ export const addClassGrade = (token, classId, file) => async (dispatch) => {
 
   try {
     const res = await agent.post(`/class/${classId}/grade`, formData, auth);
+    // console.log(res.data);
     if (res.data.success) {
       dispatch({
         type: gradeConstants.ADD_CLASS_GRADE_SUCCESS,
@@ -74,7 +75,7 @@ export const fetchAccountGrade = (token, accountId) => (dispatch) => {
     });
 };
 
-export const downloadGradeFile = (token, asAttachment) => async (dispatch) => {
+export const downloadGradeFile = (token) => async (dispatch) => {
   try {
     const auth = {
       headers: {
@@ -83,9 +84,45 @@ export const downloadGradeFile = (token, asAttachment) => async (dispatch) => {
     };
     dispatch({ type: gradeConstants.DOWNLOAD_GRADE_FILE_START });
     const res = await agent.get('/grade/template', auth);
+    if (res.data.success) {
+      const config = {
+        headers: {
+          'Auth-Token': token,
+        },
+        params: {
+          filename: res.data.data.filename,
+          as_attachment: true,
+        },
+      };
+      try {
+        const res2 = await agent.get(`/s3-file/${res.data.data.s3_file_uuid}/url`, config);
+        if (res2.data.success) {
+          fetch(res2.data.data.url).then((t) => t.blob().then((b) => {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(b);
+            a.setAttribute('download', res.data.data.filename);
+            a.click();
+          }));
+          dispatch({
+            type: gradeConstants.DOWNLOAD_GRADE_FILE_SUCCESS,
+          });
+        } else {
+          dispatch({
+            type: gradeConstants.DOWNLOAD_GRADE_FILE_FAIL,
+            error: res2.data.error,
+          });
+        }
+      } catch (err) {
+        dispatch({
+          type: gradeConstants.DOWNLOAD_GRADE_FILE_FAIL,
+          error: err,
+        });
+      }
+    }
+
     dispatch({
-      type: gradeConstants.DOWNLOAD_GRADE_FILE_SUCCESS,
-      payload: { uuid: res.data.data.s3_file_uuid, filename: res.data.data.filename, as_attachment: asAttachment },
+      type: gradeConstants.DOWNLOAD_GRADE_FILE_FAIL,
+      error: res.data.error,
     });
   } catch (err) {
     dispatch({

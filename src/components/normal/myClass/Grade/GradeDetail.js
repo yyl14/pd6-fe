@@ -45,13 +45,13 @@ export default function AccountSetting() {
   const [popUp, setPopUp] = useState(false);
 
   useEffect(() => {
-    console.log('fetch member');
+    // console.log('fetch member');
     dispatch(fetchClassMembers(authToken, classId));
   }, [dispatch, authToken, classId]);
 
   useEffect(() => {
     if (!loading.editGrade) {
-      console.log('fetch grade');
+      // console.log('fetch grade');
       dispatch(fetchClassGrade(authToken, classId));
     }
   }, [dispatch, authToken, classId, loading.editGrade]);

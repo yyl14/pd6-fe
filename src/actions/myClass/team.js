@@ -166,18 +166,12 @@ export const addTeamMember = (token, teamId, student, role, isArray, array) => a
 export const editTeamMember = (token, teamId, memberId, role) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
   dispatch({ type: teamConstants.EDIT_TEAM_MEMBER_START });
-<<<<<<< HEAD
-=======
   const body = [{
     member_id: memberId,
     role,
   }];
->>>>>>> development
   agent
-    .patch(`/team/${teamId}/member`, {
-      member_id: memberId,
-      role,
-    }, auth)
+    .patch(`/team/${teamId}/member`, body, auth)
     .then((res) => {
       // console.log(body, res.data);
       dispatch({
@@ -194,20 +188,6 @@ export const editTeamMember = (token, teamId, memberId, role) => (dispatch) => {
 
 export const deleteTeamMember = (token, teamId, memberId) => (dispatch) => {
   dispatch({ type: teamConstants.DELETE_TEAM_MEMBER_START });
-<<<<<<< HEAD
-  agent
-    .delete(`/team/${teamId}/member/${memberId}`, auth)
-    .then((res) => {
-      dispatch({
-        type: teamConstants.DELETE_TEAM_MEMBER_SUCCESS,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: teamConstants.DELETE_TEAM_MEMBER_FAIL,
-        error: err,
-      });
-=======
   const auth = {
     headers: {
       'Auth-Token': token,
@@ -221,7 +201,6 @@ export const deleteTeamMember = (token, teamId, memberId) => (dispatch) => {
     dispatch({
       type: teamConstants.DELETE_TEAM_MEMBER_FAIL,
       error: err,
->>>>>>> development
     });
   }
 };
