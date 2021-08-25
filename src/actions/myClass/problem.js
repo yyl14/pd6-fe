@@ -168,7 +168,7 @@ const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
       });
     }
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     dispatch({
       type: problemConstants.READ_SUBMISSION_JUDGE_FAIL,
       errors: err,
@@ -294,7 +294,7 @@ const browseTestcase = (token, problemId) => async (dispatch) => {
           return testcase;
         }),
       );
-      console.log('newTestcases: ', newTestcases);
+      // console.log('newTestcases: ', newTestcases);
       dispatch({
         type: problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_SUCCESS,
         payload: { problemId, testcases: newTestcases },
@@ -475,7 +475,7 @@ const editAssistingData = (token, assistingId, file) => async (dispatch) => {
 
   try {
     const res = await agent.put(`/assisting-data/${assistingId}`, formData, auth);
-    console.log(res);
+    // console.log(res);
     if (res.data.success) {
       dispatch({
         type: problemConstants.EDIT_ASSISTING_DATA_SUCCESS,
@@ -542,7 +542,7 @@ const submitCode = (token, problemId, languageId, content) => async (dispatch) =
 
   try {
     const res = await agent.post(`/problem/${problemId}/submission`, formData, config);
-    console.log('submit', res);
+    // console.log('submit', res);
     if (res.data.success) {
       dispatch({
         type: problemConstants.SUBMIT_PROBLEM_SUCCESS,
@@ -578,7 +578,7 @@ const editTestcase = (token, testcaseId, isSample, score, timeLimit, memoryLimit
   };
   try {
     const res = await agent.patch(`/testcase/${testcaseId}`, body, auth);
-    console.log('edit testcase info', res.data);
+    // console.log('edit testcase info', res.data);
     if (res.data.success) {
       dispatch({
         type: problemConstants.EDIT_TESTCASE_SUCCESS,
@@ -612,7 +612,7 @@ const uploadTestcaseInput = (token, testcaseId, file) => async (dispatch) => {
 
   try {
     const res = await agent.put(`/testcase/${testcaseId}/input-data`, formData, auth);
-    console.log('upload input data', res.data);
+    // console.log('upload input data', res.data);
     if (res.data.success) {
       dispatch({
         type: problemConstants.UPLOAD_TESTCASE_INPUT_SUCCESS,
@@ -645,7 +645,7 @@ const uploadTestcaseOutput = (token, testcaseId, file) => async (dispatch) => {
 
   try {
     const res = await agent.put(`/testcase/${testcaseId}/output-data`, formData, auth);
-    console.log('upload output data', res.data);
+    // console.log('upload output data', res.data);
     if (res.data.success) {
       dispatch({
         type: problemConstants.UPLOAD_TESTCASE_OUTPUT_SUCCESS,
@@ -681,7 +681,7 @@ const addTestcaseWithFile = (token, problemId, isSample, score, timeLimit, memor
   };
   try {
     const res = await agent.post(`/problem/${problemId}/testcase`, body, auth);
-    console.log('add testcase info', res.data);
+    // console.log('add testcase info', res.data);
     if (res.data.success) {
       // try to upload file
       const testcaseId = res.data.data.id;
@@ -695,7 +695,7 @@ const addTestcaseWithFile = (token, problemId, isSample, score, timeLimit, memor
         const formData = new FormData();
         formData.append('input_file', inputFile);
         const inRes = await agent.put(`/testcase/${testcaseId}/input-data`, formData, fileAuth);
-        console.log('add testcase input file', inRes);
+        // console.log('add testcase input file', inRes);
         if (!inRes.data.success) {
           dispatch({
             type: problemConstants.ADD_TESTCASE_FAIL,
@@ -707,7 +707,7 @@ const addTestcaseWithFile = (token, problemId, isSample, score, timeLimit, memor
         const formData = new FormData();
         formData.append('output_file', outputFile);
         const outRes = await agent.put(`/testcase/${testcaseId}/output-data`, formData, fileAuth);
-        console.log('add testcase output file', outRes);
+        // console.log('add testcase output file', outRes);
         if (!outRes.data.success) {
           dispatch({
             type: problemConstants.ADD_TESTCASE_FAIL,

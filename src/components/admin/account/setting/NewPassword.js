@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
@@ -23,24 +23,30 @@ export default function NewPassword() {
   const classes = useStyles();
   const [edit, setEdit] = useState(false);
   const [password, setPassword] = useState('');
-  const [disabled, setDisabled] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorText, setErrorText] = useState('');
 
   const { accountId } = useParams();
   const authToken = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
 
   const handleResetPassword = () => {
+    if (password === '') {
+      setError(true);
+      setErrorText("Can't be empty");
+      return;
+    }
     dispatch(editPassword(authToken, accountId, password));
     setEdit(false);
     setPassword('');
-    setDisabled(true);
   };
 
   const handleCancel = () => {
+    setError(false);
+    setErrorText('');
     setEdit(false);
     setPassword('');
-    setDisabled(true);
   };
 
   return (
@@ -54,11 +60,12 @@ export default function NewPassword() {
             <TextField
               className={classes.textfield}
               value={password}
+              error={error}
+              helperText={errorText}
               variant="outlined"
               type={showPassword ? 'text' : 'password'}
               onChange={(e) => {
                 setPassword(e.target.value);
-                setDisabled(false);
               }}
               InputProps={{
                 endAdornment: (
@@ -80,7 +87,6 @@ export default function NewPassword() {
             <Button
               color="primary"
               type="submit"
-              disabled={disabled}
               onClick={handleResetPassword}
             >
               Save

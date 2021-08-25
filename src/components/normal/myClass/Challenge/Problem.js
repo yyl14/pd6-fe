@@ -13,7 +13,7 @@ import {
 import { useHistory, useParams } from 'react-router-dom';
 
 import CodingProblem from './CodingProblem';
-import { readProblemInfo } from '../../../../actions/myClass/problem';
+import { readProblem, readProblemInfo } from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {

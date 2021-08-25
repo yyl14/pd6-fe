@@ -45,9 +45,9 @@ export default function Setting() {
   const [classTitle, setClassTitle] = useState('');
 
   useEffect(() => {
-    console.log('editLoading :', editLoading);
+    // console.log('editLoading :', editLoading);
     if (!editLoading) {
-      console.log('refetch :');
+      // console.log('refetch :');
       dispatch(fetchChallenges(authToken, classId));
     }
   }, [authToken, dispatch, classId, editLoading]);
@@ -71,9 +71,8 @@ export default function Setting() {
   const [warningPopUp, setWarningPopUp] = useState(false);
 
   const handleDelete = () => {
-    console.log('call delete challenge api');
     dispatch(deleteChallenge(authToken, challengeId));
-    history.push('/my-class/:courseId/:classId/challenge');
+    history.push(`/my-class/${courseId}/${classId}/challenge`);
   };
 
   if (challenge === undefined) {
