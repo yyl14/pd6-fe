@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Button, Card, CardContent, Typography,
 } from '@material-ui/core';
-import StarIcon from '@material-ui/icons/Star';
 import StudentInfoCard from './StudentInfoCard';
 import SimpleBar from '../../../ui/SimpleBar';
 

@@ -42,7 +42,7 @@ export default function EssaySetting() {
   const dispatch = useDispatch();
 
   const userClasses = useSelector((state) => state.user.classes);
-  const essays = useSelector((state) => state.essay.byId);
+  const essays = useSelector((state) => state.essays.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   const authToken = useSelector((state) => state.auth.token);
   const error = useSelector((state) => state.error.myClass.essay);

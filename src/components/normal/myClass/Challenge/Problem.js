@@ -13,8 +13,6 @@ import {
 import { useHistory, useParams } from 'react-router-dom';
 
 import CodingProblem from './CodingProblem';
-import EssayAdd from './EssayAdd';
-import EssaySetting from './EssaySetting';
 import { readProblem, readProblemInfo } from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
@@ -54,10 +52,7 @@ export default function Problem() {
 
   return (
     <>
-      <Typography className={classNames.pageHeader} variant="h3">
-        this is problem
-      </Typography>
-      <EssaySetting />
+      <CodingProblem />
     </>
   );
 }

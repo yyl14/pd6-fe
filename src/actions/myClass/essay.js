@@ -10,7 +10,7 @@ const readEssay = (token, essayId) => async (dispatch) => {
   };
   try {
     const essayInfo = await agent.get(`/essay/${essayId}`, auth);
-    console.log('essayInfo', essayInfo);
+    // console.log('essayInfo', essayInfo);
     if (essayInfo.data.success) {
       dispatch({
         type: essayConstants.READ_ESSAY_SUCCESS,

@@ -4,6 +4,7 @@ import {
 } from '@material-ui/core';
 import StarIcon from '@material-ui/icons/Star';
 import { yellow } from '@material-ui/core/colors';
+import Icon from '../ui/icon/index';
 import AlignedText from '../ui/AlignedText';
 
 const useStyles = makeStyles((theme) => ({
@@ -66,7 +67,7 @@ export default function StudentInfoCard(props) {
   return (
     <div className={classes.root}>
       <div className={classes.defaultHeader}>
-        {props.isDefault ? <StarIcon style={{ color: 'ffe81e' }} className={classes.defaultStar} /> : <></>}
+        {props.isDefault ? <Icon.StarIcon style={{ color: 'ffe81e' }} className={classes.defaultStar} /> : <></>}
         <Typography variant="body1">
           {transform(props.instituteId)}
         </Typography>

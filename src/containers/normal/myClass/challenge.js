@@ -4,6 +4,7 @@ import { withRouter, Switch, Route } from 'react-router-dom';
 import ChallengeList from '../../../components/normal/myClass/Challenge/ChallengeList';
 import ChallengeInfo from '../../../components/normal/myClass/Challenge/ChallengeInfo';
 import Problem from '../../../components/normal/myClass/Challenge/Problem';
+import Setting from '../../../components/normal/myClass/Challenge/Setting';
 import Statistics from '../../../components/normal/myClass/Challenge/Statistics';
 import CodeSubmission from '../../../components/normal/myClass/Challenge/CodeSubmission';
 import SubmissionList from '../../../components/normal/myClass/Challenge/SubmissionList';
@@ -25,6 +26,7 @@ class Challenge extends Component {
       <>
         <Switch>
           <Route exact path="/my-class/:courseId/:classId/challenge" component={ChallengeList} />
+          <Route path="/my-class/:courseId/:classId/challenge/:challengeId/setting" component={Setting} />
           <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId" component={ChallengeInfo} />
           <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/statistics" component={Statistics} />
           <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId" component={Problem} />

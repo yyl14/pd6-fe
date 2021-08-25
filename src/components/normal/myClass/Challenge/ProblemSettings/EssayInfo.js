@@ -38,7 +38,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
 
   const dispatch = useDispatch();
 
-  const essay = useSelector((state) => state.essay.byId);
+  const essay = useSelector((state) => state.essays.byId);
   const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
