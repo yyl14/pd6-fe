@@ -62,6 +62,7 @@ export default function RegisterForm() {
   const history = useHistory();
   const dispatch = useDispatch();
   const loadingInstitute = useSelector((state) => state.loading.common.fetchInstitutes);
+  const errorRegister = useSelector((state) => state.error.user.auth);
   const institutes = useSelector((state) => state.institutes.byId);
   const institutesId = useSelector((state) => state.institutes.allIds);
   const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
@@ -165,7 +166,12 @@ export default function RegisterForm() {
           `${inputs.email}${emailTail}`,
         ),
       );
-      setPopup(true);
+      if (errorRegister.signup === 'StudentCardExists') {
+        setErrors((input) => ({ ...input, username: true }));
+        setErrorTexts((input) => ({ ...input, username: 'Username is taken, try another' }));
+      } else {
+        setPopup(true);
+      }
     }
   };
 
