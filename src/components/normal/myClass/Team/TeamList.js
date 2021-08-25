@@ -43,9 +43,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /* This is a level 4 component (page component) */
-
-// TODO: member edit needs check
-
 export default function TeamList() {
   const classNames = useStyles();
   const dispatch = useDispatch();
@@ -83,11 +80,10 @@ export default function TeamList() {
     });
   }, [classId, user.classes]);
 
-  dispatch(downloadTeamFile(authToken));
-
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchClass(authToken, classId));
+    dispatch(downloadTeamFile(authToken, false));
   }, [authToken, classId, courseId, dispatch]);
 
   useEffect(() => {
@@ -139,17 +135,6 @@ export default function TeamList() {
     dispatch(downloadFile(authToken, teams.template));
   };
 
-  useEffect(() => {
-    setTableData(
-      teamIds.map((id) => ({
-        label: teams[id].label,
-        teamName: teams[id].name,
-        path: `/my-class/${courseId}/${classId}/team/${id}`,
-        team_path: '/team_path',
-      })),
-    );
-  }, [classId, courseId, teamIds, teams]);
-
   if (courses[courseId] === undefined || classes[classId] === undefined || teams[classId] === undefined) {
     if (loading.fetchTeams || commonLoading.fetchCourse || commonLoading.fetchClass) {
       return <div>loading...</div>;
@@ -176,7 +161,6 @@ export default function TeamList() {
             </>
           )
         }
-        data={tableData}
         columns={[
           {
             id: 'label',
@@ -196,6 +180,14 @@ export default function TeamList() {
             link_id: 'team_path',
           },
         ]}
+        data={
+          teamIds.map((id) => ({
+            label: teams[id].label,
+            teamName: teams[id].name,
+            path: `/my-class/${courseId}/${classId}/team/${id}`,
+            team_path: '/team_path',
+          }))
+        }
         hasLink
         linkName="path"
       />
@@ -271,60 +263,6 @@ export default function TeamList() {
           </Button>
         </DialogActions>
       </Dialog>
-
-      {/* <Dialog
-        open={showAddDialog}
-        keepMounted
-        onClose={() => setShowAddDialog(false)}
-        className={classNames.popUpLayout}
-        fullWidth
-        maxWidth="sm"
-      >
-        <DialogTitle id="dialog-slide-title">
-          <Typography variant="h4">Create New Team</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <AlignedText text="Class" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">
-              {`${courses[courseId].name} ${classes[classId].name}`}
-            </Typography>
-          </AlignedText>
-          <AlignedText text="Label" maxWidth="lg" childrenType="field">
-            <TextField name="label" value={addInputs.label} onChange={(e) => handleAddChange(e)} />
-          </AlignedText>
-          <AlignedText text="Team Name" maxWidth="lg" childrenType="field">
-            <TextField name="teamName" value={addInputs.teamName} onChange={(e) => handleAddChange(e)} />
-          </AlignedText>
-          <AlignedText text="Team Member" />
-          <Card variant="outlined">
-            <CardContent>
-              <AlignedText text="Student" maxWidth="mg" childrenType="field">
-                <TextField name="student" placeholder="Student ID / Email / Username" value={addInputs.student} onChange={(e) => handleAddChange(e)} />
-              </AlignedText>
-              <AlignedText text="Role" maxWidth="mg" childrenType="field">
-                <FormControl variant="outlined" className={classNames.select}>
-                  <Select name="role" value={addInputs.role} onChange={(e) => handleAddChange(e)}>
-                    <MenuItem value="Normal">Normal</MenuItem>
-                    <MenuItem value="Manager">Manager</MenuItem>
-                  </Select>
-                </FormControl>
-              </AlignedText>
-              <Button className={classNames.addTeamBtn} variant="text" color="primary" startIcon={<Icon.Newadd />}>
-                Add Team Member
-              </Button>
-            </CardContent>
-          </Card>
-        </DialogContent>
-
-        <DialogActions>
-          <Button onClick={() => { setShowAddDialog(false); clearAddInput(); }} color="default">
-            Cancel
-          </Button>
-          <Button onClick={() => { submitAdd(); }} color="primary">
-            Create
-          </Button>
-        </DialogActions>
-      </Dialog> */}
     </>
   );
 }

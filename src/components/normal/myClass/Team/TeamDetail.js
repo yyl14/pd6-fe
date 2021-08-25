@@ -48,16 +48,7 @@ export default function ChallengeList() {
   const [editTeamInfo, setEditTeamInfo] = useState(false);
   const [editTeamMember, setEditTeamMember] = useState(false);
 
-  const [tableData, setTableData] = useState(
-    teamMemberIds.map((id) => (classMembers === undefined ? [] : {
-      id: classMembers[id].member_id,
-      username: classMembers[id].username,
-      student_id: classMembers[id].student_id,
-      real_name: classMembers[id].real_name,
-      role: systemRoleTransformation(teamMembers[id].role),
-      path: '/',
-    })),
-  );
+  const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
     user.classes.forEach((item) => {
@@ -73,25 +64,30 @@ export default function ChallengeList() {
 
   useEffect(() => {
     dispatch(fetchClassMembers(authToken, classId));
-    dispatch(fetchTeams(authToken, classId));
   }, [authToken, classId, dispatch]);
+
+  useEffect(() => {
+    if (!loading.editTeam) {
+      dispatch(fetchTeams(authToken, classId));
+    }
+  }, [authToken, classId, dispatch, loading.editTeam]);
 
   useEffect(() => {
     dispatch(fetchTeamMember(authToken, teamId));
   }, [authToken, dispatch, teamId]);
 
-  // useEffect(() => {
-  //   setTableData(
-  //     teamMemberIds.map((id) => ({
-  //       id: classMembers[id].member_id,
-  //       username: classMembers[id].username,
-  //       student_id: classMembers[id].student_id,
-  //       real_name: classMembers[id].real_name,
-  //       role: systemRoleTransformation(teamMembers[id].role),
-  //       path: '/',
-  //     })),
-  //   );
-  // }, [teamMemberIds, classMembers, teamMembers]);
+  useEffect(() => {
+    setTableData(
+      teamMemberIds.map((id) => ({
+        id: classMembers[id].member_id,
+        username: classMembers[id].username,
+        student_id: classMembers[id].student_id,
+        real_name: classMembers[id].real_name,
+        role: systemRoleTransformation(teamMembers[id].role),
+        path: '/',
+      })),
+    );
+  }, [teamMemberIds, classMembers, teamMembers]);
 
   const handleInfoBack = () => {
     setEditTeamInfo(false);

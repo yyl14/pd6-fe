@@ -16,7 +16,9 @@ import { MdAdd } from 'react-icons/md';
 import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleTable from '../../../../ui/SimpleTable';
-import { addTeamMember, editTeamMember, deleteTeamMember } from '../../../../../actions/myClass/team';
+import {
+  addTeamMember, editTeamMember, deleteTeamMember, fetchTeamMember,
+} from '../../../../../actions/myClass/team';
 import systemRoleTransformation from '../../../../../function/systemRoleTransformation';
 
 const useStyles = makeStyles((theme) => ({
@@ -35,16 +37,7 @@ export default function TeamMemberEdit(props) {
   const teamMembers = useSelector((state) => state.teamMembers.byId);
   const teamMemberIds = useSelector((state) => state.teamMembers.allIds);
 
-  const [tableData, setTableData] = useState(
-    teamMemberIds.map((id) => ({
-      id: classMembers[id].member_id,
-      username: classMembers[id].username,
-      student_id: classMembers[id].student_id,
-      real_name: classMembers[id].real_name,
-      role: systemRoleTransformation(teamMembers[id].role),
-      path: '/',
-    })),
-  );
+  const [tableData, setTableData] = useState([]);
   const { setOriginData } = props;
   const [tempAddData, setTempAddData] = useState([]);
   const [popUp, setPopUp] = useState(false);
@@ -52,6 +45,23 @@ export default function TeamMemberEdit(props) {
     student: '',
     role: 'Normal',
   });
+
+  useEffect(() => {
+    dispatch(fetchTeamMember(authToken, teamId));
+  }, [authToken, dispatch, teamId]);
+
+  useEffect(() => {
+    setTableData(
+      teamMemberIds.map((id) => ({
+        id: classMembers[id].member_id,
+        username: classMembers[id].username,
+        student_id: classMembers[id].student_id,
+        real_name: classMembers[id].real_name,
+        role: systemRoleTransformation(teamMembers[id].role),
+        path: '/',
+      })),
+    );
+  }, [classMembers, teamMemberIds, teamMembers]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -82,11 +92,13 @@ export default function TeamMemberEdit(props) {
     // handle edit and delete members
     teamMemberIds.forEach((id) => {
       const data = tableData.find((item) => item.id === classMembers[id].member_id);
-      const role = data.role === 'Normal' ? 'NORMAL' : 'MANAGER';
-      if (data.length === 0) {
+      if (data === undefined) {
         dispatch(deleteTeamMember(authToken, teamId, id));
-      } else if (classMembers[id].role !== role) {
-        dispatch(editTeamMember(authToken, teamId, id, role));
+      } else {
+        const role = data.role === 'Normal' ? 'NORMAL' : 'MANAGER';
+        if (teamMembers[id].role !== role) {
+          dispatch(editTeamMember(authToken, teamId, id, role));
+        }
       }
     });
     setOriginData(tableData);
@@ -102,6 +114,7 @@ export default function TeamMemberEdit(props) {
       const newTempAdd = [...tempAddData, inputs.student];
       setTempAddData(newTempAdd);
     }
+    dispatch(fetchTeamMember(authToken, teamId));
   };
 
   return (
