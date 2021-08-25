@@ -5,18 +5,9 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data } = action.payload;
-      return data.problem.reduce(
+      return data.peer_review.reduce(
         (acc, item) => ({ ...acc, [item.id]: { ...item } }), {},
       );
-    }
-    case problemConstants.READ_PROBLEM_SUCCESS: {
-      const data = action.payload;
-      return {
-        ...state,
-        [data.id]: {
-          ...data,
-        },
-      };
     }
 
     default:
@@ -28,10 +19,8 @@ const allIds = (state = [], action) => {
   switch (action.type) {
     case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data } = action.payload;
-      return data.problem.map((item) => item.id);
+      return data.peer_review.map((item) => item.id);
     }
-    case problemConstants.READ_PROBLEM_SUCCESS:
-      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
     default:
       return state;
   }
