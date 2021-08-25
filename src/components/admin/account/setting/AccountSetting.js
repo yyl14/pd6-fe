@@ -30,7 +30,7 @@ export default function AccountSetting() {
 
   const dispatch = useDispatch();
   const { accountId } = useParams();
-  const authToken = useSelector((state) => state.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   const accounts = useSelector((state) => state.accounts.byId);
   const studentCards = useSelector((state) => state.studentCards.byId);
   const loading = useSelector((state) => state.loading.admin.account);

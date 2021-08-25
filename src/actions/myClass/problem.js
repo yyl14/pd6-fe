@@ -26,6 +26,49 @@ const browseChallengeOverview = (token, challengeId) => (dispatch) => {
     });
 };
 
+const editChallenge = (token, challengeId, body) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: problemConstants.EDIT_CHALLENGE_START });
+    const res = await agent.patch(`/challenge/${challengeId}`, {
+      publicize_type: body.publicizeType,
+      selection_type: body.selectionType,
+      title: body.title,
+      description: body.description,
+      start_time: body.startTime,
+      end_time: body.endTime,
+    }, auth);
+    dispatch({ type: problemConstants.EDIT_CHALLENGE_SUCCESS, payload: res.data.data });
+  } catch (err) {
+    dispatch({
+      type: problemConstants.EDIT_CHALLENGE_FAIL,
+      error: err,
+    });
+  }
+};
+
+const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_START });
+    const res = await agent.get(`/challenge/${challengeId}/task`, auth);
+    dispatch({ type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS, payload: { id: challengeId, data: res.data.data } });
+  } catch (err) {
+    dispatch({
+      type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_FAIL,
+      error: err,
+    });
+  }
+};
+
 const readProblemInfo = (token, problemId, challengeId) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_PROBLEM_START });
   dispatch({ type: problemConstants.READ_CHALLENGE_START });
@@ -166,6 +209,8 @@ const readSubmissionDetail = (token, submissionId, challengeId, problemId) => as
 
 export {
   browseChallengeOverview,
+  editChallenge,
+  browseTasksUnderChallenge,
   readProblemInfo,
   readSubmissionDetail,
 };

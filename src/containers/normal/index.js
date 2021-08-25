@@ -27,7 +27,6 @@ class Normal extends Component {
   }
 
   render() {
-    console.log(this.props.user);
     return (
       <div>
         <Header role={this.props.user.role} hasClass={this.props.user.classes.length !== 0} />

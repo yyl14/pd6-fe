@@ -26,35 +26,101 @@ const fetchChallenges = (token, classId) => (dispatch) => {
     });
 };
 
-const addChallenge = (token, classId, type, publicizeType, title, description, startTime, endTime) => (dispatch) => {
+const addChallenge = (token, classId, body) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: challengeConstants.ADD_CHALLENGE_REQUEST });
+    const res = await agent.post(`/class/${classId}/challenge`, {
+      publicize_type: body.showTime,
+      selection_type: body.scoredBy,
+      title: body.title,
+      description: '',
+      start_time: body.startTime,
+      end_time: body.endTime,
+    }, auth);
+    dispatch({ type: challengeConstants.ADD_CHALLENGE_SUCCESS });
+  } catch (err) {
+    dispatch({
+      type: challengeConstants.ADD_CHALLENGE_FAIL,
+      error: err,
+    });
+  }
+};
+
+const editChallenge = (token, challengeId, body) => (dispatch) => {
   const auth = {
     headers: {
       'Auth-Token': token,
     },
   };
-  dispatch({ type: challengeConstants.ADD_CHALLENGE_REQUEST });
+  dispatch({ type: challengeConstants.EDIT_CHALLENGE_REQUEST });
 
-  agent.post(`/class/${classId}/challenge`, {
-    type,
-    publicize_type: publicizeType,
-    title,
-    description,
-    start_time: startTime,
-    end_time: endTime,
-  }, auth)
+  agent.patch(`/challenge/${challengeId}`, body, auth)
     .then((res) => {
+      console.log('edit challenge res:', res);
       dispatch({
-        type: challengeConstants.ADD_CHALLENGE_SUCCESS,
+        type: challengeConstants.EDIT_CHALLENGE_SUCCESS,
       });
     })
     .catch((err) => {
       dispatch({
-        type: challengeConstants.ADD_CHALLENGE_FAIL,
+        type: challengeConstants.EDIT_CHALLENGE_FAIL,
+        error: err,
+      });
+    });
+};
+
+const deleteChallenge = (token, challengeId) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  dispatch({ type: challengeConstants.DELETE_CHALLENGE_REQUEST });
+
+  agent.delete(`/challenge/${challengeId}`, auth)
+    .then((res) => {
+      console.log('delete challenge res:', res);
+      dispatch({
+        type: challengeConstants.DELETE_CHALLENGE_SUCCESS,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: challengeConstants.DELETE_CHALLENGE_FAIL,
+        error: err,
+      });
+    });
+};
+
+const fetchChallengeSummary = (token, challengeId) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+
+  dispatch({ type: challengeConstants.FETCH_CHALLENGE_SUMMARY_REQUEST });
+
+  agent.get(`/challenge/${challengeId}/statistics/summary`, auth)
+    .then((res) => {
+      dispatch({
+        type: challengeConstants.FETCH_CHALLENGE_SUMMARY_SUCCESS,
+        payload: { challengeId, data: res.data.data.tasks },
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: challengeConstants.FETCH_CHALLENGE_SUMMARY_FAIL,
         error: err,
       });
     });
 };
 
 export {
-  fetchChallenges, addChallenge,
+  fetchChallenges, addChallenge, editChallenge, deleteChallenge, fetchChallengeSummary,
 };

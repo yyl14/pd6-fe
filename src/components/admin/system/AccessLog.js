@@ -26,11 +26,11 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 export default function AccessLog() {
   const classes = useStyles();
-  const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.admin.system.fetchAccessLog);
-  const dispatch = useDispatch();
+  const authToken = useSelector((state) => state.auth.token);
   const logs = useSelector((state) => state.accessLogs);
   const accounts = useSelector((state) => state.accounts);
+  const dispatch = useDispatch();
 
   return (
     <>
