@@ -7,6 +7,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
+import { fetchChallenges, fetchChallengeSummary } from '../../../../actions/myClass/challenge';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
 import CustomTable from '../../../ui/CustomTable';
@@ -23,20 +24,32 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 export default function Statistics() {
-  const { courseId, classId } = useParams();
+  const { courseId, classId, challengeId } = useParams();
   const history = useHistory();
   const classes = useStyles();
-  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const dispatch = useDispatch();
-  const [statData, setStatData] = useState([
-    {
-      task: 'Q1',
-      solved_member: 69,
-      submission: 80,
-      user_tried: 71,
-    },
-  ]);
+
+  const authToken = useSelector((state) => state.auth.token);
+  const challenges = useSelector((state) => state.challenges.byId);
+
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [statisticsData, setStatisticsData] = useState([]);
+
+  useEffect(() => {
+    dispatch(fetchChallenges(authToken, classId));
+    dispatch(fetchChallengeSummary(authToken, challengeId));
+  }, [authToken, dispatch, classId, challengeId]);
+
+  useEffect(() => {
+    if (challenges[challengeId] !== undefined
+      && challenges[challengeId].statistics !== undefined) {
+      setStatisticsData(challenges[challengeId].statistics);
+    } else {
+      setStatisticsData([]);
+    }
+  }, [challenges, challengeId]);
+
   const [scoreData, setScoreData] = useState([
     {
       username: 'shiba',
@@ -58,14 +71,14 @@ export default function Statistics() {
   return (
     <>
       <Typography variant="h3" className={classes.bottomSpace}>
-        HW4 / Statistics
+        {`${(challenges[challengeId] === undefined) ? '' : challenges[challengeId].title} / Statistics`}
       </Typography>
       <SimpleBar title="Statistics" />
       <SimpleTable
-        data={statData}
+        data={statisticsData}
         columns={[
           {
-            id: 'task',
+            id: 'task_label',
             label: 'Task',
             minWidth: 50,
             align: 'center',
@@ -73,15 +86,15 @@ export default function Statistics() {
             type: 'string',
           },
           {
-            id: 'solved_member',
+            id: 'solved_member_count',
             label: 'Solved Member',
             minWidth: 50,
             align: 'center',
-            width: 120,
+            width: 200,
             type: 'string',
           },
           {
-            id: 'submission',
+            id: 'submission_count',
             label: 'Submission',
             minWidth: 50,
             align: 'center',
@@ -89,7 +102,7 @@ export default function Statistics() {
             type: 'string',
           },
           {
-            id: 'user_tried',
+            id: 'member_count',
             label: 'User Tried',
             minWidth: 50,
             align: 'center',

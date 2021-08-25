@@ -97,6 +97,30 @@ const deleteChallenge = (token, challengeId) => (dispatch) => {
     });
 };
 
+const fetchChallengeSummary = (token, challengeId) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+
+  dispatch({ type: challengeConstants.FETCH_CHALLENGE_SUMMARY_REQUEST });
+
+  agent.get(`/challenge/${challengeId}/statistics/summary`, auth)
+    .then((res) => {
+      dispatch({
+        type: challengeConstants.FETCH_CHALLENGE_SUMMARY_SUCCESS,
+        payload: { challengeId, data: res.data.data.tasks },
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: challengeConstants.FETCH_CHALLENGE_SUMMARY_FAIL,
+        error: err,
+      });
+    });
+};
+
 export {
-  fetchChallenges, addChallenge, editChallenge, deleteChallenge,
+  fetchChallenges, addChallenge, editChallenge, deleteChallenge, fetchChallengeSummary,
 };
