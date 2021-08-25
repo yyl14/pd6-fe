@@ -6,94 +6,107 @@ import {
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
+import { fetchTeams } from '../../../actions/myClass/team';
+import { fetchClass, fetchCourse } from '../../../actions/common/common';
+
 export default function Team({
-  classes, history, location, mode,
+  classNames, history, location, mode,
 }) {
-  const baseURL = '/admin/account';
+  const { courseId, classId, teamId } = useParams();
+  const baseURL = '/my-class';
+  const dispatch = useDispatch();
+  const authToken = useSelector((state) => state.auth.token);
+  const teams = useSelector((state) => state.teams);
+
+  useEffect(() => {
+    dispatch(fetchTeams(authToken, classId));
+  }, [dispatch, authToken, classId, courseId]);
+
+  const [display, setDisplay] = useState('unfold');
+
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
   const [arrow, setArrow] = useState(null);
-  const [display, setDisplay] = useState('unfold');
+
   useEffect(() => {
-    if (mode === 'main') {
-      setTitle('PBC 111-1');
+    // console.log(teams);
+    const goBackToTeam = () => {
+      history.push(`${baseURL}/${courseId}/${classId}/team`);
+    };
+
+    if (mode === 'detail' && teams.byId[teamId] !== undefined) {
+      setArrow(
+        <IconButton className={classNames.arrow} onClick={goBackToTeam}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
+      setTitle(teams.byId[teamId].name);
       setItemList([
         {
-          text: 'Challenge',
-          icon: (
-            <Icon.Challenge className={location.pathname === `${baseURL}/institute` ? classes.activeIcon : classes.icon} />
-          ),
-          path: `${baseURL}/institute`,
-        },
-        {
-          text: 'Submission',
-          icon: (
-            <Icon.Submission className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />
-          ),
-          path: `${baseURL}/submission`,
-        },
-        {
-          text: 'Grade',
-          icon: (
-            <Icon.Grade className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />
-          ),
-          path: `${baseURL}/grade`,
-        },
-        {
-          text: 'Team',
-          icon: (
-            <Icon.SupervisedUserCircleIcon className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />
-          ),
-          path: `${baseURL}/team`,
-        },
-        {
-          text: 'Member',
-          icon: (
-            <Icon.PeopleIcon className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />
-          ),
-          path: `${baseURL}/member`,
+          text: 'Detail',
+          icon: <Icon.Team />,
+          path: `${baseURL}/${courseId}/${classId}/team`,
         },
       ]);
     }
-  }, [classes.activeIcon, classes.icon, location.pathname, mode]);
+  }, [classId, classNames.arrow, courseId, history, mode, teamId, teams]);
 
-  const foldAccount = () => {
+  const foldTeam = () => {
     setDisplay('fold');
   };
 
-  const unfoldAccount = () => {
+  const unfoldTeam = () => {
     setDisplay('unfold');
   };
+
+  // if (teamId !== undefined && teams[teamId] === undefined) {
+  //   return (
+  //     <div>
+  //       <Drawer
+  //         className={classNames.drawer}
+  //         variant="permanent"
+  //         anchor="left"
+  //         PaperProps={{ elevation: 5 }}
+  //         classes={{ paper: classNames.drawerPaper }}
+  //       />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div>
       <Drawer
-        className={classes.drawer}
+        className={classNames.drawer}
         variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
-        classes={{ paper: classes.drawerPaper }}
+        classes={{ paper: classNames.drawerPaper }}
       >
-        {mode === 'main' ? <div className={classes.topSpace} /> : arrow}
-        <div>
+        {arrow}
+        <div className={classNames.title}>
           {display === 'unfold' ? (
-            <Icon.TriangleDown className={classes.titleIcon} onClick={foldAccount} />
+            <Icon.TriangleDown className={classNames.titleIcon} onClick={foldTeam} />
           ) : (
-            <Icon.TriangleRight className={classes.titleIcon} onClick={unfoldAccount} />
+            <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldTeam} />
           )}
-          <Typography variant="h4" className={classes.title}>
+          <Typography variant="h4" className={classNames.titleText}>
             {title}
           </Typography>
         </div>
-        <Divider variant="middle" className={classes.divider} />
+        <Divider variant="middle" className={classNames.divider} />
         {display === 'unfold' ? (
           <List>
             {itemList.map((item) => (
-              <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classes.item}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItem button key={item.text} className={classNames.item}>
+                <ListItemIcon
+                  className={classNames.itemIcon}
+                  style={{ color: location.pathname.includes(item.path) ? '#1EA5FF' : '' }}
+                >
+                  {item.icon}
+                </ListItemIcon>
                 <ListItemText
                   primary={item.text}
-                  className={location.pathname === item.path ? classes.active : null}
+                  className={location.pathname.includes(item.path) ? classNames.activeItemText : classNames.itemText}
                 />
               </ListItem>
             ))}
@@ -101,7 +114,7 @@ export default function Team({
         ) : (
           ''
         )}
-        <div className={classes.bottomSpace} />
+        <div className={classNames.bottomSpace} />
       </Drawer>
     </div>
   );

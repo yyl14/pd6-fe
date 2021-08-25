@@ -8,6 +8,7 @@ import CustomCheckbox from './CustomCheckbox';
 const useStyles = makeStyles((theme) => ({
   selectField: {
     width: '350px',
+    marginRight: '5px',
   },
   listItem: {
     marginLeft: '10px',
