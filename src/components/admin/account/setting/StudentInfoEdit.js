@@ -79,7 +79,7 @@ export default function StudentInfoEdit(props) {
   const editMode = true;
   const [cards, setCards] = useState(props.cards); // new card isn't here
   const [defaultCardId, setDefaultCardId] = useState(null);
-  const [disabledSave, setDisabledSave] = useState(true);
+  const [changed, setChanged] = useState(false);
   const [disabledTwoCards, setDisabledTwoCards] = useState(false);
   const [add, setAdd] = useState(false); // addCard block
   const [popUp, setPopUp] = useState(false);
@@ -102,7 +102,7 @@ export default function StudentInfoEdit(props) {
   };
 
   const handleSave = () => {
-    if (defaultCardId !== null) {
+    if (defaultCardId !== null && changed === true) {
       dispatch(makeStudentCardDefault(authToken, accountId, defaultCardId));
     }
     props.handleBack();
@@ -131,7 +131,6 @@ export default function StudentInfoEdit(props) {
     dispatch(addStudentCard(authToken, accountId, instituteId, addInputs.email, addInputs.studentId));
     setPopUp(true);
     setAdd(false);
-    setDisabledSave(false);
   };
 
   const handleChange = (e) => {
@@ -188,7 +187,7 @@ export default function StudentInfoEdit(props) {
                     email={p.email}
                     instituteId={p.institute_id}
                     updateStatus={updateStatus}
-                    setDisabledSave={setDisabledSave}
+                    setChanged={setChanged}
                   />
                 );
               }
@@ -290,7 +289,7 @@ export default function StudentInfoEdit(props) {
         >
           Cancel
         </Button>
-        <Button color="primary" type="submit" disabled={disabledSave} onClick={handleSave}>
+        <Button color="primary" type="submit" onClick={handleSave}>
           Save
         </Button>
       </SimpleBar>

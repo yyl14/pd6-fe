@@ -50,7 +50,7 @@ const allIds = (state = [], action) => {
   switch (action.type) {
     case challengeConstants.FETCH_CHALLENGES_SUCCESS: {
       const { data } = action.payload;
-      return data.map((item) => item.id);
+      return [...new Set([...data.map((item) => item.id), ...state])];
     }
     case problemConstants.READ_CHALLENGE_SUCCESS:
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);

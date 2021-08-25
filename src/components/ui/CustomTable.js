@@ -235,7 +235,7 @@ export default function CustomTable({
     //   setFilterData(data);
     // }
     setFilterData(data);
-  }, [columns, data]);
+  }, [columns, data, search]);
 
   return (
     <>

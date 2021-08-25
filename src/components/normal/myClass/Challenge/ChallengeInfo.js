@@ -180,7 +180,7 @@ export default function ChallengeInfo() {
             <Typography variant="body1">
               {challenges[challengeId].selection_type === 'LAST'
                 ? 'Last Score'
-                : 'Highest Score'}
+                : 'Best Score'}
             </Typography>
           </AlignedText>
           <AlignedText text="Status" childrenType="text">

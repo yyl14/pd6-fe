@@ -8,11 +8,11 @@ import Account from './sidebar/Account';
 import Course from './sidebar/Course';
 import System from './sidebar/System';
 
+import MyClass from './sidebar/MyClass';
 import Challenge from './sidebar/Challenge';
 import Submission from './sidebar/Submission';
 import Grade from './sidebar/Grade';
 import Team from './sidebar/Team';
-import Member from './sidebar/Member';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -25,71 +25,69 @@ const useStyles = makeStyles((theme) => ({
     height: 'calc(100% - 55px)',
     width: '300px',
   },
-  active: {
-    color: theme.palette.primary.main,
-  },
+
   topSpace: {
-    marginTop: '82.5px',
+    marginTop: '110px',
   },
   bottomSpace: {
     marginBottom: '40px',
   },
+  title: {
+    display: 'flex',
+    marginTop: '20px',
+    marginBottom: '6px',
+  },
   titleIcon: {
-    float: 'left',
+    margin: 'auto 0',
+    flex: '1',
     color: theme.palette.black.main,
-    marginTop: '44px',
-    marginBottom: '6.33px',
-    marginLeft: '20px',
-    marginRight: '14px',
     '&:hover': {
       cursor: 'pointer',
     },
   },
-  title: {
-    float: 'left',
-    marginTop: '40px',
-    marginBottom: '6.33px',
+
+  titleText: {
+    flex: '5',
   },
-  secondTitle: {
-    float: 'left',
-    marginTop: '25px',
-    marginBottom: '6.33px',
-  },
-  icon: {
+  itemIcon: {
+    flex: '1',
+    width: '18px',
     color: theme.palette.black.main,
     marginLeft: '35px',
-    marginRight: '21px',
+    marginRight: '-15px',
   },
-  activeIcon: {
+  itemText: {
+    flex: '8',
+    width: '30px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  activeItemText: {
+    flex: '10',
     color: theme.palette.primary.main,
-    marginLeft: '35px',
-    marginRight: '21px',
+    width: '30px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
+
   greyIcon: {
     color: theme.palette.grey.A400,
     marginLeft: '35px',
     marginRight: '21px',
   },
-  secondTitleIcon: {
-    float: 'left',
-    color: theme.palette.black.main,
-    marginTop: '29px',
-    marginBottom: '6.33px',
-    marginLeft: '20px',
-    marginRight: '14px',
-    '&:hover': {
-      cursor: 'pointer',
-    },
-  },
   divider: {
     marginBottom: '16px',
   },
   arrow: {
-    marginTop: '65px',
-    marginLeft: '15px',
+    marginTop: '60px',
+    marginLeft: '10px',
     marginRight: 'auto',
+    marginBottom: '20px',
   },
   item: {
+    display: 'flex',
     paddingTop: '7.5px',
     paddingBottom: '7.5px',
   },
@@ -107,6 +105,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
+
 }));
 
 export default function Sidebar() {
@@ -168,41 +167,41 @@ export default function Sidebar() {
       {/* {Challenge} */}
       <Route exact path="/my-class">
         {/* for fetchClass and redirection */}
-        <Challenge classNames={classes} history={history} location={location} mode="main" />
+        <MyClass classNames={classes} history={history} location={location} mode="main" />
       </Route>
       <Route exact path="/my-class/:courseId/:classId/challenge">
-        <Challenge classNames={classes} history={history} location={location} mode="main" />
+        <MyClass classNames={classes} history={history} location={location} mode="main" />
       </Route>
       <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId">
-        <Challenge classNames={classes} history={history} location={location} mode="main" />
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
       <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId">
-        <Challenge classNames={classes} history={history} location={location} mode="main" />
+        <Challenge classNames={classes} history={history} location={location} mode="problem" />
       </Route>
       {/* {Submission} */}
       <Route exact path="/my-class/:courseId/:classId/submission">
-        <Submission classes={classes} history={history} location={location} mode="main" />
+        <MyClass classNames={classes} history={history} location={location} mode="main" />
       </Route>
       <Route path="/my-class/:courseId/:classId/submission/:submissionId">
-        <Submission classes={classes} history={history} location={location} mode="main" />
+        <Submission classNames={classes} history={history} location={location} mode="detail" />
       </Route>
       {/* {Grade} */}
       <Route exact path="/my-class/:courseId/:classId/grade">
-        <Grade classes={classes} history={history} location={location} mode="main" />
+        <MyClass classNames={classes} history={history} location={location} mode="main" />
       </Route>
       <Route path="/my-class/:courseId/:classId/grade/:studentId">
-        <Grade classes={classes} history={history} location={location} mode="main" />
+        <Grade classNames={classes} history={history} location={location} mode="detail" />
       </Route>
       {/* {Team} */}
       <Route exact path="/my-class/:courseId/:classId/team">
-        <Team classes={classes} history={history} location={location} mode="main" />
+        <MyClass classNames={classes} history={history} location={location} mode="main" />
       </Route>
       <Route path="/my-class/:courseId/:classId/team/:teamId">
-        <Team classes={classes} history={history} location={location} mode="main" />
+        <Team classNames={classes} history={history} location={location} mode="detail" />
       </Route>
       {/* {Member} */}
       <Route path="/my-class/:courseId/:classId/member">
-        <Member classes={classes} history={history} location={location} mode="main" />
+        <MyClass classNames={classes} history={history} location={location} mode="main" />
       </Route>
     </Switch>
   );
