@@ -3,6 +3,9 @@ import { challengeConstants } from '../../../actions/myClass/constant';
 const initialState = {
   fetchChallenges: false,
   addChallenge: false,
+  fetchChallengeSummary: false,
+  editChallenge: false,
+  deleteChallenge: false,
 };
 
 export default function challenge(state = initialState, action) {
@@ -42,6 +45,62 @@ export default function challenge(state = initialState, action) {
       return {
         ...state,
         addChallenge: false,
+      };
+    }
+
+    case challengeConstants.FETCH_CHALLENGE_SUMMARY_REQUEST: {
+      return {
+        ...state,
+        fetchChallengeSummary: true,
+      };
+    }
+    case challengeConstants.FETCH_CHALLENGE_SUMMARY_SUCCESS: {
+      return {
+        ...state,
+        fetchChallengeSummary: false,
+      };
+    }
+    case challengeConstants.FETCH_CHALLENGE_SUMMARY_FAIL: {
+      return {
+        ...state,
+        fetchChallengeSummary: false,
+      };
+    }
+    case challengeConstants.EDIT_CHALLENGE_REQUEST: {
+      return {
+        ...state,
+        editChallenge: true,
+      };
+    }
+    case challengeConstants.EDIT_CHALLENGE_SUCCESS: {
+      return {
+        ...state,
+        editChallenge: false,
+      };
+    }
+    case challengeConstants.EDIT_CHALLENGE_FAIL: {
+      return {
+        ...state,
+        editChallenge: false,
+      };
+    }
+
+    case challengeConstants.DELETE_CHALLENGE_REQUEST: {
+      return {
+        ...state,
+        deleteChallenge: true,
+      };
+    }
+    case challengeConstants.DELETE_CHALLENGE_SUCCESS: {
+      return {
+        ...state,
+        deleteChallenge: false,
+      };
+    }
+    case challengeConstants.DELETE_CHALLENGE_FAIL: {
+      return {
+        ...state,
+        deleteChallenge: false,
       };
     }
 
