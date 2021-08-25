@@ -31,7 +31,6 @@ export default function MyClass({
   const [TAicons, setTAicons] = useState([]);
 
   useEffect(() => {
-    console.log(userClasses);
     if (
       userClasses[0].course_id !== undefined
       && userClasses[0].class_id !== undefined
