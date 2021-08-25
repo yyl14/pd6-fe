@@ -70,7 +70,7 @@ export default function SettingEdit({ challengeId, challenge, setEdit }) {
         <AlignedText text="Duration" childrenType="field">
           <DateRangePicker className={classes.dateRangePicker} value={duration} setValue={setDuration} />
         </AlignedText>
-        <AlignedText text="Score by" childrenType="field">
+        <AlignedText text="Scored by" childrenType="field">
           <RadioGroupForm
             options={[
               {
@@ -78,7 +78,7 @@ export default function SettingEdit({ challengeId, challenge, setEdit }) {
                 value: 'LAST',
               },
               {
-                label: 'Highest Score',
+                label: 'Best Score',
                 value: 'BEST',
               }]}
             selectedValue={selectionType}
@@ -90,11 +90,11 @@ export default function SettingEdit({ challengeId, challenge, setEdit }) {
           <RadioGroupForm
             options={[
               {
-                label: 'on Start Time',
+                label: 'On Start Time',
                 value: 'START_TIME',
               },
               {
-                label: 'on End Time',
+                label: 'On End Time',
                 value: 'END_TIME',
               }]}
             selectedValue={publicizeType}

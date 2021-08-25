@@ -108,7 +108,7 @@ export default function SubmissionDetail() {
           </Link>
         </AlignedText>
         <AlignedText text="Student ID" childrenType="text">
-          <Typography variant="body1">...</Typography>
+          <Typography variant="body1">{account.student_id}</Typography>
         </AlignedText>
         <AlignedText text="Real Name" childrenType="text">
           <Typography variant="body1">{account.real_name}</Typography>
