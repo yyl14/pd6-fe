@@ -107,25 +107,27 @@ const MemberEdit = ({
   };
 
   useEffect(() => {
-    setTA(
-      members
-        .filter((item) => item.role === 'MANAGER')
-        .map((member) => member.student_id)
-        .join('\n'),
-    );
-    setStudent(
-      members
-        .filter((item) => item.role === 'NORMAL')
-        .map((member) => member.student_id)
-        .join('\n'),
-    );
-    setGuest(
-      members
-        .filter((item) => item.role === 'GUEST')
-        .map((member) => member.student_id)
-        .join('\n'),
-    );
-  }, [members]);
+    if (!dispatchStart) {
+      setTA(
+        members
+          .filter((item) => item.role === 'MANAGER')
+          .map((member) => member.student_id)
+          .join('\n'),
+      );
+      setStudent(
+        members
+          .filter((item) => item.role === 'NORMAL')
+          .map((member) => member.student_id)
+          .join('\n'),
+      );
+      setGuest(
+        members
+          .filter((item) => item.role === 'GUEST')
+          .map((member) => member.student_id)
+          .join('\n'),
+      );
+    }
+  }, [dispatchStart, members]);
 
   useEffect(() => {
     unblockHandle.current = history.block((tl) => {
