@@ -29,7 +29,8 @@ const fetchClassMembers = (token, classId) => async (dispatch) => {
     };
     dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_REQUEST });
     const res = await agent.get(`/class/${classId}/member`, auth);
-    console.log(res);
+    // console.log(res);
+
     dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_SUCCESS, payload: { classId, data: res.data.data } });
   } catch (err) {
     dispatch({
@@ -70,11 +71,18 @@ const replaceClassMembers = (token, classId, replacingList) => async (dispatch) 
       },
     };
     dispatch({ type: commonConstants.REPLACE_CLASS_MEMBERS_REQUEST });
+
     const res = await agent.put(`/class/${classId}/member`, replacingList, auth);
-    console.log(res);
-    dispatch({
-      type: commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS,
-    });
+    if (res.data.success) {
+      dispatch({
+        type: commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS,
+      });
+    } else {
+      dispatch({
+        type: commonConstants.REPLACE_CLASS_MEMBERS_FAIL,
+        error: res.data.error,
+      });
+    }
   } catch (err) {
     dispatch({
       type: commonConstants.REPLACE_CLASS_MEMBERS_FAIL,
@@ -82,6 +90,7 @@ const replaceClassMembers = (token, classId, replacingList) => async (dispatch) 
     });
   }
 };
+
 // const deleteClassMember = (token, classId, memberId) => (dispatch) => {
 //   const auth = {
 //     headers: {
