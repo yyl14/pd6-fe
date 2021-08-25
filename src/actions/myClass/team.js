@@ -128,7 +128,7 @@ export const fetchTeamMember = (token, teamId) => async (dispatch) => {
   };
   try {
     const res = await agent.get(`/team/${teamId}/member`, auth);
-    console.log('fetch');
+    // console.log('fetch');
     dispatch({
       type: teamConstants.FETCH_TEAM_MEMBER_SUCCESS,
       payload: { teamId, data: res.data.data },
@@ -152,10 +152,10 @@ export const addTeamMember = (token, teamId, student, role, isArray, array) => a
     account_referral: student,
     role,
   }];
-  console.log('body', body);
+  // console.log('body', body);
   try {
     const res = await agent.post(`/team/${teamId}/member`, body, auth);
-    console.log('add', res);
+    // console.log('add', res);
     dispatch({ type: teamConstants.ADD_TEAM_MEMBER_SUCCESS });
   } catch (err) {
     dispatch({
@@ -175,7 +175,7 @@ export const editTeamMember = (token, teamId, memberId, role) => (dispatch) => {
   agent
     .patch(`/team/${teamId}/member`, body, auth)
     .then((res) => {
-      console.log(body, res.data);
+      // console.log(body, res.data);
       dispatch({
         type: teamConstants.EDIT_TEAM_MEMBER_SUCCESS,
       });
@@ -197,7 +197,7 @@ export const deleteTeamMember = (token, teamId, memberId) => (dispatch) => {
   };
   try {
     const res = agent.delete(`/team/${teamId}/member/${memberId}`, auth);
-    console.log('delete', res);
+    // console.log('delete', res);
     dispatch({ type: teamConstants.DELETE_TEAM_MEMBER_SUCCESS });
   } catch (err) {
     dispatch({

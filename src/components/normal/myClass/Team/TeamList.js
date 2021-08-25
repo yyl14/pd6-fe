@@ -135,7 +135,7 @@ export default function TeamList() {
     dispatch(downloadFile(authToken, teams.template));
   };
 
-  if (courses[courseId] === undefined || classes[classId] === undefined || teams[classId] === undefined) {
+  if (courses[courseId] === undefined || classes[classId] === undefined) {
     if (loading.fetchTeams || commonLoading.fetchCourse || commonLoading.fetchClass) {
       return <div>loading...</div>;
     }

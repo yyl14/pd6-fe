@@ -111,7 +111,7 @@ export default function ChallengeList() {
     }
     return <NoMatch />;
   }
-  console.log(tableData);
+  // console.log(tableData);
 
   return (
     <>
