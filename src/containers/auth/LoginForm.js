@@ -53,7 +53,7 @@ export default function LoginForm(props) {
   useEffect(() => {
     if (loginError.fetchAccount) {
       setErrors((ori) => ({ username: true, password: true }));
-      setErrorTexts((ori) => ({ ...ori, password: 'Login Failed' }));
+      setErrorTexts((ori) => ({ ...ori, password: 'Incorrect username or password' }));
     }
   }, [loginError.fetchAccount]);
 
