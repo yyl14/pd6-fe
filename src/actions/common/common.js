@@ -29,7 +29,7 @@ const fetchClassMembers = (token, classId) => async (dispatch) => {
     };
     dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_REQUEST });
     const res = await agent.get(`/class/${classId}/member`, auth);
-    // console.log(res);
+    console.log(res);
     dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_SUCCESS, payload: { classId, data: res.data.data } });
   } catch (err) {
     dispatch({
@@ -60,6 +60,35 @@ const editClassMember = (token, classId, editedList) => (dispatch) => {
         error: err,
       });
     });
+};
+
+const replaceClassMembers = (token, classId, replacingList) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: commonConstants.REPLACE_CLASS_MEMBERS_REQUEST });
+
+    const res = await agent.put(`/class/${classId}/member`, replacingList, auth);
+    console.log(res);
+    if (res.data.success) {
+      dispatch({
+        type: commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS,
+      });
+    } else {
+      dispatch({
+        type: commonConstants.REPLACE_CLASS_MEMBERS_FAIL,
+        error: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: commonConstants.REPLACE_CLASS_MEMBERS_FAIL,
+      error: err,
+    });
+  }
 };
 
 // const deleteClassMember = (token, classId, memberId) => (dispatch) => {
@@ -200,5 +229,5 @@ const downloadFile = (token, file) => async (dispatch) => {
 };
 
 export {
-  getInstitutes, fetchClassMembers, editClassMember, fetchCourse, fetchClass, fetchAccount, browseSubmitLang, downloadFile,
+  getInstitutes, fetchClassMembers, editClassMember, replaceClassMembers, fetchCourse, fetchClass, fetchAccount, browseSubmitLang, downloadFile,
 };

@@ -4,6 +4,7 @@ const initialState = {
   fetchInstitutes: null,
   fetchClassMembers: null,
   editClassMember: null,
+  replaceClassMembers: null,
   // deleteClassMember: null,
   browseSubmitLang: null,
   fetchCourse: null,
@@ -53,6 +54,18 @@ export default function common(state = initialState, action) {
       return {
         ...state,
         editClassMember: action.error,
+      };
+    }
+    case commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS: {
+      return {
+        ...state,
+        replaceClassMembers: null,
+      };
+    }
+    case commonConstants.REPLACE_CLASS_MEMBERS_FAIL: {
+      return {
+        ...state,
+        replaceClassMembers: action.error,
       };
     }
     case commonConstants.DELETE_CLASS_MEMBER_SUCCESS: {
