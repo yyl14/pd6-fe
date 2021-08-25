@@ -85,6 +85,7 @@ export default function SimpleTable({
   buttons,
   columns,
   data,
+  setData,
 }) {
   const classes = useStyles();
   const [filterData, setFilterData] = useState(data);
@@ -101,6 +102,9 @@ export default function SimpleTable({
       }
     }
     const newData = [...data];
+    if (isEdit) {
+      setData(newData);
+    }
     setFilterData(newData);
   };
 
@@ -112,6 +116,9 @@ export default function SimpleTable({
       }
     }
     const newData = [...data];
+    if (isEdit) {
+      setData(newData);
+    }
     setFilterData(newData);
   };
 
@@ -132,11 +139,7 @@ export default function SimpleTable({
                     </div>
                   </TableCell>
                 ))}
-                {
-                  isEdit && hasDelete
-                    ? <TableCell key="delete" align="right" className={classes.tableHeadCell} />
-                    : <TableCell key="blank" align="right" className={classes.tableHeadCell} />
-                }
+                <TableCell key="delete" align="right" className={isEdit && hasDelete ? classes.tableHeadCell : classes.hide} />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -198,20 +201,14 @@ export default function SimpleTable({
                       </TableCell>
                     );
                   })}
-                  {
-                    isEdit && hasDelete
-                      ? (
-                        <TableCell key={`${row.id}-deleteIcon`} className={classes.deleteCell} align="right">
-                          <Icon.Trash
-                            className={classes.deleteIcon}
-                            onClick={(e) => {
-                              handleDelete(e, row.id);
-                            }}
-                          />
-                        </TableCell>
-                      )
-                      : <TableCell key="blank" align="right" />
-                  }
+                  <TableCell key={`${row.id}-deleteIcon`} className={isEdit && hasDelete ? classes.deleteCell : classes.hide} align="right">
+                    <Icon.Trash
+                      className={classes.deleteIcon}
+                      onClick={(e) => {
+                        handleDelete(e, row.id);
+                      }}
+                    />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

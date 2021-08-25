@@ -1,8 +1,9 @@
-import { teamConstants } from "../../../actions/myClass/constant";
+import { teamConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
   fetchTeams: false,
   addTeam: false,
+  importTeam: false,
   editTeam: false,
 
   fetchTeamMember: false,
@@ -48,6 +49,25 @@ export default function team(state = initialState, action) {
       return {
         ...state,
         addTeam: false,
+      };
+    }
+
+    case teamConstants.IMPORT_TEAM_START: {
+      return {
+        ...state,
+        importTeam: true,
+      };
+    }
+    case teamConstants.IMPORT_TEAM_SUCCESS: {
+      return {
+        ...state,
+        importTeam: false,
+      };
+    }
+    case teamConstants.IMPORT_TEAM_FAIL: {
+      return {
+        ...state,
+        importTeam: false,
       };
     }
 
@@ -149,4 +169,4 @@ export default function team(state = initialState, action) {
     default:
       return state;
   }
-};
+}

@@ -142,14 +142,14 @@ export default function MyClass({
   }, [location.pathname, history, mode, courses, classes, userClasses, courseId, classId]);
 
   const foldMyClass = (id) => {
-    console.log(id);
+    // console.log(id);
     const updatedDisplay = [...display];
     updatedDisplay[id] = 0;
     setDisplay(updatedDisplay);
   };
 
   const unfoldMyClass = (id) => {
-    console.log(id);
+    // console.log(id);
     const updatedDisplay = [...display];
     updatedDisplay[id] = 1;
     setDisplay(updatedDisplay);
@@ -183,53 +183,50 @@ export default function MyClass({
       >
         <div className={classNames.topSpace} />
 
-        {userClasses.map((userClass, id) => {
-          console.log(userClass);
-          return (
-            <div key={userClass.class_id}>
-              <div className={classNames.title}>
-                {display[id] === 1 ? (
-                  <Icon.TriangleDown
-                    className={classNames.titleIcon}
-                    onClick={() => foldMyClass(id)}
-                  />
-                ) : (
-                  <Icon.TriangleRight
-                    className={classNames.titleIcon}
-                    onClick={() => unfoldMyClass(id)}
-                  />
-                )}
-                <Typography variant="h4" className={classNames.titleText}>
-                  {titles[id]}
-                  {TAicons[id]}
-                </Typography>
-              </div>
-              <Divider variant="middle" className={classNames.divider} />
+        {userClasses.map((userClass, id) => (
+          <div key={userClass.class_id}>
+            <div className={classNames.title}>
               {display[id] === 1 ? (
-                <List>
-                  {itemLists[id].map((item) => (
-                    <ListItem
-                      button
-                      key={item.text}
-                      onClick={() => history.push(item.path)}
-                      className={classNames.item}
-                    >
-                      <ListItemIcon className={classNames.itemIcon} style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}>
-                        {item.icon}
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={item.text}
-                        className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
+                <Icon.TriangleDown
+                  className={classNames.titleIcon}
+                  onClick={() => foldMyClass(id)}
+                />
               ) : (
-                ''
+                <Icon.TriangleRight
+                  className={classNames.titleIcon}
+                  onClick={() => unfoldMyClass(id)}
+                />
               )}
+              <Typography variant="h4" className={classNames.titleText}>
+                {titles[id]}
+                {TAicons[id]}
+              </Typography>
             </div>
-          );
-        })}
+            <Divider variant="middle" className={classNames.divider} />
+            {display[id] === 1 ? (
+              <List>
+                {itemLists[id].map((item) => (
+                  <ListItem
+                    button
+                    key={item.text}
+                    onClick={() => history.push(item.path)}
+                    className={classNames.item}
+                  >
+                    <ListItemIcon className={classNames.itemIcon} style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}>
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={item.text}
+                      className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            ) : (
+              ''
+            )}
+          </div>
+        ))}
         <div className={classNames.bottomSpace} />
       </Drawer>
     </div>
