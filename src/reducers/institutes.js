@@ -7,9 +7,7 @@ const byId = (state = {}, action) => {
     case commonConstants.GET_INSTITUTE_SUCCESS: {
       return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), {});
     }
-    case accountConstants.FETCH_INSTITUTES_SUCCESS: {
-      return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
-    }
+
     case accountConstants.FETCH_INSTITUTE_SUCCESS: {
       return { ...state, [action.payload.id]: action.payload };
     }
@@ -21,9 +19,6 @@ const byId = (state = {}, action) => {
 const allIds = (state = [], action) => {
   switch (action.type) {
     case commonConstants.GET_INSTITUTE_SUCCESS:
-      return action.payload.map((item) => item.id);
-
-    case accountConstants.FETCH_INSTITUTES_SUCCESS:
       return action.payload.map((item) => item.id);
 
     case accountConstants.FETCH_INSTITUTE_SUCCESS:

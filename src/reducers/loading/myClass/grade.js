@@ -4,6 +4,7 @@ const initialState = {
   fetchClassGrade: false,
   addClassGrade: false,
   fetchAccountGrade: false,
+  downloadGradeFile: false,
   deleteGrade: false,
   editGrade: false,
 };
@@ -64,6 +65,25 @@ export default function grade(state = initialState, action) {
       return {
         ...state,
         fetchAccountGrade: false,
+      };
+    }
+
+    case gradeConstants.DOWNLOAD_GRADE_FILE_START: {
+      return {
+        ...state,
+        downloadGradeFile: true,
+      };
+    }
+    case gradeConstants.DOWNLOAD_GRADE_FILE_SUCCESS: {
+      return {
+        ...state,
+        downloadGradeFile: false,
+      };
+    }
+    case gradeConstants.DOWNLOAD_GRADE_FILE_FAIL: {
+      return {
+        ...state,
+        downloadGradeFile: false,
       };
     }
 

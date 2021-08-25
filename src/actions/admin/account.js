@@ -1,30 +1,6 @@
 import agent from '../agent';
 import { accountConstants } from './constant';
 
-const getInstitutes = (token) => (dispatch) => {
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-  dispatch({ type: accountConstants.FETCH_INSTITUTES_REQUEST });
-
-  agent
-    .get('/institute', auth)
-    .then((res) => {
-      dispatch({
-        type: accountConstants.FETCH_INSTITUTES_SUCCESS,
-        payload: res.data.data,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: accountConstants.FETCH_INSTITUTES_FAIL,
-        error: err,
-      });
-    });
-};
-
 const getInstitute = (token, instituteId) => (dispatch) => {
   const auth = {
     headers: {
@@ -310,7 +286,6 @@ const fetchAccounts = (token) => (dispatch) => {
 };
 
 export {
-  getInstitutes,
   getInstitute,
   addInstitute,
   editInstitute,
