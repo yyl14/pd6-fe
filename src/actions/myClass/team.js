@@ -41,6 +41,60 @@ export const addTeam = (token, classId, teamName, newLabel) => (dispatch) => {
     });
 };
 
+export const importTeam = (token, classId, file) => async (dispatch) => {
+  dispatch({ type: teamConstants.IMPORT_TEAM_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+      'Content-Type': 'multipart/form-data',
+    },
+  };
+
+  const blob = new Blob([file]);
+  const formData = new FormData();
+  formData.append('team_file', blob);
+
+  try {
+    const res = await agent.post(`/class/${classId}/team-import`, formData, auth);
+    if (res.data.success) {
+      dispatch({
+        type: teamConstants.IMPORT_TEAM_SUCCESS,
+      });
+    } else {
+      dispatch({
+        type: teamConstants.IMPORT_TEAM_FAIL,
+        error: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: teamConstants.IMPORT_TEAM_FAIL,
+      error: err,
+    });
+  }
+};
+
+export const downloadTeamFile = (token, asAttachment) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: teamConstants.DOWNLOAD_TEAM_FILE_START });
+    const res = await agent.get('/team/template', auth);
+    dispatch({
+      type: teamConstants.DOWNLOAD_TEAM_FILE_SUCCESS,
+      payload: { uuid: res.data.data.s3_file_uuid, filename: res.data.data.filename, as_attachment: asAttachment },
+    });
+  } catch (err) {
+    dispatch({
+      type: teamConstants.DOWNLOAD_TEAM_FILE_FAIL,
+      error: err,
+    });
+  }
+};
+
 export const editTeam = (token, teamId, teamName, classId, newLabel) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
   dispatch({ type: teamConstants.EDIT_TEAM_START });
@@ -63,55 +117,69 @@ export const editTeam = (token, teamId, teamName, classId, newLabel) => (dispatc
     });
 };
 
-export const fetchTeamMember = (token, teamId) => (dispatch) => {
-  const auth = { headers: { 'auth-token': token } };
+export const fetchTeamMember = (token, teamId) => async (dispatch) => {
   dispatch({ type: teamConstants.FETCH_TEAM_MEMBER_START });
-  agent
-    .get(`/team/${teamId}/member`, auth)
-    .then((res) => {
-      dispatch({
-        type: teamConstants.FETCH_TEAM_MEMBER_SUCCESS,
-        payload: { teamId, data: res.data.data },
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: teamConstants.FETCH_TEAM_MEMBER_FAIL,
-        error: err,
-      });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const res = await agent.get(`/team/${teamId}/member`, auth);
+    // console.log('fetch');
+    dispatch({
+      type: teamConstants.FETCH_TEAM_MEMBER_SUCCESS,
+      payload: { teamId, data: res.data.data },
     });
+  } catch (err) {
+    dispatch({
+      type: teamConstants.FETCH_TEAM_MEMBER_FAIL,
+      error: err,
+    });
+  }
 };
 
-export const addTeamMember = (token, teamId, student, role) => (dispatch) => {
-  const auth = { headers: { 'auth-token': token } };
+export const addTeamMember = (token, teamId, student, role, isArray, array) => async (dispatch) => {
   dispatch({ type: teamConstants.ADD_TEAM_MEMBER_START });
-  agent
-    .post(`/team/${teamId}/member`, {
-      account_referral: student,
-      role,
-    }, auth)
-    .then((res) => {
-      dispatch({
-        type: teamConstants.ADD_TEAM_MEMBER_SUCCESS,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: teamConstants.ADD_TEAM_MEMBER_FAIL,
-        error: err,
-      });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  const body = isArray ? array : [{
+    account_referral: student,
+    role,
+  }];
+  // console.log('body', body);
+  try {
+    const res = await agent.post(`/team/${teamId}/member`, body, auth);
+    // console.log('add', res);
+    dispatch({ type: teamConstants.ADD_TEAM_MEMBER_SUCCESS });
+  } catch (err) {
+    dispatch({
+      type: teamConstants.ADD_TEAM_MEMBER_FAIL,
+      error: err,
     });
+  }
 };
 
 export const editTeamMember = (token, teamId, memberId, role) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
   dispatch({ type: teamConstants.EDIT_TEAM_MEMBER_START });
+<<<<<<< HEAD
+=======
+  const body = [{
+    member_id: memberId,
+    role,
+  }];
+>>>>>>> development
   agent
     .patch(`/team/${teamId}/member`, {
       member_id: memberId,
       role,
     }, auth)
     .then((res) => {
+      // console.log(body, res.data);
       dispatch({
         type: teamConstants.EDIT_TEAM_MEMBER_SUCCESS,
       });
@@ -125,8 +193,8 @@ export const editTeamMember = (token, teamId, memberId, role) => (dispatch) => {
 };
 
 export const deleteTeamMember = (token, teamId, memberId) => (dispatch) => {
-  const auth = { headers: { 'auth-token': token } };
   dispatch({ type: teamConstants.DELETE_TEAM_MEMBER_START });
+<<<<<<< HEAD
   agent
     .delete(`/team/${teamId}/member/${memberId}`, auth)
     .then((res) => {
@@ -139,5 +207,21 @@ export const deleteTeamMember = (token, teamId, memberId) => (dispatch) => {
         type: teamConstants.DELETE_TEAM_MEMBER_FAIL,
         error: err,
       });
+=======
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const res = agent.delete(`/team/${teamId}/member/${memberId}`, auth);
+    // console.log('delete', res);
+    dispatch({ type: teamConstants.DELETE_TEAM_MEMBER_SUCCESS });
+  } catch (err) {
+    dispatch({
+      type: teamConstants.DELETE_TEAM_MEMBER_FAIL,
+      error: err,
+>>>>>>> development
     });
+  }
 };
