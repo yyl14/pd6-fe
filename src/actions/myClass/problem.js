@@ -681,7 +681,7 @@ const addTestcaseWithFile = (token, problemId, isSample, score, timeLimit, memor
   };
   try {
     const res = await agent.post(`/problem/${problemId}/testcase`, body, auth);
-    console.log('add testcase info', res.data);
+    // console.log('add testcase info', res.data);
     if (res.data.success) {
       // try to upload file
       const testcaseId = res.data.data.id;
@@ -695,7 +695,7 @@ const addTestcaseWithFile = (token, problemId, isSample, score, timeLimit, memor
         const formData = new FormData();
         formData.append('input_file', inputFile);
         const inRes = await agent.put(`/testcase/${testcaseId}/input-data`, formData, fileAuth);
-        console.log('add testcase input file', inRes);
+        // console.log('add testcase input file', inRes);
         if (!inRes.data.success) {
           dispatch({
             type: problemConstants.ADD_TESTCASE_FAIL,
@@ -707,7 +707,7 @@ const addTestcaseWithFile = (token, problemId, isSample, score, timeLimit, memor
         const formData = new FormData();
         formData.append('output_file', outputFile);
         const outRes = await agent.put(`/testcase/${testcaseId}/output-data`, formData, fileAuth);
-        console.log('add testcase output file', outRes);
+        // console.log('add testcase output file', outRes);
         if (!outRes.data.success) {
           dispatch({
             type: problemConstants.ADD_TESTCASE_FAIL,
@@ -724,6 +724,34 @@ const addTestcaseWithFile = (token, problemId, isSample, score, timeLimit, memor
   } catch (err) {
     dispatch({
       type: problemConstants.ADD_TESTCASE_FAIL,
+      errors: err,
+    });
+  }
+};
+
+const readChallenge = (token, challengeId) => async (dispatch) => {
+  dispatch({ type: problemConstants.READ_CHALLENGE_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const challenge = await agent.get(`/challenge/${challengeId}`, auth);
+    if (challenge.data.success) {
+      dispatch({
+        type: problemConstants.READ_CHALLENGE_SUCCESS,
+        payload: challenge.data.data,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.READ_CHALLENGE_FAIL,
+        errors: challenge.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.READ_CHALLENGE_FAIL,
       errors: err,
     });
   }
@@ -749,4 +777,5 @@ export {
   uploadTestcaseInput,
   uploadTestcaseOutput,
   addTestcaseWithFile,
+  readChallenge,
 };

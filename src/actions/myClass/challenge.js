@@ -101,6 +101,112 @@ const deleteChallenge = (token, challengeId) => (dispatch) => {
     });
 };
 
+const addProblem = (token, challengeId, label, title) => async (dispatch) => {
+  dispatch({ type: challengeConstants.ADD_PROBLEM_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  const body = {
+    challenge_label: label,
+    title,
+    full_score: 0,
+    description: '',
+    io_description: '',
+    source: '',
+    hint: '',
+  };
+  try {
+    const res = await agent.post(`/challenge/${challengeId}/problem`, body, auth);
+    if (res.data.success) {
+      dispatch({
+        type: challengeConstants.ADD_PROBLEM_SUCCESS,
+      });
+    } else {
+      dispatch({
+        type: challengeConstants.ADD_PROBLEM_FAIL,
+        error: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: challengeConstants.ADD_PROBLEM_FAIL,
+      error: err,
+    });
+  }
+};
+
+const addEssay = (token, challengeId, label, title) => async (dispatch) => {
+  dispatch({ type: challengeConstants.ADD_ESSAY_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  const body = {
+    challenge_label: label,
+    title,
+    description: '',
+  };
+  try {
+    const res = await agent.post(`/challenge/${challengeId}/essay`, body, auth);
+    if (res.data.success) {
+      dispatch({
+        type: challengeConstants.ADD_ESSAY_SUCCESS,
+      });
+    } else {
+      dispatch({
+        type: challengeConstants.ADD_ESSAY_FAIL,
+        error: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: challengeConstants.ADD_ESSAY_FAIL,
+      error: err,
+    });
+  }
+};
+
+const addPeerReview = (token, challengeId, label, title) => async (dispatch) => {
+  dispatch({ type: challengeConstants.ADD_PEER_REVIEW_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  const body = {
+    challenge_label: label,
+    title,
+    target_problem_id: 0,
+    description: '',
+    min_score: 0,
+    max_score: 0,
+    max_review_count: 0,
+    start_time: '2000-01-01T00:00:00.000Z',
+    end_time: '2000-01-01T00:00:00.000Z',
+  };
+  try {
+    const res = await agent.post(`/challenge/${challengeId}/peer-review`, body, auth);
+    if (res.data.success) {
+      dispatch({
+        type: challengeConstants.ADD_PEER_REVIEW_SUCCESS,
+      });
+    } else {
+      dispatch({
+        type: challengeConstants.ADD_PEER_REVIEW_FAIL,
+        error: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: challengeConstants.ADD_PEER_REVIEW_FAIL,
+      error: err,
+    });
+  }
+};
+
 export {
-  fetchChallenges, addChallenge, editChallenge, deleteChallenge,
+  fetchChallenges, addChallenge, editChallenge, deleteChallenge, addProblem, addEssay, addPeerReview,
 };
