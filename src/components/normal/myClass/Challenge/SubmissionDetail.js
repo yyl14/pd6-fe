@@ -48,6 +48,8 @@ export default function SubmissionDetail() {
   const history = useHistory();
   const classNames = useStyles();
   const [color, setColor] = useState('blue');
+  const [popUp, setPopUp] = useState(false);
+  const [role, setRole] = useState('NORMAL');
   const dispatch = useDispatch();
 
   const submissions = useSelector((state) => state.submissions.byId);
@@ -72,6 +74,16 @@ export default function SubmissionDetail() {
     dispatch(readSubmission(authToken, account.id, problemId));
   }, [account.id, authToken, dispatch, problemId]);
 
+  useEffect(() => {
+    account.classes.forEach((value) => {
+      if (value.class_id === parseInt(classId, 10)) {
+        if (value.role === 'MANAGER') {
+          setRole('MANAGER');
+        }
+      }
+    });
+  }, [account.classes, classId]);
+
   if (problems.byId[problemId] === undefined || challenges.byId[challengeId] === undefined || submissions[submissionId] === undefined || judgmentIds === undefined) {
     if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge && !loading.readJudgment) {
       return <NoMatch />;
@@ -87,6 +99,11 @@ export default function SubmissionDetail() {
     dispatch(readSubmissionDetail(authToken, submissionId));
   };
 
+  const handleRejudge = () => {
+    // rejudge
+    setPopUp(false);
+  };
+
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
@@ -95,7 +112,8 @@ export default function SubmissionDetail() {
         / Submission Detail
       </Typography>
       <div className={classNames.generalButtons}>
-        <Button>Rejudge</Button>
+        {role === 'MANAGER'
+        && <Button onClick={() => { setPopUp(true); }}>Rejudge</Button>}
         <Button color="primary" startIcon={<Icon.RefreshOutlinedIcon />} onClick={handleRefresh}>Refresh</Button>
       </div>
       <SimpleBar title="Submission Information">
@@ -152,6 +170,21 @@ export default function SubmissionDetail() {
       </SimpleBar>
       <SimpleBar title="Submission Result" />
       <SimpleBar title="Code" />
+      <Dialog maxWidth="md" open={popUp} onClose={() => { setPopUp(false); }}>
+        <DialogTitle>
+          <Typography variant="h4">Rejudge Submission</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <AlignedText text="Submission ID" childrenType="text">
+            <Typography variant="body1">{submissionId}</Typography>
+          </AlignedText>
+          <Typography variant="body2">Once you rejudge a submission, the corresponding score and status may change.</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setPopUp(false); }}>Cancel</Button>
+          <Button color="secondary" onClick={handleRejudge}>Rejudge</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
