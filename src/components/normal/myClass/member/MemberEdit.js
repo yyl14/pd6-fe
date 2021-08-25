@@ -51,7 +51,6 @@ const useStyles = makeStyles((theme) => ({
   },
   duplicateList: {
     marginTop: '16px',
-    display: 'inline-block',
   },
   dialogButtons: {
     justifyContent: 'space-between',
@@ -68,11 +67,12 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 const MemberEdit = ({
-  dispatch, authToken, classId, backToMemberList, members, onEditMembers, loading,
+  dispatch, authToken, classId, backToMemberList, members,
 }) => {
   const classes = useStyles();
 
   const error = useSelector((state) => state.error.common.common);
+  const loading = useSelector((state) => state.loading.common.common);
 
   const [TA, setTA] = useState([]);
   const [student, setStudent] = useState([]);
@@ -254,7 +254,7 @@ const MemberEdit = ({
         const replacingList = handleBlankList(TATransformedList
           .concat(studentTransformedList, guestTransformedList));
 
-        // dispatch(replaceClassMembers(authToken, classId, replacingList));
+        dispatch(replaceClassMembers(authToken, classId, replacingList));
         setDispatchStart(true);
       }
     } else {
@@ -378,7 +378,7 @@ const MemberEdit = ({
             Save member failed due to the following reasons:
           </Typography>
           <Typography variant="body1" className={classes.duplicateList}>
-            {/* error */}
+            {submitError === 'IllegalInput' ? 'Illegal Input' : submitError}
           </Typography>
         </DialogContent>
         <DialogActions>

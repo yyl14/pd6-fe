@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 const MemberEdit = ({
-  dispatch, authToken, classId, backToMemberList, members, onEditMembers,
+  dispatch, authToken, classId, backToMemberList, members,
 }) => {
   const classes = useStyles();
 
@@ -378,7 +378,7 @@ const MemberEdit = ({
             Save member failed due to the following reasons:
           </Typography>
           <Typography variant="body1" className={classes.duplicateList}>
-            {submitError}
+            {submitError === 'IllegalInput' ? 'Illegal Input' : submitError}
           </Typography>
         </DialogContent>
         <DialogActions>
