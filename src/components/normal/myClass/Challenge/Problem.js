@@ -38,13 +38,9 @@ export default function Problem() {
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(readProblemInfo(authToken, problemId, challengeId));
-  // }, [authToken, dispatch, problemId, challengeId]);
-  // if (courses.byId[courseId] === undefined || courses.byId[courseId].name === undefined) {
-
-  //   return <NoMatch />;
-  // }
+  useEffect(() => {
+    dispatch(readProblemInfo(authToken, problemId, challengeId));
+  }, [authToken, dispatch, problemId, challengeId]);
 
   if (loading.readProblem) {
     return <div>loading...</div>;

@@ -16,6 +16,18 @@ const byId = (state = {}, action) => {
         },
       }), state);
     }
+    case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
+      const { data, id } = action.payload;
+      return {
+        ...state,
+        [id]: {
+          ...state[id],
+          problemIds: data.problem.map((item) => item.id),
+          peerReviewIds: data.peer_review.map((item) => item.id),
+          essayIds: data.essay.map((item) => item.id),
+        },
+      };
+    }
     case problemConstants.READ_CHALLENGE_SUCCESS: {
       const data = action.payload;
       return {

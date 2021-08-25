@@ -85,6 +85,7 @@ export default function SimpleTable({
   buttons,
   columns,
   data,
+  setData,
 }) {
   const classes = useStyles();
   const [filterData, setFilterData] = useState(data);
@@ -101,6 +102,9 @@ export default function SimpleTable({
       }
     }
     const newData = [...data];
+    if (isEdit) {
+      setData(newData);
+    }
     setFilterData(newData);
   };
 
@@ -112,6 +116,9 @@ export default function SimpleTable({
       }
     }
     const newData = [...data];
+    if (isEdit) {
+      setData(newData);
+    }
     setFilterData(newData);
   };
 

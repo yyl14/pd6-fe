@@ -27,7 +27,7 @@ export default function NewPassword() {
   const [showPassword, setShowPassword] = useState(false);
 
   const { accountId } = useParams();
-  const authToken = useSelector((state) => state.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
 
   const handleResetPassword = () => {

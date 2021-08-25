@@ -7,6 +7,8 @@ import courses from './courses';
 import classes from './classes';
 import classMembers from './classMembers';
 import problem from './problems';
+import testcases from './testcases';
+import assistingData from './assistingData';
 import submissions from './submissions';
 import judgments from './judgments';
 import teamMembers from './teamMembers';
@@ -17,6 +19,8 @@ import user from './user';
 import accessLogs from './accessLogs';
 import announcements from './announcements';
 import submitLangs from './submitLangs';
+import essays from './essays';
+import peerReviews from './peerReviews';
 import loading from './loading/index';
 import error from './error/index';
 import component from './component';
@@ -30,6 +34,8 @@ export default combineReducers({
   grades,
   classMembers,
   problem,
+  testcases,
+  assistingData,
   submissions,
   judgments,
   teamMembers,
@@ -43,4 +49,6 @@ export default combineReducers({
   loading,
   error,
   component,
+  essays,
+  peerReviews,
 });
