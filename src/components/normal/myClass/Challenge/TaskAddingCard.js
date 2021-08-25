@@ -67,7 +67,7 @@ export default function TaskAddingCard({ open, setOpen }) {
         break;
       }
       default: {
-        return;
+        break;
       }
     }
     setOpen(false);
