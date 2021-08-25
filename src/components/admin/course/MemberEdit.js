@@ -82,12 +82,29 @@ const MemberEdit = ({
   const [guestChanged, setGuestChanged] = useState(false);
   const [duplicateList, setDuplicateList] = useState([]);
   const [submitError, setSubmitError] = useState('');
+  const [dispatchStart, setDispatchStart] = useState(false);
   const [showUnsavedChangesDialog, setShowUnsavedChangesDialog] = useState(false);
   const [showDuplicateIdentityDialog, setShowDuplicateIdentityDialog] = useState(false);
   const [showErrorDetectedDialog, setShowErrorDetectedDialog] = useState(false);
   const unblockHandle = useRef();
   const targetLocation = useRef();
   const history = useHistory();
+
+  const unblockAndReturn = () => {
+    if (unblockHandle) {
+      unblockHandle.current();
+      setShowDuplicateIdentityDialog(false);
+      setShowErrorDetectedDialog(false);
+      history.push(targetLocation.current);
+    }
+    backToMemberList();
+  };
+  const handleBlankList = (list) => {
+    if (list.length === 1 && (list[0].account_referral === '' || list[0] === '')) {
+      return [];
+    }
+    return list;
+  };
 
   useEffect(() => {
     setTA(
@@ -122,14 +139,22 @@ const MemberEdit = ({
   });
 
   useEffect(() => {
-    if (error.replaceClassMembers) {
-      setSubmitError(error.replaceClassMembers);
-      setShowErrorDetectedDialog(true);
+    if (dispatchStart) {
+      if (!loading.replaceClassMembers) {
+        if (error.replaceClassMembers) {
+          setSubmitError(error.replaceClassMembers);
+          setShowErrorDetectedDialog(true);
+        } else {
+          backToMemberList();
+        }
+      }
     }
-  }, [error.replaceClassMembers]);
+  }, [backToMemberList, dispatchStart, error.replaceClassMembers, loading.replaceClassMembers]);
 
   useBeforeunload((e) => {
-    if (TAChanged || studentChanged || guestChanged) {
+    if (showDuplicateIdentityDialog || showErrorDetectedDialog) {
+      e.preventDefault();
+    } else if (TAChanged || studentChanged || guestChanged) {
       e.preventDefault();
       setShowUnsavedChangesDialog(true);
     }
@@ -164,22 +189,6 @@ const MemberEdit = ({
           .map((member) => member.student_id)
           .join('\n'),
     );
-  };
-
-  const unblockAndReturn = () => {
-    if (unblockHandle) {
-      unblockHandle.current();
-      setShowDuplicateIdentityDialog(false);
-      setShowErrorDetectedDialog(false);
-      history.push(targetLocation.current);
-    }
-    backToMemberList();
-  };
-  const handleBlankList = (list) => {
-    if (list.length === 1 && (list[0].account_referral === '' || list[0] === '')) {
-      return [];
-    }
-    return list;
   };
 
   const handleClickCancel = () => {
@@ -218,7 +227,7 @@ const MemberEdit = ({
 
       const combinedDuplicateList = handleBlankList(TAStudentDuplicateList
         .concat(guestStudentDuplicateList, guestTADuplicateList));
-      setDuplicateList(combinedDuplicateList.join('\n'));
+      setDuplicateList(combinedDuplicateList);
 
       if (combinedDuplicateList.length !== 0) {
         setShowDuplicateIdentityDialog(true);
@@ -245,17 +254,11 @@ const MemberEdit = ({
         const replacingList = handleBlankList(TATransformedList
           .concat(studentTransformedList, guestTransformedList));
 
-        // dispatch(replaceClassMembers(authToken, classId, replacingList));
-
-        if (error.replaceClassMembers) {
-          setShowErrorDetectedDialog(true);
-        } else {
-          console.log(error.replaceClassMembers);
-          unblockAndReturn();
-        }
+        dispatch(replaceClassMembers(authToken, classId, replacingList));
+        setDispatchStart(true);
       }
     } else {
-      unblockAndReturn();
+      backToMemberList();
     }
   };
 
@@ -333,7 +336,9 @@ const MemberEdit = ({
             </Button>
           </div>
           <div>
-            <Button onClick={handleSubmitUnsave}>Don’t Save</Button>
+            <Button onClick={handleSubmitUnsave}>
+              Don’t Save
+            </Button>
             <Button onClick={handleSubmitSave} color="primary">
               Save
             </Button>
@@ -349,8 +354,12 @@ const MemberEdit = ({
           <Typography variant="body1">
             The following accounts appear in more than one column. Please remove duplicate identities.
           </Typography>
-          <div variant="body1" className={classes.duplicateList}>
-            {duplicateList}
+          <div className={classes.duplicateList}>
+            {duplicateList.map((accountReferral) => (
+              <Typography variant="body1" key={accountReferral}>
+                {accountReferral}
+              </Typography>
+            ))}
           </div>
         </DialogContent>
         <DialogActions>
@@ -369,7 +378,7 @@ const MemberEdit = ({
             Save member failed due to the following reasons:
           </Typography>
           <Typography variant="body1" className={classes.duplicateList}>
-            {/* error */}
+            {submitError}
           </Typography>
         </DialogContent>
         <DialogActions>
