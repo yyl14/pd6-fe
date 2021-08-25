@@ -48,7 +48,7 @@ export default combineReducers({
   submitLangs,
   loading,
   error,
-  component,
   essays,
   peerReviews,
+  component,
 });

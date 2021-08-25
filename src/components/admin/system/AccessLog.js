@@ -27,87 +27,10 @@ const useStyles = makeStyles((theme) => ({
 export default function AccessLog() {
   const classes = useStyles();
   const loading = useSelector((state) => state.loading.admin.system.fetchAccessLog);
+  const logs = useSelector((state) => state.accessLogs);
   const authToken = useSelector((state) => state.auth.token);
   const accounts = useSelector((state) => state.accounts);
   const dispatch = useDispatch();
-
-  const logs = useSelector((state) => state.accessLogs.byId);
-  const logsID = useSelector((state) => state.accessLogs.allIds);
-
-  const [tableData, setTableData] = useState([]);
-  const [filterOrNot, setFilterOrNot] = useState(false);
-  const [dateRange, setDateRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: 'selection',
-    },
-  ]);
-
-  const modifyRawData = useCallback((item) => {
-    let studentID = item.account_id;
-    if (typeof studentID === 'number') {
-      studentID = studentID.toString();
-    }
-    const temp = {
-      username: item.username,
-      student_id: studentID,
-      real_name: item.real_name,
-      ip: item.ip,
-      resource_path: item.resource_path,
-      request_method: item.request_method,
-      access_time: moment(item.access_time).format('YYYY-MM-DD, HH:mm'),
-      path: item.path,
-    };
-    return temp;
-  }, []);
-
-  const storeAllAccessLog = useCallback(() => {
-    setDateRange([
-      {
-        startDate: new Date(),
-        endDate: new Date(),
-        key: 'selection',
-      },
-    ]);
-    setTableData(logsID.map((key) => ({
-      ...modifyRawData(logs[key]),
-      path: `/admin/account/account/${logs[key].account_id}/setting`,
-    })));
-  }, [logsID, logs, modifyRawData]);
-
-  const filter = () => {
-    const newData = [];
-    const start = dateRange[0].startDate.getTime();
-    const end = dateRange[0].endDate.getTime();
-    logsID.forEach((key) => {
-      const item = logs[key];
-      item.path = `/admin/account/account/${item.account_id}/setting`;
-      const accessTime = moment(item.access_time).valueOf();
-      if (start <= accessTime && accessTime <= end) {
-        newData.push(modifyRawData(item));
-      }
-    });
-    setTableData(newData);
-    setFilterOrNot(false);
-  };
-
-  const clearFilter = () => {
-    storeAllAccessLog();
-    setFilterOrNot(false);
-  };
-
-  useEffect(() => {
-    dispatch(fetchAccessLog(authToken, 0, 30));
-  }, [authToken, dispatch]);
-
-  useEffect(() => {
-    storeAllAccessLog();
-  }, [storeAllAccessLog]);
-
-  if (loading) {
-    return <div>loading...</div>;
-  }
 
   return (
     <>
