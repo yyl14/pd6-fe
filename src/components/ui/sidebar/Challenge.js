@@ -12,156 +12,75 @@ import { fetchClass, fetchCourse } from '../../../actions/common/common';
 export default function Challenge({
   classNames, history, location, mode,
 }) {
-  const { courseId, classId } = useParams();
+  const {
+    courseId, classId, challengeId, problemId,
+  } = useParams();
+  const baseURL = '/my-class';
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.challenge);
   const challenges = useSelector((state) => state.challenges.byId);
   const challengesID = useSelector((state) => state.challenges.allIds);
-  // const classes = useSelector((state) => state.classes.byId);
-  // const courses = useSelector((state) => state.courses.byId);
-  const classes = useSelector((state) => state.classes);
-  const courses = useSelector((state) => state.courses);
+  const classes = useSelector((state) => state.classes.byId);
+  const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
 
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchClass(authToken, classId));
+    dispatch(fetchChallenges(authToken, classId));
   }, [dispatch, authToken, classId, courseId]);
 
-  const { instituteId, accountId } = useParams();
-  const instituteList = useSelector((state) => state.institutes);
-  const accountList = useSelector((state) => state.accounts);
-  const baseURL = '/admin/account';
   const [display, setDisplay] = useState('unfold');
 
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
   const [arrow, setArrow] = useState(null);
-  const [TAicon, setTAicon] = useState(null);
 
   useEffect(() => {
-    // console.log(instituteId, accountId);
-    console.log(userClasses);
-    console.log(courses, classes);
-    // console.log(courses[courseId].name, classes[classId].name);
-    const goBackToInstitute = () => {
-      history.push('/admin/account/institute');
+    console.log(challenges);
+    const goBackToChallenge = () => {
+      history.push(`${baseURL}/${courseId}/${classId}/challenge`);
     };
 
-    const goBackToAccount = () => {
-      history.push('/admin/account/account');
-    };
-
-    if (mode === 'main') {
-      setTitle('PBC 111-1');
-      setTAicon(<Icon.TA style={{ marginLeft: '100px' }} />);
-      setItemList([
-        {
-          text: 'Challenge',
-          icon: (
-            <Icon.Challenge
-              className={location.pathname === `${baseURL}/institute` ? classNames.activeIcon : classNames.icon}
-            />
-          ),
-          path: `${baseURL}/institute`,
-        },
-        {
-          text: 'Submission',
-          icon: (
-            <Icon.Submission
-              className={location.pathname === `${baseURL}/account` ? classNames.activeIcon : classNames.icon}
-            />
-          ),
-          path: `${baseURL}/submission`,
-        },
-        {
-          text: 'Grade',
-          icon: (
-            <Icon.Grade
-              className={location.pathname === `${baseURL}/account` ? classNames.activeIcon : classNames.icon}
-            />
-          ),
-          path: `${baseURL}/grade`,
-        },
-        {
-          text: 'Team',
-          icon: (
-            <Icon.Team
-              className={location.pathname === `${baseURL}/account` ? classNames.activeIcon : classNames.icon}
-            />
-          ),
-          path: `${baseURL}/team`,
-        },
-        {
-          text: 'Member',
-          icon: (
-            <Icon.Member
-              className={location.pathname === `${baseURL}/account` ? classNames.activeIcon : classNames.icon}
-            />
-          ),
-          path: `${baseURL}/member`,
-        },
-      ]);
-    } else if (mode === 'institute' && instituteList.byId[instituteId]) {
+    if (mode === 'challenge' && challenges[challengeId] !== undefined) {
+      // console.log(challenges[challengeId]);
       setArrow(
-        <IconButton className={classNames.arrow} onClick={goBackToInstitute}>
+        <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
-      setTitle(instituteList.byId[instituteId].abbreviated_name);
+      setTitle(challenges[challengeId].title);
       setItemList([
         {
-          text: 'Setting',
-          path: `${baseURL}/institute/${instituteId}/setting`,
-          icon: (
-            <Icon.SettingsIcon
-              className={
-                location.pathname === `${baseURL}/institute/${instituteId}/setting`
-                  ? classNames.activeIcon
-                  : classNames.icon
-              }
-            />
-          ),
-        },
-      ]);
-    } else if (mode === 'account' && accountList.byId[accountId]) {
-      setArrow(
-        <IconButton className={classNames.arrow} onClick={goBackToAccount}>
-          <Icon.ArrowBackRoundedIcon />
-        </IconButton>,
-      );
-      setTitle(accountList.byId[accountId].username);
-      setItemList([
-        {
-          text: 'Setting',
-          path: `${baseURL}/account/${accountId}/setting`,
-          icon: (
-            <Icon.SettingsIcon
-              className={
-                location.pathname === `${baseURL}/account/${accountId}/setting`
-                  ? classNames.activeIcon
-                  : classNames.icon
-              }
-            />
-          ),
+          text: 'Info',
+          icon: <Icon.Warning />,
+          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
         },
       ]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, history, mode, courses, classes, accountId, instituteId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    challengeId,
+    challenges,
+    classId,
+    courseId,
+    history,
+    location.pathname,
+    mode,
+  ]);
 
-  const foldAccount = () => {
+  const foldChallenge = () => {
     setDisplay('fold');
   };
 
-  const unfoldAccount = () => {
+  const unfoldChallenge = () => {
     setDisplay('unfold');
   };
 
   if (
-    (instituteId !== undefined && instituteList.byId[instituteId] === undefined)
-    || (accountId !== undefined && accountList.byId[accountId] === undefined)
+    (courseId !== undefined && courses[courseId] === undefined)
+    || (classId !== undefined && classes[classId] === undefined)
   ) {
     return (
       <div>
@@ -185,16 +104,15 @@ export default function Challenge({
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}
       >
-        {mode === 'main' ? <div className={classNames.topSpace} /> : arrow}
-        <div>
+        {arrow}
+        <div className={classNames.title}>
           {display === 'unfold' ? (
-            <Icon.TriangleDown className={classNames.titleIcon} onClick={foldAccount} />
+            <Icon.TriangleDown className={classNames.titleIcon} onClick={foldChallenge} />
           ) : (
-            <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldAccount} />
+            <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldChallenge} />
           )}
-          <Typography variant="h4" className={classNames.title}>
+          <Typography variant="h4" className={classNames.titleText}>
             {title}
-            {TAicon}
           </Typography>
         </div>
         <Divider variant="middle" className={classNames.divider} />
@@ -202,10 +120,15 @@ export default function Challenge({
           <List>
             {itemList.map((item) => (
               <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemIcon
+                  className={classNames.itemIcon}
+                  style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
+                >
+                  {item.icon}
+                </ListItemIcon>
                 <ListItemText
                   primary={item.text}
-                  className={location.pathname === item.path ? classNames.active : null}
+                  className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
                 />
               </ListItem>
             ))}

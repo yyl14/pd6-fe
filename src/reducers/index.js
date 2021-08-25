@@ -21,6 +21,7 @@ import essays from './essays';
 import peerReviews from './peerReviews';
 import loading from './loading/index';
 import error from './error/index';
+import component from './component';
 
 export default combineReducers({
   auth,
@@ -45,4 +46,5 @@ export default combineReducers({
   error,
   essays,
   peerReviews,
+  component,
 });
