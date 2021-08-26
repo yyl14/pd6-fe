@@ -208,6 +208,18 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       <SimpleBar title="About Input and Output">
         <Typography variant="body2">{problems[problemId] === undefined ? 'error' : problems[problemId].io_description}</Typography>
       </SimpleBar>
+      {problems[problemId].source !== ''
+      && (
+      <SimpleBar title="Source">
+        <Typography variant="body2">{problems[problemId].source}</Typography>
+      </SimpleBar>
+      )}
+      {problems[problemId].hint !== ''
+      && (
+      <SimpleBar title="Hint">
+        <Typography variant="body2">{problems[problemId].hint}</Typography>
+      </SimpleBar>
+      )}
       <SimpleBar title="Sample">
         {role === 'MANAGER' && <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllSampleFile}>Download All Files</Button>}
         <SimpleTable
