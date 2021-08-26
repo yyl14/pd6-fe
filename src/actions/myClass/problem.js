@@ -536,13 +536,14 @@ const submitCode = (token, problemId, languageId, content) => async (dispatch) =
       language_id: languageId,
     },
   };
-  const blob = new Blob([content]); // , { type: 'text/py' }); // haven't set designated type
+  const blob = new Blob([content], { type: 'text/plain' });
+  const file = new File([blob], 'foo.txt', { type: 'text/plain' });
   const formData = new FormData();
-  formData.append('content_file', blob);
+  formData.append('content_file', file);
 
   try {
     const res = await agent.post(`/problem/${problemId}/submission`, formData, config);
-    // console.log('submit', res);
+    console.log('submit', res);
     if (res.data.success) {
       dispatch({
         type: problemConstants.SUBMIT_PROBLEM_SUCCESS,

@@ -54,7 +54,6 @@ export default function CodeSubmission() {
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass);
 
-  const [lang, setLang] = useState('');
   const [langId, setLangId] = useState(-1);
   const [code, setCode] = useState('');
 
@@ -62,9 +61,8 @@ export default function CodeSubmission() {
     if (langId === -1) {
       return;
     }
-    // TODO: Fix submit illegal type
-    // dispatch(submitCode(authToken, problemId, langId, code));
-    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`);
+    dispatch(submitCode(authToken, problemId, langId, code));
+    // history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`);
   };
 
   useEffect(() => {
@@ -94,16 +92,15 @@ export default function CodeSubmission() {
           <Select
             labelId="sort"
             id="sort"
-            value={lang}
+            value={langId}
             onChange={(e) => {
-              setLang(e.target.value);
-              setLangId(e.target.key);
+              setLangId(e.target.value);
             }}
           >
             <MenuItem key={-1} value="">
               <em>None</em>
             </MenuItem>
-            {submitLang.allIds.map((key) => <MenuItem key={submitLang.byId[key].id} value={submitLang.byId[key].name}>{submitLang.byId[key].name}</MenuItem>)}
+            {submitLang.allIds.map((key) => <MenuItem key={submitLang.byId[key].id} value={submitLang.byId[key].id}>{submitLang.byId[key].name}</MenuItem>)}
           </Select>
         </FormControl>
       </AlignedText>
