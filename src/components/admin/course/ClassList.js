@@ -51,7 +51,6 @@ export default function ClassList() {
   const [addClassName, setAddClassName] = useState('');
 
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
-  console.log(stateAll);
 
   useEffect(() => {
     if (!loading.addCourse && !loading.deleteCourse && !loading.renameCourse) {
@@ -99,7 +98,7 @@ export default function ClassList() {
     setShowAddClassDialog(false);
     dispatch(addClass(authToken, courseId, name, false));
   };
-  console.log(courses, loading.fetchCourses);
+
   if (courses.byId[courseId] === undefined || courses.byId[courseId].name === undefined) {
     if (loading.fetchCourses) {
       // still loading
@@ -107,8 +106,6 @@ export default function ClassList() {
     }
     return <NoMatch />;
   }
-
-  // console.log(courses, classes);
 
   return (
     <>
