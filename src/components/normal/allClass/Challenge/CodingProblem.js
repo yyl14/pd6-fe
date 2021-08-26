@@ -18,7 +18,6 @@ import Icon from '../../../ui/icon/index';
 import AlignedText from '../../../ui/AlignedText';
 
 import CodingProblemInfo from './ProblemSettings/CodingProblemInfo';
-import CodingProblemEdit from './ProblemSettings/CodingProblemEdit';
 import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
@@ -76,14 +75,14 @@ export default function CodingProblem() {
         <Button
           variant="outlined"
           color="primary"
-          onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)}
+          onClick={() => history.push(`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)}
           startIcon={<Icon.HistoryIcon />}
         >
           My Submission
         </Button>
         <Button
           color="primary"
-          onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}
+          onClick={() => history.push(`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}
         >
           Submit
         </Button>

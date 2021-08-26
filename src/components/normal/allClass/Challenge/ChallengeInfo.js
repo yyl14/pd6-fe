@@ -41,8 +41,6 @@ export default function ChallengeInfo() {
   const dispatch = useDispatch();
   const [currentTime, setCurrentTime] = useState(moment());
   const [status, setStatus] = useState('');
-  const [isManager, setIsManager] = useState(false);
-  const [editMode, setEditMode] = useState(false);
   const [inputs, setInputs] = useState('');
   const [tableData, setTableData] = useState([]);
 
@@ -78,37 +76,27 @@ export default function ChallengeInfo() {
   }, [challengeId, challenges, currentTime]);
 
   useEffect(() => {
-    userClasses.map((item) => {
-      if (`${item.class_id}` === classId) {
-        // console.log(item.role);
-        if (item.role === 'MANAGER') {
-          setIsManager(true);
-        }
-      }
-      return <></>;
-    });
-  }, [classId, userClasses]);
-
-  useEffect(() => {
-    if (!loading.browseTasksUnderChallenge && challenges[challengeId] !== undefined) {
-      let arr1 = challenges[challengeId].problemIds.map((id) => ({
-        challenge_label: problems[id].challenge_label,
-        score: problems[id].full_score,
-        id: Math.random(),
-      }));
-      const arr2 = challenges[challengeId].essayIds.map((id) => ({
-        challenge_label: essays[id].challenge_label,
-        id: Math.random(),
-      }));
-      const arr3 = challenges[challengeId].peerReviewIds.map((id) => ({
-        challenge_label: peerReviews[id].challenge_label,
-        id: Math.random(),
-      }));
-      arr1 = arr1.concat(arr2);
-      arr1 = arr1.concat(arr3);
-      setTableData(arr1);
+    if (challenges[challengeId]) {
+      setTableData(
+        challenges[challengeId].problemIds
+          .map((id) => ({
+            challenge_label: problems[id].challenge_label,
+            score: problems[id].full_score,
+            id: `coding-${id}`,
+          }))
+          .concat(
+            challenges[challengeId].essayIds.map((id) => ({
+              challenge_label: essays[id].challenge_label,
+              id: `essay-${id}`,
+            })),
+            challenges[challengeId].peerReviewIds.map((id) => ({
+              challenge_label: peerReviews[id].challenge_label,
+              id: `peer-${id}`,
+            })),
+          ),
+      );
     }
-  }, [authToken, challengeId, challenges, essays, loading.browseTasksUnderChallenge, peerReviews, problems]);
+  }, [challengeId, challenges, essays, peerReviews, problems]);
 
   if (challenges[challengeId] === undefined) {
     if (!loading.browseChallengeOverview) {
@@ -117,29 +105,6 @@ export default function ChallengeInfo() {
     return <div>loading...</div>;
   }
 
-  const handleEdit = () => {
-    setEditMode(true);
-  };
-
-  const handleCancel = () => {
-    setEditMode(false);
-    setInputs(challenges[challengeId].description);
-  };
-
-  const handleSave = () => {
-    const body = ({
-      publicizeType: challenges[challengeId].publicize_type,
-      selectionType: challenges[challengeId].selection_type,
-      title: challenges[challengeId].title,
-      description: inputs,
-      startTime: challenges[challengeId].start_time,
-      endTime: challenges[challengeId].end_time,
-    });
-    dispatch(editChallenge(authToken, challengeId, body));
-    setEditMode(false);
-    setInputs(challenges[challengeId].description);
-  };
-
   return (
     <>
       <Typography className={classes.pageHeader} variant="h3">
@@ -147,56 +112,34 @@ export default function ChallengeInfo() {
         {' '}
         / Info
       </Typography>
-      {isManager && !editMode
-        && (
-        <Button
-          onClick={handleEdit}
-        >
-          Edit
-        </Button>
-        )}
-      <SimpleBar
-        title="Description"
-      >
-        {editMode
-          ? (
-            <TextField
-              className={classes.descriptionField}
-              value={inputs}
-              onChange={(e) => setInputs(e.target.value)}
-              multiline
-              minRows={10}
-              maxRows={10}
-              variant="outlined"
-            />
-          )
-          : <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>{challenges[challengeId].description}</Typography>}
+      <SimpleBar title="Description">
+        <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
+          {challenges[challengeId].description}
+        </Typography>
       </SimpleBar>
-      <SimpleBar
-        title="Challenge Information"
-      >
+      <SimpleBar title="Challenge Information">
         <>
           <AlignedText text="Scored by" childrenType="text">
             <Typography variant="body1">
-              {challenges[challengeId].selection_type === 'LAST'
-                ? 'Last Score'
-                : 'Best Score'}
+              {challenges[challengeId].selection_type === 'LAST' ? 'Last Score' : 'Best Score'}
             </Typography>
           </AlignedText>
           <AlignedText text="Status" childrenType="text">
             <Typography variant="body1">{status}</Typography>
           </AlignedText>
           <AlignedText text="Start time" childrenType="text">
-            <Typography variant="body1">{moment(challenges[challengeId].start_time).format('YYYY-MM-DD, HH:mm')}</Typography>
+            <Typography variant="body1">
+              {moment(challenges[challengeId].start_time).format('YYYY-MM-DD, HH:mm')}
+            </Typography>
           </AlignedText>
           <AlignedText text="End time" childrenType="text">
-            <Typography variant="body1">{moment(challenges[challengeId].end_time).format('YYYY-MM-DD, HH:mm')}</Typography>
+            <Typography variant="body1">
+              {moment(challenges[challengeId].end_time).format('YYYY-MM-DD, HH:mm')}
+            </Typography>
           </AlignedText>
         </>
       </SimpleBar>
-      <SimpleBar
-        title="Overview"
-      />
+      <SimpleBar title="Overview" />
       <SimpleTable
         isEdit={false}
         hasDelete={false}
@@ -220,13 +163,6 @@ export default function ChallengeInfo() {
         ]}
         data={tableData}
       />
-      {editMode
-        && (
-        <div className={classes.buttons}>
-          <Button onClick={handleCancel}>Cancel</Button>
-          <Button onClick={handleSave} color="primary">Save</Button>
-        </div>
-        )}
     </>
   );
 }

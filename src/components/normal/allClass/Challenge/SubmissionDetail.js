@@ -53,7 +53,6 @@ export default function SubmissionDetail() {
   const history = useHistory();
   const classNames = useStyles();
   const [color, setColor] = useState('blue');
-  const [popUp, setPopUp] = useState(false);
   const [role, setRole] = useState('NORMAL');
   const dispatch = useDispatch();
 
@@ -89,7 +88,12 @@ export default function SubmissionDetail() {
     });
   }, [account.classes, classId]);
 
-  if (problems.byId[problemId] === undefined || challenges.byId[challengeId] === undefined || submissions[submissionId] === undefined || judgmentIds === undefined) {
+  if (
+    problems.byId[problemId] === undefined
+    || challenges.byId[challengeId] === undefined
+    || submissions[submissionId] === undefined
+    || judgmentIds === undefined
+  ) {
     if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge && !loading.readJudgment) {
       return <NoMatch />;
     }
@@ -105,11 +109,6 @@ export default function SubmissionDetail() {
     dispatch(fetchSubmission(authToken, submissionId));
   };
 
-  const handleRejudge = () => {
-    // rejudge
-    setPopUp(false);
-  };
-
   // console.log('submission', submissions[submissionId]);
 
   return (
@@ -120,9 +119,9 @@ export default function SubmissionDetail() {
         / Submission Detail
       </Typography>
       <div className={classNames.generalButtons}>
-        {role === 'MANAGER'
-        && <Button onClick={() => { setPopUp(true); }}>Rejudge</Button>}
-        <Button color="primary" startIcon={<Icon.RefreshOutlinedIcon />} onClick={handleRefresh}>Refresh</Button>
+        <Button color="primary" startIcon={<Icon.RefreshOutlinedIcon />} onClick={handleRefresh}>
+          Refresh
+        </Button>
       </div>
       <SimpleBar title="Submission Information">
         <AlignedText text="Submission ID" childrenType="text">
@@ -140,12 +139,15 @@ export default function SubmissionDetail() {
           <Typography variant="body1">{account.real_name}</Typography>
         </AlignedText>
         <AlignedText text="Challenge" childrenType="text">
-          <Link to={`/my-class/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
+          <Link to={`/all-class/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
             <Typography variant="body1">{challenges.byId[challengeId].title}</Typography>
           </Link>
         </AlignedText>
         <AlignedText text="Task Label" childrenType="text">
-          <Link to={`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`} className={classNames.textLink}>
+          <Link
+            to={`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`}
+            className={classNames.textLink}
+          >
             <Typography variant="body1">{problems.byId[problemId].challenge_label}</Typography>
           </Link>
         </AlignedText>
@@ -156,9 +158,21 @@ export default function SubmissionDetail() {
           {judgmentIds.map((key) => {
             if (judgments[key].submission_id === parseInt(submissionId, 10)) {
               if (judgments[key].status === 'ACCEPTED') {
-                return <Typography variant="body1" key={key}>{judgments[key].status.charAt(0).concat(judgments[key].status.slice(1).toLowerCase())}</Typography>;
+                return (
+                  <Typography variant="body1" key={key}>
+                    {judgments[key].status.charAt(0).concat(judgments[key].status.slice(1).toLowerCase())}
+                  </Typography>
+                );
               }
-              return <Typography variant="body1" color="secondary" key={key}>{judgments[key].status.toLowerCase().split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ')}</Typography>;
+              return (
+                <Typography variant="body1" color="secondary" key={key}>
+                  {judgments[key].status
+                    .toLowerCase()
+                    .split(' ')
+                    .map((word) => word[0].toUpperCase() + word.substring(1))
+                    .join(' ')}
+                </Typography>
+              );
             }
             return '';
           })}
@@ -169,7 +183,9 @@ export default function SubmissionDetail() {
           </Typography>
         </AlignedText>
         <AlignedText text="Submit Time" childrenType="text">
-          <Typography variant="body1">{moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm')}</Typography>
+          <Typography variant="body1">
+            {moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm')}
+          </Typography>
         </AlignedText>
         {/* <AlignedText text="Language" childrenType="text">
           {submitLangs[submissions[submissionId].language_id]
@@ -188,21 +204,6 @@ export default function SubmissionDetail() {
           maxRows={20}
         />
       </SimpleBar>
-      <Dialog maxWidth="md" open={popUp} onClose={() => { setPopUp(false); }}>
-        <DialogTitle>
-          <Typography variant="h4">Rejudge Submission</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <AlignedText text="Submission ID" childrenType="text">
-            <Typography variant="body1">{submissionId}</Typography>
-          </AlignedText>
-          <Typography variant="body2">Once you rejudge a submission, the corresponding score and status may change.</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => { setPopUp(false); }}>Cancel</Button>
-          <Button color="secondary" onClick={handleRejudge}>Rejudge</Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }

@@ -110,7 +110,7 @@ export default function ChallengeList() {
         setTableData(
           challengesID.reverse().map((id) => ({
             title: challenges[id].title,
-            path: `/my-class/${courseId}/${classId}/challenge/${id}`,
+            path: `/all-class/${courseId}/${classId}/challenge/${id}`,
             startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
             endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
             status: challenges[id].status,
@@ -118,13 +118,16 @@ export default function ChallengeList() {
         );
       } else {
         setTableData(
-          challengesID.filter((id) => challenges[id].status !== 'Not Yet').reverse().map((id) => ({
-            title: challenges[id].title,
-            path: `/my-class/${courseId}/${classId}/challenge/${id}`,
-            startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
-            endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
-            status: challenges[id].status,
-          })),
+          challengesID
+            .filter((id) => challenges[id].status !== 'Not Yet')
+            .reverse()
+            .map((id) => ({
+              title: challenges[id].title,
+              path: `/all-class/${courseId}/${classId}/challenge/${id}`,
+              startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
+              endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
+              status: challenges[id].status,
+            })),
         );
       }
     }
@@ -162,13 +165,13 @@ export default function ChallengeList() {
       setErrorText("Can't be empty");
       return;
     }
-    const body = ({
+    const body = {
       title: inputs.title,
       scoredBy: inputs.scoredBy === 'Last Score' ? 'LAST' : 'BEST',
       showTime: inputs.showTime === 'On End Time' ? 'END_TIME' : 'START_TIME',
       startTime: dateRangePicker[0].startDate.toISOString(),
       endTime: dateRangePicker[0].endDate.toISOString(),
-    });
+    };
     dispatch(addChallenge(authToken, classId, body));
     setPopUp(false);
     setInputs({
@@ -220,8 +223,9 @@ export default function ChallengeList() {
                 <Icon.Add style={{ color: 'white' }} />
               </Button>
             </>
+          ) : (
+            <></>
           )
-            : <></>
         }
         data={tableData}
         columns={[
@@ -261,12 +265,7 @@ export default function ChallengeList() {
         hasLink
         linkName="path"
       />
-      <Dialog
-        open={popUp}
-        keepMounted
-        onClose={() => setPopUp(false)}
-        maxWidth="md"
-      >
+      <Dialog open={popUp} keepMounted onClose={() => setPopUp(false)} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Create New Challenge</Typography>
         </DialogTitle>
@@ -322,7 +321,6 @@ export default function ChallengeList() {
           </Button>
         </DialogActions>
       </Dialog>
-
     </>
   );
 }
