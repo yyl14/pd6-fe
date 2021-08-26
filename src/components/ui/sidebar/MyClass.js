@@ -21,9 +21,9 @@ export default function MyClass({
   const userClasses = useSelector((state) => state.user.classes.sort((a, b) => (a.course_id > b.course_id) - (a.course_id < b.course_id)));
 
   useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-  }, [dispatch, authToken, classId, courseId]);
+    userClasses.map(({ course_id }) => dispatch(fetchCourse(authToken, courseId)));
+    // dispatch(fetchClass(authToken, classId));
+  }, [dispatch, authToken, classId, courseId, userClasses]);
 
   const [display, setDisplay] = useState([]); // 0: fold, 1: unfold
   const [titles, setTitles] = useState([]);
@@ -41,7 +41,7 @@ export default function MyClass({
       history.push(`/my-class/${userClasses[0].course_id}/${userClasses[0].class_id}/challenge`);
     }
   }, [history, location.pathname, userClasses]);
-
+  // console.log(courses[0]);
   useEffect(() => {
     if (
       mode === 'main'
@@ -59,7 +59,11 @@ export default function MyClass({
           setDisplay((prevDisplay) => [...prevDisplay, 0]); // fold
         }
 
-        setTitles((prevTitles) => [...prevTitles, `${userClass.course_name} ${userClass.class_name}`]);
+        setTitles((prevTitles) => [
+          ...prevTitles,
+          // temp. solution, userClass should contain course name
+          `${courses[userClass.course_id] ? courses[userClass.course_id].name : 'Unknown'} ${userClass.class_name}`,
+        ]);
         if (userClass.role === 'MANAGER') {
           setTAicons((prevTAicons) => [
             ...prevTAicons,

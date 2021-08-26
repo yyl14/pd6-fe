@@ -24,7 +24,11 @@ import Icon from '../../../../ui/icon/index';
 import NoMatch from '../../../../noMatch';
 
 import {
-  browseTestcase, browseAssistingData, deleteAssistingData, deleteTestcase, deleteProblem,
+  browseTestcase,
+  browseAssistingData,
+  deleteAssistingData,
+  deleteTestcase,
+  deleteProblem,
 } from '../../../../../actions/myClass/problem';
 import { fetchClass, fetchCourse, downloadFile } from '../../../../../actions/common/common';
 
@@ -88,7 +92,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       as_attachment: false,
     }));
     files.forEach((file) => {
-      dispatch((downloadFile(authToken, file)));
+      dispatch(downloadFile(authToken, file));
     });
   };
 
@@ -96,71 +100,91 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     const files = sampleDataIds.reduce((acc, id) => {
       if (testcases[id].input_file_uuid !== null && testcases[id].output_file_uuid !== null) {
         console.log('hello');
-        return [...acc, {
-          uuid: testcases[id].input_file_uuid,
-          filename: testcases[id].input_filename,
-          as_attachment: false,
-        }, {
-          uuid: testcases[id].output_file_uuid,
-          filename: testcases[id].output_filename,
-          as_attachment: false,
-        }];
+        return [
+          ...acc,
+          {
+            uuid: testcases[id].input_file_uuid,
+            filename: testcases[id].input_filename,
+            as_attachment: false,
+          },
+          {
+            uuid: testcases[id].output_file_uuid,
+            filename: testcases[id].output_filename,
+            as_attachment: false,
+          },
+        ];
       }
       if (testcases[id].input_file_uuid !== null) {
-        return [...acc, {
-          uuid: testcases[id].input_file_uuid,
-          filename: testcases[id].input_filename,
-          as_attachment: false,
-        }];
+        return [
+          ...acc,
+          {
+            uuid: testcases[id].input_file_uuid,
+            filename: testcases[id].input_filename,
+            as_attachment: false,
+          },
+        ];
       }
       if (testcases[id].output_file_uuid !== null) {
-        return [...acc, {
-          uuid: testcases[id].output_file_uuid,
-          filename: testcases[id].output_filename,
-          as_attachment: false,
-        }];
+        return [
+          ...acc,
+          {
+            uuid: testcases[id].output_file_uuid,
+            filename: testcases[id].output_filename,
+            as_attachment: false,
+          },
+        ];
       }
 
       return acc;
     }, []);
     console.log(files);
     files.forEach((file) => {
-      dispatch((downloadFile(authToken, file)));
+      dispatch(downloadFile(authToken, file));
     });
   };
 
   const downloadAllTestingFile = () => {
     const files = testcaseDataIds.reduce((acc, id) => {
       if (testcases[id].input_file_uuid !== null && testcases[id].output_file_uuid !== null) {
-        return [...acc, {
-          uuid: testcases[id].input_file_uuid,
-          filename: testcases[id].input_filename,
-          as_attachment: false,
-        }, {
-          uuid: testcases[id].output_file_uuid,
-          filename: testcases[id].output_filename,
-          as_attachment: false,
-        }];
+        return [
+          ...acc,
+          {
+            uuid: testcases[id].input_file_uuid,
+            filename: testcases[id].input_filename,
+            as_attachment: false,
+          },
+          {
+            uuid: testcases[id].output_file_uuid,
+            filename: testcases[id].output_filename,
+            as_attachment: false,
+          },
+        ];
       }
       if (testcases[id].input_file_uuid !== null) {
-        return [...acc, {
-          uuid: testcases[id].input_file_uuid,
-          filename: testcases[id].input_filename,
-          as_attachment: false,
-        }];
+        return [
+          ...acc,
+          {
+            uuid: testcases[id].input_file_uuid,
+            filename: testcases[id].input_filename,
+            as_attachment: false,
+          },
+        ];
       }
       if (testcases[id].output_file_uuid !== null) {
-        return [...acc, {
-          uuid: testcases[id].output_file_uuid,
-          filename: testcases[id].output_filename,
-          as_attachment: false,
-        }];
+        return [
+          ...acc,
+          {
+            uuid: testcases[id].output_file_uuid,
+            filename: testcases[id].output_filename,
+            as_attachment: false,
+          },
+        ];
       }
 
       return acc;
     }, []);
     files.forEach((file) => {
-      dispatch((downloadFile(authToken, file)));
+      dispatch(downloadFile(authToken, file));
     });
   };
 
@@ -185,13 +209,13 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   };
 
   useEffect(() => {
-    dispatch((browseTestcase(authToken, problemId)));
-    dispatch((browseAssistingData(authToken, problemId)));
+    dispatch(browseTestcase(authToken, problemId));
+    dispatch(browseAssistingData(authToken, problemId));
   }, [authToken, dispatch, problemId]);
 
   useEffect(() => {
-    dispatch((fetchClass(authToken, classId)));
-    dispatch((fetchCourse(authToken, courseId)));
+    dispatch(fetchClass(authToken, classId));
+    dispatch(fetchCourse(authToken, courseId));
   }, [authToken, classId, courseId, dispatch]);
 
   if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
@@ -205,7 +229,9 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   return (
     <>
       <SimpleBar title="Title">
-        <Typography variant="body2">{problems[problemId] === undefined ? 'error' : problems[problemId].title}</Typography>
+        <Typography variant="body2">
+          {problems[problemId] === undefined ? 'error' : problems[problemId].title}
+        </Typography>
       </SimpleBar>
       <SimpleBar title="Description">
         <Typography variant="body2" className={classNames.content}>
@@ -217,20 +243,22 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           <Latex>{problems[problemId].io_description}</Latex>
         </Typography>
       </SimpleBar>
-      {problems[problemId].source !== ''
-      && (
-      <SimpleBar title="Source">
-        <Typography variant="body2">{problems[problemId].source}</Typography>
-      </SimpleBar>
+      {problems[problemId].source !== '' && (
+        <SimpleBar title="Source">
+          <Typography variant="body2">{problems[problemId].source}</Typography>
+        </SimpleBar>
       )}
-      {problems[problemId].hint !== ''
-      && (
-      <SimpleBar title="Hint">
-        <Typography variant="body2">{problems[problemId].hint}</Typography>
-      </SimpleBar>
+      {problems[problemId].hint !== '' && (
+        <SimpleBar title="Hint">
+          <Typography variant="body2">{problems[problemId].hint}</Typography>
+        </SimpleBar>
       )}
       <SimpleBar title="Sample">
-        {role === 'MANAGER' && <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllSampleFile}>Download All Files</Button>}
+        {role === 'MANAGER' && (
+          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllSampleFile}>
+            Download All Files
+          </Button>
+        )}
         <SimpleTable
           isEdit={false}
           hasDelete={false}
@@ -260,14 +288,12 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
               type: 'string',
             },
           ]}
-          data={
-            sampleDataIds.map((id) => ({
-              id,
-              no: sampleTrans2no(id),
-              time_limit: testcases[id].time_limit,
-              memory_limit: testcases[id].memory_limit,
-            }))
-          }
+          data={sampleDataIds.map((id) => ({
+            id,
+            no: sampleTrans2no(id),
+            time_limit: testcases[id].time_limit,
+            memory_limit: testcases[id].memory_limit,
+          }))}
         />
         <div className={classNames.sampleArea}>
           <Grid container spacing={3}>
@@ -281,7 +307,11 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         </div>
       </SimpleBar>
       <SimpleBar title="Testing Data">
-        {role === 'MANAGER' && <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllTestingFile}>Download All Files</Button>}
+        {role === 'MANAGER' && (
+          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllTestingFile}>
+            Download All Files
+          </Button>
+        )}
         <SimpleTable
           isEdit={false}
           hasDelete={false}
@@ -319,21 +349,20 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
               type: 'string',
             },
           ]}
-          data={
-            testcaseDataIds.map((id) => ({
-              id,
-              no: testcaseTrans2no(id),
-              time_limit: testcases[id].time_limit,
-              memory_limit: testcases[id].memory_limit,
-              score: testcases[id].score,
-            }))
-          }
+          data={testcaseDataIds.map((id) => ({
+            id,
+            no: testcaseTrans2no(id),
+            time_limit: testcases[id].time_limit,
+            memory_limit: testcases[id].memory_limit,
+            score: testcases[id].score,
+          }))}
         />
       </SimpleBar>
-      { role === 'MANAGER'
-        && (
+      {role === 'MANAGER' && (
         <SimpleBar title="Assisting Data (Optional)">
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllAssistingFile}>Download All Files</Button>
+          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllAssistingFile}>
+            Download All Files
+          </Button>
           <SimpleTable
             isEdit={false}
             hasDelete={false}
@@ -348,21 +377,27 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
               },
             ]}
             data={
-            problems[problemId] !== undefined
-              ? problems[problemId].assistingDataIds.map((id) => ({
-                id,
-                filename: assistingData[id].filename,
-              }))
-              : []
-          }
+              problems[problemId] !== undefined
+                ? problems[problemId].assistingDataIds.map((id) => ({
+                  id,
+                  filename: assistingData[id].filename,
+                }))
+                : []
+            }
           />
         </SimpleBar>
-        )}
-      { role === 'MANAGER'
-      && (
-      <SimpleBar title="Delete Task" childrenButtons={<Button color="secondary" onClick={() => setDeletePopUp(true)}>Delete</Button>}>
-        <Typography variant="body1">Once you delete a task, there is no going back. Please be certain.</Typography>
-      </SimpleBar>
+      )}
+      {role === 'MANAGER' && (
+        <SimpleBar
+          title="Delete Task"
+          childrenButtons={(
+            <Button color="secondary" onClick={() => setDeletePopUp(true)}>
+              Delete
+            </Button>
+          )}
+        >
+          <Typography variant="body1">Once you delete a task, there is no going back. Please be certain.</Typography>
+        </SimpleBar>
       )}
       <Dialog open={deletePopUp} onClose={() => setDeletePopUp(false)} maxWidth="md">
         <DialogTitle>
@@ -377,7 +412,9 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
               {problems[problemId] === undefined ? 'error' : problems[problemId].title}
             </AlignedText>
             <AlignedText text="Label" childrenType="text">
-              <Typography>{problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label}</Typography>
+              <Typography>
+                {problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label}
+              </Typography>
             </AlignedText>
             <Typography variant="body2" color="textPrimary">
               Once you delete a problem, there is no going back. Please be certain.

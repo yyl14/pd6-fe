@@ -136,6 +136,7 @@ const browseSubmitLang = (token) => async (dispatch) => {
 };
 
 const fetchCourse = (token, courseId) => async (dispatch) => {
+  // console.log(courseId);
   try {
     const auth = {
       headers: {
