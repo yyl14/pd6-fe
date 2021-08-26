@@ -108,6 +108,10 @@ export default function IOFileUploadArea({
         // console.log(newSelectedFile);
         newFiles.forEach((file) => {
           const index = parseInt(file.name.slice(6, file.name.indexOf('.')), 10);
+          if (!Number.isInteger(index)) {
+            console.log('file format error');
+            return;
+          }
           const type = file.name.slice(file.name.indexOf('.') + 1);
           if (type === 'in') {
             if (newSelectedFile[index] === undefined) {
@@ -149,6 +153,10 @@ export default function IOFileUploadArea({
         // console.log(newSelectedFile);
         newFiles.forEach((file) => {
           const index = parseInt(file.name.slice(0, file.name.indexOf('.')), 10);
+          if (!Number.isInteger(index)) {
+            console.log('file format error');
+            return;
+          }
           const type = file.name.slice(file.name.indexOf('.') + 1);
           if (type === 'in') {
             if (newSelectedFile[index] === undefined) {
