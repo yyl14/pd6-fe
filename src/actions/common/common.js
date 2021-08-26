@@ -29,7 +29,6 @@ const fetchClassMembers = (token, classId) => async (dispatch) => {
     };
     dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_REQUEST });
     const res = await agent.get(`/class/${classId}/member`, auth);
-    console.log(res);
     dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_SUCCESS, payload: { classId, data: res.data.data } });
   } catch (err) {
     dispatch({
@@ -72,7 +71,6 @@ const replaceClassMembers = (token, classId, replacingList) => async (dispatch) 
     dispatch({ type: commonConstants.REPLACE_CLASS_MEMBERS_REQUEST });
 
     const res = await agent.put(`/class/${classId}/member`, replacingList, auth);
-    console.log(res);
     if (res.data.success) {
       dispatch({
         type: commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS,
@@ -136,7 +134,6 @@ const browseSubmitLang = (token) => async (dispatch) => {
 };
 
 const fetchCourse = (token, courseId) => async (dispatch) => {
-  // console.log(courseId);
   try {
     const auth = {
       headers: {
