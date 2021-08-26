@@ -21,6 +21,8 @@ import NoMatch from '../../../noMatch';
 import EssayInfo from './ProblemSettings/EssayInfo';
 import EssayEdit from './ProblemSettings/EssayEdit';
 import { readEssay } from '../../../../actions/myClass/essay';
+import { downloadFile } from '../../../../actions/common/common';
+import { fetchChallenges } from '../../../../actions/myClass/challenge';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -65,18 +67,14 @@ export default function EssaySetting() {
     setPopUpUpload(false);
   };
 
-  const handleUpload = (e) => {
-
+  const handleDownload = () => {
+    const file = {
+      uuid: essays[essayId].content_file_uuid,
+      filename: essays[essayId].filename,
+      as_attachment: false,
+    };
+    dispatch(downloadFile(authToken, file));
   };
-
-  const handleDownload = (e) => {
-
-  };
-
-  // const handleSubmitDelete = (e) => {
-  //   dispatch(deleteEssays(authToken, problemId));
-  //   history.push('/my-class');
-  // };
 
   useEffect(() => {
     userClasses.forEach((value) => {
@@ -87,6 +85,10 @@ export default function EssaySetting() {
       }
     });
   }, [classId, userClasses]);
+
+  useEffect(() => {
+    dispatch(fetchChallenges(authToken, classId));
+  }, [authToken, classId, dispatch]);
 
   useEffect(() => {
     dispatch((readEssay(authToken, essayId)));

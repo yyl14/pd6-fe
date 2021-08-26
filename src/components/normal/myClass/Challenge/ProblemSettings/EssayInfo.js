@@ -16,7 +16,10 @@ import SimpleBar from '../../../../ui/SimpleBar';
 import Icon from '../../../../ui/icon/index';
 import NoMatch from '../../../../noMatch';
 import FileUploadArea from '../../../../ui/FileUploadArea';
-import { deleteEssay, readEssay } from '../../../../../actions/myClass/essay';
+import {
+  deleteEssay, readEssay, readEssaySubmission, uploadEssay, reUploadEssay, browseEssaySubmission,
+} from '../../../../../actions/myClass/essay';
+import AlignedText from '../../../../ui/AlignedText';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -43,6 +46,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
+  const [uploadOrNot, setUploadOrNot] = useState(false);
   const [selectedFile, setSelectedFile] = useState([]);
 
   const [popUpUpload, setPopUpUpload] = useState(false);
@@ -55,6 +59,12 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   };
   const handleUpload = (e) => {
     console.log(selectedFile[0]);
+    if (uploadOrNot === false) {
+      dispatch(uploadEssay(authToken, essayId));
+      setUploadOrNot(true);
+    } else {
+      // dispatch(reUploadEssay(authToken, essaySubmissionId));
+    }
   };
   const handleSubmitDelete = (e) => {
     dispatch(deleteEssay(authToken, essayId));
@@ -62,6 +72,10 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   };
 
   useEffect(() => {
+    // dispatch(browseEssaySubmission(authToken, essayId));
+    // browse all the essay submission.
+    dispatch(readEssaySubmission(authToken, essayId));
+    // browse specific essay submission
     dispatch((readEssay(authToken, essayId)));
   }, [authToken, dispatch, essayId]);
 
@@ -77,6 +91,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
         title="File"
       >
         <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>Upload</Button>
+        {uploadOrNot === true && (<AlignedText>display time of file uploaded</AlignedText>)}
       </SimpleBar>
       {role === 'MANAGER'
             && (

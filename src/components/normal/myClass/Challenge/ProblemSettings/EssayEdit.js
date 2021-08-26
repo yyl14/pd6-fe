@@ -46,7 +46,6 @@ export default function EssayEdit({ closeEdit, role = 'NORMAL' }) {
 
   const essays = useSelector((state) => state.essays.byId);
   const authToken = useSelector((state) => state.auth.token);
-  // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.essay);
 
   const [label, setLabel] = useState(essays[essayId] === undefined ? 'error' : essays[essayId].challenge_label);
@@ -59,12 +58,9 @@ export default function EssayEdit({ closeEdit, role = 'NORMAL' }) {
       title,
       description,
     };
-    // console.log('body', body);
     dispatch(editEssay(authToken, essayId, label, title, description));
     closeEdit();
   };
-
-  // console.log('label', label, 'title', title, 'description', description);
 
   return (
     <>

@@ -30,35 +30,6 @@ const readEssay = (token, essayId) => async (dispatch) => {
   }
 };
 
-// const addEssay = (token, challengeId) => async (dispatch) => {
-//   dispatch({ type: essayConstants.ADD_ESSAY_START });
-//   const auth = {
-//     headers: {
-//       'Auth-Token': token,
-//     },
-//   };
-//   try {
-//     const addEssaysInfo = await agent.post(`/challenge/${challengeId}/essay`, auth);
-//     if (addEssaysInfo.data.success) {
-//       dispatch({
-//         type: essayConstants.ADD_ESSAY_SUCCESS,
-//         payload: addEssaysInfo.data.data,
-//       });
-//       // console.log('addEssaysInfo', addEssaysInfo);
-//     } else {
-//       dispatch({
-//         type: essayConstants.ADD_ESSAY_FAIL,
-//         errors: addEssaysInfo.data.errors,
-//       });
-//     }
-//   } catch (err) {
-//     dispatch({
-//       type: essayConstants.ADD_ESSAY_FAIL,
-//       errors: err,
-//     });
-//   }
-// };
-
 const editEssay = (token, essayId, label, title, description) => async (dispatch) => {
   dispatch({ type: essayConstants.EDIT_ESSAY_START });
   // console.log('editEssay', editEssay);
@@ -131,7 +102,7 @@ const browseEssaySubmission = (token, essayId) => async (dispatch) => {
   };
   try {
     const browseEssaySubmissionInfo = await agent.get(`/essay/${essayId}/essay-submission`, auth);
-    console.log('browseEssaySubmissionInfo', browseEssaySubmissionInfo);
+    // console.log('browseEssaySubmissionInfo', browseEssaySubmissionInfo);
     if (browseEssaySubmissionInfo.data.success) {
       dispatch({
         type: essayConstants.BROWSE_ESSAY_SUBMISSION_SUCCESS,
@@ -151,16 +122,24 @@ const browseEssaySubmission = (token, essayId) => async (dispatch) => {
   }
 };
 
-const uploadEssay = (token, essayId) => async (dispatch) => {
+const uploadEssay = (token, essayId, file) => async (dispatch) => {
   dispatch({ type: essayConstants.UPLOAD_ESSAY_SUBMISSION_START });
-  const auth = {
+  const config = {
     headers: {
       'Auth-Token': token,
+      'Content-Type': 'multipart/form-data',
+    },
+    params: {
+      essay_Id: essayId,
     },
   };
+  const blob = new Blob([file]);
+  const formData = new FormData();
+  formData.append('essay_file', blob);
+
   try {
-    const uploadEssayInfo = await agent.post(`/essay/${essayId}/essay-submission`, auth);
-    console.log('uploadEssayInfo', uploadEssayInfo);
+    const uploadEssayInfo = await agent.post(`/essay/${essayId}/essay-submission`, formData, config);
+    // console.log('uploadEssayInfo', uploadEssayInfo);
     if (uploadEssayInfo.data.success) {
       dispatch({
         type: essayConstants.UPLOAD_ESSAY_SUBMISSION_SUCCESS,
@@ -209,19 +188,23 @@ const readEssaySubmission = (token, essaySubmissionId) => async (dispatch) => {
   }
 };
 
-const reUploadEssay = (token, essaySubmissionId) => async (dispatch) => {
+const reUploadEssay = (token, essaySubmissionId, file) => async (dispatch) => {
   dispatch({ type: essayConstants.REUPLOAD_ESSAY_SUBMISSION_START });
   const auth = {
     headers: {
       'Auth-Token': token,
     },
+    'Content-Type': 'multipart/form-data',
   };
+  const blob = new Blob([file]);
+  const formData = new FormData();
+  formData.append('essay_file', blob);
+
   try {
-    const reUploadEssayInfo = await agent.put(`/essay-submission/${essaySubmissionId}`, auth);
+    const reUploadEssayInfo = await agent.put(`/essay-submission/${essaySubmissionId}`, formData, auth);
     if (reUploadEssayInfo.data.success) {
       dispatch({
         type: essayConstants.REUPLOAD_ESSAY_SUBMISSION_SUCCESS,
-        payload: reUploadEssayInfo.data.data,
       });
     } else {
       dispatch({
