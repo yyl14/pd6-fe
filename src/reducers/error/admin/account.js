@@ -1,7 +1,6 @@
 import { accountConstants } from '../../../actions/admin/constant';
 
 const initialState = {
-  fetchInstitutes: null,
   fetchInstitute: null,
   addInstitute: null,
   editInstitute: null,
@@ -19,20 +18,6 @@ const initialState = {
 
 export default function account(state = initialState, action) {
   switch (action.type) {
-    case accountConstants.FETCH_INSTITUTES_SUCCESS: {
-      return {
-        ...state,
-        fetchInstitutes: null,
-      };
-    }
-    case accountConstants.FETCH_INSTITUTES_FAIL: {
-      const { error } = action;
-      return {
-        ...state,
-        fetchInstitutes: error,
-      };
-    }
-
     case accountConstants.FETCH_INSTITUTE_SUCCESS: {
       return {
         ...state,

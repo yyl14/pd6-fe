@@ -67,7 +67,7 @@ const allIds = (state = [], action) => {
       return [...new Set([...action.payload.accounts.map((item) => item.id), ...state])];
     }
 
-    case accountConstants.FETCH_ACCOUNT_SUCCESS: {
+    case commonConstants.FETCH_ACCOUNT_SUCCESS: {
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
     }
 

@@ -16,8 +16,10 @@ import { format } from 'date-fns';
 import Icon from '../../../ui/icon/index';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
+import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
 import NoMatch from '../../../noMatch';
-import { readSubmissionDetail, readSubmission, readProblemInfo } from '../../../../actions/myClass/problem';
+import { readSubmissionDetail, readProblemInfo } from '../../../../actions/myClass/problem';
+import { fetchSubmission } from '../../../../actions/myClass/submission';
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
@@ -38,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'flex-end',
   },
+  codeField: {
+    width: '50vw',
+  },
 }));
 
 /* This is a level 4 component (page component) */
@@ -48,6 +53,8 @@ export default function SubmissionDetail() {
   const history = useHistory();
   const classNames = useStyles();
   const [color, setColor] = useState('blue');
+  const [popUp, setPopUp] = useState(false);
+  const [role, setRole] = useState('NORMAL');
   const dispatch = useDispatch();
 
   const submissions = useSelector((state) => state.submissions.byId);
@@ -69,8 +76,18 @@ export default function SubmissionDetail() {
   }, [authToken, challengeId, dispatch, problemId, submissionId]);
 
   useEffect(() => {
-    dispatch(readSubmission(authToken, account.id, problemId));
-  }, [account.id, authToken, dispatch, problemId]);
+    dispatch(fetchSubmission(authToken, submissionId));
+  }, [authToken, dispatch, submissionId]);
+
+  useEffect(() => {
+    account.classes.forEach((value) => {
+      if (value.class_id === parseInt(classId, 10)) {
+        if (value.role === 'MANAGER') {
+          setRole('MANAGER');
+        }
+      }
+    });
+  }, [account.classes, classId]);
 
   if (problems.byId[problemId] === undefined || challenges.byId[challengeId] === undefined || submissions[submissionId] === undefined || judgmentIds === undefined) {
     if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge && !loading.readJudgment) {
@@ -85,7 +102,15 @@ export default function SubmissionDetail() {
 
   const handleRefresh = () => {
     dispatch(readSubmissionDetail(authToken, submissionId));
+    dispatch(fetchSubmission(authToken, submissionId));
   };
+
+  const handleRejudge = () => {
+    // rejudge
+    setPopUp(false);
+  };
+
+  // console.log('submission', submissions[submissionId]);
 
   return (
     <>
@@ -95,7 +120,8 @@ export default function SubmissionDetail() {
         / Submission Detail
       </Typography>
       <div className={classNames.generalButtons}>
-        <Button>Rejudge</Button>
+        {role === 'MANAGER'
+        && <Button onClick={() => { setPopUp(true); }}>Rejudge</Button>}
         <Button color="primary" startIcon={<Icon.RefreshOutlinedIcon />} onClick={handleRefresh}>Refresh</Button>
       </div>
       <SimpleBar title="Submission Information">
@@ -108,7 +134,7 @@ export default function SubmissionDetail() {
           </Link>
         </AlignedText>
         <AlignedText text="Student ID" childrenType="text">
-          <Typography variant="body1">...</Typography>
+          <Typography variant="body1">{account.student_id}</Typography>
         </AlignedText>
         <AlignedText text="Real Name" childrenType="text">
           <Typography variant="body1">{account.real_name}</Typography>
@@ -151,7 +177,32 @@ export default function SubmissionDetail() {
         </AlignedText> */}
       </SimpleBar>
       <SimpleBar title="Submission Result" />
-      <SimpleBar title="Code" />
+      <SimpleBar title="Code">
+        <CopyToClipboardButton text={submissions[submissionId].content} />
+        <TextField
+          className={classNames.codeField}
+          value={submissions[submissionId].content}
+          disabled
+          multiline
+          minRows={10}
+          maxRows={20}
+        />
+      </SimpleBar>
+      <Dialog maxWidth="md" open={popUp} onClose={() => { setPopUp(false); }}>
+        <DialogTitle>
+          <Typography variant="h4">Rejudge Submission</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <AlignedText text="Submission ID" childrenType="text">
+            <Typography variant="body1">{submissionId}</Typography>
+          </AlignedText>
+          <Typography variant="body2">Once you rejudge a submission, the corresponding score and status may change.</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setPopUp(false); }}>Cancel</Button>
+          <Button color="secondary" onClick={handleRejudge}>Rejudge</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

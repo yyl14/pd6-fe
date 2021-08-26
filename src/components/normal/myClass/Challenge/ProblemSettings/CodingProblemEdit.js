@@ -360,7 +360,8 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       dispatch(addAssistingData(authToken, problemId, file));
     });
 
-    closeEdit();
+    // wait for 3 secs because uploading many files waste time
+    setTimeout(() => { closeEdit(); }, 3000);
   };
 
   const handleCancel = () => {

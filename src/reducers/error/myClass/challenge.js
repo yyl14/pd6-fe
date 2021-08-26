@@ -3,6 +3,7 @@ import { challengeConstants } from '../../../actions/myClass/constant';
 const initialState = {
   fetchChallenges: null,
   addChallenge: null,
+  fetchChallengeSummary: null,
   editChallenge: null,
   deleteChallenge: null,
   addProblem: null,
@@ -34,6 +35,18 @@ export default function challenge(state = initialState, action) {
       return {
         ...state,
         addChallenge: action.error,
+      };
+    }
+    case challengeConstants.FETCH_CHALLENGE_SUMMARY_SUCCESS: {
+      return {
+        ...state,
+        fetchChallengeSummary: null,
+      };
+    }
+    case challengeConstants.FETCH_CHALLENGE_SUMMARY_FAIL: {
+      return {
+        ...state,
+        fetchChallengeSummary: action.error,
       };
     }
 

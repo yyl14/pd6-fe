@@ -13,6 +13,7 @@ const byId = (state = {}, action) => {
           peerReviewIds: state[item.id] ? state[item.id].peerReviewIds : [],
           specialJudgeIds: state[item.id] ? state[item.id].specialJudgeIds : [],
           essayIds: state[item.id] ? state[item.id].essayIds : [],
+          statistics: state[item.id] ? state[item.id].statistics : [],
         },
       }), state);
     }
@@ -38,6 +39,18 @@ const byId = (state = {}, action) => {
           peerReviewIds: state[data.id] ? state[data.id].peerReviewIds : [],
           specialJudgeIds: state[data.id] ? state[data.id].specialJudgeIds : [],
           essayIds: state[data.id] ? state[data.id].essayIds : [],
+          statistics: state[data.id] ? state[data.id].statistics : [],
+        },
+      };
+    }
+    case challengeConstants.FETCH_CHALLENGE_SUMMARY_SUCCESS: {
+      const { challengeId, data } = action.payload;
+
+      return {
+        ...state,
+        [challengeId]: {
+          ...state[challengeId],
+          statistics: data,
         },
       };
     }
@@ -50,7 +63,7 @@ const allIds = (state = [], action) => {
   switch (action.type) {
     case challengeConstants.FETCH_CHALLENGES_SUCCESS: {
       const { data } = action.payload;
-      return data.map((item) => item.id);
+      return [...new Set([...data.map((item) => item.id), ...state])];
     }
     case problemConstants.READ_CHALLENGE_SUCCESS:
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);

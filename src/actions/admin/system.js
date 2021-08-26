@@ -6,7 +6,7 @@ import browseParamsTransForm from '../../function/browseParamsTransform';
 // Access log
 const fetchAccessLog = (token, browseParams, tableId = null) => async (dispatch) => {
   try {
-    console.log(browseParams);
+    // console.log(browseParams);
     const config1 = {
       headers: { 'auth-token': token },
       params: browseParamsTransForm(browseParams),
@@ -20,7 +20,7 @@ const fetchAccessLog = (token, browseParams, tableId = null) => async (dispatch)
     const res1 = await agent.get('/access-log', config1);
 
     const { data, total_count } = res1.data.data;
-    console.log(res1);
+    // console.log(res1);
 
     // TODO: Batch browse account
     const config2 = {

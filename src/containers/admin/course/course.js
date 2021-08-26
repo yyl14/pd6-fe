@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Switch, withRouter, Route } from 'react-router-dom';
-import { Button, Typography } from '@material-ui/core';
-import SimpleBar from '../../../components/ui/SimpleBar';
 import ClassList from '../../../components/admin/course/ClassList';
 import CourseSetting from '../../../components/admin/course/CourseSetting';
 import NoMatch from '../../../components/noMatch';

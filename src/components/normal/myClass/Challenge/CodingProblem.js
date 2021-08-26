@@ -133,22 +133,6 @@ export default function CodingProblem() {
               </Button>
             </div>
           </div>
-          <div>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)}
-              startIcon={<Icon.HistoryIcon />}
-            >
-              My Submission
-            </Button>
-            <Button
-              color="primary"
-              onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}
-            >
-              Submit
-            </Button>
-          </div>
         </div>
       ) : (
         !edit && (

@@ -22,7 +22,7 @@ export default function BasicInfoEdit(props) {
   const [userName, setUserName] = useState(props.userName);
   const [nickName, setNickName] = useState(props.nickName);
   const [altMail, setAltMail] = useState(props.altMail ? props.altMail : '');
-  const [disabled, setDisabled] = useState(true);
+  // const [disabled, setDisabled] = useState(true);
   const [popUp, setPopUp] = useState(false);
   const classes = useStyles();
 
@@ -33,17 +33,16 @@ export default function BasicInfoEdit(props) {
   const handleSave = () => {
     if (altMail !== props.altMail) {
       if (altMail !== '') {
-        console.log('send mail');
         dispatch(editAccount(authToken, accountId, userName, realName, nickName, altMail));
         setPopUp(true);
         return;
       }
     }
     if ((altMail === '' && props.altMail === null) || (altMail === props.altMail)) {
-      console.log('not change');
-      dispatch(editAccount(authToken, accountId, userName, realName, nickName, null));
+      if (realName !== props.realName || nickName !== props.nickName) {
+        dispatch(editAccount(authToken, accountId, userName, realName, nickName, null));
+      }
     } else {
-      console.log('deleted, don"t send anything');
       dispatch(editAccount(authToken, accountId, userName, realName, nickName, ''));
     }
 
@@ -69,7 +68,6 @@ export default function BasicInfoEdit(props) {
               variant="outlined"
               onChange={(e) => {
                 setRealName(e.target.value);
-                setDisabled(false);
               }}
               className={classes.textfield}
             />
@@ -79,7 +77,6 @@ export default function BasicInfoEdit(props) {
               value={nickName}
               onChange={(e) => {
                 setNickName(e.target.value);
-                setDisabled(false);
               }}
               className={classes.textfield}
             />
@@ -89,7 +86,6 @@ export default function BasicInfoEdit(props) {
               value={altMail}
               onChange={(e) => {
                 setAltMail(e.target.value);
-                setDisabled(false);
               }}
               className={classes.textfield}
             />
@@ -99,7 +95,6 @@ export default function BasicInfoEdit(props) {
             <Button
               color="primary"
               type="submit"
-              disabled={disabled}
               onClick={handleSave}
             >
               Save

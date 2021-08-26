@@ -87,7 +87,7 @@ export default function AnnouncementSetting() {
   return (
     <>
       <Typography variant="h3" className={classes.pageHeader}>
-        {edit ? `${announcement.title} / Setting` : `Announcement: ${announcement.title} / Setting`}
+        {edit ? `${announcement.title} / Setting` : `${announcement.title} / Setting`}
       </Typography>
       {edit ? (
         <AnnouncementEdit
