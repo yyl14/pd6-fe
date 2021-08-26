@@ -34,6 +34,10 @@ class MyClass extends Component {
         this.props.history.push('/notFound');
       }
     }
+
+    if (this.props.user.classes.length !== 0 && this.props.user.classes[0].course_id === undefined) {
+      this.props.history.go(0);
+    }
   }
 
   render() {

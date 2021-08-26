@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 
 import { Switch, Route, withRouter } from 'react-router-dom';
 
-import MyClass from './myClass/index';
+import MyClass from './myClass';
+import AllClass from './allClass';
 
 import NoMatch from '../../components/noMatch';
 import Header from '../../components/ui/Header';
@@ -18,11 +19,9 @@ class Normal extends Component {
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
       if (this.props.user.role.indexOf('NORMAL') === -1) {
+        // not system normal
         this.props.history.push('/notFound');
       }
-    }
-    if (this.props.user.classes.length !== 0 && this.props.user.classes[0].course_id === undefined) {
-      this.props.history.go(0);
     }
   }
 
@@ -35,6 +34,7 @@ class Normal extends Component {
           <div className="layout-content">
             <Switch>
               <Route path="/my-class/:courseId/:classId" component={MyClass} />
+              <Route path="/all-class/:courseId/:classId" component={AllClass} />
               <Route component={NoMatch} />
             </Switch>
           </div>

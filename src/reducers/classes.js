@@ -5,7 +5,8 @@ import { gradeConstants, teamConstants, challengeConstants } from '../actions/my
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    case courseConstants.FETCH_CLASSES_SUCCESS: {
+    case courseConstants.FETCH_CLASSES_SUCCESS:
+    case commonConstants.FETCH_ALL_CLASSES_SUCCESS: {
       const { data } = action.payload.data;
       return data.reduce(
         (acc, item) => ({
@@ -63,9 +64,14 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
-    case courseConstants.FETCH_CLASSES_SUCCESS: {
+    case courseConstants.FETCH_CLASSES_SUCCESS:
+    case commonConstants.FETCH_ALL_CLASSES_SUCCESS: {
       const { data } = action.payload.data;
       return [...new Set([...data.map((item) => item.id), ...state])];
+    }
+    case commonConstants.FETCH_CLASS_SUCCESS: {
+      const { id } = action.payload;
+      return [...new Set([id, ...state])];
     }
     default:
       return state;
