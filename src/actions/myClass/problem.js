@@ -543,7 +543,7 @@ const submitCode = (token, problemId, languageId, content) => async (dispatch) =
 
   try {
     const res = await agent.post(`/problem/${problemId}/submission`, formData, config);
-    console.log('submit', res);
+    // console.log('submit', res);
     if (res.data.success) {
       dispatch({
         type: problemConstants.SUBMIT_PROBLEM_SUCCESS,
