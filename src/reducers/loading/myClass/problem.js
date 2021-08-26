@@ -23,6 +23,7 @@ const initialState = {
   addTestcase: false,
   browseJudgeCases: false,
   readTestcase: false,
+  readProblemScore: false,
 };
 
 export default function problem(state = initialState, action) {
@@ -347,6 +348,21 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         readTestcase: false,
+      };
+    case problemConstants.READ_PROBLEM_SCORE_START:
+      return {
+        ...state,
+        readProblemScore: true,
+      };
+    case problemConstants.READ_PROBLEM_SCORE_SUCCESS:
+      return {
+        ...state,
+        readProblemScore: false,
+      };
+    case problemConstants.READ_PROBLEM_SCORE_FAIL:
+      return {
+        ...state,
+        readProblemScore: false,
       };
     default: {
       return state;

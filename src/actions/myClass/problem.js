@@ -168,7 +168,6 @@ const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
       });
     }
   } catch (err) {
-    // console.log(err);
     dispatch({
       type: problemConstants.READ_SUBMISSION_JUDGE_FAIL,
       errors: err,
@@ -814,6 +813,34 @@ const readTestcase = (token, testcaseId) => async (dispatch) => {
   }
 };
 
+const readProblemScore = (token, problemId) => async (dispatch) => {
+  dispatch({ type: problemConstants.READ_PROBLEM_SCORE_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const res = await agent.get(`/problem/${problemId}/score`, auth);
+    if (res.data.success) {
+      dispatch({
+        type: problemConstants.READ_PROBLEM_SCORE_SUCCESS,
+        payload: { data: res.data.data, problemId },
+      });
+    } else {
+      dispatch({
+        type: problemConstants.READ_PROBLEM_SCORE_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.READ_PROBLEM_SCORE_FAIL,
+      errors: err,
+    });
+  }
+};
+
 export {
   browseChallengeOverview,
   editChallenge,
@@ -837,4 +864,5 @@ export {
   readChallenge,
   browseJudgeCases,
   readTestcase,
+  readProblemScore,
 };
