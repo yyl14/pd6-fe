@@ -21,6 +21,7 @@ import announcements from './announcements';
 import submitLangs from './submitLangs';
 import essays from './essays';
 import peerReviews from './peerReviews';
+import judgeCases from './judgeCases';
 import loading from './loading/index';
 import error from './error/index';
 import component from './component';
@@ -50,5 +51,6 @@ export default combineReducers({
   error,
   essays,
   peerReviews,
+  judgeCases,
   component,
 });

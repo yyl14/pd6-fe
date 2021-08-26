@@ -176,6 +176,34 @@ const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
   }
 };
 
+const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
+  dispatch({ type: problemConstants.BROWSE_JUDGE_CASES_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const res = await agent.get(`/judgment/${judgmentId}/judge-case`, auth);
+    if (res.data.success) {
+      dispatch({
+        type: problemConstants.BROWSE_JUDGE_CASES_SUCCESS,
+        payload: res.data.data,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.BROWSE_JUDGE_CASES_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.BROWSE_JUDGE_CASES_FAIL,
+      errors: err,
+    });
+  }
+};
+
 const browseTestcase = (token, problemId) => async (dispatch) => {
   dispatch({ type: problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_START });
   const auth = {
@@ -758,6 +786,34 @@ const readChallenge = (token, challengeId) => async (dispatch) => {
   }
 };
 
+const readTestcase = (token, testcaseId) => async (dispatch) => {
+  dispatch({ type: problemConstants.READ_TESTCASE_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const res = await agent.get(`/testcase/${testcaseId}`, auth);
+    if (res.data.success) {
+      dispatch({
+        type: problemConstants.READ_TESTCASE_SUCCESS,
+        payload: res.data.data,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.READ_TESTCASE_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.READ_TESTCASE_FAIL,
+      errors: err,
+    });
+  }
+};
+
 export {
   browseChallengeOverview,
   editChallenge,
@@ -779,4 +835,6 @@ export {
   uploadTestcaseOutput,
   addTestcaseWithFile,
   readChallenge,
+  browseJudgeCases,
+  readTestcase,
 };

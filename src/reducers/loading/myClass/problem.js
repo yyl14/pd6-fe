@@ -21,6 +21,8 @@ const initialState = {
   uploadTestcaseInput: false,
   uploadTestcaseOutput: false,
   addTestcase: false,
+  browseJudgeCases: false,
+  readTestcase: false,
 };
 
 export default function problem(state = initialState, action) {
@@ -120,6 +122,21 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         readJudgment: false,
+      };
+    case problemConstants.BROWSE_JUDGE_CASES_START:
+      return {
+        ...state,
+        browseJudgeCases: true,
+      };
+    case problemConstants.BROWSE_JUDGE_CASES_SUCCESS:
+      return {
+        ...state,
+        browseJudgeCases: false,
+      };
+    case problemConstants.BROWSE_JUDGE_CASES_FAIL:
+      return {
+        ...state,
+        browseJudgeCases: false,
       };
     case problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_START:
       return {
@@ -315,6 +332,21 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         addTestcase: false,
+      };
+    case problemConstants.READ_TESTCASE_START:
+      return {
+        ...state,
+        readTestcase: true,
+      };
+    case problemConstants.READ_TESTCASE_SUCCESS:
+      return {
+        ...state,
+        readTestcase: false,
+      };
+    case problemConstants.READ_TESTCASE_FAIL:
+      return {
+        ...state,
+        readTestcase: false,
       };
     default: {
       return state;

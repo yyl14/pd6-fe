@@ -63,15 +63,6 @@ export default function SubmissionList() {
   useEffect(() => {
     if (judgmentIds !== []) {
       setTableData(
-        // judgmentIds.map((id) => ({
-        //   id: judgments[id].submission_id,
-        //   status: judgments[id].status,
-        //   score: judgments[id].score,
-        //   used_time: judgments[id].total_time,
-        //   used_memory: judgments[id].max_memory,
-        //   submit_time: moment(submissions[judgments[id].submission_id].submit_time).format('YYYY-MM-DD, HH:mm'),
-        //   path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${judgments[id].submission_id}`,
-        // })),
         submissionIds.map((id) => ({
           id,
           submit_time: moment(submissions[id].submit_time).format('YYYY-MM-DD, HH:mm'),
