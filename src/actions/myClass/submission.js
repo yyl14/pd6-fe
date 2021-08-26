@@ -75,21 +75,18 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
     //     })),
     // );
 
-    // TODO: browse challenges under class
-    const res2 = await agent.get(`/class/${classId}/challenge`, config2);
-
     // TODO: use problem id to read problem info
-    const problems = await Promise.all(
-      data.map(async ({ problem_id }) => agent
-        .get(`/problem/${problem_id}`, config2)
-        .then((res3) => res3.data.data)
-        .catch((err) => {
-          dispatch({
-            type: submissionConstants.FETCH_ACCESS_LOG_FAIL,
-            payload: err,
-          });
-        })),
-    );
+    // const problems = await Promise.all(
+    //   data.map(async ({ problem_id }) => agent
+    //     .get(`/problem/${problem_id}`, config2)
+    //     .then((res3) => res3.data.data)
+    //     .catch((err) => {
+    //       dispatch({
+    //         type: submissionConstants.FETCH_ACCESS_LOG_FAIL,
+    //         payload: err,
+    //       });
+    //     })),
+    // );
     // TODO: use submission id to get status
     const judgments = await Promise.all(
       data.map(async ({ id }) => agent
@@ -106,7 +103,7 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
     dispatch({
       type: submissionConstants.FETCH_SUBMISSIONS_SUCCESS,
       payload: {
-        data, challenges: res2.data.data, problems: problems.filter((item) => item !== null), judgments: judgments.filter((item) => item !== null),
+        data, judgments: judgments.filter((item) => item !== null),
       },
     });
     dispatch({

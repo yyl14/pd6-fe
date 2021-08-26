@@ -1,3 +1,4 @@
+import { common } from '@material-ui/core/colors';
 import agent from '../agent';
 import { commonConstants } from './constant';
 
@@ -250,6 +251,37 @@ const downloadFile = (token, file) => async (dispatch) => {
   }
 };
 
+const fetchAllChallengesProblems = (token, classId) => async (dispatch) => {
+  dispatch({ type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+
+  const res = await agent.get(`/class/${classId}/challenge`, auth);
+  const problems = await Promise.all(
+    res.data.data.map(async ({ id }) => agent
+      .get(`/challenge/${id}/task`, auth)
+      .then((res2) => res2.data.data.problem)
+      .catch((err) => {
+        dispatch({
+          type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_FAIL,
+          payload: err,
+        });
+      })),
+  );
+
+  // dispatch({
+  //   type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS,
+  //   payload: { classId, data: res.data.data },
+  // });
+  // dispatch({
+  //   type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_FAIL,
+  //   error: res.data.err,
+  // });
+};
+
 export {
   getInstitutes,
   fetchClassMembers,
@@ -260,4 +292,5 @@ export {
   fetchAccount,
   browseSubmitLang,
   downloadFile,
+  fetchAllChallengesProblems,
 };

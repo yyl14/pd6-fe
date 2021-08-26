@@ -54,11 +54,6 @@ const byId = (state = {}, action) => {
         },
       };
     }
-    case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
-      const { challenges } = action.payload;
-      // console.log(accounts);
-      return challenges.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [], gradeIds: [] } }), state);
-    }
     default:
       return state;
   }

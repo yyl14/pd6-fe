@@ -20,7 +20,7 @@ const byId = (state = {}, action) => {
 
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       const { data } = action.payload;
-      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), {});
     }
     default:
       return state;
@@ -42,7 +42,7 @@ const allIds = (state = [], action) => {
     }
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       const { data } = action.payload;
-      return [...new Set([...data.map((item) => item.id), ...state])];
+      return data.map((item) => item.id);
     }
     // case problemConstants.READ_SUBMISSION_SUCCESS:
     //   return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
