@@ -2,6 +2,8 @@ import agent from '../agent';
 import {
   submissionConstants,
 } from './constant';
+import { autoTableConstants } from '../component/constant';
+import browseParamsTransForm from '../../function/browseParamsTransform';
 
 const fetchAllSubmissions = (token, accountId, problemId, languageId) => (dispatch) => {
   const auth = {
@@ -26,6 +28,102 @@ const fetchAllSubmissions = (token, accountId, problemId, languageId) => (dispat
         error: err,
       });
     });
+};
+
+const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => async (dispatch) => {
+  try {
+    console.log(browseParams);
+    const config1 = {
+      headers: { 'auth-token': token },
+      params: browseParamsTransForm(browseParams),
+      // paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
+    };
+    dispatch({
+      type: submissionConstants.FETCH_SUBMISSIONS_START,
+    });
+    // console.log(config1);
+
+    const res1 = await agent.get(`/class/${classId}/submission`, config1);
+
+    const { data, total_count } = res1.data.data;
+    // Data Content
+    //  { 'id': 'int',
+    //   'account_id': 'int',
+    //   'problem_id': 'int',
+    //   'language_id': 'int',
+    //   'content_file_uuid': 'UUID',
+    //   'content_length': 'int',
+    //   'filename': 'str',
+    //   'submit_time': 'ServerTZDatetime'}
+
+    // console.log(res1);
+
+    // TODO: Batch browse account
+    const config2 = {
+      headers: { 'auth-token': token },
+    };
+
+    // const accounts = await Promise.all(
+    //   data.map(async ({ account_id }) => agent
+    //     .get(`/account/${account_id}`, config2)
+    //     .then((res2) => res2.data.data)
+    //     .catch((err) => {
+    //       dispatch({
+    //         type: submissionConstants.FETCH_ACCESS_LOG_FAIL,
+    //         payload: err,
+    //       });
+    //     })),
+    // );
+
+    // TODO: browse challenges under class
+    const res2 = await agent.get(`/class/${classId}/challenge`, config2);
+
+    // TODO: use problem id to read problem info
+    const problems = await Promise.all(
+      data.map(async ({ problem_id }) => agent
+        .get(`/problem/${problem_id}`, config2)
+        .then((res3) => res3.data.data)
+        .catch((err) => {
+          dispatch({
+            type: submissionConstants.FETCH_ACCESS_LOG_FAIL,
+            payload: err,
+          });
+        })),
+    );
+    // TODO: use submission id to get status
+    const judgments = await Promise.all(
+      data.map(async ({ id }) => agent
+        .get(`/submission/${id}/latest-judgment`, config2)
+        .then((res4) => res4.data.data)
+        .catch((err) => {
+          dispatch({
+            type: submissionConstants.FETCH_ACCESS_LOG_FAIL,
+            payload: err,
+          });
+        })),
+    );
+
+    dispatch({
+      type: submissionConstants.FETCH_SUBMISSIONS_SUCCESS,
+      payload: {
+        data, challenges: res2.data.data, problems: problems.filter((item) => item !== null), judgments: judgments.filter((item) => item !== null),
+      },
+    });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: data.map((item) => item.id),
+        offset: browseParams.offset,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: submissionConstants.FETCH_ACCESS_LOG_FAIL,
+      payload: error,
+    });
+  }
 };
 
 const fetchSubmission = (token, submissionId) => (dispatch) => {
@@ -135,5 +233,5 @@ const fetchJudgement = (token, submissionId) => (dispatch) => {
 };
 
 export {
-  fetchAllSubmissions, fetchSubmission, addSubmission, fetchJudgement,
+  fetchAllSubmissions, fetchClassSubmissions, fetchSubmission, addSubmission, fetchJudgement,
 };

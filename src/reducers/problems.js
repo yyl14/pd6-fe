@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { problemConstants } from '../actions/myClass/constant';
+import { problemConstants, submissionConstants } from '../actions/myClass/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -57,6 +57,11 @@ const byId = (state = {}, action) => {
         },
       };
     }
+    case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
+      const { problems } = action.payload;
+      // console.log(accounts);
+      return problems.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [], gradeIds: [] } }), state);
+    }
     default:
       return state;
   }
@@ -70,6 +75,9 @@ const allIds = (state = [], action) => {
     }
     case problemConstants.READ_PROBLEM_SUCCESS:
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+    case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
+      return [...new Set([...action.payload.problems.map((item) => item.id), ...state])];
+    }
     default:
       return state;
   }

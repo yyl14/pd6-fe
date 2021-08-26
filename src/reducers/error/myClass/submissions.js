@@ -2,6 +2,7 @@ import { submissionConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
   fetchAllSubmissions: null,
+  fetchClassSubmissions: null,
   fetchSubmission: null,
   addSubmission: null,
 };
@@ -43,6 +44,25 @@ export default function submissions(state = initialState, action) {
       return {
         ...state,
         fetchSubmission: action.error,
+      };
+    }
+
+    case submissionConstants.FETCH_SUBMISSIONS_START: {
+      return {
+        ...state,
+        fetchClassSubmissions: null,
+      };
+    }
+    case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
+      return {
+        ...state,
+        fetchClassSubmissions: null,
+      };
+    }
+    case submissionConstants.FETCH_SUBMISSIONS_FAIL: {
+      return {
+        ...state,
+        fetchClassSubmissions: action.error,
       };
     }
 
