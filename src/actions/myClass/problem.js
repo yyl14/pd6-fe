@@ -730,6 +730,34 @@ const addTestcaseWithFile = (token, problemId, isSample, score, timeLimit, memor
   }
 };
 
+const readChallenge = (token, challengeId) => async (dispatch) => {
+  dispatch({ type: problemConstants.READ_CHALLENGE_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const challenge = await agent.get(`/challenge/${challengeId}`, auth);
+    if (challenge.data.success) {
+      dispatch({
+        type: problemConstants.READ_CHALLENGE_SUCCESS,
+        payload: challenge.data.data,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.READ_CHALLENGE_FAIL,
+        errors: challenge.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.READ_CHALLENGE_FAIL,
+      errors: err,
+    });
+  }
+};
+
 export {
   browseChallengeOverview,
   editChallenge,
@@ -750,4 +778,5 @@ export {
   uploadTestcaseInput,
   uploadTestcaseOutput,
   addTestcaseWithFile,
+  readChallenge,
 };
