@@ -58,7 +58,7 @@ export default function SubmissionList() {
 
   useEffect(() => {
     dispatch(readProblemScore(authToken, problemId));
-  }, [authToken, dispatch, loading.readProblemInfo, problemId]);
+  }, [authToken, dispatch, problemId]);
 
   useEffect(() => {
     if (submissionIds !== []) {
