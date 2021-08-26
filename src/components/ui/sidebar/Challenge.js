@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
 } from '@material-ui/core';
+import { CompassCalibrationOutlined } from '@material-ui/icons';
 import Icon from '../icon/index';
 
 import { fetchChallenges, addChallenge } from '../../../actions/myClass/challenge';
@@ -13,7 +14,7 @@ export default function Challenge({
   classNames, history, location, mode,
 }) {
   const {
-    courseId, classId, challengeId, problemId,
+    courseId, classId, challengeId, problemId, submissionId,
   } = useParams();
   const baseURL = '/my-class';
   const dispatch = useDispatch();
@@ -24,6 +25,9 @@ export default function Challenge({
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
+
+  const problems = useSelector((state) => state.problem);
+  const essays = useSelector((state) => state.essays);
 
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
@@ -36,37 +40,170 @@ export default function Challenge({
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
   const [arrow, setArrow] = useState(null);
+  const [TAicon, setTAicon] = useState();
 
   useEffect(() => {
     const goBackToChallenge = () => {
       history.push(`${baseURL}/${courseId}/${classId}/challenge`);
     };
+    const goBackToProblem = () => {
+      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}`);
+    };
+    if (mode === 'challenge') {
+      if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER' && challenges[challengeId] !== undefined) {
+        // console.log(problems, essays, userClasses);
+        setTAicon(<Icon.TA className={classNames.titleTA} />);
+        setArrow(
+          <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
+            <Icon.ArrowBackRoundedIcon />
+          </IconButton>,
+        );
+        setTitle(challenges[challengeId].title);
+        if (Object.keys(problems).length !== 0 && Object.keys(essays).length !== 0) {
+          // console.log(problems, essays);
+          setItemList(
+            [
+              {
+                text: 'Setting',
+                icon: <Icon.Setting />,
+                path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/setting`,
+              },
+              {
+                text: 'Statistic',
+                icon: <Icon.Statistic />,
+                path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/statistics`,
+              },
+              {
+                text: 'Info',
+                icon: <Icon.Info />,
+                path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
+              },
 
-    if (mode === 'challenge' && challenges[challengeId] !== undefined) {
+            ]
+              .concat(
+                problems.allIds
+                  .map((id) => problems.byId[id])
+                  .map(({ id, challenge_label }) => ({
+                    text: challenge_label,
+                    icon: <Icon.Code />,
+                    path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${id}`,
+                  })),
+              )
+              .concat(
+                essays.allIds
+                  .map((id) => essays.byId[id])
+                  .map(({ id, challenge_label }) => ({
+                    text: challenge_label,
+                    icon: <Icon.Paper />,
+                    path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/essay/${id}`,
+                  })),
+              )
+              .concat([
+                {
+                  text: 'Task',
+                  icon: <Icon.AddBox />,
+                  path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/task`,
+                },
+              ]),
+
+          );
+        } else {
+          setItemList([
+            {
+              text: 'Info',
+              icon: <Icon.Info />,
+              path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
+            },
+          ]);
+        }
+      } else if (userClasses.find((x) => x.class_id === Number(classId)).role !== 'MANAGER' && challenges[challengeId] !== undefined) {
+        setArrow(
+          <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
+            <Icon.ArrowBackRoundedIcon />
+          </IconButton>,
+        );
+        setTitle(challenges[challengeId].title);
+        if (Object.keys(problems).length !== 0 && Object.keys(essays).length !== 0) {
+          setItemList(
+            [
+              {
+                text: 'Info',
+                icon: <Icon.Info />,
+                path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
+              },
+            ]
+              .concat(
+                problems.allIds
+                  .map((id) => problems.byId[id])
+                  .map(({ id, challenge_label }) => ({
+                    text: challenge_label,
+                    icon: <Icon.Code />,
+                    path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${id}`,
+                  })),
+              )
+              .concat(
+                essays.allIds
+                  .map((id) => essays.byId[id])
+                  .map(({ id, challenge_label }) => ({
+                    text: challenge_label,
+                    icon: <Icon.Paper />,
+                    path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/essay/${id}`,
+                  })),
+              ),
+          );
+        } else {
+          setItemList([
+            {
+              text: 'Info',
+              icon: <Icon.Info />,
+              path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
+            },
+          ]);
+        }
+      }
+    } else if (mode === 'submission') {
+      if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
+        setTAicon(<Icon.TA className={classNames.titleTA} />);
+      }
       setArrow(
-        <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
+        <IconButton className={classNames.arrow} onClick={goBackToProblem}>
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
-      setTitle(challenges[challengeId].title);
+      setTitle(`${challenges[challengeId].title} / ${problems.byId[problemId].challenge_label}`);
       setItemList([
         {
-          text: 'Info',
-          icon: <Icon.Warning />,
-          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
+          text: 'Code Submission',
+          icon: <Icon.Code />,
+          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`,
+        },
+        {
+          text: 'My Submission',
+          icon: <Icon.Statistic />,
+          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`,
+        },
+      ]);
+    } else if (mode === 'submission_detail') {
+      if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
+        setTAicon(<Icon.TA className={classNames.titleTA} />);
+      }
+      setArrow(
+        <IconButton className={classNames.arrow} onClick={goBackToProblem}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
+      setTitle(submissionId);
+      setItemList([
+        {
+          text: 'Submission Detail',
+          icon: <Icon.Code />,
+          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${submissionId}`,
         },
       ]);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    challengeId,
-    challenges,
-    classId,
-    courseId,
-    history,
-    location.pathname,
-    mode,
-  ]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [challengeId, challenges, classId, courseId, problems, essays, history, location.pathname, mode]);
 
   const foldChallenge = () => {
     setDisplay('fold');
@@ -112,6 +249,7 @@ export default function Challenge({
           <Typography variant="h4" className={classNames.titleText}>
             {title}
           </Typography>
+          {TAicon}
         </div>
         <Divider variant="middle" className={classNames.divider} />
         {display === 'unfold' ? (

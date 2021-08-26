@@ -4,6 +4,7 @@ import {
   Switch, Route, useHistory, useLocation,
 } from 'react-router-dom';
 
+import { Autocomplete } from '@material-ui/lab';
 import Account from './sidebar/Account';
 import Course from './sidebar/Course';
 import System from './sidebar/System';
@@ -45,9 +46,13 @@ const useStyles = makeStyles((theme) => ({
       cursor: 'pointer',
     },
   },
-
   titleText: {
     flex: '5',
+  },
+  titleTA: {
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    flex: '1',
   },
   itemIcon: {
     flex: '1',
@@ -176,7 +181,19 @@ export default function Sidebar() {
         <Challenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
       <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId">
-        <Challenge classNames={classes} history={history} location={location} mode="problem" />
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission">
+        <Challenge classNames={classes} history={history} location={location} mode="submission" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/code-submission">
+        <Challenge classNames={classes} history={history} location={location} mode="submission" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId">
+        <Challenge classNames={classes} history={history} location={location} mode="submission_detail" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/essay/:essayId">
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
       {/* {Submission} */}
       <Route exact path="/my-class/:courseId/:classId/submission">
