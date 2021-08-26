@@ -15,7 +15,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import { replaceClassMembers } from '../../../actions/common/common';
+import { replaceClassMembers } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -96,9 +96,9 @@ const MemberEdit = ({
 
   const unblockAndReturn = () => {
     if (unblockHandle) {
-      unblockHandle.current();
       setShowDuplicateIdentityDialog(false);
       setShowErrorDetectedDialog(false);
+      unblockHandle.current();
       history.push(targetLocation.current);
     }
     backToMemberList();

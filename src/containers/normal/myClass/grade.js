@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Switch, Route } from 'react-router-dom';
+import GradeList from '../../../components/normal/myClass/Grade/GradeList';
+import GradeDetail from '../../../components/normal/myClass/Grade/GradeDetail';
 import NoMatch from '../../../components/noMatch';
 
 /* This is a level 3 container (main page container) */
@@ -16,8 +18,8 @@ class Grade extends Component {
     return (
       <>
         <Switch>
-          {/* <Route exact path="/my-class/:courseId/:classId/grade" component={GradeList} />
-          <Route path="/my-class/:courseId/:classId/grade/:studentId" component={GradeDetail} /> */}
+          <Route exact path="/my-class/:courseId/:classId/grade" component={GradeList} />
+          <Route path="/my-class/:courseId/:classId/grade/:gradeId" component={GradeDetail} />
           <Route component={NoMatch} />
         </Switch>
       </>

@@ -21,7 +21,8 @@ import { MdAdd } from 'react-icons/md';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
 import TableFilterCard from '../../ui/TableFilterCard';
-import { getInstitutes, addInstitute } from '../../../actions/admin/account';
+import { addInstitute } from '../../../actions/admin/account';
+import { getInstitutes } from '../../../actions/common/common';
 import filterData from '../../../function/filter';
 import sortData from '../../../function/sort';
 

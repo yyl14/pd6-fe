@@ -99,8 +99,9 @@ const userForgetPassword = (email) => (dispatch) => {
       });
     });
 };
-
-const userRegister = (username, password, nickname, realName, emailPrefix, instituteId, studentId, altMail) => (dispatch) => {
+// StudentCardExists
+const userRegister = (username, password, nickname, realName, emailPrefix, instituteId, studentId, altMail) => async (dispatch) => {
+  dispatch({ type: authConstants.SIGNUP_START });
   const body = {
     username,
     password,
@@ -111,21 +112,22 @@ const userRegister = (username, password, nickname, realName, emailPrefix, insti
     student_id: studentId,
     institute_email_prefix: emailPrefix,
   };
-
-  dispatch({ type: authConstants.SIGNUP_START });
-  agent
-    .post('account', body)
-    .then((res) => {
-      dispatch({
-        type: authConstants.SIGNUP_SUCCESS,
-      });
-    })
-    .catch((err) => {
+  try {
+    const res = await agent.post('account', body);
+    if (res.data.success) {
+      dispatch({ type: authConstants.SIGNUP_SUCCESS });
+    } else {
       dispatch({
         type: authConstants.SIGNUP_FAIL,
-        errors: err,
+        errors: res.data.error,
       });
+    }
+  } catch (err) {
+    dispatch({
+      type: authConstants.SIGNUP_FAIL,
+      errors: err,
     });
+  }
 };
 
 export {

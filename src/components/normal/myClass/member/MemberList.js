@@ -10,18 +10,18 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 import { useParams, useHistory } from 'react-router-dom';
-import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
-import { fetchClassMembers } from '../../../actions/common/common';
-import CustomTable from '../../ui/CustomTable';
-import TableFilterCard from '../../ui/TableFilterCard';
+import { fetchCourse, fetchClass, fetchClassMembers } from '../../../../actions/common/common';
+import CustomTable from '../../../ui/CustomTable';
+import TableFilterCard from '../../../ui/TableFilterCard';
 import MemberEdit from './MemberEdit';
-import NoMatch from '../../noMatch';
-import systemRoleTransformation from '../../../function/systemRoleTransformation';
+import NoMatch from '../../../noMatch';
+import systemRoleTransformation from '../../../../function/systemRoleTransformation';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
   },
+
 }));
 
 /* This is a level 4 component (page component) */
@@ -37,14 +37,15 @@ export default function MemberList() {
   const classes = useSelector((state) => state.classes);
   const members = useSelector((state) => state.classMembers);
   const loading = useSelector((state) => state.loading.common.common);
+  const userClasses = useSelector((state) => state.user.classes);
 
   useEffect(() => {
-    dispatch(fetchCourses(authToken));
-  }, [authToken, dispatch]);
-
-  useEffect(() => {
-    dispatch(fetchClasses(authToken, courseId));
+    dispatch(fetchCourse(authToken, courseId));
   }, [authToken, courseId, dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchClass(authToken, classId));
+  }, [authToken, classId, dispatch]);
 
   useEffect(() => {
     if (!loading.replaceClassMembers) {
@@ -55,12 +56,13 @@ export default function MemberList() {
   const [edit, setEdit] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [transformedData, setTransformedData] = useState([]);
+  const [isManager, setIsManager] = useState(false);
 
   useEffect(() => {
     if (classes.byId[classId]) {
       const newData = classes.byId[classId].memberIds.map((id) => ({
         ...members.byId[id],
-        path: `/admin/account/account/${id}/setting`,
+        // path: `/admin/account/account/${id}/setting`,
         role: systemRoleTransformation(members.byId[id].role),
       }));
       setTableData(newData);
@@ -71,8 +73,19 @@ export default function MemberList() {
     }
   }, [classes.byId, classId, members.byId]);
 
+  useEffect(() => {
+    userClasses.map((item) => {
+      if (`${item.class_id}` === classId) {
+        if (item.role === 'MANAGER') {
+          setIsManager(true);
+        }
+      }
+      return <></>;
+    });
+  }, [classId, userClasses]);
+
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
-    if (loading.fetchCourses || loading.fetchClasses) {
+    if (loading.fetchCourse || loading.fetchClass) {
       // still loading
       return <div>loading</div>;
     }
@@ -82,7 +95,7 @@ export default function MemberList() {
   return (
     <>
       <Typography variant="h3" className={classNames.pageHeader}>
-        {`${courses.byId[courseId].name} / ${classes.byId[classId].name} / Member`}
+        {`${courses.byId[courseId].name} ${classes.byId[classId].name} / Member`}
       </Typography>
       {edit ? (
         <MemberEdit
@@ -97,11 +110,11 @@ export default function MemberList() {
         <>
           <CustomTable
             hasSearch
-            buttons={(
+            buttons={isManager ? (
               <>
                 <Button onClick={() => setEdit(true)}>Edit</Button>
               </>
-            )}
+            ) : <></>}
             data={tableData}
             columns={[
               {

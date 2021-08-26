@@ -62,6 +62,7 @@ export default function RegisterForm() {
   const history = useHistory();
   const dispatch = useDispatch();
   const loadingInstitute = useSelector((state) => state.loading.common.fetchInstitutes);
+  const errorRegister = useSelector((state) => state.error.user.auth);
   const institutes = useSelector((state) => state.institutes.byId);
   const institutesId = useSelector((state) => state.institutes.allIds);
   const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
@@ -83,7 +84,6 @@ export default function RegisterForm() {
     realName: false,
     school: false,
     username: false,
-    nickname: false,
     studentId: false,
     email: false,
     password: false,
@@ -93,7 +93,6 @@ export default function RegisterForm() {
     realName: '',
     school: '',
     username: '',
-    nickname: '',
     studentId: '',
     email: '',
     password: '',
@@ -108,7 +107,7 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const labelName = ['realName', 'school', 'username', 'nickname', 'studentId', 'email', 'password', 'confirmPassword'];
+  const labelName = ['realName', 'school', 'username', 'studentId', 'email', 'password', 'confirmPassword'];
 
   useEffect(() => {
     dispatch(getInstitutes());
@@ -165,7 +164,12 @@ export default function RegisterForm() {
           `${inputs.email}${emailTail}`,
         ),
       );
-      setPopup(true);
+      if (errorRegister.signup === 'StudentCardExists') {
+        setErrors((input) => ({ ...input, username: true }));
+        setErrorTexts((input) => ({ ...input, username: 'Username is taken, try another' }));
+      } else {
+        setPopup(true);
+      }
     }
   };
 

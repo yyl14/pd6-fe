@@ -23,12 +23,11 @@ export const fetchTeams = (token, classId) => (dispatch) => {
 export const addTeam = (token, classId, teamName, newLabel) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
   dispatch({ type: teamConstants.ADD_TEAM_START });
-  const body = {
-    name: teamName,
-    label: newLabel,
-  };
   agent
-    .post(`/class/${classId}/team`, body, auth)
+    .post(`/class/${classId}/team`, {
+      name: teamName,
+      label: newLabel,
+    }, auth)
     .then((res) => {
       dispatch({
         type: teamConstants.ADD_TEAM_SUCCESS,
@@ -99,13 +98,12 @@ export const downloadTeamFile = (token, asAttachment) => async (dispatch) => {
 export const editTeam = (token, teamId, teamName, classId, newLabel) => (dispatch) => {
   const auth = { headers: { 'auth-token': token } };
   dispatch({ type: teamConstants.EDIT_TEAM_START });
-  const body = {
-    name: teamName,
-    class_id: classId,
-    label: newLabel,
-  };
   agent
-    .patch(`/team/${teamId}`, body, auth)
+    .patch(`/team/${teamId}`, {
+      name: teamName,
+      class_id: classId,
+      label: newLabel,
+    }, auth)
     .then((res) => {
       dispatch({
         type: teamConstants.EDIT_TEAM_SUCCESS,
