@@ -135,7 +135,7 @@ export default function GradeList() {
     setInputTitle('');
     setSelectedFile([]);
     if (inputTitle !== '') {
-      dispatch(addClassGrade(authToken, classId, selectedFile));
+      selectedFile.map((file) => (dispatch(addClassGrade(authToken, classId, file))));
     }
   };
 
