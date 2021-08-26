@@ -33,23 +33,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SampleUploadCard({ popUp = false, closePopUp, action }) {
+export default function SampleUploadCard({
+  popUp = false, closePopUp, selectedFile, setSelectedFile, handleTempUpload,
+}) {
   const {
     courseId, classId, challengeId, problemId,
   } = useParams();
-  const history = useHistory();
   const classes = useStyles();
 
-  const dispatch = useDispatch();
-
-  const problems = useSelector((state) => state.problem.byId);
-  const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
-  const [time, setTime] = useState('');
-  const [memory, setMemory] = useState('');
-  const [selectedFile, setSelectedFile] = useState([]);
+  const [time, setTime] = useState(100000);
+  const [memory, setMemory] = useState(65535);
+
+  const handleConfirm = () => {
+    const newSelectedFile = selectedFile.map((data) => ({
+      ...data,
+      no: data.id,
+      time_limit: time,
+      memory_limit: memory,
+    }));
+    setSelectedFile(newSelectedFile);
+    handleTempUpload(newSelectedFile);
+    closePopUp();
+  };
+
+  const handleCancel = () => {
+    setSelectedFile([]);
+    closePopUp();
+  };
 
   return (
     <>
@@ -79,14 +92,14 @@ export default function SampleUploadCard({ popUp = false, closePopUp, action }) 
               onChange={(e) => setMemory(e.target.value)}
             />
           </AlignedText>
-          <IOFileUploadArea text="Sample Data" fileAcceptFormat=".pdf" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
+          <IOFileUploadArea text="Sample Data" uploadCase="sample" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => closePopUp()} color="default">
+          <Button onClick={() => handleCancel()} color="default">
             Cancel
           </Button>
           <Button
-            onClick={() => action()}
+            onClick={handleConfirm}
             color="primary"
           >
             Confirm

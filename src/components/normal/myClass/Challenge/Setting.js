@@ -111,11 +111,11 @@ export default function Setting() {
                 {moment(challenge.end_time).format('YYYY/MM/DD HH:mm')}
               </Typography>
             </AlignedText>
-            <AlignedText text="Score by" maxWidth="lg" childrenType="text">
+            <AlignedText text="Scored by" maxWidth="lg" childrenType="text">
               <Typography variant="body1">
                 {challenge.selection_type === 'LAST'
                   ? 'Last Score'
-                  : 'Highest Score'}
+                  : 'Best Score'}
               </Typography>
             </AlignedText>
             <AlignedText text="Shown in Problem Set" maxWidth="lg" childrenType="text">

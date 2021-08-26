@@ -204,7 +204,7 @@ const downloadFile = (token, file) => async (dispatch) => {
     dispatch({ type: commonConstants.DOWNLOAD_FILE_START });
     const res = await agent.get(`/s3-file/${file.uuid}/url`, config);
     if (res.data.success) {
-      fetch(res.data.url).then((t) => t.blob().then((b) => {
+      fetch(res.data.data.url).then((t) => t.blob().then((b) => {
         const a = document.createElement('a');
         a.href = URL.createObjectURL(b);
         a.setAttribute('download', file.filename);
