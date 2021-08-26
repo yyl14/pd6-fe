@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Switch, Route } from 'react-router-dom';
-import MemberList from '../../../components/normal/myClass/member/MemberList';
+// import MemberList from '../../../components/normal/myClass/Member/MemberList';
 import NoMatch from '../../../components/noMatch';
 
 /* This is a level 3 container (main page container) */
@@ -17,7 +17,7 @@ class Member extends Component {
     return (
       <>
         <Switch>
-          <Route path="/my-class/:courseId/:classId/member" component={MemberList} />
+          {/* <Route path="/my-class/:courseId/:classId/member" component={MemberList} /> */}
           <Route component={NoMatch} />
         </Switch>
       </>
