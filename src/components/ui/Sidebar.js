@@ -14,6 +14,7 @@ import Challenge from './sidebar/Challenge';
 import Submission from './sidebar/Submission';
 import Grade from './sidebar/Grade';
 import Team from './sidebar/Team';
+import AllClass from './sidebar/AllClass';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -219,6 +220,38 @@ export default function Sidebar() {
       {/* {Member} */}
       <Route path="/my-class/:courseId/:classId/member">
         <MyClass classNames={classes} history={history} location={location} mode="main" />
+      </Route>
+
+      {/* {ALL Class} */}
+      {/* {Challenge} */}
+      <Route exact path="/all-class">
+        {/* for fetchCourse and redirection */}
+        <AllClass classNames={classes} history={history} location={location} mode="main" />
+      </Route>
+      <Route exact path="/all-class/:courseId">
+        {/* for fetchClass and redirection */}
+        <AllClass classNames={classes} history={history} location={location} mode="course" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge">
+        <AllClass classNames={classes} history={history} location={location} mode="class" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId">
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId">
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission">
+        <Challenge classNames={classes} history={history} location={location} mode="submission" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId/code-submission">
+        <Challenge classNames={classes} history={history} location={location} mode="submission" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId">
+        <Challenge classNames={classes} history={history} location={location} mode="submission_detail" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/essay/:essayId">
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
     </Switch>
   );

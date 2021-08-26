@@ -178,6 +178,11 @@ export default function Header({ role, hasClass }) {
           path: '/my-class',
         },
         {
+          text: 'All Class',
+          basePath: '/all-class',
+          path: '/all-class',
+        },
+        {
           text: 'Problem Set',
           basePath: '/problem-set',
           path: '/problem-set',
