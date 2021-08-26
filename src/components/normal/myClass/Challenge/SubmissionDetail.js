@@ -16,8 +16,10 @@ import { format } from 'date-fns';
 import Icon from '../../../ui/icon/index';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
+import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
 import NoMatch from '../../../noMatch';
-import { readSubmissionDetail, readSubmission, readProblemInfo } from '../../../../actions/myClass/problem';
+import { readSubmissionDetail, readProblemInfo } from '../../../../actions/myClass/problem';
+import { fetchSubmission } from '../../../../actions/myClass/submission';
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
@@ -37,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
   generalButtons: {
     display: 'flex',
     justifyContent: 'flex-end',
+  },
+  codeField: {
+    width: '50vw',
   },
 }));
 
@@ -71,8 +76,8 @@ export default function SubmissionDetail() {
   }, [authToken, challengeId, dispatch, problemId, submissionId]);
 
   useEffect(() => {
-    dispatch(readSubmission(authToken, account.id, problemId));
-  }, [account.id, authToken, dispatch, problemId]);
+    dispatch(fetchSubmission(authToken, submissionId));
+  }, [authToken, dispatch, submissionId]);
 
   useEffect(() => {
     account.classes.forEach((value) => {
@@ -97,12 +102,15 @@ export default function SubmissionDetail() {
 
   const handleRefresh = () => {
     dispatch(readSubmissionDetail(authToken, submissionId));
+    dispatch(fetchSubmission(authToken, submissionId));
   };
 
   const handleRejudge = () => {
     // rejudge
     setPopUp(false);
   };
+
+  // console.log('submission', submissions[submissionId]);
 
   return (
     <>
@@ -169,7 +177,17 @@ export default function SubmissionDetail() {
         </AlignedText> */}
       </SimpleBar>
       <SimpleBar title="Submission Result" />
-      <SimpleBar title="Code" />
+      <SimpleBar title="Code">
+        <CopyToClipboardButton text={submissions[submissionId].content} />
+        <TextField
+          className={classNames.codeField}
+          value={submissions[submissionId].content}
+          disabled
+          multiline
+          minRows={10}
+          maxRows={20}
+        />
+      </SimpleBar>
       <Dialog maxWidth="md" open={popUp} onClose={() => { setPopUp(false); }}>
         <DialogTitle>
           <Typography variant="h4">Rejudge Submission</Typography>
