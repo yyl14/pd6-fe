@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     width: '300px',
   },
   codingField: {
-    width: '60vw',
+    width: '80%',
   },
   bottomButton: {
     display: 'flex-end',
@@ -62,7 +62,7 @@ export default function CodeSubmission() {
       return;
     }
     dispatch(submitCode(authToken, problemId, langId, code));
-    // history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`);
+    history.push(`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`);
   };
 
   useEffect(() => {
@@ -80,14 +80,9 @@ export default function CodeSubmission() {
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
-        {challenges[challengeId].title}
-        {' '}
-        /
-        {' '}
-        {problems[problemId].challenge_label}
-        / Code Submission
+        {`${challenges[challengeId].title} / ${problems[problemId].challenge_label} / Code Submission`}
       </Typography>
-      <AlignedText text="Language" maxWidth="lg" childrenType="filed">
+      <AlignedText text="Language" maxWidth="lg" childrenType="field">
         <FormControl variant="outlined" className={classNames.selectField}>
           <Select
             labelId="sort"
@@ -100,11 +95,15 @@ export default function CodeSubmission() {
             <MenuItem key={-1} value="">
               <em>None</em>
             </MenuItem>
-            {submitLang.allIds.map((key) => <MenuItem key={submitLang.byId[key].id} value={submitLang.byId[key].id}>{submitLang.byId[key].name}</MenuItem>)}
+            {submitLang.allIds.map((key) => (
+              <MenuItem key={submitLang.byId[key].id} value={submitLang.byId[key].id}>
+                {submitLang.byId[key].name}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </AlignedText>
-      <AlignedText text="Content" maxWidth="lg" childrenType="filed">
+      <AlignedText text="Content" maxWidth="lg" childrenType="field">
         <TextField
           className={classNames.codingField}
           value={code}
@@ -114,11 +113,19 @@ export default function CodeSubmission() {
           multiline
           minRows={10}
           maxRows={20}
+          fullWidth
         />
       </AlignedText>
       <div className={classNames.bottomButton}>
-        <Button color="default" onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`)}>Cancel</Button>
-        <Button color="primary" onClick={handleSubmit}>Submit</Button>
+        <Button
+          color="default"
+          onClick={() => history.push(`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`)}
+        >
+          Cancel
+        </Button>
+        <Button color="primary" onClick={handleSubmit}>
+          Submit
+        </Button>
       </div>
     </>
   );

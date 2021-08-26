@@ -77,7 +77,11 @@ export default function SubmissionList() {
           submit_time: moment(submissions[id].submit_time).format('YYYY-MM-DD, HH:mm'),
           status: judgmentIds.map((key) => {
             if (judgments[key].submission_id === id) {
-              return judgments[key].status.toLowerCase().split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
+              return judgments[key].status
+                .toLowerCase()
+                .split(' ')
+                .map((word) => word[0].toUpperCase() + word.substring(1))
+                .join(' ');
             }
             return null;
           }),
@@ -90,7 +94,12 @@ export default function SubmissionList() {
     }
   }, [challengeId, classId, courseId, judgmentIds, judgments, problemId, submissionIds, submissions]);
 
-  if (challenges[challengeId] === undefined || problems[problemId] === undefined || submissions === undefined || judgments === undefined) {
+  if (
+    challenges[challengeId] === undefined
+    || problems[problemId] === undefined
+    || submissions === undefined
+    || judgments === undefined
+  ) {
     if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge && !loading.readJudgment) {
       return <NoMatch />;
     }
@@ -104,13 +113,7 @@ export default function SubmissionList() {
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
-        {challenges[challengeId].title}
-        {' '}
-        /
-        {' '}
-        {problems[problemId].challenge_label}
-        {' '}
-        / My Submission
+        {`${challenges[challengeId].title} / ${problems[problemId].challenge_label} / My Submission`}
       </Typography>
       <SimpleBar title="Submission Information">
         <AlignedText text="Your Latest Score" childrenType="text">
@@ -181,6 +184,5 @@ export default function SubmissionList() {
         linkName="path"
       />
     </>
-
   );
 }
