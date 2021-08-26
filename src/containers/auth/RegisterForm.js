@@ -83,7 +83,6 @@ export default function RegisterForm() {
     realName: false,
     school: false,
     username: false,
-    nickname: false,
     studentId: false,
     email: false,
     password: false,
@@ -93,7 +92,6 @@ export default function RegisterForm() {
     realName: '',
     school: '',
     username: '',
-    nickname: '',
     studentId: '',
     email: '',
     password: '',
@@ -108,7 +106,7 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const labelName = ['realName', 'school', 'username', 'nickname', 'studentId', 'email', 'password', 'confirmPassword'];
+  const labelName = ['realName', 'school', 'username', 'studentId', 'email', 'password', 'confirmPassword'];
 
   useEffect(() => {
     dispatch(getInstitutes());
