@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import 'katex/dist/katex.min.css';
+import Latex from 'react-latex-next';
 import {
   Typography,
   Button,
@@ -36,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end',
+  },
+  content: {
+    whiteSpace: 'pre-line',
   },
 }));
 
@@ -203,10 +208,14 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         <Typography variant="body2">{problems[problemId] === undefined ? 'error' : problems[problemId].title}</Typography>
       </SimpleBar>
       <SimpleBar title="Description">
-        <Typography variant="body2">{problems[problemId] === undefined ? 'error' : problems[problemId].description}</Typography>
+        <Typography variant="body2" className={classNames.content}>
+          <Latex>{problems[problemId].description}</Latex>
+        </Typography>
       </SimpleBar>
       <SimpleBar title="About Input and Output">
-        <Typography variant="body2">{problems[problemId] === undefined ? 'error' : problems[problemId].io_description}</Typography>
+        <Typography variant="body2" className={classNames.content}>
+          <Latex>{problems[problemId].io_description}</Latex>
+        </Typography>
       </SimpleBar>
       {problems[problemId].source !== ''
       && (
@@ -253,7 +262,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           ]}
           data={
             sampleDataIds.map((id) => ({
-              id: testcases[id].id,
+              id,
               no: sampleTrans2no(id),
               time_limit: testcases[id].time_limit,
               memory_limit: testcases[id].memory_limit,
@@ -312,7 +321,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           ]}
           data={
             testcaseDataIds.map((id) => ({
-              id: testcases[id].id,
+              id,
               no: testcaseTrans2no(id),
               time_limit: testcases[id].time_limit,
               memory_limit: testcases[id].memory_limit,
@@ -341,6 +350,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             data={
             problems[problemId] !== undefined
               ? problems[problemId].assistingDataIds.map((id) => ({
+                id,
                 filename: assistingData[id].filename,
               }))
               : []
