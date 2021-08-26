@@ -67,9 +67,7 @@ export default function Course({
                 return {
                   type,
                   text: name,
-                  icon: (
-                    <Icon.PeopleIcon />
-                  ),
+                  icon: <Icon.PeopleIcon />,
                   path: `${baseURL}/course/${id}/class-list`,
                 };
             }
@@ -100,9 +98,7 @@ export default function Course({
         {
           text: 'Setting',
           path: `${baseURL}/course/${courseId}/setting`,
-          icon: (
-            <Icon.SettingsIcon />
-          ),
+          icon: <Icon.SettingsIcon />,
         },
       ]);
     } else if (mode === 'class' && courseList.byId[courseId] && classList.byId[classId]) {
@@ -116,16 +112,12 @@ export default function Course({
         {
           text: 'Member',
           path: `${baseURL}/class/${courseId}/${classId}/member`,
-          icon: (
-            <Icon.PeopleIcon />
-          ),
+          icon: <Icon.PeopleIcon />,
         },
         {
           text: 'Setting',
           path: `${baseURL}/class/${courseId}/${classId}/setting`,
-          icon: (
-            <Icon.SettingsIcon />
-          ),
+          icon: <Icon.SettingsIcon />,
         },
       ]);
     }
@@ -161,9 +153,7 @@ export default function Course({
     }
   }, [classId, classList, courseId, courseList, history, location]);
 
-  // console.log(courseList.byId[courseId]);
   if (courseList.byId[courseId] === undefined || (classId && classList.byId[classId] === undefined)) {
-    // console.log(classList.byId[classId]);
     return (
       <div>
         <Drawer
@@ -254,7 +244,6 @@ export default function Course({
                       style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
                     >
                       {item.icon}
-
                     </ListItemIcon>
                     <ListItemText
                       primary={item.text}

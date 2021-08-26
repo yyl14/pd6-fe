@@ -136,6 +136,7 @@ const browseSubmitLang = (token) => async (dispatch) => {
 };
 
 const fetchCourse = (token, courseId) => async (dispatch) => {
+  // console.log(courseId);
   try {
     const auth = {
       headers: {
@@ -148,6 +149,27 @@ const fetchCourse = (token, courseId) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: commonConstants.FETCH_COURSE_FAIL,
+      error: err,
+    });
+  }
+};
+
+const fetchAllClasses = (token) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: commonConstants.FETCH_ALL_CLASSES_START });
+    const res = await agent.get('/class', config);
+    if (!res.data.success) {
+      throw new Error(res.data.error);
+    }
+    dispatch({ type: commonConstants.FETCH_ALL_CLASSES_SUCCESS, payload: res.data.data });
+  } catch (err) {
+    dispatch({
+      type: commonConstants.FETCH_ALL_CLASSES_FAIL,
       error: err,
     });
   }
@@ -229,5 +251,13 @@ const downloadFile = (token, file) => async (dispatch) => {
 };
 
 export {
-  getInstitutes, fetchClassMembers, editClassMember, replaceClassMembers, fetchCourse, fetchClass, fetchAccount, browseSubmitLang, downloadFile,
+  getInstitutes,
+  fetchClassMembers,
+  editClassMember,
+  replaceClassMembers,
+  fetchCourse,
+  fetchClass,
+  fetchAccount,
+  browseSubmitLang,
+  downloadFile,
 };
