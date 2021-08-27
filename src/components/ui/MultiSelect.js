@@ -2,7 +2,7 @@ import {
   makeStyles, FormControl, Select, MenuItem, ListItemText,
 } from '@material-ui/core';
 
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import CustomCheckbox from './CustomCheckbox';
 
 const useStyles = makeStyles((theme) => ({
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MultiSelect({ options, value, setValue }) {
   const classes = useStyles();
-  useEffect(() => setValue(options), []);
+  // const [tempInput, setTempInput] = useState(options);
 
   const handleChange = (event) => {
     let newList = event.target.value;
