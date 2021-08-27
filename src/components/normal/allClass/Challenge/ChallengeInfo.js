@@ -76,27 +76,31 @@ export default function ChallengeInfo() {
   }, [challengeId, challenges, currentTime]);
 
   useEffect(() => {
+    // console.log(challenges[challengeId].problemIds.reduce((acc, item) => acc && problems[item] !== undefined, true));
     if (challenges[challengeId]) {
-      setTableData(
-        challenges[challengeId].problemIds
-          .map((id) => ({
-            challenge_label: problems[id].challenge_label,
-            score: problems[id].full_score,
-            id: `coding-${id}`,
-          }))
-          .concat(
-            challenges[challengeId].essayIds.map((id) => ({
-              challenge_label: essays[id].challenge_label,
-              id: `essay-${id}`,
-            })),
-            challenges[challengeId].peerReviewIds.map((id) => ({
-              challenge_label: peerReviews[id].challenge_label,
-              id: `peer-${id}`,
-            })),
-          ),
-      );
+      if (challenges[challengeId].problemIds.reduce((acc, item) => acc && problems[item] !== undefined, true)) {
+        // problems are complete
+        setTableData(
+          challenges[challengeId].problemIds
+            .map((id) => ({
+              challenge_label: problems[id].challenge_label,
+              score: problems[id].full_score,
+              id: `coding-${id}`,
+            }))
+            .concat(
+              challenges[challengeId].essayIds.map((id) => ({
+                challenge_label: essays[id].challenge_label,
+                id: `essay-${id}`,
+              })),
+              challenges[challengeId].peerReviewIds.map((id) => ({
+                challenge_label: peerReviews[id].challenge_label,
+                id: `peer-${id}`,
+              })),
+            ),
+        );
+      }
     }
-  }, [challengeId, challenges, essays, peerReviews, problems]);
+  }, [authToken, challengeId, challenges, essays, loading.browseTasksUnderChallenge, peerReviews, problems]);
 
   if (challenges[challengeId] === undefined) {
     if (!loading.browseChallengeOverview) {
