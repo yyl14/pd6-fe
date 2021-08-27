@@ -16,9 +16,12 @@ import { format } from 'date-fns';
 import Icon from '../../../ui/icon/index';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
+import SimpleTable from '../../../ui/SimpleTable';
 import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
 import NoMatch from '../../../noMatch';
-import { readSubmissionDetail, readProblemInfo } from '../../../../actions/myClass/problem';
+import {
+  readSubmissionDetail, readProblemInfo, browseJudgeCases, readTestcase,
+} from '../../../../actions/myClass/problem';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
@@ -55,6 +58,8 @@ export default function SubmissionDetail() {
   const [color, setColor] = useState('blue');
   const [popUp, setPopUp] = useState(false);
   const [role, setRole] = useState('NORMAL');
+  const [tableData, setTableData] = useState([]);
+  const [judgmentId, setJudgmentId] = useState('');
   const dispatch = useDispatch();
 
   const submissions = useSelector((state) => state.submissions.byId);
@@ -63,6 +68,9 @@ export default function SubmissionDetail() {
   const challenges = useSelector((state) => state.challenges);
   const problems = useSelector((state) => state.problem);
   const account = useSelector((state) => state.user);
+  const judgeCases = useSelector((state) => state.judgeCases);
+  const testcases = useSelector((state) => state.testcases.byId);
+  const testcaseIds = useSelector((state) => state.testcases.allIds);
   const authToken = useSelector((state) => state.auth.token);
   const error = useSelector((state) => state.error.myClass.problem);
   const loading = useSelector((state) => state.loading.myClass.problem);
@@ -80,6 +88,37 @@ export default function SubmissionDetail() {
   }, [authToken, dispatch, submissionId]);
 
   useEffect(() => {
+    judgmentIds.filter((key) => {
+      if (judgments[key].submission_id === parseInt(submissionId, 10)) {
+        dispatch(browseJudgeCases(authToken, key));
+        setJudgmentId(key);
+      }
+      return '';
+    });
+  }, [authToken, dispatch, judgmentIds, judgments, submissionId]);
+
+  useEffect(() => {
+    if (judgeCases.byId !== undefined) {
+      judgeCases.allIds.map((id) => dispatch(readTestcase(authToken, id)));
+    }
+  }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId]);
+
+  useEffect(() => {
+    if (testcaseIds !== [] && judgeCases.allIds !== []) {
+      setTableData(
+        judgeCases.allIds.filter((id) => judgeCases.byId[id].judgment_id === judgmentId).map((id) => ({
+          id,
+          no: testcaseIds.map((key) => (id === key ? testcases[key].input_filename.split('.')[0] : '')),
+          time: judgeCases.byId[id].time_lapse,
+          memory: judgeCases.byId[id].peak_memory,
+          status: judgeCases.byId[id].status.toLowerCase().split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' '),
+          score: judgeCases.byId[id].score,
+        })),
+      );
+    }
+  }, [judgeCases, judgeCases.allIds, judgeCases.byId, judgmentId, judgments.byId, testcaseIds, testcases]);
+
+  useEffect(() => {
     account.classes.forEach((value) => {
       if (value.class_id === parseInt(classId, 10)) {
         if (value.role === 'MANAGER') {
@@ -89,8 +128,8 @@ export default function SubmissionDetail() {
     });
   }, [account.classes, classId]);
 
-  if (problems.byId[problemId] === undefined || challenges.byId[challengeId] === undefined || submissions[submissionId] === undefined || judgmentIds === undefined) {
-    if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge && !loading.readJudgment) {
+  if (problems.byId[problemId] === undefined || challenges.byId[challengeId] === undefined || submissions[submissionId] === undefined || judgmentIds === undefined || judgeCases.allIds === undefined || testcaseIds === undefined) {
+    if (!loading.readProblemInfo && !loading.readSubmissionDetail && !loading.browseJudgeCases && !loading.readTestcase) {
       return <NoMatch />;
     }
     return <div>loading...</div>;
@@ -109,8 +148,6 @@ export default function SubmissionDetail() {
     // rejudge
     setPopUp(false);
   };
-
-  // console.log('submission', submissions[submissionId]);
 
   return (
     <>
@@ -160,12 +197,12 @@ export default function SubmissionDetail() {
               }
               return <Typography variant="body1" color="secondary" key={key}>{judgments[key].status.toLowerCase().split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ')}</Typography>;
             }
-            return '';
+            return '-';
           })}
         </AlignedText>
         <AlignedText text="Score" childrenType="text">
           <Typography variant="body1">
-            {judgmentIds.map((key) => (judgments[key].submission_id === parseInt(submissionId, 10) ? judgments[key].score : ''))}
+            {judgmentIds.map((key) => (judgments[key].submission_id === parseInt(submissionId, 10) ? judgments[key].score : '-'))}
           </Typography>
         </AlignedText>
         <AlignedText text="Submit Time" childrenType="text">
@@ -176,7 +213,55 @@ export default function SubmissionDetail() {
             && <Typography variant="body1">{submitLangs[submissions[submissionId].language_id].name}</Typography>}
         </AlignedText> */}
       </SimpleBar>
-      <SimpleBar title="Submission Result" />
+      <SimpleBar title="Submission Result">
+        <SimpleTable
+          isEdit={false}
+          hasDelete={false}
+          columns={[
+            {
+              id: 'no',
+              label: 'No.',
+              minWidth: 30,
+              align: 'center',
+              width: 400,
+              type: 'string',
+            },
+            {
+              id: 'time',
+              label: 'Time(ms)',
+              minWidth: 50,
+              align: 'center',
+              width: 600,
+              type: 'string',
+            },
+            {
+              id: 'memory',
+              label: 'Memory(kb)',
+              minWidth: 50,
+              align: 'center',
+              width: 600,
+              type: 'string',
+            },
+            {
+              id: 'status',
+              label: 'Status',
+              minWidth: 50,
+              align: 'center',
+              width: 600,
+              type: 'string',
+            },
+            {
+              id: 'score',
+              label: 'Score',
+              minWidth: 50,
+              align: 'center',
+              width: 600,
+              type: 'string',
+            },
+          ]}
+          data={tableData}
+        />
+      </SimpleBar>
       <SimpleBar title="Code">
         <CopyToClipboardButton text={submissions[submissionId].content} />
         <TextField

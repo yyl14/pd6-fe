@@ -17,7 +17,9 @@ import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
-import { browseChallengeOverview, editChallenge, browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
+import {
+  browseChallengeOverview, editChallenge, browseTasksUnderChallenge, readProblemScore,
+} from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -113,7 +115,7 @@ export default function ChallengeInfo() {
         );
       }
     }
-  }, [authToken, challengeId, challenges, essays, loading.browseTasksUnderChallenge, peerReviews, problems]);
+  }, [authToken, challengeId, challenges, essays, loading.browseTasksUnderChallenge, loading.readProblemScore, peerReviews, problems]);
 
   if (challenges[challengeId] === undefined) {
     if (!loading.browseChallengeOverview) {

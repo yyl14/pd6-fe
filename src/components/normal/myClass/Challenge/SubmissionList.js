@@ -18,7 +18,9 @@ import AlignedText from '../../../ui/AlignedText';
 import CustomTable from '../../../ui/CustomTable';
 import NoMatch from '../../../noMatch';
 import SimpleBar from '../../../ui/SimpleBar';
-import { readProblemInfo, readSubmission, readSubmissionDetail } from '../../../../actions/myClass/problem';
+import {
+  readProblemInfo, readSubmission, readSubmissionDetail, readProblemScore,
+} from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -55,6 +57,10 @@ export default function SubmissionList() {
   }, [authToken, challengeId, dispatch, problemId]);
 
   useEffect(() => {
+    dispatch(readProblemScore(authToken, problemId));
+  }, [authToken, dispatch, problemId]);
+
+  useEffect(() => {
     if (submissionIds !== []) {
       submissionIds.map((id) => dispatch(readSubmissionDetail(authToken, id)));
     }
@@ -63,35 +69,32 @@ export default function SubmissionList() {
   useEffect(() => {
     if (judgmentIds !== []) {
       setTableData(
-        // judgmentIds.map((id) => ({
-        //   id: judgments[id].submission_id,
-        //   status: judgments[id].status,
-        //   score: judgments[id].score,
-        //   used_time: judgments[id].total_time,
-        //   used_memory: judgments[id].max_memory,
-        //   submit_time: moment(submissions[judgments[id].submission_id].submit_time).format('YYYY-MM-DD, HH:mm'),
-        //   path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${judgments[id].submission_id}`,
-        // })),
-        submissionIds.map((id) => ({
-          id,
-          submit_time: moment(submissions[id].submit_time).format('YYYY-MM-DD, HH:mm'),
-          status: judgmentIds.map((key) => {
-            if (judgments[key].submission_id === id) {
-              return judgments[key].status.toLowerCase().split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
-            }
-            return null;
-          }),
-          score: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].score : null)),
-          used_time: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].total_time : null)),
-          used_memory: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].max_memory : null)),
-          path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${id}`,
-        })),
+        submissionIds
+          .filter(
+            (id) => submissions[id].account_id === accountId
+            && submissions[id].problem_id === parseInt(problemId, 10),
+          )
+          .map((id) => ({
+            key: id,
+            id,
+            submit_time: moment(submissions[id].submit_time).format('YYYY-MM-DD, HH:mm'),
+            status: judgmentIds.map((key) => {
+              if (judgments[key].submission_id === id) {
+                return judgments[key].status.toLowerCase().split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
+              }
+              return '-';
+            }),
+            score: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].score : '-')),
+            used_time: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].total_time : '-')),
+            used_memory: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].max_memory : '-')),
+            path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${id}`,
+          })),
       );
     }
-  }, [challengeId, classId, courseId, judgmentIds, judgments, problemId, submissionIds, submissions]);
+  }, [accountId, challengeId, classId, courseId, judgmentIds, judgments, problemId, submissionIds, submissions]);
 
-  if (challenges[challengeId] === undefined || problems[problemId] === undefined || submissions === undefined || judgments === undefined) {
-    if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge && !loading.readJudgment) {
+  if (challenges[challengeId] === undefined || problems[problemId] === undefined || submissions === undefined || judgments === undefined || loading.readProblemScore) {
+    if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge && !loading.readJudgment && !loading.readProblemScore) {
       return <NoMatch />;
     }
     return <div>loading...</div>;
@@ -99,6 +102,7 @@ export default function SubmissionList() {
 
   const handleRefresh = () => {
     dispatch(readSubmission(authToken, accountId, problemId));
+    dispatch(readProblemScore(authToken, problemId));
   };
 
   return (
@@ -114,7 +118,7 @@ export default function SubmissionList() {
       </Typography>
       <SimpleBar title="Submission Information">
         <AlignedText text="Your Latest Score" childrenType="text">
-          <Typography variant="body1">N/A</Typography>
+          <Typography variant="body1">{problems[problemId].score}</Typography>
         </AlignedText>
       </SimpleBar>
       <CustomTable

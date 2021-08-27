@@ -11,7 +11,7 @@ const byId = (state = {}, action) => {
       const { submissionId, data } = action.payload;
       return {
         ...state,
-        [submissionId]: data,
+        [parseInt(submissionId, 10)]: data,
       };
     }
     case problemConstants.READ_SUBMISSION_SUCCESS: {
@@ -33,10 +33,8 @@ const allIds = (state = [], action) => {
     }
     case submissionConstants.FETCH_SUBMISSION_SUCCESS: {
       const { submissionId, data } = action.payload;
-      return state.includes(submissionId) ? state : state.concat([submissionId]);
+      return state.includes(parseInt(submissionId, 10)) ? state : state.concat([parseInt(submissionId, 10)]);
     }
-    // case problemConstants.READ_SUBMISSION_SUCCESS:
-    //   return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
 
     default:
       return state;
