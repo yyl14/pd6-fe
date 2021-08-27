@@ -5,17 +5,21 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case challengeConstants.FETCH_CHALLENGES_SUCCESS: {
       const { data } = action.payload;
-      return data.reduce((acc, item) => ({
-        ...acc,
-        [item.id]: {
-          ...item,
-          problemIds: state[item.id] ? state[item.id].problemIds : [],
-          peerReviewIds: state[item.id] ? state[item.id].peerReviewIds : [],
-          specialJudgeIds: state[item.id] ? state[item.id].specialJudgeIds : [],
-          essayIds: state[item.id] ? state[item.id].essayIds : [],
-          statistics: state[item.id] ? state[item.id].statistics : [],
-        },
-      }), state);
+
+      return data.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item.id]: {
+            ...item,
+            problemIds: state[item.id] ? state[item.id].problemIds : [],
+            peerReviewIds: state[item.id] ? state[item.id].peerReviewIds : [],
+            specialJudgeIds: state[item.id] ? state[item.id].specialJudgeIds : [],
+            essayIds: state[item.id] ? state[item.id].essayIds : [],
+            statistics: state[item.id] ? state[item.id].statistics : [],
+          },
+        }),
+        state,
+      );
     }
     case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data, id } = action.payload;
