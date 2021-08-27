@@ -109,7 +109,7 @@ export default function ChallengeList() {
         setTableData(
           classes[classId].challengeIds.reverse().map((id) => ({
             title: challenges[id].title,
-            path: `/all-class/${courseId}/${classId}/challenge/${id}`,
+            path: `/my-class/${courseId}/${classId}/challenge/${id}`,
             startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
             endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
             status: getStatus(id),
@@ -122,7 +122,7 @@ export default function ChallengeList() {
             .reverse()
             .map((id) => ({
               title: challenges[id].title,
-              path: `/all-class/${courseId}/${classId}/challenge/${id}`,
+              path: `/my-class/${courseId}/${classId}/challenge/${id}`,
               startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
               endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
               status: getStatus(id),

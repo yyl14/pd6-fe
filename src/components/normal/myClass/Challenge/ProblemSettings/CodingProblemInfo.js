@@ -29,7 +29,9 @@ import {
   deleteAssistingData,
   deleteTestcase,
   deleteProblem,
+  browseTasksUnderChallenge,
 } from '../../../../../actions/myClass/problem';
+
 import { fetchClass, fetchCourse, downloadFile } from '../../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
@@ -62,14 +64,15 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const courses = useSelector((state) => state.courses.byId);
   const problems = useSelector((state) => state.problem.byId);
   const testcases = useSelector((state) => state.testcases.byId);
-  const sampleDataIds = problems[problemId] === undefined ? [] : problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
-  const testcaseDataIds = problems[problemId] === undefined ? [] : problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
+
   const assistingData = useSelector((state) => state.assistingData.byId);
 
   const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
+  const [sampleDataIds, setSampleDataIds] = useState([]);
+  const [testcaseDataIds, setTestcaseDataIds] = useState([]);
   const [deletePopUp, setDeletePopUp] = useState(false);
 
   const handleDelete = () => {
@@ -91,9 +94,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       filename: assistingData[id].filename,
       as_attachment: false,
     }));
-    files.forEach((file) => {
-      dispatch(downloadFile(authToken, file));
-    });
+    files.map((file) => dispatch(downloadFile(authToken, file)));
   };
 
   const downloadAllSampleFile = () => {
@@ -137,10 +138,8 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
 
       return acc;
     }, []);
-    console.log(files);
-    files.forEach((file) => {
-      dispatch(downloadFile(authToken, file));
-    });
+    // console.log(files);
+    files.map((file) => dispatch(downloadFile(authToken, file)));
   };
 
   const downloadAllTestingFile = () => {
@@ -183,9 +182,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
 
       return acc;
     }, []);
-    files.forEach((file) => {
-      dispatch(downloadFile(authToken, file));
-    });
+    files.map((file) => dispatch(downloadFile(authToken, file)));
   };
 
   const sampleTrans2no = (id) => {
@@ -209,14 +206,25 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   };
 
   useEffect(() => {
+    if (problems[problemId] && problems[problemId].testcaseIds) {
+      setSampleDataIds(problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample));
+      setTestcaseDataIds(problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample));
+    }
+  }, [problems, problemId, testcases]);
+
+  useEffect(() => {
+    dispatch(browseTasksUnderChallenge(authToken, challengeId));
+  }, [authToken, challengeId, dispatch]);
+
+  useEffect(() => {
     dispatch(browseTestcase(authToken, problemId));
     dispatch(browseAssistingData(authToken, problemId));
   }, [authToken, dispatch, problemId]);
 
-  useEffect(() => {
-    dispatch(fetchClass(authToken, classId));
-    dispatch(fetchCourse(authToken, courseId));
-  }, [authToken, classId, courseId, dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchClass(authToken, classId));
+  //   dispatch(fetchCourse(authToken, courseId));
+  // }, [authToken, classId, courseId, dispatch]);
 
   if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
     return <div>loading...</div>;
