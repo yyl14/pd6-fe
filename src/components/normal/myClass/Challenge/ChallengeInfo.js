@@ -17,7 +17,9 @@ import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
-import { browseChallengeOverview, editChallenge, browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
+import {
+  browseChallengeOverview, editChallenge, browseTasksUnderChallenge, readProblemScore,
+} from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -90,25 +92,30 @@ export default function ChallengeInfo() {
   }, [classId, userClasses]);
 
   useEffect(() => {
-    if (!loading.browseTasksUnderChallenge && challenges[challengeId] !== undefined) {
-      let arr1 = challenges[challengeId].problemIds.map((id) => ({
-        challenge_label: problems[id].challenge_label,
-        score: problems[id].full_score,
-        id: Math.random(),
-      }));
-      const arr2 = challenges[challengeId].essayIds.map((id) => ({
-        challenge_label: essays[id].challenge_label,
-        id: Math.random(),
-      }));
-      const arr3 = challenges[challengeId].peerReviewIds.map((id) => ({
-        challenge_label: peerReviews[id].challenge_label,
-        id: Math.random(),
-      }));
-      arr1 = arr1.concat(arr2);
-      arr1 = arr1.concat(arr3);
-      setTableData(arr1);
+    if (challenges[challengeId]) {
+      if (challenges[challengeId].problemIds.reduce((acc, item) => acc && problems[item] !== undefined, true)) {
+        // problems are complete
+        setTableData(
+          challenges[challengeId].problemIds
+            .map((id) => ({
+              challenge_label: problems[id].challenge_label,
+              score: problems[id].full_score,
+              id: `coding-${id}`,
+            }))
+            .concat(
+              challenges[challengeId].essayIds.map((id) => ({
+                challenge_label: essays[id].challenge_label,
+                id: `essay-${id}`,
+              })),
+              challenges[challengeId].peerReviewIds.map((id) => ({
+                challenge_label: peerReviews[id].challenge_label,
+                id: `peer-${id}`,
+              })),
+            ),
+        );
+      }
     }
-  }, [authToken, challengeId, challenges, essays, loading.browseTasksUnderChallenge, peerReviews, problems]);
+  }, [authToken, challengeId, challenges, essays, loading.browseTasksUnderChallenge, loading.readProblemScore, peerReviews, problems]);
 
   if (challenges[challengeId] === undefined) {
     if (!loading.browseChallengeOverview) {
@@ -127,14 +134,14 @@ export default function ChallengeInfo() {
   };
 
   const handleSave = () => {
-    const body = ({
+    const body = {
       publicizeType: challenges[challengeId].publicize_type,
       selectionType: challenges[challengeId].selection_type,
       title: challenges[challengeId].title,
       description: inputs,
       startTime: challenges[challengeId].start_time,
       endTime: challenges[challengeId].end_time,
-    });
+    };
     dispatch(editChallenge(authToken, challengeId, body));
     setEditMode(false);
     setInputs(challenges[challengeId].description);
@@ -147,56 +154,47 @@ export default function ChallengeInfo() {
         {' '}
         / Info
       </Typography>
-      {isManager && !editMode
-        && (
-        <Button
-          onClick={handleEdit}
-        >
-          Edit
-        </Button>
+      {isManager && !editMode && <Button onClick={handleEdit}>Edit</Button>}
+      <SimpleBar title="Description">
+        {editMode ? (
+          <TextField
+            className={classes.descriptionField}
+            value={inputs}
+            onChange={(e) => setInputs(e.target.value)}
+            multiline
+            minRows={10}
+            maxRows={10}
+            variant="outlined"
+          />
+        ) : (
+          <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
+            {challenges[challengeId].description}
+          </Typography>
         )}
-      <SimpleBar
-        title="Description"
-      >
-        {editMode
-          ? (
-            <TextField
-              className={classes.descriptionField}
-              value={inputs}
-              onChange={(e) => setInputs(e.target.value)}
-              multiline
-              minRows={10}
-              maxRows={10}
-              variant="outlined"
-            />
-          )
-          : <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>{challenges[challengeId].description}</Typography>}
       </SimpleBar>
-      <SimpleBar
-        title="Challenge Information"
-      >
+      <SimpleBar title="Challenge Information">
         <>
           <AlignedText text="Scored by" childrenType="text">
             <Typography variant="body1">
-              {challenges[challengeId].selection_type === 'LAST'
-                ? 'Last Score'
-                : 'Best Score'}
+              {challenges[challengeId].selection_type === 'LAST' ? 'Last Score' : 'Best Score'}
             </Typography>
           </AlignedText>
           <AlignedText text="Status" childrenType="text">
             <Typography variant="body1">{status}</Typography>
           </AlignedText>
           <AlignedText text="Start time" childrenType="text">
-            <Typography variant="body1">{moment(challenges[challengeId].start_time).format('YYYY-MM-DD, HH:mm')}</Typography>
+            <Typography variant="body1">
+              {moment(challenges[challengeId].start_time).format('YYYY-MM-DD, HH:mm')}
+            </Typography>
           </AlignedText>
           <AlignedText text="End time" childrenType="text">
-            <Typography variant="body1">{moment(challenges[challengeId].end_time).format('YYYY-MM-DD, HH:mm')}</Typography>
+            <Typography variant="body1">
+              {moment(challenges[challengeId].end_time).format('YYYY-MM-DD, HH:mm')}
+            </Typography>
           </AlignedText>
         </>
       </SimpleBar>
-      <SimpleBar
-        title="Overview"
-      />
+      <SimpleBar title="Overview" />
       <SimpleTable
         isEdit={false}
         hasDelete={false}
@@ -220,13 +218,14 @@ export default function ChallengeInfo() {
         ]}
         data={tableData}
       />
-      {editMode
-        && (
+      {editMode && (
         <div className={classes.buttons}>
           <Button onClick={handleCancel}>Cancel</Button>
-          <Button onClick={handleSave} color="primary">Save</Button>
+          <Button onClick={handleSave} color="primary">
+            Save
+          </Button>
         </div>
-        )}
+      )}
     </>
   );
 }

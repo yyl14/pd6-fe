@@ -6,6 +6,9 @@ const initialState = {
   fetchChallengeSummary: null,
   editChallenge: null,
   deleteChallenge: null,
+  addProblem: null,
+  addEssay: null,
+  addPeerReview: null,
 };
 
 export default function challenge(state = initialState, action) {
@@ -73,6 +76,44 @@ export default function challenge(state = initialState, action) {
       };
     }
 
+    case challengeConstants.ADD_PROBLEM_SUCCESS: {
+      return {
+        ...state,
+        addProblem: null,
+      };
+    }
+    case challengeConstants.ADD_PROBLEM_FAIL: {
+      return {
+        ...state,
+        addProblem: action.error,
+      };
+    }
+
+    case challengeConstants.ADD_ESSAY_SUCCESS: {
+      return {
+        ...state,
+        addEssay: null,
+      };
+    }
+    case challengeConstants.ADD_ESSAY_FAIL: {
+      return {
+        ...state,
+        addEssay: action.error,
+      };
+    }
+
+    case challengeConstants.ADD_PEER_REVIEW_SUCCESS: {
+      return {
+        ...state,
+        addPeerReview: null,
+      };
+    }
+    case challengeConstants.ADD_PEER_REVIEW_FAIL: {
+      return {
+        ...state,
+        addPeerReview: action.error,
+      };
+    }
     default: {
       return state;
     }

@@ -4,11 +4,13 @@ const initialState = {
   fetchInstitutes: false,
   fetchClassMembers: false,
   editClassMember: false,
+  replaceClassMembers: false,
   // deleteClassMember: false,
   browseSubmitLang: false,
   fetchCourse: false,
   fetchClass: false,
   fetchAccount: false,
+  fetchAllChallengesProblems: false,
 };
 
 export default function common(state = initialState, action) {
@@ -66,6 +68,24 @@ export default function common(state = initialState, action) {
       return {
         ...state,
         editClassMember: false,
+      };
+    }
+    case commonConstants.REPLACE_CLASS_MEMBERS_REQUEST: {
+      return {
+        ...state,
+        replaceClassMembers: true,
+      };
+    }
+    case commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS: {
+      return {
+        ...state,
+        replaceClassMembers: false,
+      };
+    }
+    case commonConstants.REPLACE_CLASS_MEMBERS_FAIL: {
+      return {
+        ...state,
+        replaceClassMembers: false,
       };
     }
     case commonConstants.DELETE_CLASS_MEMBER_REQUEST: {
@@ -157,6 +177,25 @@ export default function common(state = initialState, action) {
       return {
         ...state,
         browseSubmitLang: false,
+      };
+    }
+
+    case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_START: {
+      return {
+        ...state,
+        fetchAllChallengesProblems: true,
+      };
+    }
+    case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
+      return {
+        ...state,
+        fetchAllChallengesProblems: false,
+      };
+    }
+    case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_FAIL: {
+      return {
+        ...state,
+        fetchAllChallengesProblems: false,
       };
     }
 

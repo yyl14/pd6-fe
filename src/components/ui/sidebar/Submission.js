@@ -40,7 +40,7 @@ export default function Submission({
     };
 
     if (mode === 'detail') {
-      console.log(submissions);
+      // console.log(submissions);
       setArrow(<IconButton className={classNames.arrow} onClick={goBackToSubmission}><Icon.ArrowBackRoundedIcon /></IconButton>);
       setTitle('00111');
       setItemList([

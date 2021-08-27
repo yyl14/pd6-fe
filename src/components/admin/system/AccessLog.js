@@ -27,8 +27,8 @@ const useStyles = makeStyles((theme) => ({
 export default function AccessLog() {
   const classes = useStyles();
   const loading = useSelector((state) => state.loading.admin.system.fetchAccessLog);
-  const authToken = useSelector((state) => state.auth.token);
   const logs = useSelector((state) => state.accessLogs);
+  const authToken = useSelector((state) => state.auth.token);
   const accounts = useSelector((state) => state.accounts);
   const dispatch = useDispatch();
 

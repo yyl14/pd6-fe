@@ -5,7 +5,8 @@ import { gradeConstants, teamConstants, challengeConstants } from '../actions/my
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    case courseConstants.FETCH_CLASSES_SUCCESS: {
+    case courseConstants.FETCH_CLASSES_SUCCESS:
+    case commonConstants.FETCH_ALL_CLASSES_SUCCESS: {
       const { data } = action.payload.data;
       return data.reduce(
         (acc, item) => ({
@@ -56,6 +57,11 @@ const byId = (state = {}, action) => {
       return { ...state, [classId]: { ...state[classId], challengeIds: data.map((item) => item.id) } };
     }
 
+    case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
+      const { classId, challenges } = action.payload;
+      return { ...state, [classId]: { ...state[classId], challengeIds: challenges.map((item) => item.id) } };
+    }
+
     default:
       return state;
   }
@@ -63,9 +69,15 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
-    case courseConstants.FETCH_CLASSES_SUCCESS: {
+    case courseConstants.FETCH_CLASSES_SUCCESS:
+    case commonConstants.FETCH_ALL_CLASSES_SUCCESS: {
       const { data } = action.payload.data;
       return [...new Set([...data.map((item) => item.id), ...state])];
+    }
+    case commonConstants.FETCH_CLASS_SUCCESS: {
+      const { id } = action.payload;
+      // console.log(id);
+      return [...new Set([id, ...state])];
     }
     default:
       return state;

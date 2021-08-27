@@ -100,7 +100,7 @@ export default function InstituteSetting() {
   };
 
   const handleChangeStatus = (event) => {
-    setNewSetting((input) => ({ ...input, [event.target.name]: event.target.checked }));
+    setNewSetting((input) => ({ ...input, [event.target.name]: !event.target.checked }));
   };
 
   const handleEditInstitute = (prop) => {
@@ -154,7 +154,7 @@ export default function InstituteSetting() {
             institutes[instituteId].abbreviated_name,
             institutes[instituteId].full_name,
             institutes[instituteId].email_domain,
-            !newSetting.newStatus,
+            newSetting.newStatus,
           ),
         );
         break;
@@ -260,6 +260,7 @@ export default function InstituteSetting() {
               color="secondary"
               onClick={(prevState) => {
                 setSettingStatus((input) => ({ ...input, changeStatus: true }));
+                setNewSetting((input) => ({ ...input, newStatus: institutes[instituteId].is_disabled }));
               }}
             >
               Change Status
@@ -426,9 +427,9 @@ export default function InstituteSetting() {
         <DialogContent>
           <FormControlLabel
             control={
-              <Switch checked={newSetting.newStatus} onChange={handleChangeStatus} name="newStatus" color="primary" />
+              <Switch checked={!newSetting.newStatus} onChange={handleChangeStatus} name="newStatus" color="primary" />
             }
-            label={newSetting.newStatus ? 'Enabled' : 'Disabled'}
+            label={newSetting.newStatus ? 'Disable' : 'Enable'}
           />
           <Typography variant="body1" className={classes.warningText}>
             Once you change the institute’s status, future members from this institute may not be able to register.
@@ -440,7 +441,7 @@ export default function InstituteSetting() {
             Cancel
           </Button>
           <Button
-            disabled={institutes[instituteId].is_disabled !== newSetting.newStatus}
+            disabled={institutes[instituteId].is_disabled === newSetting.newStatus}
             onClick={() => handleEditInstitute('newStatus')}
             color="secondary"
           >
