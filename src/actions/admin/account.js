@@ -275,7 +275,10 @@ const fetchAccounts = (token) => (dispatch) => {
   agent
     .get('/account', auth)
     .then((res) => {
-      dispatch({ type: accountConstants.FETCH_ACCOUNTS_SUCCESS, payload: res.data.data });
+      dispatch({
+        type: accountConstants.FETCH_ACCOUNTS_SUCCESS,
+        payload: res.data.data.data,
+      });
     })
     .catch((err) => {
       dispatch({
