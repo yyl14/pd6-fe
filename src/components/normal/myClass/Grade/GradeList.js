@@ -131,12 +131,12 @@ export default function GradeList() {
   };
 
   const handleAdd = () => {
+    if (inputTitle !== '' && selectedFile !== []) {
+      selectedFile.map((file) => (dispatch(addClassGrade(authToken, classId, file))));
+    }
     setPopUp(false);
     setInputTitle('');
     setSelectedFile([]);
-    if (inputTitle !== '') {
-      dispatch(addClassGrade(authToken, classId, selectedFile));
-    }
   };
 
   const handleCancel = () => {

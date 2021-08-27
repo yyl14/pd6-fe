@@ -70,21 +70,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
-  const [deletePopUp, setDeletePopUp] = useState(false);
-
-  const handleDelete = () => {
-    problems[problemId].assistingDataIds.forEach((id) => {
-      dispatch(deleteAssistingData(authToken, id));
-    });
-    problems[problemId].testcaseIds.forEach((id) => {
-      dispatch(deleteTestcase(authToken, id));
-    });
-    dispatch(deleteProblem(authToken, problemId));
-
-    setDeletePopUp(false);
-    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
-  };
-
   const downloadAllAssistingFile = () => {
     const files = problems[problemId].assistingDataIds.map((id) => ({
       uuid: assistingData[id].s3_file_uuid,
@@ -137,10 +122,8 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
 
       return acc;
     }, []);
-    console.log(files);
-    files.forEach((file) => {
-      dispatch(downloadFile(authToken, file));
-    });
+    // console.log(files);
+    files.map((file) => dispatch(downloadFile(authToken, file)));
   };
 
   const downloadAllTestingFile = () => {
@@ -183,9 +166,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
 
       return acc;
     }, []);
-    files.forEach((file) => {
-      dispatch(downloadFile(authToken, file));
-    });
+    files.map((file) => dispatch(downloadFile(authToken, file)));
   };
 
   const sampleTrans2no = (id) => {
@@ -213,10 +194,10 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     dispatch(browseAssistingData(authToken, problemId));
   }, [authToken, dispatch, problemId]);
 
-  useEffect(() => {
-    dispatch(fetchClass(authToken, classId));
-    dispatch(fetchCourse(authToken, courseId));
-  }, [authToken, classId, courseId, dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchClass(authToken, classId));
+  //   dispatch(fetchCourse(authToken, courseId));
+  // }, [authToken, classId, courseId, dispatch]);
 
   if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
     return <div>loading...</div>;
@@ -254,11 +235,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         </SimpleBar>
       )}
       <SimpleBar title="Sample">
-        {role === 'MANAGER' && (
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllSampleFile}>
-            Download All Files
-          </Button>
-        )}
         <SimpleTable
           isEdit={false}
           hasDelete={false}
@@ -307,11 +283,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         </div>
       </SimpleBar>
       <SimpleBar title="Testing Data">
-        {role === 'MANAGER' && (
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllTestingFile}>
-            Download All Files
-          </Button>
-        )}
         <SimpleTable
           isEdit={false}
           hasDelete={false}
@@ -358,76 +329,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           }))}
         />
       </SimpleBar>
-      {role === 'MANAGER' && (
-        <SimpleBar title="Assisting Data (Optional)">
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllAssistingFile}>
-            Download All Files
-          </Button>
-          <SimpleTable
-            isEdit={false}
-            hasDelete={false}
-            columns={[
-              {
-                id: 'filename',
-                label: 'File Name',
-                minWidth: 40,
-                align: 'center',
-                width: 200,
-                type: 'string',
-              },
-            ]}
-            data={
-              problems[problemId] !== undefined
-                ? problems[problemId].assistingDataIds.map((id) => ({
-                  id,
-                  filename: assistingData[id].filename,
-                }))
-                : []
-            }
-          />
-        </SimpleBar>
-      )}
-      {role === 'MANAGER' && (
-        <SimpleBar
-          title="Delete Task"
-          childrenButtons={(
-            <Button color="secondary" onClick={() => setDeletePopUp(true)}>
-              Delete
-            </Button>
-          )}
-        >
-          <Typography variant="body1">Once you delete a task, there is no going back. Please be certain.</Typography>
-        </SimpleBar>
-      )}
-      <Dialog open={deletePopUp} onClose={() => setDeletePopUp(false)} maxWidth="md">
-        <DialogTitle>
-          <Typography variant="h4">Delete Problem</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText variant="body1" color="secondary">
-            <AlignedText text="Class" childrenType="text">
-              <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
-            </AlignedText>
-            <AlignedText text="Title" childrenType="text">
-              {problems[problemId] === undefined ? 'error' : problems[problemId].title}
-            </AlignedText>
-            <AlignedText text="Label" childrenType="text">
-              <Typography>
-                {problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label}
-              </Typography>
-            </AlignedText>
-            <Typography variant="body2" color="textPrimary">
-              Once you delete a problem, there is no going back. Please be certain.
-            </Typography>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeletePopUp(false)}>Cancel</Button>
-          <Button color="secondary" onClick={handleDelete}>
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }

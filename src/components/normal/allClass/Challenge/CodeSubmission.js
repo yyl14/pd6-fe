@@ -62,7 +62,7 @@ export default function CodeSubmission() {
       return;
     }
     dispatch(submitCode(authToken, problemId, langId, code));
-    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`);
+    history.push(`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`);
   };
 
   useEffect(() => {
@@ -113,12 +113,13 @@ export default function CodeSubmission() {
           multiline
           minRows={10}
           maxRows={20}
+          fullWidth
         />
       </AlignedText>
       <div className={classNames.bottomButton}>
         <Button
           color="default"
-          onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`)}
+          onClick={() => history.push(`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`)}
         >
           Cancel
         </Button>

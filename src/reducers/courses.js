@@ -34,6 +34,19 @@ const byId = (state = {}, action) => {
         [courseId]: { ...state[courseId], classIds: data.map((item) => item.id) },
       };
     }
+    case commonConstants.FETCH_ALL_CLASSES_SUCCESS: {
+      const { data } = action.payload;
+      return data.reduce(
+        (acc, { id, course_id }) => ({
+          ...acc,
+          [course_id]: {
+            ...state[course_id],
+            classIds: state[course_id].concat([id]),
+          },
+        }),
+        state,
+      );
+    }
     default:
       return state;
   }

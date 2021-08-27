@@ -29,7 +29,6 @@ const fetchClassMembers = (token, classId) => async (dispatch) => {
     };
     dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_REQUEST });
     const res = await agent.get(`/class/${classId}/member`, auth);
-    console.log(res);
     dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_SUCCESS, payload: { classId, data: res.data.data } });
   } catch (err) {
     dispatch({
@@ -72,7 +71,6 @@ const replaceClassMembers = (token, classId, replacingList) => async (dispatch) 
     dispatch({ type: commonConstants.REPLACE_CLASS_MEMBERS_REQUEST });
 
     const res = await agent.put(`/class/${classId}/member`, replacingList, auth);
-    console.log(res);
     if (res.data.success) {
       dispatch({
         type: commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS,
@@ -148,6 +146,27 @@ const fetchCourse = (token, courseId) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: commonConstants.FETCH_COURSE_FAIL,
+      error: err,
+    });
+  }
+};
+
+const fetchAllClasses = (token) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: commonConstants.FETCH_ALL_CLASSES_START });
+    const res = await agent.get('/class', config);
+    if (!res.data.success) {
+      throw new Error(res.data.error);
+    }
+    dispatch({ type: commonConstants.FETCH_ALL_CLASSES_SUCCESS, payload: res.data.data });
+  } catch (err) {
+    dispatch({
+      type: commonConstants.FETCH_ALL_CLASSES_FAIL,
       error: err,
     });
   }
@@ -229,5 +248,13 @@ const downloadFile = (token, file) => async (dispatch) => {
 };
 
 export {
-  getInstitutes, fetchClassMembers, editClassMember, replaceClassMembers, fetchCourse, fetchClass, fetchAccount, browseSubmitLang, downloadFile,
+  getInstitutes,
+  fetchClassMembers,
+  editClassMember,
+  replaceClassMembers,
+  fetchCourse,
+  fetchClass,
+  fetchAccount,
+  browseSubmitLang,
+  downloadFile,
 };

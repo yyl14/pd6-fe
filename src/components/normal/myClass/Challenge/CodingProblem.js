@@ -57,7 +57,7 @@ export default function CodingProblem() {
   const error = useSelector((state) => state.error.myClass.problem);
   const loading = useSelector((state) => state.loading.myClass.problem);
   const commonLoading = useSelector((state) => state.loading.common);
-  const [role, setRole] = useState('Normal');
+  const [role, setRole] = useState('NORMAL');
 
   const [edit, setEdit] = useState(false);
   const [rejudgePopUp, setRejudgePopUp] = useState(false);
