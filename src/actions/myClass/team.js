@@ -9,7 +9,7 @@ export const fetchTeams = (token, classId) => (dispatch) => {
     .then((res) => {
       dispatch({
         type: teamConstants.FETCH_TEAMS_SUCCESS,
-        payload: { classId, data: res.data.data },
+        payload: { classId, data: res.data.data.data },
       });
     })
     .catch((err) => {
