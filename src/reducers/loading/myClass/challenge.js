@@ -3,9 +3,10 @@ import { challengeConstants } from '../../../actions/myClass/constant';
 const initialState = {
   fetchChallenges: false,
   addChallenge: false,
-  fetchChallengeSummary: false,
   editChallenge: false,
   deleteChallenge: false,
+  fetchChallengeSummary: false,
+  fetchChallengeMemberSubmission: false,
   addProblem: false,
   addEssay: false,
   addPeerReview: false,
@@ -51,24 +52,6 @@ export default function challenge(state = initialState, action) {
       };
     }
 
-    case challengeConstants.FETCH_CHALLENGE_SUMMARY_REQUEST: {
-      return {
-        ...state,
-        fetchChallengeSummary: true,
-      };
-    }
-    case challengeConstants.FETCH_CHALLENGE_SUMMARY_SUCCESS: {
-      return {
-        ...state,
-        fetchChallengeSummary: false,
-      };
-    }
-    case challengeConstants.FETCH_CHALLENGE_SUMMARY_FAIL: {
-      return {
-        ...state,
-        fetchChallengeSummary: false,
-      };
-    }
     case challengeConstants.EDIT_CHALLENGE_REQUEST: {
       return {
         ...state,
@@ -104,6 +87,44 @@ export default function challenge(state = initialState, action) {
       return {
         ...state,
         deleteChallenge: false,
+      };
+    }
+
+    case challengeConstants.FETCH_CHALLENGE_SUMMARY_REQUEST: {
+      return {
+        ...state,
+        fetchChallengeSummary: true,
+      };
+    }
+    case challengeConstants.FETCH_CHALLENGE_SUMMARY_SUCCESS: {
+      return {
+        ...state,
+        fetchChallengeSummary: false,
+      };
+    }
+    case challengeConstants.FETCH_CHALLENGE_SUMMARY_FAIL: {
+      return {
+        ...state,
+        fetchChallengeSummary: false,
+      };
+    }
+
+    case challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_REQUEST: {
+      return {
+        ...state,
+        fetchChallengeMemberSubmission: true,
+      };
+    }
+    case challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_SUCCESS: {
+      return {
+        ...state,
+        fetchChallengeMemberSubmission: false,
+      };
+    }
+    case challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_FAIL: {
+      return {
+        ...state,
+        fetchChallengeMemberSubmission: false,
       };
     }
 
