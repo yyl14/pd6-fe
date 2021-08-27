@@ -117,6 +117,33 @@ const readProblemInfo = (token, problemId, challengeId) => async (dispatch) => {
     });
   }
 };
+const readProblem = (token, problemId) => async (dispatch) => {
+  dispatch({ type: problemConstants.READ_PROBLEM_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const problemInfo = await agent.get(`/problem/${problemId}`, auth);
+    if (problemInfo.data.success) {
+      dispatch({
+        type: problemConstants.READ_PROBLEM_SUCCESS,
+        payload: problemInfo.data.data,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.READ_PROBLEM_FAIL,
+        errors: problemInfo.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.READ_PROBLEM_FAIL,
+      errors: err,
+    });
+  }
+};
 
 const readSubmission = (token, accountId, problemId) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_SUBMISSION_START });
@@ -168,9 +195,36 @@ const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
       });
     }
   } catch (err) {
-    // console.log(err);
     dispatch({
       type: problemConstants.READ_SUBMISSION_JUDGE_FAIL,
+      errors: err,
+    });
+  }
+};
+
+const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
+  dispatch({ type: problemConstants.BROWSE_JUDGE_CASES_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const res = await agent.get(`/judgment/${judgmentId}/judge-case`, auth);
+    if (res.data.success) {
+      dispatch({
+        type: problemConstants.BROWSE_JUDGE_CASES_SUCCESS,
+        payload: res.data.data,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.BROWSE_JUDGE_CASES_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.BROWSE_JUDGE_CASES_FAIL,
       errors: err,
     });
   }
@@ -758,6 +812,62 @@ const readChallenge = (token, challengeId) => async (dispatch) => {
   }
 };
 
+const readTestcase = (token, testcaseId) => async (dispatch) => {
+  dispatch({ type: problemConstants.READ_TESTCASE_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const res = await agent.get(`/testcase/${testcaseId}`, auth);
+    if (res.data.success) {
+      dispatch({
+        type: problemConstants.READ_TESTCASE_SUCCESS,
+        payload: res.data.data,
+      });
+    } else {
+      dispatch({
+        type: problemConstants.READ_TESTCASE_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.READ_TESTCASE_FAIL,
+      errors: err,
+    });
+  }
+};
+
+const readProblemScore = (token, problemId) => async (dispatch) => {
+  dispatch({ type: problemConstants.READ_PROBLEM_SCORE_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const res = await agent.get(`/problem/${problemId}/score`, auth);
+    if (res.data.success) {
+      dispatch({
+        type: problemConstants.READ_PROBLEM_SCORE_SUCCESS,
+        payload: { data: res.data.data, problemId },
+      });
+    } else {
+      dispatch({
+        type: problemConstants.READ_PROBLEM_SCORE_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: problemConstants.READ_PROBLEM_SCORE_FAIL,
+      errors: err,
+    });
+  }
+};
+
 export {
   browseChallengeOverview,
   editChallenge,
@@ -779,4 +889,8 @@ export {
   uploadTestcaseOutput,
   addTestcaseWithFile,
   readChallenge,
+  browseJudgeCases,
+  readTestcase,
+  readProblemScore,
+  readProblem,
 };
