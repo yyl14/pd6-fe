@@ -25,7 +25,7 @@ import Icon from '../../../ui/icon/index';
 import {
   fetchTeams, addTeam, importTeam, downloadTeamFile,
 } from '../../../../actions/myClass/team';
-import { fetchCourse, fetchClass, downloadFile } from '../../../../actions/common/common';
+import { fetchCourse, fetchClass } from '../../../../actions/common/common';
 
 import NoMatch from '../../../noMatch';
 
@@ -83,14 +83,13 @@ export default function TeamList() {
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchClass(authToken, classId));
-    dispatch(downloadTeamFile(authToken, false));
   }, [authToken, classId, courseId, dispatch]);
 
   useEffect(() => {
-    if (!loading.addTeam) {
+    if (!loading.addTeam && !loading.importTeam) {
       dispatch(fetchTeams(authToken, classId));
     }
-  }, [authToken, classId, dispatch, loading.addTeam]);
+  }, [authToken, classId, dispatch, loading.addTeam, loading.importTeam]);
 
   const handleImportChange = (event) => {
     setImportInput(event.target.value);
@@ -114,12 +113,12 @@ export default function TeamList() {
   };
 
   const submitImport = () => {
+    if (importInput !== '' && selectedFile !== []) {
+      selectedFile.map((file) => (dispatch(importTeam(authToken, classId, file))));
+    }
     setShowImportDialog(false);
     clearImportInput();
     setSelectedFile([]);
-    if (importInput !== '' && selectedFile !== []) {
-      dispatch(importTeam(authToken, classId, selectedFile));
-    }
   };
 
   const submitAdd = () => {
@@ -132,13 +131,13 @@ export default function TeamList() {
 
   const downloadTemplate = () => {
     setShowImportDialog(false);
-    dispatch(downloadFile(authToken, teams.template));
+    dispatch(downloadTeamFile(authToken));
   };
 
+  if (loading.fetchTeams || commonLoading.fetchCourse || commonLoading.fetchClass) {
+    return <div>loading...</div>;
+  }
   if (courses[courseId] === undefined || classes[classId] === undefined) {
-    if (loading.fetchTeams || commonLoading.fetchCourse || commonLoading.fetchClass) {
-      return <div>loading...</div>;
-    }
     return <NoMatch />;
   }
 
@@ -182,6 +181,7 @@ export default function TeamList() {
         ]}
         data={
           teamIds.map((id) => ({
+            id: teams[id].id,
             label: teams[id].label,
             teamName: teams[id].name,
             path: `/my-class/${courseId}/${classId}/team/${id}`,
