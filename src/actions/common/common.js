@@ -163,7 +163,7 @@ const fetchAllClasses = (token) => async (dispatch) => {
     if (!res.data.success) {
       throw new Error(res.data.error);
     }
-    dispatch({ type: commonConstants.FETCH_ALL_CLASSES_SUCCESS, payload: res.data.data });
+    dispatch({ type: commonConstants.FETCH_ALL_CLASSES_SUCCESS, payload: res.data.data.data });
   } catch (err) {
     dispatch({
       type: commonConstants.FETCH_ALL_CLASSES_FAIL,
@@ -181,7 +181,7 @@ const fetchClass = (token, classId) => async (dispatch) => {
     };
     dispatch({ type: commonConstants.FETCH_CLASS_START });
     const res = await agent.get(`/class/${classId}`, auth);
-    dispatch({ type: commonConstants.FETCH_CLASS_SUCCESS, payload: res.data.data.data });
+    dispatch({ type: commonConstants.FETCH_CLASS_SUCCESS, payload: res.data.data });
   } catch (err) {
     dispatch({
       type: commonConstants.FETCH_CLASS_FAIL,
@@ -199,7 +199,7 @@ const fetchAccount = (token, accountId) => async (dispatch) => {
     };
     dispatch({ type: commonConstants.FETCH_ACCOUNT_REQUEST });
     const res = await agent.get(`/account/${accountId}`, auth);
-    dispatch({ type: commonConstants.FETCH_ACCOUNT_SUCCESS, payload: res.data.data.data });
+    dispatch({ type: commonConstants.FETCH_ACCOUNT_SUCCESS, payload: res.data.data });
   } catch (err) {
     dispatch({
       type: commonConstants.FETCH_ACCOUNT_FAIL,
