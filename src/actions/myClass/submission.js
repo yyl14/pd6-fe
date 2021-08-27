@@ -39,38 +39,38 @@ const fetchSubmission = (token, submissionId) => (dispatch) => {
   agent.get(`/submission/${submissionId}`, auth)
     .then((res) => {
       if (res.data.success) {
-        if (res.data.data.content_file_uuid !== null && res.data.data.filename !== null) {
+        if (res.data.data.data.content_file_uuid !== null && res.data.data.data.filename !== null) {
           const config = {
             headers: {
               'Auth-Token': token,
             },
             params: {
-              filename: res.data.data.filename,
+              filename: res.data.data.data.filename,
               as_attachment: false,
             },
           };
-          agent.get(`/s3-file/${res.data.data.content_file_uuid}/url`, config)
+          agent.get(`/s3-file/${res.data.data.data.content_file_uuid}/url`, config)
             .then((res2) => {
               if (res2.data.success) {
-                fetch(res2.data.data.url)
+                fetch(res2.data.data.data.url)
                   .then((r) => r.text())
                   .then((t) => {
                     dispatch({
                       type: submissionConstants.FETCH_SUBMISSION_SUCCESS,
-                      payload: { submissionId, data: { ...res.data.data, content: t.toString() } },
+                      payload: { submissionId, data: { ...res.data.data.data, content: t.toString() } },
                     });
                   });
               } else {
                 dispatch({
                   type: submissionConstants.FETCH_SUBMISSION_SUCCESS,
-                  payload: { submissionId, data: res.data.data },
+                  payload: { submissionId, data: res.data.data.data },
                 });
               }
             });
         } else {
           dispatch({
             type: submissionConstants.FETCH_SUBMISSION_SUCCESS,
-            payload: { submissionId, data: res.data.data },
+            payload: { submissionId, data: res.data.data.data },
           });
         }
       } else {
