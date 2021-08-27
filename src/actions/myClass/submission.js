@@ -64,15 +64,9 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
     };
 
     const accountIds = data.map((item) => item.account_id);
-    // console.log('account_ids: ', accountIds);
-    const config3 = {
-      headers: { 'auth-token': token },
-      params: {
-        account_ids: accountIds,
-      },
-    };
+    const query = accountIds.reduce((acc, id) => acc.concat('account_ids=', id.toString(), '&'), '/account-summary/batch?').slice(0, -1);
 
-    const res2 = await agent.get('/account-summary/batch?account_ids=1&account_ids=2&account_ids=3&account_ids=4&account_ids=5&account_ids=6&account_ids=7&account_ids=8', config2);
+    const res2 = await agent.get(query, config2);
 
     // use submission id to get status
     const res3 = await Promise.all(

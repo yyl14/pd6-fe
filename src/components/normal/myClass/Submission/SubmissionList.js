@@ -155,6 +155,7 @@ export default function SubmissionList() {
         ]}
         reduxData={submissions}
         reduxDataToRows={(item) => ({
+          id: item.id,
           ID: item.id,
           Username: accounts.byId[item.account_id] ? accounts.byId[item.account_id].username : '',
           'Student ID': accounts.byId[item.account_id] ? accounts.byId[item.account_id].student_id : '',
