@@ -17,7 +17,9 @@ import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
-import { browseChallengeOverview, editChallenge, browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
+import {
+  browseChallengeOverview, editChallenge, browseTasksUnderChallenge, readProblemScore,
+} from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -64,6 +66,12 @@ export default function ChallengeInfo() {
 
   useEffect(() => {
     if (challenges[challengeId] !== undefined) {
+      challenges[challengeId].problemIds.map((id) => dispatch(readProblemScore(authToken, id)));
+    }
+  }, [authToken, challengeId, challenges, dispatch]);
+
+  useEffect(() => {
+    if (challenges[challengeId] !== undefined) {
       if (currentTime.isBefore(moment(challenges[challengeId].start_time))) {
         setStatus('Not Yet');
       } else if (currentTime.isBefore(moment(challenges[challengeId].end_time))) {
@@ -84,7 +92,7 @@ export default function ChallengeInfo() {
           challenges[challengeId].problemIds
             .map((id) => ({
               challenge_label: problems[id].challenge_label,
-              score: problems[id].full_score,
+              score: problems[id].score,
               id: `coding-${id}`,
             }))
             .concat(
@@ -100,7 +108,7 @@ export default function ChallengeInfo() {
         );
       }
     }
-  }, [authToken, challengeId, challenges, essays, loading.browseTasksUnderChallenge, peerReviews, problems]);
+  }, [authToken, challengeId, challenges, essays, peerReviews, problems]);
 
   if (challenges[challengeId] === undefined) {
     if (!loading.browseChallengeOverview) {
@@ -143,30 +151,31 @@ export default function ChallengeInfo() {
           </AlignedText>
         </>
       </SimpleBar>
-      <SimpleBar title="Overview" />
-      <SimpleTable
-        isEdit={false}
-        hasDelete={false}
-        columns={[
-          {
-            id: 'challenge_label',
-            label: 'Label',
-            minWidth: 30,
-            align: 'center',
-            width: 400,
-            type: 'string',
-          },
-          {
-            id: 'score',
-            label: 'Score',
-            minWidth: 50,
-            align: 'center',
-            width: 600,
-            type: 'string',
-          },
-        ]}
-        data={tableData}
-      />
+      <SimpleBar title="Overview">
+        <SimpleTable
+          isEdit={false}
+          hasDelete={false}
+          columns={[
+            {
+              id: 'challenge_label',
+              label: 'Label',
+              minWidth: 30,
+              align: 'center',
+              width: 300,
+              type: 'string',
+            },
+            {
+              id: 'score',
+              label: 'Score',
+              minWidth: 50,
+              align: 'center',
+              width: 600,
+              type: 'string',
+            },
+          ]}
+          data={tableData}
+        />
+      </SimpleBar>
     </>
   );
 }
