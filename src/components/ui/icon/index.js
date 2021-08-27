@@ -23,6 +23,7 @@ import CodeIcon from '@material-ui/icons/Code';
 import ErrorIcon from '@material-ui/icons/Error';
 
 import { ReactComponent as Dots } from './9dots.svg';
+import { ReactComponent as AddBox } from './addBox.svg';
 import { ReactComponent as Advancedsearch } from './advancedSearch.svg';
 import { ReactComponent as Challenge } from './challenge.svg';
 import { ReactComponent as Class } from './class.svg';
@@ -33,10 +34,12 @@ import { ReactComponent as Download } from './download.svg';
 import { ReactComponent as Expand } from './expand.svg';
 import { ReactComponent as Folder } from './folder.svg';
 import { ReactComponent as Grade } from './grade.svg';
+import { ReactComponent as Info } from './info.svg';
 import { ReactComponent as Overview } from './overview.svg';
 import { ReactComponent as Paper } from './paper.svg';
 import { ReactComponent as Peerreview } from './peerReview.svg';
 import { ReactComponent as Project } from './project.svg';
+import { ReactComponent as Setting } from './setting.svg';
 import { ReactComponent as Statistic } from './statistic.svg';
 import { ReactComponent as Submission } from './submission.svg';
 import { ReactComponent as Trash } from './trash.svg';
@@ -94,6 +97,7 @@ export default {
   CodeIcon,
   ErrorIcon,
   Dots,
+  AddBox,
   Advancedsearch,
   Challenge,
   Class,
@@ -105,10 +109,12 @@ export default {
   Expand,
   Folder,
   Grade,
+  Info,
   Overview,
   Paper,
   Peerreview,
   Project,
+  Setting,
   Statistic,
   Submission,
   Trash,
