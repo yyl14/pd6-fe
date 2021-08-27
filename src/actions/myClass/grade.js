@@ -12,7 +12,7 @@ export const fetchClassGrade = (token, classId) => async (dispatch) => {
     const res = await agent.get(`/class/${classId}/grade`, auth);
     dispatch({
       type: gradeConstants.FETCH_CLASS_GRADE_SUCCESS,
-      payload: { classId, data: res.data.data },
+      payload: { classId, data: res.data.data.data },
     });
   } catch (err) {
     dispatch({
@@ -30,14 +30,11 @@ export const addClassGrade = (token, classId, file) => async (dispatch) => {
       'Content-Type': 'multipart/form-data',
     },
   };
-
-  const blob = new Blob([file]);
   const formData = new FormData();
-  formData.append('grade_file', blob);
+  formData.append('grade_file', file);
 
   try {
     const res = await agent.post(`/class/${classId}/grade`, formData, auth);
-    // console.log(res.data);
     if (res.data.success) {
       dispatch({
         type: gradeConstants.ADD_CLASS_GRADE_SUCCESS,
@@ -64,7 +61,7 @@ export const fetchAccountGrade = (token, accountId) => (dispatch) => {
     .then((res) => {
       dispatch({
         type: gradeConstants.FETCH_ACCOUNT_GRADE_SUCCESS,
-        payload: { accountId, data: res.data.data },
+        payload: { accountId, data: res.data.data.data },
       });
     })
     .catch((err) => {

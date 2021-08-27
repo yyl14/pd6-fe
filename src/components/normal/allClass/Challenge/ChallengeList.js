@@ -73,7 +73,6 @@ export default function ChallengeList() {
   });
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState('');
-  const [isManager, setIsManager] = useState(false);
 
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.challenge);
@@ -89,58 +88,39 @@ export default function ChallengeList() {
   }, [dispatch, authToken, classId, courseId]);
 
   useEffect(() => {
+    // console.log(loading.addChallenge);
     if (!loading.addChallenge) {
       dispatch(fetchChallenges(authToken, classId));
     }
   }, [authToken, classId, dispatch, loading.addChallenge]);
 
   useEffect(() => {
-    if (challengesID !== []) {
-      challengesID.map((id) => {
-        if (currentTime.isBefore(moment(challenges[id].start_time))) {
-          challenges[id].status = 'Not Yet';
-        } else if (currentTime.isBefore(moment(challenges[id].end_time))) {
-          challenges[id].status = 'Opened';
-        } else {
-          challenges[id].status = 'Closed';
-        }
-        return challenges[id].status;
-      });
-      if (isManager) {
-        setTableData(
-          challengesID.reverse().map((id) => ({
-            title: challenges[id].title,
-            path: `/my-class/${courseId}/${classId}/challenge/${id}`,
-            startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
-            endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
-            status: challenges[id].status,
-          })),
-        );
-      } else {
-        setTableData(
-          challengesID.filter((id) => challenges[id].status !== 'Not Yet').reverse().map((id) => ({
-            title: challenges[id].title,
-            path: `/my-class/${courseId}/${classId}/challenge/${id}`,
-            startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
-            endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
-            status: challenges[id].status,
-          })),
-        );
+    const getStatus = (id) => {
+      if (currentTime.isBefore(moment(challenges[id].start_time))) {
+        return 'Not Yet';
       }
-    }
-  }, [challenges, challengesID, classId, courseId, currentTime, isManager]);
+      if (currentTime.isBefore(moment(challenges[id].end_time))) {
+        return 'Opened';
+      }
+      return 'Closed';
+    };
 
-  useEffect(() => {
-    userClasses.map((item) => {
-      if (`${item.class_id}` === classId) {
-        // console.log(item.role);
-        if (item.role === 'MANAGER') {
-          setIsManager(true);
-        }
-      }
-      return <></>;
-    });
-  }, [classId, userClasses]);
+    // console.log(challenges);
+    if (classes[classId]) {
+      setTableData(
+        classes[classId].challengeIds
+          .filter((id) => getStatus(id) !== 'Not Yet')
+          .reverse()
+          .map((id) => ({
+            title: challenges[id].title,
+            path: `/all-class/${courseId}/${classId}/challenge/${id}`,
+            startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
+            endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
+            status: getStatus(id),
+          })),
+      );
+    }
+  }, [challenges, challengesID, classId, classes, courseId, currentTime]);
 
   if (loading.fetchChallenges || courses[courseId] === undefined || classes[classId] === undefined) {
     return <div>loading...</div>;
@@ -162,13 +142,13 @@ export default function ChallengeList() {
       setErrorText("Can't be empty");
       return;
     }
-    const body = ({
+    const body = {
       title: inputs.title,
       scoredBy: inputs.scoredBy === 'Last Score' ? 'LAST' : 'BEST',
       showTime: inputs.showTime === 'On End Time' ? 'END_TIME' : 'START_TIME',
       startTime: dateRangePicker[0].startDate.toISOString(),
       endTime: dateRangePicker[0].endDate.toISOString(),
-    });
+    };
     dispatch(addChallenge(authToken, classId, body));
     setPopUp(false);
     setInputs({
@@ -204,25 +184,11 @@ export default function ChallengeList() {
   return (
     <>
       <Typography className={className.pageHeader} variant="h3">
-        {courses[courseId].name}
-        {' '}
-        {classes[classId].name}
-        {' '}
-        / Challenge
+        {`${courses[courseId].name} ${classes[classId].name} / Challenge`}
       </Typography>
 
       <CustomTable
         hasSearch
-        buttons={
-          isManager ? (
-            <>
-              <Button color="primary" onClick={() => setPopUp(true)}>
-                <Icon.Add style={{ color: 'white' }} />
-              </Button>
-            </>
-          )
-            : <></>
-        }
         data={tableData}
         columns={[
           {
@@ -261,68 +227,6 @@ export default function ChallengeList() {
         hasLink
         linkName="path"
       />
-      <Dialog
-        open={popUp}
-        keepMounted
-        onClose={() => setPopUp(false)}
-        maxWidth="md"
-      >
-        <DialogTitle>
-          <Typography variant="h4">Create New Challenge</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <AlignedText text="Class" childrenType="text" maxWidth="md">
-            <Typography>
-              {courses[courseId].name}
-              {' '}
-              {classes[classId].name}
-            </Typography>
-          </AlignedText>
-          <AlignedText text="Title" childrenType="field" maxWidth="md">
-            <TextField
-              value={inputs.title}
-              name="title"
-              onChange={(e) => handleChange(e)}
-              error={error}
-              helperText={errorText}
-            />
-          </AlignedText>
-          <div className={className.gap}>
-            <DateRangePicker vertical value={dateRangePicker} setValue={setDateRangePicker} />
-          </div>
-          <div className={className.row}>
-            <div className={className.item}>
-              <Typography>Scored by</Typography>
-            </div>
-            <FormControl variant="outlined" className={className.textfield}>
-              <Select value={inputs.scoredBy} name="scoredBy" onChange={(e) => handleChange(e)}>
-                <MenuItem value="Last Score">Last Score</MenuItem>
-                <MenuItem value="Best Score">Best Score</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-          <div className={className.row}>
-            <div className={className.item}>
-              <Typography>Shown in problem set</Typography>
-            </div>
-            <FormControl variant="outlined" className={className.textfield}>
-              <Select value={inputs.showTime} name="showTime" onChange={(e) => handleChange(e)}>
-                <MenuItem value="On End Time">On End Time</MenuItem>
-                <MenuItem value="On Start Time">On Start Time</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancel} color="default">
-            Cancel
-          </Button>
-          <Button onClick={handleAdd} color="primary">
-            Create
-          </Button>
-        </DialogActions>
-      </Dialog>
-
     </>
   );
 }

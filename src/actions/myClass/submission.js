@@ -18,7 +18,7 @@ const fetchAllSubmissions = (token, accountId, problemId, languageId) => (dispat
       dispatch({
         type: submissionConstants.FETCH_ALL_SUBMISSIONS_SUCCESS,
         payload: {
-          accountId, problemId, languageId, data: res.data.data,
+          accountId, problemId, languageId, data: res.data.data.data,
         },
       });
     })

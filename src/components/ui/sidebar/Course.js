@@ -53,21 +53,21 @@ export default function Course({
                 return {
                   type,
                   text: name,
-                  icon: <Icon.PeopleIcon />,
+                  icon: <Icon.Class />,
                   path: `${baseURL}/course/${id}/class-list`,
                 };
               case 'CONTEST':
                 return {
                   type,
                   text: name,
-                  icon: <Icon.StarIcon />,
+                  icon: <Icon.Star />,
                   path: `${baseURL}/course/${id}/class-list`,
                 };
               default:
                 return {
                   type,
                   text: name,
-                  icon: <Icon.PeopleIcon />,
+                  icon: <Icon.Class />,
                   path: `${baseURL}/course/${id}/class-list`,
                 };
             }
@@ -76,13 +76,13 @@ export default function Course({
             {
               type: 'LESSON',
               text: 'Lesson',
-              icon: <Icon.AddBoxIcon />,
+              icon: <Icon.Newadd />,
               path: `${baseURL}/course/${courseId}/class-list/lesson`,
             },
             {
               type: 'CONTEST',
               text: 'Contest',
-              icon: <Icon.AddBoxIcon />,
+              icon: <Icon.Newadd />,
               path: `${baseURL}/course/${courseId}/class-list/contest`,
             },
           ]),

@@ -76,6 +76,7 @@ const allIds = (state = [], action) => {
     }
     case commonConstants.FETCH_CLASS_SUCCESS: {
       const { id } = action.payload;
+      // console.log(id);
       return [...new Set([id, ...state])];
     }
     default:

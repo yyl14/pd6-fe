@@ -21,6 +21,9 @@ const initialState = {
   uploadTestcaseInput: null,
   uploadTestcaseOutput: null,
   addTestcase: null,
+  browseJudgeCases: null,
+  readTestcase: null,
+  readProblemScore: null,
 };
 
 export default function problem(state = initialState, action) {
@@ -78,6 +81,11 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         readJudgment: action.errors,
+      };
+    case problemConstants.BROWSE_JUDGE_CASES_FAIL:
+      return {
+        ...state,
+        browseJudgeCases: action.errors,
       };
     case problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_FAIL:
       return {
@@ -143,6 +151,16 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         addTestcase: action.errors,
+      };
+    case problemConstants.READ_TESTCASE_FAIL:
+      return {
+        ...state,
+        readTestcase: action.errors,
+      };
+    case problemConstants.READ_PROBLEM_SCORE_FAIL:
+      return {
+        ...state,
+        readProblemScore: action.errors,
       };
     default: {
       return state;

@@ -11,7 +11,7 @@ const byId = (state = {}, action) => {
       const { submissionId, data } = action.payload;
       return {
         ...state,
-        [submissionId]: data,
+        [parseInt(submissionId, 10)]: data,
       };
     }
     case problemConstants.READ_SUBMISSION_SUCCESS: {

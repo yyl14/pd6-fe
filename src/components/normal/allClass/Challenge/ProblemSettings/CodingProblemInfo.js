@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import 'katex/dist/katex.min.css';
+import Latex from 'react-latex-next';
 import {
   Typography,
   Button,
@@ -22,7 +24,12 @@ import Icon from '../../../../ui/icon/index';
 import NoMatch from '../../../../noMatch';
 
 import {
-  browseTestcase, browseAssistingData, deleteAssistingData, deleteTestcase, deleteProblem,
+  browseTestcase,
+  browseAssistingData,
+  deleteAssistingData,
+  deleteTestcase,
+  deleteProblem,
+  browseTasksUnderChallenge,
 } from '../../../../../actions/myClass/problem';
 import { fetchClass, fetchCourse, downloadFile } from '../../../../../actions/common/common';
 
@@ -36,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end',
+  },
+  content: {
+    whiteSpace: 'pre-line',
   },
 }));
 
@@ -53,28 +63,14 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const courses = useSelector((state) => state.courses.byId);
   const problems = useSelector((state) => state.problem.byId);
   const testcases = useSelector((state) => state.testcases.byId);
-  const sampleDataIds = problems[problemId] === undefined ? [] : problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
-  const testcaseDataIds = problems[problemId] === undefined ? [] : problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
+  const [sampleDataIds, setSampleDataIds] = useState([]);
+  const [testcaseDataIds, setTestcaseDataIds] = useState([]);
+
   const assistingData = useSelector((state) => state.assistingData.byId);
 
   const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
-
-  const [deletePopUp, setDeletePopUp] = useState(false);
-
-  const handleDelete = () => {
-    problems[problemId].assistingDataIds.forEach((id) => {
-      dispatch(deleteAssistingData(authToken, id));
-    });
-    problems[problemId].testcaseIds.forEach((id) => {
-      dispatch(deleteTestcase(authToken, id));
-    });
-    dispatch(deleteProblem(authToken, problemId));
-
-    setDeletePopUp(false);
-    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
-  };
 
   const downloadAllAssistingFile = () => {
     const files = problems[problemId].assistingDataIds.map((id) => ({
@@ -82,81 +78,95 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       filename: assistingData[id].filename,
       as_attachment: false,
     }));
-    files.forEach((file) => {
-      dispatch((downloadFile(authToken, file)));
-    });
+    files.map((file) => dispatch(downloadFile(authToken, file)));
   };
 
   const downloadAllSampleFile = () => {
     const files = sampleDataIds.reduce((acc, id) => {
       if (testcases[id].input_file_uuid !== null && testcases[id].output_file_uuid !== null) {
         console.log('hello');
-        return [...acc, {
-          uuid: testcases[id].input_file_uuid,
-          filename: testcases[id].input_filename,
-          as_attachment: false,
-        }, {
-          uuid: testcases[id].output_file_uuid,
-          filename: testcases[id].output_filename,
-          as_attachment: false,
-        }];
+        return [
+          ...acc,
+          {
+            uuid: testcases[id].input_file_uuid,
+            filename: testcases[id].input_filename,
+            as_attachment: false,
+          },
+          {
+            uuid: testcases[id].output_file_uuid,
+            filename: testcases[id].output_filename,
+            as_attachment: false,
+          },
+        ];
       }
       if (testcases[id].input_file_uuid !== null) {
-        return [...acc, {
-          uuid: testcases[id].input_file_uuid,
-          filename: testcases[id].input_filename,
-          as_attachment: false,
-        }];
+        return [
+          ...acc,
+          {
+            uuid: testcases[id].input_file_uuid,
+            filename: testcases[id].input_filename,
+            as_attachment: false,
+          },
+        ];
       }
       if (testcases[id].output_file_uuid !== null) {
-        return [...acc, {
-          uuid: testcases[id].output_file_uuid,
-          filename: testcases[id].output_filename,
-          as_attachment: false,
-        }];
+        return [
+          ...acc,
+          {
+            uuid: testcases[id].output_file_uuid,
+            filename: testcases[id].output_filename,
+            as_attachment: false,
+          },
+        ];
       }
 
       return acc;
     }, []);
-    console.log(files);
-    files.forEach((file) => {
-      dispatch((downloadFile(authToken, file)));
-    });
+    // console.log(files);
+    files.map((file) => dispatch(downloadFile(authToken, file)));
   };
 
   const downloadAllTestingFile = () => {
     const files = testcaseDataIds.reduce((acc, id) => {
       if (testcases[id].input_file_uuid !== null && testcases[id].output_file_uuid !== null) {
-        return [...acc, {
-          uuid: testcases[id].input_file_uuid,
-          filename: testcases[id].input_filename,
-          as_attachment: false,
-        }, {
-          uuid: testcases[id].output_file_uuid,
-          filename: testcases[id].output_filename,
-          as_attachment: false,
-        }];
+        return [
+          ...acc,
+          {
+            uuid: testcases[id].input_file_uuid,
+            filename: testcases[id].input_filename,
+            as_attachment: false,
+          },
+          {
+            uuid: testcases[id].output_file_uuid,
+            filename: testcases[id].output_filename,
+            as_attachment: false,
+          },
+        ];
       }
       if (testcases[id].input_file_uuid !== null) {
-        return [...acc, {
-          uuid: testcases[id].input_file_uuid,
-          filename: testcases[id].input_filename,
-          as_attachment: false,
-        }];
+        return [
+          ...acc,
+          {
+            uuid: testcases[id].input_file_uuid,
+            filename: testcases[id].input_filename,
+            as_attachment: false,
+          },
+        ];
       }
       if (testcases[id].output_file_uuid !== null) {
-        return [...acc, {
-          uuid: testcases[id].output_file_uuid,
-          filename: testcases[id].output_filename,
-          as_attachment: false,
-        }];
+        return [
+          ...acc,
+          {
+            uuid: testcases[id].output_file_uuid,
+            filename: testcases[id].output_filename,
+            as_attachment: false,
+          },
+        ];
       }
 
       return acc;
     }, []);
-    files.forEach((file) => {
-      dispatch((downloadFile(authToken, file)));
-    });
+    files.map((file) => dispatch(downloadFile(authToken, file)));
   };
 
   const sampleTrans2no = (id) => {
@@ -180,14 +190,27 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   };
 
   useEffect(() => {
-    dispatch((browseTestcase(authToken, problemId)));
-    dispatch((browseAssistingData(authToken, problemId)));
-  }, [authToken, dispatch, problemId]);
+    if (problems[problemId] && problems[problemId].testcaseIds) {
+      setSampleDataIds(problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample));
+      setTestcaseDataIds(problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample));
+    }
+  }, [problems, problemId, testcases]);
+
+  // console.log(problems);
 
   useEffect(() => {
-    dispatch((fetchClass(authToken, classId)));
-    dispatch((fetchCourse(authToken, courseId)));
-  }, [authToken, classId, courseId, dispatch]);
+    dispatch(browseTasksUnderChallenge(authToken, challengeId));
+  }, [authToken, challengeId, dispatch]);
+
+  useEffect(() => {
+    dispatch(browseTestcase(authToken, problemId));
+    dispatch(browseAssistingData(authToken, problemId));
+  }, [authToken, dispatch, problemId]);
+
+  // useEffect(() => {
+  //   dispatch(fetchClass(authToken, classId));
+  //   dispatch(fetchCourse(authToken, courseId));
+  // }, [authToken, classId, courseId, dispatch]);
 
   if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
     return <div>loading...</div>;
@@ -200,16 +223,31 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   return (
     <>
       <SimpleBar title="Title">
-        <Typography variant="body2">{problems[problemId] === undefined ? 'error' : problems[problemId].title}</Typography>
+        <Typography variant="body2">
+          {problems[problemId] === undefined ? 'error' : problems[problemId].title}
+        </Typography>
       </SimpleBar>
       <SimpleBar title="Description">
-        <Typography variant="body2">{problems[problemId] === undefined ? 'error' : problems[problemId].description}</Typography>
+        <Typography variant="body2" className={classNames.content}>
+          <Latex>{problems[problemId].description}</Latex>
+        </Typography>
       </SimpleBar>
       <SimpleBar title="About Input and Output">
-        <Typography variant="body2">{problems[problemId] === undefined ? 'error' : problems[problemId].io_description}</Typography>
+        <Typography variant="body2" className={classNames.content}>
+          <Latex>{problems[problemId].io_description}</Latex>
+        </Typography>
       </SimpleBar>
+      {problems[problemId].source !== '' && (
+        <SimpleBar title="Source">
+          <Typography variant="body2">{problems[problemId].source}</Typography>
+        </SimpleBar>
+      )}
+      {problems[problemId].hint !== '' && (
+        <SimpleBar title="Hint">
+          <Typography variant="body2">{problems[problemId].hint}</Typography>
+        </SimpleBar>
+      )}
       <SimpleBar title="Sample">
-        {role === 'MANAGER' && <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllSampleFile}>Download All Files</Button>}
         <SimpleTable
           isEdit={false}
           hasDelete={false}
@@ -239,14 +277,12 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
               type: 'string',
             },
           ]}
-          data={
-            sampleDataIds.map((id) => ({
-              id: testcases[id].id,
-              no: sampleTrans2no(id),
-              time_limit: testcases[id].time_limit,
-              memory_limit: testcases[id].memory_limit,
-            }))
-          }
+          data={sampleDataIds.map((id) => ({
+            id,
+            no: sampleTrans2no(id),
+            time_limit: testcases[id].time_limit,
+            memory_limit: testcases[id].memory_limit,
+          }))}
         />
         <div className={classNames.sampleArea}>
           <Grid container spacing={3}>
@@ -260,7 +296,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         </div>
       </SimpleBar>
       <SimpleBar title="Testing Data">
-        {role === 'MANAGER' && <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllTestingFile}>Download All Files</Button>}
         <SimpleTable
           isEdit={false}
           hasDelete={false}
@@ -298,77 +333,15 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
               type: 'string',
             },
           ]}
-          data={
-            testcaseDataIds.map((id) => ({
-              id: testcases[id].id,
-              no: testcaseTrans2no(id),
-              time_limit: testcases[id].time_limit,
-              memory_limit: testcases[id].memory_limit,
-              score: testcases[id].score,
-            }))
-          }
+          data={testcaseDataIds.map((id) => ({
+            id,
+            no: testcaseTrans2no(id),
+            time_limit: testcases[id].time_limit,
+            memory_limit: testcases[id].memory_limit,
+            score: testcases[id].score,
+          }))}
         />
       </SimpleBar>
-      { role === 'MANAGER'
-        && (
-        <SimpleBar title="Assisting Data (Optional)">
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllAssistingFile}>Download All Files</Button>
-          <SimpleTable
-            isEdit={false}
-            hasDelete={false}
-            columns={[
-              {
-                id: 'filename',
-                label: 'File Name',
-                minWidth: 40,
-                align: 'center',
-                width: 200,
-                type: 'string',
-              },
-            ]}
-            data={
-            problems[problemId] !== undefined
-              ? problems[problemId].assistingDataIds.map((id) => ({
-                filename: assistingData[id].filename,
-              }))
-              : []
-          }
-          />
-        </SimpleBar>
-        )}
-      { role === 'MANAGER'
-      && (
-      <SimpleBar title="Delete Task" childrenButtons={<Button color="secondary" onClick={() => setDeletePopUp(true)}>Delete</Button>}>
-        <Typography variant="body1">Once you delete a task, there is no going back. Please be certain.</Typography>
-      </SimpleBar>
-      )}
-      <Dialog open={deletePopUp} onClose={() => setDeletePopUp(false)} maxWidth="md">
-        <DialogTitle>
-          <Typography variant="h4">Delete Problem</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText variant="body1" color="secondary">
-            <AlignedText text="Class" childrenType="text">
-              <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
-            </AlignedText>
-            <AlignedText text="Title" childrenType="text">
-              {problems[problemId] === undefined ? 'error' : problems[problemId].title}
-            </AlignedText>
-            <AlignedText text="Label" childrenType="text">
-              <Typography>{problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label}</Typography>
-            </AlignedText>
-            <Typography variant="body2" color="textPrimary">
-              Once you delete a problem, there is no going back. Please be certain.
-            </Typography>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeletePopUp(false)}>Cancel</Button>
-          <Button color="secondary" onClick={handleDelete}>
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }
