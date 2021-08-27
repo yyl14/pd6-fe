@@ -51,114 +51,88 @@ export default function MyClass({
       && classes[classId] !== undefined
     ) {
       // console.log(userClasses);
-      setDisplay([]);
-      userClasses.map((userClass, id) => {
-        if (userClass.class_id === Number(classId)) {
-          // current class
-          setDisplay((prevDisplay) => [...prevDisplay, 1]); // unfold
-        } else {
-          setDisplay((prevDisplay) => [...prevDisplay, 0]); // fold
-        }
-
-        setTitles((prevTitles) => [
-          ...prevTitles,
-          // temp. solution, userClass should contain course name
-          `${courses[userClass.course_id] ? courses[userClass.course_id].name : 'Unknown'} ${userClass.class_name}`,
-        ]);
-        if (userClass.role === 'MANAGER') {
-          setTAicons((prevTAicons) => [
-            ...prevTAicons,
-            <Icon.TA key={userClass.class_id} style={{ marginLeft: '100px' }} />,
-          ]);
-          setItemLists((prevItemLists) => [
-            ...prevItemLists,
-            [
-              {
-                text: 'Challenge',
-                icon: <Icon.Challenge />,
-                path: `${baseURL}/${userClass.course_id}/${userClass.class_id}/challenge`,
-              },
-              {
-                text: 'Submission',
-                icon: <Icon.Submission />,
-                path: `${baseURL}/${userClass.course_id}/${userClass.class_id}/submission`,
-              },
-              {
-                text: 'Grade',
-                icon: <Icon.Grade />,
-                path: `${baseURL}/${userClass.course_id}/${userClass.class_id}/grade`,
-              },
-              {
-                text: 'Team',
-                icon: <Icon.Team />,
-                path: `${baseURL}/${userClass.course_id}/${userClass.class_id}/team`,
-              },
-              {
-                text: 'Member',
-                icon: <Icon.Member />,
-                path: `${baseURL}/${userClass.course_id}/${userClass.class_id}/member`,
-              },
-            ],
-          ]);
-        } else if (userClass.role === 'NORMAL') {
-          setTAicons((prevTAicons) => [...prevTAicons, '']);
-          setItemLists((prevItemLists) => [
-            ...prevItemLists,
-            [
-              {
-                text: 'Challenge',
-                icon: <Icon.Challenge />,
-                path: `${baseURL}/${userClass.course_id}/${userClass.class_id}/challenge`,
-              },
-              {
-                text: 'Grade',
-                icon: <Icon.Grade />,
-                path: `${baseURL}/${userClass.course_id}/${userClass.class_id}/grade`,
-              },
-              {
-                text: 'Team',
-                icon: <Icon.Team />,
-                path: `${baseURL}/${userClass.course_id}/${userClass.class_id}/team`,
-              },
-              {
-                text: 'Member',
-                icon: <Icon.Member />,
-                path: `${baseURL}/${userClass.course_id}/${userClass.class_id}/member`,
-              },
-            ],
-          ]);
-        } else if (userClass.role === 'GUEST') {
-          setTAicons((prevTAicons) => [...prevTAicons, '']);
-          setItemLists((prevItemLists) => [
-            ...prevItemLists,
-            [
-              {
-                text: 'Challenge',
-                icon: <Icon.Challenge />,
-                path: `${baseURL}/${userClass.course_id}/${userClass.class_id}/challenge`,
-              },
-            ],
-          ]);
-        } else {
-          console.log('Why are you here');
-        }
-        return userClass;
-      });
+      setDisplay(userClasses.map((item) => (item.class_id === Number(classId) ? 1 : 0)));
+      setTitles(userClasses.map((item) => `${item.course_name} ${item.class_name}`));
+      setTAicons(
+        userClasses.map((item) => (item.role === 'MANAGER' ? <Icon.TA key={item.class_id} style={{ marginLeft: '100px' }} /> : '')),
+      );
+      setItemLists(
+        userClasses.map((item) => {
+          switch (item.role) {
+            case 'MANAGER': {
+              return [
+                {
+                  text: 'Challenge',
+                  icon: <Icon.Challenge />,
+                  path: `${baseURL}/${item.course_id}/${item.class_id}/challenge`,
+                },
+                {
+                  text: 'Submission',
+                  icon: <Icon.Submission />,
+                  path: `${baseURL}/${item.course_id}/${item.class_id}/submission`,
+                },
+                {
+                  text: 'Grade',
+                  icon: <Icon.Grade />,
+                  path: `${baseURL}/${item.course_id}/${item.class_id}/grade`,
+                },
+                {
+                  text: 'Team',
+                  icon: <Icon.Team />,
+                  path: `${baseURL}/${item.course_id}/${item.class_id}/team`,
+                },
+                {
+                  text: 'Member',
+                  icon: <Icon.Member />,
+                  path: `${baseURL}/${item.course_id}/${item.class_id}/member`,
+                },
+              ];
+            }
+            case 'NORMAL': {
+              return [
+                {
+                  text: 'Challenge',
+                  icon: <Icon.Challenge />,
+                  path: `${baseURL}/${item.course_id}/${item.class_id}/challenge`,
+                },
+                {
+                  text: 'Grade',
+                  icon: <Icon.Grade />,
+                  path: `${baseURL}/${item.course_id}/${item.class_id}/grade`,
+                },
+                {
+                  text: 'Team',
+                  icon: <Icon.Team />,
+                  path: `${baseURL}/${item.course_id}/${item.class_id}/team`,
+                },
+                {
+                  text: 'Member',
+                  icon: <Icon.Member />,
+                  path: `${baseURL}/${item.course_id}/${item.class_id}/member`,
+                },
+              ];
+            }
+            default: {
+              return [
+                {
+                  text: 'Challenge',
+                  icon: <Icon.Challenge />,
+                  path: `${baseURL}/${item.course_id}/${item.class_id}/challenge`,
+                },
+              ];
+            }
+          }
+        }),
+      );
     }
   }, [location.pathname, mode, courses, classes, userClasses, courseId, classId]);
 
   const foldMyClass = (id) => {
-    // console.log(id);
-    const updatedDisplay = [...display];
-    updatedDisplay[id] = 0;
-    setDisplay(updatedDisplay);
+    setDisplay(display.map((item, index) => (index === id ? 0 : item)));
   };
 
   const unfoldMyClass = (id) => {
-    // console.log(id);
-    const updatedDisplay = [...display];
-    updatedDisplay[id] = 1;
-    setDisplay(updatedDisplay);
+    setDisplay(display.map((item, index) => (index === id ? 1 : item)));
   };
 
   if (

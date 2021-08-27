@@ -53,8 +53,11 @@ export default function Challenge({
       history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
     };
     if (mode === 'challenge' && userClasses.length !== 0 && userClasses.find((x) => x.class_id === Number(classId))) {
-      console.log(userClasses);
-      if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER' && challenges[challengeId] !== undefined) {
+      // console.log(userClasses);
+      if (
+        userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER'
+        && challenges[challengeId] !== undefined
+      ) {
         // console.log(problems, essays, userClasses);
         setTAicon(<Icon.TA className={classNames.titleTA} />);
         setArrow(
@@ -82,7 +85,6 @@ export default function Challenge({
                 icon: <Icon.Info />,
                 path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
               },
-
             ]
               .concat(
                 problems.allIds
@@ -109,7 +111,6 @@ export default function Challenge({
                   path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/task`,
                 },
               ]),
-
           );
         } else {
           setItemList([
@@ -120,7 +121,10 @@ export default function Challenge({
             },
           ]);
         }
-      } else if (userClasses.find((x) => x.class_id === Number(classId)).role !== 'MANAGER' && challenges[challengeId] !== undefined) {
+      } else if (
+        userClasses.find((x) => x.class_id === Number(classId)).role !== 'MANAGER'
+        && challenges[challengeId] !== undefined
+      ) {
         setArrow(
           <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
             <Icon.ArrowBackRoundedIcon />
@@ -165,7 +169,11 @@ export default function Challenge({
           ]);
         }
       }
-    } else if (mode === 'submission' && userClasses.length !== 0 && userClasses.find((x) => x.class_id === Number(classId))) {
+    } else if (
+      mode === 'submission'
+      && userClasses.length !== 0
+      && userClasses.find((x) => x.class_id === Number(classId))
+    ) {
       if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleTA} />);
       }
@@ -187,7 +195,11 @@ export default function Challenge({
           path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`,
         },
       ]);
-    } else if (mode === 'submission_detail' && userClasses.length !== 0 && userClasses.find((x) => x.class_id === Number(classId))) {
+    } else if (
+      mode === 'submission_detail'
+      && userClasses.length !== 0
+      && userClasses.find((x) => x.class_id === Number(classId))
+    ) {
       if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleTA} />);
       }
