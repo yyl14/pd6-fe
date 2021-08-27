@@ -29,7 +29,7 @@ const fetchClassMembers = (token, classId) => async (dispatch) => {
     };
     dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_REQUEST });
     const res = await agent.get(`/class/${classId}/member`, auth);
-    dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_SUCCESS, payload: { classId, data: res.data.data } });
+    dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_SUCCESS, payload: { classId, data: res.data.data.data } });
   } catch (err) {
     dispatch({
       type: commonConstants.FETCH_CLASS_MEMBERS_FAIL,
@@ -163,7 +163,7 @@ const fetchAllClasses = (token) => async (dispatch) => {
     if (!res.data.success) {
       throw new Error(res.data.error);
     }
-    dispatch({ type: commonConstants.FETCH_ALL_CLASSES_SUCCESS, payload: res.data.data });
+    dispatch({ type: commonConstants.FETCH_ALL_CLASSES_SUCCESS, payload: res.data.data.data });
   } catch (err) {
     dispatch({
       type: commonConstants.FETCH_ALL_CLASSES_FAIL,
