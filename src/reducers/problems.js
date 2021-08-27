@@ -17,7 +17,7 @@ const byId = (state = {}, action) => {
           ...data,
           testcaseIds: [],
           assistingDataIds: [],
-          score: state[data.id] ? state[data.id].score : [],
+          score: state[data.id] ? state[data.id].score : '',
         },
       };
     }
