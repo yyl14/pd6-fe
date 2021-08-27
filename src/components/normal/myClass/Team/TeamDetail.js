@@ -105,10 +105,10 @@ export default function ChallengeList() {
     setEditTeamMember(true);
   };
 
+  if (loading.fetchTeams || loading.fetchTeamMember || commonLoading.fetchClassMember) {
+    return <div>loading...</div>;
+  }
   if (teams[teamId] === undefined || classMembers === undefined || teamMemberIds === undefined) {
-    if (loading.fetchTeams || loading.fetchTeamMember || commonLoading.fetchClassMember) {
-      return <div>loading...</div>;
-    }
     return <NoMatch />;
   }
   // console.log(tableData);

@@ -135,10 +135,10 @@ export default function TeamList() {
     dispatch(downloadFile(authToken, teams.template));
   };
 
+  if (loading.fetchTeams || commonLoading.fetchCourse || commonLoading.fetchClass) {
+    return <div>loading...</div>;
+  }
   if (courses[courseId] === undefined || classes[classId] === undefined) {
-    if (loading.fetchTeams || commonLoading.fetchCourse || commonLoading.fetchClass) {
-      return <div>loading...</div>;
-    }
     return <NoMatch />;
   }
 
