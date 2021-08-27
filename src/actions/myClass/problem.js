@@ -130,7 +130,7 @@ const readSubmission = (token, accountId, problemId) => async (dispatch) => {
     if (subInfo.data.success) {
       dispatch({
         type: problemConstants.READ_SUBMISSION_SUCCESS,
-        payload: subInfo.data.data,
+        payload: subInfo.data.data.data,
       });
     } else {
       dispatch({

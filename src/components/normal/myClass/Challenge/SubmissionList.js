@@ -69,24 +69,29 @@ export default function SubmissionList() {
   useEffect(() => {
     if (judgmentIds !== []) {
       setTableData(
-        submissionIds.map((id) => ({
-          key: id,
-          id,
-          submit_time: moment(submissions[id].submit_time).format('YYYY-MM-DD, HH:mm'),
-          status: judgmentIds.map((key) => {
-            if (judgments[key].submission_id === id) {
-              return judgments[key].status.toLowerCase().split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
-            }
-            return '-';
-          }),
-          score: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].score : '-')),
-          used_time: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].total_time : '-')),
-          used_memory: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].max_memory : '-')),
-          path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${id}`,
-        })),
+        submissionIds
+          .filter(
+            (id) => submissions[id].account_id === accountId
+            && submissions[id].problem_id === parseInt(problemId, 10),
+          )
+          .map((id) => ({
+            key: id,
+            id,
+            submit_time: moment(submissions[id].submit_time).format('YYYY-MM-DD, HH:mm'),
+            status: judgmentIds.map((key) => {
+              if (judgments[key].submission_id === id) {
+                return judgments[key].status.toLowerCase().split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
+              }
+              return '-';
+            }),
+            score: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].score : '-')),
+            used_time: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].total_time : '-')),
+            used_memory: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].max_memory : '-')),
+            path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${id}`,
+          })),
       );
     }
-  }, [challengeId, classId, courseId, judgmentIds, judgments, problemId, submissionIds, submissions]);
+  }, [accountId, challengeId, classId, courseId, judgmentIds, judgments, problemId, submissionIds, submissions]);
 
   if (challenges[challengeId] === undefined || problems[problemId] === undefined || submissions === undefined || judgments === undefined || loading.readProblemScore) {
     if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge && !loading.readJudgment && !loading.readProblemScore) {
