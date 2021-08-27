@@ -49,22 +49,24 @@ export default function SubmissionList() {
     dispatch(fetchAllChallengesProblems(authToken, classId));
   }, [authToken, classId, courseId, dispatch]);
 
-  if (
-    courses[courseId] === undefined
-    || classes[classId] === undefined
-  ) {
+  if (courses[courseId] === undefined || allClass[classId] === undefined) {
     if (commonLoading.fetchCourse || commonLoading.fetchClass) {
       return <div>loading...</div>;
     }
     return <NoMatch />;
   }
+  console.log('classes: ', allClass);
+  console.log('challenges: ', challenges);
+  console.log('problems: ', problems);
+  console.log('submissions: ', submissions);
+  console.log('judgments: ', judgments);
 
   return (
     <>
       <Typography variant="h3" className={classes.pageHeader}>
-        {`${courses[courseId].name} ${allClass[classId].name}/ Submission`}
+        {`${courses[courseId].name} ${allClass[classId].name} / Submission`}
       </Typography>
-      <AutoTable
+      {/* <AutoTable
         ident="Class Submission Table"
         hasFilter
         filterConfig={[
@@ -160,7 +162,7 @@ export default function SubmissionList() {
           'Request Method': item.request_method,
           'Access Time': moment(item.access_time).format('YYYY-MM-DD, HH:mm:ss'),
         })}
-      />
+      /> */}
     </>
   );
 }

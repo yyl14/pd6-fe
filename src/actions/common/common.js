@@ -272,10 +272,7 @@ const fetchAllChallengesProblems = (token, classId) => async (dispatch) => {
           });
         })),
     );
-
     const newProblems = problems.flat();
-    console.log('allChallenges: ', res.data.data);
-    console.log('newProblems: ', newProblems);
     dispatch({
       type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS,
       payload: { classId, challenges: res.data.data, problems: newProblems },
