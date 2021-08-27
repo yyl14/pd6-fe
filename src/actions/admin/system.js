@@ -69,7 +69,7 @@ const fetchAnnouncement = (token) => (dispatch) => {
   agent
     .get('/announcement', fetch)
     .then((res) => {
-      const { data } = res.data;
+      const { data } = res.data.data;
       dispatch({
         type: systemConstants.FETCH_ANNOUNCEMENT_SUCCESS,
         payload: {
