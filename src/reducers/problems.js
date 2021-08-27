@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { problemConstants } from '../actions/myClass/constant';
+import { problemConstants, submissionConstants } from '../actions/myClass/constant';
 import { commonConstants } from '../actions/common/constant';
 
 const byId = (state = {}, action) => {
