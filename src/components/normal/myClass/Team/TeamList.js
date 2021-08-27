@@ -87,10 +87,10 @@ export default function TeamList() {
   }, [authToken, classId, courseId, dispatch]);
 
   useEffect(() => {
-    if (!loading.addTeam) {
+    if (!loading.addTeam && !loading.importTeam) {
       dispatch(fetchTeams(authToken, classId));
     }
-  }, [authToken, classId, dispatch, loading.addTeam]);
+  }, [authToken, classId, dispatch, loading.addTeam, loading.importTeam]);
 
   const handleImportChange = (event) => {
     setImportInput(event.target.value);
@@ -114,12 +114,12 @@ export default function TeamList() {
   };
 
   const submitImport = () => {
+    if (importInput !== '' && selectedFile !== []) {
+      selectedFile.map((file) => (dispatch(importTeam(authToken, classId, file))));
+    }
     setShowImportDialog(false);
     clearImportInput();
     setSelectedFile([]);
-    if (importInput !== '' && selectedFile !== []) {
-      dispatch(importTeam(authToken, classId, selectedFile));
-    }
   };
 
   const submitAdd = () => {
@@ -182,6 +182,7 @@ export default function TeamList() {
         ]}
         data={
           teamIds.map((id) => ({
+            id: teams[id].id,
             label: teams[id].label,
             teamName: teams[id].name,
             path: `/my-class/${courseId}/${classId}/team/${id}`,

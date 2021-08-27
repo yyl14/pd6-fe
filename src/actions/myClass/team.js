@@ -49,10 +49,8 @@ export const importTeam = (token, classId, file) => async (dispatch) => {
       'Content-Type': 'multipart/form-data',
     },
   };
-
-  const blob = new Blob([file]);
   const formData = new FormData();
-  formData.append('team_file', blob);
+  formData.append('team_file', file);
 
   try {
     const res = await agent.post(`/class/${classId}/team-import`, formData, auth);
