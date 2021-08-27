@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
-import { problemConstants } from '../actions/myClass/constant';
+import { problemConstants, submissionConstants } from '../actions/myClass/constant';
+import { commonConstants } from '../actions/common/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -57,6 +58,22 @@ const byId = (state = {}, action) => {
         },
       };
     }
+
+    // this action need to delete all original state, don't revise.
+    case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
+      const { problems } = action.payload;
+      return problems.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item.id]: {
+            ...item,
+            testcaseIds: [],
+            assistingDataIds: [],
+          },
+        }), {},
+      );
+    }
+
     case problemConstants.READ_PROBLEM_SCORE_SUCCESS: {
       const { data, problemId } = action.payload;
       return {
@@ -64,6 +81,18 @@ const byId = (state = {}, action) => {
         [problemId]: {
           ...state[problemId],
           score: data.score,
+        },
+      };
+    }
+    case submissionConstants.READ_PROBLEM_SUCCESS: {
+      const data = action.payload;
+      return {
+        ...state,
+        [data.id]: {
+          ...data,
+          testcaseIds: [],
+          assistingDataIds: [],
+          score: state[data.id] ? state[data.id].score : '',
         },
       };
     }
@@ -80,6 +109,15 @@ const allIds = (state = [], action) => {
     }
     case problemConstants.READ_PROBLEM_SUCCESS:
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+    case submissionConstants.READ_PROBLEM_SUCCESS:
+      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+
+    // this action need to delete all original state, don't revise.
+    case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
+      const { problems } = action.payload;
+      return problems.map((item) => item.id);
+    }
+
     default:
       return state;
   }

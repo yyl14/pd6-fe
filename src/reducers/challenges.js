@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
-import { challengeConstants, problemConstants } from '../actions/myClass/constant';
+import { challengeConstants, problemConstants, submissionConstants } from '../actions/myClass/constant';
+import { commonConstants } from '../actions/common/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -59,6 +60,35 @@ const byId = (state = {}, action) => {
         },
       };
     }
+
+    case submissionConstants.READ_CHALLENGE_SUCCESS: {
+      const data = action.payload;
+      return {
+        ...state,
+        [data.id]: {
+          ...data,
+          problemIds: state[data.id] ? state[data.id].problemIds : [],
+          peerReviewIds: state[data.id] ? state[data.id].peerReviewIds : [],
+          specialJudgeIds: state[data.id] ? state[data.id].specialJudgeIds : [],
+          essayIds: state[data.id] ? state[data.id].essayIds : [],
+          statistics: state[data.id] ? state[data.id].statistics : [],
+        },
+      };
+    }
+    case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
+      const { challenges } = action.payload;
+      return challenges.reduce((acc, item) => ({
+        ...acc,
+        [item.id]: {
+          ...item,
+          problemIds: state[item.id] ? state[item.id].problemIds : [],
+          peerReviewIds: state[item.id] ? state[item.id].peerReviewIds : [],
+          specialJudgeIds: state[item.id] ? state[item.id].specialJudgeIds : [],
+          essayIds: state[item.id] ? state[item.id].essayIds : [],
+          statistics: state[item.id] ? state[item.id].statistics : [],
+        },
+      }), state);
+    }
     default:
       return state;
   }
@@ -72,6 +102,12 @@ const allIds = (state = [], action) => {
     }
     case problemConstants.READ_CHALLENGE_SUCCESS:
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+
+    case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
+      const { challenges } = action.payload;
+      return [...new Set([...challenges.map((item) => item.id), ...state])];
+    }
+
     default:
       return state;
   }
