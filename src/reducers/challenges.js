@@ -82,9 +82,7 @@ const allIds = (state = [], action) => {
     }
     case problemConstants.READ_CHALLENGE_SUCCESS:
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
-    case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
-      return [...new Set([...action.payload.challenges.map((item) => item.id), ...state])];
-    }
+
     case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
       const { challenges } = action.payload;
       return [...new Set([...challenges.map((item) => item.id), ...state])];

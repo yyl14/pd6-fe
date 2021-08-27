@@ -32,7 +32,7 @@ const fetchAllSubmissions = (token, accountId, problemId, languageId) => (dispat
 
 const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => async (dispatch) => {
   try {
-    console.log(browseParams);
+    // console.log(browseParams);
     const config1 = {
       headers: { 'auth-token': token },
       params: browseParamsTransForm(browseParams),
@@ -63,49 +63,68 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
       headers: { 'auth-token': token },
     };
 
-    // const accounts = await Promise.all(
-    //   data.map(async ({ account_id }) => agent
-    //     .get(`/account/${account_id}`, config2)
-    //     .then((res2) => res2.data.data)
-    //     .catch((err) => {
-    //       dispatch({
-    //         type: submissionConstants.FETCH_ACCESS_LOG_FAIL,
-    //         payload: err,
-    //       });
-    //     })),
-    // );
+    const accountIds = data.map((item) => item.account_id);
+    // console.log('account_ids: ', accountIds);
+    const config3 = {
+      headers: { 'auth-token': token },
+      params: {
+        account_ids: accountIds,
+      },
+    };
 
-    // TODO: use problem id to read problem info
-    // const problems = await Promise.all(
-    //   data.map(async ({ problem_id }) => agent
-    //     .get(`/problem/${problem_id}`, config2)
-    //     .then((res3) => res3.data.data)
-    //     .catch((err) => {
-    //       dispatch({
-    //         type: submissionConstants.FETCH_ACCESS_LOG_FAIL,
-    //         payload: err,
-    //       });
-    //     })),
-    // );
-    // TODO: use submission id to get status
-    const judgments = await Promise.all(
+    const res2 = await agent.get('/account-summary/batch', config3);
+
+    // use submission id to get status
+    const res3 = await Promise.all(
       data.map(async ({ id }) => agent
-        .get(`/submission/${id}/latest-judgment`, config2)
+        .get(`/submission/${id}/judgment`, config2)
         .then((res4) => res4.data.data)
         .catch((err) => {
           dispatch({
-            type: submissionConstants.FETCH_ACCESS_LOG_FAIL,
+            type: submissionConstants.FETCH_SUBMISSIONS_FAIL,
             payload: err,
           });
         })),
     );
-
-    dispatch({
-      type: submissionConstants.FETCH_SUBMISSIONS_SUCCESS,
-      payload: {
-        data, judgments: judgments.filter((item) => item !== null),
-      },
-    });
+    const judgments = res3.flat().filter((item) => item !== null);
+    console.log('judgments', judgments);
+    console.log('data: ', data);
+    try {
+      dispatch({
+        type: submissionConstants.FETCH_SUBMISSIONS_SUCCESS,
+        payload: {
+          data,
+          judgments,
+          accounts: [{
+            id: 5,
+            username: 'class_member1',
+            real_name: 'class_member1',
+            student_id: 'B99705003',
+          },
+          {
+            id: 8,
+            username: 'mix_role',
+            real_name: 'mix_role',
+            student_id: 'B99705006',
+          },
+          {
+            id: 2,
+            username: 'student1',
+            real_name: 'student1',
+            student_id: 'B10705001',
+          },
+          {
+            id: 1,
+            username: 'admin',
+            real_name: 'admin',
+            student_id: 'B00000000',
+          }], // res2.data.data,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    console.log('hello0');
     dispatch({
       type: autoTableConstants.AUTO_TABLE_UPDATE,
       payload: {
@@ -117,7 +136,7 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
     });
   } catch (error) {
     dispatch({
-      type: submissionConstants.FETCH_ACCESS_LOG_FAIL,
+      type: submissionConstants.FETCH_SUBMISSIONS_FAIL,
       payload: error,
     });
   }

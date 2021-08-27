@@ -262,7 +262,7 @@ const fetchAllChallengesProblems = (token, classId) => async (dispatch) => {
   try {
     const res = await agent.get(`/class/${classId}/challenge`, auth);
     const problems = await Promise.all(
-      res.data.data.map(async ({ id }) => agent
+      res.data.data.data.map(async ({ id }) => agent
         .get(`/challenge/${id}/task`, auth)
         .then((res2) => res2.data.data.problem)
         .catch((err) => {
@@ -275,7 +275,7 @@ const fetchAllChallengesProblems = (token, classId) => async (dispatch) => {
     const newProblems = problems.flat();
     dispatch({
       type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS,
-      payload: { classId, challenges: res.data.data, problems: newProblems },
+      payload: { classId, challenges: res.data.data.data, problems: newProblems },
     });
   } catch (err) {
     dispatch({

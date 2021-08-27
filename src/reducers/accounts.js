@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { accountConstants, systemConstants } from '../actions/admin/constant';
-import { gradeConstants } from '../actions/myClass/constant';
+import { gradeConstants, submissionConstants } from '../actions/myClass/constant';
 import { commonConstants } from '../actions/common/constant';
 
 const byId = (state = {}, action) => {
@@ -51,6 +51,13 @@ const byId = (state = {}, action) => {
       };
     }
 
+    case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
+      const { accounts } = action.payload;
+      return accounts.reduce(
+        (acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [], gradeIds: [] } }),
+        state,
+      );
+    }
     default:
       return state;
   }
@@ -69,6 +76,11 @@ const allIds = (state = [], action) => {
 
     case commonConstants.FETCH_ACCOUNT_SUCCESS: {
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+    }
+
+    case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
+      const { accounts } = action.payload;
+      return [...new Set([...accounts.map((item) => item.id), ...state])];
     }
 
     default:

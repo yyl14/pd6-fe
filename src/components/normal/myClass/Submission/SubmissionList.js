@@ -55,20 +55,21 @@ export default function SubmissionList() {
     }
     return <NoMatch />;
   }
-  console.log('classes: ', allClass);
-  console.log('challenges: ', challenges);
-  console.log('problems: ', problems);
+  // console.log('classes: ', allClass);
+  // console.log('challenges: ', challenges);
+  // console.log('problems: ', problems);
   console.log('submissions: ', submissions);
   console.log('judgments: ', judgments);
+  console.log('accounts', accounts);
 
   return (
     <>
       <Typography variant="h3" className={classes.pageHeader}>
         {`${courses[courseId].name} ${allClass[classId].name} / Submission`}
       </Typography>
-      {/* <AutoTable
+      <AutoTable
         ident="Class Submission Table"
-        hasFilter
+        hasFilter={false}
         filterConfig={[
           // {
           //   reduxStateId: 'id',
@@ -76,19 +77,24 @@ export default function SubmissionList() {
           //   type: '',
           //   operation: 'LIKE',
           // },
-          // {
-          //   reduxStateId: 'request_method',
-          //   label: 'Request Method',
-          //   type: 'ENUM',
-          //   operation: 'IN',
-          //   options: [
-          //     { value: 'GET', label: 'GET' },
-          //     { value: 'POST', label: 'POST' },
-          //     { value: 'PUT', label: 'PUT' },
-          //     { value: 'PATCH', label: 'PATCH' },
-          //     { value: 'DELETE', label: 'DELETE' },
-          //   ],
-          // },
+          {
+            reduxStateId: 'status',
+            label: 'Status',
+            type: 'ENUM',
+            operation: 'IN',
+            options: [
+              { value: 'Accepted', label: 'Accepted' },
+              { value: 'Wrong Answer', label: 'Wrong Answer' },
+              { value: 'Memory Limit Exceed', label: 'Memory Limit Exceed' },
+              { value: 'Time Limit Exceed', label: 'Time Limit Exceed' },
+              { value: 'Runtime Error', label: 'Runtime Error' },
+              { value: 'Compile Error', label: 'Compile Error' },
+              { value: 'Other - Contact Staff', label: 'Other - Contact Staff' },
+              { value: 'Restricted function', label: 'Restricted function' },
+              { value: 'System Error', label: 'System Error' },
+              { value: 'Waiting for Judge', label: 'Waiting for Judge' },
+            ],
+          },
           // {
           //   reduxStateId: 'resource_path',
           //   label: 'Resource Path',
@@ -101,8 +107,6 @@ export default function SubmissionList() {
           //   type: 'TEXT',
           //   operation: 'LIKE',
           // },
-
-          // TODO account id ?
         ]}
         refetch={(browseParams, ident) => {
           dispatch(fetchClassSubmissions(authToken, browseParams, ident, classId));
@@ -116,7 +120,7 @@ export default function SubmissionList() {
           {
             name: 'Username',
             align: 'center',
-            type: 'link',
+            type: 'string',
           },
           {
             name: 'Student ID',
@@ -151,18 +155,16 @@ export default function SubmissionList() {
         ]}
         reduxData={submissions}
         reduxDataToRows={(item) => ({
-          Username: {
-            text: accounts.byId[item.account_id] ? accounts.byId[item.account_id].username : '',
-            path: `/admin/account/account/${item.account_id}/setting`,
-          },
+          ID: item.id,
+          Username: accounts.byId[item.account_id] ? accounts.byId[item.account_id].username : '',
           'Student ID': accounts.byId[item.account_id] ? accounts.byId[item.account_id].student_id : '',
           'Real Name': accounts.byId[item.account_id] ? accounts.byId[item.account_id].real_name : '',
-          IP: item.ip,
-          'Resource Path': item.resource_path,
-          'Request Method': item.request_method,
-          'Access Time': moment(item.access_time).format('YYYY-MM-DD, HH:mm:ss'),
+          Challenge: challenges.byId[problems.byId[item.problem_id].challenge_id] ? challenges.byId[problems.byId[item.problem_id].challenge_id].title : '',
+          Problem: problems.byId[item.problem_id] ? problems.byId[item.problem_id].challenge_label : '',
+          Status: Object.keys(judgments.byId).filter((key) => judgments.byId[key].submission_id === item.id)[0] ? Object.keys(judgments.byId).filter((key) => judgments.byId[key].submission_id === item.id)[0].status : '',
+          Time: moment(item.submit_time).format('YYYY-MM-DD, HH:mm:ss'),
         })}
-      /> */}
+      />
     </>
   );
 }

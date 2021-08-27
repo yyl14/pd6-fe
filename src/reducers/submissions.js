@@ -19,8 +19,8 @@ const byId = (state = {}, action) => {
     }
 
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
-      const { data } = action.payload;
-      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), {});
+      const { data, judgments, accounts } = action.payload;
+      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
 
     default:
