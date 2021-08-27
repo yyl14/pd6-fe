@@ -10,17 +10,17 @@ const getUserInfo = (id, token) => async (dispatch) => {
     };
     const userInfo = await agent.get(`/account/${id}`, auth);
     const userClassesRes = await agent.get(`/account/${id}/class`, auth);
-    const userClasses = userClassesRes.data.data;
+    const userClassesInfo = userClassesRes.data.data;
     // console.log(userClasses);
-    const userClassesInfo = await Promise.all(
-      userClasses.map(async (item) => agent
-        .get(`/class/${item.class_id}`, auth)
-        .then(({ data: { data } }) => ({ ...item, class_name: data.name, course_id: data.course_id }))
-        .catch((error) => dispatch({
-          type: authConstants.AUTH_FAIL,
-          error,
-        }))),
-    );
+    // const userClassesInfo = await Promise.all(
+    //   userClasses.map(async (item) => agent
+    //     .get(`/class/${item.class_id}`, auth)
+    //     .then(({ data: { data } }) => ({ ...item, class_name: data.name, course_id: data.course_id }))
+    //     .catch((error) => dispatch({
+    //       type: authConstants.AUTH_FAIL,
+    //       error,
+    //     }))),
+    // );
 
     dispatch({
       type: authConstants.AUTH_SUCCESS,
