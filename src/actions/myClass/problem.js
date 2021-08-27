@@ -117,33 +117,6 @@ const readProblemInfo = (token, problemId, challengeId) => async (dispatch) => {
     });
   }
 };
-const readProblem = (token, problemId) => async (dispatch) => {
-  dispatch({ type: problemConstants.READ_PROBLEM_START });
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-  try {
-    const problemInfo = await agent.get(`/problem/${problemId}`, auth);
-    if (problemInfo.data.success) {
-      dispatch({
-        type: problemConstants.READ_PROBLEM_SUCCESS,
-        payload: problemInfo.data.data,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.READ_PROBLEM_FAIL,
-        errors: problemInfo.data.error,
-      });
-    }
-  } catch (err) {
-    dispatch({
-      type: problemConstants.READ_PROBLEM_FAIL,
-      errors: err,
-    });
-  }
-};
 
 const readSubmission = (token, accountId, problemId) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_SUBMISSION_START });
@@ -892,5 +865,4 @@ export {
   browseJudgeCases,
   readTestcase,
   readProblemScore,
-  readProblem,
 };

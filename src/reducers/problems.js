@@ -68,6 +68,18 @@ const byId = (state = {}, action) => {
         },
       };
     }
+    case submissionConstants.READ_PROBLEM_SUCCESS: {
+      const data = action.payload;
+      return {
+        ...state,
+        [data.id]: {
+          ...data,
+          testcaseIds: [],
+          assistingDataIds: [],
+          score: state[data.id] ? state[data.id].score : '',
+        },
+      };
+    }
     default:
       return state;
   }
@@ -80,6 +92,8 @@ const allIds = (state = [], action) => {
       return data.problem.map((item) => item.id);
     }
     case problemConstants.READ_PROBLEM_SUCCESS:
+      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+    case submissionConstants.READ_PROBLEM_SUCCESS:
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
     default:
       return state;

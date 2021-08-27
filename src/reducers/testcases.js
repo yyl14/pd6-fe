@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { problemConstants } from '../actions/myClass/constant';
+import { problemConstants, submissionConstants } from '../actions/myClass/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -8,6 +8,12 @@ const byId = (state = {}, action) => {
       return testcases.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
     case problemConstants.READ_TESTCASE_SUCCESS: {
+      return {
+        ...state,
+        [action.payload.id]: action.payload,
+      };
+    }
+    case submissionConstants.READ_TESTCASE_SUCCESS: {
       return {
         ...state,
         [action.payload.id]: action.payload,
@@ -25,6 +31,9 @@ const allIds = (state = [], action) => {
       return [...new Set([...testcases.map((item) => item.id), ...state])];
     }
     case problemConstants.READ_TESTCASE_SUCCESS: {
+      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+    }
+    case submissionConstants.READ_TESTCASE_SUCCESS: {
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
     }
     default:

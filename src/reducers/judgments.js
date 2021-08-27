@@ -13,6 +13,12 @@ const byId = (state = {}, action) => {
         [action.payload.id]: action.payload,
       };
     }
+    case submissionConstants.READ_SUBMISSION_JUDGE_SUCCESS: {
+      return {
+        ...state,
+        [action.payload.id]: action.payload,
+      };
+    }
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       const { judgments } = action.payload;
       // console.log(judgments);
@@ -26,6 +32,9 @@ const byId = (state = {}, action) => {
 const allIds = (state = [], action) => {
   switch (action.type) {
     case problemConstants.READ_SUBMISSION_JUDGE_SUCCESS: {
+      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+    }
+    case submissionConstants.READ_SUBMISSION_JUDGE_SUCCESS: {
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
     }
     case submissionConstants.FETCH_JUDGEMENT_SUCCESS: {

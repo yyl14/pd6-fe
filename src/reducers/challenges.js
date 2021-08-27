@@ -54,6 +54,20 @@ const byId = (state = {}, action) => {
         },
       };
     }
+    case submissionConstants.READ_CHALLENGE_SUCCESS: {
+      const data = action.payload;
+      return {
+        ...state,
+        [data.id]: {
+          ...data,
+          problemIds: state[data.id] ? state[data.id].problemIds : [],
+          peerReviewIds: state[data.id] ? state[data.id].peerReviewIds : [],
+          specialJudgeIds: state[data.id] ? state[data.id].specialJudgeIds : [],
+          essayIds: state[data.id] ? state[data.id].essayIds : [],
+          statistics: state[data.id] ? state[data.id].statistics : [],
+        },
+      };
+    }
     default:
       return state;
   }
@@ -70,6 +84,8 @@ const allIds = (state = [], action) => {
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       return [...new Set([...action.payload.challenges.map((item) => item.id), ...state])];
     }
+    case submissionConstants.READ_CHALLENGE_SUCCESS:
+      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
     default:
       return state;
   }

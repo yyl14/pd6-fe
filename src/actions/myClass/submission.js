@@ -228,7 +228,158 @@ const fetchJudgement = (token, submissionId) => (dispatch) => {
       });
     });
 };
+const browseChallengeOverview = (token, challengeId) => async (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+    // TODO: read challenge, get problem, and then get grade
+  dispatch({ type: submissionConstants.READ_CHALLENGE_START });
+
+  try {
+    const res = await agent.get(`/challenge/${challengeId}`, auth);
+    if (res.data.success) {
+      dispatch({
+        type: submissionConstants.READ_CHALLENGE_SUCCESS,
+        payload: res.data.data,
+      });
+    } else {
+      dispatch({
+        type: submissionConstants.READ_CHALLENGE_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: submissionConstants.READ_CHALLENGE_FAIL,
+      errors: err,
+    });
+  }
+};
+
+const readProblem = (token, problemId) => async (dispatch) => {
+  dispatch({ type: submissionConstants.READ_PROBLEM_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const problemInfo = await agent.get(`/problem/${problemId}`, auth);
+    if (problemInfo.data.success) {
+      dispatch({
+        type: submissionConstants.READ_PROBLEM_SUCCESS,
+        payload: problemInfo.data.data,
+      });
+    } else {
+      dispatch({
+        type: submissionConstants.READ_PROBLEM_FAIL,
+        errors: problemInfo.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: submissionConstants.READ_PROBLEM_FAIL,
+      errors: err,
+    });
+  }
+};
+
+const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
+  dispatch({ type: submissionConstants.READ_SUBMISSION_JUDGE_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+
+  try {
+    const judgment = await agent.get(`/submission/${submissionId}/latest-judgment`, auth);
+    if (judgment.data.success) {
+      dispatch({
+        type: submissionConstants.READ_SUBMISSION_JUDGE_SUCCESS,
+        payload: judgment.data.data,
+      });
+    } else {
+      dispatch({
+        type: submissionConstants.READ_SUBMISSION_JUDGE_FAIL,
+        errors: judgment.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: submissionConstants.READ_SUBMISSION_JUDGE_FAIL,
+      errors: err,
+    });
+  }
+};
+
+const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
+  dispatch({ type: submissionConstants.BROWSE_JUDGE_CASES_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const res = await agent.get(`/judgment/${judgmentId}/judge-case`, auth);
+    if (res.data.success) {
+      dispatch({
+        type: submissionConstants.BROWSE_JUDGE_CASES_SUCCESS,
+        payload: res.data.data,
+      });
+    } else {
+      dispatch({
+        type: submissionConstants.BROWSE_JUDGE_CASES_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: submissionConstants.BROWSE_JUDGE_CASES_FAIL,
+      errors: err,
+    });
+  }
+};
+
+const readTestcase = (token, testcaseId) => async (dispatch) => {
+  dispatch({ type: submissionConstants.READ_TESTCASE_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const res = await agent.get(`/testcase/${testcaseId}`, auth);
+    if (res.data.success) {
+      dispatch({
+        type: submissionConstants.READ_TESTCASE_SUCCESS,
+        payload: res.data.data,
+      });
+    } else {
+      dispatch({
+        type: submissionConstants.READ_TESTCASE_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: submissionConstants.READ_TESTCASE_FAIL,
+      errors: err,
+    });
+  }
+};
 
 export {
-  fetchAllSubmissions, fetchClassSubmissions, fetchSubmission, addSubmission, fetchJudgement,
+  fetchAllSubmissions,
+  fetchClassSubmissions,
+  fetchSubmission,
+  addSubmission,
+  fetchJudgement,
+  browseChallengeOverview,
+  readProblem,
+  readSubmissionDetail,
+  browseJudgeCases,
+  readTestcase,
 };
