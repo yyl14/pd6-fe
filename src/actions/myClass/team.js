@@ -72,7 +72,7 @@ export const importTeam = (token, classId, file) => async (dispatch) => {
   }
 };
 
-export const downloadTeamFile = (token, asAttachment) => async (dispatch) => {
+export const downloadTeamFile = (token) => async (dispatch) => {
   try {
     const auth = {
       headers: {
@@ -81,9 +81,45 @@ export const downloadTeamFile = (token, asAttachment) => async (dispatch) => {
     };
     dispatch({ type: teamConstants.DOWNLOAD_TEAM_FILE_START });
     const res = await agent.get('/team/template', auth);
+    if (res.data.success) {
+      const config = {
+        headers: {
+          'Auth-Token': token,
+        },
+        params: {
+          filename: res.data.data.filename,
+          as_attachment: true,
+        },
+      };
+      try {
+        const res2 = await agent.get(`/s3-file/${res.data.data.s3_file_uuid}/url`, config);
+        if (res2.data.success) {
+          fetch(res2.data.data.url).then((t) => t.blob().then((b) => {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(b);
+            a.setAttribute('download', res.data.data.filename);
+            a.click();
+          }));
+          dispatch({
+            type: teamConstants.DOWNLOAD_TEAM_FILE_SUCCESS,
+          });
+        } else {
+          dispatch({
+            type: teamConstants.DOWNLOAD_TEAM_FILE_FAIL,
+            error: res2.data.error,
+          });
+        }
+      } catch (err) {
+        dispatch({
+          type: teamConstants.DOWNLOAD_TEAM_FILE_FAIL,
+          error: err,
+        });
+      }
+    }
+
     dispatch({
-      type: teamConstants.DOWNLOAD_TEAM_FILE_SUCCESS,
-      payload: { uuid: res.data.data.s3_file_uuid, filename: res.data.data.filename, as_attachment: asAttachment },
+      type: teamConstants.DOWNLOAD_TEAM_FILE_FAIL,
+      error: res.data.error,
     });
   } catch (err) {
     dispatch({

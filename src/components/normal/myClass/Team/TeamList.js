@@ -25,7 +25,7 @@ import Icon from '../../../ui/icon/index';
 import {
   fetchTeams, addTeam, importTeam, downloadTeamFile,
 } from '../../../../actions/myClass/team';
-import { fetchCourse, fetchClass, downloadFile } from '../../../../actions/common/common';
+import { fetchCourse, fetchClass } from '../../../../actions/common/common';
 
 import NoMatch from '../../../noMatch';
 
@@ -83,7 +83,6 @@ export default function TeamList() {
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchClass(authToken, classId));
-    dispatch(downloadTeamFile(authToken, false));
   }, [authToken, classId, courseId, dispatch]);
 
   useEffect(() => {
@@ -132,7 +131,7 @@ export default function TeamList() {
 
   const downloadTemplate = () => {
     setShowImportDialog(false);
-    dispatch(downloadFile(authToken, teams.template));
+    dispatch(downloadTeamFile(authToken));
   };
 
   if (loading.fetchTeams || commonLoading.fetchCourse || commonLoading.fetchClass) {
