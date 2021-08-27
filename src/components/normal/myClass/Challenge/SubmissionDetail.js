@@ -59,6 +59,7 @@ export default function SubmissionDetail() {
   const [popUp, setPopUp] = useState(false);
   const [role, setRole] = useState('NORMAL');
   const [tableData, setTableData] = useState([]);
+  const [judgmentId, setJudgmentId] = useState('');
   const dispatch = useDispatch();
 
   const submissions = useSelector((state) => state.submissions.byId);
@@ -87,8 +88,13 @@ export default function SubmissionDetail() {
   }, [authToken, dispatch, submissionId]);
 
   useEffect(() => {
-    judgmentIds.map((key) => (judgments[key].submission_id === parseInt(submissionId, 10)
-      ? dispatch(browseJudgeCases(authToken, key)) : ''));
+    judgmentIds.filter((key) => {
+      if (judgments[key].submission_id === parseInt(submissionId, 10)) {
+        dispatch(browseJudgeCases(authToken, key));
+        setJudgmentId(key);
+      }
+      return '';
+    });
   }, [authToken, dispatch, judgmentIds, judgments, submissionId]);
 
   useEffect(() => {
@@ -100,7 +106,7 @@ export default function SubmissionDetail() {
   useEffect(() => {
     if (testcaseIds !== [] && judgeCases.allIds !== []) {
       setTableData(
-        judgeCases.allIds.map((id) => ({
+        judgeCases.allIds.filter((id) => judgeCases.byId[id].judgment_id === judgmentId).map((id) => ({
           id,
           no: testcaseIds.map((key) => (id === key ? testcases[key].input_filename.split('.')[0] : '')),
           time: judgeCases.byId[id].time_lapse,
@@ -110,7 +116,7 @@ export default function SubmissionDetail() {
         })),
       );
     }
-  }, [judgeCases.allIds, judgeCases.byId, judgments.byId, testcaseIds, testcases]);
+  }, [judgeCases, judgeCases.allIds, judgeCases.byId, judgmentId, judgments.byId, testcaseIds, testcases]);
 
   useEffect(() => {
     account.classes.forEach((value) => {
@@ -123,7 +129,7 @@ export default function SubmissionDetail() {
   }, [account.classes, classId]);
 
   if (problems.byId[problemId] === undefined || challenges.byId[challengeId] === undefined || submissions[submissionId] === undefined || judgmentIds === undefined || judgeCases.allIds === undefined || testcaseIds === undefined) {
-    if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge && !loading.readJudgment && !loading.readTestcase) {
+    if (!loading.readProblemInfo && !loading.readSubmissionDetail && !loading.browseJudgeCases && !loading.readTestcase) {
       return <NoMatch />;
     }
     return <div>loading...</div>;
@@ -142,8 +148,6 @@ export default function SubmissionDetail() {
     // rejudge
     setPopUp(false);
   };
-
-  // console.log('submission', submissions[submissionId]);
 
   return (
     <>
