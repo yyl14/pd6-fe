@@ -12,16 +12,24 @@ import SubmissionDetail from '../../../components/normal/allClass/Challenge/Subm
 import NoMatch from '../../../components/noMatch';
 
 import { fetchCourse, fetchClass } from '../../../actions/common/common';
+import { browseTasksUnderChallenge } from '../../../actions/myClass/problem';
 
 /* This is a level 3 container (main page container) */
 function Challenge() {
-  const { courseId, classId } = useParams();
+  const { courseId, classId, challengeId } = useParams();
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchClass(authToken, classId));
   }, [authToken, classId, courseId, dispatch]);
+
+  useEffect(() => {
+    if (challengeId !== undefined) {
+      dispatch(browseTasksUnderChallenge(authToken, challengeId));
+    }
+  }, [authToken, challengeId, dispatch]);
+
   return (
     <>
       <Switch>
