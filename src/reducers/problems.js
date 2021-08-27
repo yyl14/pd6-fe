@@ -6,7 +6,15 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data } = action.payload;
-      return data.problem.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), {});
+      return data.problem.reduce((acc, item) => ({
+        ...acc,
+        [item.id]: {
+          ...item,
+          testcaseIds: [],
+          assistingDataIds: [],
+          score: state[data.id] ? state[data.id].score : '',
+        },
+      }), {});
     }
     case problemConstants.READ_PROBLEM_SUCCESS: {
       const data = action.payload;
