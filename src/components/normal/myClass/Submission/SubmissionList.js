@@ -58,9 +58,9 @@ export default function SubmissionList() {
   // console.log('classes: ', allClass);
   // console.log('challenges: ', challenges);
   // console.log('problems: ', problems);
-  console.log('submissions: ', submissions);
-  console.log('judgments: ', judgments);
-  console.log('accounts', accounts);
+  // console.log('submissions: ', submissions);
+  // console.log('judgments: ', judgments);
+  // console.log('accounts', accounts);
 
   return (
     <>
@@ -159,9 +159,15 @@ export default function SubmissionList() {
           Username: accounts.byId[item.account_id] ? accounts.byId[item.account_id].username : '',
           'Student ID': accounts.byId[item.account_id] ? accounts.byId[item.account_id].student_id : '',
           'Real Name': accounts.byId[item.account_id] ? accounts.byId[item.account_id].real_name : '',
-          Challenge: challenges.byId[problems.byId[item.problem_id].challenge_id] ? challenges.byId[problems.byId[item.problem_id].challenge_id].title : '',
-          Problem: problems.byId[item.problem_id] ? problems.byId[item.problem_id].challenge_label : '',
-          Status: Object.keys(judgments.byId).filter((key) => judgments.byId[key].submission_id === item.id)[0] ? Object.keys(judgments.byId).filter((key) => judgments.byId[key].submission_id === item.id)[0].status : '',
+          Challenge: {
+            text: challenges.byId[problems.byId[item.problem_id].challenge_id] ? challenges.byId[problems.byId[item.problem_id].challenge_id].title : '',
+            path: problems.byId[item.problem_id] ? `/my-class/${courseId}/${classId}/challenge/${problems.byId[item.problem_id].challenge_id}` : '',
+          },
+          Problem: {
+            text: problems.byId[item.problem_id] ? problems.byId[item.problem_id].challenge_label : '',
+            path: problems.byId[item.problem_id] ? `/my-class/${courseId}/${classId}/challenge/${problems.byId[item.problem_id].challenge_id}/${item.problem_id}` : '',
+          },
+          Status: Object.keys(judgments.byId).filter((key) => judgments.byId[key].submission_id === item.id)[0] ? judgments.byId[Object.keys(judgments.byId).filter((key) => judgments.byId[key].submission_id === item.id)[0]].status : 'No Status',
           Time: moment(item.submit_time).format('YYYY-MM-DD, HH:mm:ss'),
         })}
       />

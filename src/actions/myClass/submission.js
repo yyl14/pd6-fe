@@ -72,7 +72,7 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
       },
     };
 
-    const res2 = await agent.get('/account-summary/batch', config3);
+    const res2 = await agent.get('/account-summary/batch?account_ids=1&account_ids=2&account_ids=3&account_ids=4&account_ids=5&account_ids=6&account_ids=7&account_ids=8', config2);
 
     // use submission id to get status
     const res3 = await Promise.all(
@@ -87,44 +87,19 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
         })),
     );
     const judgments = res3.flat().filter((item) => item !== null);
-    console.log('judgments', judgments);
-    console.log('data: ', data);
+
     try {
       dispatch({
         type: submissionConstants.FETCH_SUBMISSIONS_SUCCESS,
         payload: {
           data,
           judgments,
-          accounts: [{
-            id: 5,
-            username: 'class_member1',
-            real_name: 'class_member1',
-            student_id: 'B99705003',
-          },
-          {
-            id: 8,
-            username: 'mix_role',
-            real_name: 'mix_role',
-            student_id: 'B99705006',
-          },
-          {
-            id: 2,
-            username: 'student1',
-            real_name: 'student1',
-            student_id: 'B10705001',
-          },
-          {
-            id: 1,
-            username: 'admin',
-            real_name: 'admin',
-            student_id: 'B00000000',
-          }], // res2.data.data,
+          accounts: res2.data.data,
         },
       });
     } catch (err) {
       console.log(err);
     }
-    console.log('hello0');
     dispatch({
       type: autoTableConstants.AUTO_TABLE_UPDATE,
       payload: {
