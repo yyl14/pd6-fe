@@ -10,13 +10,13 @@ import Icon from '../icon/index';
 import { fetchChallenges, addChallenge } from '../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse } from '../../../actions/common/common';
 
-export default function Challenge({
+export default function AllClassChallenge({
   classNames, history, location, mode,
 }) {
   const {
     courseId, classId, challengeId, problemId, submissionId,
   } = useParams();
-  const baseURL = '/my-class';
+  const baseURL = '/all-class';
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.challenge);
@@ -52,75 +52,8 @@ export default function Challenge({
     const goBackToSubmission = () => {
       history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
     };
-    if (mode === 'challenge' && userClasses.length !== 0 && userClasses.find((x) => x.class_id === Number(classId))) {
-      console.log(userClasses);
-      if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER' && challenges[challengeId] !== undefined) {
-        // console.log(problems, essays, userClasses);
-        setTAicon(<Icon.TA className={classNames.titleTA} />);
-        setArrow(
-          <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
-            <Icon.ArrowBackRoundedIcon />
-          </IconButton>,
-        );
-        setTitle(challenges[challengeId].title);
-        if (Object.keys(problems).length !== 0 && Object.keys(essays).length !== 0) {
-          // console.log(problems, essays);
-          setItemList(
-            [
-              {
-                text: 'Setting',
-                icon: <Icon.Setting />,
-                path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/setting`,
-              },
-              {
-                text: 'Statistic',
-                icon: <Icon.Statistic />,
-                path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/statistics`,
-              },
-              {
-                text: 'Info',
-                icon: <Icon.Info />,
-                path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
-              },
-
-            ]
-              .concat(
-                problems.allIds
-                  .map((id) => problems.byId[id])
-                  .map(({ id, challenge_label }) => ({
-                    text: challenge_label,
-                    icon: <Icon.Code />,
-                    path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${id}`,
-                  })),
-              )
-              .concat(
-                essays.allIds
-                  .map((id) => essays.byId[id])
-                  .map(({ id, challenge_label }) => ({
-                    text: challenge_label,
-                    icon: <Icon.Paper />,
-                    path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/essay/${id}`,
-                  })),
-              )
-              .concat([
-                {
-                  text: 'Task',
-                  icon: <Icon.AddBox />,
-                  path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/task`,
-                },
-              ]),
-
-          );
-        } else {
-          setItemList([
-            {
-              text: 'Info',
-              icon: <Icon.Info />,
-              path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
-            },
-          ]);
-        }
-      } else if (userClasses.find((x) => x.class_id === Number(classId)).role !== 'MANAGER' && challenges[challengeId] !== undefined) {
+    if (mode === 'challenge') {
+      if (challenges[challengeId] !== undefined) {
         setArrow(
           <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
             <Icon.ArrowBackRoundedIcon />
@@ -165,10 +98,10 @@ export default function Challenge({
           ]);
         }
       }
-    } else if (mode === 'submission' && userClasses.length !== 0 && userClasses.find((x) => x.class_id === Number(classId))) {
-      if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
-        setTAicon(<Icon.TA className={classNames.titleTA} />);
-      }
+    } else if (mode === 'submission') {
+      // if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
+      //   setTAicon(<Icon.TA className={classNames.titleTA} />);
+      // }
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToProblem}>
           <Icon.ArrowBackRoundedIcon />
@@ -187,10 +120,10 @@ export default function Challenge({
           path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`,
         },
       ]);
-    } else if (mode === 'submission_detail' && userClasses.length !== 0 && userClasses.find((x) => x.class_id === Number(classId))) {
-      if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
-        setTAicon(<Icon.TA className={classNames.titleTA} />);
-      }
+    } else if (mode === 'submission_detail') {
+      // if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
+      //   setTAicon(<Icon.TA className={classNames.titleTA} />);
+      // }
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToSubmission}>
           <Icon.ArrowBackRoundedIcon />
