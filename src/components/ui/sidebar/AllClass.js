@@ -21,11 +21,11 @@ export default function AllClass({
 
   useEffect(() => {
     dispatch(fetchCourses(authToken));
-  }, [dispatch, authToken]);
+  }, [dispatch, authToken, location.pathname]);
 
   useEffect(() => {
     dispatch(fetchClasses(authToken, courseId));
-  }, [authToken, courseId, dispatch]);
+  }, [authToken, courseId, dispatch, location.pathname]);
 
   const [display, setDisplay] = useState('unfold'); // 0: fold, 1: unfold
   const [arrow, setArrow] = useState(null);
@@ -56,6 +56,7 @@ export default function AllClass({
           })),
       );
     } else if (mode === 'course' && courses.byId[courseId] !== undefined) {
+      console.log(courses, classes);
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToMain}>
           <Icon.ArrowBackRoundedIcon />
@@ -75,23 +76,6 @@ export default function AllClass({
       );
     }
   }, [classNames.arrow, classes, courseId, courses, history, mode]);
-
-  // if (
-  //   (courseId !== undefined && courses[courseId] === undefined)
-  //   || (classId !== undefined && classes[classId] === undefined)
-  // ) {
-  //   return (
-  //     <div>
-  //       <Drawer
-  //         className={classNames.drawer}
-  //         variant="permanent"
-  //         anchor="left"
-  //         PaperProps={{ elevation: 5 }}
-  //         classes={{ paper: classNames.drawerPaper }}
-  //       />
-  //     </div>
-  //   );
-  // }
 
   const fold = () => {
     setDisplay('fold');

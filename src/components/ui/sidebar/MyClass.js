@@ -50,7 +50,7 @@ export default function MyClass({
       && courses[courseId] !== undefined
       && classes[classId] !== undefined
     ) {
-      console.log(userClasses);
+      // console.log(userClasses);
       setDisplay([]);
       userClasses.map((userClass, id) => {
         if (userClass.class_id === Number(classId)) {
