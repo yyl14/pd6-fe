@@ -88,38 +88,39 @@ export default function ChallengeList() {
   }, [dispatch, authToken, classId, courseId]);
 
   useEffect(() => {
+    // console.log(loading.addChallenge);
     if (!loading.addChallenge) {
       dispatch(fetchChallenges(authToken, classId));
     }
   }, [authToken, classId, dispatch, loading.addChallenge]);
 
   useEffect(() => {
-    if (challengesID !== []) {
-      challengesID.map((id) => {
-        if (currentTime.isBefore(moment(challenges[id].start_time))) {
-          challenges[id].status = 'Not Yet';
-        } else if (currentTime.isBefore(moment(challenges[id].end_time))) {
-          challenges[id].status = 'Opened';
-        } else {
-          challenges[id].status = 'Closed';
-        }
-        return challenges[id].status;
-      });
+    const getStatus = (id) => {
+      if (currentTime.isBefore(moment(challenges[id].start_time))) {
+        return 'Not Yet';
+      }
+      if (currentTime.isBefore(moment(challenges[id].end_time))) {
+        return 'Opened';
+      }
+      return 'Closed';
+    };
 
+    // console.log(challenges);
+    if (classes[classId]) {
       setTableData(
-        challengesID
-          .filter((id) => challenges[id].status !== 'Not Yet')
+        classes[classId].challengeIds
+          .filter((id) => getStatus(id) !== 'Not Yet')
           .reverse()
           .map((id) => ({
             title: challenges[id].title,
             path: `/all-class/${courseId}/${classId}/challenge/${id}`,
             startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
             endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
-            status: challenges[id].status,
+            status: getStatus(id),
           })),
       );
     }
-  }, [challenges, challengesID, classId, courseId, currentTime]);
+  }, [challenges, challengesID, classId, classes, courseId, currentTime]);
 
   if (loading.fetchChallenges || courses[courseId] === undefined || classes[classId] === undefined) {
     return <div>loading...</div>;

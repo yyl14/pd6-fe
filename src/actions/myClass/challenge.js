@@ -1,7 +1,5 @@
 import agent from '../agent';
-import {
-  challengeConstants,
-} from './constant';
+import { challengeConstants } from './constant';
 
 const fetchChallenges = (token, classId) => (dispatch) => {
   const auth = {
@@ -11,11 +9,13 @@ const fetchChallenges = (token, classId) => (dispatch) => {
   };
   dispatch({ type: challengeConstants.FETCH_CHALLENGES_REQUEST });
 
-  agent.get(`/class/${classId}/challenge`, auth)
+  agent
+    .get(`/class/${classId}/challenge`, auth)
     .then((res) => {
+      console.log(res);
       dispatch({
         type: challengeConstants.FETCH_CHALLENGES_SUCCESS,
-        payload: { classId, data: res.data.data },
+        payload: { classId, data: res.data.data.data },
       });
     })
     .catch((err) => {
@@ -34,14 +34,18 @@ const addChallenge = (token, classId, body) => async (dispatch) => {
       },
     };
     dispatch({ type: challengeConstants.ADD_CHALLENGE_REQUEST });
-    const res = await agent.post(`/class/${classId}/challenge`, {
-      publicize_type: body.showTime,
-      selection_type: body.scoredBy,
-      title: body.title,
-      description: '',
-      start_time: body.startTime,
-      end_time: body.endTime,
-    }, auth);
+    const res = await agent.post(
+      `/class/${classId}/challenge`,
+      {
+        publicize_type: body.showTime,
+        selection_type: body.scoredBy,
+        title: body.title,
+        description: '',
+        start_time: body.startTime,
+        end_time: body.endTime,
+      },
+      auth,
+    );
     dispatch({ type: challengeConstants.ADD_CHALLENGE_SUCCESS });
   } catch (err) {
     dispatch({
@@ -59,7 +63,8 @@ const editChallenge = (token, challengeId, body) => (dispatch) => {
   };
   dispatch({ type: challengeConstants.EDIT_CHALLENGE_REQUEST });
 
-  agent.patch(`/challenge/${challengeId}`, body, auth)
+  agent
+    .patch(`/challenge/${challengeId}`, body, auth)
     .then((res) => {
       console.log('edit challenge res:', res);
       dispatch({
@@ -82,7 +87,8 @@ const deleteChallenge = (token, challengeId) => (dispatch) => {
   };
   dispatch({ type: challengeConstants.DELETE_CHALLENGE_REQUEST });
 
-  agent.delete(`/challenge/${challengeId}`, auth)
+  agent
+    .delete(`/challenge/${challengeId}`, auth)
     .then((res) => {
       console.log('delete challenge res:', res);
       dispatch({
@@ -106,7 +112,8 @@ const fetchChallengeSummary = (token, challengeId) => (dispatch) => {
 
   dispatch({ type: challengeConstants.FETCH_CHALLENGE_SUMMARY_REQUEST });
 
-  agent.get(`/challenge/${challengeId}/statistics/summary`, auth)
+  agent
+    .get(`/challenge/${challengeId}/statistics/summary`, auth)
     .then((res) => {
       dispatch({
         type: challengeConstants.FETCH_CHALLENGE_SUMMARY_SUCCESS,
@@ -228,5 +235,12 @@ const addPeerReview = (token, challengeId, label, title) => async (dispatch) => 
 };
 
 export {
-  fetchChallenges, addChallenge, editChallenge, deleteChallenge, fetchChallengeSummary, addProblem, addEssay, addPeerReview,
+  fetchChallenges,
+  addChallenge,
+  editChallenge,
+  deleteChallenge,
+  fetchChallengeSummary,
+  addProblem,
+  addEssay,
+  addPeerReview,
 };

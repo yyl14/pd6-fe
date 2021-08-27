@@ -56,7 +56,7 @@ export default function AllClass({
           })),
       );
     } else if (mode === 'course' && courses.byId[courseId] !== undefined) {
-      console.log(courses, classes);
+      // console.log(courses, classes);
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToMain}>
           <Icon.ArrowBackRoundedIcon />
