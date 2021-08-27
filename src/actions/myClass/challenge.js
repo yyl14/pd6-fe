@@ -12,7 +12,7 @@ const fetchChallenges = (token, classId) => (dispatch) => {
   agent
     .get(`/class/${classId}/challenge`, auth)
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       dispatch({
         type: challengeConstants.FETCH_CHALLENGES_SUCCESS,
         payload: { classId, data: res.data.data.data },
@@ -90,7 +90,7 @@ const deleteChallenge = (token, challengeId) => (dispatch) => {
   agent
     .delete(`/challenge/${challengeId}`, auth)
     .then((res) => {
-      console.log('delete challenge res:', res);
+      // console.log('delete challenge res:', res);
       dispatch({
         type: challengeConstants.DELETE_CHALLENGE_SUCCESS,
       });

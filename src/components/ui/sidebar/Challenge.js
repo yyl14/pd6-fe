@@ -6,6 +6,7 @@ import {
 } from '@material-ui/core';
 import { CompassCalibrationOutlined } from '@material-ui/icons';
 import Icon from '../icon/index';
+import TaskAddingCard from '../../normal/myClass/Challenge/TaskAddingCard';
 
 import { fetchChallenges, addChallenge } from '../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse } from '../../../actions/common/common';
@@ -41,6 +42,8 @@ export default function Challenge({
   const [itemList, setItemList] = useState([]);
   const [arrow, setArrow] = useState(null);
   const [TAicon, setTAicon] = useState();
+
+  const [addTaskPopUp, setAddTaskPopUp] = useState(false);
 
   useEffect(() => {
     const goBackToChallenge = () => {
@@ -101,15 +104,7 @@ export default function Challenge({
                     icon: <Icon.Paper />,
                     path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/essay/${id}`,
                   })),
-              )
-              .concat([
-                {
-                  text: 'Task',
-                  icon: <Icon.AddBox />,
-                  path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/task`,
-                },
-              ]),
-
+              ),
           );
         } else {
           setItemList([
@@ -272,12 +267,28 @@ export default function Challenge({
                 />
               </ListItem>
             ))}
+            { mode === 'challenge' && userClasses.length !== 0 && userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER' && challenges[challengeId] !== undefined
+              && (
+              <ListItem button key="Task" onClick={() => setAddTaskPopUp(true)} className={classNames.item}>
+                <ListItemIcon
+                  className={classNames.itemIcon}
+                  style={{ color: '' }}
+                >
+                  <Icon.AddBox />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Task"
+                  className={classNames.itemText}
+                />
+              </ListItem>
+              )}
           </List>
         ) : (
           ''
         )}
         <div className={classNames.bottomSpace} />
       </Drawer>
+      <TaskAddingCard open={addTaskPopUp} setOpen={setAddTaskPopUp} />
     </div>
   );
 }
