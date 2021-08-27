@@ -9,7 +9,7 @@ export const fetchTeams = (token, classId) => (dispatch) => {
     .then((res) => {
       dispatch({
         type: teamConstants.FETCH_TEAMS_SUCCESS,
-        payload: { classId, data: res.data.data },
+        payload: { classId, data: res.data.data.data },
       });
     })
     .catch((err) => {
@@ -163,7 +163,7 @@ export const fetchTeamMember = (token, teamId) => async (dispatch) => {
     // console.log('fetch');
     dispatch({
       type: teamConstants.FETCH_TEAM_MEMBER_SUCCESS,
-      payload: { teamId, data: res.data.data },
+      payload: { teamId, data: res.data.data.data },
     });
   } catch (err) {
     dispatch({

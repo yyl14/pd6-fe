@@ -135,7 +135,7 @@ const browseEssaySubmission = (token, essayId) => async (dispatch) => {
     if (browseEssaySubmissionInfo.data.success) {
       dispatch({
         type: essayConstants.BROWSE_ESSAY_SUBMISSION_SUCCESS,
-        payload: browseEssaySubmissionInfo.data.data,
+        payload: browseEssaySubmissionInfo.data.data.data,
       });
     } else {
       dispatch({
