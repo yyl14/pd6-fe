@@ -28,22 +28,20 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MultiSelect({ options, value, setValue }) {
   const classes = useStyles();
-  // const [tempInput, setTempInput] = useState(options);
 
   const handleChange = (event) => {
-    let newList = event.target.value;
-    if (newList.includes('Deselect all')) {
-      newList = [];
+    const newList = event.target.value;
+    if (newList.includes('Select all')) {
+      setValue(options);
+    } else {
+      setValue(newList);
     }
-    setValue(newList);
   };
 
   const displaySelection = (selected) => {
     let display = selected.join(', ');
-    if (selected.includes('Deselect all')) {
-      display = '';
-    } else if (selected.length === options.length) {
-      display = 'Select All';
+    if (selected.length === options.length) {
+      display = 'Select all';
     }
     return display;
   };
@@ -59,7 +57,7 @@ export default function MultiSelect({ options, value, setValue }) {
           renderValue={displaySelection}
           multiple
         >
-          <MenuItem value="Deselect all">Deselect all</MenuItem>
+          <MenuItem value="Select all" className={classes.selectList}>Select all</MenuItem>
           {options.map((option) => (
             <MenuItem key={option} value={option} className={classes.selectList}>
               <CustomCheckbox isChecked={value.indexOf(option) > -1} />

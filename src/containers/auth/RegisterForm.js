@@ -62,7 +62,8 @@ export default function RegisterForm() {
   const history = useHistory();
   const dispatch = useDispatch();
   const loadingInstitute = useSelector((state) => state.loading.common.fetchInstitutes);
-  const errorRegister = useSelector((state) => state.error.user.auth);
+  const registerLoading = useSelector((state) => state.loading.user.auth.signup);
+  const registerError = useSelector((state) => state.error.user.auth.signup);
   const institutes = useSelector((state) => state.institutes.byId);
   const institutesId = useSelector((state) => state.institutes.allIds);
   const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
@@ -106,6 +107,7 @@ export default function RegisterForm() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [hasRequest, setHasRequest] = useState(false);
 
   const labelName = ['realName', 'school', 'username', 'studentId', 'email', 'password', 'confirmPassword'];
 
@@ -161,15 +163,9 @@ export default function RegisterForm() {
           inputs.email,
           transform(inputs.school),
           inputs.studentId,
-          `${inputs.email}${emailTail}`,
         ),
       );
-      if (errorRegister.signup === 'StudentCardExists') {
-        setErrors((input) => ({ ...input, username: true }));
-        setErrorTexts((input) => ({ ...input, username: 'Username is taken, try another' }));
-      } else {
-        setPopup(true);
-      }
+      setHasRequest(true);
     }
   };
 
@@ -196,6 +192,23 @@ export default function RegisterForm() {
     if (name === 'school') {
       setEmailTail(`@${institutes[transform(value)].email_domain}`);
     }
+
+    if (name === 'username' && (errorTexts[name] === 'Username Exists' || errorTexts[name] === 'Register Fail')) {
+      setErrors((input) => ({ ...input, username: false }));
+      setErrorTexts((input) => ({ ...input, username: '' }));
+    }
+
+    if (name === 'studentId' && errorTexts[name] === 'Student ID Exists') {
+      setErrors((input) => ({ ...input, studentId: false }));
+      setErrorTexts((input) => ({ ...input, studentId: '' }));
+    }
+
+    if (name === 'email' && errorTexts[name] === 'Email Exists') {
+      setErrors((input) => ({ ...input, email: false }));
+      setErrorTexts((input) => ({ ...input, email: '' }));
+    }
+
+    setHasRequest(false);
   };
 
   const onClosePopup = () => {
@@ -203,10 +216,30 @@ export default function RegisterForm() {
     history.push('/login');
   };
 
+  useEffect(() => {
+    if (!registerLoading && hasRequest) {
+      if (registerError === 'StudentCardExists') {
+        setErrors((input) => ({ ...input, username: true }));
+        setErrorTexts((input) => ({ ...input, username: 'Username Exists' }));
+      } else if (registerError === 'SystemException') {
+        setErrors((input) => ({
+          ...input, username: true, studentId: true, email: true,
+        }));
+        setErrorTexts((input) => ({
+          ...input, username: 'Username Exists', studentId: 'Student ID Exists', email: 'Email Exists',
+        }));
+      } else if (registerError !== null) {
+        setErrors((input) => ({ ...input, username: true }));
+        setErrorTexts((input) => ({ ...input, username: 'Register Fail' }));
+      } else {
+        setPopup(true);
+      }
+    }
+  }, [hasRequest, registerError, registerLoading]);
+
   if (loadingInstitute) {
     return <div>loading...</div>;
   }
-
   return (
     <>
       {!nextPage ? (

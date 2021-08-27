@@ -87,15 +87,37 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const [title, setTitle] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].title);
   const [description, setDescription] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].description);
   const [ioDescription, setIoDescription] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].io_description);
+  const [source, setSource] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].source);
+  const [hint, setHint] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].hint);
   const [status, setStatus] = useState(problems[problemId] !== undefined && testcaseDataIds.length !== 0 ? !testcases[testcaseDataIds[0]].is_disabled : false);
 
   const oriSampleData = [];
   const oriTestcaseData = [];
 
+  const sampleTrans2no = (id) => {
+    if (testcases[id].input_filename !== null) {
+      return parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10);
+    }
+    if (testcases[id].output_filename !== null) {
+      return parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10);
+    }
+    return 0;
+  };
+
+  const testcaseTrans2no = (id) => {
+    if (testcases[id].input_filename !== null) {
+      return parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10);
+    }
+    if (testcases[id].output_filename !== null) {
+      return parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10);
+    }
+    return 0;
+  };
+
   const [sampleTableData, setSampleTableData] = useState(
     sampleDataIds.map((id) => ({
       id: testcases[id].id,
-      no: testcases[id].input_filename === null ? parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10) : parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10),
+      no: sampleTrans2no(id),
       time_limit: testcases[id].time_limit,
       memory_limit: testcases[id].memory_limit,
       input_filename: testcases[id].input_filename,
@@ -108,7 +130,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const [testcaseTableData, setTestcaseTableData] = useState(
     testcaseDataIds.map((id) => ({
       id: testcases[id].id,
-      no: testcases[id].input_filename === null ? parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10) : parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10),
+      no: testcaseTrans2no(id),
       time_limit: testcases[id].time_limit,
       memory_limit: testcases[id].memory_limit,
       score: testcases[id].score,
@@ -145,7 +167,6 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   };
 
   const handleSampleTempUpload = (newSelectedFiles) => {
-    // TODO: set table data
     // console.log(newSelectedFiles);
     const newTableData = sampleTableData.reduce((acc, data) => {
       const selectedData = newSelectedFiles.filter((file) => data.no === file.no);
@@ -191,7 +212,6 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   };
 
   const handleTestingTempUpload = (newSelectedFiles) => {
-    // TODO: set table data
     const newTableData = testcaseTableData.reduce((acc, data) => {
       const selectedData = newSelectedFiles.filter((file) => data.no === file.no);
       if (selectedData.length === 0) {
@@ -260,7 +280,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   };
 
   const handleSave = () => {
-    dispatch(editProblemInfo(authToken, problemId, title, problems[problemId].full_score, !status, description, ioDescription, '', ''));
+    dispatch(editProblemInfo(authToken, problemId, title, problems[problemId].full_score, !status, description, ioDescription, source, hint));
 
     // handle sample file
     sampleDataIds.map((id) => {
@@ -421,6 +441,31 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           multiline
           minRows={10}
           maxRows={10}
+          className={classNames.textfield2}
+        />
+      </SimpleBar>
+      <SimpleBar title="Source">
+        <TextField
+          value={source}
+          variant="outlined"
+          onChange={(e) => {
+            setSource(e.target.value);
+            setHasChange(true);
+          }}
+          className={classNames.textfield}
+        />
+      </SimpleBar>
+      <SimpleBar title="Hint">
+        <TextField
+          value={hint}
+          variant="outlined"
+          onChange={(e) => {
+            setHint(e.target.value);
+            setHasChange(true);
+          }}
+          multiline
+          minRows={5}
+          maxRows={5}
           className={classNames.textfield2}
         />
       </SimpleBar>
