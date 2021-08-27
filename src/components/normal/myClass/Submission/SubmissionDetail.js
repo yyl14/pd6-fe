@@ -62,6 +62,7 @@ export default function SubmissionDetail(props) {
   const [tableData, setTableData] = useState([]);
   const [challengeId, setChallengeId] = useState('');
   const [problemId, setProblemId] = useState('');
+  const [judgmentId, setJudgmentId] = useState('');
   const dispatch = useDispatch();
 
   const submissions = useSelector((state) => state.submissions.byId);
@@ -93,18 +94,24 @@ export default function SubmissionDetail(props) {
 
   useEffect(() => {
     if (problems.allIds !== [] && submissions[submissionId] !== undefined) {
-      problems.allIds.forEach((id) => {
+      problems.allIds.filter((id) => {
         if (id === submissions[submissionId].problem_id) {
           dispatch(browseChallengeOverview(authToken, problems.byId[submissions[submissionId].problem_id].challenge_id));
           setChallengeId(problems.byId[submissions[submissionId].problem_id].challenge_id);
         }
+        return '';
       });
     }
   }, [authToken, dispatch, problems, submissionId, submissions]);
 
   useEffect(() => {
-    judgmentIds.map((key) => (judgments[key].submission_id === parseInt(submissionId, 10)
-      ? dispatch(browseJudgeCases(authToken, key)) : ''));
+    judgmentIds.filter((key) => {
+      if (judgments[key].submission_id === parseInt(submissionId, 10)) {
+        dispatch(browseJudgeCases(authToken, key));
+        setJudgmentId(key);
+      }
+      return '';
+    });
   }, [authToken, dispatch, judgmentIds, judgments, submissionId]);
 
   useEffect(() => {
@@ -116,7 +123,7 @@ export default function SubmissionDetail(props) {
   useEffect(() => {
     if (testcaseIds !== [] && judgeCases.allIds !== []) {
       setTableData(
-        judgeCases.allIds.map((id) => ({
+        judgeCases.allIds.filter((id) => judgeCases.byId[id].judgment_id === judgmentId).map((id) => ({
           id,
           no: testcaseIds.map((key) => (id === key ? testcases[key].input_filename.split('.')[0] : '')),
           time: judgeCases.byId[id].time_lapse,
@@ -126,7 +133,7 @@ export default function SubmissionDetail(props) {
         })),
       );
     }
-  }, [judgeCases.allIds, judgeCases.byId, judgments.byId, testcaseIds, testcases]);
+  }, [judgeCases.allIds, judgeCases.byId, judgmentId, judgments.byId, testcaseIds, testcases]);
 
   useEffect(() => {
     user.classes.forEach((value) => {
