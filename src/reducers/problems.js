@@ -17,6 +17,7 @@ const byId = (state = {}, action) => {
           ...data,
           testcaseIds: [],
           assistingDataIds: [],
+          score: state[data.id] ? state[data.id].score : '',
         },
       };
     }
@@ -54,6 +55,16 @@ const byId = (state = {}, action) => {
           io_description: content.io_description,
           source: content.source,
           hint: content.hint,
+        },
+      };
+    }
+    case problemConstants.READ_PROBLEM_SCORE_SUCCESS: {
+      const { data, problemId } = action.payload;
+      return {
+        ...state,
+        [problemId]: {
+          ...state[problemId],
+          score: data.score,
         },
       };
     }
