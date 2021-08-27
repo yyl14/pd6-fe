@@ -197,12 +197,12 @@ export default function SubmissionDetail() {
               }
               return <Typography variant="body1" color="secondary" key={key}>{judgments[key].status.toLowerCase().split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ')}</Typography>;
             }
-            return '-';
+            return '';
           })}
         </AlignedText>
         <AlignedText text="Score" childrenType="text">
           <Typography variant="body1">
-            {judgmentIds.map((key) => (judgments[key].submission_id === parseInt(submissionId, 10) ? judgments[key].score : '-'))}
+            {judgmentIds.map((key) => (judgments[key].submission_id === parseInt(submissionId, 10) ? judgments[key].score : ''))}
           </Typography>
         </AlignedText>
         <AlignedText text="Submit Time" childrenType="text">
