@@ -21,8 +21,9 @@ import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
 import NoMatch from '../../../noMatch';
 import {
   readSubmissionDetail, readProblem, browseChallengeOverview, browseJudgeCases, readTestcase,
-} from '../../../../actions/myClass/problem';
-import { fetchSubmission } from '../../../../actions/myClass/submission';
+  fetchSubmission,
+} from '../../../../actions/myClass/submission';
+
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({

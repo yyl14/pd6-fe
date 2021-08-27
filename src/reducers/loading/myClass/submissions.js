@@ -5,6 +5,11 @@ const initialState = {
   fetchClassSubmissions: false,
   fetchSubmission: false,
   addSubmission: false,
+  browseChallengeOverview: false,
+  readProblem: false,
+  readSubmissionDetail: false,
+  browseJudgeCases: false,
+  readTestcase: false,
 };
 
 export default function submissions(state = initialState, action) {
@@ -84,7 +89,96 @@ export default function submissions(state = initialState, action) {
         addSubmission: false,
       };
     }
-
+    case submissionConstants.READ_CHALLENGE_START: {
+      return {
+        ...state,
+        browseChallengeOverview: true,
+      };
+    }
+    case submissionConstants.READ_CHALLENGE_SUCCESS: {
+      return {
+        ...state,
+        browseChallengeOverview: false,
+      };
+    }
+    case submissionConstants.READ_CHALLENGE_FAIL: {
+      return {
+        ...state,
+        browseChallengeOverview: false,
+      };
+    }
+    case submissionConstants.READ_PROBLEM_START: {
+      return {
+        ...state,
+        readProblem: true,
+      };
+    }
+    case submissionConstants.READ_PROBLEM_SUCCESS: {
+      return {
+        ...state,
+        readProblem: false,
+      };
+    }
+    case submissionConstants.READ_PROBLEM_FAIL: {
+      return {
+        ...state,
+        readProblem: false,
+      };
+    }
+    case submissionConstants.READ_SUBMISSION_JUDGE_START: {
+      return {
+        ...state,
+        readSubmissionDetail: true,
+      };
+    }
+    case submissionConstants.READ_SUBMISSION_JUDGE_SUCCESS: {
+      return {
+        ...state,
+        readSubmissionDetail: false,
+      };
+    }
+    case submissionConstants.READ_SUBMISSION_JUDGE_FAIL: {
+      return {
+        ...state,
+        readSubmissionDetail: false,
+      };
+    }
+    case submissionConstants.BROWSE_JUDGE_CASES_START: {
+      return {
+        ...state,
+        browseJudgeCases: true,
+      };
+    }
+    case submissionConstants.BROWSE_JUDGE_CASES_SUCCESS: {
+      return {
+        ...state,
+        browseJudgeCases: false,
+      };
+    }
+    case submissionConstants.BROWSE_JUDGE_CASES_FAIL: {
+      return {
+        ...state,
+        browseJudgeCases: false,
+      };
+    }
+    case submissionConstants.READ_TESTCASE_START: {
+      return {
+        ...state,
+        readTestcase: true,
+      };
+    }
+    case submissionConstants.READ_TESTCASE_SUCCESS: {
+      return {
+        ...state,
+        readTestcase: false,
+      };
+    }
+    case submissionConstants.READ_TESTCASE_FAIL: {
+      return {
+        ...state,
+        readTestcase: false,
+      };
+    }
     default:
       return state;
   }
