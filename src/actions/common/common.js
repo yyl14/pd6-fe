@@ -259,27 +259,33 @@ const fetchAllChallengesProblems = (token, classId) => async (dispatch) => {
     },
   };
 
-  const res = await agent.get(`/class/${classId}/challenge`, auth);
-  const problems = await Promise.all(
-    res.data.data.map(async ({ id }) => agent
-      .get(`/challenge/${id}/task`, auth)
-      .then((res2) => res2.data.data.problem)
-      .catch((err) => {
-        dispatch({
-          type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_FAIL,
-          payload: err,
-        });
-      })),
-  );
+  try {
+    const res = await agent.get(`/class/${classId}/challenge`, auth);
+    const problems = await Promise.all(
+      res.data.data.map(async ({ id }) => agent
+        .get(`/challenge/${id}/task`, auth)
+        .then((res2) => res2.data.data.problem)
+        .catch((err) => {
+          dispatch({
+            type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_FAIL,
+            payload: err,
+          });
+        })),
+    );
 
-  // dispatch({
-  //   type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS,
-  //   payload: { classId, data: res.data.data },
-  // });
-  // dispatch({
-  //   type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_FAIL,
-  //   error: res.data.err,
-  // });
+    const newProblems = problems.flat();
+    console.log('allChallenges: ', res.data.data);
+    console.log('newProblems: ', newProblems);
+    dispatch({
+      type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS,
+      payload: { classId, challenges: res.data.data, problems: newProblems },
+    });
+  } catch (err) {
+    dispatch({
+      type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_FAIL,
+      error: err,
+    });
+  }
 };
 
 export {

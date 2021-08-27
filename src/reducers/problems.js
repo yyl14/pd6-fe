@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { problemConstants, submissionConstants } from '../actions/myClass/constant';
+import { commonConstants } from '../actions/common/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -57,6 +58,21 @@ const byId = (state = {}, action) => {
         },
       };
     }
+
+    // this action need to delete all original state, don't revise.
+    case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
+      const { problems } = action.payload;
+      return problems.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item.id]: {
+            ...item,
+            testcaseIds: [],
+            assistingDataIds: [],
+          },
+        }), {},
+      );
+    }
     default:
       return state;
   }
@@ -70,6 +86,12 @@ const allIds = (state = [], action) => {
     }
     case problemConstants.READ_PROBLEM_SUCCESS:
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+
+    // this action need to delete all original state, don't revise.
+    case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
+      const { problems } = action.payload;
+      return problems.map((item) => item.id);
+    }
     default:
       return state;
   }

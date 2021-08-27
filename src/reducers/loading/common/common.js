@@ -10,6 +10,7 @@ const initialState = {
   fetchCourse: false,
   fetchClass: false,
   fetchAccount: false,
+  fetchAllChallengesProblems: false,
 };
 
 export default function common(state = initialState, action) {
@@ -176,6 +177,25 @@ export default function common(state = initialState, action) {
       return {
         ...state,
         browseSubmitLang: false,
+      };
+    }
+
+    case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_START: {
+      return {
+        ...state,
+        fetchAllChallengesProblems: true,
+      };
+    }
+    case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
+      return {
+        ...state,
+        fetchAllChallengesProblems: false,
+      };
+    }
+    case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_FAIL: {
+      return {
+        ...state,
+        fetchAllChallengesProblems: false,
       };
     }
 

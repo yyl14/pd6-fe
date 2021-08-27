@@ -57,6 +57,11 @@ const byId = (state = {}, action) => {
       return { ...state, [classId]: { ...state[classId], challengeIds: data.map((item) => item.id) } };
     }
 
+    case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
+      const { classId, challenges } = action.payload;
+      return { ...state, [classId]: { ...state[classId], challengeIds: challenges.map((item) => item.id) } };
+    }
+
     default:
       return state;
   }

@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { challengeConstants, problemConstants, submissionConstants } from '../actions/myClass/constant';
+import { commonConstants } from '../actions/common/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -54,6 +55,20 @@ const byId = (state = {}, action) => {
         },
       };
     }
+    case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
+      const { challenges } = action.payload;
+      return challenges.reduce((acc, item) => ({
+        ...acc,
+        [item.id]: {
+          ...item,
+          problemIds: state[item.id] ? state[item.id].problemIds : [],
+          peerReviewIds: state[item.id] ? state[item.id].peerReviewIds : [],
+          specialJudgeIds: state[item.id] ? state[item.id].specialJudgeIds : [],
+          essayIds: state[item.id] ? state[item.id].essayIds : [],
+          statistics: state[item.id] ? state[item.id].statistics : [],
+        },
+      }), state);
+    }
     default:
       return state;
   }
@@ -69,6 +84,10 @@ const allIds = (state = [], action) => {
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       return [...new Set([...action.payload.challenges.map((item) => item.id), ...state])];
+    }
+    case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
+      const { challenges } = action.payload;
+      return [...new Set([...challenges.map((item) => item.id), ...state])];
     }
     default:
       return state;
