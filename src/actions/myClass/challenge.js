@@ -128,6 +128,30 @@ const fetchChallengeSummary = (token, challengeId) => (dispatch) => {
     });
 };
 
+const fetchChallengeMemberSubmission = (token, challengeId) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+
+  dispatch({ type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_REQUEST });
+
+  agent.get(`/challenge/${challengeId}/statistics/member-submission`, auth)
+    .then((res) => {
+      dispatch({
+        type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_SUCCESS,
+        payload: { challengeId, data: res.data.data.data.member },
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_FAIL,
+        error: err,
+      });
+    });
+};
+
 const addProblem = (token, challengeId, label, title) => async (dispatch) => {
   dispatch({ type: challengeConstants.ADD_PROBLEM_START });
   const auth = {
@@ -240,6 +264,7 @@ export {
   editChallenge,
   deleteChallenge,
   fetchChallengeSummary,
+  fetchChallengeMemberSubmission,
   addProblem,
   addEssay,
   addPeerReview,
