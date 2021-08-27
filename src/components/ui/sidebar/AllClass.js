@@ -21,14 +21,11 @@ export default function AllClass({
 
   useEffect(() => {
     dispatch(fetchCourses(authToken));
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, authToken]);
 
   useEffect(() => {
     dispatch(fetchClasses(authToken, courseId));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authToken, courseId]);
+  }, [authToken, courseId, dispatch]);
 
   const [display, setDisplay] = useState('unfold'); // 0: fold, 1: unfold
   const [arrow, setArrow] = useState(null);
@@ -36,23 +33,17 @@ export default function AllClass({
   const [itemList, setItemList] = useState([]);
   const [TAicons, setTAicons] = useState([]);
 
-  // useEffect(() => {
-  //   console.log(courses, classes);
-  //   if (courses.allIds.length !== 0 && classes.allIds.length !== 0) {
-  //     if (location.pathname === '/all-class') {
-  //       history.push(`/all-class/${courses.byId[courses.allIds[0]].id}/${classes.byId[classes.allIds[0]].id}/challenge`);
-  //     }
-  //   }
-  // }, [classes, courses, history, location.pathname]);
+  useEffect(() => {
+    dispatch(fetchCourses(authToken));
+    dispatch(fetchClasses(courseId));
+  }, [authToken, courseId, dispatch]);
 
   useEffect(() => {
     // console.log(courses, classes);
     const goBackToMain = () => {
       history.push('/all-class');
     };
-    if (
-      mode === 'main'
-    ) {
+    if (mode === 'main') {
       setTitle('All Courses');
       setItemList(
         courses.allIds
@@ -70,9 +61,10 @@ export default function AllClass({
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
-      setTitle(courses.byId[courses.allIds[0]].name);
+      setTitle(courses.byId[courseId].name);
       setItemList(
-        classes.allIds.sort()
+        courses.byId[courseId].classIds
+          .sort()
           .map((id) => classes.byId[id])
           .map(({ id, name }) => ({
             type: 'Class',
@@ -82,7 +74,7 @@ export default function AllClass({
           })),
       );
     }
-  }, [location.pathname, history, mode, courses, classes, courseId, classId, classNames.arrow]);
+  }, [classNames.arrow, classes, courseId, courses, history, mode]);
 
   // if (
   //   (courseId !== undefined && courses[courseId] === undefined)
@@ -134,27 +126,20 @@ export default function AllClass({
         <Divider variant="middle" className={classNames.divider} />
         {display === 'unfold' && (
           <List>
-            {itemList.map(
-              (item) => (
-                <ListItem
-                  button
-                  key={item.path}
-                  onClick={() => history.push(item.path)}
-                  className={classNames.item}
+            {itemList.map((item) => (
+              <ListItem button key={item.path} onClick={() => history.push(item.path)} className={classNames.item}>
+                <ListItemIcon
+                  className={classNames.itemIcon}
+                  style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
                 >
-                  <ListItemIcon
-                    className={classNames.itemIcon}
-                    style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.text}
-                    className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
-                  />
-                </ListItem>
-              ),
-            )}
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={item.text}
+                  className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
+                />
+              </ListItem>
+            ))}
           </List>
         )}
         <div className={classNames.bottomSpace} />
