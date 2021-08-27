@@ -51,7 +51,7 @@ export default function MyClass({
       && classes[classId] !== undefined
     ) {
       // console.log(userClasses);
-      setDisplay(userClasses.map((item) => (item.class_id === Number(classId) ? 1 : 0)));
+      setDisplay(userClasses.map((item) => item.class_id === Number(classId)));
       setTitles(userClasses.map((item) => `${item.course_name} ${item.class_name}`));
       setTAicons(
         userClasses.map((item) => (item.role === 'MANAGER' ? <Icon.TA key={item.class_id} style={{ marginLeft: '100px' }} /> : '')),
@@ -166,7 +166,7 @@ export default function MyClass({
         {userClasses.map((userClass, id) => (
           <div key={userClass.class_id}>
             <div className={classNames.title}>
-              {display[id] === 1 ? (
+              {display[id] ? (
                 <Icon.TriangleDown className={classNames.titleIcon} onClick={() => foldMyClass(id)} />
               ) : (
                 <Icon.TriangleRight className={classNames.titleIcon} onClick={() => unfoldMyClass(id)} />
@@ -177,7 +177,7 @@ export default function MyClass({
               </Typography>
             </div>
             <Divider variant="middle" className={classNames.divider} />
-            {display[id] === 1 ? (
+            {display[id] && (
               <List>
                 {itemLists[id].map((item) => (
                   <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
@@ -194,8 +194,6 @@ export default function MyClass({
                   </ListItem>
                 ))}
               </List>
-            ) : (
-              ''
             )}
           </div>
         ))}
