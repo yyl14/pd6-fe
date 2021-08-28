@@ -108,7 +108,7 @@ export default function RegisterForm() {
 
   const [disabled, setDisabled] = useState(false);
   const [popup, setPopup] = useState(false);
-  const [errorPopUp, setErrorPopup] = useState(false);
+  const [errorPopup, setErrorPopup] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
   const [showPassword, setShowPassword] = useState(false);
@@ -427,7 +427,7 @@ export default function RegisterForm() {
       )}
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={errorPopUp}
+        open={errorPopup}
         onClose={handleClose}
         message={`Error: ${errorMsg}`}
         key="errorMsg"
