@@ -75,7 +75,7 @@ export default function Grade({
           </Typography>
         </div>
         <Divider variant="middle" className={classNames.divider} />
-        {display === 'unfold' ? (
+        {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
               <ListItem button key={item.text} className={classNames.item}>
@@ -87,8 +87,6 @@ export default function Grade({
               </ListItem>
             ))}
           </List>
-        ) : (
-          ''
         )}
         <div className={classNames.bottomSpace} />
       </Drawer>

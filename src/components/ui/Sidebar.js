@@ -8,6 +8,7 @@ import {
 import Account from './sidebar/Account';
 import Course from './sidebar/Course';
 import System from './sidebar/System';
+import MyProfile from './sidebar/MyProfile';
 
 import MyClass from './sidebar/MyClass';
 import Challenge from './sidebar/Challenge';
@@ -123,6 +124,10 @@ export default function Sidebar() {
 
   return (
     <Switch>
+      {/* {My Profile} */}
+      <Route exact path="/my-profile">
+        <MyProfile classes={classes} history={history} location={location} mode="main" />
+      </Route>
       {/* {Admin} */}
       {/* {Course} */}
       <Route exact path="/admin/course/course/">
