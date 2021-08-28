@@ -1,7 +1,18 @@
 import React from 'react';
+import { CircularProgress, makeStyles } from '@material-ui/core';
 
-function NoMatch() {
-  return <div style={{ position: 'absolute', top: '200px', left: '200px' }}>404 Not Found</div>;
+const useStyles = makeStyles(() => ({
+  progress: {
+    position: 'absolute',
+    top: '41vh',
+    left: '47%',
+    // transform: 'translate(-50%, 0)',
+  },
+}));
+
+function GeneralLoading() {
+  const classNames = useStyles();
+  return <CircularProgress color="inherit" size={30} className={classNames.progress} />;
 }
 
-export default NoMatch;
+export default GeneralLoading;

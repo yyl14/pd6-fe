@@ -22,6 +22,7 @@ import { BiFilterAlt } from 'react-icons/bi';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
 import { fetchAccounts } from '../../../actions/admin/account';
+import GeneralLoading from '../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -70,7 +71,7 @@ export default function AccountList() {
   }, [accounts, accountsID]);
 
   if (loading.fetchAccounts) {
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   return (

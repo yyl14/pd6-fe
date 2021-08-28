@@ -20,6 +20,7 @@ import AlignedText from '../../../ui/AlignedText';
 import CodingProblemInfo from './ProblemSettings/CodingProblemInfo';
 import CodingProblemEdit from './ProblemSettings/CodingProblemEdit';
 import NoMatch from '../../../noMatch';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -93,7 +94,7 @@ export default function CodingProblem() {
     || classes[classId] === undefined
   ) {
     if (commonLoading.fetchCourse || commonLoading.fetchClass) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }

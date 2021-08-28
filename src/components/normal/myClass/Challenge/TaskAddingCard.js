@@ -20,6 +20,7 @@ import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
 
 import NoMatch from '../../../noMatch';
+import GeneralLoading from '../../../GeneralLoading';
 
 import { readChallenge, browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
 import { addProblem, addEssay, addPeerReview } from '../../../../actions/myClass/challenge';
@@ -42,9 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 export default function TaskAddingCard({ open, setOpen }) {
-  const {
-    courseId, classId, challengeId,
-  } = useParams();
+  const { courseId, classId, challengeId } = useParams();
   const history = useHistory();
   const classNames = useStyles();
 
@@ -85,7 +84,9 @@ export default function TaskAddingCard({ open, setOpen }) {
       }
     }
 
-    setTimeout(() => { dispatch(browseTasksUnderChallenge(authToken, challengeId)); }, 500);
+    setTimeout(() => {
+      dispatch(browseTasksUnderChallenge(authToken, challengeId));
+    }, 500);
     setOpen(false);
   };
 
@@ -98,13 +99,13 @@ export default function TaskAddingCard({ open, setOpen }) {
   };
 
   useEffect(() => {
-    dispatch((fetchClass(authToken, classId)));
-    dispatch((fetchCourse(authToken, courseId)));
-    dispatch((readChallenge(authToken, challengeId)));
+    dispatch(fetchClass(authToken, classId));
+    dispatch(fetchCourse(authToken, courseId));
+    dispatch(readChallenge(authToken, challengeId));
   }, [authToken, challengeId, classId, courseId, dispatch]);
 
   if (loading.readChallenge || commonLoading.fetchCourse || commonLoading.fetchClass) {
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   if (classes[classId] === undefined || courses[courseId] === undefined || challenges[challengeId === undefined]) {
@@ -159,14 +160,20 @@ export default function TaskAddingCard({ open, setOpen }) {
               <TextField
                 id="label"
                 value={label}
-                onChange={(e) => { setLabel(e.target.value); checkDisabled(e.target.value, title); }}
+                onChange={(e) => {
+                  setLabel(e.target.value);
+                  checkDisabled(e.target.value, title);
+                }}
               />
             </AlignedText>
             <AlignedText text="Title" childrenType="field">
               <TextField
                 id="title"
                 value={title}
-                onChange={(e) => { setTitle(e.target.value); checkDisabled(label, e.target.value); }}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                  checkDisabled(label, e.target.value);
+                }}
               />
             </AlignedText>
           </DialogContentText>

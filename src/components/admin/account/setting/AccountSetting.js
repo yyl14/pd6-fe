@@ -1,9 +1,9 @@
-import React, { Component, useState, useEffect } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Button, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { editAccount, fetchStudentCard } from '../../../../actions/admin/account';
+import { fetchStudentCard } from '../../../../actions/admin/account';
 import { fetchAccount } from '../../../../actions/common/common';
 import SimpleBar from '../../../ui/SimpleBar';
 import NoMatch from '../../../noMatch';
@@ -13,6 +13,7 @@ import StudentInfo from './StudentInfo';
 import StudentInfoEdit from './StudentInfoEdit';
 import AccountDelete from './AccountDelete';
 import NewPassword from './NewPassword';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -54,7 +55,7 @@ export default function AccountSetting() {
 
   if (accounts[accountId] === undefined || studentCards === undefined) {
     if (loading.fetchAccount || loading.fetchStudentCard) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }

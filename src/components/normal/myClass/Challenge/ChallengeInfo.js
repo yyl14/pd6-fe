@@ -23,6 +23,7 @@ import {
   browseTasksUnderChallenge,
   readProblemScore,
 } from '../../../../actions/myClass/problem';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -133,7 +134,7 @@ export default function ChallengeInfo() {
     if (!loading.browseChallengeOverview) {
       return <NoMatch />;
     }
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   const handleEdit = () => {

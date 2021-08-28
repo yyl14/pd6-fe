@@ -22,6 +22,7 @@ import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 import { getInstitute, editInstitute } from '../../../actions/admin/account';
 import NoMatch from '../../noMatch';
+import GeneralLoading from '../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -68,7 +69,7 @@ export default function InstituteSetting() {
 
   if (institutes[instituteId] === undefined) {
     if (loading.fetchInstitute) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }
@@ -271,13 +272,7 @@ export default function InstituteSetting() {
         </Typography>
       </SimpleBar>
 
-      <Dialog
-        open={settingStatus.changeName}
-        keepMounted
-        onClose={() => handleClosePopUp()}
-        fullWidth
-        maxWidth="sm"
-      >
+      <Dialog open={settingStatus.changeName} keepMounted onClose={() => handleClosePopUp()} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Rename institute</Typography>
         </DialogTitle>
@@ -357,13 +352,7 @@ export default function InstituteSetting() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog
-        open={settingStatus.changeEmail}
-        keepMounted
-        onClose={() => handleClosePopUp()}
-        fullWidth
-        maxWidth="sm"
-      >
+      <Dialog open={settingStatus.changeEmail} keepMounted onClose={() => handleClosePopUp()} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Change institute email</Typography>
         </DialogTitle>
@@ -403,13 +392,7 @@ export default function InstituteSetting() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog
-        open={settingStatus.changeStatus}
-        keepMounted
-        onClose={() => handleClosePopUp()}
-        fullWidth
-        maxWidth="sm"
-      >
+      <Dialog open={settingStatus.changeStatus} keepMounted onClose={() => handleClosePopUp()} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Rename institute</Typography>
         </DialogTitle>

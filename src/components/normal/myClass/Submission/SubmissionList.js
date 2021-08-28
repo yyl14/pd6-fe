@@ -14,6 +14,7 @@ import { fetchClassSubmissions } from '../../../../actions/myClass/submission';
 import AutoTable from '../../../ui/AutoTable';
 
 import NoMatch from '../../../noMatch';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -49,7 +50,7 @@ export default function SubmissionList() {
 
   if (courses[courseId] === undefined || allClass[classId] === undefined) {
     if (commonLoading.fetchCourse || commonLoading.fetchClass) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }

@@ -25,6 +25,7 @@ import { addInstitute } from '../../../actions/admin/account';
 import { getInstitutes } from '../../../actions/common/common';
 import filterData from '../../../function/filter';
 import sortData from '../../../function/sort';
+import GeneralLoading from '../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -132,7 +133,7 @@ export default function InstituteList() {
   }, [institutes, institutesID]);
 
   if (loading.fetchInstitutes) {
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   return (

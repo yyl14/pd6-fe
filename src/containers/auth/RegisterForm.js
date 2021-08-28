@@ -3,7 +3,6 @@ import React, { useSelector, useDispatch } from 'react-redux';
 import {
   Button,
   TextField,
-  Grid,
   Typography,
   Card,
   CardContent,
@@ -23,12 +22,12 @@ import {
   makeStyles,
   Snackbar,
 } from '@material-ui/core';
-import { PlayCircleFilledWhite, Visibility, VisibilityOff } from '@material-ui/icons';
-import { borders, borderRadius } from '@material-ui/system';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { userRegister } from '../../actions/user/auth';
 import { getInstitutes } from '../../actions/common/common';
+import GeneralLoading from '../../components/GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   authForm: {
@@ -199,12 +198,15 @@ export default function RegisterForm() {
       setEmailTail(`@${institutes[transform(value)].email_domain}`);
     }
 
-    if (name === 'username' && (errorTexts[name] === 'Username Exists')) {
+    if (name === 'username' && errorTexts[name] === 'Username Exists') {
       setErrors((input) => ({ ...input, username: false }));
       setErrorTexts((input) => ({ ...input, username: '' }));
     }
 
-    if (name === 'studentId' && (errorTexts[name] === 'Student ID Exists' || errorTexts[name] === 'StudentIdNotMatchEmail')) {
+    if (
+      name === 'studentId'
+      && (errorTexts[name] === 'Student ID Exists' || errorTexts[name] === 'StudentIdNotMatchEmail')
+    ) {
       setErrors((input) => ({ ...input, studentId: false }));
       setErrorTexts((input) => ({ ...input, studentId: '' }));
     }
@@ -244,7 +246,11 @@ export default function RegisterForm() {
           }
           case 'StudentIdNotMatchEmail': {
             setErrors((input) => ({ ...input, studentId: true, email: true }));
-            setErrorTexts((input) => ({ ...input, studentId: 'StudentIdNotMatchEmail', email: 'StudentIdNotMatchEmail' }));
+            setErrorTexts((input) => ({
+              ...input,
+              studentId: 'StudentIdNotMatchEmail',
+              email: 'StudentIdNotMatchEmail',
+            }));
             break;
           }
           default: {
@@ -259,7 +265,7 @@ export default function RegisterForm() {
   }, [hasRequest, registerError, registerLoading]);
 
   if (loadingInstitute) {
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
   return (
     <>
@@ -434,11 +440,7 @@ export default function RegisterForm() {
         className={classNames.snackbar}
       />
       {popup && (
-        <Dialog
-          open={popup}
-          keepMounted
-          onClose={() => setPopup(false)}
-        >
+        <Dialog open={popup} keepMounted onClose={() => setPopup(false)}>
           <DialogTitle id="alert-dialog-slide-title">
             <Typography variant="h4">Verification email sent</Typography>
           </DialogTitle>
