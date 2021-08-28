@@ -40,11 +40,13 @@ export default function ForgetPasswordForm() {
   const classNames = useStyles();
   const dispatch = useDispatch();
   const serverError = useSelector((state) => state.error.user.auth.forgetPassword);
+  const serverLoading = useSelector((state) => state.loading.user.auth.forgetPassword);
   const [email, setEmail] = useState('');
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [disabled, setDisabled] = useState(true);
   const [popUp, setPopUp] = useState(false);
+  const [submit, setSubmit] = useState(false);
 
   const handleChange = (event) => {
     if (event.target.value === '') {
@@ -74,7 +76,7 @@ export default function ForgetPasswordForm() {
       return;
     }
     dispatch(userForgetPassword(email.trim()));
-    setPopUp(true);
+    setSubmit(true);
   };
 
   const handleClosePopUp = () => {
@@ -82,16 +84,21 @@ export default function ForgetPasswordForm() {
   };
 
   useEffect(() => {
-    if (serverError !== null) {
-      setErrorText(serverError);
-      setError(true);
-      setDisabled(true);
-    } else {
-      setErrorText('');
-      setError(false);
-      setDisabled(false);
+    if (serverLoading === false && submit === true) {
+      if (serverError !== null) {
+        setSubmit(false);
+        setErrorText(serverError);
+        setError(true);
+        setDisabled(true);
+      } else {
+        setSubmit(false);
+        setPopUp(true);
+        setErrorText('');
+        setError(false);
+        setDisabled(false);
+      }
     }
-  }, [serverError]);
+  }, [serverError, serverLoading, submit]);
 
   return (
     <>

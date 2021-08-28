@@ -85,25 +85,30 @@ const userLogout = (history) => (dispatch) => {
   history.push('/login');
 };
 
-const userForgetPassword = (email) => (dispatch) => {
-  dispatch({
-    type: authConstants.FORGET_PASSWORD_START,
-  });
-  agent
-    .post('/account/forget-password', { email })
-    .then((res) => {
+const userForgetPassword = (email) => async (dispatch) => {
+  try {
+    dispatch({
+      type: authConstants.FORGET_PASSWORD_START,
+    });
+    const res = await agent.post('/account/forget-password', { email });
+    if (res.data.success) {
       dispatch({
         type: authConstants.FORGET_PASSWORD_SUCCESS,
       });
-    })
-    .catch((err) => {
+    } else {
       dispatch({
         type: authConstants.FORGET_PASSWORD_FAIL,
-        error: err,
+        errors: res.data.error,
       });
+    }
+  } catch (err) {
+    dispatch({
+      type: authConstants.FORGET_PASSWORD_FAIL,
+      errors: err,
     });
+  }
 };
-// StudentCardExists
+
 const userRegister = (username, password, nickname, realName, emailPrefix, instituteId, studentId) => async (dispatch) => {
   dispatch({ type: authConstants.SIGNUP_START });
   const body = {
