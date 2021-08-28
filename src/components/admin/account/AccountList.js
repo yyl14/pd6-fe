@@ -4,6 +4,7 @@ import { makeStyles, Button, Typography } from '@material-ui/core';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
 import { fetchAccounts } from '../../../actions/admin/account';
+import GeneralLoading from '../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
   pageHeader: {
@@ -52,7 +53,7 @@ export default function AccountList() {
   }, [accounts, accountsID]);
 
   if (loading.fetchAccounts) {
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   return (

@@ -8,6 +8,7 @@ import {
 import moment from 'moment';
 
 import NoMatch from '../../noMatch';
+import GeneralLoading from '../../GeneralLoading';
 import CustomTable from '../../ui/CustomTable';
 import DateRangePicker from '../../ui/DateRangePicker';
 import { fetchAnnouncement } from '../../../actions/admin/system';
@@ -116,7 +117,7 @@ export default function AnnouncementHome() {
 
   if (announcements === null) {
     if (loading.fetchAnnouncement) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }

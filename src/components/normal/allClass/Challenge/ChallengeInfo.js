@@ -17,6 +17,7 @@ import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
+import GeneralLoading from '../../../GeneralLoading';
 import {
   browseChallengeOverview, editChallenge, browseTasksUnderChallenge, readProblemScore,
 } from '../../../../actions/myClass/problem';
@@ -113,7 +114,7 @@ export default function ChallengeInfo() {
     if (!loading.browseChallengeOverview) {
       return <NoMatch />;
     }
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   return (

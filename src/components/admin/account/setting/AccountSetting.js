@@ -12,6 +12,7 @@ import StudentInfo from './StudentInfo';
 import StudentInfoEdit from './StudentInfoEdit';
 import AccountDelete from './AccountDelete';
 import NewPassword from './NewPassword';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
   pageHeader: {
@@ -57,7 +58,7 @@ export default function AccountSetting() {
 
   if (accounts[accountId] === undefined || studentCards === undefined) {
     if (loading.fetchAccount || loading.fetchStudentCard) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }

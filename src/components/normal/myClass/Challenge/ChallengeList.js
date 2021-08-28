@@ -21,6 +21,7 @@ import CustomTable from '../../../ui/CustomTable';
 import DateRangePicker from '../../../ui/DateRangePicker';
 import { fetchChallenges, addChallenge } from '../../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse } from '../../../../actions/common/common';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -134,7 +135,7 @@ export default function ChallengeList() {
   }, [classId, userClasses]);
 
   if (loading.fetchChallenges || courses[courseId] === undefined || classes[classId] === undefined) {
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   const handleChange = (e) => {

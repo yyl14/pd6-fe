@@ -16,6 +16,7 @@ import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 import NoMatch from '../../noMatch';
 import { editSubmitLanguage, fetchSubmitLanguage } from '../../../actions/admin/system';
+import GeneralLoading from '../../GeneralLoading';
 
 const useStyle = makeStyles(() => ({
   pageHeader: {
@@ -53,7 +54,7 @@ export default function LangSetting() {
 
   if (submitLang[languageId] === undefined) {
     if (loading.fetchSubmitLanguage) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }

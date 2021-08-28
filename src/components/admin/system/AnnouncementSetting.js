@@ -19,6 +19,7 @@ import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 import { fetchAnnouncement, deleteAnnouncement } from '../../../actions/admin/system';
 import AnnouncementEdit from './AnnouncementEdit';
+import GeneralLoading from '../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
   pageHeader: {
@@ -79,7 +80,7 @@ export default function AnnouncementSetting() {
   /* This is a level 4 component (page component) */
   if (announcement === null) {
     if (loading) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }

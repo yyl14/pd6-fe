@@ -17,6 +17,7 @@ import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 import { getInstitute, editInstitute } from '../../../actions/admin/account';
 import NoMatch from '../../noMatch';
+import GeneralLoading from '../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
   pageHeader: {
@@ -63,7 +64,7 @@ export default function InstituteSetting() {
 
   if (institutes[instituteId] === undefined) {
     if (loading.fetchInstitute) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }

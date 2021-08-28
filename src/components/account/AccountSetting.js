@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { fetchStudentCard } from '../../actions/user/user';
+import GeneralLoading from '../GeneralLoading';
 
 import NoMatch from '../noMatch';
 import BasicInfo from './BasicInfo';
@@ -47,7 +48,7 @@ export default function AccountSetting() {
 
   if (account === undefined || studentCards === undefined) {
     if (loading.auth.fetchAccount || loading.user.fetchStudentCard) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }

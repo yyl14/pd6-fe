@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
-  makeStyles,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
+  Typography, makeStyles, Button, Dialog, DialogTitle, DialogContent, DialogActions,
 } from '@material-ui/core';
 import moment from 'moment';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
@@ -19,6 +13,7 @@ import { fetchChallenges, deleteChallenge } from '../../../../actions/myClass/ch
 import { fetchClass, fetchCourse } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
 import SettingEdit from './SettingEdit';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -77,7 +72,7 @@ export default function Setting() {
 
   if (challenge === undefined) {
     if (loading) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }
@@ -89,16 +84,10 @@ export default function Setting() {
       </Typography>
 
       {edit ? (
-        <SettingEdit
-          challengeId={challengeId}
-          challenge={challenge}
-          setEdit={setEdit}
-        />
+        <SettingEdit challengeId={challengeId} challenge={challenge} setEdit={setEdit} />
       ) : (
         <>
-          <Button onClick={() => setEdit(true)}>
-            Edit
-          </Button>
+          <Button onClick={() => setEdit(true)}>Edit</Button>
 
           <SimpleBar title="Information">
             <AlignedText text="Title" maxWidth="lg" childrenType="text">
@@ -113,16 +102,12 @@ export default function Setting() {
             </AlignedText>
             <AlignedText text="Scored by" maxWidth="lg" childrenType="text">
               <Typography variant="body1">
-                {challenge.selection_type === 'LAST'
-                  ? 'Last Score'
-                  : 'Best Score'}
+                {challenge.selection_type === 'LAST' ? 'Last Score' : 'Best Score'}
               </Typography>
             </AlignedText>
             <AlignedText text="Shown in Problem Set" maxWidth="lg" childrenType="text">
               <Typography variant="body1">
-                {challenge.publicize_type === 'START_TIME'
-                  ? 'On Start Time'
-                  : 'On End Time'}
+                {challenge.publicize_type === 'START_TIME' ? 'On Start Time' : 'On End Time'}
               </Typography>
             </AlignedText>
           </SimpleBar>
@@ -143,15 +128,9 @@ export default function Setting() {
           </SimpleBar>
         </>
       )}
-      <Dialog
-        open={warningPopUp}
-        onClose={() => setWarningPopUp(false)}
-        fullWidth
-      >
+      <Dialog open={warningPopUp} onClose={() => setWarningPopUp(false)} fullWidth>
         <DialogTitle id="dialog-slide-title">
-          <Typography variant="h4">
-            Delete Changes
-          </Typography>
+          <Typography variant="h4">Delete Changes</Typography>
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Class" maxWidth="lg" childrenType="text" textColor="secondary">
