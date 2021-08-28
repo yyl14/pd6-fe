@@ -29,7 +29,7 @@ export default function AccountDelete(props) {
   const deleteLoading = useSelector((state) => state.loading.admin.account.deleteAccount);
   const deleteError = useSelector((state) => state.error.admin.account.deleteAccount);
   const [hasRequest, setHasRequest] = useState(false);
-  const [errorPopUp, setErrorPopUp] = useState(false);
+  const [errorPopup, setErrorPopup] = useState(false);
 
   const handleDelete = () => {
     dispatch(deleteAccount(authToken, accountId));
@@ -41,7 +41,7 @@ export default function AccountDelete(props) {
   useEffect(() => {
     if (!deleteLoading && hasRequest) {
       if (deleteError !== null) {
-        setErrorPopUp(true);
+        setErrorPopup(true);
       } else {
         setHasRequest(false);
         history.push('/admin/account/account/');
@@ -102,8 +102,8 @@ export default function AccountDelete(props) {
       )}
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={errorPopUp}
-        onClose={() => setErrorPopUp(false)}
+        open={errorPopup}
+        onClose={() => setErrorPopup(false)}
         message={`Error: ${deleteError}`}
         key="errorMsg"
         className={classes.snackbar}
