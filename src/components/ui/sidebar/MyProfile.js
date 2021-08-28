@@ -76,8 +76,6 @@ export default function MyProfile({
               </ListItem>
             ))}
           </List>
-        ) : (
-          ''
         )}
         <div className={classes.bottomSpace} />
       </Drawer>

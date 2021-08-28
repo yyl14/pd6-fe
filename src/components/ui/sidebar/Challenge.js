@@ -271,7 +271,7 @@ export default function Challenge({
           {TAicon}
         </div>
         <Divider variant="middle" className={classNames.divider} />
-        {display === 'unfold' ? (
+        {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
               <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
@@ -303,8 +303,6 @@ export default function Challenge({
               </ListItem>
               )}
           </List>
-        ) : (
-          ''
         )}
         <div className={classNames.bottomSpace} />
       </Drawer>

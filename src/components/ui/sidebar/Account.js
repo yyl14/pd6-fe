@@ -121,7 +121,7 @@ export default function Account({
           </Typography>
         </div>
         <Divider variant="middle" className={classes.divider} />
-        {display === 'unfold' ? (
+        {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
               <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classes.item}>
@@ -139,8 +139,6 @@ export default function Account({
               </ListItem>
             ))}
           </List>
-        ) : (
-          ''
         )}
         <div className={classes.bottomSpace} />
       </Drawer>

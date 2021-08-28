@@ -94,7 +94,7 @@ export default function Team({
           </Typography>
         </div>
         <Divider variant="middle" className={classNames.divider} />
-        {display === 'unfold' ? (
+        {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
               <ListItem button key={item.text} className={classNames.item}>
@@ -111,8 +111,6 @@ export default function Team({
               </ListItem>
             ))}
           </List>
-        ) : (
-          ''
         )}
         <div className={classNames.bottomSpace} />
       </Drawer>

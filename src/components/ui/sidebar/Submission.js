@@ -6,7 +6,6 @@ import {
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
-import { fetchChallenges, addChallenge } from '../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse } from '../../../actions/common/common';
 
 export default function Submission({
@@ -99,7 +98,7 @@ export default function Submission({
           </Typography>
         </div>
         <Divider variant="middle" className={classNames.divider} />
-        {display === 'unfold' ? (
+        {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
               <ListItem button key={item.text} className={classNames.item}>
@@ -111,8 +110,6 @@ export default function Submission({
               </ListItem>
             ))}
           </List>
-        ) : (
-          ''
         )}
         <div className={classNames.bottomSpace} />
       </Drawer>
