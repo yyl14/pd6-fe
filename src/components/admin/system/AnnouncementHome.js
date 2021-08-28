@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  useHistory, useParams, BrowserRouter as Router, Link,
-} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { BiFilterAlt } from 'react-icons/bi';
 import {
   Button, Typography, makeStyles, Dialog, DialogActions, DialogContent, DialogTitle,
@@ -14,7 +12,7 @@ import CustomTable from '../../ui/CustomTable';
 import DateRangePicker from '../../ui/DateRangePicker';
 import { fetchAnnouncement } from '../../../actions/admin/system';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },

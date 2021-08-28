@@ -7,23 +7,18 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   FormControlLabel,
   Switch,
-  Grid,
-  OutlinedInput,
   TextField,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
-import { Translate } from '@material-ui/icons';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 import { getInstitute, editInstitute } from '../../../actions/admin/account';
 import NoMatch from '../../noMatch';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -271,13 +266,7 @@ export default function InstituteSetting() {
         </Typography>
       </SimpleBar>
 
-      <Dialog
-        open={settingStatus.changeName}
-        keepMounted
-        onClose={() => handleClosePopUp()}
-        fullWidth
-        maxWidth="sm"
-      >
+      <Dialog open={settingStatus.changeName} keepMounted onClose={() => handleClosePopUp()} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Rename institute</Typography>
         </DialogTitle>
@@ -357,13 +346,7 @@ export default function InstituteSetting() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog
-        open={settingStatus.changeEmail}
-        keepMounted
-        onClose={() => handleClosePopUp()}
-        fullWidth
-        maxWidth="sm"
-      >
+      <Dialog open={settingStatus.changeEmail} keepMounted onClose={() => handleClosePopUp()} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Change institute email</Typography>
         </DialogTitle>
@@ -403,13 +386,7 @@ export default function InstituteSetting() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog
-        open={settingStatus.changeStatus}
-        keepMounted
-        onClose={() => handleClosePopUp()}
-        fullWidth
-        maxWidth="sm"
-      >
+      <Dialog open={settingStatus.changeStatus} keepMounted onClose={() => handleClosePopUp()} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Rename institute</Typography>
         </DialogTitle>
