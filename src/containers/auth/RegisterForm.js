@@ -21,8 +21,9 @@ import {
   DialogTitle,
   Link,
   makeStyles,
+  Snackbar,
 } from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { PlayCircleFilledWhite, Visibility, VisibilityOff } from '@material-ui/icons';
 import { borders, borderRadius } from '@material-ui/system';
 
 import { Link as RouterLink, useHistory } from 'react-router-dom';
@@ -47,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
   },
   authLink: {
     color: theme.palette.grey.A400,
+  },
+  snackbar: {
+    width: '400px',
   },
 }));
 
@@ -104,6 +108,8 @@ export default function RegisterForm() {
 
   const [disabled, setDisabled] = useState(false);
   const [popup, setPopup] = useState(false);
+  const [errorPopUp, setErrorPopup] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -193,17 +199,17 @@ export default function RegisterForm() {
       setEmailTail(`@${institutes[transform(value)].email_domain}`);
     }
 
-    if (name === 'username' && (errorTexts[name] === 'Username Exists' || errorTexts[name] === 'Register Fail')) {
+    if (name === 'username' && (errorTexts[name] === 'Username Exists')) {
       setErrors((input) => ({ ...input, username: false }));
       setErrorTexts((input) => ({ ...input, username: '' }));
     }
 
-    if (name === 'studentId' && errorTexts[name] === 'Student ID Exists') {
+    if (name === 'studentId' && (errorTexts[name] === 'Student ID Exists' || errorTexts[name] === 'StudentIdNotMatchEmail')) {
       setErrors((input) => ({ ...input, studentId: false }));
       setErrorTexts((input) => ({ ...input, studentId: '' }));
     }
 
-    if (name === 'email' && errorTexts[name] === 'Email Exists') {
+    if (name === 'email' && (errorTexts[name] === 'Email Exists' || errorTexts[name] === 'StudentIdNotMatchEmail')) {
       setErrors((input) => ({ ...input, email: false }));
       setErrorTexts((input) => ({ ...input, email: '' }));
     }
@@ -216,21 +222,36 @@ export default function RegisterForm() {
     history.push('/login');
   };
 
+  const handleClose = () => {
+    setErrorPopup(false);
+  };
+
   useEffect(() => {
     if (!registerLoading && hasRequest) {
-      if (registerError === 'StudentCardExists') {
-        setErrors((input) => ({ ...input, username: true }));
-        setErrorTexts((input) => ({ ...input, username: 'Username Exists' }));
-      } else if (registerError === 'SystemException') {
-        setErrors((input) => ({
-          ...input, username: true, studentId: true, email: true,
-        }));
-        setErrorTexts((input) => ({
-          ...input, username: 'Username Exists', studentId: 'Student ID Exists', email: 'Email Exists',
-        }));
-      } else if (registerError !== null) {
-        setErrors((input) => ({ ...input, username: true }));
-        setErrorTexts((input) => ({ ...input, username: 'Register Fail' }));
+      // IllegalCharacter, InvalidInstitute, SystemException
+      // StudentCardExists, UsernameExists, StudentIdNotMatchEmail
+      if (registerError !== null) {
+        switch (registerError) {
+          case 'UsernameExists': {
+            setErrors((input) => ({ ...input, username: true }));
+            setErrorTexts((input) => ({ ...input, username: 'Username Exists' }));
+            break;
+          }
+          case 'StudentCardExists': {
+            setErrors((input) => ({ ...input, studentId: true }));
+            setErrorTexts((input) => ({ ...input, studentId: 'Student ID Exists' }));
+            break;
+          }
+          case 'StudentIdNotMatchEmail': {
+            setErrors((input) => ({ ...input, studentId: true, email: true }));
+            setErrorTexts((input) => ({ ...input, studentId: 'StudentIdNotMatchEmail', email: 'StudentIdNotMatchEmail' }));
+            break;
+          }
+          default: {
+            setErrorMsg(registerError);
+            setErrorPopup(true);
+          }
+        }
       } else {
         setPopup(true);
       }
@@ -404,13 +425,19 @@ export default function RegisterForm() {
           </CardContent>
         </Card>
       )}
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={errorPopUp}
+        onClose={handleClose}
+        message={`Error: ${errorMsg}`}
+        key="errorMsg"
+        className={classNames.snackbar}
+      />
       {popup && (
         <Dialog
           open={popup}
           keepMounted
           onClose={() => setPopup(false)}
-          aria-labelledby="alert-dialog-slide-title"
-          aria-describedby="alert-dialog-slide-description"
         >
           <DialogTitle id="alert-dialog-slide-title">
             <Typography variant="h4">Verification email sent</Typography>
