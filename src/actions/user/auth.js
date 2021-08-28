@@ -134,6 +134,15 @@ const userRegister = (username, password, nickname, realName, emailPrefix, insti
   }
 };
 
+const emailVerification = async (code) => {
+  const config = {
+    params: {
+      code,
+    },
+  };
+  await agent.get('/email-verification', config);
+};
+
 export {
-  getUserInfo, userSignIn, userLogout, userForgetPassword, userRegister,
+  getUserInfo, userSignIn, userLogout, userForgetPassword, userRegister, emailVerification,
 };

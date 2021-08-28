@@ -12,6 +12,7 @@ import Login from './containers/auth/Login';
 import Register from './containers/auth/Register';
 import ForgetPassword from './containers/auth/ForgetPassword';
 import ResetPassword from './containers/auth/ResetPassword';
+import EmailVerification from './containers/auth/EmailVerification';
 import Index from './containers';
 import NoMatch from './components/noMatch';
 import store from './store';
@@ -60,6 +61,7 @@ class App extends Component {
               <Route path="/forget-password" component={ForgetPassword} />
               <Route path="/reset-password" component={ResetPassword} />
               <Route path="/register" component={Register} />
+              <Route path="/email-verification" component={EmailVerification} />
               <Route path="/" component={Index} />
               <Route component={NoMatch} />
             </Switch>
