@@ -105,10 +105,10 @@ export default function TaskAddingCard({ open, setOpen }) {
   }, [authToken, challengeId, classId, courseId, dispatch]);
 
   if (loading.readChallenge || commonLoading.fetchCourse || commonLoading.fetchClass) {
-    return <GeneralLoading />;
+    return <></>;
   }
 
-  if (classes[classId] === undefined || courses[courseId] === undefined || challenges[challengeId === undefined]) {
+  if (classes[classId] === undefined || courses[courseId] === undefined || challenges[challengeId] === undefined) {
     return <NoMatch />;
   }
 

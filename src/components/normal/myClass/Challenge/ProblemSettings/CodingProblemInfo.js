@@ -214,10 +214,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   }, [problems, problemId, testcases]);
 
   useEffect(() => {
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
-  }, [authToken, challengeId, dispatch]);
-
-  useEffect(() => {
     dispatch(browseTestcase(authToken, problemId));
     dispatch(browseAssistingData(authToken, problemId));
   }, [authToken, dispatch, problemId]);

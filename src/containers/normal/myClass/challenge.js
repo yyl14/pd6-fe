@@ -6,11 +6,9 @@ import ChallengeInfo from '../../../components/normal/myClass/Challenge/Challeng
 import Problem from '../../../components/normal/myClass/Challenge/Problem';
 import Setting from '../../../components/normal/myClass/Challenge/Setting';
 import Statistics from '../../../components/normal/myClass/Challenge/Statistics';
-import CodeSubmission from '../../../components/normal/myClass/Challenge/CodeSubmission';
-import SubmissionList from '../../../components/normal/myClass/Challenge/SubmissionList';
-import SubmissionDetail from '../../../components/normal/myClass/Challenge/SubmissionDetail';
+
 import NoMatch from '../../../components/noMatch';
-import EssaySetting from '../../../components/normal/myClass/Challenge/EssaySetting';
+// import EssayProblem from '../../../components/normal/myClass/Challenge/EssayProblem';
 
 /* This is a level 3 container (main page container) */
 class Challenge extends Component {
@@ -29,11 +27,7 @@ class Challenge extends Component {
           <Route path="/my-class/:courseId/:classId/challenge/:challengeId/setting" component={Setting} />
           <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId" component={ChallengeInfo} />
           <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/statistics" component={Statistics} />
-          <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId" component={Problem} />
-          <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/code-submission" component={CodeSubmission} />
-          <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission" component={SubmissionList} />
-          <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId" component={SubmissionDetail} />
-          <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/essay/:essayId" component={EssaySetting} />
+          <Route path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId" component={Problem} />
           <Route component={NoMatch} />
         </Switch>
       </>
