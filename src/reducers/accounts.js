@@ -58,6 +58,18 @@ const byId = (state = {}, action) => {
         state,
       );
     }
+
+    case submissionConstants.GET_ACCOUNT_BATCH_SUCCESS: {
+      const { accountId, data } = action.payload;
+      return {
+        ...state,
+        [accountId]: {
+          data,
+          studentCard: [],
+          gradeIds: [],
+        },
+      };
+    }
     default:
       return state;
   }
@@ -81,6 +93,11 @@ const allIds = (state = [], action) => {
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       const { accounts } = action.payload;
       return [...new Set([...accounts.map((item) => item.id), ...state])];
+    }
+
+    case submissionConstants.GET_ACCOUNT_BATCH_SUCCESS: {
+      const { accountId } = action.payload;
+      return state.includes(accountId) ? state : state.concat([accountId]);
     }
 
     default:

@@ -359,6 +359,37 @@ const readTestcase = (token, testcaseId) => async (dispatch) => {
   }
 };
 
+const getAccountBatch = (token, accountId) => async (dispatch) => {
+  dispatch({ type: submissionConstants.GET_ACCOUNT_BATCH_START });
+  const config = {
+    headers: {
+      'Auth-Token': token,
+    },
+    params: {
+      account_ids: [accountId],
+    },
+  };
+  try {
+    const res = await agent.get('/account-summary/batch', config);
+    if (res.data.success) {
+      dispatch({
+        type: submissionConstants.GET_ACCOUNT_BATCH_SUCCESS,
+        payload: { data: res.data.data, accountId },
+      });
+    } else {
+      dispatch({
+        type: submissionConstants.GET_ACCOUNT_BATCH_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: submissionConstants.GET_ACCOUNT_BATCH_FAIL,
+      errors: err,
+    });
+  }
+};
+
 export {
   fetchAllSubmissions,
   fetchClassSubmissions,
@@ -370,4 +401,5 @@ export {
   readSubmissionDetail,
   browseJudgeCases,
   readTestcase,
+  getAccountBatch,
 };
