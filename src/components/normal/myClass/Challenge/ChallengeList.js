@@ -102,7 +102,7 @@ export default function ChallengeList() {
     if (classes[classId]) {
       if (isManager) {
         setTableData(
-          classes[classId].challengeIds.reverse().map((id) => ({
+          classes[classId].challengeIds.reduce((acc, b) => ([b, ...acc]), []).map((id) => ({
             title: challenges[id].title,
             path: `/my-class/${courseId}/${classId}/challenge/${id}`,
             startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
@@ -114,7 +114,7 @@ export default function ChallengeList() {
         setTableData(
           classes[classId].challengeIds
             .filter((id) => getStatus(id) !== 'Not Yet')
-            .reverse()
+            .reduce((acc, b) => ([b, ...acc]), [])
             .map((id) => ({
               title: challenges[id].title,
               path: `/my-class/${courseId}/${classId}/challenge/${id}`,
@@ -128,15 +128,9 @@ export default function ChallengeList() {
   }, [challenges, challengesID, classId, classes, courseId, currentTime, isManager]);
 
   useEffect(() => {
-    userClasses.map((item) => {
-      if (`${item.class_id}` === classId) {
-        // console.log(item.role);
-        if (item.role === 'MANAGER') {
-          setIsManager(true);
-        }
-      }
-      return <></>;
-    });
+    if (userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
+      setIsManager(true);
+    }
   }, [classId, userClasses]);
 
   if (loading.fetchChallenges || courses[courseId] === undefined || classes[classId] === undefined) {
