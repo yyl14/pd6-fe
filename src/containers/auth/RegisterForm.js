@@ -68,7 +68,6 @@ export default function RegisterForm() {
   const loadingInstitute = useSelector((state) => state.loading.common.fetchInstitutes);
   const registerLoading = useSelector((state) => state.loading.user.auth.signup);
   const registerError = useSelector((state) => state.error.user.auth.signup);
-  const test = useSelector((state) => state.error.user.auth);
   const institutes = useSelector((state) => state.institutes.byId);
   const institutesId = useSelector((state) => state.institutes.allIds);
   const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
@@ -257,7 +256,7 @@ export default function RegisterForm() {
         setPopup(true);
       }
     }
-  }, [hasRequest, registerError, registerLoading, test]);
+  }, [hasRequest, registerError, registerLoading]);
 
   if (loadingInstitute) {
     return <div>loading...</div>;
