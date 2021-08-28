@@ -155,7 +155,7 @@ const deleteAccount = (token, id) => (dispatch) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       dispatch({
         type: accountConstants.DELETE_ACCOUNT_FAIL,
         error: err,

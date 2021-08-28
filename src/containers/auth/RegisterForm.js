@@ -108,7 +108,7 @@ export default function RegisterForm() {
 
   const [disabled, setDisabled] = useState(false);
   const [popup, setPopup] = useState(false);
-  const [errorPopUp, setErrorPopup] = useState(false);
+  const [errorPopUp, setErrorPopUp] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
   const [showPassword, setShowPassword] = useState(false);
@@ -223,7 +223,7 @@ export default function RegisterForm() {
   };
 
   const handleClose = () => {
-    setErrorPopup(false);
+    setErrorPopUp(false);
   };
 
   useEffect(() => {
@@ -249,7 +249,7 @@ export default function RegisterForm() {
           }
           default: {
             setErrorMsg(registerError);
-            setErrorPopup(true);
+            setErrorPopUp(true);
           }
         }
       } else {

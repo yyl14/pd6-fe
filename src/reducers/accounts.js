@@ -8,7 +8,7 @@ const byId = (state = {}, action) => {
     case accountConstants.FETCH_ACCOUNTS_SUCCESS: {
       return action.payload.reduce(
         (acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [], gradeIds: [] } }),
-        state,
+        {},
       );
     }
     case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
@@ -66,7 +66,7 @@ const byId = (state = {}, action) => {
 const allIds = (state = [], action) => {
   switch (action.type) {
     case accountConstants.FETCH_ACCOUNTS_SUCCESS: {
-      return [...new Set([...action.payload.map((item) => item.id), ...state])];
+      return action.payload.map((item) => item.id);
     }
     case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
       const { accounts } = action.payload;
