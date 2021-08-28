@@ -33,7 +33,7 @@ const getUserInfo = (id, token) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: authConstants.AUTH_FAIL,
-      error: err,
+      errors: err,
     });
   }
 };
@@ -57,7 +57,7 @@ const userSignIn = (username, password) => async (dispatch) => {
         .then(({ data: { data } }) => ({ ...item, class_name: data.name, course_id: data.course_id }))
         .catch((error) => dispatch({
           type: authConstants.AUTH_FAIL,
-          error,
+          errors: error,
         }))),
     );
 
@@ -72,7 +72,7 @@ const userSignIn = (username, password) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: authConstants.AUTH_FAIL,
-      error: err,
+      errors: err,
     });
   }
 };
@@ -128,13 +128,13 @@ const userRegister = (username, password, nickname, realName, emailPrefix, insti
     } else {
       dispatch({
         type: authConstants.SIGNUP_FAIL,
-        error: res.data.error,
+        errors: res.data.error,
       });
     }
   } catch (err) {
     dispatch({
       type: authConstants.SIGNUP_FAIL,
-      error: err,
+      errors: err,
     });
   }
 };
