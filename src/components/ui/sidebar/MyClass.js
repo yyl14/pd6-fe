@@ -165,22 +165,22 @@ export default function MyClass({
         classes={{ paper: classNames.drawerPaper }}
       >
         <div className={classNames.topSpace} />
-
-        {userClasses.map((userClass, id) => (
-          <div key={userClass.class_id}>
-            <div className={classNames.title}>
-              {display[id] ? (
-                <Icon.TriangleDown className={classNames.titleIcon} onClick={() => foldMyClass(id)} />
-              ) : (
-                <Icon.TriangleRight className={classNames.titleIcon} onClick={() => unfoldMyClass(id)} />
-              )}
-              <Typography variant="h4" className={classNames.titleText}>
-                {titles[id]}
-                {TAicons[id]}
-              </Typography>
-            </div>
-            <Divider variant="middle" className={classNames.divider} />
-            {display[id] && (
+        <div>
+          {userClasses.map((userClass, id) => (
+            <div key={userClass.class_id}>
+              <div className={classNames.title}>
+                {display[id] ? (
+                  <Icon.TriangleDown className={classNames.titleIcon} onClick={() => foldMyClass(id)} />
+                ) : (
+                  <Icon.TriangleRight className={classNames.titleIcon} onClick={() => unfoldMyClass(id)} />
+                )}
+                <Typography variant="h4" className={classNames.titleText}>
+                  {titles[id]}
+                  {TAicons[id]}
+                </Typography>
+              </div>
+              <Divider variant="middle" className={classNames.divider} />
+              {display[id] && (
               <List>
                 {itemLists[id].map((item) => (
                   <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
@@ -197,9 +197,10 @@ export default function MyClass({
                   </ListItem>
                 ))}
               </List>
-            )}
-          </div>
-        ))}
+              )}
+            </div>
+          ))}
+        </div>
         <div className={classNames.bottomSpace} />
       </Drawer>
     </div>
