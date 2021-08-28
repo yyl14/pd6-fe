@@ -3,7 +3,6 @@ import React, { useSelector, useDispatch } from 'react-redux';
 import {
   Button,
   TextField,
-  Grid,
   Typography,
   Card,
   CardContent,
@@ -23,8 +22,7 @@ import {
   makeStyles,
   Snackbar,
 } from '@material-ui/core';
-import { PlayCircleFilledWhite, Visibility, VisibilityOff } from '@material-ui/icons';
-import { borders, borderRadius } from '@material-ui/system';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { userRegister } from '../../actions/user/auth';

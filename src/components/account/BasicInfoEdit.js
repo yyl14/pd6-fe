@@ -22,8 +22,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function BasicInfoEdit(props) {
-  const [realName, setRealName] = useState(props.realName);
-  const [userName, setUserName] = useState(props.userName);
+  const [realName] = useState(props.realName);
+  const [userName] = useState(props.userName);
   const [nickName, setNickName] = useState(props.nickName);
   const [altMail, setAltMail] = useState(props.altMail ? props.altMail : '');
   const [disabled, setDisabled] = useState(true);
