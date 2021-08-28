@@ -1,11 +1,10 @@
-import React, { Component, useState, useEffect } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Button, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { editAccount, fetchStudentCard } from '../../../../actions/admin/account';
+import { fetchStudentCard } from '../../../../actions/admin/account';
 import { fetchAccount } from '../../../../actions/common/common';
-import SimpleBar from '../../../ui/SimpleBar';
 import NoMatch from '../../../noMatch';
 import BasicInfo from './BasicInfo';
 import BasicInfoEdit from './BasicInfoEdit';
