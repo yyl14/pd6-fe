@@ -7,24 +7,19 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   FormControlLabel,
   Switch,
-  Grid,
-  OutlinedInput,
   TextField,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
-import { Translate } from '@material-ui/icons';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 import { getInstitute, editInstitute } from '../../../actions/admin/account';
 import NoMatch from '../../noMatch';
 import GeneralLoading from '../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },

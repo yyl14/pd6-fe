@@ -4,8 +4,6 @@ import {
   TextField,
   Card,
   CardContent,
-  Container,
-  Grid,
   Link,
   InputAdornment,
   IconButton,
@@ -13,7 +11,6 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { borders, borderRadius } from '@material-ui/system';
 import { useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -49,15 +46,19 @@ export default function LoginForm(props) {
 
   const [showPassword, setShowPassword] = useState(false);
   const loginError = useSelector((state) => state.error.user.auth);
+  const loginLoading = useSelector((state) => state.loading.user.auth);
 
   useEffect(() => {
-    if (loginError.fetchAccount) {
-      setErrors((ori) => ({ username: true, password: true }));
-      setErrorTexts((ori) => ({ ...ori, password: 'Incorrect username or password' }));
+    if (!loginLoading.fetchAccount) {
+      if (loginError.fetchAccount != null) {
+        setErrors({ username: true, password: true });
+        setErrorTexts((ori) => ({ ...ori, password: 'Incorrect username or password' }));
+      }
     }
-  }, [loginError.fetchAccount]);
+  }, [loginError, loginError.fetchAccount, loginLoading]);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const newUserName = username.trim();
     const newPassword = password.trim();
 
@@ -127,7 +128,7 @@ export default function LoginForm(props) {
             }}
           />
           <div className={classNames.authButtons}>
-            <Button color="primary" onClick={(e) => handleSubmit(e)}>
+            <Button color="primary" type="submit">
               Login
             </Button>
           </div>

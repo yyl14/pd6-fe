@@ -18,7 +18,7 @@ import NoMatch from '../../noMatch';
 import { editSubmitLanguage, fetchSubmitLanguage } from '../../../actions/admin/system';
 import GeneralLoading from '../../GeneralLoading';
 
-const useStyle = makeStyles((theme) => ({
+const useStyle = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -135,7 +135,7 @@ export default function LangSetting() {
             Cancel
           </Button>
           <Button
-            onClick={(e) => handleEditSubmitLanguage()}
+            onClick={() => handleEditSubmitLanguage()}
             color="secondary"
             disabled={changeLanguageStatus === false}
           >

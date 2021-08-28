@@ -111,7 +111,7 @@ export default function ChallengeList() {
       setTableData(
         classes[classId].challengeIds
           .filter((id) => getStatus(id) !== 'Not Yet')
-          .reverse()
+          .reduce((acc, b) => ([b, ...acc]), [])
           .map((id) => ({
             title: challenges[id].title,
             path: `/all-class/${courseId}/${classId}/challenge/${id}`,

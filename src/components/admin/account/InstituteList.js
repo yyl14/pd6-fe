@@ -7,16 +7,11 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   TextField,
   FormControlLabel,
   Switch,
-  FormControl,
-  Select,
-  MenuItem,
 } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
@@ -27,7 +22,7 @@ import filterData from '../../../function/filter';
 import sortData from '../../../function/sort';
 import GeneralLoading from '../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -49,7 +44,7 @@ export default function InstituteList() {
   const institutes = useSelector((state) => state.institutes.byId);
   const institutesID = useSelector((state) => state.institutes.allIds);
   const authToken = useSelector((state) => state.auth.token);
-  const pageError = useSelector((state) => state.error.admin.account);
+  // const pageError = useSelector((state) => state.error.admin.account);
   const loading = useSelector((state) => state.loading.admin.account);
 
   const [transformedData, setTransformedData] = useState([]);

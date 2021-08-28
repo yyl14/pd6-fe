@@ -7,7 +7,7 @@ import {
 import Icon from '../icon/index';
 
 export default function System({
-  menuItems, classes, history, location, mode,
+  classes, history, location, mode,
 }) {
   const { announcementId, languageId } = useParams();
   const announcementList = useSelector((state) => state.announcements);
@@ -141,7 +141,7 @@ export default function System({
           </Typography>
         </div>
         <Divider variant="middle" className={classes.divider} />
-        {display === 'unfold' ? (
+        {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
               <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classes.item}>
@@ -159,8 +159,6 @@ export default function System({
               </ListItem>
             ))}
           </List>
-        ) : (
-          ''
         )}
         <div className={classes.bottomSpace} />
       </Drawer>

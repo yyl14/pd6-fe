@@ -21,7 +21,7 @@ import { fetchAnnouncement, deleteAnnouncement } from '../../../actions/admin/sy
 import AnnouncementEdit from './AnnouncementEdit';
 import GeneralLoading from '../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -70,7 +70,7 @@ export default function AnnouncementSetting() {
   const handleClosePopUpDelete = () => {
     setPopUpDelete(false);
   };
-  const handleSubmitDelete = (e) => {
+  const handleSubmitDelete = () => {
     dispatch(deleteAnnouncement(authToken, announcementId));
     history.push('/admin/system/announcement');
   };
@@ -172,7 +172,7 @@ export default function AnnouncementSetting() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePopUpDelete}>Cancel</Button>
-          <Button onClick={(e) => handleSubmitDelete()} color="secondary">
+          <Button onClick={() => handleSubmitDelete()} color="secondary">
             Delete
           </Button>
         </DialogActions>
