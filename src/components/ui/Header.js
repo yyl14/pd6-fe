@@ -1,23 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  makeStyles,
-  Button,
-  Typography,
-  AppBar,
-  Toolbar,
-  Avatar,
-  ClickAwayListener,
-  Grow,
-  Paper,
-  Popper,
-  MenuItem,
-  MenuList,
+  makeStyles, Typography, AppBar, Toolbar,
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { format } from 'date-fns';
-import { GolfCourseTwoTone } from '@material-ui/icons';
 import Icon from './icon/index';
 import { userLogout } from '../../actions/user/auth';
 
@@ -320,7 +308,7 @@ export default function Header({ role, hasClass }) {
                 <Typography variant="h6">{user.username}</Typography>
               </button>
               <div className={classes.dropdownContent}>
-                {menuList.map((item, id) => (
+                {menuList.map((item) => (
                   <span
                     key={item.link}
                     tabIndex={item.link}
