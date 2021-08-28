@@ -9,17 +9,14 @@ import {
   makeStyles,
   TextField,
   FormControl,
-  InputLabel,
   Select,
   MenuItem,
-  CardActions,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
   DialogActions,
 } from '@material-ui/core';
-import StarIcon from '@material-ui/icons/Star';
 import { addStudentCard, makeStudentCardDefault } from '../../../../actions/admin/account';
 import StudentInfoCard from './StudentInfoCard';
 import SimpleBar from '../../../ui/SimpleBar';
@@ -76,7 +73,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function StudentInfoEdit(props) {
   const classes = useStyles();
-  const editMode = true;
   const [cards, setCards] = useState(props.cards); // new card isn't here
   const [defaultCardId, setDefaultCardId] = useState(null);
   const [changed, setChanged] = useState(false);

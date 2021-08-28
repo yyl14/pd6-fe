@@ -1,20 +1,15 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import {
   Button,
-  Divider,
-  Grid,
   Typography,
   Card,
   CardContent,
   makeStyles,
   TextField,
   FormControl,
-  InputLabel,
   Select,
   MenuItem,
-  CardActions,
   Dialog,
   DialogActions,
   DialogContent,
@@ -22,7 +17,6 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 
-import StarIcon from '@material-ui/icons/Star';
 import { addStudentCard, makeStudentCardDefault } from '../../actions/user/user';
 import StudentInfoCard from './StudentInfoCard';
 import SimpleBar from '../ui/SimpleBar';
@@ -73,12 +67,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function StudentInfoEdit(props) {
   const classes = useStyles();
-  const editMode = true;
   const [cards, setCards] = useState(props.cards); // new card isn't here
   const [defaultCardId, setDefaultCardId] = useState(null);
   const [disabledSave, setDisabledSave] = useState(true);
   const [add, setAdd] = useState(false); // addCard block
-  const [addCard, setAddCard] = useState(false);
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
   const [addInputs, setAddInputs] = useState({
     institute: 'National Taiwan University',
@@ -129,7 +121,6 @@ export default function StudentInfoEdit(props) {
     setPopUp(true);
     setAdd(false);
     setDisabledSave(false);
-    setAddCard(true);
   };
 
   const handleChange = (e) => {

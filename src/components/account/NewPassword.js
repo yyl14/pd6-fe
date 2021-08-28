@@ -20,7 +20,7 @@ import AlignedText from '../ui/AlignedText';
 
 import { editPassword } from '../../actions/user/user';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   textField: {
     width: '350px',
   },
@@ -41,7 +41,7 @@ export default function NewPassword() {
 
   const authToken = useSelector((state) => state.auth.token);
   const id = useSelector((state) => state.user.id);
-  const loading = useSelector((state) => state.loading.user.user.editPassword);
+  // const loading = useSelector((state) => state.loading.user.user.editPassword);
   const serverError = useSelector((state) => state.error.user.user.editPassword);
   const dispatch = useDispatch();
 
