@@ -3,14 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { format } from 'date-fns';
 import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  TextField,
+  Typography, Button, makeStyles, TextField,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import NoMatch from '../../../noMatch';

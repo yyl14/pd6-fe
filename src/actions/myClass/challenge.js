@@ -9,9 +9,7 @@ const fetchChallenges = (token, classId) => async (dispatch) => {
       },
     };
     dispatch({ type: challengeConstants.FETCH_CHALLENGES_REQUEST });
-
     const res = await agent.get(`/class/${classId}/challenge`, config);
-
     dispatch({
       type: challengeConstants.FETCH_CHALLENGES_SUCCESS,
       payload: { classId, data: res.data.data.data },
@@ -53,102 +51,83 @@ const addChallenge = (token, classId, body) => async (dispatch) => {
   }
 };
 
-const editChallenge = (token, challengeId, body) => (dispatch) => {
-  const config = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-  dispatch({ type: challengeConstants.EDIT_CHALLENGE_REQUEST });
-
-  agent
-    .patch(`/challenge/${challengeId}`, body, config)
-    .then((res) => {
-      console.log('edit challenge res:', res);
-      dispatch({
-        type: challengeConstants.EDIT_CHALLENGE_SUCCESS,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: challengeConstants.EDIT_CHALLENGE_FAIL,
-        error: err,
-      });
+const editChallenge = (token, challengeId, body) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: challengeConstants.EDIT_CHALLENGE_REQUEST });
+    await agent.patch(`/challenge/${challengeId}`, body, config);
+    dispatch({ type: challengeConstants.EDIT_CHALLENGE_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: challengeConstants.EDIT_CHALLENGE_FAIL,
+      error,
     });
+  }
 };
 
-const deleteChallenge = (token, challengeId) => (dispatch) => {
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-  dispatch({ type: challengeConstants.DELETE_CHALLENGE_REQUEST });
-
-  agent
-    .delete(`/challenge/${challengeId}`, auth)
-    .then((res) => {
-      // console.log('delete challenge res:', res);
-      dispatch({
-        type: challengeConstants.DELETE_CHALLENGE_SUCCESS,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: challengeConstants.DELETE_CHALLENGE_FAIL,
-        error: err,
-      });
+const deleteChallenge = (token, challengeId) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: challengeConstants.DELETE_CHALLENGE_REQUEST });
+    await agent.delete(`/challenge/${challengeId}`, config);
+    dispatch({ type: challengeConstants.DELETE_CHALLENGE_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: challengeConstants.DELETE_CHALLENGE_FAIL,
+      error,
     });
+  }
 };
 
-const fetchChallengeSummary = (token, challengeId) => (dispatch) => {
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-
-  dispatch({ type: challengeConstants.FETCH_CHALLENGE_SUMMARY_REQUEST });
-
-  agent
-    .get(`/challenge/${challengeId}/statistics/summary`, auth)
-    .then((res) => {
-      dispatch({
-        type: challengeConstants.FETCH_CHALLENGE_SUMMARY_SUCCESS,
-        payload: { challengeId, data: res.data.data.tasks },
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: challengeConstants.FETCH_CHALLENGE_SUMMARY_FAIL,
-        error: err,
-      });
+const fetchChallengeSummary = (token, challengeId) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: challengeConstants.FETCH_CHALLENGE_SUMMARY_REQUEST });
+    const res = agent.get(`/challenge/${challengeId}/statistics/summary`, config);
+    dispatch({
+      type: challengeConstants.FETCH_CHALLENGE_SUMMARY_SUCCESS,
+      payload: { challengeId, data: res.data.data.tasks },
     });
+  } catch (error) {
+    dispatch({
+      type: challengeConstants.FETCH_CHALLENGE_SUMMARY_FAIL,
+      error,
+    });
+  }
 };
 
-const fetchChallengeMemberSubmission = (token, challengeId) => (dispatch) => {
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
+const fetchChallengeMemberSubmission = (token, challengeId) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
 
-  dispatch({ type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_REQUEST });
-
-  agent
-    .get(`/challenge/${challengeId}/statistics/member-submission`, auth)
-    .then((res) => {
-      dispatch({
-        type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_SUCCESS,
-        payload: { challengeId, data: res.data.data.data.member },
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_FAIL,
-        error: err,
-      });
+    dispatch({ type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_REQUEST });
+    const res = agent.get(`/challenge/${challengeId}/statistics/member-submission`, config);
+    dispatch({
+      type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_SUCCESS,
+      payload: { challengeId, data: res.data.data.data.member },
     });
+  } catch (error) {
+    dispatch({
+      type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_FAIL,
+      error,
+    });
+  }
 };
 
 const addProblem = (token, challengeId, label, title) => async (dispatch) => {
@@ -193,8 +172,7 @@ const addEssay = (token, challengeId, label, title) => async (dispatch) => {
     description: '',
   };
   try {
-    const res = await agent.post(`/challenge/${challengeId}/essay`, body, auth);
-
+    await agent.post(`/challenge/${challengeId}/essay`, body, auth);
     dispatch({
       type: challengeConstants.ADD_ESSAY_SUCCESS,
     });

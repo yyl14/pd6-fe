@@ -23,8 +23,15 @@ import TestingDataUploadCard from './TestingDataUploadCard';
 import NoMatch from '../../../../noMatch';
 
 import {
-  editProblemInfo, deleteAssistingData, editAssistingData, addAssistingData,
-  deleteTestcase, editTestcase, uploadTestcaseInput, uploadTestcaseOutput, addTestcaseWithFile,
+  editProblemInfo,
+  deleteAssistingData,
+  editAssistingData,
+  addAssistingData,
+  deleteTestcase,
+  editTestcase,
+  uploadTestcaseInput,
+  uploadTestcaseOutput,
+  addTestcaseWithFile,
 } from '../../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
@@ -85,14 +92,19 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
 
   const [label, setLabel] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label);
   const [title, setTitle] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].title);
-  const [description, setDescription] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].description);
-  const [ioDescription, setIoDescription] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].io_description);
+  const [description, setDescription] = useState(
+    problems[problemId] === undefined ? 'error' : problems[problemId].description,
+  );
+  const [ioDescription, setIoDescription] = useState(
+    problems[problemId] === undefined ? 'error' : problems[problemId].io_description,
+  );
   const [source, setSource] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].source);
   const [hint, setHint] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].hint);
-  const [status, setStatus] = useState(problems[problemId] !== undefined && testcaseDataIds.length !== 0 ? !testcases[testcaseDataIds[0]].is_disabled : false);
-
-  const oriSampleData = [];
-  const oriTestcaseData = [];
+  const [status, setStatus] = useState(
+    problems[problemId] !== undefined && testcaseDataIds.length !== 0
+      ? !testcases[testcaseDataIds[0]].is_disabled
+      : false,
+  );
 
   const sampleTrans2no = (id) => {
     if (testcases[id].input_filename !== null) {
@@ -141,12 +153,14 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       new: false,
     })),
   );
-  const [assistTableData, setAssistTableData] = useState(problems[problemId] !== undefined
-    ? problems[problemId].assistingDataIds.map((id) => ({
-      id: assistingData[id].filename,
-      filename: assistingData[id].filename,
-    }))
-    : []);
+  const [assistTableData, setAssistTableData] = useState(
+    problems[problemId] !== undefined
+      ? problems[problemId].assistingDataIds.map((id) => ({
+        id: assistingData[id].filename,
+        filename: assistingData[id].filename,
+      }))
+      : [],
+  );
 
   const [tempSelectedFileS, setTempSelectedFileS] = useState([]);
   const [tempSelectedFileT, setTempSelectedFileT] = useState([]);
@@ -173,7 +187,8 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       if (selectedData.length === 0) {
         return [...acc, data];
       }
-      return [...acc,
+      return [
+        ...acc,
         {
           id: data.id,
           no: data.no,
@@ -184,7 +199,8 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           in_file: selectedData[0].in === null ? data.in_file : selectedData[0].in,
           out_file: selectedData[0].out === null ? data.out_file : selectedData[0].out,
           new: data.new,
-        }];
+        },
+      ];
     }, []);
 
     newSelectedFiles.map((item) => {
@@ -217,7 +233,8 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       if (selectedData.length === 0) {
         return [...acc, data];
       }
-      return [...acc,
+      return [
+        ...acc,
         {
           id: data.id,
           no: data.no,
@@ -229,7 +246,8 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           in_file: selectedData[0].in === null ? data.in_file : selectedData[0].in,
           out_file: selectedData[0].out === null ? data.out_file : selectedData[0].out,
           new: data.new,
-        }];
+        },
+      ];
     }, []);
 
     newSelectedFiles.map((item) => {
@@ -280,7 +298,19 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   };
 
   const handleSave = () => {
-    dispatch(editProblemInfo(authToken, problemId, title, problems[problemId].full_score, !status, description, ioDescription, source, hint));
+    dispatch(
+      editProblemInfo(
+        authToken,
+        problemId,
+        title,
+        problems[problemId].full_score,
+        !status,
+        description,
+        ioDescription,
+        source,
+        hint,
+      ),
+    );
 
     // handle sample file
     sampleDataIds.map((id) => {
@@ -297,12 +327,28 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       if (data.new) {
         // add testcase with file
         // console.log(data.no, ' should be added.');
-        dispatch(addTestcaseWithFile(authToken, problemId, true, 0, data.time_limit, data.memory_limit, false, data.in_file, data.out_file));
+        dispatch(
+          addTestcaseWithFile(
+            authToken,
+            problemId,
+            true,
+            0,
+            data.time_limit,
+            data.memory_limit,
+            false,
+            data.in_file,
+            data.out_file,
+          ),
+        );
       } else {
         // console.log(data.no, ' is original testcase');
         // check basic info
         const id = sampleDataIds.filter((item) => item === data.id);
-        if (testcases[id[0]].time_limit !== data.time_limit || testcases[id[0]].memory_limit !== data.memory_limit || testcases[id[0]].is_disabled !== !status) {
+        if (
+          testcases[id[0]].time_limit !== data.time_limit
+          || testcases[id[0]].memory_limit !== data.memory_limit
+          || testcases[id[0]].is_disabled !== !status
+        ) {
           dispatch(editTestcase(authToken, data.id, true, 0, data.time_limit, data.memory_limit, !status));
         }
         // upload file
@@ -331,12 +377,29 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       if (data.new) {
         // add testcase with file
         // console.log(data.no, ' should be added.');
-        dispatch(addTestcaseWithFile(authToken, problemId, false, data.score, data.time_limit, data.memory_limit, !status, data.in_file, data.out_file));
+        dispatch(
+          addTestcaseWithFile(
+            authToken,
+            problemId,
+            false,
+            data.score,
+            data.time_limit,
+            data.memory_limit,
+            !status,
+            data.in_file,
+            data.out_file,
+          ),
+        );
       } else {
         // console.log(data.no, ' is original testcase');
         // check basic info
         const id = testcaseDataIds.filter((item) => item === data.id);
-        if (testcases[id[0]].time_limit !== data.time_limit || testcases[id[0]].memory_limit !== data.memory_limit || testcases[id[0]].score !== data.score || testcases[id[0]].is_disabled !== !status) {
+        if (
+          testcases[id[0]].time_limit !== data.time_limit
+          || testcases[id[0]].memory_limit !== data.memory_limit
+          || testcases[id[0]].score !== data.score
+          || testcases[id[0]].is_disabled !== !status
+        ) {
           dispatch(editTestcase(authToken, data.id, false, data.score, data.time_limit, data.memory_limit, !status));
         }
         // upload file
@@ -381,7 +444,9 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
     });
 
     // wait for 3 secs because uploading many files waste time
-    setTimeout(() => { closeEdit(); }, 3000);
+    setTimeout(() => {
+      closeEdit();
+    }, 3000);
   };
 
   const handleCancel = () => {
@@ -471,7 +536,9 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       </SimpleBar>
       <SimpleBar title="Sample">
         <div className={classNames.loadButtons}>
-          <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setSamplePopUp(true)}>Upload</Button>
+          <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setSamplePopUp(true)}>
+            Upload
+          </Button>
           {/* <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button> */}
         </div>
         <SimpleTable
@@ -536,7 +603,9 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
         )}
       >
         <div className={classNames.loadButtons}>
-          <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setTestingPopUp(true)}>Upload</Button>
+          <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setTestingPopUp(true)}>
+            Upload
+          </Button>
           {/* <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button> */}
         </div>
         <SimpleTable
@@ -601,7 +670,9 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       </SimpleBar>
       <SimpleBar title="Assisting Data (Optional)">
         <div className={classNames.loadButtons}>
-          <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setAssistPopUp(true)}>Upload</Button>
+          <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setAssistPopUp(true)}>
+            Upload
+          </Button>
           {/* <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button> */}
         </div>
         <SimpleTable
@@ -622,17 +693,35 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
         />
       </SimpleBar>
       <div className={classNames.buttons}>
-        <Button color="default" onClick={handleCancel}>Cancel</Button>
-        <Button color="primary" onClick={handleSave}>Save</Button>
+        <Button color="default" onClick={handleCancel}>
+          Cancel
+        </Button>
+        <Button color="primary" onClick={handleSave}>
+          Save
+        </Button>
       </div>
-      <SampleUploadCard popUp={samplePopUp} closePopUp={handleClosePopUp} selectedFile={tempSelectedFileS} setSelectedFile={setTempSelectedFileS} handleTempUpload={handleSampleTempUpload} />
-      <AssistingDataUploadCard popUp={assistPopUp} closePopUp={handleClosePopUp} selectedFile={tempSelectedFileA} setSelectedFile={setTempSelectedFileA} handleTempUpload={handleAssistTempUpload} />
-      <TestingDataUploadCard popUp={testingPopUp} closePopUp={handleClosePopUp} selectedFile={tempSelectedFileT} setSelectedFile={setTempSelectedFileT} handleTempUpload={handleTestingTempUpload} />
-      <Dialog
-        open={warningPopUp}
-        onClose={() => setWarningPopUp(false)}
-        fullWidth
-      >
+      <SampleUploadCard
+        popUp={samplePopUp}
+        closePopUp={handleClosePopUp}
+        selectedFile={tempSelectedFileS}
+        setSelectedFile={setTempSelectedFileS}
+        handleTempUpload={handleSampleTempUpload}
+      />
+      <AssistingDataUploadCard
+        popUp={assistPopUp}
+        closePopUp={handleClosePopUp}
+        selectedFile={tempSelectedFileA}
+        setSelectedFile={setTempSelectedFileA}
+        handleTempUpload={handleAssistTempUpload}
+      />
+      <TestingDataUploadCard
+        popUp={testingPopUp}
+        closePopUp={handleClosePopUp}
+        selectedFile={tempSelectedFileT}
+        setSelectedFile={setTempSelectedFileT}
+        handleTempUpload={handleTestingTempUpload}
+      />
+      <Dialog open={warningPopUp} onClose={() => setWarningPopUp(false)} fullWidth>
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Unsaved Changes</Typography>
         </DialogTitle>

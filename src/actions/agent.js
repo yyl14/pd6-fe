@@ -9,6 +9,7 @@ agent.interceptors.response.use(
     // 2xx
     if (!res.data.success) {
       console.log(`Response error: ${res.data.error}`);
+      console.log(res);
       return Promise.reject(res.data.error);
     }
     return res;
