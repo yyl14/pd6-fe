@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Button, Card, CardContent, Typography,
-} from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import StudentInfoCard from './StudentInfoCard';
 import SimpleBar from '../../../ui/SimpleBar';
 

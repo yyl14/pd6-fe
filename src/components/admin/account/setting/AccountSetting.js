@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { fetchStudentCard } from '../../../../actions/admin/account';
-import { fetchAccount } from '../../../../actions/common/common';
+import { fetchAccount, getInstitutes } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
 import BasicInfo from './BasicInfo';
 import BasicInfoEdit from './BasicInfoEdit';
@@ -13,7 +13,7 @@ import StudentInfoEdit from './StudentInfoEdit';
 import AccountDelete from './AccountDelete';
 import NewPassword from './NewPassword';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -50,6 +50,10 @@ export default function AccountSetting() {
   useEffect(() => {
     setCards(Object.values(studentCards));
   }, [studentCards]);
+
+  useEffect(() => {
+    dispatch(getInstitutes());
+  }, [dispatch]);
 
   if (accounts[accountId] === undefined || studentCards === undefined) {
     if (loading.fetchAccount || loading.fetchStudentCard) {
