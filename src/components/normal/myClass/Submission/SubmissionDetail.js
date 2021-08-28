@@ -21,7 +21,7 @@ import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
 import NoMatch from '../../../noMatch';
 import {
   readSubmissionDetail, readProblem, browseChallengeOverview, browseJudgeCases, readTestcase,
-  fetchSubmission,
+  fetchSubmission, getAccountBatch,
 } from '../../../../actions/myClass/submission';
 
 // import { browseSubmitLang } from '../../../../actions/common/common';
@@ -63,6 +63,7 @@ export default function SubmissionDetail(props) {
   const [challengeId, setChallengeId] = useState('');
   const [problemId, setProblemId] = useState('');
   const [judgmentId, setJudgmentId] = useState('');
+  const [accountId, setAccountId] = useState('');
   const dispatch = useDispatch();
 
   const submissions = useSelector((state) => state.submissions.byId);
@@ -86,9 +87,10 @@ export default function SubmissionDetail(props) {
 
   useEffect(() => {
     if (submissions[submissionId] !== undefined) {
-      // read account info
+      dispatch(getAccountBatch(authToken, submissions[submissionId].account_id));
       dispatch(readProblem(authToken, submissions[submissionId].problem_id));
       setProblemId(submissions[submissionId].problem_id);
+      setAccountId(submissions[submissionId].account_id);
     }
   }, [authToken, dispatch, problems.byId, submissionId, submissions]);
 
@@ -145,7 +147,13 @@ export default function SubmissionDetail(props) {
     });
   }, [user.classes, classId]);
 
-  if (challenges.byId[challengeId] === undefined || problems.byId[problemId] === undefined || submissions[submissionId] === undefined || judgmentIds === undefined || judgeCases.allIds === undefined || testcaseIds === undefined) {
+  if (challenges.byId[challengeId] === undefined
+      || problems.byId[problemId] === undefined
+      || submissions[submissionId] === undefined
+      || judgmentIds === undefined
+      || judgeCases.allIds === undefined
+      || testcaseIds === undefined
+      || accounts.byId[accountId] === undefined) {
     if (!loading.readProblem && !loading.readSubmissionDetail && !loading.browseChallengeOverview && !loading.readTestcase && !loading.browseJudgeCases) {
       return <NoMatch />;
     }
@@ -183,15 +191,13 @@ export default function SubmissionDetail(props) {
           <Typography variant="body1">{submissionId}</Typography>
         </AlignedText>
         <AlignedText text="Username" childrenType="text">
-          <Link to="/my-profile" className={classNames.textLink}>
-            {/* <Typography variant="body1">{accounts.byId[submissions[submissionId].account_id].username}</Typography> */}
-          </Link>
+          <Typography variant="body1">{accounts.byId[accountId].username}</Typography>
         </AlignedText>
         <AlignedText text="Student ID" childrenType="text">
-          <Typography variant="body1">.</Typography>
+          <Typography variant="body1">{accounts.byId[accountId].student_id}</Typography>
         </AlignedText>
         <AlignedText text="Real Name" childrenType="text">
-          <Typography variant="body1">.</Typography>
+          <Typography variant="body1">{accounts.byId[accountId].real_name}</Typography>
         </AlignedText>
         <AlignedText text="Challenge" childrenType="text">
           <Link to={`/my-class/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>

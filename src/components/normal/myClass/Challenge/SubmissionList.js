@@ -82,11 +82,11 @@ export default function SubmissionList() {
               if (judgments[key].submission_id === id) {
                 return judgments[key].status.toLowerCase().split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
               }
-              return '-';
+              return '';
             }),
-            score: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].score : '-')),
-            used_time: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].total_time : '-')),
-            used_memory: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].max_memory : '-')),
+            score: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].score : '')),
+            used_time: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].total_time : '')),
+            used_memory: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].max_memory : '')),
             path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${id}`,
           })),
       );
