@@ -1,29 +1,23 @@
 import { useState, useEffect } from 'react';
 import React, { useSelector, useDispatch } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import {
   Button,
   TextField,
   Card,
   CardContent,
-  Container,
-  Grid,
   Typography,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   makeStyles,
 } from '@material-ui/core';
-import { borders, borderRadius } from '@material-ui/system';
-import { EmailOutlined, TrainRounded } from '@material-ui/icons';
 import { userForgetPassword } from '../../actions/user/auth';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   authForm: {
     width: '50%',
   },
