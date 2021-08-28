@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Button, Card, CardContent, Typography, makeStyles,
 } from '@material-ui/core';
-import { yellow } from '@material-ui/core/colors';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     width: '600px',
   },
