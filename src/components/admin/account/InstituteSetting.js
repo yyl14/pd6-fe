@@ -30,9 +30,6 @@ const useStyles = makeStyles((theme) => ({
   warningText: {
     marginTop: '10px',
   },
-  // inputField: {
-  //   width: 330,
-  // },
 }));
 
 export default function InstituteSetting() {
@@ -278,8 +275,6 @@ export default function InstituteSetting() {
         open={settingStatus.changeName}
         keepMounted
         onClose={() => handleClosePopUp()}
-        aria-labelledby="dialog-slide-title"
-        aria-describedby="dialog-slide-description"
         fullWidth
         maxWidth="sm"
       >
@@ -323,8 +318,6 @@ export default function InstituteSetting() {
         open={settingStatus.changeInitialism}
         keepMounted
         onClose={() => handleClosePopUp()}
-        aria-labelledby="dialog-slide-title"
-        aria-describedby="dialog-slide-description"
         fullWidth
         maxWidth="sm"
       >
@@ -368,8 +361,6 @@ export default function InstituteSetting() {
         open={settingStatus.changeEmail}
         keepMounted
         onClose={() => handleClosePopUp()}
-        aria-labelledby="dialog-slide-title"
-        aria-describedby="dialog-slide-description"
         fullWidth
         maxWidth="sm"
       >
@@ -408,7 +399,7 @@ export default function InstituteSetting() {
             }}
             color="secondary"
           >
-            Rename
+            Modify
           </Button>
         </DialogActions>
       </Dialog>
@@ -416,8 +407,6 @@ export default function InstituteSetting() {
         open={settingStatus.changeStatus}
         keepMounted
         onClose={() => handleClosePopUp()}
-        aria-labelledby="dialog-slide-title"
-        aria-describedby="dialog-slide-description"
         fullWidth
         maxWidth="sm"
       >

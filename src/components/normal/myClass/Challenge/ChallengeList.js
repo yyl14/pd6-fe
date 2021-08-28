@@ -210,14 +210,12 @@ export default function ChallengeList() {
       <CustomTable
         hasSearch
         buttons={
-          isManager ? (
+          isManager && (
             <>
               <Button color="primary" onClick={() => setPopUp(true)}>
                 <Icon.Add style={{ color: 'white' }} />
               </Button>
             </>
-          ) : (
-            <></>
           )
         }
         data={tableData}

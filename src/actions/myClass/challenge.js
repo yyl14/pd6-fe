@@ -12,7 +12,7 @@ const fetchChallenges = (token, classId) => (dispatch) => {
   agent
     .get(`/class/${classId}/challenge`, auth)
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       dispatch({
         type: challengeConstants.FETCH_CHALLENGES_SUCCESS,
         payload: { classId, data: res.data.data.data },
@@ -90,7 +90,7 @@ const deleteChallenge = (token, challengeId) => (dispatch) => {
   agent
     .delete(`/challenge/${challengeId}`, auth)
     .then((res) => {
-      console.log('delete challenge res:', res);
+      // console.log('delete challenge res:', res);
       dispatch({
         type: challengeConstants.DELETE_CHALLENGE_SUCCESS,
       });
@@ -123,6 +123,30 @@ const fetchChallengeSummary = (token, challengeId) => (dispatch) => {
     .catch((err) => {
       dispatch({
         type: challengeConstants.FETCH_CHALLENGE_SUMMARY_FAIL,
+        error: err,
+      });
+    });
+};
+
+const fetchChallengeMemberSubmission = (token, challengeId) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+
+  dispatch({ type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_REQUEST });
+
+  agent.get(`/challenge/${challengeId}/statistics/member-submission`, auth)
+    .then((res) => {
+      dispatch({
+        type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_SUCCESS,
+        payload: { challengeId, data: res.data.data.data.member },
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_FAIL,
         error: err,
       });
     });
@@ -240,6 +264,7 @@ export {
   editChallenge,
   deleteChallenge,
   fetchChallengeSummary,
+  fetchChallengeMemberSubmission,
   addProblem,
   addEssay,
   addPeerReview,

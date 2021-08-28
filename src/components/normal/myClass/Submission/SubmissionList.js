@@ -27,9 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 export default function SubmissionList() {
-  const {
-    courseId, classId,
-  } = useParams();
+  const { courseId, classId } = useParams();
   const classes = useStyles();
   const allClass = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
@@ -161,14 +159,25 @@ export default function SubmissionList() {
           'Student ID': accounts.byId[item.account_id] ? accounts.byId[item.account_id].student_id : '',
           'Real Name': accounts.byId[item.account_id] ? accounts.byId[item.account_id].real_name : '',
           Challenge: {
-            text: challenges.byId[problems.byId[item.problem_id].challenge_id] ? challenges.byId[problems.byId[item.problem_id].challenge_id].title : '',
-            path: problems.byId[item.problem_id] ? `/my-class/${courseId}/${classId}/challenge/${problems.byId[item.problem_id].challenge_id}` : '',
+            text:
+              problems.byId[item.problem_id] && challenges.byId[problems.byId[item.problem_id].challenge_id]
+                ? challenges.byId[problems.byId[item.problem_id].challenge_id].title
+                : '',
+            path: problems.byId[item.problem_id]
+              ? `/my-class/${courseId}/${classId}/challenge/${problems.byId[item.problem_id].challenge_id}`
+              : '',
           },
           Problem: {
             text: problems.byId[item.problem_id] ? problems.byId[item.problem_id].challenge_label : '',
-            path: problems.byId[item.problem_id] ? `/my-class/${courseId}/${classId}/challenge/${problems.byId[item.problem_id].challenge_id}/${item.problem_id}` : '',
+            path: problems.byId[item.problem_id]
+              ? `/my-class/${courseId}/${classId}/challenge/${problems.byId[item.problem_id].challenge_id}/${
+                item.problem_id
+              }`
+              : '',
           },
-          Status: Object.keys(judgments.byId).filter((key) => judgments.byId[key].submission_id === item.id)[0] ? judgments.byId[Object.keys(judgments.byId).filter((key) => judgments.byId[key].submission_id === item.id)[0]].status : 'No Status',
+          Status: judgments.allIds.filter((key) => judgments.byId[key].submission_id === item.id)[0]
+            ? judgments.byId[judgments.allIds.filter((key) => judgments.byId[key].submission_id === item.id)[0]].status
+            : 'No Status',
           Time: moment(item.submit_time).format('YYYY-MM-DD, HH:mm:ss'),
           link: `/my-class/${courseId}/${classId}/submission/${item.id}`,
         })}

@@ -7,8 +7,9 @@ import {
   DialogContentText,
   DialogActions,
   makeStyles,
+  Snackbar,
 } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { deleteAccount } from '../../../../actions/admin/account';
@@ -25,12 +26,28 @@ export default function AccountDelete(props) {
   const authToken = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
   const card = props.cards.filter((p) => p.is_default === true);
+  const deleteLoading = useSelector((state) => state.loading.admin.account.deleteAccount);
+  const deleteError = useSelector((state) => state.error.admin.account.deleteAccount);
+  const [hasRequest, setHasRequest] = useState(false);
+  const [errorPopup, setErrorPopup] = useState(false);
 
   const handleDelete = () => {
-    setPopUp(false);
     dispatch(deleteAccount(authToken, accountId));
-    history.push('/');
+    setHasRequest(true);
+    setPopUp(false);
+    // history.push('/');
   };
+
+  useEffect(() => {
+    if (!deleteLoading && hasRequest) {
+      if (deleteError !== null) {
+        setErrorPopup(true);
+      } else {
+        setHasRequest(false);
+        history.push('/admin/account/account/');
+      }
+    }
+  }, [deleteLoading, deleteError, hasRequest, history]);
 
   return (
     <div>
@@ -83,6 +100,14 @@ export default function AccountDelete(props) {
           </DialogActions>
         </Dialog>
       )}
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={errorPopup}
+        onClose={() => setErrorPopup(false)}
+        message={`Error: ${deleteError}`}
+        key="errorMsg"
+        className={classes.snackbar}
+      />
     </div>
   );
 }

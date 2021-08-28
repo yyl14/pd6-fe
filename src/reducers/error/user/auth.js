@@ -53,7 +53,7 @@ export default function auth(state = initialState, action) {
     case authConstants.SIGNUP_FAIL:
       return {
         ...state,
-        signup: action.errors,
+        signup: action.error,
       };
     case authConstants.API_CALL_ERROR:
       return {
