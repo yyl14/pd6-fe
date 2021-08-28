@@ -91,7 +91,7 @@ const userForgetPassword = (email) => (dispatch) => {
   });
   agent
     .post('/account/forget-password', { email })
-    .then((res) => {
+    .then(() => {
       dispatch({
         type: authConstants.FORGET_PASSWORD_SUCCESS,
       });
