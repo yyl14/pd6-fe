@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-  Switch, Route, withRouter, BrowserRouter as Router,
-} from 'react-router-dom';
-
-import { Container } from '@material-ui/core';
+import { Switch, Route, withRouter } from 'react-router-dom';
 
 import Challenge from './challenge';
 import Submission from './submission';
@@ -13,9 +9,6 @@ import Team from './team';
 import Member from './member';
 
 import NoMatch from '../../../components/noMatch';
-
-import Header from '../../../components/ui/Header';
-import Sidebar from '../../../components/ui/Sidebar';
 
 /* This is a level 2 container (role container) */
 class MyClass extends Component {
