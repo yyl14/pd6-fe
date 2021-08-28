@@ -57,7 +57,8 @@ export default function LoginForm(props) {
     }
   }, [loginError.fetchAccount]);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const newUserName = username.trim();
     const newPassword = password.trim();
 
@@ -127,7 +128,7 @@ export default function LoginForm(props) {
             }}
           />
           <div className={classNames.authButtons}>
-            <Button color="primary" onClick={(e) => handleSubmit(e)}>
+            <Button color="primary" type="submit">
               Login
             </Button>
           </div>

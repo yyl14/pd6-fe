@@ -170,11 +170,11 @@ export default function Header({ role, hasClass }) {
           basePath: '/all-class',
           path: '/all-class',
         },
-        {
-          text: 'Problem Set',
-          basePath: '/problem-set',
-          path: '/problem-set',
-        },
+        // {
+        //   text: 'Problem Set',
+        //   basePath: '/problem-set',
+        //   path: '/problem-set',
+        // },
         {
           text: 'PDAO',
           basePath: '/pdao',
@@ -305,7 +305,7 @@ export default function Header({ role, hasClass }) {
             <Icon.NotificationsIcon className={classes.notification} />
             <div className={classes.dropdown}>
               <button type="button" className={classes.dropbtn}>
-                <Typography variant="h6">{user.username}</Typography>
+                <Typography variant="h6" className={location.pathname === '/my-profile' ? classes.active : null}>{user.username}</Typography>
               </button>
               <div className={classes.dropdownContent}>
                 {menuList.map((item) => (
