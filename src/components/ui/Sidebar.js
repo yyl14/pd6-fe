@@ -87,6 +87,7 @@ const useStyles = makeStyles((theme) => ({
   },
   divider: {
     marginBottom: '16px',
+    transition: ['transform', '300ms'],
   },
   arrow: {
     marginTop: '60px',
@@ -113,7 +114,6 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
-
 }));
 
 export default function Sidebar() {

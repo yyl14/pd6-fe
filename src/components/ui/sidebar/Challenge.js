@@ -4,11 +4,10 @@ import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
 } from '@material-ui/core';
-import { CompassCalibrationOutlined } from '@material-ui/icons';
 import Icon from '../icon/index';
 import TaskAddingCard from '../../normal/myClass/Challenge/TaskAddingCard';
 
-import { fetchChallenges, addChallenge } from '../../../actions/myClass/challenge';
+import { fetchChallenges } from '../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse } from '../../../actions/common/common';
 
 export default function Challenge({
@@ -69,9 +68,9 @@ export default function Challenge({
           </IconButton>,
         );
         setTitle(challenges[challengeId].title);
-        if (Object.keys(problems).length !== 0 && Object.keys(essays).length !== 0) {
-          // console.log(problems, essays);
-          setItemList(
+
+        setItemList(
+          [].concat(
             [
               {
                 text: 'Setting',
@@ -88,42 +87,23 @@ export default function Challenge({
                 icon: <Icon.Info />,
                 path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
               },
-            ]
-              .concat(
-                problems.allIds
-                  .map((id) => problems.byId[id])
-                  .map(({ id, challenge_label }) => ({
-                    text: challenge_label,
-                    icon: <Icon.Code />,
-                    path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${id}`,
-                  })),
-              )
-              .concat(
-                essays.allIds
-                  .map((id) => essays.byId[id])
-                  .map(({ id, challenge_label }) => ({
-                    text: challenge_label,
-                    icon: <Icon.Paper />,
-                    path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/essay/${id}`,
-                  })),
-              )
-              .concat([
-                {
-                  text: 'Task',
-                  icon: <Icon.AddBox />,
-                  path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/task`,
-                },
-              ]),
-          );
-        } else {
-          setItemList([
-            {
-              text: 'Info',
-              icon: <Icon.Info />,
-              path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
-            },
-          ]);
-        }
+            ],
+            challenges[challengeId].problemIds
+              .map((id) => problems.byId[id])
+              .map(({ id, challenge_label }) => ({
+                text: challenge_label,
+                icon: <Icon.Code />,
+                path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${id}`,
+              })),
+            challenges[challengeId].essayIds
+              .map((id) => essays.byId[id])
+              .map(({ id, challenge_label }) => ({
+                text: challenge_label,
+                icon: <Icon.Paper />,
+                path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/essay/${id}`,
+              })),
+          ),
+        );
       } else if (
         userClasses.find((x) => x.class_id === Number(classId)).role !== 'MANAGER'
         && challenges[challengeId] !== undefined
@@ -136,31 +116,29 @@ export default function Challenge({
         setTitle(challenges[challengeId].title);
         if (Object.keys(problems).length !== 0 && Object.keys(essays).length !== 0) {
           setItemList(
-            [
-              {
-                text: 'Info',
-                icon: <Icon.Info />,
-                path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
-              },
-            ]
-              .concat(
-                problems.allIds
-                  .map((id) => problems.byId[id])
-                  .map(({ id, challenge_label }) => ({
-                    text: challenge_label,
-                    icon: <Icon.Code />,
-                    path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${id}`,
-                  })),
-              )
-              .concat(
-                essays.allIds
-                  .map((id) => essays.byId[id])
-                  .map(({ id, challenge_label }) => ({
-                    text: challenge_label,
-                    icon: <Icon.Paper />,
-                    path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/essay/${id}`,
-                  })),
-              ),
+            [].concat(
+              [
+                {
+                  text: 'Info',
+                  icon: <Icon.Info />,
+                  path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
+                },
+              ],
+              challenges[challengeId].problemIds
+                .map((id) => problems.byId[id])
+                .map(({ id, challenge_label }) => ({
+                  text: challenge_label,
+                  icon: <Icon.Code />,
+                  path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${id}`,
+                })),
+              challenges[challengeId].essayIds
+                .map((id) => essays.byId[id])
+                .map(({ id, challenge_label }) => ({
+                  text: challenge_label,
+                  icon: <Icon.Paper />,
+                  path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/essay/${id}`,
+                })),
+            ),
           );
         } else {
           setItemList([
@@ -287,21 +265,17 @@ export default function Challenge({
                 />
               </ListItem>
             ))}
-            { mode === 'challenge' && userClasses.length !== 0 && userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER' && challenges[challengeId] !== undefined
-              && (
-              <ListItem button key="Task" onClick={() => setAddTaskPopUp(true)} className={classNames.item}>
-                <ListItemIcon
-                  className={classNames.itemIcon}
-                  style={{ color: '' }}
-                >
-                  <Icon.AddBox />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Task"
-                  className={classNames.itemText}
-                />
-              </ListItem>
-              )}
+            {mode === 'challenge'
+              && userClasses.length !== 0
+              && userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER'
+              && challenges[challengeId] !== undefined && (
+                <ListItem button key="Task" onClick={() => setAddTaskPopUp(true)} className={classNames.item}>
+                  <ListItemIcon className={classNames.itemIcon} style={{ color: '' }}>
+                    <Icon.AddBox />
+                  </ListItemIcon>
+                  <ListItemText primary="Task" className={classNames.itemText} />
+                </ListItem>
+            )}
           </List>
         )}
         <div className={classNames.bottomSpace} />
