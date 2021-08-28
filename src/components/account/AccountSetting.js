@@ -84,27 +84,20 @@ export default function AccountSetting() {
           nickName={account.nickname}
           altMail={account.alternative_email}
         />
-      )
-        : (
-          <BasicInfo
-            handleEdit={handleBasicEdit}
-            realName={account.real_name}
-            userName={account.username}
-            nickName={account.nickname}
-            altMail={account.alternative_email}
-          />
-        )}
+      ) : (
+        <BasicInfo
+          handleEdit={handleBasicEdit}
+          realName={account.real_name}
+          userName={account.username}
+          nickName={account.nickname}
+          altMail={account.alternative_email}
+        />
+      )}
 
       {editStudInfo ? (
-        <StudentInfoEdit
-          handleBack={handleStudBack}
-          cards={cards}
-        />
+        <StudentInfoEdit handleBack={handleStudBack} cards={cards} />
       ) : (
-        <StudentInfo
-          handleEdit={handleStudEdit}
-          cards={cards}
-        />
+        <StudentInfo handleEdit={handleStudEdit} cards={cards} />
       )}
 
       <NewPassword />

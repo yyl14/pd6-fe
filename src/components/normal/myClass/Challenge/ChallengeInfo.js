@@ -18,7 +18,10 @@ import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
 import {
-  browseChallengeOverview, editChallenge, browseTasksUnderChallenge, readProblemScore,
+  browseChallengeOverview,
+  editChallenge,
+  browseTasksUnderChallenge,
+  readProblemScore,
 } from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
@@ -115,7 +118,16 @@ export default function ChallengeInfo() {
         );
       }
     }
-  }, [authToken, challengeId, challenges, essays, loading.browseTasksUnderChallenge, loading.readProblemScore, peerReviews, problems]);
+  }, [
+    authToken,
+    challengeId,
+    challenges,
+    essays,
+    loading.browseTasksUnderChallenge,
+    loading.readProblemScore,
+    peerReviews,
+    problems,
+  ]);
 
   if (challenges[challengeId] === undefined) {
     if (!loading.browseChallengeOverview) {
@@ -150,9 +162,7 @@ export default function ChallengeInfo() {
   return (
     <>
       <Typography className={classes.pageHeader} variant="h3">
-        {challenges[challengeId].title}
-        {' '}
-        / Info
+        {`${challenges[challengeId].title} / Info`}
       </Typography>
       {isManager && !editMode && <Button onClick={handleEdit}>Edit</Button>}
       <SimpleBar title="Description">
