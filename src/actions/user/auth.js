@@ -33,7 +33,7 @@ const getUserInfo = (id, token) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: authConstants.AUTH_FAIL,
-      errors: err,
+      error: err,
     });
   }
 };
@@ -57,7 +57,7 @@ const userSignIn = (username, password) => async (dispatch) => {
         .then(({ data: { data } }) => ({ ...item, class_name: data.name, course_id: data.course_id }))
         .catch((error) => dispatch({
           type: authConstants.AUTH_FAIL,
-          errors: error,
+          error,
         }))),
     );
 
@@ -72,7 +72,7 @@ const userSignIn = (username, password) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: authConstants.AUTH_FAIL,
-      errors: err,
+      error: err,
     });
   }
 };
@@ -98,13 +98,13 @@ const userForgetPassword = (email) => async (dispatch) => {
     } else {
       dispatch({
         type: authConstants.FORGET_PASSWORD_FAIL,
-        errors: res.data.error,
+        error: res.data.error,
       });
     }
   } catch (err) {
     dispatch({
       type: authConstants.FORGET_PASSWORD_FAIL,
-      errors: err,
+      error: err,
     });
   }
 };
@@ -128,13 +128,13 @@ const userRegister = (username, password, nickname, realName, emailPrefix, insti
     } else {
       dispatch({
         type: authConstants.SIGNUP_FAIL,
-        errors: res.data.error,
+        error: res.data.error,
       });
     }
   } catch (err) {
     dispatch({
       type: authConstants.SIGNUP_FAIL,
-      errors: err,
+      error: err,
     });
   }
 };
