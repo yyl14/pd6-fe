@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import {
   Switch, Route, useHistory, useLocation,
 } from 'react-router-dom';
 
-import { Autocomplete } from '@material-ui/lab';
+// import { Autocomplete } from '@material-ui/lab';
 import Account from './sidebar/Account';
 import Course from './sidebar/Course';
 import System from './sidebar/System';
