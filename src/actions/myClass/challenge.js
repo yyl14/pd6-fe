@@ -1,40 +1,38 @@
 import agent from '../agent';
 import { challengeConstants } from './constant';
 
-const fetchChallenges = (token, classId) => (dispatch) => {
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-  dispatch({ type: challengeConstants.FETCH_CHALLENGES_REQUEST });
+const fetchChallenges = (token, classId) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: challengeConstants.FETCH_CHALLENGES_REQUEST });
 
-  agent
-    .get(`/class/${classId}/challenge`, auth)
-    .then((res) => {
-      // console.log(res);
-      dispatch({
-        type: challengeConstants.FETCH_CHALLENGES_SUCCESS,
-        payload: { classId, data: res.data.data.data },
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: challengeConstants.FETCH_CHALLENGES_FAIL,
-        error: err,
-      });
+    const res = await agent.get(`/class/${classId}/challenge`, config);
+
+    dispatch({
+      type: challengeConstants.FETCH_CHALLENGES_SUCCESS,
+      payload: { classId, data: res.data.data.data },
     });
+  } catch (error) {
+    dispatch({
+      type: challengeConstants.FETCH_CHALLENGES_FAIL,
+      error,
+    });
+  }
 };
 
 const addChallenge = (token, classId, body) => async (dispatch) => {
   try {
-    const auth = {
+    const config = {
       headers: {
         'Auth-Token': token,
       },
     };
     dispatch({ type: challengeConstants.ADD_CHALLENGE_REQUEST });
-    const res = await agent.post(
+    await agent.post(
       `/class/${classId}/challenge`,
       {
         publicize_type: body.showTime,
@@ -44,19 +42,19 @@ const addChallenge = (token, classId, body) => async (dispatch) => {
         start_time: body.startTime,
         end_time: body.endTime,
       },
-      auth,
+      config,
     );
     dispatch({ type: challengeConstants.ADD_CHALLENGE_SUCCESS });
-  } catch (err) {
+  } catch (error) {
     dispatch({
       type: challengeConstants.ADD_CHALLENGE_FAIL,
-      error: err,
+      error,
     });
   }
 };
 
 const editChallenge = (token, challengeId, body) => (dispatch) => {
-  const auth = {
+  const config = {
     headers: {
       'Auth-Token': token,
     },
@@ -64,7 +62,7 @@ const editChallenge = (token, challengeId, body) => (dispatch) => {
   dispatch({ type: challengeConstants.EDIT_CHALLENGE_REQUEST });
 
   agent
-    .patch(`/challenge/${challengeId}`, body, auth)
+    .patch(`/challenge/${challengeId}`, body, config)
     .then((res) => {
       console.log('edit challenge res:', res);
       dispatch({
@@ -137,7 +135,8 @@ const fetchChallengeMemberSubmission = (token, challengeId) => (dispatch) => {
 
   dispatch({ type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_REQUEST });
 
-  agent.get(`/challenge/${challengeId}/statistics/member-submission`, auth)
+  agent
+    .get(`/challenge/${challengeId}/statistics/member-submission`, auth)
     .then((res) => {
       dispatch({
         type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_SUCCESS,
@@ -169,17 +168,10 @@ const addProblem = (token, challengeId, label, title) => async (dispatch) => {
     hint: '',
   };
   try {
-    const res = await agent.post(`/challenge/${challengeId}/problem`, body, auth);
-    if (res.data.success) {
-      dispatch({
-        type: challengeConstants.ADD_PROBLEM_SUCCESS,
-      });
-    } else {
-      dispatch({
-        type: challengeConstants.ADD_PROBLEM_FAIL,
-        error: res.data.error,
-      });
-    }
+    await agent.post(`/challenge/${challengeId}/problem`, body, auth);
+    dispatch({
+      type: challengeConstants.ADD_PROBLEM_SUCCESS,
+    });
   } catch (err) {
     dispatch({
       type: challengeConstants.ADD_PROBLEM_FAIL,
@@ -202,16 +194,10 @@ const addEssay = (token, challengeId, label, title) => async (dispatch) => {
   };
   try {
     const res = await agent.post(`/challenge/${challengeId}/essay`, body, auth);
-    if (res.data.success) {
-      dispatch({
-        type: challengeConstants.ADD_ESSAY_SUCCESS,
-      });
-    } else {
-      dispatch({
-        type: challengeConstants.ADD_ESSAY_FAIL,
-        error: res.data.error,
-      });
-    }
+
+    dispatch({
+      type: challengeConstants.ADD_ESSAY_SUCCESS,
+    });
   } catch (err) {
     dispatch({
       type: challengeConstants.ADD_ESSAY_FAIL,
@@ -239,17 +225,10 @@ const addPeerReview = (token, challengeId, label, title) => async (dispatch) => 
     end_time: '2000-01-01T00:00:00.000Z',
   };
   try {
-    const res = await agent.post(`/challenge/${challengeId}/peer-review`, body, auth);
-    if (res.data.success) {
-      dispatch({
-        type: challengeConstants.ADD_PEER_REVIEW_SUCCESS,
-      });
-    } else {
-      dispatch({
-        type: challengeConstants.ADD_PEER_REVIEW_FAIL,
-        error: res.data.error,
-      });
-    }
+    await agent.post(`/challenge/${challengeId}/peer-review`, body, auth);
+    dispatch({
+      type: challengeConstants.ADD_PEER_REVIEW_SUCCESS,
+    });
   } catch (err) {
     dispatch({
       type: challengeConstants.ADD_PEER_REVIEW_FAIL,
