@@ -135,15 +135,15 @@ export default function TaskAddingCard({ open, setOpen }) {
                     <Icon.Code className={classNames.selectedIcon} />
                     Coding Problem
                   </MenuItem>
-                  <MenuItem value="Essay(PDF)">
+                  <MenuItem value="Essay(PDF)" disabled>
                     <Icon.Paper className={classNames.selectedIcon} />
                     Essay(PDF)
                   </MenuItem>
-                  <MenuItem value="Peer Review">
+                  <MenuItem value="Peer Review" disabled>
                     <Icon.Peerreview className={classNames.selectedIcon} />
                     Peer Review
                   </MenuItem>
-                  <MenuItem value="Coding Project">
+                  <MenuItem value="Coding Project" disabled>
                     <Icon.Project className={classNames.selectedIcon} />
                     Coding Project
                   </MenuItem>

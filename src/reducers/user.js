@@ -11,7 +11,6 @@ const initialState = {
 };
 
 const user = (state = initialState, action) => {
-  console.log(action);
   switch (action.type) {
     case authConstants.AUTH_SUCCESS:
       return action.user;
