@@ -28,14 +28,8 @@ const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
-  selectItem: {
-    display: 'flex',
-  },
   selectedIcon: {
-    transform: 'translateY(8px)',
-  },
-  selectedText: {
-    transform: 'translateX(30px)',
+    marginRight: '20px',
   },
 }));
 
@@ -138,19 +132,19 @@ export default function TaskAddingCard({ open, setOpen }) {
                   style={{ width: '350px' }}
                 >
                   <MenuItem value="Coding Problem">
-                    <Icon.Code />
+                    <Icon.Code className={classNames.selectedIcon} />
                     Coding Problem
                   </MenuItem>
                   <MenuItem value="Essay(PDF)">
-                    <Icon.Paper />
+                    <Icon.Paper className={classNames.selectedIcon} />
                     Essay(PDF)
                   </MenuItem>
                   <MenuItem value="Peer Review">
-                    <Icon.Peerreview />
+                    <Icon.Peerreview className={classNames.selectedIcon} />
                     Peer Review
                   </MenuItem>
                   <MenuItem value="Coding Project">
-                    <Icon.Project />
+                    <Icon.Project className={classNames.selectedIcon} />
                     Coding Project
                   </MenuItem>
                 </Select>
