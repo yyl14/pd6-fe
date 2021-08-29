@@ -7,6 +7,7 @@ const initialState = {
   forgetPassword: null,
   signup: null,
   fetchAccount: null,
+  resetPassword: null,
 };
 
 export default function auth(state = initialState, action) {
@@ -14,7 +15,7 @@ export default function auth(state = initialState, action) {
     case authConstants.AUTH_LOGIN_FAIL:
       return {
         ...state,
-        login: action.errors,
+        login: action.error,
       };
     case authConstants.AUTH_SUCCESS:
       return {
@@ -23,9 +24,8 @@ export default function auth(state = initialState, action) {
       };
     case authConstants.AUTH_FAIL:
       return {
-
         ...state,
-        fetchAccount: action.errors,
+        fetchAccount: action.error,
       };
     case authConstants.AUTH_LOGOUT:
       return {
@@ -43,7 +43,7 @@ export default function auth(state = initialState, action) {
     case authConstants.FORGET_PASSWORD_FAIL:
       return {
         ...state,
-        forgetPassword: action.errors,
+        forgetPassword: action.error,
       };
     case authConstants.SIGNUP_SUCCESS:
       return {
@@ -58,7 +58,17 @@ export default function auth(state = initialState, action) {
     case authConstants.API_CALL_ERROR:
       return {
         ...state,
-        auth: action.errors,
+        auth: action.error,
+      };
+    case authConstants.RESET_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        resetPassword: null,
+      };
+    case authConstants.RESET_PASSWORD_FAIL:
+      return {
+        ...state,
+        resetPassword: action.error,
       };
     default: {
       return state;
