@@ -1,4 +1,3 @@
-import { combineReducers } from 'redux';
 import { authConstants, userConstants } from '../actions/user/constants';
 
 const initialState = {
@@ -11,7 +10,7 @@ const initialState = {
   classes: [],
 };
 
-const user = (state = {}, action) => {
+const user = (state = initialState, action) => {
   switch (action.type) {
     case authConstants.AUTH_SUCCESS:
       return action.user;
