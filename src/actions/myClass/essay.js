@@ -107,7 +107,7 @@ const browseEssaySubmission = (token, essayId) => async (dispatch) => {
     if (res.data.success) {
       dispatch({
         type: essayConstants.BROWSE_ESSAY_SUBMISSION_SUCCESS,
-        payload: res.data.data,
+        payload: res.data.data.data,
       });
     } else {
       dispatch({
@@ -222,11 +222,5 @@ const reUploadEssay = (token, essaySubmissionId, file) => async (dispatch) => {
 };
 
 export {
-  readEssay,
-  editEssay,
-  deleteEssay,
-  browseEssaySubmission,
-  uploadEssay,
-  readEssaySubmission,
-  reUploadEssay,
+  readEssay, editEssay, deleteEssay, browseEssaySubmission, uploadEssay, readEssaySubmission, reUploadEssay,
 };

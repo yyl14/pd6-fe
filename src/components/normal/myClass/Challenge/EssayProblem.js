@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EssaySetting() {
+export default function EssayProblem() {
   const {
     courseId, classId, challengeId, problemId, essayId,
   } = useParams();
@@ -44,7 +44,10 @@ export default function EssaySetting() {
   const dispatch = useDispatch();
 
   const userClasses = useSelector((state) => state.user.classes);
-  const essays = useSelector((state) => { console.log('state.essay:', state.essays); return state.essays.byId; });
+  const essays = useSelector((state) => {
+    console.log('state.essay:', state.essays);
+    return state.essays.byId;
+  });
   const challenges = useSelector((state) => state.challenges.byId);
   const authToken = useSelector((state) => state.auth.token);
   const error = useSelector((state) => state.error.myClass.essay);
@@ -67,15 +70,9 @@ export default function EssaySetting() {
     setPopUpUpload(false);
   };
 
-  const handleDownload = () => {
-    // console.log('essaysInfo', essays[essayId]);
-    // const file = {
-    //   uuid: essays[essayId].content_file_uuid,
-    //   filename: essays[essayId].filename,
-    //   as_attachment: false,
-    // };
-    // dispatch(downloadFile(authToken, file));
-  };
+  const handleUpload = (e) => {};
+
+  const handleDownload = (e) => {};
 
   useEffect(() => {
     userClasses.forEach((value) => {
@@ -88,11 +85,7 @@ export default function EssaySetting() {
   }, [classId, userClasses]);
 
   useEffect(() => {
-    dispatch(fetchChallenges(authToken, classId));
-  }, [authToken, classId, dispatch]);
-
-  useEffect(() => {
-    dispatch((readEssay(authToken, essayId)));
+    dispatch(readEssay(authToken, essayId));
   }, [authToken, dispatch, essayId]);
 
   return (
@@ -106,17 +99,13 @@ export default function EssaySetting() {
       </Typography>
       {!edit && role === 'MANAGER' && (
         <div className={classNames.managerButtons}>
-          <Button
-            onClick={() => setEdit(true)}
-          >
-            Edit
-          </Button>
+          <Button onClick={() => setEdit(true)}>Edit</Button>
           <Button variant="outlined" component="span" startIcon={<Icon.Download />} onClick={handleDownload}>
             Download
           </Button>
         </div>
       )}
-      {edit ? <EssayEdit closeEdit={handleCloseEdit} role={role} /> : <EssayInfo role={role} /> }
+      {edit ? <EssayEdit closeEdit={handleCloseEdit} role={role} /> : <EssayInfo role={role} />}
     </>
   );
 }

@@ -18,10 +18,9 @@ import CustomTable from '../../../ui/CustomTable';
 import FileUploadArea from '../../../ui/FileUploadArea';
 import Icon from '../../../ui/icon/index';
 import { fetchClassGrade, addClassGrade, downloadGradeFile } from '../../../../actions/myClass/grade';
-import {
-  fetchCourse, fetchClass, fetchClassMembers,
-} from '../../../../actions/common/common';
+import { fetchCourse, fetchClass, fetchClassMembers } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -131,12 +130,12 @@ export default function GradeList() {
   };
 
   const handleAdd = () => {
+    if (inputTitle !== '' && selectedFile !== []) {
+      selectedFile.map((file) => dispatch(addClassGrade(authToken, classId, file)));
+    }
     setPopUp(false);
     setInputTitle('');
     setSelectedFile([]);
-    if (inputTitle !== '') {
-      dispatch(addClassGrade(authToken, classId, selectedFile));
-    }
   };
 
   const handleCancel = () => {
@@ -152,7 +151,7 @@ export default function GradeList() {
 
   if (courses[courseId] === undefined || classes[classId] === undefined || grades === undefined) {
     if (loading.fetchCourse || loading.fetchClass || loading.fetchClassGrade || loading.addClassGrade) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }
@@ -229,33 +228,39 @@ export default function GradeList() {
         linkName="path"
       />
 
-      <Dialog
-        open={popUp}
-        onClose={() => setPopUp(false)}
-        fullWidth
-        maxWidth="sm"
-      >
+      <Dialog open={popUp} onClose={() => setPopUp(false)} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Add New Grades</Typography>
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2">Grade file format:</Typography>
-          <Typography variant="body2" className={classNames.reminder}>Receiver: student id (NTU only) &gt;= institute email &gt; #username</Typography>
-          <Typography variant="body2" className={classNames.reminder}>Score: number or string</Typography>
-          <Typography variant="body2" className={classNames.reminder}>Comment: string (optional)</Typography>
-          <Typography variant="body2" className={classNames.reminder}>Grader: same as receiver</Typography>
+          <Typography variant="body2" className={classNames.reminder}>
+            Receiver: student id (NTU only) &gt;= institute email &gt; #username
+          </Typography>
+          <Typography variant="body2" className={classNames.reminder}>
+            Score: number or string
+          </Typography>
+          <Typography variant="body2" className={classNames.reminder}>
+            Comment: string (optional)
+          </Typography>
+          <Typography variant="body2" className={classNames.reminder}>
+            Grader: same as receiver
+          </Typography>
           <Typography variant="body2">Download template file for more instructions.</Typography>
         </DialogContent>
         <DialogContent>
           <AlignedText text="Class" maxWidth="mg" childrenType="text">
-            <Typography variant="body1">
-              {`${courses[courseId].name}  ${classes[classId].name}`}
-            </Typography>
+            <Typography variant="body1">{`${courses[courseId].name}  ${classes[classId].name}`}</Typography>
           </AlignedText>
           <AlignedText text="Title" maxWidth="mg" childrenType="field">
             <TextField id="title" name="title" value={inputTitle} onChange={(e) => handleChange(e)} />
           </AlignedText>
-          <FileUploadArea text="Grade File" fileAcceptFormat=".csv" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
+          <FileUploadArea
+            text="Grade File"
+            fileAcceptFormat=".csv"
+            selectedFile={selectedFile}
+            setSelectedFile={setSelectedFile}
+          />
         </DialogContent>
         <DialogActions>
           <Button

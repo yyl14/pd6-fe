@@ -1,23 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  makeStyles,
-  Button,
-  Typography,
-  AppBar,
-  Toolbar,
-  Avatar,
-  ClickAwayListener,
-  Grow,
-  Paper,
-  Popper,
-  MenuItem,
-  MenuList,
+  makeStyles, Typography, AppBar, Toolbar,
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { format } from 'date-fns';
-import { GolfCourseTwoTone } from '@material-ui/icons';
 import Icon from './icon/index';
 import { userLogout } from '../../actions/user/auth';
 
@@ -139,106 +127,122 @@ export default function Header({ role, hasClass }) {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
-  let itemList = [];
   const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   H:mm'));
-  let menuList = [];
-
-  if (role === 'MANAGER') {
-    itemList = [
-      {
-        text: 'Course',
-        basePath: '/admin/course',
-        path: '/admin/course/course',
-      },
-      {
-        text: 'Account',
-        basePath: '/admin/account',
-        path: '/admin/account/institute',
-      },
-      {
-        text: 'System',
-        basePath: '/admin/system',
-        path: '/admin/system/accesslog',
-      },
-      {
-        text: 'About',
-        path: '/about',
-      },
-    ];
-    menuList = [
-      { title: 'My Profile', link: '/my-profile' },
-      { title: 'Logout', link: '/logout' },
-    ];
-  } else if (role === 'NORMAL') {
-    if (hasClass) {
-      itemList = [
-        {
-          text: 'My Class',
-          basePath: '/my-class',
-          path: '/my-class',
-        },
-        {
-          text: 'Problem Set',
-          basePath: '/problem-set',
-          path: '/problem-set',
-        },
-        {
-          text: 'PDAO',
-          basePath: '/pdao',
-          path: '/pdao',
-        },
-        {
-          text: 'Ranklist',
-          basePath: '/ranklist',
-          path: '/ranklist',
-        },
-        {
-          text: 'System',
-          basePath: '/system',
-          path: '/system',
-        },
-      ];
-    } else {
-      itemList = [
-        {
-          text: 'Problem Set',
-          basePath: '/problem-set',
-          path: '/problem-set',
-        },
-        {
-          text: 'PDAO',
-          basePath: '/pdao',
-          path: '/pdao',
-        },
-        {
-          text: 'Ranklist',
-          basePath: '/ranklist',
-          path: '/ranklist',
-        },
-        {
-          text: 'System',
-          basePath: '/system',
-          path: '/system',
-        },
-      ];
-    }
-    menuList = [
-      { title: 'My Submission', link: '/my-submission' },
-      { title: 'My Profile', link: '/my-profile' },
-      { title: 'Logout', link: '/logout' },
-    ];
-  } else {
-    // System Guest
-    itemList = [];
-  }
+  const [itemList, setItemList] = useState([]);
+  const [menuList, setMenuList] = useState([]);
 
   useEffect(() => {
-    console.log('Current route', location.pathname);
-  }, [location]);
+    if (role === 'MANAGER') {
+      setItemList([
+        {
+          text: 'Course',
+          basePath: '/admin/course',
+          path: '/admin/course/course',
+        },
+        {
+          text: 'Account',
+          basePath: '/admin/account',
+          path: '/admin/account/institute',
+        },
+        {
+          text: 'System',
+          basePath: '/admin/system',
+          path: '/admin/system/accesslog',
+        },
+        {
+          text: 'About',
+          path: '/about',
+        },
+      ]);
+      setMenuList([
+        { title: 'My Profile', link: '/my-profile' },
+        { title: 'Logout', link: '/logout' },
+      ]);
+    } else if (role === 'NORMAL') {
+      if (hasClass) {
+        setItemList([
+          {
+            text: 'My Class',
+            basePath: '/my-class',
+            path: '/my-class',
+          },
+          {
+            text: 'All Class',
+            basePath: '/all-class',
+            path: '/all-class',
+          },
+          // {
+          //   text: 'Problem Set',
+          //   basePath: '/problem-set',
+          //   path: '/problem-set',
+          // },
+          {
+            text: 'PDAO',
+            basePath: '/pdao',
+            path: '/pdao',
+          },
+          {
+            text: 'Ranklist',
+            basePath: '/ranklist',
+            path: '/ranklist',
+          },
+          {
+            text: 'System',
+            basePath: '/system',
+            path: '/system',
+          },
+        ]);
+      } else {
+        setItemList([
+          {
+            text: 'All Class',
+            basePath: '/all-class',
+            path: '/all-class',
+          },
+          // {
+          //   text: 'Problem Set',
+          //   basePath: '/problem-set',
+          //   path: '/problem-set',
+          // },
+          {
+            text: 'PDAO',
+            basePath: '/pdao',
+            path: '/pdao',
+          },
+          {
+            text: 'Ranklist',
+            basePath: '/ranklist',
+            path: '/ranklist',
+          },
+          {
+            text: 'System',
+            basePath: '/system',
+            path: '/system',
+          },
+        ]);
+      }
+      setMenuList([
+        { title: 'My Submission', link: '/my-submission' },
+        { title: 'My Profile', link: '/my-profile' },
+        { title: 'Logout', link: '/logout' },
+      ]);
+    } else {
+      // System Guest
+      setItemList([]);
+      setMenuList([
+        { title: 'My Profile', link: '/my-profile' },
+        { title: 'Logout', link: '/logout' },
+      ]);
+    }
+  }, [hasClass, role]);
+
+  // useEffect(() => {
+  //   console.log('Current route', location.pathname);
+  // }, [location]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTime(format(new Date(), 'MMM d  HH:mm'));
+      setCurrentTime(format(new Date(), 'MMM d  H:mm'));
     }, 1000);
     return () => clearInterval(interval);
   }, []);
@@ -246,24 +250,24 @@ export default function Header({ role, hasClass }) {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
 
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
+  // const handleToggle = () => {
+  //   setOpen((prevOpen) => !prevOpen);
+  // };
 
-  const handleClose = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
+  // const handleClose = (event) => {
+  //   if (anchorRef.current && anchorRef.current.contains(event.target)) {
+  //     return;
+  //   }
 
-    setOpen(false);
-  };
+  //   setOpen(false);
+  // };
 
-  function handleListKeyDown(event) {
-    if (event.key === 'Tab') {
-      event.preventDefault();
-      setOpen(false);
-    }
-  }
+  // function handleListKeyDown(event) {
+  //   if (event.key === 'Tab') {
+  //     event.preventDefault();
+  //     setOpen(false);
+  //   }
+  // }
 
   // return focus to the button when we transitioned from !open -> open
   const prevOpen = useRef(open);
@@ -278,8 +282,6 @@ export default function Header({ role, hasClass }) {
   const dispatch = useDispatch();
   const [cookiesId, setCookieId, removeCookieId] = useCookies(['id']);
   const [cookiesToken, setCookieToken, removeCookieToken] = useCookies(['token']);
-  // const [idCookies, setIdCookie] = useCookies(['id']);
-  // const [tokenCookies, setTokenCookie] = useCookies(['token']);
 
   const goto = (link) => {
     // console.log(link);
@@ -296,7 +298,6 @@ export default function Header({ role, hasClass }) {
     <div>
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
-          {/* <Avatar src="https://pdogs.ntu.im/judge/image/LOGO.png" className={classes.avatar} /> */}
           {itemList.map((item) => (
             <Typography variant="h6" className={classes.item} key={item.text}>
               <a
@@ -312,10 +313,12 @@ export default function Header({ role, hasClass }) {
             <Icon.NotificationsIcon className={classes.notification} />
             <div className={classes.dropdown}>
               <button type="button" className={classes.dropbtn}>
-                <Typography variant="h6">{user.username}</Typography>
+                <Typography variant="h6" className={location.pathname === '/my-profile' ? classes.active : null}>
+                  {user.username}
+                </Typography>
               </button>
               <div className={classes.dropdownContent}>
-                {menuList.map((item, id) => (
+                {menuList.map((item) => (
                   <span
                     key={item.link}
                     tabIndex={item.link}

@@ -13,18 +13,15 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import { format } from 'date-fns';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
 import CustomTable from '../../../ui/CustomTable';
-import TableFilterCard from '../../../ui/TableFilterCard';
 import DateRangePicker from '../../../ui/DateRangePicker';
-import filterData from '../../../../function/filter';
-import sortData from '../../../../function/sort';
 import { fetchChallenges, addChallenge } from '../../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse } from '../../../../actions/common/common';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -51,7 +48,6 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 export default function ChallengeList() {
   const { courseId, classId } = useParams();
-  const history = useHistory();
   const className = useStyles();
   const dispatch = useDispatch();
 
@@ -95,55 +91,51 @@ export default function ChallengeList() {
   }, [authToken, classId, dispatch, loading.addChallenge]);
 
   useEffect(() => {
-    if (challengesID !== []) {
-      challengesID.map((id) => {
-        if (currentTime.isBefore(moment(challenges[id].start_time))) {
-          challenges[id].status = 'Not Yet';
-        } else if (currentTime.isBefore(moment(challenges[id].end_time))) {
-          challenges[id].status = 'Opened';
-        } else {
-          challenges[id].status = 'Closed';
-        }
-        return challenges[id].status;
-      });
+    const getStatus = (id) => {
+      if (currentTime.isBefore(moment(challenges[id].start_time))) {
+        return 'Not Yet';
+      }
+      if (currentTime.isBefore(moment(challenges[id].end_time))) {
+        return 'Opened';
+      }
+      return 'Closed';
+    };
+    if (classes[classId]) {
       if (isManager) {
         setTableData(
-          challengesID.reverse().map((id) => ({
+          classes[classId].challengeIds.reduce((acc, b) => ([b, ...acc]), []).map((id) => ({
             title: challenges[id].title,
             path: `/my-class/${courseId}/${classId}/challenge/${id}`,
             startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
             endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
-            status: challenges[id].status,
+            status: getStatus(id),
           })),
         );
       } else {
         setTableData(
-          challengesID.filter((id) => challenges[id].status !== 'Not Yet').reverse().map((id) => ({
-            title: challenges[id].title,
-            path: `/my-class/${courseId}/${classId}/challenge/${id}`,
-            startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
-            endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
-            status: challenges[id].status,
-          })),
+          classes[classId].challengeIds
+            .filter((id) => getStatus(id) !== 'Not Yet')
+            .reduce((acc, b) => ([b, ...acc]), [])
+            .map((id) => ({
+              title: challenges[id].title,
+              path: `/my-class/${courseId}/${classId}/challenge/${id}`,
+              startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
+              endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
+              status: getStatus(id),
+            })),
         );
       }
     }
-  }, [challenges, challengesID, classId, courseId, currentTime, isManager]);
+  }, [challenges, challengesID, classId, classes, courseId, currentTime, isManager]);
 
   useEffect(() => {
-    userClasses.map((item) => {
-      if (`${item.class_id}` === classId) {
-        // console.log(item.role);
-        if (item.role === 'MANAGER') {
-          setIsManager(true);
-        }
-      }
-      return <></>;
-    });
+    if (userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
+      setIsManager(true);
+    }
   }, [classId, userClasses]);
 
   if (loading.fetchChallenges || courses[courseId] === undefined || classes[classId] === undefined) {
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   const handleChange = (e) => {
@@ -162,13 +154,13 @@ export default function ChallengeList() {
       setErrorText("Can't be empty");
       return;
     }
-    const body = ({
+    const body = {
       title: inputs.title,
       scoredBy: inputs.scoredBy === 'Last Score' ? 'LAST' : 'BEST',
       showTime: inputs.showTime === 'On End Time' ? 'END_TIME' : 'START_TIME',
       startTime: dateRangePicker[0].startDate.toISOString(),
       endTime: dateRangePicker[0].endDate.toISOString(),
-    });
+    };
     dispatch(addChallenge(authToken, classId, body));
     setPopUp(false);
     setInputs({
@@ -214,14 +206,13 @@ export default function ChallengeList() {
       <CustomTable
         hasSearch
         buttons={
-          isManager ? (
+          isManager && (
             <>
               <Button color="primary" onClick={() => setPopUp(true)}>
                 <Icon.Add style={{ color: 'white' }} />
               </Button>
             </>
           )
-            : <></>
         }
         data={tableData}
         columns={[
@@ -261,12 +252,7 @@ export default function ChallengeList() {
         hasLink
         linkName="path"
       />
-      <Dialog
-        open={popUp}
-        keepMounted
-        onClose={() => setPopUp(false)}
-        maxWidth="md"
-      >
+      <Dialog open={popUp} keepMounted onClose={() => setPopUp(false)} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Create New Challenge</Typography>
         </DialogTitle>
@@ -322,7 +308,6 @@ export default function ChallengeList() {
           </Button>
         </DialogActions>
       </Dialog>
-
     </>
   );
 }

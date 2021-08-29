@@ -7,5 +7,3 @@ export const autoTableMount = (tableId) => (dispatch) => {
 export const autoTableFlush = (tableId) => (dispatch) => {
   dispatch({ type: autoTableConstants.AUTO_TABLE_FLUSH, payload: { tableId } });
 };
-
-export const somethingElse = 0;

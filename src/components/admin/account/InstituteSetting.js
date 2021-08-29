@@ -7,32 +7,25 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   FormControlLabel,
   Switch,
-  Grid,
-  OutlinedInput,
   TextField,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
-import { Translate } from '@material-ui/icons';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 import { getInstitute, editInstitute } from '../../../actions/admin/account';
 import NoMatch from '../../noMatch';
+import GeneralLoading from '../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
   warningText: {
     marginTop: '10px',
   },
-  // inputField: {
-  //   width: 330,
-  // },
 }));
 
 export default function InstituteSetting() {
@@ -71,7 +64,7 @@ export default function InstituteSetting() {
 
   if (institutes[instituteId] === undefined) {
     if (loading.fetchInstitute) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }
@@ -100,7 +93,7 @@ export default function InstituteSetting() {
   };
 
   const handleChangeStatus = (event) => {
-    setNewSetting((input) => ({ ...input, [event.target.name]: event.target.checked }));
+    setNewSetting((input) => ({ ...input, [event.target.name]: !event.target.checked }));
   };
 
   const handleEditInstitute = (prop) => {
@@ -154,7 +147,7 @@ export default function InstituteSetting() {
             institutes[instituteId].abbreviated_name,
             institutes[instituteId].full_name,
             institutes[instituteId].email_domain,
-            !newSetting.newStatus,
+            newSetting.newStatus,
           ),
         );
         break;
@@ -260,6 +253,7 @@ export default function InstituteSetting() {
               color="secondary"
               onClick={(prevState) => {
                 setSettingStatus((input) => ({ ...input, changeStatus: true }));
+                setNewSetting((input) => ({ ...input, newStatus: institutes[instituteId].is_disabled }));
               }}
             >
               Change Status
@@ -273,15 +267,7 @@ export default function InstituteSetting() {
         </Typography>
       </SimpleBar>
 
-      <Dialog
-        open={settingStatus.changeName}
-        keepMounted
-        onClose={() => handleClosePopUp()}
-        aria-labelledby="dialog-slide-title"
-        aria-describedby="dialog-slide-description"
-        fullWidth
-        maxWidth="sm"
-      >
+      <Dialog open={settingStatus.changeName} keepMounted onClose={() => handleClosePopUp()} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Rename institute</Typography>
         </DialogTitle>
@@ -322,8 +308,6 @@ export default function InstituteSetting() {
         open={settingStatus.changeInitialism}
         keepMounted
         onClose={() => handleClosePopUp()}
-        aria-labelledby="dialog-slide-title"
-        aria-describedby="dialog-slide-description"
         fullWidth
         maxWidth="sm"
       >
@@ -363,15 +347,7 @@ export default function InstituteSetting() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog
-        open={settingStatus.changeEmail}
-        keepMounted
-        onClose={() => handleClosePopUp()}
-        aria-labelledby="dialog-slide-title"
-        aria-describedby="dialog-slide-description"
-        fullWidth
-        maxWidth="sm"
-      >
+      <Dialog open={settingStatus.changeEmail} keepMounted onClose={() => handleClosePopUp()} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Change institute email</Typography>
         </DialogTitle>
@@ -407,28 +383,20 @@ export default function InstituteSetting() {
             }}
             color="secondary"
           >
-            Rename
+            Modify
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog
-        open={settingStatus.changeStatus}
-        keepMounted
-        onClose={() => handleClosePopUp()}
-        aria-labelledby="dialog-slide-title"
-        aria-describedby="dialog-slide-description"
-        fullWidth
-        maxWidth="sm"
-      >
+      <Dialog open={settingStatus.changeStatus} keepMounted onClose={() => handleClosePopUp()} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Rename institute</Typography>
         </DialogTitle>
         <DialogContent>
           <FormControlLabel
             control={
-              <Switch checked={newSetting.newStatus} onChange={handleChangeStatus} name="newStatus" color="primary" />
+              <Switch checked={!newSetting.newStatus} onChange={handleChangeStatus} name="newStatus" color="primary" />
             }
-            label={newSetting.newStatus ? 'Enabled' : 'Disabled'}
+            label={newSetting.newStatus ? 'Disable' : 'Enable'}
           />
           <Typography variant="body1" className={classes.warningText}>
             Once you change the institute’s status, future members from this institute may not be able to register.
@@ -440,7 +408,7 @@ export default function InstituteSetting() {
             Cancel
           </Button>
           <Button
-            disabled={institutes[instituteId].is_disabled !== newSetting.newStatus}
+            disabled={institutes[instituteId].is_disabled === newSetting.newStatus}
             onClick={() => handleEditInstitute('newStatus')}
             color="secondary"
           >

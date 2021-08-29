@@ -6,6 +6,7 @@ const initialState = {
   forgetPassword: false,
   signup: false,
   fetchAccount: false,
+  resetPassword: false,
 };
 
 export default function auth(state = initialState, action) {
@@ -60,6 +61,21 @@ export default function auth(state = initialState, action) {
       return {
         ...state,
         signup: false,
+      };
+    case authConstants.RESET_PASSWORD_START:
+      return {
+        ...state,
+        resetPassword: true,
+      };
+    case authConstants.RESET_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        resetPassword: false,
+      };
+    case authConstants.RESET_PASSWORD_FAIL:
+      return {
+        ...state,
+        resetPassword: false,
       };
     default: {
       return state;

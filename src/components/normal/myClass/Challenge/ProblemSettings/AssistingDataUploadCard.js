@@ -31,51 +31,26 @@ const useStyles = makeStyles((theme) => ({
   reminder: {
     color: '#AAAAAA',
   },
-  clearButton: {
-    marginLeft: '24px',
-    backgroundColor: '#FFFFFF',
-    border: 'solid',
-    borderColor: '#DDDDDD',
-  },
-  filterButton: {
-    justifyContent: 'space-between',
-  },
 }));
 
 export default function AssistingDataUploadCard({
-  popUp = false, closePopUp, selectedFile, setSelectedFile,
+  popUp = false, closePopUp, selectedFile, setSelectedFile, handleTempUpload,
 }) {
   const {
     courseId, classId, challengeId, problemId,
   } = useParams();
-  const history = useHistory();
   const classes = useStyles();
 
-  const dispatch = useDispatch();
-
-  const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
-  const [warningPopUp, setWarningPopUp] = useState(false);
-
-  const [tempSelectedFile, setTempSelectedFile] = useState(selectedFile);
-
   const handleConfirm = () => {
-    setSelectedFile(tempSelectedFile);
+    handleTempUpload();
     closePopUp();
   };
 
   const handleCancel = () => {
-    if (tempSelectedFile !== selectedFile) {
-      setWarningPopUp(true);
-    } else {
-      closePopUp();
-    }
-  };
-
-  const handleNotSave = () => {
-    setWarningPopUp(false);
+    setSelectedFile([]);
     closePopUp();
   };
 
@@ -94,7 +69,7 @@ export default function AssistingDataUploadCard({
             Assisting Data are files shared among all testing data (e.g. a csv file)
             They will be placed under /challenge/assist
           </Typography>
-          <FileUploadArea text="Assisting Data" fileAcceptFormat=".pdf, .csv" selectedFile={tempSelectedFile} setSelectedFile={setTempSelectedFile} />
+          <FileUploadArea text="Assisting Data" fileAcceptFormat=".pdf, .csv" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => handleCancel()} color="default">
@@ -106,35 +81,6 @@ export default function AssistingDataUploadCard({
           >
             Confirm
           </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog
-        open={warningPopUp}
-        onClose={() => setWarningPopUp(false)}
-        fullWidth
-      >
-        <DialogTitle id="dialog-slide-title">
-          <Typography variant="h4">Unsaved Changes</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body2">
-            You have unsaved changes, do you want to save your chnages or back to edit?
-          </Typography>
-        </DialogContent>
-        <DialogActions className={classes.filterButton}>
-          <div>
-            <Button onClick={() => setWarningPopUp(false)} className={classes.clearButton}>
-              Back to Edit
-            </Button>
-          </div>
-          <div>
-            <Button onClick={() => handleNotSave()} color="default">
-              Do not Save
-            </Button>
-            <Button onClick={() => { setWarningPopUp(false); closePopUp(); }} color="primary">
-              Save
-            </Button>
-          </div>
         </DialogActions>
       </Dialog>
     </>

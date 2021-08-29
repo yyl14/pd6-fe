@@ -20,6 +20,7 @@ import TeamMemberEdit from './detail/TeamMemberEdit';
 import NoMatch from '../../../noMatch';
 import SimpleBar from '../../../ui/SimpleBar';
 import systemRoleTransformation from '../../../../function/systemRoleTransformation';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -55,7 +56,11 @@ export default function ChallengeList() {
       if (item.class_id === parseInt(classId, 10)) {
         if (item.role === 'MANAGER') {
           setIsManager(true);
-        } else if (teamMembers[user.id] !== undefined && (item.role === 'NORMAL' && teamMembers[user.id].role === 'MANAGER')) {
+        } else if (
+          teamMembers[user.id] !== undefined
+          && item.role === 'NORMAL'
+          && teamMembers[user.id].role === 'MANAGER'
+        ) {
           setIsTeamManager(true);
         }
       }
@@ -105,10 +110,10 @@ export default function ChallengeList() {
     setEditTeamMember(true);
   };
 
+  if (loading.fetchTeams || loading.fetchTeamMember || commonLoading.fetchClassMember) {
+    return <GeneralLoading />;
+  }
   if (teams[teamId] === undefined || classMembers === undefined || teamMemberIds === undefined) {
-    if (loading.fetchTeams || loading.fetchTeamMember || commonLoading.fetchClassMember) {
-      return <div>loading...</div>;
-    }
     return <NoMatch />;
   }
   // console.log(tableData);
@@ -136,17 +141,9 @@ export default function ChallengeList() {
       )}
 
       {editTeamMember ? (
-        <TeamMemberEdit
-          isManager={isManager}
-          setOriginData={setTableData}
-          handleBack={handleMemberBack}
-        />
+        <TeamMemberEdit isManager={isManager} setOriginData={setTableData} handleBack={handleMemberBack} />
       ) : (
-        <TeamMember
-          isManager={isManager}
-          tableData={tableData}
-          handleEdit={handleMemberEdit}
-        />
+        <TeamMember isManager={isManager} tableData={tableData} handleEdit={handleMemberEdit} />
       )}
     </>
   );

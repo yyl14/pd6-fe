@@ -8,15 +8,21 @@ const byId = (state = {}, action) => {
       return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.submissions);
     }
     case submissionConstants.FETCH_SUBMISSION_SUCCESS: {
-      const { data } = action.payload;
-      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.submissions);
-    }
-    case problemConstants.READ_SUBMISSION_SUCCESS: {
+      const { submissionId, data } = action.payload;
       return {
         ...state,
-        [action.payload.id]: action.payload,
+        [parseInt(submissionId, 10)]: data,
       };
     }
+    case problemConstants.READ_SUBMISSION_SUCCESS: {
+      return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), {});
+    }
+
+    case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
+      const { data, judgments, accounts } = action.payload;
+      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+    }
+
     default:
       return state;
   }
@@ -24,16 +30,22 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
+    case problemConstants.READ_SUBMISSION_SUCCESS: {
+      return action.payload.map((item) => item.id);
+    }
     case submissionConstants.FETCH_ALL_SUBMISSIONS_SUCCESS: {
       const { data } = action.payload;
       return data.map((item) => item.id);
     }
     case submissionConstants.FETCH_SUBMISSION_SUCCESS: {
+      const { submissionId, data } = action.payload;
+      return state.includes(parseInt(submissionId, 10)) ? state : state.concat([parseInt(submissionId, 10)]);
+    }
+    case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       const { data } = action.payload;
       return data.map((item) => item.id);
     }
-    case problemConstants.READ_SUBMISSION_SUCCESS:
-      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+
     default:
       return state;
   }

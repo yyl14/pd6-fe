@@ -29,8 +29,7 @@ const fetchClassMembers = (token, classId) => async (dispatch) => {
     };
     dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_REQUEST });
     const res = await agent.get(`/class/${classId}/member`, auth);
-    // console.log(res);
-    dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_SUCCESS, payload: { classId, data: res.data.data } });
+    dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_SUCCESS, payload: { classId, data: res.data.data.data } });
   } catch (err) {
     dispatch({
       type: commonConstants.FETCH_CLASS_MEMBERS_FAIL,
@@ -49,7 +48,7 @@ const editClassMember = (token, classId, editedList) => (dispatch) => {
 
   agent
     .patch(`/class/${classId}/member`, editedList, auth)
-    .then((res) => {
+    .then(() => {
       dispatch({
         type: commonConstants.EDIT_CLASS_MEMBER_SUCCESS,
       });
@@ -60,6 +59,34 @@ const editClassMember = (token, classId, editedList) => (dispatch) => {
         error: err,
       });
     });
+};
+
+const replaceClassMembers = (token, classId, replacingList) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: commonConstants.REPLACE_CLASS_MEMBERS_REQUEST });
+
+    const res = await agent.put(`/class/${classId}/member`, replacingList, auth);
+    if (res.data.success) {
+      dispatch({
+        type: commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS,
+      });
+    } else {
+      dispatch({
+        type: commonConstants.REPLACE_CLASS_MEMBERS_FAIL,
+        error: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: commonConstants.REPLACE_CLASS_MEMBERS_FAIL,
+      error: err,
+    });
+  }
 };
 
 // const deleteClassMember = (token, classId, memberId) => (dispatch) => {
@@ -124,6 +151,27 @@ const fetchCourse = (token, courseId) => async (dispatch) => {
   }
 };
 
+const fetchAllClasses = (token) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: commonConstants.FETCH_ALL_CLASSES_START });
+    const res = await agent.get('/class', config);
+    if (!res.data.success) {
+      throw new Error(res.data.error);
+    }
+    dispatch({ type: commonConstants.FETCH_ALL_CLASSES_SUCCESS, payload: res.data.data.data });
+  } catch (err) {
+    dispatch({
+      type: commonConstants.FETCH_ALL_CLASSES_FAIL,
+      error: err,
+    });
+  }
+};
+
 const fetchClass = (token, classId) => async (dispatch) => {
   try {
     const auth = {
@@ -175,7 +223,7 @@ const downloadFile = (token, file) => async (dispatch) => {
     dispatch({ type: commonConstants.DOWNLOAD_FILE_START });
     const res = await agent.get(`/s3-file/${file.uuid}/url`, config);
     if (res.data.success) {
-      fetch(res.data.url).then((t) => t.blob().then((b) => {
+      fetch(res.data.data.url).then((t) => t.blob().then((b) => {
         const a = document.createElement('a');
         a.href = URL.createObjectURL(b);
         a.setAttribute('download', file.filename);
@@ -199,6 +247,83 @@ const downloadFile = (token, file) => async (dispatch) => {
   }
 };
 
+const fetchDownloadFileUrl = (token, file) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Auth-Token': token,
+    },
+    params: {
+      filename: file.filename,
+      as_attachment: file.as_attachment,
+    },
+  };
+  try {
+    dispatch({ type: commonConstants.FETCH_DOWNLOAD_FILE_URL_START });
+    const res = await agent.get(`/s3-file/${file.uuid}/url`, config);
+    if (res.data.success) {
+      dispatch({
+        type: commonConstants.FETCH_DOWNLOAD_FILE_URL_SUCCESS,
+        payload: { uuid: file.uuid, url: res.data.data.url },
+      });
+    } else {
+      dispatch({
+        type: commonConstants.FETCH_DOWNLOAD_FILE_URL_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: commonConstants.FETCH_DOWNLOAD_FILE_URL_FAIL,
+      errors: err,
+    });
+  }
+};
+
+const fetchAllChallengesProblems = (token, classId) => async (dispatch) => {
+  dispatch({ type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+
+  try {
+    const res = await agent.get(`/class/${classId}/challenge`, auth);
+    const problems = await Promise.all(
+      res.data.data.data.map(async ({ id }) => agent
+        .get(`/challenge/${id}/task`, auth)
+        .then((res2) => res2.data.data.problem)
+        .catch((err) => {
+          dispatch({
+            type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_FAIL,
+            payload: err,
+          });
+        })),
+    );
+    const newProblems = problems.flat();
+    dispatch({
+      type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS,
+      payload: { classId, challenges: res.data.data.data, problems: newProblems },
+    });
+  } catch (err) {
+    dispatch({
+      type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_FAIL,
+      error: err,
+    });
+  }
+};
+
 export {
-  getInstitutes, fetchClassMembers, editClassMember, fetchCourse, fetchClass, fetchAccount, browseSubmitLang, downloadFile,
+  getInstitutes,
+  fetchClassMembers,
+  editClassMember,
+  replaceClassMembers,
+  fetchAllClasses,
+  fetchCourse,
+  fetchClass,
+  fetchAccount,
+  browseSubmitLang,
+  downloadFile,
+  fetchDownloadFileUrl,
+  fetchAllChallengesProblems,
 };

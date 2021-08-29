@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import {
   Switch, Route, useHistory, useLocation,
 } from 'react-router-dom';
 
+// import { Autocomplete } from '@material-ui/lab';
 import Account from './sidebar/Account';
 import Course from './sidebar/Course';
 import System from './sidebar/System';
+import MyProfile from './sidebar/MyProfile';
 
 import MyClass from './sidebar/MyClass';
 import Challenge from './sidebar/Challenge';
 import Submission from './sidebar/Submission';
 import Grade from './sidebar/Grade';
 import Team from './sidebar/Team';
+import AllClass from './sidebar/AllClass';
+import AllClassChallenge from './sidebar/AllClassChallenge';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -45,9 +49,13 @@ const useStyles = makeStyles((theme) => ({
       cursor: 'pointer',
     },
   },
-
   titleText: {
     flex: '5',
+  },
+  titleTA: {
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    flex: '1',
   },
   itemIcon: {
     flex: '1',
@@ -79,6 +87,7 @@ const useStyles = makeStyles((theme) => ({
   },
   divider: {
     marginBottom: '16px',
+    transition: ['transform', '300ms'],
   },
   arrow: {
     marginTop: '60px',
@@ -105,7 +114,6 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
-
 }));
 
 export default function Sidebar() {
@@ -116,6 +124,10 @@ export default function Sidebar() {
 
   return (
     <Switch>
+      {/* {My Profile} */}
+      <Route exact path="/my-profile">
+        <MyProfile classes={classes} history={history} location={location} mode="main" />
+      </Route>
       {/* {Admin} */}
       {/* {Course} */}
       <Route exact path="/admin/course/course/">
@@ -176,7 +188,19 @@ export default function Sidebar() {
         <Challenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
       <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId">
-        <Challenge classNames={classes} history={history} location={location} mode="problem" />
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission">
+        <Challenge classNames={classes} history={history} location={location} mode="submission" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/code-submission">
+        <Challenge classNames={classes} history={history} location={location} mode="submission" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId">
+        <Challenge classNames={classes} history={history} location={location} mode="submission_detail" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/essay/:essayId">
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
       {/* {Submission} */}
       <Route exact path="/my-class/:courseId/:classId/submission">
@@ -202,6 +226,38 @@ export default function Sidebar() {
       {/* {Member} */}
       <Route path="/my-class/:courseId/:classId/member">
         <MyClass classNames={classes} history={history} location={location} mode="main" />
+      </Route>
+
+      {/* {ALL Class} */}
+      {/* {Challenge} */}
+      <Route exact path="/all-class">
+        {/* for fetchCourse and redirection */}
+        <AllClass classNames={classes} history={history} location={location} mode="main" />
+      </Route>
+      <Route exact path="/all-class/:courseId">
+        {/* for fetchClass and redirection */}
+        <AllClass classNames={classes} history={history} location={location} mode="course" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge">
+        <AllClass classNames={classes} history={history} location={location} mode="course" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId">
+        <AllClassChallenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId">
+        <AllClassChallenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission">
+        <AllClassChallenge classNames={classes} history={history} location={location} mode="submission" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId/code-submission">
+        <AllClassChallenge classNames={classes} history={history} location={location} mode="submission" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId">
+        <AllClassChallenge classNames={classes} history={history} location={location} mode="submission_detail" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/essay/:essayId">
+        <AllClassChallenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
     </Switch>
   );

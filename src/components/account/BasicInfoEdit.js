@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import {
   Button,
   TextField,
@@ -16,15 +15,15 @@ import SimpleBar from '../ui/SimpleBar';
 import AlignedText from '../ui/AlignedText';
 import { editAccount } from '../../actions/user/user';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   textfield: {
     width: '350px',
   },
 }));
 
 export default function BasicInfoEdit(props) {
-  const [realName, setRealName] = useState(props.realName);
-  const [userName, setUserName] = useState(props.userName);
+  const [realName] = useState(props.realName);
+  const [userName] = useState(props.userName);
   const [nickName, setNickName] = useState(props.nickName);
   const [altMail, setAltMail] = useState(props.altMail ? props.altMail : '');
   const [disabled, setDisabled] = useState(true);
@@ -96,8 +95,6 @@ export default function BasicInfoEdit(props) {
         open={popUp}
         keepMounted
         onClose={() => setPopUp(false)}
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle id="alert-dialog-slide-title">
           <Typography variant="h4">Verification email sent</Typography>
