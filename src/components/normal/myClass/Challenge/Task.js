@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 
 import CodingProblem from './CodingProblem';
-import { readProblemInfo, browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
+import { browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
 
 import GeneralLoading from '../../../GeneralLoading';
 import EssayProblem from './EssayProblem';
@@ -16,7 +16,7 @@ import SubmissionDetail from './SubmissionDetail';
 
 /* This is a level 4 component (page component) */
 /* judge the problem type on this level */
-export default function Problem() {
+export default function Task() {
   const { challengeId, problemId } = useParams();
 
   // const problemIDs = useSelector((state) => state.problem.allIds);
@@ -27,16 +27,8 @@ export default function Problem() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(readProblemInfo(authToken, problemId, challengeId));
-  }, [authToken, dispatch, problemId, challengeId]);
-
-  useEffect(() => {
     dispatch(browseTasksUnderChallenge(authToken, challengeId));
   }, [authToken, challengeId, dispatch]);
-
-  if (loading.readProblem || loading.readChallenge) {
-    return <GeneralLoading />;
-  }
 
   return (
     <>
@@ -46,7 +38,6 @@ export default function Problem() {
           path="/my-class/:courseId/:classId/challenge/:challengeId/essay/:essayId"
           component={EssayProblem}
         />
-        <Route path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId" component={CodingProblem} />
         <Route
           exact
           path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/code-submission"
@@ -62,6 +53,7 @@ export default function Problem() {
           path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId"
           component={SubmissionDetail}
         />
+        <Route path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId" component={CodingProblem} />
       </Switch>
     </>
   );

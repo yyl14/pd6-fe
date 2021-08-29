@@ -22,7 +22,9 @@ import CodingProblemEdit from './ProblemSettings/CodingProblemEdit';
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+import { readProblemInfo } from '../../../../actions/myClass/problem';
+
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -83,6 +85,13 @@ export default function CodingProblem() {
     });
   }, [classId, userClasses]);
 
+  useEffect(() => {
+    dispatch(readProblemInfo(authToken, problemId, challengeId));
+  }, [authToken, dispatch, problemId, challengeId]);
+
+  if (loading.readProblem || loading.readChallenge) {
+    return <GeneralLoading />;
+  }
   // if (error.readChallenge != null || error.readProblem != null) {
   //   return <div>System Exception</div>;
   // }

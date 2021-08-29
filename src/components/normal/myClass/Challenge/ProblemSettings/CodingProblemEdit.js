@@ -12,7 +12,7 @@ import {
   FormControlLabel,
   Switch,
 } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
 import SimpleTable from '../../../../ui/SimpleTable';
 import Icon from '../../../../ui/icon/index';
@@ -20,7 +20,6 @@ import Icon from '../../../../ui/icon/index';
 import SampleUploadCard from './SampleUploadCard';
 import AssistingDataUploadCard from './AssistingDataUploadCard';
 import TestingDataUploadCard from './TestingDataUploadCard';
-import NoMatch from '../../../../noMatch';
 
 import {
   editProblemInfo,
@@ -34,7 +33,7 @@ import {
   addTestcaseWithFile,
 } from '../../../../../actions/myClass/problem';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -71,9 +70,8 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const {
-    courseId, classId, challengeId, problemId,
+    problemId,
   } = useParams();
-  const history = useHistory();
   const classNames = useStyles();
 
   const dispatch = useDispatch();
@@ -165,14 +163,15 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const [tempSelectedFileS, setTempSelectedFileS] = useState([]);
   const [tempSelectedFileT, setTempSelectedFileT] = useState([]);
   const [tempSelectedFileA, setTempSelectedFileA] = useState([]);
-  const [selectedFileS, setSelectedFileS] = useState([]);
-  const [selectedFileT, setSelectedFileT] = useState([]);
   const [selectedFileA, setSelectedFileA] = useState([]);
 
   const [samplePopUp, setSamplePopUp] = useState(false);
   const [assistPopUp, setAssistPopUp] = useState(false);
   const [testingPopUp, setTestingPopUp] = useState(false);
   const [warningPopUp, setWarningPopUp] = useState(false);
+
+  const [hasRequest, setHasRequest] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   const handleClosePopUp = () => {
     setSamplePopUp(false);
@@ -443,10 +442,12 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       dispatch(addAssistingData(authToken, problemId, file));
     });
 
+    setHasRequest(true);
+    setDisabled(true);
     // wait for 3 secs because uploading many files waste time
-    setTimeout(() => {
-      closeEdit();
-    }, 3000);
+    // setTimeout(() => {
+    //   closeEdit();
+    // }, 3000);
   };
 
   const handleCancel = () => {
@@ -456,6 +457,12 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       closeEdit();
     }
   };
+
+  useEffect(() => {
+    if (hasRequest && !loading.editProblem && !loading.deleteTestcase && !loading.deleteAssistingData && !loading.editAssistingData && !loading.addAssistingData && !loading.editTestcase && !loading.uploadTestcaseInput && !loading.uploadTestcaseOutput && !loading.addTestcase) {
+      closeEdit();
+    }
+  }, [closeEdit, hasRequest, loading.addAssistingData, loading.addTestcase, loading.deleteAssistingData, loading.deleteTestcase, loading.editAssistingData, loading.editProblem, loading.editTestcase, loading.uploadTestcaseInput, loading.uploadTestcaseOutput]);
 
   return (
     <>
@@ -696,7 +703,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
         <Button color="default" onClick={handleCancel}>
           Cancel
         </Button>
-        <Button color="primary" onClick={handleSave}>
+        <Button disabled={disabled} color="primary" onClick={handleSave}>
           Save
         </Button>
       </div>

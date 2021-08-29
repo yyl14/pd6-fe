@@ -637,6 +637,7 @@ const addTestcaseWithFile = (token, problemId, isSample, score, timeLimit, memor
         });
       }
     }
+    dispatch({ type: problemConstants.ADD_TESTCASE_SUCCESS });
   } catch (err) {
     dispatch({
       type: problemConstants.ADD_TESTCASE_FAIL,
