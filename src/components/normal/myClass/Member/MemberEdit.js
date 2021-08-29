@@ -140,11 +140,15 @@ const MemberEdit = ({
           setSubmitError(error.replaceClassMembers);
           setShowErrorDetectedDialog(true);
         } else {
+          if (unblockHandle) {
+            unblockHandle.current();
+            history.push(targetLocation.current);
+          }
           backToMemberList();
         }
       }
     }
-  }, [backToMemberList, dispatchStart, error.replaceClassMembers, loading.replaceClassMembers]);
+  }, [backToMemberList, dispatchStart, error.replaceClassMembers, history, loading.replaceClassMembers]);
 
   useBeforeunload((e) => {
     if (showErrorDetectedDialog || showDuplicateIdentityDialog) {
@@ -190,7 +194,7 @@ const MemberEdit = ({
     if (TAChanged || studentChanged || guestChanged) {
       setShowUnsavedChangesDialog(true);
     } else {
-      backToMemberList();
+      unblockAndReturn();
     }
   };
   const handleSubmitUnsave = () => {
@@ -246,7 +250,7 @@ const MemberEdit = ({
         setDispatchStart(true);
       }
     } else {
-      backToMemberList();
+      unblockAndReturn();
     }
   };
 
