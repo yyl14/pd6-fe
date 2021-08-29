@@ -13,9 +13,5 @@ export default function EmailVerification() {
   emailVerification(query.get('code'));
   history.push('/login');
 
-  return (
-    <div>
-      {query.get('code')}
-    </div>
-  );
+  return <div>{query.get('code')}</div>;
 }

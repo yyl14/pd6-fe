@@ -7,6 +7,7 @@ const initialState = {
   forgetPassword: null,
   signup: null,
   fetchAccount: null,
+  resetPassword: null,
 };
 
 export default function auth(state = initialState, action) {
@@ -58,6 +59,16 @@ export default function auth(state = initialState, action) {
       return {
         ...state,
         auth: action.error,
+      };
+    case authConstants.RESET_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        resetPassword: null,
+      };
+    case authConstants.RESET_PASSWORD_FAIL:
+      return {
+        ...state,
+        resetPassword: action.error,
       };
     default: {
       return state;
