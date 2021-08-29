@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import {
-  Button, Card, CardContent, Divider, Grid, Typography, makeStyles,
+  Button, Card, CardContent, Typography, makeStyles,
 } from '@material-ui/core';
-import StarIcon from '@material-ui/icons/Star';
-import { yellow } from '@material-ui/core/colors';
 import Icon from '../ui/icon/index';
 import AlignedText from '../ui/AlignedText';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     width: '600px',
   },
@@ -47,21 +46,19 @@ const useStyles = makeStyles((theme) => ({
 export default function StudentInfoCard(props) {
   const classes = useStyles();
   const disabled = props.isDefault;
+  const institutes = useSelector((state) => state.institutes.byId);
+  const institutesId = useSelector((state) => state.institutes.allIds);
 
   const handleClick = () => {
     props.updateStatus(props.studentId, props.id);
   };
 
   const transform = (instituteId) => {
-    switch (instituteId) {
-      case 1:
-        return ('National Taiwan University');
-      case 2:
-        return ('National Taiwan Normal University');
-      case 3:
-        return ('National Taiwan University of Science and Technology');
-      default: return ('National Taiwan University');
+    const institute = institutesId.filter((id) => id === instituteId);
+    if (institute.length !== 0) {
+      return institutes[institute[0]].full_name;
     }
+    return 'Unknown Institute';
   };
 
   return (

@@ -1,29 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  makeStyles,
-  Button,
-  Typography,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  TextField,
-  FormControlLabel,
-  Switch,
-  FormControl,
-  Select,
-  MenuItem,
-} from '@material-ui/core';
-import { useParams } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
-import { BiFilterAlt } from 'react-icons/bi';
+import { makeStyles, Button, Typography } from '@material-ui/core';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
 import { fetchAccounts } from '../../../actions/admin/account';
+import GeneralLoading from '../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -70,7 +53,7 @@ export default function AccountList() {
   }, [accounts, accountsID]);
 
   if (loading.fetchAccounts) {
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   return (

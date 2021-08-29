@@ -60,7 +60,7 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
 
     // console.log(res1);
 
-    // TODO: Batch browse account
+    // Batch browse account
     const config2 = {
       headers: { 'auth-token': token },
     };
@@ -84,7 +84,7 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
           });
         })),
     );
-    const judgments = res3.flat().filter((item) => item !== null);
+    const judgments = res3.flat().filter((item) => (item !== null && item !== undefined));
 
     try {
       dispatch({
@@ -96,6 +96,7 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
         },
       });
     } catch (err) {
+      // console.log(judgments);
       console.log(err);
     }
     dispatch({

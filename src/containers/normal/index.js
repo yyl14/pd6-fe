@@ -34,7 +34,7 @@ class Normal extends Component {
           <div className="layout-content">
             <Switch>
               <Route path="/my-class/:courseId/:classId" component={MyClass} />
-              <Route path="/all-class/:courseId/:classId" component={AllClass} />
+              <Route path="/all-class" component={AllClass} />
               <Route component={NoMatch} />
             </Switch>
           </div>

@@ -19,6 +19,7 @@ import CustomTable from '../../../ui/CustomTable';
 import NoMatch from '../../../noMatch';
 import SimpleBar from '../../../ui/SimpleBar';
 import { readProblemInfo, readSubmission, readSubmissionDetail } from '../../../../actions/myClass/problem';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -103,7 +104,7 @@ export default function SubmissionList() {
     if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge && !loading.readJudgment) {
       return <NoMatch />;
     }
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   const handleRefresh = () => {

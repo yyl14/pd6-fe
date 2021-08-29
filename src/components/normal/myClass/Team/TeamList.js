@@ -9,15 +9,9 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
-  Card,
-  CardContent,
-  Select,
-  MenuItem,
-  FormControl,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
-import moment from 'moment-timezone';
 import AlignedText from '../../../ui/AlignedText';
 import CustomTable from '../../../ui/CustomTable';
 import FileUploadArea from '../../../ui/FileUploadArea';
@@ -28,6 +22,7 @@ import {
 import { fetchCourse, fetchClass } from '../../../../actions/common/common';
 
 import NoMatch from '../../../noMatch';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -114,7 +109,7 @@ export default function TeamList() {
 
   const submitImport = () => {
     if (importInput !== '' && selectedFile !== []) {
-      selectedFile.map((file) => (dispatch(importTeam(authToken, classId, file))));
+      selectedFile.map((file) => dispatch(importTeam(authToken, classId, file)));
     }
     setShowImportDialog(false);
     clearImportInput();
@@ -135,7 +130,7 @@ export default function TeamList() {
   };
 
   if (loading.fetchTeams || commonLoading.fetchCourse || commonLoading.fetchClass) {
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
   if (courses[courseId] === undefined || classes[classId] === undefined) {
     return <NoMatch />;
@@ -151,7 +146,12 @@ export default function TeamList() {
         buttons={
           isManager && (
             <>
-              <Button variant="outlined" color="primary" onClick={() => setShowImportDialog(true)} startIcon={<Icon.Folder />}>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => setShowImportDialog(true)}
+                startIcon={<Icon.Folder />}
+              >
                 Import
               </Button>
               <Button color="primary" onClick={() => setShowAddDialog(true)}>
@@ -179,33 +179,32 @@ export default function TeamList() {
             link_id: 'team_path',
           },
         ]}
-        data={
-          teamIds.map((id) => ({
-            id: teams[id].id,
-            label: teams[id].label,
-            teamName: teams[id].name,
-            path: `/my-class/${courseId}/${classId}/team/${id}`,
-            team_path: '/team_path',
-          }))
-        }
+        data={teamIds.map((id) => ({
+          id: teams[id].id,
+          label: teams[id].label,
+          teamName: teams[id].name,
+          path: `/my-class/${courseId}/${classId}/team/${id}`,
+          team_path: '/team_path',
+        }))}
         hasLink
         linkName="path"
       />
 
-      <Dialog
-        open={showImportDialog}
-        onClose={() => setShowImportDialog(false)}
-        fullWidth
-        maxWidth="sm"
-      >
+      <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Import Team</Typography>
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2">Team file format:</Typography>
-          <Typography variant="body2" className={classNames.reminder}>Name: String</Typography>
-          <Typography variant="body2" className={classNames.reminder}>Manager: student id (NTU only) &gt;= institute email &gt; #username</Typography>
-          <Typography variant="body2" className={classNames.reminder}>Member N (N=2~10): Same as Team Manager</Typography>
+          <Typography variant="body2" className={classNames.reminder}>
+            Name: String
+          </Typography>
+          <Typography variant="body2" className={classNames.reminder}>
+            Manager: student id (NTU only) &gt;= institute email &gt; #username
+          </Typography>
+          <Typography variant="body2" className={classNames.reminder}>
+            Member N (N=2~10): Same as Team Manager
+          </Typography>
           <Typography variant="body2"> Download template file for more instructions.</Typography>
         </DialogContent>
         <DialogContent>
@@ -215,27 +214,45 @@ export default function TeamList() {
           <AlignedText text="Title" maxWidth="mg" childrenType="field">
             <TextField id="title" name="title" value={importInput} onChange={(e) => handleImportChange(e)} />
           </AlignedText>
-          <FileUploadArea text="Grading File" fileAcceptFormat=".csv" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
+          <FileUploadArea
+            text="Grading File"
+            fileAcceptFormat=".csv"
+            selectedFile={selectedFile}
+            setSelectedFile={setSelectedFile}
+          />
         </DialogContent>
         <DialogActions>
-          <Button className={classNames.templateBtn} variant="outlined" startIcon={<Icon.Download />} onClick={() => { downloadTemplate(); }}>
+          <Button
+            className={classNames.templateBtn}
+            variant="outlined"
+            startIcon={<Icon.Download />}
+            onClick={() => {
+              downloadTemplate();
+            }}
+          >
             Template
           </Button>
-          <Button onClick={() => { setShowImportDialog(false); clearImportInput(); }} color="default">
+          <Button
+            onClick={() => {
+              setShowImportDialog(false);
+              clearImportInput();
+            }}
+            color="default"
+          >
             Cancel
           </Button>
-          <Button onClick={() => { submitImport(); }} color="primary">
+          <Button
+            onClick={() => {
+              submitImport();
+            }}
+            color="primary"
+          >
             Confirm
           </Button>
         </DialogActions>
       </Dialog>
 
-      <Dialog
-        open={showAddDialog}
-        onClose={() => setShowAddDialog(false)}
-        fullWidth
-        maxWidth="sm"
-      >
+      <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Create New Team</Typography>
         </DialogTitle>
@@ -255,10 +272,21 @@ export default function TeamList() {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={() => { setShowAddDialog(false); clearAddInput(); }} color="default">
+          <Button
+            onClick={() => {
+              setShowAddDialog(false);
+              clearAddInput();
+            }}
+            color="default"
+          >
             Cancel
           </Button>
-          <Button onClick={() => { submitAdd(); }} color="primary">
+          <Button
+            onClick={() => {
+              submitAdd();
+            }}
+            color="primary"
+          >
             Create
           </Button>
         </DialogActions>

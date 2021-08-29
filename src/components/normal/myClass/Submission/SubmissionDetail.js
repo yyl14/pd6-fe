@@ -19,6 +19,9 @@ import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
 import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
 // import NoMatch from '../../../noMatch';
+
+import GeneralLoading from '../../../GeneralLoading';
+
 import {
   readSubmissionDetail,
   readProblem,
@@ -168,7 +171,7 @@ export default function SubmissionDetail(props) {
     || testcaseIds === undefined
     // || accounts.byId[accountId] === undefined
   ) {
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   // if (error.readSubmission) {

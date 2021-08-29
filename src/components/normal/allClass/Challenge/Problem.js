@@ -14,6 +14,7 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import CodingProblem from './CodingProblem';
 import { readProblem, readProblemInfo } from '../../../../actions/myClass/problem';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -43,7 +44,7 @@ export default function Problem() {
   }, [authToken, dispatch, problemId, challengeId]);
 
   if (loading.readProblem) {
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   return (

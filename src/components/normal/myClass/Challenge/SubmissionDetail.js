@@ -19,6 +19,8 @@ import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
 import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
 import NoMatch from '../../../noMatch';
+import GeneralLoading from '../../../GeneralLoading';
+
 import {
   readSubmissionDetail,
   readProblemInfo,
@@ -153,7 +155,7 @@ export default function SubmissionDetail() {
     ) {
       return <NoMatch />;
     }
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
   // if (error.readSubmission) {
   //   console.log(error.readSubmission);

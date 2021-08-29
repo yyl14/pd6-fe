@@ -9,11 +9,10 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
-  Button,
   IconButton,
 } from '@material-ui/core';
 import Icon from '../icon/index';
-import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
+import { fetchCourses } from '../../../actions/admin/course';
 
 export default function Course({
   classes, history, location, mode,

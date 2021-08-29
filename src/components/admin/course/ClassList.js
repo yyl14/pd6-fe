@@ -13,21 +13,15 @@ import {
 import { useHistory, useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 import {
-  fetchCourses,
-  fetchClasses,
-  addCourse,
-  addClass,
-  renameClass,
-  deleteClass,
+  fetchCourses, fetchClasses, addCourse, addClass,
 } from '../../../actions/admin/course';
 import { fetchClassMembers } from '../../../actions/common/common';
-import SimpleBar from '../../ui/SimpleBar';
-import DateRangePicker from '../../ui/DateRangePicker';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
 import NoMatch from '../../noMatch';
+import GeneralLoading from '../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -41,7 +35,6 @@ export default function ClassList() {
   const classNames = useStyles();
 
   const dispatch = useDispatch();
-  const stateAll = useSelector((state) => state);
   const authToken = useSelector((state) => state.auth.token);
   const courses = useSelector((state) => state.courses);
   const classes = useSelector((state) => state.classes);
@@ -102,7 +95,7 @@ export default function ClassList() {
   if (courses.byId[courseId] === undefined || courses.byId[courseId].name === undefined) {
     if (loading.fetchCourses) {
       // still loading
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }

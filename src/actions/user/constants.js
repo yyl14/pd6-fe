@@ -18,7 +18,6 @@ export const authConstants = {
   RESET_PASSWORD_START: 'RESET_PASSWORD_START',
   RESET_PASSWORD_SUCCESS: 'RESET_PASSWORD_SUCCESS',
   RESET_PASSWORD_FAIL: 'RESET_PASSWORD_FAIL',
-
 };
 
 export const userConstants = {
