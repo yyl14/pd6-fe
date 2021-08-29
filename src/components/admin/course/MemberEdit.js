@@ -97,15 +97,10 @@ const MemberEdit = ({
     }
     backToMemberList();
   };
-  const handleBlankList = (list) => {
-    if (list.length === 1 && (list[0].account_referral === '' || list[0] === '')) {
-      return [];
-    }
-    return list;
-  };
+  const handleBlankList = (list) => list.filter((element) => element !== '' && element.account_referral !== '');
 
   useEffect(() => {
-    if (!dispatchStart) {
+    if (!loading.replaceClassMembers) {
       setTA(
         members
           .filter((item) => item.role === 'MANAGER')
@@ -125,7 +120,7 @@ const MemberEdit = ({
           .join('\n'),
       );
     }
-  }, [dispatchStart, members]);
+  }, [loading.replaceClassMembers, members]);
 
   useEffect(() => {
     unblockHandle.current = history.block((tl) => {
@@ -206,28 +201,22 @@ const MemberEdit = ({
     setShowUnsavedChangesDialog(false);
 
     if (TAChanged || studentChanged || guestChanged) {
-      const TAStudentDuplicateList = handleBlankList(
-        TA.split('\n').filter(
-          (id) => student
-            .split('\n')
-            .map((accountReferral) => accountReferral)
-            .indexOf(id) !== -1,
-        ),
+      const TAStudentDuplicateList = TA.split('\n').filter(
+        (id) => student
+          .split('\n')
+          .map((accountReferral) => accountReferral)
+          .indexOf(id) !== -1,
       );
-      const guestStudentDuplicateList = handleBlankList(
-        guest.split('\n').filter(
-          (id) => student
-            .split('\n')
-            .map((accountReferral) => accountReferral)
-            .indexOf(id) !== -1,
-        ),
+      const guestStudentDuplicateList = guest.split('\n').filter(
+        (id) => student
+          .split('\n')
+          .map((accountReferral) => accountReferral)
+          .indexOf(id) !== -1,
       );
-      const guestTADuplicateList = handleBlankList(
-        guest.split('\n').filter(
-          (id) => TA.split('\n')
-            .map((accountReferral) => accountReferral)
-            .indexOf(id) !== -1,
-        ),
+      const guestTADuplicateList = guest.split('\n').filter(
+        (id) => TA.split('\n')
+          .map((accountReferral) => accountReferral)
+          .indexOf(id) !== -1,
       );
 
       const combinedDuplicateList = handleBlankList(
@@ -238,24 +227,18 @@ const MemberEdit = ({
       if (combinedDuplicateList.length !== 0) {
         setShowDuplicateIdentityDialog(true);
       } else {
-        const TATransformedList = handleBlankList(
-          TA.split('\n').map((accountReferral) => ({
-            account_referral: accountReferral,
-            role: 'MANAGER',
-          })),
-        );
-        const studentTransformedList = handleBlankList(
-          student.split('\n').map((accountReferral) => ({
-            account_referral: accountReferral,
-            role: 'NORMAL',
-          })),
-        );
-        const guestTransformedList = handleBlankList(
-          guest.split('\n').map((accountReferral) => ({
-            account_referral: accountReferral,
-            role: 'GUEST',
-          })),
-        );
+        const TATransformedList = TA.split('\n').map((accountReferral) => ({
+          account_referral: accountReferral,
+          role: 'MANAGER',
+        }));
+        const studentTransformedList = student.split('\n').map((accountReferral) => ({
+          account_referral: accountReferral,
+          role: 'NORMAL',
+        }));
+        const guestTransformedList = guest.split('\n').map((accountReferral) => ({
+          account_referral: accountReferral,
+          role: 'GUEST',
+        }));
 
         const replacingList = handleBlankList(TATransformedList.concat(studentTransformedList, guestTransformedList));
 
