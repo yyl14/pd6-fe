@@ -50,7 +50,8 @@ const userSignIn = (username, password) => async (dispatch) => {
     };
     const userInfo = await agent.get(`/account/${id}`, auth);
     const userClassesRes = await agent.get(`/account/${id}/class`, auth);
-    const userClasses = userClassesRes.data.data;
+    const userClasses = userClassesRes.data.data ? userClassesRes.data.data : [];
+    console.log('userClasses: ', userClasses);
     const userClassesInfo = await Promise.all(
       userClasses.map(async (item) => agent
         .get(`/class/${item.class_id}`, auth)
@@ -133,6 +134,15 @@ const userRegister = (username, password, nickname, realName, emailPrefix, insti
   }
 };
 
+const emailVerification = async (code) => {
+  const config = {
+    params: {
+      code,
+    },
+  };
+  await agent.get('/email-verification', config);
+};
+
 export {
-  getUserInfo, userSignIn, userLogout, userForgetPassword, userRegister,
+  getUserInfo, userSignIn, userLogout, userForgetPassword, userRegister, emailVerification,
 };

@@ -1,4 +1,3 @@
-import { common } from '@material-ui/core/colors';
 import agent from '../agent';
 import { commonConstants } from './constant';
 
@@ -49,7 +48,7 @@ const editClassMember = (token, classId, editedList) => (dispatch) => {
 
   agent
     .patch(`/class/${classId}/member`, editedList, auth)
-    .then((res) => {
+    .then(() => {
       dispatch({
         type: commonConstants.EDIT_CLASS_MEMBER_SUCCESS,
       });
@@ -287,6 +286,7 @@ export {
   fetchClassMembers,
   editClassMember,
   replaceClassMembers,
+  fetchAllClasses,
   fetchCourse,
   fetchClass,
   fetchAccount,

@@ -22,6 +22,7 @@ import AlignedText from '../../../../ui/AlignedText';
 import Icon from '../../../../ui/icon/index';
 
 import NoMatch from '../../../../noMatch';
+import GeneralLoading from '../../../../GeneralLoading';
 
 import {
   browseTestcase,
@@ -213,10 +214,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   }, [problems, problemId, testcases]);
 
   useEffect(() => {
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
-  }, [authToken, challengeId, dispatch]);
-
-  useEffect(() => {
     dispatch(browseTestcase(authToken, problemId));
     dispatch(browseAssistingData(authToken, problemId));
   }, [authToken, dispatch, problemId]);
@@ -227,7 +224,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   // }, [authToken, classId, courseId, dispatch]);
 
   if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   if (problems[problemId] === undefined || classes[classId] === undefined || courses[courseId] === undefined) {

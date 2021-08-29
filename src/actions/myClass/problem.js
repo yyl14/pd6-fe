@@ -34,14 +34,18 @@ const editChallenge = (token, challengeId, body) => async (dispatch) => {
       },
     };
     dispatch({ type: problemConstants.EDIT_CHALLENGE_START });
-    const res = await agent.patch(`/challenge/${challengeId}`, {
-      publicize_type: body.publicizeType,
-      selection_type: body.selectionType,
-      title: body.title,
-      description: body.description,
-      start_time: body.startTime,
-      end_time: body.endTime,
-    }, auth);
+    const res = await agent.patch(
+      `/challenge/${challengeId}`,
+      {
+        publicize_type: body.publicizeType,
+        selection_type: body.selectionType,
+        title: body.title,
+        description: body.description,
+        start_time: body.startTime,
+        end_time: body.endTime,
+      },
+      auth,
+    );
     dispatch({ type: problemConstants.EDIT_CHALLENGE_SUCCESS, payload: res.data.data });
   } catch (err) {
     dispatch({
@@ -60,7 +64,10 @@ const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
     };
     dispatch({ type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_START });
     const res = await agent.get(`/challenge/${challengeId}/task`, auth);
-    dispatch({ type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS, payload: { id: challengeId, data: res.data.data } });
+    dispatch({
+      type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS,
+      payload: { id: challengeId, data: res.data.data },
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_FAIL,
@@ -70,49 +77,36 @@ const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
 };
 
 const readProblemInfo = (token, problemId, challengeId) => async (dispatch) => {
-  dispatch({ type: problemConstants.READ_PROBLEM_START });
-  dispatch({ type: problemConstants.READ_CHALLENGE_START });
-  const auth = {
+  const config = {
     headers: {
       'Auth-Token': token,
     },
   };
+
   try {
-    const problemInfo = await agent.get(`/problem/${problemId}`, auth);
-    if (problemInfo.data.success) {
-      dispatch({
-        type: problemConstants.READ_PROBLEM_SUCCESS,
-        payload: problemInfo.data.data,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.READ_PROBLEM_FAIL,
-        errors: problemInfo.data.error,
-      });
-    }
+    dispatch({ type: problemConstants.READ_CHALLENGE_START });
+    const challenge = await agent.get(`/challenge/${challengeId}`, config);
+    dispatch({
+      type: problemConstants.READ_CHALLENGE_SUCCESS,
+      payload: challenge.data.data,
+    });
   } catch (err) {
     dispatch({
-      type: problemConstants.READ_PROBLEM_FAIL,
+      type: problemConstants.READ_CHALLENGE_FAIL,
       errors: err,
     });
   }
 
   try {
-    const challenge = await agent.get(`/challenge/${challengeId}`, auth);
-    if (challenge.data.success) {
-      dispatch({
-        type: problemConstants.READ_CHALLENGE_SUCCESS,
-        payload: challenge.data.data,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.READ_CHALLENGE_FAIL,
-        errors: challenge.data.error,
-      });
-    }
+    dispatch({ type: problemConstants.READ_PROBLEM_START });
+    const problemInfo = await agent.get(`/problem/${problemId}`, config);
+    dispatch({
+      type: problemConstants.READ_PROBLEM_SUCCESS,
+      payload: problemInfo.data.data,
+    });
   } catch (err) {
     dispatch({
-      type: problemConstants.READ_CHALLENGE_FAIL,
+      type: problemConstants.READ_PROBLEM_FAIL,
       errors: err,
     });
   }
@@ -127,17 +121,11 @@ const readSubmission = (token, accountId, problemId) => async (dispatch) => {
   };
   try {
     const subInfo = await agent.get(`/submission?account_id=${accountId}&problem_id=${parseInt(problemId, 10)}`, auth);
-    if (subInfo.data.success) {
-      dispatch({
-        type: problemConstants.READ_SUBMISSION_SUCCESS,
-        payload: subInfo.data.data.data,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.READ_SUBMISSION_FAIL,
-        errors: subInfo.data.error,
-      });
-    }
+
+    dispatch({
+      type: problemConstants.READ_SUBMISSION_SUCCESS,
+      payload: subInfo.data.data.data,
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.READ_SUBMISSION_FAIL,
@@ -156,17 +144,11 @@ const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
 
   try {
     const judgment = await agent.get(`/submission/${submissionId}/latest-judgment`, auth);
-    if (judgment.data.success) {
-      dispatch({
-        type: problemConstants.READ_SUBMISSION_JUDGE_SUCCESS,
-        payload: judgment.data.data,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.READ_SUBMISSION_JUDGE_FAIL,
-        errors: judgment.data.error,
-      });
-    }
+
+    dispatch({
+      type: problemConstants.READ_SUBMISSION_JUDGE_SUCCESS,
+      payload: judgment.data.data,
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.READ_SUBMISSION_JUDGE_FAIL,
@@ -184,17 +166,11 @@ const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
   };
   try {
     const res = await agent.get(`/judgment/${judgmentId}/judge-case`, auth);
-    if (res.data.success) {
-      dispatch({
-        type: problemConstants.BROWSE_JUDGE_CASES_SUCCESS,
-        payload: res.data.data,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.BROWSE_JUDGE_CASES_FAIL,
-        errors: res.data.error,
-      });
-    }
+
+    dispatch({
+      type: problemConstants.BROWSE_JUDGE_CASES_SUCCESS,
+      payload: res.data.data,
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.BROWSE_JUDGE_CASES_FAIL,
@@ -212,103 +188,69 @@ const browseTestcase = (token, problemId) => async (dispatch) => {
   };
   try {
     const testcases = await agent.get(`/problem/${problemId}/testcase`, auth);
-    if (testcases.data.success) {
-      const { success, data, error } = testcases.data;
-      // console.log('testcase ori data: ', data);
-      const newTestcases = await Promise.all(
-        data.map(async (testcase) => {
-          if (testcase.is_sample === true) {
-            if (testcase.input_file_uuid !== null || testcase.output_file_uuid !== null) {
-              const config1 = {
-                headers: {
-                  'Auth-Token': token,
-                },
-                params: {
-                  filename: testcase.input_filename,
-                  as_attachment: false,
-                },
-              };
-              const config2 = {
-                headers: {
-                  'Auth-Token': token,
-                },
-                params: {
-                  filename: testcase.output_filename,
-                  as_attachment: false,
-                },
-              };
-              const res1 = await agent.get(`/s3-file/${testcase.input_file_uuid}/url`, config1);
-              const res2 = await agent.get(`/s3-file/${testcase.output_file_uuid}/url`, config2);
-              if (res1.data.success && res2.data.success) {
-                const input = await fetch(res1.data.data.url)
-                  .then((r) => r.text())
-                  .then((t) => t.toString());
-                const output = await fetch(res2.data.data.url)
-                  .then((r) => r.text())
-                  .then((t) => t.toString());
-                return {
-                  ...testcase,
-                  input,
-                  output,
-                };
-              }
+
+    const { success, data, error } = testcases.data;
+    const newTestcases = await Promise.all(
+      data.map(async (testcase) => {
+        if (testcase.is_sample === true) {
+          if (testcase.input_file_uuid !== null || testcase.output_file_uuid !== null) {
+            const config1 = {
+              headers: {
+                'Auth-Token': token,
+              },
+              params: {
+                filename: testcase.input_filename,
+                as_attachment: false,
+              },
+            };
+            const config2 = {
+              headers: {
+                'Auth-Token': token,
+              },
+              params: {
+                filename: testcase.output_filename,
+                as_attachment: false,
+              },
+            };
+            const res1 = await agent.get(`/s3-file/${testcase.input_file_uuid}/url`, config1);
+            const res2 = await agent.get(`/s3-file/${testcase.output_file_uuid}/url`, config2);
+            if (res1.data.success && res2.data.success) {
+              const input = await fetch(res1.data.data.url)
+                .then((r) => r.text())
+                .then((t) => t.toString());
+              const output = await fetch(res2.data.data.url)
+                .then((r) => r.text())
+                .then((t) => t.toString());
               return {
                 ...testcase,
-                input: '',
-                output: '',
+                input,
+                output,
               };
             }
-            if (testcase.input_file_uuid !== null) {
-              const config1 = {
-                headers: {
-                  'Auth-Token': token,
-                },
-                params: {
-                  filename: testcase.input_filename,
-                  as_attachment: false,
-                },
-              };
-              const res1 = await agent.get(`/s3-file/${testcase.input_file_uuid}/url`, config1);
-              if (res1.data.success) {
-                const input = await fetch(res1.data.data.url)
-                  .then((r) => r.text())
-                  .then((t) => t.toString());
-                return {
-                  ...testcase,
-                  input,
-                  output: '',
-                };
-              }
+            return {
+              ...testcase,
+              input: '',
+              output: '',
+            };
+          }
+          if (testcase.input_file_uuid !== null) {
+            const config1 = {
+              headers: {
+                'Auth-Token': token,
+              },
+              params: {
+                filename: testcase.input_filename,
+                as_attachment: false,
+              },
+            };
+            const res1 = await agent.get(`/s3-file/${testcase.input_file_uuid}/url`, config1);
+            if (res1.data.success) {
+              const input = await fetch(res1.data.data.url)
+                .then((r) => r.text())
+                .then((t) => t.toString());
               return {
                 ...testcase,
-                input: '',
-                output: '',
-              };
-            }
-            if (testcase.output_file_uuid !== null) {
-              const config2 = {
-                headers: {
-                  'Auth-Token': token,
-                },
-                params: {
-                  filename: testcase.output_filename,
-                  as_attachment: false,
-                },
-              };
-              const res2 = await agent.get(`/s3-file/${testcase.output_file_uuid}/url`, config2);
-              if (res2.data.success) {
-                const output = await fetch(res2.data.data.url)
-                  .then((r) => r.text())
-                  .then((t) => t.toString());
-                return {
-                  ...testcase,
-                  input: '',
-                  output,
-                };
-              }
-              return {
-                ...testcase,
-                input: '',
+                input,
                 output: '',
               };
             }
@@ -318,20 +260,46 @@ const browseTestcase = (token, problemId) => async (dispatch) => {
               output: '',
             };
           }
-          return testcase;
-        }),
-      );
-      // console.log('newTestcases: ', newTestcases);
-      dispatch({
-        type: problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_SUCCESS,
-        payload: { problemId, testcases: newTestcases },
-      });
-    } else {
-      dispatch({
-        type: problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_FAIL,
-        errors: testcases.data.error,
-      });
-    }
+          if (testcase.output_file_uuid !== null) {
+            const config2 = {
+              headers: {
+                'Auth-Token': token,
+              },
+              params: {
+                filename: testcase.output_filename,
+                as_attachment: false,
+              },
+            };
+            const res2 = await agent.get(`/s3-file/${testcase.output_file_uuid}/url`, config2);
+            if (res2.data.success) {
+              const output = await fetch(res2.data.data.url)
+                .then((r) => r.text())
+                .then((t) => t.toString());
+              return {
+                ...testcase,
+                input: '',
+                output,
+              };
+            }
+            return {
+              ...testcase,
+              input: '',
+              output: '',
+            };
+          }
+          return {
+            ...testcase,
+            input: '',
+            output: '',
+          };
+        }
+        return testcase;
+      }),
+    );
+    dispatch({
+      type: problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_SUCCESS,
+      payload: { problemId, testcases: newTestcases },
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_FAIL,
@@ -349,17 +317,10 @@ const browseAssistingData = (token, problemId) => async (dispatch) => {
   };
   try {
     const res = await agent.get(`/problem/${problemId}/assisting-data`, auth);
-    if (res.data.success) {
-      dispatch({
-        type: problemConstants.BROWSE_ASSISTING_DATA_SUCCESS,
-        payload: { problemId, assistingData: res.data.data },
-      });
-    } else {
-      dispatch({
-        type: problemConstants.BROWSE_ASSISTING_DATA_FAIL,
-        errors: res.data.error,
-      });
-    }
+    dispatch({
+      type: problemConstants.BROWSE_ASSISTING_DATA_SUCCESS,
+      payload: { problemId, assistingData: res.data.data },
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.BROWSE_ASSISTING_DATA_FAIL,
@@ -385,18 +346,12 @@ const editProblemInfo = (token, problemId, title, score, testcaseDisabled, descr
     hint,
   };
   try {
-    const res = await agent.patch(`/problem/${problemId}`, body, auth);
-    if (res.data.success) {
-      dispatch({
-        type: problemConstants.EDIT_PROBLEM_SUCCESS,
-        payload: { problemId, content: body },
-      });
-    } else {
-      dispatch({
-        type: problemConstants.EDIT_PROBLEM_FAIL,
-        errors: res.data.error,
-      });
-    }
+    await agent.patch(`/problem/${problemId}`, body, auth);
+
+    dispatch({
+      type: problemConstants.EDIT_PROBLEM_SUCCESS,
+      payload: { problemId, content: body },
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.EDIT_PROBLEM_FAIL,
@@ -413,18 +368,12 @@ const deleteProblem = (token, problemId) => async (dispatch) => {
     },
   };
   try {
-    const res = await agent.delete(`/problem/${problemId}`, auth);
-    if (res.data.success) {
-      dispatch({
-        type: problemConstants.DELETE_PROBLEM_SUCCESS,
-        payload: problemId,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.DELETE_PROBLEM_FAIL,
-        errors: res.data.error,
-      });
-    }
+    await agent.delete(`/problem/${problemId}`, auth);
+
+    dispatch({
+      type: problemConstants.DELETE_PROBLEM_SUCCESS,
+      payload: problemId,
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.DELETE_PROBLEM_FAIL,
@@ -441,18 +390,12 @@ const deleteTestcase = (token, testcaseId) => async (dispatch) => {
     },
   };
   try {
-    const res = await agent.delete(`/testcase/${testcaseId}`, auth);
-    if (res.data.success) {
-      dispatch({
-        type: problemConstants.DELETE_TESTCASE_SUCCESS,
-        payload: testcaseId,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.DELETE_TESTCASE_FAIL,
-        errors: res.data.error,
-      });
-    }
+    await agent.delete(`/testcase/${testcaseId}`, auth);
+
+    dispatch({
+      type: problemConstants.DELETE_TESTCASE_SUCCESS,
+      payload: testcaseId,
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.DELETE_TESTCASE_FAIL,
@@ -469,18 +412,11 @@ const deleteAssistingData = (token, assistingId) => async (dispatch) => {
     },
   };
   try {
-    const res = await agent.delete(`/assisting-data/${assistingId}`, auth);
-    if (res.data.success) {
-      dispatch({
-        type: problemConstants.DELETE_ASSISTING_DATA_SUCCESS,
-        payload: assistingId,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.DELETE_ASSISTING_DATA_FAIL,
-        errors: res.data.error,
-      });
-    }
+    await agent.delete(`/assisting-data/${assistingId}`, auth);
+    dispatch({
+      type: problemConstants.DELETE_ASSISTING_DATA_SUCCESS,
+      payload: assistingId,
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.DELETE_ASSISTING_DATA_FAIL,
@@ -501,18 +437,11 @@ const editAssistingData = (token, assistingId, file) => async (dispatch) => {
   formData.append('assisting_data', file);
 
   try {
-    const res = await agent.put(`/assisting-data/${assistingId}`, formData, auth);
-    // console.log(res);
-    if (res.data.success) {
-      dispatch({
-        type: problemConstants.EDIT_ASSISTING_DATA_SUCCESS,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.EDIT_ASSISTING_DATA_FAIL,
-        errors: res.data.error,
-      });
-    }
+    await agent.put(`/assisting-data/${assistingId}`, formData, auth);
+
+    dispatch({
+      type: problemConstants.EDIT_ASSISTING_DATA_SUCCESS,
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.EDIT_ASSISTING_DATA_FAIL,
@@ -533,17 +462,10 @@ const addAssistingData = (token, problemId, file) => async (dispatch) => {
   formData.append('assisting_data', file);
 
   try {
-    const res = await agent.post(`/problem/${problemId}/assisting-data`, formData, auth);
-    if (res.data.success) {
-      dispatch({
-        type: problemConstants.ADD_ASSISTING_DATA_SUCCESS,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.ADD_ASSISTING_DATA_FAIL,
-        errors: res.data.error,
-      });
-    }
+    await agent.post(`/problem/${problemId}/assisting-data`, formData, auth);
+    dispatch({
+      type: problemConstants.ADD_ASSISTING_DATA_SUCCESS,
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.ADD_ASSISTING_DATA_FAIL,
@@ -569,18 +491,11 @@ const submitCode = (token, problemId, languageId, content) => async (dispatch) =
   formData.append('content_file', file);
 
   try {
-    const res = await agent.post(`/problem/${problemId}/submission`, formData, config);
-    // console.log('submit', res);
-    if (res.data.success) {
-      dispatch({
-        type: problemConstants.SUBMIT_PROBLEM_SUCCESS,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.SUBMIT_PROBLEM_FAIL,
-        errors: res.data.error,
-      });
-    }
+    await agent.post(`/problem/${problemId}/submission`, formData, config);
+
+    dispatch({
+      type: problemConstants.SUBMIT_PROBLEM_SUCCESS,
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.SUBMIT_PROBLEM_FAIL,
@@ -605,19 +520,12 @@ const editTestcase = (token, testcaseId, isSample, score, timeLimit, memoryLimit
     is_disabled: isDisabled,
   };
   try {
-    const res = await agent.patch(`/testcase/${testcaseId}`, body, auth);
-    // console.log('edit testcase info', res.data);
-    if (res.data.success) {
-      dispatch({
-        type: problemConstants.EDIT_TESTCASE_SUCCESS,
-        payload: testcaseId,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.EDIT_TESTCASE_FAIL,
-        errors: res.data.error,
-      });
-    }
+    await agent.patch(`/testcase/${testcaseId}`, body, auth);
+
+    dispatch({
+      type: problemConstants.EDIT_TESTCASE_SUCCESS,
+      payload: testcaseId,
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.EDIT_TESTCASE_FAIL,
@@ -639,18 +547,11 @@ const uploadTestcaseInput = (token, testcaseId, file) => async (dispatch) => {
   formData.append('input_file', file);
 
   try {
-    const res = await agent.put(`/testcase/${testcaseId}/input-data`, formData, auth);
-    // console.log('upload input data', res.data);
-    if (res.data.success) {
-      dispatch({
-        type: problemConstants.UPLOAD_TESTCASE_INPUT_SUCCESS,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.UPLOAD_TESTCASE_INPUT_FAIL,
-        errors: res.data.error,
-      });
-    }
+    await agent.put(`/testcase/${testcaseId}/input-data`, formData, auth);
+
+    dispatch({
+      type: problemConstants.UPLOAD_TESTCASE_INPUT_SUCCESS,
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.UPLOAD_TESTCASE_INPUT_FAIL,
@@ -672,18 +573,11 @@ const uploadTestcaseOutput = (token, testcaseId, file) => async (dispatch) => {
   formData.append('output_file', file);
 
   try {
-    const res = await agent.put(`/testcase/${testcaseId}/output-data`, formData, auth);
-    // console.log('upload output data', res.data);
-    if (res.data.success) {
-      dispatch({
-        type: problemConstants.UPLOAD_TESTCASE_OUTPUT_SUCCESS,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.UPLOAD_TESTCASE_OUTPUT_FAIL,
-        errors: res.data.error,
-      });
-    }
+    await agent.put(`/testcase/${testcaseId}/output-data`, formData, auth);
+
+    dispatch({
+      type: problemConstants.UPLOAD_TESTCASE_OUTPUT_SUCCESS,
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.UPLOAD_TESTCASE_OUTPUT_FAIL,
@@ -710,45 +604,40 @@ const addTestcaseWithFile = (token, problemId, isSample, score, timeLimit, memor
   try {
     const res = await agent.post(`/problem/${problemId}/testcase`, body, auth);
     // console.log('add testcase info', res.data);
-    if (res.data.success) {
-      // try to upload file
-      const testcaseId = res.data.data.id;
-      const fileAuth = {
-        headers: {
-          'Auth-Token': token,
-          'Content-Type': 'multipart/form-data',
-        },
-      };
-      if (inputFile != null) {
-        const formData = new FormData();
-        formData.append('input_file', inputFile);
-        const inRes = await agent.put(`/testcase/${testcaseId}/input-data`, formData, fileAuth);
-        // console.log('add testcase input file', inRes);
-        if (!inRes.data.success) {
-          dispatch({
-            type: problemConstants.ADD_TESTCASE_FAIL,
-            errors: inRes.data.error,
-          });
-        }
+
+    // try to upload file
+    const testcaseId = res.data.data.id;
+    const fileAuth = {
+      headers: {
+        'Auth-Token': token,
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+    if (inputFile != null) {
+      const formData = new FormData();
+      formData.append('input_file', inputFile);
+      const inRes = await agent.put(`/testcase/${testcaseId}/input-data`, formData, fileAuth);
+      // console.log('add testcase input file', inRes);
+      if (!inRes.data.success) {
+        dispatch({
+          type: problemConstants.ADD_TESTCASE_FAIL,
+          errors: inRes.data.error,
+        });
       }
-      if (outputFile != null) {
-        const formData = new FormData();
-        formData.append('output_file', outputFile);
-        const outRes = await agent.put(`/testcase/${testcaseId}/output-data`, formData, fileAuth);
-        // console.log('add testcase output file', outRes);
-        if (!outRes.data.success) {
-          dispatch({
-            type: problemConstants.ADD_TESTCASE_FAIL,
-            errors: outRes.data.error,
-          });
-        }
-      }
-    } else {
-      dispatch({
-        type: problemConstants.ADD_TESTCASE_FAIL,
-        errors: res.data.error,
-      });
     }
+    if (outputFile != null) {
+      const formData = new FormData();
+      formData.append('output_file', outputFile);
+      const outRes = await agent.put(`/testcase/${testcaseId}/output-data`, formData, fileAuth);
+      // console.log('add testcase output file', outRes);
+      if (!outRes.data.success) {
+        dispatch({
+          type: problemConstants.ADD_TESTCASE_FAIL,
+          errors: outRes.data.error,
+        });
+      }
+    }
+    dispatch({ type: problemConstants.ADD_TESTCASE_SUCCESS });
   } catch (err) {
     dispatch({
       type: problemConstants.ADD_TESTCASE_FAIL,
@@ -766,17 +655,11 @@ const readChallenge = (token, challengeId) => async (dispatch) => {
   };
   try {
     const challenge = await agent.get(`/challenge/${challengeId}`, auth);
-    if (challenge.data.success) {
-      dispatch({
-        type: problemConstants.READ_CHALLENGE_SUCCESS,
-        payload: challenge.data.data,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.READ_CHALLENGE_FAIL,
-        errors: challenge.data.error,
-      });
-    }
+
+    dispatch({
+      type: problemConstants.READ_CHALLENGE_SUCCESS,
+      payload: challenge.data.data,
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.READ_CHALLENGE_FAIL,
@@ -794,17 +677,11 @@ const readTestcase = (token, testcaseId) => async (dispatch) => {
   };
   try {
     const res = await agent.get(`/testcase/${testcaseId}`, auth);
-    if (res.data.success) {
-      dispatch({
-        type: problemConstants.READ_TESTCASE_SUCCESS,
-        payload: res.data.data,
-      });
-    } else {
-      dispatch({
-        type: problemConstants.READ_TESTCASE_FAIL,
-        errors: res.data.error,
-      });
-    }
+
+    dispatch({
+      type: problemConstants.READ_TESTCASE_SUCCESS,
+      payload: res.data.data,
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.READ_TESTCASE_FAIL,
@@ -822,17 +699,11 @@ const readProblemScore = (token, problemId) => async (dispatch) => {
   };
   try {
     const res = await agent.get(`/problem/${problemId}/score`, auth);
-    if (res.data.success) {
-      dispatch({
-        type: problemConstants.READ_PROBLEM_SCORE_SUCCESS,
-        payload: { data: res.data.data, problemId },
-      });
-    } else {
-      dispatch({
-        type: problemConstants.READ_PROBLEM_SCORE_FAIL,
-        errors: res.data.error,
-      });
-    }
+
+    dispatch({
+      type: problemConstants.READ_PROBLEM_SCORE_SUCCESS,
+      payload: { data: res.data.data, problemId },
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.READ_PROBLEM_SCORE_FAIL,

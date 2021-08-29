@@ -1,21 +1,20 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import {
-  Typography, makeStyles, Dialog, DialogActions, DialogContent, DialogTitle, Button,
+  Typography, makeStyles,
 } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { BiFilterAlt } from 'react-icons/bi';
 import moment from 'moment';
 
-import { nanoid } from 'nanoid';
-import DateRangePicker from '../../../ui/DateRangePicker';
+// import DateRangePicker from '../../../ui/DateRangePicker';
 import { fetchClass, fetchCourse, fetchAllChallengesProblems } from '../../../../actions/common/common';
 import { fetchClassSubmissions } from '../../../../actions/myClass/submission';
 import AutoTable from '../../../ui/AutoTable';
 
 import NoMatch from '../../../noMatch';
+import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -31,7 +30,7 @@ export default function SubmissionList() {
   const classes = useStyles();
   const allClass = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
-  const loading = useSelector((state) => state.loading.myClass.submissions);
+  // const loading = useSelector((state) => state.loading.myClass.submissions);
   const commonLoading = useSelector((state) => state.loading.common);
   const submissions = useSelector((state) => state.submissions);
   const authToken = useSelector((state) => state.auth.token);
@@ -49,16 +48,10 @@ export default function SubmissionList() {
 
   if (courses[courseId] === undefined || allClass[classId] === undefined) {
     if (commonLoading.fetchCourse || commonLoading.fetchClass) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }
-  // console.log('classes: ', allClass);
-  // console.log('challenges: ', challenges);
-  // console.log('problems: ', problems);
-  // console.log('submissions: ', submissions);
-  // console.log('judgments: ', judgments);
-  // console.log('accounts', accounts);
 
   return (
     <>
@@ -67,14 +60,32 @@ export default function SubmissionList() {
       </Typography>
       <AutoTable
         ident="Class Submission Table"
-        hasFilter={false}
+        hasFilter
         filterConfig={[
-          // {
-          //   reduxStateId: 'id',
-          //   label: 'ID',
-          //   type: '',
-          //   operation: 'LIKE',
-          // },
+          {
+            reduxStateId: 'id',
+            label: 'ID',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          {
+            reduxStateId: 'username',
+            label: 'Username',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          {
+            reduxStateId: 'student_id',
+            label: 'Student ID',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          {
+            reduxStateId: 'id',
+            label: 'ID',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
           {
             reduxStateId: 'status',
             label: 'Status',
@@ -93,18 +104,32 @@ export default function SubmissionList() {
               { value: 'Waiting for Judge', label: 'Waiting for Judge' },
             ],
           },
-          // {
-          //   reduxStateId: 'resource_path',
-          //   label: 'Resource Path',
-          //   type: 'TEXT',
-          //   operation: 'LIKE',
-          // },
-          // {
-          //   reduxStateId: 'ip',
-          //   label: 'IP',
-          //   type: 'TEXT',
-          //   operation: 'LIKE',
-          // },
+          {
+            reduxStateId: 'challenge_id',
+            label: 'Challenge',
+            type: 'ENUM',
+            operation: 'IN',
+            options: allClass[classId].challengeIds.map((id) => ({
+              value: id,
+              label: challenges[id] ? challenges[id].title : '',
+            })),
+          },
+          {
+            reduxStateId: 'problem_id',
+            label: 'Problem',
+            type: 'ENUM',
+            operation: 'IN',
+            options: allClass[classId].challengeIds.map((id) => problems.allIds.filter((problemId) => problems.byId[problemId].challenge_id === id)).flat().map((problemId) => ({
+              value: problemId,
+              label: problems.byId[problemId].challenge_label,
+            })),
+          },
+          {
+            reduxStateId: 'submit_time',
+            label: 'Time',
+            type: 'DATE',
+            operation: 'LIKE',
+          },
         ]}
         refetch={(browseParams, ident) => {
           dispatch(fetchClassSubmissions(authToken, browseParams, ident, classId));

@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EssaySetting() {
+export default function EssayProblem() {
   const {
     courseId, classId, challengeId, problemId, essayId,
   } = useParams();
@@ -65,13 +65,9 @@ export default function EssaySetting() {
     setPopUpUpload(false);
   };
 
-  const handleUpload = (e) => {
+  const handleUpload = (e) => {};
 
-  };
-
-  const handleDownload = (e) => {
-
-  };
+  const handleDownload = (e) => {};
 
   // const handleSubmitDelete = (e) => {
   //   dispatch(deleteEssays(authToken, problemId));
@@ -89,7 +85,7 @@ export default function EssaySetting() {
   }, [classId, userClasses]);
 
   useEffect(() => {
-    dispatch((readEssay(authToken, essayId)));
+    dispatch(readEssay(authToken, essayId));
   }, [authToken, dispatch, essayId]);
 
   return (
@@ -103,17 +99,13 @@ export default function EssaySetting() {
       </Typography>
       {!edit && role === 'MANAGER' && (
         <div className={classNames.managerButtons}>
-          <Button
-            onClick={() => setEdit(true)}
-          >
-            Edit
-          </Button>
+          <Button onClick={() => setEdit(true)}>Edit</Button>
           <Button variant="outlined" component="span" startIcon={<Icon.Download />} onClick={handleDownload}>
             Download
           </Button>
         </div>
       )}
-      {edit ? <EssayEdit closeEdit={handleCloseEdit} role={role} /> : <EssayInfo role={role} /> }
+      {edit ? <EssayEdit closeEdit={handleCloseEdit} role={role} /> : <EssayInfo role={role} />}
     </>
   );
 }

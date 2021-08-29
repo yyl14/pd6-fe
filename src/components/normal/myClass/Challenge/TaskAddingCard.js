@@ -13,9 +13,8 @@ import {
   FormControl,
   Select,
   MenuItem,
-  ListItemText,
 } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
 
@@ -25,27 +24,18 @@ import { readChallenge, browseTasksUnderChallenge } from '../../../../actions/my
 import { addProblem, addEssay, addPeerReview } from '../../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse } from '../../../../actions/common/common';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
-  selectItem: {
-    display: 'flex',
-  },
   selectedIcon: {
-    transform: 'translateY(8px)',
-  },
-  selectedText: {
-    transform: 'translateX(30px)',
+    marginRight: '20px',
   },
 }));
 
 /* This is a level 4 component (page component) */
 export default function TaskAddingCard({ open, setOpen }) {
-  const {
-    courseId, classId, challengeId,
-  } = useParams();
-  const history = useHistory();
+  const { courseId, classId, challengeId } = useParams();
   const classNames = useStyles();
 
   const dispatch = useDispatch();
@@ -85,7 +75,12 @@ export default function TaskAddingCard({ open, setOpen }) {
       }
     }
 
-    setTimeout(() => { dispatch(browseTasksUnderChallenge(authToken, challengeId)); }, 500);
+    setTimeout(() => {
+      dispatch(browseTasksUnderChallenge(authToken, challengeId));
+    }, 500);
+    setType('Coding Problem');
+    setTitle('');
+    setLabel('');
     setOpen(false);
   };
 
@@ -98,16 +93,16 @@ export default function TaskAddingCard({ open, setOpen }) {
   };
 
   useEffect(() => {
-    dispatch((fetchClass(authToken, classId)));
-    dispatch((fetchCourse(authToken, courseId)));
-    dispatch((readChallenge(authToken, challengeId)));
+    dispatch(fetchClass(authToken, classId));
+    dispatch(fetchCourse(authToken, courseId));
+    dispatch(readChallenge(authToken, challengeId));
   }, [authToken, challengeId, classId, courseId, dispatch]);
 
   if (loading.readChallenge || commonLoading.fetchCourse || commonLoading.fetchClass) {
-    return <div>loading...</div>;
+    return <></>;
   }
 
-  if (classes[classId] === undefined || courses[courseId] === undefined || challenges[challengeId === undefined]) {
+  if (classes[classId] === undefined || courses[courseId] === undefined || challenges[challengeId] === undefined) {
     return <NoMatch />;
   }
 
@@ -137,19 +132,19 @@ export default function TaskAddingCard({ open, setOpen }) {
                   style={{ width: '350px' }}
                 >
                   <MenuItem value="Coding Problem">
-                    <Icon.Code />
+                    <Icon.Code className={classNames.selectedIcon} />
                     Coding Problem
                   </MenuItem>
                   <MenuItem value="Essay(PDF)">
-                    <Icon.Paper />
+                    <Icon.Paper className={classNames.selectedIcon} />
                     Essay(PDF)
                   </MenuItem>
                   <MenuItem value="Peer Review">
-                    <Icon.Peerreview />
+                    <Icon.Peerreview className={classNames.selectedIcon} />
                     Peer Review
                   </MenuItem>
                   <MenuItem value="Coding Project">
-                    <Icon.Project />
+                    <Icon.Project className={classNames.selectedIcon} />
                     Coding Project
                   </MenuItem>
                 </Select>
@@ -159,14 +154,20 @@ export default function TaskAddingCard({ open, setOpen }) {
               <TextField
                 id="label"
                 value={label}
-                onChange={(e) => { setLabel(e.target.value); checkDisabled(e.target.value, title); }}
+                onChange={(e) => {
+                  setLabel(e.target.value);
+                  checkDisabled(e.target.value, title);
+                }}
               />
             </AlignedText>
             <AlignedText text="Title" childrenType="field">
               <TextField
                 id="title"
                 value={title}
-                onChange={(e) => { setTitle(e.target.value); checkDisabled(label, e.target.value); }}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                  checkDisabled(label, e.target.value);
+                }}
               />
             </AlignedText>
           </DialogContentText>

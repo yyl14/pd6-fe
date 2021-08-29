@@ -19,8 +19,14 @@ import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
 import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
 import NoMatch from '../../../noMatch';
+import GeneralLoading from '../../../GeneralLoading';
+
 import {
-  readSubmissionDetail, readProblem, browseChallengeOverview, browseJudgeCases, readTestcase,
+  readSubmissionDetail,
+  readProblem,
+  browseChallengeOverview,
+  browseJudgeCases,
+  readTestcase,
   fetchSubmission,
 } from '../../../../actions/myClass/submission';
 
@@ -51,9 +57,7 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 export default function SubmissionDetail(props) {
-  const {
-    courseId, classId, submissionId,
-  } = useParams();
+  const { courseId, classId, submissionId } = useParams();
   const history = useHistory();
   const classNames = useStyles();
   const [color, setColor] = useState('blue');
@@ -96,7 +100,9 @@ export default function SubmissionDetail(props) {
     if (problems.allIds !== [] && submissions[submissionId] !== undefined) {
       problems.allIds.filter((id) => {
         if (id === submissions[submissionId].problem_id) {
-          dispatch(browseChallengeOverview(authToken, problems.byId[submissions[submissionId].problem_id].challenge_id));
+          dispatch(
+            browseChallengeOverview(authToken, problems.byId[submissions[submissionId].problem_id].challenge_id),
+          );
           setChallengeId(problems.byId[submissions[submissionId].problem_id].challenge_id);
         }
         return '';
@@ -123,14 +129,20 @@ export default function SubmissionDetail(props) {
   useEffect(() => {
     if (testcaseIds !== [] && judgeCases.allIds !== []) {
       setTableData(
-        judgeCases.allIds.filter((id) => judgeCases.byId[id].judgment_id === judgmentId).map((id) => ({
-          id,
-          no: testcaseIds.map((key) => (id === key ? testcases[key].input_filename.split('.')[0] : '')),
-          time: judgeCases.byId[id].time_lapse,
-          memory: judgeCases.byId[id].peak_memory,
-          status: judgeCases.byId[id].status.toLowerCase().split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' '),
-          score: judgeCases.byId[id].score,
-        })),
+        judgeCases.allIds
+          .filter((id) => judgeCases.byId[id].judgment_id === judgmentId)
+          .map((id) => ({
+            id,
+            no: testcaseIds.map((key) => (id === key ? testcases[key].input_filename.split('.')[0] : '')),
+            time: judgeCases.byId[id].time_lapse,
+            memory: judgeCases.byId[id].peak_memory,
+            status: judgeCases.byId[id].status
+              .toLowerCase()
+              .split(' ')
+              .map((word) => word[0].toUpperCase() + word.substring(1))
+              .join(' '),
+            score: judgeCases.byId[id].score,
+          })),
       );
     }
   }, [judgeCases.allIds, judgeCases.byId, judgmentId, judgments.byId, testcaseIds, testcases]);
@@ -145,11 +157,24 @@ export default function SubmissionDetail(props) {
     });
   }, [user.classes, classId]);
 
-  if (challenges.byId[challengeId] === undefined || problems.byId[problemId] === undefined || submissions[submissionId] === undefined || judgmentIds === undefined || judgeCases.allIds === undefined || testcaseIds === undefined) {
-    if (!loading.readProblem && !loading.readSubmissionDetail && !loading.browseChallengeOverview && !loading.readTestcase && !loading.browseJudgeCases) {
+  if (
+    challenges.byId[challengeId] === undefined
+    || problems.byId[problemId] === undefined
+    || submissions[submissionId] === undefined
+    || judgmentIds === undefined
+    || judgeCases.allIds === undefined
+    || testcaseIds === undefined
+  ) {
+    if (
+      !loading.readProblem
+      && !loading.readSubmissionDetail
+      && !loading.browseChallengeOverview
+      && !loading.readTestcase
+      && !loading.browseJudgeCases
+    ) {
       return <NoMatch />;
     }
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
   // if (error.readSubmission) {
   //   console.log(error.readSubmission);
@@ -174,9 +199,18 @@ export default function SubmissionDetail(props) {
         / Submission Detail
       </Typography>
       <div className={classNames.generalButtons}>
-        {role === 'MANAGER'
-        && <Button onClick={() => { setPopUp(true); }}>Rejudge</Button>}
-        <Button color="primary" startIcon={<Icon.RefreshOutlinedIcon />} onClick={handleRefresh}>Refresh</Button>
+        {role === 'MANAGER' && (
+          <Button
+            onClick={() => {
+              setPopUp(true);
+            }}
+          >
+            Rejudge
+          </Button>
+        )}
+        <Button color="primary" startIcon={<Icon.RefreshOutlinedIcon />} onClick={handleRefresh}>
+          Refresh
+        </Button>
       </div>
       <SimpleBar title="Submission Information">
         <AlignedText text="Submission ID" childrenType="text">
@@ -199,7 +233,10 @@ export default function SubmissionDetail(props) {
           </Link>
         </AlignedText>
         <AlignedText text="Task Label" childrenType="text">
-          <Link to={`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`} className={classNames.textLink}>
+          <Link
+            to={`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`}
+            className={classNames.textLink}
+          >
             <Typography variant="body1">{problems.byId[problemId].challenge_label}</Typography>
           </Link>
         </AlignedText>
@@ -210,9 +247,21 @@ export default function SubmissionDetail(props) {
           {judgmentIds.map((key) => {
             if (judgments[key].submission_id === parseInt(submissionId, 10)) {
               if (judgments[key].status === 'ACCEPTED') {
-                return <Typography variant="body1" key={key}>{judgments[key].status.charAt(0).concat(judgments[key].status.slice(1).toLowerCase())}</Typography>;
+                return (
+                  <Typography variant="body1" key={key}>
+                    {judgments[key].status.charAt(0).concat(judgments[key].status.slice(1).toLowerCase())}
+                  </Typography>
+                );
               }
-              return <Typography variant="body1" color="secondary" key={key}>{judgments[key].status.toLowerCase().split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ')}</Typography>;
+              return (
+                <Typography variant="body1" color="secondary" key={key}>
+                  {judgments[key].status
+                    .toLowerCase()
+                    .split(' ')
+                    .map((word) => word[0].toUpperCase() + word.substring(1))
+                    .join(' ')}
+                </Typography>
+              );
             }
             return '';
           })}
@@ -223,7 +272,9 @@ export default function SubmissionDetail(props) {
           </Typography>
         </AlignedText>
         <AlignedText text="Submit Time" childrenType="text">
-          <Typography variant="body1">{moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm')}</Typography>
+          <Typography variant="body1">
+            {moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm')}
+          </Typography>
         </AlignedText>
         {/* <AlignedText text="Language" childrenType="text">
           {submitLangs[submissions[submissionId].language_id]
@@ -290,7 +341,13 @@ export default function SubmissionDetail(props) {
           maxRows={20}
         />
       </SimpleBar>
-      <Dialog maxWidth="md" open={popUp} onClose={() => { setPopUp(false); }}>
+      <Dialog
+        maxWidth="md"
+        open={popUp}
+        onClose={() => {
+          setPopUp(false);
+        }}
+      >
         <DialogTitle>
           <Typography variant="h4">Rejudge Submission</Typography>
         </DialogTitle>
@@ -298,11 +355,21 @@ export default function SubmissionDetail(props) {
           <AlignedText text="Submission ID" childrenType="text">
             <Typography variant="body1">{submissionId}</Typography>
           </AlignedText>
-          <Typography variant="body2">Once you rejudge a submission, the corresponding score and status may change.</Typography>
+          <Typography variant="body2">
+            Once you rejudge a submission, the corresponding score and status may change.
+          </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => { setPopUp(false); }}>Cancel</Button>
-          <Button color="secondary" onClick={handleRejudge}>Rejudge</Button>
+          <Button
+            onClick={() => {
+              setPopUp(false);
+            }}
+          >
+            Cancel
+          </Button>
+          <Button color="secondary" onClick={handleRejudge}>
+            Rejudge
+          </Button>
         </DialogActions>
       </Dialog>
     </>

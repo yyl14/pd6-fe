@@ -9,17 +9,14 @@ import {
   makeStyles,
   TextField,
   FormControl,
-  InputLabel,
   Select,
   MenuItem,
-  CardActions,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
   DialogActions,
 } from '@material-ui/core';
-import StarIcon from '@material-ui/icons/Star';
 import { addStudentCard, makeStudentCardDefault } from '../../../../actions/admin/account';
 import StudentInfoCard from './StudentInfoCard';
 import SimpleBar from '../../../ui/SimpleBar';
@@ -76,7 +73,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function StudentInfoEdit(props) {
   const classes = useStyles();
-  const editMode = true;
   const [cards, setCards] = useState(props.cards); // new card isn't here
   const [defaultCardId, setDefaultCardId] = useState(null);
   const [changed, setChanged] = useState(false);
@@ -89,7 +85,9 @@ export default function StudentInfoEdit(props) {
     studentId: '',
     email: '',
   });
-  let instituteId = 1;
+  const institutes = useSelector((state) => state.institutes.byId);
+  const institutesId = useSelector((state) => state.institutes.allIds);
+  const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
 
   const { accountId } = useParams();
   const authToken = useSelector((state) => state.auth.token);
@@ -115,21 +113,11 @@ export default function StudentInfoEdit(props) {
   };
 
   const handleAddSave = () => {
-    switch (addInputs.institute) {
-      case 'National Taiwan University':
-        instituteId = 1;
-        break;
-      case 'National Taiwan Normal University':
-        instituteId = 2;
-        break;
-      case 'National Taiwan University of Science and Technology':
-        instituteId = 3;
-        break;
-      default:
-        instituteId = 1;
+    const inputInstituteId = institutesId.filter((id) => institutes[id].full_name === addInputs.institute);
+    if (inputInstituteId.length !== 0) {
+      dispatch(addStudentCard(authToken, accountId, inputInstituteId[0], addInputs.email, addInputs.studentId));
+      setPopUp(true);
     }
-    dispatch(addStudentCard(authToken, accountId, instituteId, addInputs.email, addInputs.studentId));
-    setPopUp(true);
     setAdd(false);
   };
 
@@ -138,18 +126,11 @@ export default function StudentInfoEdit(props) {
     setAddInputs((input) => ({ ...input, [name]: value }));
 
     if (name === 'institute') {
-      switch (value) {
-        case 'National Taiwan University':
-          setEmailTail('@ntu.edu.tw');
-          break;
-        case 'National Taiwan Normal University':
-          setEmailTail('@ntnu.edu.tw');
-          break;
-        case 'National Taiwan University of Science and Technology':
-          setEmailTail('@mail.ntust.edu.tw');
-          break;
-        default:
-          setEmailTail('@ntu.edu.tw');
+      const inputInstituteId = institutesId.filter((id) => id.full_name === value);
+      if (inputInstituteId.length !== 0) {
+        setEmailTail(institutes[inputInstituteId[0]].email_domain);
+      } else {
+        setEmailTail('@ntu.edu.tw');
       }
     }
   };
@@ -207,11 +188,11 @@ export default function StudentInfoEdit(props) {
                   </div>
                   <FormControl variant="outlined" className={classes.textfield}>
                     <Select value={addInputs.institute} name="institute" onChange={(e) => handleChange(e)}>
-                      <MenuItem value="National Taiwan University">National Taiwan University</MenuItem>
-                      <MenuItem value="National Taiwan Normal University">National Taiwan Normal University</MenuItem>
-                      <MenuItem value="National Taiwan University of Science and Technology">
-                        National Taiwan University of Science and Technology
-                      </MenuItem>
+                      {enableInstitutesId.map((item) => (
+                        <MenuItem key={item} value={institutes[item].full_name}>
+                          {institutes[item].full_name}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                 </div>

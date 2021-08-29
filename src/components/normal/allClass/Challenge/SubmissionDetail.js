@@ -20,7 +20,7 @@ import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
 import NoMatch from '../../../noMatch';
 import { readSubmissionDetail, readProblemInfo } from '../../../../actions/myClass/problem';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
-// import { browseSubmitLang } from '../../../../actions/common/common';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -97,7 +97,7 @@ export default function SubmissionDetail() {
     if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge && !loading.readJudgment) {
       return <NoMatch />;
     }
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
   // if (error.readSubmission) {
   //   console.log(error.readSubmission);

@@ -19,8 +19,12 @@ import CustomTable from '../../../ui/CustomTable';
 import NoMatch from '../../../noMatch';
 import SimpleBar from '../../../ui/SimpleBar';
 import {
-  readProblemInfo, readSubmission, readSubmissionDetail, readProblemScore,
+  readProblemInfo,
+  readSubmission,
+  readSubmissionDetail,
+  readProblemScore,
 } from '../../../../actions/myClass/problem';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -71,8 +75,7 @@ export default function SubmissionList() {
       setTableData(
         submissionIds
           .filter(
-            (id) => submissions[id].account_id === accountId
-            && submissions[id].problem_id === parseInt(problemId, 10),
+            (id) => submissions[id].account_id === accountId && submissions[id].problem_id === parseInt(problemId, 10),
           )
           .map((id) => ({
             key: id,
@@ -80,7 +83,11 @@ export default function SubmissionList() {
             submit_time: moment(submissions[id].submit_time).format('YYYY-MM-DD, HH:mm'),
             status: judgmentIds.map((key) => {
               if (judgments[key].submission_id === id) {
-                return judgments[key].status.toLowerCase().split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
+                return judgments[key].status
+                  .toLowerCase()
+                  .split(' ')
+                  .map((word) => word[0].toUpperCase() + word.substring(1))
+                  .join(' ');
               }
               return '-';
             }),
@@ -93,11 +100,23 @@ export default function SubmissionList() {
     }
   }, [accountId, challengeId, classId, courseId, judgmentIds, judgments, problemId, submissionIds, submissions]);
 
-  if (challenges[challengeId] === undefined || problems[problemId] === undefined || submissions === undefined || judgments === undefined || loading.readProblemScore) {
-    if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge && !loading.readJudgment && !loading.readProblemScore) {
+  if (
+    challenges[challengeId] === undefined
+    || problems[problemId] === undefined
+    || submissions === undefined
+    || judgments === undefined
+    || loading.readProblemScore
+  ) {
+    if (
+      !loading.readProblem
+      && !loading.readSubmission
+      && !loading.readChallenge
+      && !loading.readJudgment
+      && !loading.readProblemScore
+    ) {
       return <NoMatch />;
     }
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   const handleRefresh = () => {
@@ -111,7 +130,6 @@ export default function SubmissionList() {
         {challenges[challengeId].title}
         {' '}
         /
-        {' '}
         {problems[problemId].challenge_label}
         {' '}
         / My Submission
@@ -185,6 +203,5 @@ export default function SubmissionList() {
         linkName="path"
       />
     </>
-
   );
 }

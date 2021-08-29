@@ -16,7 +16,7 @@ import { deleteAccount } from '../../../../actions/admin/account';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 
-const useStyles = makeStyles((theme) => ({}));
+const useStyles = makeStyles(() => ({}));
 
 export default function AccountDelete(props) {
   const classes = useStyles();
