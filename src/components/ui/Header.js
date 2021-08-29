@@ -231,7 +231,7 @@ export default function Header({ role, hasClass }) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTime(format(new Date(), 'MMM d  HH:mm'));
+      setCurrentTime(format(new Date(), 'MMM d  H:mm'));
     }, 1000);
     return () => clearInterval(interval);
   }, []);
