@@ -82,7 +82,7 @@ export default function SubmissionList() {
                 score: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].score,
                 used_time: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].total_time,
                 used_memory: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].max_memory,
-                path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${id}`,
+                path: `/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${id}`,
               };
             }
             return '';

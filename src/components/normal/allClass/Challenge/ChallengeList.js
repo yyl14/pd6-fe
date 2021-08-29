@@ -106,7 +106,7 @@ export default function ChallengeList() {
           .reduce((acc, b) => [b, ...acc], [])
           .map((id) => ({
             title: challenges[id].title,
-            path: `/my-class/${courseId}/${classId}/challenge/${id}`,
+            path: `/all-class/${courseId}/${classId}/challenge/${id}`,
             startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
             endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
             status: getStatus(id),

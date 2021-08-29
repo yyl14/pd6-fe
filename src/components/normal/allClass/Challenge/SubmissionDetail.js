@@ -58,7 +58,6 @@ export default function SubmissionDetail() {
   } = useParams();
   const classNames = useStyles();
   const [popUp, setPopUp] = useState(false);
-  const [role, setRole] = useState('NORMAL');
   const [tableData, setTableData] = useState([]);
   const [judgmentId, setJudgmentId] = useState('');
   const dispatch = useDispatch();
@@ -126,16 +125,6 @@ export default function SubmissionDetail() {
     }
   }, [judgeCases, judgeCases.allIds, judgeCases.byId, judgmentId, judgments.byId, testcaseIds, testcases]);
 
-  useEffect(() => {
-    account.classes.forEach((value) => {
-      if (value.class_id === parseInt(classId, 10)) {
-        if (value.role === 'MANAGER') {
-          setRole('MANAGER');
-        }
-      }
-    });
-  }, [account.classes, classId]);
-
   if (
     problems.byId[problemId] === undefined
     || challenges.byId[challengeId] === undefined
@@ -164,11 +153,6 @@ export default function SubmissionDetail() {
     dispatch(fetchSubmission(authToken, submissionId));
   };
 
-  const handleRejudge = () => {
-    // rejudge
-    setPopUp(false);
-  };
-
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
@@ -177,15 +161,6 @@ export default function SubmissionDetail() {
         / Submission Detail
       </Typography>
       <div className={classNames.generalButtons}>
-        {role === 'MANAGER' && (
-          <Button
-            onClick={() => {
-              setPopUp(true);
-            }}
-          >
-            Rejudge
-          </Button>
-        )}
         <Button color="primary" startIcon={<Icon.RefreshOutlinedIcon />} onClick={handleRefresh}>
           Refresh
         </Button>
@@ -206,13 +181,13 @@ export default function SubmissionDetail() {
           <Typography variant="body1">{account.real_name}</Typography>
         </AlignedText>
         <AlignedText text="Challenge" childrenType="text">
-          <Link to={`/my-class/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
+          <Link to={`/all-class/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
             <Typography variant="body1">{challenges.byId[challengeId].title}</Typography>
           </Link>
         </AlignedText>
         <AlignedText text="Task Label" childrenType="text">
           <Link
-            to={`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`}
+            to={`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`}
             className={classNames.textLink}
           >
             <Typography variant="body1">{problems.byId[problemId].challenge_label}</Typography>
@@ -309,37 +284,6 @@ export default function SubmissionDetail() {
           maxRows={20}
         />
       </SimpleBar>
-      <Dialog
-        maxWidth="md"
-        open={popUp}
-        onClose={() => {
-          setPopUp(false);
-        }}
-      >
-        <DialogTitle>
-          <Typography variant="h4">Rejudge Submission</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <AlignedText text="Submission ID" childrenType="text">
-            <Typography variant="body1">{submissionId}</Typography>
-          </AlignedText>
-          <Typography variant="body2">
-            Once you rejudge a submission, the corresponding score and status may change.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setPopUp(false);
-            }}
-          >
-            Cancel
-          </Button>
-          <Button color="secondary" onClick={handleRejudge}>
-            Rejudge
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }
