@@ -92,9 +92,10 @@ export default function SubmissionList() {
   }, [accountId, challengeId, classId, courseId, judgmentIds, judgments, problemId, submissionIds, submissions]);
   if (
     challenges[challengeId] === undefined
-    || problems[problemId].score === undefined
+    || problems[problemId] === undefined
     || submissions === undefined
     || judgments === undefined
+    || loading.readProblemScore
   ) {
     // if (
     //   !loading.readProblem

@@ -89,12 +89,14 @@ export default function SubmissionDetail() {
 
   useEffect(() => {
     setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0]);
-    dispatch(
-      browseJudgeCases(
-        authToken,
-        judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0],
-      ),
-    );
+    if (judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0]) {
+      dispatch(
+        browseJudgeCases(
+          authToken,
+          judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0],
+        ),
+      );
+    }
   }, [authToken, dispatch, judgmentIds, judgments, submissionId]);
 
   useEffect(() => {
@@ -142,14 +144,14 @@ export default function SubmissionDetail() {
     || judgeCases.allIds === undefined
     || testcaseIds === undefined
   ) {
-    if (
-      !loading.readProblemInfo
-      && !loading.readSubmissionDetail
-      && !loading.browseJudgeCases
-      && !loading.readTestcase
-    ) {
-      return <NoMatch />;
-    }
+    // if (
+    //   !loading.readProblemInfo
+    //   && !loading.readSubmissionDetail
+    //   && !loading.browseJudgeCases
+    //   && !loading.readTestcase
+    // ) {
+    //   return <NoMatch />;
+    // }
     return <GeneralLoading />;
   }
   // if (error.readSubmission) {
