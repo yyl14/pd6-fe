@@ -95,7 +95,7 @@ export default function SubmissionList() {
     || problems[problemId] === undefined
     || submissions === undefined
     || judgments === undefined
-    || loading.readProblemScore
+    || problems[problemId].score === undefined
   ) {
     // if (
     //   !loading.readProblem
