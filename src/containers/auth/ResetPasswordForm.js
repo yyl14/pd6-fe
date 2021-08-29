@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import React, { useSelector, useDispatch } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, { useDispatch } from 'react-redux';
+import { useLocation, useHistory } from 'react-router-dom';
 import {
   Button,
   TextField,
-  Grid,
   Typography,
   Card,
   CardContent,
@@ -13,16 +12,13 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   makeStyles,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { borders, borderRadius } from '@material-ui/system';
-
 import { userResetPassword } from '../../actions/user/auth';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   authForm: {
     width: '50%',
   },
@@ -42,15 +38,22 @@ function checkPassword(password1, password2) {
   return "Passwords don't match";
 }
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 export default function ResetPassword() {
   const classNames = useStyles();
   const dispatch = useDispatch();
+  const query = useQuery();
+  const history = useHistory();
+
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [disabled, setDisabled] = useState(true);
-  const [popUp, setPopUp] = useState(false);
+  // const [popUp, setPopUp] = useState(false);
 
   const [showPassword1, setShowPassword1] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
@@ -68,8 +71,9 @@ export default function ResetPassword() {
     }
     setError(false);
     setErrorText('');
-    // dispatch(userResetPassword(confirmPassword));
-    setPopUp(true);
+    dispatch(userResetPassword(query.get('code'), confirmPassword));
+    history.push('/login');
+    // setPopUp(true);
   };
 
   const handleChange = (event) => {
@@ -94,9 +98,9 @@ export default function ResetPassword() {
     }
   };
 
-  const handleClosePopUp = () => {
-    setPopUp(false);
-  };
+  // const handleClosePopUp = () => {
+  //   setPopUp(false);
+  // };
 
   const handleClickShowPassword1 = () => {
     setShowPassword1(!showPassword1);
@@ -160,7 +164,7 @@ export default function ResetPassword() {
           </form>
         </CardContent>
       </Card>
-      {popUp ? (
+      {/* {popUp ? (
         <Dialog
           open={popUp}
           keepMounted
@@ -178,7 +182,7 @@ export default function ResetPassword() {
         </Dialog>
       ) : (
         <></>
-      )}
+      )} */}
     </>
   );
 }

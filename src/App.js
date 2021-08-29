@@ -23,7 +23,6 @@ import './App.css';
 import './styles/ui.css';
 
 const GlobalCss = withStyles({
-
   '@global': {
     // You should target [class*="MuiButton-root"] instead if you nest themes.
     // '.MuiButton-root': {
