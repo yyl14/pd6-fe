@@ -5,12 +5,10 @@ import {
   Typography,
   Button,
   Card,
-  CardContent,
   TextField,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   makeStyles,
 } from '@material-ui/core';
@@ -77,16 +75,12 @@ const MemberEdit = ({
   const [TA, setTA] = useState([]);
   const [student, setStudent] = useState([]);
   const [guest, setGuest] = useState([]);
-  const [TAOriginal, setTAOriginal] = useState([]);
-  const [studentOriginal, setStudentOriginal] = useState([]);
-  const [guestOriginal, setGuestOriginal] = useState([]);
   const [TAChanged, setTAChanged] = useState(false);
   const [studentChanged, setStudentChanged] = useState(false);
   const [guestChanged, setGuestChanged] = useState(false);
   const [duplicateList, setDuplicateList] = useState([]);
   const [submitError, setSubmitError] = useState('');
   const [dispatchStart, setDispatchStart] = useState(false);
-  const [dispatchForOriginalListStart, setDispatchForOriginalListStart] = useState(false);
   const [showUnsavedChangesDialog, setShowUnsavedChangesDialog] = useState(false);
   const [showDuplicateIdentityDialog, setShowDuplicateIdentityDialog] = useState(false);
   const [showErrorDetectedDialog, setShowErrorDetectedDialog] = useState(false);
@@ -103,15 +97,10 @@ const MemberEdit = ({
     }
     backToMemberList();
   };
-  const handleBlankList = (list) => {
-    if (list.length === 1 && (list[0].account_referral === '' || list[0] === '')) {
-      return [];
-    }
-    return list;
-  };
+  const handleBlankList = (list) => list.filter((element) => element !== '' && element.account_referral !== '');
 
   useEffect(() => {
-    if (!dispatchStart) {
+    if (!loading.replaceClassMembers) {
       setTA(
         members
           .filter((item) => item.role === 'MANAGER')
@@ -131,30 +120,7 @@ const MemberEdit = ({
           .join('\n'),
       );
     }
-  }, [dispatchStart, members]);
-
-  useEffect(() => {
-    if (!(TAChanged || studentChanged || guestChanged)) {
-      setTAOriginal(handleBlankList(members
-        .filter((item) => item.role === 'MANAGER')
-        .map((member) => ({
-          account_referral: member.student_id,
-          role: 'MANAGER',
-        }))));
-      setStudentOriginal(handleBlankList(members
-        .filter((item) => item.role === 'NORMAL')
-        .map((member) => ({
-          account_referral: member.student_id,
-          role: 'NORMAL',
-        }))));
-      setGuestOriginal(handleBlankList(members
-        .filter((item) => item.role === 'GUEST')
-        .map((member) => ({
-          account_referral: member.student_id,
-          role: 'GUEST',
-        }))));
-    }
-  }, [TAChanged, studentChanged, guestChanged, members]);
+  }, [loading.replaceClassMembers, members]);
 
   useEffect(() => {
     unblockHandle.current = history.block((tl) => {
@@ -168,7 +134,7 @@ const MemberEdit = ({
   });
 
   useEffect(() => {
-    if (dispatchStart && !dispatchForOriginalListStart) {
+    if (dispatchStart) {
       if (!loading.replaceClassMembers) {
         if (error.replaceClassMembers) {
           setSubmitError(error.replaceClassMembers);
@@ -178,14 +144,10 @@ const MemberEdit = ({
         }
       }
     }
-  }, [backToMemberList, dispatchForOriginalListStart, dispatchStart, error.replaceClassMembers, loading.replaceClassMembers]);
+  }, [backToMemberList, dispatchStart, error.replaceClassMembers, loading.replaceClassMembers]);
 
   useBeforeunload((e) => {
-    if (showErrorDetectedDialog) {
-      e.preventDefault();
-      dispatch(replaceClassMembers(authToken, classId, TAOriginal.concat(studentOriginal, guestOriginal)));
-      setDispatchForOriginalListStart(true);
-    } else if (showDuplicateIdentityDialog) {
+    if (showErrorDetectedDialog || showDuplicateIdentityDialog) {
       e.preventDefault();
     } else if (TAChanged || studentChanged || guestChanged) {
       e.preventDefault();
@@ -239,53 +201,46 @@ const MemberEdit = ({
     setShowUnsavedChangesDialog(false);
 
     if (TAChanged || studentChanged || guestChanged) {
-      const TAStudentDuplicateList = handleBlankList(TA
-        .split('\n')
-        .filter((id) => student
+      const TAStudentDuplicateList = TA.split('\n').filter(
+        (id) => student
           .split('\n')
           .map((accountReferral) => accountReferral)
-          .indexOf(id) !== -1));
-      const guestStudentDuplicateList = handleBlankList(guest
-        .split('\n')
-        .filter((id) => student
+          .indexOf(id) !== -1,
+      );
+      const guestStudentDuplicateList = guest.split('\n').filter(
+        (id) => student
           .split('\n')
           .map((accountReferral) => accountReferral)
-          .indexOf(id) !== -1));
-      const guestTADuplicateList = handleBlankList(guest
-        .split('\n')
-        .filter((id) => TA
-          .split('\n')
+          .indexOf(id) !== -1,
+      );
+      const guestTADuplicateList = guest.split('\n').filter(
+        (id) => TA.split('\n')
           .map((accountReferral) => accountReferral)
-          .indexOf(id) !== -1));
+          .indexOf(id) !== -1,
+      );
 
-      const combinedDuplicateList = handleBlankList(TAStudentDuplicateList
-        .concat(guestStudentDuplicateList, guestTADuplicateList));
+      const combinedDuplicateList = handleBlankList(
+        TAStudentDuplicateList.concat(guestStudentDuplicateList, guestTADuplicateList),
+      );
       setDuplicateList(combinedDuplicateList);
 
       if (combinedDuplicateList.length !== 0) {
         setShowDuplicateIdentityDialog(true);
       } else {
-        const TATransformedList = handleBlankList(TA
-          .split('\n')
-          .map((accountReferral) => ({
-            account_referral: accountReferral,
-            role: 'MANAGER',
-          })));
-        const studentTransformedList = handleBlankList(student
-          .split('\n')
-          .map((accountReferral) => ({
-            account_referral: accountReferral,
-            role: 'NORMAL',
-          })));
-        const guestTransformedList = handleBlankList(guest
-          .split('\n')
-          .map((accountReferral) => ({
-            account_referral: accountReferral,
-            role: 'GUEST',
-          })));
+        const TATransformedList = TA.split('\n').map((accountReferral) => ({
+          account_referral: accountReferral,
+          role: 'MANAGER',
+        }));
+        const studentTransformedList = student.split('\n').map((accountReferral) => ({
+          account_referral: accountReferral,
+          role: 'NORMAL',
+        }));
+        const guestTransformedList = guest.split('\n').map((accountReferral) => ({
+          account_referral: accountReferral,
+          role: 'GUEST',
+        }));
 
-        const replacingList = handleBlankList(TATransformedList
-          .concat(studentTransformedList, guestTransformedList));
+        const replacingList = handleBlankList(TATransformedList.concat(studentTransformedList, guestTransformedList));
 
         dispatch(replaceClassMembers(authToken, classId, replacingList));
         setDispatchStart(true);
@@ -305,13 +260,7 @@ const MemberEdit = ({
           <div className={classes.editorItem}>
             <Typography variant="caption">List of student ID</Typography>
           </div>
-          <TextField
-            className={classes.textField}
-            value={TA}
-            onChange={(e) => handleChangeTA(e)}
-            multiline
-            rows={20}
-          />
+          <TextField className={classes.textField} value={TA} onChange={(e) => handleChangeTA(e)} multiline rows={20} />
         </div>
         <div className={classes.editorCol}>
           <div className={classes.editorItem}>
@@ -364,14 +313,16 @@ const MemberEdit = ({
         </DialogContent>
         <DialogActions className={classes.dialogButtons}>
           <div>
-            <Button variant="outlined" onClick={() => setShowUnsavedChangesDialog(false)} className={classes.backToEditButton}>
+            <Button
+              variant="outlined"
+              onClick={() => setShowUnsavedChangesDialog(false)}
+              className={classes.backToEditButton}
+            >
               Back to Edit
             </Button>
           </div>
           <div>
-            <Button onClick={handleSubmitUnsave}>
-              Don’t Save
-            </Button>
+            <Button onClick={handleSubmitUnsave}>Don’t Save</Button>
             <Button onClick={handleSubmitSave} color="primary">
               Save
             </Button>
@@ -396,7 +347,11 @@ const MemberEdit = ({
           </div>
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={() => setShowDuplicateIdentityDialog(false)} className={classes.buttonFlexEnd}>
+          <Button
+            color="primary"
+            onClick={() => setShowDuplicateIdentityDialog(false)}
+            className={classes.buttonFlexEnd}
+          >
             Back to Edit
           </Button>
         </DialogActions>
@@ -407,9 +362,7 @@ const MemberEdit = ({
           <Typography variant="h4">Error Detected</Typography>
         </DialogTitle>
         <DialogContent className={classes.dialogContent}>
-          <Typography variant="body1">
-            Save member failed due to the following reasons:
-          </Typography>
+          <Typography variant="body1">Save member failed due to the following reasons:</Typography>
           <Typography variant="body1" className={classes.duplicateList}>
             {submitError === 'IllegalInput' ? 'Illegal Input' : submitError}
           </Typography>
