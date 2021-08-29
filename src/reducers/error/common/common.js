@@ -11,6 +11,7 @@ const initialState = {
   fetchClass: null,
   fetchAccount: null,
   fetchAllChallengesProblems: null,
+  fetchDownloadFileUrl: null,
 };
 
 export default function common(state = initialState, action) {
@@ -140,6 +141,19 @@ export default function common(state = initialState, action) {
       return {
         ...state,
         fetchAllChallengesProblems: action.error,
+      };
+    }
+
+    case commonConstants.FETCH_DOWNLOAD_FILE_URL_SUCCESS: {
+      return {
+        ...state,
+        fetchDownloadFileUrl: null,
+      };
+    }
+    case commonConstants.FETCH_DOWNLOAD_FILE_URL_FAIL: {
+      return {
+        ...state,
+        fetchDownloadFileUrl: action.error,
       };
     }
 

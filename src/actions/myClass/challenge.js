@@ -95,7 +95,7 @@ const fetchChallengeSummary = (token, challengeId) => async (dispatch) => {
       },
     };
     dispatch({ type: challengeConstants.FETCH_CHALLENGE_SUMMARY_REQUEST });
-    const res = agent.get(`/challenge/${challengeId}/statistics/summary`, config);
+    const res = await agent.get(`/challenge/${challengeId}/statistics/summary`, config);
     dispatch({
       type: challengeConstants.FETCH_CHALLENGE_SUMMARY_SUCCESS,
       payload: { challengeId, data: res.data.data.tasks },
@@ -117,7 +117,7 @@ const fetchChallengeMemberSubmission = (token, challengeId) => async (dispatch) 
     };
 
     dispatch({ type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_REQUEST });
-    const res = agent.get(`/challenge/${challengeId}/statistics/member-submission`, config);
+    const res = await agent.get(`/challenge/${challengeId}/statistics/member-submission`, config);
     dispatch({
       type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_SUCCESS,
       payload: { challengeId, data: res.data.data.data.member },

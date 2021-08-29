@@ -247,6 +247,38 @@ const downloadFile = (token, file) => async (dispatch) => {
   }
 };
 
+const fetchDownloadFileUrl = (token, file) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Auth-Token': token,
+    },
+    params: {
+      filename: file.filename,
+      as_attachment: file.as_attachment,
+    },
+  };
+  try {
+    dispatch({ type: commonConstants.FETCH_DOWNLOAD_FILE_URL_START });
+    const res = await agent.get(`/s3-file/${file.uuid}/url`, config);
+    if (res.data.success) {
+      dispatch({
+        type: commonConstants.FETCH_DOWNLOAD_FILE_URL_SUCCESS,
+        payload: { uuid: file.uuid, url: res.data.data.url },
+      });
+    } else {
+      dispatch({
+        type: commonConstants.FETCH_DOWNLOAD_FILE_URL_FAIL,
+        errors: res.data.error,
+      });
+    }
+  } catch (err) {
+    dispatch({
+      type: commonConstants.FETCH_DOWNLOAD_FILE_URL_FAIL,
+      errors: err,
+    });
+  }
+};
+
 const fetchAllChallengesProblems = (token, classId) => async (dispatch) => {
   dispatch({ type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_START });
   const auth = {
@@ -292,5 +324,6 @@ export {
   fetchAccount,
   browseSubmitLang,
   downloadFile,
+  fetchDownloadFileUrl,
   fetchAllChallengesProblems,
 };
