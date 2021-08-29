@@ -13,16 +13,12 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import { format } from 'date-fns';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
 import CustomTable from '../../../ui/CustomTable';
-import TableFilterCard from '../../../ui/TableFilterCard';
 import DateRangePicker from '../../../ui/DateRangePicker';
-import filterData from '../../../../function/filter';
-import sortData from '../../../../function/sort';
 import { fetchChallenges, addChallenge } from '../../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse } from '../../../../actions/common/common';
 import GeneralLoading from '../../../GeneralLoading';
@@ -52,7 +48,6 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 export default function ChallengeList() {
   const { courseId, classId } = useParams();
-  const history = useHistory();
   const className = useStyles();
   const dispatch = useDispatch();
 
@@ -74,6 +69,7 @@ export default function ChallengeList() {
   });
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState('');
+  const [isManager, setIsManager] = useState(false);
 
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.challenge);
@@ -89,7 +85,6 @@ export default function ChallengeList() {
   }, [dispatch, authToken, classId, courseId]);
 
   useEffect(() => {
-    // console.log(loading.addChallenge);
     if (!loading.addChallenge) {
       dispatch(fetchChallenges(authToken, classId));
     }
@@ -105,23 +100,41 @@ export default function ChallengeList() {
       }
       return 'Closed';
     };
-
-    // console.log(challenges);
     if (classes[classId]) {
-      setTableData(
-        classes[classId].challengeIds
-          .filter((id) => getStatus(id) !== 'Not Yet')
-          .reduce((acc, b) => ([b, ...acc]), [])
-          .map((id) => ({
-            title: challenges[id].title,
-            path: `/all-class/${courseId}/${classId}/challenge/${id}`,
-            startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
-            endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
-            status: getStatus(id),
-          })),
-      );
+      if (isManager) {
+        setTableData(
+          classes[classId].challengeIds
+            .reduce((acc, b) => [b, ...acc], [])
+            .map((id) => ({
+              title: challenges[id].title,
+              path: `/my-class/${courseId}/${classId}/challenge/${id}`,
+              startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
+              endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
+              status: getStatus(id),
+            })),
+        );
+      } else {
+        setTableData(
+          classes[classId].challengeIds
+            .filter((id) => getStatus(id) !== 'Not Yet')
+            .reduce((acc, b) => [b, ...acc], [])
+            .map((id) => ({
+              title: challenges[id].title,
+              path: `/my-class/${courseId}/${classId}/challenge/${id}`,
+              startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
+              endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
+              status: getStatus(id),
+            })),
+        );
+      }
     }
-  }, [challenges, challengesID, classId, classes, courseId, currentTime]);
+  }, [challenges, challengesID, classId, classes, courseId, currentTime, isManager]);
+
+  useEffect(() => {
+    if (userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
+      setIsManager(true);
+    }
+  }, [classId, userClasses]);
 
   if (loading.fetchChallenges || courses[courseId] === undefined || classes[classId] === undefined) {
     return <GeneralLoading />;
@@ -185,11 +198,24 @@ export default function ChallengeList() {
   return (
     <>
       <Typography className={className.pageHeader} variant="h3">
-        {`${courses[courseId].name} ${classes[classId].name} / Challenge`}
+        {courses[courseId].name}
+        {' '}
+        {classes[classId].name}
+        {' '}
+        / Challenge
       </Typography>
 
       <CustomTable
         hasSearch
+        buttons={
+          isManager && (
+            <>
+              <Button color="primary" onClick={() => setPopUp(true)}>
+                <Icon.Add style={{ color: 'white' }} />
+              </Button>
+            </>
+          )
+        }
         data={tableData}
         columns={[
           {
@@ -228,6 +254,62 @@ export default function ChallengeList() {
         hasLink
         linkName="path"
       />
+      <Dialog open={popUp} keepMounted onClose={() => setPopUp(false)} maxWidth="md">
+        <DialogTitle>
+          <Typography variant="h4">Create New Challenge</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <AlignedText text="Class" childrenType="text" maxWidth="md">
+            <Typography>
+              {courses[courseId].name}
+              {' '}
+              {classes[classId].name}
+            </Typography>
+          </AlignedText>
+          <AlignedText text="Title" childrenType="field" maxWidth="md">
+            <TextField
+              value={inputs.title}
+              name="title"
+              onChange={(e) => handleChange(e)}
+              error={error}
+              helperText={errorText}
+            />
+          </AlignedText>
+          <div className={className.gap}>
+            <DateRangePicker vertical value={dateRangePicker} setValue={setDateRangePicker} />
+          </div>
+          <div className={className.row}>
+            <div className={className.item}>
+              <Typography>Scored by</Typography>
+            </div>
+            <FormControl variant="outlined" className={className.textfield}>
+              <Select value={inputs.scoredBy} name="scoredBy" onChange={(e) => handleChange(e)}>
+                <MenuItem value="Last Score">Last Score</MenuItem>
+                <MenuItem value="Best Score">Best Score</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <div className={className.row}>
+            <div className={className.item}>
+              <Typography>Shown in problem set</Typography>
+            </div>
+            <FormControl variant="outlined" className={className.textfield}>
+              <Select value={inputs.showTime} name="showTime" onChange={(e) => handleChange(e)}>
+                <MenuItem value="On End Time">On End Time</MenuItem>
+                <MenuItem value="On Start Time">On Start Time</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel} color="default">
+            Cancel
+          </Button>
+          <Button onClick={handleAdd} color="primary">
+            Create
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

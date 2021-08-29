@@ -3,24 +3,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { format } from 'date-fns';
 import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  TextField,
+  Typography, Button, makeStyles, TextField,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
-import GeneralLoading from '../../../GeneralLoading';
 import {
-  browseChallengeOverview, editChallenge, browseTasksUnderChallenge, readProblemScore,
+  browseChallengeOverview,
+  editChallenge,
+  browseTasksUnderChallenge,
+  readProblemScore,
 } from '../../../../actions/myClass/problem';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -43,6 +39,8 @@ export default function ChallengeInfo() {
   const dispatch = useDispatch();
   const [currentTime, setCurrentTime] = useState(moment());
   const [status, setStatus] = useState('');
+  const [isManager, setIsManager] = useState(false);
+  const [editMode, setEditMode] = useState(false);
   const [inputs, setInputs] = useState('');
   const [tableData, setTableData] = useState([]);
 
@@ -84,7 +82,12 @@ export default function ChallengeInfo() {
   }, [challengeId, challenges, currentTime]);
 
   useEffect(() => {
-    // console.log(challenges[challengeId].problemIds.reduce((acc, item) => acc && problems[item] !== undefined, true));
+    if (userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
+      setIsManager(true);
+    }
+  }, [classId, userClasses]);
+
+  useEffect(() => {
     if (challenges[challengeId]) {
       if (challenges[challengeId].problemIds.reduce((acc, item) => acc && problems[item] !== undefined, true)) {
         // problems are complete
@@ -117,17 +120,51 @@ export default function ChallengeInfo() {
     return <GeneralLoading />;
   }
 
+  const handleEdit = () => {
+    setEditMode(true);
+  };
+
+  const handleCancel = () => {
+    setEditMode(false);
+    setInputs(challenges[challengeId].description);
+  };
+
+  const handleSave = () => {
+    const body = {
+      publicizeType: challenges[challengeId].publicize_type,
+      selectionType: challenges[challengeId].selection_type,
+      title: challenges[challengeId].title,
+      description: inputs,
+      startTime: challenges[challengeId].start_time,
+      endTime: challenges[challengeId].end_time,
+    };
+    dispatch(editChallenge(authToken, challengeId, body));
+    setEditMode(false);
+    setInputs(challenges[challengeId].description);
+  };
+
   return (
     <>
       <Typography className={classes.pageHeader} variant="h3">
-        {challenges[challengeId].title}
-        {' '}
-        / Info
+        {`${challenges[challengeId].title} / Info`}
       </Typography>
+      {isManager && !editMode && <Button onClick={handleEdit}>Edit</Button>}
       <SimpleBar title="Description">
-        <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
-          {challenges[challengeId].description}
-        </Typography>
+        {editMode ? (
+          <TextField
+            className={classes.descriptionField}
+            value={inputs}
+            onChange={(e) => setInputs(e.target.value)}
+            multiline
+            minRows={10}
+            maxRows={10}
+            variant="outlined"
+          />
+        ) : (
+          <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
+            {challenges[challengeId].description}
+          </Typography>
+        )}
       </SimpleBar>
       <SimpleBar title="Challenge Information">
         <>
@@ -176,6 +213,14 @@ export default function ChallengeInfo() {
           data={tableData}
         />
       </SimpleBar>
+      {editMode && (
+        <div className={classes.buttons}>
+          <Button onClick={handleCancel}>Cancel</Button>
+          <Button onClick={handleSave} color="primary">
+            Save
+          </Button>
+        </div>
+      )}
     </>
   );
 }

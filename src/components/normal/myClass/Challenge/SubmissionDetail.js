@@ -10,7 +10,7 @@ import {
   DialogContent,
   TextField,
 } from '@material-ui/core';
-import { useHistory, useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import moment from 'moment';
 import Icon from '../../../ui/icon/index';
 import SimpleBar from '../../../ui/SimpleBar';
