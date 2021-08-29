@@ -49,7 +49,7 @@ export default function Challenge({
       history.push(`${baseURL}/${courseId}/${classId}/challenge`);
     };
     const goBackToProblem = () => {
-      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}`);
+      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}`);
     };
     const goBackToSubmission = () => {
       history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
@@ -251,33 +251,33 @@ export default function Challenge({
           </div>
           <Divider variant="middle" className={classNames.divider} />
           {display === 'unfold' && (
-          <List>
-            {itemList.map((item) => (
-              <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
-                <ListItemIcon
-                  className={classNames.itemIcon}
-                  style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
-                />
-              </ListItem>
-            ))}
-            {mode === 'challenge'
-              && userClasses.length !== 0
-              && userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER'
-              && challenges[challengeId] !== undefined && (
-                <ListItem button key="Task" onClick={() => setAddTaskPopUp(true)} className={classNames.item}>
-                  <ListItemIcon className={classNames.itemIcon} style={{ color: '' }}>
-                    <Icon.AddBox />
+            <List>
+              {itemList.map((item) => (
+                <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
+                  <ListItemIcon
+                    className={classNames.itemIcon}
+                    style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
+                  >
+                    {item.icon}
                   </ListItemIcon>
-                  <ListItemText primary="Task" className={classNames.itemText} />
+                  <ListItemText
+                    primary={item.text}
+                    className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
+                  />
                 </ListItem>
-            )}
-          </List>
+              ))}
+              {mode === 'challenge'
+                && userClasses.length !== 0
+                && userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER'
+                && challenges[challengeId] !== undefined && (
+                  <ListItem button key="Task" onClick={() => setAddTaskPopUp(true)} className={classNames.item}>
+                    <ListItemIcon className={classNames.itemIcon} style={{ color: '' }}>
+                      <Icon.AddBox />
+                    </ListItemIcon>
+                    <ListItemText primary="Task" className={classNames.itemText} />
+                  </ListItem>
+              )}
+            </List>
           )}
         </div>
         <div className={classNames.bottomSpace} />
