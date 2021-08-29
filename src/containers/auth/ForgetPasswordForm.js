@@ -1,29 +1,23 @@
 import { useState, useEffect } from 'react';
 import React, { useSelector, useDispatch } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import {
   Button,
   TextField,
   Card,
   CardContent,
-  Container,
-  Grid,
   Typography,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   makeStyles,
 } from '@material-ui/core';
-import { borders, borderRadius } from '@material-ui/system';
-import { EmailOutlined, TrainRounded } from '@material-ui/icons';
 import { userForgetPassword } from '../../actions/user/auth';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   authForm: {
     width: '50%',
   },
@@ -39,10 +33,10 @@ const useStyles = makeStyles((theme) => ({
 export default function ForgetPasswordForm() {
   const classNames = useStyles();
   const dispatch = useDispatch();
-  const error0 = useSelector((state) => state.error.user.auth.forgetPassword);
+  const error = useSelector((state) => state.error.user.auth.forgetPassword);
   const loading = useSelector((state) => state.loading.user.auth.forgetPassword);
   const [email, setEmail] = useState('');
-  const [error, setError] = useState(false);
+  const [showError, setShowError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [disabled, setDisabled] = useState(true);
   const [popUp, setPopUp] = useState(false);
@@ -52,7 +46,7 @@ export default function ForgetPasswordForm() {
     if (event.target.value === '') {
       setEmail(event.target.value);
       setErrorText('');
-      setError(false);
+      setShowError(false);
       setDisabled(true);
       return;
     }
@@ -60,19 +54,19 @@ export default function ForgetPasswordForm() {
     if (!status) {
       setEmail(event.target.value);
       setErrorText('Invalid email address');
-      setError(true);
+      setShowError(true);
       setDisabled(true);
     } else {
       setEmail(event.target.value);
       setErrorText('');
-      setError(false);
+      setShowError(false);
       setDisabled(false);
     }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (error) {
+    if (showError) {
       return;
     }
     dispatch(userForgetPassword(email.trim()));
@@ -85,20 +79,20 @@ export default function ForgetPasswordForm() {
 
   useEffect(() => {
     if (loading === false && submit === true) {
-      if (error0 !== null) {
+      if (error !== null) {
         setSubmit(false);
-        setErrorText(error0);
-        setError(true);
+        setErrorText(error);
+        setShowError(true);
         setDisabled(true);
       } else {
         setSubmit(false);
         setPopUp(true);
         setErrorText('');
-        setError(false);
+        setShowError(false);
         setDisabled(false);
       }
     }
-  }, [error0, loading, submit]);
+  }, [error, loading, submit]);
 
   return (
     <>
@@ -108,7 +102,7 @@ export default function ForgetPasswordForm() {
             <TextField
               // required
               className={`auth-form-input ${classNames.authTextFields}`}
-              error={error}
+              error={showError}
               helperText={errorText}
               label="Registered / Alternative Email"
               value={email}
