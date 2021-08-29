@@ -100,7 +100,7 @@ const MemberEdit = ({
   const handleBlankList = (list) => list.filter((element) => element !== '' && element.account_referral !== '');
 
   useEffect(() => {
-    if (!loading.replaceClassMembers) {
+    if (!loading.replaceClassMembers && !error.replaceClassMembers) {
       setTA(
         members
           .filter((item) => item.role === 'MANAGER')
@@ -120,7 +120,7 @@ const MemberEdit = ({
           .join('\n'),
       );
     }
-  }, [loading.replaceClassMembers, members]);
+  }, [error.replaceClassMembers, loading.replaceClassMembers, members]);
 
   useEffect(() => {
     unblockHandle.current = history.block((tl) => {
