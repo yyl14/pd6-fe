@@ -120,10 +120,13 @@ export default function Statistics() {
       const memberSubmissionList = challenges[challengeId].statistics.memberSubmission.map((member) => {
         const memberChallengeDetail = {
           id: member.id,
-          username: members[member.id].username,
-          student_id: members[member.id].student_id,
-          real_name: members[member.id].real_name,
         };
+
+        if (members[member.id]) {
+          memberChallengeDetail.username = members[member.id].username;
+          memberChallengeDetail.student_id = members[member.id].student_id;
+          memberChallengeDetail.real_name = members[member.id].real_name;
+        }
 
         if (member.problem_scores) {
           member.problem_scores.map((judgement) => {
