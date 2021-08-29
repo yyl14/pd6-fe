@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter, Switch, Route } from 'react-router-dom';
 import ChallengeList from '../../../components/normal/myClass/Challenge/ChallengeList';
 import ChallengeInfo from '../../../components/normal/myClass/Challenge/ChallengeInfo';
-import Problem from '../../../components/normal/myClass/Challenge/Problem';
+import Task from '../../../components/normal/myClass/Challenge/Task';
 import Setting from '../../../components/normal/myClass/Challenge/Setting';
 import Statistics from '../../../components/normal/myClass/Challenge/Statistics';
 
@@ -27,7 +27,7 @@ class Challenge extends Component {
           <Route path="/my-class/:courseId/:classId/challenge/:challengeId/setting" component={Setting} />
           <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId" component={ChallengeInfo} />
           <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/statistics" component={Statistics} />
-          <Route path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId" component={Problem} />
+          <Route path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId" component={Task} />
           <Route component={NoMatch} />
         </Switch>
       </>
