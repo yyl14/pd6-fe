@@ -176,19 +176,20 @@ export default function AllClassChallenge({
         classes={{ paper: classNames.drawerPaper }}
       >
         {arrow}
-        <div className={classNames.title}>
-          {display === 'unfold' ? (
-            <Icon.TriangleDown className={classNames.titleIcon} onClick={foldChallenge} />
-          ) : (
-            <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldChallenge} />
-          )}
-          <Typography variant="h4" className={classNames.titleText}>
-            {title}
-          </Typography>
-          {TAicon}
-        </div>
-        <Divider variant="middle" className={classNames.divider} />
-        {display === 'unfold' && (
+        <div>
+          <div className={classNames.title}>
+            {display === 'unfold' ? (
+              <Icon.TriangleDown className={classNames.titleIcon} onClick={foldChallenge} />
+            ) : (
+              <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldChallenge} />
+            )}
+            <Typography variant="h4" className={classNames.titleText}>
+              {title}
+            </Typography>
+            {TAicon}
+          </div>
+          <Divider variant="middle" className={classNames.divider} />
+          {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
               <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
@@ -205,7 +206,8 @@ export default function AllClassChallenge({
               </ListItem>
             ))}
           </List>
-        )}
+          )}
+        </div>
         <div className={classNames.bottomSpace} />
       </Drawer>
     </div>

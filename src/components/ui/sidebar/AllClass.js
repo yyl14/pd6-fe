@@ -95,20 +95,20 @@ export default function AllClass({
         classes={{ paper: classNames.drawerPaper }}
       >
         {mode === 'main' ? <div className={classNames.topSpace} /> : arrow}
+        <div>
+          <div className={classNames.title}>
+            {display === 'unfold' ? (
+              <Icon.TriangleDown className={classNames.titleIcon} onClick={fold} />
+            ) : (
+              <Icon.TriangleRight className={classNames.titleIcon} onClick={unfold} />
+            )}
 
-        <div className={classNames.title}>
-          {display === 'unfold' ? (
-            <Icon.TriangleDown className={classNames.titleIcon} onClick={fold} />
-          ) : (
-            <Icon.TriangleRight className={classNames.titleIcon} onClick={unfold} />
-          )}
-
-          <Typography variant="h4" className={classNames.titleText}>
-            {title}
-          </Typography>
-        </div>
-        <Divider variant="middle" className={classNames.divider} />
-        {display === 'unfold' && (
+            <Typography variant="h4" className={classNames.titleText}>
+              {title}
+            </Typography>
+          </div>
+          <Divider variant="middle" className={classNames.divider} />
+          {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
               <ListItem button key={item.path} onClick={() => history.push(item.path)} className={classNames.item}>
@@ -125,7 +125,8 @@ export default function AllClass({
               </ListItem>
             ))}
           </List>
-        )}
+          )}
+        </div>
         <div className={classNames.bottomSpace} />
       </Drawer>
     </div>
