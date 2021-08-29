@@ -77,8 +77,19 @@ export default function LoginForm(props) {
   };
   const handleUsernameChange = (e) => {
     if (e.target.value !== '') {
-      setErrors((ori) => ({ ...ori, username: false }));
-      setErrorTexts((ori) => ({ ...ori, username: '' }));
+      if (errors.password && errorTexts.password === 'Incorrect username or password') {
+        setErrors({
+          username: false,
+          password: false,
+        });
+        setErrorTexts({
+          username: '',
+          password: '',
+        });
+      } else {
+        setErrors((ori) => ({ ...ori, username: false }));
+        setErrorTexts((ori) => ({ ...ori, username: '' }));
+      }
     }
     setUserName(e.target.value);
   };
