@@ -39,8 +39,6 @@ export default function ChallengeInfo() {
   const dispatch = useDispatch();
   const [currentTime, setCurrentTime] = useState(moment());
   const [status, setStatus] = useState('');
-  const [isManager, setIsManager] = useState(false);
-  const [editMode, setEditMode] = useState(false);
   const [inputs, setInputs] = useState('');
   const [tableData, setTableData] = useState([]);
 
@@ -82,12 +80,6 @@ export default function ChallengeInfo() {
   }, [challengeId, challenges, currentTime]);
 
   useEffect(() => {
-    if (userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
-      setIsManager(true);
-    }
-  }, [classId, userClasses]);
-
-  useEffect(() => {
     if (challenges[challengeId]) {
       if (challenges[challengeId].problemIds.reduce((acc, item) => acc && problems[item] !== undefined, true)) {
         // problems are complete
@@ -120,51 +112,15 @@ export default function ChallengeInfo() {
     return <GeneralLoading />;
   }
 
-  const handleEdit = () => {
-    setEditMode(true);
-  };
-
-  const handleCancel = () => {
-    setEditMode(false);
-    setInputs(challenges[challengeId].description);
-  };
-
-  const handleSave = () => {
-    const body = {
-      publicizeType: challenges[challengeId].publicize_type,
-      selectionType: challenges[challengeId].selection_type,
-      title: challenges[challengeId].title,
-      description: inputs,
-      startTime: challenges[challengeId].start_time,
-      endTime: challenges[challengeId].end_time,
-    };
-    dispatch(editChallenge(authToken, challengeId, body));
-    setEditMode(false);
-    setInputs(challenges[challengeId].description);
-  };
-
   return (
     <>
       <Typography className={classes.pageHeader} variant="h3">
         {`${challenges[challengeId].title} / Info`}
       </Typography>
-      {isManager && !editMode && <Button onClick={handleEdit}>Edit</Button>}
       <SimpleBar title="Description">
-        {editMode ? (
-          <TextField
-            className={classes.descriptionField}
-            value={inputs}
-            onChange={(e) => setInputs(e.target.value)}
-            multiline
-            minRows={10}
-            maxRows={10}
-            variant="outlined"
-          />
-        ) : (
-          <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
-            {challenges[challengeId].description}
-          </Typography>
-        )}
+        <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
+          {challenges[challengeId].description}
+        </Typography>
       </SimpleBar>
       <SimpleBar title="Challenge Information">
         <>
@@ -213,14 +169,6 @@ export default function ChallengeInfo() {
           data={tableData}
         />
       </SimpleBar>
-      {editMode && (
-        <div className={classes.buttons}>
-          <Button onClick={handleCancel}>Cancel</Button>
-          <Button onClick={handleSave} color="primary">
-            Save
-          </Button>
-        </div>
-      )}
     </>
   );
 }
