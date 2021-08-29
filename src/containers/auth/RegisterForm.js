@@ -203,17 +203,24 @@ export default function RegisterForm() {
       setErrorTexts((input) => ({ ...input, username: '' }));
     }
 
-    if (
-      name === 'studentId'
-      && (errorTexts[name] === 'Student ID Exists' || errorTexts[name] === 'StudentIdNotMatchEmail')
-    ) {
-      setErrors((input) => ({ ...input, studentId: false }));
-      setErrorTexts((input) => ({ ...input, studentId: '' }));
+    if (name === 'studentId') {
+      if (errorTexts[name] === 'Student ID Exists') {
+        setErrors((input) => ({ ...input, studentId: false }));
+        setErrorTexts((input) => ({ ...input, studentId: '' }));
+      } else if (errorTexts[name] === 'StudentIdNotMatchEmail') {
+        setErrors((input) => ({ ...input, studentId: false, email: false }));
+        setErrorTexts((input) => ({ ...input, studentId: '', email: '' }));
+      }
     }
 
-    if (name === 'email' && (errorTexts[name] === 'Email Exists' || errorTexts[name] === 'StudentIdNotMatchEmail')) {
-      setErrors((input) => ({ ...input, email: false }));
-      setErrorTexts((input) => ({ ...input, email: '' }));
+    if (name === 'email') {
+      if (errorTexts[name] === 'Email Exists') {
+        setErrors((input) => ({ ...input, email: false }));
+        setErrorTexts((input) => ({ ...input, email: '' }));
+      } else if (errorTexts[name] === 'StudentIdNotMatchEmail') {
+        setErrors((input) => ({ ...input, studentId: false, email: false }));
+        setErrorTexts((input) => ({ ...input, studentId: '', email: '' }));
+      }
     }
 
     setHasRequest(false);
