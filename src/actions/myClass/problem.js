@@ -114,14 +114,17 @@ const readProblemInfo = (token, problemId, challengeId) => async (dispatch) => {
 
 const readSubmission = (token, accountId, problemId) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_SUBMISSION_START });
-  const auth = {
+  const config = {
     headers: {
       'Auth-Token': token,
     },
+    params: {
+      problem_id: parseInt(problemId, 10),
+      account_id: accountId,
+    },
   };
   try {
-    const subInfo = await agent.get(`/submission?account_id=${accountId}&problem_id=${parseInt(problemId, 10)}`, auth);
-
+    const subInfo = await agent.get('/submission', config);
     dispatch({
       type: problemConstants.READ_SUBMISSION_SUCCESS,
       payload: subInfo.data.data.data,

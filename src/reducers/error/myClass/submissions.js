@@ -10,6 +10,7 @@ const initialState = {
   readSubmissionDetail: null,
   browseJudgeCases: null,
   readTestcase: null,
+  getAccountBatch: null,
 };
 
 export default function submissions(state = initialState, action) {
@@ -117,6 +118,12 @@ export default function submissions(state = initialState, action) {
       return {
         ...state,
         readTestcase: action.errors,
+      };
+    }
+    case submissionConstants.GET_ACCOUNT_BATCH_FAIL: {
+      return {
+        ...state,
+        getAccountBatch: action.errors,
       };
     }
     default:

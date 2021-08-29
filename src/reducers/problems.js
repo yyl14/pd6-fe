@@ -21,7 +21,6 @@ const byId = (state = {}, action) => {
     }
     case problemConstants.READ_PROBLEM_SUCCESS: {
       const data = action.payload;
-      // console.log(data);
       return {
         ...state,
         [data.id]: {

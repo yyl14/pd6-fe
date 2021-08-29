@@ -53,10 +53,22 @@ const byId = (state = {}, action) => {
 
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       const { accounts } = action.payload;
-      return accounts.reduce(
-        (acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [], gradeIds: [] } }),
-        state,
-      );
+      return accounts.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [], gradeIds: [] } }), state);
+    }
+
+    case submissionConstants.GET_ACCOUNT_BATCH_SUCCESS: {
+      const { accountId, data } = action.payload;
+      return {
+        ...state,
+        [accountId]: {
+          id: data.id,
+          real_name: data.real_name,
+          student_id: data.student_id,
+          username: data.username,
+          studentCard: [],
+          gradeIds: [],
+        },
+      };
     }
     default:
       return state;
@@ -81,6 +93,11 @@ const allIds = (state = [], action) => {
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       const { accounts } = action.payload;
       return [...new Set([...accounts.map((item) => item.id), ...state])];
+    }
+
+    case submissionConstants.GET_ACCOUNT_BATCH_SUCCESS: {
+      const { accountId } = action.payload;
+      return state.includes(accountId) ? state : state.concat([accountId]);
     }
 
     default:

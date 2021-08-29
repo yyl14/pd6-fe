@@ -3,24 +3,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { format } from 'date-fns';
 import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  TextField,
+  Typography, Button, makeStyles, TextField,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
-import GeneralLoading from '../../../GeneralLoading';
 import {
-  browseChallengeOverview, editChallenge, browseTasksUnderChallenge, readProblemScore,
+  browseChallengeOverview,
+  editChallenge,
+  browseTasksUnderChallenge,
+  readProblemScore,
 } from '../../../../actions/myClass/problem';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -84,7 +80,6 @@ export default function ChallengeInfo() {
   }, [challengeId, challenges, currentTime]);
 
   useEffect(() => {
-    // console.log(challenges[challengeId].problemIds.reduce((acc, item) => acc && problems[item] !== undefined, true));
     if (challenges[challengeId]) {
       if (challenges[challengeId].problemIds.reduce((acc, item) => acc && problems[item] !== undefined, true)) {
         // problems are complete
@@ -120,9 +115,7 @@ export default function ChallengeInfo() {
   return (
     <>
       <Typography className={classes.pageHeader} variant="h3">
-        {challenges[challengeId].title}
-        {' '}
-        / Info
+        {`${challenges[challengeId].title} / Info`}
       </Typography>
       <SimpleBar title="Description">
         <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
