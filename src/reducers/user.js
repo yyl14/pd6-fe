@@ -15,7 +15,7 @@ const user = (state = initialState, action) => {
     case authConstants.AUTH_SUCCESS:
       return action.user;
     case authConstants.AUTH_LOGOUT:
-      return {};
+      return initialState;
     case userConstants.EDIT_SELF_ACCOUNT_SUCCESS: {
       return {
         ...state,
