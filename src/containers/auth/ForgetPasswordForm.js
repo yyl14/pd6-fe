@@ -83,8 +83,17 @@ export default function ForgetPasswordForm() {
   useEffect(() => {
     if (loading === false && submit === true) {
       if (error !== null) {
+        switch (error.toString()) {
+          case 'Error: NotFound': {
+            setErrorText('Unregistered email address.');
+            break;
+          }
+          default: {
+            setErrorText(error.toString());
+            break;
+          }
+        }
         setSubmit(false);
-        setErrorText(error);
         setShowError(true);
         setDisabled(true);
       } else {
