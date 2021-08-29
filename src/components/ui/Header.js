@@ -300,14 +300,14 @@ export default function Header() {
   }, [open]);
 
   const dispatch = useDispatch();
-  const [cookiesId, setCookieId, removeCookieId] = useCookies(['id']);
-  const [cookiesToken, setCookieToken, removeCookieToken] = useCookies(['token']);
+
+  const [cookies, setCookie, removeCookie] = useCookies(['token', 'id']);
 
   const goto = (link) => {
     // console.log(link);
     if (link === '/logout') {
-      removeCookieId('id');
-      removeCookieToken('token');
+      removeCookie('token', { path: '/' });
+      removeCookie('id', { path: '/' });
       dispatch(userLogout(history));
     } else {
       history.push(link);
