@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-  Switch, Route, withRouter, BrowserRouter as Router,
-} from 'react-router-dom';
+import { withRouter, BrowserRouter as Router } from 'react-router-dom';
 
-import { Container } from '@material-ui/core';
-import NoMatch from '../../components/noMatch';
 import AccountSetting from '../../components/account/AccountSetting';
 
 import Header from '../../components/ui/Header';
@@ -22,7 +18,7 @@ class Account extends Component {
   render() {
     return (
       <div>
-        <Header role={this.props.user.role} />
+        <Header />
         <Sidebar />
         <Router>
           <div className="layout-content-container">
