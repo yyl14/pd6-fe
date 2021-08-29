@@ -84,7 +84,7 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
           });
         })),
     );
-    const judgments = res3.flat().filter((item) => (item !== null && item !== undefined));
+    const judgments = res3.flat().filter((item) => item !== null && item !== undefined);
 
     try {
       dispatch({

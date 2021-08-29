@@ -84,7 +84,6 @@ export default function SubmissionDetail(props) {
   const testcases = useSelector((state) => state.testcases.byId);
   const testcaseIds = useSelector((state) => state.testcases.allIds);
   const authToken = useSelector((state) => state.auth.token);
-  const error = useSelector((state) => state.error.myClass.problem);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
   useEffect(() => {
@@ -166,7 +165,7 @@ export default function SubmissionDetail(props) {
     challenges.byId[challengeId] === undefined
     || problems.byId[problemId] === undefined
     || submissions[submissionId] === undefined
-    || judgmentIds === undefined
+    || judgments[judgmentId] === undefined
     || judgeCases.allIds === undefined
     || testcaseIds === undefined
     // || accounts.byId[accountId] === undefined
