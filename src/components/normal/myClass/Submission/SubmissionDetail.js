@@ -116,12 +116,14 @@ export default function SubmissionDetail(props) {
 
   useEffect(() => {
     setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0]);
-    dispatch(
-      browseJudgeCases(
-        authToken,
-        judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0],
-      ),
-    );
+    if (judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0]) {
+      dispatch(
+        browseJudgeCases(
+          authToken,
+          judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0],
+        ),
+      );
+    }
   }, [authToken, dispatch, judgmentIds, judgments, submissionId]);
 
   useEffect(() => {
