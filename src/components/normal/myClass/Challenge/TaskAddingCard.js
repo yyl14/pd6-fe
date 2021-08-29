@@ -13,20 +13,18 @@ import {
   FormControl,
   Select,
   MenuItem,
-  ListItemText,
 } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
 
 import NoMatch from '../../../noMatch';
-import GeneralLoading from '../../../GeneralLoading';
 
 import { readChallenge, browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
 import { addProblem, addEssay, addPeerReview } from '../../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse } from '../../../../actions/common/common';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -44,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 export default function TaskAddingCard({ open, setOpen }) {
   const { courseId, classId, challengeId } = useParams();
-  const history = useHistory();
   const classNames = useStyles();
 
   const dispatch = useDispatch();
@@ -87,6 +84,9 @@ export default function TaskAddingCard({ open, setOpen }) {
     setTimeout(() => {
       dispatch(browseTasksUnderChallenge(authToken, challengeId));
     }, 500);
+    setType('Coding Problem');
+    setTitle('');
+    setLabel('');
     setOpen(false);
   };
 
