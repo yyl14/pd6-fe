@@ -39,12 +39,16 @@ function Index() {
       if (user.role.indexOf('MANAGER') !== -1 || user.role === 'MANAGER') {
         history.push('/admin/course/course');
       } else if (user.role.indexOf('NORMAL') !== -1 || user.role === 'NORMAL') {
-        history.push('/my-class');
+        if (user.classes.length !== 0) {
+          history.push('/my-class');
+        } else {
+          history.push('/all-class');
+        }
       } else {
         history.push('/my-profile');
       }
     }
-  }, [auth.isAuthenticated, history, location.pathname, user.role]);
+  }, [auth.isAuthenticated, history, location.pathname, user.classes, user.classes.length, user.role]);
 
   if (!auth.isAuthenticated) {
     return <></>;
@@ -60,67 +64,5 @@ function Index() {
     </div>
   );
 }
-
-// class Index extends Component {
-//   static propTypes = {
-//     cookies: instanceOf(Cookies).isRequired,
-//   };
-
-//   constructor(props) {
-//     super(props);
-//     this.state = {};
-//   }
-
-//   componentDidMount() {}
-
-//   static getDerivedStateFromProps(nextProps, prevState) {
-//     console.log(prevState);
-//     if (nextProps.auth.isAuthenticated) {
-//       const cookieId = nextProps.cookies.get('id');
-//       const cookieToken = nextProps.cookies.get('token');
-//       console.log(cookieId, cookieToken);
-
-//       if (cookieId !== null && cookieId !== undefined && cookieToken !== null && cookieToken !== undefined) {
-//         this.props.getUserInfo(cookieId, cookieToken);
-//       } else {
-//         this.props.history.push('/login');
-//       }
-//     }
-
-//     if (nextProps.auth.isAuthenticated && nextProps.history.location.pathname === '/') {
-//       if (nextProps.user.role.indexOf('MANAGER') !== -1 || nextProps.user.role === 'MANAGER') {
-//         nextProps.history.push('/admin/course/course');
-//       } else {
-//         nextProps.history.push('/my-class');
-//       }
-//     }
-
-//     return null;
-//   }
-
-//   render() {
-//     if (!this.props.auth.isAuthenticated) {
-//       return <></>;
-//     }
-
-//     return (
-//       <div className="wrapper">
-//         <Switch>
-//           <Route path="/admin" component={Admin} />
-//           <Route path="/my-profile" component={Account} />
-//           <Route path="/" component={Normal} />
-//         </Switch>
-//       </div>
-//     );
-//   }
-// }
-
-// const mapStateToProps = (state) => ({
-//   auth: state.auth,
-//   user: state.user,
-//   error: state.error,
-// });
-
-// export default connect(mapStateToProps, { getUserInfo })(withRouter(withCookies(Index)));
 
 export default Index;
