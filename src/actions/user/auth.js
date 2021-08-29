@@ -147,10 +147,17 @@ const emailVerification = async (code) => {
 const userResetPassword = (code, password) => async (dispatch) => {
   dispatch({ type: authConstants.RESET_PASSWORD_START });
   try {
-    await agent.post('account/reset-password', { code, password });
-    dispatch({
-      type: authConstants.RESET_PASSWORD_SUCCESS,
-    });
+    const res = await agent.post('account/reset-password', { code, password });
+    if (!res.data.success) {
+      dispatch({
+        type: authConstants.RESET_PASSWORD_FAIL,
+        error: res.data.error,
+      });
+    } else {
+      dispatch({
+        type: authConstants.RESET_PASSWORD_SUCCESS,
+      });
+    }
   } catch (err) {
     dispatch({
       type: authConstants.RESET_PASSWORD_FAIL,
