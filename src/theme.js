@@ -177,7 +177,7 @@ const overrides = {
     root: {
       borderRadius: '5px',
       height: '40px',
-      transition: 'background 0.4s',
+      transition: 'background 0.2s',
       margin: '10px 5px 10px 5px',
       padding: '8.5px 25px 10px 25px',
     },
