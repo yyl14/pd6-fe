@@ -44,7 +44,7 @@ export default function EssaySetting() {
   const dispatch = useDispatch();
 
   const userClasses = useSelector((state) => state.user.classes);
-  const essays = useSelector((state) => state.essays.byId);
+  const essays = useSelector((state) => { console.log('state.essay:', state.essays); return state.essays.byId; });
   const challenges = useSelector((state) => state.challenges.byId);
   const authToken = useSelector((state) => state.auth.token);
   const error = useSelector((state) => state.error.myClass.essay);
@@ -68,12 +68,13 @@ export default function EssaySetting() {
   };
 
   const handleDownload = () => {
-    const file = {
-      uuid: essays[essayId].content_file_uuid,
-      filename: essays[essayId].filename,
-      as_attachment: false,
-    };
-    dispatch(downloadFile(authToken, file));
+    // console.log('essaysInfo', essays[essayId]);
+    // const file = {
+    //   uuid: essays[essayId].content_file_uuid,
+    //   filename: essays[essayId].filename,
+    //   as_attachment: false,
+    // };
+    // dispatch(downloadFile(authToken, file));
   };
 
   useEffect(() => {

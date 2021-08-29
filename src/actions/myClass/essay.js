@@ -9,17 +9,17 @@ const readEssay = (token, essayId) => async (dispatch) => {
     },
   };
   try {
-    const essayInfo = await agent.get(`/essay/${essayId}`, auth);
-    // console.log('essayInfo', essayInfo);
-    if (essayInfo.data.success) {
+    const res = await agent.get(`/essay/${essayId}`, auth);
+    console.log('res1', res);
+    if (res.data.success) {
       dispatch({
         type: essayConstants.READ_ESSAY_SUCCESS,
-        payload: essayInfo.data.data,
+        payload: res.data.data,
       });
     } else {
       dispatch({
         type: essayConstants.READ_ESSAY_FAIL,
-        errors: essayInfo.data.errors,
+        errors: res.data.errors,
       });
     }
   } catch (err) {
@@ -32,7 +32,7 @@ const readEssay = (token, essayId) => async (dispatch) => {
 
 const editEssay = (token, essayId, label, title, description) => async (dispatch) => {
   dispatch({ type: essayConstants.EDIT_ESSAY_START });
-  // console.log('editEssay', editEssay);
+  console.log('editEssay', editEssay);
   const auth = {
     headers: {
       'Auth-Token': token,
@@ -44,9 +44,9 @@ const editEssay = (token, essayId, label, title, description) => async (dispatch
     description,
   };
   try {
-    const editEssaysInfo = await agent.patch(`/essay/${essayId}`, body, auth);
-    // console.log('editEssaysInfo', editEssaysInfo);
-    if (editEssaysInfo.data.success) {
+    const res = await agent.patch(`/essay/${essayId}`, body, auth);
+    console.log('editRes', res);
+    if (res.data.success) {
       dispatch({
         type: essayConstants.EDIT_ESSAY_SUCCESS,
         payload: { essayId, content: body },
@@ -54,7 +54,7 @@ const editEssay = (token, essayId, label, title, description) => async (dispatch
     } else {
       dispatch({
         type: essayConstants.EDIT_ESSAY_FAIL,
-        errors: editEssaysInfo.data.errors,
+        errors: res.data.errors,
       });
     }
   } catch (err) {
@@ -74,6 +74,7 @@ const deleteEssay = (token, essayId) => async (dispatch) => {
   };
   try {
     const res = await agent.delete(`/essay/${essayId}`, auth);
+    console.log('res2:', res);
     if (res.data.success) {
       dispatch({
         type: essayConstants.DELETE_ESSAY_SUCCESS,
@@ -101,17 +102,17 @@ const browseEssaySubmission = (token, essayId) => async (dispatch) => {
     },
   };
   try {
-    const browseEssaySubmissionInfo = await agent.get(`/essay/${essayId}/essay-submission`, auth);
-    // console.log('browseEssaySubmissionInfo', browseEssaySubmissionInfo);
-    if (browseEssaySubmissionInfo.data.success) {
+    const res = await agent.get(`/essay/${essayId}/essay-submission`, auth);
+    // console.log('res', res);
+    if (res.data.success) {
       dispatch({
         type: essayConstants.BROWSE_ESSAY_SUBMISSION_SUCCESS,
-        payload: browseEssaySubmissionInfo.data.data,
+        payload: res.data.data,
       });
     } else {
       dispatch({
         type: essayConstants.BROWSE_ESSAY_SUBMISSION_FAIL,
-        errors: browseEssaySubmissionInfo.data.errors,
+        errors: res.data.errors,
       });
     }
   } catch (err) {
@@ -138,17 +139,17 @@ const uploadEssay = (token, essayId, file) => async (dispatch) => {
   formData.append('essay_file', blob);
 
   try {
-    const uploadEssayInfo = await agent.post(`/essay/${essayId}/essay-submission`, formData, config);
-    // console.log('uploadEssayInfo', uploadEssayInfo);
-    if (uploadEssayInfo.data.success) {
+    const res = await agent.post(`/essay/${essayId}/essay-submission`, formData, config);
+    // console.log('res', res);
+    if (res.data.success) {
       dispatch({
         type: essayConstants.UPLOAD_ESSAY_SUBMISSION_SUCCESS,
-        payload: uploadEssayInfo.data.data,
+        payload: res.data.data,
       });
     } else {
       dispatch({
         type: essayConstants.UPLOAD_ESSAY_SUBMISSION_FAIL,
-        errors: uploadEssayInfo.data.errors,
+        errors: res.data.errors,
       });
     }
   } catch (err) {
@@ -167,17 +168,17 @@ const readEssaySubmission = (token, essaySubmissionId) => async (dispatch) => {
     },
   };
   try {
-    const readEssaySubmissionInfo = await agent.get(`/essay-submission/${essaySubmissionId}`, auth);
-    console.log('readEssaySubmissionInfo', readEssaySubmissionInfo);
-    if (readEssaySubmissionInfo.data.success) {
+    const res = await agent.get(`/essay-submission/${essaySubmissionId}`, auth);
+    // console.log('res', res);
+    if (res.data.success) {
       dispatch({
         type: essayConstants.READ_ESSAY_SUBMISSION_SUCCESS,
-        payload: readEssaySubmissionInfo.data.data,
+        payload: res.data.data,
       });
     } else {
       dispatch({
         type: essayConstants.READ_ESSAY_SUBMISSION_FAIL,
-        errors: readEssaySubmissionInfo.data.errors,
+        errors: res.data.errors,
       });
     }
   } catch (err) {
@@ -201,15 +202,15 @@ const reUploadEssay = (token, essaySubmissionId, file) => async (dispatch) => {
   formData.append('essay_file', blob);
 
   try {
-    const reUploadEssayInfo = await agent.put(`/essay-submission/${essaySubmissionId}`, formData, auth);
-    if (reUploadEssayInfo.data.success) {
+    const res = await agent.put(`/essay-submission/${essaySubmissionId}`, formData, auth);
+    if (res.data.success) {
       dispatch({
         type: essayConstants.REUPLOAD_ESSAY_SUBMISSION_SUCCESS,
       });
     } else {
       dispatch({
         type: essayConstants.REUPLOAD_ESSAY_SUBMISSION_FAIL,
-        errors: reUploadEssayInfo.data.errors,
+        errors: res.data.errors,
       });
     }
   } catch (err) {
