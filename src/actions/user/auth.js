@@ -79,28 +79,17 @@ const userSignIn = (username, password) => async (dispatch) => {
 };
 
 const userLogout = (history) => (dispatch) => {
-  dispatch({
-    type: authConstants.AUTH_LOGOUT,
-  });
-
+  dispatch({ type: authConstants.AUTH_LOGOUT });
   history.push('/login');
 };
 
 const userForgetPassword = (email) => async (dispatch) => {
   try {
-    dispatch({
-      type: authConstants.FORGET_PASSWORD_START,
-    });
-    const res = await agent.post('/account/forget-password', { email });
-    if (!res.data.success) {
-      throw new Error(res.data.error);
-    }
+    dispatch({ type: authConstants.FORGET_PASSWORD_START });
+    await agent.post('/account/forget-password', { email });
     dispatch({ type: authConstants.FORGET_PASSWORD_SUCCESS });
-  } catch (err) {
-    dispatch({
-      type: authConstants.FORGET_PASSWORD_FAIL,
-      error: err,
-    });
+  } catch (error) {
+    dispatch({ type: authConstants.FORGET_PASSWORD_FAIL, error });
   }
 };
 
