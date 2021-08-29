@@ -167,6 +167,7 @@ export default function CustomTable({
   hasLink,
   linkName,
   children,
+  tableRef,
 }) {
   const classes = useStyles();
   const [curPage, setPage] = useState(0);
@@ -277,13 +278,11 @@ export default function CustomTable({
 
       <Paper className={classes.root} elevation={0}>
         <TableContainer className={classes.container}>
-          <Table stickyHeader aria-label="sticky table">
+          <Table stickyHeader aria-label="sticky table" ref={tableRef}>
             <TableHead>
               <TableRow>
-                <TableCell className={`${classes.tableHeadCell} ${classes.tableRowContainerLeftSpacing}`} />
                 {columns.map((column) => (
                   <React.Fragment key={`${column.id}-${column.label}`}>
-                    <TableCell className={`${classes.tableHeadCell} ${classes.tableColumnLeftSpacing}`} />
                     <TableCell
                       align={column.align}
                       className={classes.tableHeadCell}
@@ -320,14 +319,12 @@ export default function CustomTable({
               */
                 filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row[columns[0].id]} className={classes.row}>
-                    <TableCell className={classes.tableRowContainerLeftSpacing} />
                     {columns.map((column) => {
                       if (column.type === 'link') {
                         const link = row[column.link_id];
                         const value = row[column.id];
                         return (
                           <React.Fragment key={`${column.id}-${column.label}`}>
-                            <TableCell className={classes.tableColumnLeftSpacing} />
                             <TableCell align={column.align}>
                               {column.isExternal ? (
                                 <a href={link} className={classes.textLink}>
@@ -345,7 +342,6 @@ export default function CustomTable({
                       const value = row[column.id];
                       return (
                         <React.Fragment key={`${column.id}-${column.label}`}>
-                          <TableCell className={classes.tableColumnLeftSpacing} />
                           <TableCell align={column.align}>
                             {column.format && typeof value === 'number' ? column.format(value) : value}
                           </TableCell>

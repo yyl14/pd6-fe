@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Typography, Button, Snackbar, makeStyles,
@@ -56,6 +56,7 @@ const accountColumn = [
 /* This is a level 4 component (page component) */
 export default function Statistics() {
   const { courseId, classId, challengeId } = useParams();
+  const scoreboardTableRef = useRef();
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -120,10 +121,13 @@ export default function Statistics() {
       const memberSubmissionList = challenges[challengeId].statistics.memberSubmission.map((member) => {
         const memberChallengeDetail = {
           id: member.id,
-          username: members[member.id].username,
-          student_id: members[member.id].student_id,
-          real_name: members[member.id].real_name,
         };
+
+        if (members[member.id]) {
+          memberChallengeDetail.username = members[member.id].username;
+          memberChallengeDetail.student_id = members[member.id].student_id;
+          memberChallengeDetail.real_name = members[member.id].real_name;
+        }
 
         if (member.problem_scores) {
           member.problem_scores.map((judgement) => {
@@ -178,6 +182,19 @@ export default function Statistics() {
     }
   }, [authToken, challengeId, dispatch, challenges]);
 
+  const copyTable = () => {
+    console.log('scoreboard');
+    console.log(scoreboardTableRef);
+    const range = document.createRange();
+    // set the Node to select the "range"
+    range.selectNode(scoreboardTableRef.current);
+    // add the Range to the set of window selections
+    window.getSelection().addRange(range);
+    // execute 'copy', can't 'cut' in this case
+    document.execCommand('copy');
+    setShowSnackbar(true);
+  };
+
   return (
     <>
       <Typography variant="h3" className={classes.bottomSpace}>
@@ -225,12 +242,11 @@ export default function Statistics() {
       <SimpleBar title="Scoreboard" />
       <CustomTable
         buttons={(
-          <>
-            <Button onClick={() => setShowSnackbar(true)}>
-              <Icon.Copy />
-            </Button>
-          </>
+          <Button onClick={copyTable}>
+            <Icon.Copy />
+          </Button>
         )}
+        tableRef={scoreboardTableRef}
         data={scoreboardData}
         columns={scoreboardTitle}
       />
