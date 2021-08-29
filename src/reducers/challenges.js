@@ -28,7 +28,6 @@ const byId = (state = {}, action) => {
     }
     case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data, id } = action.payload;
-      console.log(data);
       return {
         ...state,
         [id]: {
@@ -42,7 +41,6 @@ const byId = (state = {}, action) => {
     case submissionConstants.READ_CHALLENGE_SUCCESS:
     case problemConstants.READ_CHALLENGE_SUCCESS: {
       const data = action.payload;
-      console.log(data);
       return {
         ...state,
         [data.id]: {
@@ -57,7 +55,6 @@ const byId = (state = {}, action) => {
     }
     case challengeConstants.FETCH_CHALLENGE_SUMMARY_SUCCESS: {
       const { challengeId, data } = action.payload;
-
       return {
         ...state,
         [challengeId]: {
@@ -71,7 +68,6 @@ const byId = (state = {}, action) => {
     }
     case challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_SUCCESS: {
       const { challengeId, data } = action.payload;
-
       return {
         ...state,
         [challengeId]: {
@@ -95,7 +91,7 @@ const byId = (state = {}, action) => {
             peerReviewIds: state[item.id] ? state[item.id].peerReviewIds : [],
             specialJudgeIds: state[item.id] ? state[item.id].specialJudgeIds : [],
             essayIds: state[item.id] ? state[item.id].essayIds : [],
-            statistics: state[item.id] ? state[item.id].statistics : [],
+            statistics: state[item.id] ? state[item.id].statistics : emptyStatistics,
           },
         }),
         state,

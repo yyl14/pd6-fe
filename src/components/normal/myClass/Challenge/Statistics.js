@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
-  Button,
-  Snackbar,
-  makeStyles,
+  Typography, Button, Snackbar, makeStyles,
 } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
   fetchChallenges,
   fetchChallengeSummary,
   fetchChallengeMemberSubmission,
 } from '../../../../actions/myClass/challenge';
-import { fetchClassMembers } from '../../../../actions/common/common';
+import { fetchDownloadFileUrl, fetchClassMembers } from '../../../../actions/common/common';
 import { browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
 import SimpleBar from '../../../ui/SimpleBar';
@@ -29,36 +26,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const accountColumn = [{
-  id: 'username',
-  label: 'Username',
-  minWidth: 150,
-  align: 'center',
-  width: 500,
-  type: 'link',
-  link_id: 'account_path',
-},
-{
-  id: 'student_id',
-  label: 'Student ID',
-  minWidth: 150,
-  align: 'center',
-  width: 500,
-  type: 'string',
-},
-{
-  id: 'real_name',
-  label: 'Real Name',
-  minWidth: 150,
-  align: 'center',
-  width: 500,
-  type: 'string',
-}];
+const accountColumn = [
+  {
+    id: 'username',
+    label: 'Username',
+    minWidth: 150,
+    align: 'center',
+    width: 500,
+    type: 'string',
+  },
+  {
+    id: 'student_id',
+    label: 'Student ID',
+    minWidth: 150,
+    align: 'center',
+    width: 500,
+    type: 'string',
+  },
+  {
+    id: 'real_name',
+    label: 'Real Name',
+    minWidth: 150,
+    align: 'center',
+    width: 500,
+    type: 'string',
+  },
+];
 
 /* This is a level 4 component (page component) */
 export default function Statistics() {
   const { courseId, classId, challengeId } = useParams();
-  const history = useHistory();
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -69,12 +66,13 @@ export default function Statistics() {
   const problems = useSelector((state) => state.problem.byId);
   const essays = useSelector((state) => state.essays.byId);
   const submissions = useSelector((state) => state.submissions.byId);
-  const loading = useSelector((state) => state.loading.myClass.submissions);
+  const downloadLinks = useSelector((state) => state.downloadLinks.byId);
 
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [statisticsData, setStatisticsData] = useState([]);
   const [scoreboardTitle, setScoreboardTitle] = useState(accountColumn);
   const [scoreboardData, setScoreboardData] = useState([]);
+  const [challengeTitle, setChallengeTitle] = useState('');
 
   useEffect(() => {
     dispatch(fetchChallenges(authToken, classId));
@@ -88,10 +86,15 @@ export default function Statistics() {
   }, [authToken, dispatch, challengeId]);
 
   useEffect(() => {
-    if (challenges[challengeId] !== undefined
-      && challenges[challengeId].statistics !== undefined
-      && !loading.fetchSubmission) {
+    if (
+      challenges[challengeId]
+      && challenges[challengeId].statistics
+      && challenges[challengeId].statistics.summary
+      && challenges[challengeId].statistics.memberSubmission
+      && members
+    ) {
       setStatisticsData(challenges[challengeId].statistics.summary);
+
       const problemList = challenges[challengeId].problemIds.map((id) => ({
         id: `problem-${id}`,
         label: problems[id].challenge_label,
@@ -108,6 +111,7 @@ export default function Statistics() {
         align: 'center',
         width: 500,
         type: 'link',
+        isExternal: true,
         link_id: `essay-${id}-link`,
       }));
       setScoreboardTitle([].concat(accountColumn, problemList, essayList));
@@ -123,35 +127,61 @@ export default function Statistics() {
 
         if (member.problem_scores) {
           member.problem_scores.map((judgement) => {
-            const problemId = submissions[judgement.submission_id].problem_id;
-            memberChallengeDetail[`problem-${problemId}`] = judgement.score;
-            memberChallengeDetail[`problem-${problemId}-link`] = `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${judgement.submission_id}`;
+            if (submissions[judgement.submission_id]) {
+              const problemId = submissions[judgement.submission_id].problem_id;
+              memberChallengeDetail[`problem-${problemId}`] = judgement.score;
+              memberChallengeDetail[
+                `problem-${problemId}-link`
+              ] = `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${judgement.submission_id}`;
+            }
             return judgement;
+          });
+        }
+
+        if (member.essay_submissions) {
+          member.essay_submissions.map((record) => {
+            memberChallengeDetail[`essay-${record.essay_id}`] = 'pdf';
+            if (downloadLinks[record.content_file_uuid]) {
+              memberChallengeDetail[`essay-${record.essay_id}-link`] = downloadLinks[record.content_file_uuid].url;
+            }
+            return record;
           });
         }
         return memberChallengeDetail;
       });
       setScoreboardData(memberSubmissionList);
-    } else {
-      setStatisticsData([]);
     }
-  }, [classId, courseId, challenges, challengeId, essays, problems, members, submissions, loading.fetchSubmission]);
+  }, [classId, courseId, challenges, challengeId, essays, problems, members, submissions, downloadLinks]);
 
   useEffect(() => {
-    if (challenges[challengeId] !== undefined
-      && challenges[challengeId].statistics !== undefined) {
-      challenges[challengeId].statistics.memberSubmission.map(
-        (member) => member.problem_scores && member.problem_scores.map(
-          (judgement) => dispatch(fetchSubmission(authToken, judgement.submission_id)),
-        ),
-      );
+    if (
+      challenges[challengeId]
+      && challenges[challengeId].statistics
+      && challenges[challengeId].statistics.memberSubmission
+    ) {
+      setChallengeTitle(challenges[challengeId].title);
+      challenges[challengeId].statistics.memberSubmission.map((member) => {
+        if (member.problem_scores) {
+          member.problem_scores.map((judgement) => dispatch(fetchSubmission(authToken, judgement.submission_id)));
+        }
+        if (member.essay_submissions) {
+          member.essay_submissions.map((record) => dispatch(
+            fetchDownloadFileUrl(authToken, {
+              filename: record.filename,
+              uuid: record.content_file_uuid,
+              as_attachment: false,
+            }),
+          ));
+        }
+        return member;
+      });
     }
   }, [authToken, challengeId, dispatch, challenges]);
 
   return (
     <>
       <Typography variant="h3" className={classes.bottomSpace}>
-        {`${(challenges[challengeId] === undefined) ? '' : challenges[challengeId].title} / Statistics`}
+        {`${challengeTitle} / Statistics`}
       </Typography>
       <SimpleBar title="Statistics" />
       <SimpleTable
@@ -196,7 +226,9 @@ export default function Statistics() {
       <CustomTable
         buttons={(
           <>
-            <Button onClick={() => setShowSnackbar(true)}><Icon.Copy /></Button>
+            <Button onClick={() => setShowSnackbar(true)}>
+              <Icon.Copy />
+            </Button>
           </>
         )}
         data={scoreboardData}
