@@ -121,7 +121,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header({ role, hasClass }) {
+export default function Header() {
   const user = useSelector((state) => state.user);
   const baseURL = '';
   const classes = useStyles();
@@ -131,110 +131,130 @@ export default function Header({ role, hasClass }) {
   const [itemList, setItemList] = useState([]);
   const [menuList, setMenuList] = useState([]);
 
+  const [hasClass, setHasClass] = useState(false);
+
   useEffect(() => {
-    if (role === 'MANAGER') {
-      setItemList([
-        {
-          text: 'Course',
-          basePath: '/admin/course',
-          path: '/admin/course/course',
-        },
-        {
-          text: 'Account',
-          basePath: '/admin/account',
-          path: '/admin/account/institute',
-        },
-        {
-          text: 'System',
-          basePath: '/admin/system',
-          path: '/admin/system/accesslog',
-        },
-        {
-          text: 'About',
-          path: '/about',
-        },
-      ]);
-      setMenuList([
-        { title: 'My Profile', link: '/my-profile' },
-        { title: 'Logout', link: '/logout' },
-      ]);
-    } else if (role === 'NORMAL') {
-      if (hasClass) {
+    setHasClass(user.classes.length !== 0);
+  }, [user.classes.length]);
+
+  useEffect(() => {
+    switch (user.role) {
+      case 'MANAGER': {
         setItemList([
           {
-            text: 'My Class',
-            basePath: '/my-class',
-            path: '/my-class',
+            text: 'Course',
+            basePath: '/admin/course',
+            path: '/admin/course/course',
           },
           {
-            text: 'All Class',
-            basePath: '/all-class',
-            path: '/all-class',
-          },
-          // {
-          //   text: 'Problem Set',
-          //   basePath: '/problem-set',
-          //   path: '/problem-set',
-          // },
-          {
-            text: 'PDAO',
-            basePath: '/pdao',
-            path: '/pdao',
-          },
-          {
-            text: 'Ranklist',
-            basePath: '/ranklist',
-            path: '/ranklist',
+            text: 'Account',
+            basePath: '/admin/account',
+            path: '/admin/account/institute',
           },
           {
             text: 'System',
-            basePath: '/system',
-            path: '/system',
+            basePath: '/admin/system',
+            path: '/admin/system/accesslog',
+          },
+          {
+            text: 'About',
+            path: '/about',
           },
         ]);
-      } else {
-        setItemList([
-          {
-            text: 'All Class',
-            basePath: '/all-class',
-            path: '/all-class',
-          },
-          // {
-          //   text: 'Problem Set',
-          //   basePath: '/problem-set',
-          //   path: '/problem-set',
-          // },
-          {
-            text: 'PDAO',
-            basePath: '/pdao',
-            path: '/pdao',
-          },
-          {
-            text: 'Ranklist',
-            basePath: '/ranklist',
-            path: '/ranklist',
-          },
-          {
-            text: 'System',
-            basePath: '/system',
-            path: '/system',
-          },
+        setMenuList([
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
+        ]);
+        break;
+      }
+      case 'NORMAL': {
+        if (hasClass) {
+          setItemList([
+            {
+              text: 'My Class',
+              basePath: '/my-class',
+              path: '/my-class',
+            },
+            {
+              text: 'All Class',
+              basePath: '/all-class',
+              path: '/all-class',
+            },
+            // {
+            //   text: 'Problem Set',
+            //   basePath: '/problem-set',
+            //   path: '/problem-set',
+            // },
+            {
+              text: 'PDAO',
+              basePath: '/pdao',
+              path: '/pdao',
+            },
+            {
+              text: 'Ranklist',
+              basePath: '/ranklist',
+              path: '/ranklist',
+            },
+            {
+              text: 'System',
+              basePath: '/system',
+              path: '/system',
+            },
+          ]);
+        } else {
+          setItemList([
+            {
+              text: 'All Class',
+              basePath: '/all-class',
+              path: '/all-class',
+            },
+            // {
+            //   text: 'Problem Set',
+            //   basePath: '/problem-set',
+            //   path: '/problem-set',
+            // },
+            {
+              text: 'PDAO',
+              basePath: '/pdao',
+              path: '/pdao',
+            },
+            {
+              text: 'Ranklist',
+              basePath: '/ranklist',
+              path: '/ranklist',
+            },
+            {
+              text: 'System',
+              basePath: '/system',
+              path: '/system',
+            },
+          ]);
+        }
+        setMenuList([
+          { title: 'My Submission', link: '/my-submission' },
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
+        ]);
+        break;
+      }
+      case 'GUEST': {
+        // System Guest
+        setItemList([]);
+        setMenuList([
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
+        ]);
+        break;
+      }
+      default: {
+        setItemList([]);
+        setMenuList([
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
         ]);
       }
-      setMenuList([
-        { title: 'My Submission', link: '/my-submission' },
-        { title: 'My Profile', link: '/my-profile' },
-        { title: 'Logout', link: '/logout' },
-      ]);
-    } else {
-      // System Guest
-      setItemList([]);
-      setMenuList([
-        { title: 'My Profile', link: '/my-profile' },
-        { title: 'Logout', link: '/logout' },
-      ]);
     }
-  }, [hasClass, role]);
+  }, [hasClass, user.role]);
 
   // useEffect(() => {
   //   console.log('Current route', location.pathname);
