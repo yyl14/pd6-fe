@@ -39,8 +39,8 @@ const useStyles = makeStyles((theme) => ({
 export default function ForgetPasswordForm() {
   const classNames = useStyles();
   const dispatch = useDispatch();
-  const serverError = useSelector((state) => state.error.user.auth.forgetPassword);
-  const serverLoading = useSelector((state) => state.loading.user.auth.forgetPassword);
+  const error0 = useSelector((state) => state.error.user.auth.forgetPassword);
+  const loading = useSelector((state) => state.loading.user.auth.forgetPassword);
   const [email, setEmail] = useState('');
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -84,10 +84,10 @@ export default function ForgetPasswordForm() {
   };
 
   useEffect(() => {
-    if (serverLoading === false && submit === true) {
-      if (serverError !== null) {
+    if (loading === false && submit === true) {
+      if (error0 !== null) {
         setSubmit(false);
-        setErrorText(serverError);
+        setErrorText(error0);
         setError(true);
         setDisabled(true);
       } else {
@@ -98,7 +98,7 @@ export default function ForgetPasswordForm() {
         setDisabled(false);
       }
     }
-  }, [serverError, serverLoading, submit]);
+  }, [error0, loading, submit]);
 
   return (
     <>

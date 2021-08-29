@@ -91,16 +91,10 @@ const userForgetPassword = (email) => async (dispatch) => {
       type: authConstants.FORGET_PASSWORD_START,
     });
     const res = await agent.post('/account/forget-password', { email });
-    if (res.data.success) {
-      dispatch({
-        type: authConstants.FORGET_PASSWORD_SUCCESS,
-      });
-    } else {
-      dispatch({
-        type: authConstants.FORGET_PASSWORD_FAIL,
-        error: res.data.error,
-      });
+    if (!res.data.success) {
+      throw new Error(res.data.error);
     }
+    dispatch({ type: authConstants.FORGET_PASSWORD_SUCCESS });
   } catch (err) {
     dispatch({
       type: authConstants.FORGET_PASSWORD_FAIL,
