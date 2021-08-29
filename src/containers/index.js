@@ -1,75 +1,68 @@
-import { connect } from 'react-redux';
-import { Switch, Route, withRouter } from 'react-router-dom';
-import { withCookies, Cookies } from 'react-cookie';
+import { connect, useSelector, useDispatch } from 'react-redux';
+import {
+  Switch, Route, withRouter, useHistory, useLocation,
+} from 'react-router-dom';
+import { withCookies, Cookies, useCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import Normal from './normal';
 import Admin from './admin';
 import Account from './account';
 import NoMatch from '../components/noMatch';
 
-import { getUserInfo } from '../actions/auth';
+import { getUserInfo } from '../actions/user/auth';
 
 import '../styles/index.css';
 
-class Index extends Component {
-  static propTypes = {
-    cookies: instanceOf(Cookies).isRequired,
-  };
+function Index() {
+  const history = useHistory();
+  const location = useLocation();
+  const auth = useSelector((state) => state.auth);
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const [cookies, setCookie, removeCookie] = useCookies(['id', 'token']);
 
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  componentDidMount() {
-    if (!this.props.auth.isAuthenticated) {
-      const cookieId = this.props.cookies.get('id');
-      const cookieToken = this.props.cookies.get('token');
-      console.log(cookieId, cookieToken);
-
-      if (cookieId !== null && cookieId !== undefined && cookieToken !== null && cookieToken !== undefined) {
-        this.props.getUserInfo(cookieId, cookieToken);
+  useEffect(() => {
+    // console.log(auth.isAuthenticated, Boolean(cookies.id && cookies.token));
+    if (!auth.isAuthenticated) {
+      if (cookies.id && cookies.token) {
+        dispatch(getUserInfo(cookies.id, cookies.token));
       } else {
-        this.props.history.push('/login');
+        history.push('/login');
       }
     }
-  }
+  }, [auth.isAuthenticated, cookies, cookies.id, cookies.token, dispatch, history]);
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.auth.isAuthenticated && nextProps.history.location.pathname === '/') {
-      if (nextProps.auth.user.role.indexOf('MANAGER') !== -1 || nextProps.auth.user.role === 'MANAGER') {
-        nextProps.history.push('/admin/course/course');
+  useEffect(() => {
+    if (auth.isAuthenticated && location.pathname === '/') {
+      if (user.role.indexOf('MANAGER') !== -1 || user.role === 'MANAGER') {
+        history.push('/admin/course/course');
+      } else if (user.role.indexOf('NORMAL') !== -1 || user.role === 'NORMAL') {
+        if (user.classes.length !== 0) {
+          history.push('/my-class');
+        } else {
+          history.push('/all-class');
+        }
       } else {
-        nextProps.history.push('/');
+        history.push('/my-profile');
       }
     }
+  }, [auth.isAuthenticated, history, location.pathname, user.classes, user.classes.length, user.role]);
 
-    return null;
+  if (!auth.isAuthenticated) {
+    return <></>;
   }
 
-  render() {
-    if (!this.props.auth.isAuthenticated) {
-      return <></>;
-    }
-
-    return (
-      <div className="wrapper">
-        <Switch>
-          <Route exact path="/" component={Normal} />
-          <Route path="/admin" component={Admin} />
-          <Route path="/account/setting" component={Account} />
-          <Route component={NoMatch} />
-        </Switch>
-      </div>
-    );
-  }
+  return (
+    <div className="wrapper">
+      <Switch>
+        <Route path="/admin" component={Admin} />
+        <Route path="/my-profile" component={Account} />
+        <Route path="/" component={Normal} />
+      </Switch>
+    </div>
+  );
 }
 
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-  error: state.error,
-});
-
-export default connect(mapStateToProps, { getUserInfo })(withRouter(withCookies(Index)));
+export default Index;

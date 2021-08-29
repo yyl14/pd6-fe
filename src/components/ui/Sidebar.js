@@ -1,12 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import {
   Switch, Route, useHistory, useLocation,
 } from 'react-router-dom';
 
+// import { Autocomplete } from '@material-ui/lab';
 import Account from './sidebar/Account';
 import Course from './sidebar/Course';
 import System from './sidebar/System';
+import MyProfile from './sidebar/MyProfile';
+
+import MyClass from './sidebar/MyClass';
+import Challenge from './sidebar/Challenge';
+import Submission from './sidebar/Submission';
+import Grade from './sidebar/Grade';
+import Team from './sidebar/Team';
+import AllClass from './sidebar/AllClass';
+import AllClassChallenge from './sidebar/AllClassChallenge';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -19,67 +29,81 @@ const useStyles = makeStyles((theme) => ({
     height: 'calc(100% - 55px)',
     width: '300px',
   },
-  active: {
-    color: theme.palette.primary.main,
-  },
+
   topSpace: {
-    marginTop: '10vh',
+    marginTop: '110px',
   },
   bottomSpace: {
-    marginBottom: '5vh',
-  },
-  titleIcon: {
-    float: 'left',
-    color: theme.palette.black.main,
-    marginTop: '5.4vh',
-    marginBottom: '1.23vh',
-    marginLeft: '1.6vw',
-    marginRight: '0.97vw',
-    '&:hover': {
-      cursor: 'pointer',
-    },
+    marginBottom: '40px',
   },
   title: {
-    float: 'left',
-    marginTop: '5vh',
-    marginBottom: '1.23vh',
+    display: 'flex',
+    marginTop: '20px',
+    marginBottom: '6px',
   },
-  secondTitle: {
-    float: 'left',
-    marginTop: '3vh',
-    marginBottom: '1.23vh',
-  },
-  icon: {
+  titleIcon: {
+    margin: 'auto 0',
+    flex: '1',
     color: theme.palette.black.main,
-    marginLeft: '2.75vw',
-    marginRight: '1.3vw',
-  },
-  activeIcon: {
-    color: theme.palette.primary.main,
-    marginLeft: '2.75vw',
-    marginRight: '1.3vw',
-  },
-  secondTitleIcon: {
-    float: 'left',
-    color: theme.palette.black.main,
-    marginTop: '3.5vh',
-    marginBottom: '1.23vh',
-    marginLeft: '1.6vw',
-    marginRight: '0.97vw',
     '&:hover': {
       cursor: 'pointer',
     },
+  },
+  titleText: {
+    flex: '5',
+  },
+  titleTA: {
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    flex: '1',
+  },
+  itemIcon: {
+    flex: '1',
+    width: '18px',
+    color: theme.palette.black.main,
+    marginLeft: '35px',
+    marginRight: '-15px',
+  },
+  itemText: {
+    flex: '8',
+    width: '30px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  activeItemText: {
+    flex: '10',
+    color: theme.palette.primary.main,
+    width: '30px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+
+  greyIcon: {
+    color: theme.palette.grey.A400,
+    marginLeft: '35px',
+    marginRight: '21px',
   },
   divider: {
-    marginBottom: '2.21vh',
+    marginBottom: '16px',
+    transition: ['transform', '300ms'],
   },
   arrow: {
-    marginTop: '7.3vh',
-    marginLeft: '1.6vw',
+    marginTop: '60px',
+    marginLeft: '10px',
     marginRight: 'auto',
-    '&:hover': {
-      cursor: 'pointer',
-    },
+    marginBottom: '20px',
+  },
+  item: {
+    display: 'flex',
+    paddingTop: '7.5px',
+    paddingBottom: '7.5px',
+  },
+  addItem: {
+    color: theme.palette.grey.A400,
+    paddingTop: '7.5px',
+    paddingBottom: '7.5px',
   },
   rotate90: {
     transform: 'rotate(90deg)',
@@ -100,6 +124,12 @@ export default function Sidebar() {
 
   return (
     <Switch>
+      {/* {My Profile} */}
+      <Route exact path="/my-profile">
+        <MyProfile classes={classes} history={history} location={location} mode="main" />
+      </Route>
+      {/* {Admin} */}
+      {/* {Course} */}
       <Route exact path="/admin/course/course/">
         {/* for fetchCourse and redirection */}
         <Course classes={classes} history={history} location={location} mode="class-list" />
@@ -113,6 +143,7 @@ export default function Sidebar() {
       <Route path="/admin/course/class/:courseId/:classId/">
         <Course classes={classes} history={history} location={location} mode="class" />
       </Route>
+      {/* {Account} */}
       <Route exact path="/admin/account/institute">
         <Account classes={classes} history={history} location={location} mode="main" />
       </Route>
@@ -142,6 +173,91 @@ export default function Sidebar() {
       </Route>
       <Route path="/admin/system/submitlang/:languageId/setting">
         <System classes={classes} history={history} location={location} mode="language" />
+      </Route>
+
+      {/* {My Class} */}
+      {/* {Challenge} */}
+      <Route exact path="/my-class">
+        {/* for fetchClass and redirection */}
+        <MyClass classNames={classes} history={history} location={location} mode="main" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge">
+        <MyClass classNames={classes} history={history} location={location} mode="main" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId">
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId">
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission">
+        <Challenge classNames={classes} history={history} location={location} mode="submission" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/code-submission">
+        <Challenge classNames={classes} history={history} location={location} mode="submission" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId">
+        <Challenge classNames={classes} history={history} location={location} mode="submission_detail" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/essay/:essayId">
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      {/* {Submission} */}
+      <Route exact path="/my-class/:courseId/:classId/submission">
+        <MyClass classNames={classes} history={history} location={location} mode="main" />
+      </Route>
+      <Route path="/my-class/:courseId/:classId/submission/:submissionId">
+        <Submission classNames={classes} history={history} location={location} mode="detail" />
+      </Route>
+      {/* {Grade} */}
+      <Route exact path="/my-class/:courseId/:classId/grade">
+        <MyClass classNames={classes} history={history} location={location} mode="main" />
+      </Route>
+      <Route path="/my-class/:courseId/:classId/grade/:studentId">
+        <Grade classNames={classes} history={history} location={location} mode="detail" />
+      </Route>
+      {/* {Team} */}
+      <Route exact path="/my-class/:courseId/:classId/team">
+        <MyClass classNames={classes} history={history} location={location} mode="main" />
+      </Route>
+      <Route path="/my-class/:courseId/:classId/team/:teamId">
+        <Team classNames={classes} history={history} location={location} mode="detail" />
+      </Route>
+      {/* {Member} */}
+      <Route path="/my-class/:courseId/:classId/member">
+        <MyClass classNames={classes} history={history} location={location} mode="main" />
+      </Route>
+
+      {/* {ALL Class} */}
+      {/* {Challenge} */}
+      <Route exact path="/all-class">
+        {/* for fetchCourse and redirection */}
+        <AllClass classNames={classes} history={history} location={location} mode="main" />
+      </Route>
+      <Route exact path="/all-class/:courseId">
+        {/* for fetchClass and redirection */}
+        <AllClass classNames={classes} history={history} location={location} mode="course" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge">
+        <AllClass classNames={classes} history={history} location={location} mode="course" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId">
+        <AllClassChallenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId">
+        <AllClassChallenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission">
+        <AllClassChallenge classNames={classes} history={history} location={location} mode="submission" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId/code-submission">
+        <AllClassChallenge classNames={classes} history={history} location={location} mode="submission" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId">
+        <AllClassChallenge classNames={classes} history={history} location={location} mode="submission_detail" />
+      </Route>
+      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/essay/:essayId">
+        <AllClassChallenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
     </Switch>
   );

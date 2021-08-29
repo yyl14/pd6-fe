@@ -1,10 +1,11 @@
-import React, { Component, useState, useEffect } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { Button, Typography } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { editAccount, getUserInfo, fetchStudentCard } from '../../actions/auth';
-import SimpleBar from '../ui/SimpleBar';
+import { fetchStudentCard } from '../../actions/user/user';
+import GeneralLoading from '../GeneralLoading';
+
 import NoMatch from '../noMatch';
 import BasicInfo from './BasicInfo';
 import BasicInfoEdit from './BasicInfoEdit';
@@ -12,7 +13,7 @@ import StudentInfo from './StudentInfo';
 import StudentInfoEdit from './StudentInfoEdit';
 import NewPassword from './NewPassword';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -27,11 +28,11 @@ export default function AccountSetting() {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const accountId = useSelector((state) => state.auth.user.id);
-  const authToken = useSelector((state) => state.auth.user.token);
-  const account = useSelector((state) => state.auth.user);
-  const studentCards = useSelector((state) => state.auth.studentCards);
-  const loading = useSelector((state) => state.auth.loading);
+  const accountId = useSelector((state) => state.user.id);
+  const authToken = useSelector((state) => state.user.token);
+  const account = useSelector((state) => state.user);
+  const studentCards = useSelector((state) => state.studentCards);
+  const loading = useSelector((state) => state.loading.user);
 
   useEffect(() => {
     dispatch(fetchStudentCard(authToken, accountId));
@@ -39,15 +40,15 @@ export default function AccountSetting() {
 
   useEffect(() => {
     let update = [];
-    account.studentCard.forEach((key) => {
-      update = [...update, studentCards[key]];
+    studentCards.allIds.forEach((key) => {
+      update = [...update, studentCards.byId[key]];
     });
     setCards(update);
   }, [account, studentCards]);
 
   if (account === undefined || studentCards === undefined) {
-    if (loading.fetchAccount || loading.fetchStudentCard) {
-      return <div>loading...</div>;
+    if (loading.auth.fetchAccount || loading.user.fetchStudentCard) {
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }
@@ -83,27 +84,20 @@ export default function AccountSetting() {
           nickName={account.nickname}
           altMail={account.alternative_email}
         />
-      )
-        : (
-          <BasicInfo
-            handleEdit={handleBasicEdit}
-            realName={account.real_name}
-            userName={account.username}
-            nickName={account.nickname}
-            altMail={account.alternative_email}
-          />
-        )}
+      ) : (
+        <BasicInfo
+          handleEdit={handleBasicEdit}
+          realName={account.real_name}
+          userName={account.username}
+          nickName={account.nickname}
+          altMail={account.alternative_email}
+        />
+      )}
 
       {editStudInfo ? (
-        <StudentInfoEdit
-          handleBack={handleStudBack}
-          cards={cards}
-        />
+        <StudentInfoEdit handleBack={handleStudBack} cards={cards} />
       ) : (
-        <StudentInfo
-          handleEdit={handleStudEdit}
-          cards={cards}
-        />
+        <StudentInfo handleEdit={handleStudEdit} cards={cards} />
       )}
 
       <NewPassword />

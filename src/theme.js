@@ -55,6 +55,7 @@ const palette = {
   // primary: blue
   primary: {
     light: blue[60],
+    hover: blue[80],
     main: blue[100],
     dark: blue.dark,
     contrastText: 'white',
@@ -176,7 +177,7 @@ const overrides = {
     root: {
       borderRadius: '5px',
       height: '40px',
-      transition: 'background 0.4s',
+      transition: 'background 0.2s',
       margin: '10px 5px 10px 5px',
       padding: '8.5px 25px 10px 25px',
     },
@@ -187,6 +188,14 @@ const overrides = {
       '&:active': {
         backgroundColor: mono.semiDarkGray,
       },
+      '& path': {
+        fill: mono.black,
+      },
+      '&$disabled': {
+        '& path': {
+          fill: mono.lightGray,
+        },
+      },
     },
     containedPrimary: {
       '&:hover': {
@@ -194,6 +203,9 @@ const overrides = {
       },
       '&:active': {
         backgroundColor: blue.dark,
+      },
+      '& path': {
+        fill: mono.white,
       },
     },
     containedSecondary: {
@@ -203,12 +215,159 @@ const overrides = {
       '&:active': {
         backgroundColor: red.dark,
       },
+      '& path': {
+        fill: mono.white,
+      },
+    },
+    text: {
+      margin: '10px 5px 10px 5px',
+      padding: '8.5px 25px 10px 25px',
+      '&$disabled': {
+        color: mono.gray,
+        '& path': {
+          fill: mono.gray,
+        },
+      },
+    },
+    textPrimary: {
+      '&:hover': {
+        backgroundColor: blue[60],
+      },
+      '&:active': {
+        backgroundColor: blue[80],
+      },
+      '& path': {
+        fill: blue[100],
+      },
+    },
+    textSecondary: {
+      '&:hover': {
+        backgroundColor: red[60],
+      },
+      '&:active': {
+        backgroundColor: red[80],
+      },
+      '& path': {
+        fill: red[100],
+      },
+    },
+    outlined: {
+      margin: '10px 5px 10px 5px',
+      padding: '7.5px 24px 9px 24px',
+      '&:hover': {
+        backgroundColor: mono.lightGray,
+      },
+      '&:active': {
+        backgroundColor: mono.semiDarkGray,
+      },
+      '& path': {
+        fill: mono.black,
+        height: '20px',
+        width: '20px',
+      },
+      '&$disabled': {
+        color: mono.gray,
+        '& path': {
+          fill: mono.gray,
+        },
+      },
+    },
+    outlinedPrimary: {
+      '&:hover': {
+        color: mono.white,
+        backgroundColor: blue[60],
+        '& path': {
+          fill: mono.white,
+        },
+      },
+      '&:active': {
+        color: mono.white,
+        backgroundColor: blue.dark,
+        '& path': {
+          fill: mono.white,
+        },
+      },
+      '& path': {
+        fill: blue[100],
+      },
+    },
+    outlinedSecondary: {
+      '&:hover': {
+        color: mono.white,
+        backgroundColor: red[60],
+        '& path': {
+          fill: mono.white,
+        },
+      },
+      '&:active': {
+        color: mono.white,
+        backgroundColor: red.dark,
+        '& path': {
+          fill: mono.white,
+        },
+      },
+      '& path': {
+        fill: red[100],
+      },
+    },
+    startIcon: {
+      marginRight: '10px',
+      marginLeft: '0px',
+      '& path': {
+        height: '20px',
+        width: '20px',
+      },
+    },
+    endIcon: {
+      marginLeft: '10px',
+      marginRight: '0px',
+      '& path': {
+        height: '20px',
+        width: '20px',
+      },
     },
   },
 
   MuiIconButton: {
     root: {
       color: mono.black,
+      height: '30px',
+      width: '30px',
+      '&:hover': {
+        backgroundColor: mono.lightGray,
+      },
+      '&:active': {
+        backgroundColor: mono.gray,
+        '& path': {
+          fill: mono.white,
+        },
+      },
+      '& path': {
+        fill: mono.black,
+      },
+      '&$disabled': {
+        '& path': {
+          fill: mono.gray,
+        },
+      },
+    },
+  },
+  MuiLink: {
+    root: {
+      textDecoration: 'none',
+      color: blue[100],
+      cursor: 'pointer',
+      '&:hover': {
+        color: blue[80],
+      },
+      '&:active': {
+        color: blue.dark,
+      },
+    },
+    underlineHover: {
+      '&:hover': {
+        textDecoration: 'none',
+      },
     },
   },
 
@@ -216,6 +375,7 @@ const overrides = {
   MuiInputBase: {
     root: {
       height: '45px',
+
       backgroundColor: mono.white,
     },
     multiline: {
@@ -223,20 +383,61 @@ const overrides = {
     },
   },
 
-  MuiTextField: {
-    // root: {
-    //   margin: '1vh 5px 2.2vh 5px',
-    // },
-  },
   MuiFormControl: {
     root: {
       margin: '10px 0 5px 0',
+      // width: '350px',
+    },
+  },
+  MuiFormControlLabel: {
+    root: {
+      marginLeft: '0px',
     },
   },
   MuiSelect: {
-    outlined: { padding: '10px 0px 10px 15px' },
+    outlined: {
+      padding: '10px 0px 10px 15px',
+      display: 'flex',
+      alignItems: 'center',
+    },
     selectMenu: {
       // height: '1.1876em',
+    },
+  },
+  MuiSwitch: {
+    root: {
+      height: '28px',
+      width: '48px',
+      marginRight: '16px',
+      padding: '0px',
+    },
+    track: {
+      height: '15px',
+      width: '40px',
+      margin: '6.5px 4px 6.5px 4px',
+    },
+    thumb: {
+      height: '22px',
+      width: '22px',
+      boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.35)',
+      padding: '0px',
+      transform: 'translateX(3px) translateY(3px)',
+    },
+    switchBase: {
+      height: '22px',
+      width: '22px',
+      padding: '0px',
+      color: mono.veryLightGray,
+      '&:hover': {
+        backgroundColor: 'transparent',
+      },
+    },
+    colorPrimary: {
+      '&$checked': {
+        '&:hover': {
+          backgroundColor: 'transparent',
+        },
+      },
     },
   },
   // Base of "List"
@@ -250,6 +451,11 @@ const overrides = {
       paddingBottom: '12px',
       borderRadius: '10px',
       height: '45px',
+    },
+  },
+  MuiTextField: {
+    root: {
+      width: '350px',
     },
   },
   MuiOutlinedInput: {
@@ -288,6 +494,39 @@ const overrides = {
       '&$shrink': { transform: 'translate(14px, -20px) scale(0.89)', fontWeight: 400 },
     },
   },
+  MuiRadio: {
+    root: {
+      display: 'flex',
+      padding: '4px',
+      '&:hover': {
+        backgroundColor: mono.lightGray,
+      },
+      '&:active': {
+        backgroundColor: mono.gray,
+      },
+    },
+    colorSecondary: {
+      '&$checked': {
+        display: 'flex',
+        padding: '4px',
+        '&:hover': {
+          backgroundColor: mono.lightGray,
+        },
+        '&:active': {
+          backgroundColor: mono.gray,
+        },
+      },
+    },
+  },
+
+  // Table
+  MuiTableRow: {
+    hover: {
+      '&:hover': {
+        backgroundColor: `${mono.veryLightGray} !important`,
+      },
+    },
+  },
 
   MuiPaper: {
     // elevation: {  },
@@ -316,6 +555,33 @@ const overrides = {
   },
   MuiDialogActions: {
     root: { padding: '0 19px 6px 0' },
+  },
+
+  MuiSnackbarContent: {
+    root: {
+      width: '600px',
+      padding: '0px 20px',
+      borderRadius: '12px',
+      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
+      backgroundColor: mono.black,
+
+      // message : body1
+      fontSize: '1rem',
+      fontWeight: 500,
+      lineHeight: 25 / 18,
+      // letterSpacing: '-0.01rem',
+      color: mono.white,
+    },
+    message: {
+      display: 'flex',
+      alignItems: 'center',
+      height: '57px',
+      padding: '0px',
+    },
+    action: {
+      marginRight: '21px',
+      paddingLeft: '0px',
+    },
   },
 
   // "Mask"
@@ -363,6 +629,7 @@ const props = {
 
   MuiTextField: {
     variant: 'outlined',
+    // style: { width: 350 },
   },
 
   MuiOutlinedInput: {

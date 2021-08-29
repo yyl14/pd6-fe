@@ -9,18 +9,14 @@ import {
   makeStyles,
   TextField,
   FormControl,
-  InputLabel,
   Select,
   MenuItem,
-  CardActions,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
   DialogActions,
 } from '@material-ui/core';
-
-import StarIcon from '@material-ui/icons/Star';
 import { addStudentCard, makeStudentCardDefault } from '../../../../actions/admin/account';
 import StudentInfoCard from './StudentInfoCard';
 import SimpleBar from '../../../ui/SimpleBar';
@@ -37,45 +33,49 @@ const useStyles = makeStyles((theme) => ({
   },
   mailfield: {
     width: '150px',
+    marginRight: '10px',
   },
   row: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: theme.spacing(3),
+    marginBottom: theme.spacing(2),
   },
   mailrow: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: theme.spacing(3),
   },
   item: {
     width: '190px',
   },
-  addCard: {
+  addBlock: {
     marginTop: '16px',
-    marginBottom: '6px',
+    marginBottom: '16px',
+    width: '600px',
+  },
+  addCard: {
     width: '600px',
     height: '329px',
     display: 'flex',
     flexDirection: 'column',
     padding: 0,
     '&:last-child': {
-      padding: '0 11px 20px 14px',
+      padding: '20px 0px 20px 30px',
     },
   },
   buttons: {
     alignSelf: 'flex-end',
-    marginRight: '11px',
+    marginRight: '23px',
   },
 }));
 
 export default function StudentInfoEdit(props) {
   const classes = useStyles();
-  const editMode = true;
   const [cards, setCards] = useState(props.cards); // new card isn't here
   const [defaultCardId, setDefaultCardId] = useState(null);
-  const [disabledSave, setDisabledSave] = useState(true);
+  const [changed, setChanged] = useState(false);
   const [disabledTwoCards, setDisabledTwoCards] = useState(false);
   const [add, setAdd] = useState(false); // addCard block
   const [popUp, setPopUp] = useState(false);
@@ -85,10 +85,12 @@ export default function StudentInfoEdit(props) {
     studentId: '',
     email: '',
   });
-  let instituteId = 1;
+  const institutes = useSelector((state) => state.institutes.byId);
+  const institutesId = useSelector((state) => state.institutes.allIds);
+  const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
 
   const { accountId } = useParams();
-  const authToken = useSelector((state) => state.auth.user.token);
+  const authToken = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
 
   const updateStatus = (studentId, cardId) => {
@@ -98,7 +100,7 @@ export default function StudentInfoEdit(props) {
   };
 
   const handleSave = () => {
-    if (defaultCardId !== null) {
+    if (defaultCardId !== null && changed === true) {
       dispatch(makeStudentCardDefault(authToken, accountId, defaultCardId));
     }
     props.handleBack();
@@ -111,23 +113,12 @@ export default function StudentInfoEdit(props) {
   };
 
   const handleAddSave = () => {
-    switch (addInputs.institute) {
-      case 'National Taiwan University':
-        instituteId = 1;
-        break;
-      case 'National Taiwan Normal University':
-        instituteId = 2;
-        break;
-      case 'National Taiwan University of Science and Technology':
-        instituteId = 3;
-        break;
-      default:
-        instituteId = 1;
+    const inputInstituteId = institutesId.filter((id) => institutes[id].full_name === addInputs.institute);
+    if (inputInstituteId.length !== 0) {
+      dispatch(addStudentCard(authToken, accountId, inputInstituteId[0], addInputs.email, addInputs.studentId));
+      setPopUp(true);
     }
-    dispatch(addStudentCard(authToken, accountId, instituteId, addInputs.email, addInputs.studentId));
-    setPopUp(true);
     setAdd(false);
-    setDisabledSave(false);
   };
 
   const handleChange = (e) => {
@@ -135,18 +126,11 @@ export default function StudentInfoEdit(props) {
     setAddInputs((input) => ({ ...input, [name]: value }));
 
     if (name === 'institute') {
-      switch (value) {
-        case 'National Taiwan University':
-          setEmailTail('@ntu.edu.tw');
-          break;
-        case 'National Taiwan Normal University':
-          setEmailTail('@ntnu.edu.tw');
-          break;
-        case 'National Taiwan University of Science and Technology':
-          setEmailTail('@mail.ntust.edu.tw');
-          break;
-        default:
-          setEmailTail('@ntu.edu.tw');
+      const inputInstituteId = institutesId.filter((id) => id.full_name === value);
+      if (inputInstituteId.length !== 0) {
+        setEmailTail(institutes[inputInstituteId[0]].email_domain);
+      } else {
+        setEmailTail('@ntu.edu.tw');
       }
     }
   };
@@ -159,58 +143,56 @@ export default function StudentInfoEdit(props) {
             {cards.map((p) => {
               if (p.is_default === true) {
                 return (
-                  <>
-                    <StudentInfoCard
-                      editMode
-                      isDefault={p.is_default}
-                      studentId={p.student_id}
-                      email={p.email}
-                      instituteId={p.institute_id}
-                    />
-                  </>
+                  <StudentInfoCard
+                    key={p.id}
+                    editMode
+                    isDefault={p.is_default}
+                    studentId={p.student_id}
+                    email={p.email}
+                    instituteId={p.institute_id}
+                  />
                 );
               }
-              return <></>;
+              return <div key={p.id} />;
             })}
-            <p> </p>
+            <p />
             {cards.map((p) => {
               if (p.is_default === false) {
                 return (
-                  <>
-                    <StudentInfoCard
-                      editMode
-                      id={p.id}
-                      isDefault={p.is_default}
-                      studentId={p.student_id}
-                      email={p.email}
-                      instituteId={p.institute_id}
-                      updateStatus={updateStatus}
-                      setDisabledSave={setDisabledSave}
-                    />
-                  </>
+                  <StudentInfoCard
+                    key={p.id}
+                    editMode
+                    id={p.id}
+                    isDefault={p.is_default}
+                    studentId={p.student_id}
+                    email={p.email}
+                    instituteId={p.institute_id}
+                    updateStatus={updateStatus}
+                    setChanged={setChanged}
+                  />
                 );
               }
-              return <></>;
+              return <div key={p.id} />;
             })}
           </div>
         ) : (
           <></>
         )}
         {add ? (
-          <>
-            <Card variant="outlined" className={classes.addCard}>
-              <CardContent>
+          <div className={classes.addBlock}>
+            <Card variant="outlined">
+              <CardContent className={classes.addCard}>
                 <div className={classes.row}>
                   <div className={classes.item}>
                     <Typography>Institute</Typography>
                   </div>
                   <FormControl variant="outlined" className={classes.textfield}>
                     <Select value={addInputs.institute} name="institute" onChange={(e) => handleChange(e)}>
-                      <MenuItem value="National Taiwan University">National Taiwan University</MenuItem>
-                      <MenuItem value="National Taiwan Normal University">National Taiwan Normal University</MenuItem>
-                      <MenuItem value="National Taiwan University of Science and Technology">
-                        National Taiwan University of Science and Technology
-                      </MenuItem>
+                      {enableInstitutesId.map((item) => (
+                        <MenuItem key={item} value={institutes[item].full_name}>
+                          {institutes[item].full_name}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                 </div>
@@ -235,19 +217,18 @@ export default function StudentInfoEdit(props) {
                     className={classes.mailfield}
                     value={addInputs.email}
                     onChange={(e) => handleChange(e)}
-                    style={{ marginLeft: '0px', marginRight: '10px' }}
                   />
                   <Typography>{emailTail}</Typography>
                 </div>
+                <div className={classes.buttons}>
+                  <Button onClick={handleAddCancel}>Cancel</Button>
+                  <Button color="primary" onClick={handleAddSave}>
+                    Save
+                  </Button>
+                </div>
               </CardContent>
-              <div className={classes.buttons}>
-                <Button onClick={handleAddCancel}>Cancel</Button>
-                <Button color="primary" onClick={handleAddSave}>
-                  Save
-                </Button>
-              </div>
             </Card>
-          </>
+          </div>
         ) : (
           <></>
         )}
@@ -289,7 +270,7 @@ export default function StudentInfoEdit(props) {
         >
           Cancel
         </Button>
-        <Button color="primary" type="submit" disabled={disabledSave} onClick={handleSave}>
+        <Button color="primary" type="submit" onClick={handleSave}>
           Save
         </Button>
       </SimpleBar>

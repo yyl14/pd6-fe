@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Button, TextField, Typography, makeStyles, InputAdornment, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+  Button,
+  TextField,
+  Typography,
+  makeStyles,
+  InputAdornment,
+  IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from '@material-ui/core';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import SimpleBar from '../ui/SimpleBar';
 import AlignedText from '../ui/AlignedText';
 
-import { editPassword } from '../../actions/auth';
+import { editPassword } from '../../actions/user/user';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   textField: {
     width: '350px',
   },
@@ -29,10 +39,10 @@ export default function NewPassword() {
     confirmPassword: false,
   });
 
-  const authToken = useSelector((state) => state.auth.user.token);
-  const id = useSelector((state) => state.auth.user.id);
-  const loading = useSelector((state) => state.auth.loading.editPassword);
-  const serverError = useSelector((state) => state.auth.error.editPassword);
+  const authToken = useSelector((state) => state.auth.token);
+  const id = useSelector((state) => state.user.id);
+  // const loading = useSelector((state) => state.loading.user.user.editPassword);
+  const serverError = useSelector((state) => state.error.user.user.editPassword);
   const dispatch = useDispatch();
 
   const [errors, setErrors] = useState({
@@ -69,26 +79,26 @@ export default function NewPassword() {
   useEffect(() => {
     if (oldPassword === '') {
       setErrors((input) => ({ ...input, oldPassword: true }));
-      setHelperText(((input) => ({ ...input, oldPassword: "Can't be empty!" })));
+      setHelperText((input) => ({ ...input, oldPassword: "Can't be empty!" }));
       return;
     }
     setErrors((input) => ({ ...input, oldPassword: false }));
-    setHelperText(((input) => ({ ...input, oldPassword: '' })));
+    setHelperText((input) => ({ ...input, oldPassword: '' }));
   }, [oldPassword]);
 
   useEffect(() => {
     if (newPassword === '') {
       setErrors((input) => ({ ...input, newPassword: true }));
-      setHelperText(((input) => ({ ...input, newPassword: "Can't be empty!" })));
+      setHelperText((input) => ({ ...input, newPassword: "Can't be empty!" }));
       return;
     }
     if (newPassword !== confirmPassword && newPassword !== '') {
       setErrors((input) => ({ ...input, newPassword: false, confirmPassword: true }));
-      setHelperText(((input) => ({ ...input, newPassword: '', confirmPassword: "Passwords don't match" })));
+      setHelperText((input) => ({ ...input, newPassword: '', confirmPassword: "Passwords don't match" }));
       return;
     }
     setErrors((input) => ({ ...input, newPassword: false, confirmPassword: false }));
-    setHelperText(((input) => ({ ...input, newPassword: '', confirmPassword: '' })));
+    setHelperText((input) => ({ ...input, newPassword: '', confirmPassword: '' }));
   }, [newPassword, confirmPassword]);
 
   useEffect(() => {
@@ -109,9 +119,7 @@ export default function NewPassword() {
   return (
     <>
       {edit ? (
-        <SimpleBar
-          title="Password"
-        >
+        <SimpleBar title="Password">
           <>
             <AlignedText text="Old Password" childrenType="field" maxWidth="lg">
               <TextField
@@ -127,7 +135,12 @@ export default function NewPassword() {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton onClick={() => { setShowPassword((input) => ({ ...input, oldPassword: !input.oldPassword })); }} edge="end">
+                      <IconButton
+                        onClick={() => {
+                          setShowPassword((input) => ({ ...input, oldPassword: !input.oldPassword }));
+                        }}
+                        edge="end"
+                      >
                         {showPassword.oldPassword ? <Visibility /> : <VisibilityOff />}
                       </IconButton>
                     </InputAdornment>
@@ -149,7 +162,12 @@ export default function NewPassword() {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton onClick={() => { setShowPassword((input) => ({ ...input, newPassword: !input.newPassword })); }} edge="end">
+                      <IconButton
+                        onClick={() => {
+                          setShowPassword((input) => ({ ...input, newPassword: !input.newPassword }));
+                        }}
+                        edge="end"
+                      >
                         {showPassword.newPassword ? <Visibility /> : <VisibilityOff />}
                       </IconButton>
                     </InputAdornment>
@@ -171,7 +189,12 @@ export default function NewPassword() {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton onClick={() => { setShowPassword((input) => ({ ...input, confirmPassword: !input.confirmPassword })); }} edge="end">
+                      <IconButton
+                        onClick={() => {
+                          setShowPassword((input) => ({ ...input, confirmPassword: !input.confirmPassword }));
+                        }}
+                        edge="end"
+                      >
                         {showPassword.confirmPassword ? <Visibility /> : <VisibilityOff />}
                       </IconButton>
                     </InputAdornment>
@@ -179,17 +202,8 @@ export default function NewPassword() {
                 }}
               />
             </AlignedText>
-            <Button
-              onClick={handleCancel}
-            >
-              Cancel
-            </Button>
-            <Button
-              color="primary"
-              type="submit"
-              disabled={disabled}
-              onClick={() => setPopUp(true)}
-            >
+            <Button onClick={handleCancel}>Cancel</Button>
+            <Button color="primary" type="submit" disabled={disabled} onClick={() => setPopUp(true)}>
               Save
             </Button>
           </>
@@ -220,10 +234,22 @@ export default function NewPassword() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => { setPopUp(false); handleCancel(); }} color="default">
+          <Button
+            onClick={() => {
+              setPopUp(false);
+              handleCancel();
+            }}
+            color="default"
+          >
             Cancel
           </Button>
-          <Button onClick={() => { setPopUp(false); handleResetPassword(); }} color="secondary">
+          <Button
+            onClick={() => {
+              setPopUp(false);
+              handleResetPassword();
+            }}
+            color="secondary"
+          >
             Change
           </Button>
         </DialogActions>

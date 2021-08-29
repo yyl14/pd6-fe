@@ -15,21 +15,19 @@ import {
   InputBase,
   FormControl,
   Select,
+  InputAdornment,
+  IconButton,
 } from '@material-ui/core';
 
-import { ArrowForward, CenterFocusStrong, FilterList } from '@material-ui/icons';
-
-import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from 'react-icons/md';
-
+import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React, { useState, useEffect, useLocation } from 'react';
 import { Link } from 'react-router-dom';
+import Icon from './icon/index';
 
 const useStyles = makeStyles((theme) => ({
   topContent1: {
-    // width: '80%',
-    // maxWidth: '1280px',
-    background: '#EAEAEA',
+    background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
     padding: '5px 15px 15px 15px',
     display: 'flex',
@@ -37,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     height: '75px',
   },
   topContent2: {
-    background: '#EAEAEA',
+    background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
     padding: '5px 15px 15px 15px',
     display: 'flex',
@@ -46,7 +44,16 @@ const useStyles = makeStyles((theme) => ({
   },
   search: {
     height: '60px',
-    width: 340,
+    width: 300,
+  },
+  search2: {
+    height: '60px',
+    width: 380,
+  },
+  search3: {
+    height: '60px',
+    width: 550,
+    marginLeft: '5px',
   },
   buttons: {
     marginTop: '3px',
@@ -61,15 +68,34 @@ const useStyles = makeStyles((theme) => ({
   container: {
     maxHeight: 800,
   },
-  tableHead: {
-    height: '60px',
+  tableRowContainerLeftSpacing: {
+    width: '15px',
+    padding: '0px',
+  },
+  tableColumnLeftSpacing: {
+    width: '10px',
+    padding: '0px',
+  },
+  tableHeadCell: {
+    height: '45px',
+    padding: '0px',
+    background: 'white',
+    borderBottomWidth: '1px',
+    borderBottomColor: theme.palette.grey.A400,
   },
   column: {
     display: 'flex',
+    flexDirection: 'row',
     justifyContent: 'center',
   },
+  columnLabelMoveLeft: {
+    transform: 'translateX(-5px)',
+  },
+  columnLabelDefault: {
+    transform: 'translateX(0px)',
+  },
   columnComponent: {
-    transform: 'translateX(10px)',
+    transform: 'translateX(5px) translateY(2px)',
   },
   row: {
     height: '60px',
@@ -77,50 +103,83 @@ const useStyles = makeStyles((theme) => ({
   bottom: {
     height: '75px',
     display: 'flex',
-    alignItems: 'center',
-    padding: '10px',
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'flex-end',
+    paddingRight: '15px',
+    background: theme.palette.background.default,
+  },
+  pageChangeButtons: {
+    width: '70px',
+    paddingTop: '11.5px',
+  },
+  pageRowSelect: {
+    width: '100px',
+    height: '50px',
+    margin: '0px 5px 5px 5px',
+  },
+  pageText: {
+    margin: '0px 5px 0px 5px',
   },
   pageIndexTextField: {
     width: '100px',
-  },
-  bottomItem: {
-    padding: '5px',
+    height: '45px',
+    margin: '0px 5px 0px 5px',
   },
   detailLink: {
     color: 'black',
   },
-  filterIcon: {
-    height: '15px',
+  toggleButtonIcon: {
+    height: '20px',
+    width: '20px',
   },
   arrowIcon: {
     height: '35px',
     margin: 'auto',
   },
+  textLink: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+  },
 }));
+
+// const tableRefetch = (limit, offset, filters, sorts) => dispatch(action(authToken, problemId, limit, offset, filter, sort))
+
+// TODO: new API
+
+// hasSearch,
+// tableRefetch,
+// buttons,
+// columns,
+// data,
+// hasLink,
+// linkName,
+// children,
 
 export default function CustomTable({
   hasSearch,
-  searchPlaceholder,
+  // searchWidthOption = 1, // will remove
+  // searchPlaceholder, // will remove
   buttons,
   columns,
-  columnComponent,
+  // columnComponent, // will remove
   data,
   hasLink,
-  path,
+  linkName,
   children,
+  tableRef,
 }) {
   const classes = useStyles();
   const [curPage, setPage] = useState(0);
   const [pageInput, setPageInput] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [search, setSearch] = useState('');
   const [filterData, setFilterData] = useState(data);
 
+  const [filters, setFilters] = useState([]);
+
   const handleChangePage = (event, newPage) => {
     if (newPage + 1 <= Math.ceil(filterData.length / rowsPerPage) && newPage >= 0) {
-      // setPage(newPage);
       setPageInput(newPage + 1);
     }
   };
@@ -130,6 +189,31 @@ export default function CustomTable({
     setPage(0);
   };
 
+  const searchWidth = (searchWidthOptions) => {
+    switch (searchWidthOptions) {
+      case 1:
+        return classes.search;
+      case 2:
+        return classes.search2;
+      case 3:
+        return classes.search3;
+      default:
+        return classes.search;
+    }
+  };
+
+  const labelMoveLeft = (icon, cols, col) => {
+    if (icon && icon[cols.findIndex((x) => x.id === col.id)]) {
+      return classes.columnLabelMoveLeft;
+    }
+    return classes.columnLabelDefault;
+  };
+
+  // TODO: table refetch
+  // useEffect(()=>{
+  //   tableRefetch(limit, offset, filter, sort)
+  // }, [limit, offset, filter, sort])
+
   useEffect(() => {
     if (pageInput <= Math.ceil(filterData.length / rowsPerPage) && pageInput >= 1) {
       setPage(pageInput - 1);
@@ -137,86 +221,154 @@ export default function CustomTable({
   }, [filterData.length, pageInput, rowsPerPage]);
 
   useEffect(() => {
-    if (search !== '') {
-      const newData = data.filter((row) => {
-        let cnt = 0;
-        columns.forEach((column) => {
-          if (row[column.id].indexOf(search) >= 0) {
-            cnt += 1;
-          }
-        });
-        return cnt > 0;
-      });
-      setFilterData(newData);
-    } else {
-      setFilterData(data);
-    }
+    // if (search !== '') {
+    //   const newData = data.filter((row) => {
+    //     let cnt = 0;
+    //     columns.forEach((column) => {
+    //       if (row[column.id].indexOf(search) >= 0) {
+    //         cnt += 1;
+    //       }
+    //     });
+    //     return cnt > 0;
+    //   });
+    //   setFilterData(newData);
+    // } else {
+    //   setFilterData(data);
+    // }
+    setFilterData(data);
   }, [columns, data, search]);
 
   return (
     <>
+      {/*
+      TODO: Table head component
+
+      props:
+
+      filtersConfig: [
+        {column: 'Name', type: 'TextField', options:null, operation: 'LIKE'},
+        {column: 'Role', type: 'Dropdown' options:['a', 'b', 'c'], operation: 'IN'},
+        {column: 'Start Time', type: 'Date', options: null, operation: 'BETWEEN'}],
+      filters: [['Start Time', 'LIKE', 'something'], ['Name', 'IN', ['b', 'c']], ['Start Time', 'BETWEEN', ['2021-08-16T14:21:54Z', '2021-08-16T14:21:54Z']]]
+      setFilters,
+      buttons,
+      */}
+
       <div className={hasSearch ? classes.topContent1 : classes.topContent2}>
-        { hasSearch && (
-        <TextField
-          id="search"
-          className={classes.search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-          }}
-          value={search}
-          placeholder={searchPlaceholder}
-        />
+        {hasSearch && (
+          <TextField
+            id="search"
+            // className={searchWidth(searchWidthOption)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+            value={search}
+            placeholder={"This doesn't work."}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Icon.SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
         )}
         <div className={classes.buttons}>{buttons}</div>
       </div>
 
       <Paper className={classes.root} elevation={0}>
         <TableContainer className={classes.container}>
-          <Table stickyHeader aria-label="sticky table">
+          <Table stickyHeader aria-label="sticky table" ref={tableRef}>
             <TableHead>
-              <TableRow className={classes.tableHead}>
+              <TableRow>
                 {columns.map((column) => (
-                  <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth, width: column.width }}>
-                    <div className={classes.column}>
-                      {column.label}
-                      <div className={classes.columnComponent}>
-                        { columnComponent && columnComponent[columns.findIndex((x) => x.id === column.id)]}
-                      </div>
-                    </div>
-                  </TableCell>
+                  <React.Fragment key={`${column.id}-${column.label}`}>
+                    <TableCell
+                      align={column.align}
+                      className={classes.tableHeadCell}
+                      style={{ minWidth: column.minWidth, width: column.width }}
+                    >
+                      <b>{column.label}</b>
+                      {/* <div className={classes.column}>
+                        <div className={labelMoveLeft(columnComponent, columns, column)}>
+                          <b>{column.label}</b>
+                        </div>
+                        <div className={classes.columnComponent}>
+                          {columnComponent && columnComponent[columns.findIndex((x) => x.id === column.id)]}
+                        </div>
+                      </div> */}
+                    </TableCell>
+                  </React.Fragment>
                 ))}
-                {hasLink
-                  ? (<TableCell key="link" align="right" style={{ minWidth: 20 }} />
-                  ) : (<TableCell key="blank" align="right" style={{ minWidth: 20 }} />)}
+
+                {
+                  // TODO: simplify this
+                  hasLink ? (
+                    <TableCell key="link" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
+                  ) : (
+                    <TableCell key="blank" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
+                  )
+                }
               </TableRow>
             </TableHead>
             <TableBody>
-              {filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row[columns[0].id]} className={classes.row}>
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.format && typeof value === 'number' ? column.format(value) : value}
+              {
+                /* TODO
+              if => switch
+              column.type: 'text', 'number', 'link', 'date'
+              */
+                filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row[columns[0].id]} className={classes.row}>
+                    {columns.map((column) => {
+                      if (column.type === 'link') {
+                        const link = row[column.link_id];
+                        const value = row[column.id];
+                        return (
+                          <React.Fragment key={`${column.id}-${column.label}`}>
+                            <TableCell align={column.align}>
+                              {column.isExternal ? (
+                                <a href={link} className={classes.textLink}>
+                                  {column.format && typeof value === 'number' ? column.format(value) : value}
+                                </a>
+                              ) : (
+                                <Link to={link} className={classes.textLink} replace>
+                                  {column.format && typeof value === 'number' ? column.format(value) : value}
+                                </Link>
+                              )}
+                            </TableCell>
+                          </React.Fragment>
+                        );
+                      }
+                      const value = row[column.id];
+                      return (
+                        <React.Fragment key={`${column.id}-${column.label}`}>
+                          <TableCell align={column.align}>
+                            {column.format && typeof value === 'number' ? column.format(value) : value}
+                          </TableCell>
+                        </React.Fragment>
+                      );
+                    })}
+                    {hasLink ? (
+                      <TableCell key={`${row.id}-show`} align="right">
+                        <Link to={row[linkName]} className={classes.detailLink}>
+                          <IconButton>
+                            <Icon.ArrowForwardRoundedIcon className={classes.toggleButtonIcon} />
+                          </IconButton>
+                        </Link>
                       </TableCell>
-                    );
-                  })}
-                  {hasLink ? (
-                    <TableCell key={`${row.id}-show`} align="right">
-                      <Link to={path[filterData.indexOf(row)]} className={classes.detailLink}>
-                        <ArrowForward style={{ height: '20px' }} />
-                      </Link>
-                    </TableCell>
-                  ) : (<TableCell key={`${row.id}-blank`} align="right" style={{ minWidth: 20 }} />)}
-                </TableRow>
-              ))}
+                    ) : (
+                      <TableCell key={`${row.id}-blank`} align="right" style={{ minWidth: 20 }} />
+                    )}
+                  </TableRow>
+                ))
+              }
             </TableBody>
           </Table>
         </TableContainer>
         <div className={classes.bottom}>
-          <FormControl variant="outlined" className="">
+          <FormControl variant="outlined">
             <Select
-              className={classes.bottomItem}
+              className={classes.pageRowSelect}
               labelId="rows-per-page"
               id="rows-per-page"
               value={rowsPerPage}
@@ -224,23 +376,23 @@ export default function CustomTable({
                 setRowsPerPage(e.target.value);
               }}
             >
-              <MenuItem value={5}>5</MenuItem>
               <MenuItem value={10}>10</MenuItem>
               <MenuItem value={25}>25</MenuItem>
               <MenuItem value={50}>50</MenuItem>
+              <MenuItem value={100}>100</MenuItem>
             </Select>
           </FormControl>
 
-          <Typography className={classes.bottomItem} variant="body1">
+          <Typography className={classes.pageText} variant="body1">
             rows
           </Typography>
           <Button
-            className={classes.bottomItem}
+            className={classes.pageChangeButtons}
             onClick={(e) => {
               handleChangePage(e, curPage - 1);
             }}
           >
-            <MdKeyboardArrowLeft className={classes.arrowIcon} />
+            <Icon.ChevronLeftOutlinedIcon className={classes.arrowIcon} />
           </Button>
           <TextField
             className={classes.pageIndexTextField}
@@ -249,18 +401,18 @@ export default function CustomTable({
               setPageInput(e.target.value);
             }}
           />
-          <Typography className={classes.bottomItem} variant="body1">
+          <Typography className={classes.pageText} variant="body1">
             of
             {' '}
             {Math.ceil(filterData.length / rowsPerPage)}
           </Typography>
           <Button
-            className={classes.bottomItem}
+            className={classes.pageChangeButtons}
             onClick={(e) => {
               handleChangePage(e, curPage + 1);
             }}
           >
-            <MdKeyboardArrowRight className={classes.arrowIcon} />
+            <Icon.ChevronRightOutlinedIcon className={classes.arrowIcon} />
           </Button>
         </div>
       </Paper>

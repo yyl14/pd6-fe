@@ -1,68 +1,61 @@
 import agent from '../agent';
-import {
-  systemConstants,
-} from '../constant';
+import { systemConstants, accountConstants } from './constant';
+import { autoTableConstants } from '../component/constant';
+import browseParamsTransForm from '../../function/browseParamsTransform';
 
 // Access log
-const fetchAccessLog = (token, offset, limit) => (dispatch) => {
-  const fetch = { headers: { 'auth-token': token } };
-  dispatch({
-    type: systemConstants.FETCH_ACCESS_LOG_START,
-  });
-  agent.get(`/access-log?offset=${offset}&limit=${limit}`, fetch)
-    .then((res) => {
-      const { data } = res.data;
-      console.log('response :', data);
-      dispatch({
-        type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
-        payload: {
-          ...data,
-        },
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: systemConstants.FETCH_ACCESS_LOG_FAIL,
-        payload: err,
-      });
-    });
-};
-const fetchAccounts = (token, ids) => async (dispatch) => {
-  const fetch = { headers: { 'auth-token': token } };
-  dispatch({
-    type: systemConstants.FETCH_LOG_ACCOUNTS_START,
-  });
-
-  let error = null;
-  const accounts = await Promise.all(ids.map(async (id) => {
-    let response = null;
-    await agent.get(`/account/${id}`, fetch)
-      .then((res) => {
-        const { data } = res.data;
-        // console.log('account :', id, data);
-        response = data;
-      })
-      .catch((err) => {
-        error = err;
-        response = null;
-      });
-    return response;
-  }));
-
-  // console.log('payload : ', accounts);
-  if (error === null) {
+const fetchAccessLog = (token, browseParams, tableId = null) => async (dispatch) => {
+  try {
+    // console.log(browseParams);
+    const config1 = {
+      headers: { 'auth-token': token },
+      params: browseParamsTransForm(browseParams),
+      // paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
+    };
     dispatch({
-      type: systemConstants.FETCH_LOG_ACCOUNTS_SUCCESS,
+      type: systemConstants.FETCH_ACCESS_LOG_START,
+    });
+    // console.log(config1);
+
+    const res1 = await agent.get('/access-log', config1);
+
+    const { data, total_count } = res1.data.data;
+    // console.log(res1);
+
+    // TODO: Batch browse account
+    const config2 = {
+      headers: { 'auth-token': token },
+    };
+
+    const accounts = await Promise.all(
+      data.map(async ({ account_id }) => agent
+        .get(`/account/${account_id}`, config2)
+        .then((res2) => res2.data.data)
+        .catch((err) => {
+          dispatch({
+            type: systemConstants.FETCH_ACCESS_LOG_FAIL,
+            payload: err,
+          });
+        })),
+    );
+
+    dispatch({
+      type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
+      payload: { data, accounts: accounts.filter((item) => item !== null) },
+    });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
       payload: {
-        ...accounts,
+        tableId,
+        totalCount: total_count,
+        dataIds: data.map((item) => item.id),
+        offset: browseParams.offset,
       },
     });
-  } else {
+  } catch (error) {
     dispatch({
-      type: systemConstants.FETCH_LOG_ACCOUNTS_FAIL,
-      payload: {
-        error,
-      },
+      type: systemConstants.FETCH_ACCESS_LOG_FAIL,
+      payload: error,
     });
   }
 };
@@ -73,9 +66,10 @@ const fetchAnnouncement = (token) => (dispatch) => {
     type: systemConstants.FETCH_ANNOUNCEMENT_START,
   });
 
-  agent.get('/announcement', fetch)
+  agent
+    .get('/announcement', fetch)
     .then((res) => {
-      const { data } = res.data;
+      const { data } = res.data.data;
       dispatch({
         type: systemConstants.FETCH_ANNOUNCEMENT_SUCCESS,
         payload: {
@@ -97,7 +91,8 @@ const editAnnouncement = (token, id, body) => (dispatch) => {
     type: systemConstants.EDIT_ANNOUNCEMENT_START,
   });
 
-  agent.patch(`/announcement/${id}`, body, fetch)
+  agent
+    .patch(`/announcement/${id}`, body, fetch)
     .then((res) => {
       const { success } = res.data;
       dispatch({
@@ -118,7 +113,8 @@ const addAnnouncement = (token, body) => (dispatch) => {
   dispatch({
     type: systemConstants.ADD_ANNOUNCEMENT_START,
   });
-  agent.post('/announcement', body, fetch)
+  agent
+    .post('/announcement', body, fetch)
     .then((res) => {
       const { success } = res.data;
       dispatch({
@@ -140,7 +136,8 @@ const deleteAnnouncement = (token, id) => (dispatch) => {
     type: systemConstants.DELETE_ANNOUNCEMENT_START,
   });
 
-  agent.delete(`/announcement/${id}`, fetch)
+  agent
+    .delete(`/announcement/${id}`, fetch)
     .then((res) => {
       const { success } = res.data;
       dispatch({
@@ -163,7 +160,8 @@ const fetchSubmitLanguage = (token) => (dispatch) => {
     type: systemConstants.FETCH_SUBMIT_LANGUAGE_START,
   });
 
-  agent.get('submission/language', fetch)
+  agent
+    .get('submission/language', fetch)
     .then((res) => {
       const { data } = res.data;
       // console.log('use api :', data);
@@ -191,7 +189,8 @@ const editSubmitLanguage = (token, id, name, version, isDisabled) => (dispatch) 
     is_disabled: isDisabled,
   };
 
-  agent.patch(`submission/language/${id}`, body, fetch)
+  agent
+    .patch(`submission/language/${id}`, body, fetch)
     .then((res) => {
       // console.log('edit submit language :', body);
       dispatch({
@@ -214,7 +213,6 @@ const editSubmitLanguage = (token, id, name, version, isDisabled) => (dispatch) 
 
 export {
   fetchAccessLog,
-  fetchAccounts,
   fetchAnnouncement,
   editAnnouncement,
   addAnnouncement,

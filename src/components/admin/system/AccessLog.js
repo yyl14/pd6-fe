@@ -4,11 +4,14 @@ import {
 } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { BiFilterAlt } from 'react-icons/bi';
+import moment from 'moment';
 
 /* TODO: Use component/ui/CustomTable to implement access log (remove this import afterwards) */
+import { nanoid } from 'nanoid';
 import CustomTable from '../../ui/CustomTable';
 import DateRangePicker from '../../ui/DateRangePicker';
-import { fetchAccessLog, fetchAccounts } from '../../../actions/admin/system';
+import { fetchAccessLog } from '../../../actions/admin/system';
+import AutoTable from '../../ui/AutoTable';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -23,191 +26,109 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 export default function AccessLog() {
   const classes = useStyles();
+  const loading = useSelector((state) => state.loading.admin.system.fetchAccessLog);
+  const logs = useSelector((state) => state.accessLogs);
+  const authToken = useSelector((state) => state.auth.token);
+  const accounts = useSelector((state) => state.accounts);
   const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.user.token);
-  const loading = useSelector((state) => state.admin.system.loading.fetchAccessLog);
-
-  const logs = useSelector((state) => state.admin.system.logs.byId);
-  const logsID = useSelector((state) => state.admin.system.logs.allIds);
-
-  const accounts = useSelector((state) => state.admin.system.accounts.byId);
-  const [accountsId, setAccountsId] = useState([]);
-  const [path, setPath] = useState([]);
-
-  const [tableData, setTableData] = useState([]);
-  const [filterOrNot, setFilterOrNot] = useState(false);
-  const [dateRange, setDateRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: 'selection',
-    },
-  ]);
-
-  const modifyRawData = useCallback(
-    (item) => {
-      let studentID = item.account_id;
-      if (typeof studentID === 'number') {
-        studentID = studentID.toString();
-      }
-      const temp = {
-        username: accounts[item.account_id].username,
-        studentID,
-        realName: accounts[item.account_id].real_name,
-        IP: item.ip,
-        resourcePath: item.resource_path,
-        requestMethod: item.request_method,
-        accessTime: item.access_time.toISOString().slice(0, 16).replace('T', ' '),
-      };
-      return temp;
-    },
-    [accounts],
-  );
-
-  const filter = () => {
-    const newData = [];
-    const start = dateRange[0].startDate.getTime();
-    const end = dateRange[0].endDate.getTime();
-    logsID.forEach((key) => {
-      const item = logs[key];
-      const accessTime = item.access_time.getTime();
-      if (start <= accessTime && accessTime <= end) {
-        newData.push(modifyRawData(item));
-      }
-    });
-    setTableData(newData);
-    setFilterOrNot(false);
-  };
-
-  useEffect(() => {
-    if (logsID === null) {
-      dispatch(fetchAccessLog(authToken, 0, 100));
-      setDateRange([
-        {
-          startDate: new Date(),
-          endDate: new Date(),
-          key: 'selection',
-        },
-      ]);
-    } else {
-      const newAccountsId = logsID.map((logID) => logs[logID].account_id);
-      setAccountsId(newAccountsId);
-    }
-  }, [logsID, logs, authToken, dispatch]);
-
-  useEffect(() => {
-    if (accountsId.length !== 0) {
-      if (accounts === null) {
-        dispatch(fetchAccounts(authToken, accountsId));
-      } else {
-        const newData = [];
-        const newPath = [];
-        logsID.forEach((key) => {
-          const item = logs[key];
-          newData.push(modifyRawData(item));
-          newPath.push(`account/${item.account_id}/setting`);
-        });
-        setTableData(newData);
-        setPath(newPath);
-      }
-    }
-  }, [accountsId, accounts, logs, logsID, authToken, dispatch, modifyRawData]);
-
-  if (loading) {
-    return <div>loading...</div>;
-  }
 
   return (
     <>
       <Typography variant="h3" className={classes.pageHeader}>
         Access Log
       </Typography>
-      <CustomTable
-        hasSearch
-        searchPlaceholder="Student ID / Real Name / Username / IP"
-        data={tableData}
+      <AutoTable
+        ident="Access Log Table"
+        hasFilter
+        filterConfig={[
+          {
+            reduxStateId: 'access_time',
+            label: 'Access Time',
+            type: 'DATE',
+            operation: 'LIKE',
+          },
+          {
+            reduxStateId: 'request_method',
+            label: 'Request Method',
+            type: 'ENUM',
+            operation: 'IN',
+            options: [
+              { value: 'GET', label: 'GET' },
+              { value: 'POST', label: 'POST' },
+              { value: 'PUT', label: 'PUT' },
+              { value: 'PATCH', label: 'PATCH' },
+              { value: 'DELETE', label: 'DELETE' },
+            ],
+          },
+          {
+            reduxStateId: 'resource_path',
+            label: 'Resource Path',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          {
+            reduxStateId: 'ip',
+            label: 'IP',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+
+          // TODO account id ?
+        ]}
+        refetch={(browseParams, ident) => {
+          dispatch(fetchAccessLog(authToken, browseParams, ident));
+        }}
         columns={[
           {
-            id: 'username',
-            label: 'Username',
+            name: 'Username',
             align: 'center',
-            width: 150,
+            type: 'link',
           },
           {
-            id: 'studentID',
-            label: 'Student ID',
+            name: 'Student ID',
             align: 'center',
-            width: 150,
+            type: 'string',
           },
           {
-            id: 'realName',
-            label: 'Real Name',
+            name: 'Real Name',
             align: 'center',
-            width: 150,
+            type: 'string',
           },
           {
-            id: 'IP',
-            label: 'IP',
+            name: 'IP',
             align: 'center',
-            width: 150,
+            type: 'string',
           },
           {
-            id: 'resourcePath',
-            label: 'Resource Path',
+            name: 'Resource Path',
             align: 'center',
-            width: 150,
+            type: 'string',
           },
           {
-            id: 'requestMethod',
-            label: 'Request Method',
+            name: 'Request Method',
             align: 'center',
-            width: 200,
+            type: 'string',
           },
           {
-            id: 'accessTime',
-            label: 'Access Time',
+            name: 'Access Time',
             align: 'center',
-            width: 300,
+            type: 'string',
           },
         ]}
-        columnComponent={[
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          <BiFilterAlt key="filter" onClick={() => setFilterOrNot(true)} />,
-        ]}
+        reduxData={logs}
+        reduxDataToRows={(item) => ({
+          Username: {
+            text: accounts.byId[item.account_id] ? accounts.byId[item.account_id].username : '',
+            path: `/admin/account/account/${item.account_id}/setting`,
+          },
+          'Student ID': accounts.byId[item.account_id] ? accounts.byId[item.account_id].student_id : '',
+          'Real Name': accounts.byId[item.account_id] ? accounts.byId[item.account_id].real_name : '',
+          IP: item.ip,
+          'Resource Path': item.resource_path,
+          'Request Method': item.request_method,
+          'Access Time': moment(item.access_time).format('YYYY-MM-DD, HH:mm:ss'),
+        })}
       />
-      <Dialog
-        open={filterOrNot}
-        keepMounted
-        onClose={() => setFilterOrNot(false)}
-        aria-labelledby="dialog-slide-title"
-        aria-describedby="dialog-slide-description"
-        classes={{ paper: classes.paper }}
-      >
-        <DialogTitle id="dialog-slide-title">
-          <Typography variant="h4">Access time range</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <DateRangePicker value={dateRange} setValue={setDateRange} />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setFilterOrNot(false)} color="default">
-            Cancel
-          </Button>
-          <Button
-            onClick={() => {
-              filter();
-            }}
-            color="primary"
-          >
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }

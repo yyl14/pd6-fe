@@ -1,18 +1,48 @@
 /** Noto Sans **/
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&display=swap'); */
+
+@font-face {
+  font-family: 'Noto Sans';
+  src: local('Lato'), url(./fonts/NotoSans/NotoSans-Regular.ttf) format('truetype');
+}
+
+/*
+@font-face {
+  font-family: 'Noto Sans';
+  font-weight: 100;
+  src: local('Lato'), url(./fonts/NotoSans/NotoSans-Thin.ttf) format('truetype');
+} */
+
+@font-face {
+  font-family: 'Noto Sans';
+  font-weight: 300;
+  src: local('Noto Sans'), url(./fonts/NotoSans/NotoSans-Light.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Noto Sans';
+  font-weight: 500;
+  src: local('Noto Sans'), url(./fonts/NotoSans/NotoSans-Medium.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Noto Sans';
+  font-weight: 700;
+  src: local('Noto Sans'), url(./fonts/NotoSans/NotoSans-Bold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Noto Sans';
+  font-weight: 900;
+  src: local('Noto Sans'), url(./fonts/NotoSans/NotoSans-Black.ttf) format('truetype');
+}
 
 /** Azonix **/
-@import url(//db.onlinewebfonts.com/c/50cd2aad9c8f35800bb6beac3ad42f16?family=Azonix);
 @font-face {
   font-family: 'Azonix';
-  src: url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.eot');
-  src: url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.eot?#iefix') format('embedded-opentype'),
-    url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.woff2') format('woff2'),
-    url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.woff') format('woff'),
-    url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.ttf') format('truetype'),
-    url('//db.onlinewebfonts.com/t/50cd2aad9c8f35800bb6beac3ad42f16.svg#Azonix') format('svg');
+  src: local('Azonix'), url(./fonts/Azonix/Azonix.otf) format('opentype');
 }
 
 body {

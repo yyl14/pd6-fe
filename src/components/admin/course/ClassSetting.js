@@ -4,7 +4,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import {
   Typography,
   Button,
-  Grid,
   Dialog,
   DialogActions,
   DialogContent,
@@ -33,11 +32,11 @@ const ClassSetting = () => {
   const history = useHistory();
 
   const dispatch = useDispatch();
-  const thisState = useSelector((state) => state);
-  const authToken = useSelector((state) => state.auth.user.token);
-  const courses = useSelector((state) => state.admin.course.courses);
-  const classes = useSelector((state) => state.admin.course.classes);
-  const loading = useSelector((state) => state.admin.course.loading);
+  // const thisState = useSelector((state) => state);
+  const authToken = useSelector((state) => state.auth.token);
+  const courses = useSelector((state) => state.courses);
+  const classes = useSelector((state) => state.classes);
+  const loading = useSelector((state) => state.loading.admin.course);
 
   const [showRenameDialog, setShowRenameDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -45,9 +44,13 @@ const ClassSetting = () => {
 
   useEffect(() => {
     dispatch(fetchCourses(authToken));
-    dispatch(fetchClasses(authToken, courseId));
-    // dispatch(fetchMembers(authToken, classId));
-  }, [authToken, classId, courseId, dispatch]);
+  }, [authToken, dispatch]);
+
+  useEffect(() => {
+    if (!loading.renameClass) {
+      dispatch(fetchClasses(authToken, courseId));
+    }
+  }, [authToken, courseId, dispatch, loading.renameClass]);
 
   const getCourseType = (courseType) => {
     switch (courseType) {
@@ -153,7 +156,7 @@ const ClassSetting = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowRenameDialog(false)}>Cancel</Button>
-          <Button onClick={onRename} color="secondary" disabled={loading.renameClass}>
+          <Button onClick={onRename} color="secondary">
             Rename
           </Button>
         </DialogActions>
@@ -179,7 +182,7 @@ const ClassSetting = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowDeleteDialog(false)}>Cancel</Button>
-          <Button onClick={onDelete} color="secondary" disabled={loading.deleteClass}>
+          <Button onClick={onDelete} color="secondary">
             Delete
           </Button>
         </DialogActions>

@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, TextField, makeStyles } from '@material-ui/core';
+import moment from 'moment-timezone';
+
 import SimpleBar from '../../ui/SimpleBar';
 import DateRangePicker from '../../ui/DateRangePicker';
 import AlignedText from '../../ui/AlignedText';
@@ -24,13 +26,13 @@ export default function AnnouncementEdit(props) {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.user.token);
+  const authToken = useSelector((state) => state.auth.token);
 
   const [editTitle, setEditTitle] = useState(props.editTitle);
   const [dateRangePicker, setDateRangePicker] = useState([
     {
-      startDate: new Date(props.editStartDate),
-      endDate: new Date(props.editEndDate),
+      startDate: moment(props.editStartDate).toDate(),
+      endDate: moment(props.editEndDate).toDate(),
       key: 'selection',
     },
   ]);
@@ -38,6 +40,7 @@ export default function AnnouncementEdit(props) {
 
   const history = useHistory();
   const handleClickSave = () => {
+    console.log(dateRangePicker[0].startDate, dateRangePicker[0].endDate);
     const body = {
       title: editTitle,
       content: editContent,

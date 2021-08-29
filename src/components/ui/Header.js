@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
-  makeStyles, Typography, AppBar, Toolbar, Avatar,
+  makeStyles, Typography, AppBar, Toolbar,
 } from '@material-ui/core';
-import { AddCircleOutline, SubjectOutlined } from '@material-ui/icons';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 import { format } from 'date-fns';
+import Icon from './icon/index';
+import { userLogout } from '../../actions/user/auth';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -27,16 +29,31 @@ const useStyles = makeStyles((theme) => ({
   },
   date: {
     float: 'left',
-    marginRight: '2vw',
+    marginRight: '20px',
+    marginTop: '2px',
+    marginBottom: 'auto',
   },
   notification: {
     float: 'left',
-    width: '3.28vh',
+    width: '20px',
+    marginTop: '3px',
+    marginBottom: 'auto',
+    marginRight: '16px',
   },
   name: {
+    width: '65px',
+    height: '33px',
     float: 'left',
     marginLeft: '2vw',
     marginRight: '1vw',
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    fontSize: '1rem',
+    color: 'white',
+    backgroundColor: 'black',
+    '&:hover': {
+      backgroundColor: 'black',
+    },
   },
   right: {
     marginLeft: 'auto',
@@ -56,108 +73,251 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
     color: theme.palette.primary.main,
   },
+
+  // menu
+  dropdown: {
+    position: 'relative',
+    display: 'inline-block',
+    '&:hover': {
+      '& $dropdownContent': {
+        display: 'block',
+      },
+    },
+    marginRight: '20px',
+  },
+
+  dropbtn: {
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    backgroundColor: theme.palette.black.main,
+    color: theme.palette.primary.contrastText,
+    border: 'none',
+    '&:hover': {
+      cursor: 'pointer',
+    },
+  },
+
+  dropdownContent: {
+    display: 'none',
+    position: 'absolute',
+    backgroundColor: theme.palette.primary.contrastText,
+    marginLeft: '-40px',
+    minWidth: '140px',
+    zIndex: '1',
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
+    borderRadius: '10px',
+    '& span': {
+      color: theme.palette.black.main,
+      padding: '12px',
+      textDecoration: 'none',
+      textAlign: 'center',
+      display: 'block',
+      borderRadius: '10px',
+    },
+    '& span:hover': {
+      cursor: 'pointer',
+      backgroundColor: theme.palette.grey.A100,
+    },
+  },
 }));
-export default function Header({ role }) {
+
+export default function Header() {
+  const user = useSelector((state) => state.user);
   const baseURL = '';
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
-  let itemList = [];
   const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   H:mm'));
+  const [itemList, setItemList] = useState([]);
+  const [menuList, setMenuList] = useState([]);
 
-  if (role === 'MANAGER') {
-    itemList = [
-      {
-        text: 'Course',
-        basePath: '/admin/course',
-        path: '/admin/course/course',
-      },
-      {
-        text: 'Account',
-        basePath: '/admin/account',
-        path: '/admin/account/institute',
-      },
-      {
-        text: 'System',
-        basePath: '/admin/system',
-        path: '/admin/system/accesslog',
-      },
-      {
-        text: 'About',
-        path: '/about',
-      },
-    ];
-  } else if (role === 'NORMAL') {
-    itemList = [
-      {
-        text: 'Problem Set',
-        path: '/',
-      },
-      {
-        text: 'About',
-        path: '/about',
-      },
-    ];
-  } else if (role === 'GUEST') {
-    itemList = [
-      {
-        text: 'Your Class',
-        path: '/',
-      },
-      {
-        text: 'Problem Set',
-        path: '/problem_set',
-      },
-      {
-        text: 'PDAO',
-        path: '/pdao',
-      },
-      {
-        text: 'About',
-        path: '/about',
-      },
-    ];
-  } else if (role === 'TA') {
-    itemList = [
-      {
-        text: 'Your Class',
-        path: '/',
-      },
-      {
-        text: 'Problem Set',
-        path: '/problem_set',
-      },
-      {
-        text: 'PDAO',
-        path: '/pdao',
-      },
-      {
-        text: 'System',
-        path: '/system',
-      },
-      {
-        text: 'About',
-        path: '/about',
-      },
-    ];
-  }
+  const [hasClass, setHasClass] = useState(false);
 
   useEffect(() => {
-    console.log('Current route', location.pathname);
-  }, [location]);
+    setHasClass(user.classes.length !== 0);
+  }, [user.classes.length]);
+
+  useEffect(() => {
+    switch (user.role) {
+      case 'MANAGER': {
+        setItemList([
+          {
+            text: 'Course',
+            basePath: '/admin/course',
+            path: '/admin/course/course',
+          },
+          {
+            text: 'Account',
+            basePath: '/admin/account',
+            path: '/admin/account/institute',
+          },
+          {
+            text: 'System',
+            basePath: '/admin/system',
+            path: '/admin/system/accesslog',
+          },
+          {
+            text: 'About',
+            path: '/about',
+          },
+        ]);
+        setMenuList([
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
+        ]);
+        break;
+      }
+      case 'NORMAL': {
+        if (hasClass) {
+          setItemList([
+            {
+              text: 'My Class',
+              basePath: '/my-class',
+              path: '/my-class',
+            },
+            {
+              text: 'All Class',
+              basePath: '/all-class',
+              path: '/all-class',
+            },
+            // {
+            //   text: 'Problem Set',
+            //   basePath: '/problem-set',
+            //   path: '/problem-set',
+            // },
+            {
+              text: 'PDAO',
+              basePath: '/pdao',
+              path: '/pdao',
+            },
+            {
+              text: 'Ranklist',
+              basePath: '/ranklist',
+              path: '/ranklist',
+            },
+            {
+              text: 'System',
+              basePath: '/system',
+              path: '/system',
+            },
+          ]);
+        } else {
+          setItemList([
+            {
+              text: 'All Class',
+              basePath: '/all-class',
+              path: '/all-class',
+            },
+            // {
+            //   text: 'Problem Set',
+            //   basePath: '/problem-set',
+            //   path: '/problem-set',
+            // },
+            {
+              text: 'PDAO',
+              basePath: '/pdao',
+              path: '/pdao',
+            },
+            {
+              text: 'Ranklist',
+              basePath: '/ranklist',
+              path: '/ranklist',
+            },
+            {
+              text: 'System',
+              basePath: '/system',
+              path: '/system',
+            },
+          ]);
+        }
+        setMenuList([
+          { title: 'My Submission', link: '/my-submission' },
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
+        ]);
+        break;
+      }
+      case 'GUEST': {
+        // System Guest
+        setItemList([]);
+        setMenuList([
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
+        ]);
+        break;
+      }
+      default: {
+        setItemList([]);
+        setMenuList([
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
+        ]);
+      }
+    }
+  }, [hasClass, user.role]);
+
+  // useEffect(() => {
+  //   console.log('Current route', location.pathname);
+  // }, [location]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTime(format(new Date(), 'MMM d   H:mm'));
+      setCurrentTime(format(new Date(), 'MMM d  H:mm'));
     }, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  const [open, setOpen] = React.useState(false);
+  const anchorRef = React.useRef(null);
+
+  // const handleToggle = () => {
+  //   setOpen((prevOpen) => !prevOpen);
+  // };
+
+  // const handleClose = (event) => {
+  //   if (anchorRef.current && anchorRef.current.contains(event.target)) {
+  //     return;
+  //   }
+
+  //   setOpen(false);
+  // };
+
+  // function handleListKeyDown(event) {
+  //   if (event.key === 'Tab') {
+  //     event.preventDefault();
+  //     setOpen(false);
+  //   }
+  // }
+
+  // return focus to the button when we transitioned from !open -> open
+  const prevOpen = useRef(open);
+  useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current.focus();
+    }
+
+    prevOpen.current = open;
+  }, [open]);
+
+  const dispatch = useDispatch();
+  const [cookiesId, setCookieId, removeCookieId] = useCookies(['id']);
+  const [cookiesToken, setCookieToken, removeCookieToken] = useCookies(['token']);
+
+  const goto = (link) => {
+    // console.log(link);
+    if (link === '/logout') {
+      removeCookieId('id');
+      removeCookieToken('token');
+      dispatch(userLogout(history));
+    } else {
+      history.push(link);
+    }
+  };
 
   return (
     <div>
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
-          {/* <Avatar src="https://pdogs.ntu.im/judge/image/LOGO.png" className={classes.avatar} /> */}
           {itemList.map((item) => (
             <Typography variant="h6" className={classes.item} key={item.text}>
               <a
@@ -170,10 +330,27 @@ export default function Header({ role }) {
           ))}
           <div className={classes.right}>
             <Typography className={classes.date}>{currentTime}</Typography>
-            <NotificationsIcon className={classes.notification} />
-            <Typography variant="h6" className={classes.name}>
-              shiba
-            </Typography>
+            <Icon.NotificationsIcon className={classes.notification} />
+            <div className={classes.dropdown}>
+              <button type="button" className={classes.dropbtn}>
+                <Typography variant="h6" className={location.pathname === '/my-profile' ? classes.active : null}>
+                  {user.username}
+                </Typography>
+              </button>
+              <div className={classes.dropdownContent}>
+                {menuList.map((item) => (
+                  <span
+                    key={item.link}
+                    tabIndex={item.link}
+                    role="button"
+                    onClick={() => goto(item.link)}
+                    onKeyDown={() => goto(item.link)}
+                  >
+                    {item.title}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </Toolbar>
       </AppBar>

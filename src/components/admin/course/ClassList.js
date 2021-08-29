@@ -13,21 +13,15 @@ import {
 import { useHistory, useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 import {
-  fetchCourses,
-  fetchClasses,
-  fetchMembers,
-  addCourse,
-  addClass,
-  renameClass,
-  deleteClass,
+  fetchCourses, fetchClasses, addCourse, addClass,
 } from '../../../actions/admin/course';
-import SimpleBar from '../../ui/SimpleBar';
-import DateRangePicker from '../../ui/DateRangePicker';
+import { fetchClassMembers } from '../../../actions/common/common';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
 import NoMatch from '../../noMatch';
+import GeneralLoading from '../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -41,11 +35,10 @@ export default function ClassList() {
   const classNames = useStyles();
 
   const dispatch = useDispatch();
-
-  const authToken = useSelector((state) => state.auth.user.token);
-  const courses = useSelector((state) => state.admin.course.courses);
-  const classes = useSelector((state) => state.admin.course.classes);
-  const loading = useSelector((state) => state.admin.course.loading);
+  const authToken = useSelector((state) => state.auth.token);
+  const courses = useSelector((state) => state.courses);
+  const classes = useSelector((state) => state.classes);
+  const loading = useSelector((state) => state.loading.admin.course);
 
   const [addCourseName, setAddCourseName] = useState('');
   const [addClassName, setAddClassName] = useState('');
@@ -53,18 +46,21 @@ export default function ClassList() {
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
 
   useEffect(() => {
-    if (!loading.deleteCourse) {
+    if (!loading.addCourse && !loading.deleteCourse && !loading.renameCourse) {
       dispatch(fetchCourses(authToken));
     }
-    if (!loading.deleteClass) {
+  }, [authToken, dispatch, loading.addCourse, loading.deleteCourse, loading.renameCourse]);
+
+  useEffect(() => {
+    if (!loading.addClass && !loading.renameClass && !loading.deleteClass) {
       dispatch(fetchClasses(authToken, courseId));
     }
-  }, [authToken, courseId, dispatch, loading.deleteClass, loading.deleteCourse]);
+  }, [authToken, courseId, dispatch, loading.addClass, loading.deleteClass, loading.renameClass]);
 
   // fetch members under all classes to get member count
   useEffect(() => {
     if (courses.byId[courseId] && !loading.renameClass && !loading.deleteClass && !loading.addClass) {
-      courses.byId[courseId].classIds.map((id) => dispatch(fetchMembers(authToken, id)));
+      courses.byId[courseId].classIds.map((id) => dispatch(fetchClassMembers(authToken, id)));
     }
   }, [authToken, courseId, courses.byId, dispatch, loading.addClass, loading.deleteClass, loading.renameClass]);
 
@@ -99,12 +95,10 @@ export default function ClassList() {
   if (courses.byId[courseId] === undefined || courses.byId[courseId].name === undefined) {
     if (loading.fetchCourses) {
       // still loading
-      return <div>loading</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }
-
-  // console.log(courses, classes);
 
   return (
     <>
@@ -126,6 +120,7 @@ export default function ClassList() {
             ? courses.byId[courseId].classIds.map((classId) => ({
               name: classes.byId[classId].name,
               memberCount: classes.byId[classId].memberIds.length,
+              path: `/admin/course/class/${courseId}/${classId}/member`,
             }))
             : {}
         }
@@ -134,20 +129,22 @@ export default function ClassList() {
             id: 'name',
             label: 'Class',
             minWidth: 100,
+            width: 120,
             align: 'center',
           },
           {
             id: 'memberCount',
             label: 'Member Count',
             minWidth: 180,
+            width: 120,
             align: 'center',
           },
         ]}
         hasLink
-        path={courses.byId[courseId].classIds.map((classId) => `/admin/course/class/${courseId}/${classId}/member`)}
+        linkName="path"
       />
       {/* add course is controlled by optional route param "addType" */}
-      <Dialog open={addType} maxWidth="md">
+      <Dialog open={addType !== undefined} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Create a new course</Typography>
         </DialogTitle>

@@ -12,7 +12,7 @@ class AccessLog extends Component {
     this.state = {};
   }
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   render() {
     return (
@@ -31,4 +31,4 @@ const mapStateToProps = (state) => ({
   error: state.error,
 });
 
-export default connect(mapStateToProps, { })(withRouter(AccessLog));
+export default connect(mapStateToProps, {})(withRouter(AccessLog));

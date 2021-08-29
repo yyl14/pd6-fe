@@ -2,20 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider,
+  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
 } from '@material-ui/core';
-import SchoolIcon from '@material-ui/icons/School';
-import PersonIcon from '@material-ui/icons/Person';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import SettingsIcon from '@material-ui/icons/Settings';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import Icon from '../icon/index';
 
 export default function Account({
   menuItems, classes, history, location, mode,
 }) {
   const { instituteId, accountId } = useParams();
-  const instituteList = useSelector((state) => state.admin.account.institutes);
-  const accountList = useSelector((state) => state.admin.account.accounts);
+  const instituteList = useSelector((state) => state.institutes);
+  const accountList = useSelector((state) => state.accounts);
   const baseURL = '/admin/account';
   const [display, setDisplay] = useState('unfold');
 
@@ -39,53 +35,45 @@ export default function Account({
         {
           text: 'Institute',
           icon: (
-            <SchoolIcon className={location.pathname === `${baseURL}/institute` ? classes.activeIcon : classes.icon} />
+            <Icon.SchoolIcon />
           ),
           path: `${baseURL}/institute`,
         },
         {
           text: 'Account',
           icon: (
-            <PersonIcon className={location.pathname === `${baseURL}/account` ? classes.activeIcon : classes.icon} />
+            <Icon.PersonIcon />
           ),
           path: `${baseURL}/account`,
         },
       ]);
     } else if (mode === 'institute' && instituteList.byId[instituteId]) {
-      setArrow(<ArrowBackIcon className={classes.arrow} onClick={goBackToInstitute} />);
+      setArrow(<IconButton className={classes.arrow} onClick={goBackToInstitute}><Icon.ArrowBackRoundedIcon /></IconButton>);
       setTitle(instituteList.byId[instituteId].abbreviated_name);
       setItemList([
         {
           text: 'Setting',
           path: `${baseURL}/institute/${instituteId}/setting`,
           icon: (
-            <SettingsIcon
-              className={
-                location.pathname === `${baseURL}/institute/${instituteId}/setting` ? classes.activeIcon : classes.icon
-              }
-            />
+            <Icon.SettingsIcon />
           ),
         },
       ]);
     } else if (mode === 'account' && accountList.byId[accountId]) {
-      setArrow(<ArrowBackIcon className={classes.arrow} onClick={goBackToAccount} />);
+      setArrow(<IconButton className={classes.arrow} onClick={goBackToAccount}><Icon.ArrowBackRoundedIcon /></IconButton>);
       setTitle(accountList.byId[accountId].username);
       setItemList([
         {
           text: 'Setting',
           path: `${baseURL}/account/${accountId}/setting`,
           icon: (
-            <SettingsIcon
-              className={
-                location.pathname === `${baseURL}/account/${accountId}/setting` ? classes.activeIcon : classes.icon
-              }
-            />
+            <Icon.SettingsIcon />
           ),
         },
       ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, history, mode]);
+  }, [location.pathname, history, mode, accountList, instituteList, accountId, instituteId]);
 
   const foldAccount = () => {
     setDisplay('fold');
@@ -122,33 +110,35 @@ export default function Account({
         classes={{ paper: classes.drawerPaper }}
       >
         {mode === 'main' ? <div className={classes.topSpace} /> : arrow}
-        <div>
+        <div className={classes.title}>
           {display === 'unfold' ? (
-            <PlayArrowIcon className={`${classes.titleIcon} ${classes.rotate90}`} onClick={foldAccount} />
+            <Icon.TriangleDown className={classes.titleIcon} onClick={foldAccount} />
           ) : (
-            <PlayArrowIcon className={classes.titleIcon} onClick={unfoldAccount} />
+            <Icon.TriangleRight className={classes.titleIcon} onClick={unfoldAccount} />
           )}
-          <Typography variant="h4" className={classes.title}>
+          <Typography variant="h4" className={classes.titleText}>
             {title}
           </Typography>
         </div>
         <Divider variant="middle" className={classes.divider} />
-        {display === 'unfold' ? (
+        {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
-              <ListItem
-                button
-                key={item.text}
-                onClick={() => history.push(item.path)}
-                className={location.pathname === item.path ? classes.active : null}
-              >
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
+              <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classes.item}>
+                <ListItemIcon
+                  className={classes.itemIcon}
+                  style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
+                >
+                  {item.icon}
+
+                </ListItemIcon>
+                <ListItemText
+                  primary={item.text}
+                  className={location.pathname === item.path ? classes.activeItemText : classes.itemText}
+                />
               </ListItem>
             ))}
           </List>
-        ) : (
-          ''
         )}
         <div className={classes.bottomSpace} />
       </Drawer>

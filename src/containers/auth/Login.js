@@ -1,20 +1,37 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, useHistory } from 'react-router-dom';
-import { withCookies, Cookies } from 'react-cookie';
+import { withCookies, Cookies, useCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import { Grid, Typography } from '@material-ui/core';
-import agent from '../../actions/agent';
-import { userSignIn } from '../../actions/auth';
+import { userSignIn } from '../../actions/user/auth';
 import LoginForm from './LoginForm';
 import Trademark from '../../components/auth/Trademark';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
 
-const propTypes = {
-  cookies: instanceOf(Cookies).isRequired,
-};
+// export default function Login() {
+//   const auth = useSelector(state => state.auth)
+//   const user = useSelector(state => state.user)
+//   const [cookiesId, setCookieId, removeCookieId] = useCookies(['id']);
+// const [cookiesToken, setCookieToken, removeCookieToken] = useCookies(['token']);
+
+//   useEffect(() => {
+//     document.title = 'Singin'
+//     return () => {
+//       document.title = 'PDOGS';
+//     }
+//   }, [input])
+
+//   useEffect(() => {
+//     if (auth.isAuthenticated)
+//     {
+
+//     }
+
+//   }, [input])
+// }
 
 class Login extends Component {
   static propTypes = {
@@ -23,27 +40,22 @@ class Login extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      loading: false,
-    };
+    this.state = {};
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
+  static getDerivedStateFromProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      nextProps.cookies.set('id', nextProps.auth.user.id, {
+      nextProps.cookies.set('id', nextProps.user.id, {
         path: '/',
         expires: new Date(Date.now() + 86400000), // cookie expires after 1 day
       });
 
-      nextProps.cookies.set('token', nextProps.auth.user.token, {
+      nextProps.cookies.set('token', nextProps.user.token, {
         path: '/',
         expires: new Date(Date.now() + 86400000), // cookie expires after 1 day
       });
-      if (nextProps.auth.user.role.indexOf('MANAGER') !== -1 || nextProps.auth.user.role === 'MANAGER') {
-        nextProps.history.push('/admin/course/course');
-      } else {
-        nextProps.history.push('/');
-      }
+
+      nextProps.history.push('/');
     }
 
     return null;
@@ -77,6 +89,7 @@ class Login extends Component {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  user: state.user,
   error: state.error,
 });
 

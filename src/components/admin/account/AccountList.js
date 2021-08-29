@@ -1,26 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  makeStyles, Button, Typography, Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  TextField,
-  FormControlLabel,
-  Switch,
-  FormControl,
-  Select,
-  MenuItem,
-} from '@material-ui/core';
-import { useParams } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
-import { BiFilterAlt } from 'react-icons/bi';
+import { makeStyles, Button, Typography } from '@material-ui/core';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
 import { fetchAccounts } from '../../../actions/admin/account';
+import GeneralLoading from '../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -44,34 +30,30 @@ export default function AccountList() {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const accounts = useSelector((state) => state.admin.account.accounts.byId);
-  const accountsID = useSelector((state) => state.admin.account.accounts.allIds);
-  const authToken = useSelector((state) => state.auth.user.token);
-  const error = useSelector((state) => state.admin.account.error);
-  const loading = useSelector((state) => state.admin.account.loading);
-
+  const accounts = useSelector((state) => state.accounts.byId);
+  const accountsID = useSelector((state) => state.accounts.allIds);
+  const authToken = useSelector((state) => state.auth.token);
+  // const error = useSelector((state) => state.admin.account.error);
+  const loading = useSelector((state) => state.loading.admin.account);
   const [tableData, setTableData] = useState([]);
-  const [path, setPath] = useState([]);
 
   useEffect(() => {
-    // dispatch(fetchAccounts(authToken));
-  }, [authToken, dispatch]);
+    if (!loading.editAccount && !loading.deleteAccount && !loading.makeStudentCardDefault) {
+      dispatch(fetchAccounts(authToken));
+    }
+  }, [authToken, dispatch, loading.deleteAccount, loading.editAccount, loading.makeStudentCardDefault]);
 
   useEffect(() => {
-    const newData = [];
-    const newPath = [];
-
-    accountsID.forEach((key) => {
-      const item = accounts[key];
-      newData.push(item);
-      newPath.push(`account/${item.id}/setting`);
-    });
-    setTableData(newData);
-    setPath(newPath);
+    setTableData(
+      accountsID.map((id) => ({
+        ...accounts[id],
+        path: `/admin/account/account/${id}/setting`,
+      })),
+    );
   }, [accounts, accountsID]);
 
   if (loading.fetchAccounts) {
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   return (
@@ -81,7 +63,8 @@ export default function AccountList() {
       </Typography>
       <CustomTable
         hasSearch
-        searchPlaceholder="Student Id / Real Name / Username"
+        searchWidthOption={3}
+        searchPlaceholder="Student ID / Real Name / Username"
         data={tableData}
         columns={[
           {
@@ -90,6 +73,8 @@ export default function AccountList() {
             minWidth: 50,
             align: 'center',
             width: 120,
+            type: 'link',
+            link_id: 'path',
           },
           {
             id: 'student_id',
@@ -97,6 +82,7 @@ export default function AccountList() {
             minWidth: 50,
             align: 'center',
             width: 120,
+            type: 'string',
           },
           {
             id: 'real_name',
@@ -104,10 +90,11 @@ export default function AccountList() {
             minWidth: 50,
             align: 'center',
             width: 120,
+            type: 'string',
           },
         ]}
         hasLink
-        path={path}
+        linkName="path"
       />
     </>
   );

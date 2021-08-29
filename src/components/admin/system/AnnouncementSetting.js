@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
+import moment from 'moment-timezone';
 
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import NoMatch from '../../noMatch';
@@ -18,8 +19,9 @@ import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 import { fetchAnnouncement, deleteAnnouncement } from '../../../actions/admin/system';
 import AnnouncementEdit from './AnnouncementEdit';
+import GeneralLoading from '../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -35,11 +37,11 @@ export default function AnnouncementSetting() {
   const history = useHistory();
 
   const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.user.token);
-  const announcements = useSelector((state) => state.admin.system.announcements.byId);
-  const allIds = useSelector((state) => state.admin.system.announcements.allIds);
-  const loading = useSelector((state) => state.admin.system.loading.fetchAnnouncement);
-  const editLoading = useSelector((state) => state.admin.system.loading.editAnnouncement);
+  const authToken = useSelector((state) => state.auth.token);
+  const announcements = useSelector((state) => state.announcements.byId);
+  const allIds = useSelector((state) => state.announcements.allIds);
+  const loading = useSelector((state) => state.loading.admin.system.fetchAnnouncement);
+  const editLoading = useSelector((state) => state.loading.admin.system.editAnnouncement);
 
   const [popUpDelete, setPopUpDelete] = useState(false);
   const [announcement, setAnnouncement] = useState(null);
@@ -51,10 +53,8 @@ export default function AnnouncementSetting() {
   }, [authToken, dispatch, editLoading]);
 
   useEffect(() => {
-    if (allIds === null) {
-      dispatch(fetchAnnouncement(authToken));
-    } else {
-      const item = announcements[announcementId];
+    const item = announcements[announcementId];
+    if (item !== undefined) {
       setAnnouncement({
         title: item.title,
         PostTime: item.post_time,
@@ -62,7 +62,7 @@ export default function AnnouncementSetting() {
         Content: item.content,
       });
     }
-  }, [authToken, dispatch, allIds, announcementId, announcements]);
+  }, [allIds, announcementId, announcements]);
 
   const handleClickDelete = () => {
     setPopUpDelete(true);
@@ -70,7 +70,7 @@ export default function AnnouncementSetting() {
   const handleClosePopUpDelete = () => {
     setPopUpDelete(false);
   };
-  const handleSubmitDelete = (e) => {
+  const handleSubmitDelete = () => {
     dispatch(deleteAnnouncement(authToken, announcementId));
     history.push('/admin/system/announcement');
   };
@@ -80,7 +80,7 @@ export default function AnnouncementSetting() {
   /* This is a level 4 component (page component) */
   if (announcement === null) {
     if (loading) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }
@@ -88,7 +88,7 @@ export default function AnnouncementSetting() {
   return (
     <>
       <Typography variant="h3" className={classes.pageHeader}>
-        {edit ? `${announcement.title} / Setting` : `Announcement: ${announcement.title} / Setting`}
+        {edit ? `${announcement.title} / Setting` : `${announcement.title} / Setting`}
       </Typography>
       {edit ? (
         <AnnouncementEdit
@@ -109,27 +109,19 @@ export default function AnnouncementSetting() {
               </>
             )}
           >
-            <Typography variant="body1">
-              <AlignedText text="Title" childrenType="text">
-                <Typography variant="body1">{announcement.title}</Typography>
-              </AlignedText>
-              <AlignedText text="Duration" childrenType="text">
-                <Typography variant="body1" className={classes.duration}>
-                  {`${announcement.PostTime.getFullYear()}/${announcement.PostTime.getMonth()}/${announcement.PostTime.getDate()} ${announcement.PostTime.toLocaleTimeString(
-                    [],
-                    { hour: '2-digit', minute: '2-digit', hour12: false },
-                  )}`}
-                  <ArrowRightIcon style={{ transform: 'translate(0, 5px)' }} />
-                  {`${announcement.EndTime.getFullYear()}/${announcement.EndTime.getMonth()}/${announcement.EndTime.getDate()} ${announcement.EndTime.toLocaleTimeString(
-                    [],
-                    { hour: '2-digit', minute: '2-digit', hour12: false },
-                  )}`}
-                </Typography>
-              </AlignedText>
-              <AlignedText text="Content" childrenType="text">
-                <Typography variant="body1">{announcement.Content}</Typography>
-              </AlignedText>
-            </Typography>
+            <AlignedText text="Title" childrenType="text">
+              <Typography variant="body1">{announcement.title}</Typography>
+            </AlignedText>
+            <AlignedText text="Duration" childrenType="text">
+              <Typography variant="body1" className={classes.duration}>
+                {moment(announcement.PostTime).format('YYYY/MM/DD HH:mm')}
+                <ArrowRightIcon style={{ transform: 'translate(0, 5px)' }} />
+                {moment(announcement.EndTime).format('YYYY/MM/DD HH:mm')}
+              </Typography>
+            </AlignedText>
+            <AlignedText text="Content" childrenType="text">
+              <Typography variant="body1">{announcement.Content}</Typography>
+            </AlignedText>
           </SimpleBar>
           <SimpleBar
             title="Delete Announcement"
@@ -180,7 +172,7 @@ export default function AnnouncementSetting() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePopUpDelete}>Cancel</Button>
-          <Button onClick={(e) => handleSubmitDelete()} color="secondary">
+          <Button onClick={() => handleSubmitDelete()} color="secondary">
             Delete
           </Button>
         </DialogActions>

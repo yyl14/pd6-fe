@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography } from '@material-ui/core';
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import CustomTable from '../../ui/CustomTable';
 import { fetchSubmitLanguage } from '../../../actions/admin/system';
@@ -17,12 +16,11 @@ export default function SubmissionLanguageHome() {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.user.token);
-  const submitLang = useSelector((state) => state.admin.system.submitLang.byId);
-  const submitLangId = useSelector((state) => state.admin.system.submitLang.allIds);
+  const authToken = useSelector((state) => state.auth.token);
+  const submitLang = useSelector((state) => state.submitLangs.byId);
+  const submitLangId = useSelector((state) => state.submitLangs.allIds);
 
   const [tableData, setTableData] = useState([]);
-  const [path, setPath] = useState([]);
 
   useEffect(() => {
     dispatch(fetchSubmitLanguage(authToken));
@@ -31,7 +29,6 @@ export default function SubmissionLanguageHome() {
   useEffect(() => {
     if (submitLangId !== null) {
       const newData = [];
-      const newPath = [];
 
       submitLangId.forEach((key) => {
         const item = submitLang[key];
@@ -41,11 +38,10 @@ export default function SubmissionLanguageHome() {
         } else if (item.is_disabled === false) {
           temp.is_disabled = 'Enabled';
         }
+        temp.path = `submitlang/${item.id}/setting`;
         newData.push(temp);
-        newPath.push(`submitlang/${item.id}/setting`);
       });
       setTableData(newData);
-      setPath(newPath);
     }
   }, [submitLang, submitLangId]);
 
@@ -80,7 +76,7 @@ export default function SubmissionLanguageHome() {
         ]}
         columnComponent={[null, null, null]}
         hasLink
-        path={path}
+        linkName="path"
       />
     </>
   );

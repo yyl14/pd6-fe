@@ -1,10 +1,10 @@
-import React, { Component, useState, useEffect } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Button, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { editAccount, fetchAccount, fetchStudentCard } from '../../../../actions/admin/account';
-import SimpleBar from '../../../ui/SimpleBar';
+import { fetchStudentCard } from '../../../../actions/admin/account';
+import { fetchAccount, getInstitutes } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
 import BasicInfo from './BasicInfo';
 import BasicInfoEdit from './BasicInfoEdit';
@@ -12,8 +12,9 @@ import StudentInfo from './StudentInfo';
 import StudentInfoEdit from './StudentInfoEdit';
 import AccountDelete from './AccountDelete';
 import NewPassword from './NewPassword';
+import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -29,25 +30,35 @@ export default function AccountSetting() {
 
   const dispatch = useDispatch();
   const { accountId } = useParams();
-  const authToken = useSelector((state) => state.auth.user.token);
-  const accounts = useSelector((state) => state.admin.account.accounts.byId);
-  const studentCards = useSelector((state) => state.admin.account.studentCards.byId);
-  const loading = useSelector((state) => state.admin.account.loading);
+  const authToken = useSelector((state) => state.auth.token);
+  const accounts = useSelector((state) => state.accounts.byId);
+  const studentCards = useSelector((state) => state.studentCards.byId);
+  const loading = useSelector((state) => state.loading.admin.account);
   const account = accounts[accountId];
 
   useEffect(() => {
-    dispatch(fetchAccount(authToken, accountId));
-    dispatch(fetchStudentCard(authToken, accountId));
-  }, [authToken, accountId, dispatch, studentCards]);
+    if (!loading.editAccount) {
+      dispatch(fetchAccount(authToken, accountId));
+    }
+  }, [accountId, authToken, dispatch, loading.editAccount]);
+
+  useEffect(() => {
+    if (!loading.makeStudentCardDefault) {
+      dispatch(fetchStudentCard(authToken, accountId));
+    }
+  }, [accountId, authToken, dispatch, loading.makeStudentCardDefault]);
 
   useEffect(() => {
     setCards(Object.values(studentCards));
-    // console.log(Object.values(studentCards));
-  }, [studentCards, accountId]);
+  }, [studentCards]);
+
+  useEffect(() => {
+    dispatch(getInstitutes());
+  }, [dispatch]);
 
   if (accounts[accountId] === undefined || studentCards === undefined) {
     if (loading.fetchAccount || loading.fetchStudentCard) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }
@@ -83,40 +94,28 @@ export default function AccountSetting() {
           nickName={account.nickname}
           altMail={account.alternative_email}
         />
-      )
-        : (
-          <BasicInfo
-            handleEdit={handleBasicEdit}
-            realName={account.real_name}
-            userName={account.username}
-            nickName={account.nickname}
-            altMail={account.alternative_email}
-          />
-        )}
+      ) : (
+        <BasicInfo
+          handleEdit={handleBasicEdit}
+          realName={account.real_name}
+          userName={account.username}
+          nickName={account.nickname}
+          altMail={account.alternative_email}
+        />
+      )}
 
       {editStudInfo ? (
         <div>
-          <StudentInfoEdit
-            handleBack={handleStudBack}
-            cards={cards}
-          />
+          <StudentInfoEdit handleBack={handleStudBack} cards={cards} />
         </div>
       ) : (
         <div>
-          <StudentInfo
-            handleEdit={handleStudEdit}
-            cards={cards}
-          />
-
+          <StudentInfo handleEdit={handleStudEdit} cards={cards} />
         </div>
       )}
 
-      {/* <NewPassword /> */}
-      <AccountDelete
-        userName={account.username}
-        cards={cards}
-        realName={account.real_name}
-      />
+      <NewPassword />
+      <AccountDelete userName={account.username} cards={cards} realName={account.real_name} />
     </div>
   );
 }

@@ -1,30 +1,5 @@
 import agent from '../agent';
-import {
-  accountConstants,
-} from '../constant';
-
-const getInstitutes = (token) => (dispatch) => {
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-  dispatch({ type: accountConstants.FETCH_INSTITUTES_REQUEST });
-
-  agent.get('/institute', auth)
-    .then((res) => {
-      dispatch({
-        type: accountConstants.FETCH_INSTITUTES_SUCCESS,
-        payload: res.data.data,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: accountConstants.FETCH_INSTITUTES_FAIL,
-        error: err,
-      });
-    });
-};
+import { accountConstants } from './constant';
 
 const getInstitute = (token, instituteId) => (dispatch) => {
   const auth = {
@@ -34,7 +9,8 @@ const getInstitute = (token, instituteId) => (dispatch) => {
   };
   dispatch({ type: accountConstants.FETCH_INSTITUTE_REQUEST });
 
-  agent.get(`/institute/${instituteId}`, auth)
+  agent
+    .get(`/institute/${instituteId}`, auth)
     .then((res) => {
       dispatch({
         type: accountConstants.FETCH_INSTITUTE_SUCCESS,
@@ -57,17 +33,26 @@ const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled)
   };
   dispatch({ type: accountConstants.ADD_INSTITUTE_REQUEST });
 
-  agent.post('/institute', {
-    abbreviated_name: abbreviatedName,
-    full_name: fullName,
-    email_domain: emailDomain,
-    is_disabled: isDisabled,
-  }, auth)
+  agent
+    .post(
+      '/institute',
+      {
+        abbreviated_name: abbreviatedName,
+        full_name: fullName,
+        email_domain: emailDomain,
+        is_disabled: isDisabled,
+      },
+      auth,
+    )
     .then((res) => {
       dispatch({
         type: accountConstants.ADD_INSTITUTE_SUCCESS,
         payload: {
-          id: res.data.data.id, abbreviated_name: abbreviatedName, full_name: fullName, email_domain: emailDomain, is_disabled: isDisabled,
+          id: res.data.data.id,
+          abbreviated_name: abbreviatedName,
+          full_name: fullName,
+          email_domain: emailDomain,
+          is_disabled: isDisabled,
         },
       });
     })
@@ -93,20 +78,9 @@ const editInstitute = (token, id, abbreviatedName, fullName, emailDomain, isDisa
     is_disabled: isDisabled,
   };
 
-  // dispatch({
-  //   type: accountConstants.EDIT_INSTITUTE_SUCCESS,
-  //   payload: {
-  //     id: parseInt(id, 10),
-  //     abbreviated_name: abbreviatedName,
-  //     full_name: fullName,
-  //     email_domain: emailDomain,
-  //     is_disabled: isDisabled,
-  //   },
-  // });
-
-  agent.patch(`/institute/${id}`, body, auth)
-    .then((res) => {
-      console.log('editing institute suc');
+  agent
+    .patch(`/institute/${id}`, body, auth)
+    .then(() => {
       dispatch({
         type: accountConstants.EDIT_INSTITUTE_SUCCESS,
         payload: {
@@ -127,30 +101,6 @@ const editInstitute = (token, id, abbreviatedName, fullName, emailDomain, isDisa
     });
 };
 
-const fetchAccount = (token, id) => (dispatch) => {
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-  dispatch({ type: accountConstants.FETCH_ACCOUNT_REQUEST });
-
-  agent.get(`/account/${id}`, auth)
-    .then((res) => {
-      // console.log(res.data);
-      dispatch({
-        type: accountConstants.FETCH_ACCOUNT_SUCCESS,
-        payload: res.data.data,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: accountConstants.FETCH_ACCOUNT_FAIL,
-        error: err,
-      });
-    });
-};
-
 const editAccount = (token, id, userName, realName, nickName, email) => (dispatch) => {
   const auth = {
     headers: {
@@ -159,15 +109,9 @@ const editAccount = (token, id, userName, realName, nickName, email) => (dispatc
   };
   dispatch({ type: accountConstants.EDIT_ACCOUNT_REQUEST });
 
-  const body = {
-    username: userName,
-    real_name: realName,
-    nickname: nickName,
-    alternative_email: email,
-  };
-
-  agent.patch(`/account/${id}`, { real_name: realName, nickname: nickName, alternative_email: email }, auth)
-    .then((res) => {
+  agent
+    .patch(`/account/${id}`, { real_name: realName, nickname: nickName, alternative_email: email }, auth)
+    .then(() => {
       dispatch({
         type: accountConstants.EDIT_ACCOUNT_SUCCESS,
         payload: {
@@ -194,15 +138,16 @@ const deleteAccount = (token, id) => (dispatch) => {
     },
   };
   dispatch({ type: accountConstants.DELETE_ACCOUNT_REQUEST });
-  agent.delete(`/account/${id}`, auth)
-    .then((res) => {
+  agent
+    .delete(`/account/${id}`, auth)
+    .then(() => {
       dispatch({
         type: accountConstants.DELETE_ACCOUNT_SUCCESS,
         payload: { id },
       });
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       dispatch({
         type: accountConstants.DELETE_ACCOUNT_FAIL,
         error: err,
@@ -217,8 +162,9 @@ const makeStudentCardDefault = (token, id, cardId) => (dispatch) => {
     },
   };
   dispatch({ type: accountConstants.MAKE_STUDENT_CARD_DEFAULT_REQUEST });
-  agent.put(`/account/${id}/default-student-card`, { student_card_id: cardId }, auth)
-    .then((res) => {
+  agent
+    .put(`/account/${id}/default-student-card`, { student_card_id: cardId }, auth)
+    .then(() => {
       dispatch({
         type: accountConstants.MAKE_STUDENT_CARD_DEFAULT_SUCCESS,
         payload: { cardId, id },
@@ -240,7 +186,8 @@ const fetchStudentCard = (token, id) => (dispatch) => {
   };
   dispatch({ type: accountConstants.FETCH_STUDENT_CARD_REQUEST });
 
-  agent.get(`/account/${id}/student-card`, auth)
+  agent
+    .get(`/account/${id}/student-card`, auth)
     .then((res) => {
       dispatch({
         type: accountConstants.FETCH_STUDENT_CARD_SUCCESS,
@@ -263,12 +210,17 @@ const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (disp
     },
   };
   dispatch({ type: accountConstants.ADD_STUDENT_CARD_REQUEST });
-  agent.post(`/account/${id}/student-card`, {
-    institute_id: instituteId,
-    institute_email_prefix: emailPrefix,
-    student_id: studentId,
-  }, auth)
-    .then((res) => {
+  agent
+    .post(
+      `/account/${id}/student-card`,
+      {
+        institute_id: instituteId,
+        institute_email_prefix: emailPrefix,
+        student_id: studentId,
+      },
+      auth,
+    )
+    .then(() => {
       dispatch({ type: accountConstants.ADD_STUDENT_CARD_SUCCESS });
     })
     .catch((err) => {
@@ -279,11 +231,64 @@ const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (disp
     });
 };
 
-// TODO: Fetch all accounts
-const fetchAccounts = (token) => (dispatch) => {
+const editPassword = (token, id, newPassword) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  dispatch({ type: accountConstants.EDIT_PASSWORD_REQUEST });
+  agent
+    .put(
+      `/account/${id}/pass_hash`,
+      {
+        new_password: newPassword,
+      },
+      auth,
+    )
+    .then(() => {
+      dispatch({ type: accountConstants.EDIT_PASSWORD_SUCCESS });
+    })
+    .catch((err) => {
+      dispatch({
+        type: accountConstants.EDIT_PASSWORD_FAIL,
+        error: err,
+      });
+    });
+};
 
+const fetchAccounts = (token) => (dispatch) => {
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  dispatch({ type: accountConstants.FETCH_ACCOUNTS_REQUEST });
+  agent
+    .get('/account', auth)
+    .then((res) => {
+      dispatch({
+        type: accountConstants.FETCH_ACCOUNTS_SUCCESS,
+        payload: res.data.data.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: accountConstants.FETCH_ACCOUNTS_FAIL,
+        error: err,
+      });
+    });
 };
 
 export {
-  getInstitutes, getInstitute, addInstitute, editInstitute, fetchAccount, editAccount, deleteAccount, makeStudentCardDefault, fetchStudentCard, addStudentCard, fetchAccounts,
+  getInstitute,
+  addInstitute,
+  editInstitute,
+  editAccount,
+  deleteAccount,
+  makeStudentCardDefault,
+  fetchStudentCard,
+  addStudentCard,
+  editPassword,
+  fetchAccounts,
 };

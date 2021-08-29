@@ -2,22 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button,
+  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button, IconButton,
 } from '@material-ui/core';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import SettingsIcon from '@material-ui/icons/Settings';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import DescriptionIcon from '@material-ui/icons/Description';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import CodeIcon from '@material-ui/icons/Code';
-import AddIcon from '@material-ui/icons/Add';
+import Icon from '../icon/index';
 
 export default function System({
-  menuItems, classes, history, location, mode,
+  classes, history, location, mode,
 }) {
   const { announcementId, languageId } = useParams();
-  const announcementList = useSelector((state) => state.admin.system.announcements);
-  const languageList = useSelector((state) => state.admin.system.submitLang);
+  const announcementList = useSelector((state) => state.announcements);
+  const languageList = useSelector((state) => state.submitLangs);
   const baseURL = '/admin/system';
   const [display, setDisplay] = useState('unfold');
   const [title, setTitle] = useState('');
@@ -41,80 +35,64 @@ export default function System({
         {
           text: 'Access Log',
           icon: (
-            <DescriptionIcon
-              className={location.pathname === `${baseURL}/accesslog` ? classes.activeIcon : classes.icon}
-            />
+            <Icon.DescriptionIcon />
           ),
           path: `${baseURL}/accesslog`,
         },
         {
           text: 'Announcement',
           icon: (
-            <NotificationsIcon
-              className={location.pathname === `${baseURL}/announcement` ? classes.activeIcon : classes.icon}
-            />
+            <Icon.NotificationsIcon />
           ),
           path: `${baseURL}/announcement`,
         },
         {
           text: 'Submission Language',
           icon: (
-            <CodeIcon className={location.pathname === `${baseURL}/submitlang` ? classes.activeIcon : classes.icon} />
+            <Icon.CodeIcon />
           ),
           path: `${baseURL}/submitlang`,
         },
       ]);
     } else if (mode === 'create') {
-      setArrow(<ArrowBackIcon className={classes.arrow} onClick={goBackToAnnouncement} />);
+      setArrow(<IconButton className={classes.arrow} onClick={goBackToAnnouncement}><Icon.ArrowBackRoundedIcon /></IconButton>);
       setTitle('(Draft)');
       setItemList([
         {
           text: 'Setting',
           path: `${baseURL}/announcement/add`,
           icon: (
-            <SettingsIcon
-              className={location.pathname === `${baseURL}/announcement/add` ? classes.activeIcon : classes.icon}
-            />
+            <Icon.SettingsIcon />
           ),
         },
       ]);
     } else if (mode === 'announcement' && announcementList.byId[announcementId]) {
-      setArrow(<ArrowBackIcon className={classes.arrow} onClick={goBackToAnnouncement} />);
+      setArrow(<IconButton className={classes.arrow} onClick={goBackToAnnouncement}><Icon.ArrowBackRoundedIcon /></IconButton>);
       setTitle(announcementList.byId[announcementId].title);
       setItemList([
         {
           text: 'Setting',
           path: `${baseURL}/announcement/${announcementId}/setting`,
           icon: (
-            <SettingsIcon
-              className={
-                location.pathname === `${baseURL}/announcement/${announcementId}/setting`
-                  ? classes.activeIcon
-                  : classes.icon
-              }
-            />
+            <Icon.SettingsIcon />
           ),
         },
       ]);
     } else if (mode === 'language' && languageList.byId[languageId]) {
-      setArrow(<ArrowBackIcon className={classes.arrow} onClick={goBackToLanguage} />);
+      setArrow(<IconButton className={classes.arrow} onClick={goBackToLanguage}><Icon.ArrowBackRoundedIcon /></IconButton>);
       setTitle(`${languageList.byId[languageId].name} ${languageList.byId[languageId].version}`);
       setItemList([
         {
           text: 'Setting',
           path: `${baseURL}/submitlang/${languageId}/setting`,
           icon: (
-            <SettingsIcon
-              className={
-                location.pathname === `${baseURL}/submitlang/${languageId}/setting` ? classes.activeIcon : classes.icon
-              }
-            />
+            <Icon.SettingsIcon />
           ),
         },
       ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, history, mode]);
+  }, [location.pathname, history, mode, announcementList, languageList, announcementId, languageId]);
 
   const foldSystem = () => {
     setDisplay('fold');
@@ -152,33 +130,35 @@ export default function System({
         classes={{ paper: classes.drawerPaper }}
       >
         {mode === 'main' ? <div className={classes.topSpace} /> : arrow}
-        <div>
+        <div className={classes.title}>
           {display === 'unfold' ? (
-            <PlayArrowIcon className={`${classes.titleIcon} ${classes.rotate90}`} onClick={foldSystem} />
+            <Icon.TriangleDown className={classes.titleIcon} onClick={foldSystem} />
           ) : (
-            <PlayArrowIcon className={classes.titleIcon} onClick={unfoldSystem} />
+            <Icon.TriangleRight className={classes.titleIcon} onClick={unfoldSystem} />
           )}
-          <Typography variant="h4" className={classes.title}>
+          <Typography variant="h4" className={classes.titleText}>
             {title}
           </Typography>
         </div>
         <Divider variant="middle" className={classes.divider} />
-        {display === 'unfold' ? (
+        {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
-              <ListItem
-                button
-                key={item.text}
-                onClick={() => history.push(item.path)}
-                className={location.pathname === item.path ? classes.active : null}
-              >
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} className={classes.wrapping} />
+              <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classes.item}>
+                <ListItemIcon
+                  className={classes.itemIcon}
+                  style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
+                >
+                  {item.icon}
+
+                </ListItemIcon>
+                <ListItemText
+                  primary={item.text}
+                  className={location.pathname === item.path ? classes.activeItemText : classes.itemText}
+                />
               </ListItem>
             ))}
           </List>
-        ) : (
-          ''
         )}
         <div className={classes.bottomSpace} />
       </Drawer>

@@ -1,24 +1,19 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  withRouter, Switch, Route, useHistory, useParams, BrowserRouter as Router, Link,
-} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { BiFilterAlt } from 'react-icons/bi';
 import {
-  Button,
-  Typography,
-  makeStyles,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
+  Button, Typography, makeStyles, Dialog, DialogActions, DialogContent, DialogTitle,
 } from '@material-ui/core';
+import moment from 'moment';
+
 import NoMatch from '../../noMatch';
+import GeneralLoading from '../../GeneralLoading';
 import CustomTable from '../../ui/CustomTable';
 import DateRangePicker from '../../ui/DateRangePicker';
 import { fetchAnnouncement } from '../../../actions/admin/system';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -38,16 +33,14 @@ export default function AnnouncementHome() {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.user.token);
-  const loading = useSelector((state) => state.admin.system.loading);
-  const announcements = useSelector((state) => state.admin.system.announcements.byId);
-  const announcementId = useSelector((state) => state.admin.system.announcements.allIds);
-  const addLoading = useSelector((state) => state.admin.system.loading.addAnnouncement);
-  const deleteLoading = useSelector((state) => state.admin.system.loading.deleteAnnouncement);
+  const authToken = useSelector((state) => state.auth.token);
+  const announcements = useSelector((state) => state.announcements.byId);
+  const announcementId = useSelector((state) => state.announcements.allIds);
+  const loading = useSelector((state) => state.loading.admin.system.fetchAnnouncement);
+  const addLoading = useSelector((state) => state.loading.admin.system.addAnnouncement);
+  const deleteLoading = useSelector((state) => state.loading.admin.system.deleteAnnouncement);
 
   const [tableData, setTableData] = useState([]);
-  const [path, setPath] = useState([]);
-
   const [filterPostOrNot, setFilterPostOrNot] = useState(false);
   const [filterEndOrNot, setFilterEndOrNot] = useState(false);
   const [postRange, setPostRange] = useState([
@@ -68,8 +61,9 @@ export default function AnnouncementHome() {
   const modifyRawData = (item) => {
     const temp = {
       title: item.title,
-      PostTime: item.post_time.toISOString().slice(0, 16).replace('T', ' '),
-      EndTime: item.expire_time.toISOString().slice(0, 16).replace('T', ' '),
+      PostTime: moment(item.post_time).format('YYYY-MM-DD, HH:mm'),
+      EndTime: moment(item.expire_time).format('YYYY-MM-DD, HH:mm'),
+      path: item.path,
     };
     return temp;
   };
@@ -106,20 +100,15 @@ export default function AnnouncementHome() {
   }, [authToken, dispatch, addLoading, deleteLoading]);
 
   useEffect(() => {
-    if (announcementId == null) {
-      dispatch(fetchAnnouncement(authToken));
-    } else {
-      const newData = [];
-      const newPath = [];
-      announcementId.forEach((key) => {
-        const item = announcements[key];
-        newData.push(modifyRawData(item));
-        newPath.push(`announcement/${item.id}/setting`);
-      });
-      setTableData(newData);
-      setPath(newPath);
-    }
-  }, [dispatch, authToken, announcements, announcementId]);
+    const newData = [];
+
+    announcementId.forEach((key) => {
+      const item = announcements[key];
+      item.path = `announcement/${item.id}/setting`;
+      newData.push(modifyRawData(item));
+    });
+    setTableData(newData);
+  }, [announcements, announcementId]);
 
   const history = useHistory();
   const handleClickAdd = () => {
@@ -128,7 +117,7 @@ export default function AnnouncementHome() {
 
   if (announcements === null) {
     if (loading.fetchAnnouncement) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }
@@ -144,7 +133,7 @@ export default function AnnouncementHome() {
           <Button variant="contained" color="primary" onClick={handleClickAdd} placeholder="Search">
             +
           </Button>
-            )}
+        )}
         data={tableData}
         columns={[
           {
@@ -169,16 +158,28 @@ export default function AnnouncementHome() {
             align: 'center',
           },
         ]}
-        columnComponent={[null, (<BiFilterAlt key="filterPost" onClick={() => { setFilterPostOrNot(true); }} />), (<BiFilterAlt key="filterEnd" onClick={() => { setFilterEndOrNot(true); }} />)]}
+        columnComponent={[
+          null,
+          <BiFilterAlt
+            key="filterPost"
+            onClick={() => {
+              setFilterPostOrNot(true);
+            }}
+          />,
+          <BiFilterAlt
+            key="filterEnd"
+            onClick={() => {
+              setFilterEndOrNot(true);
+            }}
+          />,
+        ]}
         hasLink
-        path={path}
+        linkName="path"
       />
       <Dialog
         open={filterPostOrNot}
         keepMounted
         onClose={() => setFilterPostOrNot(false)}
-        aria-labelledby="dialog-slide-title"
-        aria-describedby="dialog-slide-description"
         classes={{ paper: classes.paper }}
       >
         <DialogTitle id="dialog-slide-title">
@@ -191,7 +192,12 @@ export default function AnnouncementHome() {
           <Button onClick={() => setFilterPostOrNot(false)} color="default">
             Cancel
           </Button>
-          <Button onClick={() => { filter(); }} color="primary">
+          <Button
+            onClick={() => {
+              filter();
+            }}
+            color="primary"
+          >
             Save
           </Button>
         </DialogActions>
@@ -200,8 +206,6 @@ export default function AnnouncementHome() {
         open={filterEndOrNot}
         keepMounted
         onClose={() => setFilterEndOrNot(false)}
-        aria-labelledby="dialog-slide-title"
-        aria-describedby="dialog-slide-description"
         classes={{ paper: classes.paper }}
       >
         <DialogTitle id="dialog-slide-title">
@@ -214,7 +218,12 @@ export default function AnnouncementHome() {
           <Button onClick={() => setFilterEndOrNot(false)} color="default">
             Cancel
           </Button>
-          <Button onClick={() => { filter(); }} color="primary">
+          <Button
+            onClick={() => {
+              filter();
+            }}
+            color="primary"
+          >
             Save
           </Button>
         </DialogActions>

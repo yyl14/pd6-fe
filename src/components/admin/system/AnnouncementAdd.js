@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   Button, TextField, Typography, makeStyles,
 } from '@material-ui/core';
+import moment from 'moment';
 import DateRangePicker from '../../ui/DateRangePicker';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
@@ -22,16 +23,16 @@ const useStyles = makeStyles((theme) => ({
 const AnnouncementAdd = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.user.token);
-  const userId = useSelector((state) => state.auth.user.id);
+  const authToken = useSelector((state) => state.auth.token);
+  const userId = useSelector((state) => state.user.id);
 
   const [addTitle, setAddTitle] = useState('');
   const [addContent, setAddContent] = useState('');
 
   const [dateRangePicker, setDateRangePicker] = useState([
     {
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: moment().startOf('week').toDate(),
+      endDate: moment().endOf('week').toDate(),
       key: 'selection',
     },
   ]);
@@ -48,6 +49,7 @@ const AnnouncementAdd = () => {
       post_time: dateRangePicker[0].startDate.toISOString(),
       expire_time: dateRangePicker[0].endDate.toISOString(),
     };
+    console.log(body);
     dispatch(addAnnouncement(authToken, body));
     backToHomePage();
   };
@@ -57,9 +59,7 @@ const AnnouncementAdd = () => {
       <Typography variant="h3" className={classes.pageHeader}>
         (Draft) / Setting
       </Typography>
-      <SimpleBar
-        title="Announcement"
-      >
+      <SimpleBar title="Announcement">
         <AlignedText text="Title" childrenType="field">
           <TextField value={addTitle} onChange={(e) => setAddTitle(e.target.value)} />
         </AlignedText>
@@ -78,7 +78,9 @@ const AnnouncementAdd = () => {
       </SimpleBar>
       {/* TODO: re-write with ui components SimpleBar and DatePicker  */}
       <Button onClick={backToHomePage}>Cancel</Button>
-      <Button color="primary" onClick={handleClickSave}>Save</Button>
+      <Button color="primary" onClick={handleClickSave}>
+        Save
+      </Button>
     </>
   );
 };

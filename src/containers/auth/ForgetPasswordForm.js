@@ -1,29 +1,23 @@
 import { useState, useEffect } from 'react';
 import React, { useSelector, useDispatch } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import {
   Button,
   TextField,
   Card,
   CardContent,
-  Container,
-  Grid,
   Typography,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   makeStyles,
 } from '@material-ui/core';
-import { borders, borderRadius } from '@material-ui/system';
-import { EmailOutlined, TrainRounded } from '@material-ui/icons';
-import { authActions } from '../../actions/index';
+import { userForgetPassword } from '../../actions/user/auth';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   authForm: {
     width: '50%',
   },
@@ -39,45 +33,47 @@ const useStyles = makeStyles((theme) => ({
 export default function ForgetPasswordForm() {
   const classNames = useStyles();
   const dispatch = useDispatch();
-  const { userForgetPassword } = bindActionCreators(authActions, dispatch);
-  const loginState = useSelector((state) => state.auth);
-  const serverError = useSelector((state) => state.auth.error.forgetPassword);
+  const error = useSelector((state) => state.error.user.auth.forgetPassword);
+  const loading = useSelector((state) => state.loading.user.auth.forgetPassword);
   const [email, setEmail] = useState('');
-  const [error, setError] = useState(false);
+  const [showError, setShowError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [disabled, setDisabled] = useState(true);
   const [popUp, setPopUp] = useState(false);
+  const [submit, setSubmit] = useState(false);
 
   const handleChange = (event) => {
     if (event.target.value === '') {
       setEmail(event.target.value);
       setErrorText('');
-      setError(false);
+      setShowError(false);
       setDisabled(true);
       return;
     }
-    const status = event.target.value.indexOf('@') > 0;
+
+    const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const status = emailRe.test(event.target.value);
+
     if (!status) {
       setEmail(event.target.value);
       setErrorText('Invalid email address');
-      setError(true);
+      setShowError(true);
       setDisabled(true);
     } else {
       setEmail(event.target.value);
       setErrorText('');
-      setError(false);
+      setShowError(false);
       setDisabled(false);
     }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    if (error) {
+    if (showError) {
       return;
     }
-    userForgetPassword(email.trim());
-    setPopUp(true);
+    dispatch(userForgetPassword(email.trim()));
+    setSubmit(true);
   };
 
   const handleClosePopUp = () => {
@@ -85,16 +81,30 @@ export default function ForgetPasswordForm() {
   };
 
   useEffect(() => {
-    if (serverError === null) {
-      setErrorText(serverError);
-      setError(true);
-      setDisabled(true);
-    } else {
-      setErrorText('');
-      setError(false);
-      setDisabled(false);
+    if (loading === false && submit === true) {
+      if (error !== null) {
+        switch (error.toString()) {
+          case 'Error: NotFound': {
+            setErrorText('Unregistered email address.');
+            break;
+          }
+          default: {
+            setErrorText(error.toString());
+            break;
+          }
+        }
+        setSubmit(false);
+        setShowError(true);
+        setDisabled(true);
+      } else {
+        setSubmit(false);
+        setPopUp(true);
+        setErrorText('');
+        setShowError(false);
+        setDisabled(false);
+      }
     }
-  }, [serverError]);
+  }, [error, loading, submit]);
 
   return (
     <>
@@ -104,7 +114,7 @@ export default function ForgetPasswordForm() {
             <TextField
               // required
               className={`auth-form-input ${classNames.authTextFields}`}
-              error={error}
+              error={showError}
               helperText={errorText}
               label="Registered / Alternative Email"
               value={email}

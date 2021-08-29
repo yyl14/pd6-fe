@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Switch, withRouter, Route } from 'react-router-dom';
-import { Button, Typography } from '@material-ui/core';
-import SimpleBar from '../../../components/ui/SimpleBar';
 import ClassList from '../../../components/admin/course/ClassList';
 import CourseSetting from '../../../components/admin/course/CourseSetting';
 import NoMatch from '../../../components/noMatch';
@@ -16,11 +14,11 @@ class Course extends Component {
 
   componentDidMount() {
     // push to default page component: class list
-    if (this.props.courses.allIds.length) {
-      // this.props.history.push(
-      //   `/admin/course/course/${this.props.courses.byId[this.props.courses.allIds[0]].id}/class-list/`,
-      // );
-    }
+    // if (this.props.courses.allIds.length) {
+    //   // this.props.history.push(
+    //   //   `/admin/course/course/${this.props.courses.byId[this.props.courses.allIds[0]].id}/class-list/`,
+    //   // );
+    // }
   }
 
   render() {
@@ -37,9 +35,9 @@ class Course extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  auth: state.auth,
-  error: state.error,
-  courses: state.admin.course.courses,
+  // auth: state.auth,
+  // error: state.error,
+  // courses: state.admin.course.courses,
 });
 
 export default connect(mapStateToProps, {})(withRouter(Course));
