@@ -34,14 +34,18 @@ const editChallenge = (token, challengeId, body) => async (dispatch) => {
       },
     };
     dispatch({ type: problemConstants.EDIT_CHALLENGE_START });
-    const res = await agent.patch(`/challenge/${challengeId}`, {
-      publicize_type: body.publicizeType,
-      selection_type: body.selectionType,
-      title: body.title,
-      description: body.description,
-      start_time: body.startTime,
-      end_time: body.endTime,
-    }, auth);
+    const res = await agent.patch(
+      `/challenge/${challengeId}`,
+      {
+        publicize_type: body.publicizeType,
+        selection_type: body.selectionType,
+        title: body.title,
+        description: body.description,
+        start_time: body.startTime,
+        end_time: body.endTime,
+      },
+      auth,
+    );
     dispatch({ type: problemConstants.EDIT_CHALLENGE_SUCCESS, payload: res.data.data });
   } catch (err) {
     dispatch({
@@ -60,7 +64,10 @@ const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
     };
     dispatch({ type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_START });
     const res = await agent.get(`/challenge/${challengeId}/task`, auth);
-    dispatch({ type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS, payload: { id: challengeId, data: res.data.data } });
+    dispatch({
+      type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS,
+      payload: { id: challengeId, data: res.data.data },
+    });
   } catch (err) {
     dispatch({
       type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_FAIL,
@@ -79,6 +86,7 @@ const readProblemInfo = (token, problemId, challengeId) => async (dispatch) => {
   };
   try {
     const problemInfo = await agent.get(`/problem/${problemId}`, auth);
+    console.log(problemInfo); // wait for be to fix
     if (problemInfo.data.success) {
       dispatch({
         type: problemConstants.READ_PROBLEM_SUCCESS,
@@ -120,13 +128,17 @@ const readProblemInfo = (token, problemId, challengeId) => async (dispatch) => {
 
 const readSubmission = (token, accountId, problemId) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_SUBMISSION_START });
-  const auth = {
+  const config = {
     headers: {
       'Auth-Token': token,
     },
+    params: {
+      problem_id: parseInt(problemId, 10),
+      account_id: accountId,
+    },
   };
   try {
-    const subInfo = await agent.get(`/submission?account_id=${accountId}&problem_id=${parseInt(problemId, 10)}`, auth);
+    const subInfo = await agent.get('/submission', config);
     if (subInfo.data.success) {
       dispatch({
         type: problemConstants.READ_SUBMISSION_SUCCESS,
