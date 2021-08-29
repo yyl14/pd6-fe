@@ -359,7 +359,6 @@ const overrides = {
       cursor: 'pointer',
       '&:hover': {
         color: blue[80],
-
       },
       '&:active': {
         color: blue.dark,
@@ -396,7 +395,11 @@ const overrides = {
     },
   },
   MuiSelect: {
-    outlined: { padding: '10px 0px 10px 15px' },
+    outlined: {
+      padding: '10px 0px 10px 15px',
+      display: 'flex',
+      alignItems: 'center',
+    },
     selectMenu: {
       // height: '1.1876em',
     },
