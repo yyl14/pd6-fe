@@ -93,10 +93,10 @@ export default function SubmissionDetail(props) {
 
   useEffect(() => {
     if (submissions[submissionId] !== undefined) {
-      // dispatch(getAccountBatch(authToken, submissions[submissionId].account_id));
+      dispatch(getAccountBatch(authToken, submissions[submissionId].account_id));
       dispatch(readProblem(authToken, submissions[submissionId].problem_id));
       setProblemId(submissions[submissionId].problem_id);
-      // setAccountId(submissions[submissionId].account_id);
+      setAccountId(submissions[submissionId].account_id);
     }
   }, [authToken, dispatch, submissionId, submissions]);
 
@@ -168,7 +168,7 @@ export default function SubmissionDetail(props) {
     || judgments[judgmentId] === undefined
     || judgeCases.allIds === undefined
     || testcaseIds === undefined
-    // || accounts.byId[accountId] === undefined
+    || accounts.byId[accountId] === undefined
   ) {
     return <GeneralLoading />;
   }
@@ -213,13 +213,13 @@ export default function SubmissionDetail(props) {
           <Typography variant="body1">{submissionId}</Typography>
         </AlignedText>
         <AlignedText text="Username" childrenType="text">
-          {/* <Typography variant="body1">{accounts.byId[submissions[submissionId].account_id].username}</Typography> */}
+          <Typography variant="body1">{accounts.byId[accountId].username}</Typography>
         </AlignedText>
         <AlignedText text="Student ID" childrenType="text">
-          {/* <Typography variant="body1">{accounts.byId[submissions[submissionId].account_id].student_id}</Typography> */}
+          <Typography variant="body1">{accounts.byId[accountId].student_id}</Typography>
         </AlignedText>
         <AlignedText text="Real Name" childrenType="text">
-          {/* <Typography variant="body1">{accounts.byId[submissions[submissionId].account_id].real_name}</Typography> */}
+          <Typography variant="body1">{accounts.byId[accountId].real_name}</Typography>
         </AlignedText>
         <AlignedText text="Challenge" childrenType="text">
           <Link to={`/my-class/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>

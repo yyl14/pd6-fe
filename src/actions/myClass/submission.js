@@ -368,20 +368,17 @@ const readTestcase = (token, testcaseId) => async (dispatch) => {
 
 const getAccountBatch = (token, accountId) => async (dispatch) => {
   dispatch({ type: submissionConstants.GET_ACCOUNT_BATCH_START });
-  const config = {
+  const auth = {
     headers: {
       'Auth-Token': token,
     },
-    params: {
-      account_ids: [accountId],
-    },
   };
   try {
-    const res = await agent.get('/account-summary/batch', config); // wait for be to fix
+    const res = await agent.get(`/account-summary/batch?account_ids=${accountId}`, auth); // wait for be to fix
     if (res.data.success) {
       dispatch({
         type: submissionConstants.GET_ACCOUNT_BATCH_SUCCESS,
-        payload: { data: res.data.data, accountId },
+        payload: { data: res.data.data[0], accountId },
       });
     } else {
       dispatch({

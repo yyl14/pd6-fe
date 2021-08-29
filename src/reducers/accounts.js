@@ -53,10 +53,7 @@ const byId = (state = {}, action) => {
 
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       const { accounts } = action.payload;
-      return accounts.reduce(
-        (acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [], gradeIds: [] } }),
-        state,
-      );
+      return accounts.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [], gradeIds: [] } }), state);
     }
 
     case submissionConstants.GET_ACCOUNT_BATCH_SUCCESS: {
@@ -64,7 +61,10 @@ const byId = (state = {}, action) => {
       return {
         ...state,
         [accountId]: {
-          data,
+          id: data.id,
+          real_name: data.real_name,
+          student_id: data.student_id,
+          username: data.username,
           studentCard: [],
           gradeIds: [],
         },
