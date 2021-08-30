@@ -1,3 +1,7 @@
+.MuiButton-outlined path {
+  fill: none !important;
+}
+
 /* DateRangePicker */
 .rdrCalendarWrapper {
   /* font-size: 20px; */
