@@ -61,7 +61,7 @@ export default function Challenge({
         && challenges[challengeId] !== undefined
       ) {
         // console.log(problems, essays, userClasses);
-        setTAicon(<Icon.TA className={classNames.titleTA} />);
+        setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
         setArrow(
           <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
             <Icon.ArrowBackRoundedIcon />
@@ -154,9 +154,11 @@ export default function Challenge({
       mode === 'submission'
       && userClasses.length !== 0
       && userClasses.find((x) => x.class_id === Number(classId))
+      && challenges[challengeId] !== undefined
+      && problems.byId[problemId] !== undefined
     ) {
       if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
-        setTAicon(<Icon.TA className={classNames.titleTA} />);
+        setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
       }
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToProblem}>
@@ -182,7 +184,7 @@ export default function Challenge({
       && userClasses.find((x) => x.class_id === Number(classId))
     ) {
       if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
-        setTAicon(<Icon.TA className={classNames.titleTA} />);
+        setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
       }
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToSubmission}>
@@ -287,3 +289,4 @@ export default function Challenge({
     </div>
   );
 }
+
