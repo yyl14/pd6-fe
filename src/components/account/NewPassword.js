@@ -12,6 +12,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Snackbar,
 } from '@material-ui/core';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
@@ -23,10 +24,6 @@ import { editPassword } from '../../actions/user/user';
 const useStyles = makeStyles(() => ({
   textField: {
     width: '350px',
-  },
-  topAlignedItem: {
-    marginTop: '-10px',
-    marginBottom: '23px',
   },
   alignedItem: {
     marginBottom: '23px',
@@ -48,25 +45,28 @@ export default function NewPassword() {
     newPassword: false,
     confirmPassword: false,
   });
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const authToken = useSelector((state) => state.auth.token);
   const id = useSelector((state) => state.user.id);
-  // const loading = useSelector((state) => state.loading.user.user.editPassword);
+  const loading = useSelector((state) => state.loading.user.user.editPassword);
   const serverError = useSelector((state) => state.error.user.user.editPassword);
   const dispatch = useDispatch();
 
-  const [errors, setErrors] = useState({
+  const initErrors = {
     oldPassword: false,
     newPassword: false,
     confirmPassword: false,
-  });
+  };
 
-  const [helperText, setHelperText] = useState({
+  const initHelperText = {
     oldPassword: '',
     newPassword: '',
     confirmPassword: '',
-  });
+  };
 
+  const [errors, setErrors] = useState(initErrors);
+  const [helperText, setHelperText] = useState(initHelperText);
   const [popUp, setPopUp] = useState(false);
 
   const handleResetPassword = () => {
@@ -84,54 +84,62 @@ export default function NewPassword() {
     setNewPassword('');
     setConfirmPassword('');
     setDisabled(true);
+    setErrors(initErrors);
+    setHelperText(initHelperText);
   };
 
   useEffect(() => {
-    if (oldPassword === '') {
-      setErrors((input) => ({ ...input, oldPassword: true }));
-      setHelperText((input) => ({ ...input, oldPassword: "Can't be empty!" }));
-      return;
+    if (confirmPassword === '') return;
+    setErrors((input) => ({
+      ...input,
+      oldPassword: oldPassword === '',
+      newPassword: newPassword === '',
+    }));
+    setHelperText((input) => ({
+      ...input,
+      oldPassword: oldPassword === '' ? "Can't be empty!" : '',
+      newPassword: newPassword === '' ? "Can't be empty!" : '',
+    }));
+
+    if (oldPassword !== '' && newPassword !== '') {
+      setErrors((input) => ({
+        ...input,
+        confirmPassword: newPassword !== confirmPassword,
+      }));
+      setHelperText((input) => ({
+        ...input,
+        confirmPassword: newPassword !== confirmPassword ? "Passwords don't match" : '',
+      }));
     }
-    setErrors((input) => ({ ...input, oldPassword: false }));
-    setHelperText((input) => ({ ...input, oldPassword: '' }));
-  }, [oldPassword]);
+  }, [oldPassword, newPassword, confirmPassword]);
 
   useEffect(() => {
-    if (newPassword === '') {
-      setErrors((input) => ({ ...input, newPassword: true }));
-      setHelperText((input) => ({ ...input, newPassword: "Can't be empty!" }));
-      return;
+    if (serverError && !loading) {
+      setShowSnackbar(true);
     }
-    if (newPassword !== confirmPassword && newPassword !== '') {
-      setErrors((input) => ({ ...input, newPassword: false, confirmPassword: true }));
-      setHelperText((input) => ({ ...input, newPassword: '', confirmPassword: "Passwords don't match" }));
-      return;
-    }
-    setErrors((input) => ({ ...input, newPassword: false, confirmPassword: false }));
-    setHelperText((input) => ({ ...input, newPassword: '', confirmPassword: '' }));
-  }, [newPassword, confirmPassword]);
+  }, [serverError, loading]);
 
   useEffect(() => {
-    if (serverError) {
-      setErrors((input) => ({ ...input, oldPassword: true }));
-      setHelperText((input) => ({ ...input, oldPassword: serverError }));
-    }
-  }, [serverError]);
-
-  useEffect(() => {
-    if (errors.oldPassword === false && errors.newPassword === false && errors.confirmPassword === false) {
+    if (
+      oldPassword !== ''
+      && newPassword !== ''
+      && confirmPassword !== ''
+      && !errors.oldPassword
+      && !errors.newPassword
+      && !errors.confirmPassword
+    ) {
       setDisabled(false);
       return;
     }
     setDisabled(true);
-  }, [errors.oldPassword, errors.newPassword, errors.confirmPassword]);
+  }, [oldPassword, newPassword, confirmPassword, errors.oldPassword, errors.newPassword, errors.confirmPassword]);
 
   return (
     <>
       {edit ? (
         <SimpleBar title="Password">
           <>
-            <div className={classes.topAlignedItem}>
+            <div className={classes.alignedItem}>
               <AlignedText text="Current Password" childrenType="field" maxWidth="lg">
                 <TextField
                   className={classes.textField}
