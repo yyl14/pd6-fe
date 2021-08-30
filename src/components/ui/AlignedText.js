@@ -34,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
   fieldAlignedText: {
     marginTop: '18px',
   },
+  radioAlignedText: {
+    marginBottom: '16px',
+  },
 }));
 
 export default function AlignedText({
@@ -73,6 +76,9 @@ export default function AlignedText({
       }
       case 'text': {
         return classes.textAlignedText;
+      }
+      case 'radio': {
+        return classes.radioAlignedText;
       }
       default: {
         return classes.alignedText;
