@@ -45,6 +45,7 @@ export default function EssayProblem() {
 
   const userClasses = useSelector((state) => state.user.classes);
   const courses = useSelector((state) => state.courses.byId);
+  const classes = useSelector((state) => state.classes.byId);
   const essays = useSelector((state) => state.essays.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   const authToken = useSelector((state) => state.auth.token);
@@ -114,7 +115,7 @@ export default function EssayProblem() {
         <DialogContent>
           <DialogContentText variant="body1" color="textPrimary">
             <AlignedText text="Class" childrenType="text">
-              <Typography>{courses[courseId].name}</Typography>
+              <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
             </AlignedText>
             <AlignedText text="Challenge" childrenType="text">
               <Typography>{challenges[challengeId].title}</Typography>
