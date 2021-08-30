@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-  Typography, makeStyles,
-} from '@material-ui/core';
+import { Typography, makeStyles } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
@@ -31,6 +29,7 @@ export default function SubmissionList() {
   const allClass = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
   // const loading = useSelector((state) => state.loading.myClass.submissions);
+  const error = useSelector((state) => state.error.myClass.submissions);
   const commonLoading = useSelector((state) => state.loading.common);
   const submissions = useSelector((state) => state.submissions);
   const authToken = useSelector((state) => state.auth.token);
@@ -52,6 +51,7 @@ export default function SubmissionList() {
     }
     return <NoMatch />;
   }
+  console.log(error);
 
   return (
     <>
@@ -119,10 +119,13 @@ export default function SubmissionList() {
             label: 'Problem',
             type: 'ENUM',
             operation: 'IN',
-            options: allClass[classId].challengeIds.map((id) => problems.allIds.filter((problemId) => problems.byId[problemId].challenge_id === id)).flat().map((problemId) => ({
-              value: problemId,
-              label: problems.byId[problemId].challenge_label,
-            })),
+            options: allClass[classId].challengeIds
+              .map((id) => problems.allIds.filter((problemId) => problems.byId[problemId].challenge_id === id))
+              .flat()
+              .map((problemId) => ({
+                value: problemId,
+                label: problems.byId[problemId].challenge_label,
+              })),
           },
           {
             reduxStateId: 'submit_time',
@@ -134,6 +137,7 @@ export default function SubmissionList() {
         refetch={(browseParams, ident) => {
           dispatch(fetchClassSubmissions(authToken, browseParams, ident, classId));
         }}
+        refetchErrors={[error.fetchSubmissions]}
         columns={[
           {
             name: 'ID',

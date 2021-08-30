@@ -41,9 +41,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '20px',
     marginBottom: '6px',
   },
+
   titleIcon: {
-    margin: 'auto 0',
-    flex: '1',
+    margin: 'auto 11px auto 24px',
+    flexShrink: 0,
     color: theme.palette.black.main,
     '&:hover': {
       cursor: 'pointer',
@@ -52,10 +53,11 @@ const useStyles = makeStyles((theme) => ({
   titleText: {
     flex: '5',
   },
-  titleTA: {
+  titleRightIcon: {
     marginTop: 'auto',
     marginBottom: 'auto',
     flex: '1',
+    marginLeft: '10px',
   },
   itemIcon: {
     flex: '1',
