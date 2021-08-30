@@ -31,6 +31,9 @@ const useStyles = makeStyles(() => ({
   alignedItem: {
     marginBottom: '23px',
   },
+  buttons: {
+    marginLeft: '-5px',
+  },
 }));
 
 export default function NewPassword() {
@@ -215,10 +218,12 @@ export default function NewPassword() {
                 />
               </AlignedText>
             </div>
-            <Button onClick={handleCancel}>Cancel</Button>
-            <Button color="primary" type="submit" disabled={disabled} onClick={() => setPopUp(true)}>
-              Save
-            </Button>
+            <div className={classes.buttons}>
+              <Button onClick={handleCancel}>Cancel</Button>
+              <Button color="primary" type="submit" disabled={disabled} onClick={() => setPopUp(true)}>
+                Save
+              </Button>
+            </div>
           </>
         </SimpleBar>
       ) : (
