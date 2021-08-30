@@ -3,33 +3,36 @@ import { submissionConstants } from './constant';
 import { autoTableConstants } from '../component/constant';
 import browseParamsTransForm from '../../function/browseParamsTransform';
 
-const fetchAllSubmissions = (token, accountId, problemId, languageId) => (dispatch) => {
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-  dispatch({ type: submissionConstants.FETCH_ALL_SUBMISSIONS_START });
+const fetchAllSubmissions = (token, accountId, problemId, languageId) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: submissionConstants.FETCH_ALL_SUBMISSIONS_START });
 
-  agent
-    .get(`/submission?account_id=${accountId}&problem_id=${problemId}&language_id=${languageId}`, auth)
-    .then((res) => {
-      dispatch({
-        type: submissionConstants.FETCH_ALL_SUBMISSIONS_SUCCESS,
-        payload: {
-          accountId,
-          problemId,
-          languageId,
-          data: res.data.data.data,
-        },
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: submissionConstants.FETCH_ALL_SUBMISSIONS_FAIL,
-        error: err,
-      });
+    const res = agent.get(
+      `/submission?account_id=${accountId}&problem_id=${problemId}&language_id=${languageId}`,
+      auth,
+    );
+
+    dispatch({
+      type: submissionConstants.FETCH_ALL_SUBMISSIONS_SUCCESS,
+      payload: {
+        accountId,
+        problemId,
+        languageId,
+        data: res.data.data.data,
+      },
     });
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: submissionConstants.FETCH_ALL_SUBMISSIONS_FAIL,
+      error: err,
+    });
+  }
 };
 
 const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => async (dispatch) => {
@@ -61,16 +64,13 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
     // console.log(res1);
 
     // Batch browse account
+    const accountIds = data.map((item) => item.account_id);
     const config2 = {
       headers: { 'auth-token': token },
+      params: { account_ids: JSON.stringify(accountIds) },
     };
 
-    const accountIds = data.map((item) => item.account_id);
-    const query = accountIds
-      .reduce((acc, id) => acc.concat('account_ids=', id.toString(), '&'), '/account-summary/batch?')
-      .slice(0, -1);
-
-    const res2 = await agent.get(query, config2);
+    const res2 = await agent.get('/account-summary/batch', config2);
 
     // use submission id to get status
     const res3 = await Promise.all(
@@ -86,19 +86,15 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
     );
     const judgments = res3.flat().filter((item) => item !== null && item !== undefined);
 
-    try {
-      dispatch({
-        type: submissionConstants.FETCH_SUBMISSIONS_SUCCESS,
-        payload: {
-          data,
-          judgments,
-          accounts: res2.data.data,
-        },
-      });
-    } catch (err) {
-      // console.log(judgments);
-      console.log(err);
-    }
+    dispatch({
+      type: submissionConstants.FETCH_SUBMISSIONS_SUCCESS,
+      payload: {
+        data,
+        judgments,
+        accounts: res2.data.data,
+      },
+    });
+
     dispatch({
       type: autoTableConstants.AUTO_TABLE_UPDATE,
       payload: {
