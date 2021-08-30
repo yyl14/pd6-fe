@@ -127,7 +127,7 @@ export default function Header() {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
-  const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   H:mm'));
+  const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   HH:mm'));
   const [itemList, setItemList] = useState([]);
   const [menuList, setMenuList] = useState([]);
 
@@ -262,13 +262,13 @@ export default function Header() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTime(format(new Date(), 'MMM d  H:mm'));
+      setCurrentTime(format(new Date(), 'MMM d  HH:mm'));
     }, 1000);
     return () => clearInterval(interval);
   }, []);
 
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
+  const [open, setOpen] = useState(false);
+  const anchorRef = useRef(null);
 
   // const handleToggle = () => {
   //   setOpen((prevOpen) => !prevOpen);
