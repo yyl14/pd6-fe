@@ -44,10 +44,8 @@ export default function EssayProblem() {
   const dispatch = useDispatch();
 
   const userClasses = useSelector((state) => state.user.classes);
-  const essays = useSelector((state) => {
-    console.log('state.essay:', state.essays);
-    return state.essays.byId;
-  });
+  const courses = useSelector((state) => state.courses.byId);
+  const essays = useSelector((state) => state.essays.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   const authToken = useSelector((state) => state.auth.token);
   const error = useSelector((state) => state.error.myClass.essay);
@@ -60,19 +58,22 @@ export default function EssayProblem() {
     setEdit(false);
   };
 
-  const [essay, setEssay] = useState(null);
-  const [popUpUpload, setPopUpUpload] = useState(false);
+  const [popUp, setPopUpUp] = useState(false);
 
-  const handleClickUpload = () => {
-    setPopUpUpload(true);
+  const handleClickDownload = () => {
+    setPopUpUp(true);
   };
-  const handleClosePopUpUpload = () => {
-    setPopUpUpload(false);
+  const handleClosePopUp = () => {
+    setPopUpUp(false);
   };
 
   const handleUpload = (e) => {};
 
   const handleDownload = (e) => {};
+
+  useEffect(() => {
+    dispatch(fetchChallenges(authToken, classId));
+  }, [authToken, classId, dispatch]);
 
   useEffect(() => {
     userClasses.forEach((value) => {
@@ -83,7 +84,6 @@ export default function EssayProblem() {
       }
     });
   }, [classId, userClasses]);
-
   useEffect(() => {
     dispatch(readEssay(authToken, essayId));
   }, [authToken, dispatch, essayId]);
@@ -100,12 +100,40 @@ export default function EssayProblem() {
       {!edit && role === 'MANAGER' && (
         <div className={classNames.managerButtons}>
           <Button onClick={() => setEdit(true)}>Edit</Button>
-          <Button variant="outlined" component="span" startIcon={<Icon.Download />} onClick={handleDownload}>
+          <Button variant="outlined" component="span" startIcon={<Icon.Download />} onClick={handleClickDownload}>
             Download
           </Button>
         </div>
       )}
       {edit ? <EssayEdit closeEdit={handleCloseEdit} role={role} /> : <EssayInfo role={role} />}
+      {/* Upload dialog */}
+      <Dialog open={popUp} keepMounted onClose={handleClosePopUp} maxWidth="md">
+        <DialogTitle>
+          <Typography variant="h4">Download All Files</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText variant="body1" color="textPrimary">
+            <AlignedText text="Class" childrenType="text">
+              <Typography>{courses[courseId].name}</Typography>
+            </AlignedText>
+            <AlignedText text="Challenge" childrenType="text">
+              <Typography>{challenges[challengeId].title}</Typography>
+            </AlignedText>
+            <AlignedText text="Task Label" childrenType="text">
+              <Typography>{essays[essayId].challenge_label}</Typography>
+            </AlignedText>
+            <AlignedText text="Download Options" childrenType="text">
+              <Typography>All users&apos; last submissioin</Typography>
+            </AlignedText>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleClosePopUp()}>Cancel</Button>
+          <Button onClick={() => handleUpload()} color="primary">
+            Download
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
