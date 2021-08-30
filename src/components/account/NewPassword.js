@@ -24,6 +24,13 @@ const useStyles = makeStyles(() => ({
   textField: {
     width: '350px',
   },
+  topAlignedItem: {
+    marginTop: '-10px',
+    marginBottom: '23px',
+  },
+  alignedItem: {
+    marginBottom: '23px',
+  },
 }));
 
 export default function NewPassword() {
@@ -121,87 +128,93 @@ export default function NewPassword() {
       {edit ? (
         <SimpleBar title="Password">
           <>
-            <AlignedText text="Old Password" childrenType="field" maxWidth="lg">
-              <TextField
-                className={classes.textField}
-                value={oldPassword}
-                variant="outlined"
-                type={showPassword.oldPassword ? 'text' : 'password'}
-                onChange={(e) => {
-                  setOldPassword(e.target.value);
-                }}
-                error={errors.oldPassword}
-                helperText={helperText.oldPassword}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => {
-                          setShowPassword((input) => ({ ...input, oldPassword: !input.oldPassword }));
-                        }}
-                        edge="end"
-                      >
-                        {showPassword.oldPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </AlignedText>
-            <AlignedText text="New Password" childrenType="field" maxWidth="lg">
-              <TextField
-                className={classes.textField}
-                value={newPassword}
-                variant="outlined"
-                type={showPassword.newPassword ? 'text' : 'password'}
-                onChange={(e) => {
-                  setNewPassword(e.target.value);
-                }}
-                error={errors.newPassword}
-                helperText={helperText.newPassword}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => {
-                          setShowPassword((input) => ({ ...input, newPassword: !input.newPassword }));
-                        }}
-                        edge="end"
-                      >
-                        {showPassword.newPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </AlignedText>
-            <AlignedText text="Confirm Password" childrenType="field" maxWidth="lg">
-              <TextField
-                className={classes.textField}
-                value={confirmPassword}
-                variant="outlined"
-                type={showPassword.confirmPassword ? 'text' : 'password'}
-                onChange={(e) => {
-                  setConfirmPassword(e.target.value);
-                }}
-                error={errors.confirmPassword}
-                helperText={helperText.confirmPassword}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => {
-                          setShowPassword((input) => ({ ...input, confirmPassword: !input.confirmPassword }));
-                        }}
-                        edge="end"
-                      >
-                        {showPassword.confirmPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </AlignedText>
+            <div className={classes.topAlignedItem}>
+              <AlignedText text="Current Password" childrenType="field" maxWidth="lg">
+                <TextField
+                  className={classes.textField}
+                  value={oldPassword}
+                  variant="outlined"
+                  type={showPassword.oldPassword ? 'text' : 'password'}
+                  onChange={(e) => {
+                    setOldPassword(e.target.value);
+                  }}
+                  error={errors.oldPassword}
+                  helperText={helperText.oldPassword}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => {
+                            setShowPassword((input) => ({ ...input, oldPassword: !input.oldPassword }));
+                          }}
+                          edge="end"
+                        >
+                          {showPassword.oldPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </AlignedText>
+            </div>
+            <div className={classes.alignedItem}>
+              <AlignedText text="New Password" childrenType="field" maxWidth="lg">
+                <TextField
+                  className={classes.textField}
+                  value={newPassword}
+                  variant="outlined"
+                  type={showPassword.newPassword ? 'text' : 'password'}
+                  onChange={(e) => {
+                    setNewPassword(e.target.value);
+                  }}
+                  error={errors.newPassword}
+                  helperText={helperText.newPassword}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => {
+                            setShowPassword((input) => ({ ...input, newPassword: !input.newPassword }));
+                          }}
+                          edge="end"
+                        >
+                          {showPassword.newPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </AlignedText>
+            </div>
+            <div className={classes.alignedItem}>
+              <AlignedText text="Confirmed Password" childrenType="field" maxWidth="lg">
+                <TextField
+                  className={classes.textField}
+                  value={confirmPassword}
+                  variant="outlined"
+                  type={showPassword.confirmPassword ? 'text' : 'password'}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                  }}
+                  error={errors.confirmPassword}
+                  helperText={helperText.confirmPassword}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => {
+                            setShowPassword((input) => ({ ...input, confirmPassword: !input.confirmPassword }));
+                          }}
+                          edge="end"
+                        >
+                          {showPassword.confirmPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </AlignedText>
+            </div>
             <Button onClick={handleCancel}>Cancel</Button>
             <Button color="primary" type="submit" disabled={disabled} onClick={() => setPopUp(true)}>
               Save
