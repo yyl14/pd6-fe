@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   makeStyles, Typography, AppBar, Toolbar,
 } from '@material-ui/core';
@@ -122,6 +122,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Header() {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const baseURL = '';
   const classes = useStyles();
@@ -132,6 +133,7 @@ export default function Header() {
   const [menuList, setMenuList] = useState([]);
 
   const [hasClass, setHasClass] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(['token', 'id']);
 
   useEffect(() => {
     setHasClass(user.classes.length !== 0);
@@ -266,42 +268,6 @@ export default function Header() {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
-
-  const [open, setOpen] = useState(false);
-  const anchorRef = useRef(null);
-
-  // const handleToggle = () => {
-  //   setOpen((prevOpen) => !prevOpen);
-  // };
-
-  // const handleClose = (event) => {
-  //   if (anchorRef.current && anchorRef.current.contains(event.target)) {
-  //     return;
-  //   }
-
-  //   setOpen(false);
-  // };
-
-  // function handleListKeyDown(event) {
-  //   if (event.key === 'Tab') {
-  //     event.preventDefault();
-  //     setOpen(false);
-  //   }
-  // }
-
-  // return focus to the button when we transitioned from !open -> open
-  const prevOpen = useRef(open);
-  useEffect(() => {
-    if (prevOpen.current === true && open === false) {
-      anchorRef.current.focus();
-    }
-
-    prevOpen.current = open;
-  }, [open]);
-
-  const dispatch = useDispatch();
-
-  const [cookies, setCookie, removeCookie] = useCookies(['token', 'id']);
 
   const goto = (link) => {
     // console.log(link);
