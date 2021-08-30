@@ -21,28 +21,23 @@ export default function MyClass({
 
   useEffect(() => {
     userClasses.map(({ course_id }) => dispatch(fetchCourse(authToken, course_id)));
-    // dispatch(fetchClass(authToken, classId));
   }, [dispatch, authToken, classId, courseId, userClasses]);
 
   const [display, setDisplay] = useState([]); // 0: fold, 1: unfold
   const [titles, setTitles] = useState([]);
   const [itemLists, setItemLists] = useState([]);
-  const [TAicons, setTAicons] = useState([]);
 
   useEffect(() => {
-    // console.log(userClasses[0].course_id, userClasses[0].class_id, location.pathname === '/my-class');
     if (userClasses.length !== 0) {
       if (
         userClasses[0].course_id !== undefined
         && userClasses[0].class_id !== undefined
         && location.pathname === '/my-class'
       ) {
-        // console.log('push', `/my-class/${userClasses[0].course_id}/${userClasses[0].class_id}/challenge`);
         history.push(`/my-class/${userClasses[0].course_id}/${userClasses[0].class_id}/challenge`);
       }
     }
   }, [history, location.pathname, userClasses]);
-  // console.log(courses[0]);
   useEffect(() => {
     if (userClasses.length !== 0) {
       if (
@@ -55,9 +50,7 @@ export default function MyClass({
         // console.log(userClasses);
         setDisplay(userClasses.map((item) => item.class_id === Number(classId)));
         setTitles(userClasses.map((item) => `${item.course_name} ${item.class_name}`));
-        setTAicons(
-          userClasses.map((item) => (item.role === 'MANAGER' ? <Icon.TA key={item.class_id} style={{ marginLeft: '100px' }} /> : '')),
-        );
+
         setItemLists(
           userClasses.map((item) => {
             switch (item.role) {
@@ -174,29 +167,38 @@ export default function MyClass({
                 ) : (
                   <Icon.TriangleRight className={classNames.titleIcon} onClick={() => unfoldMyClass(id)} />
                 )}
-                <Typography variant="h4" className={classNames.titleText}>
+                <Typography noWrap variant="h4" className={classNames.titleText}>
                   {titles[id]}
-                  {TAicons[id]}
                 </Typography>
+                {userClass.role === 'MANAGER' && (
+                  <div className={classNames.titleRightIcon}>
+                    <Icon.TA />
+                  </div>
+                )}
               </div>
               <Divider variant="middle" className={classNames.divider} />
-              {display[id] && (
-              <List>
-                {itemLists[id].map((item) => (
-                  <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
-                    <ListItemIcon
-                      className={classNames.itemIcon}
-                      style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
+              {Boolean(display[id]) && (
+                <List>
+                  {itemLists[id].map((item) => (
+                    <ListItem
+                      button
+                      key={item.text}
+                      onClick={() => history.push(item.path)}
+                      className={classNames.item}
                     >
-                      {item.icon}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={item.text}
-                      className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
-                    />
-                  </ListItem>
-                ))}
-              </List>
+                      <ListItemIcon
+                        className={classNames.itemIcon}
+                        style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
+                      >
+                        {item.icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={item.text}
+                        className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
               )}
             </div>
           ))}
