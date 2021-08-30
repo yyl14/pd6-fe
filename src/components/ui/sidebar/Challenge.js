@@ -78,7 +78,7 @@ export default function Challenge({
                 path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/setting`,
               },
               {
-                text: 'Statistic',
+                text: 'Statistics',
                 icon: <Icon.Statistic />,
                 path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/statistics`,
               },
