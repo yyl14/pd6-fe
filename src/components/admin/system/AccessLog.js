@@ -1,19 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  Typography, makeStyles, Dialog, DialogActions, DialogContent, DialogTitle, Button,
-} from '@material-ui/core';
+import React from 'react';
+import { Typography, makeStyles } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
-import { BiFilterAlt } from 'react-icons/bi';
 import moment from 'moment';
 
-/* TODO: Use component/ui/CustomTable to implement access log (remove this import afterwards) */
-import { nanoid } from 'nanoid';
-import CustomTable from '../../ui/CustomTable';
-import DateRangePicker from '../../ui/DateRangePicker';
 import { fetchAccessLog } from '../../../actions/admin/system';
 import AutoTable from '../../ui/AutoTable';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -26,11 +19,17 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 export default function AccessLog() {
   const classes = useStyles();
+
   const loading = useSelector((state) => state.loading.admin.system.fetchAccessLog);
+  const error = useSelector((state) => state.error.admin.system.fetchAccessLog);
+  const accountError = useSelector((state) => state.error.common.common.fetchAccount);
+
   const logs = useSelector((state) => state.accessLogs);
   const authToken = useSelector((state) => state.auth.token);
   const accounts = useSelector((state) => state.accounts);
   const dispatch = useDispatch();
+
+  console.log(accountError);
 
   return (
     <>
@@ -78,6 +77,7 @@ export default function AccessLog() {
         refetch={(browseParams, ident) => {
           dispatch(fetchAccessLog(authToken, browseParams, ident));
         }}
+        refetchErrors={[error, accountError]}
         columns={[
           {
             name: 'Username',

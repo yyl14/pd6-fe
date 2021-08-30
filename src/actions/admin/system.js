@@ -1,61 +1,50 @@
 import agent from '../agent';
-import { systemConstants, accountConstants } from './constant';
+import { systemConstants } from './constant';
+import { commonConstants } from '../common/constant';
 import { autoTableConstants } from '../component/constant';
 import browseParamsTransForm from '../../function/browseParamsTransform';
 
 // Access log
 const fetchAccessLog = (token, browseParams, tableId = null) => async (dispatch) => {
   try {
-    // console.log(browseParams);
-    const config1 = {
-      headers: { 'auth-token': token },
-      params: browseParamsTransForm(browseParams),
-      // paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
-    };
     dispatch({
       type: systemConstants.FETCH_ACCESS_LOG_START,
     });
-    // console.log(config1);
-
+    const config1 = {
+      headers: { 'auth-token': token },
+      params: browseParamsTransForm(browseParams),
+    };
     const res1 = await agent.get('/access-log', config1);
+    const { data: logs, total_count } = res1.data.data;
 
-    const { data, total_count } = res1.data.data;
-    // console.log(res1);
-
-    // TODO: Batch browse account
+    // Batch browse account
+    const accountIds = logs.map((item) => Number(item.account_id));
     const config2 = {
       headers: { 'auth-token': token },
+      params: { account_ids: JSON.stringify(accountIds) },
     };
 
-    const accounts = await Promise.all(
-      data.map(async ({ account_id }) => agent
-        .get(`/account/${account_id}`, config2)
-        .then((res2) => res2.data.data)
-        .catch((err) => {
-          dispatch({
-            type: systemConstants.FETCH_ACCESS_LOG_FAIL,
-            payload: err,
-          });
-        })),
-    );
+    const res2 = await agent.get('/account-summary/batch', config2);
+    const { data: accounts } = res2.data;
 
     dispatch({
       type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
-      payload: { data, accounts: accounts.filter((item) => item !== null) },
+      payload: { data: logs, accounts: accounts.filter((item) => item !== null) },
     });
+
     dispatch({
       type: autoTableConstants.AUTO_TABLE_UPDATE,
       payload: {
         tableId,
         totalCount: total_count,
-        dataIds: data.map((item) => item.id),
+        dataIds: logs.map((item) => item.id),
         offset: browseParams.offset,
       },
     });
   } catch (error) {
     dispatch({
       type: systemConstants.FETCH_ACCESS_LOG_FAIL,
-      payload: error,
+      error,
     });
   }
 };
@@ -80,7 +69,7 @@ const fetchAnnouncement = (token) => (dispatch) => {
     .catch((err) => {
       dispatch({
         type: systemConstants.FETCH_ANNOUNCEMENT_FAIL,
-        payload: err,
+        error: err,
       });
     });
 };

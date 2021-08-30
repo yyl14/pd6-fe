@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-  Switch, Route, withRouter, BrowserRouter as Router,
-} from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
 
-import { Container } from '@material-ui/core';
 import Account from './account/account';
 import Institute from './account/institute';
 import Class from './course/class';
