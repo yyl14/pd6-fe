@@ -154,6 +154,8 @@ export default function Challenge({
       mode === 'submission'
       && userClasses.length !== 0
       && userClasses.find((x) => x.class_id === Number(classId))
+      && challenges[challengeId] !== undefined
+      && problems.byId[problemId] !== undefined
     ) {
       if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleTA} />);

@@ -97,7 +97,8 @@ export default function AllClassChallenge({
           ]);
         }
       }
-    } else if (mode === 'submission') {
+    } else if (mode === 'submission' && challenges[challengeId] !== undefined
+    && problems.byId[problemId] !== undefined) {
       // if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
       //   setTAicon(<Icon.TA className={classNames.titleTA} />);
       // }
