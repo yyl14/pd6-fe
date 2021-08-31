@@ -68,6 +68,7 @@ export default function Statistics() {
   const essays = useSelector((state) => state.essays.byId);
   const submissions = useSelector((state) => state.submissions.byId);
   const downloadLinks = useSelector((state) => state.downloadLinks.byId);
+  const loading = useSelector((state) => state.loading.common.common);
 
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [statisticsData, setStatisticsData] = useState([]);
@@ -117,6 +118,8 @@ export default function Statistics() {
       }));
       setScoreboardTitle([].concat(accountColumn, problemList, essayList));
 
+      if (loading.fetchClassMembers) return;
+
       // set table content
       const memberSubmissionList = challenges[challengeId].statistics.memberSubmission.map((member) => {
         const memberChallengeDetail = {
@@ -155,7 +158,18 @@ export default function Statistics() {
       });
       setScoreboardData(memberSubmissionList);
     }
-  }, [classId, courseId, challenges, challengeId, essays, problems, members, submissions, downloadLinks]);
+  }, [
+    classId,
+    courseId,
+    challenges,
+    challengeId,
+    essays,
+    problems,
+    members,
+    submissions,
+    downloadLinks,
+    loading.fetchClassMembers,
+  ]);
 
   useEffect(() => {
     if (
@@ -190,7 +204,6 @@ export default function Statistics() {
     range.selectNode(scoreboardTableRef.current);
     // add the Range to the set of window selections
     window.getSelection().addRange(range);
-    // execute 'copy', can't 'cut' in this case
     document.execCommand('copy');
     setShowSnackbar(true);
   };
