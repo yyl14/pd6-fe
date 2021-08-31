@@ -38,6 +38,24 @@ const fetchClassMembers = (token, classId) => async (dispatch) => {
   }
 };
 
+const fetchClassMemberWithAccountReferral = (token, classId) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_REQUEST });
+    const res = await agent.get(`/class/${classId}/member/account-referral`, auth);
+    dispatch({ type: commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_SUCCESS, payload: { classId, data: res.data.data.data } });
+  } catch (err) {
+    dispatch({
+      type: commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_FAIL,
+      error: err,
+    });
+  }
+};
+
 const editClassMember = (token, classId, editedList) => (dispatch) => {
   const auth = {
     headers: {
