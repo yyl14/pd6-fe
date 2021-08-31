@@ -447,7 +447,7 @@ const editAssistingData = (token, assistingId, file) => async (dispatch) => {
     'Content-Type': 'multipart/form-data',
   };
   const formData = new FormData();
-  formData.append('assisting_data', file);
+  formData.append('assisting_data_file', file);
 
   try {
     await agent.put(`/assisting-data/${assistingId}`, formData, auth);
