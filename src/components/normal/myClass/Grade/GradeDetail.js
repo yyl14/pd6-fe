@@ -16,6 +16,7 @@ import Grader from './detail/Grader';
 import GradeInfoEdit from './detail/GradeInfoEdit';
 import GradeDelete from './detail/GradeDelete';
 import NoMatch from '../../../noMatch';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -76,7 +77,7 @@ export default function AccountSetting() {
 
   if (grades[gradeId] === undefined || members === undefined) {
     if (loading.fetchClassGrade || commonLoading.fetchClassMembers) {
-      return <div>loading...</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }
@@ -104,16 +105,10 @@ export default function AccountSetting() {
         />
       )}
 
-      <Grader
-        grader={members[grades[gradeId].grader_id]}
-        link={graderLink}
-      />
+      <Grader grader={members[grades[gradeId].grader_id]} link={graderLink} />
 
       {isManager && (
-        <GradeDelete
-          username={members[grades[gradeId].receiver_id].username}
-          title={grades[gradeId].title}
-        />
+        <GradeDelete username={members[grades[gradeId].receiver_id].username} title={grades[gradeId].title} />
       )}
     </>
   );

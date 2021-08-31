@@ -2,18 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-  Drawer,
-  Typography,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-  Button,
-  IconButton,
+  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
 } from '@material-ui/core';
 import Icon from '../icon/index';
-import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
+import { fetchCourses } from '../../../actions/admin/course';
 
 export default function Course({
   classes, history, location, mode,
@@ -177,85 +169,86 @@ export default function Course({
         classes={{ paper: classes.drawerPaper }}
       >
         {mode === 'class-list' ? <div className={classes.topSpace} /> : arrow}
+        <div>
+          <div className={classes.title}>
+            {display === 'unfold' ? (
+              <Icon.TriangleDown className={classes.titleIcon} onClick={foldLesson} />
+            ) : (
+              <Icon.TriangleRight className={classes.titleIcon} onClick={unfoldLesson} />
+            )}
 
-        <div className={classes.title}>
-          {display === 'unfold' ? (
-            <Icon.TriangleDown className={classes.titleIcon} onClick={foldLesson} />
-          ) : (
-            <Icon.TriangleRight className={classes.titleIcon} onClick={unfoldLesson} />
+            <Typography variant="h4" className={classes.titleText}>
+              {title1}
+            </Typography>
+          </div>
+          <Divider variant="middle" className={classes.divider} />
+          {display === 'unfold' && (
+            <List>
+              {itemList.map(
+                (item) => (item.type === 'LESSON' || mode !== 'class-list') && (
+                <ListItem
+                  button
+                  key={item.path}
+                  onClick={() => history.push(item.path)}
+                  className={item.text !== 'Lesson' ? classes.item : classes.addItem}
+                >
+                  <ListItemIcon
+                    className={classes.itemIcon}
+                    style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item.text}
+                    className={location.pathname === item.path ? classes.activeItemText : classes.itemText}
+                  />
+                </ListItem>
+                ),
+              )}
+            </List>
           )}
 
-          <Typography variant="h4" className={classes.titleText}>
-            {title1}
-          </Typography>
-        </div>
-        <Divider variant="middle" className={classes.divider} />
-        {display === 'unfold' && (
-          <List>
-            {itemList.map(
-              (item) => (item.type === 'LESSON' || mode !== 'class-list') && (
-              <ListItem
-                button
-                key={item.path}
-                onClick={() => history.push(item.path)}
-                className={item.text !== 'Lesson' ? classes.item : classes.addItem}
-              >
-                <ListItemIcon
-                  className={classes.itemIcon}
-                  style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  className={location.pathname === item.path ? classes.activeItemText : classes.itemText}
-                />
-              </ListItem>
-              ),
-            )}
-          </List>
-        )}
-
-        {mode === 'class-list' && (
-          <>
-            <div className={classes.title}>
-              {display1 === 'unfold' ? (
-                <Icon.TriangleDown className={classes.titleIcon} onClick={foldContest} />
-              ) : (
-                <Icon.TriangleRight className={classes.titleIcon} onClick={unfoldContest} />
-              )}
-              <Typography variant="h4" className={classes.titleText}>
-                {title2}
-              </Typography>
-            </div>
-            <Divider variant="middle" className={classes.divider} />
-            {display1 === 'unfold' && (
-              <List>
-                {itemList.map(
-                  (item) => item.type === 'CONTEST' && (
-                  <ListItem
-                    button
-                    key={item.path}
-                    onClick={() => history.push(item.path)}
-                    className={item.text !== 'Contest' ? classes.item : classes.addItem}
-                  >
-                    <ListItemIcon
-                      className={classes.itemIcon}
-                      style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                    >
-                      {item.icon}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={item.text}
-                      className={location.pathname === item.path ? classes.activeItemText : classes.itemText}
-                    />
-                  </ListItem>
-                  ),
+          {mode === 'class-list' && (
+            <>
+              <div className={classes.title}>
+                {display1 === 'unfold' ? (
+                  <Icon.TriangleDown className={classes.titleIcon} onClick={foldContest} />
+                ) : (
+                  <Icon.TriangleRight className={classes.titleIcon} onClick={unfoldContest} />
                 )}
-              </List>
-            )}
-          </>
-        )}
+                <Typography variant="h4" className={classes.titleText}>
+                  {title2}
+                </Typography>
+              </div>
+              <Divider variant="middle" className={classes.divider} />
+              {display1 === 'unfold' && (
+                <List>
+                  {itemList.map(
+                    (item) => item.type === 'CONTEST' && (
+                    <ListItem
+                      button
+                      key={item.path}
+                      onClick={() => history.push(item.path)}
+                      className={item.text !== 'Contest' ? classes.item : classes.addItem}
+                    >
+                      <ListItemIcon
+                        className={classes.itemIcon}
+                        style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
+                      >
+                        {item.icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={item.text}
+                        className={location.pathname === item.path ? classes.activeItemText : classes.itemText}
+                      />
+                    </ListItem>
+                    ),
+                  )}
+                </List>
+              )}
+            </>
+          )}
+        </div>
         <div className={classes.bottomSpace} />
       </Drawer>
     </div>

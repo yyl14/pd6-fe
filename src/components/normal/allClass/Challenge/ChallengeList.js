@@ -13,18 +13,15 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import { format } from 'date-fns';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
 import CustomTable from '../../../ui/CustomTable';
-import TableFilterCard from '../../../ui/TableFilterCard';
 import DateRangePicker from '../../../ui/DateRangePicker';
-import filterData from '../../../../function/filter';
-import sortData from '../../../../function/sort';
 import { fetchChallenges, addChallenge } from '../../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse } from '../../../../actions/common/common';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -51,7 +48,6 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 export default function ChallengeList() {
   const { courseId, classId } = useParams();
-  const history = useHistory();
   const className = useStyles();
   const dispatch = useDispatch();
 
@@ -88,7 +84,6 @@ export default function ChallengeList() {
   }, [dispatch, authToken, classId, courseId]);
 
   useEffect(() => {
-    // console.log(loading.addChallenge);
     if (!loading.addChallenge) {
       dispatch(fetchChallenges(authToken, classId));
     }
@@ -104,13 +99,11 @@ export default function ChallengeList() {
       }
       return 'Closed';
     };
-
-    // console.log(challenges);
     if (classes[classId]) {
       setTableData(
         classes[classId].challengeIds
           .filter((id) => getStatus(id) !== 'Not Yet')
-          .reverse()
+          .reduce((acc, b) => [b, ...acc], [])
           .map((id) => ({
             title: challenges[id].title,
             path: `/all-class/${courseId}/${classId}/challenge/${id}`,
@@ -123,7 +116,7 @@ export default function ChallengeList() {
   }, [challenges, challengesID, classId, classes, courseId, currentTime]);
 
   if (loading.fetchChallenges || courses[courseId] === undefined || classes[classId] === undefined) {
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   const handleChange = (e) => {

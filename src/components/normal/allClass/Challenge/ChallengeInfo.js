@@ -3,21 +3,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { format } from 'date-fns';
 import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  TextField,
+  Typography, Button, makeStyles, TextField,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
-import { browseChallengeOverview, editChallenge, browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
+import {
+  browseChallengeOverview,
+  editChallenge,
+  browseTasksUnderChallenge,
+  readProblemScore,
+} from '../../../../actions/myClass/problem';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -29,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end',
-    marginTop: '50px',
   },
 }));
 
@@ -64,6 +62,12 @@ export default function ChallengeInfo() {
 
   useEffect(() => {
     if (challenges[challengeId] !== undefined) {
+      challenges[challengeId].problemIds.map((id) => dispatch(readProblemScore(authToken, id)));
+    }
+  }, [authToken, challengeId, challenges, dispatch]);
+
+  useEffect(() => {
+    if (challenges[challengeId] !== undefined) {
       if (currentTime.isBefore(moment(challenges[challengeId].start_time))) {
         setStatus('Not Yet');
       } else if (currentTime.isBefore(moment(challenges[challengeId].end_time))) {
@@ -76,7 +80,6 @@ export default function ChallengeInfo() {
   }, [challengeId, challenges, currentTime]);
 
   useEffect(() => {
-    // console.log(challenges[challengeId].problemIds.reduce((acc, item) => acc && problems[item] !== undefined, true));
     if (challenges[challengeId]) {
       if (challenges[challengeId].problemIds.reduce((acc, item) => acc && problems[item] !== undefined, true)) {
         // problems are complete
@@ -84,7 +87,7 @@ export default function ChallengeInfo() {
           challenges[challengeId].problemIds
             .map((id) => ({
               challenge_label: problems[id].challenge_label,
-              score: problems[id].full_score,
+              score: problems[id].score,
               id: `coding-${id}`,
             }))
             .concat(
@@ -100,21 +103,19 @@ export default function ChallengeInfo() {
         );
       }
     }
-  }, [authToken, challengeId, challenges, essays, loading.browseTasksUnderChallenge, peerReviews, problems]);
+  }, [authToken, challengeId, challenges, essays, peerReviews, problems]);
 
   if (challenges[challengeId] === undefined) {
     if (!loading.browseChallengeOverview) {
       return <NoMatch />;
     }
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   return (
     <>
       <Typography className={classes.pageHeader} variant="h3">
-        {challenges[challengeId].title}
-        {' '}
-        / Info
+        {`${challenges[challengeId].title} / Info`}
       </Typography>
       <SimpleBar title="Description">
         <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
@@ -143,30 +144,31 @@ export default function ChallengeInfo() {
           </AlignedText>
         </>
       </SimpleBar>
-      <SimpleBar title="Overview" />
-      <SimpleTable
-        isEdit={false}
-        hasDelete={false}
-        columns={[
-          {
-            id: 'challenge_label',
-            label: 'Label',
-            minWidth: 30,
-            align: 'center',
-            width: 400,
-            type: 'string',
-          },
-          {
-            id: 'score',
-            label: 'Score',
-            minWidth: 50,
-            align: 'center',
-            width: 600,
-            type: 'string',
-          },
-        ]}
-        data={tableData}
-      />
+      <SimpleBar title="Overview">
+        <SimpleTable
+          isEdit={false}
+          hasDelete={false}
+          columns={[
+            {
+              id: 'challenge_label',
+              label: 'Label',
+              minWidth: 30,
+              align: 'center',
+              width: 300,
+              type: 'string',
+            },
+            {
+              id: 'score',
+              label: 'Score',
+              minWidth: 50,
+              align: 'center',
+              width: 600,
+              type: 'string',
+            },
+          ]}
+          data={tableData}
+        />
+      </SimpleBar>
     </>
   );
 }

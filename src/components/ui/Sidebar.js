@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import {
   Switch, Route, useHistory, useLocation,
 } from 'react-router-dom';
 
-import { Autocomplete } from '@material-ui/lab';
+// import { Autocomplete } from '@material-ui/lab';
 import Account from './sidebar/Account';
 import Course from './sidebar/Course';
 import System from './sidebar/System';
+import MyProfile from './sidebar/MyProfile';
 
 import MyClass from './sidebar/MyClass';
 import Challenge from './sidebar/Challenge';
@@ -86,6 +87,7 @@ const useStyles = makeStyles((theme) => ({
   },
   divider: {
     marginBottom: '16px',
+    transition: ['transform', '300ms'],
   },
   arrow: {
     marginTop: '60px',
@@ -112,7 +114,6 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
-
 }));
 
 export default function Sidebar() {
@@ -123,6 +124,10 @@ export default function Sidebar() {
 
   return (
     <Switch>
+      {/* {My Profile} */}
+      <Route exact path="/my-profile">
+        <MyProfile classes={classes} history={history} location={location} mode="main" />
+      </Route>
       {/* {Admin} */}
       {/* {Course} */}
       <Route exact path="/admin/course/course/">

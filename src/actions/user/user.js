@@ -10,7 +10,7 @@ const editAccount = (token, id, userName, realName, nickName, email) => (dispatc
   dispatch({ type: userConstants.EDIT_SELF_ACCOUNT_START });
 
   agent.patch(`/account/${id}`, { nickname: nickName, alternative_email: email }, auth)
-    .then((res) => {
+    .then(() => {
       dispatch({
         type: userConstants.EDIT_SELF_ACCOUNT_SUCCESS,
         payload: {
@@ -36,7 +36,7 @@ const makeStudentCardDefault = (token, id, cardId) => (dispatch) => {
   };
   dispatch({ type: userConstants.MAKE_SELF_STUDENT_CARD_DEFAULT_START });
   agent.put(`/account/${id}/default-student-card`, { student_card_id: cardId }, auth)
-    .then((res) => {
+    .then(() => {
       dispatch({
         type: userConstants.MAKE_SELF_STUDENT_CARD_DEFAULT_SUCCESS,
         payload: { cardId, id },
@@ -86,7 +86,7 @@ const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (disp
     institute_email_prefix: emailPrefix,
     student_id: studentId,
   }, auth)
-    .then((res) => {
+    .then(() => {
       dispatch({ type: userConstants.ADD_SELF_STUDENT_CARD_SUCCESS });
     })
     .catch((err) => {
@@ -109,7 +109,7 @@ const editPassword = (token, id, oldPassword, newPassword) => (dispatch) => {
     old_password: oldPassword,
     new_password: newPassword,
   }, auth)
-    .then((res) => {
+    .then(() => {
       dispatch({ type: userConstants.EDIT_SELF_PASSWORD_SUCCESS });
     })
     .catch((err) => {

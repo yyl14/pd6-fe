@@ -1,24 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  TextField,
-} from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { Typography, Button, makeStyles } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import { format } from 'date-fns';
 import Icon from '../../../ui/icon/index';
 import AlignedText from '../../../ui/AlignedText';
 import CustomTable from '../../../ui/CustomTable';
 import NoMatch from '../../../noMatch';
 import SimpleBar from '../../../ui/SimpleBar';
-import { readProblemInfo, readSubmission, readSubmissionDetail } from '../../../../actions/myClass/problem';
+import {
+  readSubmission,
+  readSubmissionDetail,
+  readProblemScore,
+  browseTasksUnderChallenge,
+} from '../../../../actions/myClass/problem';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -31,7 +27,6 @@ export default function SubmissionList() {
   const {
     courseId, classId, challengeId, problemId,
   } = useParams();
-  const history = useHistory();
   const classNames = useStyles();
   const [tableData, setTableData] = useState([]);
 
@@ -51,8 +46,14 @@ export default function SubmissionList() {
   }, [accountId, authToken, dispatch, problemId]);
 
   useEffect(() => {
-    dispatch(readProblemInfo(authToken, problemId, challengeId));
-  }, [authToken, challengeId, dispatch, problemId]);
+    dispatch(browseTasksUnderChallenge(authToken, challengeId));
+  }, [authToken, challengeId, dispatch]);
+
+  useEffect(() => {
+    if (!loading.browseTasksUnderChallenge) {
+      dispatch(readProblemScore(authToken, problemId));
+    }
+  }, [authToken, dispatch, loading.browseTasksUnderChallenge, problemId]);
 
   useEffect(() => {
     if (submissionIds !== []) {
@@ -63,61 +64,69 @@ export default function SubmissionList() {
   useEffect(() => {
     if (judgmentIds !== []) {
       setTableData(
-        // judgmentIds.map((id) => ({
-        //   id: judgments[id].submission_id,
-        //   status: judgments[id].status,
-        //   score: judgments[id].score,
-        //   used_time: judgments[id].total_time,
-        //   used_memory: judgments[id].max_memory,
-        //   submit_time: moment(submissions[judgments[id].submission_id].submit_time).format('YYYY-MM-DD, HH:mm'),
-        //   path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${judgments[id].submission_id}`,
-        // })),
-        submissionIds.map((id) => ({
-          id,
-          submit_time: moment(submissions[id].submit_time).format('YYYY-MM-DD, HH:mm'),
-          status: judgmentIds.map((key) => {
-            if (judgments[key].submission_id === id) {
-              return judgments[key].status
-                .toLowerCase()
-                .split(' ')
-                .map((word) => word[0].toUpperCase() + word.substring(1))
-                .join(' ');
+        submissionIds
+          .filter(
+            (id) => submissions[id].account_id === accountId && submissions[id].problem_id === parseInt(problemId, 10),
+          )
+          .map((id) => {
+            if (judgmentIds.filter((key) => judgments[key].submission_id === id)[0]) {
+              return {
+                key: id,
+                id,
+                submit_time: moment(submissions[id].submit_time).format('YYYY-MM-DD, HH:mm'),
+                status: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].status
+                  .toLowerCase()
+                  .split(' ')
+                  .map((word) => word[0].toUpperCase() + word.substring(1))
+                  .join(' '),
+                score: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].score,
+                used_time: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].total_time,
+                used_memory: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].max_memory,
+                path: `/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${id}`,
+              };
             }
-            return null;
+            return '';
           }),
-          score: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].score : null)),
-          used_time: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].total_time : null)),
-          used_memory: judgmentIds.map((key) => (judgments[key].submission_id === id ? judgments[key].max_memory : null)),
-          path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${id}`,
-        })),
       );
     }
-  }, [challengeId, classId, courseId, judgmentIds, judgments, problemId, submissionIds, submissions]);
-
+  }, [accountId, challengeId, classId, courseId, judgmentIds, judgments, problemId, submissionIds, submissions]);
   if (
     challenges[challengeId] === undefined
     || problems[problemId] === undefined
     || submissions === undefined
     || judgments === undefined
+    || problems[problemId].score === undefined
   ) {
-    if (!loading.readProblem && !loading.readSubmission && !loading.readChallenge && !loading.readJudgment) {
-      return <NoMatch />;
-    }
-    return <div>loading...</div>;
+    // if (
+    //   !loading.readProblem
+    //   && !loading.readSubmission
+    //   && !loading.readChallenge
+    //   && !loading.readJudgment
+    //   && !loading.readProblemScore
+    // ) {
+    //   return <NoMatch />;
+    // }
+    return <GeneralLoading />;
   }
 
   const handleRefresh = () => {
     dispatch(readSubmission(authToken, accountId, problemId));
+    dispatch(readProblemScore(authToken, problemId));
   };
 
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
-        {`${challenges[challengeId].title} / ${problems[problemId].challenge_label} / My Submission`}
+        {challenges[challengeId].title}
+        {' '}
+        /
+        {problems[problemId].challenge_label}
+        {' '}
+        / My Submission
       </Typography>
       <SimpleBar title="Submission Information">
         <AlignedText text="Your Latest Score" childrenType="text">
-          <Typography variant="body1">N/A</Typography>
+          <Typography variant="body1">{problems[problemId].score}</Typography>
         </AlignedText>
       </SimpleBar>
       <CustomTable

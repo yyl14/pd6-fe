@@ -13,18 +13,15 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import { format } from 'date-fns';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
 import CustomTable from '../../../ui/CustomTable';
-import TableFilterCard from '../../../ui/TableFilterCard';
 import DateRangePicker from '../../../ui/DateRangePicker';
-import filterData from '../../../../function/filter';
-import sortData from '../../../../function/sort';
 import { fetchChallenges, addChallenge } from '../../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse } from '../../../../actions/common/common';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -51,7 +48,6 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 export default function ChallengeList() {
   const { courseId, classId } = useParams();
-  const history = useHistory();
   const className = useStyles();
   const dispatch = useDispatch();
 
@@ -107,7 +103,7 @@ export default function ChallengeList() {
     if (classes[classId]) {
       if (isManager) {
         setTableData(
-          classes[classId].challengeIds.reverse().map((id) => ({
+          classes[classId].challengeIds.reduce((acc, b) => ([b, ...acc]), []).map((id) => ({
             title: challenges[id].title,
             path: `/my-class/${courseId}/${classId}/challenge/${id}`,
             startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
@@ -119,7 +115,7 @@ export default function ChallengeList() {
         setTableData(
           classes[classId].challengeIds
             .filter((id) => getStatus(id) !== 'Not Yet')
-            .reverse()
+            .reduce((acc, b) => ([b, ...acc]), [])
             .map((id) => ({
               title: challenges[id].title,
               path: `/my-class/${courseId}/${classId}/challenge/${id}`,
@@ -133,19 +129,13 @@ export default function ChallengeList() {
   }, [challenges, challengesID, classId, classes, courseId, currentTime, isManager]);
 
   useEffect(() => {
-    userClasses.map((item) => {
-      if (`${item.class_id}` === classId) {
-        // console.log(item.role);
-        if (item.role === 'MANAGER') {
-          setIsManager(true);
-        }
-      }
-      return <></>;
-    });
+    if (userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
+      setIsManager(true);
+    }
   }, [classId, userClasses]);
 
   if (loading.fetchChallenges || courses[courseId] === undefined || classes[classId] === undefined) {
-    return <div>loading...</div>;
+    return <GeneralLoading />;
   }
 
   const handleChange = (e) => {
@@ -216,14 +206,12 @@ export default function ChallengeList() {
       <CustomTable
         hasSearch
         buttons={
-          isManager ? (
+          isManager && (
             <>
               <Button color="primary" onClick={() => setPopUp(true)}>
                 <Icon.Add style={{ color: 'white' }} />
               </Button>
             </>
-          ) : (
-            <></>
           )
         }
         data={tableData}

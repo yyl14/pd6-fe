@@ -1,10 +1,9 @@
-import { useState } from 'react';
-import React, { useSelector, useDispatch } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { useEffect, useState } from 'react';
+import React, { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useHistory } from 'react-router-dom';
 import {
   Button,
   TextField,
-  Grid,
   Typography,
   Card,
   CardContent,
@@ -12,17 +11,14 @@ import {
   IconButton,
   Dialog,
   DialogActions,
-  DialogContent,
-  DialogContentText,
   DialogTitle,
   makeStyles,
+  Snackbar,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { borders, borderRadius } from '@material-ui/system';
-
 import { userResetPassword } from '../../actions/user/auth';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   authForm: {
     width: '50%',
   },
@@ -42,9 +38,16 @@ function checkPassword(password1, password2) {
   return "Passwords don't match";
 }
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 export default function ResetPassword() {
   const classNames = useStyles();
   const dispatch = useDispatch();
+  const query = useQuery();
+  const history = useHistory();
+
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
   const [error, setError] = useState(false);
@@ -54,6 +57,12 @@ export default function ResetPassword() {
 
   const [showPassword1, setShowPassword1] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
+
+  const [hasRequest, setHasRequest] = useState(false);
+  const resetLoading = useSelector((state) => state.loading.user.auth.resetPassword);
+  const resetError = useSelector((state) => state.error.user.auth.resetPassword);
+  const [errorPopup, setErrorPopup] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -68,8 +77,8 @@ export default function ResetPassword() {
     }
     setError(false);
     setErrorText('');
-    // dispatch(userResetPassword(confirmPassword));
-    setPopUp(true);
+    dispatch(userResetPassword(query.get('code'), confirmPassword));
+    setHasRequest(true);
   };
 
   const handleChange = (event) => {
@@ -95,7 +104,12 @@ export default function ResetPassword() {
   };
 
   const handleClosePopUp = () => {
+    history.push('/login');
     setPopUp(false);
+  };
+
+  const handleClose = () => {
+    setErrorPopup(false);
   };
 
   const handleClickShowPassword1 = () => {
@@ -105,6 +119,17 @@ export default function ResetPassword() {
   const handleClickShowPassword2 = () => {
     setShowPassword2(!showPassword2);
   };
+
+  useEffect(() => {
+    if (!resetLoading && hasRequest) {
+      if (resetError !== null) {
+        setErrorPopup(true);
+        setErrorMsg(resetError);
+      } else {
+        setPopUp(true);
+      }
+    }
+  }, [hasRequest, resetError, resetLoading]);
 
   return (
     <>
@@ -160,25 +185,26 @@ export default function ResetPassword() {
           </form>
         </CardContent>
       </Card>
-      {popUp ? (
-        <Dialog
-          open={popUp}
-          keepMounted
-          onClose={() => handleClosePopUp()}
-          aria-labelledby="alert-dialog-slide-title"
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <DialogTitle id="alert-dialog-slide-title">
-            <Typography variant="h4">Password reset success</Typography>
-          </DialogTitle>
-          <DialogContent>Please check your mailbox to the account.</DialogContent>
-          <DialogActions>
-            <Button onClick={() => handleClosePopUp()}>Done</Button>
-          </DialogActions>
-        </Dialog>
-      ) : (
-        <></>
-      )}
+      <Dialog
+        open={popUp}
+        keepMounted
+        onClose={() => handleClosePopUp()}
+      >
+        <DialogTitle id="alert-dialog-slide-title">
+          <Typography variant="h4">Password reset success</Typography>
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={() => handleClosePopUp()}>Done</Button>
+        </DialogActions>
+      </Dialog>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={errorPopup}
+        onClose={handleClose}
+        message={`Error: ${errorMsg}`}
+        key="errorMsg"
+        className={classNames.snackbar}
+      />
     </>
   );
 }

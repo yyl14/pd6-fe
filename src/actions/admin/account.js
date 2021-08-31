@@ -80,8 +80,7 @@ const editInstitute = (token, id, abbreviatedName, fullName, emailDomain, isDisa
 
   agent
     .patch(`/institute/${id}`, body, auth)
-    .then((res) => {
-      console.log('editing institute suc');
+    .then(() => {
       dispatch({
         type: accountConstants.EDIT_INSTITUTE_SUCCESS,
         payload: {
@@ -110,16 +109,9 @@ const editAccount = (token, id, userName, realName, nickName, email) => (dispatc
   };
   dispatch({ type: accountConstants.EDIT_ACCOUNT_REQUEST });
 
-  const body = {
-    username: userName,
-    real_name: realName,
-    nickname: nickName,
-    alternative_email: email,
-  };
-
   agent
     .patch(`/account/${id}`, { real_name: realName, nickname: nickName, alternative_email: email }, auth)
-    .then((res) => {
+    .then(() => {
       dispatch({
         type: accountConstants.EDIT_ACCOUNT_SUCCESS,
         payload: {
@@ -148,14 +140,14 @@ const deleteAccount = (token, id) => (dispatch) => {
   dispatch({ type: accountConstants.DELETE_ACCOUNT_REQUEST });
   agent
     .delete(`/account/${id}`, auth)
-    .then((res) => {
+    .then(() => {
       dispatch({
         type: accountConstants.DELETE_ACCOUNT_SUCCESS,
         payload: { id },
       });
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       dispatch({
         type: accountConstants.DELETE_ACCOUNT_FAIL,
         error: err,
@@ -172,7 +164,7 @@ const makeStudentCardDefault = (token, id, cardId) => (dispatch) => {
   dispatch({ type: accountConstants.MAKE_STUDENT_CARD_DEFAULT_REQUEST });
   agent
     .put(`/account/${id}/default-student-card`, { student_card_id: cardId }, auth)
-    .then((res) => {
+    .then(() => {
       dispatch({
         type: accountConstants.MAKE_STUDENT_CARD_DEFAULT_SUCCESS,
         payload: { cardId, id },
@@ -228,7 +220,7 @@ const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (disp
       },
       auth,
     )
-    .then((res) => {
+    .then(() => {
       dispatch({ type: accountConstants.ADD_STUDENT_CARD_SUCCESS });
     })
     .catch((err) => {
@@ -254,7 +246,7 @@ const editPassword = (token, id, newPassword) => (dispatch) => {
       },
       auth,
     )
-    .then((res) => {
+    .then(() => {
       dispatch({ type: accountConstants.EDIT_PASSWORD_SUCCESS });
     })
     .catch((err) => {

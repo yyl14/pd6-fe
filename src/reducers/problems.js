@@ -6,11 +6,21 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data } = action.payload;
-      return data.problem.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), {});
+      return data.problem.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item.id]: {
+            ...item,
+            testcaseIds: [],
+            assistingDataIds: [],
+            score: state[data.id] ? state[data.id].score : '',
+          },
+        }),
+        state,
+      );
     }
     case problemConstants.READ_PROBLEM_SUCCESS: {
       const data = action.payload;
-      // console.log(data);
       return {
         ...state,
         [data.id]: {
@@ -59,8 +69,8 @@ const byId = (state = {}, action) => {
       };
     }
 
-    // this action need to delete all original state, don't revise.
     case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
+      // console.log(action);
       const { problems } = action.payload;
       return problems.reduce(
         (acc, item) => ({
@@ -70,7 +80,8 @@ const byId = (state = {}, action) => {
             testcaseIds: [],
             assistingDataIds: [],
           },
-        }), {},
+        }),
+        state,
       );
     }
 
@@ -105,17 +116,16 @@ const allIds = (state = [], action) => {
   switch (action.type) {
     case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data } = action.payload;
-      return data.problem.map((item) => item.id);
+      return [...new Set([...data.problem.map((item) => item.id), ...state])];
     }
     case problemConstants.READ_PROBLEM_SUCCESS:
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
     case submissionConstants.READ_PROBLEM_SUCCESS:
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
 
-    // this action need to delete all original state, don't revise.
     case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
       const { problems } = action.payload;
-      return problems.map((item) => item.id);
+      return [...new Set([...problems.map((item) => item.id), ...state])];
     }
 
     default:

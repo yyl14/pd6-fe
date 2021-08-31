@@ -4,10 +4,9 @@ import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
 } from '@material-ui/core';
-import { CompassCalibrationOutlined } from '@material-ui/icons';
 import Icon from '../icon/index';
 
-import { fetchChallenges, addChallenge } from '../../../actions/myClass/challenge';
+import { fetchChallenges } from '../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse } from '../../../actions/common/common';
 
 export default function AllClassChallenge({
@@ -177,19 +176,20 @@ export default function AllClassChallenge({
         classes={{ paper: classNames.drawerPaper }}
       >
         {arrow}
-        <div className={classNames.title}>
-          {display === 'unfold' ? (
-            <Icon.TriangleDown className={classNames.titleIcon} onClick={foldChallenge} />
-          ) : (
-            <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldChallenge} />
-          )}
-          <Typography variant="h4" className={classNames.titleText}>
-            {title}
-          </Typography>
-          {TAicon}
-        </div>
-        <Divider variant="middle" className={classNames.divider} />
-        {display === 'unfold' ? (
+        <div>
+          <div className={classNames.title}>
+            {display === 'unfold' ? (
+              <Icon.TriangleDown className={classNames.titleIcon} onClick={foldChallenge} />
+            ) : (
+              <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldChallenge} />
+            )}
+            <Typography variant="h4" className={classNames.titleText}>
+              {title}
+            </Typography>
+            {TAicon}
+          </div>
+          <Divider variant="middle" className={classNames.divider} />
+          {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
               <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
@@ -206,9 +206,8 @@ export default function AllClassChallenge({
               </ListItem>
             ))}
           </List>
-        ) : (
-          ''
-        )}
+          )}
+        </div>
         <div className={classNames.bottomSpace} />
       </Drawer>
     </div>

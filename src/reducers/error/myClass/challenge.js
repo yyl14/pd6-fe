@@ -3,9 +3,10 @@ import { challengeConstants } from '../../../actions/myClass/constant';
 const initialState = {
   fetchChallenges: null,
   addChallenge: null,
-  fetchChallengeSummary: null,
   editChallenge: null,
   deleteChallenge: null,
+  fetchChallengeSummary: null,
+  fetchChallengeMemberSubmission: null,
   addProblem: null,
   addEssay: null,
   addPeerReview: null,
@@ -25,6 +26,7 @@ export default function challenge(state = initialState, action) {
         fetchChallenges: action.error,
       };
     }
+
     case challengeConstants.ADD_CHALLENGE_SUCCESS: {
       return {
         ...state,
@@ -35,18 +37,6 @@ export default function challenge(state = initialState, action) {
       return {
         ...state,
         addChallenge: action.error,
-      };
-    }
-    case challengeConstants.FETCH_CHALLENGE_SUMMARY_SUCCESS: {
-      return {
-        ...state,
-        fetchChallengeSummary: null,
-      };
-    }
-    case challengeConstants.FETCH_CHALLENGE_SUMMARY_FAIL: {
-      return {
-        ...state,
-        fetchChallengeSummary: action.error,
       };
     }
 
@@ -73,6 +63,32 @@ export default function challenge(state = initialState, action) {
       return {
         ...state,
         deleteChallenge: action.error,
+      };
+    }
+
+    case challengeConstants.FETCH_CHALLENGE_SUMMARY_SUCCESS: {
+      return {
+        ...state,
+        fetchChallengeSummary: null,
+      };
+    }
+    case challengeConstants.FETCH_CHALLENGE_SUMMARY_FAIL: {
+      return {
+        ...state,
+        fetchChallengeSummary: action.error,
+      };
+    }
+
+    case challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_SUCCESS: {
+      return {
+        ...state,
+        fetchChallengeMemberSubmission: null,
+      };
+    }
+    case challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_FAIL: {
+      return {
+        ...state,
+        fetchChallengeMemberSubmission: action.error,
       };
     }
 
