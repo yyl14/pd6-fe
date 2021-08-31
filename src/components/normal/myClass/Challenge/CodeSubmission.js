@@ -93,7 +93,7 @@ export default function CodeSubmission() {
             </MenuItem>
             {submitLang.allIds.map((key) => (
               <MenuItem key={submitLang.byId[key].id} value={submitLang.byId[key].id}>
-                {submitLang.byId[key].name}
+                {`${submitLang.byId[key].name} ${submitLang.byId[key].version}`}
               </MenuItem>
             ))}
           </Select>
