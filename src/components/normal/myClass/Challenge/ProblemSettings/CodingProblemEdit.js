@@ -284,6 +284,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const handleAssistTempUpload = () => {
     // add file name to table;
     const newData = assistTableData;
+    const selectedFile = selectedFileA;
     tempSelectedFileA.forEach((file) => {
       let flag = false;
       assistTableData.every((item) => {
@@ -296,9 +297,17 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       if (flag === false) {
         newData.push({ id: file.name, filename: file.name });
       }
+      const filteredFile = selectedFileA.filter((oriFile) => oriFile.name === file.name);
+      if (filteredFile.length === 0) {
+        selectedFile.push(file);
+      } else {
+        const index = selectedFile.indexOf(filteredFile[0]);
+        selectedFile.splice(index, 1);
+        selectedFile.push(file);
+      }
     });
     setAssistTableData(newData);
-    setSelectedFileA(tempSelectedFileA);
+    setSelectedFileA(selectedFile);
     setTempSelectedFileA([]);
     setHasChange(true);
   };
@@ -430,7 +439,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           selectedFileA.every((file) => {
             if (file.name === assistingData[id].filename) {
               dispatch(editAssistingData(authToken, id, file));
-              selectedFileABackUp = selectedFileABackUp.filter((newFile) => !file);
+              selectedFileABackUp = selectedFileABackUp.filter((data) => data.name !== file.name);
               return false;
             }
             return true;
@@ -446,15 +455,14 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
     });
 
     selectedFileABackUp.forEach((file) => {
-      dispatch(addAssistingData(authToken, problemId, file));
+      const existedFile = assistTableData.filter((data) => data.filename === file.name);
+      if (existedFile.length !== 0) {
+        dispatch(addAssistingData(authToken, problemId, file));
+      }
     });
 
     setHasRequest(true);
     setDisabled(true);
-    // wait for 3 secs because uploading many files waste time
-    // setTimeout(() => {
-    //   closeEdit();
-    // }, 3000);
   };
 
   const handleCancel = () => {
