@@ -140,7 +140,7 @@ export default function SubmissionDetail() {
     problems.byId[problemId] === undefined
     || challenges.byId[challengeId] === undefined
     || submissions[submissionId] === undefined
-    || judgments[judgmentId] === undefined
+    || judgments === undefined
     || judgeCases.allIds === undefined
     || testcaseIds === undefined
   ) {
@@ -222,22 +222,34 @@ export default function SubmissionDetail() {
           <Typography variant="body1">{problems.byId[problemId].title}</Typography>
         </AlignedText>
         <AlignedText text="Status" childrenType="text">
-          {judgments[judgmentId].status === 'ACCEPTED' ? (
-            <Typography variant="body1">
-              {judgments[judgmentId].status.charAt(0).concat(judgments[judgmentId].status.slice(1).toLowerCase())}
-            </Typography>
+          {judgments[judgmentId] !== undefined ? (
+            <div>
+              {judgments[judgmentId].status === 'ACCEPTED' ? (
+                <Typography variant="body1">
+                  {judgments[judgmentId].status.charAt(0).concat(judgments[judgmentId].status.slice(1).toLowerCase())}
+                </Typography>
+              ) : (
+                <Typography variant="body1" color="secondary">
+                  {judgments[judgmentId].status
+                    .toLowerCase()
+                    .split(' ')
+                    .map((word) => word[0].toUpperCase() + word.substring(1))
+                    .join(' ')}
+                </Typography>
+              )}
+            </div>
           ) : (
             <Typography variant="body1" color="secondary">
-              {judgments[judgmentId].status
-                .toLowerCase()
-                .split(' ')
-                .map((word) => word[0].toUpperCase() + word.substring(1))
-                .join(' ')}
+              Waiting For Judge
             </Typography>
           )}
         </AlignedText>
         <AlignedText text="Score" childrenType="text">
-          <Typography variant="body1">{judgments[judgmentId].score}</Typography>
+          {judgments[judgmentId] !== undefined && (
+            <div>
+              <Typography variant="body1">{judgments[judgmentId].score}</Typography>
+            </div>
+          )}
         </AlignedText>
         <AlignedText text="Submit Time" childrenType="text">
           <Typography variant="body1">

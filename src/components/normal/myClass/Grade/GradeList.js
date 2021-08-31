@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   makeStyles,
+  withStyles,
   Button,
   Typography,
   Dialog,
@@ -34,6 +35,14 @@ const useStyles = makeStyles((theme) => ({
     marginRight: '155px',
   },
 }));
+
+const StyledButton = withStyles({
+  outlined: {
+    '& path': {
+      fill: 'none !important',
+    },
+  },
+})(Button);
 
 /* This is a level 4 component (page component) */
 export default function GradeList() {
@@ -131,7 +140,7 @@ export default function GradeList() {
 
   const handleAdd = () => {
     if (inputTitle !== '' && selectedFile !== []) {
-      selectedFile.map((file) => dispatch(addClassGrade(authToken, classId, file)));
+      selectedFile.map((file) => dispatch(addClassGrade(authToken, classId, inputTitle, file)));
     }
     setPopUp(false);
     setInputTitle('');
@@ -263,7 +272,7 @@ export default function GradeList() {
           />
         </DialogContent>
         <DialogActions>
-          <Button
+          <StyledButton
             className={classNames.templateBtn}
             variant="outlined"
             startIcon={<Icon.Download />}
@@ -272,7 +281,7 @@ export default function GradeList() {
             }}
           >
             Template
-          </Button>
+          </StyledButton>
           <Button onClick={handleCancel} color="default">
             Cancel
           </Button>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
-import { format } from 'date-fns';
 import {
   Typography, Button, makeStyles, TextField,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
+import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
@@ -165,9 +165,9 @@ export default function ChallengeInfo() {
             </Button>
           </div>
         ) : (
-          <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
-            {challenges[challengeId].description}
-          </Typography>
+          <MathpixLoader>
+            <MathpixMarkdown text={challenges[challengeId].description} />
+          </MathpixLoader>
         )}
       </SimpleBar>
       <SimpleBar title="Challenge Information">

@@ -4,6 +4,7 @@ import {
   Typography,
   Button,
   makeStyles,
+  withStyles,
   Dialog,
   DialogTitle,
   DialogActions,
@@ -67,11 +68,17 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const StyledButton = withStyles({
+  outlined: {
+    '& path': {
+      fill: 'none !important',
+    },
+  },
+})(Button);
+
 /* This is a level 4 component (page component) */
 export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
-  const {
-    problemId,
-  } = useParams();
+  const { problemId } = useParams();
   const classNames = useStyles();
 
   const dispatch = useDispatch();
@@ -277,6 +284,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const handleAssistTempUpload = () => {
     // add file name to table;
     const newData = assistTableData;
+    const selectedFile = selectedFileA;
     tempSelectedFileA.forEach((file) => {
       let flag = false;
       assistTableData.every((item) => {
@@ -289,9 +297,17 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       if (flag === false) {
         newData.push({ id: file.name, filename: file.name });
       }
+      const filteredFile = selectedFileA.filter((oriFile) => oriFile.name === file.name);
+      if (filteredFile.length === 0) {
+        selectedFile.push(file);
+      } else {
+        const index = selectedFile.indexOf(filteredFile[0]);
+        selectedFile.splice(index, 1);
+        selectedFile.push(file);
+      }
     });
     setAssistTableData(newData);
-    setSelectedFileA(tempSelectedFileA);
+    setSelectedFileA(selectedFile);
     setTempSelectedFileA([]);
     setHasChange(true);
   };
@@ -423,7 +439,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           selectedFileA.every((file) => {
             if (file.name === assistingData[id].filename) {
               dispatch(editAssistingData(authToken, id, file));
-              selectedFileABackUp = selectedFileABackUp.filter((newFile) => !file);
+              selectedFileABackUp = selectedFileABackUp.filter((data) => data.name !== file.name);
               return false;
             }
             return true;
@@ -439,15 +455,14 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
     });
 
     selectedFileABackUp.forEach((file) => {
-      dispatch(addAssistingData(authToken, problemId, file));
+      const existedFile = assistTableData.filter((data) => data.filename === file.name);
+      if (existedFile.length !== 0) {
+        dispatch(addAssistingData(authToken, problemId, file));
+      }
     });
 
     setHasRequest(true);
     setDisabled(true);
-    // wait for 3 secs because uploading many files waste time
-    // setTimeout(() => {
-    //   closeEdit();
-    // }, 3000);
   };
 
   const handleCancel = () => {
@@ -459,10 +474,33 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   };
 
   useEffect(() => {
-    if (hasRequest && !loading.editProblem && !loading.deleteTestcase && !loading.deleteAssistingData && !loading.editAssistingData && !loading.addAssistingData && !loading.editTestcase && !loading.uploadTestcaseInput && !loading.uploadTestcaseOutput && !loading.addTestcase) {
+    if (
+      hasRequest
+      && !loading.editProblem
+      && !loading.deleteTestcase
+      && !loading.deleteAssistingData
+      && !loading.editAssistingData
+      && !loading.addAssistingData
+      && !loading.editTestcase
+      && !loading.uploadTestcaseInput
+      && !loading.uploadTestcaseOutput
+      && !loading.addTestcase
+    ) {
       closeEdit();
     }
-  }, [closeEdit, hasRequest, loading.addAssistingData, loading.addTestcase, loading.deleteAssistingData, loading.deleteTestcase, loading.editAssistingData, loading.editProblem, loading.editTestcase, loading.uploadTestcaseInput, loading.uploadTestcaseOutput]);
+  }, [
+    closeEdit,
+    hasRequest,
+    loading.addAssistingData,
+    loading.addTestcase,
+    loading.deleteAssistingData,
+    loading.deleteTestcase,
+    loading.editAssistingData,
+    loading.editProblem,
+    loading.editTestcase,
+    loading.uploadTestcaseInput,
+    loading.uploadTestcaseOutput,
+  ]);
 
   return (
     <>
@@ -541,12 +579,16 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield2}
         />
       </SimpleBar>
-      <SimpleBar title="Sample">
+      <SimpleBar title="Sample Data">
         <div className={classNames.loadButtons}>
-          <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setSamplePopUp(true)}>
+          <StyledButton
+            variant="outlined"
+            color="primary"
+            startIcon={<Icon.Upload />}
+            onClick={() => setSamplePopUp(true)}
+          >
             Upload
-          </Button>
-          {/* <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button> */}
+          </StyledButton>
         </div>
         <SimpleTable
           isEdit
@@ -610,10 +652,14 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
         )}
       >
         <div className={classNames.loadButtons}>
-          <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setTestingPopUp(true)}>
+          <StyledButton
+            variant="outlined"
+            color="primary"
+            startIcon={<Icon.Upload />}
+            onClick={() => setTestingPopUp(true)}
+          >
             Upload
-          </Button>
-          {/* <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button> */}
+          </StyledButton>
         </div>
         <SimpleTable
           isEdit
@@ -677,10 +723,14 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       </SimpleBar>
       <SimpleBar title="Assisting Data (Optional)">
         <div className={classNames.loadButtons}>
-          <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setAssistPopUp(true)}>
+          <StyledButton
+            variant="outlined"
+            color="primary"
+            startIcon={<Icon.Upload />}
+            onClick={() => setAssistPopUp(true)}
+          >
             Upload
-          </Button>
-          {/* <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button> */}
+          </StyledButton>
         </div>
         <SimpleTable
           isEdit

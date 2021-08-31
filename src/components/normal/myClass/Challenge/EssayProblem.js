@@ -1,22 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContentText,
-  DialogContent,
-  TextField,
-  Grid,
+  Typography, Button, makeStyles, withStyles,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
-import SimpleBar from '../../../ui/SimpleBar';
 import Icon from '../../../ui/icon/index';
-import AlignedText from '../../../ui/AlignedText';
-import NoMatch from '../../../noMatch';
 
 import EssayInfo from './ProblemSettings/EssayInfo';
 import EssayEdit from './ProblemSettings/EssayEdit';
@@ -31,6 +19,14 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
   },
 }));
+
+const StyledButton = withStyles({
+  outlined: {
+    '& path': {
+      fill: 'none !important',
+    },
+  },
+})(Button);
 
 export default function EssayProblem() {
   const {
@@ -100,9 +96,9 @@ export default function EssayProblem() {
       {!edit && role === 'MANAGER' && (
         <div className={classNames.managerButtons}>
           <Button onClick={() => setEdit(true)}>Edit</Button>
-          <Button variant="outlined" component="span" startIcon={<Icon.Download />} onClick={handleDownload}>
+          <StyledButton variant="outlined" component="span" startIcon={<Icon.Download />} onClick={handleDownload}>
             Download
-          </Button>
+          </StyledButton>
         </div>
       )}
       {edit ? <EssayEdit closeEdit={handleCloseEdit} role={role} /> : <EssayInfo role={role} />}

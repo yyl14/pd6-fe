@@ -1,17 +1,18 @@
 import React from 'react';
-import styled from 'styled-components';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Icon from './icon/index';
 
-const StyledPaper = styled(Paper)`
-  padding: 5px;
-  text-align: center;
-  width: 18vw;
-  margin: 5px;
-  display: inherit;
-`;
+const StyledPaper = withStyles({
+  root: {
+    padding: '5px',
+    textAlign: 'center',
+    width: '18vw',
+    margin: '5px',
+    display: 'inherit',
+  },
+})(Paper);
 
 const useStyles = makeStyles((theme) => ({
   root: {

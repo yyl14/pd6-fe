@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import 'katex/dist/katex.min.css';
-import Latex from 'react-latex-next';
+// https://mathpix.com/docs/mathpix-markdown/overview
+import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 import {
   Typography,
   Button,
   makeStyles,
+  withStyles,
   Dialog,
   DialogTitle,
   DialogActions,
   DialogContent,
   DialogContentText,
-  TextField,
   Grid,
+  FormControlLabel,
+  Switch,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
@@ -30,12 +32,11 @@ import {
   deleteAssistingData,
   deleteTestcase,
   deleteProblem,
-  browseTasksUnderChallenge,
 } from '../../../../../actions/myClass/problem';
 
-import { fetchClass, fetchCourse, downloadFile } from '../../../../../actions/common/common';
+import { downloadFile } from '../../../../../actions/common/common';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -49,7 +50,18 @@ const useStyles = makeStyles((theme) => ({
   content: {
     whiteSpace: 'pre-line',
   },
+  statusSwitch: {
+    marginTop: '20px',
+  },
 }));
+
+const StyledButton = withStyles({
+  outlined: {
+    '& path': {
+      fill: 'none !important',
+    },
+  },
+})(Button);
 
 /* This is a level 4 component (page component) */
 export default function CodingProblemInfo({ role = 'NORMAL' }) {
@@ -65,6 +77,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const courses = useSelector((state) => state.courses.byId);
   const problems = useSelector((state) => state.problem.byId);
   const testcases = useSelector((state) => state.testcases.byId);
+  const [status, setStatus] = useState(false);
 
   const assistingData = useSelector((state) => state.assistingData.byId);
 
@@ -208,8 +221,14 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
 
   useEffect(() => {
     if (problems[problemId] && problems[problemId].testcaseIds) {
+      const testcasesId = problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
       setSampleDataIds(problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample));
-      setTestcaseDataIds(problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample));
+      setTestcaseDataIds(testcasesId);
+      if (testcasesId.length === 0) {
+        setStatus(false);
+      } else {
+        setStatus(!testcases[testcasesId[0]].is_disabled);
+      }
     }
   }, [problems, problemId, testcases]);
 
@@ -217,11 +236,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     dispatch(browseTestcase(authToken, problemId));
     dispatch(browseAssistingData(authToken, problemId));
   }, [authToken, dispatch, problemId]);
-
-  // useEffect(() => {
-  //   dispatch(fetchClass(authToken, classId));
-  //   dispatch(fetchCourse(authToken, courseId));
-  // }, [authToken, classId, courseId, dispatch]);
 
   if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
     return <GeneralLoading />;
@@ -239,14 +253,14 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         </Typography>
       </SimpleBar>
       <SimpleBar title="Description">
-        <Typography variant="body2" className={classNames.content}>
-          <Latex>{problems[problemId].description}</Latex>
-        </Typography>
+        <MathpixLoader>
+          <MathpixMarkdown text={problems[problemId].description} />
+        </MathpixLoader>
       </SimpleBar>
       <SimpleBar title="About Input and Output">
-        <Typography variant="body2" className={classNames.content}>
-          <Latex>{problems[problemId].io_description}</Latex>
-        </Typography>
+        <MathpixLoader>
+          <MathpixMarkdown text={problems[problemId].io_description} htmlTags />
+        </MathpixLoader>
       </SimpleBar>
       {problems[problemId].source !== '' && (
         <SimpleBar title="Source">
@@ -258,11 +272,16 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           <Typography variant="body2">{problems[problemId].hint}</Typography>
         </SimpleBar>
       )}
-      <SimpleBar title="Sample">
+      <SimpleBar title="Sample Data">
         {role === 'MANAGER' && (
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllSampleFile}>
+          <StyledButton
+            variant="outlined"
+            color="inherit"
+            startIcon={<Icon.Download />}
+            onClick={downloadAllSampleFile}
+          >
             Download All Files
-          </Button>
+          </StyledButton>
         )}
         <SimpleTable
           isEdit={false}
@@ -311,11 +330,25 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           </Grid>
         </div>
       </SimpleBar>
-      <SimpleBar title="Testing Data">
+      <SimpleBar
+        title="Testing Data"
+        buttons={(
+          <FormControlLabel
+            control={<Switch checked={status} name="status" color="primary" disabled />}
+            label={status ? 'Enabled' : 'Disabled'}
+            className={classNames.statusSwitch}
+          />
+        )}
+      >
         {role === 'MANAGER' && (
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllTestingFile}>
+          <StyledButton
+            variant="outlined"
+            color="inherit"
+            startIcon={<Icon.Download />}
+            onClick={downloadAllTestingFile}
+          >
             Download All Files
-          </Button>
+          </StyledButton>
         )}
         <SimpleTable
           isEdit={false}
@@ -365,9 +398,14 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       </SimpleBar>
       {role === 'MANAGER' && (
         <SimpleBar title="Assisting Data (Optional)">
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllAssistingFile}>
+          <StyledButton
+            variant="outlined"
+            color="inherit"
+            startIcon={<Icon.Download />}
+            onClick={downloadAllAssistingFile}
+          >
             Download All Files
-          </Button>
+          </StyledButton>
           <SimpleTable
             isEdit={false}
             hasDelete={false}

@@ -24,6 +24,10 @@ import { editPassword } from '../../actions/user/user';
 const useStyles = makeStyles(() => ({
   textField: {
     width: '350px',
+    marginBottom: '23px',
+  },
+  buttons: {
+    marginLeft: '-5px',
   },
 }));
 
@@ -133,7 +137,7 @@ export default function NewPassword() {
       {edit ? (
         <SimpleBar title="Password">
           <>
-            <AlignedText text="Old Password" childrenType="field" maxWidth="lg">
+            <AlignedText text="Current Password" childrenType="field" maxWidth="lg">
               <TextField
                 className={classes.textField}
                 value={oldPassword}
@@ -160,6 +164,7 @@ export default function NewPassword() {
                 }}
               />
             </AlignedText>
+
             <AlignedText text="New Password" childrenType="field" maxWidth="lg">
               <TextField
                 className={classes.textField}
@@ -187,7 +192,7 @@ export default function NewPassword() {
                 }}
               />
             </AlignedText>
-            <AlignedText text="Confirm Password" childrenType="field" maxWidth="lg">
+            <AlignedText text="Confirmed Password" childrenType="field" maxWidth="lg">
               <TextField
                 className={classes.textField}
                 value={confirmPassword}
@@ -214,16 +219,12 @@ export default function NewPassword() {
                 }}
               />
             </AlignedText>
-            <Button onClick={handleCancel}>Cancel</Button>
-            <Button color="primary" type="submit" disabled={disabled} onClick={() => setPopUp(true)}>
-              Save
-            </Button>
-            <Snackbar
-              open={showSnackbar}
-              autoHideDuration={2000}
-              message={serverError}
-              onClose={() => setShowSnackbar(false)}
-            />
+            <div className={classes.buttons}>
+              <Button onClick={handleCancel}>Cancel</Button>
+              <Button color="primary" type="submit" disabled={disabled} onClick={() => setPopUp(true)}>
+                Save
+              </Button>
+            </div>
           </>
         </SimpleBar>
       ) : (

@@ -59,7 +59,7 @@ export default function SettingEdit({ challengeId, challenge, setEdit }) {
 
   return (
     <>
-      <SimpleBar title="Announcement">
+      <SimpleBar title="Information">
         <AlignedText text="Title" childrenType="field">
           <TextField defaultValue={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
         </AlignedText>

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { fetchStudentCard } from '../../actions/user/user';
+import { getInstitutes } from '../../actions/common/common';
 import GeneralLoading from '../GeneralLoading';
 
 import NoMatch from '../noMatch';
@@ -45,6 +46,10 @@ export default function AccountSetting() {
     });
     setCards(update);
   }, [account, studentCards]);
+
+  useEffect(() => {
+    dispatch(getInstitutes());
+  }, [dispatch]);
 
   if (account === undefined || studentCards === undefined) {
     if (loading.auth.fetchAccount || loading.user.fetchStudentCard) {

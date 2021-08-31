@@ -1,6 +1,24 @@
 import agent from '../agent';
 import { problemConstants } from './constant';
 
+function getText(url) {
+  // read text from URL location
+  return new Promise((resolve) => {
+    const request = new XMLHttpRequest();
+    request.open('GET', url, true);
+    request.send(null);
+    request.onreadystatechange = () => {
+      if (request.readyState === 4 && request.status === 200) {
+        const type = request.getResponseHeader('Content-Type');
+        if (type.indexOf('text') !== 1) {
+          resolve(request.responseText);
+          // return request.responseText;
+        }
+      }
+    };
+  });
+}
+
 const browseChallengeOverview = (token, challengeId) => (dispatch) => {
   const auth = {
     headers: {
@@ -196,7 +214,7 @@ const browseTestcase = (token, problemId) => async (dispatch) => {
     const newTestcases = await Promise.all(
       data.map(async (testcase) => {
         if (testcase.is_sample === true) {
-          if (testcase.input_file_uuid !== null || testcase.output_file_uuid !== null) {
+          if (testcase.input_file_uuid !== null && testcase.output_file_uuid !== null) {
             const config1 = {
               headers: {
                 'Auth-Token': token,
@@ -218,12 +236,8 @@ const browseTestcase = (token, problemId) => async (dispatch) => {
             const res1 = await agent.get(`/s3-file/${testcase.input_file_uuid}/url`, config1);
             const res2 = await agent.get(`/s3-file/${testcase.output_file_uuid}/url`, config2);
             if (res1.data.success && res2.data.success) {
-              const input = await fetch(res1.data.data.url)
-                .then((r) => r.text())
-                .then((t) => t.toString());
-              const output = await fetch(res2.data.data.url)
-                .then((r) => r.text())
-                .then((t) => t.toString());
+              const input = await getText(res1.data.data.url);
+              const output = await getText(res2.data.data.url);
               return {
                 ...testcase,
                 input,
@@ -248,9 +262,7 @@ const browseTestcase = (token, problemId) => async (dispatch) => {
             };
             const res1 = await agent.get(`/s3-file/${testcase.input_file_uuid}/url`, config1);
             if (res1.data.success) {
-              const input = await fetch(res1.data.data.url)
-                .then((r) => r.text())
-                .then((t) => t.toString());
+              const input = await getText(res1.data.data.url);
               return {
                 ...testcase,
                 input,
@@ -275,9 +287,7 @@ const browseTestcase = (token, problemId) => async (dispatch) => {
             };
             const res2 = await agent.get(`/s3-file/${testcase.output_file_uuid}/url`, config2);
             if (res2.data.success) {
-              const output = await fetch(res2.data.data.url)
-                .then((r) => r.text())
-                .then((t) => t.toString());
+              const output = await getText(res2.data.data.url);
               return {
                 ...testcase,
                 input: '',
@@ -437,7 +447,7 @@ const editAssistingData = (token, assistingId, file) => async (dispatch) => {
     'Content-Type': 'multipart/form-data',
   };
   const formData = new FormData();
-  formData.append('assisting_data', file);
+  formData.append('assisting_data_file', file);
 
   try {
     await agent.put(`/assisting-data/${assistingId}`, formData, auth);
