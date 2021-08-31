@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useHistory } from 'react-router-dom';
-import {
-  Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions,
-} from '@material-ui/core';
+import { useParams } from 'react-router-dom';
+import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import moment from 'moment-timezone';
-import SimpleBar from '../../../ui/SimpleBar';
-import AlignedText from '../../../ui/AlignedText';
 import { fetchClassMembers } from '../../../../actions/common/common';
-import { editGrade, fetchClassGrade } from '../../../../actions/myClass/grade';
+import { fetchClassGrade } from '../../../../actions/myClass/grade';
 
 import GradeInfo from './detail/GradeInfo';
 import Grader from './detail/Grader';
@@ -18,7 +13,7 @@ import GradeDelete from './detail/GradeDelete';
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -28,8 +23,7 @@ const useStyles = makeStyles((theme) => ({
 export default function AccountSetting() {
   const classNames = useStyles();
   const dispatch = useDispatch();
-  const history = useHistory();
-  const { courseId, classId, gradeId } = useParams();
+  const { classId, gradeId } = useParams();
 
   const authToken = useSelector((state) => state.auth.token);
   const members = useSelector((state) => state.classMembers.byId);
@@ -43,16 +37,13 @@ export default function AccountSetting() {
   const graderLink = '/grader_profile';
 
   const [editGradeInfo, setEditGradeInfo] = useState(false);
-  const [popUp, setPopUp] = useState(false);
 
   useEffect(() => {
-    // console.log('fetch member');
     dispatch(fetchClassMembers(authToken, classId));
   }, [dispatch, authToken, classId]);
 
   useEffect(() => {
     if (!loading.editGrade) {
-      // console.log('fetch grade');
       dispatch(fetchClassGrade(authToken, classId));
     }
   }, [dispatch, authToken, classId, loading.editGrade]);
