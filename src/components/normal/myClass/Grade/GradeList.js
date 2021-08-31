@@ -140,7 +140,7 @@ export default function GradeList() {
 
   const handleAdd = () => {
     if (inputTitle !== '' && selectedFile !== []) {
-      selectedFile.map((file) => dispatch(addClassGrade(authToken, classId, file)));
+      selectedFile.map((file) => dispatch(addClassGrade(authToken, classId, inputTitle, file)));
     }
     setPopUp(false);
     setInputTitle('');
