@@ -47,7 +47,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   const handleClosePopUpUpload = () => {
     setPopUpUpload(false);
   };
-  const handleUpload = (e) => {
+  const handleUpload = () => {
     console.log(selectedFile[0]);
     if (uploadOrNot === false) {
       dispatch(uploadEssay(authToken, essayId, selectedFile[0]));
