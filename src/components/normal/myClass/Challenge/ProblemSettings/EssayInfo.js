@@ -8,8 +8,7 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  TextField,
-  Grid,
+  withStyles,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
@@ -27,6 +26,14 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
   },
 }));
+
+const StyledButton = withStyles({
+  outlined: {
+    '& path': {
+      fill: 'none !important',
+    },
+  },
+})(Button);
 
 /* This is a level 4 component (page component) */
 export default function EssayInfo({ role = 'NORMAL' }) {
@@ -62,7 +69,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   };
 
   useEffect(() => {
-    dispatch((readEssay(authToken, essayId)));
+    dispatch(readEssay(authToken, essayId));
   }, [authToken, dispatch, essayId]);
 
   if (essay[essayId] === undefined) {
@@ -73,28 +80,25 @@ export default function EssayInfo({ role = 'NORMAL' }) {
     <>
       <SimpleBar title="Title">{essay[essayId] === undefined ? 'error' : essay[essayId].title}</SimpleBar>
       <SimpleBar title="Description">{essay[essayId] === undefined ? 'error' : essay[essayId].description}</SimpleBar>
-      <SimpleBar
-        title="File"
-      >
-        <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>Upload</Button>
+      <SimpleBar title="File">
+        <StyledButton variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>
+          Upload
+        </StyledButton>
       </SimpleBar>
-      {role === 'MANAGER'
-            && (
-            <SimpleBar
-              title="Delete Task"
-              childrenButtons={(
-                <>
-                  <Button color="secondary" onClick={handleSubmitDelete}>
-                    Delete
-                  </Button>
-                </>
-            )}
-            >
-              <Typography variant="body1">
-                Once you delete a task, there is no going back. Please be certain.
-              </Typography>
-            </SimpleBar>
-            )}
+      {role === 'MANAGER' && (
+        <SimpleBar
+          title="Delete Task"
+          childrenButtons={(
+            <>
+              <Button color="secondary" onClick={handleSubmitDelete}>
+                Delete
+              </Button>
+            </>
+          )}
+        >
+          <Typography variant="body1">Once you delete a task, there is no going back. Please be certain.</Typography>
+        </SimpleBar>
+      )}
       {/* Upload dialog */}
       <Dialog maxWidth="lg" open={popUpUpload} keepMounted onClose={handleClosePopUpUpload}>
         <DialogTitle>

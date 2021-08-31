@@ -6,6 +6,7 @@ import {
   Typography,
   Button,
   makeStyles,
+  withStyles,
   Dialog,
   DialogTitle,
   DialogActions,
@@ -50,6 +51,14 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: 'pre-line',
   },
 }));
+
+const StyledButton = withStyles({
+  outlined: {
+    '& path': {
+      fill: 'none !important',
+    },
+  },
+})(Button);
 
 /* This is a level 4 component (page component) */
 export default function CodingProblemInfo({ role = 'NORMAL' }) {
@@ -218,11 +227,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     dispatch(browseAssistingData(authToken, problemId));
   }, [authToken, dispatch, problemId]);
 
-  // useEffect(() => {
-  //   dispatch(fetchClass(authToken, classId));
-  //   dispatch(fetchCourse(authToken, courseId));
-  // }, [authToken, classId, courseId, dispatch]);
-
   if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
     return <GeneralLoading />;
   }
@@ -260,9 +264,14 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       )}
       <SimpleBar title="Sample">
         {role === 'MANAGER' && (
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllSampleFile}>
+          <StyledButton
+            variant="outlined"
+            color="inherit"
+            startIcon={<Icon.Download />}
+            onClick={downloadAllSampleFile}
+          >
             Download All Files
-          </Button>
+          </StyledButton>
         )}
         <SimpleTable
           isEdit={false}
@@ -313,9 +322,14 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       </SimpleBar>
       <SimpleBar title="Testing Data">
         {role === 'MANAGER' && (
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllTestingFile}>
+          <StyledButton
+            variant="outlined"
+            color="inherit"
+            startIcon={<Icon.Download />}
+            onClick={downloadAllTestingFile}
+          >
             Download All Files
-          </Button>
+          </StyledButton>
         )}
         <SimpleTable
           isEdit={false}
@@ -365,9 +379,14 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       </SimpleBar>
       {role === 'MANAGER' && (
         <SimpleBar title="Assisting Data (Optional)">
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllAssistingFile}>
+          <StyledButton
+            variant="outlined"
+            color="inherit"
+            startIcon={<Icon.Download />}
+            onClick={downloadAllAssistingFile}
+          >
             Download All Files
-          </Button>
+          </StyledButton>
           <SimpleTable
             isEdit={false}
             hasDelete={false}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   makeStyles,
+  withStyles,
   Button,
   Typography,
   Dialog,
@@ -36,6 +37,14 @@ const useStyles = makeStyles((theme) => ({
     marginRight: '115px',
   },
 }));
+
+const StyledButton = withStyles({
+  outlined: {
+    '& path': {
+      fill: 'none !important',
+    },
+  },
+})(Button);
 
 /* This is a level 4 component (page component) */
 export default function TeamList() {
@@ -222,7 +231,7 @@ export default function TeamList() {
           />
         </DialogContent>
         <DialogActions>
-          <Button
+          <StyledButton
             className={classNames.templateBtn}
             variant="outlined"
             startIcon={<Icon.Download />}
@@ -231,7 +240,7 @@ export default function TeamList() {
             }}
           >
             Template
-          </Button>
+          </StyledButton>
           <Button
             onClick={() => {
               setShowImportDialog(false);
