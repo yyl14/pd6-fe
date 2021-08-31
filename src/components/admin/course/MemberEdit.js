@@ -15,7 +15,7 @@ import {
 import { useSelector } from 'react-redux';
 import { replaceClassMembers } from '../../../actions/common/common';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   card: {
     display: 'flex',
     flexDirection: 'row',
@@ -104,19 +104,19 @@ const MemberEdit = ({
       setTA(
         members
           .filter((item) => item.role === 'MANAGER')
-          .map((member) => member.student_id)
+          .map((member) => member.member_referral)
           .join('\n'),
       );
       setStudent(
         members
           .filter((item) => item.role === 'NORMAL')
-          .map((member) => member.student_id)
+          .map((member) => member.member_referral)
           .join('\n'),
       );
       setGuest(
         members
           .filter((item) => item.role === 'GUEST')
-          .map((member) => member.student_id)
+          .map((member) => member.member_referral)
           .join('\n'),
       );
     }
@@ -165,7 +165,7 @@ const MemberEdit = ({
       e.target.value
         !== members
           .filter((item) => item.role === 'MANAGER')
-          .map((member) => member.student_id)
+          .map((member) => member.member_referral)
           .join('\n'),
     );
   };
@@ -175,7 +175,7 @@ const MemberEdit = ({
       e.target.value
         !== members
           .filter((item) => item.role === 'NORMAL')
-          .map((member) => member.student_id)
+          .map((member) => member.member_referral)
           .join('\n'),
     );
   };
@@ -185,7 +185,7 @@ const MemberEdit = ({
       e.target.value
         !== members
           .filter((item) => item.role === 'GUEST')
-          .map((member) => member.student_id)
+          .map((member) => member.member_referral)
           .join('\n'),
     );
   };
