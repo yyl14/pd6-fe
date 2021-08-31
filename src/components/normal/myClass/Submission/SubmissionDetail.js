@@ -84,7 +84,6 @@ export default function SubmissionDetail(props) {
   const testcases = useSelector((state) => state.testcases.byId);
   const testcaseIds = useSelector((state) => state.testcases.allIds);
   const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.myClass.problem);
 
   useEffect(() => {
     dispatch(readSubmissionDetail(authToken, submissionId));
@@ -167,7 +166,7 @@ export default function SubmissionDetail(props) {
     challenges.byId[challengeId] === undefined
     || problems.byId[problemId] === undefined
     || submissions[submissionId] === undefined
-    || judgments[judgmentId] === undefined
+    || judgments === undefined
     || judgeCases.allIds === undefined
     || testcaseIds === undefined
     || accounts.byId[accountId] === undefined
@@ -240,22 +239,34 @@ export default function SubmissionDetail(props) {
           <Typography variant="body1">{problems.byId[problemId].title}</Typography>
         </AlignedText>
         <AlignedText text="Status" childrenType="text">
-          {judgments[judgmentId].status === 'ACCEPTED' ? (
-            <Typography variant="body1">
-              {judgments[judgmentId].status.charAt(0).concat(judgments[judgmentId].status.slice(1).toLowerCase())}
-            </Typography>
+          {judgments[judgmentId] !== undefined ? (
+            <div>
+              {judgments[judgmentId].status === 'ACCEPTED' ? (
+                <Typography variant="body1">
+                  {judgments[judgmentId].status.charAt(0).concat(judgments[judgmentId].status.slice(1).toLowerCase())}
+                </Typography>
+              ) : (
+                <Typography variant="body1" color="secondary">
+                  {judgments[judgmentId].status
+                    .toLowerCase()
+                    .split(' ')
+                    .map((word) => word[0].toUpperCase() + word.substring(1))
+                    .join(' ')}
+                </Typography>
+              )}
+            </div>
           ) : (
             <Typography variant="body1" color="secondary">
-              {judgments[judgmentId].status
-                .toLowerCase()
-                .split(' ')
-                .map((word) => word[0].toUpperCase() + word.substring(1))
-                .join(' ')}
+              Waiting For Judge
             </Typography>
           )}
         </AlignedText>
         <AlignedText text="Score" childrenType="text">
-          <Typography variant="body1">{judgments[judgmentId].score}</Typography>
+          {judgments[judgmentId] !== undefined && (
+            <div>
+              <Typography variant="body1">{judgments[judgmentId].score}</Typography>
+            </div>
+          )}
         </AlignedText>
         <AlignedText text="Submit Time" childrenType="text">
           <Typography variant="body1">
