@@ -541,7 +541,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield2}
         />
       </SimpleBar>
-      <SimpleBar title="Sample">
+      <SimpleBar title="Sample Data">
         <div className={classNames.loadButtons}>
           <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setSamplePopUp(true)}>
             Upload
