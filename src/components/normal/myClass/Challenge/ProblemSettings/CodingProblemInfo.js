@@ -13,6 +13,8 @@ import {
   DialogContent,
   DialogContentText,
   Grid,
+  FormControlLabel,
+  Switch,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
@@ -48,6 +50,9 @@ const useStyles = makeStyles(() => ({
   content: {
     whiteSpace: 'pre-line',
   },
+  statusSwitch: {
+    marginTop: '20px',
+  },
 }));
 
 const StyledButton = withStyles({
@@ -72,6 +77,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const courses = useSelector((state) => state.courses.byId);
   const problems = useSelector((state) => state.problem.byId);
   const testcases = useSelector((state) => state.testcases.byId);
+  const [status, setStatus] = useState(false);
 
   const assistingData = useSelector((state) => state.assistingData.byId);
 
@@ -215,8 +221,14 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
 
   useEffect(() => {
     if (problems[problemId] && problems[problemId].testcaseIds) {
+      const testcasesId = problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
       setSampleDataIds(problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample));
-      setTestcaseDataIds(problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample));
+      setTestcaseDataIds(testcasesId);
+      if (testcasesId.length === 0) {
+        setStatus(false);
+      } else {
+        setStatus(!testcases[testcasesId[0]].is_disabled);
+      }
     }
   }, [problems, problemId, testcases]);
 
@@ -318,7 +330,16 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           </Grid>
         </div>
       </SimpleBar>
-      <SimpleBar title="Testing Data">
+      <SimpleBar
+        title="Testing Data"
+        buttons={(
+          <FormControlLabel
+            control={<Switch checked={status} name="status" color="primary" disabled />}
+            label={status ? 'Enabled' : 'Disabled'}
+            className={classNames.statusSwitch}
+          />
+        )}
+      >
         {role === 'MANAGER' && (
           <StyledButton
             variant="outlined"
