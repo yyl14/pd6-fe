@@ -368,9 +368,10 @@ const getAccountBatch = (token, accountId) => async (dispatch) => {
     headers: {
       'Auth-Token': token,
     },
+    // account_ids: [accountId],
   };
   try {
-    const res = await agent.get(`/account-summary/batch?account_ids=${accountId}`, auth); // wait for be to fix
+    const res = await agent.get(`/account-summary/batch?account_ids=%5B${accountId}%5D`, auth);
     if (res.data.success) {
       dispatch({
         type: submissionConstants.GET_ACCOUNT_BATCH_SUCCESS,

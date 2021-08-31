@@ -85,11 +85,21 @@ export default function SubmissionList() {
                 path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${id}`,
               };
             }
-            return '';
+            return {
+              key: id,
+              id,
+              submit_time: moment(submissions[id].submit_time).format('YYYY-MM-DD, HH:mm'),
+              status: 'Waiting For Judge',
+              score: '-',
+              used_time: '-',
+              used_memory: '-',
+              path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${id}`,
+            };
           }),
       );
     }
   }, [accountId, challengeId, classId, courseId, judgmentIds, judgments, problemId, submissionIds, submissions]);
+
   if (
     challenges[challengeId] === undefined
     || problems[problemId] === undefined
@@ -112,6 +122,9 @@ export default function SubmissionList() {
   const handleRefresh = () => {
     dispatch(readSubmission(authToken, accountId, problemId));
     dispatch(readProblemScore(authToken, problemId));
+    if (submissionIds !== []) {
+      submissionIds.map((id) => dispatch(readSubmissionDetail(authToken, id)));
+    }
   };
 
   return (
@@ -144,7 +157,7 @@ export default function SubmissionList() {
             label: 'Submission ID',
             minWidth: 50,
             align: 'center',
-            width: 120,
+            width: 150,
             type: 'string',
           },
           {
@@ -168,7 +181,7 @@ export default function SubmissionList() {
             label: 'Used Time(ms)',
             minWidth: 50,
             align: 'center',
-            width: 150,
+            width: 170,
             type: 'string',
           },
           {
@@ -176,7 +189,7 @@ export default function SubmissionList() {
             label: 'Used Memory(kb)',
             minWidth: 50,
             align: 'center',
-            width: 150,
+            width: 170,
             type: 'string',
           },
           {
