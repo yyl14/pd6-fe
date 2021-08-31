@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import 'katex/dist/katex.min.css';
-import Latex from 'react-latex-next';
+// https://mathpix.com/docs/mathpix-markdown/overview
+import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 import {
   Typography,
   Button,
@@ -241,14 +241,14 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         </Typography>
       </SimpleBar>
       <SimpleBar title="Description">
-        <Typography variant="body2" className={classNames.content}>
-          <Latex>{problems[problemId].description}</Latex>
-        </Typography>
+        <MathpixLoader>
+          <MathpixMarkdown text={problems[problemId].description} />
+        </MathpixLoader>
       </SimpleBar>
       <SimpleBar title="About Input and Output">
-        <Typography variant="body2" className={classNames.content}>
-          <Latex>{problems[problemId].io_description}</Latex>
-        </Typography>
+        <MathpixLoader>
+          <MathpixMarkdown text={problems[problemId].io_description} htmlTags />
+        </MathpixLoader>
       </SimpleBar>
       {problems[problemId].source !== '' && (
         <SimpleBar title="Source">
