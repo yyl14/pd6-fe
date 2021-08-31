@@ -262,7 +262,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           <Typography variant="body2">{problems[problemId].hint}</Typography>
         </SimpleBar>
       )}
-      <SimpleBar title="Sample">
+      <SimpleBar title="Sample Data">
         {role === 'MANAGER' && (
           <StyledButton
             variant="outlined"
