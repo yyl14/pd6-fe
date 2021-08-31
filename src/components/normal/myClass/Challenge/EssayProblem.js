@@ -9,19 +9,14 @@ import {
   DialogActions,
   DialogContentText,
   DialogContent,
-  TextField,
-  Grid,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
-import SimpleBar from '../../../ui/SimpleBar';
 import Icon from '../../../ui/icon/index';
 import AlignedText from '../../../ui/AlignedText';
-import NoMatch from '../../../noMatch';
 
 import EssayInfo from './ProblemSettings/EssayInfo';
 import EssayEdit from './ProblemSettings/EssayEdit';
 import { readEssay } from '../../../../actions/myClass/essay';
-import { downloadFile } from '../../../../actions/common/common';
 import { fetchChallenges } from '../../../../actions/myClass/challenge';
 
 const useStyles = makeStyles((theme) => ({
@@ -36,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EssayProblem() {
   const {
-    courseId, classId, challengeId, problemId, essayId,
+    courseId, classId, challengeId, essayId,
   } = useParams();
   const history = useHistory();
   const classNames = useStyles();
@@ -49,9 +44,6 @@ export default function EssayProblem() {
   const essays = useSelector((state) => state.essays.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   const authToken = useSelector((state) => state.auth.token);
-  const error = useSelector((state) => state.error.myClass.essay);
-  const loading = useSelector((state) => state.loading.myClass.essay);
-  const editLoading = useSelector((state) => state.loading.myClass.problem.editEssays);
   const [role, setRole] = useState('Normal');
   const [edit, setEdit] = useState(false);
 
@@ -68,9 +60,9 @@ export default function EssayProblem() {
     setPopUpUp(false);
   };
 
-  const handleUpload = (e) => {};
-
-  const handleDownload = (e) => {};
+  const handleDownload = () => {
+    // dispatch;
+  };
 
   useEffect(() => {
     dispatch(fetchChallenges(authToken, classId));
@@ -130,7 +122,7 @@ export default function EssayProblem() {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => handleClosePopUp()}>Cancel</Button>
-          <Button onClick={() => handleUpload()} color="primary">
+          <Button onClick={() => handleDownload()} color="primary">
             Download
           </Button>
         </DialogActions>
