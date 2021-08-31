@@ -12,7 +12,6 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  TextField,
   Grid,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
@@ -31,12 +30,11 @@ import {
   deleteAssistingData,
   deleteTestcase,
   deleteProblem,
-  browseTasksUnderChallenge,
 } from '../../../../../actions/myClass/problem';
 
-import { fetchClass, fetchCourse, downloadFile } from '../../../../../actions/common/common';
+import { downloadFile } from '../../../../../actions/common/common';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
