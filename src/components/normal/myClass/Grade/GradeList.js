@@ -65,6 +65,7 @@ export default function GradeList() {
   const [popUp, setPopUp] = useState(false);
   const [inputTitle, setInputTitle] = useState('');
   const [selectedFile, setSelectedFile] = useState([]);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
@@ -98,41 +99,12 @@ export default function GradeList() {
       path: `/my-class/${courseId}/${classId}/grade/${grades[id].id}`,
       user_path: '/',
     }));
-    // if (isManager) {
-    //   if (memberIds !== undefined && gradeIds !== undefined) {
-    //     memberIds.forEach((key) => {
-    //       const item = members[key];
-    //       const temp = { ...item };
-    //       gradeIds.forEach((id) => {
-    //         if (grades[id].receiver_id === members[key].member_id) {
-    //           temp.title = grades[id].title;
-    //           temp.score = grades[id].score;
-    //           temp.time = moment(grades[id].update_time).format('YYYY-MM-DD, HH:mm');
-    //           temp.id = grades[id].id;
-    //           temp.path = `/my-class/${courseId}/${classId}/grade/${temp.id}`;
-    //           temp.user_path = '/';
-    //         }
-    //       });
-    //       newData.push(temp);
-    //     });
-    //   }
-    // } else {
-    // gradeIds.forEach((id) => {
-    //   if (`${grades[id].class_id}` === classId) {
-    //     const item = members[grades[id].receiver_id];
-    //     const temp = { ...item };
-    //     temp.title = grades[id].title;
-    //     temp.score = grades[id].score;
-    //     temp.time = moment(grades[id].update_time).format('YYYY-MM-DD, HH:mm');
-    //     temp.id = grades[id].id;
-    //     temp.path = `/my-class/${courseId}/${classId}/grade/${temp.id}`;
-    //     temp.user_path = '/';
-    //     newData.push(temp);
-    //   }
-    // });
-    // }
     setTableData(newData);
   }, [members, memberIds, grades, courseId, classId, isManager, gradeIds]);
+
+  useEffect(() => {
+    setIsDisabled(inputTitle === '' || selectedFile.length === 0);
+  }, [inputTitle, selectedFile]);
 
   const handleChange = (event) => {
     setInputTitle(event.target.value);
@@ -285,7 +257,7 @@ export default function GradeList() {
           <Button onClick={handleCancel} color="default">
             Cancel
           </Button>
-          <Button onClick={handleAdd} color="primary">
+          <Button disabled={isDisabled} onClick={handleAdd} color="primary">
             Add
           </Button>
         </DialogActions>
