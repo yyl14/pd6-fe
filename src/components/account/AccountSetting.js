@@ -40,7 +40,12 @@ export default function AccountSetting() {
   }, [authToken, accountId, dispatch]);
 
   useEffect(() => {
-    setCards(account.studentCards.reduce((acc, key) => [...acc, studentCards.byId[key]], []));
+    setCards(account.studentCards.reduce((acc, key) => {
+      if (studentCards.byId[key]) {
+        return [...acc, studentCards.byId[key]];
+      }
+      return [...acc];
+    }, []));
   }, [account, studentCards]);
 
   useEffect(() => {
