@@ -65,6 +65,7 @@ export default function GradeList() {
   const [popUp, setPopUp] = useState(false);
   const [inputTitle, setInputTitle] = useState('');
   const [selectedFile, setSelectedFile] = useState([]);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
@@ -133,6 +134,10 @@ export default function GradeList() {
     // }
     setTableData(newData);
   }, [members, memberIds, grades, courseId, classId, isManager, gradeIds]);
+
+  useEffect(() => {
+    setIsDisabled(inputTitle === '' || selectedFile.length === 0);
+  }, [inputTitle, selectedFile]);
 
   const handleChange = (event) => {
     setInputTitle(event.target.value);
@@ -285,7 +290,7 @@ export default function GradeList() {
           <Button onClick={handleCancel} color="default">
             Cancel
           </Button>
-          <Button onClick={handleAdd} color="primary">
+          <Button disabled={isDisabled} onClick={handleAdd} color="primary">
             Add
           </Button>
         </DialogActions>
