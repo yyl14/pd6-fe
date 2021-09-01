@@ -47,6 +47,9 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     justifyContent: 'flex-end',
   },
+  table: {
+    width: '100%',
+  },
   content: {
     whiteSpace: 'pre-line',
   },
@@ -284,6 +287,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           </StyledButton>
         )}
         <SimpleTable
+          className={classNames.table}
           isEdit={false}
           hasDelete={false}
           columns={[
@@ -331,6 +335,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         </div>
       </SimpleBar>
       <SimpleBar
+        noIndent
         title="Testing Data"
         buttons={(
           <FormControlLabel
@@ -352,6 +357,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           </StyledButton>
         )}
         <SimpleTable
+          className={classNames.table}
           isEdit={false}
           hasDelete={false}
           columns={[
@@ -408,6 +414,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             Download All Files
           </StyledButton>
           <SimpleTable
+            className={classNames.table}
             isEdit={false}
             hasDelete={false}
             columns={[

@@ -25,6 +25,9 @@ const useStyles = makeStyles(() => ({
   descriptionField: {
     width: '60vw',
   },
+  table: {
+    width: '100%',
+  },
 }));
 
 /* This is a level 4 component (page component) */
@@ -194,6 +197,7 @@ export default function ChallengeInfo() {
       </SimpleBar>
       <SimpleBar title="Overview" noIndent>
         <SimpleTable
+          className={classes.table}
           isEdit={false}
           hasDelete={false}
           columns={[
