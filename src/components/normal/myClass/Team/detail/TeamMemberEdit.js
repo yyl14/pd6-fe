@@ -96,7 +96,7 @@ export default function TeamMemberEdit(props) {
     clearInputs();
     if (inputs.student !== '') {
       const role = inputs.role === 'Normal' ? 'NORMAL' : 'MANAGER';
-      dispatch(addTeamMember(authToken, teamId, `#${inputs.student}`, role, false, null));
+      dispatch(addTeamMember(authToken, teamId, inputs.student, role, false, null));
       const newTempAdd = [...tempAddData, inputs.student];
       setTempAddData(newTempAdd);
     }
