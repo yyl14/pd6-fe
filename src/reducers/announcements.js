@@ -4,7 +4,8 @@ import { systemConstants } from '../actions/admin/constant';
 const byId = (state = {}, action) => {
   switch (action.type) {
     case systemConstants.FETCH_ANNOUNCEMENT_SUCCESS: {
-      const data = Object.values(action.payload);
+      const { data } = action.payload;
+      console.log('reducer :', data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.announcements));
       return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.announcements);
     }
     default:
@@ -15,7 +16,7 @@ const byId = (state = {}, action) => {
 const allIds = (state = [], action) => {
   switch (action.type) {
     case systemConstants.FETCH_ANNOUNCEMENT_SUCCESS: {
-      const data = Object.values(action.payload);
+      const { data } = action.payload;
       return data.map((item) => item.id);
     }
     default:

@@ -1,16 +1,16 @@
 import { systemConstants } from '../../../actions/admin/constant';
 
 const initialState = {
-  fetchAccessLog: false,
-  fetchAnnouncement: false,
-  editAnnouncement: false,
-  addAnnouncement: false,
-  deleteAnnouncement: false,
-  fetchSubmitLanguage: false,
-  editSubmitLanguage: false,
+  fetchAccessLog: null,
+  fetchAnnouncement: null,
+  editAnnouncement: null,
+  addAnnouncement: null,
+  deleteAnnouncement: null,
+  fetchSubmitLanguage: null,
+  editSubmitLanguage: null,
 };
 
-export default function account(state = initialState, action) {
+export default function system(state = initialState, action) {
   switch (action.type) {
     /* Access Logs */
     case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
@@ -62,12 +62,6 @@ export default function account(state = initialState, action) {
         addAnnouncement: action.error,
       };
     }
-    case systemConstants.DELETE_ANNOUNCEMENT_START: {
-      return {
-        ...state,
-        deleteAnnouncement: null,
-      };
-    }
     case systemConstants.DELETE_ANNOUNCEMENT_SUCCESS: {
       return {
         ...state,
@@ -94,7 +88,6 @@ export default function account(state = initialState, action) {
       };
     }
     case systemConstants.EDIT_SUBMIT_LANGUAGE_SUCCESS: {
-      const { data } = action.payload;
       return {
         ...state,
         editSubmitLanguage: null,
