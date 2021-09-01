@@ -73,19 +73,23 @@ const useStyles = makeStyles((theme) => ({
     padding: '15px',
   },
   deleteIcon: {
-    height: '20px',
-    width: '20px',
-    cursor: 'pointer',
+    height: '30px',
+    width: '30px',
+    padding: '6px',
+    borderRadius: '15px',
+    '&:hover': {
+      cursor: 'pointer',
+      background: theme.palette.grey.A100,
+    },
+    '&:active': {
+      cursor: 'pointer',
+      background: theme.palette.grey[300],
+    },
   },
 }));
 
 export default function SimpleTable({
-  isEdit,
-  hasDelete,
-  buttons,
-  columns,
-  data,
-  setData,
+  isEdit, hasDelete, buttons, columns, data, setData,
 }) {
   const classes = useStyles();
   const [filterData, setFilterData] = useState(data);
@@ -133,13 +137,21 @@ export default function SimpleTable({
             <TableHead className={classes.tableHead}>
               <TableRow>
                 {columns.map((column) => (
-                  <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth, width: column.width, border: 'none' }}>
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth, width: column.width, border: 'none' }}
+                  >
                     <div className={classes.column}>
                       <b>{column.label}</b>
                     </div>
                   </TableCell>
                 ))}
-                <TableCell key="delete" align="right" className={isEdit && hasDelete ? classes.tableHeadCell : classes.hide} />
+                <TableCell
+                  key="delete"
+                  align="right"
+                  className={isEdit && hasDelete ? classes.tableHeadCell : classes.hide}
+                />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -179,7 +191,9 @@ export default function SimpleTable({
                                 }}
                               >
                                 {column.dropdownList.map((item) => (
-                                  <MenuItem key={item} value={item}>{item}</MenuItem>
+                                  <MenuItem key={item} value={item}>
+                                    {item}
+                                  </MenuItem>
                                 ))}
                               </Select>
                             </FormControl>
@@ -191,7 +205,9 @@ export default function SimpleTable({
                       const link = row[column.link_id];
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          <Link to={link} className={classes.textLink}>{column.format && typeof value === 'number' ? column.format(value) : value}</Link>
+                          <Link to={link} className={classes.textLink}>
+                            {column.format && typeof value === 'number' ? column.format(value) : value}
+                          </Link>
                         </TableCell>
                       );
                     }
@@ -201,7 +217,11 @@ export default function SimpleTable({
                       </TableCell>
                     );
                   })}
-                  <TableCell key={`${row.id}-deleteIcon`} className={isEdit && hasDelete ? classes.deleteCell : classes.hide} align="right">
+                  <TableCell
+                    key={`${row.id}-deleteIcon`}
+                    className={isEdit && hasDelete ? classes.deleteCell : classes.hide}
+                    align="right"
+                  >
                     <Icon.Trash
                       className={classes.deleteIcon}
                       onClick={(e) => {

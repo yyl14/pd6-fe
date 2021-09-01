@@ -504,7 +504,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
 
   return (
     <>
-      <SimpleBar title="Label">
+      <SimpleBar title="Label" noIndent>
         <TextField
           value={label}
           variant="outlined"
@@ -515,7 +515,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield}
         />
       </SimpleBar>
-      <SimpleBar title="Title">
+      <SimpleBar title="Title" noIndent>
         <TextField
           value={title}
           variant="outlined"
@@ -526,7 +526,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield}
         />
       </SimpleBar>
-      <SimpleBar title="Description">
+      <SimpleBar title="Description" noIndent>
         <TextField
           value={description}
           variant="outlined"
@@ -540,7 +540,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield2}
         />
       </SimpleBar>
-      <SimpleBar title="About Input and Output">
+      <SimpleBar title="About Input and Output" noIndent>
         <TextField
           value={ioDescription}
           variant="outlined"
@@ -554,7 +554,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield2}
         />
       </SimpleBar>
-      <SimpleBar title="Source">
+      <SimpleBar title="Source" noIndent>
         <TextField
           value={source}
           variant="outlined"
@@ -565,7 +565,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield}
         />
       </SimpleBar>
-      <SimpleBar title="Hint">
+      <SimpleBar title="Hint" noIndent>
         <TextField
           value={hint}
           variant="outlined"
@@ -579,7 +579,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield2}
         />
       </SimpleBar>
-      <SimpleBar title="Sample Data">
+      <SimpleBar title="Sample Data" noIndent>
         <div className={classNames.loadButtons}>
           <StyledButton
             variant="outlined"
@@ -650,6 +650,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
             className={classNames.statusSwitch}
           />
         )}
+        noIndent
       >
         <div className={classNames.loadButtons}>
           <StyledButton
@@ -721,7 +722,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           setData={setTestcaseTableData}
         />
       </SimpleBar>
-      <SimpleBar title="Assisting Data (Optional)">
+      <SimpleBar title="Assisting Data (Optional)" noIndent>
         <div className={classNames.loadButtons}>
           <StyledButton
             variant="outlined"

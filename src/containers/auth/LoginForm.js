@@ -96,8 +96,19 @@ export default function LoginForm(props) {
 
   const handlePasswordChange = (e) => {
     if (e.target.value !== '') {
-      setErrors((ori) => ({ ...ori, password: false }));
-      setErrorTexts((ori) => ({ ...ori, password: '' }));
+      if (errors.password && errorTexts.password === 'Incorrect username or password') {
+        setErrors({
+          username: false,
+          password: false,
+        });
+        setErrorTexts({
+          username: '',
+          password: '',
+        });
+      } else {
+        setErrors((ori) => ({ ...ori, password: false }));
+        setErrorTexts((ori) => ({ ...ori, password: '' }));
+      }
     }
     setPassword(e.target.value);
   };

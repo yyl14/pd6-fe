@@ -47,6 +47,9 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     justifyContent: 'flex-end',
   },
+  table: {
+    width: '100%',
+  },
   content: {
     whiteSpace: 'pre-line',
   },
@@ -247,32 +250,32 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
 
   return (
     <>
-      <SimpleBar title="Title">
+      <SimpleBar title="Title" noIndent>
         <Typography variant="body2">
           {problems[problemId] === undefined ? 'error' : problems[problemId].title}
         </Typography>
       </SimpleBar>
-      <SimpleBar title="Description">
+      <SimpleBar title="Description" noIndent>
         <MathpixLoader>
           <MathpixMarkdown text={problems[problemId].description} />
         </MathpixLoader>
       </SimpleBar>
-      <SimpleBar title="About Input and Output">
+      <SimpleBar title="About Input and Output" noIndent>
         <MathpixLoader>
           <MathpixMarkdown text={problems[problemId].io_description} htmlTags />
         </MathpixLoader>
       </SimpleBar>
       {problems[problemId].source !== '' && (
-        <SimpleBar title="Source">
+        <SimpleBar title="Source" noIndent>
           <Typography variant="body2">{problems[problemId].source}</Typography>
         </SimpleBar>
       )}
       {problems[problemId].hint !== '' && (
-        <SimpleBar title="Hint">
+        <SimpleBar title="Hint" noIndent>
           <Typography variant="body2">{problems[problemId].hint}</Typography>
         </SimpleBar>
       )}
-      <SimpleBar title="Sample Data">
+      <SimpleBar title="Sample Data" noIndent>
         {role === 'MANAGER' && (
           <StyledButton
             variant="outlined"
@@ -284,6 +287,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           </StyledButton>
         )}
         <SimpleTable
+          className={classNames.table}
           isEdit={false}
           hasDelete={false}
           columns={[
@@ -331,6 +335,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         </div>
       </SimpleBar>
       <SimpleBar
+        noIndent
         title="Testing Data"
         buttons={(
           <FormControlLabel
@@ -351,6 +356,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           </StyledButton>
         )}
         <SimpleTable
+          className={classNames.table}
           isEdit={false}
           hasDelete={false}
           columns={[
@@ -397,7 +403,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         />
       </SimpleBar>
       {role === 'MANAGER' && (
-        <SimpleBar title="Assisting Data (Optional)">
+        <SimpleBar title="Assisting Data (Optional)" noIndent>
           <StyledButton
             variant="outlined"
             color="inherit"
@@ -407,6 +413,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             Download All Files
           </StyledButton>
           <SimpleTable
+            className={classNames.table}
             isEdit={false}
             hasDelete={false}
             columns={[
