@@ -9,15 +9,15 @@ import {
   DialogActions,
   DialogContent,
   TextField,
+  IconButton,
 } from '@material-ui/core';
 import { useParams, Link } from 'react-router-dom';
 import moment from 'moment';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Icon from '../../../ui/icon/index';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
-import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
-import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 import {
   readSubmissionDetail,
@@ -88,12 +88,12 @@ export default function SubmissionDetail() {
   }, [authToken, dispatch, submissionId]);
 
   useEffect(() => {
-    setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0]);
-    if (judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0]) {
+    setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
+    if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
       dispatch(
         browseJudgeCases(
           authToken,
-          judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0],
+          judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
         ),
       );
     }
@@ -128,7 +128,7 @@ export default function SubmissionDetail() {
 
   useEffect(() => {
     account.classes.forEach((value) => {
-      if (value.class_id === parseInt(classId, 10)) {
+      if (value.class_id === Number(classId, 10)) {
         if (value.role === 'MANAGER') {
           setRole('MANAGER');
         }
@@ -261,7 +261,7 @@ export default function SubmissionDetail() {
             && <Typography variant="body1">{submitLangs[submissions[submissionId].language_id].name}</Typography>}
         </AlignedText> */}
       </SimpleBar>
-      <SimpleBar title="Submission Result">
+      <SimpleBar title="Submission Result" noIndent>
         <SimpleTable
           isEdit={false}
           hasDelete={false}
@@ -310,16 +310,22 @@ export default function SubmissionDetail() {
           data={tableData}
         />
       </SimpleBar>
-      <SimpleBar title="Code">
-        <CopyToClipboardButton text={submissions[submissionId].content} />
-        <TextField
-          className={classNames.codeField}
-          value={submissions[submissionId].content}
-          disabled
-          multiline
-          minRows={10}
-          maxRows={20}
-        />
+      <SimpleBar title="Code" noIndent>
+        <div className={classNames.codeContent}>
+          <TextField
+            className={classNames.codeField}
+            value={submissions[submissionId].content}
+            disabled
+            multiline
+            minRows={10}
+            maxRows={20}
+          />
+          <CopyToClipboard text={submissions[submissionId].content}>
+            <IconButton className={classNames.copyIcon}>
+              <Icon.Copy />
+            </IconButton>
+          </CopyToClipboard>
+        </div>
       </SimpleBar>
       <Dialog
         maxWidth="md"
