@@ -128,20 +128,22 @@ export const downloadGradeFile = (token) => async (dispatch) => {
   }
 };
 
-export const deleteGrade = (token, gradeId) => (dispatch) => {
-  const auth = { headers: { 'auth-token': token } };
-  dispatch({ type: gradeConstants.DELETE_GRADE_START });
-  agent
-    .delete(`/grade/${gradeId}`, auth)
-    .then((res) => {
-      dispatch({ type: gradeConstants.DELETE_GRADE_SUCCESS });
-    })
-    .catch((err) => {
-      dispatch({
-        type: gradeConstants.DELETE_GRADE_FAIL,
-        error: err,
-      });
+export const deleteGrade = (token, gradeId) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: gradeConstants.DELETE_GRADE_START });
+    await agent.delete(`/grade/${gradeId}`, config);
+    dispatch({ type: gradeConstants.DELETE_GRADE_SUCCESS });
+  } catch (err) {
+    dispatch({
+      type: gradeConstants.DELETE_GRADE_FAIL,
+      error: err,
     });
+  }
 };
 
 export const editGrade = (token, gradeId, title, score, comment) => (dispatch) => {
