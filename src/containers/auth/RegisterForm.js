@@ -249,6 +249,7 @@ export default function RegisterForm() {
           case 'StudentCardExists': {
             setErrors((input) => ({ ...input, studentId: true }));
             setErrorTexts((input) => ({ ...input, studentId: 'Student ID Exists' }));
+            setNextPage(false);
             break;
           }
           case 'StudentIdNotMatchEmail': {
@@ -258,6 +259,7 @@ export default function RegisterForm() {
               studentId: 'StudentIdNotMatchEmail',
               email: 'StudentIdNotMatchEmail',
             }));
+            setNextPage(false);
             break;
           }
           default: {
