@@ -24,6 +24,8 @@ const initialState = {
   browseJudgeCases: false,
   readTestcase: false,
   readProblemScore: false,
+  downloadSamples: false,
+  downloadTestcases: false,
 };
 
 export default function problem(state = initialState, action) {
@@ -363,6 +365,36 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         readProblemScore: false,
+      };
+    case problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_START:
+      return {
+        ...state,
+        downloadSamples: true,
+      };
+    case problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_SUCCESS:
+      return {
+        ...state,
+        downloadSamples: false,
+      };
+    case problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_FAIL:
+      return {
+        ...state,
+        downloadSamples: false,
+      };
+    case problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_START:
+      return {
+        ...state,
+        downloadTestcases: true,
+      };
+    case problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_SUCCESS:
+      return {
+        ...state,
+        downloadTestcases: false,
+      };
+    case problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_FAIL:
+      return {
+        ...state,
+        downloadTestcases: false,
       };
     default: {
       return state;
