@@ -10,6 +10,7 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Snackbar,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
@@ -58,6 +59,8 @@ export default function GradeList() {
   const grades = useSelector((state) => state.grades.byId);
   const gradeIds = useSelector((state) => state.grades.allIds);
   const loading = useSelector((state) => state.loading.myClass.grade);
+  const error = useSelector((state) => state.error.myClass.grade.addClassGrade);
+
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
 
@@ -66,6 +69,8 @@ export default function GradeList() {
   const [inputTitle, setInputTitle] = useState('');
   const [selectedFile, setSelectedFile] = useState([]);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [hasRequest, setHasRequest] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
@@ -106,6 +111,18 @@ export default function GradeList() {
     setIsDisabled(inputTitle === '' || selectedFile.length === 0);
   }, [inputTitle, selectedFile]);
 
+  useEffect(() => {
+    if (hasRequest && !loading.addClassGrade) {
+      if (error === null) {
+        setPopUp(false);
+        setInputTitle('');
+        setSelectedFile([]);
+      } else {
+        setHasError(true);
+      }
+    }
+  }, [error, hasRequest, loading.addClassGrade]);
+
   const handleChange = (event) => {
     setInputTitle(event.target.value);
   };
@@ -114,9 +131,7 @@ export default function GradeList() {
     if (inputTitle !== '' && selectedFile !== []) {
       selectedFile.map((file) => dispatch(addClassGrade(authToken, classId, inputTitle, file)));
     }
-    setPopUp(false);
-    setInputTitle('');
-    setSelectedFile([]);
+    setHasRequest(true);
   };
 
   const handleCancel = () => {
@@ -128,6 +143,10 @@ export default function GradeList() {
   const downloadTemplate = () => {
     dispatch(downloadGradeFile(authToken));
     setPopUp(false);
+  };
+
+  const handleCloseError = () => {
+    setHasError(false);
   };
 
   if (courses[courseId] === undefined || classes[classId] === undefined || grades === undefined) {
@@ -262,6 +281,7 @@ export default function GradeList() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar severity="error" open={hasError} onClose={handleCloseError} message={`Error: ${error}`} />
     </>
   );
 }

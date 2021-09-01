@@ -250,28 +250,28 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
 
   return (
     <>
-      <SimpleBar title="Title">
+      <SimpleBar title="Title" noIndent>
         <Typography variant="body2">
           {problems[problemId] === undefined ? 'error' : problems[problemId].title}
         </Typography>
       </SimpleBar>
-      <SimpleBar title="Description">
+      <SimpleBar title="Description" noIndent>
         <MathpixLoader>
           <MathpixMarkdown text={problems[problemId].description} />
         </MathpixLoader>
       </SimpleBar>
-      <SimpleBar title="About Input and Output">
+      <SimpleBar title="About Input and Output" noIndent>
         <MathpixLoader>
           <MathpixMarkdown text={problems[problemId].io_description} htmlTags />
         </MathpixLoader>
       </SimpleBar>
       {problems[problemId].source !== '' && (
-        <SimpleBar title="Source">
+        <SimpleBar title="Source" noIndent>
           <Typography variant="body2">{problems[problemId].source}</Typography>
         </SimpleBar>
       )}
       {problems[problemId].hint !== '' && (
-        <SimpleBar title="Hint">
+        <SimpleBar title="Hint" noIndent>
           <Typography variant="body2">{problems[problemId].hint}</Typography>
         </SimpleBar>
       )}
@@ -344,6 +344,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             className={classNames.statusSwitch}
           />
         )}
+        noIndent
       >
         {role === 'MANAGER' && (
           <StyledButton
