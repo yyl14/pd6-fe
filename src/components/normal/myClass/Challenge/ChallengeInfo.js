@@ -4,7 +4,7 @@ import moment from 'moment';
 import {
   Typography, Button, makeStyles, TextField,
 } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
@@ -29,8 +29,7 @@ const useStyles = makeStyles(() => ({
 
 /* This is a level 4 component (page component) */
 export default function ChallengeInfo() {
-  const { courseId, classId, challengeId } = useParams();
-  const history = useHistory();
+  const { classId, challengeId } = useParams();
   const classes = useStyles();
   const dispatch = useDispatch();
   const [currentTime, setCurrentTime] = useState(moment());
@@ -147,6 +146,7 @@ export default function ChallengeInfo() {
       <SimpleBar
         title="Description"
         buttons={<>{isManager && !editMode && <Button onClick={handleEdit}>Edit</Button>}</>}
+        noIndent
       >
         {editMode ? (
           <div>
@@ -192,7 +192,7 @@ export default function ChallengeInfo() {
           </AlignedText>
         </>
       </SimpleBar>
-      <SimpleBar title="Overview">
+      <SimpleBar title="Overview" noIndent>
         <SimpleTable
           isEdit={false}
           hasDelete={false}
