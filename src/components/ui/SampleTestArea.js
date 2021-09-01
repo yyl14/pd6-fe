@@ -19,12 +19,16 @@ const useStyles = makeStyles({
     // },
   },
   limitedCardContent: {
+    height: '330px',
     padding: '4px 30px 0px 30px',
-    maxHeight: '331.5px',
     overflow: 'hidden',
+    wordBreak: 'break-word',
+    // textOverflow: 'ellipsis',
+    // whiteSpace: 'nowrap',
   },
   limitedCardContentExpanded: {
     padding: '4px 30px 0px 30px',
+    wordBreak: 'break-word',
   },
   title: {
     display: 'flex',
