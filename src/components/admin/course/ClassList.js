@@ -84,7 +84,7 @@ export default function ClassList() {
   const onAddCourse = (name) => {
     setAddCourseName('');
     history.push(`/admin/course/course/${courseId}/class-list`);
-    dispatch(addCourse(authToken, name, getCourseType(addType).toUpperCase()));
+    dispatch(addCourse(authToken, name, getCourseType(addType).toUpperCase(), history));
   };
   const onAddClass = (name) => {
     setAddClassName('');
