@@ -60,8 +60,8 @@ const fetchAnnouncement = (token, browseParams, tableId = null) => async (dispat
     };
     const res = await agent.get('/announcement', config);
     const { data: announcements, total_count } = res.data.data;
-    console.log('announcements res :', res);
-    console.log('announcements :', announcements, total_count);
+    // console.log('announcements res :', res);
+    // console.log('announcements :', announcements, total_count);
     dispatch({
       type: systemConstants.FETCH_ANNOUNCEMENT_SUCCESS,
       payload: {
