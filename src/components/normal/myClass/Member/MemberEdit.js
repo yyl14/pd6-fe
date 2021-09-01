@@ -120,7 +120,7 @@ const MemberEdit = ({
           .join('\n'),
       );
     }
-  }, [dispatchStart, error.replaceClassMembers, loading.replaceClassMembers, members]);
+  }, [dispatchStart, members]);
 
   useEffect(() => {
     unblockHandle.current = history.block((tl) => {
