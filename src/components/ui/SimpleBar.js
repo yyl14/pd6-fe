@@ -34,14 +34,21 @@ const useStyles = makeStyles((theme) => ({
   children: {
     margin: '16px 0px 50px 50px',
   },
+  childrenNoIndent: {
+    margin: '16px 0px 50px 50px',
+  },
   childrenWithChildrenButtons: {
     margin: '16px 0px 50px 50px',
     width: '70.9%',
   },
+  noIndent: {
+    margin: '16px 0px 50px 0px',
+    width: '100%',
+  },
 }));
 
 export default function SimpleBar({
-  title, buttons, childrenButtons, children,
+  title, buttons, childrenButtons, children, noIndent,
 }) {
   const classes = useStyles();
   return (
@@ -54,8 +61,14 @@ export default function SimpleBar({
       </div>
       <hr className={classes.divider} />
       <div className={classes.bottomContent}>
-        <div className={childrenButtons ? classes.childrenWithChildrenButtons : classes.children}>{children}</div>
-        <div className={`${classes.buttons} ${classes.buttonsBelow}`}>{childrenButtons}</div>
+        <div
+          className={`${childrenButtons ? classes.childrenWithChildrenButtons : classes.children} ${
+            noIndent && classes.noIndent
+          }`}
+        >
+          {children}
+        </div>
+        {childrenButtons && <div className={`${classes.buttons} ${classes.buttonsBelow}`}>{childrenButtons}</div>}
       </div>
     </>
   );

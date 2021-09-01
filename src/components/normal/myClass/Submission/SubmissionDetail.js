@@ -52,8 +52,11 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'flex-end',
   },
+  resultTable: {
+    width: '100%',
+  },
   codeField: {
-    width: '50vw',
+    width: '100%',
   },
 }));
 
@@ -278,7 +281,7 @@ export default function SubmissionDetail(props) {
             && <Typography variant="body1">{submitLangs[submissions[submissionId].language_id].name}</Typography>}
         </AlignedText> */}
       </SimpleBar>
-      <SimpleBar title="Submission Result">
+      <SimpleBar title="Submission Result" noIndent>
         <SimpleTable
           isEdit={false}
           hasDelete={false}
@@ -327,7 +330,7 @@ export default function SubmissionDetail(props) {
           data={tableData}
         />
       </SimpleBar>
-      <SimpleBar title="Code">
+      <SimpleBar title="Code" noIndent>
         <CopyToClipboardButton text={submissions[submissionId].content} />
         <TextField
           className={classNames.codeField}
