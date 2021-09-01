@@ -511,7 +511,7 @@ export default function UIComponentUsage() {
         </div>
       </div>
       <div className={classes.wrapper}>
-        <Typography variant="h4">Custom Table with Table Filter Card</Typography>
+        <Typography variant="h4">Auto Table</Typography>
         <hr className={classes.divider} style={{ width: '460px' }} />
         <div className={classes.wideComponent}>
           <AutoTable

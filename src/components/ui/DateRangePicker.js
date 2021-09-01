@@ -1,12 +1,12 @@
-import { makeStyles, TextField } from '@material-ui/core';
+import { FormControl, makeStyles, TextField } from '@material-ui/core';
+import moment from 'moment';
 import React, { useState, useEffect } from 'react';
 import { DateRange } from 'react-date-range';
-import theme from '../../theme';
 
-const useStyles = makeStyles((muiTheme) => ({
+const useStyles = makeStyles((theme) => ({
   wrapper: {
     background: '#ffffff',
-    borderRadius: muiTheme.shape.borderRadius,
+    borderRadius: theme.shape.borderRadius,
     border: '1px solid #CACACA',
     padding: '20px 30px 20px 30px',
     width: '720px',
@@ -15,7 +15,7 @@ const useStyles = makeStyles((muiTheme) => ({
   },
   wrapperVertical: {
     background: '#ffffff',
-    borderRadius: muiTheme.shape.borderRadius,
+    borderRadius: theme.shape.borderRadius,
     border: '1px solid #CACACA',
     padding: '20px 30px 20px 30px',
     width: '540px',
@@ -75,18 +75,7 @@ const useStyles = makeStyles((muiTheme) => ({
   },
 }));
 
-/*
-value: {
-  date: {
-    startDate: Date,
-    endDate: Date,
-  },
-  time: {
-
-  }
-}
-*/
-const monthNames = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
+const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
 export default function DateRangePicker({
   className, value, setValue, vertical,
@@ -108,11 +97,42 @@ export default function DateRangePicker({
       `${monthNames[value[0].endDate.getMonth()]} ${value[0].endDate.getDate()}, ${value[0].endDate.getFullYear()}`,
     );
     setStartTime(value[0].startDate.toLocaleString('en-GB').substring(12, 17));
-    setEndTime(value[0].startDate.toLocaleString('en-GB').substring(12, 17));
+    setEndTime(value[0].endDate.toLocaleString('en-GB').substring(12, 17));
   }, [value]);
 
-  const [startError, setStartError] = useState(null);
-  const [endError, setEndError] = useState(null);
+  const onStartTimeBlur = (e) => {
+    e.preventDefault();
+    const parsed = moment(e.target.value, ['HHmm', 'HH:mm']);
+    if (parsed.isValid()) {
+      setValue((prevValue) => [
+        {
+          ...prevValue[0],
+          startDate: moment(prevValue[0].startDate)
+            .set({ hour: parsed.get('hour'), minute: parsed.get('minute') })
+            .toDate(),
+        },
+      ]);
+    } else {
+      setStartTime(value[0].startDate.toLocaleString('en-GB').substring(12, 17));
+    }
+  };
+
+  const onEndTimeBlur = (e) => {
+    e.preventDefault();
+    const parsed = moment(e.target.value, ['HHmm', 'HH:mm']);
+    if (parsed.isValid()) {
+      setValue((prevValue) => [
+        {
+          ...prevValue[0],
+          endDate: moment(prevValue[0].startDate)
+            .set({ hour: parsed.get('hour'), minute: parsed.get('minute') })
+            .toDate(),
+        },
+      ]);
+    } else {
+      setEndTime(value[0].endDate.toLocaleString('en-GB').substring(12, 17));
+    }
+  };
 
   return (
     <div className={`${className} ${vertical ? classes.wrapperVertical : classes.wrapper}`}>
@@ -129,26 +149,54 @@ export default function DateRangePicker({
         color="#FFFFFF"
       />
       <div className={vertical ? classes.fieldsWrapperVertical : classes.fieldsWrapper}>
-        <div className={`${vertical ? classes.startDateFieldVertical : classes.startDateField}`}>
-          <TextField
-            className={classes.dateField}
-            label="Start Date"
-            InputLabelProps={{ shrink: true }}
-            InputProps={{ notched: false }}
-            value={startDate}
-          />
-          <TextField className={classes.timeField} value={startTime} />
-        </div>
-        <div className={`${vertical ? classes.endDateFieldVertical : classes.endDateField}`}>
-          <TextField
-            className={classes.dateField}
-            label="End Date"
-            InputLabelProps={{ shrink: true }}
-            InputProps={{ notched: false }}
-            value={endDate}
-          />
-          <TextField className={classes.timeField} value={endTime} />
-        </div>
+        <FormControl>
+          <div className={`${vertical ? classes.startDateFieldVertical : classes.startDateField}`}>
+            <TextField
+              className={classes.dateField}
+              label="Start Date"
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                notched: false,
+                readOnly: true,
+                // disabled: true,
+              }}
+              value={startDate}
+            />
+            <TextField
+              className={classes.timeField}
+              autoFocus
+              onFocus={(event) => {
+                event.target.select();
+              }}
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              onBlur={(e) => onStartTimeBlur(e)}
+            />
+          </div>
+          <div className={`${vertical ? classes.endDateFieldVertical : classes.endDateField}`}>
+            <TextField
+              className={classes.dateField}
+              label="End Date"
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                notched: false,
+                readOnly: true,
+                // disabled: true,
+              }}
+              value={endDate}
+            />
+            <TextField
+              className={classes.timeField}
+              autoFocus
+              onFocus={(event) => {
+                event.target.select();
+              }}
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              onBlur={(e) => onEndTimeBlur(e)}
+            />
+          </div>
+        </FormControl>
       </div>
     </div>
   );
