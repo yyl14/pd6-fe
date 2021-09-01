@@ -344,7 +344,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             className={classNames.statusSwitch}
           />
         )}
-        noIndent
       >
         {role === 'MANAGER' && (
           <StyledButton
