@@ -167,7 +167,6 @@ export default function CustomTable({
   hasLink,
   linkName,
   children,
-  tableRef,
 }) {
   const classes = useStyles();
   const [curPage, setPage] = useState(0);
@@ -278,7 +277,7 @@ export default function CustomTable({
 
       <Paper className={classes.root} elevation={0}>
         <TableContainer className={classes.container}>
-          <Table stickyHeader aria-label="sticky table" ref={tableRef}>
+          <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
                 {columns.map((column) => (

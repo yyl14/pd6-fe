@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Typography, Button, Snackbar, makeStyles,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import {
   fetchChallenges,
   fetchChallengeSummary,
@@ -56,7 +57,6 @@ const accountColumn = [
 /* This is a level 4 component (page component) */
 export default function Statistics() {
   const { courseId, classId, challengeId } = useParams();
-  const scoreboardTableRef = useRef();
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -75,6 +75,7 @@ export default function Statistics() {
   const [scoreboardTitle, setScoreboardTitle] = useState(accountColumn);
   const [scoreboardData, setScoreboardData] = useState([]);
   const [challengeTitle, setChallengeTitle] = useState('');
+  const [scoreboardHTML, setScoreboardHTML] = useState('');
 
   useEffect(() => {
     dispatch(fetchChallenges(authToken, classId));
@@ -196,17 +197,36 @@ export default function Statistics() {
     }
   }, [authToken, challengeId, dispatch, challenges]);
 
-  const copyTable = () => {
-    console.log('scoreboard');
-    console.log(scoreboardTableRef);
-    const range = document.createRange();
-    // set the Node to select the "range"
-    range.selectNode(scoreboardTableRef.current);
-    // add the Range to the set of window selections
-    window.getSelection().addRange(range);
-    document.execCommand('copy');
-    setShowSnackbar(true);
-  };
+  useEffect(() => {
+    // assemble html data to copy
+    let tableHTML = '<table>';
+    tableHTML += '<tr>';
+    scoreboardTitle.map((title) => {
+      tableHTML += `<td><b>${title.label}</b></td>`;
+      return title;
+    });
+    tableHTML += '</tr>';
+
+    scoreboardData.map((row) => {
+      tableHTML += '<tr>';
+      scoreboardTitle.map((column) => {
+        const value = row[column.id] ? row[column.id] : '';
+        if (column.type === 'link') {
+          const link = row[column.link_id] ? row[column.link_id] : '';
+          const url = column.isExternal ? link : `${window.location.origin}${link}`;
+          tableHTML += `<td><a href='${url}'>${value}</a></td>`;
+        } else {
+          tableHTML += `<td>${value}</td>`;
+        }
+        return column;
+      });
+      tableHTML += '</tr>';
+      return row;
+    });
+
+    tableHTML += '</table>';
+    setScoreboardHTML(tableHTML);
+  }, [scoreboardData, scoreboardTitle]);
 
   return (
     <>
@@ -255,11 +275,12 @@ export default function Statistics() {
       <SimpleBar title="Scoreboard" />
       <CustomTable
         buttons={(
-          <Button onClick={copyTable}>
-            <Icon.Copy />
-          </Button>
+          <CopyToClipboard options={{ format: 'text/html' }} text={scoreboardHTML} onCopy={() => setShowSnackbar(true)}>
+            <Button>
+              <Icon.Copy />
+            </Button>
+          </CopyToClipboard>
         )}
-        tableRef={scoreboardTableRef}
         data={scoreboardData}
         columns={scoreboardTitle}
       />
