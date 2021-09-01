@@ -193,7 +193,7 @@ function AutoTable({
 
   (ident, browseParams) are required parameters
   */
-  refetchErrors, // boolean if there's problem in refetch
+  refetchErrors = [], // boolean if there's problem in refetch
   columns, // configurations of columns
   /*
   example value:
@@ -212,7 +212,7 @@ function AutoTable({
 */
   reduxData,
   reduxDataToRows,
-  hasLink,
+  hasLink = false,
   buttons,
 }) {
   const classes = useStyles();
