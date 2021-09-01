@@ -1,27 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  TextField,
-} from '@material-ui/core';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Typography, Button, makeStyles } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
-import SimpleBar from '../../../ui/SimpleBar';
-import SimpleTable from '../../../ui/SimpleTable';
-import SampleTestArea from '../../../ui/SampleTestArea';
 import Icon from '../../../ui/icon/index';
-import AlignedText from '../../../ui/AlignedText';
 
 import CodingProblemInfo from './ProblemSettings/CodingProblemInfo';
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -42,15 +29,10 @@ export default function CodingProblem() {
   const history = useHistory();
   const classNames = useStyles();
 
-  const dispatch = useDispatch();
-
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
   const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges.byId);
-  const authToken = useSelector((state) => state.auth.token);
-  const error = useSelector((state) => state.error.myClass.problem);
-  const loading = useSelector((state) => state.loading.myClass.problem);
   const commonLoading = useSelector((state) => state.loading.common);
 
   if (

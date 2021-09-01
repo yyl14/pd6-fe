@@ -25,12 +25,15 @@ const useStyles = makeStyles(() => ({
   descriptionField: {
     width: '60vw',
   },
+  table: {
+    width: '100%',
+  },
 }));
 
 /* This is a level 4 component (page component) */
 export default function ChallengeInfo() {
   const { courseId, classId, challengeId } = useParams();
-  const history = useHistory();
+
   const classes = useStyles();
   const dispatch = useDispatch();
   const [currentTime, setCurrentTime] = useState(moment());
@@ -192,8 +195,9 @@ export default function ChallengeInfo() {
           </AlignedText>
         </>
       </SimpleBar>
-      <SimpleBar title="Overview">
+      <SimpleBar title="Overview" noIndent>
         <SimpleTable
+          className={classes.table}
           isEdit={false}
           hasDelete={false}
           columns={[

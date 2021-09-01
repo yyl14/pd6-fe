@@ -47,6 +47,9 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     justifyContent: 'flex-end',
   },
+  table: {
+    width: '100%',
+  },
   content: {
     whiteSpace: 'pre-line',
   },
@@ -272,7 +275,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           <Typography variant="body2">{problems[problemId].hint}</Typography>
         </SimpleBar>
       )}
-      <SimpleBar title="Sample Data">
+      <SimpleBar title="Sample Data" noIndent>
         {role === 'MANAGER' && (
           <StyledButton
             variant="outlined"
@@ -284,6 +287,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           </StyledButton>
         )}
         <SimpleTable
+          className={classNames.table}
           isEdit={false}
           hasDelete={false}
           columns={[
@@ -331,6 +335,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         </div>
       </SimpleBar>
       <SimpleBar
+        noIndent
         title="Testing Data"
         buttons={(
           <FormControlLabel
@@ -351,6 +356,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           </StyledButton>
         )}
         <SimpleTable
+          className={classNames.table}
           isEdit={false}
           hasDelete={false}
           columns={[
@@ -397,7 +403,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         />
       </SimpleBar>
       {role === 'MANAGER' && (
-        <SimpleBar title="Assisting Data (Optional)">
+        <SimpleBar title="Assisting Data (Optional)" noIndent>
           <StyledButton
             variant="outlined"
             color="inherit"
@@ -407,6 +413,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             Download All Files
           </StyledButton>
           <SimpleTable
+            className={classNames.table}
             isEdit={false}
             hasDelete={false}
             columns={[
