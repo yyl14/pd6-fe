@@ -13,14 +13,22 @@ export default function GradeDelete(props) {
   const dispatch = useDispatch();
   const history = useHistory();
   const authToken = useSelector((state) => state.auth.token);
+  const loading = useSelector((state) => state.loading.myClass.grade);
 
   const [popUp, setPopUp] = useState(false);
+  const [hasRequest, setHasRequest] = useState(false);
 
   const handleDelete = () => {
-    setPopUp(false);
     dispatch(deleteGrade(authToken, gradeId));
-    history.push(`/my-class/${courseId}/${classId}/grade`);
+    setHasRequest(true);
   };
+
+  useEffect(() => {
+    if (hasRequest && !loading.deleteGrade) {
+      setPopUp(false);
+      history.push(`/my-class/${courseId}/${classId}/grade`);
+    }
+  }, [hasRequest, loading.deleteGrade, history, courseId, classId]);
 
   return (
     <>
