@@ -28,7 +28,7 @@ export default function MemberList() {
   const members = useSelector((state) => state.classMembers);
   const loading = useSelector((state) => state.loading.admin.course);
   const error = useSelector((state) => state.error.common.common.fetchClassMembers);
-  console.log(loading);
+
   useEffect(() => {
     dispatch(fetchCourses(authToken));
   }, [authToken, dispatch]);
