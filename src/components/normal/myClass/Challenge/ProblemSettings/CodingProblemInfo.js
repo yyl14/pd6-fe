@@ -276,12 +276,12 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           {problems[problemId] === undefined ? 'error' : problems[problemId].title}
         </Typography>
       </SimpleBar>
-      <SimpleBar title="Description">
+      <SimpleBar title="Description" noIndent>
         <MathpixLoader>
           <MathpixMarkdown text={problems[problemId].description} />
         </MathpixLoader>
       </SimpleBar>
-      <SimpleBar title="About Input and Output">
+      <SimpleBar title="About Input and Output" noIndent>
         <MathpixLoader>
           <MathpixMarkdown text={problems[problemId].io_description} htmlTags />
         </MathpixLoader>
@@ -296,7 +296,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           <Typography variant="body2">{problems[problemId].hint}</Typography>
         </SimpleBar>
       )}
-      <SimpleBar title="Sample Data">
+      <SimpleBar title="Sample Data" noIndent>
         {role === 'MANAGER' && (
           <StyledButton
             variant="outlined"
