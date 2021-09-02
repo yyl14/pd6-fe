@@ -43,39 +43,92 @@ const byId = (state = {}, action) => {
 
     case commonConstants.FETCH_CLASS_MEMBERS_SUCCESS: {
       const { classId, data } = action.payload;
-      // console.log('member', data);
-      // console.log(state[classId]);
-      return { ...state, [classId]: { ...state[classId], memberIds: data.map((item) => item.member_id) } };
+      return {
+        ...state,
+        [classId]: {
+          ...state[classId],
+          memberIds: data.map((item) => item.member_id),
+          gradeIds: state[classId] ? state[classId].gradeIds : [],
+          teamIds: state[classId] ? state[classId].teamIds : [],
+          challengeIds: state[classId] ? state[classId].challengeIds : [],
+          submissionIds: state[classId] ? state[classId].submissionIds : [],
+        },
+      };
     }
 
     case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {
       const { classId, data } = action.payload;
-      // console.log('grade', data);
-      // console.log(state[classId]);
-      return { ...state, [classId]: { ...state[classId], gradeIds: data.map((item) => item.id) } };
+      return {
+        ...state,
+        [classId]: {
+          ...state[classId],
+          gradeIds: data.map((item) => item.id),
+          memberIds: state[classId] ? state[classId].memberIds : [],
+          teamIds: state[classId] ? state[classId].teamIds : [],
+          challengeIds: state[classId] ? state[classId].challengeIds : [],
+          submissionIds: state[classId] ? state[classId].submissionIds : [],
+        },
+      };
     }
 
     case teamConstants.FETCH_TEAMS_SUCCESS: {
       const { classId, data } = action.payload;
-      // console.log('team', data);
-      // console.log(state[classId]);
-      return { ...state, [classId]: { ...state[classId], teamIds: data.map((item) => item.id) } };
+      return {
+        ...state,
+        [classId]: {
+          ...state[classId],
+          teamIds: data.map((item) => item.id),
+          gradeIds: state[classId] ? state[classId].gradeIds : [],
+          memberIds: state[classId] ? state[classId].memberIds : [],
+          challengeIds: state[classId] ? state[classId].challengeIds : [],
+          submissionIds: state[classId] ? state[classId].submissionIds : [],
+        },
+      };
     }
 
     case challengeConstants.FETCH_CHALLENGES_SUCCESS: {
       const { classId, data } = action.payload;
-      return { ...state, [classId]: { ...state[classId], challengeIds: data.map((item) => item.id) } };
+      return {
+        ...state,
+        [classId]: {
+          ...state[classId],
+          challengeIds: data.map((item) => item.id),
+          gradeIds: state[classId] ? state[classId].gradeIds : [],
+          memberIds: state[classId] ? state[classId].memberIds : [],
+          teamIds: state[classId] ? state[classId].teamIds : [],
+          submissionIds: state[classId] ? state[classId].submissionIds : [],
+        },
+      };
     }
 
     case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
       const { classId, challenges } = action.payload;
-      // console.log('common', challenges);
-      return { ...state, [classId]: { ...state[classId], challengeIds: challenges.map((item) => item.id) } };
+      return {
+        ...state,
+        [classId]: {
+          ...state[classId],
+          challengeIds: challenges.map((item) => item.id),
+          teamIds: state[classId] ? state[classId].teamIds : [],
+          gradeIds: state[classId] ? state[classId].gradeIds : [],
+          memberIds: state[classId] ? state[classId].memberIds : [],
+          submissionIds: state[classId] ? state[classId].submissionIds : [],
+        },
+      };
     }
 
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       const { classId, data } = action.payload;
-      return { ...state, [classId]: { ...state[classId], submissionIds: data.map((item) => item.id) } };
+      return {
+        ...state,
+        [classId]: {
+          ...state[classId],
+          submissionIds: data.map((item) => item.id),
+          teamIds: state[classId] ? state[classId].teamIds : [],
+          gradeIds: state[classId] ? state[classId].gradeIds : [],
+          memberIds: state[classId] ? state[classId].memberIds : [],
+          challengeIds: state[classId] ? state[classId].challengeIds : [],
+        },
+      };
     }
 
     default:

@@ -111,18 +111,11 @@ export default function SubmissionDetail() {
   }, [authToken, dispatch, submissionId, submissions]);
 
   useEffect(() => {
-    if (problems.allIds !== [] && submissions[submissionId] !== undefined) {
-      problems.allIds.filter((id) => {
-        if (id === submissions[submissionId].problem_id) {
-          dispatch(
-            browseChallengeOverview(authToken, problems.byId[submissions[submissionId].problem_id].challenge_id),
-          );
-          setChallengeId(problems.byId[submissions[submissionId].problem_id].challenge_id);
-        }
-        return '';
-      });
+    if (problems.byId[problemId] !== undefined && submissions[submissionId] !== undefined) {
+      dispatch(browseChallengeOverview(authToken, problems.byId[problemId].challenge_id));
+      setChallengeId(problems.byId[problemId].challenge_id);
     }
-  }, [authToken, dispatch, problems, submissionId, submissions]);
+  }, [authToken, dispatch, problemId, problems.allIds, problems.byId, submissionId, submissions]);
 
   useEffect(() => {
     setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
@@ -164,13 +157,9 @@ export default function SubmissionDetail() {
   }, [judgeCases.allIds, judgeCases.byId, judgmentId, judgments.byId, testcaseIds, testcases]);
 
   useEffect(() => {
-    user.classes.forEach((value) => {
-      if (value.class_id === parseInt(classId, 10)) {
-        if (value.role === 'MANAGER') {
-          setRole('MANAGER');
-        }
-      }
-    });
+    if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
+      setRole('MANAGER');
+    }
   }, [user.classes, classId]);
 
   if (
@@ -184,11 +173,6 @@ export default function SubmissionDetail() {
   ) {
     return <GeneralLoading />;
   }
-
-  // if (error.readSubmission) {
-  //   console.log(error.readSubmission);
-  //   return (<div>{error.readSubmission}</div>);
-  // }
 
   const handleRefresh = () => {
     dispatch(readSubmissionDetail(authToken, submissionId));
