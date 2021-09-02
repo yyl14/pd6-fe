@@ -1,33 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from '@material-ui/core';
-import { useParams, useHistory } from 'react-router-dom';
+import { Typography, Button, makeStyles } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 import { fetchCourse, fetchClass, fetchClassMembers } from '../../../../actions/common/common';
-import CustomTable from '../../../ui/CustomTable';
-import TableFilterCard from '../../../ui/TableFilterCard';
+import AutoTable from '../../../ui/AutoTable';
 import MemberEdit from './MemberEdit';
 import NoMatch from '../../../noMatch';
 import systemRoleTransformation from '../../../../function/systemRoleTransformation';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
-
 }));
 
 /* This is a level 4 component (page component) */
 export default function MemberList() {
   const { courseId, classId } = useParams();
-  const history = useHistory();
   const classNames = useStyles();
 
   const dispatch = useDispatch();
@@ -37,6 +26,7 @@ export default function MemberList() {
   const classes = useSelector((state) => state.classes);
   const members = useSelector((state) => state.classMembers);
   const loading = useSelector((state) => state.loading.common.common);
+  const error = useSelector((state) => state.error.common.common.fetchClassMembers);
   const userClasses = useSelector((state) => state.user.classes);
 
   useEffect(() => {
@@ -47,31 +37,8 @@ export default function MemberList() {
     dispatch(fetchClass(authToken, classId));
   }, [authToken, classId, dispatch]);
 
-  useEffect(() => {
-    if (!loading.replaceClassMembers) {
-      dispatch(fetchClassMembers(authToken, classId));
-    }
-  }, [authToken, classId, dispatch, loading.replaceClassMembers]);
-
   const [edit, setEdit] = useState(false);
-  const [tableData, setTableData] = useState([]);
-  const [transformedData, setTransformedData] = useState([]);
   const [isManager, setIsManager] = useState(false);
-
-  useEffect(() => {
-    if (classes.byId[classId]) {
-      const newData = classes.byId[classId].memberIds.map((id) => ({
-        ...members.byId[id],
-        // path: `/admin/account/account/${id}/setting`,
-        role: systemRoleTransformation(members.byId[id].role),
-      }));
-      setTableData(newData);
-      setTransformedData(newData);
-    } else {
-      setTableData([]);
-      setTransformedData([]);
-    }
-  }, [classes.byId, classId, members.byId]);
 
   useEffect(() => {
     userClasses.map((item) => {
@@ -108,57 +75,106 @@ export default function MemberList() {
         />
       ) : (
         <>
-          <CustomTable
-            hasSearch
-            buttons={isManager ? (
-              <>
-                <Button onClick={() => setEdit(true)}>Edit</Button>
-              </>
-            ) : <></>}
-            data={tableData}
+          <AutoTable
+            ident="MyClass Member Table"
+            hasFilter
+            buttons={
+              isManager ? (
+                <>
+                  <Button onClick={() => setEdit(true)}>Edit</Button>
+                </>
+              ) : (
+                <></>
+              )
+            }
+            filterConfig={[
+              {
+                reduxStateId: 'username',
+                label: 'Username',
+                type: 'TEXT',
+                operation: 'LIKE',
+              },
+              {
+                reduxStateId: 'student_id',
+                label: 'Student ID',
+                type: 'TEXT',
+                operation: 'LIKE',
+              },
+              {
+                reduxStateId: 'real_name',
+                label: 'Real Name',
+                type: 'TEXT',
+                operation: 'LIKE',
+              },
+              {
+                reduxStateId: 'institute_abbreviated_name',
+                label: 'Institute',
+                type: 'ENUM',
+                options: [
+                  { value: 'NTU', label: 'NTU' },
+                  { value: 'NTNU', label: 'NTNU' },
+                  { value: 'NTUST', label: 'NTUST' },
+                ],
+              },
+              {
+                reduxStateId: 'role',
+                label: 'Role',
+                type: 'ENUM',
+                options: [
+                  { value: 'Guest', label: 'Guest' },
+                  { value: 'Normal', label: 'Normal' },
+                  { value: 'Manager', label: 'Manager' },
+                ],
+              },
+            ]}
+            refetch={(browseParams, ident) => {
+              dispatch(fetchClassMembers(authToken, browseParams, ident, classId));
+            }}
+            refetchErrors={[error]}
             columns={[
               {
-                id: 'username',
-                label: 'Username',
-                minWidth: 150,
+                name: 'Username',
+                align: 'center',
                 width: 200,
-                align: 'center',
                 type: 'link',
-                link_id: 'path',
               },
               {
-                id: 'student_id',
-                label: 'Student ID',
-                minWidth: 105,
+                name: 'Student ID',
+                align: 'center',
                 width: 155,
-                align: 'center',
                 type: 'string',
               },
               {
-                id: 'real_name',
-                label: 'Real Name',
-                minWidth: 96,
+                name: 'Real Name',
+                align: 'center',
                 width: 144,
-                align: 'center',
                 type: 'string',
               },
               {
-                id: 'institute_abbreviated_name',
-                label: 'Institute',
-                minWidth: 109,
+                name: 'Institute',
+                align: 'center',
                 width: 165,
-                align: 'center',
                 type: 'string',
               },
               {
-                id: 'role',
-                label: 'Role',
-                minWidth: 71,
-                width: 127,
+                name: 'Role',
                 align: 'center',
+                width: 127,
                 type: 'string',
               },
             ]}
+            reduxData={members}
+            reduxDataToRows={(item) => ({
+              id: item.member_id,
+              Username: {
+                text: item.username,
+                path: `my-class/${courseId}/${classId}/member`,
+              },
+              'Student ID': item.student_id,
+              'Real Name': item.real_name,
+              Institute: item.institute_abbreviated_name,
+              Role: systemRoleTransformation(item.role),
+            })}
           />
         </>
       )}
