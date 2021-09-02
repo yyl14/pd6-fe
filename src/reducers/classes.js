@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
 import { courseConstants } from '../actions/admin/constant';
 import { commonConstants } from '../actions/common/constant';
-import { gradeConstants, teamConstants, challengeConstants } from '../actions/myClass/constant';
+import {
+  gradeConstants, teamConstants, challengeConstants, submissionConstants,
+} from '../actions/myClass/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -18,6 +20,7 @@ const byId = (state = {}, action) => {
             gradeIds: state[item.id] ? state[item.id].gradeIds : [],
             teamIds: state[item.id] ? state[item.id].teamIds : [],
             challengeIds: state[item.id] ? state[item.id].challengeIds : [],
+            submissionIds: state[item.id] ? state[item.id].submissionIds : [],
           },
         }),
         state,
@@ -33,6 +36,7 @@ const byId = (state = {}, action) => {
           gradeIds: state[action.payload.id] ? state[action.payload.id].gradeIds : [],
           teamIds: state[action.payload.id] ? state[action.payload.id].teamIds : [],
           challengeIds: state[action.payload.id] ? state[action.payload.id].challengeIds : [],
+          submissionIds: state[action.payload.id] ? state[action.payload.id].submissionIds : [],
         },
       };
     }
@@ -60,6 +64,11 @@ const byId = (state = {}, action) => {
     case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
       const { classId, challenges } = action.payload;
       return { ...state, [classId]: { ...state[classId], challengeIds: challenges.map((item) => item.id) } };
+    }
+
+    case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
+      const { classId, data } = action.payload;
+      return { ...state, [classId]: { ...state[classId], submissionIds: data.map((item) => item.id) } };
     }
 
     default:
