@@ -10,9 +10,10 @@ import {
   Typography,
   makeStyles,
 } from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
+import { userSignIn } from '../../actions/user/auth';
 
 const useStyles = makeStyles((theme) => ({
   authForm: {
@@ -31,7 +32,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function LoginForm(props) {
+export default function LoginForm() {
+  const dispatch = useDispatch();
   const classNames = useStyles();
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
@@ -72,7 +74,7 @@ export default function LoginForm(props) {
     }
 
     if (errors.username === false && errors.password === false && newUserName !== '' && newPassword !== '') {
-      props.userSignIn(newUserName, newPassword);
+      dispatch(userSignIn(newUserName, newPassword));
     }
   };
   const handleUsernameChange = (e) => {
