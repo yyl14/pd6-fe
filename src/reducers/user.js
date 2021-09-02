@@ -8,12 +8,13 @@ const initialState = {
   real_name: '',
   alternative_email: '',
   classes: [],
+  studentCards: [],
 };
 
 const user = (state = initialState, action) => {
   switch (action.type) {
     case authConstants.AUTH_SUCCESS:
-      return action.user;
+      return { ...action.user, studentCards: [] };
     case authConstants.AUTH_LOGOUT:
       return initialState;
     case userConstants.EDIT_SELF_ACCOUNT_SUCCESS: {
@@ -24,6 +25,8 @@ const user = (state = initialState, action) => {
           action.payload.alternative_email === '' ? action.payload.alternative_email : state.alternative_email,
       };
     }
+    case userConstants.GET_SELF_STUDENT_CARD_SUCCESS:
+      return { ...state, studentCards: action.payload.map((item) => item.id) };
     default:
       return state;
   }

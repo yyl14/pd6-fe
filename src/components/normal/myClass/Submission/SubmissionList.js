@@ -30,6 +30,7 @@ export default function SubmissionList() {
   const courses = useSelector((state) => state.courses.byId);
   // const loading = useSelector((state) => state.loading.myClass.submissions);
   const error = useSelector((state) => state.error.myClass.submissions);
+  const accountError = useSelector((state) => state.error.common.common.fetchAccount);
   const commonLoading = useSelector((state) => state.loading.common);
   const submissions = useSelector((state) => state.submissions);
   const authToken = useSelector((state) => state.auth.token);
@@ -51,7 +52,6 @@ export default function SubmissionList() {
     }
     return <NoMatch />;
   }
-  console.log(error);
 
   return (
     <>
@@ -81,8 +81,8 @@ export default function SubmissionList() {
             operation: 'LIKE',
           },
           {
-            reduxStateId: 'id',
-            label: 'ID',
+            reduxStateId: 'real_name',
+            label: 'Real Name',
             type: 'TEXT',
             operation: 'LIKE',
           },
@@ -137,7 +137,7 @@ export default function SubmissionList() {
         refetch={(browseParams, ident) => {
           dispatch(fetchClassSubmissions(authToken, browseParams, ident, classId));
         }}
-        refetchErrors={[error.fetchSubmissions]}
+        refetchErrors={[error.fetchClassSubmissions, accountError]}
         columns={[
           {
             name: 'ID',

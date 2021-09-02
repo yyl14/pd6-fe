@@ -285,13 +285,13 @@ export default function Header() {
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
           {itemList.map((item) => (
-            <Typography variant="h6" className={classes.item} key={item.text}>
-              <a
-                href={baseURL + item.path}
-                className={location.pathname.includes(item.basePath) ? classes.active : classes.a}
-              >
-                {item.text}
-              </a>
+            <Typography
+              variant="h6"
+              onClick={() => history.push(item.path)}
+              className={`${classes.item} ${location.pathname.includes(item.basePath) && classes.active}`}
+              key={item.text}
+            >
+              {item.text}
             </Typography>
           ))}
           <div className={classes.right}>

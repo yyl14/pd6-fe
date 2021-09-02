@@ -9,16 +9,15 @@ import {
   DialogActions,
   DialogContent,
   TextField,
+  IconButton,
 } from '@material-ui/core';
 import { useHistory, useParams, Link } from 'react-router-dom';
 import moment from 'moment';
-import { format } from 'date-fns';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Icon from '../../../ui/icon/index';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
-import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
-// import NoMatch from '../../../noMatch';
 
 import GeneralLoading from '../../../GeneralLoading';
 
@@ -52,13 +51,25 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'flex-end',
   },
+  resultTable: {
+    width: '100%',
+  },
+  codeContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+  },
   codeField: {
-    width: '50vw',
+    width: '100%',
+  },
+  copyIcon: {
+    transform: 'translate(-20px, -230px)',
+    zIndex: '1000',
   },
 }));
 
 /* This is a level 4 component (page component) */
-export default function SubmissionDetail(props) {
+export default function SubmissionDetail() {
   const { courseId, classId, submissionId } = useParams();
   const history = useHistory();
   const classNames = useStyles();
@@ -114,12 +125,12 @@ export default function SubmissionDetail(props) {
   }, [authToken, dispatch, problems, submissionId, submissions]);
 
   useEffect(() => {
-    setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0]);
-    if (judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0]) {
+    setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
+    if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
       dispatch(
         browseJudgeCases(
           authToken,
-          judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0],
+          judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
         ),
       );
     }
@@ -278,7 +289,7 @@ export default function SubmissionDetail(props) {
             && <Typography variant="body1">{submitLangs[submissions[submissionId].language_id].name}</Typography>}
         </AlignedText> */}
       </SimpleBar>
-      <SimpleBar title="Submission Result">
+      <SimpleBar title="Submission Result" noIndent>
         <SimpleTable
           isEdit={false}
           hasDelete={false}
@@ -327,16 +338,22 @@ export default function SubmissionDetail(props) {
           data={tableData}
         />
       </SimpleBar>
-      <SimpleBar title="Code">
-        <CopyToClipboardButton text={submissions[submissionId].content} />
-        <TextField
-          className={classNames.codeField}
-          value={submissions[submissionId].content}
-          disabled
-          multiline
-          minRows={10}
-          maxRows={20}
-        />
+      <SimpleBar title="Code" noIndent>
+        <div className={classNames.codeContent}>
+          <TextField
+            className={classNames.codeField}
+            value={submissions[submissionId].content}
+            disabled
+            multiline
+            minRows={10}
+            maxRows={20}
+          />
+          <CopyToClipboard text={submissions[submissionId].content}>
+            <IconButton className={classNames.copyIcon}>
+              <Icon.Copy />
+            </IconButton>
+          </CopyToClipboard>
+        </div>
       </SimpleBar>
       <Dialog
         maxWidth="md"

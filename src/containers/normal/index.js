@@ -5,6 +5,7 @@ import { Switch, Route, withRouter } from 'react-router-dom';
 
 import MyClass from './myClass';
 import AllClass from './allClass';
+import ProblemSet from './problemSet';
 
 import NoMatch from '../../components/noMatch';
 import Header from '../../components/ui/Header';
@@ -35,6 +36,7 @@ class Normal extends Component {
             <Switch>
               <Route path="/my-class/:courseId/:classId" component={MyClass} />
               <Route path="/all-class" component={AllClass} />
+              <Route path="/problem-set" component={ProblemSet} />
               <Route component={NoMatch} />
             </Switch>
           </div>

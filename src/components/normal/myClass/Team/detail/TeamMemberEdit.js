@@ -9,7 +9,6 @@ import {
   FormControl,
   Dialog, DialogTitle, DialogContent, DialogActions,
 } from '@material-ui/core';
-import moment from 'moment-timezone';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdAdd } from 'react-icons/md';
@@ -21,7 +20,7 @@ import {
 } from '../../../../../actions/myClass/team';
 import systemRoleTransformation from '../../../../../function/systemRoleTransformation';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   select: {
     width: '350px',
   },
@@ -29,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TeamMemberEdit(props) {
   const classNames = useStyles();
-  const { classId, teamId } = useParams();
+  const { teamId } = useParams();
   const dispatch = useDispatch();
 
   const authToken = useSelector((state) => state.auth.token);
@@ -47,21 +46,8 @@ export default function TeamMemberEdit(props) {
   });
 
   useEffect(() => {
-    dispatch(fetchTeamMember(authToken, teamId));
-  }, [authToken, dispatch, teamId]);
-
-  useEffect(() => {
-    setTableData(
-      teamMemberIds.map((id) => ({
-        id: classMembers[id].member_id,
-        username: classMembers[id].username,
-        student_id: classMembers[id].student_id,
-        real_name: classMembers[id].real_name,
-        role: systemRoleTransformation(teamMembers[id].role),
-        path: '/',
-      })),
-    );
-  }, [classMembers, teamMemberIds, teamMembers]);
+    setTableData(props.tableData);
+  }, [props.tableData]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -110,7 +96,7 @@ export default function TeamMemberEdit(props) {
     clearInputs();
     if (inputs.student !== '') {
       const role = inputs.role === 'Normal' ? 'NORMAL' : 'MANAGER';
-      dispatch(addTeamMember(authToken, teamId, `#${inputs.student}`, role, false, null));
+      dispatch(addTeamMember(authToken, teamId, inputs.student, role, false, null));
       const newTempAdd = [...tempAddData, inputs.student];
       setTempAddData(newTempAdd);
     }
@@ -119,8 +105,7 @@ export default function TeamMemberEdit(props) {
 
   return (
     <div>
-      <SimpleBar title="Team Member" />
-      <>
+      <SimpleBar title="Team Member" noIndent>
         <SimpleTable
           isEdit={props.isManager}
           hasDelete={props.isManager}
@@ -170,17 +155,18 @@ export default function TeamMemberEdit(props) {
             },
           ]}
         />
-      </>
-      <Button onClick={handleCancel}>
-        Cancel
-      </Button>
-      <Button
-        color="primary"
-        type="submit"
-        onClick={handleSave}
-      >
-        Save
-      </Button>
+
+        <Button onClick={handleCancel}>
+          Cancel
+        </Button>
+        <Button
+          color="primary"
+          type="submit"
+          onClick={handleSave}
+        >
+          Save
+        </Button>
+      </SimpleBar>
 
       <Dialog open={popUp} onClose={() => setPopUp(false)} maxWidth="md">
         <DialogTitle>

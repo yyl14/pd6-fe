@@ -2,27 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Typography,
-  Button,
   makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  TextField,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { fetchTeams, fetchTeamMember, editTeam } from '../../../../actions/myClass/team';
+import { fetchTeams, fetchTeamMember } from '../../../../actions/myClass/team';
 import { fetchClassMembers } from '../../../../actions/common/common';
 import TeamInfo from './detail/TeamInfo';
 import TeamInfoEdit from './detail/TeamInfoEdit';
 import TeamMember from './detail/TeamMember';
 import TeamMemberEdit from './detail/TeamMemberEdit';
 import NoMatch from '../../../noMatch';
-import SimpleBar from '../../../ui/SimpleBar';
 import systemRoleTransformation from '../../../../function/systemRoleTransformation';
 import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -84,10 +77,10 @@ export default function ChallengeList() {
   useEffect(() => {
     setTableData(
       teamMemberIds.map((id) => ({
-        id: classMembers[id].member_id,
-        username: classMembers[id].username,
-        student_id: classMembers[id].student_id,
-        real_name: classMembers[id].real_name,
+        id: classMembers[id] ? classMembers[id].member_id : 0,
+        username: classMembers[id] ? classMembers[id].username : '',
+        student_id: classMembers[id] ? classMembers[id].student_id : '',
+        real_name: classMembers[id] ? classMembers[id].real_name : '',
         role: systemRoleTransformation(teamMembers[id].role),
         path: '/',
       })),
@@ -141,7 +134,7 @@ export default function ChallengeList() {
       )}
 
       {editTeamMember ? (
-        <TeamMemberEdit isManager={isManager} setOriginData={setTableData} handleBack={handleMemberBack} />
+        <TeamMemberEdit isManager={isManager} tableData={tableData} setOriginData={setTableData} handleBack={handleMemberBack} />
       ) : (
         <TeamMember isManager={isManager} tableData={tableData} handleEdit={handleMemberEdit} />
       )}

@@ -65,22 +65,28 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
 
     // Batch browse account
     const accountIds = data.map((item) => item.account_id);
-    const config2 = {
+    let res2 = null;
+    if (accountIds.length !== 0) {
+      const config2 = {
+        headers: { 'auth-token': token },
+        params: { account_ids: JSON.stringify(accountIds) },
+      };
+
+      res2 = await agent.get('/account-summary/batch', config2);
+    }
+
+    const config3 = {
       headers: { 'auth-token': token },
-      params: { account_ids: JSON.stringify(accountIds) },
     };
-
-    const res2 = await agent.get('/account-summary/batch', config2);
-
     // use submission id to get status
     const res3 = await Promise.all(
       data.map(async ({ id }) => agent
-        .get(`/submission/${id}/judgment`, config2)
+        .get(`/submission/${id}/judgment`, config3)
         .then((res4) => res4.data.data)
         .catch((err) => {
           dispatch({
             type: submissionConstants.FETCH_SUBMISSIONS_FAIL,
-            payload: err,
+            error: err,
           });
         })),
     );
@@ -89,9 +95,10 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
     dispatch({
       type: submissionConstants.FETCH_SUBMISSIONS_SUCCESS,
       payload: {
+        classId,
         data,
         judgments,
-        accounts: res2.data.data,
+        accounts: res2 ? res2.data.data : [],
       },
     });
 
@@ -104,10 +111,10 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
         offset: browseParams.offset,
       },
     });
-  } catch (error) {
+  } catch (err) {
     dispatch({
       type: submissionConstants.FETCH_SUBMISSIONS_FAIL,
-      payload: error,
+      error: err,
     });
   }
 };
