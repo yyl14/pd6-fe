@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Typography, makeStyles } from '@material-ui/core';
+import { Typography, Button, makeStyles } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
 import { fetchClassMembers } from '../../../actions/common/common';
@@ -66,6 +66,7 @@ export default function MemberList() {
           <AutoTable
             ident="Class Member Table"
             hasFilter
+            buttons={<Button onClick={() => setEdit(true)}>Edit</Button>}
             filterConfig={[
               {
                 reduxStateId: 'username',
