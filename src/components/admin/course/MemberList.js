@@ -115,26 +115,31 @@ export default function MemberList() {
               {
                 name: 'Username',
                 align: 'center',
+                width: 200,
                 type: 'link',
               },
               {
                 name: 'Student ID',
                 align: 'center',
+                width: 150,
                 type: 'string',
               },
               {
                 name: 'Real Name',
                 align: 'center',
+                width: 150,
                 type: 'string',
               },
               {
                 name: 'Institute',
                 align: 'center',
+                width: 150,
                 type: 'string',
               },
               {
                 name: 'Role',
                 align: 'center',
+                width: 120,
                 type: 'string',
               },
             ]}
