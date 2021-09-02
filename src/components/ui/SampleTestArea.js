@@ -14,31 +14,31 @@ const useStyles = makeStyles({
   },
   defaultCardContent: {
     padding: '4px 30px 20px 30px',
+    wordBreak: 'break-word',
     // '&:last-child': {
     //  padding: '22.5px 30px 5.5px',
     // },
   },
   limitedCardContent: {
-    height: '330px',
+    height: '334px',
     padding: '4px 30px 0px 30px',
     overflow: 'hidden',
     wordBreak: 'break-word',
-    // textOverflow: 'ellipsis',
-    // whiteSpace: 'nowrap',
+    display: '-webkit-box',
+    WebkitLineClamp: 10,
+    WebkitBoxOrient: 'vertical',
   },
   limitedCardContentExpanded: {
     padding: '4px 30px 0px 30px',
     wordBreak: 'break-word',
   },
   title: {
-    display: 'flex',
-    flexDirection: 'row',
     marginTop: '18.5px',
-    alignItems: 'center',
   },
   copyIcon: {
+    display: 'inline-block',
     marginLeft: '7.5px',
-    transform: 'translate(0, -1px)',
+    transform: 'translateY(-3.5px)',
   },
   content: {
     marginTop: '18.5px',
@@ -46,8 +46,8 @@ const useStyles = makeStyles({
   actions: {
     display: 'flex',
     justifyContent: 'center',
-    paddingTop: '18.5px',
-    paddingBottom: '18.5px',
+    paddingTop: '16px',
+    paddingBottom: '20px',
   },
 });
 
@@ -62,7 +62,6 @@ export default function SampleTestArea({ input, output, note }) {
       setShowExpandArrow(true);
       setExpanded(false);
     }
-    console.log(height);
   }, [height, showExpandArrow]);
 
   const handleExpand = (limited, isExpanded) => {
@@ -76,13 +75,15 @@ export default function SampleTestArea({ input, output, note }) {
   };
 
   return (
-    <>
-      <Card ref={ref} className={classes.root} variant="outlined">
+    <div ref={ref}>
+      <Card className={classes.root} variant="outlined">
         <CardContent className={handleExpand(showExpandArrow, expanded)}>
           {input && (
             <>
               <div className={classes.title}>
-                <Typography variant="h6">Input</Typography>
+                <Typography variant="h6" display="inline">
+                  Input
+                </Typography>
                 <div className={classes.copyIcon}>
                   <CopyToClipboardButton text={input} />
                 </div>
@@ -95,7 +96,9 @@ export default function SampleTestArea({ input, output, note }) {
           {output && (
             <>
               <div className={classes.title}>
-                <Typography variant="h6">Output</Typography>
+                <Typography variant="h6" display="inline">
+                  Output
+                </Typography>
                 <div className={classes.copyIcon}>
                   <CopyToClipboardButton text={output} />
                 </div>
@@ -106,7 +109,9 @@ export default function SampleTestArea({ input, output, note }) {
             </>
           )}
           <div className={classes.title}>
-            <Typography variant="h6">Note</Typography>
+            <Typography variant="h6" display="inline">
+              Note
+            </Typography>
             <div className={classes.copyIcon}>
               <CopyToClipboardButton text={note} />
             </div>
@@ -120,16 +125,12 @@ export default function SampleTestArea({ input, output, note }) {
 
         {showExpandArrow && (
           <CardActions className={classes.actions}>
-            <IconButton>
-              {expanded ? (
-                <Icon.ExpandLessOutlinedIcon onClick={() => setExpanded(false)} />
-              ) : (
-                <Icon.ExpandMoreOutlinedIcon onClick={() => setExpanded(true)} />
-              )}
+            <IconButton onClick={() => setExpanded(!expanded)}>
+              {expanded ? <Icon.ExpandLessOutlinedIcon /> : <Icon.ExpandMoreOutlinedIcon />}
             </IconButton>
           </CardActions>
         )}
       </Card>
-    </>
+    </div>
   );
 }
