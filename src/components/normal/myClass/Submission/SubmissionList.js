@@ -111,7 +111,7 @@ export default function SubmissionList() {
             operation: 'IN',
             options: allClass[classId].challengeIds.map((id) => ({
               value: id,
-              label: challenges[id] ? challenges[id].title : '',
+              label: challenges.byId[id].title,
             })),
           },
           {
