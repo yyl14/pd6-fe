@@ -1,24 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from '@material-ui/core';
-import { useParams, useHistory } from 'react-router-dom';
+import { Typography, Button, makeStyles } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
 import { fetchClassMembers } from '../../../actions/common/common';
 import CustomTable from '../../ui/CustomTable';
-import TableFilterCard from '../../ui/TableFilterCard';
 import MemberEdit from './MemberEdit';
 import NoMatch from '../../noMatch';
 import systemRoleTransformation from '../../../function/systemRoleTransformation';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -27,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 export default function MemberList() {
   const { courseId, classId } = useParams();
-  const history = useHistory();
   const classNames = useStyles();
 
   const dispatch = useDispatch();
