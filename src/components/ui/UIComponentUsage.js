@@ -33,8 +33,6 @@ import CustomTable from './CustomTable';
 import SimpleTable from './SimpleTable';
 import TableFilterCard from './TableFilterCard';
 import ErrorText from './ErrorText';
-import Header from './Header';
-import Sidebar from './Sidebar';
 import MultiSelect from './MultiSelect';
 import CustomCheckbox from './CustomCheckbox';
 import AutoTable from './AutoTable';
@@ -437,8 +435,22 @@ export default function UIComponentUsage() {
       <div className={classes.wrapper}>
         <Typography variant="h4">Sample Test Data Area</Typography>
         <hr className={classes.divider} />
-        <div className={classes.component}>
-          <SampleTestArea input="Hello" output="World!" />
+        <div className={classes.wideComponent}>
+          <SampleTestArea
+            input="Hello"
+            output={(
+              <>
+                <Typography>World!</Typography>
+                <Typography>World!</Typography>
+                <Typography>World!</Typography>
+                <Typography>World!</Typography>
+                <Typography>World!</Typography>
+                <Typography>World!</Typography>
+                <Typography>World!</Typography>
+                <Typography>World!</Typography>
+              </>
+            )}
+          />
         </div>
       </div>
       <div className={classes.wrapper}>
@@ -508,7 +520,7 @@ export default function UIComponentUsage() {
         </div>
       </div>
       <div className={classes.wrapper}>
-        <Typography variant="h4">Custom Table with Table Filter Card</Typography>
+        <Typography variant="h4">Auto Table with Table Filter Card</Typography>
         <hr className={classes.divider} style={{ width: '460px' }} />
         <div className={classes.wideComponent}>
           <AutoTable
