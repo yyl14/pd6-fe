@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState, useEffect, useCallback,
+} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // https://mathpix.com/docs/mathpix-markdown/overview
 import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
@@ -202,7 +204,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     files.map((file) => dispatch(downloadFile(authToken, file)));
   };
 
-  const sampleTrans2no = (id) => {
+  const sampleTrans2no = useCallback((id) => {
     if (testcases[id].input_filename !== null) {
       return parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10);
     }
@@ -210,9 +212,9 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       return parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10);
     }
     return 0;
-  };
+  }, [testcases]);
 
-  const testcaseTrans2no = (id) => {
+  const testcaseTrans2no = useCallback((id) => {
     if (testcases[id].input_filename !== null) {
       return parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10);
     }
@@ -220,12 +222,31 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       return parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10);
     }
     return 0;
-  };
+  }, [testcases]);
 
   useEffect(() => {
     if (problems[problemId] && problems[problemId].testcaseIds) {
       const testcasesId = problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
-      setSampleDataIds(problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample));
+      const samplesId = problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
+      testcasesId.sort((a, b) => {
+        if (testcaseTrans2no(a) < testcaseTrans2no(b)) {
+          return -1;
+        }
+        if (testcaseTrans2no(a) > testcaseTrans2no(b)) {
+          return 1;
+        }
+        return 0;
+      });
+      samplesId.sort((a, b) => {
+        if (sampleTrans2no(a) < sampleTrans2no(b)) {
+          return -1;
+        }
+        if (sampleTrans2no(a) > sampleTrans2no(b)) {
+          return 1;
+        }
+        return 0;
+      });
+      setSampleDataIds(samplesId);
       setTestcaseDataIds(testcasesId);
       if (testcasesId.length === 0) {
         setStatus(false);
@@ -233,7 +254,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         setStatus(!testcases[testcasesId[0]].is_disabled);
       }
     }
-  }, [problems, problemId, testcases]);
+  }, [problems, problemId, testcases, sampleTrans2no, testcaseTrans2no]);
 
   useEffect(() => {
     dispatch(browseTestcase(authToken, problemId));
