@@ -14,7 +14,8 @@ export default function Login() {
   const history = useHistory();
   const auth = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
-  const [setCookie] = useCookies(['id', 'token']);
+  // eslint-disable-next-line no-unused-vars
+  const [cookies, setCookie] = useCookies(['id', 'token']);
 
   useEffect(() => {
     document.title = 'Singin';
@@ -26,10 +27,10 @@ export default function Login() {
   useEffect(() => {
     if (auth.isAuthenticated) {
       setCookie('id', user.id, { path: '/', maxAge: 86400 });
-      setCookie('token', user.token, { path: '/', maxAge: 86400 });
+      setCookie('token', auth.token, { path: '/', maxAge: 86400 });
       history.push('/');
     }
-  }, [auth.isAuthenticated, history, setCookie, user.id, user.token]);
+  }, [auth.isAuthenticated, auth.token, history, setCookie, user.id]);
 
   return (
     <div className="page auth-page">
