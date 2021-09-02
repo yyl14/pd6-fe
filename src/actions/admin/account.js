@@ -162,6 +162,7 @@ const makeStudentCardDefault = (token, id, cardId) => (dispatch) => {
     },
   };
   dispatch({ type: accountConstants.MAKE_STUDENT_CARD_DEFAULT_REQUEST });
+
   agent
     .put(`/account/${id}/default-student-card`, { student_card_id: cardId }, auth)
     .then(() => {

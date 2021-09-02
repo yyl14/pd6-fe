@@ -104,15 +104,9 @@ export default function AccountSetting() {
         />
       )}
 
-      {editStudInfo ? (
-        <div>
-          <StudentInfoEdit handleBack={handleStudBack} cards={cards} />
-        </div>
-      ) : (
-        <div>
-          <StudentInfo handleEdit={handleStudEdit} cards={cards} />
-        </div>
-      )}
+      <div>
+        <StudentInfoEdit handleBack={handleStudBack} cards={cards} />
+      </div>
 
       <NewPassword />
       <AccountDelete userName={account.username} cards={cards} realName={account.real_name} />

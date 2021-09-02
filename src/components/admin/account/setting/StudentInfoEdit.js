@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
 export default function StudentInfoEdit(props) {
   const classes = useStyles();
   const [cards, setCards] = useState(props.cards); // new card isn't here
-  const [defaultCardId, setDefaultCardId] = useState(null);
+  // const [defaultCardId, setDefaultCardId] = useState(null);
   const [changed, setChanged] = useState(false);
   const [disabledTwoCards, setDisabledTwoCards] = useState(false);
   const [add, setAdd] = useState(false); // addCard block
@@ -93,17 +93,16 @@ export default function StudentInfoEdit(props) {
   const authToken = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (props.cards) {
+      setCards(props.cards);
+    }
+  }, [props.cards]);
+
   const updateStatus = (studentId, cardId) => {
     const updated = cards.map((p) => (p.student_id === studentId ? { ...p, is_default: true } : { ...p, is_default: false }));
     setCards(updated);
-    setDefaultCardId(cardId);
-  };
-
-  const handleSave = () => {
-    if (defaultCardId !== null && changed === true) {
-      dispatch(makeStudentCardDefault(authToken, accountId, defaultCardId));
-    }
-    props.handleBack();
+    dispatch(makeStudentCardDefault(authToken, accountId, cardId));
   };
 
   const handleAddCancel = () => {
@@ -138,7 +137,7 @@ export default function StudentInfoEdit(props) {
   return (
     <div>
       <SimpleBar title="Student Information">
-        {cards ? (
+        {cards && (
           <div>
             {cards.map((p) => {
               if (p.is_default === true) {
@@ -175,8 +174,6 @@ export default function StudentInfoEdit(props) {
               return <div key={p.id} />;
             })}
           </div>
-        ) : (
-          <></>
         )}
         {add ? (
           <div className={classes.addBlock}>
@@ -263,16 +260,6 @@ export default function StudentInfoEdit(props) {
             <Button onClick={() => setPopUp(false)}>Done</Button>
           </DialogActions>
         </Dialog>
-        <Button
-          onClick={() => {
-            props.handleBack();
-          }}
-        >
-          Cancel
-        </Button>
-        <Button color="primary" type="submit" onClick={handleSave}>
-          Save
-        </Button>
       </SimpleBar>
     </div>
   );
