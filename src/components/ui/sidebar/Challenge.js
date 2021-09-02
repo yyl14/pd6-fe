@@ -206,9 +206,9 @@ export default function Challenge({
 
   const addTaskItemColor = (popup) => {
     if (popup) {
-      return classNames.addTaskItemClicked;
+      return classNames.addIconItemClicked;
     }
-    return classNames.addTaskItem;
+    return classNames.addIconItem;
   };
 
   const foldChallenge = () => {
