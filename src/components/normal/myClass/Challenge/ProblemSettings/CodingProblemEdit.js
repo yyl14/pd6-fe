@@ -107,7 +107,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const [hint, setHint] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].hint);
   const [status, setStatus] = useState(false);
 
-  const sampleTrans2no = useCallback((id) => {
+  const sampleTransToNumber = useCallback((id) => {
     if (testcases[id].input_filename !== null) {
       return parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10);
     }
@@ -117,7 +117,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
     return 0;
   }, [testcases]);
 
-  const testcaseTrans2no = useCallback((id) => {
+  const testcaseTransToNumber = useCallback((id) => {
     if (testcases[id].input_filename !== null) {
       return parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10);
     }
@@ -135,19 +135,19 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       const testcasesId = problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
       const samplesId = problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
       testcasesId.sort((a, b) => {
-        if (testcaseTrans2no(a) < testcaseTrans2no(b)) {
+        if (testcaseTransToNumber(a) < testcaseTransToNumber(b)) {
           return -1;
         }
-        if (testcaseTrans2no(a) > testcaseTrans2no(b)) {
+        if (testcaseTransToNumber(a) > testcaseTransToNumber(b)) {
           return 1;
         }
         return 0;
       });
       samplesId.sort((a, b) => {
-        if (sampleTrans2no(a) < sampleTrans2no(b)) {
+        if (sampleTransToNumber(a) < sampleTransToNumber(b)) {
           return -1;
         }
-        if (sampleTrans2no(a) > sampleTrans2no(b)) {
+        if (sampleTransToNumber(a) > sampleTransToNumber(b)) {
           return 1;
         }
         return 0;
@@ -162,7 +162,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       // set original table data
       const data = samplesId.map((id) => ({
         id: testcases[id].id,
-        no: sampleTrans2no(id),
+        no: sampleTransToNumber(id),
         time_limit: testcases[id].time_limit,
         memory_limit: testcases[id].memory_limit,
         score: testcases[id].score,
@@ -175,7 +175,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       setSampleTableData(data);
       const data2 = testcasesId.map((id) => ({
         id: testcases[id].id,
-        no: testcaseTrans2no(id),
+        no: testcaseTransToNumber(id),
         time_limit: testcases[id].time_limit,
         memory_limit: testcases[id].memory_limit,
         score: testcases[id].score,
@@ -187,7 +187,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       }));
       setTestcaseTableData(data2);
     }
-  }, [problems, problemId, testcases, sampleTrans2no, testcaseTrans2no]);
+  }, [problems, problemId, testcases, sampleTransToNumber, testcaseTransToNumber]);
 
   const [assistTableData, setAssistTableData] = useState(
     problems[problemId] !== undefined

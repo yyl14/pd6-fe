@@ -73,6 +73,12 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
+  addIconItem: {
+    color: theme.palette.grey.A400,
+  },
+  addIconItemClicked: {
+    color: theme.palette.primary.main,
+  },
   activeItemText: {
     flex: '10',
     color: theme.palette.primary.main,

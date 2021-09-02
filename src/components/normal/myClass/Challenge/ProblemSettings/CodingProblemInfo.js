@@ -1,6 +1,4 @@
-import React, {
-  useState, useEffect, useCallback,
-} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // https://mathpix.com/docs/mathpix-markdown/overview
 import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
@@ -44,6 +42,9 @@ const useStyles = makeStyles(() => ({
   },
   sampleArea: {
     marginTop: '50px',
+  },
+  sampleName: {
+    marginBottom: '16px',
   },
   buttons: {
     display: 'flex',
@@ -204,7 +205,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     files.map((file) => dispatch(downloadFile(authToken, file)));
   };
 
-  const sampleTrans2no = useCallback((id) => {
+  const sampleTransToNumber = useCallback((id) => {
     if (testcases[id].input_filename !== null) {
       return parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10);
     }
@@ -214,7 +215,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     return 0;
   }, [testcases]);
 
-  const testcaseTrans2no = useCallback((id) => {
+  const testcaseTransToNumber = useCallback((id) => {
     if (testcases[id].input_filename !== null) {
       return parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10);
     }
@@ -229,19 +230,19 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       const testcasesId = problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
       const samplesId = problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
       testcasesId.sort((a, b) => {
-        if (testcaseTrans2no(a) < testcaseTrans2no(b)) {
+        if (testcaseTransToNumber(a) < testcaseTransToNumber(b)) {
           return -1;
         }
-        if (testcaseTrans2no(a) > testcaseTrans2no(b)) {
+        if (testcaseTransToNumber(a) > testcaseTransToNumber(b)) {
           return 1;
         }
         return 0;
       });
       samplesId.sort((a, b) => {
-        if (sampleTrans2no(a) < sampleTrans2no(b)) {
+        if (sampleTransToNumber(a) < sampleTransToNumber(b)) {
           return -1;
         }
-        if (sampleTrans2no(a) > sampleTrans2no(b)) {
+        if (sampleTransToNumber(a) > sampleTransToNumber(b)) {
           return 1;
         }
         return 0;
@@ -254,7 +255,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         setStatus(!testcases[testcasesId[0]].is_disabled);
       }
     }
-  }, [problems, problemId, testcases, sampleTrans2no, testcaseTrans2no]);
+  }, [problems, problemId, testcases, sampleTransToNumber, testcaseTransToNumber]);
 
   useEffect(() => {
     dispatch(browseTestcase(authToken, problemId));
@@ -271,7 +272,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
 
   return (
     <>
-      <SimpleBar title="Title" noIndent>
+      <SimpleBar title="Title">
         <Typography variant="body2">
           {problems[problemId] === undefined ? 'error' : problems[problemId].title}
         </Typography>
@@ -287,12 +288,12 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         </MathpixLoader>
       </SimpleBar>
       {problems[problemId].source !== '' && (
-        <SimpleBar title="Source" noIndent>
+        <SimpleBar title="Source">
           <Typography variant="body2">{problems[problemId].source}</Typography>
         </SimpleBar>
       )}
       {problems[problemId].hint !== '' && (
-        <SimpleBar title="Hint" noIndent>
+        <SimpleBar title="Hint">
           <Typography variant="body2">{problems[problemId].hint}</Typography>
         </SimpleBar>
       )}
@@ -339,7 +340,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           ]}
           data={sampleDataIds.map((id) => ({
             id,
-            no: sampleTrans2no(id),
+            no: sampleTransToNumber(id),
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
           }))}
@@ -348,7 +349,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           <Grid container spacing={3}>
             {sampleDataIds.map((id) => (
               <Grid item xs={6} key={id}>
-                <Typography variant="body2">{`Sample ${sampleTrans2no(id)}`}</Typography>
+                <Typography variant="h6" className={classNames.sampleName}>{`Sample ${sampleTransToNumber(id)}`}</Typography>
                 <SampleTestArea input={testcases[id].input} output={testcases[id].output} />
               </Grid>
             ))}
@@ -416,7 +417,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           ]}
           data={testcaseDataIds.map((id) => ({
             id,
-            no: testcaseTrans2no(id),
+            no: testcaseTransToNumber(id),
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
             score: testcases[id].score,
