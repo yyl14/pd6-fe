@@ -1,6 +1,4 @@
-import React, {
-  useState, useEffect, useCallback,
-} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // https://mathpix.com/docs/mathpix-markdown/overview
 import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
@@ -44,6 +42,9 @@ const useStyles = makeStyles(() => ({
   },
   sampleArea: {
     marginTop: '50px',
+  },
+  sampleName: {
+    marginBottom: '16px',
   },
   buttons: {
     display: 'flex',
@@ -204,25 +205,31 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     files.map((file) => dispatch(downloadFile(authToken, file)));
   };
 
-  const sampleTrans2no = useCallback((id) => {
-    if (testcases[id].input_filename !== null) {
-      return parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10);
-    }
-    if (testcases[id].output_filename !== null) {
-      return parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10);
-    }
-    return 0;
-  }, [testcases]);
+  const sampleTrans2no = useCallback(
+    (id) => {
+      if (testcases[id].input_filename !== null) {
+        return parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10);
+      }
+      if (testcases[id].output_filename !== null) {
+        return parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10);
+      }
+      return 0;
+    },
+    [testcases],
+  );
 
-  const testcaseTrans2no = useCallback((id) => {
-    if (testcases[id].input_filename !== null) {
-      return parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10);
-    }
-    if (testcases[id].output_filename !== null) {
-      return parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10);
-    }
-    return 0;
-  }, [testcases]);
+  const testcaseTrans2no = useCallback(
+    (id) => {
+      if (testcases[id].input_filename !== null) {
+        return parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10);
+      }
+      if (testcases[id].output_filename !== null) {
+        return parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10);
+      }
+      return 0;
+    },
+    [testcases],
+  );
 
   useEffect(() => {
     if (problems[problemId] && problems[problemId].testcaseIds) {
@@ -348,7 +355,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           <Grid container spacing={3}>
             {sampleDataIds.map((id) => (
               <Grid item xs={6} key={id}>
-                <Typography variant="body2">{`Sample ${sampleTrans2no(id)}`}</Typography>
+                <Typography variant="h6" className={classNames.sampleName}>{`Sample ${sampleTrans2no(id)}`}</Typography>
                 <SampleTestArea input={testcases[id].input} output={testcases[id].output} />
               </Grid>
             ))}
