@@ -36,7 +36,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     marginTop: '22px',
-    // marginBottom: '10px',
+    width: '100%',
+    // flexWrap: 'nowrap',
+    marginBottom: '17px',
     // marginLeft: '45px',
   },
 
@@ -78,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
 const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
 export default function DateRangePicker({
-  className, value, setValue, vertical,
+  className = '', value, setValue, vertical,
 }) {
   const classes = useStyles();
 
@@ -140,64 +142,55 @@ export default function DateRangePicker({
         showDateDisplay={false}
         showMonthAndYearPickers={false}
         editableDateInputs
-        onChange={(item) => {
-          console.log(item);
-          setValue([item.selection]);
-        }}
+        onChange={(item) => setValue([item.selection])}
         moveRangeOnFirstSelection={false}
         ranges={value}
         color="#FFFFFF"
       />
-      <div className={vertical ? classes.fieldsWrapperVertical : classes.fieldsWrapper}>
-        <FormControl>
-          <div className={`${vertical ? classes.startDateFieldVertical : classes.startDateField}`}>
-            <TextField
-              className={classes.dateField}
-              label="Start Date"
-              InputLabelProps={{ shrink: true }}
-              InputProps={{
-                notched: false,
-                readOnly: true,
-                // disabled: true,
-              }}
-              value={startDate}
-            />
-            <TextField
-              className={classes.timeField}
-              autoFocus
-              onFocus={(event) => {
-                event.target.select();
-              }}
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              onBlur={(e) => onStartTimeBlur(e)}
-            />
-          </div>
-          <div className={`${vertical ? classes.endDateFieldVertical : classes.endDateField}`}>
-            <TextField
-              className={classes.dateField}
-              label="End Date"
-              InputLabelProps={{ shrink: true }}
-              InputProps={{
-                notched: false,
-                readOnly: true,
-                // disabled: true,
-              }}
-              value={endDate}
-            />
-            <TextField
-              className={classes.timeField}
-              autoFocus
-              onFocus={(event) => {
-                event.target.select();
-              }}
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              onBlur={(e) => onEndTimeBlur(e)}
-            />
-          </div>
-        </FormControl>
-      </div>
+      {/* <div className={vertical ? classes.fieldsWrapperVertical : classes.fieldsWrapper}> */}
+      <FormControl className={vertical ? classes.fieldsWrapperVertical : classes.fieldsWrapper}>
+        <div className={`${vertical ? classes.startDateFieldVertical : classes.startDateField}`}>
+          <TextField
+            className={classes.dateField}
+            label="Start Date"
+            InputLabelProps={{ shrink: true }}
+            InputProps={{
+              notched: false,
+              readOnly: true,
+              disabled: true,
+            }}
+            value={startDate}
+          />
+          <TextField
+            className={classes.timeField}
+            onFocus={(event) => event.target.select()}
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value)}
+            onBlur={(e) => onStartTimeBlur(e)}
+          />
+        </div>
+        <div className={`${vertical ? classes.endDateFieldVertical : classes.endDateField}`}>
+          <TextField
+            className={classes.dateField}
+            label="End Date"
+            InputLabelProps={{ shrink: true }}
+            InputProps={{
+              notched: false,
+              readOnly: true,
+              disabled: true,
+            }}
+            value={endDate}
+          />
+          <TextField
+            className={classes.timeField}
+            onFocus={(event) => event.target.select()}
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value)}
+            onBlur={(e) => onEndTimeBlur(e)}
+          />
+        </div>
+      </FormControl>
+      {/* </div> */}
     </div>
   );
 }
