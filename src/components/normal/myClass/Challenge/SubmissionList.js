@@ -107,16 +107,16 @@ export default function SubmissionList() {
     || judgments === undefined
     || problems[problemId].score === undefined
   ) {
-    // if (
-    //   !loading.readProblem
-    //   && !loading.readSubmission
-    //   && !loading.readChallenge
-    //   && !loading.readJudgment
-    //   && !loading.readProblemScore
-    // ) {
-    //   return <NoMatch />;
-    // }
-    return <GeneralLoading />;
+    if (
+      loading.readSubmission
+      || loading.readSubmissionDetail
+      || loading.readProblemScore
+      || loading.browseTasksUnderChallenge
+      || loading.readProblemScore
+    ) {
+      return <GeneralLoading />;
+    }
+    return <NoMatch />;
   }
 
   const handleRefresh = () => {

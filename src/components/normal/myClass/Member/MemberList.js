@@ -12,6 +12,7 @@ import CustomTable from '../../../ui/CustomTable';
 import MemberEdit from './MemberEdit';
 import NoMatch from '../../../noMatch';
 import systemRoleTransformation from '../../../../function/systemRoleTransformation';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
   pageHeader: {
@@ -79,10 +80,19 @@ export default function MemberList() {
     });
   }, [classId, userClasses]);
 
-  if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
-    if (loading.fetchCourse || loading.fetchClass) {
+  if (
+    courses.byId[courseId] === undefined
+    || classes.byId[classId] === undefined
+    || classes.byId[classId].memberIds === undefined
+  ) {
+    if (
+      loading.fetchCourse
+      || loading.fetchClass
+      || loading.fetchClassMembers
+      || loading.fetchClassMemberWithAccountReferral
+    ) {
       // still loading
-      return <div>loading</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }

@@ -43,16 +43,22 @@ const byId = (state = {}, action) => {
 
     case commonConstants.FETCH_CLASS_MEMBERS_SUCCESS: {
       const { classId, data } = action.payload;
+      // console.log('member', data);
+      // console.log(state[classId]);
       return { ...state, [classId]: { ...state[classId], memberIds: data.map((item) => item.member_id) } };
     }
 
     case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {
       const { classId, data } = action.payload;
+      // console.log('grade', data);
+      // console.log(state[classId]);
       return { ...state, [classId]: { ...state[classId], gradeIds: data.map((item) => item.id) } };
     }
 
     case teamConstants.FETCH_TEAMS_SUCCESS: {
       const { classId, data } = action.payload;
+      // console.log('team', data);
+      // console.log(state[classId]);
       return { ...state, [classId]: { ...state[classId], teamIds: data.map((item) => item.id) } };
     }
 
@@ -63,6 +69,7 @@ const byId = (state = {}, action) => {
 
     case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
       const { classId, challenges } = action.payload;
+      // console.log('common', challenges);
       return { ...state, [classId]: { ...state[classId], challengeIds: challenges.map((item) => item.id) } };
     }
 

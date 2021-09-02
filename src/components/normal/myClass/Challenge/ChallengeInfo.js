@@ -112,10 +112,10 @@ export default function ChallengeInfo() {
   }, [authToken, challengeId, challenges, essays, peerReviews, problems]);
 
   if (challenges[challengeId] === undefined) {
-    if (!loading.browseChallengeOverview) {
-      return <NoMatch />;
+    if (loading.browseChallengeOverview) {
+      return <GeneralLoading />;
     }
-    return <GeneralLoading />;
+    return <NoMatch />;
   }
 
   const handleEdit = () => {

@@ -26,6 +26,7 @@ import {
   browseTasksUnderChallenge,
 } from '../../../../actions/myClass/problem';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
+import NoMatch from '../../../noMatch';
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
@@ -144,20 +145,16 @@ export default function SubmissionDetail() {
     || judgeCases.allIds === undefined
     || testcaseIds === undefined
   ) {
-    // if (
-    //   !loading.readProblemInfo
-    //   && !loading.readSubmissionDetail
-    //   && !loading.browseJudgeCases
-    //   && !loading.readTestcase
-    // ) {
-    //   return <NoMatch />;
-    // }
-    return <GeneralLoading />;
+    if (
+      loading.readSubmissionDetail
+      || loading.browseJudgeCases
+      || loading.readTestcase
+      || loading.browseTasksUnderChallenge
+    ) {
+      return <GeneralLoading />;
+    }
+    return <NoMatch />;
   }
-  // if (error.readSubmission) {
-  //   console.log(error.readSubmission);
-  //   return (<div>{error.readSubmission}</div>);
-  // }
 
   const handleRefresh = () => {
     dispatch(readSubmissionDetail(authToken, submissionId));
