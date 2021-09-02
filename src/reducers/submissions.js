@@ -19,7 +19,7 @@ const byId = (state = {}, action) => {
     }
 
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
-      const { data, judgments, accounts } = action.payload;
+      const { data } = action.payload;
       return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
 
@@ -38,12 +38,12 @@ const allIds = (state = [], action) => {
       return data.map((item) => item.id);
     }
     case submissionConstants.FETCH_SUBMISSION_SUCCESS: {
-      const { submissionId, data } = action.payload;
-      return state.includes(parseInt(submissionId, 10)) ? state : state.concat([parseInt(submissionId, 10)]);
+      const { submissionId } = action.payload;
+      return state.includes(Number(submissionId)) ? state : state.concat([Number(submissionId)]);
     }
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       const { data } = action.payload;
-      return data.map((item) => item.id);
+      return [...new Set([...data.map((item) => item.id), ...state])];
     }
 
     default:
