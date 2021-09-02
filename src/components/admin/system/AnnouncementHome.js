@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
-  Typography, makeStyles,
+  Typography, makeStyles, Button,
 } from '@material-ui/core';
 import moment from 'moment';
 
@@ -103,6 +103,11 @@ export default function AnnouncementHome() {
           'Post Time': moment(item.post_time).format('YYYY-MM-DD, HH:mm'),
           'End Time': moment(item.expire_time).format('YYYY-MM-DD, HH:mm'),
         })}
+        buttons={(
+          <Button variant="contained" color="primary" onClick={handleClickAdd}>
+            +
+          </Button>
+        )}
       />
     </>
   );
