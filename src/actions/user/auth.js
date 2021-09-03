@@ -136,5 +136,11 @@ const userResetPassword = (code, password) => async (dispatch) => {
 };
 
 export {
-  getUserInfo, userSignIn, userLogout, userForgetPassword, userRegister, emailVerification, userResetPassword,
+  getUserInfo,
+  userSignIn,
+  userLogout,
+  userForgetPassword,
+  userRegister,
+  emailVerification,
+  userResetPassword,
 };
