@@ -20,17 +20,31 @@ const useStyles = makeStyles({
     // },
   },
   limitedCardContent: {
-    height: '334px',
+    height: '333.5px',
     padding: '4px 30px 0px 30px',
     overflow: 'hidden',
     wordBreak: 'break-word',
     display: '-webkit-box',
-    WebkitLineClamp: 10,
     WebkitBoxOrient: 'vertical',
   },
   limitedCardContentExpanded: {
     padding: '4px 30px 0px 30px',
     wordBreak: 'break-word',
+  },
+  truncateInputContent: {
+    WebkitLineClamp: 11,
+  },
+  truncateOutputTitle: {
+    WebkitLineClamp: 11,
+  },
+  truncateOutputContent: {
+    WebkitLineClamp: 10,
+  },
+  truncateNoteTitle: {
+    WebkitLineClamp: 9,
+  },
+  truncateNoteContent: {
+    WebkitLineClamp: 8,
   },
   title: {
     marginTop: '18.5px',
@@ -49,20 +63,47 @@ const useStyles = makeStyles({
     paddingTop: '16px',
     paddingBottom: '20px',
   },
+  hideTextOverflowCardContent: {
+    height: '325px',
+  },
+  hideTextOverflowActions: {
+    paddingTop: '24.5px',
+  },
 });
 
 export default function SampleTestArea({ input, output, note }) {
   const classes = useStyles();
   const [ref, { height }] = useMeasure();
+  const inputRef = useMeasure();
+  const outputRef = useMeasure();
+  const noteRef = useMeasure();
   const [showExpandArrow, setShowExpandArrow] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [truncatePosition, setTruncatePosition] = useState('');
 
   useEffect(() => {
-    if (!showExpandArrow && height > 400) {
-      setShowExpandArrow(true);
-      setExpanded(false);
+    if (height > 401.5) {
+      if (!showExpandArrow) {
+        setShowExpandArrow(true);
+        setExpanded(false);
+
+        const inputContentHeight = inputRef.current.clientHeight;
+        const outputContentHeight = outputRef.current.clientHeight;
+        const noteContentHeight = noteRef.current.clientHeight;
+        if (inputContentHeight >= 248) {
+          setTruncatePosition('inputContent');
+        } else if (inputContentHeight >= 223) {
+          setTruncatePosition('outputTitle');
+        } else if (inputContentHeight + outputContentHeight >= 198) {
+          setTruncatePosition('outputContent');
+        } else if (inputContentHeight + outputContentHeight >= 148) {
+          setTruncatePosition('noteTitle');
+        } else if (inputContentHeight + outputContentHeight + noteContentHeight >= 124) {
+          setTruncatePosition('noteContent');
+        }
+      }
     }
-  }, [height, showExpandArrow]);
+  }, [expanded, height, inputRef, noteRef, outputRef, showExpandArrow]);
 
   const handleExpand = (limited, isExpanded) => {
     if (limited) {
@@ -73,11 +114,45 @@ export default function SampleTestArea({ input, output, note }) {
     }
     return classes.defaultCardContent;
   };
+  const handleTruncate = (position) => {
+    switch (position) {
+      case 'inputContent':
+        return classes.truncateInputContent;
+      case 'outputTitle':
+        return classes.truncateOutputTitle;
+      case 'outputContent':
+        return classes.truncateOutputContent;
+      case 'noteTitle':
+        return classes.truncateNoteTitle;
+      case 'noteContent':
+        return classes.truncateNoteContent;
+      default:
+        return classes.truncateInputContent;
+    }
+  };
+  const handleHideTextOverflowCardContent = (position, isExpanded) => {
+    if (position === 'inputContent') {
+      if (!isExpanded) {
+        return classes.hideTextOverflowCardContent;
+      }
+      return classes.limitedCardContentExpanded;
+    }
+    return classes.defaultCardContent;
+  };
+  const handleHideTextOverflowActions = (position, isExpanded) => {
+    if (position === 'inputContent' && !isExpanded) {
+      return classes.hideTextOverflowActions;
+    }
+    return classes.actions;
+  };
 
   return (
     <div ref={ref}>
       <Card className={classes.root} variant="outlined">
-        <CardContent className={handleExpand(showExpandArrow, expanded)}>
+        <CardContent
+          className={`${handleExpand(showExpandArrow, expanded)}
+          ${handleTruncate(truncatePosition)} ${handleHideTextOverflowCardContent(truncatePosition, expanded)}`}
+        >
           {input && (
             <>
               <div className={classes.title}>
@@ -88,7 +163,7 @@ export default function SampleTestArea({ input, output, note }) {
                   <CopyToClipboardButton text={input} />
                 </div>
               </div>
-              <div className={classes.content}>
+              <div className={classes.content} ref={inputRef}>
                 <Typography variant="body1">{input}</Typography>
               </div>
             </>
@@ -103,7 +178,7 @@ export default function SampleTestArea({ input, output, note }) {
                   <CopyToClipboardButton text={output} />
                 </div>
               </div>
-              <div className={classes.content}>
+              <div className={classes.content} ref={outputRef}>
                 <Typography variant="body1">{output}</Typography>
               </div>
             </>
@@ -117,14 +192,14 @@ export default function SampleTestArea({ input, output, note }) {
             </div>
           </div>
           {note && (
-            <div className={classes.content}>
+            <div className={classes.content} ref={noteRef}>
               <Typography variant="body1">{note}</Typography>
             </div>
           )}
         </CardContent>
 
         {showExpandArrow && (
-          <CardActions className={classes.actions}>
+          <CardActions className={`${classes.actions} ${handleHideTextOverflowActions(truncatePosition, expanded)}`}>
             <IconButton onClick={() => setExpanded(!expanded)}>
               {expanded ? <Icon.ExpandLessOutlinedIcon /> : <Icon.ExpandMoreOutlinedIcon />}
             </IconButton>
