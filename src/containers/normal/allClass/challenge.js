@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
-  withRouter, Switch, Route, useParams,
+  Switch, Route, useParams,
 } from 'react-router-dom';
 import ChallengeList from '../../../components/normal/allClass/Challenge/ChallengeList';
 import ChallengeInfo from '../../../components/normal/allClass/Challenge/ChallengeInfo';
