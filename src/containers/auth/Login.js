@@ -18,7 +18,7 @@ export default function Login() {
   const [cookies, setCookie] = useCookies(['id', 'token']);
 
   useEffect(() => {
-    document.title = 'Singin';
+    document.title = 'Signin';
     return () => {
       document.title = 'PDOGS';
     };
