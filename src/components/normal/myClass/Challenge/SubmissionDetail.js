@@ -27,6 +27,7 @@ import {
 } from '../../../../actions/myClass/problem';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
 import NoMatch from '../../../noMatch';
+import CodeArea from '../../../ui/CodeArea';
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
@@ -159,9 +160,7 @@ export default function SubmissionDetail() {
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
-        {submissionId}
-        {' '}
-        / Submission Detail
+        {`${submissionId} / Submission Detail`}
       </Typography>
       <div className={classNames.generalButtons}>
         {role === 'MANAGER' && (
@@ -298,21 +297,7 @@ export default function SubmissionDetail() {
         />
       </SimpleBar>
       <SimpleBar title="Code" noIndent>
-        <div className={classNames.codeContent}>
-          <TextField
-            className={classNames.codeField}
-            value={submissions[submissionId].content}
-            disabled
-            multiline
-            minRows={10}
-            maxRows={20}
-          />
-          <CopyToClipboard text={submissions[submissionId].content}>
-            <IconButton className={classNames.copyIcon}>
-              <Icon.Copy />
-            </IconButton>
-          </CopyToClipboard>
-        </div>
+        <CodeArea value={submissions[submissionId].content} />
       </SimpleBar>
       <Dialog
         maxWidth="md"

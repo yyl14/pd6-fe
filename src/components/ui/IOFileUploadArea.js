@@ -3,7 +3,6 @@ import {
   makeStyles,
   Typography,
   Button,
-  Input,
   Paper,
   Table,
   TableContainer,
@@ -14,7 +13,6 @@ import {
 } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import Icon from './icon/index';
-import SimpleTable from './SimpleTable';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -258,46 +256,60 @@ export default function IOFileUploadArea({
         )}
       </div>
       {fileNum !== 0 && (
-      <Paper className={classes.root} elevation={0}>
-        <TableContainer className={classes.container}>
-          <Table>
-            <TableHead className={classes.tableHead}>
-              <TableRow>
-                <TableCell key="input" align="center" style={{ minWidth: 50, width: 80, border: 'none' }} className={classes.fileNameCell}>
-                  <div className={classes.column}>
-                    <b>Input File</b>
-                  </div>
-                </TableCell>
-                <TableCell key="output" align="center" style={{ minWidth: 50, width: 80, border: 'none' }} className={classes.fileNameCell}>
-                  <div className={classes.column}>
-                    <b>Output File</b>
-                  </div>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {tableData.map((row) => (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.id} className={classes.row}>
-                  <TableCell align="left" className={classes.fileNameCell}>
-                    <Typography variant="body2">{row.in === undefined || row.in === null ? '' : row.in.name}</Typography>
+        <Paper className={classes.root} elevation={0}>
+          <TableContainer className={classes.container}>
+            <Table>
+              <TableHead className={classes.tableHead}>
+                <TableRow>
+                  <TableCell
+                    key="input"
+                    align="center"
+                    style={{ minWidth: 50, width: 80, border: 'none' }}
+                    className={classes.fileNameCell}
+                  >
+                    <div className={classes.column}>
+                      <b>Input File</b>
+                    </div>
                   </TableCell>
-                  <TableCell align="left" className={classes.fileNameCell}>
-                    <Typography variant="body2">{row.out === undefined || row.out === null ? '' : row.out.name}</Typography>
-                  </TableCell>
-                  <TableCell className={classes.deleteCell} align="right">
-                    <Icon.Trash
-                      className={classes.deleteIcon}
-                      onClick={(e) => {
-                        handleDelete(e, row);
-                      }}
-                    />
+                  <TableCell
+                    key="output"
+                    align="center"
+                    style={{ minWidth: 50, width: 80, border: 'none' }}
+                    className={classes.fileNameCell}
+                  >
+                    <div className={classes.column}>
+                      <b>Output File</b>
+                    </div>
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
+              </TableHead>
+              <TableBody>
+                {tableData.map((row) => (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id} className={classes.row}>
+                    <TableCell align="left" className={classes.fileNameCell}>
+                      <Typography variant="body2">
+                        {row.in === undefined || row.in === null ? '' : row.in.name}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left" className={classes.fileNameCell}>
+                      <Typography variant="body2">
+                        {row.out === undefined || row.out === null ? '' : row.out.name}
+                      </Typography>
+                    </TableCell>
+                    <TableCell className={classes.deleteCell} align="right">
+                      <Icon.Trash
+                        className={classes.deleteIcon}
+                        onClick={(e) => {
+                          handleDelete(e, row);
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
       )}
     </>
   );
