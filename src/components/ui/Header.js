@@ -57,7 +57,6 @@ const useStyles = makeStyles((theme) => ({
     top: '2px',
   },
   notificationDropContent: {
-    // display: 'none',
     position: 'absolute',
     backgroundColor: theme.palette.primary.contrastText,
     right: '-120px',
@@ -371,15 +370,8 @@ export default function Header() {
     setUnreadNotifyExist(!!(ns.filter((e) => !e.is_deleted).length));
   }, [user.notifications]);
 
-  const getNotification = () => {
-    if (notifyPop) {
-      document.getElementById('notifyContent').style.display = 'none';
-      setNotifyPop(false);
-    } else {
-      dispatch(userGetNotify(authToken));
-      document.getElementById('notifyContent').style.display = 'block';
-      setNotifyPop(true);
-    }
+  const toggleNotify = () => {
+    setNotifyPop(!notifyPop);
   };
 
   const readNotification = (notifyId) => {
@@ -415,7 +407,7 @@ export default function Header() {
           <div className={classes.right}>
             <Typography className={classes.date}>{currentTime}</Typography>
             <div className={classes.notificationContainer}>
-              <Icon.NotificationsIcon className={classes.notification} onClick={getNotification} />
+              <Icon.NotificationsIcon className={classes.notification} onClick={toggleNotify} />
               {unreadNotifyExist && <div className={classes.unreadDot} />}
               {notifyPop && (
                 <div className={classes.notificationDropContent}>
