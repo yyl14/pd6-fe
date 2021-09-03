@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   makeStyles,
+  withStyles,
   Button,
   Typography,
   Dialog,
@@ -9,6 +10,7 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Snackbar,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
@@ -35,6 +37,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const StyledButton = withStyles({
+  outlined: {
+    '& path': {
+      fill: 'none !important',
+    },
+  },
+})(Button);
+
 /* This is a level 4 component (page component) */
 export default function GradeList() {
   const classNames = useStyles();
@@ -49,6 +59,8 @@ export default function GradeList() {
   const grades = useSelector((state) => state.grades.byId);
   const gradeIds = useSelector((state) => state.grades.allIds);
   const loading = useSelector((state) => state.loading.myClass.grade);
+  const error = useSelector((state) => state.error.myClass.grade.addClassGrade);
+
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
 
@@ -56,6 +68,9 @@ export default function GradeList() {
   const [popUp, setPopUp] = useState(false);
   const [inputTitle, setInputTitle] = useState('');
   const [selectedFile, setSelectedFile] = useState([]);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [hasRequest, setHasRequest] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
@@ -89,41 +104,24 @@ export default function GradeList() {
       path: `/my-class/${courseId}/${classId}/grade/${grades[id].id}`,
       user_path: '/',
     }));
-    // if (isManager) {
-    //   if (memberIds !== undefined && gradeIds !== undefined) {
-    //     memberIds.forEach((key) => {
-    //       const item = members[key];
-    //       const temp = { ...item };
-    //       gradeIds.forEach((id) => {
-    //         if (grades[id].receiver_id === members[key].member_id) {
-    //           temp.title = grades[id].title;
-    //           temp.score = grades[id].score;
-    //           temp.time = moment(grades[id].update_time).format('YYYY-MM-DD, HH:mm');
-    //           temp.id = grades[id].id;
-    //           temp.path = `/my-class/${courseId}/${classId}/grade/${temp.id}`;
-    //           temp.user_path = '/';
-    //         }
-    //       });
-    //       newData.push(temp);
-    //     });
-    //   }
-    // } else {
-    // gradeIds.forEach((id) => {
-    //   if (`${grades[id].class_id}` === classId) {
-    //     const item = members[grades[id].receiver_id];
-    //     const temp = { ...item };
-    //     temp.title = grades[id].title;
-    //     temp.score = grades[id].score;
-    //     temp.time = moment(grades[id].update_time).format('YYYY-MM-DD, HH:mm');
-    //     temp.id = grades[id].id;
-    //     temp.path = `/my-class/${courseId}/${classId}/grade/${temp.id}`;
-    //     temp.user_path = '/';
-    //     newData.push(temp);
-    //   }
-    // });
-    // }
     setTableData(newData);
   }, [members, memberIds, grades, courseId, classId, isManager, gradeIds]);
+
+  useEffect(() => {
+    setIsDisabled(inputTitle === '' || selectedFile.length === 0);
+  }, [inputTitle, selectedFile]);
+
+  useEffect(() => {
+    if (hasRequest && !loading.addClassGrade) {
+      if (error === null) {
+        setPopUp(false);
+        setInputTitle('');
+        setSelectedFile([]);
+      } else {
+        setHasError(true);
+      }
+    }
+  }, [error, hasRequest, loading.addClassGrade]);
 
   const handleChange = (event) => {
     setInputTitle(event.target.value);
@@ -131,11 +129,9 @@ export default function GradeList() {
 
   const handleAdd = () => {
     if (inputTitle !== '' && selectedFile !== []) {
-      selectedFile.map((file) => dispatch(addClassGrade(authToken, classId, file)));
+      selectedFile.map((file) => dispatch(addClassGrade(authToken, classId, inputTitle, file)));
     }
-    setPopUp(false);
-    setInputTitle('');
-    setSelectedFile([]);
+    setHasRequest(true);
   };
 
   const handleCancel = () => {
@@ -147,6 +143,10 @@ export default function GradeList() {
   const downloadTemplate = () => {
     dispatch(downloadGradeFile(authToken));
     setPopUp(false);
+  };
+
+  const handleCloseError = () => {
+    setHasError(false);
   };
 
   if (courses[courseId] === undefined || classes[classId] === undefined || grades === undefined) {
@@ -263,7 +263,7 @@ export default function GradeList() {
           />
         </DialogContent>
         <DialogActions>
-          <Button
+          <StyledButton
             className={classNames.templateBtn}
             variant="outlined"
             startIcon={<Icon.Download />}
@@ -272,15 +272,16 @@ export default function GradeList() {
             }}
           >
             Template
-          </Button>
+          </StyledButton>
           <Button onClick={handleCancel} color="default">
             Cancel
           </Button>
-          <Button onClick={handleAdd} color="primary">
+          <Button disabled={isDisabled} onClick={handleAdd} color="primary">
             Add
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar severity="error" open={hasError} onClose={handleCloseError} message={`Error: ${error}`} />
     </>
   );
 }

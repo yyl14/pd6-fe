@@ -13,8 +13,10 @@ const byId = (state = {}, action) => {
     }
     case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
       const { accounts } = action.payload;
-      // console.log(accounts);
-      return accounts.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [], gradeIds: [] } }), state);
+      return accounts.reduce(
+        (acc, item) => (item ? { ...acc, [item.id]: { ...item, studentCard: [], gradeIds: [] } } : acc),
+        state,
+      );
     }
 
     case commonConstants.FETCH_ACCOUNT_SUCCESS: {
@@ -82,8 +84,7 @@ const allIds = (state = [], action) => {
     }
     case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
       const { accounts } = action.payload;
-      // console.log(accounts);
-      return [...new Set([...action.payload.accounts.map((item) => item.id), ...state])];
+      return [...new Set([...accounts.filter((item) => !!item).map((item) => item.id), ...state])];
     }
 
     case commonConstants.FETCH_ACCOUNT_SUCCESS: {

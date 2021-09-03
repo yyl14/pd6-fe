@@ -103,6 +103,9 @@ export default function UIComponentUsage() {
   const authToken = useSelector((state) => state.auth.token);
   const logs = useSelector((state) => state.accessLogs);
   const accounts = useSelector((state) => state.accounts);
+  const error = useSelector((state) => state.error.admin.system.fetchAccessLog);
+  const accountError = useSelector((state) => state.error.common.common.fetchAccount);
+
   const dispatch = useDispatch();
 
   const [value, setValue] = useState('');
@@ -508,11 +511,11 @@ export default function UIComponentUsage() {
         </div>
       </div>
       <div className={classes.wrapper}>
-        <Typography variant="h4">Custom Table with Table Filter Card</Typography>
+        <Typography variant="h4">Auto Table</Typography>
         <hr className={classes.divider} style={{ width: '460px' }} />
         <div className={classes.wideComponent}>
           <AutoTable
-            ident="Access Log Table Example"
+            ident="Access Log Table"
             hasFilter
             filterConfig={[
               {
@@ -552,6 +555,7 @@ export default function UIComponentUsage() {
             refetch={(browseParams, ident) => {
               dispatch(fetchAccessLog(authToken, browseParams, ident));
             }}
+            refetchErrors={[error, accountError]}
             columns={[
               {
                 name: 'Username',

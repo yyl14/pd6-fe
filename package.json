@@ -23,6 +23,7 @@
     "eslint-plugin-markdown": "^2.2.0",
     "global": "^4.4.0",
     "katex": "^0.13.13",
+    "mathpix-markdown-it": "^1.0.63",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
     "nanoid": "^3.1.25",
@@ -44,11 +45,9 @@
     "react-router-redux": "^4.0.8",
     "react-scripts": "^4.0.3",
     "react-select": "^4.3.0",
-    "react-syntax-highlighter": "^15.4.4",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "serve": "^11.3.2",
-    "styled-components": "^5.3.0",
     "web-vitals": "^1.0.1"
   },
   "scripts": {

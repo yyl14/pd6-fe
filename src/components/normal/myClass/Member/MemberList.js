@@ -1,33 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Typography, Button, makeStyles } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from '@material-ui/core';
-import { useParams, useHistory } from 'react-router-dom';
-import { fetchCourse, fetchClass, fetchClassMembers } from '../../../../actions/common/common';
+  fetchCourse,
+  fetchClass,
+  fetchClassMembers,
+  fetchClassMemberWithAccountReferral,
+} from '../../../../actions/common/common';
 import CustomTable from '../../../ui/CustomTable';
-import TableFilterCard from '../../../ui/TableFilterCard';
 import MemberEdit from './MemberEdit';
 import NoMatch from '../../../noMatch';
 import systemRoleTransformation from '../../../../function/systemRoleTransformation';
+import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
-
 }));
 
 /* This is a level 4 component (page component) */
 export default function MemberList() {
   const { courseId, classId } = useParams();
-  const history = useHistory();
   const classNames = useStyles();
 
   const dispatch = useDispatch();
@@ -50,6 +45,7 @@ export default function MemberList() {
   useEffect(() => {
     if (!loading.replaceClassMembers) {
       dispatch(fetchClassMembers(authToken, classId));
+      dispatch(fetchClassMemberWithAccountReferral(authToken, classId));
     }
   }, [authToken, classId, dispatch, loading.replaceClassMembers]);
 
@@ -85,9 +81,14 @@ export default function MemberList() {
   }, [classId, userClasses]);
 
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
-    if (loading.fetchCourse || loading.fetchClass) {
+    if (
+      loading.fetchCourse
+      || loading.fetchClass
+      || loading.fetchClassMembers
+      || loading.fetchClassMemberWithAccountReferral
+    ) {
       // still loading
-      return <div>loading</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }
@@ -110,11 +111,15 @@ export default function MemberList() {
         <>
           <CustomTable
             hasSearch
-            buttons={isManager ? (
-              <>
-                <Button onClick={() => setEdit(true)}>Edit</Button>
-              </>
-            ) : <></>}
+            buttons={
+              isManager ? (
+                <>
+                  <Button onClick={() => setEdit(true)}>Edit</Button>
+                </>
+              ) : (
+                <></>
+              )
+            }
             data={tableData}
             columns={[
               {

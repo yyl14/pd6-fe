@@ -14,7 +14,6 @@ export default function account(state = initialState, action) {
   switch (action.type) {
     /* Access Logs */
     case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
-      const data = Object.values(action.payload);
       return {
         ...state,
         fetchAccessLog: null,
@@ -23,7 +22,7 @@ export default function account(state = initialState, action) {
     case systemConstants.FETCH_ACCESS_LOG_FAIL: {
       return {
         ...state,
-        fetchAccessLog: action.payload,
+        fetchAccessLog: action.error,
       };
     }
     /* Announcement */
@@ -36,7 +35,7 @@ export default function account(state = initialState, action) {
     case systemConstants.FETCH_ANNOUNCEMENT_FAIL: {
       return {
         ...state,
-        fetchAnnouncement: action.payload,
+        fetchAnnouncement: action.error,
       };
     }
     case systemConstants.EDIT_ANNOUNCEMENT_SUCCESS: {

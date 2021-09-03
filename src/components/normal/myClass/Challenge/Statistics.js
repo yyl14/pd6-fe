@@ -4,6 +4,7 @@ import {
   Typography, Button, Snackbar, makeStyles,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import {
   fetchChallenges,
   fetchChallengeSummary,
@@ -67,12 +68,14 @@ export default function Statistics() {
   const essays = useSelector((state) => state.essays.byId);
   const submissions = useSelector((state) => state.submissions.byId);
   const downloadLinks = useSelector((state) => state.downloadLinks.byId);
+  const loading = useSelector((state) => state.loading.common.common);
 
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [statisticsData, setStatisticsData] = useState([]);
   const [scoreboardTitle, setScoreboardTitle] = useState(accountColumn);
   const [scoreboardData, setScoreboardData] = useState([]);
   const [challengeTitle, setChallengeTitle] = useState('');
+  const [scoreboardHTML, setScoreboardHTML] = useState('');
 
   useEffect(() => {
     dispatch(fetchChallenges(authToken, classId));
@@ -116,14 +119,19 @@ export default function Statistics() {
       }));
       setScoreboardTitle([].concat(accountColumn, problemList, essayList));
 
+      if (loading.fetchClassMembers) return;
+
       // set table content
       const memberSubmissionList = challenges[challengeId].statistics.memberSubmission.map((member) => {
         const memberChallengeDetail = {
           id: member.id,
-          username: members[member.id].username,
-          student_id: members[member.id].student_id,
-          real_name: members[member.id].real_name,
         };
+
+        if (members[member.id]) {
+          memberChallengeDetail.username = members[member.id].username;
+          memberChallengeDetail.student_id = members[member.id].student_id;
+          memberChallengeDetail.real_name = members[member.id].real_name;
+        }
 
         if (member.problem_scores) {
           member.problem_scores.map((judgement) => {
@@ -151,7 +159,18 @@ export default function Statistics() {
       });
       setScoreboardData(memberSubmissionList);
     }
-  }, [classId, courseId, challenges, challengeId, essays, problems, members, submissions, downloadLinks]);
+  }, [
+    classId,
+    courseId,
+    challenges,
+    challengeId,
+    essays,
+    problems,
+    members,
+    submissions,
+    downloadLinks,
+    loading.fetchClassMembers,
+  ]);
 
   useEffect(() => {
     if (
@@ -177,6 +196,37 @@ export default function Statistics() {
       });
     }
   }, [authToken, challengeId, dispatch, challenges]);
+
+  useEffect(() => {
+    // assemble html data to copy
+    let tableHTML = '<table>';
+    tableHTML += '<tr>';
+    scoreboardTitle.map((title) => {
+      tableHTML += `<td><b>${title.label}</b></td>`;
+      return title;
+    });
+    tableHTML += '</tr>';
+
+    scoreboardData.map((row) => {
+      tableHTML += '<tr>';
+      scoreboardTitle.map((column) => {
+        const value = row[column.id] ? row[column.id] : '';
+        if (column.type === 'link') {
+          const link = row[column.link_id] ? row[column.link_id] : '';
+          const url = column.isExternal ? link : `${window.location.origin}${link}`;
+          tableHTML += `<td><a href='${url}'>${value}</a></td>`;
+        } else {
+          tableHTML += `<td>${value}</td>`;
+        }
+        return column;
+      });
+      tableHTML += '</tr>';
+      return row;
+    });
+
+    tableHTML += '</table>';
+    setScoreboardHTML(tableHTML);
+  }, [scoreboardData, scoreboardTitle]);
 
   return (
     <>
@@ -225,11 +275,11 @@ export default function Statistics() {
       <SimpleBar title="Scoreboard" />
       <CustomTable
         buttons={(
-          <>
-            <Button onClick={() => setShowSnackbar(true)}>
+          <CopyToClipboard options={{ format: 'text/html' }} text={scoreboardHTML} onCopy={() => setShowSnackbar(true)}>
+            <Button>
               <Icon.Copy />
             </Button>
-          </>
+          </CopyToClipboard>
         )}
         data={scoreboardData}
         columns={scoreboardTitle}

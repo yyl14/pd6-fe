@@ -1,15 +1,14 @@
-import { connect, useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
-  Switch, Route, withRouter, useHistory, useLocation,
+  Switch, Route, useHistory, useLocation,
 } from 'react-router-dom';
-import { withCookies, Cookies, useCookies } from 'react-cookie';
-import { instanceOf } from 'prop-types';
+import { useCookies } from 'react-cookie';
 
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Normal from './normal';
 import Admin from './admin';
 import Account from './account';
-import NoMatch from '../components/noMatch';
+// import NoMatch from '../components/noMatch';
 
 import { getUserInfo } from '../actions/user/auth';
 
@@ -21,6 +20,7 @@ function Index() {
   const auth = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  // eslint-disable-next-line no-unused-vars
   const [cookies, setCookie, removeCookie] = useCookies(['id', 'token']);
 
   useEffect(() => {

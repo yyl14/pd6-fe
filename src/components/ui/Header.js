@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   makeStyles, Typography, AppBar, Toolbar,
 } from '@material-ui/core';
@@ -121,120 +121,142 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header({ role, hasClass }) {
+export default function Header() {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const baseURL = '';
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
-  const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   H:mm'));
+  const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   HH:mm'));
   const [itemList, setItemList] = useState([]);
   const [menuList, setMenuList] = useState([]);
 
+  const [hasClass, setHasClass] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(['token', 'id']);
+
   useEffect(() => {
-    if (role === 'MANAGER') {
-      setItemList([
-        {
-          text: 'Course',
-          basePath: '/admin/course',
-          path: '/admin/course/course',
-        },
-        {
-          text: 'Account',
-          basePath: '/admin/account',
-          path: '/admin/account/institute',
-        },
-        {
-          text: 'System',
-          basePath: '/admin/system',
-          path: '/admin/system/accesslog',
-        },
-        {
-          text: 'About',
-          path: '/about',
-        },
-      ]);
-      setMenuList([
-        { title: 'My Profile', link: '/my-profile' },
-        { title: 'Logout', link: '/logout' },
-      ]);
-    } else if (role === 'NORMAL') {
-      if (hasClass) {
+    setHasClass(user.classes.length !== 0);
+  }, [user.classes.length]);
+
+  useEffect(() => {
+    switch (user.role) {
+      case 'MANAGER': {
         setItemList([
           {
-            text: 'My Class',
-            basePath: '/my-class',
-            path: '/my-class',
+            text: 'Course',
+            basePath: '/admin/course',
+            path: '/admin/course/course',
           },
           {
-            text: 'All Class',
-            basePath: '/all-class',
-            path: '/all-class',
-          },
-          // {
-          //   text: 'Problem Set',
-          //   basePath: '/problem-set',
-          //   path: '/problem-set',
-          // },
-          {
-            text: 'PDAO',
-            basePath: '/pdao',
-            path: '/pdao',
-          },
-          {
-            text: 'Ranklist',
-            basePath: '/ranklist',
-            path: '/ranklist',
+            text: 'Account',
+            basePath: '/admin/account',
+            path: '/admin/account/institute',
           },
           {
             text: 'System',
-            basePath: '/system',
-            path: '/system',
+            basePath: '/admin/system',
+            path: '/admin/system/accesslog',
+          },
+          {
+            text: 'About',
+            path: '/about',
           },
         ]);
-      } else {
-        setItemList([
-          {
-            text: 'All Class',
-            basePath: '/all-class',
-            path: '/all-class',
-          },
-          // {
-          //   text: 'Problem Set',
-          //   basePath: '/problem-set',
-          //   path: '/problem-set',
-          // },
-          {
-            text: 'PDAO',
-            basePath: '/pdao',
-            path: '/pdao',
-          },
-          {
-            text: 'Ranklist',
-            basePath: '/ranklist',
-            path: '/ranklist',
-          },
-          {
-            text: 'System',
-            basePath: '/system',
-            path: '/system',
-          },
+        setMenuList([
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
+        ]);
+        break;
+      }
+      case 'NORMAL': {
+        if (hasClass) {
+          setItemList([
+            {
+              text: 'My Class',
+              basePath: '/my-class',
+              path: '/my-class',
+            },
+            {
+              text: 'All Class',
+              basePath: '/all-class',
+              path: '/all-class',
+            },
+            // {
+            //   text: 'Problem Set',
+            //   basePath: '/problem-set',
+            //   path: '/problem-set',
+            // },
+            {
+              text: 'PDAO',
+              basePath: '/pdao',
+              path: '/pdao',
+            },
+            {
+              text: 'Ranklist',
+              basePath: '/ranklist',
+              path: '/ranklist',
+            },
+            {
+              text: 'System',
+              basePath: '/system',
+              path: '/system',
+            },
+          ]);
+        } else {
+          setItemList([
+            {
+              text: 'All Class',
+              basePath: '/all-class',
+              path: '/all-class',
+            },
+            // {
+            //   text: 'Problem Set',
+            //   basePath: '/problem-set',
+            //   path: '/problem-set',
+            // },
+            {
+              text: 'PDAO',
+              basePath: '/pdao',
+              path: '/pdao',
+            },
+            {
+              text: 'Ranklist',
+              basePath: '/ranklist',
+              path: '/ranklist',
+            },
+            {
+              text: 'System',
+              basePath: '/system',
+              path: '/system',
+            },
+          ]);
+        }
+        setMenuList([
+          { title: 'My Submission', link: '/my-submission' },
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
+        ]);
+        break;
+      }
+      case 'GUEST': {
+        // System Guest
+        setItemList([]);
+        setMenuList([
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
+        ]);
+        break;
+      }
+      default: {
+        setItemList([]);
+        setMenuList([
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
         ]);
       }
-      setMenuList([
-        { title: 'My Submission', link: '/my-submission' },
-        { title: 'My Profile', link: '/my-profile' },
-        { title: 'Logout', link: '/logout' },
-      ]);
-    } else {
-      // System Guest
-      setItemList([]);
-      setMenuList([
-        { title: 'My Profile', link: '/my-profile' },
-        { title: 'Logout', link: '/logout' },
-      ]);
     }
-  }, [hasClass, role]);
+  }, [hasClass, user.role]);
 
   // useEffect(() => {
   //   console.log('Current route', location.pathname);
@@ -242,52 +264,16 @@ export default function Header({ role, hasClass }) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTime(format(new Date(), 'MMM d  H:mm'));
+      setCurrentTime(format(new Date(), 'MMM d  HH:mm'));
     }, 1000);
     return () => clearInterval(interval);
   }, []);
 
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
-
-  // const handleToggle = () => {
-  //   setOpen((prevOpen) => !prevOpen);
-  // };
-
-  // const handleClose = (event) => {
-  //   if (anchorRef.current && anchorRef.current.contains(event.target)) {
-  //     return;
-  //   }
-
-  //   setOpen(false);
-  // };
-
-  // function handleListKeyDown(event) {
-  //   if (event.key === 'Tab') {
-  //     event.preventDefault();
-  //     setOpen(false);
-  //   }
-  // }
-
-  // return focus to the button when we transitioned from !open -> open
-  const prevOpen = useRef(open);
-  useEffect(() => {
-    if (prevOpen.current === true && open === false) {
-      anchorRef.current.focus();
-    }
-
-    prevOpen.current = open;
-  }, [open]);
-
-  const dispatch = useDispatch();
-  const [cookiesId, setCookieId, removeCookieId] = useCookies(['id']);
-  const [cookiesToken, setCookieToken, removeCookieToken] = useCookies(['token']);
-
   const goto = (link) => {
     // console.log(link);
     if (link === '/logout') {
-      removeCookieId('id');
-      removeCookieToken('token');
+      removeCookie('token', { path: '/' });
+      removeCookie('id', { path: '/' });
       dispatch(userLogout(history));
     } else {
       history.push(link);
@@ -299,13 +285,13 @@ export default function Header({ role, hasClass }) {
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
           {itemList.map((item) => (
-            <Typography variant="h6" className={classes.item} key={item.text}>
-              <a
-                href={baseURL + item.path}
-                className={location.pathname.includes(item.basePath) ? classes.active : classes.a}
-              >
-                {item.text}
-              </a>
+            <Typography
+              variant="h6"
+              onClick={() => history.push(item.path)}
+              className={`${classes.item} ${location.pathname.includes(item.basePath) && classes.active}`}
+              key={item.text}
+            >
+              {item.text}
             </Typography>
           ))}
           <div className={classes.right}>

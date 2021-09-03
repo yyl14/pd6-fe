@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-  Typography, makeStyles,
-} from '@material-ui/core';
+import { Typography, makeStyles } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
@@ -30,8 +28,10 @@ export default function SubmissionList() {
   const classes = useStyles();
   const allClass = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
-  // const loading = useSelector((state) => state.loading.myClass.submissions);
-  const commonLoading = useSelector((state) => state.loading.common);
+  const loading = useSelector((state) => state.loading.myClass.submissions);
+  const error = useSelector((state) => state.error.myClass.submissions);
+  const accountError = useSelector((state) => state.error.common.common.fetchAccount);
+  const commonLoading = useSelector((state) => state.loading.common.common);
   const submissions = useSelector((state) => state.submissions);
   const authToken = useSelector((state) => state.auth.token);
   const accounts = useSelector((state) => state.accounts);
@@ -46,8 +46,13 @@ export default function SubmissionList() {
     dispatch(fetchAllChallengesProblems(authToken, classId));
   }, [authToken, classId, courseId, dispatch]);
 
-  if (courses[courseId] === undefined || allClass[classId] === undefined) {
-    if (commonLoading.fetchCourse || commonLoading.fetchClass) {
+  if (courses[courseId] === undefined || allClass[classId] === undefined || submissions.allIds === undefined) {
+    if (
+      commonLoading.fetchCourse
+      || commonLoading.fetchClass
+      || commonLoading.fetchAllChallengesProblems
+      || loading.fetchClassSubmissions
+    ) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -81,8 +86,8 @@ export default function SubmissionList() {
             operation: 'LIKE',
           },
           {
-            reduxStateId: 'id',
-            label: 'ID',
+            reduxStateId: 'real_name',
+            label: 'Real Name',
             type: 'TEXT',
             operation: 'LIKE',
           },
@@ -111,7 +116,7 @@ export default function SubmissionList() {
             operation: 'IN',
             options: allClass[classId].challengeIds.map((id) => ({
               value: id,
-              label: challenges[id] ? challenges[id].title : '',
+              label: challenges.byId[id].title,
             })),
           },
           {
@@ -119,10 +124,13 @@ export default function SubmissionList() {
             label: 'Problem',
             type: 'ENUM',
             operation: 'IN',
-            options: allClass[classId].challengeIds.map((id) => problems.allIds.filter((problemId) => problems.byId[problemId].challenge_id === id)).flat().map((problemId) => ({
-              value: problemId,
-              label: problems.byId[problemId].challenge_label,
-            })),
+            options: allClass[classId].challengeIds
+              .map((id) => problems.allIds.filter((problemId) => problems.byId[problemId].challenge_id === id))
+              .flat()
+              .map((problemId) => ({
+                value: problemId,
+                label: problems.byId[problemId].challenge_label,
+              })),
           },
           {
             reduxStateId: 'submit_time',
@@ -134,6 +142,7 @@ export default function SubmissionList() {
         refetch={(browseParams, ident) => {
           dispatch(fetchClassSubmissions(authToken, browseParams, ident, classId));
         }}
+        refetchErrors={[error.fetchClassSubmissions, accountError]}
         columns={[
           {
             name: 'ID',

@@ -22,29 +22,28 @@ export const fetchClassGrade = (token, classId) => async (dispatch) => {
   }
 };
 
-export const addClassGrade = (token, classId, file) => async (dispatch) => {
+export const addClassGrade = (token, classId, title, file) => async (dispatch) => {
   dispatch({ type: gradeConstants.ADD_CLASS_GRADE_START });
-  const auth = {
+  const config = {
     headers: {
       'Auth-Token': token,
       'Content-Type': 'multipart/form-data',
+    },
+    params: {
+      title,
     },
   };
   const formData = new FormData();
   formData.append('grade_file', file);
 
   try {
-    const res = await agent.post(`/class/${classId}/grade`, formData, auth);
-    if (res.data.success) {
-      dispatch({
-        type: gradeConstants.ADD_CLASS_GRADE_SUCCESS,
-      });
-    } else {
-      dispatch({
-        type: gradeConstants.ADD_CLASS_GRADE_FAIL,
-        error: res.data.error,
-      });
+    const res = await agent.post(`/class/${classId}/grade`, formData, config);
+    if (!res.data.success) {
+      throw new Error(res.data.error);
     }
+    dispatch({
+      type: gradeConstants.ADD_CLASS_GRADE_SUCCESS,
+    });
   } catch (err) {
     dispatch({
       type: gradeConstants.ADD_CLASS_GRADE_FAIL,
@@ -129,20 +128,22 @@ export const downloadGradeFile = (token) => async (dispatch) => {
   }
 };
 
-export const deleteGrade = (token, gradeId) => (dispatch) => {
-  const auth = { headers: { 'auth-token': token } };
-  dispatch({ type: gradeConstants.DELETE_GRADE_START });
-  agent
-    .delete(`/grade/${gradeId}`, auth)
-    .then((res) => {
-      dispatch({ type: gradeConstants.DELETE_GRADE_SUCCESS });
-    })
-    .catch((err) => {
-      dispatch({
-        type: gradeConstants.DELETE_GRADE_FAIL,
-        error: err,
-      });
+export const deleteGrade = (token, gradeId) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: gradeConstants.DELETE_GRADE_START });
+    await agent.delete(`/grade/${gradeId}`, config);
+    dispatch({ type: gradeConstants.DELETE_GRADE_SUCCESS });
+  } catch (err) {
+    dispatch({
+      type: gradeConstants.DELETE_GRADE_FAIL,
+      error: err,
     });
+  }
 };
 
 export const editGrade = (token, gradeId, title, score, comment) => (dispatch) => {

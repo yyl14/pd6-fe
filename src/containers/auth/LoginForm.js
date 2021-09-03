@@ -10,9 +10,10 @@ import {
   Typography,
   makeStyles,
 } from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
+import { userSignIn } from '../../actions/user/auth';
 
 const useStyles = makeStyles((theme) => ({
   authForm: {
@@ -31,7 +32,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function LoginForm(props) {
+export default function LoginForm() {
+  const dispatch = useDispatch();
   const classNames = useStyles();
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
@@ -72,7 +74,7 @@ export default function LoginForm(props) {
     }
 
     if (errors.username === false && errors.password === false && newUserName !== '' && newPassword !== '') {
-      props.userSignIn(newUserName, newPassword);
+      dispatch(userSignIn(newUserName, newPassword));
     }
   };
   const handleUsernameChange = (e) => {
@@ -96,8 +98,19 @@ export default function LoginForm(props) {
 
   const handlePasswordChange = (e) => {
     if (e.target.value !== '') {
-      setErrors((ori) => ({ ...ori, password: false }));
-      setErrorTexts((ori) => ({ ...ori, password: '' }));
+      if (errors.password && errorTexts.password === 'Incorrect username or password') {
+        setErrors({
+          username: false,
+          password: false,
+        });
+        setErrorTexts({
+          username: '',
+          password: '',
+        });
+      } else {
+        setErrors((ori) => ({ ...ori, password: false }));
+        setErrorTexts((ori) => ({ ...ori, password: '' }));
+      }
     }
     setPassword(e.target.value);
   };

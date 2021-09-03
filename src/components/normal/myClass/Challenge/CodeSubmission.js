@@ -4,10 +4,6 @@ import {
   Typography,
   Button,
   makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
   TextField,
   MenuItem,
   FormControl,
@@ -22,7 +18,7 @@ import { browseSubmitLang } from '../../../../actions/common/common';
 
 import NoMatch from '../../../noMatch';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -62,7 +58,7 @@ export default function CodeSubmission() {
       return;
     }
     dispatch(submitCode(authToken, problemId, langId, code));
-    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`);
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
   };
 
   useEffect(() => {
@@ -97,7 +93,7 @@ export default function CodeSubmission() {
             </MenuItem>
             {submitLang.allIds.map((key) => (
               <MenuItem key={submitLang.byId[key].id} value={submitLang.byId[key].id}>
-                {submitLang.byId[key].name}
+                {`${submitLang.byId[key].name} ${submitLang.byId[key].version}`}
               </MenuItem>
             ))}
           </Select>
