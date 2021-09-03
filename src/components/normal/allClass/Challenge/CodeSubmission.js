@@ -1,17 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  TextField,
-  MenuItem,
-  FormControl,
-  Select,
+  Typography, Button, makeStyles, TextField, MenuItem, FormControl, Select,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 
@@ -22,7 +12,7 @@ import { browseSubmitLang } from '../../../../actions/common/common';
 
 import NoMatch from '../../../noMatch';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -52,7 +42,7 @@ export default function CodeSubmission() {
   const submitLang = useSelector((state) => state.submitLangs);
   const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
-  const loading = useSelector((state) => state.loading.myClass);
+  // const loading = useSelector((state) => state.loading.myClass);
 
   const [langId, setLangId] = useState(-1);
   const [code, setCode] = useState('');
