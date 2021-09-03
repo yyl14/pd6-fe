@@ -120,6 +120,56 @@ const editPassword = (token, id, oldPassword, newPassword) => (dispatch) => {
     });
 };
 
+const userGetNotify = (authToken) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Auth-Token': authToken,
+    },
+  };
+
+  try {
+    const notifyRes = await agent.get('/announcement', config);
+    dispatch({
+      type: userConstants.USER_GET_NOTIFY,
+      payload: notifyRes.data.data.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: userConstants.USER_GET_NOTIFY_FAIL,
+      error: err,
+    });
+  }
+};
+
+const userReadNotify = (authToken, notifyId) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Auth-Token': authToken,
+    },
+  };
+
+  try {
+    const notifyReadRes = await agent.get(`/announcement/${notifyId}`, config);
+    const notifyRes = await agent.get('/announcement', config);
+    dispatch({
+      type: userConstants.USER_GET_NOTIFY,
+      payload: notifyRes.data.data.data,
+    });
+    // console.log(notifyRes.data);
+  } catch (err) {
+    dispatch({
+      type: userConstants.USER_READ_NOTIFY_FAIL,
+      error: err,
+    });
+  }
+};
+
 export {
-  editAccount, makeStudentCardDefault, fetchStudentCard, addStudentCard, editPassword,
+  editAccount,
+  makeStudentCardDefault,
+  fetchStudentCard,
+  addStudentCard,
+  editPassword,
+  userGetNotify,
+  userReadNotify,
 };

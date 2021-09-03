@@ -14,7 +14,7 @@ export default function MyProfile({
   const [itemList, setItemList] = useState([]);
 
   useEffect(() => {
-    console.log(account);
+    // console.log(account);
     if (mode === 'main') {
       setTitle(account.username);
       setItemList([
