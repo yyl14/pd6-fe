@@ -12,6 +12,7 @@ const mono = {
   white: '#FFFFFF',
   veryLightGray: '#F8F8F8',
   lightGray: '#EAEAEA',
+  emptyGray: '#C4C4C4',
   gray: '#CACACA',
   semiDarkGray: '#AAAAAA',
   darkGray: '#656565',
@@ -44,6 +45,7 @@ const palette = {
     300: mono.gray, // root backgroundColor for Contained Buttons, etc.
     A100: mono.lightGray,
     A400: mono.darkGray,
+    A500: mono.emptyGray,
     A700: mono.semiDarkGray,
   },
 
