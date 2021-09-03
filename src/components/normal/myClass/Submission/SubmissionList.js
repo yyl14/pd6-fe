@@ -28,10 +28,10 @@ export default function SubmissionList() {
   const classes = useStyles();
   const allClass = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
-  // const loading = useSelector((state) => state.loading.myClass.submissions);
+  const loading = useSelector((state) => state.loading.myClass.submissions);
   const error = useSelector((state) => state.error.myClass.submissions);
   const accountError = useSelector((state) => state.error.common.common.fetchAccount);
-  const commonLoading = useSelector((state) => state.loading.common);
+  const commonLoading = useSelector((state) => state.loading.common.common);
   const submissions = useSelector((state) => state.submissions);
   const authToken = useSelector((state) => state.auth.token);
   const accounts = useSelector((state) => state.accounts);
@@ -46,8 +46,13 @@ export default function SubmissionList() {
     dispatch(fetchAllChallengesProblems(authToken, classId));
   }, [authToken, classId, courseId, dispatch]);
 
-  if (courses[courseId] === undefined || allClass[classId] === undefined) {
-    if (commonLoading.fetchCourse || commonLoading.fetchClass) {
+  if (courses[courseId] === undefined || allClass[classId] === undefined || submissions.allIds === undefined) {
+    if (
+      commonLoading.fetchCourse
+      || commonLoading.fetchClass
+      || commonLoading.fetchAllChallengesProblems
+      || loading.fetchClassSubmissions
+    ) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -111,7 +116,7 @@ export default function SubmissionList() {
             operation: 'IN',
             options: allClass[classId].challengeIds.map((id) => ({
               value: id,
-              label: challenges[id] ? challenges[id].title : '',
+              label: challenges.byId[id].title,
             })),
           },
           {
