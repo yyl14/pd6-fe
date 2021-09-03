@@ -113,7 +113,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
       <SimpleBar title="File">
         <StyledButton variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>
           Upload
-        </Button>
+        </StyledButton>
       </SimpleBar>
       {essaySubmission
         && Object.keys(essaySubmission).map((key) => {

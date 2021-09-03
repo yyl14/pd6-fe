@@ -40,7 +40,9 @@ const StyledButton = withStyles({
 })(Button);
 
 export default function EssayProblem() {
-  const { courseId, classId, challengeId, essayId } = useParams();
+  const {
+    courseId, classId, challengeId, essayId,
+  } = useParams();
   const history = useHistory();
   const classNames = useStyles();
 
