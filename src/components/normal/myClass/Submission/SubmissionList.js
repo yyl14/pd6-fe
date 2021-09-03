@@ -46,12 +46,7 @@ export default function SubmissionList() {
     dispatch(fetchAllChallengesProblems(authToken, classId));
   }, [authToken, classId, courseId, dispatch]);
 
-  if (
-    courses[courseId] === undefined
-    || allClass[classId] === undefined
-    || allClass[classId].challengeIds === undefined
-    || submissions.allIds === undefined
-  ) {
+  if (courses[courseId] === undefined || allClass[classId] === undefined || submissions.allIds === undefined) {
     if (
       commonLoading.fetchCourse
       || commonLoading.fetchClass

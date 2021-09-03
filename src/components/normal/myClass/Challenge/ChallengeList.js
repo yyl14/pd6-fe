@@ -141,7 +141,6 @@ export default function ChallengeList() {
   if (
     courses[courseId] === undefined
     || classes[classId] === undefined
-    || classes[classId].challengeIds === undefined
   ) {
     if (loading.fetchChallenges || commonLoading.fetchClass || commonLoading.fetchCourse) {
       return <GeneralLoading />;

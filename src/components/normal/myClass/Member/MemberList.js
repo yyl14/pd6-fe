@@ -80,11 +80,7 @@ export default function MemberList() {
     });
   }, [classId, userClasses]);
 
-  if (
-    courses.byId[courseId] === undefined
-    || classes.byId[classId] === undefined
-    || classes.byId[classId].memberIds === undefined
-  ) {
+  if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
     if (
       loading.fetchCourse
       || loading.fetchClass
