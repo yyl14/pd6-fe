@@ -292,6 +292,14 @@ function AutoTable({
     setPageInput('1');
   };
 
+  const calculateTotalNumOfPages = () => {
+    if (tableState.byId[ident]) {
+      if (tableState.byId[ident].totalCount === Infinity) return 0;
+      return Math.ceil(tableState.byId[ident].totalCount / rowsPerPage);
+    }
+    return 100;
+  };
+
   useEffect(() => {
     if (tableState.byId[ident]) {
       setDisplayedRange(
@@ -489,11 +497,7 @@ function AutoTable({
               value={pageInput}
               onChange={(e) => {
                 const newInput = e.target.value;
-                if (
-                  tableState.byId[ident]
-                  && Number(newInput) <= Math.ceil(tableState.byId[ident].totalCount / rowsPerPage)
-                  && Number(newInput) >= 1
-                ) {
+                if (tableState.byId[ident] && Number(newInput) <= calculateTotalNumOfPages() && Number(newInput) >= 1) {
                   setPageInput(newInput);
                   setCurPage(Number(pageInput) - 1);
                 } else if (newInput === '') {
@@ -502,7 +506,7 @@ function AutoTable({
               }}
             />
             <Typography className={classes.pageText} variant="body1">
-              {`of ${Math.ceil((tableState.byId[ident] ? tableState.byId[ident].totalCount : 100) / rowsPerPage)}`}
+              {`of ${calculateTotalNumOfPages()}`}
             </Typography>
             <Button
               className={classes.pageChangeButtons}
