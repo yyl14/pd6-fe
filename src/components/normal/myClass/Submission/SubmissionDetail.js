@@ -9,11 +9,10 @@ import {
   DialogActions,
   DialogContent,
   TextField,
-  IconButton,
 } from '@material-ui/core';
-import { useHistory, useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import moment from 'moment';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import CodeArea from '../../../ui/CodeArea';
 import Icon from '../../../ui/icon/index';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
@@ -30,6 +29,7 @@ import {
   fetchSubmission,
   getAccountBatch,
 } from '../../../../actions/myClass/submission';
+import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
 
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
@@ -54,26 +54,14 @@ const useStyles = makeStyles((theme) => ({
   resultTable: {
     width: '100%',
   },
-  codeContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-  },
-  codeField: {
-    width: '100%',
-  },
-  copyIcon: {
-    transform: 'translate(-20px, -230px)',
-    zIndex: '1000',
-  },
 }));
 
 /* This is a level 4 component (page component) */
 export default function SubmissionDetail() {
   const { courseId, classId, submissionId } = useParams();
-  const history = useHistory();
+  // const history = useHistory();
   const classNames = useStyles();
-  const [color, setColor] = useState('blue');
+  // const [color, setColor] = useState('blue');
   const [popUp, setPopUp] = useState(false);
   const [role, setRole] = useState('NORMAL');
   const [tableData, setTableData] = useState([]);
@@ -111,18 +99,11 @@ export default function SubmissionDetail() {
   }, [authToken, dispatch, submissionId, submissions]);
 
   useEffect(() => {
-    if (problems.allIds !== [] && submissions[submissionId] !== undefined) {
-      problems.allIds.filter((id) => {
-        if (id === submissions[submissionId].problem_id) {
-          dispatch(
-            browseChallengeOverview(authToken, problems.byId[submissions[submissionId].problem_id].challenge_id),
-          );
-          setChallengeId(problems.byId[submissions[submissionId].problem_id].challenge_id);
-        }
-        return '';
-      });
+    if (problems.byId[problemId] !== undefined && submissions[submissionId] !== undefined) {
+      dispatch(browseChallengeOverview(authToken, problems.byId[problemId].challenge_id));
+      setChallengeId(problems.byId[problemId].challenge_id);
     }
-  }, [authToken, dispatch, problems, submissionId, submissions]);
+  }, [authToken, dispatch, problemId, problems.allIds, problems.byId, submissionId, submissions]);
 
   useEffect(() => {
     setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
@@ -164,13 +145,9 @@ export default function SubmissionDetail() {
   }, [judgeCases.allIds, judgeCases.byId, judgmentId, judgments.byId, testcaseIds, testcases]);
 
   useEffect(() => {
-    user.classes.forEach((value) => {
-      if (value.class_id === parseInt(classId, 10)) {
-        if (value.role === 'MANAGER') {
-          setRole('MANAGER');
-        }
-      }
-    });
+    if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
+      setRole('MANAGER');
+    }
   }, [user.classes, classId]);
 
   if (
@@ -184,11 +161,6 @@ export default function SubmissionDetail() {
   ) {
     return <GeneralLoading />;
   }
-
-  // if (error.readSubmission) {
-  //   console.log(error.readSubmission);
-  //   return (<div>{error.readSubmission}</div>);
-  // }
 
   const handleRefresh = () => {
     dispatch(readSubmissionDetail(authToken, submissionId));
@@ -339,21 +311,7 @@ export default function SubmissionDetail() {
         />
       </SimpleBar>
       <SimpleBar title="Code" noIndent>
-        <div className={classNames.codeContent}>
-          <TextField
-            className={classNames.codeField}
-            value={submissions[submissionId].content}
-            disabled
-            multiline
-            minRows={10}
-            maxRows={20}
-          />
-          <CopyToClipboard text={submissions[submissionId].content}>
-            <IconButton className={classNames.copyIcon}>
-              <Icon.Copy />
-            </IconButton>
-          </CopyToClipboard>
-        </div>
+        <CodeArea value={submissions[submissionId].content} />
       </SimpleBar>
       <Dialog
         maxWidth="md"

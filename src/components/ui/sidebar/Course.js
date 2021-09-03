@@ -68,13 +68,13 @@ export default function Course({
             {
               type: 'LESSON',
               text: 'Lesson',
-              icon: <Icon.Newadd />,
+              icon: <Icon.Newadd className={classes.addIconItem} />,
               path: `${baseURL}/course/${courseId}/class-list/lesson`,
             },
             {
               type: 'CONTEST',
               text: 'Contest',
-              icon: <Icon.Newadd />,
+              icon: <Icon.Newadd className={classes.addIconItem} />,
               path: `${baseURL}/course/${courseId}/class-list/contest`,
             },
           ]),

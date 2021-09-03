@@ -26,6 +26,8 @@ import {
   browseTasksUnderChallenge,
 } from '../../../../actions/myClass/problem';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
+import NoMatch from '../../../noMatch';
+import CodeArea from '../../../ui/CodeArea';
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
@@ -68,7 +70,7 @@ export default function SubmissionDetail() {
   const judgmentIds = useSelector((state) => state.judgments.allIds);
   const challenges = useSelector((state) => state.challenges);
   const problems = useSelector((state) => state.problem);
-  const account = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
   const judgeCases = useSelector((state) => state.judgeCases);
   const testcases = useSelector((state) => state.testcases.byId);
   const testcaseIds = useSelector((state) => state.testcases.allIds);
@@ -77,15 +79,9 @@ export default function SubmissionDetail() {
 
   useEffect(() => {
     dispatch(browseTasksUnderChallenge(authToken, challengeId));
-  }, [authToken, challengeId, dispatch, problemId]);
-
-  useEffect(() => {
     dispatch(readSubmissionDetail(authToken, submissionId));
-  }, [authToken, dispatch, submissionId]);
-
-  useEffect(() => {
     dispatch(fetchSubmission(authToken, submissionId));
-  }, [authToken, dispatch, submissionId]);
+  }, [authToken, challengeId, dispatch, problemId, submissionId]);
 
   useEffect(() => {
     setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
@@ -127,14 +123,10 @@ export default function SubmissionDetail() {
   }, [judgeCases, judgeCases.allIds, judgeCases.byId, judgmentId, judgments.byId, testcaseIds, testcases]);
 
   useEffect(() => {
-    account.classes.forEach((value) => {
-      if (value.class_id === Number(classId, 10)) {
-        if (value.role === 'MANAGER') {
-          setRole('MANAGER');
-        }
-      }
-    });
-  }, [account.classes, classId]);
+    if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
+      setRole('MANAGER');
+    }
+  }, [user.classes, classId]);
 
   if (
     problems.byId[problemId] === undefined
@@ -144,20 +136,16 @@ export default function SubmissionDetail() {
     || judgeCases.allIds === undefined
     || testcaseIds === undefined
   ) {
-    // if (
-    //   !loading.readProblemInfo
-    //   && !loading.readSubmissionDetail
-    //   && !loading.browseJudgeCases
-    //   && !loading.readTestcase
-    // ) {
-    //   return <NoMatch />;
-    // }
-    return <GeneralLoading />;
+    if (
+      loading.readSubmissionDetail
+      || loading.browseJudgeCases
+      || loading.readTestcase
+      || loading.browseTasksUnderChallenge
+    ) {
+      return <GeneralLoading />;
+    }
+    return <NoMatch />;
   }
-  // if (error.readSubmission) {
-  //   console.log(error.readSubmission);
-  //   return (<div>{error.readSubmission}</div>);
-  // }
 
   const handleRefresh = () => {
     dispatch(readSubmissionDetail(authToken, submissionId));
@@ -172,9 +160,7 @@ export default function SubmissionDetail() {
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
-        {submissionId}
-        {' '}
-        / Submission Detail
+        {`${submissionId} / Submission Detail`}
       </Typography>
       <div className={classNames.generalButtons}>
         {role === 'MANAGER' && (
@@ -196,14 +182,14 @@ export default function SubmissionDetail() {
         </AlignedText>
         <AlignedText text="Username" childrenType="text">
           <Link to="/my-profile" className={classNames.textLink}>
-            <Typography variant="body1">{account.username}</Typography>
+            <Typography variant="body1">{user.username}</Typography>
           </Link>
         </AlignedText>
         <AlignedText text="Student ID" childrenType="text">
-          <Typography variant="body1">{account.student_id}</Typography>
+          <Typography variant="body1">{user.student_id}</Typography>
         </AlignedText>
         <AlignedText text="Real Name" childrenType="text">
-          <Typography variant="body1">{account.real_name}</Typography>
+          <Typography variant="body1">{user.real_name}</Typography>
         </AlignedText>
         <AlignedText text="Challenge" childrenType="text">
           <Link to={`/my-class/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
@@ -311,21 +297,7 @@ export default function SubmissionDetail() {
         />
       </SimpleBar>
       <SimpleBar title="Code" noIndent>
-        <div className={classNames.codeContent}>
-          <TextField
-            className={classNames.codeField}
-            value={submissions[submissionId].content}
-            disabled
-            multiline
-            minRows={10}
-            maxRows={20}
-          />
-          <CopyToClipboard text={submissions[submissionId].content}>
-            <IconButton className={classNames.copyIcon}>
-              <Icon.Copy />
-            </IconButton>
-          </CopyToClipboard>
-        </div>
+        <CodeArea value={submissions[submissionId].content} />
       </SimpleBar>
       <Dialog
         maxWidth="md"
