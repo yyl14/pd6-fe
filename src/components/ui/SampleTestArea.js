@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import useMeasure from 'react-use-measure';
+import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Typography, Card, CardContent, CardActions, IconButton,
@@ -73,37 +72,37 @@ const useStyles = makeStyles({
 
 export default function SampleTestArea({ input, output, note }) {
   const classes = useStyles();
-  const [ref, { height }] = useMeasure();
-  const inputRef = useMeasure();
-  const outputRef = useMeasure();
-  const noteRef = useMeasure();
+  const ref = useRef();
+  const inputRef = useRef();
+  const outputRef = useRef();
+  const noteRef = useRef();
   const [showExpandArrow, setShowExpandArrow] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [truncatePosition, setTruncatePosition] = useState('');
 
   useEffect(() => {
-    if (height > 401.5) {
+    if (ref.current.clientHeight > 401.5) {
       if (!showExpandArrow) {
         setShowExpandArrow(true);
         setExpanded(false);
 
-        const inputContentHeight = inputRef.current.clientHeight;
-        const outputContentHeight = outputRef.current.clientHeight;
-        const noteContentHeight = noteRef.current.clientHeight;
-        if (inputContentHeight >= 248) {
+        if (inputRef.current.clientHeight >= 248) {
           setTruncatePosition('inputContent');
-        } else if (inputContentHeight >= 223) {
+        } else if (inputRef.current.clientHeight >= 223) {
           setTruncatePosition('outputTitle');
-        } else if (inputContentHeight + outputContentHeight >= 198) {
+        } else if (inputRef.current.clientHeight + outputRef.current.clientHeight >= 198) {
           setTruncatePosition('outputContent');
-        } else if (inputContentHeight + outputContentHeight >= 148) {
+        } else if (inputRef.current.clientHeight + outputRef.current.clientHeight >= 148) {
           setTruncatePosition('noteTitle');
-        } else if (inputContentHeight + outputContentHeight + noteContentHeight >= 124) {
+        } else if (
+          inputRef.current.clientHeight + outputRef.current.clientHeight + noteRef.current.clientHeight
+          >= 124
+        ) {
           setTruncatePosition('noteContent');
         }
       }
     }
-  }, [expanded, height, inputRef, noteRef, outputRef, showExpandArrow]);
+  }, [expanded, inputRef, noteRef, outputRef, ref, showExpandArrow]);
 
   const handleExpand = (limited, isExpanded) => {
     if (limited) {
