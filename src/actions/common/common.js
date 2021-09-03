@@ -22,7 +22,7 @@ const getInstitutes = () => (dispatch) => {
     });
 };
 
-const fetchClassMembers = (token, browseParams, tableId = null, classId) => async (dispatch) => {
+const fetchClassMembers = (token, classId, browseParams, tableId = null) => async (dispatch) => {
   try {
     const config = {
       headers: {

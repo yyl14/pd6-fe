@@ -88,47 +88,49 @@ export default function MemberList() {
               )
             }
             filterConfig={[
-              {
-                reduxStateId: 'username',
-                label: 'Username',
-                type: 'TEXT',
-                operation: 'LIKE',
-              },
-              {
-                reduxStateId: 'student_id',
-                label: 'Student ID',
-                type: 'TEXT',
-                operation: 'LIKE',
-              },
-              {
-                reduxStateId: 'real_name',
-                label: 'Real Name',
-                type: 'TEXT',
-                operation: 'LIKE',
-              },
-              {
-                reduxStateId: 'institute_abbreviated_name',
-                label: 'Institute',
-                type: 'ENUM',
-                options: [
-                  { value: 'NTU', label: 'NTU' },
-                  { value: 'NTNU', label: 'NTNU' },
-                  { value: 'NTUST', label: 'NTUST' },
-                ],
-              },
+              // {
+              //   reduxStateId: 'username',
+              //   label: 'Username',
+              //   type: 'TEXT',
+              //   operation: 'LIKE',
+              // },
+              // {
+              //   reduxStateId: 'student_id',
+              //   label: 'Student ID',
+              //   type: 'TEXT',
+              //   operation: 'LIKE',
+              // },
+              // {
+              //   reduxStateId: 'real_name',
+              //   label: 'Real Name',
+              //   type: 'TEXT',
+              //   operation: 'LIKE',
+              // },
+              // {
+              //   reduxStateId: 'institute_abbreviated_name',
+              //   label: 'Institute',
+              //   type: 'ENUM',
+              //   operation: 'IN',
+              //   options: [
+              //     { value: 'NTU', label: 'NTU' },
+              //     { value: 'NTNU', label: 'NTNU' },
+              //     { value: 'NTUST', label: 'NTUST' },
+              //   ],
+              // },
               {
                 reduxStateId: 'role',
                 label: 'Role',
                 type: 'ENUM',
+                operation: 'IN',
                 options: [
-                  { value: 'Guest', label: 'Guest' },
-                  { value: 'Normal', label: 'Normal' },
-                  { value: 'Manager', label: 'Manager' },
+                  { value: 'GUEST', label: 'Guest' },
+                  { value: 'NORMAL', label: 'Normal' },
+                  { value: 'MANAGER', label: 'Manager' },
                 ],
               },
             ]}
             refetch={(browseParams, ident) => {
-              dispatch(fetchClassMembers(authToken, browseParams, ident, classId));
+              dispatch(fetchClassMembers(authToken, classId, browseParams, ident));
             }}
             refetchErrors={[error]}
             columns={[
