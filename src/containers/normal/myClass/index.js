@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Switch, Route, useParams, useHistory,
 } from 'react-router-dom';
@@ -10,12 +10,16 @@ import Grade from './grade';
 import Team from './team';
 import Member from './member';
 
+import { fetchClass, fetchCourse } from '../../../actions/common/common';
+
 import NoMatch from '../../../components/noMatch';
 
 /* This is a level 2 container (role container) */
 export default function MyClass() {
   const history = useHistory();
-  const { classId } = useParams();
+  const dispatch = useDispatch();
+  const authToken = useSelector((state) => state.auth.token);
+  const { courseId, classId } = useParams();
   const auth = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
 
@@ -31,6 +35,11 @@ export default function MyClass() {
       history.go(0);
     }
   }, [auth.isAuthenticated, classId, history, user.classes]);
+
+  useEffect(() => {
+    dispatch(fetchClass(authToken, classId));
+    dispatch(fetchCourse(authToken, courseId));
+  }, [authToken, classId, courseId, dispatch]);
 
   return (
     <Switch>

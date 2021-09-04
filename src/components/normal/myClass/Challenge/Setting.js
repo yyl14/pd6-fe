@@ -10,7 +10,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import { fetchChallenges, deleteChallenge } from '../../../../actions/myClass/challenge';
-import { fetchClass, fetchCourse } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
 import SettingEdit from './SettingEdit';
 import GeneralLoading from '../../../GeneralLoading';
@@ -46,11 +45,6 @@ export default function Setting() {
       dispatch(fetchChallenges(authToken, classId));
     }
   }, [authToken, dispatch, classId, editLoading]);
-
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-  }, [dispatch, authToken, classId, courseId]);
 
   useEffect(() => {
     setChallenge(challenges[challengeId]);

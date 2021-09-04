@@ -20,7 +20,6 @@ import Icon from '../../../ui/icon/index';
 import {
   fetchTeams, addTeam, importTeam, downloadTeamFile,
 } from '../../../../actions/myClass/team';
-import { fetchCourse, fetchClass } from '../../../../actions/common/common';
 
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
@@ -83,11 +82,6 @@ export default function TeamList() {
       }
     });
   }, [classId, user.classes]);
-
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-  }, [authToken, classId, courseId, dispatch]);
 
   useEffect(() => {
     if (!loading.addTeam && !loading.importTeam) {

@@ -3,8 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Button, makeStyles } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import {
-  fetchCourse,
-  fetchClass,
   fetchClassMembers,
   fetchClassMemberWithAccountReferral,
 } from '../../../../actions/common/common';
@@ -33,14 +31,6 @@ export default function MemberList() {
   const members = useSelector((state) => state.classMembers);
   const loading = useSelector((state) => state.loading.common.common);
   const userClasses = useSelector((state) => state.user.classes);
-
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-  }, [authToken, courseId, dispatch]);
-
-  useEffect(() => {
-    dispatch(fetchClass(authToken, classId));
-  }, [authToken, classId, dispatch]);
 
   useEffect(() => {
     if (!loading.replaceClassMembers) {
