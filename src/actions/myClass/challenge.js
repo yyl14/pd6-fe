@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import agent from '../agent';
 import { challengeConstants } from './constant';
 import { autoTableConstants } from '../component/constant';
@@ -27,13 +29,32 @@ const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
 const fetchChallenges = (token, classId, browseParams, tableId = null) => async (dispatch) => {
   try {
     dispatch({ type: challengeConstants.FETCH_CHALLENGES_REQUEST });
+    let temp = {
+      ...browseParams,
+    };
+    if (browseParams.filter.length > 0) {
+      if (browseParams.filter[0][0] === 'status') {
+        let newQuery = [];
+        const currentTime = moment().toISOString();
+        if (browseParams.filter[0][2][0] === 'Not Yet') {
+          newQuery = [['start_time', '>', currentTime]];
+        } else if (browseParams.filter[0][2][0] === 'Closed') {
+          newQuery = [['end_time', '<', currentTime]];
+        } else if (browseParams.filter[0][2][0] === 'Opened') {
+          newQuery = [['start_time', '<', currentTime], ['end_time', '>', currentTime]];
+        }
+        temp = {
+          ...browseParams,
+          filter: newQuery,
+        };
+      }
+    }
 
     const config = {
       headers: { 'auth-token': token },
-      params: browseParamsTransForm(browseParams),
+      params: browseParamsTransForm(temp),
     };
     const res = await agent.get(`/class/${classId}/challenge`, config);
-    console.log('challenges res:', res);
     const { data: challenges, total_count } = res.data.data;
     dispatch({
       type: challengeConstants.FETCH_CHALLENGES_SUCCESS,

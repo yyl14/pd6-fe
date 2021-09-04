@@ -216,17 +216,17 @@ export default function ChallengeList() {
             type: 'DATE',
             operation: 'LIKE',
           },
-          // {
-          //   reduxStateId: 'status',
-          //   label: 'Status',
-          //   type: 'ENUM',
-          //   operation: 'IN',
-          //   options: [
-          //     { value: 'Not Yet', label: 'Not Yet' },
-          //     { value: 'Opened', label: 'Opened' },
-          //     { value: 'Closed', label: 'Closed' },
-          //   ],
-          // },
+          {
+            reduxStateId: 'status',
+            label: 'Status',
+            type: 'ENUM',
+            operation: 'IN',
+            options: [
+              { value: 'Not Yet', label: 'Not Yet' },
+              { value: 'Opened', label: 'Opened' },
+              { value: 'Closed', label: 'Closed' },
+            ],
+          },
         ]}
         refetch={(browseParams, ident) => {
           dispatch(fetchChallenges(authToken, classId, browseParams, ident));
