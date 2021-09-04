@@ -14,7 +14,8 @@ import {
   Select,
   IconButton,
   Snackbar,
-  CircularProgress,
+  // CircularProg,
+  LinearProgress,
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -79,6 +80,14 @@ const useStyles = makeStyles((theme) => ({
     background: 'white',
     borderBottomWidth: '1px',
     borderBottomColor: theme.palette.grey.A400,
+  },
+  progressContainer: {
+    height: 0,
+    overflow: 'visible',
+  },
+  progress: {
+    height: 3,
+    zIndex: 1000,
   },
   column: {
     display: 'flex',
@@ -373,6 +382,10 @@ function AutoTable({
         filter={filter}
         onSearch={onSearch}
       />
+      <div className={classes.progressContainer}>
+        {dataComplete || isError || <LinearProgress color="primary" className={classes.progress} />}
+        {/* <LinearProgress color="primary" className={classes.progress} /> */}
+      </div>
       <Paper className={classes.root} elevation={0}>
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">
@@ -462,7 +475,7 @@ function AutoTable({
           </Table>
         </TableContainer>
         <div className={classes.bottomWrapper}>
-          <div>{dataComplete || isError || <CircularProgress color="inherit" size={30} />}</div>
+          {/* <div>{dataComplete || isError || <CircularProgress color="inherit" size={30} />}</div> */}
           <div className={classes.bottom}>
             <FormControl variant="outlined">
               <Select

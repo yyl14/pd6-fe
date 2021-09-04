@@ -18,8 +18,7 @@ import Icon from '../../../../ui/icon/index';
 import NoMatch from '../../../../noMatch';
 import FileUploadArea from '../../../../ui/FileUploadArea';
 import { deleteEssay, readEssay } from '../../../../../actions/myClass/essay';
-import { uploadEssay, readEssaySubmission, reUploadEssay } from '../../../../../actions/myClass/essaySubmission';
-import AlignedText from '../../../../ui/AlignedText';
+import { uploadEssay, reUploadEssay } from '../../../../../actions/myClass/essaySubmission';
 import { downloadFile } from '../../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
