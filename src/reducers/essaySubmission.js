@@ -29,7 +29,7 @@ const allIds = (state = [], action) => {
     case essayConstants.REUPLOAD_ESSAY_SUBMISSION_SUCCESS:
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
     case essayConstants.UPLOAD_ESSAY_SUBMISSION_SUCCESS:
-      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+      return state.includes(action.payload) ? state : state.concat([action.payload]);
     default:
       return state;
   }

@@ -53,6 +53,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   const essay = useSelector((state) => state.essays.byId);
   const authToken = useSelector((state) => state.auth.token);
   const essaySubmission = useSelector((state) => state.essaySubmission.byId);
+  const submissionIds = useSelector((state) => state.essaySubmission.allIds);
   const uploadFail = useSelector((state) => state.error.myClass.essaySubmission);
 
   const [uploadOrNot, setUploadOrNot] = useState(false);
@@ -116,19 +117,19 @@ export default function EssayInfo({ role = 'NORMAL' }) {
         </StyledButton>
       </SimpleBar>
       {essaySubmission
-        && Object.keys(essaySubmission).map((key) => {
-          if (uploadOrNot === true) {
+        && submissionIds.map((id) => {
+          if (uploadOrNot) {
             return (
               <div>
                 <Link href onClick={handleClickLink}>
-                  {essaySubmission[key].filename}
+                  {essaySubmission[id].filename}
                 </Link>
                 {' '}
-                {moment(essaySubmission[key].submit_time).format('YYYY-MM-DD, HH:mm')}
+                {moment(essaySubmission[id].submit_time).format('YYYY-MM-DD, HH:mm')}
               </div>
             );
           }
-          return <></>;
+          return id;
         })}
       {role === 'MANAGER' && (
         <SimpleBar
@@ -181,11 +182,11 @@ export default function EssayInfo({ role = 'NORMAL' }) {
             File below was failed to be uploaded:
             <br />
             {essaySubmission
-              && Object.keys(essaySubmission).map((key) => {
-                if (uploadOrNot === true) {
-                  return <div>{essaySubmission[key].filename}</div>;
+              && submissionIds.map((id) => {
+                if (uploadOrNot) {
+                  return <div>{essaySubmission[id].filename}</div>;
                 }
-                return <></>;
+                return id;
               })}
           </Typography>
         </DialogContent>
