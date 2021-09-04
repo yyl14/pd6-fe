@@ -26,7 +26,7 @@ const byId = (state = {}, action) => {
         state,
       );
     }
-    case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
+    case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data, id } = action.payload;
       return {
         ...state,
@@ -38,7 +38,6 @@ const byId = (state = {}, action) => {
         },
       };
     }
-    case submissionConstants.READ_CHALLENGE_SUCCESS:
     case commonConstants.READ_CHALLENGE_SUCCESS: {
       const data = action.payload;
       return {

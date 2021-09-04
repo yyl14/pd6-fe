@@ -48,27 +48,6 @@ const editChallenge = (token, challengeId, body) => async (dispatch) => {
   }
 };
 
-const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
-  try {
-    const auth = {
-      headers: {
-        'Auth-Token': token,
-      },
-    };
-    dispatch({ type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_START });
-    const res = await agent.get(`/challenge/${challengeId}/task`, auth);
-    dispatch({
-      type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS,
-      payload: { id: challengeId, data: res.data.data },
-    });
-  } catch (err) {
-    dispatch({
-      type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_FAIL,
-      error: err,
-    });
-  }
-};
-
 const readProblemInfo = (token, problemId) => async (dispatch) => {
   const config = {
     headers: {
@@ -666,7 +645,6 @@ const readProblemScore = (token, problemId) => async (dispatch) => {
 
 export {
   editChallenge,
-  browseTasksUnderChallenge,
   readProblemInfo,
   editProblemInfo,
   deleteProblem,

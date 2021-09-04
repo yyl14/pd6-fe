@@ -7,7 +7,7 @@ import Task from '../../../components/normal/myClass/Challenge/Task';
 import Setting from '../../../components/normal/myClass/Challenge/Setting';
 import Statistics from '../../../components/normal/myClass/Challenge/Statistics';
 import { fetchChallenge } from '../../../actions/common/common';
-import { browseTasksUnderChallenge } from '../../../actions/myClass/problem';
+import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
 
 import NoMatch from '../../../components/noMatch';
 // import EssayProblem from '../../../components/normal/myClass/Challenge/EssayProblem';

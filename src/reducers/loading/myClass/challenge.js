@@ -1,6 +1,7 @@
 import { challengeConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
+  browseTasksUnderChallenge: false,
   fetchChallenges: false,
   addChallenge: false,
   editChallenge: false,
@@ -14,6 +15,22 @@ const initialState = {
 
 export default function challenge(state = initialState, action) {
   switch (action.type) {
+    case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_START:
+      return {
+        ...state,
+        browseTasksUnderChallenge: true,
+      };
+    case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS:
+      return {
+        ...state,
+        browseTasksUnderChallenge: false,
+      };
+    case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_FAIL:
+      return {
+        ...state,
+        browseTasksUnderChallenge: false,
+      };
+
     case challengeConstants.FETCH_CHALLENGES_REQUEST: {
       return {
         ...state,

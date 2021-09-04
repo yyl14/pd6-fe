@@ -3,7 +3,6 @@ import { problemConstants } from '../../../actions/myClass/constant';
 const initialState = {
   browseChallengeOverview: null,
   editChallenge: null,
-  browseTasksUnderChallenge: null,
   readProblem: null,
   readSubmission: null,
   readChallenge: null,
@@ -49,17 +48,6 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         editChallenge: action.error,
-      };
-
-    case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS:
-      return {
-        ...state,
-        browseTasksUnderChallenge: null,
-      };
-    case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_FAIL:
-      return {
-        ...state,
-        browseTasksUnderChallenge: action.error,
       };
 
     case problemConstants.READ_PROBLEM_FAIL:
