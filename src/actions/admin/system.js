@@ -60,8 +60,7 @@ const fetchAnnouncement = (token, browseParams, tableId = null) => async (dispat
     };
     const res = await agent.get('/announcement', config);
     const { data: announcements, total_count } = res.data.data;
-    // console.log('announcements res :', res);
-    // console.log('announcements :', announcements, total_count);
+    // console.log('fetchAnnouncement :', announcements);
     dispatch({
       type: systemConstants.FETCH_ANNOUNCEMENT_SUCCESS,
       payload: {
@@ -76,6 +75,33 @@ const fetchAnnouncement = (token, browseParams, tableId = null) => async (dispat
         totalCount: total_count,
         dataIds: announcements.map((item) => item.id),
         offset: browseParams.offset,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: systemConstants.FETCH_ANNOUNCEMENT_FAIL,
+      error,
+    });
+  }
+};
+
+const readAnnouncement = (token, announcementId) => async (dispatch) => {
+  // read only one announcement by its id
+  try {
+    dispatch({
+      type: systemConstants.FETCH_ANNOUNCEMENT_START,
+    });
+
+    const config = {
+      headers: { 'auth-token': token },
+    };
+    const res = await agent.get(`/announcement/${announcementId}`, config);
+    const { data } = res.data;
+    // console.log('readAnnouncement :', data);
+    dispatch({
+      type: systemConstants.FETCH_ANNOUNCEMENT_SUCCESS,
+      payload: {
+        data: [data],
       },
     });
   } catch (error) {
@@ -215,6 +241,7 @@ const editSubmitLanguage = (token, id, name, version, isDisabled) => (dispatch) 
 export {
   fetchAccessLog,
   fetchAnnouncement,
+  readAnnouncement,
   editAnnouncement,
   addAnnouncement,
   deleteAnnouncement,

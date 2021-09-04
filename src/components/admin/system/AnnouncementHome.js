@@ -102,7 +102,9 @@ export default function AnnouncementHome() {
           Title: item.title,
           'Post Time': moment(item.post_time).format('YYYY-MM-DD, HH:mm'),
           'End Time': moment(item.expire_time).format('YYYY-MM-DD, HH:mm'),
+          link: `announcement/${item.id}/setting`,
         })}
+        hasLink
         buttons={(
           <Button variant="contained" color="primary" onClick={handleClickAdd}>
             +
