@@ -21,6 +21,8 @@ import { readEssay } from '../../../../actions/myClass/essay';
 import { fetchChallenges } from '../../../../actions/myClass/challenge';
 import { downloadAllEssaySubmission } from '../../../../actions/myClass/essaySubmission';
 
+import NoMatch from '../../../noMatch';
+
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
     marginBottom: '50px',
@@ -92,6 +94,10 @@ export default function EssayProblem() {
   useEffect(() => {
     dispatch(readEssay(authToken, essayId));
   }, [authToken, dispatch, essayId]);
+
+  if (essays[essayId] === undefined) {
+    return <NoMatch />;
+  }
 
   return (
     <>

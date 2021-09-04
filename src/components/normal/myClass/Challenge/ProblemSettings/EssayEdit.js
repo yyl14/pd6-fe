@@ -64,7 +64,7 @@ export default function EssayEdit({ closeEdit, role = 'NORMAL' }) {
 
   return (
     <>
-      <SimpleBar title="Label">
+      <SimpleBar title="Label" noIndent>
         <TextField
           value={label}
           variant="outlined"
@@ -74,7 +74,7 @@ export default function EssayEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield}
         />
       </SimpleBar>
-      <SimpleBar title="Title">
+      <SimpleBar title="Title" noIndent>
         <TextField
           value={title}
           variant="outlined"
@@ -84,7 +84,7 @@ export default function EssayEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield}
         />
       </SimpleBar>
-      <SimpleBar title="Description">
+      <SimpleBar title="Description" noIndent>
         <TextField
           value={description}
           variant="outlined"

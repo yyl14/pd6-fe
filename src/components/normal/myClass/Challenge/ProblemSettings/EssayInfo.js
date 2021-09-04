@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import moment from 'moment';
 import {
   Typography,
   Button,
@@ -12,7 +13,6 @@ import {
   withStyles,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
-import moment from 'moment-timezone';
 import SimpleBar from '../../../../ui/SimpleBar';
 import Icon from '../../../../ui/icon/index';
 import NoMatch from '../../../../noMatch';
@@ -20,6 +20,7 @@ import FileUploadArea from '../../../../ui/FileUploadArea';
 import { deleteEssay, readEssay } from '../../../../../actions/myClass/essay';
 import { uploadEssay, reUploadEssay } from '../../../../../actions/myClass/essaySubmission';
 import { downloadFile } from '../../../../../actions/common/common';
+import { browseTasksUnderChallenge } from '../../../../../actions/myClass/challenge';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -46,11 +47,14 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   } = useParams();
   const history = useHistory();
   const classNames = useStyles();
+  const [currentTime, setCurrentTime] = useState(moment());
 
   const dispatch = useDispatch();
 
+  const loading = useSelector((state) => state.loading.myClass.essay);
   const essay = useSelector((state) => state.essays.byId);
   const authToken = useSelector((state) => state.auth.token);
+  const challenges = useSelector((state) => state.challenges.byId);
   const essaySubmission = useSelector((state) => state.essaySubmission.byId);
   const submissionIds = useSelector((state) => state.essaySubmission.allIds);
   const uploadFail = useSelector((state) => state.error.myClass.essaySubmission);
@@ -60,6 +64,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
 
   const [popUpUpload, setPopUpUpload] = useState(false);
   const [popUpFail, setPopUpFail] = useState(false);
+  const [hasRequest, setHasRequest] = useState(false);
 
   const handleClickUpload = () => {
     setPopUpUpload(true);
@@ -67,23 +72,19 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   const handleClosePopUpUpload = () => {
     setPopUpUpload(false);
   };
-<<<<<<< HEAD
-  const handleUpload = () => {
-    console.log(selectedFile[0]);
-=======
 
   const handleClosePopUpFail = () => {
     setPopUpFail(false);
   };
 
   const handleUpload = () => {
->>>>>>> b4baeb49fbcc1a8bf289a13480e65da76d80ae3d
     if (uploadOrNot === false) {
       dispatch(uploadEssay(authToken, essayId, selectedFile[0]));
       setUploadOrNot(true);
     } else {
       dispatch(reUploadEssay(authToken, essay[essayId].essaySubmissionId, selectedFile[0]));
     }
+    setSelectedFile([]);
     if (!!uploadFail.reUploadEssay || !!uploadFail.uploadEssay) {
       setPopUpFail(true);
     }
@@ -100,12 +101,16 @@ export default function EssayInfo({ role = 'NORMAL' }) {
 
   const handleSubmitDelete = () => {
     dispatch(deleteEssay(authToken, essayId));
-    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
+    setHasRequest(true);
   };
 
   useEffect(() => {
-    dispatch(readEssay(authToken, essayId));
-  }, [authToken, dispatch, essayId]);
+    if (hasRequest && !loading.deleteEssay) {
+      setHasRequest(false);
+      dispatch(browseTasksUnderChallenge(authToken, challengeId));
+      history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
+    }
+  }, [authToken, challengeId, classId, courseId, dispatch, hasRequest, history, loading.deleteEssay]);
 
   if (essay[essayId] === undefined) {
     return <NoMatch />;
@@ -116,9 +121,12 @@ export default function EssayInfo({ role = 'NORMAL' }) {
       <SimpleBar title="Title">{essay[essayId] === undefined ? 'error' : essay[essayId].title}</SimpleBar>
       <SimpleBar title="Description">{essay[essayId] === undefined ? 'error' : essay[essayId].description}</SimpleBar>
       <SimpleBar title="File">
+        { currentTime.isBefore(moment(challenges[challengeId].end_time))
+        && (
         <StyledButton variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>
           Upload
         </StyledButton>
+        )}
       </SimpleBar>
       {essaySubmission
         && submissionIds.map((id) => {

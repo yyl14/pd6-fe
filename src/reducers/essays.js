@@ -5,7 +5,7 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data } = action.payload;
-      return data.essay.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), {});
+      return data.essay.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, essaySubmissionId: null } }), {});
     }
     case essayConstants.READ_ESSAY_SUCCESS: {
       const data = action.payload;
