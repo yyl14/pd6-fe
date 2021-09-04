@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography, Button, makeStyles, Dialog, DialogTitle, DialogActions, DialogContent,
+  Typography,
+  Button,
+  makeStyles,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  Link,
+  withStyles,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
+import moment from 'moment-timezone';
 import SimpleBar from '../../../../ui/SimpleBar';
 import Icon from '../../../../ui/icon/index';
 import NoMatch from '../../../../noMatch';
 import FileUploadArea from '../../../../ui/FileUploadArea';
 import { deleteEssay, readEssay } from '../../../../../actions/myClass/essay';
-import { uploadEssay, readEssaySubmission, reUploadEssay } from '../../../../../actions/myClass/essaySubmission';
-import AlignedText from '../../../../ui/AlignedText';
-import downloadFile from '../../../../../actions/common/common';
+import { uploadEssay, reUploadEssay } from '../../../../../actions/myClass/essaySubmission';
+import { downloadFile } from '../../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -22,6 +30,14 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
   },
 }));
+
+const StyledButton = withStyles({
+  outlined: {
+    '& path': {
+      fill: 'none !important',
+    },
+  },
+})(Button);
 
 /* This is a level 4 component (page component) */
 export default function EssayInfo({ role = 'NORMAL' }) {
@@ -35,11 +51,15 @@ export default function EssayInfo({ role = 'NORMAL' }) {
 
   const essay = useSelector((state) => state.essays.byId);
   const authToken = useSelector((state) => state.auth.token);
+  const essaySubmission = useSelector((state) => state.essaySubmission.byId);
+  const submissionIds = useSelector((state) => state.essaySubmission.allIds);
+  const uploadFail = useSelector((state) => state.error.myClass.essaySubmission);
 
   const [uploadOrNot, setUploadOrNot] = useState(false);
   const [selectedFile, setSelectedFile] = useState([]);
 
   const [popUpUpload, setPopUpUpload] = useState(false);
+  const [popUpFail, setPopUpFail] = useState(false);
 
   const handleClickUpload = () => {
     setPopUpUpload(true);
@@ -47,20 +67,38 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   const handleClosePopUpUpload = () => {
     setPopUpUpload(false);
   };
+<<<<<<< HEAD
   const handleUpload = () => {
     console.log(selectedFile[0]);
+=======
+
+  const handleClosePopUpFail = () => {
+    setPopUpFail(false);
+  };
+
+  const handleUpload = () => {
+>>>>>>> b4baeb49fbcc1a8bf289a13480e65da76d80ae3d
     if (uploadOrNot === false) {
       dispatch(uploadEssay(authToken, essayId, selectedFile[0]));
       setUploadOrNot(true);
-      // readEssaySubmission(token, essaySubmissionId);
-      // downloadFile(token, file);
     } else {
-      // dispatch(reUploadEssay(authToken, essaySubmissionId));
-      // readEssaySubmission(token, essaySubmissionId);
-      // downloadFile(token, file);
+      dispatch(reUploadEssay(authToken, essay[essayId].essaySubmissionId, selectedFile[0]));
+    }
+    if (!!uploadFail.reUploadEssay || !!uploadFail.uploadEssay) {
+      setPopUpFail(true);
     }
   };
-  const handleSubmitDelete = (e) => {
+
+  const handleClickLink = () => {
+    const fileToDownload = Object.keys(essaySubmission).map((key) => ({
+      uuid: essaySubmission[key].content_file_uuid,
+      filename: essaySubmission[key].filename,
+      as_attachment: false,
+    }));
+    fileToDownload.map((file) => dispatch(downloadFile(authToken, file)));
+  };
+
+  const handleSubmitDelete = () => {
     dispatch(deleteEssay(authToken, essayId));
     history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
   };
@@ -78,11 +116,25 @@ export default function EssayInfo({ role = 'NORMAL' }) {
       <SimpleBar title="Title">{essay[essayId] === undefined ? 'error' : essay[essayId].title}</SimpleBar>
       <SimpleBar title="Description">{essay[essayId] === undefined ? 'error' : essay[essayId].description}</SimpleBar>
       <SimpleBar title="File">
-        <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>
+        <StyledButton variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>
           Upload
-        </Button>
-        {uploadOrNot === true && <AlignedText>display time of file uploaded</AlignedText>}
+        </StyledButton>
       </SimpleBar>
+      {essaySubmission
+        && submissionIds.map((id) => {
+          if (uploadOrNot) {
+            return (
+              <div>
+                <Link href onClick={handleClickLink}>
+                  {essaySubmission[id].filename}
+                </Link>
+                {' '}
+                {moment(essaySubmission[id].submit_time).format('YYYY-MM-DD, HH:mm')}
+              </div>
+            );
+          }
+          return id;
+        })}
       {role === 'MANAGER' && (
         <SimpleBar
           title="Delete Task"
@@ -112,9 +164,38 @@ export default function EssayInfo({ role = 'NORMAL' }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePopUpUpload}>Cancel</Button>
-          <Button onClick={(e) => handleUpload()} color="primary">
+          <Button
+            onClick={() => {
+              handleUpload();
+              setSelectedFile([]);
+              setPopUpUpload(false);
+            }}
+            color="primary"
+          >
             Upload
           </Button>
+        </DialogActions>
+      </Dialog>
+      {/* Upload dialog */}
+      <Dialog maxWidth="lg" open={popUpFail} keepMounted onClose={handleClosePopUpFail}>
+        <DialogTitle>
+          <Typography variant="h4">Upload Failed</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Typography>
+            File below was failed to be uploaded:
+            <br />
+            {essaySubmission
+              && submissionIds.map((id) => {
+                if (uploadOrNot) {
+                  return <div>{essaySubmission[id].filename}</div>;
+                }
+                return id;
+              })}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePopUpFail}>Done</Button>
         </DialogActions>
       </Dialog>
     </>

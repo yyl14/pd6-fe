@@ -1,96 +1,49 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { withRouter, useHistory } from 'react-router-dom';
-import { withCookies, Cookies, useCookies } from 'react-cookie';
-import { instanceOf } from 'prop-types';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 import { Grid, Typography } from '@material-ui/core';
-import { userSignIn } from '../../actions/user/auth';
+
 import LoginForm from './LoginForm';
 import Trademark from '../../components/auth/Trademark';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
 
-// export default function Login() {
-//   const auth = useSelector(state => state.auth)
-//   const user = useSelector(state => state.user)
-//   const [cookiesId, setCookieId, removeCookieId] = useCookies(['id']);
-// const [cookiesToken, setCookieToken, removeCookieToken] = useCookies(['token']);
+export default function Login() {
+  const history = useHistory();
+  const auth = useSelector((state) => state.auth);
+  const user = useSelector((state) => state.user);
+  // eslint-disable-next-line no-unused-vars
+  const [cookies, setCookie] = useCookies(['id', 'token']);
 
-//   useEffect(() => {
-//     document.title = 'Singin'
-//     return () => {
-//       document.title = 'PDOGS';
-//     }
-//   }, [input])
-
-//   useEffect(() => {
-//     if (auth.isAuthenticated)
-//     {
-
-//     }
-
-//   }, [input])
-// }
-
-class Login extends Component {
-  static propTypes = {
-    cookies: instanceOf(Cookies).isRequired,
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  static getDerivedStateFromProps(nextProps) {
-    if (nextProps.auth.isAuthenticated) {
-      nextProps.cookies.set('id', nextProps.user.id, {
-        path: '/',
-        expires: new Date(Date.now() + 86400000), // cookie expires after 1 day
-      });
-
-      nextProps.cookies.set('token', nextProps.user.token, {
-        path: '/',
-        expires: new Date(Date.now() + 86400000), // cookie expires after 1 day
-      });
-
-      nextProps.history.push('/');
-    }
-
-    return null;
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     document.title = 'Signin';
-  }
+    return () => {
+      document.title = 'PDOGS';
+    };
+  }, []);
 
-  signIn = (username, password) => {
-    this.props.userSignIn(username, password);
-  };
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      setCookie('id', user.id, { path: '/', maxAge: 86400 });
+      setCookie('token', auth.token, { path: '/', maxAge: 86400 });
+      history.push('/');
+    }
+  }, [auth.isAuthenticated, auth.token, history, setCookie, user.id]);
 
-  render() {
-    return (
-      <div className="page auth-page">
-        <Grid className="auth-page-container" container direction="row" justifyContent="center" alignItems="center">
-          <Grid container item xs={6} className="auth-page-col auth-page-col-left" justifyContent="center" />
-          <Grid container item xs={6} className="auth-page-col auth-page-col-right" justifyContent="center">
-            <LoginForm userSignIn={this.signIn} />
-          </Grid>
-          <Typography className="auth-title" variant="h3">
-            Login and train your puppy!
-          </Typography>
-          <Trademark />
+  return (
+    <div className="page auth-page">
+      <Grid className="auth-page-container" container direction="row" justifyContent="center" alignItems="center">
+        <Grid container item xs={6} className="auth-page-col auth-page-col-left" justifyContent="center" />
+        <Grid container item xs={6} className="auth-page-col auth-page-col-right" justifyContent="center">
+          <LoginForm />
         </Grid>
-      </div>
-    );
-  }
+        <Typography className="auth-title" variant="h3">
+          Login and train your puppy!
+        </Typography>
+        <Trademark />
+      </Grid>
+    </div>
+  );
 }
-
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-  user: state.user,
-  error: state.error,
-});
-
-export default connect(mapStateToProps, { userSignIn })(withRouter(withCookies(Login)));

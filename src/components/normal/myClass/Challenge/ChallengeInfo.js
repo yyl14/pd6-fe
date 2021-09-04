@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
-import { format } from 'date-fns';
 import {
   Typography, Button, makeStyles, TextField,
 } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
@@ -18,23 +18,21 @@ import {
 } from '../../../../actions/myClass/problem';
 import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
   descriptionField: {
     width: '60vw',
   },
-  buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
+  table: {
+    width: '100%',
   },
 }));
 
 /* This is a level 4 component (page component) */
 export default function ChallengeInfo() {
-  const { courseId, classId, challengeId } = useParams();
-  const history = useHistory();
+  const { classId, challengeId } = useParams();
   const classes = useStyles();
   const dispatch = useDispatch();
   const [currentTime, setCurrentTime] = useState(moment());
@@ -114,10 +112,10 @@ export default function ChallengeInfo() {
   }, [authToken, challengeId, challenges, essays, peerReviews, problems]);
 
   if (challenges[challengeId] === undefined) {
-    if (!loading.browseChallengeOverview) {
-      return <NoMatch />;
+    if (loading.browseChallengeOverview) {
+      return <GeneralLoading />;
     }
-    return <GeneralLoading />;
+    return <NoMatch />;
   }
 
   const handleEdit = () => {
@@ -148,22 +146,31 @@ export default function ChallengeInfo() {
       <Typography className={classes.pageHeader} variant="h3">
         {`${challenges[challengeId].title} / Info`}
       </Typography>
-      {isManager && !editMode && <Button onClick={handleEdit}>Edit</Button>}
-      <SimpleBar title="Description">
+      <SimpleBar
+        title="Description"
+        buttons={<>{isManager && !editMode && <Button onClick={handleEdit}>Edit</Button>}</>}
+        noIndent
+      >
         {editMode ? (
-          <TextField
-            className={classes.descriptionField}
-            value={inputs}
-            onChange={(e) => setInputs(e.target.value)}
-            multiline
-            minRows={10}
-            maxRows={10}
-            variant="outlined"
-          />
+          <div>
+            <TextField
+              className={classes.descriptionField}
+              value={inputs}
+              onChange={(e) => setInputs(e.target.value)}
+              multiline
+              minRows={10}
+              maxRows={10}
+              variant="outlined"
+            />
+            <Button onClick={handleCancel}>Cancel</Button>
+            <Button onClick={handleSave} color="primary">
+              Save
+            </Button>
+          </div>
         ) : (
-          <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
-            {challenges[challengeId].description}
-          </Typography>
+          <MathpixLoader>
+            <MathpixMarkdown text={challenges[challengeId].description} />
+          </MathpixLoader>
         )}
       </SimpleBar>
       <SimpleBar title="Challenge Information">
@@ -188,8 +195,9 @@ export default function ChallengeInfo() {
           </AlignedText>
         </>
       </SimpleBar>
-      <SimpleBar title="Overview">
+      <SimpleBar title="Overview" noIndent>
         <SimpleTable
+          className={classes.table}
           isEdit={false}
           hasDelete={false}
           columns={[
@@ -213,14 +221,6 @@ export default function ChallengeInfo() {
           data={tableData}
         />
       </SimpleBar>
-      {editMode && (
-        <div className={classes.buttons}>
-          <Button onClick={handleCancel}>Cancel</Button>
-          <Button onClick={handleSave} color="primary">
-            Save
-          </Button>
-        </div>
-      )}
     </>
   );
 }

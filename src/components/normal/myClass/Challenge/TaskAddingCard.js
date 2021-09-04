@@ -17,7 +17,6 @@ import {
 import { useParams } from 'react-router-dom';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
-
 import NoMatch from '../../../noMatch';
 
 import { readChallenge, browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
@@ -113,7 +112,7 @@ export default function TaskAddingCard({ open, setOpen }) {
           <Typography variant="h4">Create New Task</Typography>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText variant="body1" color="secondary">
+          <DialogContentText color="textPrimary">
             <AlignedText text="Class" childrenType="text">
               <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
             </AlignedText>
@@ -135,15 +134,15 @@ export default function TaskAddingCard({ open, setOpen }) {
                     <Icon.Code className={classNames.selectedIcon} />
                     Coding Problem
                   </MenuItem>
-                  <MenuItem value="Essay(PDF)">
+                  <MenuItem value="Essay(PDF)" disabled>
                     <Icon.Paper className={classNames.selectedIcon} />
                     Essay(PDF)
                   </MenuItem>
-                  <MenuItem value="Peer Review">
+                  <MenuItem value="Peer Review" disabled>
                     <Icon.Peerreview className={classNames.selectedIcon} />
                     Peer Review
                   </MenuItem>
-                  <MenuItem value="Coding Project">
+                  <MenuItem value="Coding Project" disabled>
                     <Icon.Project className={classNames.selectedIcon} />
                     Coding Project
                   </MenuItem>
@@ -174,7 +173,7 @@ export default function TaskAddingCard({ open, setOpen }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button disabled={disabled} color="secondary" onClick={handleCreate}>
+          <Button disabled={disabled} color="primary" onClick={handleCreate}>
             Create
           </Button>
         </DialogActions>

@@ -1,13 +1,7 @@
 import {
-  makeStyles,
-  Typography,
-  FormControl,
-  FormLabel,
-  FormControlLabel,
-  RadioGroup,
-  Radio,
+  makeStyles, Typography, FormControl, FormControlLabel, RadioGroup, Radio,
 } from '@material-ui/core';
-import React, { useState } from 'react';
+import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -17,8 +11,9 @@ const useStyles = makeStyles((theme) => ({
   },
 
   rowOption: {
-    height: '25px',
+    height: '36px',
     marginRight: '20px',
+    transform: 'translateY(-5px)',
   },
   columnOption: {
     height: '25px',
@@ -52,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
       content: '""',
     },
   },
-
 }));
 
 export default function RadioGroupForm({
@@ -82,7 +76,7 @@ export default function RadioGroupForm({
   return (
     <FormControl className={classes.wrapper}>
       <RadioGroup value={selectedValue} row={directionSelect(flexDirection)}>
-        { options.map((option) => (
+        {options.map((option) => (
           <FormControlLabel
             className={marginDirectionSelect(flexDirection)}
             key={option.value}
@@ -94,7 +88,11 @@ export default function RadioGroupForm({
                 onClick={handleClick}
               />
             )}
-            label={<Typography variant="body1" className={classes.optionText}>{option.label}</Typography>}
+            label={(
+              <Typography variant="body1" className={classes.optionText}>
+                {option.label}
+              </Typography>
+            )}
           />
         ))}
       </RadioGroup>

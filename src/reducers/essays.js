@@ -13,6 +13,17 @@ const byId = (state = {}, action) => {
         ...state,
         [data.id]: {
           ...data,
+          essaySubmissionId: null,
+        },
+      };
+    }
+    case essayConstants.READ_ESSAY_SUBMISSION_SUCCESS: {
+      const data = action.payload;
+      return {
+        ...state,
+        [data.essay_id]: {
+          ...state[data.essay_id],
+          essaySubmissionId: data.id,
         },
       };
     }

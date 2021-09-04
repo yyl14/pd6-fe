@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Button,
-  TextField,
-  makeStyles,
-} from '@material-ui/core';
+import { Button, TextField, makeStyles } from '@material-ui/core';
 import moment from 'moment-timezone';
 
 import { editChallenge } from '../../../../actions/myClass/challenge';
@@ -22,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
   dateRangePicker: {
     marginTop: '15px',
-    marginBottom: '9px',
+    marginBottom: '16px',
   },
   buttons: {
     display: 'flex',
@@ -63,14 +59,14 @@ export default function SettingEdit({ challengeId, challenge, setEdit }) {
 
   return (
     <>
-      <SimpleBar title="Announcement">
+      <SimpleBar title="Information">
         <AlignedText text="Title" childrenType="field">
           <TextField defaultValue={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
         </AlignedText>
         <AlignedText text="Duration" childrenType="field">
           <DateRangePicker className={classes.dateRangePicker} value={duration} setValue={setDuration} />
         </AlignedText>
-        <AlignedText text="Scored by" childrenType="field">
+        <AlignedText text="Scored by" childrenType="radio">
           <RadioGroupForm
             options={[
               {
@@ -80,13 +76,14 @@ export default function SettingEdit({ challengeId, challenge, setEdit }) {
               {
                 label: 'Best Score',
                 value: 'BEST',
-              }]}
+              },
+            ]}
             selectedValue={selectionType}
             setSelectedValue={setSelectionType}
             flexDirection="row"
           />
         </AlignedText>
-        <AlignedText text="Shown in Problem Set" childrenType="field">
+        <AlignedText text="Shown in Problem Set" childrenType="radio">
           <RadioGroupForm
             options={[
               {
@@ -96,7 +93,8 @@ export default function SettingEdit({ challengeId, challenge, setEdit }) {
               {
                 label: 'On End Time',
                 value: 'END_TIME',
-              }]}
+              },
+            ]}
             selectedValue={publicizeType}
             setSelectedValue={setPublicizeType}
             flexDirection="row"
@@ -104,8 +102,16 @@ export default function SettingEdit({ challengeId, challenge, setEdit }) {
         </AlignedText>
       </SimpleBar>
       <div className={classes.buttons}>
-        <Button onClick={() => { setEdit(false); }}>Cancel</Button>
-        <Button color="primary" onClick={handleClickSave}>Save</Button>
+        <Button
+          onClick={() => {
+            setEdit(false);
+          }}
+        >
+          Cancel
+        </Button>
+        <Button color="primary" onClick={handleClickSave}>
+          Save
+        </Button>
       </div>
     </>
   );

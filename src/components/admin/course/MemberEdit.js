@@ -15,7 +15,7 @@ import {
 import { useSelector } from 'react-redux';
 import { replaceClassMembers } from '../../../actions/common/common';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   card: {
     display: 'flex',
     flexDirection: 'row',
@@ -100,27 +100,27 @@ const MemberEdit = ({
   const handleBlankList = (list) => list.filter((element) => element !== '' && element.account_referral !== '');
 
   useEffect(() => {
-    if (!loading.replaceClassMembers) {
+    if (!dispatchStart) {
       setTA(
         members
           .filter((item) => item.role === 'MANAGER')
-          .map((member) => member.student_id)
+          .map((member) => member.member_referral)
           .join('\n'),
       );
       setStudent(
         members
           .filter((item) => item.role === 'NORMAL')
-          .map((member) => member.student_id)
+          .map((member) => member.member_referral)
           .join('\n'),
       );
       setGuest(
         members
           .filter((item) => item.role === 'GUEST')
-          .map((member) => member.student_id)
+          .map((member) => member.member_referral)
           .join('\n'),
       );
     }
-  }, [loading.replaceClassMembers, members]);
+  }, [dispatchStart, members]);
 
   useEffect(() => {
     unblockHandle.current = history.block((tl) => {
@@ -140,11 +140,15 @@ const MemberEdit = ({
           setSubmitError(error.replaceClassMembers);
           setShowErrorDetectedDialog(true);
         } else {
+          if (unblockHandle) {
+            unblockHandle.current();
+            history.push(targetLocation.current);
+          }
           backToMemberList();
         }
       }
     }
-  }, [backToMemberList, dispatchStart, error.replaceClassMembers, loading.replaceClassMembers]);
+  }, [backToMemberList, dispatchStart, error.replaceClassMembers, history, loading.replaceClassMembers]);
 
   useBeforeunload((e) => {
     if (showErrorDetectedDialog || showDuplicateIdentityDialog) {
@@ -161,7 +165,7 @@ const MemberEdit = ({
       e.target.value
         !== members
           .filter((item) => item.role === 'MANAGER')
-          .map((member) => member.student_id)
+          .map((member) => member.member_referral)
           .join('\n'),
     );
   };
@@ -171,7 +175,7 @@ const MemberEdit = ({
       e.target.value
         !== members
           .filter((item) => item.role === 'NORMAL')
-          .map((member) => member.student_id)
+          .map((member) => member.member_referral)
           .join('\n'),
     );
   };
@@ -181,7 +185,7 @@ const MemberEdit = ({
       e.target.value
         !== members
           .filter((item) => item.role === 'GUEST')
-          .map((member) => member.student_id)
+          .map((member) => member.member_referral)
           .join('\n'),
     );
   };
@@ -190,7 +194,7 @@ const MemberEdit = ({
     if (TAChanged || studentChanged || guestChanged) {
       setShowUnsavedChangesDialog(true);
     } else {
-      backToMemberList();
+      unblockAndReturn();
     }
   };
   const handleSubmitUnsave = () => {
@@ -246,7 +250,7 @@ const MemberEdit = ({
         setDispatchStart(true);
       }
     } else {
-      backToMemberList();
+      unblockAndReturn();
     }
   };
 

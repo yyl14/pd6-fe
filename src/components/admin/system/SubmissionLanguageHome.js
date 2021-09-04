@@ -51,8 +51,7 @@ export default function SubmissionLanguageHome() {
         Submission Language
       </Typography>
       <CustomTable
-        hasSearch
-        searchPlaceholder="Language / Version"
+        hasSearch={false}
         data={tableData}
         columns={[
           {

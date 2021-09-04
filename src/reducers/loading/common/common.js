@@ -3,6 +3,7 @@ import { commonConstants } from '../../../actions/common/constant';
 const initialState = {
   fetchInstitutes: false,
   fetchClassMembers: false,
+  fetchClassMemberWithAccountReferral: false,
   editClassMember: false,
   replaceClassMembers: false,
   // deleteClassMember: false,
@@ -47,6 +48,24 @@ export default function common(state = initialState, action) {
       };
     }
     case commonConstants.FETCH_CLASS_MEMBERS_FAIL: {
+      return {
+        ...state,
+        fetchClassMembers: false,
+      };
+    }
+    case commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_REQUEST: {
+      return {
+        ...state,
+        fetchClassMembers: true,
+      };
+    }
+    case commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_SUCCESS: {
+      return {
+        ...state,
+        fetchClassMembers: false,
+      };
+    }
+    case commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_FAIL: {
       return {
         ...state,
         fetchClassMembers: false,

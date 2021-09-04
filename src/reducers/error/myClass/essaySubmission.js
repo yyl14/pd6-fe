@@ -1,7 +1,6 @@
 import { essayConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
-  browseEssaySubmission: null,
   uploadEssay: null,
   readEssayubmission: null,
   reUploadEssay: null,
@@ -10,18 +9,6 @@ const initialState = {
 
 export default function essaySubmission(state = initialState, action) {
   switch (action.type) {
-    case essayConstants.BROWSE_ESSAY_SUBMISSION_SUCCESS: {
-      return {
-        ...state,
-        browseEssaySubmission: null,
-      };
-    }
-    case essayConstants.BROWSE_ESSAY_SUBMISSION_FAIL: {
-      return {
-        ...state,
-        browseEssaySubmission: action.error,
-      };
-    }
     case essayConstants.UPLOAD_ESSAY_SUBMISSION_SUCCESS: {
       return {
         ...state,

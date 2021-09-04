@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Typography,
   Button,
   makeStyles,
+  withStyles,
   Dialog,
   DialogTitle,
   DialogActions,
@@ -67,11 +68,17 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const StyledButton = withStyles({
+  outlined: {
+    '& path': {
+      fill: 'none !important',
+    },
+  },
+})(Button);
+
 /* This is a level 4 component (page component) */
 export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
-  const {
-    problemId,
-  } = useParams();
+  const { problemId } = useParams();
   const classNames = useStyles();
 
   const dispatch = useDispatch();
@@ -81,8 +88,8 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
 
   const assistingData = useSelector((state) => state.assistingData.byId);
   const testcases = useSelector((state) => state.testcases.byId);
-  const sampleDataIds = problems[problemId] === undefined ? [] : problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
-  const testcaseDataIds = problems[problemId] === undefined ? [] : problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
+  const [sampleDataIds, setSampleDataIds] = useState([]);
+  const [testcaseDataIds, setTestcaseDataIds] = useState([]);
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
@@ -98,13 +105,9 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   );
   const [source, setSource] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].source);
   const [hint, setHint] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].hint);
-  const [status, setStatus] = useState(
-    problems[problemId] !== undefined && testcaseDataIds.length !== 0
-      ? !testcases[testcaseDataIds[0]].is_disabled
-      : false,
-  );
+  const [status, setStatus] = useState(false);
 
-  const sampleTrans2no = (id) => {
+  const sampleTransToNumber = useCallback((id) => {
     if (testcases[id].input_filename !== null) {
       return parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10);
     }
@@ -112,9 +115,9 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       return parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10);
     }
     return 0;
-  };
+  }, [testcases]);
 
-  const testcaseTrans2no = (id) => {
+  const testcaseTransToNumber = useCallback((id) => {
     if (testcases[id].input_filename !== null) {
       return parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10);
     }
@@ -122,35 +125,70 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       return parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10);
     }
     return 0;
-  };
+  }, [testcases]);
 
-  const [sampleTableData, setSampleTableData] = useState(
-    sampleDataIds.map((id) => ({
-      id: testcases[id].id,
-      no: sampleTrans2no(id),
-      time_limit: testcases[id].time_limit,
-      memory_limit: testcases[id].memory_limit,
-      input_filename: testcases[id].input_filename,
-      output_filename: testcases[id].output_filename,
-      in_file: null,
-      out_file: null,
-      new: false,
-    })),
-  );
-  const [testcaseTableData, setTestcaseTableData] = useState(
-    testcaseDataIds.map((id) => ({
-      id: testcases[id].id,
-      no: testcaseTrans2no(id),
-      time_limit: testcases[id].time_limit,
-      memory_limit: testcases[id].memory_limit,
-      score: testcases[id].score,
-      input_filename: testcases[id].input_filename,
-      output_filename: testcases[id].output_filename,
-      in_file: null,
-      out_file: null,
-      new: false,
-    })),
-  );
+  const [sampleTableData, setSampleTableData] = useState([]);
+  const [testcaseTableData, setTestcaseTableData] = useState([]);
+
+  useEffect(() => {
+    if (problems[problemId] && problems[problemId].testcaseIds) {
+      const testcasesId = problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
+      const samplesId = problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
+      testcasesId.sort((a, b) => {
+        if (testcaseTransToNumber(a) < testcaseTransToNumber(b)) {
+          return -1;
+        }
+        if (testcaseTransToNumber(a) > testcaseTransToNumber(b)) {
+          return 1;
+        }
+        return 0;
+      });
+      samplesId.sort((a, b) => {
+        if (sampleTransToNumber(a) < sampleTransToNumber(b)) {
+          return -1;
+        }
+        if (sampleTransToNumber(a) > sampleTransToNumber(b)) {
+          return 1;
+        }
+        return 0;
+      });
+      setSampleDataIds(samplesId);
+      setTestcaseDataIds(testcasesId);
+      if (testcasesId.length === 0) {
+        setStatus(false);
+      } else {
+        setStatus(!testcases[testcasesId[0]].is_disabled);
+      }
+      // set original table data
+      const data = samplesId.map((id) => ({
+        id: testcases[id].id,
+        no: sampleTransToNumber(id),
+        time_limit: testcases[id].time_limit,
+        memory_limit: testcases[id].memory_limit,
+        score: testcases[id].score,
+        input_filename: testcases[id].input_filename,
+        output_filename: testcases[id].output_filename,
+        in_file: null,
+        out_file: null,
+        new: false,
+      }));
+      setSampleTableData(data);
+      const data2 = testcasesId.map((id) => ({
+        id: testcases[id].id,
+        no: testcaseTransToNumber(id),
+        time_limit: testcases[id].time_limit,
+        memory_limit: testcases[id].memory_limit,
+        score: testcases[id].score,
+        input_filename: testcases[id].input_filename,
+        output_filename: testcases[id].output_filename,
+        in_file: null,
+        out_file: null,
+        new: false,
+      }));
+      setTestcaseTableData(data2);
+    }
+  }, [problems, problemId, testcases, sampleTransToNumber, testcaseTransToNumber]);
+
   const [assistTableData, setAssistTableData] = useState(
     problems[problemId] !== undefined
       ? problems[problemId].assistingDataIds.map((id) => ({
@@ -277,6 +315,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const handleAssistTempUpload = () => {
     // add file name to table;
     const newData = assistTableData;
+    const selectedFile = selectedFileA;
     tempSelectedFileA.forEach((file) => {
       let flag = false;
       assistTableData.every((item) => {
@@ -289,9 +328,17 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       if (flag === false) {
         newData.push({ id: file.name, filename: file.name });
       }
+      const filteredFile = selectedFileA.filter((oriFile) => oriFile.name === file.name);
+      if (filteredFile.length === 0) {
+        selectedFile.push(file);
+      } else {
+        const index = selectedFile.indexOf(filteredFile[0]);
+        selectedFile.splice(index, 1);
+        selectedFile.push(file);
+      }
     });
     setAssistTableData(newData);
-    setSelectedFileA(tempSelectedFileA);
+    setSelectedFileA(selectedFile);
     setTempSelectedFileA([]);
     setHasChange(true);
   };
@@ -423,7 +470,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           selectedFileA.every((file) => {
             if (file.name === assistingData[id].filename) {
               dispatch(editAssistingData(authToken, id, file));
-              selectedFileABackUp = selectedFileABackUp.filter((newFile) => !file);
+              selectedFileABackUp = selectedFileABackUp.filter((data) => data.name !== file.name);
               return false;
             }
             return true;
@@ -439,15 +486,14 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
     });
 
     selectedFileABackUp.forEach((file) => {
-      dispatch(addAssistingData(authToken, problemId, file));
+      const existedFile = assistTableData.filter((data) => data.filename === file.name);
+      if (existedFile.length !== 0) {
+        dispatch(addAssistingData(authToken, problemId, file));
+      }
     });
 
     setHasRequest(true);
     setDisabled(true);
-    // wait for 3 secs because uploading many files waste time
-    // setTimeout(() => {
-    //   closeEdit();
-    // }, 3000);
   };
 
   const handleCancel = () => {
@@ -459,14 +505,37 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   };
 
   useEffect(() => {
-    if (hasRequest && !loading.editProblem && !loading.deleteTestcase && !loading.deleteAssistingData && !loading.editAssistingData && !loading.addAssistingData && !loading.editTestcase && !loading.uploadTestcaseInput && !loading.uploadTestcaseOutput && !loading.addTestcase) {
+    if (
+      hasRequest
+      && !loading.editProblem
+      && !loading.deleteTestcase
+      && !loading.deleteAssistingData
+      && !loading.editAssistingData
+      && !loading.addAssistingData
+      && !loading.editTestcase
+      && !loading.uploadTestcaseInput
+      && !loading.uploadTestcaseOutput
+      && !loading.addTestcase
+    ) {
       closeEdit();
     }
-  }, [closeEdit, hasRequest, loading.addAssistingData, loading.addTestcase, loading.deleteAssistingData, loading.deleteTestcase, loading.editAssistingData, loading.editProblem, loading.editTestcase, loading.uploadTestcaseInput, loading.uploadTestcaseOutput]);
+  }, [
+    closeEdit,
+    hasRequest,
+    loading.addAssistingData,
+    loading.addTestcase,
+    loading.deleteAssistingData,
+    loading.deleteTestcase,
+    loading.editAssistingData,
+    loading.editProblem,
+    loading.editTestcase,
+    loading.uploadTestcaseInput,
+    loading.uploadTestcaseOutput,
+  ]);
 
   return (
     <>
-      <SimpleBar title="Label">
+      <SimpleBar title="Label" noIndent>
         <TextField
           value={label}
           variant="outlined"
@@ -477,7 +546,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield}
         />
       </SimpleBar>
-      <SimpleBar title="Title">
+      <SimpleBar title="Title" noIndent>
         <TextField
           value={title}
           variant="outlined"
@@ -488,7 +557,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield}
         />
       </SimpleBar>
-      <SimpleBar title="Description">
+      <SimpleBar title="Description" noIndent>
         <TextField
           value={description}
           variant="outlined"
@@ -502,7 +571,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield2}
         />
       </SimpleBar>
-      <SimpleBar title="About Input and Output">
+      <SimpleBar title="About Input and Output" noIndent>
         <TextField
           value={ioDescription}
           variant="outlined"
@@ -516,7 +585,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield2}
         />
       </SimpleBar>
-      <SimpleBar title="Source">
+      <SimpleBar title="Source" noIndent>
         <TextField
           value={source}
           variant="outlined"
@@ -527,7 +596,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield}
         />
       </SimpleBar>
-      <SimpleBar title="Hint">
+      <SimpleBar title="Hint" noIndent>
         <TextField
           value={hint}
           variant="outlined"
@@ -541,12 +610,16 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield2}
         />
       </SimpleBar>
-      <SimpleBar title="Sample">
+      <SimpleBar title="Sample Data" noIndent>
         <div className={classNames.loadButtons}>
-          <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setSamplePopUp(true)}>
+          <StyledButton
+            variant="outlined"
+            color="primary"
+            startIcon={<Icon.Upload />}
+            onClick={() => setSamplePopUp(true)}
+          >
             Upload
-          </Button>
-          {/* <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button> */}
+          </StyledButton>
         </div>
         <SimpleTable
           isEdit
@@ -608,12 +681,17 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
             className={classNames.statusSwitch}
           />
         )}
+        noIndent
       >
         <div className={classNames.loadButtons}>
-          <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setTestingPopUp(true)}>
+          <StyledButton
+            variant="outlined"
+            color="primary"
+            startIcon={<Icon.Upload />}
+            onClick={() => setTestingPopUp(true)}
+          >
             Upload
-          </Button>
-          {/* <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button> */}
+          </StyledButton>
         </div>
         <SimpleTable
           isEdit
@@ -675,12 +753,16 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           setData={setTestcaseTableData}
         />
       </SimpleBar>
-      <SimpleBar title="Assisting Data (Optional)">
+      <SimpleBar title="Assisting Data (Optional)" noIndent>
         <div className={classNames.loadButtons}>
-          <Button variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={() => setAssistPopUp(true)}>
+          <StyledButton
+            variant="outlined"
+            color="primary"
+            startIcon={<Icon.Upload />}
+            onClick={() => setAssistPopUp(true)}
+          >
             Upload
-          </Button>
-          {/* <Button variant="outlined" color="inherit" startIcon={<Icon.Download />}>Download All Files</Button> */}
+          </StyledButton>
         </div>
         <SimpleTable
           isEdit

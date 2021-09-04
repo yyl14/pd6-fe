@@ -10,15 +10,13 @@ import {
   DialogContent,
   TextField,
 } from '@material-ui/core';
-import { useHistory, useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import moment from 'moment';
-import { format } from 'date-fns';
+import CodeArea from '../../../ui/CodeArea';
 import Icon from '../../../ui/icon/index';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
-import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
-// import NoMatch from '../../../noMatch';
 
 import GeneralLoading from '../../../GeneralLoading';
 
@@ -31,6 +29,7 @@ import {
   fetchSubmission,
   getAccountBatch,
 } from '../../../../actions/myClass/submission';
+import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
 
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
@@ -52,17 +51,17 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'flex-end',
   },
-  codeField: {
-    width: '50vw',
+  resultTable: {
+    width: '100%',
   },
 }));
 
 /* This is a level 4 component (page component) */
-export default function SubmissionDetail(props) {
+export default function SubmissionDetail() {
   const { courseId, classId, submissionId } = useParams();
-  const history = useHistory();
+  // const history = useHistory();
   const classNames = useStyles();
-  const [color, setColor] = useState('blue');
+  // const [color, setColor] = useState('blue');
   const [popUp, setPopUp] = useState(false);
   const [role, setRole] = useState('NORMAL');
   const [tableData, setTableData] = useState([]);
@@ -84,7 +83,6 @@ export default function SubmissionDetail(props) {
   const testcases = useSelector((state) => state.testcases.byId);
   const testcaseIds = useSelector((state) => state.testcases.allIds);
   const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.myClass.problem);
 
   useEffect(() => {
     dispatch(readSubmissionDetail(authToken, submissionId));
@@ -101,26 +99,19 @@ export default function SubmissionDetail(props) {
   }, [authToken, dispatch, submissionId, submissions]);
 
   useEffect(() => {
-    if (problems.allIds !== [] && submissions[submissionId] !== undefined) {
-      problems.allIds.filter((id) => {
-        if (id === submissions[submissionId].problem_id) {
-          dispatch(
-            browseChallengeOverview(authToken, problems.byId[submissions[submissionId].problem_id].challenge_id),
-          );
-          setChallengeId(problems.byId[submissions[submissionId].problem_id].challenge_id);
-        }
-        return '';
-      });
+    if (problems.byId[problemId] !== undefined && submissions[submissionId] !== undefined) {
+      dispatch(browseChallengeOverview(authToken, problems.byId[problemId].challenge_id));
+      setChallengeId(problems.byId[problemId].challenge_id);
     }
-  }, [authToken, dispatch, problems, submissionId, submissions]);
+  }, [authToken, dispatch, problemId, problems.allIds, problems.byId, submissionId, submissions]);
 
   useEffect(() => {
-    setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0]);
-    if (judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0]) {
+    setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
+    if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
       dispatch(
         browseJudgeCases(
           authToken,
-          judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0],
+          judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
         ),
       );
     }
@@ -154,31 +145,22 @@ export default function SubmissionDetail(props) {
   }, [judgeCases.allIds, judgeCases.byId, judgmentId, judgments.byId, testcaseIds, testcases]);
 
   useEffect(() => {
-    user.classes.forEach((value) => {
-      if (value.class_id === parseInt(classId, 10)) {
-        if (value.role === 'MANAGER') {
-          setRole('MANAGER');
-        }
-      }
-    });
+    if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
+      setRole('MANAGER');
+    }
   }, [user.classes, classId]);
 
   if (
     challenges.byId[challengeId] === undefined
     || problems.byId[problemId] === undefined
     || submissions[submissionId] === undefined
-    || judgments[judgmentId] === undefined
+    || judgments === undefined
     || judgeCases.allIds === undefined
     || testcaseIds === undefined
     || accounts.byId[accountId] === undefined
   ) {
     return <GeneralLoading />;
   }
-
-  // if (error.readSubmission) {
-  //   console.log(error.readSubmission);
-  //   return (<div>{error.readSubmission}</div>);
-  // }
 
   const handleRefresh = () => {
     dispatch(readSubmissionDetail(authToken, submissionId));
@@ -240,22 +222,34 @@ export default function SubmissionDetail(props) {
           <Typography variant="body1">{problems.byId[problemId].title}</Typography>
         </AlignedText>
         <AlignedText text="Status" childrenType="text">
-          {judgments[judgmentId].status === 'ACCEPTED' ? (
-            <Typography variant="body1">
-              {judgments[judgmentId].status.charAt(0).concat(judgments[judgmentId].status.slice(1).toLowerCase())}
-            </Typography>
+          {judgments[judgmentId] !== undefined ? (
+            <div>
+              {judgments[judgmentId].status === 'ACCEPTED' ? (
+                <Typography variant="body1">
+                  {judgments[judgmentId].status.charAt(0).concat(judgments[judgmentId].status.slice(1).toLowerCase())}
+                </Typography>
+              ) : (
+                <Typography variant="body1" color="secondary">
+                  {judgments[judgmentId].status
+                    .toLowerCase()
+                    .split(' ')
+                    .map((word) => word[0].toUpperCase() + word.substring(1))
+                    .join(' ')}
+                </Typography>
+              )}
+            </div>
           ) : (
             <Typography variant="body1" color="secondary">
-              {judgments[judgmentId].status
-                .toLowerCase()
-                .split(' ')
-                .map((word) => word[0].toUpperCase() + word.substring(1))
-                .join(' ')}
+              Waiting For Judge
             </Typography>
           )}
         </AlignedText>
         <AlignedText text="Score" childrenType="text">
-          <Typography variant="body1">{judgments[judgmentId].score}</Typography>
+          {judgments[judgmentId] !== undefined && (
+            <div>
+              <Typography variant="body1">{judgments[judgmentId].score}</Typography>
+            </div>
+          )}
         </AlignedText>
         <AlignedText text="Submit Time" childrenType="text">
           <Typography variant="body1">
@@ -267,7 +261,7 @@ export default function SubmissionDetail(props) {
             && <Typography variant="body1">{submitLangs[submissions[submissionId].language_id].name}</Typography>}
         </AlignedText> */}
       </SimpleBar>
-      <SimpleBar title="Submission Result">
+      <SimpleBar title="Submission Result" noIndent>
         <SimpleTable
           isEdit={false}
           hasDelete={false}
@@ -316,16 +310,8 @@ export default function SubmissionDetail(props) {
           data={tableData}
         />
       </SimpleBar>
-      <SimpleBar title="Code">
-        <CopyToClipboardButton text={submissions[submissionId].content} />
-        <TextField
-          className={classNames.codeField}
-          value={submissions[submissionId].content}
-          disabled
-          multiline
-          minRows={10}
-          maxRows={20}
-        />
+      <SimpleBar title="Code" noIndent>
+        <CodeArea value={submissions[submissionId].content} />
       </SimpleBar>
       <Dialog
         maxWidth="md"

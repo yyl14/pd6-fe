@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import moment from 'moment';
 import {
   makeStyles, Typography, AppBar, Toolbar,
 } from '@material-ui/core';
@@ -8,6 +9,7 @@ import { useCookies } from 'react-cookie';
 import { format } from 'date-fns';
 import Icon from './icon/index';
 import { userLogout } from '../../actions/user/auth';
+import { userGetNotify, userReadNotify } from '../../actions/user/user';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -28,17 +30,97 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   date: {
+    position: 'relative',
     float: 'left',
     marginRight: '20px',
     marginTop: '2px',
     marginBottom: 'auto',
+    top: '2px',
+  },
+  notificationContainer: {
+    position: 'relative',
+    display: 'inline-block',
+    '&:hover': {
+      // '& $notificationDropContent': {
+      //   display: 'block',
+      // },
+      cursor: 'pointer',
+    },
   },
   notification: {
+    position: 'relative',
     float: 'left',
     width: '20px',
     marginTop: '3px',
     marginBottom: 'auto',
     marginRight: '16px',
+    top: '2px',
+  },
+  notificationDropContent: {
+    position: 'absolute',
+    backgroundColor: theme.palette.primary.contrastText,
+    right: '-120px',
+    top: '45px',
+    minWidth: '460px',
+    maxHeight: '423px',
+    zIndex: '1',
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
+    borderRadius: '10px',
+    overflow: 'auto',
+  },
+  eachNotify: {
+    color: theme.palette.black.main,
+    padding: '20px 30px',
+    width: '460px',
+    minHeight: '106px',
+    height: 'auto',
+    borderBottom: `1px solid ${theme.palette.grey.A700}`,
+    textDecoration: 'none',
+    textAlign: 'left',
+    display: 'block',
+    '&:nth-child(1)': {
+      borderRadius: '10px 10px 0 0',
+    },
+    '&:last-child': {
+      borderRadius: '0 0 10px 10px',
+    },
+    '&:hover': {
+      cursor: 'pointer',
+    },
+    '& div': {
+      width: '400px',
+      minHeight: '25px',
+      height: 'auto',
+      lineHeight: '25px',
+      display: 'flex',
+      justifyContent: 'space-between',
+      '& span': {
+        fontSize: '18px',
+      },
+    },
+  },
+  unread: {
+    backgroundColor: theme.palette.grey.A100,
+  },
+  unreadDot: {
+    width: '6.75px',
+    height: '6.75px',
+    backgroundColor: theme.palette.secondary.main,
+    position: 'absolute',
+    left: '14px',
+    top: '17px',
+    borderRadius: '50%',
+    zIndex: 2,
+  },
+  secondSpan: {
+    marginTop: '16px',
+    display: 'block !important',
+    width: '400px',
+    wordWrap: 'break-word',
+  },
+  days: {
+    fontSize: '16px !important',
+    color: theme.palette.grey.A400,
   },
   name: {
     width: '65px',
@@ -84,6 +166,7 @@ const useStyles = makeStyles((theme) => ({
       },
     },
     marginRight: '20px',
+    bottom: '3px',
   },
 
   dropbtn: {
@@ -112,7 +195,12 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: 'none',
       textAlign: 'center',
       display: 'block',
-      borderRadius: '10px',
+      '&:nth-child(1)': {
+        borderRadius: '10px 10px 0 0',
+      },
+      '&:last-child': {
+        borderRadius: '0 0 10px 10px',
+      },
     },
     '& span:hover': {
       cursor: 'pointer',
@@ -121,120 +209,149 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header({ role, hasClass }) {
+export default function Header() {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const baseURL = '';
+  const authToken = useSelector((state) => state.auth.token);
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
-  const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   H:mm'));
+  const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   HH:mm'));
   const [itemList, setItemList] = useState([]);
   const [menuList, setMenuList] = useState([]);
+  const [notifyPop, setNotifyPop] = useState(false);
+  const [notifyList, setNotifyList] = useState([]);
+  const [unreadNotifyExist, setUnreadNotifyExist] = useState(false);
+
+  const [hasClass, setHasClass] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(['token', 'id']);
 
   useEffect(() => {
-    if (role === 'MANAGER') {
-      setItemList([
-        {
-          text: 'Course',
-          basePath: '/admin/course',
-          path: '/admin/course/course',
-        },
-        {
-          text: 'Account',
-          basePath: '/admin/account',
-          path: '/admin/account/institute',
-        },
-        {
-          text: 'System',
-          basePath: '/admin/system',
-          path: '/admin/system/accesslog',
-        },
-        {
-          text: 'About',
-          path: '/about',
-        },
-      ]);
-      setMenuList([
-        { title: 'My Profile', link: '/my-profile' },
-        { title: 'Logout', link: '/logout' },
-      ]);
-    } else if (role === 'NORMAL') {
-      if (hasClass) {
+    setHasClass(user.classes.length !== 0);
+  }, [user.classes.length]);
+
+  useEffect(() => {
+    dispatch(userGetNotify(authToken));
+  }, [authToken, dispatch]);
+
+  useEffect(() => {
+    switch (user.role) {
+      case 'MANAGER': {
         setItemList([
           {
-            text: 'My Class',
-            basePath: '/my-class',
-            path: '/my-class',
+            text: 'Course',
+            basePath: '/admin/course',
+            path: '/admin/course/course',
           },
           {
-            text: 'All Class',
-            basePath: '/all-class',
-            path: '/all-class',
-          },
-          // {
-          //   text: 'Problem Set',
-          //   basePath: '/problem-set',
-          //   path: '/problem-set',
-          // },
-          {
-            text: 'PDAO',
-            basePath: '/pdao',
-            path: '/pdao',
-          },
-          {
-            text: 'Ranklist',
-            basePath: '/ranklist',
-            path: '/ranklist',
+            text: 'Account',
+            basePath: '/admin/account',
+            path: '/admin/account/institute',
           },
           {
             text: 'System',
-            basePath: '/system',
-            path: '/system',
+            basePath: '/admin/system',
+            path: '/admin/system/accesslog',
+          },
+          {
+            text: 'About',
+            path: '/about',
           },
         ]);
-      } else {
-        setItemList([
-          {
-            text: 'All Class',
-            basePath: '/all-class',
-            path: '/all-class',
-          },
-          // {
-          //   text: 'Problem Set',
-          //   basePath: '/problem-set',
-          //   path: '/problem-set',
-          // },
-          {
-            text: 'PDAO',
-            basePath: '/pdao',
-            path: '/pdao',
-          },
-          {
-            text: 'Ranklist',
-            basePath: '/ranklist',
-            path: '/ranklist',
-          },
-          {
-            text: 'System',
-            basePath: '/system',
-            path: '/system',
-          },
+        setMenuList([
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
+        ]);
+        break;
+      }
+      case 'NORMAL': {
+        if (hasClass) {
+          setItemList([
+            {
+              text: 'My Class',
+              basePath: '/my-class',
+              path: '/my-class',
+            },
+            {
+              text: 'All Class',
+              basePath: '/all-class',
+              path: '/all-class',
+            },
+            // {
+            //   text: 'Problem Set',
+            //   basePath: '/problem-set',
+            //   path: '/problem-set',
+            // },
+            {
+              text: 'PDAO',
+              basePath: '/pdao',
+              path: '/pdao',
+            },
+            {
+              text: 'Ranklist',
+              basePath: '/ranklist',
+              path: '/ranklist',
+            },
+            {
+              text: 'System',
+              basePath: '/system',
+              path: '/system',
+            },
+          ]);
+        } else {
+          setItemList([
+            {
+              text: 'All Class',
+              basePath: '/all-class',
+              path: '/all-class',
+            },
+            // {
+            //   text: 'Problem Set',
+            //   basePath: '/problem-set',
+            //   path: '/problem-set',
+            // },
+            {
+              text: 'PDAO',
+              basePath: '/pdao',
+              path: '/pdao',
+            },
+            {
+              text: 'Ranklist',
+              basePath: '/ranklist',
+              path: '/ranklist',
+            },
+            {
+              text: 'System',
+              basePath: '/system',
+              path: '/system',
+            },
+          ]);
+        }
+        setMenuList([
+          { title: 'My Submission', link: '/my-submission' },
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
+        ]);
+        break;
+      }
+      case 'GUEST': {
+        // System Guest
+        setItemList([]);
+        setMenuList([
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
+        ]);
+        break;
+      }
+      default: {
+        setItemList([]);
+        setMenuList([
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
         ]);
       }
-      setMenuList([
-        { title: 'My Submission', link: '/my-submission' },
-        { title: 'My Profile', link: '/my-profile' },
-        { title: 'Logout', link: '/logout' },
-      ]);
-    } else {
-      // System Guest
-      setItemList([]);
-      setMenuList([
-        { title: 'My Profile', link: '/my-profile' },
-        { title: 'Logout', link: '/logout' },
-      ]);
     }
-  }, [hasClass, role]);
+  }, [hasClass, user.role]);
 
   // useEffect(() => {
   //   console.log('Current route', location.pathname);
@@ -242,52 +359,31 @@ export default function Header({ role, hasClass }) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTime(format(new Date(), 'MMM d  H:mm'));
+      setCurrentTime(format(new Date(), 'MMM d  HH:mm'));
     }, 1000);
     return () => clearInterval(interval);
   }, []);
 
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
-
-  // const handleToggle = () => {
-  //   setOpen((prevOpen) => !prevOpen);
-  // };
-
-  // const handleClose = (event) => {
-  //   if (anchorRef.current && anchorRef.current.contains(event.target)) {
-  //     return;
-  //   }
-
-  //   setOpen(false);
-  // };
-
-  // function handleListKeyDown(event) {
-  //   if (event.key === 'Tab') {
-  //     event.preventDefault();
-  //     setOpen(false);
-  //   }
-  // }
-
-  // return focus to the button when we transitioned from !open -> open
-  const prevOpen = useRef(open);
   useEffect(() => {
-    if (prevOpen.current === true && open === false) {
-      anchorRef.current.focus();
-    }
+    const ns = user.notifications.sort((a, b) => new Date(b.post_time).getTime() - new Date(a.post_time).getTime());
+    setNotifyList(ns);
+    setUnreadNotifyExist(!!ns.filter((e) => !e.is_deleted).length);
+  }, [user.notifications]);
 
-    prevOpen.current = open;
-  }, [open]);
+  const toggleNotify = () => {
+    setNotifyPop(!notifyPop);
+  };
 
-  const dispatch = useDispatch();
-  const [cookiesId, setCookieId, removeCookieId] = useCookies(['id']);
-  const [cookiesToken, setCookieToken, removeCookieToken] = useCookies(['token']);
+  const readNotification = (notifyId) => {
+    dispatch(userReadNotify(authToken, notifyId));
+    // dispatch(userGetNotify(authToken)); // this line needs to be de-marked when BE complete read anoouncement
+  };
 
   const goto = (link) => {
     // console.log(link);
     if (link === '/logout') {
-      removeCookieId('id');
-      removeCookieToken('token');
+      removeCookie('token', { path: '/' });
+      removeCookie('id', { path: '/' });
       dispatch(userLogout(history));
     } else {
       history.push(link);
@@ -299,18 +395,50 @@ export default function Header({ role, hasClass }) {
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
           {itemList.map((item) => (
-            <Typography variant="h6" className={classes.item} key={item.text}>
-              <a
-                href={baseURL + item.path}
-                className={location.pathname.includes(item.basePath) ? classes.active : classes.a}
-              >
-                {item.text}
-              </a>
+            <Typography
+              variant="h6"
+              onClick={() => history.push(item.path)}
+              className={`${classes.item} ${location.pathname.includes(item.basePath) && classes.active}`}
+              key={item.text}
+            >
+              {item.text}
             </Typography>
           ))}
           <div className={classes.right}>
             <Typography className={classes.date}>{currentTime}</Typography>
-            <Icon.NotificationsIcon className={classes.notification} />
+            <div className={classes.notificationContainer}>
+              <Icon.NotificationsIcon className={classes.notification} onClick={toggleNotify} />
+              {unreadNotifyExist && <div className={classes.unreadDot} />}
+              {notifyPop && (
+                <div className={classes.notificationDropContent}>
+                  {notifyList.map((notify) => (
+                    <div
+                      key={notify.title}
+                      className={
+                        notify.is_deleted ? `${classes.eachNotify}` : `${classes.eachNotify} ${classes.unread}`
+                      }
+                      role="button"
+                      tabIndex={notify.id}
+                      onClick={() => readNotification(notify.id)}
+                      onKeyDown={() => readNotification(notify.id)}
+                    >
+                      <div>
+                        <span>
+                          <b>{notify.title}</b>
+                        </span>
+                        <span className={classes.days}>
+                          {moment(new Date()).diff(moment(notify.post_time), 'days')}
+                          &nbsp; days
+                        </span>
+                      </div>
+                      <div className={classes.secondSpan}>
+                        <span>{notify.content}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
             <div className={classes.dropdown}>
               <button type="button" className={classes.dropbtn}>
                 <Typography variant="h6" className={location.pathname === '/my-profile' ? classes.active : null}>

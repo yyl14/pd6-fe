@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import 'katex/dist/katex.min.css';
-import Latex from 'react-latex-next';
+// https://mathpix.com/docs/mathpix-markdown/overview
+import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 import {
   Typography,
   Button,
   makeStyles,
+  withStyles,
   Dialog,
   DialogTitle,
   DialogActions,
   DialogContent,
   DialogContentText,
-  TextField,
   Grid,
+  FormControlLabel,
+  Switch,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
@@ -30,26 +32,42 @@ import {
   deleteAssistingData,
   deleteTestcase,
   deleteProblem,
-  browseTasksUnderChallenge,
 } from '../../../../../actions/myClass/problem';
 
-import { fetchClass, fetchCourse, downloadFile } from '../../../../../actions/common/common';
+import { downloadFile } from '../../../../../actions/common/common';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
   sampleArea: {
     marginTop: '50px',
   },
+  sampleName: {
+    marginBottom: '16px',
+  },
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end',
   },
+  table: {
+    width: '100%',
+  },
   content: {
     whiteSpace: 'pre-line',
   },
+  statusSwitch: {
+    marginTop: '20px',
+  },
 }));
+
+const StyledButton = withStyles({
+  outlined: {
+    '& path': {
+      fill: 'none !important',
+    },
+  },
+})(Button);
 
 /* This is a level 4 component (page component) */
 export default function CodingProblemInfo({ role = 'NORMAL' }) {
@@ -65,6 +83,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const courses = useSelector((state) => state.courses.byId);
   const problems = useSelector((state) => state.problem.byId);
   const testcases = useSelector((state) => state.testcases.byId);
+  const [status, setStatus] = useState(false);
 
   const assistingData = useSelector((state) => state.assistingData.byId);
 
@@ -186,7 +205,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     files.map((file) => dispatch(downloadFile(authToken, file)));
   };
 
-  const sampleTrans2no = (id) => {
+  const sampleTransToNumber = useCallback((id) => {
     if (testcases[id].input_filename !== null) {
       return parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10);
     }
@@ -194,9 +213,9 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       return parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10);
     }
     return 0;
-  };
+  }, [testcases]);
 
-  const testcaseTrans2no = (id) => {
+  const testcaseTransToNumber = useCallback((id) => {
     if (testcases[id].input_filename !== null) {
       return parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10);
     }
@@ -204,24 +223,44 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       return parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10);
     }
     return 0;
-  };
+  }, [testcases]);
 
   useEffect(() => {
     if (problems[problemId] && problems[problemId].testcaseIds) {
-      setSampleDataIds(problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample));
-      setTestcaseDataIds(problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample));
+      const testcasesId = problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
+      const samplesId = problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
+      testcasesId.sort((a, b) => {
+        if (testcaseTransToNumber(a) < testcaseTransToNumber(b)) {
+          return -1;
+        }
+        if (testcaseTransToNumber(a) > testcaseTransToNumber(b)) {
+          return 1;
+        }
+        return 0;
+      });
+      samplesId.sort((a, b) => {
+        if (sampleTransToNumber(a) < sampleTransToNumber(b)) {
+          return -1;
+        }
+        if (sampleTransToNumber(a) > sampleTransToNumber(b)) {
+          return 1;
+        }
+        return 0;
+      });
+      setSampleDataIds(samplesId);
+      setTestcaseDataIds(testcasesId);
+      if (testcasesId.length === 0) {
+        setStatus(false);
+      } else {
+        setStatus(!testcases[testcasesId[0]].is_disabled);
+      }
     }
-  }, [problems, problemId, testcases]);
+  }, [problems, problemId, testcases, sampleTransToNumber, testcaseTransToNumber]);
 
   useEffect(() => {
     dispatch(browseTestcase(authToken, problemId));
     dispatch(browseAssistingData(authToken, problemId));
   }, [authToken, dispatch, problemId]);
-
-  // useEffect(() => {
-  //   dispatch(fetchClass(authToken, classId));
-  //   dispatch(fetchCourse(authToken, courseId));
-  // }, [authToken, classId, courseId, dispatch]);
 
   if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
     return <GeneralLoading />;
@@ -238,15 +277,15 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           {problems[problemId] === undefined ? 'error' : problems[problemId].title}
         </Typography>
       </SimpleBar>
-      <SimpleBar title="Description">
-        <Typography variant="body2" className={classNames.content}>
-          <Latex>{problems[problemId].description}</Latex>
-        </Typography>
+      <SimpleBar title="Description" noIndent>
+        <MathpixLoader>
+          <MathpixMarkdown text={problems[problemId].description} />
+        </MathpixLoader>
       </SimpleBar>
-      <SimpleBar title="About Input and Output">
-        <Typography variant="body2" className={classNames.content}>
-          <Latex>{problems[problemId].io_description}</Latex>
-        </Typography>
+      <SimpleBar title="About Input and Output" noIndent>
+        <MathpixLoader>
+          <MathpixMarkdown text={problems[problemId].io_description} htmlTags />
+        </MathpixLoader>
       </SimpleBar>
       {problems[problemId].source !== '' && (
         <SimpleBar title="Source">
@@ -258,13 +297,19 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           <Typography variant="body2">{problems[problemId].hint}</Typography>
         </SimpleBar>
       )}
-      <SimpleBar title="Sample">
+      <SimpleBar title="Sample Data" noIndent>
         {role === 'MANAGER' && (
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllSampleFile}>
+          <StyledButton
+            variant="outlined"
+            color="inherit"
+            startIcon={<Icon.Download />}
+            onClick={downloadAllSampleFile}
+          >
             Download All Files
-          </Button>
+          </StyledButton>
         )}
         <SimpleTable
+          className={classNames.table}
           isEdit={false}
           hasDelete={false}
           columns={[
@@ -295,7 +340,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           ]}
           data={sampleDataIds.map((id) => ({
             id,
-            no: sampleTrans2no(id),
+            no: sampleTransToNumber(id),
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
           }))}
@@ -304,20 +349,36 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           <Grid container spacing={3}>
             {sampleDataIds.map((id) => (
               <Grid item xs={6} key={id}>
-                <Typography variant="body2">{`Sample ${sampleTrans2no(id)}`}</Typography>
+                <Typography variant="h6" className={classNames.sampleName}>{`Sample ${sampleTransToNumber(id)}`}</Typography>
                 <SampleTestArea input={testcases[id].input} output={testcases[id].output} />
               </Grid>
             ))}
           </Grid>
         </div>
       </SimpleBar>
-      <SimpleBar title="Testing Data">
+      <SimpleBar
+        noIndent
+        title="Testing Data"
+        buttons={(
+          <FormControlLabel
+            control={<Switch checked={status} name="status" color="primary" disabled />}
+            label={status ? 'Enabled' : 'Disabled'}
+            className={classNames.statusSwitch}
+          />
+        )}
+      >
         {role === 'MANAGER' && (
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllTestingFile}>
+          <StyledButton
+            variant="outlined"
+            color="inherit"
+            startIcon={<Icon.Download />}
+            onClick={downloadAllTestingFile}
+          >
             Download All Files
-          </Button>
+          </StyledButton>
         )}
         <SimpleTable
+          className={classNames.table}
           isEdit={false}
           hasDelete={false}
           columns={[
@@ -356,7 +417,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           ]}
           data={testcaseDataIds.map((id) => ({
             id,
-            no: testcaseTrans2no(id),
+            no: testcaseTransToNumber(id),
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
             score: testcases[id].score,
@@ -364,11 +425,17 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         />
       </SimpleBar>
       {role === 'MANAGER' && (
-        <SimpleBar title="Assisting Data (Optional)">
-          <Button variant="outlined" color="inherit" startIcon={<Icon.Download />} onClick={downloadAllAssistingFile}>
+        <SimpleBar title="Assisting Data (Optional)" noIndent>
+          <StyledButton
+            variant="outlined"
+            color="inherit"
+            startIcon={<Icon.Download />}
+            onClick={downloadAllAssistingFile}
+          >
             Download All Files
-          </Button>
+          </StyledButton>
           <SimpleTable
+            className={classNames.table}
             isEdit={false}
             hasDelete={false}
             columns={[

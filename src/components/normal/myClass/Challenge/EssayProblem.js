@@ -9,6 +9,7 @@ import {
   DialogActions,
   DialogContentText,
   DialogContent,
+  withStyles,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import Icon from '../../../ui/icon/index';
@@ -18,6 +19,7 @@ import EssayInfo from './ProblemSettings/EssayInfo';
 import EssayEdit from './ProblemSettings/EssayEdit';
 import { readEssay } from '../../../../actions/myClass/essay';
 import { fetchChallenges } from '../../../../actions/myClass/challenge';
+import { downloadAllEssaySubmission } from '../../../../actions/myClass/essaySubmission';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -28,6 +30,14 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
   },
 }));
+
+const StyledButton = withStyles({
+  outlined: {
+    '& path': {
+      fill: 'none !important',
+    },
+  },
+})(Button);
 
 export default function EssayProblem() {
   const {
@@ -46,6 +56,7 @@ export default function EssayProblem() {
   const authToken = useSelector((state) => state.auth.token);
   const [role, setRole] = useState('Normal');
   const [edit, setEdit] = useState(false);
+  const [emailSentPopup, setEmailSentPopup] = useState(false);
 
   const handleCloseEdit = () => {
     setEdit(false);
@@ -61,7 +72,8 @@ export default function EssayProblem() {
   };
 
   const handleDownload = () => {
-    // dispatch;
+    dispatch(downloadAllEssaySubmission(authToken, essayId, true));
+    setEmailSentPopup(true);
   };
 
   useEffect(() => {
@@ -85,17 +97,15 @@ export default function EssayProblem() {
     <>
       <Typography className={classNames.pageHeader} variant="h3">
         {challenges[challengeId] === undefined ? 'error' : challenges[challengeId].title}
-        {' '}
-        /
-        {' '}
+        {' / '}
         {essays[essayId] === undefined ? 'error' : essays[essayId].challenge_label}
       </Typography>
       {!edit && role === 'MANAGER' && (
         <div className={classNames.managerButtons}>
           <Button onClick={() => setEdit(true)}>Edit</Button>
-          <Button variant="outlined" component="span" startIcon={<Icon.Download />} onClick={handleClickDownload}>
+          <StyledButton variant="outlined" component="span" startIcon={<Icon.Download />} onClick={handleClickDownload}>
             Download
-          </Button>
+          </StyledButton>
         </div>
       )}
       {edit ? <EssayEdit closeEdit={handleCloseEdit} role={role} /> : <EssayInfo role={role} />}
@@ -124,6 +134,19 @@ export default function EssayProblem() {
           <Button onClick={() => handleClosePopUp()}>Cancel</Button>
           <Button onClick={() => handleDownload()} color="primary">
             Download
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={emailSentPopup} keepMounted onClose={() => setEmailSentPopup(false)}>
+        <DialogTitle id="alert-dialog-slide-title">
+          <Typography variant="h4">All Essay Submissions sent</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">Please check your mailbox.</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEmailSentPopup(false)} color="primary">
+            Done
           </Button>
         </DialogActions>
       </Dialog>

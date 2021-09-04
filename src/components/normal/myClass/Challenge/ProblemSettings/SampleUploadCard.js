@@ -34,7 +34,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SampleUploadCard({
-  popUp = false, closePopUp, selectedFile, setSelectedFile, handleTempUpload,
+  popUp = false,
+  closePopUp,
+  selectedFile,
+  setSelectedFile,
+  handleTempUpload,
 }) {
   const {
     courseId, classId, challengeId, problemId,
@@ -66,42 +70,36 @@ export default function SampleUploadCard({
 
   return (
     <>
-      <Dialog
-        open={popUp}
-        onClose={() => closePopUp()}
-        fullWidth
-      >
+      <Dialog open={popUp} onClose={() => closePopUp()} fullWidth>
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Upload Sample Data</Typography>
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2">Please name your files in the following manner:</Typography>
-          <Typography variant="body2" className={classes.reminder}>sample1.in （範例測資 1 的 input）</Typography>
-          <Typography variant="body2" className={classes.reminder}>sample1.out （範例測資 1 的 output）</Typography>
+          <Typography variant="body2" className={classes.reminder}>
+            sample1.in （範例測資 1 的 input）
+          </Typography>
+          <Typography variant="body2" className={classes.reminder}>
+            sample1.out （範例測資 1 的 output）
+          </Typography>
           <AlignedText text="Default Time(ms)" childrenType="field">
-            <TextField
-              id="time"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-            />
+            <TextField id="time" value={time} onChange={(e) => setTime(e.target.value)} />
           </AlignedText>
           <AlignedText text="Default Memory(kb)" childrenType="field">
-            <TextField
-              id="memory"
-              value={memory}
-              onChange={(e) => setMemory(e.target.value)}
-            />
+            <TextField id="memory" value={memory} onChange={(e) => setMemory(e.target.value)} />
           </AlignedText>
-          <IOFileUploadArea text="Sample Data" uploadCase="sample" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
+          <IOFileUploadArea
+            text="Sample Data"
+            uploadCase="sample"
+            selectedFile={selectedFile}
+            setSelectedFile={setSelectedFile}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => handleCancel()} color="default">
             Cancel
           </Button>
-          <Button
-            onClick={handleConfirm}
-            color="primary"
-          >
+          <Button onClick={handleConfirm} color="primary">
             Confirm
           </Button>
         </DialogActions>
