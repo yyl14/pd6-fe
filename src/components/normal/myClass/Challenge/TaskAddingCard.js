@@ -128,7 +128,7 @@ export default function TaskAddingCard({ open, setOpen }) {
                     <Icon.Code className={classNames.selectedIcon} />
                     Coding Problem
                   </MenuItem>
-                  <MenuItem value="Essay(PDF)" disabled>
+                  <MenuItem value="Essay(PDF)">
                     <Icon.Paper className={classNames.selectedIcon} />
                     Essay(PDF)
                   </MenuItem>
