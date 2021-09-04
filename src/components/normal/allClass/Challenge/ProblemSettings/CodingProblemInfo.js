@@ -21,7 +21,8 @@ import SampleTestArea from '../../../../ui/SampleTestArea';
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
 
-import { browseTestcase, browseAssistingData, browseTasksUnderChallenge } from '../../../../../actions/myClass/problem';
+import { browseTestcase, browseAssistingData } from '../../../../../actions/myClass/problem';
+import { browseTasksUnderChallenge } from '../../../../../actions/myClass/challenge';
 import { downloadFile } from '../../../../../actions/common/common';
 
 const useStyles = makeStyles(() => ({

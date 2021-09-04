@@ -8,7 +8,6 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  TextField,
 } from '@material-ui/core';
 import { useParams, Link } from 'react-router-dom';
 import moment from 'moment';
@@ -22,14 +21,13 @@ import GeneralLoading from '../../../GeneralLoading';
 
 import {
   readSubmissionDetail,
-  readProblem,
-  browseChallengeOverview,
   browseJudgeCases,
   readTestcase,
   fetchSubmission,
   getAccountBatch,
 } from '../../../../actions/myClass/submission';
-import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
+import { readProblemInfo } from '../../../../actions/myClass/problem';
+import { fetchChallenge } from '../../../../actions/common/common';
 
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
@@ -92,7 +90,7 @@ export default function SubmissionDetail() {
   useEffect(() => {
     if (submissions[submissionId] !== undefined) {
       dispatch(getAccountBatch(authToken, submissions[submissionId].account_id));
-      dispatch(readProblem(authToken, submissions[submissionId].problem_id));
+      dispatch(readProblemInfo(authToken, submissions[submissionId].problem_id));
       setProblemId(submissions[submissionId].problem_id);
       setAccountId(submissions[submissionId].account_id);
     }
@@ -100,7 +98,7 @@ export default function SubmissionDetail() {
 
   useEffect(() => {
     if (problems.byId[problemId] !== undefined && submissions[submissionId] !== undefined) {
-      dispatch(browseChallengeOverview(authToken, problems.byId[problemId].challenge_id));
+      dispatch(fetchChallenge(authToken, problems.byId[problemId].challenge_id));
       setChallengeId(problems.byId[problemId].challenge_id);
     }
   }, [authToken, dispatch, problemId, problems.allIds, problems.byId, submissionId, submissions]);

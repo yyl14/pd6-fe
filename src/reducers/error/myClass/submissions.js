@@ -6,7 +6,6 @@ const initialState = {
   fetchSubmission: null,
   addSubmission: null,
   browseChallengeOverview: null,
-  readProblem: null,
   readSubmissionDetail: null,
   browseJudgeCases: null,
   readTestcase: null,
@@ -88,18 +87,6 @@ export default function submissions(state = initialState, action) {
       return {
         ...state,
         addSubmission: action.error,
-      };
-    }
-    case submissionConstants.READ_CHALLENGE_FAIL: {
-      return {
-        ...state,
-        browseChallengeOverview: action.errors,
-      };
-    }
-    case submissionConstants.READ_PROBLEM_FAIL: {
-      return {
-        ...state,
-        readProblem: action.errors,
       };
     }
     case submissionConstants.READ_SUBMISSION_JUDGE_FAIL: {

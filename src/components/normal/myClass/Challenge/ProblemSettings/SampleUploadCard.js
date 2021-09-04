@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
 import {
   Typography,
   Button,
@@ -9,15 +8,11 @@ import {
   DialogActions,
   DialogContent,
   TextField,
-  Grid,
 } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
 import AlignedText from '../../../../ui/AlignedText';
 import IOFileUploadArea from '../../../../ui/IOFileUploadArea';
-import Icon from '../../../../ui/icon/index';
-import NoMatch from '../../../../noMatch';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -40,13 +35,10 @@ export default function SampleUploadCard({
   setSelectedFile,
   handleTempUpload,
 }) {
-  const {
-    courseId, classId, challengeId, problemId,
-  } = useParams();
   const classes = useStyles();
 
   // const error = useSelector((state) => state.error);
-  const loading = useSelector((state) => state.loading.myClass.problem);
+  // const loading = useSelector((state) => state.loading.myClass.problem);
 
   const [time, setTime] = useState(100000);
   const [memory, setMemory] = useState(65535);

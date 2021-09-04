@@ -20,7 +20,7 @@ import CustomTable from '../../../ui/CustomTable';
 import FileUploadArea from '../../../ui/FileUploadArea';
 import Icon from '../../../ui/icon/index';
 import { fetchClassGrade, addClassGrade, downloadGradeFile } from '../../../../actions/myClass/grade';
-import { fetchCourse, fetchClass, fetchClassMembers } from '../../../../actions/common/common';
+import { fetchClassMembers } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
@@ -73,10 +73,8 @@ export default function GradeList() {
   const [hasRequest, setHasRequest] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
     dispatch(fetchClassMembers(authToken, classId));
-  }, [authToken, classId, courseId, dispatch]);
+  }, [authToken, classId, dispatch]);
 
   useEffect(() => {
     if (!loading.addClassGrade) {

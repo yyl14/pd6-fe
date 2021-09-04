@@ -12,11 +12,10 @@ import {
   readSubmission,
   readSubmissionDetail,
   readProblemScore,
-  browseTasksUnderChallenge,
 } from '../../../../actions/myClass/problem';
 import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -44,10 +43,6 @@ export default function SubmissionList() {
   useEffect(() => {
     dispatch(readSubmission(authToken, accountId, problemId));
   }, [accountId, authToken, dispatch, problemId]);
-
-  useEffect(() => {
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
-  }, [authToken, challengeId, dispatch]);
 
   useEffect(() => {
     if (!loading.browseTasksUnderChallenge) {

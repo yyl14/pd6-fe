@@ -226,51 +226,6 @@ const fetchJudgement = (token, submissionId) => (dispatch) => {
       });
     });
 };
-const browseChallengeOverview = (token, challengeId) => async (dispatch) => {
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-  // TODO: read challenge, get problem, and then get grade
-  dispatch({ type: submissionConstants.READ_CHALLENGE_START });
-
-  try {
-    const res = await agent.get(`/challenge/${challengeId}`, auth);
-
-    dispatch({
-      type: submissionConstants.READ_CHALLENGE_SUCCESS,
-      payload: res.data.data,
-    });
-  } catch (err) {
-    dispatch({
-      type: submissionConstants.READ_CHALLENGE_FAIL,
-      errors: err,
-    });
-  }
-};
-
-const readProblem = (token, problemId) => async (dispatch) => {
-  dispatch({ type: submissionConstants.READ_PROBLEM_START });
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-  try {
-    const problemInfo = await agent.get(`/problem/${problemId}`, auth);
-
-    dispatch({
-      type: submissionConstants.READ_PROBLEM_SUCCESS,
-      payload: problemInfo.data.data,
-    });
-  } catch (err) {
-    dispatch({
-      type: submissionConstants.READ_PROBLEM_FAIL,
-      errors: err,
-    });
-  }
-};
 
 const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
   dispatch({ type: submissionConstants.READ_SUBMISSION_JUDGE_START });
@@ -366,8 +321,6 @@ export {
   fetchSubmission,
   addSubmission,
   fetchJudgement,
-  browseChallengeOverview,
-  readProblem,
   readSubmissionDetail,
   browseJudgeCases,
   readTestcase,
