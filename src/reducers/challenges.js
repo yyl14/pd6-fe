@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { challengeConstants, problemConstants, submissionConstants } from '../actions/myClass/constant';
+import { challengeConstants } from '../actions/myClass/constant';
 import { commonConstants } from '../actions/common/constant';
 
 const emptyStatistics = {

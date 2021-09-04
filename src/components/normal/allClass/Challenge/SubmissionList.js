@@ -12,8 +12,8 @@ import {
   readSubmission,
   readSubmissionDetail,
   readProblemScore,
-  browseTasksUnderChallenge,
 } from '../../../../actions/myClass/problem';
+import { browseTasksUnderChallenge } from '../../../../actions/myClass/challenge';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({

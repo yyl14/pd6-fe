@@ -5,7 +5,6 @@ const initialState = {
   editChallenge: null,
   readProblem: null,
   readSubmission: null,
-  readChallenge: null,
   readJudgment: null,
   browseTestcase: null,
   browseAssistingData: null,
@@ -27,18 +26,6 @@ const initialState = {
 
 export default function problem(state = initialState, action) {
   switch (action.type) {
-    case problemConstants.READ_CHALLENGE_SUCCESS:
-      return {
-        ...state,
-        browseChallengeOverview: null,
-      };
-    case problemConstants.READ_CHALLENGE_FAIL:
-      return {
-        ...state,
-        browseChallengeOverview: action.error,
-        readChallenge: action.errors,
-      };
-
     case problemConstants.EDIT_CHALLENGE_SUCCESS:
       return {
         ...state,

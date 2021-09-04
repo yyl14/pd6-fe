@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import { problemConstants, essayConstants } from '../actions/myClass/constant';
+import { challengeConstants, essayConstants } from '../actions/myClass/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
+    case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data } = action.payload;
       return data.essay.reduce(
         (acc, item) => ({ ...acc, [item.id]: { ...item } }), {},
@@ -26,7 +26,7 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
-    case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
+    case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data } = action.payload;
       return data.essay.map((item) => item.id);
     }

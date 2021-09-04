@@ -5,7 +5,6 @@ const initialState = {
   editChallenge: false,
   readProblem: false,
   readSubmission: false,
-  readChallenge: false,
   readJudgment: false,
   browseTestcase: false,
   browseAssistingData: false,
@@ -27,25 +26,6 @@ const initialState = {
 
 export default function problem(state = initialState, action) {
   switch (action.type) {
-    case problemConstants.READ_CHALLENGE_START:
-      return {
-        ...state,
-        browseChallengeOverview: true,
-        readChallenge: true,
-      };
-    case problemConstants.READ_CHALLENGE_SUCCESS:
-      return {
-        ...state,
-        browseChallengeOverview: false,
-        readChallenge: false,
-      };
-    case problemConstants.READ_CHALLENGE_FAIL:
-      return {
-        ...state,
-        browseChallengeOverview: false,
-        readChallenge: false,
-      };
-
     case problemConstants.EDIT_CHALLENGE_START:
       return {
         ...state,

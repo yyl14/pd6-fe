@@ -20,7 +20,6 @@ import {
   readSubmissionDetail,
   browseJudgeCases,
   readTestcase,
-  browseTasksUnderChallenge,
 } from '../../../../actions/myClass/problem';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
 import NoMatch from '../../../noMatch';
@@ -75,7 +74,6 @@ export default function SubmissionDetail() {
   const loading = useSelector((state) => state.loading.myClass.problem);
 
   useEffect(() => {
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
     dispatch(readSubmissionDetail(authToken, submissionId));
     dispatch(fetchSubmission(authToken, submissionId));
   }, [authToken, challengeId, dispatch, problemId, submissionId]);
@@ -137,7 +135,6 @@ export default function SubmissionDetail() {
       loading.readSubmissionDetail
       || loading.browseJudgeCases
       || loading.readTestcase
-      || loading.browseTasksUnderChallenge
     ) {
       return <GeneralLoading />;
     }
