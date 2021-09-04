@@ -111,13 +111,23 @@ const userRegister = (username, password, nickname, realName, emailPrefix, insti
   }
 };
 
-const emailVerification = async (code) => {
+const emailVerification = (code) => async (dispatch) => {
   const config = {
     params: {
       code,
     },
   };
-  await agent.get('/email-verification', config);
+
+  try {
+    dispatch({ type: authConstants.EMAIL_VERIFICATION_START });
+    await agent.get('/email-verification', config);
+    dispatch({ type: authConstants.EMAIL_VERIFICATION_SUCCESS });
+  } catch (err) {
+    dispatch({
+      type: authConstants.EMAIL_VERIFICATION_FAIL,
+      error: err,
+    });
+  }
 };
 
 const userResetPassword = (code, password) => async (dispatch) => {
@@ -136,5 +146,11 @@ const userResetPassword = (code, password) => async (dispatch) => {
 };
 
 export {
-  getUserInfo, userSignIn, userLogout, userForgetPassword, userRegister, emailVerification, userResetPassword,
+  getUserInfo,
+  userSignIn,
+  userLogout,
+  userForgetPassword,
+  userRegister,
+  emailVerification,
+  userResetPassword,
 };

@@ -5,26 +5,26 @@ import { userConstants } from '../actions/user/constants';
 const byId = (state = {}, action) => {
   switch (action.type) {
     case accountConstants.FETCH_STUDENT_CARD_SUCCESS: {
-      const { id, data } = action.payload;
+      const { data } = action.payload;
       return data === null ? {} : data;
     }
     case accountConstants.MAKE_STUDENT_CARD_DEFAULT_SUCCESS: {
-      const { cardId, id } = action.payload;
-      const newArray = { ...state };
-      Object.keys(newArray).forEach((key) => {
-        newArray[key].is_default = false;
+      const { cardId } = action.payload;
+      return state.map((item) => {
+        if (item.id !== cardId) {
+          return { ...item, is_default: false };
+        }
+        return { ...item, is_default: true };
       });
-      newArray[cardId].is_default = true;
-      return newArray;
     }
     case userConstants.MAKE_SELF_STUDENT_CARD_DEFAULT_SUCCESS: {
-      const { cardId, id } = action.payload;
-      const newArray = { ...state };
-      Object.keys(newArray).forEach((key) => {
-        newArray[key].is_default = false;
+      const { cardId } = action.payload;
+      return state.map((item) => {
+        if (item.id !== cardId) {
+          return { ...item, is_default: false };
+        }
+        return { ...item, is_default: true };
       });
-      newArray[cardId].is_default = true;
-      return newArray;
     }
     case userConstants.GET_SELF_STUDENT_CARD_SUCCESS:
       return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), {});
@@ -38,7 +38,7 @@ const byId = (state = {}, action) => {
 const allIds = (state = [], action) => {
   switch (action.type) {
     case accountConstants.FETCH_STUDENT_CARD_SUCCESS: {
-      const { id, data } = action.payload;
+      const { data } = action.payload;
       return data === null ? [] : data.map((item) => item.id);
     }
     case userConstants.GET_SELF_STUDENT_CARD_SUCCESS:

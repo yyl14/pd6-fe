@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Typography,
@@ -88,8 +88,8 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
 
   const assistingData = useSelector((state) => state.assistingData.byId);
   const testcases = useSelector((state) => state.testcases.byId);
-  const sampleDataIds = problems[problemId] === undefined ? [] : problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
-  const testcaseDataIds = problems[problemId] === undefined ? [] : problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
+  const [sampleDataIds, setSampleDataIds] = useState([]);
+  const [testcaseDataIds, setTestcaseDataIds] = useState([]);
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
@@ -105,13 +105,9 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   );
   const [source, setSource] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].source);
   const [hint, setHint] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].hint);
-  const [status, setStatus] = useState(
-    problems[problemId] !== undefined && testcaseDataIds.length !== 0
-      ? !testcases[testcaseDataIds[0]].is_disabled
-      : false,
-  );
+  const [status, setStatus] = useState(false);
 
-  const sampleTrans2no = (id) => {
+  const sampleTransToNumber = useCallback((id) => {
     if (testcases[id].input_filename !== null) {
       return parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10);
     }
@@ -119,9 +115,9 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       return parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10);
     }
     return 0;
-  };
+  }, [testcases]);
 
-  const testcaseTrans2no = (id) => {
+  const testcaseTransToNumber = useCallback((id) => {
     if (testcases[id].input_filename !== null) {
       return parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10);
     }
@@ -129,35 +125,70 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
       return parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10);
     }
     return 0;
-  };
+  }, [testcases]);
 
-  const [sampleTableData, setSampleTableData] = useState(
-    sampleDataIds.map((id) => ({
-      id: testcases[id].id,
-      no: sampleTrans2no(id),
-      time_limit: testcases[id].time_limit,
-      memory_limit: testcases[id].memory_limit,
-      input_filename: testcases[id].input_filename,
-      output_filename: testcases[id].output_filename,
-      in_file: null,
-      out_file: null,
-      new: false,
-    })),
-  );
-  const [testcaseTableData, setTestcaseTableData] = useState(
-    testcaseDataIds.map((id) => ({
-      id: testcases[id].id,
-      no: testcaseTrans2no(id),
-      time_limit: testcases[id].time_limit,
-      memory_limit: testcases[id].memory_limit,
-      score: testcases[id].score,
-      input_filename: testcases[id].input_filename,
-      output_filename: testcases[id].output_filename,
-      in_file: null,
-      out_file: null,
-      new: false,
-    })),
-  );
+  const [sampleTableData, setSampleTableData] = useState([]);
+  const [testcaseTableData, setTestcaseTableData] = useState([]);
+
+  useEffect(() => {
+    if (problems[problemId] && problems[problemId].testcaseIds) {
+      const testcasesId = problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
+      const samplesId = problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
+      testcasesId.sort((a, b) => {
+        if (testcaseTransToNumber(a) < testcaseTransToNumber(b)) {
+          return -1;
+        }
+        if (testcaseTransToNumber(a) > testcaseTransToNumber(b)) {
+          return 1;
+        }
+        return 0;
+      });
+      samplesId.sort((a, b) => {
+        if (sampleTransToNumber(a) < sampleTransToNumber(b)) {
+          return -1;
+        }
+        if (sampleTransToNumber(a) > sampleTransToNumber(b)) {
+          return 1;
+        }
+        return 0;
+      });
+      setSampleDataIds(samplesId);
+      setTestcaseDataIds(testcasesId);
+      if (testcasesId.length === 0) {
+        setStatus(false);
+      } else {
+        setStatus(!testcases[testcasesId[0]].is_disabled);
+      }
+      // set original table data
+      const data = samplesId.map((id) => ({
+        id: testcases[id].id,
+        no: sampleTransToNumber(id),
+        time_limit: testcases[id].time_limit,
+        memory_limit: testcases[id].memory_limit,
+        score: testcases[id].score,
+        input_filename: testcases[id].input_filename,
+        output_filename: testcases[id].output_filename,
+        in_file: null,
+        out_file: null,
+        new: false,
+      }));
+      setSampleTableData(data);
+      const data2 = testcasesId.map((id) => ({
+        id: testcases[id].id,
+        no: testcaseTransToNumber(id),
+        time_limit: testcases[id].time_limit,
+        memory_limit: testcases[id].memory_limit,
+        score: testcases[id].score,
+        input_filename: testcases[id].input_filename,
+        output_filename: testcases[id].output_filename,
+        in_file: null,
+        out_file: null,
+        new: false,
+      }));
+      setTestcaseTableData(data2);
+    }
+  }, [problems, problemId, testcases, sampleTransToNumber, testcaseTransToNumber]);
+
   const [assistTableData, setAssistTableData] = useState(
     problems[problemId] !== undefined
       ? problems[problemId].assistingDataIds.map((id) => ({
@@ -504,7 +535,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
 
   return (
     <>
-      <SimpleBar title="Label">
+      <SimpleBar title="Label" noIndent>
         <TextField
           value={label}
           variant="outlined"
@@ -515,7 +546,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield}
         />
       </SimpleBar>
-      <SimpleBar title="Title">
+      <SimpleBar title="Title" noIndent>
         <TextField
           value={title}
           variant="outlined"
@@ -526,7 +557,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield}
         />
       </SimpleBar>
-      <SimpleBar title="Description">
+      <SimpleBar title="Description" noIndent>
         <TextField
           value={description}
           variant="outlined"
@@ -540,7 +571,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield2}
         />
       </SimpleBar>
-      <SimpleBar title="About Input and Output">
+      <SimpleBar title="About Input and Output" noIndent>
         <TextField
           value={ioDescription}
           variant="outlined"
@@ -554,7 +585,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield2}
         />
       </SimpleBar>
-      <SimpleBar title="Source">
+      <SimpleBar title="Source" noIndent>
         <TextField
           value={source}
           variant="outlined"
@@ -565,7 +596,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield}
         />
       </SimpleBar>
-      <SimpleBar title="Hint">
+      <SimpleBar title="Hint" noIndent>
         <TextField
           value={hint}
           variant="outlined"
@@ -579,7 +610,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           className={classNames.textfield2}
         />
       </SimpleBar>
-      <SimpleBar title="Sample Data">
+      <SimpleBar title="Sample Data" noIndent>
         <div className={classNames.loadButtons}>
           <StyledButton
             variant="outlined"
@@ -650,6 +681,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
             className={classNames.statusSwitch}
           />
         )}
+        noIndent
       >
         <div className={classNames.loadButtons}>
           <StyledButton
@@ -721,7 +753,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
           setData={setTestcaseTableData}
         />
       </SimpleBar>
-      <SimpleBar title="Assisting Data (Optional)">
+      <SimpleBar title="Assisting Data (Optional)" noIndent>
         <div className={classNames.loadButtons}>
           <StyledButton
             variant="outlined"

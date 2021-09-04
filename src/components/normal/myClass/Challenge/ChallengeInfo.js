@@ -4,7 +4,7 @@ import moment from 'moment';
 import {
   Typography, Button, makeStyles, TextField,
 } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
@@ -18,19 +18,21 @@ import {
 } from '../../../../actions/myClass/problem';
 import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
   descriptionField: {
     width: '60vw',
   },
+  table: {
+    width: '100%',
+  },
 }));
 
 /* This is a level 4 component (page component) */
 export default function ChallengeInfo() {
-  const { courseId, classId, challengeId } = useParams();
-  const history = useHistory();
+  const { classId, challengeId } = useParams();
   const classes = useStyles();
   const dispatch = useDispatch();
   const [currentTime, setCurrentTime] = useState(moment());
@@ -110,10 +112,10 @@ export default function ChallengeInfo() {
   }, [authToken, challengeId, challenges, essays, peerReviews, problems]);
 
   if (challenges[challengeId] === undefined) {
-    if (!loading.browseChallengeOverview) {
-      return <NoMatch />;
+    if (loading.browseChallengeOverview) {
+      return <GeneralLoading />;
     }
-    return <GeneralLoading />;
+    return <NoMatch />;
   }
 
   const handleEdit = () => {
@@ -147,6 +149,7 @@ export default function ChallengeInfo() {
       <SimpleBar
         title="Description"
         buttons={<>{isManager && !editMode && <Button onClick={handleEdit}>Edit</Button>}</>}
+        noIndent
       >
         {editMode ? (
           <div>
@@ -192,8 +195,9 @@ export default function ChallengeInfo() {
           </AlignedText>
         </>
       </SimpleBar>
-      <SimpleBar title="Overview">
+      <SimpleBar title="Overview" noIndent>
         <SimpleTable
+          className={classes.table}
           isEdit={false}
           hasDelete={false}
           columns={[

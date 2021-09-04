@@ -26,6 +26,7 @@ import {
   browseTasksUnderChallenge,
 } from '../../../../actions/myClass/problem';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
+import CodeArea from '../../../ui/CodeArea';
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
@@ -156,9 +157,7 @@ export default function SubmissionDetail() {
   return (
     <>
       <Typography className={classNames.pageHeader} variant="h3">
-        {submissionId}
-        {' '}
-        / Submission Detail
+        {`${submissionId} / Submission Detail`}
       </Typography>
       <div className={classNames.generalButtons}>
         <Button color="primary" startIcon={<Icon.RefreshOutlinedIcon />} onClick={handleRefresh}>
@@ -224,7 +223,7 @@ export default function SubmissionDetail() {
             && <Typography variant="body1">{submitLangs[submissions[submissionId].language_id].name}</Typography>}
         </AlignedText> */}
       </SimpleBar>
-      <SimpleBar title="Submission Result">
+      <SimpleBar title="Submission Result" noIndent>
         <SimpleTable
           isEdit={false}
           hasDelete={false}
@@ -273,16 +272,8 @@ export default function SubmissionDetail() {
           data={tableData}
         />
       </SimpleBar>
-      <SimpleBar title="Code">
-        <CopyToClipboardButton text={submissions[submissionId].content} />
-        <TextField
-          className={classNames.codeField}
-          value={submissions[submissionId].content}
-          disabled
-          multiline
-          minRows={10}
-          maxRows={20}
-        />
+      <SimpleBar title="Code" noIndent>
+        <CodeArea value={submissions[submissionId].content} />
       </SimpleBar>
     </>
   );

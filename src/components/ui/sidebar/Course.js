@@ -5,7 +5,6 @@ import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
 } from '@material-ui/core';
 import Icon from '../icon/index';
-import { fetchCourses } from '../../../actions/admin/course';
 
 export default function Course({
   classes, history, location, mode,
@@ -22,10 +21,10 @@ export default function Course({
   const [itemList, setItemList] = useState([]);
   const [arrow, setArrow] = useState(null);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.admin.course);
+  // const authToken = useSelector((state) => state.auth.token);
+  // const loading = useSelector((state) => state.loading.admin.course);
 
   useEffect(() => {
     // console.log(mode, courseId, classId);
@@ -68,13 +67,13 @@ export default function Course({
             {
               type: 'LESSON',
               text: 'Lesson',
-              icon: <Icon.Newadd />,
+              icon: <Icon.Newadd className={classes.addIconItem} />,
               path: `${baseURL}/course/${courseId}/class-list/lesson`,
             },
             {
               type: 'CONTEST',
               text: 'Contest',
-              icon: <Icon.Newadd />,
+              icon: <Icon.Newadd className={classes.addIconItem} />,
               path: `${baseURL}/course/${courseId}/class-list/contest`,
             },
           ]),
@@ -131,19 +130,6 @@ export default function Course({
   const unfoldContest = () => {
     setDisplay1('unfold');
   };
-
-  useEffect(() => {
-    dispatch(fetchCourses(authToken));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (courseList.allIds.length !== 0) {
-      if (location.pathname === '/admin/course/course') {
-        history.push(`/admin/course/course/${courseList.byId[courseList.allIds[0]].id}/class-list`);
-      }
-    }
-  }, [classId, classList, courseId, courseList, history, location]);
 
   if (courseList.byId[courseId] === undefined || (classId && classList.byId[classId] === undefined)) {
     return (

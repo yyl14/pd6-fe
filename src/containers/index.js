@@ -20,6 +20,7 @@ function Index() {
   const auth = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  // eslint-disable-next-line no-unused-vars
   const [cookies, setCookie, removeCookie] = useCookies(['id', 'token']);
 
   useEffect(() => {
@@ -39,7 +40,7 @@ function Index() {
         history.push('/admin/course/course');
       } else if (user.role.indexOf('NORMAL') !== -1 || user.role === 'NORMAL') {
         if (user.classes.length !== 0) {
-          history.push('/my-class');
+          history.push(`/my-class/${user.classes[0].course_id}/${user.classes[0].class_id}/challenge`);
         } else {
           history.push('/all-class');
         }

@@ -2,11 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Button, makeStyles } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { fetchCourse, fetchClass, fetchClassMembers } from '../../../../actions/common/common';
+import {
+  fetchCourse,
+  fetchClass,
+  fetchClassMembers,
+  fetchClassMemberWithAccountReferral,
+} from '../../../../actions/common/common';
 import AutoTable from '../../../ui/AutoTable';
 import MemberEdit from './MemberEdit';
 import NoMatch from '../../../noMatch';
 import systemRoleTransformation from '../../../../function/systemRoleTransformation';
+import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
   pageHeader: {
@@ -52,9 +58,14 @@ export default function MemberList() {
   }, [classId, userClasses]);
 
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
-    if (loading.fetchCourse || loading.fetchClass) {
+    if (
+      loading.fetchCourse
+      || loading.fetchClass
+      || loading.fetchClassMembers
+      || loading.fetchClassMemberWithAccountReferral
+    ) {
       // still loading
-      return <div>loading</div>;
+      return <GeneralLoading />;
     }
     return <NoMatch />;
   }
@@ -131,6 +142,7 @@ export default function MemberList() {
             ]}
             refetch={(browseParams, ident) => {
               dispatch(fetchClassMembers(authToken, classId, browseParams, ident));
+              dispatch(fetchClassMemberWithAccountReferral(authToken, classId));
             }}
             refetchErrors={[error]}
             columns={[

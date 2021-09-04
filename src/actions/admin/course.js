@@ -22,7 +22,7 @@ export const fetchCourses = (token) => (dispatch) => {
     });
 };
 
-export const addCourse = (token, name, type) => (dispatch) => {
+export const addCourse = (token, name, type, history) => (dispatch) => {
   const auth = {
     headers: { 'auth-token': token },
   };
@@ -48,6 +48,7 @@ export const addCourse = (token, name, type) => (dispatch) => {
           },
         },
       });
+      history.push(`/admin/course/course/${id}/class-list`);
     })
     .catch((error) => {
       dispatch({ type: courseConstants.ADD_COURSE_FAIL, payload: { error } });
@@ -61,7 +62,7 @@ export const renameCourse = (token, courseId, newName) => (dispatch) => {
 
   agent
     .patch(`/course/${courseId}`, body, auth)
-    .then((res) => {
+    .then(() => {
       dispatch({
         type: courseConstants.RENAME_COURSE_SUCCESS,
         payload: {
@@ -88,7 +89,7 @@ export const deleteCourse = (token, courseId) => (dispatch) => {
 
   agent
     .delete(`/course/${courseId}`, auth)
-    .then((res) => {
+    .then(() => {
       dispatch({
         type: courseConstants.DELETE_COURSE_SUCCESS,
         payload: {
@@ -188,7 +189,7 @@ export const deleteClass = (token, courseId, classId) => (dispatch) => {
 
   agent
     .delete(`/class/${classId}`, auth)
-    .then((res) => {
+    .then(() => {
       dispatch({
         type: courseConstants.DELETE_CLASS_SUCCESS,
         payload: {
