@@ -20,7 +20,6 @@ import Icon from '../../../ui/icon/index';
 import {
   fetchTeams, addTeam, importTeam, downloadTeamFile,
 } from '../../../../actions/myClass/team';
-import { fetchCourse, fetchClass } from '../../../../actions/common/common';
 
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
@@ -83,11 +82,6 @@ export default function TeamList() {
       }
     });
   }, [classId, user.classes]);
-
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-  }, [authToken, classId, courseId, dispatch]);
 
   useEffect(() => {
     if (!loading.addTeam && !loading.importTeam) {
@@ -184,8 +178,7 @@ export default function TeamList() {
             minWidth: 50,
             align: 'center',
             width: 150,
-            type: 'link',
-            link_id: 'team_path',
+            type: 'string',
           },
         ]}
         data={teamIds.map((id) => ({
@@ -193,7 +186,6 @@ export default function TeamList() {
           label: teams[id].label,
           teamName: teams[id].name,
           path: `/my-class/${courseId}/${classId}/team/${id}`,
-          team_path: '/team_path',
         }))}
         hasLink
         linkName="path"

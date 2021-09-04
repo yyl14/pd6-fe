@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import moment from 'moment';
 
 // import DateRangePicker from '../../../ui/DateRangePicker';
-import { fetchClass, fetchCourse, fetchAllChallengesProblems } from '../../../../actions/common/common';
+import { fetchAllChallengesProblems } from '../../../../actions/common/common';
 import { fetchClassSubmissions } from '../../../../actions/myClass/submission';
 import AutoTable from '../../../ui/AutoTable';
 
@@ -41,10 +41,8 @@ export default function SubmissionList() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchClass(authToken, classId));
-    dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchAllChallengesProblems(authToken, classId));
-  }, [authToken, classId, courseId, dispatch]);
+  }, [authToken, classId, dispatch]);
 
   if (courses[courseId] === undefined || allClass[classId] === undefined || submissions.allIds === undefined) {
     if (

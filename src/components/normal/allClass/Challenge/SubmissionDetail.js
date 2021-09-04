@@ -23,8 +23,8 @@ import {
   readSubmissionDetail,
   browseJudgeCases,
   readTestcase,
-  browseTasksUnderChallenge,
 } from '../../../../actions/myClass/problem';
+import { browseTasksUnderChallenge } from '../../../../actions/myClass/challenge';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
 import CodeArea from '../../../ui/CodeArea';
 // import { browseSubmitLang } from '../../../../actions/common/common';

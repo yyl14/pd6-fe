@@ -6,7 +6,17 @@ import problem from './problem';
 import team from './team';
 import submissions from '../../submissions';
 import judgements from './judgements';
+import essaySubmission from './essaySubmission';
+import essay from './essay';
 
 export default combineReducers({
-  grade, challenge, member, problem, team, submissions, judgements,
+  grade,
+  challenge,
+  member,
+  problem,
+  team,
+  submissions,
+  judgements,
+  essaySubmission,
+  essay,
 });

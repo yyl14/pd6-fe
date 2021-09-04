@@ -48,7 +48,7 @@ export default function CodeSubmission() {
   const submitLang = useSelector((state) => state.submitLangs);
   const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
-  const loading = useSelector((state) => state.loading.myClass);
+  // const loading = useSelector((state) => state.loading.myClass);
 
   const [langId, setLangId] = useState(-1);
   const [code, setCode] = useState('');
@@ -62,8 +62,8 @@ export default function CodeSubmission() {
   };
 
   useEffect(() => {
-    dispatch(readProblemInfo(authToken, problemId, challengeId));
-  }, [authToken, challengeId, dispatch, problemId]);
+    dispatch(readProblemInfo(authToken, problemId));
+  }, [authToken, dispatch, problemId]);
 
   useEffect(() => {
     dispatch(browseSubmitLang(authToken));
