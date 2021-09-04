@@ -5,8 +5,8 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case systemConstants.FETCH_ANNOUNCEMENT_SUCCESS: {
       const { data } = action.payload;
-      // console.log('reducer :', data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.announcements));
-      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.announcements);
+      // console.log('reducer :', data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state));
+      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
     default:
       return state;
