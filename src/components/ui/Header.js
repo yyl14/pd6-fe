@@ -406,8 +406,14 @@ export default function Header() {
           ))}
           <div className={classes.right}>
             <Typography className={classes.date}>{currentTime}</Typography>
-            <div className={classes.notificationContainer}>
-              <Icon.NotificationsIcon className={classes.notification} onClick={toggleNotify} />
+            <div
+              className={classes.notificationContainer}
+              onClick={toggleNotify}
+              onKeyDown={toggleNotify}
+              role="button"
+              tabIndex="0"
+            >
+              <Icon.NotificationsIcon className={classes.notification} />
               {unreadNotifyExist && <div className={classes.unreadDot} />}
               {notifyPop && (
                 <div className={classes.notificationDropContent}>
