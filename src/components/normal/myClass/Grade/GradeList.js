@@ -83,7 +83,7 @@ export default function GradeList() {
   const [isDisabled, setIsDisabled] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [hasRequest, setHasRequest] = useState(false);
-  console.log(courses, classes);
+
   useEffect(() => {
     dispatch(fetchClassMembers(authToken, classId));
   }, [authToken, classId, dispatch]);
