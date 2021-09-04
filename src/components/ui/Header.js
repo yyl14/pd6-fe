@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment';
 import {
   makeStyles, Typography, AppBar, Toolbar,
@@ -160,11 +160,6 @@ const useStyles = makeStyles((theme) => ({
   dropdown: {
     position: 'relative',
     display: 'inline-block',
-    '&:hover': {
-      '& $dropdownContent': {
-        display: 'block',
-      },
-    },
     marginRight: '20px',
     bottom: '3px',
   },
@@ -181,10 +176,10 @@ const useStyles = makeStyles((theme) => ({
   },
 
   dropdownContent: {
-    display: 'none',
     position: 'absolute',
     backgroundColor: theme.palette.primary.contrastText,
-    marginLeft: '-40px',
+    marginLeft: '-20px',
+    top: '41px',
     minWidth: '140px',
     zIndex: '1',
     boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
@@ -220,11 +215,17 @@ export default function Header() {
   const [itemList, setItemList] = useState([]);
   const [menuList, setMenuList] = useState([]);
   const [notifyPop, setNotifyPop] = useState(false);
+  const [notifyAlreadyClose, setNotifyAlreadyClose] = useState(false);
+  const [accountAlreadyClose, setAccountAlreadyClose] = useState(false);
+  const [accountPop, setAccountPop] = useState(false);
   const [notifyList, setNotifyList] = useState([]);
   const [unreadNotifyExist, setUnreadNotifyExist] = useState(false);
 
   const [hasClass, setHasClass] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies(['token', 'id']);
+
+  const notifyRef = useRef(null);
+  const accountRef = useRef(null);
 
   useEffect(() => {
     setHasClass(user.classes.length !== 0);
@@ -353,9 +354,30 @@ export default function Header() {
     }
   }, [hasClass, user.role]);
 
-  // useEffect(() => {
-  //   console.log('Current route', location.pathname);
-  // }, [location]);
+  const handleNotifyClickOutside = (event) => {
+    if (notifyRef.current && !notifyRef.current.contains(event.target)) {
+      setNotifyAlreadyClose(true);
+      setNotifyPop(false);
+      setTimeout(() => setNotifyAlreadyClose(false), 300);
+    }
+  };
+
+  const handleAccountClickOutside = (event) => {
+    if (accountRef.current && !accountRef.current.contains(event.target)) {
+      setAccountAlreadyClose(true);
+      setAccountPop(false);
+      setTimeout(() => setAccountAlreadyClose(false), 300);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleNotifyClickOutside, true);
+    document.addEventListener('click', handleAccountClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleNotifyClickOutside, true);
+      document.removeEventListener('click', handleAccountClickOutside, true);
+    };
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -371,7 +393,17 @@ export default function Header() {
   }, [user.notifications]);
 
   const toggleNotify = () => {
-    setNotifyPop(!notifyPop);
+    if (!notifyAlreadyClose) {
+      setNotifyPop(true);
+    }
+    setNotifyAlreadyClose(false);
+  };
+
+  const toggleAccount = () => {
+    if (!accountAlreadyClose) {
+      setAccountPop(true);
+    }
+    setAccountAlreadyClose(false);
   };
 
   const readNotification = (notifyId) => {
@@ -416,7 +448,7 @@ export default function Header() {
               <Icon.NotificationsIcon className={classes.notification} />
               {unreadNotifyExist && <div className={classes.unreadDot} />}
               {notifyPop && (
-                <div className={classes.notificationDropContent}>
+                <div className={classes.notificationDropContent} ref={notifyRef}>
                   {notifyList.map((notify) => (
                     <div
                       key={notify.title}
@@ -445,25 +477,33 @@ export default function Header() {
                 </div>
               )}
             </div>
-            <div className={classes.dropdown}>
+            <div
+              className={classes.dropdown}
+              onClick={toggleAccount}
+              onKeyDown={toggleAccount}
+              role="button"
+              tabIndex="-1"
+            >
               <button type="button" className={classes.dropbtn}>
                 <Typography variant="h6" className={location.pathname === '/my-profile' ? classes.active : null}>
                   {user.username}
                 </Typography>
               </button>
-              <div className={classes.dropdownContent}>
-                {menuList.map((item) => (
-                  <span
-                    key={item.link}
-                    tabIndex={item.link}
-                    role="button"
-                    onClick={() => goto(item.link)}
-                    onKeyDown={() => goto(item.link)}
-                  >
-                    {item.title}
-                  </span>
-                ))}
-              </div>
+              {accountPop && (
+                <div className={classes.dropdownContent} ref={accountRef}>
+                  {menuList.map((item) => (
+                    <span
+                      key={item.link}
+                      tabIndex={item.link}
+                      role="button"
+                      onClick={() => goto(item.link)}
+                      onKeyDown={() => goto(item.link)}
+                    >
+                      {item.title}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </Toolbar>
