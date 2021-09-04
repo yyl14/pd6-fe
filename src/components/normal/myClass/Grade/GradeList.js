@@ -19,7 +19,9 @@ import AlignedText from '../../../ui/AlignedText';
 import CustomTable from '../../../ui/CustomTable';
 import FileUploadArea from '../../../ui/FileUploadArea';
 import Icon from '../../../ui/icon/index';
-import { fetchClassGrade, addClassGrade, downloadGradeFile } from '../../../../actions/myClass/grade';
+import {
+  fetchClassGrade, addClassGrade, importClassGrade, downloadGradeFile,
+} from '../../../../actions/myClass/grade';
 import { fetchCourse, fetchClass, fetchClassMembers } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
@@ -34,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
   },
   templateBtn: {
     marginRight: '155px',
+  },
+  addGradeDiaText: {
+    marginTop: '20px',
   },
 }));
 
@@ -59,13 +64,20 @@ export default function GradeList() {
   const grades = useSelector((state) => state.grades.byId);
   const gradeIds = useSelector((state) => state.grades.allIds);
   const loading = useSelector((state) => state.loading.myClass.grade);
-  const error = useSelector((state) => state.error.myClass.grade.addClassGrade);
+  const error = useSelector((state) => state.error.myClass.grade);
 
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
 
   const [tableData, setTableData] = useState([]);
-  const [popUp, setPopUp] = useState(false);
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [showImportDialog, setShowImportDialog] = useState(false);
+  const [addInputs, setAddInputs] = useState({
+    title: '',
+    receiver: '',
+    score: '',
+    comment: '',
+  });
   const [inputTitle, setInputTitle] = useState('');
   const [selectedFile, setSelectedFile] = useState([]);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -108,49 +120,104 @@ export default function GradeList() {
   }, [members, memberIds, grades, courseId, classId, isManager, gradeIds]);
 
   useEffect(() => {
-    setIsDisabled(inputTitle === '' || selectedFile.length === 0);
-  }, [inputTitle, selectedFile]);
+    if (showImportDialog) {
+      setIsDisabled(inputTitle === '' || selectedFile.length === 0);
+    } else if (showAddDialog) {
+      setIsDisabled(addInputs.title === '' || addInputs.receiver === '' || addInputs.score === '');
+    }
+  }, [addInputs.receiver, addInputs.score, addInputs.title, inputTitle, selectedFile, showAddDialog, showImportDialog]);
 
   useEffect(() => {
-    if (hasRequest && !loading.addClassGrade) {
-      if (error === null) {
-        setPopUp(false);
+    if (showImportDialog && hasRequest && !loading.importClassGrade) {
+      if (error.importClassGrade === null) {
+        setShowImportDialog(false);
+        setIsDisabled(true);
         setInputTitle('');
         setSelectedFile([]);
       } else {
         setHasError(true);
       }
+    } else if (showAddDialog && hasRequest && !loading.addClassGrade) {
+      if (error.addClassGrade === null) {
+        setShowAddDialog(false);
+        setIsDisabled(true);
+        setAddInputs({
+          title: '',
+          receiver: '',
+          score: '',
+          comment: '',
+        });
+      } else {
+        setHasError(true);
+      }
     }
-  }, [error, hasRequest, loading.addClassGrade]);
+  }, [error, hasRequest, loading.addClassGrade, loading.importClassGrade, showAddDialog, showImportDialog]);
 
   const handleChange = (event) => {
-    setInputTitle(event.target.value);
+    if (showImportDialog) {
+      setInputTitle(event.target.value);
+    } else {
+      const { name, value } = event.target;
+      setAddInputs((input) => ({ ...input, [name]: value }));
+    }
   };
 
-  const handleAdd = () => {
-    if (inputTitle !== '' && selectedFile !== []) {
-      selectedFile.map((file) => dispatch(addClassGrade(authToken, classId, inputTitle, file)));
+  const handleSubmit = () => {
+    if (showImportDialog) {
+      if (inputTitle !== '' && selectedFile !== []) {
+        selectedFile.map((file) => dispatch(importClassGrade(authToken, classId, inputTitle, file)));
+      }
+    } else if (showAddDialog) {
+      if (addInputs.title !== '' && addInputs.receiver !== '' && addInputs.score !== '') {
+        dispatch(
+          addClassGrade(
+            authToken,
+            classId,
+            addInputs.receiver,
+            user.username,
+            addInputs.title,
+            addInputs.score,
+            addInputs.comment,
+          ),
+        );
+      }
     }
     setHasRequest(true);
   };
 
   const handleCancel = () => {
-    setPopUp(false);
+    setShowAddDialog(false);
+    setShowImportDialog(false);
+    setHasRequest(false);
+    setIsDisabled(true);
+    setAddInputs({
+      title: '',
+      receiver: '',
+      score: '',
+      comment: '',
+    });
     setInputTitle('');
     setSelectedFile([]);
   };
 
   const downloadTemplate = () => {
     dispatch(downloadGradeFile(authToken));
-    setPopUp(false);
+    setShowImportDialog(false);
   };
 
   const handleCloseError = () => {
     setHasError(false);
+    setHasRequest(false);
   };
 
   if (courses[courseId] === undefined || classes[classId] === undefined || grades === undefined) {
-    if (loading.fetchCourse || loading.fetchClass || loading.fetchClassGrade || loading.addClassGrade) {
+    if (
+      loading.fetchCourse
+      || loading.fetchClass
+      || loading.fetchClassGrade
+      || loading.importClassGrade
+      || loading.addClassGrade
+    ) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -166,8 +233,11 @@ export default function GradeList() {
         buttons={
           isManager && (
             <>
-              <Button color="primary" onClick={() => setPopUp(true)}>
+              <Button variant="outlined" color="primary" onClick={() => setShowAddDialog(true)}>
                 <MdAdd />
+              </Button>
+              <Button color="primary" onClick={() => setShowImportDialog(true)} startIcon={<Icon.Folder />}>
+                Import
               </Button>
             </>
           )
@@ -228,9 +298,61 @@ export default function GradeList() {
         linkName="path"
       />
 
-      <Dialog open={popUp} onClose={() => setPopUp(false)} fullWidth maxWidth="sm">
+      <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
-          <Typography variant="h4">Add New Grades</Typography>
+          <Typography variant="h4">Add New Grade</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <AlignedText text="Class" maxWidth="mg" childrenType="text">
+            <Typography variant="body1">{`${courses[courseId].name}  ${classes[classId].name}`}</Typography>
+          </AlignedText>
+          <AlignedText text="Title" maxWidth="mg" childrenType="field">
+            <TextField name="title" value={addInputs.title} onChange={(e) => handleChange(e)} />
+          </AlignedText>
+          <AlignedText text="Receiver" maxWidth="mg" childrenType="field">
+            <TextField
+              name="receiver"
+              placeholder="Student ID / Email / #Username"
+              value={addInputs.receiver}
+              onChange={(e) => handleChange(e)}
+            />
+          </AlignedText>
+          <AlignedText text="Score" maxWidth="mg" childrenType="field">
+            <TextField name="score" value={addInputs.score} onChange={(e) => handleChange(e)} />
+          </AlignedText>
+          <AlignedText text="Comment" maxWidth="mg" childrenType="field">
+            <TextField
+              name="comment"
+              placeholder="(Optional)"
+              value={addInputs.comment}
+              onChange={(e) => handleChange(e)}
+            />
+          </AlignedText>
+        </DialogContent>
+        <DialogContent>
+          <Typography variant="body2" className={classNames.addGradeDiaText}>
+            You will be the grader for this grade.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel} color="default">
+            Cancel
+          </Button>
+          <Button disabled={isDisabled} onClick={handleSubmit} color="primary">
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Snackbar
+        severity="error"
+        open={showAddDialog && hasError}
+        onClose={handleCloseError}
+        message={`Error: ${error.addClassGrade}`}
+      />
+
+      <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} fullWidth maxWidth="sm">
+        <DialogTitle id="dialog-slide-title">
+          <Typography variant="h4">Import Grades</Typography>
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2">Grade file format:</Typography>
@@ -256,7 +378,7 @@ export default function GradeList() {
             <TextField id="title" name="title" value={inputTitle} onChange={(e) => handleChange(e)} />
           </AlignedText>
           <FileUploadArea
-            text="Grade File"
+            text="Grading File"
             fileAcceptFormat=".csv"
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
@@ -276,12 +398,17 @@ export default function GradeList() {
           <Button onClick={handleCancel} color="default">
             Cancel
           </Button>
-          <Button disabled={isDisabled} onClick={handleAdd} color="primary">
+          <Button disabled={isDisabled} onClick={handleSubmit} color="primary">
             Add
           </Button>
         </DialogActions>
       </Dialog>
-      <Snackbar severity="error" open={hasError} onClose={handleCloseError} message={`Error: ${error}`} />
+      <Snackbar
+        severity="error"
+        open={showImportDialog && hasError}
+        onClose={handleCloseError}
+        message={`Error: ${error.importClassGrade}`}
+      />
     </>
   );
 }
