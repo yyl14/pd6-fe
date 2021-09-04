@@ -11,11 +11,10 @@ import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
 import {
-  browseChallengeOverview,
   editChallenge,
-  browseTasksUnderChallenge,
   readProblemScore,
 } from '../../../../actions/myClass/problem';
+import { fetchChallenge } from '../../../../actions/common/common';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
@@ -50,15 +49,14 @@ export default function ChallengeInfo() {
   const essays = useSelector((state) => state.essays.byId);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
 
-  useEffect(() => {
-    if (!loading.editChallenge) {
-      dispatch(browseChallengeOverview(authToken, challengeId));
-    }
-  }, [authToken, challengeId, dispatch, loading.editChallenge]);
+  const [hasRequest, setHasRequest] = useState(false);
 
   useEffect(() => {
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
-  }, [authToken, challengeId, dispatch]);
+    if (hasRequest && !loading.editChallenge) {
+      dispatch(fetchChallenge(authToken, challengeId));
+      setHasRequest(false);
+    }
+  }, [authToken, challengeId, dispatch, hasRequest, loading.editChallenge]);
 
   useEffect(() => {
     if (challenges[challengeId] !== undefined) {
@@ -137,6 +135,7 @@ export default function ChallengeInfo() {
       endTime: challenges[challengeId].end_time,
     };
     dispatch(editChallenge(authToken, challengeId, body));
+    setHasRequest(true);
     setEditMode(false);
     setInputs(challenges[challengeId].description);
   };

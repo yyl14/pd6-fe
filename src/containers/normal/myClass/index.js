@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 
 import Challenge from './challenge';
+import ChallengeList from '../../../components/normal/myClass/Challenge/ChallengeList';
 import Submission from './submission';
 import Grade from './grade';
 import Team from './team';
@@ -43,7 +44,8 @@ export default function MyClass() {
 
   return (
     <Switch>
-      <Route path="/my-class/:courseId/:classId/challenge" component={Challenge} />
+      <Route path="/my-class/:courseId/:classId/challenge/:challengeId" component={Challenge} />
+      <Route exact path="/my-class/:courseId/:classId/challenge" component={ChallengeList} />
       <Route path="/my-class/:courseId/:classId/submission" component={Submission} />
       <Route path="/my-class/:courseId/:classId/grade" component={Grade} />
       <Route path="/my-class/:courseId/:classId/team" component={Team} />

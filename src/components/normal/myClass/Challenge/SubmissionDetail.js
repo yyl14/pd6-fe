@@ -8,12 +8,9 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  TextField,
-  IconButton,
 } from '@material-ui/core';
 import { useParams, Link } from 'react-router-dom';
 import moment from 'moment';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Icon from '../../../ui/icon/index';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';

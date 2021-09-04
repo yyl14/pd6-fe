@@ -19,7 +19,7 @@ import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
 import NoMatch from '../../../noMatch';
 
-import { readChallenge, browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
+import { browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
 import { addProblem, addEssay, addPeerReview } from '../../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse } from '../../../../actions/common/common';
 
@@ -90,12 +90,6 @@ export default function TaskAddingCard({ open, setOpen }) {
       setDisabled(false);
     }
   };
-
-  useEffect(() => {
-    dispatch(fetchClass(authToken, classId));
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(readChallenge(authToken, challengeId));
-  }, [authToken, challengeId, classId, courseId, dispatch]);
 
   if (loading.readChallenge || commonLoading.fetchCourse || commonLoading.fetchClass) {
     return <></>;

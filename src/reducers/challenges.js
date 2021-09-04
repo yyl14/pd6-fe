@@ -39,7 +39,7 @@ const byId = (state = {}, action) => {
       };
     }
     case submissionConstants.READ_CHALLENGE_SUCCESS:
-    case problemConstants.READ_CHALLENGE_SUCCESS: {
+    case commonConstants.READ_CHALLENGE_SUCCESS: {
       const data = action.payload;
       return {
         ...state,
@@ -108,9 +108,9 @@ const allIds = (state = [], action) => {
       const { data } = action.payload;
       return [...new Set([...data.map((item) => item.id), ...state])];
     }
-    case problemConstants.READ_CHALLENGE_SUCCESS:
+    case commonConstants.READ_CHALLENGE_SUCCESS: {
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
-
+    }
     case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
       const { challenges } = action.payload;
       return [...new Set([...challenges.map((item) => item.id), ...state])];
