@@ -8,12 +8,8 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  TextField,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
-import SimpleBar from '../../../ui/SimpleBar';
-import SimpleTable from '../../../ui/SimpleTable';
-import SampleTestArea from '../../../ui/SampleTestArea';
 import Icon from '../../../ui/icon/index';
 import AlignedText from '../../../ui/AlignedText';
 
@@ -57,7 +53,7 @@ export default function CodingProblem() {
   const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   const authToken = useSelector((state) => state.auth.token);
-  const error = useSelector((state) => state.error.myClass.problem);
+  //  const error = useSelector((state) => state.error.myClass.problem);
   const loading = useSelector((state) => state.loading.myClass.problem);
   const commonLoading = useSelector((state) => state.loading.common);
   const [role, setRole] = useState('NORMAL');
@@ -86,8 +82,8 @@ export default function CodingProblem() {
   }, [classId, userClasses]);
 
   useEffect(() => {
-    dispatch(readProblemInfo(authToken, problemId, challengeId));
-  }, [authToken, dispatch, problemId, challengeId]);
+    dispatch(readProblemInfo(authToken, problemId));
+  }, [authToken, dispatch, problemId]);
 
   if (loading.readProblem || loading.readChallenge) {
     return <GeneralLoading />;

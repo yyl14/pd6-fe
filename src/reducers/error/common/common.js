@@ -10,6 +10,7 @@ const initialState = {
   browseSubmitLang: null,
   fetchCourse: null,
   fetchClass: null,
+  fetchChallenge: null,
   fetchAccount: null,
   fetchAllChallengesProblems: null,
   fetchDownloadFileUrl: null,
@@ -129,6 +130,18 @@ export default function common(state = initialState, action) {
       return {
         ...state,
         fetchClass: action.error,
+      };
+    }
+    case commonConstants.READ_CHALLENGE_SUCCESS: {
+      return {
+        ...state,
+        fetchChallenge: null,
+      };
+    }
+    case commonConstants.READ_CHALLENGE_FAIL: {
+      return {
+        ...state,
+        fetchChallenge: action.error,
       };
     }
     case commonConstants.FETCH_ACCOUNT_SUCCESS: {

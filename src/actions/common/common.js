@@ -211,6 +211,28 @@ const fetchClass = (token, classId) => async (dispatch) => {
   }
 };
 
+const fetchChallenge = (token, challengeId) => async (dispatch) => {
+  dispatch({ type: commonConstants.READ_CHALLENGE_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const challenge = await agent.get(`/challenge/${challengeId}`, auth);
+
+    dispatch({
+      type: commonConstants.READ_CHALLENGE_SUCCESS,
+      payload: challenge.data.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: commonConstants.READ_CHALLENGE_FAIL,
+      error: err,
+    });
+  }
+};
+
 const fetchAccount = (token, accountId) => async (dispatch) => {
   try {
     const auth = {
@@ -343,6 +365,7 @@ export {
   fetchAllClasses,
   fetchCourse,
   fetchClass,
+  fetchChallenge,
   fetchAccount,
   browseSubmitLang,
   downloadFile,
