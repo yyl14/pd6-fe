@@ -1,18 +1,32 @@
 import agent from '../agent';
 import { challengeConstants } from './constant';
+import { autoTableConstants } from '../component/constant';
+import browseParamsTransForm from '../../function/browseParamsTransform';
 
-const fetchChallenges = (token, classId) => async (dispatch) => {
+const fetchChallenges = (token, classId, browseParams, tableId = null) => async (dispatch) => {
   try {
-    const config = {
-      headers: {
-        'Auth-Token': token,
-      },
-    };
     dispatch({ type: challengeConstants.FETCH_CHALLENGES_REQUEST });
+
+    const config = {
+      headers: { 'auth-token': token },
+      params: browseParamsTransForm(browseParams),
+    };
     const res = await agent.get(`/class/${classId}/challenge`, config);
+    console.log('challenges res:', res);
+    const { data: challenges, total_count } = res.data.data;
     dispatch({
       type: challengeConstants.FETCH_CHALLENGES_SUCCESS,
-      payload: { classId, data: res.data.data.data },
+      payload: { classId, data: challenges },
+    });
+
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: challenges.map((item) => item.id),
+        offset: browseParams.offset,
+      },
     });
   } catch (error) {
     dispatch({
