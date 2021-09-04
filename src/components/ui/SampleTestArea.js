@@ -70,7 +70,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function SampleTestArea({ input, output, note }) {
+export default function SampleTestArea({ input, output }) {
   const classes = useStyles();
   const ref = useRef();
   const inputRef = useRef();
@@ -182,7 +182,7 @@ export default function SampleTestArea({ input, output, note }) {
               </div>
             </>
           )}
-          <div className={classes.title}>
+          {/* <div className={classes.title}>
             <Typography variant="h6" display="inline">
               Note
             </Typography>
@@ -194,7 +194,7 @@ export default function SampleTestArea({ input, output, note }) {
             <div className={classes.content} ref={noteRef}>
               <Typography variant="body1">{note}</Typography>
             </div>
-          )}
+          )} */}
         </CardContent>
 
         {showExpandArrow && (

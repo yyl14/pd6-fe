@@ -10,6 +10,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  Snackbar,
 } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import Icon from './icon/index';
@@ -95,8 +96,8 @@ export default function IOFileUploadArea({
   const classes = useStyles();
 
   const [tableData, setTableData] = useState([]);
-
   const [fileNum, setFileNum] = useState(0);
+  const [errorPopup, setErrorPopup] = useState(false);
 
   const handleUploadFile = (e) => {
     const newFiles = Object.keys(e.target.files).map((key) => e.target.files[key]);
@@ -107,7 +108,8 @@ export default function IOFileUploadArea({
         newFiles.forEach((file) => {
           const index = parseInt(file.name.slice(6, file.name.indexOf('.')), 10);
           if (!Number.isInteger(index)) {
-            console.log('file format error');
+            setErrorPopup(true);
+            // console.log('file format error');
             return;
           }
           const type = file.name.slice(file.name.indexOf('.') + 1);
@@ -138,7 +140,8 @@ export default function IOFileUploadArea({
               };
             }
           } else {
-            console.log('File Format Error');
+            setErrorPopup(true);
+            // console.log('File Format Error');
           }
           // console.log(newSelectedFile[index]);
         });
@@ -152,7 +155,8 @@ export default function IOFileUploadArea({
         newFiles.forEach((file) => {
           const index = parseInt(file.name.slice(0, file.name.indexOf('.')), 10);
           if (!Number.isInteger(index)) {
-            console.log('file format error');
+            setErrorPopup(true);
+            // console.log('file format error');
             return;
           }
           const type = file.name.slice(file.name.indexOf('.') + 1);
@@ -183,7 +187,8 @@ export default function IOFileUploadArea({
               };
             }
           } else {
-            console.log('File Format Error');
+            setErrorPopup(true);
+            // console.log('File Format Error');
           }
           // console.log(newSelectedFile[index]);
         });
@@ -192,11 +197,12 @@ export default function IOFileUploadArea({
         break;
       }
       default:
-        console.log('File Format Error');
+        setErrorPopup(true);
     }
   };
 
   const handleDelete = (e, deleteRow) => {
+    // eslint-disable-next-line no-unused-vars
     const filtered = selectedFile.filter((file, index, arr) => file !== deleteRow);
     setSelectedFile(filtered);
   };
@@ -311,6 +317,13 @@ export default function IOFileUploadArea({
           </TableContainer>
         </Paper>
       )}
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        open={errorPopup}
+        onClose={() => setErrorPopup(false)}
+        message="Filename does not match the naming format"
+        key="errorMsg"
+      />
     </>
   );
 }
