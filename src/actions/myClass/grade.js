@@ -22,8 +22,36 @@ export const fetchClassGrade = (token, classId) => async (dispatch) => {
   }
 };
 
-export const addClassGrade = (token, classId, title, file) => async (dispatch) => {
-  dispatch({ type: gradeConstants.ADD_CLASS_GRADE_START });
+export const addClassGrade = (token, classId, receiverRef, graderRef, title, score, comment = null) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+      params: {
+        receiver_referral: receiverRef,
+        grader_referral: graderRef,
+        title,
+        score,
+        comment,
+      },
+    };
+    dispatch({ type: gradeConstants.ADD_CLASS_GRADE_START });
+    const res = await agent.post(`/class/${classId}/grade`, config);
+    if (!res.data.success) {
+      throw new Error(res.data.error);
+    }
+    dispatch({ type: gradeConstants.ADD_CLASS_GRADE_SUCCESS });
+  } catch (err) {
+    dispatch({
+      type: gradeConstants.ADD_CLASS_GRADE_FAIL,
+      error: err,
+    });
+  }
+};
+
+export const importClassGrade = (token, classId, title, file) => async (dispatch) => {
+  dispatch({ type: gradeConstants.IMPORT_CLASS_GRADE_START });
   const config = {
     headers: {
       'Auth-Token': token,
@@ -37,16 +65,16 @@ export const addClassGrade = (token, classId, title, file) => async (dispatch) =
   formData.append('grade_file', file);
 
   try {
-    const res = await agent.post(`/class/${classId}/grade`, formData, config);
+    const res = await agent.post(`/class/${classId}/grade-import`, formData, config);
     if (!res.data.success) {
       throw new Error(res.data.error);
     }
     dispatch({
-      type: gradeConstants.ADD_CLASS_GRADE_SUCCESS,
+      type: gradeConstants.IMPORT_CLASS_GRADE_SUCCESS,
     });
   } catch (err) {
     dispatch({
-      type: gradeConstants.ADD_CLASS_GRADE_FAIL,
+      type: gradeConstants.IMPORT_CLASS_GRADE_FAIL,
       error: err,
     });
   }
