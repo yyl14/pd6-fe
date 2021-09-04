@@ -222,7 +222,7 @@ export default function Header() {
   const [unreadNotifyExist, setUnreadNotifyExist] = useState(false);
 
   const [hasClass, setHasClass] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies(['token', 'id']);
+  const [, , removeCookie] = useCookies(['token', 'id']);
 
   const notifyRef = useRef(null);
   const accountRef = useRef(null);
@@ -389,7 +389,7 @@ export default function Header() {
   useEffect(() => {
     const ns = user.notifications.sort((a, b) => new Date(b.post_time).getTime() - new Date(a.post_time).getTime());
     setNotifyList(ns);
-    setUnreadNotifyExist(!!(ns.filter((e) => !e.is_deleted).length));
+    setUnreadNotifyExist(!!ns.filter((e) => !e.is_deleted).length);
   }, [user.notifications]);
 
   const toggleNotify = () => {
