@@ -19,35 +19,6 @@ function getText(url) {
   });
 }
 
-const editChallenge = (token, challengeId, body) => async (dispatch) => {
-  try {
-    const auth = {
-      headers: {
-        'Auth-Token': token,
-      },
-    };
-    dispatch({ type: problemConstants.EDIT_CHALLENGE_START });
-    const res = await agent.patch(
-      `/challenge/${challengeId}`,
-      {
-        publicize_type: body.publicizeType,
-        selection_type: body.selectionType,
-        title: body.title,
-        description: body.description,
-        start_time: body.startTime,
-        end_time: body.endTime,
-      },
-      auth,
-    );
-    dispatch({ type: problemConstants.EDIT_CHALLENGE_SUCCESS, payload: res.data.data });
-  } catch (err) {
-    dispatch({
-      type: problemConstants.EDIT_CHALLENGE_FAIL,
-      error: err,
-    });
-  }
-};
-
 const readProblemInfo = (token, problemId) => async (dispatch) => {
   const config = {
     headers: {
@@ -644,7 +615,6 @@ const readProblemScore = (token, problemId) => async (dispatch) => {
 };
 
 export {
-  editChallenge,
   readProblemInfo,
   editProblemInfo,
   deleteProblem,

@@ -1,8 +1,6 @@
 import { problemConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
-  browseChallengeOverview: false,
-  editChallenge: false,
   readProblem: false,
   readSubmission: false,
   readJudgment: false,
@@ -26,22 +24,6 @@ const initialState = {
 
 export default function problem(state = initialState, action) {
   switch (action.type) {
-    case problemConstants.EDIT_CHALLENGE_START:
-      return {
-        ...state,
-        editChallenge: true,
-      };
-    case problemConstants.EDIT_CHALLENGE_SUCCESS:
-      return {
-        ...state,
-        editChallenge: false,
-      };
-    case problemConstants.EDIT_CHALLENGE_FAIL:
-      return {
-        ...state,
-        editChallenge: false,
-      };
-
     case problemConstants.READ_PROBLEM_START:
       return {
         ...state,
