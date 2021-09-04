@@ -178,8 +178,7 @@ export default function TeamList() {
             minWidth: 50,
             align: 'center',
             width: 150,
-            type: 'link',
-            link_id: 'team_path',
+            type: 'string',
           },
         ]}
         data={teamIds.map((id) => ({
@@ -187,7 +186,6 @@ export default function TeamList() {
           label: teams[id].label,
           teamName: teams[id].name,
           path: `/my-class/${courseId}/${classId}/team/${id}`,
-          team_path: '/team_path',
         }))}
         hasLink
         linkName="path"
