@@ -7,6 +7,7 @@ const initialState = {
   signup: false,
   fetchAccount: false,
   resetPassword: false,
+  emailVerification: false,
 };
 
 export default function auth(state = initialState, action) {
@@ -76,6 +77,21 @@ export default function auth(state = initialState, action) {
       return {
         ...state,
         resetPassword: false,
+      };
+    case authConstants.EMAIL_VERIFICATION_START:
+      return {
+        ...state,
+        emailVerification: true,
+      };
+    case authConstants.EMAIL_VERIFICATION_SUCCESS:
+      return {
+        ...state,
+        emailVerification: false,
+      };
+    case authConstants.EMAIL_VERIFICATION_FAIL:
+      return {
+        ...state,
+        emailVerification: false,
       };
     default: {
       return state;
