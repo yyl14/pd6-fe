@@ -22,6 +22,7 @@ export default function MyClass() {
   useEffect(() => {
     if (auth.isAuthenticated) {
       const inClass = user.classes.reduce((acc, item) => acc || item.class_id === Number(classId), false);
+
       if (!inClass) {
         history.push('/notFound');
       }
