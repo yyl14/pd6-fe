@@ -11,6 +11,7 @@ const initialState = {
   fetchCourse: false,
   fetchClass: false,
   fetchAccount: false,
+  fetchChallenge: false,
   fetchAllChallengesProblems: false,
   fetchDownloadFileUrl: false,
 };
@@ -160,6 +161,24 @@ export default function common(state = initialState, action) {
       return {
         ...state,
         fetchClass: false,
+      };
+    }
+    case commonConstants.READ_CHALLENGE_START: {
+      return {
+        ...state,
+        fetchChallenge: true,
+      };
+    }
+    case commonConstants.READ_CHALLENGE_SUCCESS: {
+      return {
+        ...state,
+        fetchChallenge: false,
+      };
+    }
+    case commonConstants.READ_CHALLENGE_FAIL: {
+      return {
+        ...state,
+        fetchChallenge: false,
       };
     }
     case commonConstants.FETCH_ACCOUNT_REQUEST: {

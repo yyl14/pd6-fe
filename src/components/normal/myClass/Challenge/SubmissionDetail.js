@@ -8,12 +8,9 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  TextField,
-  IconButton,
 } from '@material-ui/core';
 import { useParams, Link } from 'react-router-dom';
 import moment from 'moment';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Icon from '../../../ui/icon/index';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
@@ -23,7 +20,6 @@ import {
   readSubmissionDetail,
   browseJudgeCases,
   readTestcase,
-  browseTasksUnderChallenge,
 } from '../../../../actions/myClass/problem';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
 import NoMatch from '../../../noMatch';
@@ -78,7 +74,6 @@ export default function SubmissionDetail() {
   const loading = useSelector((state) => state.loading.myClass.problem);
 
   useEffect(() => {
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
     dispatch(readSubmissionDetail(authToken, submissionId));
     dispatch(fetchSubmission(authToken, submissionId));
   }, [authToken, challengeId, dispatch, problemId, submissionId]);
@@ -140,7 +135,6 @@ export default function SubmissionDetail() {
       loading.readSubmissionDetail
       || loading.browseJudgeCases
       || loading.readTestcase
-      || loading.browseTasksUnderChallenge
     ) {
       return <GeneralLoading />;
     }

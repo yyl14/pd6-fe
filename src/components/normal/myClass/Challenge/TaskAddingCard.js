@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Typography,
@@ -19,9 +19,9 @@ import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
 import NoMatch from '../../../noMatch';
 
-import { readChallenge, browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
-import { addProblem, addEssay, addPeerReview } from '../../../../actions/myClass/challenge';
-import { fetchClass, fetchCourse } from '../../../../actions/common/common';
+import {
+  addProblem, addEssay, addPeerReview, browseTasksUnderChallenge,
+} from '../../../../actions/myClass/challenge';
 
 const useStyles = makeStyles(() => ({
   pageHeader: {
@@ -91,12 +91,6 @@ export default function TaskAddingCard({ open, setOpen }) {
     }
   };
 
-  useEffect(() => {
-    dispatch(fetchClass(authToken, classId));
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(readChallenge(authToken, challengeId));
-  }, [authToken, challengeId, classId, courseId, dispatch]);
-
   if (loading.readChallenge || commonLoading.fetchCourse || commonLoading.fetchClass) {
     return <></>;
   }
@@ -134,7 +128,7 @@ export default function TaskAddingCard({ open, setOpen }) {
                     <Icon.Code className={classNames.selectedIcon} />
                     Coding Problem
                   </MenuItem>
-                  <MenuItem value="Essay(PDF)" disabled>
+                  <MenuItem value="Essay(PDF)">
                     <Icon.Paper className={classNames.selectedIcon} />
                     Essay(PDF)
                   </MenuItem>

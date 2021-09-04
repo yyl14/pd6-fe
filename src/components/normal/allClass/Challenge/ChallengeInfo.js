@@ -7,11 +7,9 @@ import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
-import {
-  browseChallengeOverview,
-  browseTasksUnderChallenge,
-  readProblemScore,
-} from '../../../../actions/myClass/problem';
+import { readProblemScore } from '../../../../actions/myClass/problem';
+import { browseTasksUnderChallenge } from '../../../../actions/myClass/challenge';
+import { fetchChallenge } from '../../../../actions/common/common';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
@@ -50,7 +48,7 @@ export default function ChallengeInfo() {
 
   useEffect(() => {
     if (!loading.editChallenge) {
-      dispatch(browseChallengeOverview(authToken, challengeId));
+      dispatch(fetchChallenge(authToken, challengeId));
     }
   }, [authToken, challengeId, dispatch, loading.editChallenge]);
 

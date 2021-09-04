@@ -20,7 +20,6 @@ import Icon from '../../../ui/icon/index';
 import CustomTable from '../../../ui/CustomTable';
 import DateRangePicker from '../../../ui/DateRangePicker';
 import { fetchChallenges, addChallenge } from '../../../../actions/myClass/challenge';
-import { fetchClass, fetchCourse } from '../../../../actions/common/common';
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
 
@@ -80,11 +79,6 @@ export default function ChallengeList() {
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
-
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-  }, [dispatch, authToken, classId, courseId]);
 
   useEffect(() => {
     if (!loading.addChallenge) {

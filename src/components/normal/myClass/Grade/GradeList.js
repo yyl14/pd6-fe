@@ -22,7 +22,7 @@ import Icon from '../../../ui/icon/index';
 import {
   fetchClassGrade, addClassGrade, importClassGrade, downloadGradeFile,
 } from '../../../../actions/myClass/grade';
-import { fetchCourse, fetchClass, fetchClassMembers } from '../../../../actions/common/common';
+import { fetchClassMembers } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
@@ -83,12 +83,10 @@ export default function GradeList() {
   const [isDisabled, setIsDisabled] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [hasRequest, setHasRequest] = useState(false);
-
+  console.log(courses, classes);
   useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
     dispatch(fetchClassMembers(authToken, classId));
-  }, [authToken, classId, courseId, dispatch]);
+  }, [authToken, classId, dispatch]);
 
   useEffect(() => {
     if (!loading.addClassGrade) {
@@ -210,16 +208,16 @@ export default function GradeList() {
     setHasRequest(false);
   };
 
+  if (
+    loading.fetchCourse
+    || loading.fetchClass
+    || loading.fetchClassGrade
+    || loading.importClassGrade
+    || loading.addClassGrade
+  ) {
+    return <GeneralLoading />;
+  }
   if (courses[courseId] === undefined || classes[classId] === undefined || grades === undefined) {
-    if (
-      loading.fetchCourse
-      || loading.fetchClass
-      || loading.fetchClassGrade
-      || loading.importClassGrade
-      || loading.addClassGrade
-    ) {
-      return <GeneralLoading />;
-    }
     return <NoMatch />;
   }
 

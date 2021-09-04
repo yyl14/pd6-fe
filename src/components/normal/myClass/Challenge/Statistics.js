@@ -6,19 +6,17 @@ import {
 import { useParams } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import {
-  fetchChallenges,
   fetchChallengeSummary,
   fetchChallengeMemberSubmission,
 } from '../../../../actions/myClass/challenge';
 import { fetchDownloadFileUrl, fetchClassMembers } from '../../../../actions/common/common';
-import { browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
 import CustomTable from '../../../ui/CustomTable';
 import Icon from '../../../ui/icon/index';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   bottomSpace: {
     marginBottom: '50px',
   },
@@ -78,12 +76,10 @@ export default function Statistics() {
   const [scoreboardHTML, setScoreboardHTML] = useState('');
 
   useEffect(() => {
-    dispatch(fetchChallenges(authToken, classId));
     dispatch(fetchClassMembers(authToken, classId));
   }, [authToken, dispatch, classId]);
 
   useEffect(() => {
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
     dispatch(fetchChallengeSummary(authToken, challengeId));
     dispatch(fetchChallengeMemberSubmission(authToken, challengeId));
   }, [authToken, dispatch, challengeId]);
