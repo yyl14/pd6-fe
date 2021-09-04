@@ -3,6 +3,27 @@ import { challengeConstants } from './constant';
 import { autoTableConstants } from '../component/constant';
 import browseParamsTransForm from '../../function/browseParamsTransform';
 
+const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_START });
+    const res = await agent.get(`/challenge/${challengeId}/task`, auth);
+    dispatch({
+      type: challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS,
+      payload: { id: challengeId, data: res.data.data },
+    });
+  } catch (err) {
+    dispatch({
+      type: challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_FAIL,
+      error: err,
+    });
+  }
+};
+
 const fetchChallenges = (token, classId, browseParams, tableId = null) => async (dispatch) => {
   try {
     dispatch({ type: challengeConstants.FETCH_CHALLENGES_REQUEST });
@@ -230,6 +251,7 @@ const addPeerReview = (token, challengeId, label, title) => async (dispatch) => 
 };
 
 export {
+  browseTasksUnderChallenge,
   fetchChallenges,
   addChallenge,
   editChallenge,

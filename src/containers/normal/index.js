@@ -7,6 +7,7 @@ import MyClass from './myClass';
 import AllClass from './allClass';
 import ProblemSet from './problemSet';
 
+import GeneralLoading from '../../components/GeneralLoading';
 import NoMatch from '../../components/noMatch';
 import Header from '../../components/ui/Header';
 import Sidebar from '../../components/ui/Sidebar';
@@ -35,6 +36,7 @@ export default function Normal() {
             <Route path="/my-class/:courseId/:classId" component={MyClass} />
             <Route path="/all-class" component={AllClass} />
             <Route path="/problem-set" component={ProblemSet} />
+            <Route exact path="/" component={GeneralLoading} />
             <Route component={NoMatch} />
           </Switch>
         </div>

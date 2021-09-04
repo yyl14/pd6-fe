@@ -12,7 +12,7 @@ import SubmissionDetail from '../../../components/normal/problemSet/SubmissionDe
 import NoMatch from '../../../components/noMatch';
 
 import { fetchCourse, fetchClass } from '../../../actions/common/common';
-import { browseTasksUnderChallenge } from '../../../actions/myClass/problem';
+import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
 
 /* This is a level 3 container (main page container) */
 function Problem() {

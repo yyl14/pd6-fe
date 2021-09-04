@@ -9,6 +9,7 @@ import Course from './course/course';
 import AccessLog from './system/accessLog';
 import SubmitLang from './system/submitLang';
 import Announcement from './system/announcement';
+
 import NoMatch from '../../components/noMatch';
 
 import Header from '../../components/ui/Header';
@@ -42,6 +43,7 @@ export default function Admin() {
             <Route path="/admin/system/accesslog" component={AccessLog} />
             <Route path="/admin/system/announcement" component={Announcement} />
             <Route path="/admin/system/submitlang" component={SubmitLang} />
+
             <Route component={NoMatch} />
           </Switch>
         </div>

@@ -9,13 +9,12 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
-import { fetchChallenges, deleteChallenge } from '../../../../actions/myClass/challenge';
-import { fetchClass, fetchCourse } from '../../../../actions/common/common';
+import { deleteChallenge } from '../../../../actions/myClass/challenge';
 import NoMatch from '../../../noMatch';
 import SettingEdit from './SettingEdit';
 import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -33,24 +32,11 @@ export default function Setting() {
   const userClasses = useSelector((state) => state.classes.byId);
   const userCourses = useSelector((state) => state.courses.byId);
   const challenges = useSelector((state) => state.challenges.byId);
+  console.log(challenges);
   const loading = useSelector((state) => state.loading.myClass.challenge.fetchChallenges);
-  const editLoading = useSelector((state) => state.loading.myClass.challenge.editChallenge);
 
   const [challenge, setChallenge] = useState(undefined);
   const [classTitle, setClassTitle] = useState('');
-
-  useEffect(() => {
-    // console.log('editLoading :', editLoading);
-    if (!editLoading) {
-      // console.log('refetch :');
-      dispatch(fetchChallenges(authToken, classId));
-    }
-  }, [authToken, dispatch, classId, editLoading]);
-
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-  }, [dispatch, authToken, classId, courseId]);
 
   useEffect(() => {
     setChallenge(challenges[challengeId]);

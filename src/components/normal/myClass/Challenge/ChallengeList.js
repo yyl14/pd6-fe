@@ -17,11 +17,10 @@ import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
-// import CustomTable from '../../../ui/CustomTable';
 import AutoTable from '../../../ui/AutoTable';
 import DateRangePicker from '../../../ui/DateRangePicker';
 import { fetchChallenges, addChallenge } from '../../../../actions/myClass/challenge';
-import { fetchClass, fetchCourse } from '../../../../actions/common/common';
+import { fetchCourse, fetchClass } from '../../../../actions/common/common';
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
 
@@ -47,6 +46,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const tableIdent = 'Challenge Table';
+
 /* This is a level 4 component (page component) */
 export default function ChallengeList() {
   const { courseId, classId } = useParams();
@@ -61,7 +62,6 @@ export default function ChallengeList() {
     },
   ]);
 
-  const [currentTime, setCurrentTime] = useState(moment());
   const [popUp, setPopUp] = useState(false);
   const [inputs, setInputs] = useState({
     title: '',
@@ -83,9 +83,19 @@ export default function ChallengeList() {
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchClass(authToken, classId));
-  }, [dispatch, authToken, classId, courseId]);
+    if (!loading.addChallenge) {
+      const browseParams = {
+        limit: 5,
+        offset: 0 * 5,
+        filter: [],
+        sort: [],
+      };
+      dispatch(fetchChallenges(authToken, classId, browseParams, tableIdent));
+    }
+  }, [dispatch, authToken, classId, courseId, loading.addChallenge]);
 
   const getStatus = (id) => {
+    const currentTime = moment();
     if (currentTime.isBefore(moment(challenges.byId[id].start_time))) {
       return 'Not Yet';
     }
@@ -94,46 +104,6 @@ export default function ChallengeList() {
     }
     return 'Closed';
   };
-
-  // useEffect(() => {
-  //   const getStatus = (id) => {
-  //     if (currentTime.isBefore(moment(challenges[id].start_time))) {
-  //       return 'Not Yet';
-  //     }
-  //     if (currentTime.isBefore(moment(challenges[id].end_time))) {
-  //       return 'Opened';
-  //     }
-  //     return 'Closed';
-  //   };
-  //   if (classes[classId]) {
-  //     if (isManager) {
-  //       setTableData(
-  //         classes[classId].challengeIds
-  //           .reduce((acc, b) => [b, ...acc], [])
-  //           .map((id) => ({
-  //             title: challenges[id].title,
-  //             path: `/my-class/${courseId}/${classId}/challenge/${id}`,
-  //             startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
-  //             endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
-  //             status: getStatus(id),
-  //           })),
-  //       );
-  //     } else {
-  //       setTableData(
-  //         classes[classId].challengeIds
-  //           .filter((id) => getStatus(id) !== 'Not Yet')
-  //           .reduce((acc, b) => [b, ...acc], [])
-  //           .map((id) => ({
-  //             title: challenges[id].title,
-  //             path: `/my-class/${courseId}/${classId}/challenge/${id}`,
-  //             startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
-  //             endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
-  //             status: getStatus(id),
-  //           })),
-  //       );
-  //     }
-  //   }
-  // }, [challenges, challengesID, classId, classes, courseId, currentTime, isManager]);
 
   useEffect(() => {
     if (userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
@@ -215,58 +185,8 @@ export default function ChallengeList() {
         {' '}
         / Challenge
       </Typography>
-
-      {/* <CustomTable
-        hasSearch
-        buttons={
-          isManager && (
-            <>
-              <Button color="primary" onClick={() => setPopUp(true)}>
-                <Icon.Add style={{ color: 'white' }} />
-              </Button>
-            </>
-          )
-        }
-        data={tableData}
-        columns={[
-          {
-            id: 'title',
-            label: 'Title',
-            minWidth: 150,
-            align: 'center',
-            width: 200,
-            type: 'string',
-          },
-          {
-            id: 'startTime',
-            label: 'Start Time',
-            minWidth: 50,
-            align: 'center',
-            width: 180,
-            type: 'string',
-          },
-          {
-            id: 'endTime',
-            label: 'End Time',
-            minWidth: 50,
-            align: 'center',
-            width: 180,
-            type: 'string',
-          },
-          {
-            id: 'status',
-            label: 'Status',
-            minWidth: 50,
-            align: 'center',
-            width: 100,
-            type: 'string',
-          },
-        ]}
-        hasLink
-        linkName="path"
-      /> */}
       <AutoTable
-        ident="Challenge Table"
+        ident={tableIdent}
         buttons={
           isManager && (
             <>
