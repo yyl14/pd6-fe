@@ -59,8 +59,8 @@ const readSubmission = (token, accountId, problemId, browseParams, tableId = nul
   try {
     const res = await agent.get('/submission', config);
     const { data: submissions, total_count } = res.data.data;
-    console.log('readSubmission config:', config);
-    console.log('readSubmission submissions:', submissions);
+    // console.log('readSubmission config:', config);
+    // console.log('readSubmission submissions:', submissions);
     dispatch({
       type: problemConstants.READ_SUBMISSION_SUCCESS,
       payload: submissions,
