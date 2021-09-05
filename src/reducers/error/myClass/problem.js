@@ -22,6 +22,7 @@ const initialState = {
   readProblemScore: null,
   downloadSamples: null,
   downloadTestcases: null,
+  uploadFailFilename: [],
 };
 
 export default function problem(state = initialState, action) {
@@ -36,11 +37,7 @@ export default function problem(state = initialState, action) {
         ...state,
         readSubmission: action.errors,
       };
-    // case problemConstants.READ_CHALLENGE_FAIL:
-    //   return {
-    //     ...state,
-    //     readChallenge: action.errors,
-    //   };
+
     case problemConstants.READ_SUBMISSION_JUDGE_FAIL:
       return {
         ...state,
@@ -148,6 +145,21 @@ export default function problem(state = initialState, action) {
         ...state,
         downloadTestcases: action.error,
       };
+
+    case problemConstants.CLEAR_UPLOAD_FAIL_RECORD: {
+      return {
+        ...state,
+        uploadFailFilename: [],
+      };
+    }
+    case problemConstants.UPLOAD_DATA_FAIL: {
+      console.log(action.filename);
+      return {
+        ...state,
+        uploadFailFilename: state.uploadFailFilename.concat([action.filename]),
+      };
+    }
+
     default: {
       return state;
     }
