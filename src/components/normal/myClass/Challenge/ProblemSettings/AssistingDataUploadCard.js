@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Typography,
   Button,
@@ -14,6 +14,15 @@ export default function AssistingDataUploadCard({
 }) {
   // const error = useSelector((state) => state.error);
   // const loading = useSelector((state) => state.loading.myClass.problem);
+  const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    if (selectedFile.length !== 0 && disabled) {
+      setDisabled(false);
+    } else if (selectedFile.length === 0 && !disabled) {
+      setDisabled(true);
+    }
+  }, [disabled, selectedFile.length]);
 
   const handleConfirm = () => {
     handleTempUpload();
@@ -33,14 +42,10 @@ export default function AssistingDataUploadCard({
         fullWidth
       >
         <DialogTitle id="dialog-slide-title">
-          <Typography variant="h4">Upload Assisting Data</Typography>
+          <Typography variant="h4">Upload File</Typography>
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body2">
-            Assisting Data are files shared among all testing data (e.g. a csv file)
-            They will be placed under /challenge/assist
-          </Typography>
-          <FileUploadArea text="Assisting Data" fileAcceptFormat=".pdf, .csv" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
+          <FileUploadArea text="PDF file" fileAcceptFormat=".pdf" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => handleCancel()} color="default">
@@ -49,8 +54,9 @@ export default function AssistingDataUploadCard({
           <Button
             onClick={() => handleConfirm()}
             color="primary"
+            disabled={disabled}
           >
-            Confirm
+            Upload
           </Button>
         </DialogActions>
       </Dialog>
