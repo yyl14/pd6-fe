@@ -205,18 +205,6 @@ export default function ChallengeList() {
             operation: 'LIKE',
           },
           {
-            reduxStateId: 'start_time',
-            label: 'Start Time',
-            type: 'DATE',
-            operation: 'LIKE',
-          },
-          {
-            reduxStateId: 'end_time',
-            label: 'End Time',
-            type: 'DATE',
-            operation: 'LIKE',
-          },
-          {
             reduxStateId: 'status',
             label: 'Status',
             type: 'ENUM',
