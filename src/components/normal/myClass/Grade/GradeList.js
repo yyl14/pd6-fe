@@ -137,9 +137,7 @@ export default function GradeList() {
         setHasError(true);
       }
     } else if (showAddDialog && hasRequest && !loading.addClassGrade) {
-      console.log('1');
       if (error.addClassGrade === null) {
-        console.log('2');
         setShowAddDialog(false);
         setHasRequest(false);
         setIsDisabled(true);
