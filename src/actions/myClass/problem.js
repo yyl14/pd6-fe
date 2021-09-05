@@ -623,11 +623,9 @@ const downloadAllSamples = (token, problemId, as_attachment) => async (dispatch)
       as_attachment,
     },
   };
-  console.log(config);
   dispatch({ type: problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_START });
   try {
-    const res = await agent.post(`/problem/${problemId}/all-sample-testcase`, config);
-    console.log(res);
+    await agent.post(`/problem/${problemId}/all-sample-testcase`, { as_attachment: true }, config);
     dispatch({ type: problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_SUCCESS });
   } catch (err) {
     dispatch({
@@ -637,18 +635,18 @@ const downloadAllSamples = (token, problemId, as_attachment) => async (dispatch)
   }
 };
 
-const downloadAllTestcases = (token, problemId) => async (dispatch) => {
+const downloadAllTestcases = (token, problemId, as_attachment) => async (dispatch) => {
   const config = {
     headers: {
       'Auth-Token': token,
     },
     params: {
-      as_attachment: true,
+      as_attachment,
     },
   };
   dispatch({ type: problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_START });
   try {
-    await agent.post(`/problem/${problemId}/all-non-sample-testcase`, config);
+    await agent.post(`/problem/${problemId}/all-non-sample-testcase`, { as_attachment: true }, config);
 
     dispatch({ type: problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_SUCCESS });
   } catch (err) {

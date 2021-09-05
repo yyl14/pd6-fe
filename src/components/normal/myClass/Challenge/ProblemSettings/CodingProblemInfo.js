@@ -121,93 +121,13 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   };
 
   const downloadAllSampleFile = () => {
-    dispatch(downloadAllSamples(authToken, problemId, false));
+    dispatch(downloadAllSamples(authToken, problemId, true));
     setEmailSentPopup(true);
-    // const files = sampleDataIds.reduce((acc, id) => {
-    //   if (testcases[id].input_file_uuid !== null && testcases[id].output_file_uuid !== null) {
-    //     return [
-    //       ...acc,
-    //       {
-    //         uuid: testcases[id].input_file_uuid,
-    //         filename: testcases[id].input_filename,
-    //         as_attachment: false,
-    //       },
-    //       {
-    //         uuid: testcases[id].output_file_uuid,
-    //         filename: testcases[id].output_filename,
-    //         as_attachment: false,
-    //       },
-    //     ];
-    //   }
-    //   if (testcases[id].input_file_uuid !== null) {
-    //     return [
-    //       ...acc,
-    //       {
-    //         uuid: testcases[id].input_file_uuid,
-    //         filename: testcases[id].input_filename,
-    //         as_attachment: false,
-    //       },
-    //     ];
-    //   }
-    //   if (testcases[id].output_file_uuid !== null) {
-    //     return [
-    //       ...acc,
-    //       {
-    //         uuid: testcases[id].output_file_uuid,
-    //         filename: testcases[id].output_filename,
-    //         as_attachment: false,
-    //       },
-    //     ];
-    //   }
-
-    //   return acc;
-    // }, []);
-    // files.map((file) => dispatch(downloadFile(authToken, file)));
   };
 
   const downloadAllTestingFile = () => {
-    dispatch(downloadAllTestcases(authToken, problemId));
+    dispatch(downloadAllTestcases(authToken, problemId, true));
     setEmailSentPopup(true);
-    // const files = testcaseDataIds.reduce((acc, id) => {
-    //   if (testcases[id].input_file_uuid !== null && testcases[id].output_file_uuid !== null) {
-    //     return [
-    //       ...acc,
-    //       {
-    //         uuid: testcases[id].input_file_uuid,
-    //         filename: testcases[id].input_filename,
-    //         as_attachment: false,
-    //       },
-    //       {
-    //         uuid: testcases[id].output_file_uuid,
-    //         filename: testcases[id].output_filename,
-    //         as_attachment: false,
-    //       },
-    //     ];
-    //   }
-    //   if (testcases[id].input_file_uuid !== null) {
-    //     return [
-    //       ...acc,
-    //       {
-    //         uuid: testcases[id].input_file_uuid,
-    //         filename: testcases[id].input_filename,
-    //         as_attachment: false,
-    //       },
-    //     ];
-    //   }
-    //   if (testcases[id].output_file_uuid !== null) {
-    //     return [
-    //       ...acc,
-    //       {
-    //         uuid: testcases[id].output_file_uuid,
-    //         filename: testcases[id].output_filename,
-    //         as_attachment: false,
-    //       },
-    //     ];
-    //   }
-
-    //   return acc;
-    // }, []);
-    // files.map((file) => dispatch(downloadFile(authToken, file)));
   };
 
   const sampleTransToNumber = useCallback((id) => {
