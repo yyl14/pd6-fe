@@ -5,6 +5,7 @@ const initialState = {
   readEssayubmission: null,
   reUploadEssay: null,
   downloadAllEssaySubmission: null,
+  browseEssaySubmission: null,
 };
 
 export default function essaySubmission(state = initialState, action) {
@@ -55,6 +56,18 @@ export default function essaySubmission(state = initialState, action) {
       return {
         ...state,
         downloadAllEssaySubmission: action.error,
+      };
+    }
+    case essayConstants.BROWSE_ESSAY_SUBMISSION_SUCCESS: {
+      return {
+        ...state,
+        browseEssaySubmission: null,
+      };
+    }
+    case essayConstants.BROWSE_ESSAY_SUBMISSION_FAIL: {
+      return {
+        ...state,
+        browseEssaySubmission: action.error,
       };
     }
 

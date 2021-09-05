@@ -9,12 +9,14 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
+  DialogContentText,
   Link,
   withStyles,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
 import Icon from '../../../../ui/icon/index';
+import AlignedText from '../../../../ui/AlignedText';
 import NoMatch from '../../../../noMatch';
 import FileUploadArea from '../../../../ui/FileUploadArea';
 import { deleteEssay, readEssay } from '../../../../../actions/myClass/essay';
@@ -52,6 +54,8 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   const dispatch = useDispatch();
 
   const loading = useSelector((state) => state.loading.myClass.essay);
+  const classes = useSelector((state) => state.classes.byId);
+  const courses = useSelector((state) => state.courses.byId);
   const essay = useSelector((state) => state.essays.byId);
   const authToken = useSelector((state) => state.auth.token);
   const challenges = useSelector((state) => state.challenges.byId);
@@ -65,6 +69,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   const [popUpUpload, setPopUpUpload] = useState(false);
   const [popUpFail, setPopUpFail] = useState(false);
   const [hasRequest, setHasRequest] = useState(false);
+  const [popUpDelete, setPopUpDelete] = useState(false);
 
   const handleClickUpload = () => {
     setPopUpUpload(true);
@@ -75,6 +80,14 @@ export default function EssayInfo({ role = 'NORMAL' }) {
 
   const handleClosePopUpFail = () => {
     setPopUpFail(false);
+  };
+
+  const handleClickDelete = () => {
+    setPopUpDelete(true);
+  };
+
+  const handleCloseDelete = () => {
+    setPopUpDelete(false);
   };
 
   const handleUpload = () => {
@@ -121,11 +134,10 @@ export default function EssayInfo({ role = 'NORMAL' }) {
       <SimpleBar title="Title">{essay[essayId] === undefined ? 'error' : essay[essayId].title}</SimpleBar>
       <SimpleBar title="Description">{essay[essayId] === undefined ? 'error' : essay[essayId].description}</SimpleBar>
       <SimpleBar title="File">
-        { currentTime.isBefore(moment(challenges[challengeId].end_time))
-        && (
-        <StyledButton variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>
-          Upload
-        </StyledButton>
+        {currentTime.isBefore(moment(challenges[challengeId].end_time)) && (
+          <StyledButton variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>
+            Upload
+          </StyledButton>
         )}
       </SimpleBar>
       {essaySubmission
@@ -148,7 +160,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
           title="Delete Task"
           childrenButtons={(
             <>
-              <Button color="secondary" onClick={handleSubmitDelete}>
+              <Button color="secondary" onClick={handleClickDelete}>
                 Delete
               </Button>
             </>
@@ -184,7 +196,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
           </Button>
         </DialogActions>
       </Dialog>
-      {/* Upload dialog */}
+      {/* Upload Failed dialog */}
       <Dialog maxWidth="lg" open={popUpFail} keepMounted onClose={handleClosePopUpFail}>
         <DialogTitle>
           <Typography variant="h4">Upload Failed</Typography>
@@ -204,6 +216,34 @@ export default function EssayInfo({ role = 'NORMAL' }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePopUpFail}>Done</Button>
+        </DialogActions>
+      </Dialog>
+      {/* Delete dialog */}
+      <Dialog maxWidth="lg" open={popUpDelete} keepMounted onClose={handleCloseDelete}>
+        <DialogTitle>
+          <Typography variant="h4">Delete Essay</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText variant="body1" color="secondary">
+            <AlignedText text="Class" childrenType="text">
+              <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
+            </AlignedText>
+            <AlignedText text="Title" childrenType="text">
+              <Typography>{challenges[challengeId].title}</Typography>
+            </AlignedText>
+            <AlignedText text="Label" childrenType="text">
+              <Typography>{essay[essayId].challenge_label}</Typography>
+            </AlignedText>
+            <Typography variant="body2" color="textPrimary">
+              Once you delete a essay, there is no going back. Please be certain.
+            </Typography>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDelete}>Cancel</Button>
+          <Button onClick={handleSubmitDelete} color="secondary">
+            Delete
+          </Button>
         </DialogActions>
       </Dialog>
     </>

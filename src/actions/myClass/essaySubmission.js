@@ -93,6 +93,27 @@ const downloadAllEssaySubmission = (token, essayId, as_attachment) => async (dis
   }
 };
 
+const browseEssaySubmission = (essayId, token) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: essayConstants.BROWSE_ESSAY_SUBMISSION_START });
+    const res = await agent.get(`/essay/${essayId}/essay-submission`, auth);
+    dispatch({
+      type: essayConstants.BROWSE_ESSAY_SUBMISSION_SUCCESS,
+      payload: res.data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: essayConstants.BROWSE_ESSAY_SUBMISSION_FAIL,
+      error,
+    });
+  }
+};
+
 export {
-  uploadEssay, readEssaySubmission, reUploadEssay, downloadAllEssaySubmission,
+  uploadEssay, readEssaySubmission, reUploadEssay, downloadAllEssaySubmission, browseEssaySubmission,
 };
