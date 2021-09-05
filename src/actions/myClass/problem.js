@@ -121,7 +121,7 @@ const browseTestcase = (token, problemId) => async (dispatch) => {
   try {
     const testcases = await agent.get(`/problem/${problemId}/testcase`, auth);
 
-    const { success, data, error } = testcases.data;
+    const { data } = testcases.data;
     const newTestcases = await Promise.all(
       data.map(async (testcase) => {
         if (testcase.is_sample === true) {
@@ -395,6 +395,10 @@ const addAssistingData = (token, problemId, file) => async (dispatch) => {
       type: problemConstants.ADD_ASSISTING_DATA_FAIL,
       errors: err,
     });
+    dispatch({
+      type: problemConstants.UPLOAD_DATA_FAIL,
+      filename: file.name,
+    });
   }
 };
 
@@ -481,6 +485,10 @@ const uploadTestcaseInput = (token, testcaseId, file) => async (dispatch) => {
       type: problemConstants.UPLOAD_TESTCASE_INPUT_FAIL,
       errors: err,
     });
+    dispatch({
+      type: problemConstants.UPLOAD_DATA_FAIL,
+      filename: file.name,
+    });
   }
 };
 
@@ -506,6 +514,10 @@ const uploadTestcaseOutput = (token, testcaseId, file) => async (dispatch) => {
     dispatch({
       type: problemConstants.UPLOAD_TESTCASE_OUTPUT_FAIL,
       errors: err,
+    });
+    dispatch({
+      type: problemConstants.UPLOAD_DATA_FAIL,
+      filename: file.name,
     });
   }
 };
@@ -567,6 +579,18 @@ const addTestcaseWithFile = (token, problemId, isSample, score, timeLimit, memor
       type: problemConstants.ADD_TESTCASE_FAIL,
       errors: err,
     });
+    if (inputFile != null) {
+      dispatch({
+        type: problemConstants.UPLOAD_DATA_FAIL,
+        filename: inputFile.name,
+      });
+    }
+    if (outputFile != null) {
+      dispatch({
+        type: problemConstants.UPLOAD_DATA_FAIL,
+        filename: outputFile.name,
+      });
+    }
   }
 };
 
@@ -657,6 +681,10 @@ const downloadAllTestcases = (token, problemId, as_attachment) => async (dispatc
   }
 };
 
+const clearUploadFail = () => (dispatch) => {
+  dispatch({ type: problemConstants.CLEAR_UPLOAD_FAIL_RECORD });
+};
+
 export {
   readProblemInfo,
   editProblemInfo,
@@ -679,4 +707,5 @@ export {
   readProblemScore,
   downloadAllSamples,
   downloadAllTestcases,
+  clearUploadFail,
 };
