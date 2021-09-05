@@ -32,14 +32,14 @@ export default function AccountSetting() {
   const commonLoading = useSelector((state) => state.loading.common.common);
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
-
+  console.log(members);
   const userLink = '/user_profile';
   const graderLink = '/grader_profile';
 
   const [editGradeInfo, setEditGradeInfo] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchClassMembers(authToken, classId));
+    dispatch(fetchClassMembers(authToken, classId, {}));
   }, [dispatch, authToken, classId]);
 
   useEffect(() => {
@@ -66,10 +66,10 @@ export default function AccountSetting() {
     setEditGradeInfo(true);
   };
 
+  if (loading.fetchClassGrade || commonLoading.fetchClassMembers) {
+    return <GeneralLoading />;
+  }
   if (grades[gradeId] === undefined || members === undefined) {
-    if (loading.fetchClassGrade || commonLoading.fetchClassMembers) {
-      return <GeneralLoading />;
-    }
     return <NoMatch />;
   }
 
