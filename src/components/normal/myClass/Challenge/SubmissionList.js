@@ -12,11 +12,10 @@ import {
   readSubmission,
   readSubmissionDetail,
   readProblemScore,
-  browseTasksUnderChallenge,
 } from '../../../../actions/myClass/problem';
 import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -46,10 +45,6 @@ export default function SubmissionList() {
   }, [accountId, authToken, dispatch, problemId]);
 
   useEffect(() => {
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
-  }, [authToken, challengeId, dispatch]);
-
-  useEffect(() => {
     if (!loading.browseTasksUnderChallenge) {
       dispatch(readProblemScore(authToken, problemId));
     }
@@ -68,24 +63,23 @@ export default function SubmissionList() {
           .filter(
             (id) => submissions[id].account_id === accountId && submissions[id].problem_id === parseInt(problemId, 10),
           )
-          .map((id) => {
-            if (judgmentIds.filter((key) => judgments[key].submission_id === id)[0]) {
-              return {
-                key: id,
-                id,
-                submit_time: moment(submissions[id].submit_time).format('YYYY-MM-DD, HH:mm'),
-                status: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].status
-                  .toLowerCase()
-                  .split(' ')
-                  .map((word) => word[0].toUpperCase() + word.substring(1))
-                  .join(' '),
-                score: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].score,
-                used_time: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].total_time,
-                used_memory: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].max_memory,
-                path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${id}`,
-              };
+          .map((id) => (judgmentIds.filter((key) => judgments[key].submission_id === id)[0]
+            ? {
+              key: id,
+              id,
+              submit_time: moment(submissions[id].submit_time).format('YYYY-MM-DD, HH:mm'),
+              status: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].status
+                .toLowerCase()
+                .split(' ')
+                .map((word) => word[0].toUpperCase() + word.substring(1))
+                .join(' '),
+              score: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].score,
+              used_time: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].total_time,
+              used_memory:
+                    judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].max_memory,
+              path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${id}`,
             }
-            return {
+            : {
               key: id,
               id,
               submit_time: moment(submissions[id].submit_time).format('YYYY-MM-DD, HH:mm'),
@@ -94,8 +88,7 @@ export default function SubmissionList() {
               used_time: '-',
               used_memory: '-',
               path: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${id}`,
-            };
-          }),
+            })),
       );
     }
   }, [accountId, challengeId, classId, courseId, judgmentIds, judgments, problemId, submissionIds, submissions]);
@@ -107,16 +100,16 @@ export default function SubmissionList() {
     || judgments === undefined
     || problems[problemId].score === undefined
   ) {
-    // if (
-    //   !loading.readProblem
-    //   && !loading.readSubmission
-    //   && !loading.readChallenge
-    //   && !loading.readJudgment
-    //   && !loading.readProblemScore
-    // ) {
-    //   return <NoMatch />;
-    // }
-    return <GeneralLoading />;
+    if (
+      loading.readSubmission
+      || loading.readSubmissionDetail
+      || loading.readProblemScore
+      || loading.browseTasksUnderChallenge
+      || loading.readProblemScore
+    ) {
+      return <GeneralLoading />;
+    }
+    return <NoMatch />;
   }
 
   const handleRefresh = () => {
@@ -165,7 +158,7 @@ export default function SubmissionList() {
             label: 'Status',
             minWidth: 50,
             align: 'center',
-            width: 170,
+            width: 180,
             type: 'string',
           },
           {

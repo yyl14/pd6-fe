@@ -19,101 +19,12 @@ function getText(url) {
   });
 }
 
-const browseChallengeOverview = (token, challengeId) => (dispatch) => {
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-  // TODO: read challenge, get problem, and then get grade
-  dispatch({ type: problemConstants.READ_CHALLENGE_START });
-
-  agent
-    .get(`/challenge/${challengeId}`, auth)
-    .then((res) => {
-      dispatch({
-        type: problemConstants.READ_CHALLENGE_SUCCESS,
-        payload: res.data.data,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: problemConstants.READ_CHALLENGE_FAIL,
-        error: err,
-      });
-    });
-};
-
-const editChallenge = (token, challengeId, body) => async (dispatch) => {
-  try {
-    const auth = {
-      headers: {
-        'Auth-Token': token,
-      },
-    };
-    dispatch({ type: problemConstants.EDIT_CHALLENGE_START });
-    const res = await agent.patch(
-      `/challenge/${challengeId}`,
-      {
-        publicize_type: body.publicizeType,
-        selection_type: body.selectionType,
-        title: body.title,
-        description: body.description,
-        start_time: body.startTime,
-        end_time: body.endTime,
-      },
-      auth,
-    );
-    dispatch({ type: problemConstants.EDIT_CHALLENGE_SUCCESS, payload: res.data.data });
-  } catch (err) {
-    dispatch({
-      type: problemConstants.EDIT_CHALLENGE_FAIL,
-      error: err,
-    });
-  }
-};
-
-const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
-  try {
-    const auth = {
-      headers: {
-        'Auth-Token': token,
-      },
-    };
-    dispatch({ type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_START });
-    const res = await agent.get(`/challenge/${challengeId}/task`, auth);
-    dispatch({
-      type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS,
-      payload: { id: challengeId, data: res.data.data },
-    });
-  } catch (err) {
-    dispatch({
-      type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_FAIL,
-      error: err,
-    });
-  }
-};
-
-const readProblemInfo = (token, problemId, challengeId) => async (dispatch) => {
+const readProblemInfo = (token, problemId) => async (dispatch) => {
   const config = {
     headers: {
       'Auth-Token': token,
     },
   };
-
-  try {
-    dispatch({ type: problemConstants.READ_CHALLENGE_START });
-    const challenge = await agent.get(`/challenge/${challengeId}`, config);
-    dispatch({
-      type: problemConstants.READ_CHALLENGE_SUCCESS,
-      payload: challenge.data.data,
-    });
-  } catch (err) {
-    dispatch({
-      type: problemConstants.READ_CHALLENGE_FAIL,
-      errors: err,
-    });
-  }
 
   try {
     dispatch({ type: problemConstants.READ_PROBLEM_START });
@@ -659,28 +570,6 @@ const addTestcaseWithFile = (token, problemId, isSample, score, timeLimit, memor
   }
 };
 
-const readChallenge = (token, challengeId) => async (dispatch) => {
-  dispatch({ type: problemConstants.READ_CHALLENGE_START });
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-  try {
-    const challenge = await agent.get(`/challenge/${challengeId}`, auth);
-
-    dispatch({
-      type: problemConstants.READ_CHALLENGE_SUCCESS,
-      payload: challenge.data.data,
-    });
-  } catch (err) {
-    dispatch({
-      type: problemConstants.READ_CHALLENGE_FAIL,
-      errors: err,
-    });
-  }
-};
-
 const readTestcase = (token, testcaseId) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_TESTCASE_START });
   const auth = {
@@ -771,9 +660,6 @@ const downloadAllTestcases = (token, problemId) => async (dispatch) => {
 };
 
 export {
-  browseChallengeOverview,
-  editChallenge,
-  browseTasksUnderChallenge,
   readProblemInfo,
   editProblemInfo,
   deleteProblem,
@@ -790,7 +676,6 @@ export {
   uploadTestcaseInput,
   uploadTestcaseOutput,
   addTestcaseWithFile,
-  readChallenge,
   browseJudgeCases,
   readTestcase,
   readProblemScore,

@@ -18,23 +18,14 @@ import { useHistory, useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
 import SimpleTable from '../../../../ui/SimpleTable';
 import SampleTestArea from '../../../../ui/SampleTestArea';
-import AlignedText from '../../../../ui/AlignedText';
-import Icon from '../../../../ui/icon/index';
-
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
 
-import {
-  browseTestcase,
-  browseAssistingData,
-  deleteAssistingData,
-  deleteTestcase,
-  deleteProblem,
-  browseTasksUnderChallenge,
-} from '../../../../../actions/myClass/problem';
-import { fetchClass, fetchCourse, downloadFile } from '../../../../../actions/common/common';
+import { browseTestcase, browseAssistingData } from '../../../../../actions/myClass/problem';
+import { browseTasksUnderChallenge } from '../../../../../actions/myClass/challenge';
+import { downloadFile } from '../../../../../actions/common/common';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
@@ -44,6 +35,9 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end',
+  },
+  table: {
+    width: '100%',
   },
   content: {
     whiteSpace: 'pre-line',
@@ -55,7 +49,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const {
     courseId, classId, challengeId, problemId,
   } = useParams();
-  const history = useHistory();
   const classNames = useStyles();
 
   const dispatch = useDispatch();
@@ -248,8 +241,9 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           <Typography variant="body2">{problems[problemId].hint}</Typography>
         </SimpleBar>
       )}
-      <SimpleBar title="Sample">
+      <SimpleBar title="Sample Data" noIndent>
         <SimpleTable
+          className={classNames.table}
           isEdit={false}
           hasDelete={false}
           columns={[
@@ -296,8 +290,9 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           </Grid>
         </div>
       </SimpleBar>
-      <SimpleBar title="Testing Data">
+      <SimpleBar title="Testing Data" noIndent>
         <SimpleTable
+          className={classNames.table}
           isEdit={false}
           hasDelete={false}
           columns={[

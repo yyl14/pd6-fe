@@ -13,7 +13,7 @@ import {
 import { useHistory, useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 import {
-  fetchCourses, fetchClasses, addCourse, addClass,
+  fetchClasses, addCourse, addClass,
 } from '../../../actions/admin/course';
 import { fetchClassMembers } from '../../../actions/common/common';
 import CustomTable from '../../ui/CustomTable';
@@ -44,12 +44,6 @@ export default function ClassList() {
   const [addClassName, setAddClassName] = useState('');
 
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
-
-  useEffect(() => {
-    if (!loading.addCourse && !loading.deleteCourse && !loading.renameCourse) {
-      dispatch(fetchCourses(authToken));
-    }
-  }, [authToken, dispatch, loading.addCourse, loading.deleteCourse, loading.renameCourse]);
 
   useEffect(() => {
     if (!loading.addClass && !loading.renameClass && !loading.deleteClass) {
@@ -84,7 +78,7 @@ export default function ClassList() {
   const onAddCourse = (name) => {
     setAddCourseName('');
     history.push(`/admin/course/course/${courseId}/class-list`);
-    dispatch(addCourse(authToken, name, getCourseType(addType).toUpperCase()));
+    dispatch(addCourse(authToken, name, getCourseType(addType).toUpperCase(), history));
   };
   const onAddClass = (name) => {
     setAddClassName('');

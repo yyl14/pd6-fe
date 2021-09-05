@@ -22,19 +22,6 @@ import UIComponentUsage from './components/ui/UIComponentUsage';
 import './App.css';
 import './styles/ui.css';
 
-const GlobalCss = withStyles({
-  '@global': {
-    // You should target [class*="MuiButton-root"] instead if you nest themes.
-    // '.MuiButton-root': {
-    //   fontSize: '1rem',
-    // },
-
-    '.MuiTextField-root': {
-      borderRadius: '10px',
-    },
-  },
-})(() => null);
-
 class App extends Component {
   constructor(props) {
     super(props);

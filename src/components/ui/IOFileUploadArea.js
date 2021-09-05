@@ -3,7 +3,6 @@ import {
   makeStyles,
   Typography,
   Button,
-  Input,
   Paper,
   Table,
   TableContainer,
@@ -11,10 +10,10 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  Snackbar,
 } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import Icon from './icon/index';
-import SimpleTable from './SimpleTable';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -97,8 +96,8 @@ export default function IOFileUploadArea({
   const classes = useStyles();
 
   const [tableData, setTableData] = useState([]);
-
   const [fileNum, setFileNum] = useState(0);
+  const [errorPopup, setErrorPopup] = useState(false);
 
   const handleUploadFile = (e) => {
     const newFiles = Object.keys(e.target.files).map((key) => e.target.files[key]);
@@ -109,7 +108,8 @@ export default function IOFileUploadArea({
         newFiles.forEach((file) => {
           const index = parseInt(file.name.slice(6, file.name.indexOf('.')), 10);
           if (!Number.isInteger(index)) {
-            console.log('file format error');
+            setErrorPopup(true);
+            // console.log('file format error');
             return;
           }
           const type = file.name.slice(file.name.indexOf('.') + 1);
@@ -140,7 +140,8 @@ export default function IOFileUploadArea({
               };
             }
           } else {
-            console.log('File Format Error');
+            setErrorPopup(true);
+            // console.log('File Format Error');
           }
           // console.log(newSelectedFile[index]);
         });
@@ -154,7 +155,8 @@ export default function IOFileUploadArea({
         newFiles.forEach((file) => {
           const index = parseInt(file.name.slice(0, file.name.indexOf('.')), 10);
           if (!Number.isInteger(index)) {
-            console.log('file format error');
+            setErrorPopup(true);
+            // console.log('file format error');
             return;
           }
           const type = file.name.slice(file.name.indexOf('.') + 1);
@@ -185,7 +187,8 @@ export default function IOFileUploadArea({
               };
             }
           } else {
-            console.log('File Format Error');
+            setErrorPopup(true);
+            // console.log('File Format Error');
           }
           // console.log(newSelectedFile[index]);
         });
@@ -194,11 +197,12 @@ export default function IOFileUploadArea({
         break;
       }
       default:
-        console.log('File Format Error');
+        setErrorPopup(true);
     }
   };
 
   const handleDelete = (e, deleteRow) => {
+    // eslint-disable-next-line no-unused-vars
     const filtered = selectedFile.filter((file, index, arr) => file !== deleteRow);
     setSelectedFile(filtered);
   };
@@ -258,47 +262,68 @@ export default function IOFileUploadArea({
         )}
       </div>
       {fileNum !== 0 && (
-      <Paper className={classes.root} elevation={0}>
-        <TableContainer className={classes.container}>
-          <Table>
-            <TableHead className={classes.tableHead}>
-              <TableRow>
-                <TableCell key="input" align="center" style={{ minWidth: 50, width: 80, border: 'none' }} className={classes.fileNameCell}>
-                  <div className={classes.column}>
-                    <b>Input File</b>
-                  </div>
-                </TableCell>
-                <TableCell key="output" align="center" style={{ minWidth: 50, width: 80, border: 'none' }} className={classes.fileNameCell}>
-                  <div className={classes.column}>
-                    <b>Output File</b>
-                  </div>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {tableData.map((row) => (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.id} className={classes.row}>
-                  <TableCell align="left" className={classes.fileNameCell}>
-                    <Typography variant="body2">{row.in === undefined || row.in === null ? '' : row.in.name}</Typography>
+        <Paper className={classes.root} elevation={0}>
+          <TableContainer className={classes.container}>
+            <Table>
+              <TableHead className={classes.tableHead}>
+                <TableRow>
+                  <TableCell
+                    key="input"
+                    align="center"
+                    style={{ minWidth: 50, width: 80, border: 'none' }}
+                    className={classes.fileNameCell}
+                  >
+                    <div className={classes.column}>
+                      <b>Input File</b>
+                    </div>
                   </TableCell>
-                  <TableCell align="left" className={classes.fileNameCell}>
-                    <Typography variant="body2">{row.out === undefined || row.out === null ? '' : row.out.name}</Typography>
-                  </TableCell>
-                  <TableCell className={classes.deleteCell} align="right">
-                    <Icon.Trash
-                      className={classes.deleteIcon}
-                      onClick={(e) => {
-                        handleDelete(e, row);
-                      }}
-                    />
+                  <TableCell
+                    key="output"
+                    align="center"
+                    style={{ minWidth: 50, width: 80, border: 'none' }}
+                    className={classes.fileNameCell}
+                  >
+                    <div className={classes.column}>
+                      <b>Output File</b>
+                    </div>
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
+              </TableHead>
+              <TableBody>
+                {tableData.map((row) => (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id} className={classes.row}>
+                    <TableCell align="left" className={classes.fileNameCell}>
+                      <Typography variant="body2">
+                        {row.in === undefined || row.in === null ? '' : row.in.name}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left" className={classes.fileNameCell}>
+                      <Typography variant="body2">
+                        {row.out === undefined || row.out === null ? '' : row.out.name}
+                      </Typography>
+                    </TableCell>
+                    <TableCell className={classes.deleteCell} align="right">
+                      <Icon.Trash
+                        className={classes.deleteIcon}
+                        onClick={(e) => {
+                          handleDelete(e, row);
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
       )}
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        open={errorPopup}
+        onClose={() => setErrorPopup(false)}
+        message="Filename does not match the naming format"
+        key="errorMsg"
+      />
     </>
   );
 }

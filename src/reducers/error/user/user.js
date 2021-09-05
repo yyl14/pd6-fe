@@ -7,6 +7,8 @@ const initialState = {
   makeStudentCardDefault: null,
   resetPassword: null,
   editPassword: null,
+  getNotify: null,
+  readNotify: null,
 };
 
 export default function user(state = initialState, action) {
@@ -67,6 +69,30 @@ export default function user(state = initialState, action) {
       return {
         ...state,
         editPassword: action.error,
+      };
+    }
+    case userConstants.USER_GET_NOTIFY: {
+      return {
+        ...state,
+        getNotify: null,
+      };
+    }
+    case userConstants.USER_GET_NOTIFY_FAIL: {
+      return {
+        ...state,
+        getNotify: action.error,
+      };
+    }
+    case userConstants.USER_READ_NOTIFY: {
+      return {
+        ...state,
+        readNotify: null,
+      };
+    }
+    case userConstants.USER_READ_NOTIFY_FAIL: {
+      return {
+        ...state,
+        readNotify: action.error,
       };
     }
     default: {

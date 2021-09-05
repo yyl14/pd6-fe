@@ -1,6 +1,27 @@
 import agent from '../agent';
 import { challengeConstants } from './constant';
 
+const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
+  try {
+    const auth = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    dispatch({ type: challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_START });
+    const res = await agent.get(`/challenge/${challengeId}/task`, auth);
+    dispatch({
+      type: challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS,
+      payload: { id: challengeId, data: res.data.data },
+    });
+  } catch (err) {
+    dispatch({
+      type: challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_FAIL,
+      error: err,
+    });
+  }
+};
+
 const fetchChallenges = (token, classId) => async (dispatch) => {
   try {
     const config = {
@@ -216,6 +237,7 @@ const addPeerReview = (token, challengeId, label, title) => async (dispatch) => 
 };
 
 export {
+  browseTasksUnderChallenge,
   fetchChallenges,
   addChallenge,
   editChallenge,

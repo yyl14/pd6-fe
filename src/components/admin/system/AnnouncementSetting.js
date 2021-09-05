@@ -17,7 +17,7 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import NoMatch from '../../noMatch';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
-import { fetchAnnouncement, deleteAnnouncement } from '../../../actions/admin/system';
+import { readAnnouncement, deleteAnnouncement } from '../../../actions/admin/system';
 import AnnouncementEdit from './AnnouncementEdit';
 import GeneralLoading from '../../GeneralLoading';
 
@@ -48,9 +48,9 @@ export default function AnnouncementSetting() {
 
   useEffect(() => {
     if (!editLoading) {
-      dispatch(fetchAnnouncement(authToken));
+      dispatch(readAnnouncement(authToken, announcementId));
     }
-  }, [authToken, dispatch, editLoading]);
+  }, [authToken, dispatch, editLoading, announcementId]);
 
   useEffect(() => {
     const item = announcements[announcementId];

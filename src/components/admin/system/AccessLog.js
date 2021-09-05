@@ -20,7 +20,6 @@ const useStyles = makeStyles(() => ({
 export default function AccessLog() {
   const classes = useStyles();
 
-  const loading = useSelector((state) => state.loading.admin.system.fetchAccessLog);
   const error = useSelector((state) => state.error.admin.system.fetchAccessLog);
   const accountError = useSelector((state) => state.error.common.common.fetchAccount);
 

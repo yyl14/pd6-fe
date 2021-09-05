@@ -3,12 +3,14 @@ import { commonConstants } from '../../../actions/common/constant';
 const initialState = {
   fetchInstitutes: null,
   fetchClassMembers: null,
+  fetchClassMemberWithAccountReferral: null,
   editClassMember: null,
   replaceClassMembers: null,
   // deleteClassMember: null,
   browseSubmitLang: null,
   fetchCourse: null,
   fetchClass: null,
+  fetchChallenge: null,
   fetchAccount: null,
   fetchAllChallengesProblems: null,
   fetchDownloadFileUrl: null,
@@ -44,6 +46,18 @@ export default function common(state = initialState, action) {
       return {
         ...state,
         fetchClassMembers: action.error,
+      };
+    }
+    case commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_SUCCESS: {
+      return {
+        ...state,
+        fetchClassMemberWithAccountReferral: null,
+      };
+    }
+    case commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_FAIL: {
+      return {
+        ...state,
+        fetchClassMemberWithAccountReferral: action.error,
       };
     }
     case commonConstants.EDIT_CLASS_MEMBER_SUCCESS: {
@@ -116,6 +130,18 @@ export default function common(state = initialState, action) {
       return {
         ...state,
         fetchClass: action.error,
+      };
+    }
+    case commonConstants.READ_CHALLENGE_SUCCESS: {
+      return {
+        ...state,
+        fetchChallenge: null,
+      };
+    }
+    case commonConstants.READ_CHALLENGE_FAIL: {
+      return {
+        ...state,
+        fetchChallenge: action.error,
       };
     }
     case commonConstants.FETCH_ACCOUNT_SUCCESS: {

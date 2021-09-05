@@ -1,29 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
-import { format } from 'date-fns';
-import {
-  Typography, Button, makeStyles, TextField,
-} from '@material-ui/core';
+import { Typography, makeStyles } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
-import {
-  browseChallengeOverview,
-  editChallenge,
-  browseTasksUnderChallenge,
-  readProblemScore,
-} from '../../../../actions/myClass/problem';
+import { readProblemScore } from '../../../../actions/myClass/problem';
+import { browseTasksUnderChallenge } from '../../../../actions/myClass/challenge';
+import { fetchChallenge } from '../../../../actions/common/common';
 import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   pageHeader: {
     marginBottom: '50px',
   },
   descriptionField: {
     width: '60vw',
+  },
+  table: {
+    width: '100%',
   },
   buttons: {
     display: 'flex',
@@ -33,8 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 export default function ChallengeInfo() {
-  const { courseId, classId, challengeId } = useParams();
-  const history = useHistory();
+  const { challengeId } = useParams();
   const classes = useStyles();
   const dispatch = useDispatch();
   const [currentTime, setCurrentTime] = useState(moment());
@@ -52,7 +48,7 @@ export default function ChallengeInfo() {
 
   useEffect(() => {
     if (!loading.editChallenge) {
-      dispatch(browseChallengeOverview(authToken, challengeId));
+      dispatch(fetchChallenge(authToken, challengeId));
     }
   }, [authToken, challengeId, dispatch, loading.editChallenge]);
 
@@ -144,8 +140,9 @@ export default function ChallengeInfo() {
           </AlignedText>
         </>
       </SimpleBar>
-      <SimpleBar title="Overview">
+      <SimpleBar title="Overview" noIndent>
         <SimpleTable
+          className={classes.table}
           isEdit={false}
           hasDelete={false}
           columns={[
