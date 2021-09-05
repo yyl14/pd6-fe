@@ -614,6 +614,49 @@ const readProblemScore = (token, problemId) => async (dispatch) => {
   }
 };
 
+const downloadAllSamples = (token, problemId, as_attachment) => async (dispatch) => {
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+    params: {
+      as_attachment,
+    },
+  };
+  dispatch({ type: problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_START });
+  try {
+    await agent.post(`/problem/${problemId}/all-sample-testcase`, { as_attachment: true }, config);
+    dispatch({ type: problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_SUCCESS });
+  } catch (err) {
+    dispatch({
+      type: problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_FAIL,
+      error: err,
+    });
+  }
+};
+
+const downloadAllTestcases = (token, problemId, as_attachment) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Auth-Token': token,
+    },
+    params: {
+      as_attachment,
+    },
+  };
+  dispatch({ type: problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_START });
+  try {
+    await agent.post(`/problem/${problemId}/all-non-sample-testcase`, { as_attachment: true }, config);
+
+    dispatch({ type: problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_SUCCESS });
+  } catch (err) {
+    dispatch({
+      type: problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_FAIL,
+      error: err,
+    });
+  }
+};
+
 export {
   readProblemInfo,
   editProblemInfo,
@@ -634,4 +677,6 @@ export {
   browseJudgeCases,
   readTestcase,
   readProblemScore,
+  downloadAllSamples,
+  downloadAllTestcases,
 };

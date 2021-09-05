@@ -20,6 +20,8 @@ const initialState = {
   browseJudgeCases: null,
   readTestcase: null,
   readProblemScore: null,
+  downloadSamples: null,
+  downloadTestcases: null,
 };
 
 export default function problem(state = initialState, action) {
@@ -123,6 +125,28 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         readProblemScore: action.errors,
+      };
+
+    case problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_SUCCESS:
+      return {
+        ...state,
+        downloadSamples: null,
+      };
+    case problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_FAIL:
+      return {
+        ...state,
+        downloadSamples: action.error,
+      };
+
+    case problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_SUCCESS:
+      return {
+        ...state,
+        downloadTestcases: null,
+      };
+    case problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_FAIL:
+      return {
+        ...state,
+        downloadTestcases: action.error,
       };
     default: {
       return state;
