@@ -121,27 +121,22 @@ export default function RegisterForm() {
   }, [dispatch]);
 
   const transform = (school) => {
-    let id = 1;
-    enableInstitutesId.forEach((item) => {
-      if (institutes[item].full_name === school) {
-        id = item;
-      }
-    });
-
-    return id;
+    const ids = enableInstitutesId.filter((item) => (institutes[item].full_name === school));
+    return ids.length === 0 ? 1 : ids[0];
   };
 
   const onSubmit = () => {
     let errorCnt = 0;
     const newInputs = {};
 
-    labelName.forEach((name) => {
+    labelName.map((name) => {
       newInputs[name] = inputs[name].trim();
       if (newInputs[name] === '') {
         setErrors((input) => ({ ...input, [name]: true }));
         setErrorTexts((input) => ({ ...input, [name]: "Can't be empty" }));
         errorCnt += 1;
       }
+      return name;
     });
 
     // check password
@@ -152,10 +147,11 @@ export default function RegisterForm() {
       errorCnt += 1;
     }
 
-    labelName.forEach((name) => {
+    labelName.map((name) => {
       if (errors[name] === true) {
         errorCnt += 1;
       }
+      return name;
     });
 
     if (errorCnt === 0) {
