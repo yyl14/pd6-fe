@@ -32,7 +32,7 @@ export default function AccountSetting() {
   const commonLoading = useSelector((state) => state.loading.common.common);
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
-  console.log(members);
+
   const userLink = '/user_profile';
   const graderLink = '/grader_profile';
 
