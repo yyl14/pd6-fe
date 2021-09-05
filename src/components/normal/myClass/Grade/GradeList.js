@@ -85,7 +85,7 @@ export default function GradeList() {
   const [hasRequest, setHasRequest] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchClassMembers(authToken, classId));
+    dispatch(fetchClassMembers(authToken, classId, {}));
   }, [authToken, classId, dispatch]);
 
   useEffect(() => {
@@ -129,6 +129,7 @@ export default function GradeList() {
     if (showImportDialog && hasRequest && !loading.importClassGrade) {
       if (error.importClassGrade === null) {
         setShowImportDialog(false);
+        setHasRequest(false);
         setIsDisabled(true);
         setInputTitle('');
         setSelectedFile([]);
@@ -138,6 +139,7 @@ export default function GradeList() {
     } else if (showAddDialog && hasRequest && !loading.addClassGrade) {
       if (error.addClassGrade === null) {
         setShowAddDialog(false);
+        setHasRequest(false);
         setIsDisabled(true);
         setAddInputs({
           title: '',
@@ -172,7 +174,7 @@ export default function GradeList() {
             authToken,
             classId,
             addInputs.receiver,
-            user.username,
+            `#${user.username}`,
             addInputs.title,
             addInputs.score,
             addInputs.comment,
@@ -212,6 +214,7 @@ export default function GradeList() {
     loading.fetchCourse
     || loading.fetchClass
     || loading.fetchClassGrade
+    || loading.fetchClassMembers
     || loading.importClassGrade
     || loading.addClassGrade
   ) {
@@ -341,12 +344,12 @@ export default function GradeList() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Snackbar
+      {/* <Snackbar
         severity="error"
         open={showAddDialog && hasError}
         onClose={handleCloseError}
         message={`Error: ${error.addClassGrade}`}
-      />
+      /> */}
 
       <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
