@@ -65,15 +65,13 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
 
     // Batch browse account
     const accountIds = data.map((item) => item.account_id);
-    let res2 = null;
-    if (accountIds.length !== 0) {
-      const config2 = {
-        headers: { 'auth-token': token },
-        params: { account_ids: JSON.stringify(accountIds) },
-      };
 
-      res2 = await agent.get('/account-summary/batch', config2);
-    }
+    const config2 = {
+      headers: { 'auth-token': token },
+      params: { account_ids: JSON.stringify(accountIds) },
+    };
+
+    const res2 = await agent.get('/account-summary/batch', config2);
 
     const config3 = {
       headers: { 'auth-token': token },

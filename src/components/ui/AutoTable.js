@@ -300,6 +300,8 @@ function AutoTable({
     }
   }, [ident, pageInput, rowsPerPage, tableState]);
 
+  console.log(tableState);
+
   // const handleChangeRowsPerPage = (event) => {
   //   setRowsPerPage(+event.target.value);
   //   setCurPage(0); // TODO: calculate this
@@ -318,7 +320,7 @@ function AutoTable({
   }, [ident]);
 
   useEffect(() => {
-    if (!refreshLoadings.reduce((acc, item) => acc || item, false)) {
+    if (refreshLoadings.reduce((acc, item) => acc || item, false)) {
       onRefresh();
     }
   }, [refreshLoadings]);

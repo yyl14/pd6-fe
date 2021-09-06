@@ -76,7 +76,11 @@ const AutoTableHead = ({
       )}
       <div className={classes.buttons}>
         {buttons}
-        {hasRefreshButton && <Button color="primary" onClick={onRefresh} />}
+        {hasRefreshButton && (
+          <Button color="primary" onClick={onRefresh} startIcon={<Icon.RefreshOutlinedIcon />}>
+            Refresh
+          </Button>
+        )}
       </div>
     </div>
   );
