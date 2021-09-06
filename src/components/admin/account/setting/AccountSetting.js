@@ -49,12 +49,12 @@ export default function AccountSetting() {
   }, [accountId, authToken, dispatch, loading.makeStudentCardDefault]);
 
   useEffect(() => {
-    setCards(Object.values(studentCards));
-  }, [studentCards]);
-
-  useEffect(() => {
     dispatch(getInstitutes());
   }, [dispatch]);
+
+  useEffect(() => {
+    setCards(Object.values(studentCards));
+  }, [studentCards]);
 
   if (accounts[accountId] === undefined || studentCards === undefined) {
     if (loading.fetchAccount || loading.fetchStudentCards) {

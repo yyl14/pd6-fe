@@ -14,7 +14,7 @@ import Sidebar from '../../components/ui/Sidebar';
 
 export default function Normal() {
   const history = useHistory();
-  const config = useSelector((state) => state.auth);
+  const auth = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function Normal() {
         history.push('/notFound');
       }
     }
-  }, [history, user.role]);
+  }, [auth.isAuthenticated, history, user.role]);
 
   return (
     <div>

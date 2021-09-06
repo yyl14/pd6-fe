@@ -22,7 +22,7 @@ const getInstitutes = () => (dispatch) => {
     });
 };
 
-// WITH BROWSE PARAMS
+// WITH BROWSE API
 const fetchClassMembers = (token, classId, browseParams, tableId = null) => async (dispatch) => {
   try {
     const config = {
@@ -71,7 +71,7 @@ const fetchClassMemberWithAccountReferral = (token, classId) => async (dispatch)
     const res = await agent.get(`/class/${classId}/member/account-referral`, config);
     dispatch({
       type: commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_SUCCESS,
-      payload: { classId, data: res.data.data.data },
+      payload: { classId, data: res.data.data },
     });
   } catch (error) {
     dispatch({

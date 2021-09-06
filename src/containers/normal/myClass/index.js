@@ -21,7 +21,7 @@ export default function MyClass() {
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
   const { courseId, classId } = useParams();
-  const config = useSelector((state) => state.auth);
+  const auth = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function MyClass() {
     if (user.classes.length !== 0 && user.classes[0].course_id === undefined) {
       history.go(0);
     }
-  }, [classId, history, user.classes]);
+  }, [auth.isAuthenticated, classId, history, user.classes]);
 
   useEffect(() => {
     dispatch(fetchClass(authToken, classId));

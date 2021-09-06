@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import config from './auth';
+import auth from './auth';
 import institutes from './institutes';
 import challenges from './challenges';
 import grades from './grades';

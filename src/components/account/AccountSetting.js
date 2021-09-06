@@ -40,6 +40,10 @@ export default function AccountSetting() {
   }, [authToken, accountId, dispatch]);
 
   useEffect(() => {
+    dispatch(getInstitutes());
+  }, [dispatch]);
+
+  useEffect(() => {
     setCards(
       account.studentCards.reduce((acc, key) => {
         if (studentCards.byId[key]) {
@@ -49,10 +53,6 @@ export default function AccountSetting() {
       }, []),
     );
   }, [account, studentCards]);
-
-  useEffect(() => {
-    dispatch(getInstitutes());
-  }, [dispatch]);
 
   if (account === undefined || studentCards === undefined) {
     if (loading.auth.fetchAccount || loading.user.fetchStudentCards) {

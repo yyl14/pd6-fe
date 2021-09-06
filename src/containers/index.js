@@ -17,7 +17,7 @@ import '../styles/index.css';
 function Index() {
   const history = useHistory();
   const location = useLocation();
-  const config = useSelector((state) => state.auth);
+  const auth = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   // eslint-disable-next-line no-unused-vars
@@ -32,7 +32,7 @@ function Index() {
         history.push('/login');
       }
     }
-  }, [cookies, cookies.id, cookies.token, dispatch, history]);
+  }, [auth.isAuthenticated, cookies, cookies.id, cookies.token, dispatch, history]);
 
   useEffect(() => {
     if (auth.isAuthenticated && location.pathname === '/') {
@@ -48,7 +48,7 @@ function Index() {
         history.push('/my-profile');
       }
     }
-  }, [history, location.pathname, user.classes, user.classes.length, user.role]);
+  }, [auth.isAuthenticated, history, location.pathname, user.classes, user.classes.length, user.role]);
 
   if (!auth.isAuthenticated) {
     return <></>;

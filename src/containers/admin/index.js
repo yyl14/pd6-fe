@@ -18,7 +18,7 @@ import Sidebar from '../../components/ui/Sidebar';
 /* This is a level 2 container (role container) */
 export default function Admin() {
   const history = useHistory();
-  const config = useSelector((state) => state.auth);
+  const auth = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function Admin() {
         history.push('/notFound');
       }
     }
-  }, [history, user.role]);
+  }, [auth.isAuthenticated, history, user.role]);
 
   return (
     <div>
