@@ -14,7 +14,6 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
     dispatch({
       type: submissionConstants.FETCH_SUBMISSIONS_START,
     });
-    // console.log(config1);
 
     const res1 = await agent.get(`/class/${classId}/submission`, config1);
 
