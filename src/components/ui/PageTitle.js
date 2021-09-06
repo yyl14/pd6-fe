@@ -8,7 +8,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function PageTitle(text) {
+export default function PageTitle({ text }) {
   const classes = useStyles();
 
   return (
