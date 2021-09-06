@@ -39,7 +39,7 @@ export default function AccountSetting() {
   const [editGradeInfo, setEditGradeInfo] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchClassMembers(authToken, classId));
+    dispatch(fetchClassMembers(authToken, classId, {}));
   }, [dispatch, authToken, classId]);
 
   useEffect(() => {
@@ -66,10 +66,10 @@ export default function AccountSetting() {
     setEditGradeInfo(true);
   };
 
+  if (loading.fetchClassGrade || commonLoading.fetchClassMembers) {
+    return <GeneralLoading />;
+  }
   if (grades[gradeId] === undefined || members === undefined) {
-    if (loading.fetchClassGrade || commonLoading.fetchClassMembers) {
-      return <GeneralLoading />;
-    }
     return <NoMatch />;
   }
 

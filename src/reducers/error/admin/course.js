@@ -1,7 +1,7 @@
 import { courseConstants } from '../../../actions/admin/constant';
 
 const initialState = {
-  fetchCourse: null,
+  fetchCourses: null,
   addCourse: null,
   editCourse: null,
   deleteCourse: null,
@@ -21,14 +21,14 @@ export default function course(state = initialState, action) {
     case courseConstants.FETCH_COURSES_SUCCESS: {
       return {
         ...state,
-        fetchCourse: null,
+        fetchCourses: null,
       };
     }
     case courseConstants.FETCH_COURSES_FAIL: {
       const { error } = action.payload;
       return {
         ...state,
-        fetchCourse: error,
+        fetchCourses: error,
       };
     }
     case courseConstants.ADD_COURSE_SUCCESS: {

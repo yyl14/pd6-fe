@@ -32,6 +32,9 @@ import {
   deleteAssistingData,
   deleteTestcase,
   deleteProblem,
+  downloadAllSamples,
+  downloadAllTestcases,
+  clearUploadFail,
 } from '../../../../../actions/myClass/problem';
 
 import { downloadFile } from '../../../../../actions/common/common';
@@ -94,6 +97,16 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const [sampleDataIds, setSampleDataIds] = useState([]);
   const [testcaseDataIds, setTestcaseDataIds] = useState([]);
   const [deletePopUp, setDeletePopUp] = useState(false);
+  const [emailSentPopup, setEmailSentPopup] = useState(false);
+  const uploadError = useSelector((state) => state.error.myClass.problem.uploadFailFilename);
+  const [uploadFailCardPopup, setUploadFailCardPopup] = useState(false);
+  // console.log('uploadError: ', uploadError);
+
+  useEffect(() => {
+    if (uploadError.length !== 0) {
+      setUploadFailCardPopup(true);
+    }
+  }, [uploadError.length]);
 
   const handleDelete = () => {
     problems[problemId].assistingDataIds.forEach((id) => {
@@ -118,91 +131,13 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   };
 
   const downloadAllSampleFile = () => {
-    const files = sampleDataIds.reduce((acc, id) => {
-      if (testcases[id].input_file_uuid !== null && testcases[id].output_file_uuid !== null) {
-        console.log('hello');
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].input_file_uuid,
-            filename: testcases[id].input_filename,
-            as_attachment: false,
-          },
-          {
-            uuid: testcases[id].output_file_uuid,
-            filename: testcases[id].output_filename,
-            as_attachment: false,
-          },
-        ];
-      }
-      if (testcases[id].input_file_uuid !== null) {
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].input_file_uuid,
-            filename: testcases[id].input_filename,
-            as_attachment: false,
-          },
-        ];
-      }
-      if (testcases[id].output_file_uuid !== null) {
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].output_file_uuid,
-            filename: testcases[id].output_filename,
-            as_attachment: false,
-          },
-        ];
-      }
-
-      return acc;
-    }, []);
-    // console.log(files);
-    files.map((file) => dispatch(downloadFile(authToken, file)));
+    dispatch(downloadAllSamples(authToken, problemId, true));
+    setEmailSentPopup(true);
   };
 
   const downloadAllTestingFile = () => {
-    const files = testcaseDataIds.reduce((acc, id) => {
-      if (testcases[id].input_file_uuid !== null && testcases[id].output_file_uuid !== null) {
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].input_file_uuid,
-            filename: testcases[id].input_filename,
-            as_attachment: false,
-          },
-          {
-            uuid: testcases[id].output_file_uuid,
-            filename: testcases[id].output_filename,
-            as_attachment: false,
-          },
-        ];
-      }
-      if (testcases[id].input_file_uuid !== null) {
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].input_file_uuid,
-            filename: testcases[id].input_filename,
-            as_attachment: false,
-          },
-        ];
-      }
-      if (testcases[id].output_file_uuid !== null) {
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].output_file_uuid,
-            filename: testcases[id].output_filename,
-            as_attachment: false,
-          },
-        ];
-      }
-
-      return acc;
-    }, []);
-    files.map((file) => dispatch(downloadFile(authToken, file)));
+    dispatch(downloadAllTestcases(authToken, problemId, true));
+    setEmailSentPopup(true);
   };
 
   const sampleTransToNumber = useCallback((id) => {
@@ -359,7 +294,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       <SimpleBar
         noIndent
         title="Testing Data"
-        buttons={(
+        buttons={role === 'MANAGER' && (
           <FormControlLabel
             control={<Switch checked={status} name="status" color="primary" disabled />}
             label={status ? 'Enabled' : 'Disabled'}
@@ -497,6 +432,41 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           <Button onClick={() => setDeletePopUp(false)}>Cancel</Button>
           <Button color="secondary" onClick={handleDelete}>
             Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={emailSentPopup} keepMounted onClose={() => setEmailSentPopup(false)}>
+        <DialogTitle id="alert-dialog-slide-title">
+          <Typography variant="h4">All Testcases sent</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Please check your mailbox.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEmailSentPopup(false)} color="primary">
+            Done
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={uploadFailCardPopup} onClose={() => { setUploadFailCardPopup(false); dispatch(clearUploadFail()); }} fullWidth>
+        <DialogTitle id="dialog-slide-title">
+          <Typography variant="h4">Upload Fail</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body2">
+            File below was failed to be uploaded:
+          </Typography>
+          {uploadError.map((filename) => (
+            <Typography variant="body2" key={filename}>
+              {filename}
+            </Typography>
+          ))}
+        </DialogContent>
+        <DialogActions className={classNames.filterButton}>
+          <Button color="default" onClick={() => { setUploadFailCardPopup(false); dispatch(clearUploadFail()); }}>
+            Done
           </Button>
         </DialogActions>
       </Dialog>

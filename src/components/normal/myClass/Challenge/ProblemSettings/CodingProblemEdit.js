@@ -32,6 +32,7 @@ import {
   uploadTestcaseInput,
   uploadTestcaseOutput,
   addTestcaseWithFile,
+  clearUploadFail,
 } from '../../../../../actions/myClass/problem';
 
 const useStyles = makeStyles(() => ({
@@ -77,7 +78,7 @@ const StyledButton = withStyles({
 })(Button);
 
 /* This is a level 4 component (page component) */
-export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
+export default function CodingProblemEdit({ closeEdit }) {
   const { problemId } = useParams();
   const classNames = useStyles();
 
@@ -90,9 +91,8 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const testcases = useSelector((state) => state.testcases.byId);
   const [sampleDataIds, setSampleDataIds] = useState([]);
   const [testcaseDataIds, setTestcaseDataIds] = useState([]);
-  // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
-
+  const [hasInitialize, setHasInitialize] = useState(false);
   const [hasChange, setHasChange] = useState(false);
 
   const [label, setLabel] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label);
@@ -129,6 +129,13 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
 
   const [sampleTableData, setSampleTableData] = useState([]);
   const [testcaseTableData, setTestcaseTableData] = useState([]);
+
+  useEffect(() => {
+    if (!hasInitialize) {
+      setHasInitialize(true);
+      dispatch(clearUploadFail());
+    }
+  }, [dispatch, hasInitialize]);
 
   useEffect(() => {
     if (problems[problemId] && problems[problemId].testcaseIds) {
@@ -519,19 +526,7 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
     ) {
       closeEdit();
     }
-  }, [
-    closeEdit,
-    hasRequest,
-    loading.addAssistingData,
-    loading.addTestcase,
-    loading.deleteAssistingData,
-    loading.deleteTestcase,
-    loading.editAssistingData,
-    loading.editProblem,
-    loading.editTestcase,
-    loading.uploadTestcaseInput,
-    loading.uploadTestcaseOutput,
-  ]);
+  }, [closeEdit, hasRequest, loading.addAssistingData, loading.addTestcase, loading.deleteAssistingData, loading.deleteTestcase, loading.editAssistingData, loading.editProblem, loading.editTestcase, loading.uploadTestcaseInput, loading.uploadTestcaseOutput]);
 
   return (
     <>
