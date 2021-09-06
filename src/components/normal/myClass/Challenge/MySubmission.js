@@ -8,11 +8,7 @@ import AlignedText from '../../../ui/AlignedText';
 import CustomTable from '../../../ui/CustomTable';
 import NoMatch from '../../../noMatch';
 import SimpleBar from '../../../ui/SimpleBar';
-import {
-  readSubmission,
-  readSubmissionDetail,
-  readProblemScore,
-} from '../../../../actions/myClass/problem';
+import { readSubmission, readSubmissionDetail, readProblemScore } from '../../../../actions/myClass/problem';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
@@ -22,7 +18,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 /* This is a level 4 component (page component) */
-export default function SubmissionList() {
+export default function MySubmission() {
   const {
     courseId, classId, challengeId, problemId,
   } = useParams();
