@@ -112,6 +112,7 @@ const deleteChallenge = (token, challengeId) => async (dispatch) => {
   }
 };
 
+// fetch statistics summary
 const fetchChallengeSummary = (token, challengeId) => async (dispatch) => {
   try {
     const config = {
@@ -133,6 +134,7 @@ const fetchChallengeSummary = (token, challengeId) => async (dispatch) => {
   }
 };
 
+// fetch statistics scoreboard data
 const fetchChallengeMemberSubmission = (token, challengeId) => async (dispatch) => {
   try {
     const config = {
