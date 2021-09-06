@@ -104,7 +104,7 @@ const browseEssaySubmission = (essayId, token) => async (dispatch) => {
     const res = await agent.get(`/essay/${essayId}/essay-submission`, auth);
     dispatch({
       type: essayConstants.BROWSE_ESSAY_SUBMISSION_SUCCESS,
-      payload: res.data.data,
+      payload: res.data.data.data,
     });
   } catch (error) {
     dispatch({

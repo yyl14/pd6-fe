@@ -20,7 +20,7 @@ import AlignedText from '../../../../ui/AlignedText';
 import NoMatch from '../../../../noMatch';
 import FileUploadArea from '../../../../ui/FileUploadArea';
 import { deleteEssay, readEssay } from '../../../../../actions/myClass/essay';
-import { uploadEssay, reUploadEssay } from '../../../../../actions/myClass/essaySubmission';
+import { uploadEssay, reUploadEssay, browseEssaySubmission } from '../../../../../actions/myClass/essaySubmission';
 import { downloadFile } from '../../../../../actions/common/common';
 import { browseTasksUnderChallenge } from '../../../../../actions/myClass/challenge';
 
@@ -59,11 +59,12 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   const essay = useSelector((state) => state.essays.byId);
   const authToken = useSelector((state) => state.auth.token);
   const challenges = useSelector((state) => state.challenges.byId);
-  const essaySubmission = useSelector((state) => state.essaySubmission.byId);
-  const submissionIds = useSelector((state) => state.essaySubmission.allIds);
+  const essaySubmission = useSelector((state) => state.essaySubmission);
+  const userId = useSelector((state) => state.user.id);
+
   const uploadFail = useSelector((state) => state.error.myClass.essaySubmission);
 
-  const [uploadOrNot, setUploadOrNot] = useState(false);
+  const [uploadRecord, setUploadRecord] = useState();
   const [selectedFile, setSelectedFile] = useState([]);
 
   const [popUpUpload, setPopUpUpload] = useState(false);
@@ -91,11 +92,10 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   };
 
   const handleUpload = () => {
-    if (uploadOrNot === false) {
-      dispatch(uploadEssay(authToken, essayId, selectedFile[0]));
-      setUploadOrNot(true);
+    if (uploadRecord) {
+      dispatch(reUploadEssay(authToken, uploadRecord, selectedFile[0]));
     } else {
-      dispatch(reUploadEssay(authToken, essay[essayId].essaySubmissionId, selectedFile[0]));
+      dispatch(uploadEssay(authToken, essayId, selectedFile[0]));
     }
     setSelectedFile([]);
     if (!!uploadFail.reUploadEssay || !!uploadFail.uploadEssay) {
@@ -104,9 +104,9 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   };
 
   const handleClickLink = () => {
-    const fileToDownload = Object.keys(essaySubmission).map((key) => ({
-      uuid: essaySubmission[key].content_file_uuid,
-      filename: essaySubmission[key].filename,
+    const fileToDownload = Object.keys(essaySubmission.byId).map((key) => ({
+      uuid: essaySubmission.byId[key].content_file_uuid,
+      filename: essaySubmission.byId[key].filename,
       as_attachment: false,
     }));
     fileToDownload.map((file) => dispatch(downloadFile(authToken, file)));
@@ -125,6 +125,21 @@ export default function EssayInfo({ role = 'NORMAL' }) {
     }
   }, [authToken, challengeId, classId, courseId, dispatch, hasRequest, history, loading.deleteEssay]);
 
+  useEffect(() => {
+    dispatch(browseEssaySubmission(essayId, authToken));
+  }, [authToken, dispatch, essayId]);
+
+  useEffect(() => {
+    essaySubmission.allIds.map((id) => {
+      if (essaySubmission.byId[id].account_id === userId) {
+        if (essaySubmission.byId[id].essay_id === parseInt(essayId, 10)) {
+          setUploadRecord(id);
+        }
+      }
+      return <></>;
+    });
+  }, [essayId, essaySubmission.allIds, essaySubmission.byId, userId]);
+
   if (essay[essayId] === undefined) {
     return <NoMatch />;
   }
@@ -140,21 +155,15 @@ export default function EssayInfo({ role = 'NORMAL' }) {
           </StyledButton>
         )}
       </SimpleBar>
-      {essaySubmission
-        && submissionIds.map((id) => {
-          if (uploadOrNot) {
-            return (
-              <div>
-                <Link href onClick={handleClickLink}>
-                  {essaySubmission[id].filename}
-                </Link>
-                {' '}
-                {moment(essaySubmission[id].submit_time).format('YYYY-MM-DD, HH:mm')}
-              </div>
-            );
-          }
-          return id;
-        })}
+      {essaySubmission.byId[uploadRecord] && (
+        <div>
+          <Link href onClick={handleClickLink}>
+            {essaySubmission.byId[uploadRecord].filename}
+          </Link>
+          {' '}
+          {moment(essaySubmission.byId[uploadRecord].submit_time).format('YYYY-MM-DD, HH:mm')}
+        </div>
+      )}
       {role === 'MANAGER' && (
         <SimpleBar
           title="Delete Task"
@@ -205,13 +214,9 @@ export default function EssayInfo({ role = 'NORMAL' }) {
           <Typography>
             File below was failed to be uploaded:
             <br />
-            {essaySubmission
-              && submissionIds.map((id) => {
-                if (uploadOrNot) {
-                  return <div>{essaySubmission[id].filename}</div>;
-                }
-                return id;
-              })}
+            {/* {uploadSuccessOrNot &&
+              ({essaySubmission.byId[uploadRecord].filename});
+            } */}
           </Typography>
         </DialogContent>
         <DialogActions>
