@@ -12,9 +12,7 @@ import {
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
-import {
-  fetchClasses, addCourse, addClass,
-} from '../../../actions/admin/course';
+import { fetchClasses, addCourse, addClass } from '../../../actions/admin/course';
 import { fetchClassMembers } from '../../../actions/common/common';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
@@ -38,6 +36,7 @@ export default function ClassList() {
   const authToken = useSelector((state) => state.auth.token);
   const courses = useSelector((state) => state.courses);
   const classes = useSelector((state) => state.classes);
+
   const loading = useSelector((state) => state.loading.admin.course);
 
   const [addCourseName, setAddCourseName] = useState('');

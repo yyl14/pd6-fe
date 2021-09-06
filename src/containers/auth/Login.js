@@ -12,7 +12,7 @@ import '../../styles/index.css';
 
 export default function Login() {
   const history = useHistory();
-  const auth = useSelector((state) => state.auth);
+  const config = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
   // eslint-disable-next-line no-unused-vars
   const [cookies, setCookie] = useCookies(['id', 'token']);
@@ -30,7 +30,7 @@ export default function Login() {
       setCookie('token', auth.token, { path: '/', maxAge: 86400 });
       history.push('/');
     }
-  }, [auth.isAuthenticated, auth.token, history, setCookie, user.id]);
+  }, [history, setCookie, user.id]);
 
   return (
     <div className="page auth-page">

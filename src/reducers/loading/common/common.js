@@ -36,7 +36,7 @@ export default function common(state = initialState, action) {
         fetchInstitutes: false,
       };
     }
-    case commonConstants.FETCH_CLASS_MEMBERS_REQUEST: {
+    case commonConstants.FETCH_CLASS_MEMBERS_START: {
       return {
         ...state,
         fetchClassMembers: true,
@@ -54,7 +54,7 @@ export default function common(state = initialState, action) {
         fetchClassMembers: false,
       };
     }
-    case commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_REQUEST: {
+    case commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_START: {
       return {
         ...state,
         fetchClassMembers: true,
@@ -73,7 +73,7 @@ export default function common(state = initialState, action) {
       };
     }
 
-    case commonConstants.EDIT_CLASS_MEMBER_REQUEST: {
+    case commonConstants.EDIT_CLASS_MEMBER_START: {
       return {
         ...state,
         editClassMember: true,
@@ -91,7 +91,7 @@ export default function common(state = initialState, action) {
         editClassMember: false,
       };
     }
-    case commonConstants.REPLACE_CLASS_MEMBERS_REQUEST: {
+    case commonConstants.REPLACE_CLASS_MEMBERS_START: {
       return {
         ...state,
         replaceClassMembers: true,
@@ -109,7 +109,7 @@ export default function common(state = initialState, action) {
         replaceClassMembers: false,
       };
     }
-    case commonConstants.DELETE_CLASS_MEMBER_REQUEST: {
+    case commonConstants.DELETE_CLASS_MEMBER_START: {
       return {
         ...state,
         deleteClassMember: true,
@@ -181,7 +181,7 @@ export default function common(state = initialState, action) {
         fetchChallenge: false,
       };
     }
-    case commonConstants.FETCH_ACCOUNT_REQUEST: {
+    case commonConstants.FETCH_ACCOUNT_START: {
       return {
         ...state,
         fetchAccount: true,

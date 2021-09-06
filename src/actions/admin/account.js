@@ -2,36 +2,36 @@ import agent from '../agent';
 import { accountConstants } from './constant';
 
 const getInstitute = (token, instituteId) => (dispatch) => {
-  const auth = {
+  const config = {
     headers: {
-      'Auth-Token': token,
+      'auth-token': token,
     },
   };
-  dispatch({ type: accountConstants.FETCH_INSTITUTE_REQUEST });
+  dispatch({ type: accountConstants.FETCH_INSTITUTE_START });
 
   agent
-    .get(`/institute/${instituteId}`, auth)
+    .get(`/institute/${instituteId}`, config)
     .then((res) => {
       dispatch({
         type: accountConstants.FETCH_INSTITUTE_SUCCESS,
         payload: res.data.data,
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: accountConstants.FETCH_INSTITUTE_FAIL,
-        error: err,
+        error,
       });
     });
 };
 
 const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled) => (dispatch) => {
-  const auth = {
+  const config = {
     headers: {
-      'Auth-Token': token,
+      'auth-token': token,
     },
   };
-  dispatch({ type: accountConstants.ADD_INSTITUTE_REQUEST });
+  dispatch({ type: accountConstants.ADD_INSTITUTE_START });
 
   agent
     .post(
@@ -42,7 +42,7 @@ const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled)
         email_domain: emailDomain,
         is_disabled: isDisabled,
       },
-      auth,
+      config,
     )
     .then((res) => {
       dispatch({
@@ -56,21 +56,21 @@ const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled)
         },
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: accountConstants.ADD_INSTITUTE_FAIL,
-        error: err,
+        error,
       });
     });
 };
 
 const editInstitute = (token, id, abbreviatedName, fullName, emailDomain, isDisabled) => (dispatch) => {
-  const auth = {
+  const config = {
     headers: {
-      'Auth-Token': token,
+      'auth-token': token,
     },
   };
-  dispatch({ type: accountConstants.EDIT_INSTITUTE_REQUEST });
+  dispatch({ type: accountConstants.EDIT_INSTITUTE_START });
   const body = {
     abbreviated_name: abbreviatedName,
     full_name: fullName,
@@ -79,7 +79,7 @@ const editInstitute = (token, id, abbreviatedName, fullName, emailDomain, isDisa
   };
 
   agent
-    .patch(`/institute/${id}`, body, auth)
+    .patch(`/institute/${id}`, body, config)
     .then(() => {
       dispatch({
         type: accountConstants.EDIT_INSTITUTE_SUCCESS,
@@ -92,25 +92,26 @@ const editInstitute = (token, id, abbreviatedName, fullName, emailDomain, isDisa
         },
       });
     })
-    .catch((err) => {
-      console.log('editing institute fail');
+    .catch((error) => {
+      // console.log('editing institute fail');
       dispatch({
         type: accountConstants.EDIT_INSTITUTE_FAIL,
-        error: err,
+        error,
       });
     });
 };
 
+// SM: edit any account
 const editAccount = (token, id, userName, realName, nickName, email) => (dispatch) => {
-  const auth = {
+  const config = {
     headers: {
-      'Auth-Token': token,
+      'auth-token': token,
     },
   };
-  dispatch({ type: accountConstants.EDIT_ACCOUNT_REQUEST });
+  dispatch({ type: accountConstants.EDIT_ACCOUNT_START });
 
   agent
-    .patch(`/account/${id}`, { real_name: realName, nickname: nickName, alternative_email: email }, auth)
+    .patch(`/account/${id}`, { real_name: realName, nickname: nickName, alternative_email: email }, config)
     .then(() => {
       dispatch({
         type: accountConstants.EDIT_ACCOUNT_SUCCESS,
@@ -122,94 +123,96 @@ const editAccount = (token, id, userName, realName, nickName, email) => (dispatc
         },
       });
     })
-    .catch((err) => {
-      console.log(err);
+    .catch((error) => {
       dispatch({
         type: accountConstants.EDIT_ACCOUNT_FAIL,
-        error: err,
+        error,
       });
     });
 };
 
+// SM: delete any account
 const deleteAccount = (token, id) => (dispatch) => {
-  const auth = {
+  const config = {
     headers: {
-      'Auth-Token': token,
+      'auth-token': token,
     },
   };
-  dispatch({ type: accountConstants.DELETE_ACCOUNT_REQUEST });
+  dispatch({ type: accountConstants.DELETE_ACCOUNT_START });
   agent
-    .delete(`/account/${id}`, auth)
+    .delete(`/account/${id}`, config)
     .then(() => {
       dispatch({
         type: accountConstants.DELETE_ACCOUNT_SUCCESS,
         payload: { id },
       });
     })
-    .catch((err) => {
-      // console.log(err);
+    .catch((error) => {
       dispatch({
         type: accountConstants.DELETE_ACCOUNT_FAIL,
-        error: err,
+        error,
       });
     });
 };
 
+// SM: edit any account
 const makeStudentCardDefault = (token, id, cardId) => (dispatch) => {
-  const auth = {
+  const config = {
     headers: {
-      'Auth-Token': token,
+      'auth-token': token,
     },
   };
-  dispatch({ type: accountConstants.MAKE_STUDENT_CARD_DEFAULT_REQUEST });
+  dispatch({ type: accountConstants.MAKE_STUDENT_CARD_DEFAULT_START });
   agent
-    .put(`/account/${id}/default-student-card`, { student_card_id: cardId }, auth)
+    .put(`/account/${id}/default-student-card`, { student_card_id: cardId }, config)
     .then(() => {
       dispatch({
         type: accountConstants.MAKE_STUDENT_CARD_DEFAULT_SUCCESS,
         payload: { cardId, id },
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: accountConstants.MAKE_STUDENT_CARD_DEFAULT_FAIL,
-        error: err,
+        error,
       });
     });
 };
 
-const fetchStudentCard = (token, id) => (dispatch) => {
-  const auth = {
+// SM: edit any account
+const fetchStudentCards = (token, id) => (dispatch) => {
+  const config = {
     headers: {
-      'Auth-Token': token,
+      'auth-token': token,
     },
   };
-  dispatch({ type: accountConstants.FETCH_STUDENT_CARD_REQUEST });
+  dispatch({ type: accountConstants.FETCH_STUDENT_CARDS_START });
 
   agent
-    .get(`/account/${id}/student-card`, auth)
+    .get(`/account/${id}/student-card`, config)
     .then((res) => {
       dispatch({
-        type: accountConstants.FETCH_STUDENT_CARD_SUCCESS,
+        type: accountConstants.FETCH_STUDENT_CARDS_SUCCESS,
         payload: { id, data: res.data.data },
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
-        type: accountConstants.FETCH_STUDENT_CARD_FAIL,
+        type: accountConstants.FETCH_STUDENT_CARDS_FAIL,
         payload: id,
-        error: err,
+        error,
       });
     });
 };
 
+// SM: edit any account
 const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (dispatch) => {
-  const auth = {
+  const config = {
     headers: {
-      'Auth-Token': token,
+      'auth-token': token,
     },
   };
-  dispatch({ type: accountConstants.ADD_STUDENT_CARD_REQUEST });
+  dispatch({ type: accountConstants.ADD_STUDENT_CARD_START });
   agent
     .post(
       `/account/${id}/student-card`,
@@ -218,64 +221,67 @@ const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (disp
         institute_email_prefix: emailPrefix,
         student_id: studentId,
       },
-      auth,
+      config,
     )
     .then(() => {
       dispatch({ type: accountConstants.ADD_STUDENT_CARD_SUCCESS });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: accountConstants.ADD_STUDENT_CARD_FAIL,
-        error: err,
+        error,
       });
     });
 };
 
+// SM: edit any account
 const editPassword = (token, id, newPassword) => (dispatch) => {
-  const auth = {
+  const config = {
     headers: {
-      'Auth-Token': token,
+      'auth-token': token,
     },
   };
-  dispatch({ type: accountConstants.EDIT_PASSWORD_REQUEST });
+  dispatch({ type: accountConstants.EDIT_PASSWORD_START });
   agent
     .put(
       `/account/${id}/pass_hash`,
       {
         new_password: newPassword,
       },
-      auth,
+      config,
     )
     .then(() => {
       dispatch({ type: accountConstants.EDIT_PASSWORD_SUCCESS });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: accountConstants.EDIT_PASSWORD_FAIL,
-        error: err,
+        error,
       });
     });
 };
 
+// SM: fetch all accounts
+// WITH BROWSE API
 const fetchAccounts = (token) => (dispatch) => {
-  const auth = {
+  const config = {
     headers: {
-      'Auth-Token': token,
+      'auth-token': token,
     },
   };
-  dispatch({ type: accountConstants.FETCH_ACCOUNTS_REQUEST });
+  dispatch({ type: accountConstants.FETCH_ACCOUNTS_START });
   agent
-    .get('/account', auth)
+    .get('/account', config)
     .then((res) => {
       dispatch({
         type: accountConstants.FETCH_ACCOUNTS_SUCCESS,
         payload: res.data.data.data,
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: accountConstants.FETCH_ACCOUNTS_FAIL,
-        error: err,
+        error,
       });
     });
 };
@@ -287,7 +293,7 @@ export {
   editAccount,
   deleteAccount,
   makeStudentCardDefault,
-  fetchStudentCard,
+  fetchStudentCards,
   addStudentCard,
   editPassword,
   fetchAccounts,

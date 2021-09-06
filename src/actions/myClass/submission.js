@@ -5,16 +5,16 @@ import browseParamsTransForm from '../../function/browseParamsTransform';
 
 const fetchAllSubmissions = (token, accountId, problemId, languageId) => async (dispatch) => {
   try {
-    const auth = {
+    const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
       },
     };
     dispatch({ type: submissionConstants.FETCH_ALL_SUBMISSIONS_START });
 
     const res = agent.get(
       `/submission?account_id=${accountId}&problem_id=${problemId}&language_id=${languageId}`,
-      auth,
+      config,
     );
 
     dispatch({
@@ -26,11 +26,11 @@ const fetchAllSubmissions = (token, accountId, problemId, languageId) => async (
         data: res.data.data.data,
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
     dispatch({
       type: submissionConstants.FETCH_ALL_SUBMISSIONS_FAIL,
-      error: err,
+      error,
     });
   }
 };
@@ -83,10 +83,10 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
       data.map(async ({ id }) => agent
         .get(`/submission/${id}/judgment`, config3)
         .then((res4) => res4.data.data)
-        .catch((err) => {
+        .catch((error) => {
           dispatch({
             type: submissionConstants.FETCH_SUBMISSIONS_FAIL,
-            error: err,
+            error,
           });
         })),
     );
@@ -111,30 +111,30 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
         offset: browseParams.offset,
       },
     });
-  } catch (err) {
+  } catch (error) {
     dispatch({
       type: submissionConstants.FETCH_SUBMISSIONS_FAIL,
-      error: err,
+      error,
     });
   }
 };
 
 const fetchSubmission = (token, submissionId) => (dispatch) => {
-  const auth = {
+  const config = {
     headers: {
-      'Auth-Token': token,
+      'auth-token': token,
     },
   };
   dispatch({ type: submissionConstants.FETCH_SUBMISSION_START });
 
   agent
-    .get(`/submission/${submissionId}`, auth)
+    .get(`/submission/${submissionId}`, config)
     .then((res) => {
       if (res.data.success) {
         if (res.data.data.content_file_uuid !== null && res.data.data.filename !== null) {
           const config = {
             headers: {
-              'Auth-Token': token,
+              'auth-token': token,
             },
             params: {
               filename: res.data.data.filename,
@@ -171,125 +171,125 @@ const fetchSubmission = (token, submissionId) => (dispatch) => {
         });
       }
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: submissionConstants.FETCH_SUBMISSION_FAIL,
-        error: err,
+        error,
       });
     });
 };
 
 const addSubmission = (token, problemId, languageId, body) => (dispatch) => {
-  const auth = {
+  const config = {
     headers: {
-      'Auth-Token': token,
+      'auth-token': token,
     },
   };
   dispatch({ type: submissionConstants.ADD_SUBMISSION_START });
 
   agent
-    .post(`/problem/${problemId}/submission?language_id=${languageId}`, body, auth)
+    .post(`/problem/${problemId}/submission?language_id=${languageId}`, body, config)
     .then((res) => {
       dispatch({
         type: submissionConstants.ADD_SUBMISSION_SUCCESS,
         payload: { submissionId: res.data.data.id },
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: submissionConstants.ADD_SUBMISSION_FAIL,
-        error: err,
+        error,
       });
     });
 };
 
 const fetchJudgement = (token, submissionId) => (dispatch) => {
-  const auth = {
+  const config = {
     headers: {
-      'Auth-Token': token,
+      'auth-token': token,
     },
   };
   dispatch({ type: submissionConstants.FETCH_JUDGEMENT_START });
 
   agent
-    .get(`/submission/${submissionId}/judgment`, auth)
+    .get(`/submission/${submissionId}/judgment`, config)
     .then((res) => {
       dispatch({
         type: submissionConstants.FETCH_JUDGEMENT_SUCCESS,
         payload: { submissionId, data: res.data.data },
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: submissionConstants.FETCH_JUDGEMENT_FAIL,
-        error: err,
+        error,
       });
     });
 };
 
 const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
   dispatch({ type: submissionConstants.READ_SUBMISSION_JUDGE_START });
-  const auth = {
+  const config = {
     headers: {
-      'Auth-Token': token,
+      'auth-token': token,
     },
   };
 
   try {
-    const judgment = await agent.get(`/submission/${submissionId}/latest-judgment`, auth);
+    const judgment = await agent.get(`/submission/${submissionId}/latest-judgment`, config);
 
     dispatch({
       type: submissionConstants.READ_SUBMISSION_JUDGE_SUCCESS,
       payload: judgment.data.data,
     });
-  } catch (err) {
+  } catch (error) {
     dispatch({
       type: submissionConstants.READ_SUBMISSION_JUDGE_FAIL,
-      errors: err,
+      error,
     });
   }
 };
 
 const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
   dispatch({ type: submissionConstants.BROWSE_JUDGE_CASES_START });
-  const auth = {
+  const config = {
     headers: {
-      'Auth-Token': token,
+      'auth-token': token,
     },
   };
   try {
-    const res = await agent.get(`/judgment/${judgmentId}/judge-case`, auth);
+    const res = await agent.get(`/judgment/${judgmentId}/judge-case`, config);
 
     dispatch({
       type: submissionConstants.BROWSE_JUDGE_CASES_SUCCESS,
       payload: res.data.data,
     });
-  } catch (err) {
+  } catch (error) {
     dispatch({
       type: submissionConstants.BROWSE_JUDGE_CASES_FAIL,
-      errors: err,
+      error,
     });
   }
 };
 
 const readTestcase = (token, testcaseId) => async (dispatch) => {
   dispatch({ type: submissionConstants.READ_TESTCASE_START });
-  const auth = {
+  const config = {
     headers: {
-      'Auth-Token': token,
+      'auth-token': token,
     },
   };
   try {
-    const res = await agent.get(`/testcase/${testcaseId}`, auth);
+    const res = await agent.get(`/testcase/${testcaseId}`, config);
 
     dispatch({
       type: submissionConstants.READ_TESTCASE_SUCCESS,
       payload: res.data.data,
     });
-  } catch (err) {
+  } catch (error) {
     dispatch({
       type: submissionConstants.READ_TESTCASE_FAIL,
-      errors: err,
+      error,
     });
   }
 };
@@ -307,10 +307,10 @@ const getAccountBatch = (token, accountId) => async (dispatch) => {
       type: submissionConstants.GET_ACCOUNT_BATCH_SUCCESS,
       payload: { data: res.data.data[0], accountId },
     });
-  } catch (err) {
+  } catch (error) {
     dispatch({
       type: submissionConstants.GET_ACCOUNT_BATCH_FAIL,
-      errors: err,
+      error,
     });
   }
 };

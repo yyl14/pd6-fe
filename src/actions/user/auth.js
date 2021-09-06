@@ -3,13 +3,13 @@ import { authConstants } from './constants';
 
 const getUserInfo = (id, token) => async (dispatch) => {
   try {
-    const auth = {
+    const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
       },
     };
-    const userInfo = await agent.get(`/account/${id}`, auth);
-    const userClassesRes = await agent.get(`/account/${id}/class`, auth);
+    const userInfo = await agent.get(`/account/${id}`, config);
+    const userClassesRes = await agent.get(`/account/${id}/class`, config);
     const userClassesInfo = userClassesRes.data.data;
 
     dispatch({
@@ -20,10 +20,10 @@ const getUserInfo = (id, token) => async (dispatch) => {
         classes: userClassesInfo,
       },
     });
-  } catch (err) {
+  } catch (error) {
     dispatch({
       type: authConstants.AUTH_FAIL,
-      error: err,
+      error,
     });
   }
 };
@@ -33,16 +33,16 @@ const userSignIn = (username, password) => async (dispatch) => {
     const logRes = await agent.post('/account/jwt', { username, password });
     const id = logRes.data.data.account_id;
     const { token } = logRes.data.data;
-    const auth = {
+    const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
       },
     };
-    const userInfo = await agent.get(`/account/${id}`, auth);
-    const userClassesRes = await agent.get(`/account/${id}/class`, auth);
+    const userInfo = await agent.get(`/account/${id}`, config);
+    const userClassesRes = await agent.get(`/account/${id}/class`, config);
     const userClassesInfo = await Promise.all(
       userClassesRes.data.data.map(async (item) => agent
-        .get(`/class/${item.class_id}`, auth)
+        .get(`/class/${item.class_id}`, config)
         .then(({ data: { data } }) => ({ ...item, class_name: data.name, course_id: data.course_id }))
         .catch((error) => dispatch({
           type: authConstants.AUTH_FAIL,
@@ -58,10 +58,10 @@ const userSignIn = (username, password) => async (dispatch) => {
         classes: userClassesInfo,
       },
     });
-  } catch (err) {
+  } catch (error) {
     dispatch({
       type: authConstants.AUTH_FAIL,
-      error: err,
+      error,
     });
   }
 };
@@ -103,10 +103,10 @@ const userRegister = (username, password, nickname, realName, emailPrefix, insti
         error: res.data.error,
       });
     }
-  } catch (err) {
+  } catch (error) {
     dispatch({
       type: authConstants.SIGNUP_FAIL,
-      error: err,
+      error,
     });
   }
 };
@@ -122,10 +122,10 @@ const emailVerification = (code) => async (dispatch) => {
     dispatch({ type: authConstants.EMAIL_VERIFICATION_START });
     await agent.get('/email-verification', config);
     dispatch({ type: authConstants.EMAIL_VERIFICATION_SUCCESS });
-  } catch (err) {
+  } catch (error) {
     dispatch({
       type: authConstants.EMAIL_VERIFICATION_FAIL,
-      error: err,
+      error,
     });
   }
 };
@@ -137,20 +137,14 @@ const userResetPassword = (code, password) => async (dispatch) => {
     dispatch({
       type: authConstants.RESET_PASSWORD_SUCCESS,
     });
-  } catch (err) {
+  } catch (error) {
     dispatch({
       type: authConstants.RESET_PASSWORD_FAIL,
-      error: err,
+      error,
     });
   }
 };
 
 export {
-  getUserInfo,
-  userSignIn,
-  userLogout,
-  userForgetPassword,
-  userRegister,
-  emailVerification,
-  userResetPassword,
+  getUserInfo, userSignIn, userLogout, userForgetPassword, userRegister, emailVerification, userResetPassword,
 };

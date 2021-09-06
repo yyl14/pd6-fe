@@ -99,7 +99,7 @@ export default function common(state = initialState, action) {
     case commonConstants.BROWSE_SUBMISSION_LANG_FAIL: {
       return {
         ...state,
-        browseSubmitLang: action.errors,
+        browseSubmitLang: action.error,
       };
     }
     case commonConstants.BROWSE_SUBMISSION_LANG_SUCCESS: {

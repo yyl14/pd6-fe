@@ -92,25 +92,25 @@ export default function submissions(state = initialState, action) {
     case submissionConstants.READ_SUBMISSION_JUDGE_FAIL: {
       return {
         ...state,
-        readSubmissionDetail: action.errors,
+        readSubmissionDetail: action.error,
       };
     }
     case submissionConstants.BROWSE_JUDGE_CASES_FAIL: {
       return {
         ...state,
-        browseJudgeCases: action.errors,
+        browseJudgeCases: action.error,
       };
     }
     case submissionConstants.READ_TESTCASE_FAIL: {
       return {
         ...state,
-        readTestcase: action.errors,
+        readTestcase: action.error,
       };
     }
     case submissionConstants.GET_ACCOUNT_BATCH_FAIL: {
       return {
         ...state,
-        getAccountBatch: action.errors,
+        getAccountBatch: action.error,
       };
     }
     default:

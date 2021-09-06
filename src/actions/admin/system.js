@@ -127,7 +127,7 @@ const editAnnouncement = (token, id, body) => (dispatch) => {
         payload: success,
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: systemConstants.EDIT_ANNOUNCEMENT_FAIL,
         payload: err,
@@ -149,7 +149,7 @@ const addAnnouncement = (token, body) => (dispatch) => {
         payload: success,
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: systemConstants.ADD_ANNOUNCEMENT_FAIL,
         payload: err,
@@ -172,7 +172,7 @@ const deleteAnnouncement = (token, id) => (dispatch) => {
         payload: success,
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: systemConstants.DELETE_ANNOUNCEMENT_FAIL,
         payload: err,
@@ -197,7 +197,7 @@ const fetchSubmitLanguage = (token) => (dispatch) => {
         payload: { data },
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: systemConstants.FETCH_SUBMIT_LANGUAGE_FAIL,
         payload: err,
@@ -230,7 +230,7 @@ const editSubmitLanguage = (token, id, name, version, isDisabled) => (dispatch) 
         },
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: systemConstants.EDIT_SUBMIT_LANGUAGE_FAIL,
         payload: err,

@@ -2,7 +2,7 @@ import { userConstants } from '../../../actions/user/constants';
 
 const initialState = {
   editAccount: null,
-  fetchStudentCard: null,
+  fetchStudentCards: null,
   addStudentCard: null,
   makeStudentCardDefault: null,
   resetPassword: null,
@@ -38,13 +38,13 @@ export default function user(state = initialState, action) {
     case userConstants.GET_SELF_STUDENT_CARD_SUCCESS: {
       return {
         ...state,
-        fetchStudentCard: null,
+        fetchStudentCards: null,
       };
     }
     case userConstants.GET_SELF_STUDENT_CARD_FAIL: {
       return {
         ...state,
-        fetchStudentCard: action.error,
+        fetchStudentCards: action.error,
       };
     }
     case userConstants.ADD_SELF_STUDENT_CARD_SUCCESS: {

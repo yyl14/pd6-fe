@@ -3,13 +3,13 @@ import { essayConstants } from './constant';
 
 const readEssaySubmission = (token, essaySubmissionId) => async (dispatch) => {
   try {
-    const auth = {
+    const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
       },
     };
     dispatch({ type: essayConstants.READ_ESSAY_SUBMISSION_START });
-    const res = await agent.get(`/essay-submission/${essaySubmissionId}`, auth);
+    const res = await agent.get(`/essay-submission/${essaySubmissionId}`, config);
     dispatch({
       type: essayConstants.READ_ESSAY_SUBMISSION_SUCCESS,
       payload: res.data.data,
@@ -27,7 +27,7 @@ const uploadEssay = (token, essayId, file) => async (dispatch) => {
     dispatch({ type: essayConstants.UPLOAD_ESSAY_SUBMISSION_START });
     const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
         'Content-Type': 'multipart/form-data',
       },
     };
@@ -54,7 +54,7 @@ const reUploadEssay = (token, essaySubmissionId, file) => async (dispatch) => {
     dispatch({ type: essayConstants.REUPLOAD_ESSAY_SUBMISSION_START });
     const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
       },
       'Content-Type': 'multipart/form-data',
     };
@@ -76,7 +76,7 @@ const downloadAllEssaySubmission = (token, essayId, as_attachment) => async (dis
     dispatch({ type: essayConstants.DOWNLOAD_ALL_ESSAY_SUBMISSION_START });
     const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
       },
       params: {
         as_attachment,
