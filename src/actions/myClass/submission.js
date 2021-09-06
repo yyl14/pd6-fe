@@ -3,45 +3,12 @@ import { submissionConstants } from './constant';
 import { autoTableConstants } from '../component/constant';
 import browseParamsTransForm from '../../function/browseParamsTransform';
 
-const fetchAllSubmissions = (token, accountId, problemId, languageId) => async (dispatch) => {
-  try {
-    const config = {
-      headers: {
-        'auth-token': token,
-      },
-    };
-    dispatch({ type: submissionConstants.FETCH_ALL_SUBMISSIONS_START });
-
-    const res = agent.get(
-      `/submission?account_id=${accountId}&problem_id=${problemId}&language_id=${languageId}`,
-      config,
-    );
-
-    dispatch({
-      type: submissionConstants.FETCH_ALL_SUBMISSIONS_SUCCESS,
-      payload: {
-        accountId,
-        problemId,
-        languageId,
-        data: res.data.data.data,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-    dispatch({
-      type: submissionConstants.FETCH_ALL_SUBMISSIONS_FAIL,
-      error,
-    });
-  }
-};
-
+// WITH BROWSE PARAMS
 const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => async (dispatch) => {
   try {
-    // console.log(browseParams);
     const config1 = {
       headers: { 'auth-token': token },
       params: browseParamsTransForm(browseParams),
-      // paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
     };
     dispatch({
       type: submissionConstants.FETCH_SUBMISSIONS_START,
@@ -61,19 +28,15 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
     //   'filename': 'str',
     //   'submit_time': 'ServerTZDatetime'}
 
-    // console.log(res1);
-
     // Batch browse account
     const accountIds = data.map((item) => item.account_id);
-    let res2 = null;
-    if (accountIds.length !== 0) {
-      const config2 = {
-        headers: { 'auth-token': token },
-        params: { account_ids: JSON.stringify(accountIds) },
-      };
 
-      res2 = await agent.get('/account-summary/batch', config2);
-    }
+    const config2 = {
+      headers: { 'auth-token': token },
+      params: { account_ids: JSON.stringify(accountIds) },
+    };
+
+    const res2 = await agent.get('/account-summary/batch', config2);
 
     const config3 = {
       headers: { 'auth-token': token },
@@ -120,7 +83,7 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
 };
 
 const fetchSubmission = (token, submissionId) => (dispatch) => {
-  const config = {
+  const config1 = {
     headers: {
       'auth-token': token,
     },
@@ -128,46 +91,32 @@ const fetchSubmission = (token, submissionId) => (dispatch) => {
   dispatch({ type: submissionConstants.FETCH_SUBMISSION_START });
 
   agent
-    .get(`/submission/${submissionId}`, config)
+    .get(`/submission/${submissionId}`, config1)
     .then((res) => {
-      if (res.data.success) {
-        if (res.data.data.content_file_uuid !== null && res.data.data.filename !== null) {
-          const config = {
-            headers: {
-              'auth-token': token,
-            },
-            params: {
-              filename: res.data.data.filename,
-              as_attachment: false,
-            },
-          };
-          agent.get(`/s3-file/${res.data.data.content_file_uuid}/url`, config).then((res2) => {
-            if (res2.data.success) {
-              fetch(res2.data.data.url)
-                .then((r) => r.text())
-                .then((t) => {
-                  dispatch({
-                    type: submissionConstants.FETCH_SUBMISSION_SUCCESS,
-                    payload: { submissionId, data: { ...res.data.data, content: t.toString() } },
-                  });
-                });
-            } else {
+      if (res.data.data.content_file_uuid !== null && res.data.data.filename !== null) {
+        const config2 = {
+          headers: {
+            'auth-token': token,
+          },
+          params: {
+            filename: res.data.data.filename,
+            as_attachment: false,
+          },
+        };
+        agent.get(`/s3-file/${res.data.data.content_file_uuid}/url`, config2).then((res2) => {
+          fetch(res2.data.data.url)
+            .then((r) => r.text())
+            .then((t) => {
               dispatch({
                 type: submissionConstants.FETCH_SUBMISSION_SUCCESS,
-                payload: { submissionId, data: res.data.data },
+                payload: { submissionId, data: { ...res.data.data, content: t.toString() } },
               });
-            }
-          });
-        } else {
-          dispatch({
-            type: submissionConstants.FETCH_SUBMISSION_SUCCESS,
-            payload: { submissionId, data: res.data.data },
-          });
-        }
+            });
+        });
       } else {
         dispatch({
-          type: submissionConstants.FETCH_SUBMISSION_FAIL,
-          error: res.data.error,
+          type: submissionConstants.FETCH_SUBMISSION_SUCCESS,
+          payload: { submissionId, data: res.data.data },
         });
       }
     })
@@ -250,6 +199,7 @@ const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
   }
 };
 
+// browse judge cases under judgement
 const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
   dispatch({ type: submissionConstants.BROWSE_JUDGE_CASES_START });
   const config = {
@@ -316,7 +266,6 @@ const getAccountBatch = (token, accountId) => async (dispatch) => {
 };
 
 export {
-  fetchAllSubmissions,
   fetchClassSubmissions,
   fetchSubmission,
   addSubmission,

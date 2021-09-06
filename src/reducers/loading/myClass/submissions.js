@@ -1,7 +1,6 @@
 import { submissionConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
-  fetchAllSubmissions: false,
   fetchClassSubmissions: false,
   fetchSubmission: false,
   addSubmission: false,
@@ -14,25 +13,6 @@ const initialState = {
 
 export default function submissions(state = initialState, action) {
   switch (action.type) {
-    case submissionConstants.FETCH_ALL_SUBMISSIONS_START: {
-      return {
-        ...state,
-        fetchAllSubmissions: true,
-      };
-    }
-    case submissionConstants.FETCH_ALL_SUBMISSIONS_SUCCESS: {
-      return {
-        ...state,
-        fetchAllSubmissions: false,
-      };
-    }
-    case submissionConstants.FETCH_ALL_SUBMISSIONS_FAIL: {
-      return {
-        ...state,
-        fetchAllSubmissions: false,
-      };
-    }
-
     case submissionConstants.FETCH_SUBMISSION_START: {
       return {
         ...state,

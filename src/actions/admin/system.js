@@ -4,7 +4,7 @@ import { autoTableConstants } from '../component/constant';
 import browseParamsTransForm from '../../function/browseParamsTransform';
 
 // Access log
-// WITH BROWSE API
+// WITH BROWSE PARAMS
 const fetchAccessLog = (token, browseParams, tableId = null) => async (dispatch) => {
   try {
     dispatch({

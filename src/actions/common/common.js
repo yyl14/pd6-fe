@@ -22,7 +22,7 @@ const getInstitutes = () => (dispatch) => {
     });
 };
 
-// WITH BROWSE API
+// WITH BROWSE PARAMS
 const fetchClassMembers = (token, classId, browseParams, tableId = null) => async (dispatch) => {
   try {
     const config = {

@@ -262,7 +262,7 @@ const editPassword = (token, id, newPassword) => (dispatch) => {
 };
 
 // SM: fetch all accounts
-// WITH BROWSE API
+// WITH BROWSE PARAMS
 const fetchAccounts = (token) => (dispatch) => {
   const config = {
     headers: {

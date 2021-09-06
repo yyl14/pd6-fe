@@ -57,7 +57,7 @@ export const editGrade = (token, gradeId, title, score, comment) => (dispatch) =
     });
 };
 
-// WITH BROWSE API
+// WITH BROWSE PARAMS
 export const fetchClassGrade = (token, classId) => async (dispatch) => {
   try {
     const config = {
@@ -129,7 +129,7 @@ export const importClassGrade = (token, classId, title, file) => async (dispatch
   }
 };
 
-// WITH BROWSE API
+// WITH BROWSE PARAMS
 // export const fetchAccountGrade = (token, accountId) => (dispatch) => {
 //   const config = { headers: { 'auth-token': token } };
 //   dispatch({ type: gradeConstants.FETCH_ACCOUNT_GRADE_START });

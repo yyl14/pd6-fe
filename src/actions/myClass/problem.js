@@ -1,23 +1,6 @@
 import agent from '../agent';
 import { problemConstants } from './constant';
-
-function getText(url) {
-  // read text from URL location
-  return new Promise((resolve) => {
-    const request = new XMLHttpRequest();
-    request.open('GET', url, true);
-    request.send(null);
-    request.onreadystatechange = () => {
-      if (request.readyState === 4 && request.status === 200) {
-        const type = request.getResponseHeader('Content-Type');
-        if (type.indexOf('text') !== 1) {
-          resolve(request.responseText);
-          // return request.responseText;
-        }
-      }
-    };
-  });
-}
+import getTextFromUrl from '../../function/getTextFromUrl';
 
 const readProblemInfo = (token, problemId) => async (dispatch) => {
   const config = {
@@ -28,10 +11,10 @@ const readProblemInfo = (token, problemId) => async (dispatch) => {
 
   try {
     dispatch({ type: problemConstants.READ_PROBLEM_START });
-    const problemInfo = await agent.get(`/problem/${problemId}`, config);
+    const res = await agent.get(`/problem/${problemId}`, config);
     dispatch({
       type: problemConstants.READ_PROBLEM_SUCCESS,
-      payload: problemInfo.data.data,
+      payload: res.data.data,
     });
   } catch (error) {
     dispatch({
@@ -41,6 +24,8 @@ const readProblemInfo = (token, problemId) => async (dispatch) => {
   }
 };
 
+// read own submission under problem
+// WITH BROWSE PARAMS
 const readSubmission = (token, accountId, problemId) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_SUBMISSION_START });
   const config = {
@@ -48,15 +33,15 @@ const readSubmission = (token, accountId, problemId) => async (dispatch) => {
       'auth-token': token,
     },
     params: {
-      problem_id: parseInt(problemId, 10),
+      problem_id: Number(problemId),
       account_id: accountId,
     },
   };
   try {
-    const subInfo = await agent.get('/submission', config);
+    const res = await agent.get('/submission', config);
     dispatch({
       type: problemConstants.READ_SUBMISSION_SUCCESS,
-      payload: subInfo.data.data.data,
+      payload: res.data.data.data,
     });
   } catch (error) {
     dispatch({
@@ -75,11 +60,11 @@ const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
   };
 
   try {
-    const judgment = await agent.get(`/submission/${submissionId}/latest-judgment`, config);
+    const res = await agent.get(`/submission/${submissionId}/latest-judgment`, config);
 
     dispatch({
       type: problemConstants.READ_SUBMISSION_JUDGE_SUCCESS,
-      payload: judgment.data.data,
+      payload: res.data.data,
     });
   } catch (error) {
     dispatch({
@@ -147,8 +132,8 @@ const browseTestcase = (token, problemId) => async (dispatch) => {
             const res1 = await agent.get(`/s3-file/${testcase.input_file_uuid}/url`, config1);
             const res2 = await agent.get(`/s3-file/${testcase.output_file_uuid}/url`, config2);
             if (res1.data.success && res2.data.success) {
-              const input = await getText(res1.data.data.url);
-              const output = await getText(res2.data.data.url);
+              const input = await getTextFromUrl(res1.data.data.url);
+              const output = await getTextFromUrl(res2.data.data.url);
               return {
                 ...testcase,
                 input,
@@ -173,7 +158,7 @@ const browseTestcase = (token, problemId) => async (dispatch) => {
             };
             const res1 = await agent.get(`/s3-file/${testcase.input_file_uuid}/url`, config1);
             if (res1.data.success) {
-              const input = await getText(res1.data.data.url);
+              const input = await getTextFromUrl(res1.data.data.url);
               return {
                 ...testcase,
                 input,
@@ -198,7 +183,7 @@ const browseTestcase = (token, problemId) => async (dispatch) => {
             };
             const res2 = await agent.get(`/s3-file/${testcase.output_file_uuid}/url`, config2);
             if (res2.data.success) {
-              const output = await getText(res2.data.data.url);
+              const output = await getTextFromUrl(res2.data.data.url);
               return {
                 ...testcase,
                 input: '',
