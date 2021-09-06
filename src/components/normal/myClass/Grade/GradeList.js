@@ -344,12 +344,12 @@ export default function GradeList() {
           </Button>
         </DialogActions>
       </Dialog>
-      {/* <Snackbar
+      <Snackbar
         severity="error"
         open={showAddDialog && hasError}
         onClose={handleCloseError}
         message={`Error: ${error.addClassGrade}`}
-      /> */}
+      />
 
       <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
