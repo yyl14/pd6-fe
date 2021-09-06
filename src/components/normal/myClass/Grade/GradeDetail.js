@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { fetchClassMembers } from '../../../../actions/common/common';
-import { fetchClassGrade } from '../../../../actions/myClass/grade';
+import { fetchGrade } from '../../../../actions/myClass/grade';
 
 import GradeInfo from './detail/GradeInfo';
 import Grader from './detail/Grader';
@@ -44,9 +44,9 @@ export default function AccountSetting() {
 
   useEffect(() => {
     if (!loading.editGrade) {
-      dispatch(fetchClassGrade(authToken, classId));
+      dispatch(fetchGrade(authToken, gradeId));
     }
-  }, [dispatch, authToken, classId, loading.editGrade]);
+  }, [dispatch, authToken, loading.editGrade, gradeId]);
 
   useEffect(() => {
     user.classes.forEach((item) => {

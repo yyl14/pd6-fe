@@ -26,7 +26,7 @@ const byId = (state = {}, action) => {
       };
     }
 
-    case accountConstants.FETCH_STUDENT_CARD_SUCCESS: {
+    case accountConstants.FETCH_STUDENT_CARDS_SUCCESS: {
       const { id, data } = action.payload;
       return {
         ...state,
@@ -37,7 +37,7 @@ const byId = (state = {}, action) => {
       };
     }
 
-    case accountConstants.FETCH_STUDENT_CARD_FAIL: {
+    case accountConstants.FETCH_STUDENT_CARDS_FAIL: {
       const { id } = action.payload;
       return { ...state, [id]: { ...state[id], studentCard: [] } };
     }

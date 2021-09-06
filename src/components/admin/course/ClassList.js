@@ -12,10 +12,8 @@ import {
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
-import {
-  fetchClasses, addCourse, addClass,
-} from '../../../actions/admin/course';
-import { fetchClassMembers } from '../../../actions/common/common';
+import { fetchClasses, addCourse, addClass } from '../../../actions/admin/course';
+import { fetchClassMemberWithAccountReferral } from '../../../actions/common/common';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
 import NoMatch from '../../noMatch';
@@ -38,6 +36,7 @@ export default function ClassList() {
   const authToken = useSelector((state) => state.auth.token);
   const courses = useSelector((state) => state.courses);
   const classes = useSelector((state) => state.classes);
+
   const loading = useSelector((state) => state.loading.admin.course);
 
   const [addCourseName, setAddCourseName] = useState('');
@@ -54,7 +53,7 @@ export default function ClassList() {
   // fetch members under all classes to get member count
   useEffect(() => {
     if (courses.byId[courseId] && !loading.renameClass && !loading.deleteClass && !loading.addClass) {
-      courses.byId[courseId].classIds.map((id) => dispatch(fetchClassMembers(authToken, id)));
+      courses.byId[courseId].classIds.map((id) => dispatch(fetchClassMemberWithAccountReferral(authToken, id)));
     }
   }, [authToken, courseId, courses.byId, dispatch, loading.addClass, loading.deleteClass, loading.renameClass]);
 
@@ -93,6 +92,8 @@ export default function ClassList() {
     }
     return <NoMatch />;
   }
+
+  console.log(classes);
 
   return (
     <>

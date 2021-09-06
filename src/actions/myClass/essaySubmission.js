@@ -3,13 +3,13 @@ import { essayConstants } from './constant';
 
 const readEssaySubmission = (token, essaySubmissionId) => async (dispatch) => {
   try {
-    const auth = {
+    const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
       },
     };
     dispatch({ type: essayConstants.READ_ESSAY_SUBMISSION_START });
-    const res = await agent.get(`/essay-submission/${essaySubmissionId}`, auth);
+    const res = await agent.get(`/essay-submission/${essaySubmissionId}`, config);
     dispatch({
       type: essayConstants.READ_ESSAY_SUBMISSION_SUCCESS,
       payload: res.data.data,
@@ -27,20 +27,18 @@ const uploadEssay = (token, essayId, file) => async (dispatch) => {
     dispatch({ type: essayConstants.UPLOAD_ESSAY_SUBMISSION_START });
     const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
         'Content-Type': 'multipart/form-data',
       },
     };
     const formData = new FormData();
     formData.append('essay_file', file);
 
-    const res = await agent.post(`/essay/${essayId}/essay-submission`, formData, config);
+    await agent.post(`/essay/${essayId}/essay-submission`, formData, config);
 
     dispatch({
       type: essayConstants.UPLOAD_ESSAY_SUBMISSION_SUCCESS,
-      payload: res.data.data,
     });
-    dispatch(readEssaySubmission(token, res.data.data));
   } catch (error) {
     dispatch({
       type: essayConstants.UPLOAD_ESSAY_SUBMISSION_FAIL,
@@ -51,10 +49,10 @@ const uploadEssay = (token, essayId, file) => async (dispatch) => {
 
 const reUploadEssay = (token, essaySubmissionId, file) => async (dispatch) => {
   try {
-    dispatch({ type: essayConstants.REUPLOAD_ESSAY_SUBMISSION_START });
+    dispatch({ type: essayConstants.RE_UPLOAD_ESSAY_SUBMISSION_START });
     const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
       },
       'Content-Type': 'multipart/form-data',
     };
@@ -62,21 +60,24 @@ const reUploadEssay = (token, essaySubmissionId, file) => async (dispatch) => {
     formData.append('essay_file', file);
 
     await agent.put(`/essay-submission/${essaySubmissionId}`, formData, config);
-    dispatch(readEssaySubmission(token, essaySubmissionId));
+    dispatch({
+      type: essayConstants.RE_UPLOAD_ESSAY_SUBMISSION_SUCCESS,
+    });
   } catch (error) {
     dispatch({
-      type: essayConstants.REUPLOAD_ESSAY_SUBMISSION_FAIL,
+      type: essayConstants.RE_UPLOAD_ESSAY_SUBMISSION_FAIL,
       error,
     });
   }
 };
 
+// CM only
 const downloadAllEssaySubmission = (token, essayId, as_attachment) => async (dispatch) => {
   try {
     dispatch({ type: essayConstants.DOWNLOAD_ALL_ESSAY_SUBMISSION_START });
     const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
       },
       params: {
         as_attachment,
