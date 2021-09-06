@@ -1,67 +1,65 @@
 import agent from '../agent';
 import { authConstants } from './constants';
 
-const getUserInfo = (id, token) => async (dispatch) => {
+const userSignIn = (username, password) => async (dispatch) => {
   try {
-    const auth = {
+    const res1 = await agent.post('/account/jwt', { username, password });
+    const id = res1.data.data.account_id;
+    const { token } = res1.data.data;
+    const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
       },
     };
-    const userInfo = await agent.get(`/account/${id}`, auth);
-    const userClassesRes = await agent.get(`/account/${id}/class`, auth);
-    const userClassesInfo = userClassesRes.data.data;
+    const [res2, res3] = await Promise.all([
+      agent.get(`/account/${id}`, config),
+      agent.get(`/account/${id}/class`, config),
+    ]);
+
+    console.log([res2, res3]);
 
     dispatch({
       type: authConstants.AUTH_SUCCESS,
       user: {
         token,
-        ...userInfo.data.data,
-        classes: userClassesInfo,
+        ...res2.data.data,
+        classes: res3.data.data,
       },
     });
-  } catch (err) {
+  } catch (error) {
     dispatch({
       type: authConstants.AUTH_FAIL,
-      error: err,
+      error,
     });
   }
 };
 
-const userSignIn = (username, password) => async (dispatch) => {
+// resume logged in status from cookies
+const getUserInfo = (id, token) => async (dispatch) => {
   try {
-    const logRes = await agent.post('/account/jwt', { username, password });
-    const id = logRes.data.data.account_id;
-    const { token } = logRes.data.data;
-    const auth = {
+    const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
       },
     };
-    const userInfo = await agent.get(`/account/${id}`, auth);
-    const userClassesRes = await agent.get(`/account/${id}/class`, auth);
-    const userClassesInfo = await Promise.all(
-      userClassesRes.data.data.map(async (item) => agent
-        .get(`/class/${item.class_id}`, auth)
-        .then(({ data: { data } }) => ({ ...item, class_name: data.name, course_id: data.course_id }))
-        .catch((error) => dispatch({
-          type: authConstants.AUTH_FAIL,
-          error,
-        }))),
-    );
+
+    const [res1, res2] = await Promise.all([
+      agent.get(`/account/${id}`, config),
+      agent.get(`/account/${id}/class`, config),
+    ]);
 
     dispatch({
       type: authConstants.AUTH_SUCCESS,
       user: {
         token,
-        ...userInfo.data.data,
-        classes: userClassesInfo,
+        ...res1.data.data,
+        classes: res2.data.data,
       },
     });
-  } catch (err) {
+  } catch (error) {
     dispatch({
       type: authConstants.AUTH_FAIL,
-      error: err,
+      error,
     });
   }
 };
@@ -82,7 +80,6 @@ const userForgetPassword = (email) => async (dispatch) => {
 };
 
 const userRegister = (username, password, nickname, realName, emailPrefix, instituteId, studentId) => async (dispatch) => {
-  dispatch({ type: authConstants.SIGNUP_START });
   const body = {
     username,
     password,
@@ -94,19 +91,13 @@ const userRegister = (username, password, nickname, realName, emailPrefix, insti
     institute_email_prefix: emailPrefix,
   };
   try {
-    const res = await agent.post('account', body);
-    if (res.data.success) {
-      dispatch({ type: authConstants.SIGNUP_SUCCESS });
-    } else {
-      dispatch({
-        type: authConstants.SIGNUP_FAIL,
-        error: res.data.error,
-      });
-    }
-  } catch (err) {
+    dispatch({ type: authConstants.SIGNUP_START });
+    await agent.post('account', body);
+    dispatch({ type: authConstants.SIGNUP_SUCCESS });
+  } catch (error) {
     dispatch({
       type: authConstants.SIGNUP_FAIL,
-      error: err,
+      error,
     });
   }
 };
@@ -122,35 +113,27 @@ const emailVerification = (code) => async (dispatch) => {
     dispatch({ type: authConstants.EMAIL_VERIFICATION_START });
     await agent.get('/email-verification', config);
     dispatch({ type: authConstants.EMAIL_VERIFICATION_SUCCESS });
-  } catch (err) {
+  } catch (error) {
     dispatch({
       type: authConstants.EMAIL_VERIFICATION_FAIL,
-      error: err,
+      error,
     });
   }
 };
 
 const userResetPassword = (code, password) => async (dispatch) => {
-  dispatch({ type: authConstants.RESET_PASSWORD_START });
   try {
+    dispatch({ type: authConstants.RESET_PASSWORD_START });
     await agent.post('account/reset-password', { code, password });
-    dispatch({
-      type: authConstants.RESET_PASSWORD_SUCCESS,
-    });
-  } catch (err) {
+    dispatch({ type: authConstants.RESET_PASSWORD_SUCCESS });
+  } catch (error) {
     dispatch({
       type: authConstants.RESET_PASSWORD_FAIL,
-      error: err,
+      error,
     });
   }
 };
 
 export {
-  getUserInfo,
-  userSignIn,
-  userLogout,
-  userForgetPassword,
-  userRegister,
-  emailVerification,
-  userResetPassword,
+  getUserInfo, userSignIn, userLogout, userForgetPassword, userRegister, emailVerification, userResetPassword,
 };

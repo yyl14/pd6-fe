@@ -1,6 +1,7 @@
 import { gradeConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
+  fetchGrade: null,
   fetchClassGrade: null,
   addClassGrade: null,
   importClassGrade: null,
@@ -12,6 +13,18 @@ const initialState = {
 
 export default function grade(state = initialState, action) {
   switch (action.type) {
+    case gradeConstants.FETCH_GRADE_SUCCESS: {
+      return {
+        ...state,
+        fetchGrade: null,
+      };
+    }
+    case gradeConstants.FETCH_GRADE_FAIL: {
+      return {
+        ...state,
+        fetchGrade: action.error,
+      };
+    }
     case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {
       return {
         ...state,

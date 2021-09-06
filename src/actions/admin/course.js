@@ -2,14 +2,14 @@ import agent from '../agent';
 import { courseConstants } from './constant';
 
 export const fetchCourses = (token) => (dispatch) => {
-  const auth = { headers: { 'auth-token': token } };
+  const config = { headers: { 'auth-token': token } };
 
   dispatch({
     type: courseConstants.FETCH_COURSES_START,
   });
 
   agent
-    .get('/course', auth)
+    .get('/course', config)
     .then((res) => {
       const { data } = res.data;
       dispatch({
@@ -18,12 +18,12 @@ export const fetchCourses = (token) => (dispatch) => {
       });
     })
     .catch((error) => {
-      dispatch({ type: courseConstants.FETCH_COURSES_FAIL, payload: { error } });
+      dispatch({ type: courseConstants.FETCH_COURSES_FAIL, error });
     });
 };
 
 export const addCourse = (token, name, type, history) => (dispatch) => {
-  const auth = {
+  const config = {
     headers: { 'auth-token': token },
   };
   const body = { name, type };
@@ -31,7 +31,7 @@ export const addCourse = (token, name, type, history) => (dispatch) => {
   dispatch({ type: courseConstants.ADD_COURSE_START });
 
   agent
-    .post('/course', body, auth)
+    .post('/course', body, config)
     .then((res) => {
       const { data } = res.data;
       const { id } = data;
@@ -51,17 +51,17 @@ export const addCourse = (token, name, type, history) => (dispatch) => {
       history.push(`/admin/course/course/${id}/class-list`);
     })
     .catch((error) => {
-      dispatch({ type: courseConstants.ADD_COURSE_FAIL, payload: { error } });
+      dispatch({ type: courseConstants.ADD_COURSE_FAIL, error });
     });
 };
 
 export const renameCourse = (token, courseId, newName) => (dispatch) => {
-  const auth = { headers: { 'auth-token': token } };
+  const config = { headers: { 'auth-token': token } };
   const body = { name: newName };
   dispatch({ type: courseConstants.RENAME_COURSE_START });
 
   agent
-    .patch(`/course/${courseId}`, body, auth)
+    .patch(`/course/${courseId}`, body, config)
     .then(() => {
       dispatch({
         type: courseConstants.RENAME_COURSE_SUCCESS,
@@ -74,21 +74,19 @@ export const renameCourse = (token, courseId, newName) => (dispatch) => {
     .catch((error) => {
       dispatch({
         type: courseConstants.RENAME_COURSE_FAIL,
-        payload: {
-          error,
-        },
+        error,
       });
     });
 };
 
 export const deleteCourse = (token, courseId) => (dispatch) => {
-  const auth = { headers: { 'auth-token': token } };
+  const config = { headers: { 'auth-token': token } };
   dispatch({
     type: courseConstants.DELETE_COURSE_START,
   });
 
   agent
-    .delete(`/course/${courseId}`, auth)
+    .delete(`/course/${courseId}`, config)
     .then(() => {
       dispatch({
         type: courseConstants.DELETE_COURSE_SUCCESS,
@@ -100,20 +98,18 @@ export const deleteCourse = (token, courseId) => (dispatch) => {
     .catch((error) => {
       dispatch({
         type: courseConstants.DELETE_COURSE_FAIL,
-        payload: {
-          error,
-        },
+        error,
       });
     });
 };
 
 export const fetchClasses = (token, courseId) => (dispatch) => {
-  const auth = { headers: { 'auth-token': token } };
+  const config = { headers: { 'auth-token': token } };
 
   dispatch({ type: courseConstants.FETCH_CLASSES_START });
 
   agent
-    .get(`/course/${courseId}/class`, auth)
+    .get(`/course/${courseId}/class`, config)
     .then((res) => {
       dispatch({
         type: courseConstants.FETCH_CLASSES_SUCCESS,
@@ -121,19 +117,19 @@ export const fetchClasses = (token, courseId) => (dispatch) => {
       });
     })
     .catch((error) => {
-      dispatch({ type: courseConstants.FETCH_CLASSES_FAIL, payload: { courseId, error } });
+      dispatch({ type: courseConstants.FETCH_CLASSES_FAIL, error });
     });
 };
 
 export const addClass = (token, courseId, name, isHidden) => (dispatch) => {
-  const auth = {
+  const config = {
     headers: { 'auth-token': token },
   };
 
   dispatch({ type: courseConstants.ADD_CLASS_START });
 
   agent
-    .post(`/course/${courseId}/class`, { name }, auth)
+    .post(`/course/${courseId}/class`, { name }, config)
     .then((res) => {
       const { data } = res.data;
       const { id } = data;
@@ -151,17 +147,16 @@ export const addClass = (token, courseId, name, isHidden) => (dispatch) => {
       });
     })
     .catch((error) => {
-      dispatch({ type: courseConstants.ADD_CLASS_FAIL, payload: { error } });
+      dispatch({ type: courseConstants.ADD_CLASS_FAIL, error });
     });
 };
 
 export const renameClass = (token, classId, newName) => (dispatch) => {
-  const auth = { headers: { 'auth-token': token } };
-  const name = newName;
+  const config = { headers: { 'auth-token': token } };
   dispatch({ type: courseConstants.RENAME_CLASS_START });
 
   agent
-    .patch(`/class/${classId}`, { name }, auth)
+    .patch(`/class/${classId}`, { name: newName }, config)
     .then(() => {
       dispatch({
         type: courseConstants.RENAME_CLASS_SUCCESS,
@@ -174,21 +169,19 @@ export const renameClass = (token, classId, newName) => (dispatch) => {
     .catch((error) => {
       dispatch({
         type: courseConstants.RENAME_CLASS_FAIL,
-        payload: {
-          error,
-        },
+        error,
       });
     });
 };
 
 export const deleteClass = (token, courseId, classId) => (dispatch) => {
-  const auth = { headers: { 'auth-token': token } };
+  const config = { headers: { 'auth-token': token } };
   dispatch({
     type: courseConstants.DELETE_CLASS_START,
   });
 
   agent
-    .delete(`/class/${classId}`, auth)
+    .delete(`/class/${classId}`, config)
     .then(() => {
       dispatch({
         type: courseConstants.DELETE_CLASS_SUCCESS,
@@ -201,9 +194,7 @@ export const deleteClass = (token, courseId, classId) => (dispatch) => {
     .catch((error) => {
       dispatch({
         type: courseConstants.DELETE_CLASS_FAIL,
-        payload: {
-          error,
-        },
+        error,
       });
     });
 };

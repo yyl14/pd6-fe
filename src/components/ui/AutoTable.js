@@ -226,7 +226,7 @@ function AutoTable({
   reduxDataToRows,
   hasLink = false,
   buttons = null,
-  refreshLoadings = [], // refresh when any of the array elements turned from true to false
+  refreshLoadings = null, // refresh when any of the array elements turned from true to false
   hasRefreshButton = false,
 }) {
   const classes = useStyles();
@@ -300,8 +300,6 @@ function AutoTable({
     }
   }, [ident, pageInput, rowsPerPage, tableState]);
 
-  console.log(tableState);
-
   // const handleChangeRowsPerPage = (event) => {
   //   setRowsPerPage(+event.target.value);
   //   setCurPage(0); // TODO: calculate this
@@ -320,8 +318,10 @@ function AutoTable({
   }, [ident]);
 
   useEffect(() => {
-    if (refreshLoadings.reduce((acc, item) => acc || item, false)) {
-      onRefresh();
+    if (refreshLoadings) {
+      if (refreshLoadings.reduce((acc, item) => acc && !item, true)) {
+        onRefresh();
+      }
     }
   }, [refreshLoadings]);
 
