@@ -60,8 +60,8 @@ export default function CodeSubmission() {
     const enabledIds = submitLang.allIds.filter((id) => !submitLang.byId[id].is_disabled);
     setLang(enabledIds);
     if (cookies.lang) {
-      if (enabledIds.includes(cookies.lang)) {
-        setLangId(cookies.lang);
+      if (enabledIds.includes(Number(cookies.lang))) {
+        setLangId(Number(cookies.lang));
       }
     }
   }, [cookies.lang, submitLang.allIds, submitLang.byId]);
@@ -71,7 +71,8 @@ export default function CodeSubmission() {
       return;
     }
     dispatch(submitCode(authToken, problemId, langId, code));
-    setCookie('lang', langId, { path: '/' });
+    const daysToExpire = new Date(2147483647 * 1000);
+    setCookie('lang', langId, { path: '/', expires: daysToExpire });
     history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
   };
 
