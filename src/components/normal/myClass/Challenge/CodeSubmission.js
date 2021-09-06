@@ -48,13 +48,23 @@ export default function CodeSubmission() {
   const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   const submitLang = useSelector((state) => state.submitLangs);
+  const [lang, setLang] = useState([]);
   const authToken = useSelector((state) => state.auth.token);
-  const [hasInit, setHasInit] = useState(false);
   // const error = useSelector((state) => state.error);
   // const loading = useSelector((state) => state.loading.myClass);
 
   const [langId, setLangId] = useState(-1);
   const [code, setCode] = useState('');
+
+  useEffect(() => {
+    if (cookies.lang) {
+      setLangId(cookies.lang);
+    }
+  }, [cookies.lang]);
+
+  useEffect(() => {
+    setLang(submitLang.allIds.filter((id) => !submitLang.byId[id].is_disabled));
+  }, [submitLang.allIds, submitLang.byId]);
 
   const handleSubmit = () => {
     if (langId === -1) {
@@ -72,13 +82,6 @@ export default function CodeSubmission() {
   useEffect(() => {
     dispatch(browseSubmitLang(authToken));
   }, [authToken, dispatch]);
-
-  useEffect(() => {
-    if (!hasInit && cookies.lang) {
-      setLangId(cookies.lang);
-      setHasInit(true);
-    }
-  }, [cookies.lang, hasInit]);
 
   if (problems[problemId] === undefined || challenges[challengeId] === undefined) {
     return <NoMatch />;
@@ -102,7 +105,7 @@ export default function CodeSubmission() {
             <MenuItem key={-1} value="">
               <em>None</em>
             </MenuItem>
-            {submitLang.allIds.map((key) => (
+            {lang.map((key) => (
               <MenuItem key={submitLang.byId[key].id} value={submitLang.byId[key].id}>
                 {`${submitLang.byId[key].name} ${submitLang.byId[key].version}`}
               </MenuItem>
