@@ -62,7 +62,6 @@ export default function TeamList() {
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
 
-  const [tableData, setTableData] = useState([]);
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [disabled, setDisabled] = useState(true);
@@ -91,23 +90,23 @@ export default function TeamList() {
   }, [authToken, classId, dispatch, loading.addTeam, loading.importTeam]);
 
   useEffect(() => {
-    if (selectedFile.length === 0) {
-      setDisabled(true);
-    }
-  }, [selectedFile.length]);
-
-  useEffect(() => {
-    if (importInput !== '' && selectedFile.length !== 0) {
+    if (addInputs.label !== '' && addInputs.teamName !== '') {
       setDisabled(false);
     }
-  }, [importInput, selectedFile.length]);
+  }, [addInputs.label, addInputs.teamName, selectedFile.length]);
+
+  useEffect(() => {
+    if (importInput !== '' && selectedFile !== []) {
+      setDisabled(false);
+    }
+  }, [importInput, selectedFile]);
 
   const handleImportChange = (event) => {
-    if (event.target.value === '') {
-      setDisabled(true);
-      setImportInput(event.target.value);
-      return;
-    }
+    // if (event.target.value === '') {
+    //   setDisabled(true);
+    //   setImportInput(event.target.value);
+    //   return;
+    // }
     setImportInput(event.target.value);
   };
 
@@ -129,20 +128,17 @@ export default function TeamList() {
   };
 
   const submitImport = () => {
-    if (importInput !== '' && selectedFile !== []) {
-      selectedFile.map((file) => dispatch(importTeam(authToken, classId, file)));
-    }
+    selectedFile.map((file) => dispatch(importTeam(authToken, classId, file)));
     setShowImportDialog(false);
     clearImportInput();
-    setSelectedFile([]);
+    setDisabled(true);
   };
 
   const submitAdd = () => {
-    if (addInputs.label !== '' && addInputs.teamName !== '') {
-      dispatch(addTeam(authToken, classId, addInputs.teamName, addInputs.label));
-    }
+    dispatch(addTeam(authToken, classId, addInputs.teamName, addInputs.label));
     setShowAddDialog(false);
     clearAddInput();
+    setDisabled(true);
   };
 
   const downloadTemplate = () => {
@@ -298,6 +294,7 @@ export default function TeamList() {
             onClick={() => {
               setShowAddDialog(false);
               clearAddInput();
+              setDisabled(true);
             }}
             color="default"
           >
@@ -306,8 +303,10 @@ export default function TeamList() {
           <Button
             onClick={() => {
               submitAdd();
+              setDisabled(true);
             }}
             color="primary"
+            disabled={disabled}
           >
             Create
           </Button>
