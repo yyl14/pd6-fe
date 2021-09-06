@@ -128,14 +128,18 @@ export default function TeamList() {
   };
 
   const submitImport = () => {
-    selectedFile.map((file) => dispatch(importTeam(authToken, classId, file)));
+    if (importInput !== '' && selectedFile !== []) {
+      selectedFile.map((file) => dispatch(importTeam(authToken, classId, file)));
+    }
     setShowImportDialog(false);
     clearImportInput();
     setDisabled(true);
   };
 
   const submitAdd = () => {
-    dispatch(addTeam(authToken, classId, addInputs.teamName, addInputs.label));
+    if (addInputs.label !== '' && addInputs.teamName !== '') {
+      dispatch(addTeam(authToken, classId, addInputs.teamName, addInputs.label));
+    }
     setShowAddDialog(false);
     clearAddInput();
     setDisabled(true);
