@@ -49,7 +49,7 @@ export default function SubmissionList() {
     <>
       <PageTitle text={`${courses[courseId].name} ${allClass[classId].name} / Submission`} />
       <AutoTable
-        ident="Class Submission Table"
+        ident={`Class Submission Table ${classId}`}
         hasFilter
         filterConfig={[
           {
@@ -201,6 +201,7 @@ export default function SubmissionList() {
           link: `/my-class/${courseId}/${classId}/submission/${item.id}`,
         })}
         hasLink
+        hasRefreshButton
       />
     </>
   );
