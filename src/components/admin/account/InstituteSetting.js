@@ -15,14 +15,12 @@ import {
 import { useParams } from 'react-router-dom';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
+import PageTitle from '../../ui/PageTitle';
 import { getInstitute, editInstitute } from '../../../actions/admin/account';
 import NoMatch from '../../noMatch';
 import GeneralLoading from '../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   warningText: {
     marginTop: '10px',
   },
@@ -34,7 +32,6 @@ export default function InstituteSetting() {
   const { instituteId } = useParams();
   const institutes = useSelector((state) => state.institutes.byId);
   const authToken = useSelector((state) => state.auth.token);
-  const pageError = useSelector((state) => state.error.admin.account);
   const loading = useSelector((state) => state.loading.admin.account);
 
   const dispatch = useDispatch();
@@ -168,9 +165,7 @@ export default function InstituteSetting() {
 
   return (
     <>
-      <Typography variant="h3" className={classes.pageHeader}>
-        {`${institutes[instituteId].abbreviated_name} / Setting`}
-      </Typography>
+      <PageTitle text={`${institutes[instituteId].abbreviated_name} / Setting`} />
       <SimpleBar title="Institute Information">
         <AlignedText text="Full Name" maxWidth="lg" childrenType="text">
           <Typography variant="body1">{institutes[instituteId].full_name}</Typography>
@@ -212,7 +207,7 @@ export default function InstituteSetting() {
           <>
             <Button
               color="secondary"
-              onClick={(prevState) => {
+              onClick={() => {
                 setSettingStatus((input) => ({ ...input, changeInitialism: true }));
               }}
             >
@@ -231,7 +226,7 @@ export default function InstituteSetting() {
           <>
             <Button
               color="secondary"
-              onClick={(prevState) => {
+              onClick={() => {
                 setSettingStatus((input) => ({ ...input, changeEmail: true }));
               }}
             >
@@ -251,7 +246,7 @@ export default function InstituteSetting() {
           <>
             <Button
               color="secondary"
-              onClick={(prevState) => {
+              onClick={() => {
                 setSettingStatus((input) => ({ ...input, changeStatus: true }));
                 setNewSetting((input) => ({ ...input, newStatus: institutes[instituteId].is_disabled }));
               }}
