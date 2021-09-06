@@ -326,7 +326,7 @@ export default function CustomTable({
                           <React.Fragment key={`${column.id}-${column.label}`}>
                             <TableCell align={column.align}>
                               {column.isExternal ? (
-                                <a href={link} className={classes.textLink}>
+                                <a href={link} className={classes.textLink} target="_blank" rel="noreferrer noopener">
                                   {column.format && typeof value === 'number' ? column.format(value) : value}
                                 </a>
                               ) : (
