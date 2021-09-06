@@ -3,6 +3,7 @@ import React from 'react';
 
 const useStyles = makeStyles(() => ({
   title: {
+    marginBottom: '50px',
     wordBreak: 'break-word',
   },
 }));
