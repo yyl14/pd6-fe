@@ -124,12 +124,7 @@ export default function ChallengeInfo() {
 
   const handleSave = () => {
     const body = {
-      publicize_type: challenges[challengeId].publicize_type,
-      selection_type: challenges[challengeId].selection_type,
-      title: challenges[challengeId].title,
       description: inputs,
-      start_time: challenges[challengeId].start_time,
-      end_time: challenges[challengeId].end_time,
     };
     dispatch(editChallenge(authToken, challengeId, body));
     setHasRequest(true);

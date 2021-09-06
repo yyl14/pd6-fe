@@ -13,7 +13,7 @@ import { readSubmission, readSubmissionDetail, readProblemScore } from '../../..
 import GeneralLoading from '../../../GeneralLoading';
 
 /* This is a level 4 component (page component) */
-export default function SubmissionList() {
+export default function MySubmission() {
   const {
     courseId, classId, challengeId, problemId,
   } = useParams();

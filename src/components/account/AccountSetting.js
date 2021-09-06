@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { fetchStudentCard } from '../../actions/user/user';
+import { fetchStudentCards } from '../../actions/user/user';
 import { getInstitutes } from '../../actions/common/common';
 import GeneralLoading from '../GeneralLoading';
 import PageTitle from '../ui/PageTitle';
@@ -28,8 +28,12 @@ export default function AccountSetting() {
   const loading = useSelector((state) => state.loading.user);
 
   useEffect(() => {
-    dispatch(fetchStudentCard(authToken, accountId));
+    dispatch(fetchStudentCards(authToken, accountId));
   }, [authToken, accountId, dispatch]);
+
+  useEffect(() => {
+    dispatch(getInstitutes());
+  }, [dispatch]);
 
   useEffect(() => {
     setCards(
@@ -42,12 +46,8 @@ export default function AccountSetting() {
     );
   }, [account, studentCards]);
 
-  useEffect(() => {
-    dispatch(getInstitutes());
-  }, [dispatch]);
-
   if (account === undefined || studentCards === undefined) {
-    if (loading.auth.fetchAccount || loading.user.fetchStudentCard) {
+    if (loading.auth.fetchAccount || loading.user.fetchStudentCards) {
       return <GeneralLoading />;
     }
     return <NoMatch />;

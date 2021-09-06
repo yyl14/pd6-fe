@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchClassMembers } from '../../../../actions/common/common';
-import { fetchClassGrade } from '../../../../actions/myClass/grade';
+import { fetchGrade } from '../../../../actions/myClass/grade';
 import PageTitle from '../../../ui/PageTitle';
 
 import GradeInfo from './detail/GradeInfo';
@@ -36,9 +36,9 @@ export default function AccountSetting() {
 
   useEffect(() => {
     if (!loading.editGrade) {
-      dispatch(fetchClassGrade(authToken, classId));
+      dispatch(fetchGrade(authToken, gradeId));
     }
-  }, [dispatch, authToken, classId, loading.editGrade]);
+  }, [dispatch, authToken, loading.editGrade, gradeId]);
 
   useEffect(() => {
     user.classes.forEach((item) => {

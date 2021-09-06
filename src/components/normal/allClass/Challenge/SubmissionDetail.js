@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  TextField,
-} from '@material-ui/core';
+import { Typography, Button, makeStyles } from '@material-ui/core';
 import { useParams, Link } from 'react-router-dom';
 import moment from 'moment';
 import Icon from '../../../ui/icon/index';
@@ -17,8 +8,6 @@ import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
 import PageTitle from '../../../ui/PageTitle';
-import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
-import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 import { readSubmissionDetail, browseJudgeCases, readTestcase } from '../../../../actions/myClass/problem';
 import { browseTasksUnderChallenge } from '../../../../actions/myClass/challenge';
@@ -82,12 +71,12 @@ export default function SubmissionDetail() {
   }, [authToken, dispatch, submissionId]);
 
   useEffect(() => {
-    setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0]);
-    if (judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0]) {
+    setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
+    if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
       dispatch(
         browseJudgeCases(
           authToken,
-          judgmentIds.filter((id) => judgments[id].submission_id === parseInt(submissionId, 10))[0],
+          judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
         ),
       );
     }
