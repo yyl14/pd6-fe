@@ -11,14 +11,14 @@ const initialState = {
   deleteAccount: false,
   editPassword: false,
 
-  fetchStudentCard: false,
+  fetchStudentCards: false,
   addStudentCard: false,
   makeStudentCardDefault: false,
 };
 
 export default function account(state = initialState, action) {
   switch (action.type) {
-    case accountConstants.FETCH_INSTITUTE_REQUEST: {
+    case accountConstants.FETCH_INSTITUTE_START: {
       return {
         ...state,
         fetchInstitute: true,
@@ -37,7 +37,7 @@ export default function account(state = initialState, action) {
       };
     }
 
-    case accountConstants.ADD_INSTITUTE_REQUEST: {
+    case accountConstants.ADD_INSTITUTE_START: {
       return {
         ...state,
         addInstitute: true,
@@ -55,7 +55,7 @@ export default function account(state = initialState, action) {
         addInstitute: false,
       };
     }
-    case accountConstants.EDIT_INSTITUTE_REQUEST: {
+    case accountConstants.EDIT_INSTITUTE_START: {
       return {
         ...state,
         editInstitute: true,
@@ -74,7 +74,7 @@ export default function account(state = initialState, action) {
       };
     }
 
-    case accountConstants.FETCH_ACCOUNTS_REQUEST: {
+    case accountConstants.FETCH_ACCOUNTS_START: {
       return {
         ...state,
         fetchAccounts: true,
@@ -93,7 +93,7 @@ export default function account(state = initialState, action) {
       };
     }
 
-    case accountConstants.FETCH_ACCOUNT_REQUEST: {
+    case accountConstants.FETCH_ACCOUNT_START: {
       return {
         ...state,
         fetchAccount: true,
@@ -112,7 +112,7 @@ export default function account(state = initialState, action) {
       };
     }
 
-    case accountConstants.EDIT_ACCOUNT_REQUEST: {
+    case accountConstants.EDIT_ACCOUNT_START: {
       return {
         ...state,
         editAccount: true,
@@ -131,7 +131,7 @@ export default function account(state = initialState, action) {
       };
     }
 
-    case accountConstants.DELETE_ACCOUNT_REQUEST: {
+    case accountConstants.DELETE_ACCOUNT_START: {
       return {
         ...state,
         deleteAccount: true,
@@ -150,7 +150,7 @@ export default function account(state = initialState, action) {
       };
     }
 
-    case accountConstants.EDIT_PASSWORD_REQUEST: {
+    case accountConstants.EDIT_PASSWORD_START: {
       return {
         ...state,
         editPassword: true,
@@ -169,26 +169,26 @@ export default function account(state = initialState, action) {
       };
     }
 
-    case accountConstants.FETCH_STUDENT_CARD_REQUEST: {
+    case accountConstants.FETCH_STUDENT_CARDS_START: {
       return {
         ...state,
-        fetchStudentCard: true,
+        fetchStudentCards: true,
       };
     }
-    case accountConstants.FETCH_STUDENT_CARD_SUCCESS: {
+    case accountConstants.FETCH_STUDENT_CARDS_SUCCESS: {
       return {
         ...state,
-        fetchStudentCard: false,
+        fetchStudentCards: false,
       };
     }
-    case accountConstants.FETCH_STUDENT_CARD_FAIL: {
+    case accountConstants.FETCH_STUDENT_CARDS_FAIL: {
       return {
         ...state,
-        fetchStudentCard: false,
+        fetchStudentCards: false,
       };
     }
 
-    case accountConstants.ADD_STUDENT_CARD_REQUEST: {
+    case accountConstants.ADD_STUDENT_CARD_START: {
       return {
         ...state,
         addStudentCard: true,
@@ -207,7 +207,7 @@ export default function account(state = initialState, action) {
       };
     }
 
-    case accountConstants.MAKE_STUDENT_CARD_DEFAULT_REQUEST: {
+    case accountConstants.MAKE_STUDENT_CARD_DEFAULT_START: {
       return {
         ...state,
         makeStudentCardDefault: true,

@@ -29,14 +29,6 @@ export default function MemberList() {
   const loading = useSelector((state) => state.loading.admin.course);
   const error = useSelector((state) => state.error.common.common.fetchClassMembers);
 
-  useEffect(() => {
-    dispatch(fetchCourses(authToken));
-  }, [authToken, dispatch]);
-
-  useEffect(() => {
-    dispatch(fetchClasses(authToken, courseId));
-  }, [authToken, courseId, dispatch]);
-
   const [edit, setEdit] = useState(false);
 
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {

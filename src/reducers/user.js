@@ -32,7 +32,7 @@ const user = (state = initialState, action) => {
     }
     case userConstants.GET_SELF_STUDENT_CARD_SUCCESS:
       return { ...state, studentCards: action.payload.map((item) => item.id) };
-    case userConstants.USER_GET_NOTIFY:
+    case userConstants.USER_BROWSE_ANNOUNCEMENT_SUCCESS:
       return {
         ...state,
         notifications: action.payload,
