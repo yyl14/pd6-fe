@@ -281,6 +281,67 @@ const fetchAccounts = (token) => (dispatch) => {
     });
 };
 
+const browsePendingStudentCards = (token, accountId) => async (dispatch) => {
+  dispatch({ type: accountConstants.BROWSE_PENDING_STUDENT_CARDS_REQUEST });
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    const res = await agent.get(`/account/${accountId}/email-verification`, config);
+    dispatch({
+      type: accountConstants.BROWSE_PENDING_STUDENT_CARDS_SUCCESS,
+      payload: { accountId, data: res.data.data },
+    });
+  } catch (error) {
+    dispatch({
+      type: accountConstants.BROWSE_PENDING_STUDENT_CARDS_FAIL,
+      error,
+    });
+  }
+};
+
+const resendEmailVerification = (token, emailVerificationId) => async (dispatch) => {
+  dispatch({ type: accountConstants.RESEND_EMAIL_VERIFICATION_REQUEST });
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    await agent.post(`/email-verification/${emailVerificationId}/resend`, config);
+    dispatch({
+      type: accountConstants.RESEND_EMAIL_VERIFICATION_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: accountConstants.RESEND_EMAIL_VERIFICATION_FAIL,
+      error,
+    });
+  }
+};
+
+const deletePendingStudentCard = (token, emailVerificationId) => async (dispatch) => {
+  dispatch({ type: accountConstants.DELETE_PENDING_STUDENT_CARD_REQUEST });
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    await agent.delete(`/email-verification/${emailVerificationId}`, config);
+    dispatch({
+      type: accountConstants.DELETE_PENDING_STUDENT_CARD_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: accountConstants.DELETE_PENDING_STUDENT_CARD_FAIL,
+      error,
+    });
+  }
+};
+
 export {
   getInstitute,
   addInstitute,
@@ -292,4 +353,7 @@ export {
   addStudentCard,
   editPassword,
   fetchAccounts,
+  browsePendingStudentCards,
+  resendEmailVerification,
+  deletePendingStudentCard,
 };

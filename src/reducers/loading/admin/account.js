@@ -14,6 +14,10 @@ const initialState = {
   fetchStudentCard: false,
   addStudentCard: false,
   makeStudentCardDefault: false,
+
+  browsePendingStudentCards: false,
+  resendEmailVerification: false,
+  deletePendingStudentCard: false,
 };
 
 export default function account(state = initialState, action) {
@@ -223,6 +227,63 @@ export default function account(state = initialState, action) {
       return {
         ...state,
         makeStudentCardDefault: false,
+      };
+    }
+
+    case accountConstants.BROWSE_PENDING_STUDENT_CARDS_REQUEST: {
+      return {
+        ...state,
+        browsePendingStudentCards: true,
+      };
+    }
+    case accountConstants.BROWSE_PENDING_STUDENT_CARDS_SUCCESS: {
+      return {
+        ...state,
+        browsePendingStudentCards: false,
+      };
+    }
+    case accountConstants.BROWSE_PENDING_STUDENT_CARDS_FAIL: {
+      return {
+        ...state,
+        browsePendingStudentCards: false,
+      };
+    }
+
+    case accountConstants.RESEND_EMAIL_VERIFICATION_REQUEST: {
+      return {
+        ...state,
+        resendEmailVerification: true,
+      };
+    }
+    case accountConstants.RESEND_EMAIL_VERIFICATION_SUCCESS: {
+      return {
+        ...state,
+        resendEmailVerification: false,
+      };
+    }
+    case accountConstants.RESEND_EMAIL_VERIFICATION_FAIL: {
+      return {
+        ...state,
+        resendEmailVerification: false,
+      };
+    }
+
+    case accountConstants.DELETE_PENDING_STUDENT_CARD_REQUEST: {
+      return {
+        ...state,
+        deletePendingStudentCard: true,
+      };
+    }
+    case accountConstants.DELETE_PENDING_STUDENT_CARD_SUCCESS: {
+      return {
+        ...state,
+        deletePendingStudentCard: false,
+      };
+    }
+    case accountConstants.DELETE_PENDING_STUDENT_CARD_FAIL: {
+      return {
+        ...state,
+        deletePendingStudentCard: false,
       };
     }
 
