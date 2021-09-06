@@ -57,14 +57,14 @@ export default function CodeSubmission() {
   const [code, setCode] = useState('');
 
   useEffect(() => {
+    const enabledIds = submitLang.allIds.filter((id) => !submitLang.byId[id].is_disabled);
+    setLang(enabledIds);
     if (cookies.lang) {
-      setLangId(cookies.lang);
+      if (enabledIds.includes(cookies.lang)) {
+        setLangId(cookies.lang);
+      }
     }
-  }, [cookies.lang]);
-
-  useEffect(() => {
-    setLang(submitLang.allIds.filter((id) => !submitLang.byId[id].is_disabled));
-  }, [submitLang.allIds, submitLang.byId]);
+  }, [cookies.lang, submitLang.allIds, submitLang.byId]);
 
   const handleSubmit = () => {
     if (langId === -1) {
