@@ -1,23 +1,80 @@
 import agent from '../agent';
 import { gradeConstants } from './constant';
 
+// fetch single grade
+export const fetchGrade = (token, gradeId) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'auth-token': token,
+      },
+    };
+    dispatch({ type: gradeConstants.FETCH_GRADE_START });
+    const res = await agent.get(`/grade/${gradeId}`, config);
+    dispatch({
+      type: gradeConstants.FETCH_GRADE_SUCCESS,
+      payload: { gradeId, data: res.data.data },
+    });
+  } catch (error) {
+    dispatch({
+      type: gradeConstants.FETCH_GRADE_FAIL,
+      error,
+    });
+  }
+};
+
+export const deleteGrade = (token, gradeId) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'auth-token': token,
+      },
+    };
+    dispatch({ type: gradeConstants.DELETE_GRADE_START });
+    await agent.delete(`/grade/${gradeId}`, config);
+    dispatch({ type: gradeConstants.DELETE_GRADE_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: gradeConstants.DELETE_GRADE_FAIL,
+      error,
+    });
+  }
+};
+
+export const editGrade = (token, gradeId, title, score, comment) => (dispatch) => {
+  const config = { headers: { 'auth-token': token } };
+  dispatch({ type: gradeConstants.EDIT_GRADE_START });
+  agent
+    .patch(`/grade/${gradeId}`, { title, score, comment }, config)
+    .then(() => {
+      dispatch({ type: gradeConstants.EDIT_GRADE_SUCCESS });
+    })
+    .catch((error) => {
+      dispatch({
+        type: gradeConstants.EDIT_GRADE_FAIL,
+        error,
+      });
+    });
+};
+
+// WITH BROWSE PARAMS
 export const fetchClassGrade = (token, classId) => async (dispatch) => {
   try {
-    const auth = {
+    const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
       },
     };
     dispatch({ type: gradeConstants.FETCH_CLASS_GRADE_START });
-    const res = await agent.get(`/class/${classId}/grade`, auth);
+    const res = await agent.get(`/class/${classId}/grade`, config);
     dispatch({
       type: gradeConstants.FETCH_CLASS_GRADE_SUCCESS,
       payload: { classId, data: res.data.data.data },
     });
-  } catch (err) {
+  } catch (error) {
     dispatch({
       type: gradeConstants.FETCH_CLASS_GRADE_FAIL,
-      error: err,
+      error,
     });
   }
 };
@@ -26,7 +83,7 @@ export const addClassGrade = (token, classId, receiverRef, graderRef, title, sco
   try {
     const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
       },
     };
     const body = {
@@ -39,20 +96,19 @@ export const addClassGrade = (token, classId, receiverRef, graderRef, title, sco
     dispatch({ type: gradeConstants.ADD_CLASS_GRADE_START });
     await agent.post(`/class/${classId}/grade`, body, config);
     dispatch({ type: gradeConstants.ADD_CLASS_GRADE_SUCCESS });
-  } catch (err) {
+  } catch (error) {
     dispatch({
       type: gradeConstants.ADD_CLASS_GRADE_FAIL,
-      error: err,
+      error,
     });
   }
 };
 
 export const importClassGrade = (token, classId, title, file) => async (dispatch) => {
   try {
-    dispatch({ type: gradeConstants.IMPORT_CLASS_GRADE_START });
     const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
         'Content-Type': 'multipart/form-data',
       },
       params: {
@@ -62,122 +118,72 @@ export const importClassGrade = (token, classId, title, file) => async (dispatch
     const formData = new FormData();
     formData.append('grade_file', file);
 
+    dispatch({ type: gradeConstants.IMPORT_CLASS_GRADE_START });
     await agent.post(`/class/${classId}/grade-import`, formData, config);
     dispatch({ type: gradeConstants.IMPORT_CLASS_GRADE_SUCCESS });
-  } catch (err) {
+  } catch (error) {
     dispatch({
       type: gradeConstants.IMPORT_CLASS_GRADE_FAIL,
-      error: err,
+      error,
     });
   }
 };
 
-export const fetchAccountGrade = (token, accountId) => (dispatch) => {
-  const auth = { headers: { 'auth-token': token } };
-  dispatch({ type: gradeConstants.FETCH_ACCOUNT_GRADE_START });
-  agent
-    .get(`/account/${accountId}/grade`, auth)
-    .then((res) => {
-      dispatch({
-        type: gradeConstants.FETCH_ACCOUNT_GRADE_SUCCESS,
-        payload: { accountId, data: res.data.data.data },
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: gradeConstants.FETCH_ACCOUNT_GRADE_FAIL,
-        error: err,
-      });
-    });
-};
+// WITH BROWSE PARAMS
+// export const fetchAccountGrade = (token, accountId) => (dispatch) => {
+//   const config = { headers: { 'auth-token': token } };
+//   dispatch({ type: gradeConstants.FETCH_ACCOUNT_GRADE_START });
+//   agent
+//     .get(`/account/${accountId}/grade`, config)
+//     .then((res) => {
+//       dispatch({
+//         type: gradeConstants.FETCH_ACCOUNT_GRADE_SUCCESS,
+//         payload: { accountId, data: res.data.data.data },
+//       });
+//     })
+//     .catch((error) => {
+//       dispatch({
+//         type: gradeConstants.FETCH_ACCOUNT_GRADE_FAIL,
+//         error,
+//       });
+//     });
+// };
 
 export const downloadGradeFile = (token) => async (dispatch) => {
   try {
-    const auth = {
+    const config1 = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
       },
     };
     dispatch({ type: gradeConstants.DOWNLOAD_GRADE_FILE_START });
-    const res = await agent.get('/grade/template', auth);
-    if (res.data.success) {
-      const config = {
-        headers: {
-          'Auth-Token': token,
-        },
-        params: {
-          filename: res.data.data.filename,
-          as_attachment: true,
-        },
-      };
-      try {
-        const res2 = await agent.get(`/s3-file/${res.data.data.s3_file_uuid}/url`, config);
-        if (res2.data.success) {
-          fetch(res2.data.data.url).then((t) => t.blob().then((b) => {
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(b);
-            a.setAttribute('download', res.data.data.filename);
-            a.click();
-          }));
-          dispatch({
-            type: gradeConstants.DOWNLOAD_GRADE_FILE_SUCCESS,
-          });
-        } else {
-          dispatch({
-            type: gradeConstants.DOWNLOAD_GRADE_FILE_FAIL,
-            error: res2.data.error,
-          });
-        }
-      } catch (err) {
-        dispatch({
-          type: gradeConstants.DOWNLOAD_GRADE_FILE_FAIL,
-          error: err,
-        });
-      }
-    }
+    const res = await agent.get('/grade/template', config1);
 
-    dispatch({
-      type: gradeConstants.DOWNLOAD_GRADE_FILE_FAIL,
-      error: res.data.error,
-    });
-  } catch (err) {
-    dispatch({
-      type: gradeConstants.DOWNLOAD_GRADE_FILE_FAIL,
-      error: err,
-    });
-  }
-};
-
-export const deleteGrade = (token, gradeId) => async (dispatch) => {
-  try {
-    const config = {
+    const config2 = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
+      },
+      params: {
+        filename: res.data.data.filename,
+        as_attachment: true,
       },
     };
-    dispatch({ type: gradeConstants.DELETE_GRADE_START });
-    await agent.delete(`/grade/${gradeId}`, config);
-    dispatch({ type: gradeConstants.DELETE_GRADE_SUCCESS });
-  } catch (err) {
+    const res2 = await agent.get(`/s3-file/${res.data.data.s3_file_uuid}/url`, config2);
+
+    fetch(res2.data.data.url).then((t) => t.blob().then((b) => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(b);
+      a.setAttribute('download', res.data.data.filename);
+      a.click();
+    }));
+
     dispatch({
-      type: gradeConstants.DELETE_GRADE_FAIL,
-      error: err,
+      type: gradeConstants.DOWNLOAD_GRADE_FILE_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: gradeConstants.DOWNLOAD_GRADE_FILE_FAIL,
+      error,
     });
   }
-};
-
-export const editGrade = (token, gradeId, title, score, comment) => (dispatch) => {
-  const auth = { headers: { 'auth-token': token } };
-  dispatch({ type: gradeConstants.EDIT_GRADE_START });
-  agent
-    .patch(`/grade/${gradeId}`, { title, score, comment }, auth)
-    .then(() => {
-      dispatch({ type: gradeConstants.EDIT_GRADE_SUCCESS });
-    })
-    .catch((err) => {
-      dispatch({
-        type: gradeConstants.EDIT_GRADE_FAIL,
-        error: err,
-      });
-    });
 };

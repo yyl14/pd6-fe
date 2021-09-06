@@ -4,6 +4,7 @@ import { autoTableConstants } from '../component/constant';
 import browseParamsTransForm from '../../function/browseParamsTransform';
 
 // Access log
+// WITH BROWSE PARAMS
 const fetchAccessLog = (token, browseParams, tableId = null) => async (dispatch) => {
   try {
     dispatch({
@@ -85,8 +86,8 @@ const fetchAnnouncement = (token, browseParams, tableId = null) => async (dispat
   }
 };
 
+// read only one announcement by its id
 const readAnnouncement = (token, announcementId) => async (dispatch) => {
-  // read only one announcement by its id
   try {
     dispatch({
       type: systemConstants.FETCH_ANNOUNCEMENT_START,
@@ -97,7 +98,6 @@ const readAnnouncement = (token, announcementId) => async (dispatch) => {
     };
     const res = await agent.get(`/announcement/${announcementId}`, config);
     const { data } = res.data;
-    // console.log('readAnnouncement :', data);
     dispatch({
       type: systemConstants.FETCH_ANNOUNCEMENT_SUCCESS,
       payload: {
@@ -113,100 +113,93 @@ const readAnnouncement = (token, announcementId) => async (dispatch) => {
 };
 
 const editAnnouncement = (token, id, body) => (dispatch) => {
-  const fetch = { headers: { 'auth-token': token } };
+  const config = { headers: { 'auth-token': token } };
   dispatch({
     type: systemConstants.EDIT_ANNOUNCEMENT_START,
   });
 
   agent
-    .patch(`/announcement/${id}`, body, fetch)
-    .then((res) => {
-      const { success } = res.data;
+    .patch(`/announcement/${id}`, body, config)
+    .then(() => {
       dispatch({
         type: systemConstants.EDIT_ANNOUNCEMENT_SUCCESS,
-        payload: success,
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: systemConstants.EDIT_ANNOUNCEMENT_FAIL,
-        payload: err,
+        error,
       });
     });
 };
 
 const addAnnouncement = (token, body) => (dispatch) => {
-  const fetch = { headers: { 'auth-token': token } };
+  const config = { headers: { 'auth-token': token } };
   dispatch({
     type: systemConstants.ADD_ANNOUNCEMENT_START,
   });
   agent
-    .post('/announcement', body, fetch)
-    .then((res) => {
-      const { success } = res.data;
+    .post('/announcement', body, config)
+    .then(() => {
       dispatch({
         type: systemConstants.ADD_ANNOUNCEMENT_SUCCESS,
-        payload: success,
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: systemConstants.ADD_ANNOUNCEMENT_FAIL,
-        payload: err,
+        error,
       });
     });
 };
 
 const deleteAnnouncement = (token, id) => (dispatch) => {
-  const fetch = { headers: { 'auth-token': token } };
+  const config = { headers: { 'auth-token': token } };
   dispatch({
     type: systemConstants.DELETE_ANNOUNCEMENT_START,
   });
 
   agent
-    .delete(`/announcement/${id}`, fetch)
-    .then((res) => {
-      const { success } = res.data;
+    .delete(`/announcement/${id}`, config)
+    .then(() => {
       dispatch({
         type: systemConstants.DELETE_ANNOUNCEMENT_SUCCESS,
-        payload: success,
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: systemConstants.DELETE_ANNOUNCEMENT_FAIL,
-        payload: err,
+        error,
       });
     });
 };
 
 // Submit language
 const fetchSubmitLanguage = (token) => (dispatch) => {
-  const fetch = { headers: { 'auth-token': token } };
+  const config = { headers: { 'auth-token': token } };
   dispatch({
     type: systemConstants.FETCH_SUBMIT_LANGUAGE_START,
   });
 
   agent
-    .get('submission/language', fetch)
+    .get('submission/language', config)
     .then((res) => {
       const { data } = res.data;
-      // console.log('use api :', data);
       dispatch({
         type: systemConstants.FETCH_SUBMIT_LANGUAGE_SUCCESS,
         payload: { data },
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: systemConstants.FETCH_SUBMIT_LANGUAGE_FAIL,
-        payload: err,
+        error,
       });
     });
 };
 
 const editSubmitLanguage = (token, id, name, version, isDisabled) => (dispatch) => {
-  const fetch = { headers: { 'auth-token': token } };
+  const config = { headers: { 'auth-token': token } };
   dispatch({
     type: systemConstants.EDIT_SUBMIT_LANGUAGE_START,
   });
@@ -217,23 +210,22 @@ const editSubmitLanguage = (token, id, name, version, isDisabled) => (dispatch) 
   };
 
   agent
-    .patch(`submission/language/${id}`, body, fetch)
-    .then((res) => {
-      // console.log('edit submit language :', body);
+    .patch(`submission/language/${id}`, body, config)
+    .then(() => {
       dispatch({
         type: systemConstants.EDIT_SUBMIT_LANGUAGE_SUCCESS,
         payload: {
-          language_id: parseInt(id, 10),
+          language_id: Number(id),
           name,
           version,
           is_disabled: isDisabled,
         },
       });
     })
-    .catch((err) => {
+    .catch((error) => {
       dispatch({
         type: systemConstants.EDIT_SUBMIT_LANGUAGE_FAIL,
-        payload: err,
+        error,
       });
     });
 };

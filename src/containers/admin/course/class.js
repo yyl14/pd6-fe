@@ -5,7 +5,7 @@ import ClassSetting from '../../../components/admin/course/ClassSetting';
 import NoMatch from '../../../components/noMatch';
 
 /* This is a level 3 container (main page container) */
-export default function ClassInfo() {
+export default function Class() {
   return (
     <>
       <Switch>
