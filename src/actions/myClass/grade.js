@@ -22,31 +22,51 @@ export const fetchClassGrade = (token, classId) => async (dispatch) => {
   }
 };
 
-export const addClassGrade = (token, classId, title, file) => async (dispatch) => {
-  dispatch({ type: gradeConstants.ADD_CLASS_GRADE_START });
-  const config = {
-    headers: {
-      'Auth-Token': token,
-      'Content-Type': 'multipart/form-data',
-    },
-    params: {
-      title,
-    },
-  };
-  const formData = new FormData();
-  formData.append('grade_file', file);
-
+export const addClassGrade = (token, classId, receiverRef, graderRef, title, score, comment) => async (dispatch) => {
   try {
-    const res = await agent.post(`/class/${classId}/grade`, formData, config);
-    if (!res.data.success) {
-      throw new Error(res.data.error);
-    }
-    dispatch({
-      type: gradeConstants.ADD_CLASS_GRADE_SUCCESS,
-    });
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    const body = {
+      receiver_referral: receiverRef,
+      grader_referral: graderRef,
+      title,
+      score,
+      comment,
+    };
+    dispatch({ type: gradeConstants.ADD_CLASS_GRADE_START });
+    await agent.post(`/class/${classId}/grade`, body, config);
+    dispatch({ type: gradeConstants.ADD_CLASS_GRADE_SUCCESS });
   } catch (err) {
     dispatch({
       type: gradeConstants.ADD_CLASS_GRADE_FAIL,
+      error: err,
+    });
+  }
+};
+
+export const importClassGrade = (token, classId, title, file) => async (dispatch) => {
+  try {
+    dispatch({ type: gradeConstants.IMPORT_CLASS_GRADE_START });
+    const config = {
+      headers: {
+        'Auth-Token': token,
+        'Content-Type': 'multipart/form-data',
+      },
+      params: {
+        title,
+      },
+    };
+    const formData = new FormData();
+    formData.append('grade_file', file);
+
+    await agent.post(`/class/${classId}/grade-import`, formData, config);
+    dispatch({ type: gradeConstants.IMPORT_CLASS_GRADE_SUCCESS });
+  } catch (err) {
+    dispatch({
+      type: gradeConstants.IMPORT_CLASS_GRADE_FAIL,
       error: err,
     });
   }
@@ -151,8 +171,7 @@ export const editGrade = (token, gradeId, title, score, comment) => (dispatch) =
   dispatch({ type: gradeConstants.EDIT_GRADE_START });
   agent
     .patch(`/grade/${gradeId}`, { title, score, comment }, auth)
-    .then((res) => {
-      console.log(res.data);
+    .then(() => {
       dispatch({ type: gradeConstants.EDIT_GRADE_SUCCESS });
     })
     .catch((err) => {

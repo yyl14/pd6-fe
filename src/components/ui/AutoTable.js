@@ -14,7 +14,8 @@ import {
   Select,
   IconButton,
   Snackbar,
-  CircularProgress,
+  // CircularProg,
+  LinearProgress,
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -79,6 +80,14 @@ const useStyles = makeStyles((theme) => ({
     background: 'white',
     borderBottomWidth: '1px',
     borderBottomColor: theme.palette.grey.A400,
+  },
+  progressContainer: {
+    height: 0,
+    overflow: 'visible',
+  },
+  progress: {
+    height: 3,
+    zIndex: 1000,
   },
   column: {
     display: 'flex',
@@ -292,6 +301,14 @@ function AutoTable({
     setPageInput('1');
   };
 
+  const calculateTotalNumOfPages = () => {
+    if (tableState.byId[ident]) {
+      if (tableState.byId[ident].totalCount === Infinity) return 0;
+      return Math.ceil(tableState.byId[ident].totalCount / rowsPerPage);
+    }
+    return 100;
+  };
+
   useEffect(() => {
     if (tableState.byId[ident]) {
       setDisplayedRange(
@@ -365,6 +382,10 @@ function AutoTable({
         filter={filter}
         onSearch={onSearch}
       />
+      <div className={classes.progressContainer}>
+        {dataComplete || isError || <LinearProgress color="primary" className={classes.progress} />}
+        {/* <LinearProgress color="primary" className={classes.progress} /> */}
+      </div>
       <Paper className={classes.root} elevation={0}>
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">
@@ -454,7 +475,7 @@ function AutoTable({
           </Table>
         </TableContainer>
         <div className={classes.bottomWrapper}>
-          <div>{dataComplete || isError || <CircularProgress color="inherit" size={30} />}</div>
+          {/* <div>{dataComplete || isError || <CircularProgress color="inherit" size={30} />}</div> */}
           <div className={classes.bottom}>
             <FormControl variant="outlined">
               <Select
@@ -489,11 +510,7 @@ function AutoTable({
               value={pageInput}
               onChange={(e) => {
                 const newInput = e.target.value;
-                if (
-                  tableState.byId[ident]
-                  && Number(newInput) <= Math.ceil(tableState.byId[ident].totalCount / rowsPerPage)
-                  && Number(newInput) >= 1
-                ) {
+                if (tableState.byId[ident] && Number(newInput) <= calculateTotalNumOfPages() && Number(newInput) >= 1) {
                   setPageInput(newInput);
                   setCurPage(Number(pageInput) - 1);
                 } else if (newInput === '') {
@@ -502,7 +519,7 @@ function AutoTable({
               }}
             />
             <Typography className={classes.pageText} variant="body1">
-              {`of ${Math.ceil((tableState.byId[ident] ? tableState.byId[ident].totalCount : 100) / rowsPerPage)}`}
+              {`of ${calculateTotalNumOfPages()}`}
             </Typography>
             <Button
               className={classes.pageChangeButtons}
@@ -519,7 +536,9 @@ function AutoTable({
         severity="error"
         open={isError}
         autoHideDuration={6000}
-        message={`Error refetching data: ${isError && refetchErrors.filter((error) => !!error)[0].toString()}`}
+        message={`Error refetching data: ${
+          Boolean(refetchErrors.filter((error) => !!error)[0]) && refetchErrors.filter((error) => !!error)[0].toString()
+        }`}
       />
     </>
   );

@@ -17,7 +17,7 @@ export default function MyClass({
   const authToken = useSelector((state) => state.auth.token);
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
-  const userClasses = useSelector((state) => state.user.classes.sort((a, b) => (a.course_id > b.course_id) - (a.course_id < b.course_id)));
+  const userClasses = useSelector((state) => state.user.classes);
 
   useEffect(() => {
     userClasses.map(({ course_id }) => dispatch(fetchCourse(authToken, course_id)));
@@ -27,17 +27,6 @@ export default function MyClass({
   const [titles, setTitles] = useState([]);
   const [itemLists, setItemLists] = useState([]);
 
-  useEffect(() => {
-    if (userClasses.length !== 0) {
-      if (
-        userClasses[0].course_id !== undefined
-        && userClasses[0].class_id !== undefined
-        && location.pathname === '/my-class'
-      ) {
-        history.push(`/my-class/${userClasses[0].course_id}/${userClasses[0].class_id}/challenge`);
-      }
-    }
-  }, [history, location.pathname, userClasses]);
   useEffect(() => {
     if (userClasses.length !== 0) {
       if (

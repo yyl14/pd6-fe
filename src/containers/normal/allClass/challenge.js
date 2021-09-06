@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
-  withRouter, Switch, Route, useParams,
+  Switch, Route, useParams,
 } from 'react-router-dom';
 import ChallengeList from '../../../components/normal/allClass/Challenge/ChallengeList';
 import ChallengeInfo from '../../../components/normal/allClass/Challenge/ChallengeInfo';
@@ -12,7 +12,7 @@ import SubmissionDetail from '../../../components/normal/allClass/Challenge/Subm
 import NoMatch from '../../../components/noMatch';
 
 import { fetchCourse, fetchClass } from '../../../actions/common/common';
-import { browseTasksUnderChallenge } from '../../../actions/myClass/problem';
+import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
 
 /* This is a level 3 container (main page container) */
 function Challenge() {

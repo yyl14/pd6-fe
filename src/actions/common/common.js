@@ -1,5 +1,7 @@
 import agent from '../agent';
 import { commonConstants } from './constant';
+import { autoTableConstants } from '../component/constant';
+import browseParamsTransForm from '../../function/browseParamsTransform';
 
 const getInstitutes = () => (dispatch) => {
   dispatch({ type: commonConstants.GET_INSTITUTE_START });
@@ -20,16 +22,34 @@ const getInstitutes = () => (dispatch) => {
     });
 };
 
-const fetchClassMembers = (token, classId) => async (dispatch) => {
+const fetchClassMembers = (token, classId, browseParams, tableId = null) => async (dispatch) => {
   try {
-    const auth = {
+    const config = {
       headers: {
         'Auth-Token': token,
       },
+      params: browseParamsTransForm(browseParams),
     };
     dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_REQUEST });
-    const res = await agent.get(`/class/${classId}/member`, auth);
-    dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_SUCCESS, payload: { classId, data: res.data.data.data } });
+    const res = await agent.get(`/class/${classId}/member`, config);
+    const { data, total_count } = res.data.data;
+
+    dispatch({
+      type: commonConstants.FETCH_CLASS_MEMBERS_SUCCESS,
+      payload: {
+        classId,
+        data: res.data.data.data,
+      },
+    });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: data.map((item) => item.member_id),
+        offset: browseParams.offset,
+      },
+    });
   } catch (err) {
     dispatch({
       type: commonConstants.FETCH_CLASS_MEMBERS_FAIL,
@@ -211,6 +231,28 @@ const fetchClass = (token, classId) => async (dispatch) => {
   }
 };
 
+const fetchChallenge = (token, challengeId) => async (dispatch) => {
+  dispatch({ type: commonConstants.READ_CHALLENGE_START });
+  const auth = {
+    headers: {
+      'Auth-Token': token,
+    },
+  };
+  try {
+    const challenge = await agent.get(`/challenge/${challengeId}`, auth);
+
+    dispatch({
+      type: commonConstants.READ_CHALLENGE_SUCCESS,
+      payload: challenge.data.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: commonConstants.READ_CHALLENGE_FAIL,
+      error: err,
+    });
+  }
+};
+
 const fetchAccount = (token, accountId) => async (dispatch) => {
   try {
     const auth = {
@@ -343,6 +385,7 @@ export {
   fetchAllClasses,
   fetchCourse,
   fetchClass,
+  fetchChallenge,
   fetchAccount,
   browseSubmitLang,
   downloadFile,

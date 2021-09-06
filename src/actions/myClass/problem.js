@@ -19,101 +19,12 @@ function getText(url) {
   });
 }
 
-const browseChallengeOverview = (token, challengeId) => (dispatch) => {
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-  // TODO: read challenge, get problem, and then get grade
-  dispatch({ type: problemConstants.READ_CHALLENGE_START });
-
-  agent
-    .get(`/challenge/${challengeId}`, auth)
-    .then((res) => {
-      dispatch({
-        type: problemConstants.READ_CHALLENGE_SUCCESS,
-        payload: res.data.data,
-      });
-    })
-    .catch((err) => {
-      dispatch({
-        type: problemConstants.READ_CHALLENGE_FAIL,
-        error: err,
-      });
-    });
-};
-
-const editChallenge = (token, challengeId, body) => async (dispatch) => {
-  try {
-    const auth = {
-      headers: {
-        'Auth-Token': token,
-      },
-    };
-    dispatch({ type: problemConstants.EDIT_CHALLENGE_START });
-    const res = await agent.patch(
-      `/challenge/${challengeId}`,
-      {
-        publicize_type: body.publicizeType,
-        selection_type: body.selectionType,
-        title: body.title,
-        description: body.description,
-        start_time: body.startTime,
-        end_time: body.endTime,
-      },
-      auth,
-    );
-    dispatch({ type: problemConstants.EDIT_CHALLENGE_SUCCESS, payload: res.data.data });
-  } catch (err) {
-    dispatch({
-      type: problemConstants.EDIT_CHALLENGE_FAIL,
-      error: err,
-    });
-  }
-};
-
-const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
-  try {
-    const auth = {
-      headers: {
-        'Auth-Token': token,
-      },
-    };
-    dispatch({ type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_START });
-    const res = await agent.get(`/challenge/${challengeId}/task`, auth);
-    dispatch({
-      type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS,
-      payload: { id: challengeId, data: res.data.data },
-    });
-  } catch (err) {
-    dispatch({
-      type: problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_FAIL,
-      error: err,
-    });
-  }
-};
-
-const readProblemInfo = (token, problemId, challengeId) => async (dispatch) => {
+const readProblemInfo = (token, problemId) => async (dispatch) => {
   const config = {
     headers: {
       'Auth-Token': token,
     },
   };
-
-  try {
-    dispatch({ type: problemConstants.READ_CHALLENGE_START });
-    const challenge = await agent.get(`/challenge/${challengeId}`, config);
-    dispatch({
-      type: problemConstants.READ_CHALLENGE_SUCCESS,
-      payload: challenge.data.data,
-    });
-  } catch (err) {
-    dispatch({
-      type: problemConstants.READ_CHALLENGE_FAIL,
-      errors: err,
-    });
-  }
 
   try {
     dispatch({ type: problemConstants.READ_PROBLEM_START });
@@ -210,7 +121,7 @@ const browseTestcase = (token, problemId) => async (dispatch) => {
   try {
     const testcases = await agent.get(`/problem/${problemId}/testcase`, auth);
 
-    const { success, data, error } = testcases.data;
+    const { data } = testcases.data;
     const newTestcases = await Promise.all(
       data.map(async (testcase) => {
         if (testcase.is_sample === true) {
@@ -484,6 +395,10 @@ const addAssistingData = (token, problemId, file) => async (dispatch) => {
       type: problemConstants.ADD_ASSISTING_DATA_FAIL,
       errors: err,
     });
+    dispatch({
+      type: problemConstants.UPLOAD_DATA_FAIL,
+      filename: file.name,
+    });
   }
 };
 
@@ -570,6 +485,10 @@ const uploadTestcaseInput = (token, testcaseId, file) => async (dispatch) => {
       type: problemConstants.UPLOAD_TESTCASE_INPUT_FAIL,
       errors: err,
     });
+    dispatch({
+      type: problemConstants.UPLOAD_DATA_FAIL,
+      filename: file.name,
+    });
   }
 };
 
@@ -595,6 +514,10 @@ const uploadTestcaseOutput = (token, testcaseId, file) => async (dispatch) => {
     dispatch({
       type: problemConstants.UPLOAD_TESTCASE_OUTPUT_FAIL,
       errors: err,
+    });
+    dispatch({
+      type: problemConstants.UPLOAD_DATA_FAIL,
+      filename: file.name,
     });
   }
 };
@@ -656,28 +579,18 @@ const addTestcaseWithFile = (token, problemId, isSample, score, timeLimit, memor
       type: problemConstants.ADD_TESTCASE_FAIL,
       errors: err,
     });
-  }
-};
-
-const readChallenge = (token, challengeId) => async (dispatch) => {
-  dispatch({ type: problemConstants.READ_CHALLENGE_START });
-  const auth = {
-    headers: {
-      'Auth-Token': token,
-    },
-  };
-  try {
-    const challenge = await agent.get(`/challenge/${challengeId}`, auth);
-
-    dispatch({
-      type: problemConstants.READ_CHALLENGE_SUCCESS,
-      payload: challenge.data.data,
-    });
-  } catch (err) {
-    dispatch({
-      type: problemConstants.READ_CHALLENGE_FAIL,
-      errors: err,
-    });
+    if (inputFile != null) {
+      dispatch({
+        type: problemConstants.UPLOAD_DATA_FAIL,
+        filename: inputFile.name,
+      });
+    }
+    if (outputFile != null) {
+      dispatch({
+        type: problemConstants.UPLOAD_DATA_FAIL,
+        filename: outputFile.name,
+      });
+    }
   }
 };
 
@@ -725,10 +638,54 @@ const readProblemScore = (token, problemId) => async (dispatch) => {
   }
 };
 
+const downloadAllSamples = (token, problemId, as_attachment) => async (dispatch) => {
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+    params: {
+      as_attachment,
+    },
+  };
+  dispatch({ type: problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_START });
+  try {
+    await agent.post(`/problem/${problemId}/all-sample-testcase`, { as_attachment: true }, config);
+    dispatch({ type: problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_SUCCESS });
+  } catch (err) {
+    dispatch({
+      type: problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_FAIL,
+      error: err,
+    });
+  }
+};
+
+const downloadAllTestcases = (token, problemId, as_attachment) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Auth-Token': token,
+    },
+    params: {
+      as_attachment,
+    },
+  };
+  dispatch({ type: problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_START });
+  try {
+    await agent.post(`/problem/${problemId}/all-non-sample-testcase`, { as_attachment: true }, config);
+
+    dispatch({ type: problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_SUCCESS });
+  } catch (err) {
+    dispatch({
+      type: problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_FAIL,
+      error: err,
+    });
+  }
+};
+
+const clearUploadFail = () => (dispatch) => {
+  dispatch({ type: problemConstants.CLEAR_UPLOAD_FAIL_RECORD });
+};
+
 export {
-  browseChallengeOverview,
-  editChallenge,
-  browseTasksUnderChallenge,
   readProblemInfo,
   editProblemInfo,
   deleteProblem,
@@ -745,8 +702,10 @@ export {
   uploadTestcaseInput,
   uploadTestcaseOutput,
   addTestcaseWithFile,
-  readChallenge,
   browseJudgeCases,
   readTestcase,
   readProblemScore,
+  downloadAllSamples,
+  downloadAllTestcases,
+  clearUploadFail,
 };

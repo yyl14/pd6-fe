@@ -10,12 +10,9 @@ import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
-import {
-  browseChallengeOverview,
-  editChallenge,
-  browseTasksUnderChallenge,
-  readProblemScore,
-} from '../../../../actions/myClass/problem';
+import { readProblemScore } from '../../../../actions/myClass/problem';
+import { editChallenge } from '../../../../actions/myClass/challenge';
+import { fetchChallenge } from '../../../../actions/common/common';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
@@ -43,22 +40,22 @@ export default function ChallengeInfo() {
   const [tableData, setTableData] = useState([]);
 
   const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.myClass.problem);
+  const loading = useSelector((state) => state.loading.myClass.challenge);
+  const commonLoading = useSelector((state) => state.loading.common.common);
   const userClasses = useSelector((state) => state.user.classes);
   const challenges = useSelector((state) => state.challenges.byId);
   const problems = useSelector((state) => state.problem.byId);
   const essays = useSelector((state) => state.essays.byId);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
 
-  useEffect(() => {
-    if (!loading.editChallenge) {
-      dispatch(browseChallengeOverview(authToken, challengeId));
-    }
-  }, [authToken, challengeId, dispatch, loading.editChallenge]);
+  const [hasRequest, setHasRequest] = useState(false);
 
   useEffect(() => {
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
-  }, [authToken, challengeId, dispatch]);
+    if (hasRequest && !loading.editChallenge) {
+      dispatch(fetchChallenge(authToken, challengeId));
+      setHasRequest(false);
+    }
+  }, [authToken, challengeId, dispatch, hasRequest, loading.editChallenge]);
 
   useEffect(() => {
     if (challenges[challengeId] !== undefined) {
@@ -112,10 +109,10 @@ export default function ChallengeInfo() {
   }, [authToken, challengeId, challenges, essays, peerReviews, problems]);
 
   if (challenges[challengeId] === undefined) {
-    if (!loading.browseChallengeOverview) {
-      return <NoMatch />;
+    if (commonLoading.fetchChallenge) {
+      return <GeneralLoading />;
     }
-    return <GeneralLoading />;
+    return <NoMatch />;
   }
 
   const handleEdit = () => {
@@ -129,14 +126,15 @@ export default function ChallengeInfo() {
 
   const handleSave = () => {
     const body = {
-      publicizeType: challenges[challengeId].publicize_type,
-      selectionType: challenges[challengeId].selection_type,
+      publicize_type: challenges[challengeId].publicize_type,
+      selection_type: challenges[challengeId].selection_type,
       title: challenges[challengeId].title,
       description: inputs,
-      startTime: challenges[challengeId].start_time,
-      endTime: challenges[challengeId].end_time,
+      start_time: challenges[challengeId].start_time,
+      end_time: challenges[challengeId].end_time,
     };
     dispatch(editChallenge(authToken, challengeId, body));
+    setHasRequest(true);
     setEditMode(false);
     setInputs(challenges[challengeId].description);
   };

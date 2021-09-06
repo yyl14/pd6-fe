@@ -20,7 +20,6 @@ import Icon from '../../../ui/icon/index';
 import {
   fetchTeams, addTeam, importTeam, downloadTeamFile,
 } from '../../../../actions/myClass/team';
-import { fetchCourse, fetchClass } from '../../../../actions/common/common';
 
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
@@ -66,6 +65,7 @@ export default function TeamList() {
   const [tableData, setTableData] = useState([]);
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [disabled, setDisabled] = useState(true);
 
   const [selectedFile, setSelectedFile] = useState([]);
   const [importInput, setImportInput] = useState('');
@@ -85,17 +85,29 @@ export default function TeamList() {
   }, [classId, user.classes]);
 
   useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-  }, [authToken, classId, courseId, dispatch]);
-
-  useEffect(() => {
     if (!loading.addTeam && !loading.importTeam) {
       dispatch(fetchTeams(authToken, classId));
     }
   }, [authToken, classId, dispatch, loading.addTeam, loading.importTeam]);
 
+  useEffect(() => {
+    if (selectedFile.length === 0) {
+      setDisabled(true);
+    }
+  }, [selectedFile.length]);
+
+  useEffect(() => {
+    if (importInput !== '' && selectedFile.length !== 0) {
+      setDisabled(false);
+    }
+  }, [importInput, selectedFile.length]);
+
   const handleImportChange = (event) => {
+    if (event.target.value === '') {
+      setDisabled(true);
+      setImportInput(event.target.value);
+      return;
+    }
     setImportInput(event.target.value);
   };
 
@@ -184,8 +196,7 @@ export default function TeamList() {
             minWidth: 50,
             align: 'center',
             width: 150,
-            type: 'link',
-            link_id: 'team_path',
+            type: 'string',
           },
         ]}
         data={teamIds.map((id) => ({
@@ -193,7 +204,6 @@ export default function TeamList() {
           label: teams[id].label,
           teamName: teams[id].name,
           path: `/my-class/${courseId}/${classId}/team/${id}`,
-          team_path: '/team_path',
         }))}
         hasLink
         linkName="path"
@@ -220,7 +230,7 @@ export default function TeamList() {
           <AlignedText text="Class" maxWidth="mg" childrenType="text">
             <Typography variant="body1">{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
           </AlignedText>
-          <AlignedText text="Title" maxWidth="mg" childrenType="field">
+          <AlignedText text="Label" maxWidth="mg" childrenType="field">
             <TextField id="title" name="title" value={importInput} onChange={(e) => handleImportChange(e)} />
           </AlignedText>
           <FileUploadArea
@@ -245,6 +255,7 @@ export default function TeamList() {
             onClick={() => {
               setShowImportDialog(false);
               clearImportInput();
+              setDisabled(true);
             }}
             color="default"
           >
@@ -253,8 +264,10 @@ export default function TeamList() {
           <Button
             onClick={() => {
               submitImport();
+              setDisabled(true);
             }}
             color="primary"
+            disabled={disabled}
           >
             Confirm
           </Button>

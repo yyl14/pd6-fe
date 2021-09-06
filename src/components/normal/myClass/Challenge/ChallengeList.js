@@ -20,8 +20,8 @@ import Icon from '../../../ui/icon/index';
 import CustomTable from '../../../ui/CustomTable';
 import DateRangePicker from '../../../ui/DateRangePicker';
 import { fetchChallenges, addChallenge } from '../../../../actions/myClass/challenge';
-import { fetchClass, fetchCourse } from '../../../../actions/common/common';
 import GeneralLoading from '../../../GeneralLoading';
+import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
   pageHeader: {
@@ -73,16 +73,12 @@ export default function ChallengeList() {
 
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.challenge);
+  const commonLoading = useSelector((state) => state.loading.common.common);
   const challenges = useSelector((state) => state.challenges.byId);
   const challengesID = useSelector((state) => state.challenges.allIds);
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
-
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-  }, [dispatch, authToken, classId, courseId]);
 
   useEffect(() => {
     if (!loading.addChallenge) {
@@ -103,19 +99,21 @@ export default function ChallengeList() {
     if (classes[classId]) {
       if (isManager) {
         setTableData(
-          classes[classId].challengeIds.reduce((acc, b) => ([b, ...acc]), []).map((id) => ({
-            title: challenges[id].title,
-            path: `/my-class/${courseId}/${classId}/challenge/${id}`,
-            startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
-            endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
-            status: getStatus(id),
-          })),
+          classes[classId].challengeIds
+            .reduce((acc, b) => [b, ...acc], [])
+            .map((id) => ({
+              title: challenges[id].title,
+              path: `/my-class/${courseId}/${classId}/challenge/${id}`,
+              startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
+              endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
+              status: getStatus(id),
+            })),
         );
       } else {
         setTableData(
           classes[classId].challengeIds
             .filter((id) => getStatus(id) !== 'Not Yet')
-            .reduce((acc, b) => ([b, ...acc]), [])
+            .reduce((acc, b) => [b, ...acc], [])
             .map((id) => ({
               title: challenges[id].title,
               path: `/my-class/${courseId}/${classId}/challenge/${id}`,
@@ -134,8 +132,14 @@ export default function ChallengeList() {
     }
   }, [classId, userClasses]);
 
-  if (loading.fetchChallenges || courses[courseId] === undefined || classes[classId] === undefined) {
-    return <GeneralLoading />;
+  if (
+    courses[courseId] === undefined
+    || classes[classId] === undefined
+  ) {
+    if (loading.fetchChallenges || commonLoading.fetchClass || commonLoading.fetchCourse) {
+      return <GeneralLoading />;
+    }
+    return <NoMatch />;
   }
 
   const handleChange = (e) => {
