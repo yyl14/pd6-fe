@@ -22,6 +22,7 @@ const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
   }
 };
 
+// fetch all challenges under class
 const fetchChallenges = (token, classId) => async (dispatch) => {
   try {
     const config = {
@@ -43,6 +44,7 @@ const fetchChallenges = (token, classId) => async (dispatch) => {
   }
 };
 
+// add a challenge under class
 const addChallenge = (token, classId, body) => async (dispatch) => {
   try {
     const config = {
@@ -72,6 +74,8 @@ const addChallenge = (token, classId, body) => async (dispatch) => {
   }
 };
 
+// in ChallengeInfo: edit description
+// in SettingEdit: edit everything else
 const editChallenge = (token, challengeId, body) => async (dispatch) => {
   try {
     const config = {

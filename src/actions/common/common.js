@@ -22,6 +22,7 @@ const getInstitutes = () => (dispatch) => {
     });
 };
 
+// WITH BROWSE API
 const fetchClassMembers = (token, classId, browseParams, tableId = null) => async (dispatch) => {
   try {
     const config = {
@@ -38,7 +39,7 @@ const fetchClassMembers = (token, classId, browseParams, tableId = null) => asyn
       type: commonConstants.FETCH_CLASS_MEMBERS_SUCCESS,
       payload: {
         classId,
-        data: res.data.data.data,
+        data,
       },
     });
     dispatch({
@@ -58,6 +59,7 @@ const fetchClassMembers = (token, classId, browseParams, tableId = null) => asyn
   }
 };
 
+// Used ONLY in class member edit
 const fetchClassMemberWithAccountReferral = (token, classId) => async (dispatch) => {
   try {
     const config = {
@@ -77,29 +79,6 @@ const fetchClassMemberWithAccountReferral = (token, classId) => async (dispatch)
       error,
     });
   }
-};
-
-const editClassMember = (token, classId, editedList) => (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
-  dispatch({ type: commonConstants.EDIT_CLASS_MEMBER_START });
-
-  agent
-    .patch(`/class/${classId}/member`, editedList, config)
-    .then(() => {
-      dispatch({
-        type: commonConstants.EDIT_CLASS_MEMBER_SUCCESS,
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        type: commonConstants.EDIT_CLASS_MEMBER_FAIL,
-        error,
-      });
-    });
 };
 
 const replaceClassMembers = (token, classId, replacingList) => async (dispatch) => {
@@ -130,29 +109,6 @@ const replaceClassMembers = (token, classId, replacingList) => async (dispatch) 
   }
 };
 
-// const deleteClassMember = (token, classId, memberId) => (dispatch) => {
-//   const config = {
-//     headers: {
-//       'auth-token': token,
-//     },
-//   };
-//   dispatch({ type: commonConstants.DELETE_CLASS_MEMBER_START });
-
-//   agent
-//     .delete(`/class/${classId}/member/${memberId}`, config)
-//     .then((res) => {
-//       dispatch({
-//         type: commonConstants.DELETE_CLASS_MEMBER_SUCCESS,
-//       });
-//     })
-//     .catch((error) => {
-//       dispatch({
-//         type: commonConstants.DELETE_CLASS_MEMBER_FAIL,
-//         error,
-//       });
-//     });
-// };
-
 const browseSubmitLang = (token) => async (dispatch) => {
   try {
     const config = {
@@ -161,10 +117,10 @@ const browseSubmitLang = (token) => async (dispatch) => {
       },
     };
     dispatch({ type: commonConstants.BROWSE_SUBMISSION_LANG_START });
-    const submitLang = await agent.get('/submission/language', config);
+    const res = await agent.get('/submission/language', config);
     dispatch({
       type: commonConstants.BROWSE_SUBMISSION_LANG_SUCCESS,
-      payload: submitLang.data.data,
+      payload: res.data.data,
     });
   } catch (error) {
     dispatch({
@@ -187,27 +143,6 @@ const fetchCourse = (token, courseId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: commonConstants.FETCH_COURSE_FAIL,
-      error,
-    });
-  }
-};
-
-const fetchAllClasses = (token) => async (dispatch) => {
-  try {
-    const config = {
-      headers: {
-        'auth-token': token,
-      },
-    };
-    dispatch({ type: commonConstants.FETCH_ALL_CLASSES_START });
-    const res = await agent.get('/class', config);
-    if (!res.data.success) {
-      throw new Error(res.data.error);
-    }
-    dispatch({ type: commonConstants.FETCH_ALL_CLASSES_SUCCESS, payload: res.data.data.data });
-  } catch (error) {
-    dispatch({
-      type: commonConstants.FETCH_ALL_CLASSES_FAIL,
       error,
     });
   }
@@ -271,8 +206,9 @@ const fetchAccount = (token, accountId) => async (dispatch) => {
   }
 };
 
+// get file URL and download
 const downloadFile = (token, file) => async (dispatch) => {
-  // in each file, you should contain uuid, filename, and as_attachment
+  // in 'file' parameter, you should include uuid, filename, and as_attachment as attributes
   const config = {
     headers: {
       'auth-token': token,
@@ -285,23 +221,17 @@ const downloadFile = (token, file) => async (dispatch) => {
   try {
     dispatch({ type: commonConstants.DOWNLOAD_FILE_START });
     const res = await agent.get(`/s3-file/${file.uuid}/url`, config);
-    if (res.data.success) {
-      fetch(res.data.data.url).then((t) => t.blob().then((b) => {
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(b);
-        a.setAttribute('download', file.filename);
-        a.click();
-      }));
 
-      dispatch({
-        type: commonConstants.DOWNLOAD_FILE_SUCCESS,
-      });
-    } else {
-      dispatch({
-        type: commonConstants.DOWNLOAD_FILE_FAIL,
-        error: res.data.error,
-      });
-    }
+    fetch(res.data.data.url).then((t) => t.blob().then((b) => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(b);
+      a.setAttribute('download', file.filename);
+      a.click();
+    }));
+
+    dispatch({
+      type: commonConstants.DOWNLOAD_FILE_SUCCESS,
+    });
   } catch (error) {
     dispatch({
       type: commonConstants.DOWNLOAD_FILE_FAIL,
@@ -310,6 +240,7 @@ const downloadFile = (token, file) => async (dispatch) => {
   }
 };
 
+// get file URL only
 const fetchDownloadFileUrl = (token, file) => async (dispatch) => {
   const config = {
     headers: {
@@ -323,17 +254,10 @@ const fetchDownloadFileUrl = (token, file) => async (dispatch) => {
   try {
     dispatch({ type: commonConstants.FETCH_DOWNLOAD_FILE_URL_START });
     const res = await agent.get(`/s3-file/${file.uuid}/url`, config);
-    if (res.data.success) {
-      dispatch({
-        type: commonConstants.FETCH_DOWNLOAD_FILE_URL_SUCCESS,
-        payload: { uuid: file.uuid, url: res.data.data.url },
-      });
-    } else {
-      dispatch({
-        type: commonConstants.FETCH_DOWNLOAD_FILE_URL_FAIL,
-        error: res.data.error,
-      });
-    }
+    dispatch({
+      type: commonConstants.FETCH_DOWNLOAD_FILE_URL_SUCCESS,
+      payload: { uuid: file.uuid, url: res.data.data.url },
+    });
   } catch (error) {
     dispatch({
       type: commonConstants.FETCH_DOWNLOAD_FILE_URL_FAIL,
@@ -342,6 +266,7 @@ const fetchDownloadFileUrl = (token, file) => async (dispatch) => {
   }
 };
 
+// fetch all challenges and coding problems (no essay/peer review) under class
 const fetchAllChallengesProblems = (token, classId) => async (dispatch) => {
   dispatch({ type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_START });
   const config = {
@@ -359,7 +284,7 @@ const fetchAllChallengesProblems = (token, classId) => async (dispatch) => {
         .catch((error) => {
           dispatch({
             type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_FAIL,
-            payload: err,
+            error,
           });
         })),
     );
@@ -380,9 +305,7 @@ export {
   getInstitutes,
   fetchClassMembers,
   fetchClassMemberWithAccountReferral,
-  editClassMember,
   replaceClassMembers,
-  fetchAllClasses,
   fetchCourse,
   fetchClass,
   fetchChallenge,

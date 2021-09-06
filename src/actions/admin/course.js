@@ -18,7 +18,7 @@ export const fetchCourses = (token) => (dispatch) => {
       });
     })
     .catch((error) => {
-      dispatch({ type: courseConstants.FETCH_COURSES_FAIL, payload: { error } });
+      dispatch({ type: courseConstants.FETCH_COURSES_FAIL, error });
     });
 };
 
@@ -51,7 +51,7 @@ export const addCourse = (token, name, type, history) => (dispatch) => {
       history.push(`/admin/course/course/${id}/class-list`);
     })
     .catch((error) => {
-      dispatch({ type: courseConstants.ADD_COURSE_FAIL, payload: { error } });
+      dispatch({ type: courseConstants.ADD_COURSE_FAIL, error });
     });
 };
 
@@ -74,9 +74,7 @@ export const renameCourse = (token, courseId, newName) => (dispatch) => {
     .catch((error) => {
       dispatch({
         type: courseConstants.RENAME_COURSE_FAIL,
-        payload: {
-          error,
-        },
+        error,
       });
     });
 };
@@ -100,9 +98,7 @@ export const deleteCourse = (token, courseId) => (dispatch) => {
     .catch((error) => {
       dispatch({
         type: courseConstants.DELETE_COURSE_FAIL,
-        payload: {
-          error,
-        },
+        error,
       });
     });
 };
@@ -121,7 +117,7 @@ export const fetchClasses = (token, courseId) => (dispatch) => {
       });
     })
     .catch((error) => {
-      dispatch({ type: courseConstants.FETCH_CLASSES_FAIL, payload: { error } });
+      dispatch({ type: courseConstants.FETCH_CLASSES_FAIL, error });
     });
 };
 
@@ -151,7 +147,7 @@ export const addClass = (token, courseId, name, isHidden) => (dispatch) => {
       });
     })
     .catch((error) => {
-      dispatch({ type: courseConstants.ADD_CLASS_FAIL, payload: { error } });
+      dispatch({ type: courseConstants.ADD_CLASS_FAIL, error });
     });
 };
 
@@ -173,9 +169,7 @@ export const renameClass = (token, classId, newName) => (dispatch) => {
     .catch((error) => {
       dispatch({
         type: courseConstants.RENAME_CLASS_FAIL,
-        payload: {
-          error,
-        },
+        error,
       });
     });
 };
@@ -200,9 +194,7 @@ export const deleteClass = (token, courseId, classId) => (dispatch) => {
     .catch((error) => {
       dispatch({
         type: courseConstants.DELETE_CLASS_FAIL,
-        payload: {
-          error,
-        },
+        error,
       });
     });
 };

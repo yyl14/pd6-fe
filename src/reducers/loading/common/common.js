@@ -4,9 +4,7 @@ const initialState = {
   fetchInstitutes: false,
   fetchClassMembers: false,
   fetchClassMemberWithAccountReferral: false,
-  editClassMember: false,
   replaceClassMembers: false,
-  // deleteClassMember: false,
   browseSubmitLang: false,
   fetchCourse: false,
   fetchClass: false,
@@ -73,24 +71,6 @@ export default function common(state = initialState, action) {
       };
     }
 
-    case commonConstants.EDIT_CLASS_MEMBER_START: {
-      return {
-        ...state,
-        editClassMember: true,
-      };
-    }
-    case commonConstants.EDIT_CLASS_MEMBER_SUCCESS: {
-      return {
-        ...state,
-        editClassMember: false,
-      };
-    }
-    case commonConstants.EDIT_CLASS_MEMBER_FAIL: {
-      return {
-        ...state,
-        editClassMember: false,
-      };
-    }
     case commonConstants.REPLACE_CLASS_MEMBERS_START: {
       return {
         ...state,
@@ -109,24 +89,6 @@ export default function common(state = initialState, action) {
         replaceClassMembers: false,
       };
     }
-    case commonConstants.DELETE_CLASS_MEMBER_START: {
-      return {
-        ...state,
-        deleteClassMember: true,
-      };
-    }
-    // case commonConstants.DELETE_CLASS_MEMBER_SUCCESS: {
-    //   return {
-    //     ...state,
-    //     deleteClassMember: false,
-    //   };
-    // }
-    // case commonConstants.DELETE_CLASS_MEMBER_FAIL: {
-    //   return {
-    //     ...state,
-    //     deleteClassMember: false,
-    //   };
-    // }
     case commonConstants.FETCH_COURSE_START: {
       return {
         ...state,
