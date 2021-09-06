@@ -255,6 +255,34 @@ function AutoTable({
     }
   };
 
+  // refresh
+  const onRefresh = () => {
+    dispatch(autoTableFlush(ident));
+    dispatch(autoTableFlush(ident));
+    setDataComplete(false);
+    setCurPage(0);
+    setPageInput('1');
+  };
+
+  // change filter
+  const onSearch = (newFilter) => {
+    if (tableState.byId[ident]) {
+      dispatch(autoTableFlush(ident));
+      setFilter(newFilter);
+      setDataComplete(false);
+      setCurPage(0);
+      setPageInput('1');
+    }
+  };
+
+  const calculateTotalNumOfPages = () => {
+    if (tableState.byId[ident]) {
+      if (tableState.byId[ident].totalCount === Infinity) return 0;
+      return Math.ceil(tableState.byId[ident].totalCount / rowsPerPage);
+    }
+    return 100;
+  };
+
   // page change from input
   useEffect(() => {
     if (
@@ -286,10 +314,14 @@ function AutoTable({
 
   // table mount, create dynamic redux state
   useEffect(() => {
+    dispatch(autoTableMount(ident));
+  }, [ident]);
+
+  useEffect(() => {
     if (!refreshLoadings.reduce((acc, item) => acc || item, false)) {
-      dispatch(autoTableMount(ident));
+      onRefresh();
     }
-  }, [ident, refreshLoadings]);
+  }, [refreshLoadings]);
 
   // useEffect(() => {
   //   if (tableState.byId[ident]) {
@@ -298,28 +330,6 @@ function AutoTable({
   //     }
   //   }
   // }, [tableState.byId[ident], curPage, rowsPerPage]);
-
-  // change filter
-  const onSearch = (newFilter) => {
-    dispatch(autoTableFlush(ident));
-    setFilter(newFilter);
-    setDataComplete(false);
-    setCurPage(0);
-    setPageInput('1');
-  };
-
-  const calculateTotalNumOfPages = () => {
-    if (tableState.byId[ident]) {
-      if (tableState.byId[ident].totalCount === Infinity) return 0;
-      return Math.ceil(tableState.byId[ident].totalCount / rowsPerPage);
-    }
-    return 100;
-  };
-
-  // refresh
-  const onRefresh = () => {
-    dispatch(autoTableMount(ident));
-  };
 
   useEffect(() => {
     if (tableState.byId[ident]) {

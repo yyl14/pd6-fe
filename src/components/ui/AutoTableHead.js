@@ -5,20 +5,6 @@ import {
 import Icon from './icon/index';
 import SearchField from './SearchField';
 
-/*
-      TODO: Table head component
-
-      props:
-
-      filtersConfig: [
-        {column: 'Name', type: 'TextField', options:null, operation: 'LIKE'},
-        {column: 'Role', type: 'Dropdown' options:['a', 'b', 'c'], operation: 'IN'},
-        {column: 'Start Time', type: 'Date', options: null, operation: 'BETWEEN'}],
-      filters: [['Start Time', 'LIKE', 'something'], ['Name', 'IN', ['b', 'c']], ['Start Time', 'BETWEEN', ['2021-08-16T14:21:54Z', '2021-08-16T14:21:54Z']]]
-      setFilters,
-      buttons,
-      */
-
 const AutoTableHead = ({
   hasFilter,
   classes,
@@ -31,7 +17,7 @@ const AutoTableHead = ({
 }) => {
   const [tempFilterValue, setTempFilterValue] = useState(filterConfig.map((item) => (item.type === 'ENUM' ? [] : '')));
   const [filteringIndex, setFilteringIndex] = useState(0);
-  const [advanceSearchActivated, setAdvanceSearchActivated] = useState(false);
+  // const [advanceSearchActivated, setAdvanceSearchActivated] = useState(false);
 
   const onClickSearch = () => {
     const { reduxStateId, operation } = filterConfig[filteringIndex];
@@ -90,7 +76,7 @@ const AutoTableHead = ({
       )}
       <div className={classes.buttons}>
         {buttons}
-        {hasRefreshButton && <Button onClick={onRefresh} />}
+        {hasRefreshButton && <Button color="primary" onClick={onRefresh} />}
       </div>
     </div>
   );
