@@ -1,5 +1,7 @@
 import agent from '../agent';
 import { problemConstants } from './constant';
+import { autoTableConstants } from '../component/constant';
+import browseParamsTransForm from '../../function/browseParamsTransform';
 import getTextFromUrl from '../../function/getTextFromUrl';
 
 const readProblemInfo = (token, problemId) => async (dispatch) => {
@@ -24,24 +26,36 @@ const readProblemInfo = (token, problemId) => async (dispatch) => {
   }
 };
 
-// read own submission under problem
-// WITH BROWSE PARAMS
-const readSubmission = (token, accountId, problemId) => async (dispatch) => {
+const readSubmission = (token, accountId, problemId, browseParams, tableId = null) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_SUBMISSION_START });
+  const temp = {
+    ...browseParams,
+    filter: [['problem_id', '=', problemId]].concat(browseParams.filter),
+    account_id: accountId,
+  };
   const config = {
     headers: {
       'auth-token': token,
     },
-    params: {
-      problem_id: Number(problemId),
-      account_id: accountId,
-    },
+    params: browseParamsTransForm(temp),
   };
   try {
     const res = await agent.get('/submission', config);
+    const { data: submissions, total_count } = res.data.data;
+    // console.log('readSubmission config:', config);
+    // console.log('readSubmission submissions:', submissions);
     dispatch({
       type: problemConstants.READ_SUBMISSION_SUCCESS,
-      payload: res.data.data.data,
+      payload: submissions,
+    });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: submissions.map((item) => item.id),
+        offset: browseParams.offset,
+      },
     });
   } catch (error) {
     dispatch({
