@@ -57,7 +57,7 @@ const readSubmission = (token, accountId, problemId, browseParams, tableId = nul
         offset: browseParams.offset,
       },
     });
-  } catch (error) {
+  } catch (err) {
     dispatch({
       type: problemConstants.READ_SUBMISSION_FAIL,
       error,
