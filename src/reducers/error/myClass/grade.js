@@ -3,6 +3,7 @@ import { gradeConstants } from '../../../actions/myClass/constant';
 const initialState = {
   fetchClassGrade: null,
   addClassGrade: null,
+  importClassGrade: null,
   fetchAccountGrade: null,
   downloadGradeFile: null,
   deleteGrade: null,
@@ -34,6 +35,19 @@ export default function grade(state = initialState, action) {
       return {
         ...state,
         addClassGrade: action.error,
+      };
+    }
+
+    case gradeConstants.IMPORT_CLASS_GRADE_SUCCESS: {
+      return {
+        ...state,
+        importClassGrade: null,
+      };
+    }
+    case gradeConstants.IMPORT_CLASS_GRADE_FAIL: {
+      return {
+        ...state,
+        importClassGrade: action.error,
       };
     }
 

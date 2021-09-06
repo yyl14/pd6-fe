@@ -32,6 +32,7 @@ export default function InstituteSetting() {
   const { instituteId } = useParams();
   const institutes = useSelector((state) => state.institutes.byId);
   const authToken = useSelector((state) => state.auth.token);
+  // const pageError = useSelector((state) => state.error.admin.account);
   const loading = useSelector((state) => state.loading.admin.account);
 
   const dispatch = useDispatch();
@@ -294,6 +295,7 @@ export default function InstituteSetting() {
               handleEditInstitute('newName');
             }}
             color="secondary"
+            disabled={newSetting.newName === ''}
           >
             Rename
           </Button>
@@ -337,6 +339,7 @@ export default function InstituteSetting() {
               handleEditInstitute('newInitialism');
             }}
             color="secondary"
+            disabled={newSetting.newInitialism === ''}
           >
             Rename
           </Button>
@@ -377,6 +380,7 @@ export default function InstituteSetting() {
               handleEditInstitute('newEmail');
             }}
             color="secondary"
+            disabled={newSetting.newEmail === ''}
           >
             Modify
           </Button>

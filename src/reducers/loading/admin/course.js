@@ -27,13 +27,13 @@ export default function course(state = initialState, action) {
     case courseConstants.FETCH_COURSES_SUCCESS: {
       return {
         ...state,
-        fetchCourse: false,
+        fetchCourses: false,
       };
     }
     case courseConstants.FETCH_COURSES_FAIL: {
       return {
         ...state,
-        fetchCourse: false,
+        fetchCourses: false,
       };
     }
 
