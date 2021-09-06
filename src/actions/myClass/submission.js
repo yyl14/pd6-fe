@@ -78,16 +78,9 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
     };
     // use submission id to get status
     const res3 = await Promise.all(
-      data.map(async ({ id }) => agent
-        .get(`/submission/${id}/judgment`, config3)
-        .then((res4) => res4.data.data)
-        .catch((err) => {
-          dispatch({
-            type: submissionConstants.FETCH_SUBMISSIONS_FAIL,
-            error: err,
-          });
-        })),
+      data.map(async ({ id }) => agent.get(`/submission/${id}/judgment`, config3).then((res4) => res4.data.data)),
     );
+
     const judgments = res3.flat().filter((item) => item !== null && item !== undefined);
 
     dispatch({
