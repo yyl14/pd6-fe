@@ -198,7 +198,7 @@ function AutoTable({
     }
   ],
   */
-  refetch, // function to call when table change page / filter/ sort
+  refetch, // function to call when table change page / filter / sort / clicked Refresh
   /*
   example value:
     (browseConfig, ident) => dispatch(fetchClassMembers(authToken, classId, browseParams: {limit, offset, filters, sorts}, ident))
@@ -221,11 +221,13 @@ function AutoTable({
       type: 'string',
     },
   ];
-*/
+  */
   reduxData,
   reduxDataToRows,
   hasLink = false,
-  buttons,
+  buttons = null,
+  refreshLoadings = [], // refresh when any of the array elements turned from true to false
+  hasRefreshButton = false,
 }) {
   const classes = useStyles();
   const [curPage, setCurPage] = useState(0); // curPage * rowsPerPage = offset
@@ -270,22 +272,24 @@ function AutoTable({
     }
   }, [ident, pageInput, rowsPerPage, tableState]);
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setCurPage(0); // TODO: calculate this
-  };
+  // const handleChangeRowsPerPage = (event) => {
+  //   setRowsPerPage(+event.target.value);
+  //   setCurPage(0); // TODO: calculate this
+  // };
 
-  const labelMoveLeft = (icon, cols, col) => {
-    if (icon && icon[cols.findIndex((x) => x.id === col.id)]) {
-      return classes.columnLabelMoveLeft;
-    }
-    return classes.columnLabelDefault;
-  };
+  // const labelMoveLeft = (icon, cols, col) => {
+  //   if (icon && icon[cols.findIndex((x) => x.id === col.id)]) {
+  //     return classes.columnLabelMoveLeft;
+  //   }
+  //   return classes.columnLabelDefault;
+  // };
 
   // table mount, create dynamic redux state
   useEffect(() => {
-    dispatch(autoTableMount(ident));
-  }, [ident]);
+    if (!refreshLoadings.reduce((acc, item) => acc || item, false)) {
+      dispatch(autoTableMount(ident));
+    }
+  }, [ident, refreshLoadings]);
 
   // useEffect(() => {
   //   if (tableState.byId[ident]) {
@@ -310,6 +314,11 @@ function AutoTable({
       return Math.ceil(tableState.byId[ident].totalCount / rowsPerPage);
     }
     return 100;
+  };
+
+  // refresh
+  const onRefresh = () => {
+    dispatch(autoTableMount(ident));
   };
 
   useEffect(() => {
@@ -384,6 +393,8 @@ function AutoTable({
         filterConfig={filterConfig}
         filter={filter}
         onSearch={onSearch}
+        onRefresh={onRefresh}
+        hasRefreshButton={hasRefreshButton}
       />
       <div className={classes.progressContainer}>
         {dataComplete || isError || <LinearProgress color="primary" className={classes.progress} />}

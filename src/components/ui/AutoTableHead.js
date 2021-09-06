@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { createStore } from 'redux';
+import React, { useState } from 'react';
 import {
-  Button, TextField, InputAdornment, FormControl, Select, MenuItem,
+  Button, FormControl, Select, MenuItem,
 } from '@material-ui/core';
-import { nanoid } from 'nanoid';
 import Icon from './icon/index';
 import SearchField from './SearchField';
 
@@ -22,7 +20,14 @@ import SearchField from './SearchField';
       */
 
 const AutoTableHead = ({
-  hasFilter, classes, buttons, filterConfig, filter, onSearch,
+  hasFilter,
+  classes,
+  buttons,
+  filterConfig,
+  // filter,
+  onSearch,
+  onRefresh,
+  hasRefreshButton,
 }) => {
   const [tempFilterValue, setTempFilterValue] = useState(filterConfig.map((item) => (item.type === 'ENUM' ? [] : '')));
   const [filteringIndex, setFilteringIndex] = useState(0);
@@ -41,7 +46,6 @@ const AutoTableHead = ({
       onSearch([[reduxStateId, operation, tempFilterValue[filteringIndex]]]);
     }
   };
-  // console.log(tempFilterValue);
 
   return (
     <div className={hasFilter ? classes.topContent1 : classes.topContent2}>
@@ -84,7 +88,10 @@ const AutoTableHead = ({
           </div>
         </div>
       )}
-      <div className={classes.buttons}>{buttons}</div>
+      <div className={classes.buttons}>
+        {buttons}
+        {hasRefreshButton && <Button onClick={onRefresh} />}
+      </div>
     </div>
   );
 };
