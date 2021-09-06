@@ -36,9 +36,6 @@ import {
 } from '../../../../../actions/myClass/problem';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   sampleArea: {
     marginTop: '50px',
   },
@@ -107,25 +104,31 @@ export default function CodingProblemEdit({ closeEdit }) {
   const [hint, setHint] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].hint);
   const [status, setStatus] = useState(false);
 
-  const sampleTransToNumber = useCallback((id) => {
-    if (testcases[id].input_filename !== null) {
-      return parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10);
-    }
-    if (testcases[id].output_filename !== null) {
-      return parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10);
-    }
-    return 0;
-  }, [testcases]);
+  const sampleTransToNumber = useCallback(
+    (id) => {
+      if (testcases[id].input_filename !== null) {
+        return parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10);
+      }
+      if (testcases[id].output_filename !== null) {
+        return parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10);
+      }
+      return 0;
+    },
+    [testcases],
+  );
 
-  const testcaseTransToNumber = useCallback((id) => {
-    if (testcases[id].input_filename !== null) {
-      return parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10);
-    }
-    if (testcases[id].output_filename !== null) {
-      return parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10);
-    }
-    return 0;
-  }, [testcases]);
+  const testcaseTransToNumber = useCallback(
+    (id) => {
+      if (testcases[id].input_filename !== null) {
+        return parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10);
+      }
+      if (testcases[id].output_filename !== null) {
+        return parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10);
+      }
+      return 0;
+    },
+    [testcases],
+  );
 
   const [sampleTableData, setSampleTableData] = useState([]);
   const [testcaseTableData, setTestcaseTableData] = useState([]);
@@ -526,7 +529,19 @@ export default function CodingProblemEdit({ closeEdit }) {
     ) {
       closeEdit();
     }
-  }, [closeEdit, hasRequest, loading.addAssistingData, loading.addTestcase, loading.deleteAssistingData, loading.deleteTestcase, loading.editAssistingData, loading.editProblem, loading.editTestcase, loading.uploadTestcaseInput, loading.uploadTestcaseOutput]);
+  }, [
+    closeEdit,
+    hasRequest,
+    loading.addAssistingData,
+    loading.addTestcase,
+    loading.deleteAssistingData,
+    loading.deleteTestcase,
+    loading.editAssistingData,
+    loading.editProblem,
+    loading.editTestcase,
+    loading.uploadTestcaseInput,
+    loading.uploadTestcaseOutput,
+  ]);
 
   return (
     <>

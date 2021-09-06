@@ -40,9 +40,6 @@ import {
 import { downloadFile } from '../../../../../actions/common/common';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   sampleArea: {
     marginTop: '50px',
   },
