@@ -2,6 +2,7 @@ import agent from '../agent';
 import { submissionConstants } from './constant';
 import { autoTableConstants } from '../component/constant';
 import browseParamsTransForm from '../../function/browseParamsTransform';
+import getTextFromUrl from '../../function/getTextFromUrl';
 
 // WITH BROWSE PARAMS
 const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => async (dispatch) => {
@@ -103,15 +104,12 @@ const fetchSubmission = (token, submissionId) => (dispatch) => {
             as_attachment: false,
           },
         };
-        agent.get(`/s3-file/${res.data.data.content_file_uuid}/url`, config2).then((res2) => {
-          fetch(res2.data.data.url)
-            .then((r) => r.text())
-            .then((t) => {
-              dispatch({
-                type: submissionConstants.FETCH_SUBMISSION_SUCCESS,
-                payload: { submissionId, data: { ...res.data.data, content: t.toString() } },
-              });
-            });
+        agent.get(`/s3-file/${res.data.data.content_file_uuid}/url`, config2).then(async (res2) => {
+          const code = await getTextFromUrl(res2.data.data.url);
+          dispatch({
+            type: submissionConstants.FETCH_SUBMISSION_SUCCESS,
+            payload: { submissionId, data: { ...res.data.data, content: code } },
+          });
         });
       } else {
         dispatch({
