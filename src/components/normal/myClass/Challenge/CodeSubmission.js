@@ -10,6 +10,7 @@ import {
   Select,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 import AlignedText from '../../../ui/AlignedText';
 
@@ -40,6 +41,7 @@ export default function CodeSubmission() {
   } = useParams();
   const history = useHistory();
   const classNames = useStyles();
+  const [cookies, setCookie] = useCookies(['lang']);
 
   const dispatch = useDispatch();
 
@@ -47,6 +49,7 @@ export default function CodeSubmission() {
   const challenges = useSelector((state) => state.challenges.byId);
   const submitLang = useSelector((state) => state.submitLangs);
   const authToken = useSelector((state) => state.auth.token);
+  const [hasInit, setHasInit] = useState(false);
   // const error = useSelector((state) => state.error);
   // const loading = useSelector((state) => state.loading.myClass);
 
@@ -58,6 +61,7 @@ export default function CodeSubmission() {
       return;
     }
     dispatch(submitCode(authToken, problemId, langId, code));
+    setCookie('lang', langId, { path: '/' });
     history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
   };
 
@@ -68,6 +72,13 @@ export default function CodeSubmission() {
   useEffect(() => {
     dispatch(browseSubmitLang(authToken));
   }, [authToken, dispatch]);
+
+  useEffect(() => {
+    if (!hasInit && cookies.lang) {
+      setLangId(cookies.lang);
+      setHasInit(true);
+    }
+  }, [cookies.lang, hasInit]);
 
   if (problems[problemId] === undefined || challenges[challengeId] === undefined) {
     return <NoMatch />;
@@ -118,7 +129,7 @@ export default function CodeSubmission() {
         >
           Cancel
         </Button>
-        <Button color="primary" onClick={handleSubmit}>
+        <Button color="primary" onClick={handleSubmit} disabled={langId === -1}>
           Submit
         </Button>
       </div>
