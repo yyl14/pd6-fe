@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Typography, makeStyles } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
@@ -8,24 +7,14 @@ import moment from 'moment';
 import { fetchAllChallengesProblems } from '../../../../actions/common/common';
 import { fetchClassSubmissions } from '../../../../actions/myClass/submission';
 import AutoTable from '../../../ui/AutoTable';
+import PageTitle from '../../../ui/PageTitle';
 
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-  paper: {
-    minWidth: '800px',
-    minHeight: '550px',
-  },
-}));
-
 /* This is a level 4 component (page component) */
 export default function SubmissionList() {
   const { courseId, classId } = useParams();
-  const classes = useStyles();
   const allClass = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
   const loading = useSelector((state) => state.loading.myClass.submissions);
@@ -58,9 +47,7 @@ export default function SubmissionList() {
 
   return (
     <>
-      <Typography variant="h3" className={classes.pageHeader}>
-        {`${courses[courseId].name} ${allClass[classId].name} / Submission`}
-      </Typography>
+      <PageTitle text={`${courses[courseId].name} ${allClass[classId].name} / Submission`} />
       <AutoTable
         ident="Class Submission Table"
         hasFilter
