@@ -65,6 +65,9 @@ const useStyles = makeStyles((theme) => ({
     marginRight: '10px',
     minWidth: '180px',
   },
+  filterItem: {
+    minWidth: '180px',
+  },
 
   tableRowContainerLeftSpacing: {
     width: '15px',

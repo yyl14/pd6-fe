@@ -58,7 +58,7 @@ const AutoTableHead = ({
                 }}
               >
                 {filterConfig.map((item, index) => (
-                  <MenuItem key={item.label} value={index}>
+                  <MenuItem key={item.label} value={index} className={classes.filterItem}>
                     {item.label}
                   </MenuItem>
                 ))}
