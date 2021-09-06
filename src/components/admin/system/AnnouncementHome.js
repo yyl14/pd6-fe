@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Typography, makeStyles, Button } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import moment from 'moment';
 
 import NoMatch from '../../noMatch';
@@ -10,19 +10,10 @@ import AutoTable from '../../ui/AutoTable';
 import PageTitle from '../../ui/PageTitle';
 import { fetchAnnouncement } from '../../../actions/admin/system';
 
-const useStyles = makeStyles(() => ({
-  paper: {
-    minWidth: '800px',
-    minHeight: '550px',
-  },
-}));
-
 // TODO: use ui/CustomTable to implement announcement table directly in this component
 
 /* This is a level 4 component (page component) */
 export default function AnnouncementHome() {
-  const classes = useStyles();
-
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
   const announcements = useSelector((state) => state.announcements);
