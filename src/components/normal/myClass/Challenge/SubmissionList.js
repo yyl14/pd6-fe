@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Typography, Button, makeStyles } from '@material-ui/core';
+import { Typography, Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import Icon from '../../../ui/icon/index';
@@ -8,25 +8,15 @@ import AlignedText from '../../../ui/AlignedText';
 import CustomTable from '../../../ui/CustomTable';
 import NoMatch from '../../../noMatch';
 import SimpleBar from '../../../ui/SimpleBar';
-import {
-  readSubmission,
-  readSubmissionDetail,
-  readProblemScore,
-} from '../../../../actions/myClass/problem';
+import PageTitle from '../../../ui/PageTitle';
+import { readSubmission, readSubmissionDetail, readProblemScore } from '../../../../actions/myClass/problem';
 import GeneralLoading from '../../../GeneralLoading';
-
-const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-}));
 
 /* This is a level 4 component (page component) */
 export default function SubmissionList() {
   const {
     courseId, classId, challengeId, problemId,
   } = useParams();
-  const classNames = useStyles();
   const [tableData, setTableData] = useState([]);
 
   const dispatch = useDispatch();
@@ -122,13 +112,7 @@ export default function SubmissionList() {
 
   return (
     <>
-      <Typography className={classNames.pageHeader} variant="h3">
-        {challenges[challengeId].title}
-        {' / '}
-        {problems[problemId].challenge_label}
-        {' '}
-        / My Submission
-      </Typography>
+      <PageTitle text={`${challenges[challengeId].title} / ${problems[problemId].challenge_label} / My Submission`} />
       <SimpleBar title="Submission Information">
         <AlignedText text="My Last Score" childrenType="text">
           <Typography variant="body1">{problems[problemId].score}</Typography>

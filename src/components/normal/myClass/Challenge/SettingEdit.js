@@ -11,9 +11,6 @@ import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   contentField: {
     width: '720px',
   },

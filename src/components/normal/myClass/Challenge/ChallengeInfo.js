@@ -10,15 +10,13 @@ import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
+import PageTitle from '../../../ui/PageTitle';
 import { readProblemScore } from '../../../../actions/myClass/problem';
 import { editChallenge } from '../../../../actions/myClass/challenge';
 import { fetchChallenge } from '../../../../actions/common/common';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   descriptionField: {
     width: '60vw',
   },
@@ -141,9 +139,7 @@ export default function ChallengeInfo() {
 
   return (
     <>
-      <Typography className={classes.pageHeader} variant="h3">
-        {`${challenges[challengeId].title} / Info`}
-      </Typography>
+      <PageTitle text={`${challenges[challengeId].title} / Info`} />
       <SimpleBar
         title="Description"
         buttons={<>{isManager && !editMode && <Button onClick={handleEdit}>Edit</Button>}</>}
