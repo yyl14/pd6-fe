@@ -11,15 +11,10 @@ import NoMatch from '../../noMatch';
 import GeneralLoading from '../../GeneralLoading';
 import CustomTable from '../../ui/CustomTable';
 import DateRangePicker from '../../ui/DateRangePicker';
+import PageTitle from '../../ui/PageTitle';
 import { fetchAnnouncement } from '../../../actions/admin/system';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-  filterButton: {
-    justifyContent: 'space-between',
-  },
   paper: {
     minWidth: '800px',
     minHeight: '550px',
@@ -123,9 +118,7 @@ export default function AnnouncementHome() {
   }
   return (
     <>
-      <Typography variant="h3" className={classes.pageHeader}>
-        Announcement
-      </Typography>
+      <PageTitle text="Announcement" />
       <CustomTable
         hasSearch
         searchPlaceholder="Search"
