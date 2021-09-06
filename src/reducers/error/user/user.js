@@ -71,13 +71,13 @@ export default function user(state = initialState, action) {
         editPassword: action.error,
       };
     }
-    case userConstants.USER_GET_NOTIFY: {
+    case userConstants.USER_BROWSE_ANNOUNCEMENT_SUCCESS: {
       return {
         ...state,
         getNotify: null,
       };
     }
-    case userConstants.USER_GET_NOTIFY_FAIL: {
+    case userConstants.USER_BROWSE_ANNOUNCEMENT_FAIL: {
       return {
         ...state,
         getNotify: action.error,

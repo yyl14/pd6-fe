@@ -44,15 +44,10 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
     };
     // use submission id to get status
     const res3 = await Promise.all(
-      data.map(async ({ id }) => agent
-        .get(`/submission/${id}/judgment`, config3)
-        .then((res4) => res4.data.data)
-        .catch((error) => {
-          dispatch({
-            type: submissionConstants.FETCH_SUBMISSIONS_FAIL,
-            error,
-          });
-        })),
+      data.map(async ({ id }) => {
+        const res4 = await agent.get(`/submission/${id}/judgment`, config3);
+        return res4.data.data;
+      }),
     );
     const judgments = res3.flat().filter((item) => item !== null && item !== undefined);
 
@@ -62,7 +57,7 @@ const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => 
         classId,
         data,
         judgments,
-        accounts: res2 ? res2.data.data : [],
+        accounts: res2.data.data,
       },
     });
 
@@ -126,30 +121,6 @@ const fetchSubmission = (token, submissionId) => (dispatch) => {
     });
 };
 
-const addSubmission = (token, problemId, languageId, body) => (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
-  dispatch({ type: submissionConstants.ADD_SUBMISSION_START });
-
-  agent
-    .post(`/problem/${problemId}/submission?language_id=${languageId}`, body, config)
-    .then((res) => {
-      dispatch({
-        type: submissionConstants.ADD_SUBMISSION_SUCCESS,
-        payload: { submissionId: res.data.data.id },
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        type: submissionConstants.ADD_SUBMISSION_FAIL,
-        error,
-      });
-    });
-};
-
 const fetchJudgement = (token, submissionId) => (dispatch) => {
   const config = {
     headers: {
@@ -175,7 +146,6 @@ const fetchJudgement = (token, submissionId) => (dispatch) => {
 };
 
 const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
-  dispatch({ type: submissionConstants.READ_SUBMISSION_JUDGE_START });
   const config = {
     headers: {
       'auth-token': token,
@@ -183,11 +153,12 @@ const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
   };
 
   try {
-    const judgment = await agent.get(`/submission/${submissionId}/latest-judgment`, config);
+    dispatch({ type: submissionConstants.READ_SUBMISSION_JUDGE_START });
+    const res = await agent.get(`/submission/${submissionId}/latest-judgment`, config);
 
     dispatch({
       type: submissionConstants.READ_SUBMISSION_JUDGE_SUCCESS,
-      payload: judgment.data.data,
+      payload: res.data.data,
     });
   } catch (error) {
     dispatch({
@@ -199,15 +170,14 @@ const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
 
 // browse judge cases under judgement
 const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
-  dispatch({ type: submissionConstants.BROWSE_JUDGE_CASES_START });
   const config = {
     headers: {
       'auth-token': token,
     },
   };
   try {
+    dispatch({ type: submissionConstants.BROWSE_JUDGE_CASES_START });
     const res = await agent.get(`/judgment/${judgmentId}/judge-case`, config);
-
     dispatch({
       type: submissionConstants.BROWSE_JUDGE_CASES_SUCCESS,
       payload: res.data.data,
@@ -221,15 +191,14 @@ const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
 };
 
 const readTestcase = (token, testcaseId) => async (dispatch) => {
-  dispatch({ type: submissionConstants.READ_TESTCASE_START });
   const config = {
     headers: {
       'auth-token': token,
     },
   };
   try {
+    dispatch({ type: submissionConstants.READ_TESTCASE_START });
     const res = await agent.get(`/testcase/${testcaseId}`, config);
-
     dispatch({
       type: submissionConstants.READ_TESTCASE_SUCCESS,
       payload: res.data.data,
@@ -266,7 +235,6 @@ const getAccountBatch = (token, accountId) => async (dispatch) => {
 export {
   fetchClassSubmissions,
   fetchSubmission,
-  addSubmission,
   fetchJudgement,
   readSubmissionDetail,
   browseJudgeCases,

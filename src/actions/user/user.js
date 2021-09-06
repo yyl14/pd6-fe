@@ -35,6 +35,7 @@ const makeStudentCardDefault = (token, id, cardId) => (dispatch) => {
       'auth-token': token,
     },
   };
+
   dispatch({ type: userConstants.MAKE_SELF_STUDENT_CARD_DEFAULT_START });
   agent
     .put(`/account/${id}/default-student-card`, { student_card_id: cardId }, config)
@@ -58,8 +59,8 @@ const fetchStudentCards = (token, id) => (dispatch) => {
       'auth-token': token,
     },
   };
-  dispatch({ type: userConstants.GET_SELF_STUDENT_CARD_START });
 
+  dispatch({ type: userConstants.GET_SELF_STUDENT_CARD_START });
   agent
     .get(`/account/${id}/student-card`, config)
     .then((res) => {
@@ -82,8 +83,8 @@ const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (disp
       'auth-token': token,
     },
   };
-  dispatch({ type: userConstants.ADD_SELF_STUDENT_CARD_START });
 
+  dispatch({ type: userConstants.ADD_SELF_STUDENT_CARD_START });
   agent
     .post(
       `/account/${id}/student-card`,
@@ -133,7 +134,8 @@ const editPassword = (token, id, oldPassword, newPassword) => (dispatch) => {
     });
 };
 
-const userGetNotify = (authToken) => async (dispatch) => {
+// browse all active announcement
+const userBrowseAnnouncement = (authToken) => async (dispatch) => {
   const config = {
     headers: {
       'auth-token': authToken,
@@ -143,39 +145,39 @@ const userGetNotify = (authToken) => async (dispatch) => {
   try {
     const notifyRes = await agent.get('/announcement', config);
     dispatch({
-      type: userConstants.USER_GET_NOTIFY,
+      type: userConstants.USER_BROWSE_ANNOUNCEMENT_SUCCESS,
       payload: notifyRes.data.data.data,
     });
   } catch (error) {
     dispatch({
-      type: userConstants.USER_GET_NOTIFY_FAIL,
+      type: userConstants.USER_BROWSE_ANNOUNCEMENT_FAIL,
       error,
     });
   }
 };
 
-const userReadNotify = (authToken, notifyId) => async (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': authToken,
-    },
-  };
+// const userReadAnnouncement = (authToken, notifyId) => async (dispatch) => {
+//   const config = {
+//     headers: {
+//       'auth-token': authToken,
+//     },
+//   };
 
-  try {
-    const notifyReadRes = await agent.get(`/announcement/${notifyId}`, config);
-    const notifyRes = await agent.get('/announcement', config);
-    dispatch({
-      type: userConstants.USER_GET_NOTIFY,
-      payload: notifyRes.data.data.data,
-    });
-    // console.log(notifyRes.data);
-  } catch (error) {
-    dispatch({
-      type: userConstants.USER_READ_NOTIFY_FAIL,
-      error,
-    });
-  }
-};
+//   try {
+//     const notifyReadRes = await agent.get(`/announcement/${notifyId}`, config);
+//     const notifyRes = await agent.get('/announcement', config);
+//     dispatch({
+//       type: userConstants.USER_BROWSE_ANNOUNCEMENT_SUCCESS,
+//       payload: notifyRes.data.data.data,
+//     });
+//     // console.log(notifyRes.data);
+//   } catch (error) {
+//     dispatch({
+//       type: userConstants.USER_READ_NOTIFY_FAIL,
+//       error,
+//     });
+//   }
+// };
 
 export {
   editAccount,
@@ -183,6 +185,6 @@ export {
   fetchStudentCards,
   addStudentCard,
   editPassword,
-  userGetNotify,
-  userReadNotify,
+  userBrowseAnnouncement,
+  // userReadAnnouncement,
 };

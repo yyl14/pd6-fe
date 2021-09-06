@@ -3,7 +3,6 @@ import { submissionConstants } from '../../../actions/myClass/constant';
 const initialState = {
   fetchClassSubmissions: false,
   fetchSubmission: false,
-  addSubmission: false,
   browseChallengeOverview: false,
   readSubmissionDetail: false,
   browseJudgeCases: false,
@@ -51,24 +50,6 @@ export default function submissions(state = initialState, action) {
       };
     }
 
-    case submissionConstants.ADD_SUBMISSION_START: {
-      return {
-        ...state,
-        addSubmission: true,
-      };
-    }
-    case submissionConstants.ADD_SUBMISSION_SUCCESS: {
-      return {
-        ...state,
-        addSubmission: false,
-      };
-    }
-    case submissionConstants.ADD_SUBMISSION_FAIL: {
-      return {
-        ...state,
-        addSubmission: false,
-      };
-    }
     case submissionConstants.READ_SUBMISSION_JUDGE_START: {
       return {
         ...state,
