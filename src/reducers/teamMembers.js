@@ -4,8 +4,17 @@ import { teamConstants } from '../actions/myClass/constant';
 const byId = (state = {}, action) => {
   switch (action.type) {
     case teamConstants.FETCH_TEAM_MEMBER_SUCCESS: {
-      const { data } = action.payload;
-      return data.reduce((acc, item) => ({ ...acc, [item.member_id]: { ...item } }), state);
+      const { data, accounts } = action.payload;
+      return data.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item.member_id]: {
+            ...item,
+            account: accounts.find((account) => account.id === item.member_id),
+          },
+        }),
+        state,
+      );
     }
 
     default:

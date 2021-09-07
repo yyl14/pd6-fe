@@ -1,24 +1,38 @@
 import agent from '../agent';
 import { teamConstants } from './constant';
+import { autoTableConstants } from '../component/constant';
+import browseParamsTransForm from '../../function/browseParamsTransform';
 
 // WITH BROWSE PARAMS
-export const fetchTeams = (token, classId) => (dispatch) => {
-  const config = { headers: { 'auth-token': token } };
-  dispatch({ type: teamConstants.FETCH_TEAMS_START });
-  agent
-    .get(`/class/${classId}/team`, config)
-    .then((res) => {
-      dispatch({
-        type: teamConstants.FETCH_TEAMS_SUCCESS,
-        payload: { classId, data: res.data.data.data },
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        type: teamConstants.FETCH_TEAMS_FAIL,
-        error,
-      });
+export const fetchTeams = (token, classId, browseParams, tableId = null) => async (dispatch) => {
+  try {
+    const config = {
+      headers: { 'auth-token': token },
+      params: browseParamsTransForm(browseParams),
+    };
+    dispatch({ type: teamConstants.FETCH_TEAMS_START });
+    const res = await agent.get(`/class/${classId}/team`, config);
+    const { data, total_count } = res.data.data;
+
+    dispatch({
+      type: teamConstants.FETCH_TEAMS_SUCCESS,
+      payload: { data },
     });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: data.map((item) => item.id),
+        offset: browseParams.offset,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: teamConstants.FETCH_TEAMS_FAIL,
+      error,
+    });
+  }
 };
 
 export const addTeam = (token, classId, teamName, newLabel) => (dispatch) => {
@@ -136,18 +150,36 @@ export const editTeam = (token, teamId, teamName, classId, newLabel) => (dispatc
 };
 
 // WITH BROWSE PARAMS
-export const fetchTeamMember = (token, teamId) => async (dispatch) => {
-  dispatch({ type: teamConstants.FETCH_TEAM_MEMBER_START });
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
+export const fetchTeamMembers = (token, teamId, browseParams, tableId = null) => async (dispatch) => {
   try {
-    const res = await agent.get(`/team/${teamId}/member`, config);
+    const config1 = {
+      headers: { 'auth-token': token },
+      params: browseParamsTransForm(browseParams),
+    };
+    dispatch({ type: teamConstants.FETCH_TEAM_MEMBER_START });
+    const res1 = await agent.get(`/team/${teamId}/member`, config1);
+    const { data, total_count } = res1.data.data;
+
+    // Batch browse account
+    const accountIds = data.map((item) => item.member_id);
+    const config2 = {
+      headers: { 'auth-token': token },
+      params: { account_ids: JSON.stringify(accountIds) },
+    };
+    const res2 = await agent.get('/account-summary/batch', config2);
+
     dispatch({
       type: teamConstants.FETCH_TEAM_MEMBER_SUCCESS,
-      payload: { teamId, data: res.data.data.data },
+      payload: { teamId, data, accounts: res2.data.data },
+    });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: accountIds,
+        offset: browseParams.offset,
+      },
     });
   } catch (error) {
     dispatch({
@@ -157,20 +189,13 @@ export const fetchTeamMember = (token, teamId) => async (dispatch) => {
   }
 };
 
-export const addTeamMember = (token, teamId, student, role, isArray, array) => async (dispatch) => {
+export const addTeamMember = (token, teamId, student, role) => async (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
     },
   };
-  const body = isArray
-    ? array
-    : [
-      {
-        account_referral: student,
-        role,
-      },
-    ];
+  const body = [{ account_referral: student, role }];
   // console.log('body', body);
   try {
     dispatch({ type: teamConstants.ADD_TEAM_MEMBER_START });
