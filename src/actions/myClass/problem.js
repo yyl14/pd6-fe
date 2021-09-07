@@ -402,7 +402,7 @@ const addAssistingData = (token, problemId, file) => async (dispatch) => {
   }
 };
 
-const submitCode = (token, problemId, languageId, content) => async (dispatch) => {
+const submitCode = (token, problemId, languageId, content, onSubmitSuccess) => async (dispatch) => {
   dispatch({ type: problemConstants.SUBMIT_PROBLEM_START });
   const config = {
     headers: {
@@ -420,10 +420,10 @@ const submitCode = (token, problemId, languageId, content) => async (dispatch) =
 
   try {
     await agent.post(`/problem/${problemId}/submission`, formData, config);
-
     dispatch({
       type: problemConstants.SUBMIT_PROBLEM_SUCCESS,
     });
+    onSubmitSuccess();
   } catch (error) {
     dispatch({
       type: problemConstants.SUBMIT_PROBLEM_FAIL,
