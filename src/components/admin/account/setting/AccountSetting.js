@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { fetchStudentCard, browsePendingStudentCards } from '../../../../actions/admin/account';
+import { fetchStudentCards, browsePendingStudentCards } from '../../../../actions/admin/account';
 import { fetchAccount, getInstitutes } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
 import BasicInfo from './BasicInfo';
@@ -44,7 +44,7 @@ export default function AccountSetting() {
 
   useEffect(() => {
     if (!loading.makeStudentCardDefault) {
-      dispatch(fetchStudentCard(authToken, accountId));
+      dispatch(fetchStudentCards(authToken, accountId));
     }
   }, [accountId, authToken, dispatch, loading.makeStudentCardDefault]);
 
@@ -81,7 +81,7 @@ export default function AccountSetting() {
   }, [dispatch]);
 
   if (accounts[accountId] === undefined || studentCards === undefined) {
-    if (loading.fetchAccount || loading.fetchStudentCard) {
+    if (loading.fetchAccount || loading.fetchStudentCards) {
       return <GeneralLoading />;
     }
     return <NoMatch />;

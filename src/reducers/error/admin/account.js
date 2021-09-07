@@ -11,7 +11,7 @@ const initialState = {
   deleteAccount: null,
   editPassword: null,
 
-  fetchStudentCard: null,
+  fetchStudentCards: null,
   addStudentCard: null,
   makeStudentCardDefault: null,
 
@@ -129,16 +129,16 @@ export default function account(state = initialState, action) {
       };
     }
 
-    case accountConstants.FETCH_STUDENT_CARD_SUCCESS: {
+    case accountConstants.FETCH_STUDENT_CARDS_SUCCESS: {
       return {
         ...state,
-        fetchStudentCard: null,
+        fetchStudentCards: null,
       };
     }
-    case accountConstants.FETCH_STUDENT_CARD_FAIL: {
+    case accountConstants.FETCH_STUDENT_CARDS_FAIL: {
       return {
         ...state,
-        fetchStudentCard: action.error,
+        fetchStudentCards: action.error,
       };
     }
 

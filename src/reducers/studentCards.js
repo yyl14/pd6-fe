@@ -4,7 +4,7 @@ import { userConstants } from '../actions/user/constants';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    case accountConstants.FETCH_STUDENT_CARD_SUCCESS: {
+    case accountConstants.FETCH_STUDENT_CARDS_SUCCESS: {
       const { data } = action.payload;
       return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), {});
     }
@@ -37,7 +37,7 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
-    case accountConstants.FETCH_STUDENT_CARD_SUCCESS: {
+    case accountConstants.FETCH_STUDENT_CARDS_SUCCESS: {
       const { data } = action.payload;
       return data.map((item) => item.id);
     }

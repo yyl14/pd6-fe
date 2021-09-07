@@ -41,6 +41,7 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
+    case commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_SUCCESS:
     case commonConstants.FETCH_CLASS_MEMBERS_SUCCESS: {
       const { data } = action.payload;
       return [...new Set([...data.map((item) => item.member_id), ...state])];

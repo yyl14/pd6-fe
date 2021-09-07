@@ -4,9 +4,7 @@ const initialState = {
   fetchInstitutes: null,
   fetchClassMembers: null,
   fetchClassMemberWithAccountReferral: null,
-  editClassMember: null,
   replaceClassMembers: null,
-  // deleteClassMember: null,
   browseSubmitLang: null,
   fetchCourse: null,
   fetchClass: null,
@@ -60,18 +58,6 @@ export default function common(state = initialState, action) {
         fetchClassMemberWithAccountReferral: action.error,
       };
     }
-    case commonConstants.EDIT_CLASS_MEMBER_SUCCESS: {
-      return {
-        ...state,
-        editClassMember: null,
-      };
-    }
-    case commonConstants.EDIT_CLASS_MEMBER_FAIL: {
-      return {
-        ...state,
-        editClassMember: action.error,
-      };
-    }
     case commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS: {
       return {
         ...state,
@@ -84,22 +70,10 @@ export default function common(state = initialState, action) {
         replaceClassMembers: action.error,
       };
     }
-    case commonConstants.DELETE_CLASS_MEMBER_SUCCESS: {
-      return {
-        ...state,
-        deleteClassMember: null,
-      };
-    }
-    case commonConstants.DELETE_CLASS_MEMBER_FAIL: {
-      return {
-        ...state,
-        deleteClassMember: action.error,
-      };
-    }
     case commonConstants.BROWSE_SUBMISSION_LANG_FAIL: {
       return {
         ...state,
-        browseSubmitLang: action.errors,
+        browseSubmitLang: action.error,
       };
     }
     case commonConstants.BROWSE_SUBMISSION_LANG_SUCCESS: {

@@ -3,13 +3,13 @@ import { essayConstants } from './constant';
 
 const readEssay = (token, essayId) => async (dispatch) => {
   try {
-    const auth = {
+    const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
       },
     };
     dispatch({ type: essayConstants.READ_ESSAY_START });
-    const res = await agent.get(`/essay/${essayId}`, auth);
+    const res = await agent.get(`/essay/${essayId}`, config);
     dispatch({
       type: essayConstants.READ_ESSAY_SUCCESS,
       payload: res.data.data,
@@ -26,7 +26,7 @@ const editEssay = (token, essayId, label, title, description) => async (dispatch
   try {
     const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
       },
     };
     const body = {
@@ -50,13 +50,13 @@ const editEssay = (token, essayId, label, title, description) => async (dispatch
 
 const deleteEssay = (token, essayId) => async (dispatch) => {
   try {
-    const auth = {
+    const config = {
       headers: {
-        'Auth-Token': token,
+        'auth-token': token,
       },
     };
     dispatch({ type: essayConstants.DELETE_ESSAY_START });
-    await agent.delete(`/essay/${essayId}`, auth);
+    await agent.delete(`/essay/${essayId}`, config);
     dispatch({
       type: essayConstants.DELETE_ESSAY_SUCCESS,
       payload: essayId,
