@@ -67,7 +67,7 @@ export default function SubmissionList() {
                 key: id,
                 id,
                 submit_time: moment(submissions[id].submit_time).format('YYYY-MM-DD, HH:mm'),
-                status: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].status
+                status: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].verdict
                   .toLowerCase()
                   .split(' ')
                   .map((word) => word[0].toUpperCase() + word.substring(1))

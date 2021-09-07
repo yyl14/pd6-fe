@@ -1,5 +1,7 @@
 import React from 'react';
-import { TextField } from '@material-ui/core';
+import {
+  TextField, FormControl, Select, MenuItem, makeStyles,
+} from '@material-ui/core';
 import MultiSelect from './MultiSelect';
 
 const SearchField = ({
@@ -25,6 +27,28 @@ const SearchField = ({
           placeholder="Search"
           className={classes.search}
         />
+      );
+    }
+    case 'ENUM_SINGLE': {
+      return (
+        <FormControl variant="outlined">
+          <Select
+            className={classes.search}
+            value={tempFilterValue[filteringIndex]}
+            name="institute"
+            onChange={(e) => {
+              setTempFilterValue(
+                tempFilterValue.map((item, index) => (index === filteringIndex ? e.target.value : item)),
+              );
+            }}
+          >
+            {filterConfig[filteringIndex].options.map((item) => (
+              <MenuItem key={item} value={item.label}>
+                {item.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       );
     }
     case 'ENUM': {

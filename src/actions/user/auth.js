@@ -16,8 +16,6 @@ const userSignIn = (username, password) => async (dispatch) => {
       agent.get(`/account/${id}/class`, config),
     ]);
 
-    console.log([res2, res3]);
-
     dispatch({
       type: authConstants.AUTH_SUCCESS,
       user: {

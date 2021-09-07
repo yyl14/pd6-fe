@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { accountConstants, systemConstants } from '../actions/admin/constant';
-import { gradeConstants, submissionConstants } from '../actions/myClass/constant';
+import { gradeConstants, submissionConstants, challengeConstants } from '../actions/myClass/constant';
 import { commonConstants } from '../actions/common/constant';
 
 const byId = (state = {}, action) => {
@@ -33,6 +33,21 @@ const byId = (state = {}, action) => {
             },
           }
           : acc),
+        state,
+      );
+    }
+
+    case challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_SUCCESS: {
+      const { accounts } = action.payload;
+      return accounts.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item.id]: {
+            ...item,
+            studentCard: state[item.id] ? state[item.id].studentCard : [],
+            gradeIds: state[item.id] ? state[item.id].gradeIds : [],
+          },
+        }),
         state,
       );
     }
@@ -127,6 +142,22 @@ const byId = (state = {}, action) => {
         },
       };
     }
+
+    case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {
+      const { accounts } = action.payload;
+      return accounts.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item.id]: {
+            ...item,
+            studentCard: state[item.id] ? state[item.id].studentCard : [],
+            gradeIds: state[item.id] ? state[item.id].gradeIds : [],
+          },
+        }),
+        state,
+      );
+    }
+
     default:
       return state;
   }

@@ -67,6 +67,7 @@ const byId = (state = {}, action) => {
     }
     case challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_SUCCESS: {
       const { challengeId, data } = action.payload;
+
       return {
         ...state,
         [challengeId]: {

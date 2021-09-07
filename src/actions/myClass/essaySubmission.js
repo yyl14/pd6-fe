@@ -84,7 +84,7 @@ const downloadAllEssaySubmission = (token, essayId, as_attachment) => async (dis
       },
     };
 
-    await agent.post(`/essay/${essayId}/all-essay-submission`, { as_attachment: true }, config);
+    await agent.post(`/essay/${essayId}/all-essay-submission`, {}, config);
     dispatch({ type: essayConstants.DOWNLOAD_ALL_ESSAY_SUBMISSION_SUCCESS });
   } catch (error) {
     dispatch({

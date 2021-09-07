@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '16px',
   },
   children: {
-    width: '79%',
+    maxWidth: '79%',
     padding: '0px',
     margin: '0px',
     wordBreak: 'break-word',

@@ -186,6 +186,13 @@ function AutoTable({
     {
       reduxStateId: 'role',
       label: 'Role',
+      type: 'ENUM_SINGLE',
+      options: [{value: 'MANAGER', label: 'Manager'}, {value: 'MEMBER', label: 'Member'}, {value: 'GUEST', label: 'Guest'}],
+      operation: 'IN',
+    },
+    {
+      reduxStateId: 'role',
+      label: 'Role',
       type: 'ENUM',
       options: [{value: 'MANAGER', label: 'Manager'}, {value: 'MEMBER', label: 'Member'}, {value: 'GUEST', label: 'Guest'}],
       operation: 'IN',
@@ -243,6 +250,7 @@ function AutoTable({
 
   const [dataComplete, setDataComplete] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
   // const allStates = useSelector((state) => state);
@@ -319,19 +327,23 @@ function AutoTable({
 
   useEffect(() => {
     if (refreshLoadings) {
-      if (refreshLoadings.reduce((acc, item) => acc && !item, true)) {
-        onRefresh();
-      }
+      setIsLoading(refreshLoadings.reduce((acc, item) => acc || item, false));
     }
   }, [refreshLoadings]);
 
-  // useEffect(() => {
-  //   if (tableState.byId[ident]) {
-  //     if (Number(curPage) > Math.ceil(tableState.byId[ident].totalCount / rowsPerPage)) {
-  //       setCurPage(Math.ceil(tableState.byId[ident].totalCount / rowsPerPage));
-  //     }
-  //   }
-  // }, [tableState.byId[ident], curPage, rowsPerPage]);
+  useEffect(() => {
+    if (!isLoading) {
+      onRefresh();
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (tableState.byId[ident]) {
+      if (Number(curPage) > Math.ceil(tableState.byId[ident].totalCount / rowsPerPage)) {
+        setCurPage(Math.ceil(tableState.byId[ident].totalCount / rowsPerPage));
+      }
+    }
+  }, [tableState.byId[ident], curPage, rowsPerPage]);
 
   useEffect(() => {
     if (tableState.byId[ident]) {
@@ -357,7 +369,7 @@ function AutoTable({
       setDataComplete(newDisplayedReduxData.reduce((acc, item) => acc && item !== undefined, true));
       setDisplayedReduxData(newDisplayedReduxData);
     }
-  }, [curPage, displayedRange, ident, reduxData.byId, rowsPerPage, tableState.byId]);
+  }, [curPage, displayedRange, ident, reduxData.byId, tableState.byId]);
 
   // table refetch
   useEffect(() => {
