@@ -1,41 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
-  TextField,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  makeStyles,
+  Typography, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { fetchCourses, renameCourse, deleteCourse } from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
+import PageTitle from '../../ui/PageTitle';
 import NoMatch from '../../noMatch';
-
-const useStyles = makeStyles((theme) => ({
-  informationRow: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  informationItem: {
-    width: '250px',
-  },
-
-  pageHeader: {
-    marginBottom: '50px',
-  },
-}));
 
 /* This is a level 4 component (page component) */
 export default function CourseSetting() {
-  const classNames = useStyles();
-
   const { courseId } = useParams();
   const history = useHistory();
   const authToken = useSelector((state) => state.auth.token);
@@ -91,9 +68,7 @@ export default function CourseSetting() {
 
   return (
     <>
-      <Typography variant="h3" className={classNames.pageHeader}>
-        {`${courses.byId[courseId].name} / Setting`}
-      </Typography>
+      <PageTitle text={`${courses.byId[courseId].name} / Setting`} />
       <SimpleBar title="Course Information">
         <AlignedText text="Type" childrenType="text">
           <Typography variant="body1">{getCourseType(courses.byId[courseId].type)}</Typography>

@@ -7,6 +7,7 @@ import Icon from '../../../ui/icon/index';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
+import PageTitle from '../../../ui/PageTitle';
 import GeneralLoading from '../../../GeneralLoading';
 import { readSubmissionDetail, browseJudgeCases, readTestcase } from '../../../../actions/myClass/problem';
 import { browseTasksUnderChallenge } from '../../../../actions/myClass/challenge';
@@ -15,9 +16,6 @@ import CodeArea from '../../../ui/CodeArea';
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   textLink: {
     textDecoration: 'none',
     color: theme.palette.primary.main,
@@ -141,9 +139,7 @@ export default function SubmissionDetail() {
 
   return (
     <>
-      <Typography className={classNames.pageHeader} variant="h3">
-        {`${submissionId} / Submission Detail`}
-      </Typography>
+      <PageTitle text={`${submissionId} / Submission Detail`} />
       <div className={classNames.generalButtons}>
         <Button color="primary" startIcon={<Icon.RefreshOutlinedIcon />} onClick={handleRefresh}>
           Refresh

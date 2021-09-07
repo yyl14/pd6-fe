@@ -1,5 +1,7 @@
 import agent from '../agent';
 import { accountConstants } from './constant';
+import { autoTableConstants } from '../component/constant';
+import browseParamsTransForm from '../../function/browseParamsTransform';
 
 const getInstitute = (token, instituteId) => (dispatch) => {
   const config = {
@@ -93,7 +95,6 @@ const editInstitute = (token, id, abbreviatedName, fullName, emailDomain, isDisa
       });
     })
     .catch((error) => {
-      // console.log('editing institute fail');
       dispatch({
         type: accountConstants.EDIT_INSTITUTE_FAIL,
         error,
@@ -262,28 +263,35 @@ const editPassword = (token, id, newPassword) => (dispatch) => {
 };
 
 // SM: fetch all accounts
-// WITH BROWSE PARAMS
-const fetchAccounts = (token) => (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
-  dispatch({ type: accountConstants.FETCH_ACCOUNTS_START });
-  agent
-    .get('/account', config)
-    .then((res) => {
-      dispatch({
-        type: accountConstants.FETCH_ACCOUNTS_SUCCESS,
-        payload: res.data.data.data,
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        type: accountConstants.FETCH_ACCOUNTS_FAIL,
-        error,
-      });
+const fetchAccounts = (token, browseParams, tableId = null) => async (dispatch) => {
+  try {
+    dispatch({ type: accountConstants.FETCH_ACCOUNTS_START });
+    const config = {
+      headers: { 'auth-token': token },
+      params: browseParamsTransForm(browseParams),
+    };
+    const res = await agent.get('/account', config);
+    const { data, total_count } = res.data.data;
+
+    dispatch({
+      type: accountConstants.FETCH_ACCOUNTS_SUCCESS,
+      payload: data,
     });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: data.map((item) => item.id),
+        offset: browseParams.offset,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: accountConstants.FETCH_ACCOUNTS_FAIL,
+      error,
+    });
+  }
 };
 
 const browsePendingStudentCards = (token, accountId) => async (dispatch) => {

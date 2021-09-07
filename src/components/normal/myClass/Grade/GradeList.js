@@ -18,6 +18,7 @@ import moment from 'moment-timezone';
 import AlignedText from '../../../ui/AlignedText';
 import CustomTable from '../../../ui/CustomTable';
 import FileUploadArea from '../../../ui/FileUploadArea';
+import PageTitle from '../../../ui/PageTitle';
 import Icon from '../../../ui/icon/index';
 import {
   fetchClassGrade, addClassGrade, importClassGrade, downloadGradeFile,
@@ -27,9 +28,6 @@ import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   reminder: {
     color: theme.palette.grey.A400,
     marginLeft: theme.spacing(2),
@@ -226,9 +224,7 @@ export default function GradeList() {
 
   return (
     <>
-      <Typography variant="h3" className={classNames.pageHeader}>
-        {`${courses[courseId].name} ${classes[classId].name} / Grade`}
-      </Typography>
+      <PageTitle text={`${courses[courseId].name} ${classes[classId].name} / Grade`} />
       <CustomTable
         hasSearch
         buttons={

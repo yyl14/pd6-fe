@@ -16,6 +16,7 @@ import { MdAdd } from 'react-icons/md';
 import AlignedText from '../../../ui/AlignedText';
 import CustomTable from '../../../ui/CustomTable';
 import FileUploadArea from '../../../ui/FileUploadArea';
+import PageTitle from '../../../ui/PageTitle';
 import Icon from '../../../ui/icon/index';
 import {
   fetchTeams, addTeam, importTeam, downloadTeamFile,
@@ -25,9 +26,6 @@ import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   reminder: {
     color: theme.palette.grey.A400,
     marginLeft: theme.spacing(2),
@@ -159,9 +157,7 @@ export default function TeamList() {
 
   return (
     <>
-      <Typography variant="h3" className={classNames.pageHeader}>
-        {`${courses[courseId].name} ${classes[classId].name} / Team`}
-      </Typography>
+      <PageTitle text={`${courses[courseId].name} ${classes[classId].name} / Team`} />
       <CustomTable
         hasSearch
         buttons={
