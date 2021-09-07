@@ -325,13 +325,13 @@ function AutoTable({
     }
   }, [refreshLoadings]);
 
-  // useEffect(() => {
-  //   if (tableState.byId[ident]) {
-  //     if (Number(curPage) > Math.ceil(tableState.byId[ident].totalCount / rowsPerPage)) {
-  //       setCurPage(Math.ceil(tableState.byId[ident].totalCount / rowsPerPage));
-  //     }
-  //   }
-  // }, [tableState.byId[ident], curPage, rowsPerPage]);
+  useEffect(() => {
+    if (tableState.byId[ident]) {
+      if (Number(curPage) > Math.ceil(tableState.byId[ident].totalCount / rowsPerPage)) {
+        setCurPage(Math.ceil(tableState.byId[ident].totalCount / rowsPerPage));
+      }
+    }
+  }, [tableState.byId[ident], curPage, rowsPerPage]);
 
   useEffect(() => {
     if (tableState.byId[ident]) {
@@ -357,7 +357,7 @@ function AutoTable({
       setDataComplete(newDisplayedReduxData.reduce((acc, item) => acc && item !== undefined, true));
       setDisplayedReduxData(newDisplayedReduxData);
     }
-  }, [curPage, displayedRange, ident, reduxData.byId, rowsPerPage, tableState.byId]);
+  }, [curPage, displayedRange, ident, reduxData.byId, tableState.byId]);
 
   // table refetch
   useEffect(() => {
