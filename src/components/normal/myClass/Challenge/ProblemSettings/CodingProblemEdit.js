@@ -358,6 +358,7 @@ export default function CodingProblemEdit({ closeEdit }) {
       editProblemInfo(
         authToken,
         problemId,
+        label,
         title,
         problems[problemId].full_score,
         !status,

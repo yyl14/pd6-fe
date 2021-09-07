@@ -123,7 +123,7 @@ export default function SubmissionDetail() {
             no: testcaseIds.map((key) => (id === key ? testcases[key].input_filename.split('.')[0] : '')),
             time: judgeCases.byId[id].time_lapse,
             memory: judgeCases.byId[id].peak_memory,
-            status: judgeCases.byId[id].status
+            status: judgeCases.byId[id].verdict
               .toLowerCase()
               .split(' ')
               .map((word) => word[0].toUpperCase() + word.substring(1))
@@ -210,13 +210,13 @@ export default function SubmissionDetail() {
         <AlignedText text="Status" childrenType="text">
           {judgments[judgmentId] !== undefined ? (
             <div>
-              {judgments[judgmentId].status === 'ACCEPTED' ? (
+              {judgments[judgmentId].verdict === 'ACCEPTED' ? (
                 <Typography variant="body1">
-                  {judgments[judgmentId].status.charAt(0).concat(judgments[judgmentId].status.slice(1).toLowerCase())}
+                  {judgments[judgmentId].verdict.charAt(0).concat(judgments[judgmentId].verdict.slice(1).toLowerCase())}
                 </Typography>
               ) : (
                 <Typography variant="body1" color="secondary">
-                  {judgments[judgmentId].status
+                  {judgments[judgmentId].verdict
                     .toLowerCase()
                     .split(' ')
                     .map((word) => word[0].toUpperCase() + word.substring(1))

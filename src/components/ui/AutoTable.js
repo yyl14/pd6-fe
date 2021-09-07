@@ -243,6 +243,7 @@ function AutoTable({
 
   const [dataComplete, setDataComplete] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
   // const allStates = useSelector((state) => state);
@@ -319,19 +320,23 @@ function AutoTable({
 
   useEffect(() => {
     if (refreshLoadings) {
-      if (refreshLoadings.reduce((acc, item) => acc && !item, true)) {
-        onRefresh();
-      }
+      setIsLoading(refreshLoadings.reduce((acc, item) => acc || item, false));
     }
   }, [refreshLoadings]);
 
-  // useEffect(() => {
-  //   if (tableState.byId[ident]) {
-  //     if (Number(curPage) > Math.ceil(tableState.byId[ident].totalCount / rowsPerPage)) {
-  //       setCurPage(Math.ceil(tableState.byId[ident].totalCount / rowsPerPage));
-  //     }
-  //   }
-  // }, [tableState.byId[ident], curPage, rowsPerPage]);
+  useEffect(() => {
+    if (!isLoading) {
+      onRefresh();
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (tableState.byId[ident]) {
+      if (Number(curPage) > Math.ceil(tableState.byId[ident].totalCount / rowsPerPage)) {
+        setCurPage(Math.ceil(tableState.byId[ident].totalCount / rowsPerPage));
+      }
+    }
+  }, [tableState.byId[ident], curPage, rowsPerPage]);
 
   useEffect(() => {
     if (tableState.byId[ident]) {
@@ -357,7 +362,7 @@ function AutoTable({
       setDataComplete(newDisplayedReduxData.reduce((acc, item) => acc && item !== undefined, true));
       setDisplayedReduxData(newDisplayedReduxData);
     }
-  }, [curPage, displayedRange, ident, reduxData.byId, rowsPerPage, tableState.byId]);
+  }, [curPage, displayedRange, ident, reduxData.byId, tableState.byId]);
 
   // table refetch
   useEffect(() => {
@@ -426,7 +431,7 @@ function AutoTable({
                       className={classes.tableHeadCell}
                       style={{ minWidth: column.minWidth, width: column.width }}
                     >
-                      {column.name}
+                      <b>{column.name}</b>
                       {/* <div className={classes.column}>
                         <div className={labelMoveLeft(columnComponent, columns, column)}>
                           <b>{column.label}</b>
@@ -438,15 +443,12 @@ function AutoTable({
                     </TableCell>
                   </React.Fragment>
                 ))}
-
-                {
-                  // TODO: simplify this
-                  hasLink ? (
-                    <TableCell key="link" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
-                  ) : (
-                    <TableCell key="blank" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
-                  )
-                }
+                <TableCell
+                  key={hasLink ? 'link' : 'blank'}
+                  align="right"
+                  className={classes.tableHeadCell}
+                  style={{ minWidth: 20 }}
+                />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -457,23 +459,23 @@ function AutoTable({
               */
                 rowData.map((row) => (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row[columns[0].id]} className={classes.row}>
-                    <TableCell className={classes.tableRowContainerLeftSpacing} />
+                    <TableCell key={`${row.id}-left`} className={classes.tableRowContainerLeftSpacing} />
                     {columns.map((column) => {
+                      const value = row[column.name];
                       if (column.type === 'link') {
                         return (
                           <React.Fragment key={`${row.id}-${column.name}`}>
                             <TableCell className={classes.tableColumnLeftSpacing} />
                             <TableCell align={column.align}>
-                              <Link to={row[column.name].path} className={classes.textLink} replace>
-                                {column.format && typeof row[column.name].text === 'number'
-                                  ? column.format(row[column.name].text)
-                                  : row[column.name].text}
+                              <Link to={value.path} className={classes.textLink} replace>
+                                {column.format && typeof value.text === 'number'
+                                  ? column.format(value.text)
+                                  : value.text}
                               </Link>
                             </TableCell>
                           </React.Fragment>
                         );
                       }
-                      const value = row[column.name];
                       return (
                         <React.Fragment key={`${row.id}-${column.name}`}>
                           <TableCell className={classes.tableColumnLeftSpacing} />
@@ -501,6 +503,7 @@ function AutoTable({
           </Table>
         </TableContainer>
         <div className={classes.bottomWrapper}>
+          <div />
           {/* <div>{dataComplete || isError || <CircularProgress color="inherit" size={30} />}</div> */}
           <div className={classes.bottom}>
             <FormControl variant="outlined">

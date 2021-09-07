@@ -195,7 +195,7 @@ export default function SubmissionList() {
               : '',
           },
           Status: judgments.allIds.filter((key) => judgments.byId[key].submission_id === item.id)[0]
-            ? judgments.byId[judgments.allIds.filter((key) => judgments.byId[key].submission_id === item.id)[0]].status
+            ? judgments.byId[judgments.allIds.filter((key) => judgments.byId[key].submission_id === item.id)[0]].verdict
             : 'No Status',
           Time: moment(item.submit_time).format('YYYY-MM-DD, HH:mm:ss'),
           link: `/my-class/${courseId}/${classId}/submission/${item.id}`,

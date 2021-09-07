@@ -79,8 +79,6 @@ export default function ClassList() {
     return <NoMatch />;
   }
 
-  console.log(classes);
-
   return (
     <>
       <PageTitle text={`${courses.byId[courseId].name}`} />

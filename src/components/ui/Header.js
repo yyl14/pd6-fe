@@ -56,6 +56,14 @@ const useStyles = makeStyles((theme) => ({
     marginRight: '16px',
     top: '2px',
   },
+  notificationTitle: {
+    wordBreak: 'break-word',
+  },
+  notificationDays: {
+    color: theme.palette.grey.A400,
+    marginLeft: '10px',
+    minWidth: '50px',
+  },
   notificationDropContent: {
     position: 'absolute',
     backgroundColor: theme.palette.primary.contrastText,
@@ -112,16 +120,13 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '50%',
     zIndex: 2,
   },
-  secondSpan: {
+  notificationContent: {
     marginTop: '16px',
     display: 'block !important',
     width: '400px',
-    wordWrap: 'break-word',
+    wordBreak: 'break-word',
   },
-  days: {
-    fontSize: '16px !important',
-    color: theme.palette.grey.A400,
-  },
+
   name: {
     width: '65px',
     height: '33px',
@@ -422,17 +427,16 @@ export default function Header() {
                       // onKeyDown={() => readNotification(notify.id)}
                     >
                       <div>
-                        <span>
-                          <b>{notify.title}</b>
-                        </span>
-                        <span className={classes.days}>
-                          {moment(new Date()).diff(moment(notify.post_time), 'days')}
-                          &nbsp; days
-                        </span>
+                        <Typography variant="h6" className={classes.notificationTitle}>
+                          {notify.title}
+                        </Typography>
+                        <Typography variant="body2" className={classes.notificationDays}>
+                          {`${moment(new Date()).diff(moment(notify.post_time), 'days')} days`}
+                        </Typography>
                       </div>
-                      <div className={classes.secondSpan}>
-                        <span>{notify.content}</span>
-                      </div>
+                      <Typography variant="body" className={classes.notificationContent}>
+                        {notify.content}
+                      </Typography>
                     </div>
                   ))}
                 </div>

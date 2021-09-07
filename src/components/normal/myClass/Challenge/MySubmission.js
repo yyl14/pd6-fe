@@ -60,37 +60,20 @@ export default function MySubmission() {
     return <NoMatch />;
   }
 
-  const handleRefresh = () => {
-    const browseParams = {
-      limit: 5,
-      offset: 0 * 5,
-      filter: [],
-      sort: [],
-    };
-    dispatch(readSubmission(authToken, accountId, problemId, browseParams, TableIdent));
-    dispatch(readProblemScore(authToken, problemId));
-    if (submissions.allIds !== []) {
-      submissions.allIds.map((id) => dispatch(readSubmissionDetail(authToken, id)));
-    }
-  };
-
   return (
     <>
-      <PageTitle text={`${challenges[challengeId].title} / ${problems[problemId].challenge_label} / My Submission`} />
+      <PageTitle
+        text={`${challenges.byId[challengeId].title} / ${problems.byId[problemId].challenge_label} / My Submission`}
+      />
       <SimpleBar title="Submission Information">
         <AlignedText text="My Last Score" childrenType="text">
           <Typography variant="body1">{problems.byId[problemId].score}</Typography>
         </AlignedText>
       </SimpleBar>
       <AutoTable
-        ident={TableIdent}
-        buttons={(
-          <>
-            <Button color="primary" startIcon={<Icon.RefreshOutlinedIcon />} onClick={handleRefresh}>
-              Refresh
-            </Button>
-          </>
-        )}
+        ident={TableIdent + problemId}
+        hasRefreshButton
+        refreshLoadings={[loading.submitCode]}
         hasFilter
         filterConfig={[
           {
@@ -142,7 +125,7 @@ export default function MySubmission() {
           return {
             'Submission ID': item.id,
             Status: lastJudgmentId
-              ? judgments.byId[lastJudgmentId].status
+              ? judgments.byId[lastJudgmentId].verdict
                 .toLowerCase()
                 .split(' ')
                 .map((word) => word[0].toUpperCase() + word.substring(1))
