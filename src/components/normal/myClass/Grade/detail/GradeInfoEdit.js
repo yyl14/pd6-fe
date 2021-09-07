@@ -6,7 +6,11 @@ import {
   Button,
   TextField,
   Typography,
-  Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@material-ui/core';
 import moment from 'moment-timezone';
 import SimpleBar from '../../../../ui/SimpleBar';
@@ -49,7 +53,9 @@ export default function BasicInfoEdit(props) {
         <>
           <AlignedText text="Username" maxWidth="lg" childrenType="text">
             <Typography variant="body1">
-              <Link to={props.link} className={classNames.textLink}>{props.receiver.username}</Link>
+              <Link to={props.link} className={classNames.textLink}>
+                {props.receiver.username}
+              </Link>
             </Typography>
           </AlignedText>
           <AlignedText text="Student ID" maxWidth="lg" childrenType="text">
@@ -62,11 +68,7 @@ export default function BasicInfoEdit(props) {
             <Typography variant="body1">{props.grade.title}</Typography>
           </AlignedText>
           <AlignedText text="Score" maxWidth="lg" childrenType="field">
-            <TextField
-              className={classNames.textFieldScore}
-              value={score}
-              onChange={(e) => setScore(e.target.value)}
-            />
+            <TextField className={classNames.textFieldScore} value={score} onChange={(e) => setScore(e.target.value)} />
           </AlignedText>
           <AlignedText text="Comment" maxWidth="lg" childrenType="field">
             <TextField
@@ -82,11 +84,7 @@ export default function BasicInfoEdit(props) {
           </AlignedText>
           <div>
             <Button onClick={() => props.handleBack()}>Cancel</Button>
-            <Button
-              color="primary"
-              type="submit"
-              onClick={handleSave}
-            >
+            <Button color="primary" type="submit" onClick={handleSave}>
               Save
             </Button>
           </div>

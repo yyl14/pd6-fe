@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { fetchClassMembers } from '../../../../actions/common/common';
-import { fetchClassGrade } from '../../../../actions/myClass/grade';
+import { fetchGrade } from '../../../../actions/myClass/grade';
 
 import GradeInfo from './detail/GradeInfo';
 import Grader from './detail/Grader';
@@ -26,10 +25,8 @@ export default function AccountSetting() {
   const { classId, gradeId } = useParams();
 
   const authToken = useSelector((state) => state.auth.token);
-  const members = useSelector((state) => state.classMembers.byId);
   const grades = useSelector((state) => state.grades.byId);
   const loading = useSelector((state) => state.loading.myClass.grade);
-  const commonLoading = useSelector((state) => state.loading.common.common);
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
 
@@ -39,21 +36,15 @@ export default function AccountSetting() {
   const [editGradeInfo, setEditGradeInfo] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchClassMembers(authToken, classId, {}));
-  }, [dispatch, authToken, classId]);
-
-  useEffect(() => {
     if (!loading.editGrade) {
-      dispatch(fetchClassGrade(authToken, classId));
+      dispatch(fetchGrade(authToken, gradeId));
     }
-  }, [dispatch, authToken, classId, loading.editGrade]);
+  }, [dispatch, authToken, gradeId, loading.editGrade]);
 
   useEffect(() => {
     user.classes.forEach((item) => {
-      if (item.class_id === parseInt(classId, 10)) {
-        if (item.role === 'MANAGER') {
-          setIsManager(true);
-        }
+      if (item.class_id === parseInt(classId, 10) && item.role === 'MANAGER') {
+        setIsManager(true);
       }
     });
   }, [classId, user.classes]);
@@ -66,10 +57,10 @@ export default function AccountSetting() {
     setEditGradeInfo(true);
   };
 
-  if (loading.fetchClassGrade || commonLoading.fetchClassMembers) {
-    return <GeneralLoading />;
-  }
-  if (grades[gradeId] === undefined || members === undefined) {
+  if (grades[gradeId] === undefined) {
+    if (loading.fetchGrade || loading.editGrade) {
+      return <GeneralLoading />;
+    }
     return <NoMatch />;
   }
 
@@ -81,26 +72,24 @@ export default function AccountSetting() {
 
       {editGradeInfo ? (
         <GradeInfoEdit
-          receiver={members[grades[gradeId].receiver_id]}
-          grade={grades[gradeId]}
+          receiver={grades[gradeId].receiver}
+          grade={grades[gradeId].grade}
           link={userLink}
           handleBack={handleBack}
         />
       ) : (
         <GradeInfo
           isManager={isManager}
-          receiver={members[grades[gradeId].receiver_id]}
-          grade={grades[gradeId]}
+          receiver={grades[gradeId].receiver}
+          grade={grades[gradeId].grade}
           link={userLink}
           handleEdit={handleEdit}
         />
       )}
 
-      <Grader grader={members[grades[gradeId].grader_id]} link={graderLink} />
+      <Grader grader={grades[gradeId].grader} link={graderLink} />
 
-      {isManager && (
-        <GradeDelete username={members[grades[gradeId].receiver_id].username} title={grades[gradeId].title} />
-      )}
+      {isManager && <GradeDelete username={grades[gradeId].receiver.username} title={grades[gradeId].grade.title} />}
     </>
   );
 }
