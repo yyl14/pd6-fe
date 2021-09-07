@@ -55,7 +55,6 @@ export default function TeamList() {
   const teams = useSelector((state) => state.teams.byId);
   const teamIds = useSelector((state) => state.teams.allIds);
   const loading = useSelector((state) => state.loading.myClass.team);
-  const commonLoading = useSelector((state) => state.loading.common);
 
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
@@ -83,7 +82,7 @@ export default function TeamList() {
 
   useEffect(() => {
     if (!loading.addTeam && !loading.importTeam) {
-      dispatch(fetchTeams(authToken, classId));
+      dispatch(fetchTeams(authToken, classId, {}));
     }
   }, [authToken, classId, dispatch, loading.addTeam, loading.importTeam]);
 
@@ -148,10 +147,10 @@ export default function TeamList() {
     dispatch(downloadTeamFile(authToken));
   };
 
-  if (loading.fetchTeams || commonLoading.fetchCourse || commonLoading.fetchClass) {
-    return <GeneralLoading />;
-  }
   if (courses[courseId] === undefined || classes[classId] === undefined) {
+    if (loading.fetchTeams) {
+      return <GeneralLoading />;
+    }
     return <NoMatch />;
   }
 

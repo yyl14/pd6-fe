@@ -19,7 +19,7 @@ import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleTable from '../../../../ui/SimpleTable';
 import {
-  addTeamMember, editTeamMember, deleteTeamMember, fetchTeamMember,
+  addTeamMember, editTeamMember, deleteTeamMember, fetchTeamMembers,
 } from '../../../../../actions/myClass/team';
 
 const useStyles = makeStyles(() => ({
@@ -34,7 +34,6 @@ export default function TeamMemberEdit(props) {
   const dispatch = useDispatch();
 
   const authToken = useSelector((state) => state.auth.token);
-  const classMembers = useSelector((state) => state.classMembers.byId);
   const teamMembers = useSelector((state) => state.teamMembers.byId);
   const teamMemberIds = useSelector((state) => state.teamMembers.allIds);
 
@@ -67,13 +66,12 @@ export default function TeamMemberEdit(props) {
     // delete unsaved added members
     tempAddData.forEach((item) => {
       teamMemberIds.forEach((id) => {
-        console.log(item, classMembers[id]);
         if (
-          item === classMembers[id].username
-          || item === classMembers[id].real_name
-          || item === classMembers[id].student_id
+          item === teamMembers[id].account.username
+          || item === teamMembers[id].account.real_name
+          || item === teamMembers[id].account.student_id
         ) {
-          dispatch(deleteTeamMember(authToken, teamId, classMembers[id].member_id));
+          dispatch(deleteTeamMember(authToken, teamId, teamMembers[id].member_id));
         }
       });
     });
@@ -83,7 +81,7 @@ export default function TeamMemberEdit(props) {
   const handleSave = () => {
     // handle edit and delete members
     teamMemberIds.forEach((id) => {
-      const data = tableData.find((item) => item.id === classMembers[id].member_id);
+      const data = tableData.find((item) => item.id === teamMembers[id].member_id);
       if (data === undefined) {
         dispatch(deleteTeamMember(authToken, teamId, id));
       } else {
@@ -102,11 +100,11 @@ export default function TeamMemberEdit(props) {
     clearInputs();
     if (inputs.student !== '') {
       const role = inputs.role === 'Normal' ? 'NORMAL' : 'MANAGER';
-      dispatch(addTeamMember(authToken, teamId, inputs.student, role, false, null));
+      dispatch(addTeamMember(authToken, teamId, inputs.student, role));
       const newTempAdd = [...tempAddData, inputs.student];
       setTempAddData(newTempAdd);
     }
-    dispatch(fetchTeamMember(authToken, teamId));
+    dispatch(fetchTeamMembers(authToken, teamId, {}));
   };
 
   return (
@@ -176,7 +174,7 @@ export default function TeamMemberEdit(props) {
           <AlignedText text="Student" maxWidth="mg" childrenType="field">
             <TextField
               name="student"
-              placeholder="Student ID / Email / Username"
+              placeholder="Student ID / Email / #Username"
               value={inputs.student}
               onChange={(e) => handleChange(e)}
             />
