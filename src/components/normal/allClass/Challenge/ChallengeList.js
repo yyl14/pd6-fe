@@ -15,18 +15,14 @@ import {
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import AlignedText from '../../../ui/AlignedText';
-import Icon from '../../../ui/icon/index';
 import CustomTable from '../../../ui/CustomTable';
+import PageTitle from '../../../ui/PageTitle';
 import DateRangePicker from '../../../ui/DateRangePicker';
 import { fetchChallenges, addChallenge } from '../../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse } from '../../../../actions/common/common';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   row: {
     display: 'flex',
     flexDirection: 'row',
@@ -176,10 +172,7 @@ export default function ChallengeList() {
 
   return (
     <>
-      <Typography className={className.pageHeader} variant="h3">
-        {`${courses[courseId].name} ${classes[classId].name} / Challenge`}
-      </Typography>
-
+      <PageTitle text={`${courses[courseId].name} ${classes[classId].name} / Challenge`} />
       <CustomTable
         hasSearch
         data={tableData}

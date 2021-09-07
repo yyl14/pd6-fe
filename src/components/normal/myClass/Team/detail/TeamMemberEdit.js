@@ -7,7 +7,10 @@ import {
   Select,
   MenuItem,
   FormControl,
-  Dialog, DialogTitle, DialogContent, DialogActions,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,7 +21,6 @@ import SimpleTable from '../../../../ui/SimpleTable';
 import {
   addTeamMember, editTeamMember, deleteTeamMember, fetchTeamMember,
 } from '../../../../../actions/myClass/team';
-import systemRoleTransformation from '../../../../../function/systemRoleTransformation';
 
 const useStyles = makeStyles(() => ({
   select: {
@@ -66,7 +68,11 @@ export default function TeamMemberEdit(props) {
     tempAddData.forEach((item) => {
       teamMemberIds.forEach((id) => {
         console.log(item, classMembers[id]);
-        if (item === classMembers[id].username || item === classMembers[id].real_name || item === classMembers[id].student_id) {
+        if (
+          item === classMembers[id].username
+          || item === classMembers[id].real_name
+          || item === classMembers[id].student_id
+        ) {
           dispatch(deleteTeamMember(authToken, teamId, classMembers[id].member_id));
         }
       });
@@ -111,9 +117,9 @@ export default function TeamMemberEdit(props) {
           hasDelete={props.isManager}
           buttons={
             props.isManager && (
-            <Button color="primary" onClick={() => setPopUp(true)}>
-              <MdAdd />
-            </Button>
+              <Button color="primary" onClick={() => setPopUp(true)}>
+                <MdAdd />
+              </Button>
             )
           }
           data={tableData}
@@ -156,14 +162,8 @@ export default function TeamMemberEdit(props) {
           ]}
         />
 
-        <Button onClick={handleCancel}>
-          Cancel
-        </Button>
-        <Button
-          color="primary"
-          type="submit"
-          onClick={handleSave}
-        >
+        <Button onClick={handleCancel}>Cancel</Button>
+        <Button color="primary" type="submit" onClick={handleSave}>
           Save
         </Button>
       </SimpleBar>
@@ -174,7 +174,12 @@ export default function TeamMemberEdit(props) {
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Student" maxWidth="mg" childrenType="field">
-            <TextField name="student" placeholder="Student ID / Email / Username" value={inputs.student} onChange={(e) => handleChange(e)} />
+            <TextField
+              name="student"
+              placeholder="Student ID / Email / Username"
+              value={inputs.student}
+              onChange={(e) => handleChange(e)}
+            />
           </AlignedText>
           <AlignedText text="Role" childrenType="field">
             <FormControl variant="outlined" className={classNames.select}>
@@ -186,7 +191,12 @@ export default function TeamMemberEdit(props) {
           </AlignedText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => { setPopUp(false); clearInputs(); }}>
+          <Button
+            onClick={() => {
+              setPopUp(false);
+              clearInputs();
+            }}
+          >
             Cancel
           </Button>
           <Button color="primary" onClick={handleAdd}>
@@ -194,7 +204,6 @@ export default function TeamMemberEdit(props) {
           </Button>
         </DialogActions>
       </Dialog>
-
     </div>
   );
 }

@@ -126,9 +126,9 @@ export default function StudentInfoEdit(props) {
     setAddInputs((input) => ({ ...input, [name]: value }));
 
     if (name === 'institute') {
-      const inputInstituteId = institutesId.filter((id) => id.full_name === value);
+      const inputInstituteId = institutesId.filter((id) => institutes[id].full_name === value);
       if (inputInstituteId.length !== 0) {
-        setEmailTail(institutes[inputInstituteId[0]].email_domain);
+        setEmailTail(`@${institutes[inputInstituteId[0]].email_domain}`);
       } else {
         setEmailTail('@ntu.edu.tw');
       }

@@ -1,16 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
 import {
-  makeStyles,
-  Button,
-  TextField,
-  Typography,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
+  makeStyles, Button, TextField, Typography,
 } from '@material-ui/core';
 import moment from 'moment-timezone';
 import SimpleBar from '../../../../ui/SimpleBar';
