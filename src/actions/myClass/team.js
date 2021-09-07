@@ -35,6 +35,23 @@ export const fetchTeams = (token, classId, browseParams, tableId = null) => asyn
   }
 };
 
+export const fetchTeam = (token, teamId) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    dispatch({ type: teamConstants.FETCH_TEAM_START });
+    const res = await agent.get(`/team/${teamId}`, config);
+    dispatch({
+      type: teamConstants.FETCH_TEAM_SUCCESS,
+      payload: { teamId, data: res.data.data },
+    });
+  } catch (error) {
+    dispatch({
+      type: teamConstants.FETCH_TEAM_FAIL,
+      error,
+    });
+  }
+};
+
 export const addTeam = (token, classId, teamName, newLabel) => (dispatch) => {
   const config = { headers: { 'auth-token': token } };
   dispatch({ type: teamConstants.ADD_TEAM_START });

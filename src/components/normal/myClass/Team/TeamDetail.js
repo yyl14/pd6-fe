@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchTeams, fetchTeamMembers } from '../../../../actions/myClass/team';
+import { fetchTeam, fetchTeamMembers } from '../../../../actions/myClass/team';
 import TeamInfo from './detail/TeamInfo';
 import TeamInfoEdit from './detail/TeamInfoEdit';
 import TeamMember from './detail/TeamMember';
@@ -49,9 +49,9 @@ export default function ChallengeList() {
 
   useEffect(() => {
     if (!loading.editTeam) {
-      dispatch(fetchTeams(authToken, classId, {}));
+      dispatch(fetchTeam(authToken, teamId));
     }
-  }, [authToken, classId, dispatch, loading.editTeam]);
+  }, [authToken, dispatch, loading.editTeam, teamId]);
 
   useEffect(() => {
     dispatch(fetchTeamMembers(authToken, teamId, {}));

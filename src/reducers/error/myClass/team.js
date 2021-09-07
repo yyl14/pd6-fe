@@ -2,6 +2,7 @@ import { teamConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
   fetchTeams: null,
+  fetchTeam: null,
   addTeam: null,
   importTeam: null,
   editTeam: null,
@@ -24,6 +25,19 @@ export default function team(state = initialState, action) {
       return {
         ...state,
         fetchTeams: action.error,
+      };
+    }
+
+    case teamConstants.FETCH_TEAM_SUCCESS: {
+      return {
+        ...state,
+        fetchTeam: null,
+      };
+    }
+    case teamConstants.FETCH_TEAM_FAIL: {
+      return {
+        ...state,
+        fetchTeam: action.error,
       };
     }
 
