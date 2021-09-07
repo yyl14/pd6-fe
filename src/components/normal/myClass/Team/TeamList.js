@@ -32,8 +32,11 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.grey.A400,
     marginLeft: theme.spacing(2),
   },
-  templateBtn: {
-    marginRight: '115px',
+  dialogButtons: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginLeft: '19px',
   },
 }));
 
@@ -211,7 +214,7 @@ export default function TeamList() {
         linkName="path"
       />
 
-      <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} fullWidth maxWidth="md">
+      <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} maxWidth="md">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Import Team</Typography>
         </DialogTitle>
@@ -242,9 +245,8 @@ export default function TeamList() {
             setSelectedFile={setSelectedFile}
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions className={classNames.dialogButtons}>
           <StyledButton
-            className={classNames.templateBtn}
             variant="outlined"
             startIcon={<Icon.Download />}
             onClick={() => {
@@ -253,30 +255,32 @@ export default function TeamList() {
           >
             Template
           </StyledButton>
-          <Button
-            onClick={() => {
-              setShowImportDialog(false);
-              clearImportInput();
-              setDisabled(true);
-            }}
-            color="default"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={() => {
-              submitImport();
-              setDisabled(true);
-            }}
-            color="primary"
-            disabled={disabled}
-          >
-            Confirm
-          </Button>
+          <div>
+            <Button
+              onClick={() => {
+                setShowImportDialog(false);
+                clearImportInput();
+                setDisabled(true);
+              }}
+              color="default"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                submitImport();
+                setDisabled(true);
+              }}
+              color="primary"
+              disabled={disabled}
+            >
+              Confirm
+            </Button>
+          </div>
         </DialogActions>
       </Dialog>
 
-      <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} fullWidth maxWidth="md">
+      <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} maxWidth="md">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Create New Team</Typography>
         </DialogTitle>
