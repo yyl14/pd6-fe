@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Button, Card, CardContent, Typography, makeStyles,
+  Button, Card, CardContent, Typography, makeStyles, Snackbar,
 } from '@material-ui/core';
 import Icon from '../ui/icon/index';
 import AlignedText from '../ui/AlignedText';
@@ -55,6 +55,7 @@ export default function StudentInfoCard(props) {
   const authToken = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
   const accountId = useSelector((state) => state.user.id);
+  const [snackbar, setSnackbar] = useState(false);
 
   const handleSetDefault = (cardId) => {
     dispatch(makeStudentCardDefault(authToken, accountId, cardId));
@@ -62,6 +63,7 @@ export default function StudentInfoCard(props) {
 
   const handleResend = (emailVerificationId) => {
     dispatch(resendEmailVerification(authToken, emailVerificationId));
+    setSnackbar(true);
   };
 
   const handleDelete = (emailVerificationId) => {
@@ -139,6 +141,12 @@ export default function StudentInfoCard(props) {
           </CardContent>
         )}
       </Card>
+      <Snackbar
+        open={snackbar}
+        autoHideDuration={3000}
+        message="Verification email sent! Please check your mailbox."
+        onClose={() => setSnackbar(false)}
+      />
     </div>
   );
 }

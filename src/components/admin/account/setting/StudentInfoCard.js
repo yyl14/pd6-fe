@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-  Button, Card, CardContent, Typography, makeStyles,
+  Button, Card, CardContent, Typography, makeStyles, Snackbar,
 } from '@material-ui/core';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
@@ -58,6 +58,7 @@ export default function StudentInfoCard(props) {
   const authToken = useSelector((state) => state.auth.token);
   const institutes = useSelector((state) => state.institutes.byId);
   const institutesId = useSelector((state) => state.institutes.allIds);
+  const [snackbar, setSnackbar] = useState(false);
   const dispatch = useDispatch();
   const { accountId } = useParams();
 
@@ -67,6 +68,7 @@ export default function StudentInfoCard(props) {
 
   const handleResend = (emailVerificationId) => {
     dispatch(resendEmailVerification(authToken, emailVerificationId));
+    setSnackbar(true);
   };
 
   const handleDelete = (emailVerificationId) => {
@@ -144,6 +146,12 @@ export default function StudentInfoCard(props) {
           </CardContent>
         )}
       </Card>
+      <Snackbar
+        open={snackbar}
+        autoHideDuration={3000}
+        message="Verification email sent! Please check your mailbox."
+        onClose={() => setSnackbar(false)}
+      />
     </div>
   );
 }

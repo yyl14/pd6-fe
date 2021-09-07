@@ -11,11 +11,7 @@ import {
   FormControl,
   Select,
   MenuItem,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
+  Snackbar,
 } from '@material-ui/core';
 import { addStudentCard } from '../../../../actions/admin/account';
 import StudentInfoCard from './StudentInfoCard';
@@ -77,7 +73,8 @@ export default function StudentInfoEdit(props) {
   const [pendingCards, setPendingCards] = useState(props.pendingCards);
   const [disabledTwoCards, setDisabledTwoCards] = useState(false);
   const [add, setAdd] = useState(false); // addCard block
-  const [popUp, setPopUp] = useState(false);
+  // const [popUp, setPopUp] = useState(false);
+  const [snackbar, setSnackbar] = useState(false);
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
   const [addInputs, setAddInputs] = useState({
     institute: 'National Taiwan University',
@@ -137,7 +134,7 @@ export default function StudentInfoEdit(props) {
     const inputInstituteId = institutesId.filter((id) => institutes[id].full_name === addInputs.institute);
     if (inputInstituteId.length !== 0) {
       dispatch(addStudentCard(authToken, accountId, inputInstituteId[0], addInputs.email, addInputs.studentId));
-      setPopUp(true);
+      setSnackbar(true);
     }
     setAdd(false);
     setDisabledTwoCards(false);
@@ -297,21 +294,12 @@ export default function StudentInfoEdit(props) {
             </div>
           </div>
         )}
-        <Dialog open={popUp} onClose={() => setPopUp(false)} maxWidth="md">
-          <DialogTitle>
-            <Typography variant="h4">Verification email sent</Typography>
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              <Typography variant="body1" color="textPrimary">
-                Please check your mailbox to activate this student information, then it will appear here.
-              </Typography>
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setPopUp(false)}>Done</Button>
-          </DialogActions>
-        </Dialog>
+        <Snackbar
+          open={snackbar}
+          autoHideDuration={3000}
+          message="Verification email sent! Please check your mailbox."
+          onClose={() => setSnackbar(false)}
+        />
       </SimpleBar>
     </div>
   );
