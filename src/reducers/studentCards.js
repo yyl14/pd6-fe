@@ -6,7 +6,7 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case accountConstants.FETCH_STUDENT_CARD_SUCCESS: {
       const { data } = action.payload;
-      return data === null ? {} : data;
+      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), {});
     }
     case accountConstants.MAKE_STUDENT_CARD_DEFAULT_SUCCESS: {
       const { cardId } = action.payload;
@@ -39,7 +39,7 @@ const allIds = (state = [], action) => {
   switch (action.type) {
     case accountConstants.FETCH_STUDENT_CARD_SUCCESS: {
       const { data } = action.payload;
-      return data === null ? [] : data.map((item) => item.id);
+      return data.map((item) => item.id);
     }
     case userConstants.GET_SELF_STUDENT_CARD_SUCCESS:
       return action.payload.map((item) => item.id);

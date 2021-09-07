@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
     marginBottom: '10px',
   },
   defaultStar: {
-    marginRight: ' 8px',
+    marginRight: '8px',
   },
   cardContent: {
     height: '106px',
@@ -65,12 +65,11 @@ export default function StudentInfoCard(props) {
     <div className={classes.root}>
       <div className={classes.defaultHeader}>
         {props.isDefault ? <Icon.StarIcon style={{ color: 'ffe81e' }} className={classes.defaultStar} /> : <></>}
-        <Typography variant="body1">
-          {transform(props.instituteId)}
-        </Typography>
+        {props.pending ? <Icon.Warning className={classes.defaultStar} /> : <></>}
+        <Typography variant="body1">{transform(props.instituteId)}</Typography>
       </div>
       <Card variant="outlined">
-        {props.editMode ? (
+        {!props.pending ? (
           <CardContent className={classes.editCardContent}>
             <div>
               <AlignedText text="Student ID" childrenType="text">
@@ -83,7 +82,14 @@ export default function StudentInfoCard(props) {
               </AlignedText>
             </div>
             <div className={classes.defaultButton}>
-              <Button disabled={disabled} onClick={() => { handleClick(); props.setChanged(true); }}>Set as Default</Button>
+              <Button
+                disabled={disabled}
+                onClick={() => {
+                  handleClick();
+                }}
+              >
+                Set as Default
+              </Button>
             </div>
           </CardContent>
         ) : (

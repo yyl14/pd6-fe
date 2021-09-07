@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { fetchStudentCard } from '../../../../actions/admin/account';
+import { fetchStudentCard, browsePendingStudentCards } from '../../../../actions/admin/account';
 import { fetchAccount, getInstitutes } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
 import BasicInfo from './BasicInfo';
 import BasicInfoEdit from './BasicInfoEdit';
-import StudentInfo from './StudentInfo';
+// import StudentInfo from './StudentInfo';
 import StudentInfoEdit from './StudentInfoEdit';
 import AccountDelete from './AccountDelete';
 import NewPassword from './NewPassword';
@@ -24,17 +24,17 @@ const useStyles = makeStyles(() => ({
 
 export default function AccountSetting() {
   const [cards, setCards] = useState([]);
+  const [pendingCards, setPendingCards] = useState([]);
   const [editBasicInfo, setEditBasicInfo] = useState(false);
-  const [editStudInfo, setEditStudInfo] = useState(false);
   const classes = useStyles();
-
   const dispatch = useDispatch();
   const { accountId } = useParams();
+
   const authToken = useSelector((state) => state.auth.token);
   const accounts = useSelector((state) => state.accounts.byId);
   const studentCards = useSelector((state) => state.studentCards.byId);
+  const pendingStudentCards = useSelector((state) => state.pendingStudentCards.byId);
   const loading = useSelector((state) => state.loading.admin.account);
-  const account = accounts[accountId];
 
   useEffect(() => {
     if (!loading.editAccount) {
@@ -49,8 +49,32 @@ export default function AccountSetting() {
   }, [accountId, authToken, dispatch, loading.makeStudentCardDefault]);
 
   useEffect(() => {
-    setCards(Object.values(studentCards));
-  }, [studentCards]);
+    if (!loading.deletePendingStudentCard) {
+      dispatch(browsePendingStudentCards(authToken, accountId));
+    }
+  }, [accountId, authToken, dispatch, loading.deletePendingStudentCard]);
+
+  useEffect(() => {
+    setCards(
+      accounts[accountId].studentCard.reduce((acc, key) => {
+        if (studentCards[key]) {
+          return [...acc, studentCards[key]];
+        }
+        return [...acc];
+      }, []),
+    );
+  }, [accountId, accounts, studentCards]);
+
+  useEffect(() => {
+    setPendingCards(
+      accounts[accountId].pendingStudentCard.reduce((acc, key) => {
+        if (pendingStudentCards[key]) {
+          return [...acc, pendingStudentCards[key]];
+        }
+        return [...acc];
+      }, []),
+    );
+  }, [accountId, accounts, pendingStudentCards]);
 
   useEffect(() => {
     dispatch(getInstitutes());
@@ -71,45 +95,45 @@ export default function AccountSetting() {
     setEditBasicInfo(true);
   };
 
-  const handleStudBack = () => {
-    setEditStudInfo(false);
-  };
+  // const handleStudBack = () => {
+  //   setEditStudInfo(false);
+  // };
 
-  const handleStudEdit = () => {
-    setEditStudInfo(true);
-  };
+  // const handleStudEdit = () => {
+  //   setEditStudInfo(true);
+  // };
 
   return (
     <div>
       <Typography variant="h3" className={classes.pageHeader}>
-        {account.username}
+        {accounts[accountId].username}
         {' '}
         / Setting
       </Typography>
       {editBasicInfo ? (
         <BasicInfoEdit
           handleBack={handleBasicBack}
-          realName={account.real_name}
-          userName={account.username}
-          nickName={account.nickname}
-          altMail={account.alternative_email}
+          realName={accounts[accountId].real_name}
+          userName={accounts[accountId].username}
+          nickName={accounts[accountId].nickname}
+          altMail={accounts[accountId].alternative_email}
         />
       ) : (
         <BasicInfo
           handleEdit={handleBasicEdit}
-          realName={account.real_name}
-          userName={account.username}
-          nickName={account.nickname}
-          altMail={account.alternative_email}
+          realName={accounts[accountId].real_name}
+          userName={accounts[accountId].username}
+          nickName={accounts[accountId].nickname}
+          altMail={accounts[accountId].alternative_email}
         />
       )}
 
       <div>
-        <StudentInfoEdit handleBack={handleStudBack} cards={cards} />
+        <StudentInfoEdit cards={cards} pendingCards={pendingCards} />
       </div>
 
       <NewPassword />
-      <AccountDelete userName={account.username} cards={cards} realName={account.real_name} />
+      <AccountDelete userName={accounts[accountId].username} cards={cards} realName={accounts[accountId].real_name} />
     </div>
   );
 }

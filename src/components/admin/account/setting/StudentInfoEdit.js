@@ -73,9 +73,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function StudentInfoEdit(props) {
   const classes = useStyles();
-  const [cards, setCards] = useState(props.cards); // new card isn't here
+  const [cards, setCards] = useState(props.cards);
+  const [pendingCards, setPendingCards] = useState(props.pendingCards);
   // const [defaultCardId, setDefaultCardId] = useState(null);
-  const [changed, setChanged] = useState(false);
+  // const [changed, setChanged] = useState(false);
   const [disabledTwoCards, setDisabledTwoCards] = useState(false);
   const [add, setAdd] = useState(false); // addCard block
   const [popUp, setPopUp] = useState(false);
@@ -98,6 +99,12 @@ export default function StudentInfoEdit(props) {
       setCards(props.cards);
     }
   }, [props.cards]);
+
+  useEffect(() => {
+    if (props.pendingCards) {
+      setPendingCards(props.pendingCards);
+    }
+  }, [props.pendingCards]);
 
   const updateStatus = (studentId, cardId) => {
     const updated = cards.map((p) => (p.student_id === studentId ? { ...p, is_default: true } : { ...p, is_default: false }));
@@ -144,7 +151,6 @@ export default function StudentInfoEdit(props) {
                 return (
                   <StudentInfoCard
                     key={p.id}
-                    editMode
                     isDefault={p.is_default}
                     studentId={p.student_id}
                     email={p.email}
@@ -160,19 +166,32 @@ export default function StudentInfoEdit(props) {
                 return (
                   <StudentInfoCard
                     key={p.id}
-                    editMode
                     id={p.id}
                     isDefault={p.is_default}
                     studentId={p.student_id}
                     email={p.email}
                     instituteId={p.institute_id}
                     updateStatus={updateStatus}
-                    setChanged={setChanged}
+                    // setChanged={setChanged}
                   />
                 );
               }
               return <div key={p.id} />;
             })}
+          </div>
+        )}
+        {pendingCards && (
+          <div>
+            {pendingCards.map((p) => (
+              <StudentInfoCard
+                key={p.id}
+                pending // add pending card to the component
+                id={p.id}
+                email={p.email}
+                studentId={p.student_id}
+                instituteId={p.institute_id}
+              />
+            ))}
           </div>
         )}
         {add ? (

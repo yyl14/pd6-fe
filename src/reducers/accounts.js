@@ -56,13 +56,21 @@ const byId = (state = {}, action) => {
         [id]: {
           ...state[id],
           studentCard: data === null ? [] : data.map((dataItem) => dataItem.id),
+          pendingStudentCard: state[id] ? state[id].pendingStudentCard : [],
         },
       };
     }
 
     case accountConstants.FETCH_STUDENT_CARD_FAIL: {
       const { id } = action.payload;
-      return { ...state, [id]: { ...state[id], studentCard: [] } };
+      return {
+        ...state,
+        [id]: {
+          ...state[id],
+          studentCard: [],
+          pendingStudentCard: state[id] ? state[id].pendingStudentCard : [],
+        },
+      };
     }
 
     case accountConstants.BROWSE_PENDING_STUDENT_CARDS_SUCCESS: {
@@ -71,6 +79,7 @@ const byId = (state = {}, action) => {
         ...state,
         [accountId]: {
           ...state[accountId],
+          studentCard: state[accountId] ? state[accountId].studentCard : [],
           pendingStudentCard: data.map((dataItem) => dataItem.id),
         },
       };
