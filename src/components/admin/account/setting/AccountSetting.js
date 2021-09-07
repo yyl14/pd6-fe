@@ -49,10 +49,10 @@ export default function AccountSetting() {
   }, [accountId, authToken, dispatch, loading.makeStudentCardDefault]);
 
   useEffect(() => {
-    // if (!loading.deletePendingStudentCard) {
-    //   dispatch(browsePendingStudentCards(authToken, accountId));
-    // }
-  }, [accountId, authToken, dispatch, loading.deletePendingStudentCard]);
+    if (!loading.deletePendingStudentCard && !loading.addStudentCard) {
+      dispatch(browsePendingStudentCards(authToken, accountId));
+    }
+  }, [accountId, authToken, dispatch, loading.addStudentCard, loading.deletePendingStudentCard]);
 
   useEffect(() => {
     if (accounts.byId[accountId]) {
@@ -68,16 +68,16 @@ export default function AccountSetting() {
   }, [accountId, accounts, loading.fetchStudentCards, studentCards]);
 
   useEffect(() => {
-    // if (accounts.byId[accountId]) {
-    //   setPendingCards(
-    //     accounts.byId[accountId].pendingStudentCard.reduce((acc, key) => {
-    //       if (pendingStudentCards.byId[key]) {
-    //         return [...acc, pendingStudentCards.byId[key]];
-    //       }
-    //       return [...acc];
-    //     }, []),
-    //   );
-    // }
+    if (accounts.byId[accountId]) {
+      setPendingCards(
+        accounts.byId[accountId].pendingStudentCard.reduce((acc, key) => {
+          if (pendingStudentCards.byId[key]) {
+            return [...acc, pendingStudentCards.byId[key]];
+          }
+          return [...acc];
+        }, []),
+      );
+    }
   }, [accountId, accounts, pendingStudentCards]);
 
   useEffect(() => {
@@ -98,14 +98,6 @@ export default function AccountSetting() {
   const handleBasicEdit = () => {
     setEditBasicInfo(true);
   };
-
-  // const handleStudBack = () => {
-  //   setEditStudInfo(false);
-  // };
-
-  // const handleStudEdit = () => {
-  //   setEditStudInfo(true);
-  // };
 
   return (
     <div>

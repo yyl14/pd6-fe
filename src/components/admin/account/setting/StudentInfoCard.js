@@ -1,10 +1,16 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import {
   Button, Card, CardContent, Typography, makeStyles,
 } from '@material-ui/core';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
+import {
+  deletePendingStudentCard,
+  makeStudentCardDefault,
+  resendEmailVerification,
+} from '../../../../actions/admin/account';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -16,8 +22,11 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
     marginBottom: '10px',
   },
-  defaultStar: {
-    marginRight: '8px',
+  starIcon: {
+    marginRight: '5px',
+  },
+  pendingIcon: {
+    marginRight: '13px',
   },
   cardContent: {
     height: '106px',
@@ -46,11 +55,22 @@ const useStyles = makeStyles(() => ({
 export default function StudentInfoCard(props) {
   const classes = useStyles();
   const disabled = props.isDefault;
+  const authToken = useSelector((state) => state.auth.token);
   const institutes = useSelector((state) => state.institutes.byId);
   const institutesId = useSelector((state) => state.institutes.allIds);
+  const dispatch = useDispatch();
+  const { accountId } = useParams();
 
-  const handleClick = () => {
-    props.updateStatus(props.studentId, props.id);
+  const handleSetDefault = (cardId) => {
+    dispatch(makeStudentCardDefault(authToken, accountId, cardId));
+  };
+
+  const handleResend = (emailVerificationId) => {
+    dispatch(resendEmailVerification(authToken, emailVerificationId));
+  };
+
+  const handleDelete = (emailVerificationId) => {
+    dispatch(deletePendingStudentCard(authToken, emailVerificationId));
   };
 
   const transform = (instituteId) => {
@@ -64,8 +84,8 @@ export default function StudentInfoCard(props) {
   return (
     <div className={classes.root}>
       <div className={classes.defaultHeader}>
-        {props.isDefault ? <Icon.StarIcon style={{ color: 'ffe81e' }} className={classes.defaultStar} /> : <></>}
-        {props.pending ? <Icon.Warning className={classes.defaultStar} /> : <></>}
+        {props.isDefault && <Icon.StarIcon style={{ color: 'ffe81e' }} className={classes.starIcon} />}
+        {props.pending && <Icon.Warning style={{ color: '656565' }} className={classes.pendingIcon} />}
         <Typography variant="body1">{transform(props.instituteId)}</Typography>
       </div>
       <Card variant="outlined">
@@ -85,7 +105,7 @@ export default function StudentInfoCard(props) {
               <Button
                 disabled={disabled}
                 onClick={() => {
-                  handleClick();
+                  handleSetDefault(props.id);
                 }}
               >
                 Set as Default
@@ -93,7 +113,7 @@ export default function StudentInfoCard(props) {
             </div>
           </CardContent>
         ) : (
-          <CardContent className={classes.cardContent}>
+          <CardContent className={classes.editCardContent}>
             <div>
               <AlignedText text="Student ID" childrenType="text">
                 <Typography variant="body1">{props.studentId}</Typography>
@@ -103,6 +123,23 @@ export default function StudentInfoCard(props) {
               <AlignedText text="Email" childrenType="text">
                 <Typography variant="body1">{props.email}</Typography>
               </AlignedText>
+            </div>
+            <div className={classes.defaultButton}>
+              <Button
+                onClick={() => {
+                  handleDelete(props.id);
+                }}
+              >
+                Delete
+              </Button>
+              <Button
+                onClick={() => {
+                  handleResend(props.id);
+                }}
+                color="primary"
+              >
+                Resend
+              </Button>
             </div>
           </CardContent>
         )}

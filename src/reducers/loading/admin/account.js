@@ -230,7 +230,7 @@ export default function account(state = initialState, action) {
       };
     }
 
-    case accountConstants.BROWSE_PENDING_STUDENT_CARDS_REQUEST: {
+    case accountConstants.BROWSE_PENDING_STUDENT_CARDS_START: {
       return {
         ...state,
         browsePendingStudentCards: true,
@@ -249,7 +249,7 @@ export default function account(state = initialState, action) {
       };
     }
 
-    case accountConstants.RESEND_EMAIL_VERIFICATION_REQUEST: {
+    case accountConstants.RESEND_EMAIL_VERIFICATION_START: {
       return {
         ...state,
         resendEmailVerification: true,
@@ -268,7 +268,7 @@ export default function account(state = initialState, action) {
       };
     }
 
-    case accountConstants.DELETE_PENDING_STUDENT_CARD_REQUEST: {
+    case accountConstants.DELETE_PENDING_STUDENT_CARD_START: {
       return {
         ...state,
         deletePendingStudentCard: true,
