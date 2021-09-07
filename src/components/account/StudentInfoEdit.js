@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import {
   Button,
   Typography,
@@ -17,7 +16,7 @@ import {
   DialogContentText,
   DialogActions,
 } from '@material-ui/core';
-import { addStudentCard, makeStudentCardDefault } from '../../actions/admin/account';
+import { addStudentCard } from '../../actions/user/user';
 import StudentInfoCard from './StudentInfoCard';
 import SimpleBar from '../ui/SimpleBar';
 import AlignedText from '../ui/AlignedText';
@@ -32,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     width: '350px',
   },
   mailfield: {
-    width: '150px',
+    width: '200px',
     marginRight: '10px',
   },
   row: {
@@ -74,6 +73,7 @@ const useStyles = makeStyles((theme) => ({
 export default function StudentInfoEdit(props) {
   const classes = useStyles();
   const [cards, setCards] = useState(props.cards);
+  const [pendingCards, setPendingCards] = useState(props.pendingCards);
   const [disabledTwoCards, setDisabledTwoCards] = useState(false);
   const [add, setAdd] = useState(false); // addCard block
   const [popUp, setPopUp] = useState(false);
@@ -83,11 +83,19 @@ export default function StudentInfoEdit(props) {
     studentId: '',
     email: '',
   });
+  const [errors, setErrors] = useState({
+    studentId: false,
+    email: false,
+  });
+  const [errorTexts, setErrorTexts] = useState({
+    studentId: '',
+    email: '',
+  });
   const institutes = useSelector((state) => state.institutes.byId);
   const institutesId = useSelector((state) => state.institutes.allIds);
   const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
 
-  const { accountId } = useParams();
+  const accountId = useSelector((state) => state.user.id);
   const authToken = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
 
@@ -97,19 +105,33 @@ export default function StudentInfoEdit(props) {
     }
   }, [props.cards]);
 
-  const updateStatus = (studentId, cardId) => {
-    const updated = cards.map((p) => (p.student_id === studentId ? { ...p, is_default: true } : { ...p, is_default: false }));
-    setCards(updated);
-    dispatch(makeStudentCardDefault(authToken, accountId, cardId));
-  };
+  useEffect(() => {
+    if (props.pendingCards) {
+      setPendingCards(props.pendingCards);
+    }
+  }, [props.pendingCards]);
 
   const handleAddCancel = () => {
     setAdd(false);
     setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
+    setEmailTail('@ntu.edu.tw');
     setDisabledTwoCards(false);
+    setErrors({ studentId: false, email: false });
+    setErrorTexts({ studentId: '', email: '' });
   };
 
   const handleAddSave = () => {
+    if (addInputs.studentId === '' || addInputs.email === '') {
+      if (addInputs.studentId === '') {
+        setErrors((ori) => ({ ...ori, studentId: true }));
+        setErrorTexts((ori) => ({ ...ori, studentId: "Can't be empty" }));
+      }
+      if (addInputs.email === '') {
+        setErrors((ori) => ({ ...ori, email: true }));
+        setErrorTexts((ori) => ({ ...ori, email: "Can't be empty" }));
+      }
+      return;
+    }
     const inputInstituteId = institutesId.filter((id) => institutes[id].full_name === addInputs.institute);
     if (inputInstituteId.length !== 0) {
       dispatch(addStudentCard(authToken, accountId, inputInstituteId[0], addInputs.email, addInputs.studentId));
@@ -132,6 +154,14 @@ export default function StudentInfoEdit(props) {
         setEmailTail('@ntu.edu.tw');
       }
     }
+    if (name === 'studentId' && value !== '') {
+      setErrors((ori) => ({ ...ori, studentId: false }));
+      setErrorTexts((ori) => ({ ...ori, studentId: '' }));
+    }
+    if (name === 'email' && value !== '') {
+      setErrors((ori) => ({ ...ori, email: false }));
+      setErrorTexts((ori) => ({ ...ori, email: '' }));
+    }
   };
 
   return (
@@ -142,13 +172,16 @@ export default function StudentInfoEdit(props) {
             {cards.map((p) => {
               if (p.is_default === true) {
                 return (
-                  <StudentInfoCard
-                    key={p.id}
-                    isDefault={p.is_default}
-                    studentId={p.student_id}
-                    email={p.email}
-                    instituteId={p.institute_id}
-                  />
+                  <div key={p.id}>
+                    <StudentInfoCard
+                      key={p.id}
+                      isDefault={p.is_default}
+                      studentId={p.student_id}
+                      email={p.email}
+                      instituteId={p.institute_id}
+                    />
+                    <p />
+                  </div>
                 );
               }
               return <div key={p.id} />;
@@ -157,19 +190,38 @@ export default function StudentInfoEdit(props) {
             {cards.map((p) => {
               if (p.is_default === false) {
                 return (
-                  <StudentInfoCard
-                    key={p.id}
-                    id={p.id}
-                    isDefault={p.is_default}
-                    studentId={p.student_id}
-                    email={p.email}
-                    instituteId={p.institute_id}
-                    updateStatus={updateStatus}
-                  />
+                  <div key={p.id}>
+                    <StudentInfoCard
+                      key={p.id}
+                      id={p.id}
+                      isDefault={p.is_default}
+                      studentId={p.student_id}
+                      email={p.email}
+                      instituteId={p.institute_id}
+                    />
+                    <p />
+                  </div>
                 );
               }
               return <div key={p.id} />;
             })}
+          </div>
+        )}
+        {pendingCards && (
+          <div>
+            {pendingCards.map((p) => (
+              <div key={p.id}>
+                <StudentInfoCard
+                  key={p.id}
+                  pending
+                  id={p.id}
+                  email={p.email}
+                  studentId={p.student_id}
+                  instituteId={p.institute_id}
+                />
+                <p />
+              </div>
+            ))}
           </div>
         )}
         {add && (
@@ -198,6 +250,8 @@ export default function StudentInfoEdit(props) {
                       className={classes.textfield}
                       value={addInputs.studentId}
                       onChange={(e) => handleChange(e)}
+                      error={errors.studentId}
+                      helperText={errorTexts.studentId}
                     />
                   </AlignedText>
                 </div>
@@ -211,6 +265,8 @@ export default function StudentInfoEdit(props) {
                     className={classes.mailfield}
                     value={addInputs.email}
                     onChange={(e) => handleChange(e)}
+                    error={errors.email}
+                    helperText={errorTexts.email}
                   />
                   <Typography>{emailTail}</Typography>
                 </div>

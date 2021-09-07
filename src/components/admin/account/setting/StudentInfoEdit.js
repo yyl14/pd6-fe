@@ -116,6 +116,7 @@ export default function StudentInfoEdit(props) {
   const handleAddCancel = () => {
     setAdd(false);
     setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
+    setEmailTail('@ntu.edu.tw');
     setDisabledTwoCards(false);
     setErrors({ studentId: false, email: false });
     setErrorTexts({ studentId: '', email: '' });

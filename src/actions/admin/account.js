@@ -323,7 +323,7 @@ const resendEmailVerification = (token, emailVerificationId) => async (dispatch)
         'Auth-Token': token,
       },
     };
-    await agent.post(`/email-verification/${emailVerificationId}/resend`, config);
+    await agent.post(`/email-verification/${emailVerificationId}/resend`, {}, config);
     dispatch({
       type: accountConstants.RESEND_EMAIL_VERIFICATION_SUCCESS,
     });

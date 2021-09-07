@@ -113,9 +113,6 @@ export default function BasicInfoEdit(props) {
               name="realName"
               value={inputs.realName}
               variant="outlined"
-              // onChange={(e) => {
-              //   setRealName(e.target.value);
-              // }}
               onChange={(e) => handleChange(e)}
               className={classes.textfield}
               error={errors.realName}
@@ -126,9 +123,6 @@ export default function BasicInfoEdit(props) {
             <TextField
               name="nickName"
               value={inputs.nickName}
-              // onChange={(e) => {
-              //   setNickName(e.target.value);
-              // }}
               onChange={(e) => handleChange(e)}
               className={classes.textfield}
               error={errors.nickName}
@@ -139,15 +133,12 @@ export default function BasicInfoEdit(props) {
             <TextField
               value={inputs.altMail}
               name="altMail"
-              // onChange={(e) => {
-              //   setAltMail(e.target.value);
-              // }}
               onChange={(e) => handleChange(e)}
               className={classes.textfield}
             />
           </AlignedText>
           <div className={classes.gap}>
-            <Button onClick={() => handleCancel()}>Cancel</Button>
+            <Button onClick={handleCancel}>Cancel</Button>
             <Button color="primary" type="submit" onClick={handleSave}>
               Save
             </Button>

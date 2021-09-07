@@ -19,6 +19,7 @@ const user = (state = initialState, action) => {
       return {
         ...action.user,
         studentCards: [],
+        pendingStudentCards: [],
         notifications: [],
       };
     case authConstants.AUTH_LOGOUT:
