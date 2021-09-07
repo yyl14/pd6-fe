@@ -186,8 +186,6 @@ export default function GradeList() {
     return <NoMatch />;
   }
 
-  console.log(grades);
-
   return (
     <>
       <PageTitle text={`${courses[courseId].name} ${classes[classId].name} / Grade`} />

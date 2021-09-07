@@ -153,7 +153,6 @@ export default function problem(state = initialState, action) {
       };
     }
     case problemConstants.UPLOAD_DATA_FAIL: {
-      console.log(action.filename);
       return {
         ...state,
         uploadFailFilename: state.uploadFailFilename.concat([action.filename]),

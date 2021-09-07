@@ -45,7 +45,6 @@ const AnnouncementAdd = () => {
       post_time: dateRangePicker[0].startDate.toISOString(),
       expire_time: dateRangePicker[0].endDate.toISOString(),
     };
-    console.log(body);
     dispatch(addAnnouncement(authToken, body));
     backToHomePage();
   };

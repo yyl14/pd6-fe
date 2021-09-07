@@ -35,7 +35,6 @@ export default function AnnouncementEdit(props) {
   const [editContent, setEditContent] = useState(props.editContent);
 
   const handleClickSave = () => {
-    console.log(dateRangePicker[0].startDate, dateRangePicker[0].endDate);
     const body = {
       title: editTitle,
       content: editContent,

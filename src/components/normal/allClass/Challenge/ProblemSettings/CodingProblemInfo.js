@@ -60,7 +60,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const downloadAllSampleFile = () => {
     const files = sampleDataIds.reduce((acc, id) => {
       if (testcases[id].input_file_uuid !== null && testcases[id].output_file_uuid !== null) {
-        console.log('hello');
         return [
           ...acc,
           {
