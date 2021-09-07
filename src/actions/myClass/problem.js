@@ -649,7 +649,7 @@ const downloadAllSamples = (token, problemId, as_attachment) => async (dispatch)
   };
   dispatch({ type: problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_START });
   try {
-    await agent.post(`/problem/${problemId}/all-sample-testcase`, { as_attachment: true }, config);
+    await agent.post(`/problem/${problemId}/all-sample-testcase`, {}, config);
     dispatch({ type: problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_SUCCESS });
   } catch (error) {
     dispatch({
@@ -670,7 +670,7 @@ const downloadAllTestcases = (token, problemId, as_attachment) => async (dispatc
   };
   dispatch({ type: problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_START });
   try {
-    await agent.post(`/problem/${problemId}/all-non-sample-testcase`, { as_attachment: true }, config);
+    await agent.post(`/problem/${problemId}/all-non-sample-testcase`, {}, config);
 
     dispatch({ type: problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_SUCCESS });
   } catch (error) {
