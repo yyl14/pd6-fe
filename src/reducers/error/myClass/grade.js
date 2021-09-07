@@ -3,7 +3,6 @@ import { gradeConstants } from '../../../actions/myClass/constant';
 const initialState = {
   fetchGrade: null,
   fetchClassGrade: null,
-  fetchGrade: null,
   addClassGrade: null,
   importClassGrade: null,
   fetchAccountGrade: null,
@@ -36,19 +35,6 @@ export default function grade(state = initialState, action) {
       return {
         ...state,
         fetchClassGrade: action.error,
-      };
-    }
-
-    case gradeConstants.FETCH_GRADE_SUCCESS: {
-      return {
-        ...state,
-        fetchGrade: null,
-      };
-    }
-    case gradeConstants.FETCH_GRADE_FAIL: {
-      return {
-        ...state,
-        fetchGrade: action.error,
       };
     }
 
