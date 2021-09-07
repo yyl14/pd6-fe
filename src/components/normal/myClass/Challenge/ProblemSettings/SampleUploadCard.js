@@ -44,7 +44,6 @@ export default function SampleUploadCard({
   const [memory, setMemory] = useState(65535);
 
   const handleConfirm = () => {
-    console.log(selectedFile);
     const newSelectedFile = selectedFile.map((data) => ({
       ...data,
       no: data.id,

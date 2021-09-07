@@ -228,7 +228,8 @@ export default function CodingProblemEdit({ closeEdit }) {
   };
 
   const handleSampleTempUpload = (newSelectedFiles) => {
-    // console.log(newSelectedFiles);
+    console.log(newSelectedFiles);
+
     const newTableData = sampleTableData.reduce((acc, data) => {
       const selectedData = newSelectedFiles.filter((file) => data.no === file.no);
       if (selectedData.length === 0) {
