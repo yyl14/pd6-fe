@@ -125,6 +125,8 @@ export default function StudentInfoEdit(props) {
       setPopUp(true);
     }
     setAdd(false);
+    setDisabledTwoCards(false);
+    setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
   };
 
   const handleChange = (e) => {
@@ -194,7 +196,7 @@ export default function StudentInfoEdit(props) {
             ))}
           </div>
         )}
-        {add ? (
+        {add && (
           <div className={classes.addBlock}>
             <Card variant="outlined">
               <CardContent className={classes.addCard}>
@@ -245,10 +247,8 @@ export default function StudentInfoEdit(props) {
               </CardContent>
             </Card>
           </div>
-        ) : (
-          <></>
         )}
-        {!disabledTwoCards ? (
+        {!disabledTwoCards && (
           <div className={classes.buttonContainer}>
             <div className={classes.addButton}>
               <Button
@@ -261,8 +261,6 @@ export default function StudentInfoEdit(props) {
               </Button>
             </div>
           </div>
-        ) : (
-          <></>
         )}
         <Dialog open={popUp} onClose={() => setPopUp(false)} maxWidth="md">
           <DialogTitle>
