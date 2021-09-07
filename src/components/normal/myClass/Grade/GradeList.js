@@ -183,12 +183,16 @@ export default function GradeList() {
     if (loading.fetchCourse || loading.fetchClass) {
       return <GeneralLoading />;
     }
-    return <NoMatch />;
+    // return <NoMatch />;
   }
 
   return (
     <>
-      <PageTitle text={`${courses[courseId].name} ${classes[classId].name} / Grade`} />
+      <PageTitle
+        text={`${courses[courseId] ? courses[courseId].name : ''} ${
+          classes[classId] ? classes[classId].name : ''
+        } / Grade`}
+      />
       <AutoTable
         ident={`Grade list ${classId}`}
         hasFilter
@@ -277,7 +281,9 @@ export default function GradeList() {
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Class" maxWidth="mg" childrenType="text">
-            <Typography variant="body1">{`${courses[courseId].name}  ${classes[classId].name}`}</Typography>
+            <Typography variant="body1">
+              {`${courses[courseId] ? courses[courseId].name : ''} ${classes[classId] ? classes[classId].name : ''}`}
+            </Typography>
           </AlignedText>
           <AlignedText text="Title" maxWidth="mg" childrenType="field">
             <TextField name="title" value={addInputs.title} onChange={(e) => handleChange(e)} />
@@ -345,7 +351,9 @@ export default function GradeList() {
         </DialogContent>
         <DialogContent>
           <AlignedText text="Class" maxWidth="mg" childrenType="text">
-            <Typography variant="body1">{`${courses[courseId].name}  ${classes[classId].name}`}</Typography>
+            <Typography variant="body1">
+              {`${courses[courseId] ? courses[courseId].name : ''} ${classes[classId] ? classes[classId].name : ''}`}
+            </Typography>
           </AlignedText>
           <AlignedText text="Title" maxWidth="mg" childrenType="field">
             <TextField id="title" name="title" value={inputTitle} onChange={(e) => handleChange(e)} />
