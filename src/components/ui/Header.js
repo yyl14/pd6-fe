@@ -62,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
   notificationDays: {
     color: theme.palette.grey.A400,
     marginLeft: '10px',
+    minWidth: '50px',
   },
   notificationDropContent: {
     position: 'absolute',
@@ -430,8 +431,7 @@ export default function Header() {
                           {notify.title}
                         </Typography>
                         <Typography variant="body2" className={classes.notificationDays}>
-                          {moment(new Date()).diff(moment(notify.post_time), 'days')}
-                          &nbsp;days
+                          {`${moment(new Date()).diff(moment(notify.post_time), 'days')} days`}
                         </Typography>
                       </div>
                       <Typography variant="body" className={classes.notificationContent}>
