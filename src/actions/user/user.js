@@ -178,6 +178,66 @@ const userBrowseAnnouncement = (authToken) => async (dispatch) => {
 //     });
 //   }
 // };
+const browsePendingStudentCards = (token, accountId) => async (dispatch) => {
+  dispatch({ type: userConstants.BROWSE_SELF_PENDING_STUDENT_CARDS_START });
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    const res = await agent.get(`/account/${accountId}/email-verification`, config);
+    dispatch({
+      type: userConstants.BROWSE_SELF_PENDING_STUDENT_CARDS_SUCCESS,
+      payload: res.data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: userConstants.BROWSE_SELF_PENDING_STUDENT_CARDS_FAIL,
+      error,
+    });
+  }
+};
+
+const resendEmailVerification = (token, emailVerificationId) => async (dispatch) => {
+  dispatch({ type: userConstants.RESEND_SELF_EMAIL_VERIFICATION_START });
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    await agent.post(`/email-verification/${emailVerificationId}/resend`, config);
+    dispatch({
+      type: userConstants.RESEND_SELF_EMAIL_VERIFICATION_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: userConstants.RESEND_SELF_EMAIL_VERIFICATION_FAIL,
+      error,
+    });
+  }
+};
+
+const deletePendingStudentCard = (token, emailVerificationId) => async (dispatch) => {
+  dispatch({ type: userConstants.DELETE_SELF_PENDING_STUDENT_CARD_START });
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    await agent.delete(`/email-verification/${emailVerificationId}`, config);
+    dispatch({
+      type: userConstants.DELETE_SELF_PENDING_STUDENT_CARD_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: userConstants.DELETE_SELF_PENDING_STUDENT_CARD_FAIL,
+      error,
+    });
+  }
+};
 
 export {
   editAccount,
@@ -186,5 +246,8 @@ export {
   addStudentCard,
   editPassword,
   userBrowseAnnouncement,
+  browsePendingStudentCards,
+  resendEmailVerification,
+  deletePendingStudentCard,
   // userReadAnnouncement,
 };

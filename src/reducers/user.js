@@ -9,6 +9,7 @@ const initialState = {
   alternative_email: '',
   classes: [],
   studentCards: [],
+  pendingStudentCards: [],
   notifications: [],
 };
 
@@ -31,11 +32,19 @@ const user = (state = initialState, action) => {
       };
     }
     case userConstants.GET_SELF_STUDENT_CARD_SUCCESS:
-      return { ...state, studentCards: action.payload.map((item) => item.id) };
+      return {
+        ...state,
+        studentCards: action.payload.map((item) => item.id),
+      };
     case userConstants.USER_BROWSE_ANNOUNCEMENT_SUCCESS:
       return {
         ...state,
         notifications: action.payload,
+      };
+    case userConstants.BROWSE_SELF_PENDING_STUDENT_CARDS_SUCCESS:
+      return {
+        ...state,
+        pendingStudentCards: action.payload.map((item) => item.id),
       };
     default:
       return state;

@@ -7,6 +7,9 @@ const initialState = {
   makeStudentCardDefault: false,
   resetPassword: false,
   editPassword: false,
+  browsePendingStudentCards: false,
+  resendEmailVerification: false,
+  deletePendingStudentCard: false,
 };
 
 export default function user(state = initialState, action) {
@@ -92,6 +95,54 @@ export default function user(state = initialState, action) {
         editPassword: false,
       };
     }
+
+    case userConstants.BROWSE_SELF_PENDING_STUDENT_CARDS_START:
+      return {
+        ...state,
+        browsePendingStudentCards: true,
+      };
+    case userConstants.BROWSE_SELF_PENDING_STUDENT_CARDS_SUCCESS:
+      return {
+        ...state,
+        browsePendingStudentCards: false,
+      };
+    case userConstants.BROWSE_SELF_PENDING_STUDENT_CARDS_FAIL:
+      return {
+        ...state,
+        browsePendingStudentCards: false,
+      };
+
+    case userConstants.RESEND_SELF_EMAIL_VERIFICATION_START:
+      return {
+        ...state,
+        resendEmailVerification: true,
+      };
+    case userConstants.RESEND_SELF_EMAIL_VERIFICATION_SUCCESS:
+      return {
+        ...state,
+        resendEmailVerification: false,
+      };
+    case userConstants.RESEND_SELF_EMAIL_VERIFICATION_FAIL:
+      return {
+        ...state,
+        resendEmailVerification: false,
+      };
+
+    case userConstants.DELETE_SELF_PENDING_STUDENT_CARD_START:
+      return {
+        ...state,
+        deletePendingStudentCard: true,
+      };
+    case userConstants.DELETE_SELF_PENDING_STUDENT_CARD_SUCCESS:
+      return {
+        ...state,
+        deletePendingStudentCard: false,
+      };
+    case userConstants.DELETE_SELF_PENDING_STUDENT_CARD_FAIL:
+      return {
+        ...state,
+        deletePendingStudentCard: false,
+      };
     default: {
       return state;
     }

@@ -11,9 +11,9 @@ const byId = (state = {}, action) => {
           ...acc,
           [item.id]: {
             ...item,
-            studentCard: state[item.id] ? state[item.id].studentCard : [],
+            studentCard: [],
             gradeIds: [],
-            pendingStudentCard: state[item.id] ? state[item.id].pendingStudentCard : [],
+            pendingStudentCard: [],
           },
         }),
         {},
