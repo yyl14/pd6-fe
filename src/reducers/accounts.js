@@ -11,9 +11,9 @@ const byId = (state = {}, action) => {
           ...acc,
           [item.id]: {
             ...item,
-            studentCard: [],
+            studentCard: state[item.id] ? state[item.id].studentCard : [],
             gradeIds: [],
-            pendingStudentCard: [],
+            pendingStudentCard: state[item.id] ? state[item.id].pendingStudentCard : [],
           },
         }),
         {},
@@ -42,9 +42,9 @@ const byId = (state = {}, action) => {
         ...state,
         [action.payload.id]: {
           ...action.payload,
-          studentCard: [],
+          studentCard: state[action.payload.id] ? state[action.payload.id].studentCard : [],
           gradeIds: [],
-          pendingStudentCard: [],
+          pendingStudentCard: state[action.payload.id] ? state[action.payload.id].pendingStudentCard : [],
         },
       };
     }
@@ -55,7 +55,7 @@ const byId = (state = {}, action) => {
         ...state,
         [id]: {
           ...state[id],
-          studentCard: data === null ? [] : data.map((dataItem) => dataItem.id),
+          studentCard: data.map((dataItem) => dataItem.id),
           pendingStudentCard: state[id] ? state[id].pendingStudentCard : [],
         },
       };

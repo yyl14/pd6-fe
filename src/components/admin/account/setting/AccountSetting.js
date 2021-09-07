@@ -31,9 +31,9 @@ export default function AccountSetting() {
   const { accountId } = useParams();
 
   const authToken = useSelector((state) => state.auth.token);
-  const accounts = useSelector((state) => state.accounts.byId);
-  const studentCards = useSelector((state) => state.studentCards.byId);
-  const pendingStudentCards = useSelector((state) => state.pendingStudentCards.byId);
+  const accounts = useSelector((state) => state.accounts);
+  const studentCards = useSelector((state) => state.studentCards);
+  const pendingStudentCards = useSelector((state) => state.pendingStudentCards);
   const loading = useSelector((state) => state.loading.admin.account);
 
   useEffect(() => {
@@ -49,39 +49,45 @@ export default function AccountSetting() {
   }, [accountId, authToken, dispatch, loading.makeStudentCardDefault]);
 
   useEffect(() => {
-    if (!loading.deletePendingStudentCard) {
-      dispatch(browsePendingStudentCards(authToken, accountId));
-    }
+    // if (!loading.deletePendingStudentCard) {
+    //   dispatch(browsePendingStudentCards(authToken, accountId));
+    // }
   }, [accountId, authToken, dispatch, loading.deletePendingStudentCard]);
 
   useEffect(() => {
-    setCards(
-      accounts[accountId].studentCard.reduce((acc, key) => {
-        if (studentCards[key]) {
-          return [...acc, studentCards[key]];
-        }
-        return [...acc];
-      }, []),
-    );
-  }, [accountId, accounts, studentCards]);
+    if (accounts.byId[accountId]) {
+      setCards(
+        accounts.byId[accountId].studentCard.reduce((acc, key) => {
+          if (studentCards.byId[key]) {
+            return [...acc, studentCards.byId[key]];
+          }
+          return [...acc];
+        }, []),
+      );
+    }
+  }, [accountId, accounts, loading.fetchStudentCards, studentCards]);
 
   useEffect(() => {
-    setPendingCards(
-      accounts[accountId].pendingStudentCard.reduce((acc, key) => {
-        if (pendingStudentCards[key]) {
-          return [...acc, pendingStudentCards[key]];
-        }
-        return [...acc];
-      }, []),
-    );
+    // if (accounts.byId[accountId]) {
+    //   setPendingCards(
+    //     accounts.byId[accountId].pendingStudentCard.reduce((acc, key) => {
+    //       if (pendingStudentCards.byId[key]) {
+    //         return [...acc, pendingStudentCards.byId[key]];
+    //       }
+    //       return [...acc];
+    //     }, []),
+    //   );
+    // }
   }, [accountId, accounts, pendingStudentCards]);
+
+  console.log(accounts.byId[accountId]);
 
   useEffect(() => {
     dispatch(getInstitutes());
   }, [dispatch]);
 
-  if (accounts[accountId] === undefined || studentCards === undefined) {
-    if (loading.fetchAccount || loading.fetchStudentCards) {
+  if (accounts.byId[accountId] === undefined || studentCards.byId === undefined) {
+    if (loading.fetchAccount || loading.fetchStudentCards || loading.browsePendingStudentCards) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -106,25 +112,23 @@ export default function AccountSetting() {
   return (
     <div>
       <Typography variant="h3" className={classes.pageHeader}>
-        {accounts[accountId].username}
-        {' '}
-        / Setting
+        {`${accounts.byId[accountId].username} / Setting`}
       </Typography>
       {editBasicInfo ? (
         <BasicInfoEdit
           handleBack={handleBasicBack}
-          realName={accounts[accountId].real_name}
-          userName={accounts[accountId].username}
-          nickName={accounts[accountId].nickname}
-          altMail={accounts[accountId].alternative_email}
+          realName={accounts.byId[accountId].real_name}
+          userName={accounts.byId[accountId].username}
+          nickName={accounts.byId[accountId].nickname}
+          altMail={accounts.byId[accountId].alternative_email}
         />
       ) : (
         <BasicInfo
           handleEdit={handleBasicEdit}
-          realName={accounts[accountId].real_name}
-          userName={accounts[accountId].username}
-          nickName={accounts[accountId].nickname}
-          altMail={accounts[accountId].alternative_email}
+          realName={accounts.byId[accountId].real_name}
+          userName={accounts.byId[accountId].username}
+          nickName={accounts.byId[accountId].nickname}
+          altMail={accounts.byId[accountId].alternative_email}
         />
       )}
 
@@ -133,7 +137,11 @@ export default function AccountSetting() {
       </div>
 
       <NewPassword />
-      <AccountDelete userName={accounts[accountId].username} cards={cards} realName={accounts[accountId].real_name} />
+      <AccountDelete
+        userName={accounts.byId[accountId].username}
+        cards={cards}
+        realName={accounts.byId[accountId].real_name}
+      />
     </div>
   );
 }
