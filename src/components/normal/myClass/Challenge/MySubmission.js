@@ -60,20 +60,6 @@ export default function MySubmission() {
     return <NoMatch />;
   }
 
-  const handleRefresh = () => {
-    const browseParams = {
-      limit: 5,
-      offset: 0 * 5,
-      filter: [],
-      sort: [],
-    };
-    dispatch(readSubmission(authToken, accountId, problemId, browseParams, TableIdent));
-    dispatch(readProblemScore(authToken, problemId));
-    if (submissions.allIds !== []) {
-      submissions.allIds.map((id) => dispatch(readSubmissionDetail(authToken, id)));
-    }
-  };
-
   return (
     <>
       <PageTitle
@@ -86,13 +72,7 @@ export default function MySubmission() {
       </SimpleBar>
       <AutoTable
         ident={TableIdent + problemId}
-        buttons={(
-          <>
-            <Button color="primary" startIcon={<Icon.RefreshOutlinedIcon />} onClick={handleRefresh}>
-              Refresh
-            </Button>
-          </>
-        )}
+        hasRefreshButton
         hasFilter
         filterConfig={[
           {
