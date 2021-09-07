@@ -77,7 +77,7 @@ const fetchStudentCards = (token, id) => (dispatch) => {
     });
 };
 
-const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (dispatch) => {
+const addStudentCard = (token, id, instituteId, emailPrefix, studentId, onSuccess) => (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
@@ -97,6 +97,7 @@ const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (disp
     )
     .then(() => {
       dispatch({ type: userConstants.ADD_SELF_STUDENT_CARD_SUCCESS });
+      onSuccess();
     })
     .catch((error) => {
       dispatch({

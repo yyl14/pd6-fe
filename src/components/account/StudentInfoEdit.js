@@ -11,6 +11,7 @@ import {
   Select,
   MenuItem,
   Snackbar,
+  CircularProgress,
 } from '@material-ui/core';
 import { addStudentCard } from '../../actions/user/user';
 import StudentInfoCard from './StudentInfoCard';
@@ -70,9 +71,9 @@ export default function StudentInfoEdit(props) {
   const classes = useStyles();
   const [cards, setCards] = useState(props.cards);
   const [pendingCards, setPendingCards] = useState(props.pendingCards);
-  const [disabledTwoCards, setDisabledTwoCards] = useState(false);
   const [add, setAdd] = useState(false); // addCard block
   const [snackbar, setSnackbar] = useState(false);
+  const [errorSnackbar, setErrorSnackbar] = useState(false);
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
   const [addInputs, setAddInputs] = useState({
     institute: 'National Taiwan University',
@@ -93,6 +94,10 @@ export default function StudentInfoEdit(props) {
 
   const accountId = useSelector((state) => state.user.id);
   const authToken = useSelector((state) => state.auth.token);
+
+  const loading = useSelector((state) => state.loading);
+  const error = useSelector((state) => state.error);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -107,11 +112,16 @@ export default function StudentInfoEdit(props) {
     }
   }, [props.pendingCards]);
 
+  useEffect(() => {
+    if (error.user.user.addStudentCard) {
+      setErrorSnackbar(true);
+    }
+  }, [error.user.user.addStudentCard]);
+
   const handleAddCancel = () => {
     setAdd(false);
     setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
     setEmailTail('@ntu.edu.tw');
-    setDisabledTwoCards(false);
     setErrors({ studentId: false, email: false });
     setErrorTexts({ studentId: '', email: '' });
   };
@@ -130,11 +140,11 @@ export default function StudentInfoEdit(props) {
     }
     const inputInstituteId = institutesId.filter((id) => institutes[id].full_name === addInputs.institute);
     if (inputInstituteId.length !== 0) {
-      dispatch(addStudentCard(authToken, accountId, inputInstituteId[0], addInputs.email, addInputs.studentId));
-      setSnackbar(true);
+      dispatch(
+        addStudentCard(authToken, accountId, inputInstituteId[0], addInputs.email, addInputs.studentId, () => setSnackbar(true)),
+      );
     }
     setAdd(false);
-    setDisabledTwoCards(false);
     setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
   };
 
@@ -276,17 +286,17 @@ export default function StudentInfoEdit(props) {
             </Card>
           </div>
         )}
-        {!disabledTwoCards && (
+        {!add && !pendingCards.length && !loading.user.user.addStudentCard && (
           <div className={classes.buttonContainer}>
             <div className={classes.addButton}>
-              <Button
-                onClick={() => {
-                  setAdd(true);
-                  setDisabledTwoCards(true);
-                }}
-              >
-                +
-              </Button>
+              <Button onClick={() => setAdd(true)}>+</Button>
+            </div>
+          </div>
+        )}
+        {loading.user.user.addStudentCard && (
+          <div className={classes.buttonContainer}>
+            <div className={classes.addButton}>
+              <CircularProgress />
             </div>
           </div>
         )}
@@ -296,6 +306,12 @@ export default function StudentInfoEdit(props) {
         autoHideDuration={3000}
         message="Verification email sent! Please check your mailbox."
         onClose={() => setSnackbar(false)}
+      />
+      <Snackbar
+        open={errorSnackbar}
+        autoHideDuration={3000}
+        message={error.user.user.addStudentCard ? `Error: ${error.user.user.addStudentCard.toString()}` : 'Error'}
+        onClose={() => setErrorSnackbar(false)}
       />
     </div>
   );
