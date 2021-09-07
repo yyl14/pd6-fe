@@ -43,7 +43,7 @@ export default function AccountSetting() {
 
   useEffect(() => {
     user.classes.forEach((item) => {
-      if (item.class_id === parseInt(classId, 10) && item.role === 'MANAGER') {
+      if (item.class_id === Number(classId) && item.role === 'MANAGER') {
         setIsManager(true);
       }
     });
