@@ -12,12 +12,13 @@ import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
 /* This is a level 4 component (page component) */
-export default function AccountSetting() {
+export default function GradeDetail() {
   const dispatch = useDispatch();
   const { classId, gradeId } = useParams();
 
   const authToken = useSelector((state) => state.auth.token);
-  const grades = useSelector((state) => state.grades.byId);
+  const accounts = useSelector((state) => state.accounts);
+  const grades = useSelector((state) => state.grades);
   const loading = useSelector((state) => state.loading.myClass.grade);
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
@@ -46,8 +47,7 @@ export default function AccountSetting() {
   const handleEdit = () => {
     setEditGradeInfo(true);
   };
-
-  if (grades[gradeId] === undefined) {
+  if (grades.byId[gradeId] === undefined) {
     if (loading.fetchGrade || loading.editGrade) {
       return <GeneralLoading />;
     }
@@ -60,24 +60,29 @@ export default function AccountSetting() {
 
       {editGradeInfo ? (
         <GradeInfoEdit
-          receiver={grades[gradeId].receiver}
-          grade={grades[gradeId].grade}
+          receiver={accounts.byId[grades.byId[gradeId].receiver_id]}
+          grade={grades.byId[gradeId]}
           link={userLink}
           handleBack={handleBack}
         />
       ) : (
         <GradeInfo
           isManager={isManager}
-          receiver={grades[gradeId].receiver}
-          grade={grades[gradeId].grade}
+          receiver={accounts.byId[grades.byId[gradeId].receiver_id]}
+          grade={grades.byId[gradeId]}
           link={userLink}
           handleEdit={handleEdit}
         />
       )}
 
-      <Grader grader={grades[gradeId].grader} link={graderLink} />
+      <Grader grader={accounts.byId[grades.byId[gradeId].grader_id]} link={graderLink} />
 
-      {isManager && <GradeDelete username={grades[gradeId].receiver.username} title={grades[gradeId].grade.title} />}
+      {isManager && (
+        <GradeDelete
+          username={accounts.byId[grades.byId[gradeId].receiver_id].username}
+          title={grades.byId[gradeId].title}
+        />
+      )}
     </>
   );
 }

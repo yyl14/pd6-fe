@@ -14,7 +14,10 @@ export const fetchClassGrade = (token, classId, browseParams, tableId = null) =>
     const { data, total_count } = res1.data.data;
 
     // Batch browse account
-    const accountIds = data.map((item) => item.receiver_id);
+    const accountIds = [].concat(
+      data.map((item) => item.receiver_id),
+      data.map((item) => item.grader_id),
+    );
     const config2 = {
       headers: { 'auth-token': token },
       params: { account_ids: JSON.stringify(accountIds) },
@@ -57,26 +60,17 @@ export const fetchGrade = (token, gradeId) => async (dispatch) => {
     // get receiver and grader account
     const config2 = {
       headers: { 'auth-token': token },
-      params: { account_ids: JSON.stringify([data.receiver_id]) },
+      params: { account_ids: JSON.stringify([data.receiver_id, data.grader_id]) },
     };
-    const config3 = {
-      headers: { 'auth-token': token },
-      params: { account_ids: JSON.stringify([data.grader_id]) },
-    };
-    const [res2, res3] = await Promise.all([
-      agent.get('/account-summary/batch', config2),
-      agent.get('/account-summary/batch', config3),
-    ]);
+
+    const res2 = await agent.get('/account-summary/batch', config2);
 
     dispatch({
       type: gradeConstants.FETCH_GRADE_SUCCESS,
       payload: {
         gradeId,
-        data: {
-          grade: data,
-          receiver: res2.data.data[0],
-          grader: res3.data.data[0],
-        },
+        data,
+        accounts: res2.data.data,
       },
     });
   } catch (error) {

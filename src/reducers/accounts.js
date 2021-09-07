@@ -143,6 +143,7 @@ const byId = (state = {}, action) => {
       };
     }
 
+    case gradeConstants.FETCH_GRADE_SUCCESS:
     case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {
       const { accounts } = action.payload;
       return accounts.reduce(
