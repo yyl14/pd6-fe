@@ -15,19 +15,18 @@ export const fetchClassGrade = (token, classId, browseParams, tableId = null) =>
 
     // Batch browse account
     const accountIds = data.map((item) => item.receiver_id);
-    let res2 = null;
     const config2 = {
       headers: { 'auth-token': token },
       params: { account_ids: JSON.stringify(accountIds) },
     };
-    res2 = await agent.get('/account-summary/batch', config2);
+    const res2 = await agent.get('/account-summary/batch', config2);
 
     dispatch({
       type: gradeConstants.FETCH_CLASS_GRADE_SUCCESS,
       payload: {
         classId,
         data,
-        accounts: res2 ? res2.data.data : [],
+        accounts: res2.data.data,
       },
     });
     dispatch({
