@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchTeams, fetchTeamMember } from '../../../../actions/myClass/team';
-import { fetchClassMembers } from '../../../../actions/common/common';
+import { fetchTeam, fetchTeamMembers } from '../../../../actions/myClass/team';
 import TeamInfo from './detail/TeamInfo';
 import TeamInfoEdit from './detail/TeamInfoEdit';
 import TeamMember from './detail/TeamMember';
@@ -21,9 +20,7 @@ export default function ChallengeList() {
   const teams = useSelector((state) => state.teams.byId);
   const teamMembers = useSelector((state) => state.teamMembers.byId);
   const teamMemberIds = useSelector((state) => state.teamMembers.allIds);
-  const classMembers = useSelector((state) => state.classMembers.byId);
   const loading = useSelector((state) => state.loading.myClass.team);
-  const commonLoading = useSelector((state) => state.loading.common);
 
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
@@ -51,31 +48,27 @@ export default function ChallengeList() {
   }, [classId, teamMembers, user.classes, user.id]);
 
   useEffect(() => {
-    dispatch(fetchClassMembers(authToken, classId));
-  }, [authToken, classId, dispatch]);
-
-  useEffect(() => {
     if (!loading.editTeam) {
-      dispatch(fetchTeams(authToken, classId));
+      dispatch(fetchTeam(authToken, teamId));
     }
-  }, [authToken, classId, dispatch, loading.editTeam]);
+  }, [authToken, dispatch, loading.editTeam, teamId]);
 
   useEffect(() => {
-    dispatch(fetchTeamMember(authToken, teamId));
+    dispatch(fetchTeamMembers(authToken, teamId, {}));
   }, [authToken, dispatch, teamId]);
 
   useEffect(() => {
     setTableData(
       teamMemberIds.map((id) => ({
-        id: classMembers[id] ? classMembers[id].member_id : 0,
-        username: classMembers[id] ? classMembers[id].username : '',
-        student_id: classMembers[id] ? classMembers[id].student_id : '',
-        real_name: classMembers[id] ? classMembers[id].real_name : '',
-        role: systemRoleTransformation(teamMembers[id].role),
+        id: teamMembers[id] ? teamMembers[id].account.member_id : '',
+        username: teamMembers[id] ? teamMembers[id].account.username : '',
+        student_id: teamMembers[id] ? teamMembers[id].account.student_id : '',
+        real_name: teamMembers[id] ? teamMembers[id].account.real_name : '',
+        role: systemRoleTransformation(teamMembers[id].account.role),
         path: '/',
       })),
     );
-  }, [teamMemberIds, classMembers, teamMembers]);
+  }, [teamMemberIds, teamMembers]);
 
   const handleInfoBack = () => {
     setEditTeamInfo(false);
@@ -93,10 +86,10 @@ export default function ChallengeList() {
     setEditTeamMember(true);
   };
 
-  if (loading.fetchTeams || loading.fetchTeamMember || commonLoading.fetchClassMember) {
+  if (loading.fetchTeam || loading.fetchTeamMember) {
     return <GeneralLoading />;
   }
-  if (teams[teamId] === undefined || classMembers === undefined || teamMemberIds === undefined) {
+  if (teams[teamId] === undefined || teamMemberIds === undefined) {
     return <NoMatch />;
   }
   // console.log(tableData);
