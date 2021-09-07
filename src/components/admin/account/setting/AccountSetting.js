@@ -80,8 +80,6 @@ export default function AccountSetting() {
     // }
   }, [accountId, accounts, pendingStudentCards]);
 
-  console.log(accounts.byId[accountId]);
-
   useEffect(() => {
     dispatch(getInstitutes());
   }, [dispatch]);

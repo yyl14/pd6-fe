@@ -25,7 +25,6 @@ const useStyles = makeStyles(() => ({
 export default function AccountSetting() {
   const [cards, setCards] = useState([]);
   const [editBasicInfo, setEditBasicInfo] = useState(false);
-  const [editStudInfo, setEditStudInfo] = useState(false);
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -69,20 +68,10 @@ export default function AccountSetting() {
     setEditBasicInfo(true);
   };
 
-  const handleStudBack = () => {
-    setEditStudInfo(false);
-  };
-
-  const handleStudEdit = () => {
-    setEditStudInfo(true);
-  };
-
   return (
     <div>
       <Typography variant="h3" className={classes.pageHeader}>
-        {account.username}
-        {' '}
-        / Setting
+        {`${account.username} / Setting`}
       </Typography>
       {editBasicInfo ? (
         <BasicInfoEdit
@@ -101,12 +90,9 @@ export default function AccountSetting() {
           altMail={account.alternative_email}
         />
       )}
-
-      {editStudInfo ? (
-        <StudentInfoEdit handleBack={handleStudBack} cards={cards} />
-      ) : (
-        <StudentInfo handleEdit={handleStudEdit} cards={cards} />
-      )}
+      <div>
+        <StudentInfoEdit cards={cards} />
+      </div>
 
       <NewPassword />
     </div>

@@ -75,8 +75,6 @@ export default function StudentInfoEdit(props) {
   const classes = useStyles();
   const [cards, setCards] = useState(props.cards);
   const [pendingCards, setPendingCards] = useState(props.pendingCards);
-  // const [defaultCardId, setDefaultCardId] = useState(null);
-  // const [changed, setChanged] = useState(false);
   const [disabledTwoCards, setDisabledTwoCards] = useState(false);
   const [add, setAdd] = useState(false); // addCard block
   const [popUp, setPopUp] = useState(false);
@@ -174,7 +172,6 @@ export default function StudentInfoEdit(props) {
                     email={p.email}
                     instituteId={p.institute_id}
                     updateStatus={updateStatus}
-                    // setChanged={setChanged}
                   />
                 );
               }
