@@ -186,6 +186,13 @@ function AutoTable({
     {
       reduxStateId: 'role',
       label: 'Role',
+      type: 'ENUM_SINGLE',
+      options: [{value: 'MANAGER', label: 'Manager'}, {value: 'MEMBER', label: 'Member'}, {value: 'GUEST', label: 'Guest'}],
+      operation: 'IN',
+    },
+    {
+      reduxStateId: 'role',
+      label: 'Role',
       type: 'ENUM',
       options: [{value: 'MANAGER', label: 'Manager'}, {value: 'MEMBER', label: 'Member'}, {value: 'GUEST', label: 'Guest'}],
       operation: 'IN',

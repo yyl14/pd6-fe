@@ -28,6 +28,11 @@ const AutoTableHead = ({
         (optionLabel) => filterConfig[filteringIndex].options.filter((option) => option.label === optionLabel)[0].value,
       );
       onSearch([[reduxStateId, operation, transformedTempFilterValue]]);
+    } else if (filterConfig[filteringIndex].type === 'ENUM_SINGLE') {
+      const transformedTempFilterValue = filterConfig[filteringIndex].options.filter(
+        (option) => option.label === tempFilterValue[filteringIndex],
+      )[0].value;
+      onSearch([[reduxStateId, operation, transformedTempFilterValue]]);
     } else {
       onSearch([[reduxStateId, operation, tempFilterValue[filteringIndex]]]);
     }
