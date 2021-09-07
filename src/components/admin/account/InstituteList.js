@@ -47,10 +47,8 @@ export default function InstituteList() {
 
   const [transformedData, setTransformedData] = useState([]);
   const [tableData, setTableData] = useState([]);
-
+  const [disabled, setDisabled] = useState(true);
   const [popUp, setPopUp] = useState(false);
-  const [error, setError] = useState(false);
-  const [errorText, setErrorText] = useState('');
   const [inputs, setInputs] = useState({
     fullName: '',
     initialism: '',
@@ -70,13 +68,15 @@ export default function InstituteList() {
     }
   }, [dispatch, loading.addInstitute]);
 
+  useEffect(() => {
+    if (inputs.fullName !== '' && inputs.initialism !== '' && inputs.email !== '') {
+      setDisabled(false);
+    } else setDisabled(true);
+  }, [inputs.email, inputs.fullName, inputs.initialism]);
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setInputs((input) => ({ ...input, [name]: value }));
-    if (name === 'fullName' && value !== '') {
-      setError(false);
-      setErrorText('');
-    }
   };
 
   const handleChangeStatus = (event) => {
@@ -84,11 +84,7 @@ export default function InstituteList() {
   };
 
   const add = () => {
-    if (inputs.fullName === '') {
-      setError(true);
-      setErrorText("Can't be empty");
-      return;
-    }
+    dispatch(addInstitute(authToken, inputs.initialism, inputs.fullName, inputs.email, !inputs.status));
     setPopUp(false);
     setInputs({
       fullName: '',
@@ -96,7 +92,16 @@ export default function InstituteList() {
       email: '',
       status: false,
     });
-    dispatch(addInstitute(authToken, inputs.initialism, inputs.fullName, inputs.email, !inputs.status));
+  };
+
+  const cancel = () => {
+    setPopUp(false);
+    setInputs({
+      fullName: '',
+      initialism: '',
+      email: '',
+      status: false,
+    });
   };
 
   const filterStatus = (input) => {
@@ -205,8 +210,6 @@ export default function InstituteList() {
               placeholder="e.g. National Taiwan University"
               value={inputs.fullName}
               onChange={(e) => handleChange(e)}
-              error={error}
-              helperText={errorText}
               className={classes.inputField}
             />
           </AlignedText>
@@ -239,7 +242,12 @@ export default function InstituteList() {
           </AlignedText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setPopUp(false)} color="default">
+          <Button
+            onClick={() => {
+              cancel();
+            }}
+            color="default"
+          >
             Cancel
           </Button>
           <Button
@@ -247,6 +255,7 @@ export default function InstituteList() {
               add();
             }}
             color="primary"
+            disabled={disabled}
           >
             Add
           </Button>
