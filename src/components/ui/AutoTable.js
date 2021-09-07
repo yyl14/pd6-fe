@@ -243,6 +243,7 @@ function AutoTable({
 
   const [dataComplete, setDataComplete] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
   // const allStates = useSelector((state) => state);
@@ -319,11 +320,15 @@ function AutoTable({
 
   useEffect(() => {
     if (refreshLoadings) {
-      if (refreshLoadings.reduce((acc, item) => acc && !item, true)) {
-        onRefresh();
-      }
+      setIsLoading(refreshLoadings.reduce((acc, item) => acc || item, false));
     }
   }, [refreshLoadings]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      onRefresh();
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     if (tableState.byId[ident]) {
