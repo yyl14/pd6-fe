@@ -33,6 +33,7 @@ const SearchField = ({
       return (
         <FormControl variant="outlined">
           <Select
+            className={classes.search}
             value={tempFilterValue[filteringIndex]}
             name="institute"
             onChange={(e) => {

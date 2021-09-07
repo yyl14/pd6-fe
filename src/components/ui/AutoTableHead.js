@@ -32,7 +32,7 @@ const AutoTableHead = ({
       const transformedTempFilterValue = filterConfig[filteringIndex].options.filter(
         (option) => option.label === tempFilterValue[filteringIndex],
       )[0].value;
-      onSearch([[reduxStateId, operation, transformedTempFilterValue]]);
+      onSearch([[reduxStateId, operation, [transformedTempFilterValue]]]);
     } else {
       onSearch([[reduxStateId, operation, tempFilterValue[filteringIndex]]]);
     }
