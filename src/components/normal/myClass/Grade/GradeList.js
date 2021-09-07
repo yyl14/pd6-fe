@@ -272,6 +272,7 @@ export default function GradeList() {
           Title: item.title,
           Score: item.score,
           Time: moment(item.update_time).format('YYYY-MM-DD, HH:mm:ss'),
+          link: `/my-class/${courseId}/${classId}/grade/${item.id}`,
         })}
       />
 
