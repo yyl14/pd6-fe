@@ -76,14 +76,16 @@ export default function MySubmission() {
 
   return (
     <>
-      <PageTitle text={`${challenges[challengeId].title} / ${problems[problemId].challenge_label} / My Submission`} />
+      <PageTitle
+        text={`${challenges.byId[challengeId].title} / ${problems.byId[problemId].challenge_label} / My Submission`}
+      />
       <SimpleBar title="Submission Information">
         <AlignedText text="My Last Score" childrenType="text">
           <Typography variant="body1">{problems.byId[problemId].score}</Typography>
         </AlignedText>
       </SimpleBar>
       <AutoTable
-        ident={TableIdent}
+        ident={TableIdent + problemId}
         buttons={(
           <>
             <Button color="primary" startIcon={<Icon.RefreshOutlinedIcon />} onClick={handleRefresh}>
@@ -142,7 +144,7 @@ export default function MySubmission() {
           return {
             'Submission ID': item.id,
             Status: lastJudgmentId
-              ? judgments.byId[lastJudgmentId].status
+              ? judgments.byId[lastJudgmentId].verdict
                 .toLowerCase()
                 .split(' ')
                 .map((word) => word[0].toUpperCase() + word.substring(1))
