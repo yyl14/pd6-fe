@@ -1,23 +1,90 @@
 import agent from '../agent';
 import { gradeConstants } from './constant';
+import { autoTableConstants } from '../component/constant';
+import browseParamsTransForm from '../../function/browseParamsTransform';
 
-export const fetchClassGrade = (token, classId) => async (dispatch) => {
+export const fetchClassGrade = (token, classId, browseParams, tableId = null) => async (dispatch) => {
   try {
-    const auth = {
-      headers: {
-        'Auth-Token': token,
-      },
+    const config1 = {
+      headers: { 'auth-token': token },
+      params: browseParamsTransForm(browseParams),
     };
     dispatch({ type: gradeConstants.FETCH_CLASS_GRADE_START });
-    const res = await agent.get(`/class/${classId}/grade`, auth);
+    const res1 = await agent.get(`/class/${classId}/grade`, config1);
+    const { data, total_count } = res1.data.data;
+    console.log(data);
+    // Batch browse account
+    const accountIds = data.map((item) => item.receiver_id);
+    let res2 = null;
+    if (accountIds.length !== 0) {
+      const config2 = {
+        headers: { 'auth-token': token },
+        params: { account_ids: JSON.stringify(accountIds) },
+      };
+
+      res2 = await agent.get('/account-summary/batch', config2);
+    }
+
     dispatch({
       type: gradeConstants.FETCH_CLASS_GRADE_SUCCESS,
-      payload: { classId, data: res.data.data.data },
+      payload: {
+        classId,
+        data,
+        accounts: res2 ? res2.data.data : [],
+      },
     });
-  } catch (err) {
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: data.map((item) => item.receiver_id),
+        offset: browseParams.offset,
+      },
+    });
+  } catch (error) {
     dispatch({
       type: gradeConstants.FETCH_CLASS_GRADE_FAIL,
-      error: err,
+      error,
+    });
+  }
+};
+
+export const fetchGrade = (token, gradeId) => async (dispatch) => {
+  try {
+    const config1 = { headers: { 'auth-token': token } };
+    dispatch({ type: gradeConstants.FETCH_GRADE_START });
+    const res1 = await agent.get(`grade/${gradeId}`, config1);
+    const { data } = res1.data;
+
+    // Batch browse account
+    const config2 = {
+      headers: { 'auth-token': token },
+      params: { account_ids: JSON.stringify([data.receiver_id]) },
+    };
+    const res2 = await agent.get('/account-summary/batch', config2);
+
+    const config3 = {
+      headers: { 'auth-token': token },
+      params: { account_ids: JSON.stringify([data.grader_id]) },
+    };
+    const res3 = await agent.get('/account-summary/batch', config3);
+
+    dispatch({
+      type: gradeConstants.FETCH_GRADE_SUCCESS,
+      payload: {
+        gradeId,
+        data: {
+          grade: data,
+          receiver: res2.data.data[0],
+          grader: res3.data.data[0],
+        },
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: gradeConstants.FETCH_GRADE_FAIL,
+      error,
     });
   }
 };

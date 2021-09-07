@@ -72,6 +72,12 @@ const byId = (state = {}, action) => {
         },
       };
     }
+
+    case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {
+      const { accounts } = action.payload;
+      return accounts.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [], gradeIds: [] } }), state);
+    }
+
     default:
       return state;
   }
