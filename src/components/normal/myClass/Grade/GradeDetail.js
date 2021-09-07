@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import { fetchGrade } from '../../../../actions/myClass/grade';
 import PageTitle from '../../../ui/PageTitle';
 
@@ -51,6 +49,7 @@ export default function AccountSetting() {
     setEditGradeInfo(true);
   };
 
+  console.log(loading, grades);
   if (grades[gradeId] === undefined) {
     if (loading.fetchGrade || loading.editGrade) {
       return <GeneralLoading />;
