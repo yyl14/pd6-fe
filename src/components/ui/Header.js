@@ -40,8 +40,8 @@ const useStyles = makeStyles((theme) => ({
   date: {
     position: 'relative',
     float: 'left',
-    marginRight: '20px',
-    marginTop: '4px',
+    marginRight: '4px',
+    marginTop: '14px',
   },
   notificationContainer: {
     position: 'relative',
@@ -52,10 +52,10 @@ const useStyles = makeStyles((theme) => ({
   },
   notificationIcon: {
     position: 'relative',
+    transform: 'translateY(2px)',
     float: 'left',
     width: '20px',
-    marginTop: '3px',
-    marginRight: '16px',
+    margin: '11px 16px 12px 16px',
     top: '2px',
   },
   unreadDot: {
@@ -63,8 +63,8 @@ const useStyles = makeStyles((theme) => ({
     height: '6.75px',
     backgroundColor: theme.palette.secondary.main,
     position: 'absolute',
-    left: '14px',
-    top: '17px',
+    left: '30px',
+    top: '28px',
     borderRadius: '50%',
     zIndex: 2,
   },
@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     backgroundColor: theme.palette.primary.contrastText,
     right: '-120px',
-    top: '29px',
+    top: '39px',
     minWidth: '460px',
     maxHeight: '423px',
     zIndex: '1',
@@ -122,7 +122,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     display: 'inline-block',
     marginRight: '20px',
-    bottom: '3px',
+    bottom: '13px',
   },
   userButton: {
     backgroundColor: theme.palette.black.main,
