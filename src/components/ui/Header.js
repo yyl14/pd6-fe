@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     backgroundColor: theme.palette.primary.contrastText,
     right: '-120px',
-    top: '45px',
+    top: '29px',
     minWidth: '460px',
     maxHeight: '423px',
     zIndex: '1',
@@ -118,7 +118,6 @@ const useStyles = makeStyles((theme) => ({
     wordBreak: 'break-word',
   },
 
-  // user
   userContainer: {
     position: 'relative',
     display: 'inline-block',
@@ -140,8 +139,7 @@ const useStyles = makeStyles((theme) => ({
   userDropdownContent: {
     position: 'absolute',
     backgroundColor: theme.palette.primary.contrastText,
-    marginLeft: '-20px',
-    top: '41px',
+    marginLeft: '-40px',
     minWidth: '140px',
     zIndex: '1',
     boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
