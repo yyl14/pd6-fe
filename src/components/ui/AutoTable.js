@@ -426,7 +426,7 @@ function AutoTable({
                       className={classes.tableHeadCell}
                       style={{ minWidth: column.minWidth, width: column.width }}
                     >
-                      {column.name}
+                      <b>{column.name}</b>
                       {/* <div className={classes.column}>
                         <div className={labelMoveLeft(columnComponent, columns, column)}>
                           <b>{column.label}</b>
@@ -438,15 +438,12 @@ function AutoTable({
                     </TableCell>
                   </React.Fragment>
                 ))}
-
-                {
-                  // TODO: simplify this
-                  hasLink ? (
-                    <TableCell key="link" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
-                  ) : (
-                    <TableCell key="blank" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
-                  )
-                }
+                <TableCell
+                  key={hasLink ? 'link' : 'blank'}
+                  align="right"
+                  className={classes.tableHeadCell}
+                  style={{ minWidth: 20 }}
+                />
               </TableRow>
             </TableHead>
             <TableBody>

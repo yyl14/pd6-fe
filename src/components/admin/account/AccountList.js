@@ -1,76 +1,71 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PageTitle from '../../ui/PageTitle';
-import CustomTable from '../../ui/CustomTable';
+import AutoTable from '../../ui/AutoTable';
 import { fetchAccounts } from '../../../actions/admin/account';
-import GeneralLoading from '../../GeneralLoading';
 
 export default function AccountList() {
   const dispatch = useDispatch();
 
-  const accounts = useSelector((state) => state.accounts.byId);
-  const accountsID = useSelector((state) => state.accounts.allIds);
+  const accounts = useSelector((state) => state.accounts);
   const authToken = useSelector((state) => state.auth.token);
-  // const error = useSelector((state) => state.admin.account.error);
-  const loading = useSelector((state) => state.loading.admin.account);
-  const [tableData, setTableData] = useState([]);
-
-  useEffect(() => {
-    if (!loading.editAccount && !loading.deleteAccount && !loading.makeStudentCardDefault) {
-      dispatch(fetchAccounts(authToken));
-    }
-  }, [authToken, dispatch, loading.deleteAccount, loading.editAccount, loading.makeStudentCardDefault]);
-
-  useEffect(() => {
-    setTableData(
-      accountsID.map((id) => ({
-        ...accounts[id],
-        path: `/admin/account/account/${id}/setting`,
-      })),
-    );
-  }, [accounts, accountsID]);
-
-  if (loading.fetchAccounts) {
-    return <GeneralLoading />;
-  }
+  const error = useSelector((state) => state.error.admin.account.fetchAccounts);
 
   return (
     <>
       <PageTitle text="Account" />
-      <CustomTable
-        hasSearch
-        searchWidthOption={3}
-        searchPlaceholder="Student ID / Real Name / Username"
-        data={tableData}
+      <AutoTable
+        ident="Account Table"
+        hasFilter
+        hasLink
+        filterConfig={[
+          {
+            reduxStateId: 'username',
+            label: 'Username',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          // {
+          //   reduxStateId: 'student_id',
+          //   label: 'Student ID',
+          //   type: 'TEXT',
+          //   operation: 'LIKE',
+          // },
+          {
+            reduxStateId: 'real_name',
+            label: 'Real Name',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+        ]}
+        refetch={(browseParams, ident) => {
+          dispatch(fetchAccounts(authToken, browseParams, ident));
+        }}
+        refetchErrors={[error]}
         columns={[
           {
-            id: 'username',
-            label: 'Username',
-            minWidth: 50,
+            name: 'Username',
             align: 'center',
-            width: 120,
-            type: 'link',
-            link_id: 'path',
-          },
-          {
-            id: 'student_id',
-            label: 'Student ID',
-            minWidth: 50,
-            align: 'center',
-            width: 120,
             type: 'string',
           },
           {
-            id: 'real_name',
-            label: 'Real Name',
-            minWidth: 50,
+            name: 'Student ID',
             align: 'center',
-            width: 120,
+            type: 'string',
+          },
+          {
+            name: 'Real Name',
+            align: 'center',
             type: 'string',
           },
         ]}
-        hasLink
-        linkName="path"
+        reduxData={accounts}
+        reduxDataToRows={(item) => ({
+          Username: item.username,
+          'Student ID': item.student_id,
+          'Real Name': item.real_name,
+          link: `/admin/account/account/${item.id}/setting`,
+        })}
       />
     </>
   );
