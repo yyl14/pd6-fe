@@ -157,7 +157,7 @@ const fetchChallengeMemberSubmission = (token, challengeId) => async (dispatch) 
   }
 };
 
-const addProblem = (token, challengeId, label, title) => async (dispatch) => {
+const addProblem = (token, challengeId, label, title, history, courseId, classId) => async (dispatch) => {
   dispatch({ type: challengeConstants.ADD_PROBLEM_START });
   const config = {
     headers: {
@@ -174,10 +174,13 @@ const addProblem = (token, challengeId, label, title) => async (dispatch) => {
     hint: '',
   };
   try {
-    await agent.post(`/challenge/${challengeId}/problem`, body, config);
+    const res = await agent.post(`/challenge/${challengeId}/problem`, body, config);
+    const { data } = res.data;
+    const { id } = data;
     dispatch({
       type: challengeConstants.ADD_PROBLEM_SUCCESS,
     });
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${id}`);
   } catch (error) {
     dispatch({
       type: challengeConstants.ADD_PROBLEM_FAIL,
@@ -186,7 +189,7 @@ const addProblem = (token, challengeId, label, title) => async (dispatch) => {
   }
 };
 
-const addEssay = (token, challengeId, label, title) => async (dispatch) => {
+const addEssay = (token, challengeId, label, title, history, courseId, classId) => async (dispatch) => {
   dispatch({ type: challengeConstants.ADD_ESSAY_START });
   const config = {
     headers: {
@@ -199,10 +202,13 @@ const addEssay = (token, challengeId, label, title) => async (dispatch) => {
     description: '',
   };
   try {
-    await agent.post(`/challenge/${challengeId}/essay`, body, config);
+    const res = await agent.post(`/challenge/${challengeId}/essay`, body, config);
+    const { data } = res.data;
+    const { id } = data;
     dispatch({
       type: challengeConstants.ADD_ESSAY_SUCCESS,
     });
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/essay/${id}`);
   } catch (error) {
     dispatch({
       type: challengeConstants.ADD_ESSAY_FAIL,
@@ -211,7 +217,7 @@ const addEssay = (token, challengeId, label, title) => async (dispatch) => {
   }
 };
 
-const addPeerReview = (token, challengeId, label, title) => async (dispatch) => {
+const addPeerReview = (token, challengeId, label, title, history, courseId, classId) => async (dispatch) => {
   dispatch({ type: challengeConstants.ADD_PEER_REVIEW_START });
   const config = {
     headers: {
@@ -230,10 +236,13 @@ const addPeerReview = (token, challengeId, label, title) => async (dispatch) => 
     end_time: '2000-01-01T00:00:00.000Z',
   };
   try {
-    await agent.post(`/challenge/${challengeId}/peer-review`, body, config);
+    const res = await agent.post(`/challenge/${challengeId}/peer-review`, body, config);
+    const { data } = res.data;
+    const { id } = data;
     dispatch({
       type: challengeConstants.ADD_PEER_REVIEW_SUCCESS,
     });
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${id}`);
   } catch (error) {
     dispatch({
       type: challengeConstants.ADD_PEER_REVIEW_FAIL,
