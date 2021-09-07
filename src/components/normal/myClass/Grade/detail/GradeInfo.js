@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function BasicInfo(props) {
+export default function GradeInfo(props) {
   const classNames = useStyles();
 
   return (

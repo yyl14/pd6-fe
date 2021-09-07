@@ -274,6 +274,7 @@ export default function GradeList() {
           Time: moment(item.update_time).format('YYYY-MM-DD, HH:mm:ss'),
           link: `/my-class/${courseId}/${classId}/grade/${item.id}`,
         })}
+        hasLink
       />
 
       <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} fullWidth maxWidth="sm">
