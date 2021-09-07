@@ -173,7 +173,7 @@ export const fetchTeamMembers = (token, teamId, browseParams, tableId = null) =>
       headers: { 'auth-token': token },
       params: browseParamsTransForm(browseParams),
     };
-    dispatch({ type: teamConstants.FETCH_TEAM_MEMBER_START });
+    dispatch({ type: teamConstants.FETCH_TEAM_MEMBERS_START });
     const res1 = await agent.get(`/team/${teamId}/member`, config1);
     const { data, total_count } = res1.data.data;
 
@@ -186,7 +186,7 @@ export const fetchTeamMembers = (token, teamId, browseParams, tableId = null) =>
     const res2 = await agent.get('/account-summary/batch', config2);
 
     dispatch({
-      type: teamConstants.FETCH_TEAM_MEMBER_SUCCESS,
+      type: teamConstants.FETCH_TEAM_MEMBERS_SUCCESS,
       payload: { teamId, data, accounts: res2.data.data },
     });
     dispatch({
@@ -200,7 +200,7 @@ export const fetchTeamMembers = (token, teamId, browseParams, tableId = null) =>
     });
   } catch (error) {
     dispatch({
-      type: teamConstants.FETCH_TEAM_MEMBER_FAIL,
+      type: teamConstants.FETCH_TEAM_MEMBERS_FAIL,
       error,
     });
   }

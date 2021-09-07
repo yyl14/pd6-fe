@@ -3,7 +3,7 @@ import { teamConstants } from '../actions/myClass/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    case teamConstants.FETCH_TEAM_MEMBER_SUCCESS: {
+    case teamConstants.FETCH_TEAM_MEMBERS_SUCCESS: {
       const { data, accounts } = action.payload;
       return data.reduce(
         (acc, item) => ({
@@ -24,7 +24,7 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
-    case teamConstants.FETCH_TEAM_MEMBER_SUCCESS: {
+    case teamConstants.FETCH_TEAM_MEMBERS_SUCCESS: {
       const { data } = action.payload;
       return data.map((item) => item.member_id);
     }

@@ -86,7 +86,7 @@ export default function ChallengeList() {
     setEditTeamMember(true);
   };
 
-  if (loading.fetchTeams || loading.fetchTeamMember) {
+  if (loading.fetchTeam || loading.fetchTeamMember) {
     return <GeneralLoading />;
   }
   if (teams[teamId] === undefined || teamMemberIds === undefined) {

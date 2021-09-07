@@ -110,19 +110,19 @@ export default function team(state = initialState, action) {
       };
     }
 
-    case teamConstants.FETCH_TEAM_MEMBER_START: {
+    case teamConstants.FETCH_TEAM_MEMBERS_START: {
       return {
         ...state,
         fetchTeamMember: true,
       };
     }
-    case teamConstants.FETCH_TEAM_MEMBER_SUCCESS: {
+    case teamConstants.FETCH_TEAM_MEMBERS_SUCCESS: {
       return {
         ...state,
         fetchTeamMember: false,
       };
     }
-    case teamConstants.FETCH_TEAM_MEMBER_FAIL: {
+    case teamConstants.FETCH_TEAM_MEMBERS_FAIL: {
       return {
         ...state,
         fetchTeamMember: false,

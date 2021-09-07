@@ -20,7 +20,7 @@ const byId = (state = {}, action) => {
       };
     }
 
-    case teamConstants.FETCH_TEAM_MEMBER_SUCCESS: {
+    case teamConstants.FETCH_TEAM_MEMBERS_SUCCESS: {
       const { teamId, data } = action.payload;
       return { ...state, [teamId]: { ...state[teamId], teamMemberIds: data.map((item) => item.member_id) } };
     }
