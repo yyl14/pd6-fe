@@ -2,7 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, Button, IconButton,
+  Drawer,
+  Typography,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  Button,
+  IconButton,
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
@@ -34,60 +42,60 @@ export default function System({
       setItemList([
         {
           text: 'Access Log',
-          icon: (
-            <Icon.DescriptionIcon />
-          ),
+          icon: <Icon.DescriptionIcon />,
           path: `${baseURL}/accesslog`,
         },
         {
           text: 'Announcement',
-          icon: (
-            <Icon.NotificationsIcon />
-          ),
+          icon: <Icon.NotificationsIcon />,
           path: `${baseURL}/announcement`,
         },
         {
           text: 'Submission Language',
-          icon: (
-            <Icon.CodeIcon />
-          ),
+          icon: <Icon.CodeIcon />,
           path: `${baseURL}/submitlang`,
         },
       ]);
     } else if (mode === 'create') {
-      setArrow(<IconButton className={classes.arrow} onClick={goBackToAnnouncement}><Icon.ArrowBackRoundedIcon /></IconButton>);
+      setArrow(
+        <IconButton className={classes.arrow} onClick={goBackToAnnouncement}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
       setTitle('(Draft)');
       setItemList([
         {
           text: 'Setting',
           path: `${baseURL}/announcement/add`,
-          icon: (
-            <Icon.SettingsIcon />
-          ),
+          icon: <Icon.SettingsIcon />,
         },
       ]);
     } else if (mode === 'announcement' && announcementList.byId[announcementId]) {
-      setArrow(<IconButton className={classes.arrow} onClick={goBackToAnnouncement}><Icon.ArrowBackRoundedIcon /></IconButton>);
+      setArrow(
+        <IconButton className={classes.arrow} onClick={goBackToAnnouncement}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
       setTitle(announcementList.byId[announcementId].title);
       setItemList([
         {
           text: 'Setting',
           path: `${baseURL}/announcement/${announcementId}/setting`,
-          icon: (
-            <Icon.SettingsIcon />
-          ),
+          icon: <Icon.SettingsIcon />,
         },
       ]);
     } else if (mode === 'language' && languageList.byId[languageId]) {
-      setArrow(<IconButton className={classes.arrow} onClick={goBackToLanguage}><Icon.ArrowBackRoundedIcon /></IconButton>);
+      setArrow(
+        <IconButton className={classes.arrow} onClick={goBackToLanguage}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
       setTitle(`${languageList.byId[languageId].name} ${languageList.byId[languageId].version}`);
       setItemList([
         {
           text: 'Setting',
           path: `${baseURL}/submitlang/${languageId}/setting`,
-          icon: (
-            <Icon.SettingsIcon />
-          ),
+          icon: <Icon.SettingsIcon />,
         },
       ]);
     }
@@ -106,7 +114,6 @@ export default function System({
     (announcementId !== undefined && announcementList.byId[announcementId] === undefined)
     || (languageId !== undefined && languageList.byId[languageId] === undefined)
   ) {
-    console.log(announcementId, announcementList.byId[announcementId]);
     return (
       <div>
         <Drawer
@@ -150,7 +157,6 @@ export default function System({
                   style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
                 >
                   {item.icon}
-
                 </ListItemIcon>
                 <ListItemText
                   primary={item.text}

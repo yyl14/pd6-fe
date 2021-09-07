@@ -34,7 +34,7 @@ export const fetchClassGrade = (token, classId, browseParams, tableId = null) =>
       payload: {
         tableId,
         totalCount: total_count,
-        dataIds: data.map((item) => item.receiver_id),
+        dataIds: data.map((item) => item.id),
         offset: browseParams.offset,
       },
     });
