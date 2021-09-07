@@ -26,7 +26,6 @@ export default function Setting() {
   const userClasses = useSelector((state) => state.classes.byId);
   const userCourses = useSelector((state) => state.courses.byId);
   const challenges = useSelector((state) => state.challenges.byId);
-  console.log(challenges);
   const loading = useSelector((state) => state.loading.myClass.challenge.fetchChallenges);
 
   const [challenge, setChallenge] = useState(undefined);

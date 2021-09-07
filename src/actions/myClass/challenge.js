@@ -138,16 +138,26 @@ const fetchChallengeSummary = (token, challengeId) => async (dispatch) => {
 const fetchChallengeMemberSubmission = (token, challengeId) => async (dispatch) => {
   try {
     const config = {
-      headers: {
-        'auth-token': token,
-      },
+      headers: { 'auth-token': token },
     };
 
     dispatch({ type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_START });
-    const res = await agent.get(`/challenge/${challengeId}/statistics/member-submission`, config);
+    const res1 = await agent.get(`/challenge/${challengeId}/statistics/member-submission`, config);
+    const memberSubmission = res1.data.data.data.member;
+
+    // Batch browse account
+    const accountIds = memberSubmission.map((item) => Number(item.id));
+    const config2 = {
+      headers: { 'auth-token': token },
+      params: { account_ids: JSON.stringify(accountIds) },
+    };
+
+    const res2 = await agent.get('/account-summary/batch', config2);
+    const { data: accounts } = res2.data;
+
     dispatch({
       type: challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_SUCCESS,
-      payload: { challengeId, data: res.data.data.data.member },
+      payload: { challengeId, data: memberSubmission, accounts: accounts.filter((item) => item !== null) },
     });
   } catch (error) {
     dispatch({
