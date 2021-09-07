@@ -457,23 +457,23 @@ function AutoTable({
               */
                 rowData.map((row) => (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row[columns[0].id]} className={classes.row}>
-                    <TableCell className={classes.tableRowContainerLeftSpacing} />
+                    <TableCell key={`${row.id}-left`} className={classes.tableRowContainerLeftSpacing} />
                     {columns.map((column) => {
+                      const value = row[column.name];
                       if (column.type === 'link') {
                         return (
                           <React.Fragment key={`${row.id}-${column.name}`}>
                             <TableCell className={classes.tableColumnLeftSpacing} />
                             <TableCell align={column.align}>
-                              <Link to={row[column.name].path} className={classes.textLink} replace>
-                                {column.format && typeof row[column.name].text === 'number'
-                                  ? column.format(row[column.name].text)
-                                  : row[column.name].text}
+                              <Link to={value.path} className={classes.textLink} replace>
+                                {column.format && typeof value.text === 'number'
+                                  ? column.format(value.text)
+                                  : value.text}
                               </Link>
                             </TableCell>
                           </React.Fragment>
                         );
                       }
-                      const value = row[column.name];
                       return (
                         <React.Fragment key={`${row.id}-${column.name}`}>
                           <TableCell className={classes.tableColumnLeftSpacing} />
