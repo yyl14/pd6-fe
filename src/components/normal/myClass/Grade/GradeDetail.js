@@ -34,7 +34,9 @@ export default function AccountSetting() {
   }, [dispatch, authToken, loading.editGrade, gradeId]);
 
   useEffect(() => {
-    if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') setIsManager(true);
+    if (user.classes) {
+      if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') setIsManager(true);
+    }
   }, [classId, user.classes]);
 
   const handleBack = () => {
