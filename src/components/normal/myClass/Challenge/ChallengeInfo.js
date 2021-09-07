@@ -10,18 +10,13 @@ import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
-import {
-  browseChallengeOverview,
-  editChallenge,
-  browseTasksUnderChallenge,
-  readProblemScore,
-} from '../../../../actions/myClass/problem';
+import PageTitle from '../../../ui/PageTitle';
+import { readProblemScore } from '../../../../actions/myClass/problem';
+import { editChallenge } from '../../../../actions/myClass/challenge';
+import { fetchChallenge } from '../../../../actions/common/common';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   descriptionField: {
     width: '60vw',
   },
@@ -43,22 +38,22 @@ export default function ChallengeInfo() {
   const [tableData, setTableData] = useState([]);
 
   const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.myClass.problem);
+  const loading = useSelector((state) => state.loading.myClass.challenge);
+  const commonLoading = useSelector((state) => state.loading.common.common);
   const userClasses = useSelector((state) => state.user.classes);
   const challenges = useSelector((state) => state.challenges.byId);
   const problems = useSelector((state) => state.problem.byId);
   const essays = useSelector((state) => state.essays.byId);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
 
-  useEffect(() => {
-    if (!loading.editChallenge) {
-      dispatch(browseChallengeOverview(authToken, challengeId));
-    }
-  }, [authToken, challengeId, dispatch, loading.editChallenge]);
+  const [hasRequest, setHasRequest] = useState(false);
 
   useEffect(() => {
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
-  }, [authToken, challengeId, dispatch]);
+    if (hasRequest && !loading.editChallenge) {
+      dispatch(fetchChallenge(authToken, challengeId));
+      setHasRequest(false);
+    }
+  }, [authToken, challengeId, dispatch, hasRequest, loading.editChallenge]);
 
   useEffect(() => {
     if (challenges[challengeId] !== undefined) {
@@ -112,7 +107,7 @@ export default function ChallengeInfo() {
   }, [authToken, challengeId, challenges, essays, peerReviews, problems]);
 
   if (challenges[challengeId] === undefined) {
-    if (loading.browseChallengeOverview) {
+    if (commonLoading.fetchChallenge) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -129,23 +124,17 @@ export default function ChallengeInfo() {
 
   const handleSave = () => {
     const body = {
-      publicizeType: challenges[challengeId].publicize_type,
-      selectionType: challenges[challengeId].selection_type,
-      title: challenges[challengeId].title,
       description: inputs,
-      startTime: challenges[challengeId].start_time,
-      endTime: challenges[challengeId].end_time,
     };
     dispatch(editChallenge(authToken, challengeId, body));
+    setHasRequest(true);
     setEditMode(false);
     setInputs(challenges[challengeId].description);
   };
 
   return (
     <>
-      <Typography className={classes.pageHeader} variant="h3">
-        {`${challenges[challengeId].title} / Info`}
-      </Typography>
+      <PageTitle text={`${challenges[challengeId].title} / Info`} />
       <SimpleBar
         title="Description"
         buttons={<>{isManager && !editMode && <Button onClick={handleEdit}>Edit</Button>}</>}

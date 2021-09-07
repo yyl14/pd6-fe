@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  TextField,
+  Typography, Button, makeStyles, Dialog, DialogTitle, DialogActions, DialogContent,
 } from '@material-ui/core';
 import { useParams, Link } from 'react-router-dom';
 import moment from 'moment';
@@ -17,26 +10,23 @@ import Icon from '../../../ui/icon/index';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
+import PageTitle from '../../../ui/PageTitle';
 
 import GeneralLoading from '../../../GeneralLoading';
 
 import {
   readSubmissionDetail,
-  readProblem,
-  browseChallengeOverview,
   browseJudgeCases,
   readTestcase,
   fetchSubmission,
   getAccountBatch,
 } from '../../../../actions/myClass/submission';
-import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
+import { readProblemInfo } from '../../../../actions/myClass/problem';
+import { fetchChallenge } from '../../../../actions/common/common';
 
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   textLink: {
     textDecoration: 'none',
     color: theme.palette.primary.main,
@@ -92,7 +82,7 @@ export default function SubmissionDetail() {
   useEffect(() => {
     if (submissions[submissionId] !== undefined) {
       dispatch(getAccountBatch(authToken, submissions[submissionId].account_id));
-      dispatch(readProblem(authToken, submissions[submissionId].problem_id));
+      dispatch(readProblemInfo(authToken, submissions[submissionId].problem_id));
       setProblemId(submissions[submissionId].problem_id);
       setAccountId(submissions[submissionId].account_id);
     }
@@ -100,7 +90,7 @@ export default function SubmissionDetail() {
 
   useEffect(() => {
     if (problems.byId[problemId] !== undefined && submissions[submissionId] !== undefined) {
-      dispatch(browseChallengeOverview(authToken, problems.byId[problemId].challenge_id));
+      dispatch(fetchChallenge(authToken, problems.byId[problemId].challenge_id));
       setChallengeId(problems.byId[problemId].challenge_id);
     }
   }, [authToken, dispatch, problemId, problems.allIds, problems.byId, submissionId, submissions]);
@@ -173,11 +163,7 @@ export default function SubmissionDetail() {
   };
   return (
     <>
-      <Typography className={classNames.pageHeader} variant="h3">
-        {submissionId}
-        {' '}
-        / Submission Detail
-      </Typography>
+      <PageTitle text={`${submissionId} / Submission Detail`} />
       <div className={classNames.generalButtons}>
         {role === 'MANAGER' && (
           <Button

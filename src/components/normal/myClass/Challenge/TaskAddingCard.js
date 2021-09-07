@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 import {
   Typography,
   Button,
@@ -14,14 +15,13 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
 import NoMatch from '../../../noMatch';
 
-import { readChallenge, browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
-import { addProblem, addEssay, addPeerReview } from '../../../../actions/myClass/challenge';
-import { fetchClass, fetchCourse } from '../../../../actions/common/common';
+import {
+  addProblem, addEssay, addPeerReview, browseTasksUnderChallenge,
+} from '../../../../actions/myClass/challenge';
 
 const useStyles = makeStyles(() => ({
   pageHeader: {
@@ -36,6 +36,7 @@ const useStyles = makeStyles(() => ({
 export default function TaskAddingCard({ open, setOpen }) {
   const { courseId, classId, challengeId } = useParams();
   const classNames = useStyles();
+  const history = useHistory();
 
   const dispatch = useDispatch();
 
@@ -58,15 +59,15 @@ export default function TaskAddingCard({ open, setOpen }) {
     }
     switch (type) {
       case 'Coding Problem': {
-        dispatch(addProblem(authToken, challengeId, label, title));
+        dispatch(addProblem(authToken, challengeId, label, title, history, courseId, classId));
         break;
       }
       case 'Essay(PDF)': {
-        dispatch(addEssay(authToken, challengeId, label, title));
+        dispatch(addEssay(authToken, challengeId, label, title, history, courseId, classId));
         break;
       }
       case 'Peer Review': {
-        dispatch(addPeerReview(authToken, challengeId, label, title));
+        dispatch(addPeerReview(authToken, challengeId, label, title, history, courseId, classId));
         break;
       }
       default: {
@@ -90,12 +91,6 @@ export default function TaskAddingCard({ open, setOpen }) {
       setDisabled(false);
     }
   };
-
-  useEffect(() => {
-    dispatch(fetchClass(authToken, classId));
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(readChallenge(authToken, challengeId));
-  }, [authToken, challengeId, classId, courseId, dispatch]);
 
   if (loading.readChallenge || commonLoading.fetchCourse || commonLoading.fetchClass) {
     return <></>;
@@ -134,7 +129,7 @@ export default function TaskAddingCard({ open, setOpen }) {
                     <Icon.Code className={classNames.selectedIcon} />
                     Coding Problem
                   </MenuItem>
-                  <MenuItem value="Essay(PDF)" disabled>
+                  <MenuItem value="Essay(PDF)">
                     <Icon.Paper className={classNames.selectedIcon} />
                     Essay(PDF)
                   </MenuItem>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography, makeStyles, Button, Dialog, DialogTitle, DialogContent, DialogActions,
+  Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions,
 } from '@material-ui/core';
 import moment from 'moment';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
@@ -9,22 +9,15 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
-import { fetchChallenges, deleteChallenge } from '../../../../actions/myClass/challenge';
-import { fetchClass, fetchCourse } from '../../../../actions/common/common';
+import PageTitle from '../../../ui/PageTitle';
+import { deleteChallenge } from '../../../../actions/myClass/challenge';
 import NoMatch from '../../../noMatch';
 import SettingEdit from './SettingEdit';
 import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-}));
-
 /* This is a level 4 component (page component) */
 export default function Setting() {
   const { courseId, classId, challengeId } = useParams();
-  const classNames = useStyles();
   const history = useHistory();
 
   const dispatch = useDispatch();
@@ -34,23 +27,9 @@ export default function Setting() {
   const userCourses = useSelector((state) => state.courses.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   const loading = useSelector((state) => state.loading.myClass.challenge.fetchChallenges);
-  const editLoading = useSelector((state) => state.loading.myClass.challenge.editChallenge);
 
   const [challenge, setChallenge] = useState(undefined);
   const [classTitle, setClassTitle] = useState('');
-
-  useEffect(() => {
-    // console.log('editLoading :', editLoading);
-    if (!editLoading) {
-      // console.log('refetch :');
-      dispatch(fetchChallenges(authToken, classId));
-    }
-  }, [authToken, dispatch, classId, editLoading]);
-
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-  }, [dispatch, authToken, classId, courseId]);
 
   useEffect(() => {
     setChallenge(challenges[challengeId]);
@@ -79,10 +58,7 @@ export default function Setting() {
 
   return (
     <>
-      <Typography variant="h3" className={classNames.pageHeader}>
-        {`${challenge.title} / Setting`}
-      </Typography>
-
+      <PageTitle text={`${challenge.title} / Setting`} />
       {edit ? (
         <SettingEdit challengeId={challengeId} challenge={challenge} setEdit={setEdit} />
       ) : (

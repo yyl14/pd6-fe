@@ -1,27 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Typography, Button, Snackbar, makeStyles,
-} from '@material-ui/core';
+import { Button, Snackbar, makeStyles } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import {
-  fetchChallenges,
-  fetchChallengeSummary,
-  fetchChallengeMemberSubmission,
-} from '../../../../actions/myClass/challenge';
-import { fetchDownloadFileUrl, fetchClassMembers } from '../../../../actions/common/common';
-import { browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
+import { fetchChallengeSummary, fetchChallengeMemberSubmission } from '../../../../actions/myClass/challenge';
+import { fetchDownloadFileUrl } from '../../../../actions/common/common';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
 import CustomTable from '../../../ui/CustomTable';
+import PageTitle from '../../../ui/PageTitle';
 import Icon from '../../../ui/icon/index';
 
-const useStyles = makeStyles((theme) => ({
-  bottomSpace: {
-    marginBottom: '50px',
-  },
+const useStyles = makeStyles(() => ({
   placeholder: {
     height: '50px',
   },
@@ -62,13 +53,12 @@ export default function Statistics() {
   const dispatch = useDispatch();
 
   const authToken = useSelector((state) => state.auth.token);
-  const members = useSelector((state) => state.classMembers.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   const problems = useSelector((state) => state.problem.byId);
   const essays = useSelector((state) => state.essays.byId);
   const submissions = useSelector((state) => state.submissions.byId);
   const downloadLinks = useSelector((state) => state.downloadLinks.byId);
-  const loading = useSelector((state) => state.loading.common.common);
+  const accounts = useSelector((state) => state.accounts);
 
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [statisticsData, setStatisticsData] = useState([]);
@@ -78,12 +68,6 @@ export default function Statistics() {
   const [scoreboardHTML, setScoreboardHTML] = useState('');
 
   useEffect(() => {
-    dispatch(fetchChallenges(authToken, classId));
-    dispatch(fetchClassMembers(authToken, classId));
-  }, [authToken, dispatch, classId]);
-
-  useEffect(() => {
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
     dispatch(fetchChallengeSummary(authToken, challengeId));
     dispatch(fetchChallengeMemberSubmission(authToken, challengeId));
   }, [authToken, dispatch, challengeId]);
@@ -94,7 +78,6 @@ export default function Statistics() {
       && challenges[challengeId].statistics
       && challenges[challengeId].statistics.summary
       && challenges[challengeId].statistics.memberSubmission
-      && members
     ) {
       setStatisticsData(challenges[challengeId].statistics.summary);
 
@@ -119,18 +102,16 @@ export default function Statistics() {
       }));
       setScoreboardTitle([].concat(accountColumn, problemList, essayList));
 
-      if (loading.fetchClassMembers) return;
-
       // set table content
       const memberSubmissionList = challenges[challengeId].statistics.memberSubmission.map((member) => {
         const memberChallengeDetail = {
           id: member.id,
         };
-
-        if (members[member.id]) {
-          memberChallengeDetail.username = members[member.id].username;
-          memberChallengeDetail.student_id = members[member.id].student_id;
-          memberChallengeDetail.real_name = members[member.id].real_name;
+        const classMember = accounts.byId[member.id];
+        if (classMember) {
+          memberChallengeDetail.username = classMember.username;
+          memberChallengeDetail.student_id = classMember.student_id;
+          memberChallengeDetail.real_name = classMember.real_name;
         }
 
         if (member.problem_scores) {
@@ -159,18 +140,7 @@ export default function Statistics() {
       });
       setScoreboardData(memberSubmissionList);
     }
-  }, [
-    classId,
-    courseId,
-    challenges,
-    challengeId,
-    essays,
-    problems,
-    members,
-    submissions,
-    downloadLinks,
-    loading.fetchClassMembers,
-  ]);
+  }, [classId, courseId, challenges, challengeId, essays, problems, submissions, downloadLinks, accounts]);
 
   useEffect(() => {
     if (
@@ -230,9 +200,7 @@ export default function Statistics() {
 
   return (
     <>
-      <Typography variant="h3" className={classes.bottomSpace}>
-        {`${challengeTitle} / Statistics`}
-      </Typography>
+      <PageTitle text={`${challengeTitle} / Statistics`} />
       <SimpleBar title="Statistics" />
       <SimpleTable
         data={statisticsData}

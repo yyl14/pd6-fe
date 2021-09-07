@@ -9,7 +9,7 @@ import Sidebar from '../../components/ui/Sidebar';
 function Account() {
   // const history = useHistory();
   // const location = useLocation();
-  // const auth = useSelector((state) => state.auth);
+  // const config = useSelector((state) => state.auth);
   // const user = useSelector((state) => state.user);
   // const dispatch = useDispatch();
 

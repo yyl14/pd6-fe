@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { fetchTeams, fetchTeamMember } from '../../../../actions/myClass/team';
 import { fetchClassMembers } from '../../../../actions/common/common';
@@ -14,16 +10,10 @@ import TeamMemberEdit from './detail/TeamMemberEdit';
 import NoMatch from '../../../noMatch';
 import systemRoleTransformation from '../../../../function/systemRoleTransformation';
 import GeneralLoading from '../../../GeneralLoading';
-
-const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-}));
+import PageTitle from '../../../ui/PageTitle';
 
 /* This is a level 4 component (page component) */
 export default function ChallengeList() {
-  const classNames = useStyles();
   const dispatch = useDispatch();
   const { classId, teamId } = useParams();
 
@@ -113,10 +103,7 @@ export default function ChallengeList() {
 
   return (
     <>
-      <Typography className={classNames.pageHeader} variant="h3">
-        {`${teams[teamId].name} / Detail`}
-      </Typography>
-
+      <PageTitle text={`${teams[teamId].name} / Detail`} />
       {editTeamInfo ? (
         <TeamInfoEdit
           isManager={isManager}
@@ -134,7 +121,12 @@ export default function ChallengeList() {
       )}
 
       {editTeamMember ? (
-        <TeamMemberEdit isManager={isManager} tableData={tableData} setOriginData={setTableData} handleBack={handleMemberBack} />
+        <TeamMemberEdit
+          isManager={isManager}
+          tableData={tableData}
+          setOriginData={setTableData}
+          handleBack={handleMemberBack}
+        />
       ) : (
         <TeamMember isManager={isManager} tableData={tableData} handleEdit={handleMemberEdit} />
       )}

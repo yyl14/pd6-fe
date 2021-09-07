@@ -14,7 +14,7 @@ import {
   Select,
   IconButton,
   Snackbar,
-  // CircularProgress,
+  // CircularProg,
   LinearProgress,
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
@@ -63,6 +63,9 @@ const useStyles = makeStyles((theme) => ({
   },
   filterSelect: {
     marginRight: '10px',
+    minWidth: '180px',
+  },
+  filterItem: {
     minWidth: '180px',
   },
 
@@ -195,7 +198,7 @@ function AutoTable({
     }
   ],
   */
-  refetch, // function to call when table change page / filter/ sort
+  refetch, // function to call when table change page / filter / sort / clicked Refresh
   /*
   example value:
     (browseConfig, ident) => dispatch(fetchClassMembers(authToken, classId, browseParams: {limit, offset, filters, sorts}, ident))
@@ -218,11 +221,13 @@ function AutoTable({
       type: 'string',
     },
   ];
-*/
+  */
   reduxData,
   reduxDataToRows,
   hasLink = false,
-  buttons,
+  buttons = null,
+  refreshLoadings = null, // refresh when any of the array elements turned from true to false
+  hasRefreshButton = false,
 }) {
   const classes = useStyles();
   const [curPage, setCurPage] = useState(0); // curPage * rowsPerPage = offset
@@ -250,6 +255,34 @@ function AutoTable({
     }
   };
 
+  // refresh
+  const onRefresh = () => {
+    dispatch(autoTableFlush(ident));
+    dispatch(autoTableFlush(ident));
+    setDataComplete(false);
+    setCurPage(0);
+    setPageInput('1');
+  };
+
+  // change filter
+  const onSearch = (newFilter) => {
+    if (tableState.byId[ident]) {
+      dispatch(autoTableFlush(ident));
+      setFilter(newFilter);
+      setDataComplete(false);
+      setCurPage(0);
+      setPageInput('1');
+    }
+  };
+
+  const calculateTotalNumOfPages = () => {
+    if (tableState.byId[ident]) {
+      if (tableState.byId[ident].totalCount === Infinity) return 0;
+      return Math.ceil(tableState.byId[ident].totalCount / rowsPerPage);
+    }
+    return 100;
+  };
+
   // page change from input
   useEffect(() => {
     if (
@@ -267,22 +300,30 @@ function AutoTable({
     }
   }, [ident, pageInput, rowsPerPage, tableState]);
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setCurPage(0); // TODO: calculate this
-  };
+  // const handleChangeRowsPerPage = (event) => {
+  //   setRowsPerPage(+event.target.value);
+  //   setCurPage(0); // TODO: calculate this
+  // };
 
-  const labelMoveLeft = (icon, cols, col) => {
-    if (icon && icon[cols.findIndex((x) => x.id === col.id)]) {
-      return classes.columnLabelMoveLeft;
-    }
-    return classes.columnLabelDefault;
-  };
+  // const labelMoveLeft = (icon, cols, col) => {
+  //   if (icon && icon[cols.findIndex((x) => x.id === col.id)]) {
+  //     return classes.columnLabelMoveLeft;
+  //   }
+  //   return classes.columnLabelDefault;
+  // };
 
   // table mount, create dynamic redux state
   useEffect(() => {
     dispatch(autoTableMount(ident));
   }, [ident]);
+
+  useEffect(() => {
+    if (refreshLoadings) {
+      if (refreshLoadings.reduce((acc, item) => acc && !item, true)) {
+        onRefresh();
+      }
+    }
+  }, [refreshLoadings]);
 
   // useEffect(() => {
   //   if (tableState.byId[ident]) {
@@ -291,23 +332,6 @@ function AutoTable({
   //     }
   //   }
   // }, [tableState.byId[ident], curPage, rowsPerPage]);
-
-  // change filter
-  const onSearch = (newFilter) => {
-    dispatch(autoTableFlush(ident));
-    setFilter(newFilter);
-    setDataComplete(false);
-    setCurPage(0);
-    setPageInput('1');
-  };
-
-  const calculateTotalNumOfPages = () => {
-    if (tableState.byId[ident]) {
-      if (tableState.byId[ident].totalCount === Infinity) return 0;
-      return Math.ceil(tableState.byId[ident].totalCount / rowsPerPage);
-    }
-    return 100;
-  };
 
   useEffect(() => {
     if (tableState.byId[ident]) {
@@ -381,6 +405,8 @@ function AutoTable({
         filterConfig={filterConfig}
         filter={filter}
         onSearch={onSearch}
+        onRefresh={onRefresh}
+        hasRefreshButton={hasRefreshButton}
       />
       <div className={classes.progressContainer}>
         {dataComplete || isError || <LinearProgress color="primary" className={classes.progress} />}
@@ -400,7 +426,7 @@ function AutoTable({
                       className={classes.tableHeadCell}
                       style={{ minWidth: column.minWidth, width: column.width }}
                     >
-                      {column.name}
+                      <b>{column.name}</b>
                       {/* <div className={classes.column}>
                         <div className={labelMoveLeft(columnComponent, columns, column)}>
                           <b>{column.label}</b>
@@ -412,15 +438,12 @@ function AutoTable({
                     </TableCell>
                   </React.Fragment>
                 ))}
-
-                {
-                  // TODO: simplify this
-                  hasLink ? (
-                    <TableCell key="link" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
-                  ) : (
-                    <TableCell key="blank" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
-                  )
-                }
+                <TableCell
+                  key={hasLink ? 'link' : 'blank'}
+                  align="right"
+                  className={classes.tableHeadCell}
+                  style={{ minWidth: 20 }}
+                />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -431,23 +454,23 @@ function AutoTable({
               */
                 rowData.map((row) => (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row[columns[0].id]} className={classes.row}>
-                    <TableCell className={classes.tableRowContainerLeftSpacing} />
+                    <TableCell key={`${row.id}-left`} className={classes.tableRowContainerLeftSpacing} />
                     {columns.map((column) => {
+                      const value = row[column.name];
                       if (column.type === 'link') {
                         return (
                           <React.Fragment key={`${row.id}-${column.name}`}>
                             <TableCell className={classes.tableColumnLeftSpacing} />
                             <TableCell align={column.align}>
-                              <Link to={row[column.name].path} className={classes.textLink} replace>
-                                {column.format && typeof row[column.name].text === 'number'
-                                  ? column.format(row[column.name].text)
-                                  : row[column.name].text}
+                              <Link to={value.path} className={classes.textLink} replace>
+                                {column.format && typeof value.text === 'number'
+                                  ? column.format(value.text)
+                                  : value.text}
                               </Link>
                             </TableCell>
                           </React.Fragment>
                         );
                       }
-                      const value = row[column.name];
                       return (
                         <React.Fragment key={`${row.id}-${column.name}`}>
                           <TableCell className={classes.tableColumnLeftSpacing} />
@@ -475,6 +498,7 @@ function AutoTable({
           </Table>
         </TableContainer>
         <div className={classes.bottomWrapper}>
+          <div />
           {/* <div>{dataComplete || isError || <CircularProgress color="inherit" size={30} />}</div> */}
           <div className={classes.bottom}>
             <FormControl variant="outlined">

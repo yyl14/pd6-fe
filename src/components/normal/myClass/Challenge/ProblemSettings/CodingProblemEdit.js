@@ -32,12 +32,10 @@ import {
   uploadTestcaseInput,
   uploadTestcaseOutput,
   addTestcaseWithFile,
+  clearUploadFail,
 } from '../../../../../actions/myClass/problem';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   sampleArea: {
     marginTop: '50px',
   },
@@ -77,7 +75,7 @@ const StyledButton = withStyles({
 })(Button);
 
 /* This is a level 4 component (page component) */
-export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
+export default function CodingProblemEdit({ closeEdit }) {
   const { problemId } = useParams();
   const classNames = useStyles();
 
@@ -90,9 +88,8 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const testcases = useSelector((state) => state.testcases.byId);
   const [sampleDataIds, setSampleDataIds] = useState([]);
   const [testcaseDataIds, setTestcaseDataIds] = useState([]);
-  // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
-
+  const [hasInitialize, setHasInitialize] = useState(false);
   const [hasChange, setHasChange] = useState(false);
 
   const [label, setLabel] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label);
@@ -107,28 +104,41 @@ export default function CodingProblemEdit({ closeEdit, role = 'NORMAL' }) {
   const [hint, setHint] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].hint);
   const [status, setStatus] = useState(false);
 
-  const sampleTransToNumber = useCallback((id) => {
-    if (testcases[id].input_filename !== null) {
-      return parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10);
-    }
-    if (testcases[id].output_filename !== null) {
-      return parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10);
-    }
-    return 0;
-  }, [testcases]);
+  const sampleTransToNumber = useCallback(
+    (id) => {
+      if (testcases[id].input_filename !== null) {
+        return parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10);
+      }
+      if (testcases[id].output_filename !== null) {
+        return parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10);
+      }
+      return 0;
+    },
+    [testcases],
+  );
 
-  const testcaseTransToNumber = useCallback((id) => {
-    if (testcases[id].input_filename !== null) {
-      return parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10);
-    }
-    if (testcases[id].output_filename !== null) {
-      return parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10);
-    }
-    return 0;
-  }, [testcases]);
+  const testcaseTransToNumber = useCallback(
+    (id) => {
+      if (testcases[id].input_filename !== null) {
+        return parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10);
+      }
+      if (testcases[id].output_filename !== null) {
+        return parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10);
+      }
+      return 0;
+    },
+    [testcases],
+  );
 
   const [sampleTableData, setSampleTableData] = useState([]);
   const [testcaseTableData, setTestcaseTableData] = useState([]);
+
+  useEffect(() => {
+    if (!hasInitialize) {
+      setHasInitialize(true);
+      dispatch(clearUploadFail());
+    }
+  }, [dispatch, hasInitialize]);
 
   useEffect(() => {
     if (problems[problemId] && problems[problemId].testcaseIds) {

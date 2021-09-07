@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { accountConstants, systemConstants } from '../actions/admin/constant';
-import { gradeConstants, submissionConstants } from '../actions/myClass/constant';
+import { gradeConstants, submissionConstants, challengeConstants } from '../actions/myClass/constant';
 import { commonConstants } from '../actions/common/constant';
 
 const byId = (state = {}, action) => {
@@ -19,6 +19,21 @@ const byId = (state = {}, action) => {
       );
     }
 
+    case challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_SUCCESS: {
+      const { accounts } = action.payload;
+      return accounts.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item.id]: {
+            ...item,
+            studentCard: state[item.id] ? state[item.id].studentCard : [],
+            gradeIds: state[item.id] ? state[item.id].gradeIds : [],
+          },
+        }),
+        state,
+      );
+    }
+
     case commonConstants.FETCH_ACCOUNT_SUCCESS: {
       return {
         ...state,
@@ -26,7 +41,7 @@ const byId = (state = {}, action) => {
       };
     }
 
-    case accountConstants.FETCH_STUDENT_CARD_SUCCESS: {
+    case accountConstants.FETCH_STUDENT_CARDS_SUCCESS: {
       const { id, data } = action.payload;
       return {
         ...state,
@@ -37,7 +52,7 @@ const byId = (state = {}, action) => {
       };
     }
 
-    case accountConstants.FETCH_STUDENT_CARD_FAIL: {
+    case accountConstants.FETCH_STUDENT_CARDS_FAIL: {
       const { id } = action.payload;
       return { ...state, [id]: { ...state[id], studentCard: [] } };
     }
@@ -72,6 +87,22 @@ const byId = (state = {}, action) => {
         },
       };
     }
+
+    case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {
+      const { accounts } = action.payload;
+      return accounts.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item.id]: {
+            ...item,
+            studentCard: state[item.id] ? state[item.id].studentCard : [],
+            gradeIds: state[item.id] ? state[item.id].gradeIds : [],
+          },
+        }),
+        state,
+      );
+    }
+
     default:
       return state;
   }

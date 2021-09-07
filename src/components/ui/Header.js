@@ -9,7 +9,7 @@ import { useCookies } from 'react-cookie';
 import { format } from 'date-fns';
 import Icon from './icon/index';
 import { userLogout } from '../../actions/user/auth';
-import { userGetNotify, userReadNotify } from '../../actions/user/user';
+import { userBrowseAnnouncement, userReadAnnouncement } from '../../actions/user/user';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -55,6 +55,14 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 'auto',
     marginRight: '16px',
     top: '2px',
+  },
+  notificationTitle: {
+    wordBreak: 'break-word',
+  },
+  notificationDays: {
+    color: theme.palette.grey.A400,
+    marginLeft: '10px',
+    minWidth: '50px',
   },
   notificationDropContent: {
     position: 'absolute',
@@ -112,16 +120,13 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '50%',
     zIndex: 2,
   },
-  secondSpan: {
+  notificationContent: {
     marginTop: '16px',
     display: 'block !important',
     width: '400px',
-    wordWrap: 'break-word',
+    wordBreak: 'break-word',
   },
-  days: {
-    fontSize: '16px !important',
-    color: theme.palette.grey.A400,
-  },
+
   name: {
     width: '65px',
     height: '33px',
@@ -232,7 +237,7 @@ export default function Header() {
   }, [user.classes.length]);
 
   useEffect(() => {
-    dispatch(userGetNotify(authToken));
+    dispatch(userBrowseAnnouncement(authToken));
   }, [authToken, dispatch]);
 
   useEffect(() => {
@@ -406,13 +411,12 @@ export default function Header() {
     setAccountAlreadyClose(false);
   };
 
-  const readNotification = (notifyId) => {
-    dispatch(userReadNotify(authToken, notifyId));
-    // dispatch(userGetNotify(authToken)); // this line needs to be de-marked when BE complete read anoouncement
-  };
+  // const readNotification = (notifyId) => {
+  //   dispatch(userReadAnnouncement(authToken, notifyId));
+  //   // dispatch(userBrowseAnnouncement(authToken)); // this line needs to be de-marked when BE complete read announcement
+  // };
 
   const goto = (link) => {
-    // console.log(link);
     if (link === '/logout') {
       removeCookie('token', { path: '/' });
       removeCookie('id', { path: '/' });
@@ -457,21 +461,20 @@ export default function Header() {
                       }
                       role="button"
                       tabIndex={notify.id}
-                      onClick={() => readNotification(notify.id)}
-                      onKeyDown={() => readNotification(notify.id)}
+                      // onClick={() => readNotification(notify.id)}
+                      // onKeyDown={() => readNotification(notify.id)}
                     >
                       <div>
-                        <span>
-                          <b>{notify.title}</b>
-                        </span>
-                        <span className={classes.days}>
-                          {moment(new Date()).diff(moment(notify.post_time), 'days')}
-                          &nbsp; days
-                        </span>
+                        <Typography variant="h6" className={classes.notificationTitle}>
+                          {notify.title}
+                        </Typography>
+                        <Typography variant="body2" className={classes.notificationDays}>
+                          {`${moment(new Date()).diff(moment(notify.post_time), 'days')} days`}
+                        </Typography>
                       </div>
-                      <div className={classes.secondSpan}>
-                        <span>{notify.content}</span>
-                      </div>
+                      <Typography variant="body" className={classes.notificationContent}>
+                        {notify.content}
+                      </Typography>
                     </div>
                   ))}
                 </div>

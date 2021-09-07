@@ -1,39 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  TextField,
-  IconButton,
+  Typography, Button, makeStyles, Dialog, DialogTitle, DialogActions, DialogContent,
 } from '@material-ui/core';
 import { useParams, Link } from 'react-router-dom';
 import moment from 'moment';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Icon from '../../../ui/icon/index';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
+import PageTitle from '../../../ui/PageTitle';
 import GeneralLoading from '../../../GeneralLoading';
-import {
-  readSubmissionDetail,
-  browseJudgeCases,
-  readTestcase,
-  browseTasksUnderChallenge,
-} from '../../../../actions/myClass/problem';
+import { readSubmissionDetail, browseJudgeCases, readTestcase } from '../../../../actions/myClass/problem';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
 import NoMatch from '../../../noMatch';
 import CodeArea from '../../../ui/CodeArea';
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   textLink: {
     textDecoration: 'none',
     color: theme.palette.primary.main,
@@ -78,7 +62,6 @@ export default function SubmissionDetail() {
   const loading = useSelector((state) => state.loading.myClass.problem);
 
   useEffect(() => {
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
     dispatch(readSubmissionDetail(authToken, submissionId));
     dispatch(fetchSubmission(authToken, submissionId));
   }, [authToken, challengeId, dispatch, problemId, submissionId]);
@@ -136,12 +119,7 @@ export default function SubmissionDetail() {
     || judgeCases.allIds === undefined
     || testcaseIds === undefined
   ) {
-    if (
-      loading.readSubmissionDetail
-      || loading.browseJudgeCases
-      || loading.readTestcase
-      || loading.browseTasksUnderChallenge
-    ) {
+    if (loading.readSubmissionDetail || loading.browseJudgeCases || loading.readTestcase) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -159,9 +137,7 @@ export default function SubmissionDetail() {
 
   return (
     <>
-      <Typography className={classNames.pageHeader} variant="h3">
-        {`${submissionId} / Submission Detail`}
-      </Typography>
+      <PageTitle text={`${submissionId} / Submission Detail`} />
       <div className={classNames.generalButtons}>
         {role === 'MANAGER' && (
           <Button

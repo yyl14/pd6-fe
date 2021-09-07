@@ -1,12 +1,9 @@
 import { submissionConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
-  fetchAllSubmissions: null,
   fetchClassSubmissions: null,
   fetchSubmission: null,
-  addSubmission: null,
   browseChallengeOverview: null,
-  readProblem: null,
   readSubmissionDetail: null,
   browseJudgeCases: null,
   readTestcase: null,
@@ -15,25 +12,6 @@ const initialState = {
 
 export default function submissions(state = initialState, action) {
   switch (action.type) {
-    case submissionConstants.FETCH_ALL_SUBMISSIONS_START: {
-      return {
-        ...state,
-        fetchAllSubmissions: null,
-      };
-    }
-    case submissionConstants.FETCH_ALL_SUBMISSIONS_SUCCESS: {
-      return {
-        ...state,
-        fetchAllSubmissions: null,
-      };
-    }
-    case submissionConstants.FETCH_ALL_SUBMISSIONS_FAIL: {
-      return {
-        ...state,
-        fetchAllSubmissions: action.error,
-      };
-    }
-
     case submissionConstants.FETCH_SUBMISSION_START: {
       return {
         ...state,
@@ -72,58 +50,28 @@ export default function submissions(state = initialState, action) {
       };
     }
 
-    case submissionConstants.ADD_SUBMISSION_START: {
-      return {
-        ...state,
-        addSubmission: null,
-      };
-    }
-    case submissionConstants.ADD_SUBMISSION_SUCCESS: {
-      return {
-        ...state,
-        addSubmission: null,
-      };
-    }
-    case submissionConstants.ADD_SUBMISSION_FAIL: {
-      return {
-        ...state,
-        addSubmission: action.error,
-      };
-    }
-    case submissionConstants.READ_CHALLENGE_FAIL: {
-      return {
-        ...state,
-        browseChallengeOverview: action.errors,
-      };
-    }
-    case submissionConstants.READ_PROBLEM_FAIL: {
-      return {
-        ...state,
-        readProblem: action.errors,
-      };
-    }
     case submissionConstants.READ_SUBMISSION_JUDGE_FAIL: {
       return {
         ...state,
-        readSubmissionDetail: action.errors,
+        readSubmissionDetail: action.error,
       };
     }
     case submissionConstants.BROWSE_JUDGE_CASES_FAIL: {
       return {
         ...state,
-        browseJudgeCases: action.errors,
+        browseJudgeCases: action.error,
       };
     }
     case submissionConstants.READ_TESTCASE_FAIL: {
       return {
         ...state,
-        readTestcase: action.errors,
+        readTestcase: action.error,
       };
     }
     case submissionConstants.GET_ACCOUNT_BATCH_FAIL: {
       return {
         ...state,
-        getAccountBatch: action.errors,
+        getAccountBatch: action.error,
       };
     }
     default:

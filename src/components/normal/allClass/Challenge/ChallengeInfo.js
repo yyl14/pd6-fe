@@ -2,31 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { Typography, makeStyles } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
-import {
-  browseChallengeOverview,
-  browseTasksUnderChallenge,
-  readProblemScore,
-} from '../../../../actions/myClass/problem';
+import PageTitle from '../../../ui/PageTitle';
+import { readProblemScore } from '../../../../actions/myClass/problem';
+import { browseTasksUnderChallenge } from '../../../../actions/myClass/challenge';
+import { fetchChallenge } from '../../../../actions/common/common';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-  descriptionField: {
-    width: '60vw',
-  },
   table: {
     width: '100%',
-  },
-  buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
   },
 }));
 
@@ -50,7 +39,7 @@ export default function ChallengeInfo() {
 
   useEffect(() => {
     if (!loading.editChallenge) {
-      dispatch(browseChallengeOverview(authToken, challengeId));
+      dispatch(fetchChallenge(authToken, challengeId));
     }
   }, [authToken, challengeId, dispatch, loading.editChallenge]);
 
@@ -112,9 +101,7 @@ export default function ChallengeInfo() {
 
   return (
     <>
-      <Typography className={classes.pageHeader} variant="h3">
-        {`${challenges[challengeId].title} / Info`}
-      </Typography>
+      <PageTitle text={`${challenges[challengeId].title} / Info`} />
       <SimpleBar title="Description">
         <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
           {challenges[challengeId].description}

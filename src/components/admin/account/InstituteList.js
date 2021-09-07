@@ -13,6 +13,7 @@ import {
   Switch,
 } from '@material-ui/core';
 import { MdAdd } from 'react-icons/md';
+import PageTitle from '../../ui/PageTitle';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
 import TableFilterCard from '../../ui/TableFilterCard';
@@ -23,9 +24,6 @@ import sortData from '../../../function/sort';
 import GeneralLoading from '../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   popUpLayout: {
     width: '100%',
   },
@@ -68,9 +66,9 @@ export default function InstituteList() {
 
   useEffect(() => {
     if (!loading.addInstitute) {
-      dispatch(getInstitutes(authToken));
+      dispatch(getInstitutes());
     }
-  }, [authToken, dispatch, loading.addInstitute]);
+  }, [dispatch, loading.addInstitute]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -133,9 +131,7 @@ export default function InstituteList() {
 
   return (
     <>
-      <Typography variant="h3" className={classes.pageHeader}>
-        Institute
-      </Typography>
+      <PageTitle text="Institute" />
       <CustomTable
         hasSearch={false}
         buttons={(

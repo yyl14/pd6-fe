@@ -10,7 +10,7 @@ const initialState = {
   editSubmitLanguage: false,
 };
 
-export default function account(state = initialState, action) {
+export default function system(state = initialState, action) {
   switch (action.type) {
     /* Access Logs */
     case systemConstants.FETCH_ACCESS_LOG_START:
@@ -25,7 +25,6 @@ export default function account(state = initialState, action) {
       };
     }
     case systemConstants.FETCH_ACCESS_LOG_FAIL: {
-      const error = action.payload;
       return {
         ...state,
         fetchAccessLog: false,
@@ -111,7 +110,6 @@ export default function account(state = initialState, action) {
       };
     }
     case systemConstants.FETCH_SUBMIT_LANGUAGE_SUCCESS: {
-      const { data } = action.payload;
       return {
         ...state,
         fetchSubmitLanguage: false,

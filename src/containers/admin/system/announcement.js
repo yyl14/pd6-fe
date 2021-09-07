@@ -14,7 +14,6 @@ export default function AnnouncementInfo() {
     <>
       <Switch>
         <Route path="/admin/system/announcement/add" component={AnnouncementAdd} />
-        {/* TODO: render edit page using state, not route */}
         <Route path="/admin/system/announcement/:announcementId/setting" component={AnnouncementSetting} />
         <Route exact path="/admin/system/announcement" component={AnnouncementHome} />
         <Route component={NoMatch} />

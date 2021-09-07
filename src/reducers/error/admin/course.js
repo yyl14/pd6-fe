@@ -1,7 +1,7 @@
 import { courseConstants } from '../../../actions/admin/constant';
 
 const initialState = {
-  fetchCourse: null,
+  fetchCourses: null,
   addCourse: null,
   editCourse: null,
   deleteCourse: null,
@@ -21,14 +21,14 @@ export default function course(state = initialState, action) {
     case courseConstants.FETCH_COURSES_SUCCESS: {
       return {
         ...state,
-        fetchCourse: null,
+        fetchCourses: null,
       };
     }
     case courseConstants.FETCH_COURSES_FAIL: {
-      const { error } = action.payload;
+      const { error } = action;
       return {
         ...state,
-        fetchCourse: error,
+        fetchCourses: error,
       };
     }
     case courseConstants.ADD_COURSE_SUCCESS: {
@@ -38,7 +38,7 @@ export default function course(state = initialState, action) {
       };
     }
     case courseConstants.ADD_COURSE_FAIL: {
-      const { error } = action.payload;
+      const { error } = action;
       return {
         ...state,
         addCourse: error,
@@ -52,7 +52,7 @@ export default function course(state = initialState, action) {
       };
     }
     case courseConstants.RENAME_COURSE_FAIL: {
-      const { error } = action.payload;
+      const { error } = action;
       return {
         ...state,
         renameCourse: error,
@@ -66,7 +66,7 @@ export default function course(state = initialState, action) {
       };
     }
     case courseConstants.DELETE_COURSE_FAIL: {
-      const { error } = action.payload;
+      const { error } = action;
       return {
         ...state,
         deleteCourse: error,
@@ -81,7 +81,7 @@ export default function course(state = initialState, action) {
       };
     }
     case courseConstants.FETCH_CLASSES_FAIL: {
-      const { error } = action.payload;
+      const { error } = action;
       return {
         ...state,
         fetchClasses: error,
@@ -95,7 +95,7 @@ export default function course(state = initialState, action) {
       };
     }
     case courseConstants.ADD_CLASS_FAIL: {
-      const { error } = action.payload;
+      const { error } = action;
       return {
         ...state,
         addClass: error,
@@ -109,7 +109,7 @@ export default function course(state = initialState, action) {
       };
     }
     case courseConstants.RENAME_CLASS_FAIL: {
-      const { error } = action.payload;
+      const { error } = action;
       return {
         ...state,
         renameClass: error,
@@ -123,7 +123,7 @@ export default function course(state = initialState, action) {
       };
     }
     case courseConstants.DELETE_CLASS_FAIL: {
-      const { error } = action.payload;
+      const { error } = action;
       return {
         ...state,
         deleteClass: error,

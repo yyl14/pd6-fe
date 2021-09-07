@@ -8,6 +8,11 @@ const byId = (state = {}, action) => {
       return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
 
+    case gradeConstants.FETCH_GRADE_SUCCESS: {
+      const { gradeId, data } = action.payload;
+      return { ...state, [gradeId]: { ...data } };
+    }
+
     case gradeConstants.FETCH_ACCOUNT_GRADE_SUCCESS: {
       const { data } = action.payload;
       return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
@@ -20,6 +25,11 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
+    case gradeConstants.FETCH_GRADE_SUCCESS: {
+      const { data } = action.payload;
+      return [...new Set([...state, data.id])];
+    }
+
     case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {
       const { data } = action.payload;
       return data.map((item) => item.id);

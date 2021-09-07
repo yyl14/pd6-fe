@@ -4,13 +4,12 @@ const initialState = {
   fetchInstitutes: false,
   fetchClassMembers: false,
   fetchClassMemberWithAccountReferral: false,
-  editClassMember: false,
   replaceClassMembers: false,
-  // deleteClassMember: false,
   browseSubmitLang: false,
   fetchCourse: false,
   fetchClass: false,
   fetchAccount: false,
+  fetchChallenge: false,
   fetchAllChallengesProblems: false,
   fetchDownloadFileUrl: false,
 };
@@ -35,7 +34,7 @@ export default function common(state = initialState, action) {
         fetchInstitutes: false,
       };
     }
-    case commonConstants.FETCH_CLASS_MEMBERS_REQUEST: {
+    case commonConstants.FETCH_CLASS_MEMBERS_START: {
       return {
         ...state,
         fetchClassMembers: true,
@@ -53,7 +52,7 @@ export default function common(state = initialState, action) {
         fetchClassMembers: false,
       };
     }
-    case commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_REQUEST: {
+    case commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_START: {
       return {
         ...state,
         fetchClassMembers: true,
@@ -72,25 +71,7 @@ export default function common(state = initialState, action) {
       };
     }
 
-    case commonConstants.EDIT_CLASS_MEMBER_REQUEST: {
-      return {
-        ...state,
-        editClassMember: true,
-      };
-    }
-    case commonConstants.EDIT_CLASS_MEMBER_SUCCESS: {
-      return {
-        ...state,
-        editClassMember: false,
-      };
-    }
-    case commonConstants.EDIT_CLASS_MEMBER_FAIL: {
-      return {
-        ...state,
-        editClassMember: false,
-      };
-    }
-    case commonConstants.REPLACE_CLASS_MEMBERS_REQUEST: {
+    case commonConstants.REPLACE_CLASS_MEMBERS_START: {
       return {
         ...state,
         replaceClassMembers: true,
@@ -108,24 +89,6 @@ export default function common(state = initialState, action) {
         replaceClassMembers: false,
       };
     }
-    case commonConstants.DELETE_CLASS_MEMBER_REQUEST: {
-      return {
-        ...state,
-        deleteClassMember: true,
-      };
-    }
-    // case commonConstants.DELETE_CLASS_MEMBER_SUCCESS: {
-    //   return {
-    //     ...state,
-    //     deleteClassMember: false,
-    //   };
-    // }
-    // case commonConstants.DELETE_CLASS_MEMBER_FAIL: {
-    //   return {
-    //     ...state,
-    //     deleteClassMember: false,
-    //   };
-    // }
     case commonConstants.FETCH_COURSE_START: {
       return {
         ...state,
@@ -162,7 +125,25 @@ export default function common(state = initialState, action) {
         fetchClass: false,
       };
     }
-    case commonConstants.FETCH_ACCOUNT_REQUEST: {
+    case commonConstants.READ_CHALLENGE_START: {
+      return {
+        ...state,
+        fetchChallenge: true,
+      };
+    }
+    case commonConstants.READ_CHALLENGE_SUCCESS: {
+      return {
+        ...state,
+        fetchChallenge: false,
+      };
+    }
+    case commonConstants.READ_CHALLENGE_FAIL: {
+      return {
+        ...state,
+        fetchChallenge: false,
+      };
+    }
+    case commonConstants.FETCH_ACCOUNT_START: {
       return {
         ...state,
         fetchAccount: true,
