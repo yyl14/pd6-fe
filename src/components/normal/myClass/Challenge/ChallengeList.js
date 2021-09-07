@@ -21,7 +21,6 @@ import AutoTable from '../../../ui/AutoTable';
 import PageTitle from '../../../ui/PageTitle';
 import DateRangePicker from '../../../ui/DateRangePicker';
 import { fetchChallenges, addChallenge } from '../../../../actions/myClass/challenge';
-import { fetchCourse, fetchClass } from '../../../../actions/common/common';
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
 
@@ -43,8 +42,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
 }));
-
-const tableIdent = 'Challenge Table';
 
 /* This is a level 4 component (page component) */
 export default function ChallengeList() {
@@ -161,7 +158,7 @@ export default function ChallengeList() {
     <>
       <PageTitle text={`${courses[courseId].name} ${classes[classId].name} / Challenge`} />
       <AutoTable
-        ident={tableIdent}
+        ident={`Challenge list ${classId}`}
         buttons={
           isManager && (
             <>

@@ -14,7 +14,7 @@ import {
 import { useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 import AlignedText from '../../../ui/AlignedText';
-import CustomTable from '../../../ui/CustomTable';
+import AutoTable from '../../../ui/AutoTable';
 import FileUploadArea from '../../../ui/FileUploadArea';
 import PageTitle from '../../../ui/PageTitle';
 import Icon from '../../../ui/icon/index';
@@ -52,11 +52,12 @@ export default function TeamList() {
   const authToken = useSelector((state) => state.auth.token);
   const courses = useSelector((state) => state.courses.byId);
   const classes = useSelector((state) => state.classes.byId);
-  const teams = useSelector((state) => state.teams.byId);
-  const teamIds = useSelector((state) => state.teams.allIds);
-  const loading = useSelector((state) => state.loading.myClass.team);
+  const teams = useSelector((state) => state.teams);
+  const loading = useSelector((state) => state.loading);
+  const error = useSelector((state) => state.error);
 
   const user = useSelector((state) => state.user);
+
   const [isManager, setIsManager] = useState(false);
 
   const [showImportDialog, setShowImportDialog] = useState(false);
@@ -71,20 +72,10 @@ export default function TeamList() {
   });
 
   useEffect(() => {
-    user.classes.forEach((item) => {
-      if (item.class_id === parseInt(classId, 10)) {
-        if (item.role === 'MANAGER') {
-          setIsManager(true);
-        }
-      }
-    });
-  }, [classId, user.classes]);
-
-  useEffect(() => {
-    if (!loading.addTeam && !loading.importTeam) {
-      dispatch(fetchTeams(authToken, classId, {}));
+    if (user.classes) {
+      if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') setIsManager(true);
     }
-  }, [authToken, classId, dispatch, loading.addTeam, loading.importTeam]);
+  }, [classId, user.classes]);
 
   useEffect(() => {
     if (addInputs.label !== '' && addInputs.teamName !== '') {
@@ -148,7 +139,7 @@ export default function TeamList() {
   };
 
   if (courses[courseId] === undefined || classes[classId] === undefined) {
-    if (loading.fetchTeams) {
+    if (loading.fetchCourse || loading.fetchClass) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -157,8 +148,8 @@ export default function TeamList() {
   return (
     <>
       <PageTitle text={`${courses[courseId].name} ${classes[classId].name} / Team`} />
-      <CustomTable
-        hasSearch
+      <AutoTable
+        ident={`Team list ${classId}`}
         buttons={
           isManager && (
             <>
@@ -176,34 +167,50 @@ export default function TeamList() {
             </>
           )
         }
+        hasFilter
+        filterConfig={[
+          {
+            reduxStateId: 'name',
+            label: 'Team Name',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          {
+            reduxStateId: 'label',
+            label: 'Label',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+        ]}
+        refetch={(browseParams, ident) => {
+          dispatch(fetchTeams(authToken, classId, browseParams, ident));
+        }}
+        refetchErrors={[error.myClass.team.fetchTeams]}
+        refreshLoadings={[loading.myClass.team.addTeam, loading.myClass.team.importTeam, loading.myClass.team.editTeam]}
         columns={[
           {
-            id: 'label',
-            label: 'Label',
-            minWidth: 50,
+            name: 'Team Name',
             align: 'center',
-            width: 150,
+            minWidth: 150,
+            width: 200,
             type: 'string',
           },
           {
-            id: 'teamName',
-            label: 'Team Name',
-            minWidth: 50,
+            name: 'Label',
             align: 'center',
-            width: 150,
+            minWidth: 50,
+            width: 180,
             type: 'string',
           },
         ]}
-        data={teamIds.map((id) => ({
-          id: teams[id].id,
-          label: teams[id].label,
-          teamName: teams[id].name,
-          path: `/my-class/${courseId}/${classId}/team/${id}`,
-        }))}
+        reduxData={teams}
+        reduxDataToRows={(item) => ({
+          'Team Name': item.name,
+          Label: item.label,
+          link: `/my-class/${courseId}/${classId}/team/${item.id}`,
+        })}
         hasLink
-        linkName="path"
       />
-
       <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Import Team</Typography>
@@ -268,7 +275,6 @@ export default function TeamList() {
           </Button>
         </DialogActions>
       </Dialog>
-
       <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Create New Team</Typography>
