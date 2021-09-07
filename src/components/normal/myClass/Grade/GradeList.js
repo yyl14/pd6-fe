@@ -16,7 +16,8 @@ import { useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 import moment from 'moment-timezone';
 import AlignedText from '../../../ui/AlignedText';
-import CustomTable from '../../../ui/CustomTable';
+// import CustomTable from '../../../ui/CustomTable';
+import AutoTable from '../../../ui/AutoTable';
 import FileUploadArea from '../../../ui/FileUploadArea';
 import PageTitle from '../../../ui/PageTitle';
 import Icon from '../../../ui/icon/index';
@@ -57,17 +58,14 @@ export default function GradeList() {
   const authToken = useSelector((state) => state.auth.token);
   const courses = useSelector((state) => state.courses.byId);
   const classes = useSelector((state) => state.classes.byId);
-  const members = useSelector((state) => state.classMembers.byId);
-  const memberIds = useSelector((state) => state.classMembers.allIds);
-  const grades = useSelector((state) => state.grades.byId);
-  const gradeIds = useSelector((state) => state.grades.allIds);
+  const accounts = useSelector((state) => state.accounts);
+  const grades = useSelector((state) => state.grades);
   const loading = useSelector((state) => state.loading.myClass.grade);
   const error = useSelector((state) => state.error.myClass.grade);
 
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
 
-  const [tableData, setTableData] = useState([]);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [addInputs, setAddInputs] = useState({
@@ -83,37 +81,10 @@ export default function GradeList() {
   const [hasRequest, setHasRequest] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchClassMembers(authToken, classId, {}));
-  }, [authToken, classId, dispatch]);
-
-  useEffect(() => {
-    if (!loading.addClassGrade) {
-      dispatch(fetchClassGrade(authToken, classId));
+    if (user.classes) {
+      if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') setIsManager(true);
     }
-  }, [authToken, classId, dispatch, loading.addClassGrade]);
-
-  useEffect(() => {
-    user.classes.forEach((item) => {
-      if (item.class_id === parseInt(classId, 10)) {
-        if (item.role === 'MANAGER') {
-          setIsManager(true);
-        }
-      }
-    });
   }, [classId, user.classes]);
-
-  useEffect(() => {
-    const newData = gradeIds.map((id) => ({
-      ...members[grades[id].receiver_id],
-      title: grades[id].title,
-      score: grades[id].score,
-      time: moment(grades[id].update_time).format('YYYY-MM-DD, HH:mm'),
-      id: grades[id].id,
-      path: `/my-class/${courseId}/${classId}/grade/${grades[id].id}`,
-      user_path: '/',
-    }));
-    setTableData(newData);
-  }, [members, memberIds, grades, courseId, classId, isManager, gradeIds]);
 
   useEffect(() => {
     if (showImportDialog) {
@@ -208,91 +179,98 @@ export default function GradeList() {
     setHasRequest(false);
   };
 
-  if (
-    loading.fetchCourse
-    || loading.fetchClass
-    || loading.fetchClassGrade
-    || loading.fetchClassMembers
-    || loading.importClassGrade
-    || loading.addClassGrade
-  ) {
-    return <GeneralLoading />;
-  }
-  if (courses[courseId] === undefined || classes[classId] === undefined || grades === undefined) {
+  if (courses[courseId] === undefined || classes[classId] === undefined) {
+    if (loading.fetchCourse || loading.fetchClass) {
+      return <GeneralLoading />;
+    }
     return <NoMatch />;
   }
+
+  console.log(grades);
 
   return (
     <>
       <PageTitle text={`${courses[courseId].name} ${classes[classId].name} / Grade`} />
-      <CustomTable
-        hasSearch
-        buttons={
-          isManager && (
-            <>
-              <Button variant="outlined" color="primary" onClick={() => setShowAddDialog(true)}>
-                <MdAdd />
-              </Button>
-              <Button color="primary" onClick={() => setShowImportDialog(true)} startIcon={<Icon.Folder />}>
-                Import
-              </Button>
-            </>
-          )
-        }
-        data={tableData}
+      <AutoTable
+        ident={`Grade list ${classId}`}
+        hasFilter
+        filterConfig={[
+          {
+            reduxStateId: 'title',
+            label: 'Title',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          {
+            reduxStateId: 'score',
+            label: 'Score',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+        ]}
+        buttons={(
+          <>
+            {isManager && (
+              <>
+                <Button variant="outlined" color="primary" onClick={() => setShowAddDialog(true)}>
+                  <MdAdd />
+                </Button>
+                <Button color="primary" onClick={() => setShowImportDialog(true)} startIcon={<Icon.Folder />}>
+                  Import
+                </Button>
+              </>
+            )}
+          </>
+        )}
+        refetch={(browseParams, ident) => {
+          dispatch(fetchClassGrade(authToken, classId, browseParams, ident));
+        }}
+        refetchErrors={[error.fetchClassGrade]}
+        refreshLoadings={[loading.addClassGrade, loading.importClassGrade]}
         columns={[
           {
-            id: 'username',
-            label: 'Username',
-            minWidth: 50,
+            name: 'Username',
             align: 'center',
-            width: 150,
             type: 'link',
-            link_id: 'user_path',
           },
           {
-            id: 'student_id',
-            label: 'Student ID',
-            minWidth: 50,
+            name: 'Student ID',
             align: 'center',
-            width: 150,
             type: 'string',
           },
           {
-            id: 'real_name',
-            label: 'Real Name',
-            minWidth: 50,
+            name: 'Real Name',
             align: 'center',
-            width: 150,
             type: 'string',
           },
           {
-            id: 'title',
-            label: 'Title',
-            minWidth: 50,
+            name: 'Title',
             align: 'center',
-            width: 120,
             type: 'string',
           },
           {
-            id: 'score',
-            label: 'Score',
-            minWidth: 50,
+            name: 'Score',
             align: 'center',
-            width: 120,
             type: 'string',
           },
           {
-            id: 'time',
-            label: 'Time',
-            minWidth: 100,
+            name: 'Time',
             align: 'center',
-            width: 200,
             type: 'string',
           },
         ]}
-        hasLink
-        linkName="path"
+        reduxData={grades}
+        reduxDataToRows={(item) => ({
+          Username: {
+            text: accounts.byId[item.receiver_id] ? accounts.byId[item.receiver_id].username : '',
+            path: `/admin/account/account/${item.receiver_id}/setting`,
+          },
+          'Student ID': accounts.byId[item.receiver_id] ? accounts.byId[item.receiver_id].student_id : '',
+          'Real Name': accounts.byId[item.receiver_id] ? accounts.byId[item.receiver_id].real_name : '',
+          Title: item.title,
+          Score: item.score,
+          Time: moment(item.update_time).format('YYYY-MM-DD, HH:mm:ss'),
+        })}
       />
 
       <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} fullWidth maxWidth="sm">
@@ -349,7 +327,7 @@ export default function GradeList() {
 
       <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
-          <Typography variant="h4">Import Grades</Typography>
+          <Typography variant="h4">Import Grades.byId</Typography>
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2">Grade file format:</Typography>
