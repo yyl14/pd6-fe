@@ -71,7 +71,7 @@ export default function AccountSetting() {
 
   return (
     <div>
-      <PageTitle text={`${account.usernamem} / Setting`} />
+      <PageTitle text={`${account.username} / Setting`} />
       {editBasicInfo ? (
         <BasicInfoEdit
           handleBack={handleBasicBack}
