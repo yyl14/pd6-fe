@@ -34,11 +34,9 @@ export default function AccountSetting() {
   }, [dispatch, authToken, loading.editGrade, gradeId]);
 
   useEffect(() => {
-    user.classes.forEach((item) => {
-      if (item.class_id === Number(classId) && item.role === 'MANAGER') {
-        setIsManager(true);
-      }
-    });
+    if (user.classes) {
+      if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') setIsManager(true);
+    }
   }, [classId, user.classes]);
 
   const handleBack = () => {
@@ -49,7 +47,6 @@ export default function AccountSetting() {
     setEditGradeInfo(true);
   };
 
-  console.log(loading, grades);
   if (grades[gradeId] === undefined) {
     if (loading.fetchGrade || loading.editGrade) {
       return <GeneralLoading />;
