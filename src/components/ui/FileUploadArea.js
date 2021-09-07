@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
   browseButton: {
     marginRight: '10px',
+    marginLeft: '0px',
   },
   fieldAlignedText: {
     marginTop: '18px',
