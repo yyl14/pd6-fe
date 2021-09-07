@@ -501,6 +501,7 @@ function AutoTable({
           </Table>
         </TableContainer>
         <div className={classes.bottomWrapper}>
+          <div />
           {/* <div>{dataComplete || isError || <CircularProgress color="inherit" size={30} />}</div> */}
           <div className={classes.bottom}>
             <FormControl variant="outlined">
