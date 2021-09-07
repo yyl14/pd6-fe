@@ -28,32 +28,32 @@ const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
 
 const fetchChallenges = (token, classId, browseParams, tableId = null) => async (dispatch) => {
   try {
-    dispatch({ type: challengeConstants.FETCH_CHALLENGES_REQUEST });
-    let temp = {
+    // transform status to time comparison
+    const adjustedBrowseParams = {
       ...browseParams,
-    };
-    if (browseParams.filter.length > 0) {
-      if (browseParams.filter[0][0] === 'status') {
-        let newQuery = [];
-        const currentTime = moment().toISOString();
-        if (browseParams.filter[0][2][0] === 'Not Yet') {
-          newQuery = [['start_time', '>', currentTime]];
-        } else if (browseParams.filter[0][2][0] === 'Closed') {
-          newQuery = [['end_time', '<', currentTime]];
-        } else if (browseParams.filter[0][2][0] === 'Opened') {
-          newQuery = [['start_time', '<', currentTime], ['end_time', '>', currentTime]];
+      filter: browseParams.filter.reduce((acc, item) => {
+        if (item[0] === 'status') {
+          const currentTime = moment().toISOString();
+
+          if (item[2][0] === 'Not Yet') {
+            return [...acc, ['start_time', '>', currentTime]];
+          }
+          if (item[2][0] === 'Closed') {
+            return [...acc, ['end_time', '<', currentTime]];
+          }
+          if (item[2][0] === 'Opened') {
+            return [...acc, ['start_time', '<', currentTime], ['end_time', '>', currentTime]];
+          }
         }
-        temp = {
-          ...browseParams,
-          filter: newQuery,
-        };
-      }
-    }
+        return [...acc, item];
+      }, []),
+    };
 
     const config = {
       headers: {
         'auth-token': token,
       },
+      params: browseParamsTransForm(adjustedBrowseParams),
     };
     dispatch({ type: challengeConstants.FETCH_CHALLENGES_START });
     const res = await agent.get(`/class/${classId}/challenge`, config);

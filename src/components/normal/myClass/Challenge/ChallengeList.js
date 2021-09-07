@@ -78,20 +78,6 @@ export default function ChallengeList() {
   const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
 
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-    if (!loading.addChallenge) {
-      const browseParams = {
-        limit: 5,
-        offset: 0 * 5,
-        filter: [],
-        sort: [],
-      };
-      dispatch(fetchChallenges(authToken, classId, browseParams, tableIdent));
-    }
-  }, [dispatch, authToken, classId, courseId, loading.addChallenge]);
-
   const getStatus = (id) => {
     const currentTime = moment();
     if (currentTime.isBefore(moment(challenges.byId[id].start_time))) {
@@ -110,7 +96,7 @@ export default function ChallengeList() {
   }, [classId, userClasses]);
 
   if (courses[courseId] === undefined || classes[classId] === undefined) {
-    if (loading.fetchChallenges || commonLoading.fetchClass || commonLoading.fetchCourse) {
+    if (commonLoading.fetchClass || commonLoading.fetchCourse) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -196,7 +182,7 @@ export default function ChallengeList() {
           {
             reduxStateId: 'status',
             label: 'Status',
-            type: 'ENUM',
+            type: 'ENUM_SINGLE',
             operation: 'IN',
             options: [
               { value: 'Not Yet', label: 'Not Yet' },
@@ -209,6 +195,7 @@ export default function ChallengeList() {
           dispatch(fetchChallenges(authToken, classId, browseParams, ident));
         }}
         refetchErrors={[error]}
+        refreshLoadings={[loading.addChallenge]}
         columns={[
           {
             name: 'Title',
