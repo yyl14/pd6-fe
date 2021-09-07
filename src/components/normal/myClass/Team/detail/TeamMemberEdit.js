@@ -64,17 +64,11 @@ export default function TeamMemberEdit(props) {
 
   const handleCancel = () => {
     // delete unsaved added members
-    tempAddData.forEach((item) => {
-      teamMemberIds.forEach((id) => {
-        if (
-          item === teamMembers[id].account.username
-          || item === teamMembers[id].account.real_name
-          || item === teamMembers[id].account.student_id
-        ) {
-          dispatch(deleteTeamMember(authToken, teamId, teamMembers[id].member_id));
-        }
-      });
-    });
+    tempAddData.map((item) => teamMemberIds.map((id) => (
+      item === teamMembers[id].account.username
+      || item === teamMembers[id].account.real_name
+      || item === teamMembers[id].account.student_id)
+      && dispatch(deleteTeamMember(authToken, teamId, teamMembers[id].member_id))));
     props.handleBack();
   };
 
