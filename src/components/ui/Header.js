@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import moment from 'moment';
-import {
-  makeStyles, Typography, AppBar, Toolbar,
-} from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { format } from 'date-fns';
+import moment from 'moment';
+import {
+  makeStyles, Typography, AppBar, Toolbar,
+} from '@material-ui/core';
 import Icon from './icon/index';
 import { userLogout } from '../../actions/user/auth';
 import { userBrowseAnnouncement, userReadAnnouncement } from '../../actions/user/user';
@@ -22,6 +22,8 @@ const useStyles = makeStyles((theme) => ({
     height: '55px',
     paddingLeft: '0px',
   },
+
+  // header left
   item: {
     marginLeft: '50px',
     // marginRight: '0.8vw',
@@ -29,42 +31,44 @@ const useStyles = makeStyles((theme) => ({
       cursor: 'pointer',
     },
   },
+
+  // header right
+  right: {
+    marginLeft: 'auto',
+    marginRight: 0,
+  },
   date: {
     position: 'relative',
     float: 'left',
     marginRight: '20px',
-    marginTop: '2px',
-    marginBottom: 'auto',
-    top: '2px',
+    marginTop: '4px',
   },
   notificationContainer: {
     position: 'relative',
     display: 'inline-block',
     '&:hover': {
-      // '& $notificationDropContent': {
-      //   display: 'block',
-      // },
       cursor: 'pointer',
     },
   },
-  notification: {
+  notificationIcon: {
     position: 'relative',
     float: 'left',
     width: '20px',
     marginTop: '3px',
-    marginBottom: 'auto',
     marginRight: '16px',
     top: '2px',
   },
-  notificationTitle: {
-    wordBreak: 'break-word',
+  unreadDot: {
+    width: '6.75px',
+    height: '6.75px',
+    backgroundColor: theme.palette.secondary.main,
+    position: 'absolute',
+    left: '14px',
+    top: '17px',
+    borderRadius: '50%',
+    zIndex: 2,
   },
-  notificationDays: {
-    color: theme.palette.grey.A400,
-    marginLeft: '10px',
-    minWidth: '50px',
-  },
-  notificationDropContent: {
+  notificationDropdownContent: {
     position: 'absolute',
     backgroundColor: theme.palette.primary.contrastText,
     right: '-120px',
@@ -79,13 +83,9 @@ const useStyles = makeStyles((theme) => ({
   eachNotify: {
     color: theme.palette.black.main,
     padding: '20px 30px',
-    width: '460px',
     minHeight: '106px',
-    height: 'auto',
     borderBottom: `1px solid ${theme.palette.grey.A700}`,
-    textDecoration: 'none',
     textAlign: 'left',
-    display: 'block',
     '&:nth-child(1)': {
       borderRadius: '10px 10px 0 0',
     },
@@ -95,30 +95,21 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       cursor: 'pointer',
     },
-    '& div': {
-      width: '400px',
-      minHeight: '25px',
-      height: 'auto',
-      lineHeight: '25px',
-      display: 'flex',
-      justifyContent: 'space-between',
-      '& span': {
-        fontSize: '18px',
-      },
-    },
   },
-  unread: {
+  unreadNotification: {
     backgroundColor: theme.palette.grey.A100,
   },
-  unreadDot: {
-    width: '6.75px',
-    height: '6.75px',
-    backgroundColor: theme.palette.secondary.main,
-    position: 'absolute',
-    left: '14px',
-    top: '17px',
-    borderRadius: '50%',
-    zIndex: 2,
+  notificationHead: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  notificationTitle: {
+    wordBreak: 'break-word',
+  },
+  notificationDays: {
+    color: theme.palette.grey.A400,
+    marginLeft: '10px',
+    minWidth: '50px',
   },
   notificationContent: {
     marginTop: '16px',
@@ -127,51 +118,14 @@ const useStyles = makeStyles((theme) => ({
     wordBreak: 'break-word',
   },
 
-  name: {
-    width: '65px',
-    height: '33px',
-    float: 'left',
-    marginLeft: '2vw',
-    marginRight: '1vw',
-    marginTop: 'auto',
-    marginBottom: 'auto',
-    fontSize: '1rem',
-    color: 'white',
-    backgroundColor: 'black',
-    '&:hover': {
-      backgroundColor: 'black',
-    },
-  },
-  right: {
-    marginLeft: 'auto',
-    marginRight: 0,
-  },
-  avatar: {
-    marginLeft: '2vw',
-    marginRight: '3.5vw',
-    height: '4vh',
-    width: '4vh',
-  },
-  a: {
-    color: 'inherit',
-    textDecoration: 'none',
-  },
-  active: {
-    textDecoration: 'none',
-    color: theme.palette.primary.main,
-  },
-
-  // menu
-  dropdown: {
+  // user
+  userContainer: {
     position: 'relative',
     display: 'inline-block',
     marginRight: '20px',
     bottom: '3px',
   },
-
-  dropbtn: {
-    marginTop: 'auto',
-    marginBottom: 'auto',
+  userButton: {
     backgroundColor: theme.palette.black.main,
     color: theme.palette.primary.contrastText,
     border: 'none',
@@ -179,8 +133,11 @@ const useStyles = makeStyles((theme) => ({
       cursor: 'pointer',
     },
   },
-
-  dropdownContent: {
+  active: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+  },
+  userDropdownContent: {
     position: 'absolute',
     backgroundColor: theme.palette.primary.contrastText,
     marginLeft: '-20px',
@@ -211,18 +168,20 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header() {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
-  const authToken = useSelector((state) => state.auth.token);
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
+
+  const user = useSelector((state) => state.user);
+  const authToken = useSelector((state) => state.auth.token);
+
   const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   HH:mm'));
   const [itemList, setItemList] = useState([]);
   const [menuList, setMenuList] = useState([]);
-  const [notifyPop, setNotifyPop] = useState(false);
+  const [notifyDropdown, setNotifyDropdown] = useState(false);
+  const [userDropdown, setUserDropdown] = useState(false);
   const [notifyAlreadyClose, setNotifyAlreadyClose] = useState(false);
-  const [accountAlreadyClose, setAccountAlreadyClose] = useState(false);
-  const [accountPop, setAccountPop] = useState(false);
+  const [userAlreadyClose, setUserAlreadyClose] = useState(false);
   const [notifyList, setNotifyList] = useState([]);
   const [unreadNotifyExist, setUnreadNotifyExist] = useState(false);
 
@@ -230,7 +189,7 @@ export default function Header() {
   const [, , removeCookie] = useCookies(['token', 'id']);
 
   const notifyRef = useRef(null);
-  const accountRef = useRef(null);
+  const userRef = useRef(null);
 
   useEffect(() => {
     setHasClass(user.classes.length !== 0);
@@ -362,25 +321,25 @@ export default function Header() {
   const handleNotifyClickOutside = (event) => {
     if (notifyRef.current && !notifyRef.current.contains(event.target)) {
       setNotifyAlreadyClose(true);
-      setNotifyPop(false);
+      setNotifyDropdown(false);
       setTimeout(() => setNotifyAlreadyClose(false), 300);
     }
   };
 
-  const handleAccountClickOutside = (event) => {
-    if (accountRef.current && !accountRef.current.contains(event.target)) {
-      setAccountAlreadyClose(true);
-      setAccountPop(false);
-      setTimeout(() => setAccountAlreadyClose(false), 300);
+  const handleUserClickOutside = (event) => {
+    if (userRef.current && !userRef.current.contains(event.target)) {
+      setUserAlreadyClose(true);
+      setUserDropdown(false);
+      setTimeout(() => setUserAlreadyClose(false), 300);
     }
   };
 
   useEffect(() => {
     document.addEventListener('click', handleNotifyClickOutside, true);
-    document.addEventListener('click', handleAccountClickOutside, true);
+    document.addEventListener('click', handleUserClickOutside, true);
     return () => {
       document.removeEventListener('click', handleNotifyClickOutside, true);
-      document.removeEventListener('click', handleAccountClickOutside, true);
+      document.removeEventListener('click', handleUserClickOutside, true);
     };
   });
 
@@ -399,16 +358,16 @@ export default function Header() {
 
   const toggleNotify = () => {
     if (!notifyAlreadyClose) {
-      setNotifyPop(true);
+      setNotifyDropdown(true);
     }
     setNotifyAlreadyClose(false);
   };
 
-  const toggleAccount = () => {
-    if (!accountAlreadyClose) {
-      setAccountPop(true);
+  const toggleUser = () => {
+    if (!userAlreadyClose) {
+      setUserDropdown(true);
     }
-    setAccountAlreadyClose(false);
+    setUserAlreadyClose(false);
   };
 
   // const readNotification = (notifyId) => {
@@ -449,22 +408,24 @@ export default function Header() {
               role="button"
               tabIndex="0"
             >
-              <Icon.NotificationsIcon className={classes.notification} />
+              <Icon.NotificationsIcon className={classes.notificationIcon} />
               {unreadNotifyExist && <div className={classes.unreadDot} />}
-              {notifyPop && (
-                <div className={classes.notificationDropContent} ref={notifyRef}>
+              {notifyDropdown && (
+                <div className={classes.notificationDropdownContent} ref={notifyRef}>
                   {notifyList.map((notify) => (
                     <div
                       key={notify.title}
                       className={
-                        notify.is_deleted ? `${classes.eachNotify}` : `${classes.eachNotify} ${classes.unread}`
+                        notify.is_deleted
+                          ? `${classes.eachNotify}`
+                          : `${classes.eachNotify} ${classes.unreadNotification}`
                       }
                       role="button"
                       tabIndex={notify.id}
                       // onClick={() => readNotification(notify.id)}
                       // onKeyDown={() => readNotification(notify.id)}
                     >
-                      <div>
+                      <div className={classes.notificationHead}>
                         <Typography variant="h6" className={classes.notificationTitle}>
                           {notify.title}
                         </Typography>
@@ -481,19 +442,19 @@ export default function Header() {
               )}
             </div>
             <div
-              className={classes.dropdown}
-              onClick={toggleAccount}
-              onKeyDown={toggleAccount}
+              className={classes.userContainer}
+              onClick={toggleUser}
+              onKeyDown={toggleUser}
               role="button"
               tabIndex="-1"
             >
-              <button type="button" className={classes.dropbtn}>
+              <button type="button" className={classes.userButton}>
                 <Typography variant="h6" className={location.pathname === '/my-profile' ? classes.active : null}>
                   {user.username}
                 </Typography>
               </button>
-              {accountPop && (
-                <div className={classes.dropdownContent} ref={accountRef}>
+              {userDropdown && (
+                <div className={classes.userDropdownContent} ref={userRef}>
                   {menuList.map((item) => (
                     <span
                       key={item.link}
