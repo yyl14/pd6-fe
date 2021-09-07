@@ -44,6 +44,7 @@ export default function SampleUploadCard({
   const [memory, setMemory] = useState(65535);
 
   const handleConfirm = () => {
+    console.log(selectedFile);
     const newSelectedFile = selectedFile.map((data) => ({
       ...data,
       no: data.id,
@@ -88,7 +89,7 @@ export default function SampleUploadCard({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleCancel()} color="default">
+          <Button onClick={handleCancel} color="default">
             Cancel
           </Button>
           <Button onClick={handleConfirm} color="primary">
