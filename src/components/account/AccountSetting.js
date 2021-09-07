@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { fetchStudentCard } from '../../actions/user/user';
+import { fetchStudentCards } from '../../actions/user/user';
 import { getInstitutes } from '../../actions/common/common';
 import GeneralLoading from '../GeneralLoading';
 
@@ -36,24 +36,26 @@ export default function AccountSetting() {
   const loading = useSelector((state) => state.loading.user);
 
   useEffect(() => {
-    dispatch(fetchStudentCard(authToken, accountId));
+    dispatch(fetchStudentCards(authToken, accountId));
   }, [authToken, accountId, dispatch]);
-
-  useEffect(() => {
-    setCards(account.studentCards.reduce((acc, key) => {
-      if (studentCards.byId[key]) {
-        return [...acc, studentCards.byId[key]];
-      }
-      return [...acc];
-    }, []));
-  }, [account, studentCards]);
 
   useEffect(() => {
     dispatch(getInstitutes());
   }, [dispatch]);
 
+  useEffect(() => {
+    setCards(
+      account.studentCards.reduce((acc, key) => {
+        if (studentCards.byId[key]) {
+          return [...acc, studentCards.byId[key]];
+        }
+        return [...acc];
+      }, []),
+    );
+  }, [account, studentCards]);
+
   if (account === undefined || studentCards === undefined) {
-    if (loading.auth.fetchAccount || loading.user.fetchStudentCard) {
+    if (loading.auth.fetchAccount || loading.user.fetchStudentCards) {
       return <GeneralLoading />;
     }
     return <NoMatch />;

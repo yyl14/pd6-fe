@@ -1,15 +1,13 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import {
-  Switch, Route, useParams,
-} from 'react-router-dom';
+import { Switch, Route, useParams } from 'react-router-dom';
 
 import CodingProblem from './CodingProblem';
 
 import GeneralLoading from '../../../GeneralLoading';
 import EssayProblem from './EssayProblem';
 import CodeSubmission from './CodeSubmission';
-import SubmissionList from './SubmissionList';
+import MySubmission from './MySubmission';
 import SubmissionDetail from './SubmissionDetail';
 import NoMatch from '../../../noMatch';
 
@@ -28,11 +26,7 @@ export default function Task() {
   const challenges = useSelector((state) => state.challenges.byId);
 
   // const dispatch = useDispatch();
-  if (
-    challenges[challengeId] === undefined
-    || courses[courseId] === undefined
-    || classes[classId] === undefined
-  ) {
+  if (challenges[challengeId] === undefined || courses[courseId] === undefined || classes[classId] === undefined) {
     if (commonLoading.fetchCourse || commonLoading.fetchClass || commonLoading.fetchChallenge) {
       return <GeneralLoading />;
     }
@@ -55,7 +49,7 @@ export default function Task() {
         <Route
           exact
           path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission"
-          component={SubmissionList}
+          component={MySubmission}
         />
         <Route
           exact

@@ -33,6 +33,8 @@ export default function Normal() {
       <div className="layout-content-container">
         <div className="layout-content">
           <Switch>
+            {/* For redirection */}
+            <Route exact path="/my-class" component={MyClass} />
             <Route path="/my-class/:courseId/:classId" component={MyClass} />
             <Route path="/all-class" component={AllClass} />
             <Route path="/problem-set" component={ProblemSet} />

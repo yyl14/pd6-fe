@@ -39,7 +39,7 @@ export default function AccountSetting() {
     if (!loading.editGrade) {
       dispatch(fetchGrade(authToken, gradeId));
     }
-  }, [dispatch, authToken, gradeId, loading.editGrade]);
+  }, [dispatch, authToken, loading.editGrade, gradeId]);
 
   useEffect(() => {
     user.classes.forEach((item) => {
