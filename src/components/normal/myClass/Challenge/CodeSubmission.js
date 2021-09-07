@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
-  Button,
-  makeStyles,
-  TextField,
-  MenuItem,
-  FormControl,
-  Select,
+  Button, makeStyles, TextField, MenuItem, FormControl, Select,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 import AlignedText from '../../../ui/AlignedText';
+import PageTitle from '../../../ui/PageTitle';
 
 import { readProblemInfo, submitCode } from '../../../../actions/myClass/problem';
 import { browseSubmitLang } from '../../../../actions/common/common';
@@ -20,9 +15,6 @@ import { browseSubmitLang } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   selectField: {
     width: '300px',
   },
@@ -90,9 +82,7 @@ export default function CodeSubmission() {
 
   return (
     <>
-      <Typography className={classNames.pageHeader} variant="h3">
-        {`${challenges[challengeId].title} / ${problems[problemId].challenge_label} / Code Submission`}
-      </Typography>
+      <PageTitle text={`${challenges[challengeId].title} / ${problems[problemId].challenge_label} / Code Submission`} />
       <AlignedText text="Language" maxWidth="lg" childrenType="field">
         <FormControl variant="outlined" className={classNames.selectField}>
           <Select

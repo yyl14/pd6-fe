@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { fetchStudentCard } from '../../../../actions/admin/account';
+import { fetchStudentCards } from '../../../../actions/admin/account';
 import { fetchAccount, getInstitutes } from '../../../../actions/common/common';
+import PageTitle from '../../../ui/PageTitle';
 import NoMatch from '../../../noMatch';
 import BasicInfo from './BasicInfo';
 import BasicInfoEdit from './BasicInfoEdit';
@@ -14,19 +13,12 @@ import AccountDelete from './AccountDelete';
 import NewPassword from './NewPassword';
 import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-}));
-
 /* This is a level 4 component (page component) */
 
 export default function AccountSetting() {
   const [cards, setCards] = useState([]);
   const [editBasicInfo, setEditBasicInfo] = useState(false);
   const [editStudInfo, setEditStudInfo] = useState(false);
-  const classes = useStyles();
 
   const dispatch = useDispatch();
   const { accountId } = useParams();
@@ -44,20 +36,20 @@ export default function AccountSetting() {
 
   useEffect(() => {
     if (!loading.makeStudentCardDefault) {
-      dispatch(fetchStudentCard(authToken, accountId));
+      dispatch(fetchStudentCards(authToken, accountId));
     }
   }, [accountId, authToken, dispatch, loading.makeStudentCardDefault]);
-
-  useEffect(() => {
-    setCards(Object.values(studentCards));
-  }, [studentCards]);
 
   useEffect(() => {
     dispatch(getInstitutes());
   }, [dispatch]);
 
+  useEffect(() => {
+    setCards(Object.values(studentCards));
+  }, [studentCards]);
+
   if (accounts[accountId] === undefined || studentCards === undefined) {
-    if (loading.fetchAccount || loading.fetchStudentCard) {
+    if (loading.fetchAccount || loading.fetchStudentCards) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -81,11 +73,7 @@ export default function AccountSetting() {
 
   return (
     <div>
-      <Typography variant="h3" className={classes.pageHeader}>
-        {account.username}
-        {' '}
-        / Setting
-      </Typography>
+      <PageTitle text={`${account.username} / Setting`} />
       {editBasicInfo ? (
         <BasicInfoEdit
           handleBack={handleBasicBack}

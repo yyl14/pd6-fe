@@ -22,10 +22,7 @@ import { uploadEssay, reUploadEssay } from '../../../../../actions/myClass/essay
 import { downloadFile } from '../../../../../actions/common/common';
 import { browseTasksUnderChallenge } from '../../../../../actions/myClass/challenge';
 
-const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
+const useStyles = makeStyles(() => ({
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end',
@@ -121,11 +118,10 @@ export default function EssayInfo({ role = 'NORMAL' }) {
       <SimpleBar title="Title">{essay[essayId] === undefined ? 'error' : essay[essayId].title}</SimpleBar>
       <SimpleBar title="Description">{essay[essayId] === undefined ? 'error' : essay[essayId].description}</SimpleBar>
       <SimpleBar title="File">
-        { currentTime.isBefore(moment(challenges[challengeId].end_time))
-        && (
-        <StyledButton variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>
-          Upload
-        </StyledButton>
+        {currentTime.isBefore(moment(challenges[challengeId].end_time)) && (
+          <StyledButton variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>
+            Upload
+          </StyledButton>
         )}
       </SimpleBar>
       {essaySubmission

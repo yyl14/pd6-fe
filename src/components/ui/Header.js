@@ -9,7 +9,7 @@ import { useCookies } from 'react-cookie';
 import { format } from 'date-fns';
 import Icon from './icon/index';
 import { userLogout } from '../../actions/user/auth';
-import { userGetNotify, userReadNotify } from '../../actions/user/user';
+import { userBrowseAnnouncement, userReadAnnouncement } from '../../actions/user/user';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -224,14 +224,14 @@ export default function Header() {
   const [unreadNotifyExist, setUnreadNotifyExist] = useState(false);
 
   const [hasClass, setHasClass] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies(['token', 'id']);
+  const [, , removeCookie] = useCookies(['token', 'id']);
 
   useEffect(() => {
     setHasClass(user.classes.length !== 0);
   }, [user.classes.length]);
 
   useEffect(() => {
-    dispatch(userGetNotify(authToken));
+    dispatch(userBrowseAnnouncement(authToken));
   }, [authToken, dispatch]);
 
   useEffect(() => {
@@ -374,13 +374,12 @@ export default function Header() {
     setNotifyPop(!notifyPop);
   };
 
-  const readNotification = (notifyId) => {
-    dispatch(userReadNotify(authToken, notifyId));
-    // dispatch(userGetNotify(authToken)); // this line needs to be de-marked when BE complete read anoouncement
-  };
+  // const readNotification = (notifyId) => {
+  //   dispatch(userReadAnnouncement(authToken, notifyId));
+  //   // dispatch(userBrowseAnnouncement(authToken)); // this line needs to be de-marked when BE complete read announcement
+  // };
 
   const goto = (link) => {
-    // console.log(link);
     if (link === '/logout') {
       removeCookie('token', { path: '/' });
       removeCookie('id', { path: '/' });
@@ -419,8 +418,8 @@ export default function Header() {
                       }
                       role="button"
                       tabIndex={notify.id}
-                      onClick={() => readNotification(notify.id)}
-                      onKeyDown={() => readNotification(notify.id)}
+                      // onClick={() => readNotification(notify.id)}
+                      // onKeyDown={() => readNotification(notify.id)}
                     >
                       <div>
                         <span>

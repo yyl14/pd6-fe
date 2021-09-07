@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import { fetchClassMembers } from '../../../../actions/common/common';
-import { fetchClassGrade } from '../../../../actions/myClass/grade';
+import { fetchGrade } from '../../../../actions/myClass/grade';
+import PageTitle from '../../../ui/PageTitle';
 
 import GradeInfo from './detail/GradeInfo';
 import Grader from './detail/Grader';
@@ -13,15 +12,8 @@ import GradeDelete from './detail/GradeDelete';
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-}));
-
 /* This is a level 4 component (page component) */
 export default function AccountSetting() {
-  const classNames = useStyles();
   const dispatch = useDispatch();
   const { classId, gradeId } = useParams();
 
@@ -44,9 +36,9 @@ export default function AccountSetting() {
 
   useEffect(() => {
     if (!loading.editGrade) {
-      dispatch(fetchClassGrade(authToken, classId));
+      dispatch(fetchGrade(authToken, gradeId));
     }
-  }, [dispatch, authToken, classId, loading.editGrade]);
+  }, [dispatch, authToken, loading.editGrade, gradeId]);
 
   useEffect(() => {
     user.classes.forEach((item) => {
@@ -75,9 +67,7 @@ export default function AccountSetting() {
 
   return (
     <>
-      <Typography variant="h3" className={classNames.pageHeader}>
-        Grade / Detail
-      </Typography>
+      <PageTitle text="Grade / Detail" />
 
       {editGradeInfo ? (
         <GradeInfoEdit

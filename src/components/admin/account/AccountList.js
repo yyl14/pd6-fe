@@ -1,33 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { makeStyles, Button, Typography } from '@material-ui/core';
+import PageTitle from '../../ui/PageTitle';
 import CustomTable from '../../ui/CustomTable';
-import AlignedText from '../../ui/AlignedText';
 import { fetchAccounts } from '../../../actions/admin/account';
 import GeneralLoading from '../../GeneralLoading';
 
-const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-  popUpLayout: {
-    width: '100%',
-  },
-  selectField: {
-    minWidth: 210,
-  },
-  filterButton: {
-    justifyContent: 'space-between',
-  },
-  clearButton: {
-    backgroundColor: '#FFFFFF',
-    border: 'solid',
-    borderColor: '#DDDDDD',
-  },
-}));
-
 export default function AccountList() {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const accounts = useSelector((state) => state.accounts.byId);
@@ -58,9 +36,7 @@ export default function AccountList() {
 
   return (
     <>
-      <Typography variant="h3" className={classes.pageHeader}>
-        Account
-      </Typography>
+      <PageTitle text="Account" />
       <CustomTable
         hasSearch
         searchWidthOption={3}

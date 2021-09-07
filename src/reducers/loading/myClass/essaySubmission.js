@@ -45,19 +45,19 @@ export default function essaySubmission(state = initialState, action) {
         readEssaySubmission: false,
       };
     }
-    case essayConstants.REUPLOAD_ESSAY_SUBMISSION_START: {
+    case essayConstants.RE_UPLOAD_ESSAY_SUBMISSION_START: {
       return {
         ...state,
         reUploadEssay: true,
       };
     }
-    case essayConstants.REUPLOAD_ESSAY_SUBMISSION_SUCCESS: {
+    case essayConstants.RE_UPLOAD_ESSAY_SUBMISSION_SUCCESS: {
       return {
         ...state,
         reUploadEssay: true,
       };
     }
-    case essayConstants.REUPLOAD_ESSAY_SUBMISSION_FAIL: {
+    case essayConstants.RE_UPLOAD_ESSAY_SUBMISSION_FAIL: {
       return {
         ...state,
         reUploadEssay: false,

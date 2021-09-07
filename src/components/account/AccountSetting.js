@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { fetchStudentCard } from '../../actions/user/user';
+import { fetchStudentCards } from '../../actions/user/user';
 import { getInstitutes } from '../../actions/common/common';
 import GeneralLoading from '../GeneralLoading';
+import PageTitle from '../ui/PageTitle';
 
 import NoMatch from '../noMatch';
 import BasicInfo from './BasicInfo';
@@ -14,19 +13,12 @@ import StudentInfo from './StudentInfo';
 import StudentInfoEdit from './StudentInfoEdit';
 import NewPassword from './NewPassword';
 
-const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-}));
-
 /* This is a level 3 component (page component) */
 
 export default function AccountSetting() {
   const [cards, setCards] = useState([]);
   const [editBasicInfo, setEditBasicInfo] = useState(false);
   const [editStudInfo, setEditStudInfo] = useState(false);
-  const classes = useStyles();
 
   const dispatch = useDispatch();
   const accountId = useSelector((state) => state.user.id);
@@ -36,24 +28,26 @@ export default function AccountSetting() {
   const loading = useSelector((state) => state.loading.user);
 
   useEffect(() => {
-    dispatch(fetchStudentCard(authToken, accountId));
+    dispatch(fetchStudentCards(authToken, accountId));
   }, [authToken, accountId, dispatch]);
-
-  useEffect(() => {
-    setCards(account.studentCards.reduce((acc, key) => {
-      if (studentCards.byId[key]) {
-        return [...acc, studentCards.byId[key]];
-      }
-      return [...acc];
-    }, []));
-  }, [account, studentCards]);
 
   useEffect(() => {
     dispatch(getInstitutes());
   }, [dispatch]);
 
+  useEffect(() => {
+    setCards(
+      account.studentCards.reduce((acc, key) => {
+        if (studentCards.byId[key]) {
+          return [...acc, studentCards.byId[key]];
+        }
+        return [...acc];
+      }, []),
+    );
+  }, [account, studentCards]);
+
   if (account === undefined || studentCards === undefined) {
-    if (loading.auth.fetchAccount || loading.user.fetchStudentCard) {
+    if (loading.auth.fetchAccount || loading.user.fetchStudentCards) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -77,11 +71,7 @@ export default function AccountSetting() {
 
   return (
     <div>
-      <Typography variant="h3" className={classes.pageHeader}>
-        {account.username}
-        {' '}
-        / Setting
-      </Typography>
+      <PageTitle text={`${account.usernamem} / Setting`} />
       {editBasicInfo ? (
         <BasicInfoEdit
           handleBack={handleBasicBack}

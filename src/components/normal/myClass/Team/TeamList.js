@@ -16,6 +16,7 @@ import { MdAdd } from 'react-icons/md';
 import AlignedText from '../../../ui/AlignedText';
 import CustomTable from '../../../ui/CustomTable';
 import FileUploadArea from '../../../ui/FileUploadArea';
+import PageTitle from '../../../ui/PageTitle';
 import Icon from '../../../ui/icon/index';
 import {
   fetchTeams, addTeam, importTeam, downloadTeamFile,
@@ -25,9 +26,6 @@ import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   reminder: {
     color: theme.palette.grey.A400,
     marginLeft: theme.spacing(2),
@@ -65,7 +63,6 @@ export default function TeamList() {
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
 
-  const [tableData, setTableData] = useState([]);
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [disabled, setDisabled] = useState(true);
@@ -96,23 +93,23 @@ export default function TeamList() {
   }, [authToken, classId, dispatch, loading.addTeam, loading.importTeam]);
 
   useEffect(() => {
-    if (selectedFile.length === 0) {
-      setDisabled(true);
-    }
-  }, [selectedFile.length]);
-
-  useEffect(() => {
-    if (importInput !== '' && selectedFile.length !== 0) {
+    if (addInputs.label !== '' && addInputs.teamName !== '') {
       setDisabled(false);
     }
-  }, [importInput, selectedFile.length]);
+  }, [addInputs.label, addInputs.teamName, selectedFile.length]);
+
+  useEffect(() => {
+    if (importInput !== '' && selectedFile !== []) {
+      setDisabled(false);
+    }
+  }, [importInput, selectedFile]);
 
   const handleImportChange = (event) => {
-    if (event.target.value === '') {
-      setDisabled(true);
-      setImportInput(event.target.value);
-      return;
-    }
+    // if (event.target.value === '') {
+    //   setDisabled(true);
+    //   setImportInput(event.target.value);
+    //   return;
+    // }
     setImportInput(event.target.value);
   };
 
@@ -139,7 +136,7 @@ export default function TeamList() {
     }
     setShowImportDialog(false);
     clearImportInput();
-    setSelectedFile([]);
+    setDisabled(true);
   };
 
   const submitAdd = () => {
@@ -148,6 +145,7 @@ export default function TeamList() {
     }
     setShowAddDialog(false);
     clearAddInput();
+    setDisabled(true);
   };
 
   const downloadTemplate = () => {
@@ -164,9 +162,7 @@ export default function TeamList() {
 
   return (
     <>
-      <Typography variant="h3" className={classNames.pageHeader}>
-        {`${courses[courseId].name} ${classes[classId].name} / Team`}
-      </Typography>
+      <PageTitle text={`${courses[courseId].name} ${classes[classId].name} / Team`} />
       <CustomTable
         hasSearch
         buttons={
@@ -303,6 +299,7 @@ export default function TeamList() {
             onClick={() => {
               setShowAddDialog(false);
               clearAddInput();
+              setDisabled(true);
             }}
             color="default"
           >
@@ -311,8 +308,10 @@ export default function TeamList() {
           <Button
             onClick={() => {
               submitAdd();
+              setDisabled(true);
             }}
             color="primary"
+            disabled={disabled}
           >
             Create
           </Button>
