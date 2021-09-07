@@ -11,9 +11,10 @@ import {
   DialogContent,
   withStyles,
 } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Icon from '../../../ui/icon/index';
 import AlignedText from '../../../ui/AlignedText';
+import PageTitle from '../../../ui/PageTitle';
 
 import EssayInfo from './ProblemSettings/EssayInfo';
 import EssayEdit from './ProblemSettings/EssayEdit';
@@ -23,10 +24,7 @@ import { downloadAllEssaySubmission } from '../../../../actions/myClass/essaySub
 
 import NoMatch from '../../../noMatch';
 
-const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
+const useStyles = makeStyles(() => ({
   generalButtons: {
     display: 'flex',
     justifyContent: 'flex-end',
@@ -45,7 +43,6 @@ export default function EssayProblem() {
   const {
     courseId, classId, challengeId, essayId,
   } = useParams();
-  const history = useHistory();
   const classNames = useStyles();
 
   const dispatch = useDispatch();
@@ -101,11 +98,11 @@ export default function EssayProblem() {
 
   return (
     <>
-      <Typography className={classNames.pageHeader} variant="h3">
-        {challenges[challengeId] === undefined ? 'error' : challenges[challengeId].title}
-        {' / '}
-        {essays[essayId] === undefined ? 'error' : essays[essayId].challenge_label}
-      </Typography>
+      <PageTitle
+        text={`${challenges[challengeId] === undefined ? 'error' : challenges[challengeId].title} / ${
+          essays[essayId] === undefined ? 'error' : essays[essayId].challenge_label
+        }`}
+      />
       {!edit && role === 'MANAGER' && (
         <div className={classNames.managerButtons}>
           <Button onClick={() => setEdit(true)}>Edit</Button>

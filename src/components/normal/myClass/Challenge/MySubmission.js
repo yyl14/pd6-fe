@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Typography, Button, makeStyles } from '@material-ui/core';
+import { Typography, Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import Icon from '../../../ui/icon/index';
@@ -8,14 +8,9 @@ import AlignedText from '../../../ui/AlignedText';
 import AutoTable from '../../../ui/AutoTable';
 import NoMatch from '../../../noMatch';
 import SimpleBar from '../../../ui/SimpleBar';
+import PageTitle from '../../../ui/PageTitle';
 import { readSubmission, readSubmissionDetail, readProblemScore } from '../../../../actions/myClass/problem';
 import GeneralLoading from '../../../GeneralLoading';
-
-const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-}));
 
 const TableIdent = 'My Submission Table';
 
@@ -24,7 +19,6 @@ export default function MySubmission() {
   const {
     courseId, classId, challengeId, problemId,
   } = useParams();
-  const classNames = useStyles();
 
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
@@ -82,13 +76,7 @@ export default function MySubmission() {
 
   return (
     <>
-      <Typography className={classNames.pageHeader} variant="h3">
-        {challenges.byId[challengeId].title}
-        {' / '}
-        {problems.byId[problemId].challenge_label}
-        {' '}
-        / My Submission
-      </Typography>
+      <PageTitle text={`${challenges[challengeId].title} / ${problems[problemId].challenge_label} / My Submission`} />
       <SimpleBar title="Submission Information">
         <AlignedText text="My Last Score" childrenType="text">
           <Typography variant="body1">{problems.byId[problemId].score}</Typography>
@@ -153,11 +141,12 @@ export default function MySubmission() {
           const lastJudgmentId = judgments.allIds.filter((key) => judgments.byId[key].submission_id === item.id)[0];
           return {
             'Submission ID': item.id,
-            Status: lastJudgmentId ? judgments.byId[lastJudgmentId].status
-              .toLowerCase()
-              .split(' ')
-              .map((word) => word[0].toUpperCase() + word.substring(1))
-              .join(' ')
+            Status: lastJudgmentId
+              ? judgments.byId[lastJudgmentId].status
+                .toLowerCase()
+                .split(' ')
+                .map((word) => word[0].toUpperCase() + word.substring(1))
+                .join(' ')
               : 'Waiting For Judge',
             Score: lastJudgmentId ? judgments.byId[lastJudgmentId].score : '-',
             'Used Time(ms)': lastJudgmentId ? judgments.byId[lastJudgmentId].total_time : '-',

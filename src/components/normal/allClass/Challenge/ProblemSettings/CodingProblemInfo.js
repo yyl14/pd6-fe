@@ -2,19 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
-import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  TextField,
-  Grid,
-} from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { Typography, makeStyles, Grid } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
 import SimpleTable from '../../../../ui/SimpleTable';
 import SampleTestArea from '../../../../ui/SampleTestArea';
@@ -26,15 +15,8 @@ import { browseTasksUnderChallenge } from '../../../../../actions/myClass/challe
 import { downloadFile } from '../../../../../actions/common/common';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   sampleArea: {
     marginTop: '50px',
-  },
-  buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
   },
   table: {
     width: '100%',

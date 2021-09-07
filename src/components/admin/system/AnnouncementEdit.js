@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, TextField, makeStyles } from '@material-ui/core';
 import moment from 'moment-timezone';
@@ -9,10 +8,7 @@ import DateRangePicker from '../../ui/DateRangePicker';
 import AlignedText from '../../ui/AlignedText';
 import { editAnnouncement } from '../../../actions/admin/system';
 
-const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
+const useStyles = makeStyles(() => ({
   contentField: {
     width: '720px',
   },
@@ -38,7 +34,6 @@ export default function AnnouncementEdit(props) {
   ]);
   const [editContent, setEditContent] = useState(props.editContent);
 
-  const history = useHistory();
   const handleClickSave = () => {
     console.log(dateRangePicker[0].startDate, dateRangePicker[0].endDate);
     const body = {
