@@ -17,14 +17,12 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import NoMatch from '../../noMatch';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
+import PageTitle from '../../ui/PageTitle';
 import { readAnnouncement, deleteAnnouncement } from '../../../actions/admin/system';
 import AnnouncementEdit from './AnnouncementEdit';
 import GeneralLoading from '../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   duration: {
     transform: 'translate(0, -4px)',
   },
@@ -87,9 +85,7 @@ export default function AnnouncementSetting() {
 
   return (
     <>
-      <Typography variant="h3" className={classes.pageHeader}>
-        {edit ? `${announcement.title} / Setting` : `${announcement.title} / Setting`}
-      </Typography>
+      <PageTitle text={`${announcement.title} / Setting`} />
       {edit ? (
         <AnnouncementEdit
           announcementId={announcementId}

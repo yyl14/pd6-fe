@@ -52,6 +52,10 @@ const useStyles = makeStyles((theme) => ({
   },
   titleText: {
     flex: '5',
+    marginRight: '15px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
   titleRightIcon: {
     marginTop: 'auto',

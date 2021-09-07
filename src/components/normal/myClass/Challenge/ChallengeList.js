@@ -18,15 +18,13 @@ import moment from 'moment';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
 import CustomTable from '../../../ui/CustomTable';
+import PageTitle from '../../../ui/PageTitle';
 import DateRangePicker from '../../../ui/DateRangePicker';
 import { fetchChallenges, addChallenge } from '../../../../actions/myClass/challenge';
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   row: {
     display: 'flex',
     flexDirection: 'row',
@@ -132,10 +130,7 @@ export default function ChallengeList() {
     }
   }, [classId, userClasses]);
 
-  if (
-    courses[courseId] === undefined
-    || classes[classId] === undefined
-  ) {
+  if (courses[courseId] === undefined || classes[classId] === undefined) {
     if (loading.fetchChallenges || commonLoading.fetchClass || commonLoading.fetchCourse) {
       return <GeneralLoading />;
     }
@@ -199,14 +194,7 @@ export default function ChallengeList() {
 
   return (
     <>
-      <Typography className={className.pageHeader} variant="h3">
-        {courses[courseId].name}
-        {' '}
-        {classes[classId].name}
-        {' '}
-        / Challenge
-      </Typography>
-
+      <PageTitle text={`${courses[courseId].name} ${classes[classId].name} / Challenge`} />
       <CustomTable
         hasSearch
         buttons={
