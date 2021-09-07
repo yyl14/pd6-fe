@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
+  Typography, Button, makeStyles, Dialog, DialogTitle, DialogActions, DialogContent,
 } from '@material-ui/core';
 import { useParams, Link } from 'react-router-dom';
 import moment from 'moment';
@@ -16,6 +10,7 @@ import Icon from '../../../ui/icon/index';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
+import PageTitle from '../../../ui/PageTitle';
 
 import GeneralLoading from '../../../GeneralLoading';
 
@@ -32,9 +27,6 @@ import { fetchChallenge } from '../../../../actions/common/common';
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   textLink: {
     textDecoration: 'none',
     color: theme.palette.primary.main,
@@ -131,7 +123,7 @@ export default function SubmissionDetail() {
             no: testcaseIds.map((key) => (id === key ? testcases[key].input_filename.split('.')[0] : '')),
             time: judgeCases.byId[id].time_lapse,
             memory: judgeCases.byId[id].peak_memory,
-            status: judgeCases.byId[id].status
+            status: judgeCases.byId[id].verdict
               .toLowerCase()
               .split(' ')
               .map((word) => word[0].toUpperCase() + word.substring(1))
@@ -171,11 +163,7 @@ export default function SubmissionDetail() {
   };
   return (
     <>
-      <Typography className={classNames.pageHeader} variant="h3">
-        {submissionId}
-        {' '}
-        / Submission Detail
-      </Typography>
+      <PageTitle text={`${submissionId} / Submission Detail`} />
       <div className={classNames.generalButtons}>
         {role === 'MANAGER' && (
           <Button
@@ -222,13 +210,13 @@ export default function SubmissionDetail() {
         <AlignedText text="Status" childrenType="text">
           {judgments[judgmentId] !== undefined ? (
             <div>
-              {judgments[judgmentId].status === 'ACCEPTED' ? (
+              {judgments[judgmentId].verdict === 'ACCEPTED' ? (
                 <Typography variant="body1">
-                  {judgments[judgmentId].status.charAt(0).concat(judgments[judgmentId].status.slice(1).toLowerCase())}
+                  {judgments[judgmentId].verdict.charAt(0).concat(judgments[judgmentId].verdict.slice(1).toLowerCase())}
                 </Typography>
               ) : (
                 <Typography variant="body1" color="secondary">
-                  {judgments[judgmentId].status
+                  {judgments[judgmentId].verdict
                     .toLowerCase()
                     .split(' ')
                     .map((word) => word[0].toUpperCase() + word.substring(1))

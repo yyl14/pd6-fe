@@ -1,5 +1,5 @@
 import { makeStyles, Typography } from '@material-ui/core';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -37,12 +37,27 @@ const useStyles = makeStyles((theme) => ({
   radioAlignedText: {
     marginBottom: '16px',
   },
+  children: {
+    maxWidth: '79%',
+    padding: '0px',
+    margin: '0px',
+    wordBreak: 'break-word',
+  },
 }));
 
 export default function AlignedText({
   text, children, maxWidth, textColor, childrenType,
 }) {
   const classes = useStyles();
+  const ref = useRef();
+  const [textHeight, setTextHeight] = useState();
+
+  useEffect(() => {
+    if (childrenType === 'text' && ref.current.clientHeight > 41) {
+      setTextHeight(ref.current.clientHeight);
+    }
+  }, [childrenType, ref]);
+
   const textWrapperWidth = (type) => {
     switch (type) {
       case 'lg': {
@@ -85,14 +100,17 @@ export default function AlignedText({
       }
     }
   };
+
   return (
     <div className={`${classes.wrapper} ${textColorSelect(textColor)}`}>
       <div className={`${classes.alignedTextWrapper} ${textWrapperWidth(maxWidth)}`}>
-        <Typography variant="body1" className={textTopMargin(childrenType)}>
+        <Typography variant="body1" className={textTopMargin(childrenType)} style={{ height: textHeight }}>
           {text}
         </Typography>
       </div>
-      {children}
+      <div className={classes.children} ref={ref}>
+        {children}
+      </div>
     </div>
   );
 }

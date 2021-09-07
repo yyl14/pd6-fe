@@ -11,7 +11,7 @@ import { fetchClass, fetchCourse } from '../../../actions/common/common';
 export default function Submission({
   classNames, history, location, mode,
 }) {
-  const { courseId, classId } = useParams();
+  const { courseId, classId, submissionId } = useParams();
   const baseURL = '/my-class';
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
@@ -40,8 +40,12 @@ export default function Submission({
 
     if (mode === 'detail') {
       // console.log(submissions);
-      setArrow(<IconButton className={classNames.arrow} onClick={goBackToSubmission}><Icon.ArrowBackRoundedIcon /></IconButton>);
-      setTitle('00111');
+      setArrow(
+        <IconButton className={classNames.arrow} onClick={goBackToSubmission}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
+      setTitle(submissionId);
       setItemList([
         {
           text: 'Submission Detail',
@@ -50,7 +54,18 @@ export default function Submission({
         },
       ]);
     }
-  }, [location.pathname, history, mode, userClasses, courseId, classId, submissions, classes.arrow, classNames.arrow]);
+  }, [
+    location.pathname,
+    history,
+    mode,
+    userClasses,
+    courseId,
+    classId,
+    submissions,
+    classes.arrow,
+    classNames.arrow,
+    submissionId,
+  ]);
 
   const foldAccount = () => {
     setDisplay('fold');
@@ -102,7 +117,12 @@ export default function Submission({
           <List>
             {itemList.map((item) => (
               <ListItem button key={item.text} className={classNames.item}>
-                <ListItemIcon className={classNames.itemIcon} style={{ color: location.pathname.includes(item.path) ? '#1EA5FF' : '' }}>{item.icon}</ListItemIcon>
+                <ListItemIcon
+                  className={classNames.itemIcon}
+                  style={{ color: location.pathname.includes(item.path) ? '#1EA5FF' : '' }}
+                >
+                  {item.icon}
+                </ListItemIcon>
                 <ListItemText
                   primary={item.text}
                   className={location.pathname.includes(item.path) ? classNames.activeItemText : classNames.itemText}

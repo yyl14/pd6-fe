@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import moment from 'moment';
-import {
-  makeStyles, Typography, AppBar, Toolbar,
-} from '@material-ui/core';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { format } from 'date-fns';
+import moment from 'moment';
+import {
+  makeStyles, Typography, AppBar, Toolbar,
+} from '@material-ui/core';
 import Icon from './icon/index';
 import { userLogout } from '../../actions/user/auth';
-import { userGetNotify, userReadNotify } from '../../actions/user/user';
+import { userBrowseAnnouncement, userReadAnnouncement } from '../../actions/user/user';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -22,6 +22,8 @@ const useStyles = makeStyles((theme) => ({
     height: '55px',
     paddingLeft: '0px',
   },
+
+  // header left
   item: {
     marginLeft: '50px',
     // marginRight: '0.8vw',
@@ -29,38 +31,48 @@ const useStyles = makeStyles((theme) => ({
       cursor: 'pointer',
     },
   },
+
+  // header right
+  right: {
+    marginLeft: 'auto',
+    marginRight: 0,
+  },
   date: {
     position: 'relative',
     float: 'left',
-    marginRight: '20px',
-    marginTop: '2px',
-    marginBottom: 'auto',
-    top: '2px',
+    marginRight: '4px',
+    marginTop: '14px',
   },
   notificationContainer: {
     position: 'relative',
     display: 'inline-block',
     '&:hover': {
-      // '& $notificationDropContent': {
-      //   display: 'block',
-      // },
       cursor: 'pointer',
     },
   },
-  notification: {
+  notificationIcon: {
     position: 'relative',
+    transform: 'translateY(2px)',
     float: 'left',
     width: '20px',
-    marginTop: '3px',
-    marginBottom: 'auto',
-    marginRight: '16px',
+    margin: '11px 16px 12px 16px',
     top: '2px',
   },
-  notificationDropContent: {
+  unreadDot: {
+    width: '6.75px',
+    height: '6.75px',
+    backgroundColor: theme.palette.secondary.main,
+    position: 'absolute',
+    left: '30px',
+    top: '28px',
+    borderRadius: '50%',
+    zIndex: 2,
+  },
+  notificationDropdownContent: {
     position: 'absolute',
     backgroundColor: theme.palette.primary.contrastText,
     right: '-120px',
-    top: '45px',
+    top: '39px',
     minWidth: '460px',
     maxHeight: '423px',
     zIndex: '1',
@@ -71,13 +83,9 @@ const useStyles = makeStyles((theme) => ({
   eachNotify: {
     color: theme.palette.black.main,
     padding: '20px 30px',
-    width: '460px',
     minHeight: '106px',
-    height: 'auto',
     borderBottom: `1px solid ${theme.palette.grey.A700}`,
-    textDecoration: 'none',
     textAlign: 'left',
-    display: 'block',
     '&:nth-child(1)': {
       borderRadius: '10px 10px 0 0',
     },
@@ -87,91 +95,36 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       cursor: 'pointer',
     },
-    '& div': {
-      width: '400px',
-      minHeight: '25px',
-      height: 'auto',
-      lineHeight: '25px',
-      display: 'flex',
-      justifyContent: 'space-between',
-      '& span': {
-        fontSize: '18px',
-      },
-    },
   },
-  unread: {
+  unreadNotification: {
     backgroundColor: theme.palette.grey.A100,
   },
-  unreadDot: {
-    width: '6.75px',
-    height: '6.75px',
-    backgroundColor: theme.palette.secondary.main,
-    position: 'absolute',
-    left: '14px',
-    top: '17px',
-    borderRadius: '50%',
-    zIndex: 2,
+  notificationHead: {
+    display: 'flex',
+    justifyContent: 'space-between',
   },
-  secondSpan: {
+  notificationTitle: {
+    wordBreak: 'break-word',
+  },
+  notificationDays: {
+    color: theme.palette.grey.A400,
+    marginLeft: '10px',
+    minWidth: '50px',
+  },
+  notificationContent: {
     marginTop: '16px',
     display: 'block !important',
     width: '400px',
-    wordWrap: 'break-word',
-  },
-  days: {
-    fontSize: '16px !important',
-    color: theme.palette.grey.A400,
-  },
-  name: {
-    width: '65px',
-    height: '33px',
-    float: 'left',
-    marginLeft: '2vw',
-    marginRight: '1vw',
-    marginTop: 'auto',
-    marginBottom: 'auto',
-    fontSize: '1rem',
-    color: 'white',
-    backgroundColor: 'black',
-    '&:hover': {
-      backgroundColor: 'black',
-    },
-  },
-  right: {
-    marginLeft: 'auto',
-    marginRight: 0,
-  },
-  avatar: {
-    marginLeft: '2vw',
-    marginRight: '3.5vw',
-    height: '4vh',
-    width: '4vh',
-  },
-  a: {
-    color: 'inherit',
-    textDecoration: 'none',
-  },
-  active: {
-    textDecoration: 'none',
-    color: theme.palette.primary.main,
+    wordBreak: 'break-word',
   },
 
-  // menu
-  dropdown: {
+  userContainer: {
     position: 'relative',
     display: 'inline-block',
-    '&:hover': {
-      '& $dropdownContent': {
-        display: 'block',
-      },
-    },
     marginRight: '20px',
-    bottom: '3px',
+    bottom: '13px',
   },
-
-  dropbtn: {
-    marginTop: 'auto',
-    marginBottom: 'auto',
+  userButton: {
     backgroundColor: theme.palette.black.main,
     color: theme.palette.primary.contrastText,
     border: 'none',
@@ -179,9 +132,11 @@ const useStyles = makeStyles((theme) => ({
       cursor: 'pointer',
     },
   },
-
-  dropdownContent: {
-    display: 'none',
+  active: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+  },
+  userDropdownContent: {
     position: 'absolute',
     backgroundColor: theme.palette.primary.contrastText,
     marginLeft: '-40px',
@@ -211,27 +166,35 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header() {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
-  const authToken = useSelector((state) => state.auth.token);
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
+
+  const user = useSelector((state) => state.user);
+  const authToken = useSelector((state) => state.auth.token);
+
   const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   HH:mm'));
   const [itemList, setItemList] = useState([]);
   const [menuList, setMenuList] = useState([]);
-  const [notifyPop, setNotifyPop] = useState(false);
+  const [notifyDropdown, setNotifyDropdown] = useState(false);
+  const [userDropdown, setUserDropdown] = useState(false);
+  const [notifyAlreadyClose, setNotifyAlreadyClose] = useState(false);
+  const [userAlreadyClose, setUserAlreadyClose] = useState(false);
   const [notifyList, setNotifyList] = useState([]);
   const [unreadNotifyExist, setUnreadNotifyExist] = useState(false);
 
   const [hasClass, setHasClass] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies(['token', 'id']);
+  const [, , removeCookie] = useCookies(['token', 'id']);
+
+  const notifyRef = useRef(null);
+  const userRef = useRef(null);
 
   useEffect(() => {
     setHasClass(user.classes.length !== 0);
   }, [user.classes.length]);
 
   useEffect(() => {
-    dispatch(userGetNotify(authToken));
+    dispatch(userBrowseAnnouncement(authToken));
   }, [authToken, dispatch]);
 
   useEffect(() => {
@@ -353,9 +316,30 @@ export default function Header() {
     }
   }, [hasClass, user.role]);
 
-  // useEffect(() => {
-  //   console.log('Current route', location.pathname);
-  // }, [location]);
+  const handleNotifyClickOutside = (event) => {
+    if (notifyRef.current && !notifyRef.current.contains(event.target)) {
+      setNotifyAlreadyClose(true);
+      setNotifyDropdown(false);
+      setTimeout(() => setNotifyAlreadyClose(false), 300);
+    }
+  };
+
+  const handleUserClickOutside = (event) => {
+    if (userRef.current && !userRef.current.contains(event.target)) {
+      setUserAlreadyClose(true);
+      setUserDropdown(false);
+      setTimeout(() => setUserAlreadyClose(false), 300);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleNotifyClickOutside, true);
+    document.addEventListener('click', handleUserClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleNotifyClickOutside, true);
+      document.removeEventListener('click', handleUserClickOutside, true);
+    };
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -367,20 +351,29 @@ export default function Header() {
   useEffect(() => {
     const ns = user.notifications.sort((a, b) => new Date(b.post_time).getTime() - new Date(a.post_time).getTime());
     setNotifyList(ns);
-    setUnreadNotifyExist(!!(ns.filter((e) => !e.is_deleted).length));
+    setUnreadNotifyExist(!!ns.filter((e) => !e.is_deleted).length);
   }, [user.notifications]);
 
   const toggleNotify = () => {
-    setNotifyPop(!notifyPop);
+    if (!notifyAlreadyClose) {
+      setNotifyDropdown(true);
+    }
+    setNotifyAlreadyClose(false);
   };
 
-  const readNotification = (notifyId) => {
-    dispatch(userReadNotify(authToken, notifyId));
-    // dispatch(userGetNotify(authToken)); // this line needs to be de-marked when BE complete read anoouncement
+  const toggleUser = () => {
+    if (!userAlreadyClose) {
+      setUserDropdown(true);
+    }
+    setUserAlreadyClose(false);
   };
+
+  // const readNotification = (notifyId) => {
+  //   dispatch(userReadAnnouncement(authToken, notifyId));
+  //   // dispatch(userBrowseAnnouncement(authToken)); // this line needs to be de-marked when BE complete read announcement
+  // };
 
   const goto = (link) => {
-    // console.log(link);
     if (link === '/logout') {
       removeCookie('token', { path: '/' });
       removeCookie('id', { path: '/' });
@@ -406,58 +399,73 @@ export default function Header() {
           ))}
           <div className={classes.right}>
             <Typography className={classes.date}>{currentTime}</Typography>
-            <div className={classes.notificationContainer}>
-              <Icon.NotificationsIcon className={classes.notification} onClick={toggleNotify} />
+            <div
+              className={classes.notificationContainer}
+              onClick={toggleNotify}
+              onKeyDown={toggleNotify}
+              role="button"
+              tabIndex="0"
+            >
+              <Icon.NotificationsIcon className={classes.notificationIcon} />
               {unreadNotifyExist && <div className={classes.unreadDot} />}
-              {notifyPop && (
-                <div className={classes.notificationDropContent}>
+              {notifyDropdown && (
+                <div className={classes.notificationDropdownContent} ref={notifyRef}>
                   {notifyList.map((notify) => (
                     <div
                       key={notify.title}
                       className={
-                        notify.is_deleted ? `${classes.eachNotify}` : `${classes.eachNotify} ${classes.unread}`
+                        notify.is_deleted
+                          ? `${classes.eachNotify}`
+                          : `${classes.eachNotify} ${classes.unreadNotification}`
                       }
                       role="button"
                       tabIndex={notify.id}
-                      onClick={() => readNotification(notify.id)}
-                      onKeyDown={() => readNotification(notify.id)}
+                      // onClick={() => readNotification(notify.id)}
+                      // onKeyDown={() => readNotification(notify.id)}
                     >
-                      <div>
-                        <span>
-                          <b>{notify.title}</b>
-                        </span>
-                        <span className={classes.days}>
-                          {moment(new Date()).diff(moment(notify.post_time), 'days')}
-                          &nbsp; days
-                        </span>
+                      <div className={classes.notificationHead}>
+                        <Typography variant="h6" className={classes.notificationTitle}>
+                          {notify.title}
+                        </Typography>
+                        <Typography variant="body2" className={classes.notificationDays}>
+                          {`${moment(new Date()).diff(moment(notify.post_time), 'days')} days`}
+                        </Typography>
                       </div>
-                      <div className={classes.secondSpan}>
-                        <span>{notify.content}</span>
-                      </div>
+                      <Typography variant="body" className={classes.notificationContent}>
+                        {notify.content}
+                      </Typography>
                     </div>
                   ))}
                 </div>
               )}
             </div>
-            <div className={classes.dropdown}>
-              <button type="button" className={classes.dropbtn}>
+            <div
+              className={classes.userContainer}
+              onClick={toggleUser}
+              onKeyDown={toggleUser}
+              role="button"
+              tabIndex="-1"
+            >
+              <button type="button" className={classes.userButton}>
                 <Typography variant="h6" className={location.pathname === '/my-profile' ? classes.active : null}>
                   {user.username}
                 </Typography>
               </button>
-              <div className={classes.dropdownContent}>
-                {menuList.map((item) => (
-                  <span
-                    key={item.link}
-                    tabIndex={item.link}
-                    role="button"
-                    onClick={() => goto(item.link)}
-                    onKeyDown={() => goto(item.link)}
-                  >
-                    {item.title}
-                  </span>
-                ))}
-              </div>
+              {userDropdown && (
+                <div className={classes.userDropdownContent} ref={userRef}>
+                  {menuList.map((item) => (
+                    <span
+                      key={item.link}
+                      tabIndex={item.link}
+                      role="button"
+                      onClick={() => goto(item.link)}
+                      onKeyDown={() => goto(item.link)}
+                    >
+                      {item.title}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </Toolbar>

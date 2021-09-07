@@ -20,6 +20,9 @@ const initialState = {
   browseJudgeCases: null,
   readTestcase: null,
   readProblemScore: null,
+  downloadSamples: null,
+  downloadTestcases: null,
+  uploadFailFilename: [],
 };
 
 export default function problem(state = initialState, action) {
@@ -27,103 +30,135 @@ export default function problem(state = initialState, action) {
     case problemConstants.READ_PROBLEM_FAIL:
       return {
         ...state,
-        readProblem: action.errors,
+        readProblem: action.error,
       };
     case problemConstants.READ_SUBMISSION_FAIL:
       return {
         ...state,
-        readSubmission: action.errors,
+        readSubmission: action.error,
       };
-    // case problemConstants.READ_CHALLENGE_FAIL:
-    //   return {
-    //     ...state,
-    //     readChallenge: action.errors,
-    //   };
+
     case problemConstants.READ_SUBMISSION_JUDGE_FAIL:
       return {
         ...state,
-        readJudgment: action.errors,
+        readJudgment: action.error,
       };
     case problemConstants.BROWSE_JUDGE_CASES_FAIL:
       return {
         ...state,
-        browseJudgeCases: action.errors,
+        browseJudgeCases: action.error,
       };
     case problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_FAIL:
       return {
         ...state,
-        browseTestcase: action.errors,
+        browseTestcase: action.error,
       };
     case problemConstants.BROWSE_ASSISTING_DATA_FAIL:
       return {
         ...state,
-        browseAssistingData: action.errors,
+        browseAssistingData: action.error,
       };
     case problemConstants.EDIT_PROBLEM_FAIL:
       return {
         ...state,
-        editProblem: action.errors,
+        editProblem: action.error,
       };
     case problemConstants.DELETE_PROBLEM_FAIL:
       return {
         ...state,
-        deleteProblem: action.errors,
+        deleteProblem: action.error,
       };
     case problemConstants.DELETE_TESTCASE_FAIL:
       return {
         ...state,
-        deleteTestcase: action.errors,
+        deleteTestcase: action.error,
       };
     case problemConstants.DELETE_ASSISTING_DATA_FAIL:
       return {
         ...state,
-        deleteAssistingData: action.errors,
+        deleteAssistingData: action.error,
       };
     case problemConstants.EDIT_ASSISTING_DATA_FAIL:
       return {
         ...state,
-        editAssistingData: action.errors,
+        editAssistingData: action.error,
       };
     case problemConstants.ADD_ASSISTING_DATA_FAIL:
       return {
         ...state,
-        addAssistingData: action.errors,
+        addAssistingData: action.error,
       };
     case problemConstants.SUBMIT_PROBLEM_FAIL:
       return {
         ...state,
-        submitCode: action.errors,
+        submitCode: action.error,
       };
     case problemConstants.EDIT_TESTCASE_FAIL:
       return {
         ...state,
-        editTestcase: action.errors,
+        editTestcase: action.error,
       };
     case problemConstants.UPLOAD_TESTCASE_INPUT_FAIL:
       return {
         ...state,
-        uploadTestcaseInput: action.errors,
+        uploadTestcaseInput: action.error,
       };
     case problemConstants.UPLOAD_TESTCASE_OUTPUT_FAIL:
       return {
         ...state,
-        uploadTestcaseOutput: action.errors,
+        uploadTestcaseOutput: action.error,
       };
     case problemConstants.ADD_TESTCASE_FAIL:
       return {
         ...state,
-        addTestcase: action.errors,
+        addTestcase: action.error,
       };
     case problemConstants.READ_TESTCASE_FAIL:
       return {
         ...state,
-        readTestcase: action.errors,
+        readTestcase: action.error,
       };
     case problemConstants.READ_PROBLEM_SCORE_FAIL:
       return {
         ...state,
-        readProblemScore: action.errors,
+        readProblemScore: action.error,
       };
+
+    case problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_SUCCESS:
+      return {
+        ...state,
+        downloadSamples: null,
+      };
+    case problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_FAIL:
+      return {
+        ...state,
+        downloadSamples: action.error,
+      };
+
+    case problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_SUCCESS:
+      return {
+        ...state,
+        downloadTestcases: null,
+      };
+    case problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_FAIL:
+      return {
+        ...state,
+        downloadTestcases: action.error,
+      };
+
+    case problemConstants.CLEAR_UPLOAD_FAIL_RECORD: {
+      return {
+        ...state,
+        uploadFailFilename: [],
+      };
+    }
+    case problemConstants.UPLOAD_DATA_FAIL: {
+      return {
+        ...state,
+        uploadFailFilename: state.uploadFailFilename.concat([action.filename]),
+      };
+    }
+
     default: {
       return state;
     }

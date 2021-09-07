@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Button, TextField, Typography, makeStyles,
-} from '@material-ui/core';
+import { Button, TextField, makeStyles } from '@material-ui/core';
 import moment from 'moment';
 import DateRangePicker from '../../ui/DateRangePicker';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
+import PageTitle from '../../ui/PageTitle';
 import { addAnnouncement } from '../../../actions/admin/system';
 
-const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
+const useStyles = makeStyles(() => ({
   contentField: {
     width: '720px',
   },
@@ -49,16 +45,13 @@ const AnnouncementAdd = () => {
       post_time: dateRangePicker[0].startDate.toISOString(),
       expire_time: dateRangePicker[0].endDate.toISOString(),
     };
-    console.log(body);
     dispatch(addAnnouncement(authToken, body));
     backToHomePage();
   };
 
   return (
     <>
-      <Typography variant="h3" className={classes.pageHeader}>
-        (Draft) / Setting
-      </Typography>
+      <PageTitle text="(Draft) / Setting" />
       <SimpleBar title="Announcement">
         <AlignedText text="Title" childrenType="field">
           <TextField value={addTitle} onChange={(e) => setAddTitle(e.target.value)} />

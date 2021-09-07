@@ -4,10 +4,6 @@ const initialState = {
   readEssay: false,
   editEssay: false,
   deleteEssay: false,
-  browseEssaySubmission: false,
-  uploadEssay: false,
-  readEssaySubmission: false,
-  reUploadEssay: false,
 };
 
 export default function essay(state = initialState, action) {
@@ -64,78 +60,6 @@ export default function essay(state = initialState, action) {
       return {
         ...state,
         deleteEssay: false,
-      };
-    }
-    case essayConstants.BROWSE_ESSAY_SUBMISSION_START: {
-      return {
-        ...state,
-        browseEssaySubmission: true,
-      };
-    }
-    case essayConstants.BROWSE_ESSAY_SUBMISSION_SUCCESS: {
-      return {
-        ...state,
-        browseEssaySubmission: true,
-      };
-    }
-    case essayConstants.BROWSE_ESSAY_SUBMISSION_FAIL: {
-      return {
-        ...state,
-        browseEssaySubmission: false,
-      };
-    }
-    case essayConstants.UPLOAD_ESSAY_SUBMISSION_START: {
-      return {
-        ...state,
-        uploadEssay: true,
-      };
-    }
-    case essayConstants.UPLOAD_ESSAY_SUBMISSION_SUCCESS: {
-      return {
-        ...state,
-        uploadEssay: true,
-      };
-    }
-    case essayConstants.UPLOAD_ESSAY_SUBMISSION_FAIL: {
-      return {
-        ...state,
-        uploadEssay: false,
-      };
-    }
-    case essayConstants.READ_ESSAY_SUBMISSION_START: {
-      return {
-        ...state,
-        readEssaySubmission: true,
-      };
-    }
-    case essayConstants.READ_ESSAY_SUBMISSION_SUCCESS: {
-      return {
-        ...state,
-        readEssaySubmission: true,
-      };
-    }
-    case essayConstants.READ_ESSAY_SUBMISSION_FAIL: {
-      return {
-        ...state,
-        readEssaySubmission: false,
-      };
-    }
-    case essayConstants.REUPLOAD_ESSAY_SUBMISSION_START: {
-      return {
-        ...state,
-        reUploadEssay: true,
-      };
-    }
-    case essayConstants.REUPLOAD_ESSAY_SUBMISSION_SUCCESS: {
-      return {
-        ...state,
-        reUploadEssay: true,
-      };
-    }
-    case essayConstants.REUPLOAD_ESSAY_SUBMISSION_FAIL: {
-      return {
-        ...state,
-        reUploadEssay: false,
       };
     }
 
