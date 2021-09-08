@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { Snackbar } from '@material-ui/core';
 import { fetchStudentCards, browsePendingStudentCards } from '../../../../actions/admin/account';
 import { fetchAccount, getInstitutes } from '../../../../actions/common/common';
 import PageTitle from '../../../ui/PageTitle';
@@ -18,6 +19,9 @@ export default function AccountSetting() {
   const [cards, setCards] = useState([]);
   const [pendingCards, setPendingCards] = useState([]);
   const [editBasicInfo, setEditBasicInfo] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [message, setMessage] = useState('');
+
   const dispatch = useDispatch();
   const { accountId } = useParams();
 
@@ -84,8 +88,12 @@ export default function AccountSetting() {
     return <NoMatch />;
   }
 
-  const handleBasicBack = () => {
+  const handleBasicBack = (msg) => {
     setEditBasicInfo(false);
+    if (msg !== '') {
+      setMessage(msg);
+      setShowSnackbar(true);
+    }
   };
 
   const handleBasicEdit = () => {
@@ -123,6 +131,7 @@ export default function AccountSetting() {
         cards={cards}
         realName={accounts.byId[accountId].real_name}
       />
+      <Snackbar open={showSnackbar} autoHideDuration={3000} message={message} onClose={() => setShowSnackbar(false)} />
     </div>
   );
 }
