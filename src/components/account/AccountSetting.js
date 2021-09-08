@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Snackbar } from '@material-ui/core';
+import { Snackbar, SnackbarContent } from '@material-ui/core';
 
 import { fetchStudentCards, browsePendingStudentCards } from '../../actions/user/user';
 import { getInstitutes } from '../../actions/common/common';
@@ -117,11 +117,14 @@ export default function AccountSetting() {
       <NewPassword />
       <Snackbar
         open={showSnackbar}
-        style={{ width: '600px' }}
         autoHideDuration={3000}
-        message="Please verify your institute email to activate your PDOGS account."
         onClose={() => setShowSnackbar(false)}
-      />
+      >
+        <SnackbarContent
+          style={{ fontSize: '0.95rem' }}
+          message="Please verify your institute email to activate your PDOGS account."
+        />
+      </Snackbar>
     </div>
   );
 }
