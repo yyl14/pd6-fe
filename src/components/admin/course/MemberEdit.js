@@ -88,6 +88,8 @@ const MemberEdit = ({
   const targetLocation = useRef();
   const history = useHistory();
 
+  // unblock user leaving current page through header and sidebar links
+  // and push to original target location
   const unblockAndReturn = () => {
     if (unblockHandle) {
       unblockHandle.current();
@@ -97,10 +99,11 @@ const MemberEdit = ({
     }
     backToMemberList();
   };
+  // remove empty elements in an array
   const handleBlankList = (list) => list.filter((element) => element !== '' && element.account_referral !== '');
 
   useEffect(() => {
-    if (!dispatchStart) {
+    if (members !== undefined) {
       setTA(
         members
           .filter((item) => item.role === 'MANAGER')
@@ -120,8 +123,9 @@ const MemberEdit = ({
           .join('\n'),
       );
     }
-  }, [dispatchStart, members]);
+  }, [members]);
 
+  // block user leaving current page through header and sidebar links (if contents have been changed)
   useEffect(() => {
     unblockHandle.current = history.block((tl) => {
       if (TAChanged || studentChanged || guestChanged) {
@@ -137,7 +141,7 @@ const MemberEdit = ({
     if (dispatchStart) {
       if (!loading.replaceClassMembers) {
         if (error.replaceClassMembers) {
-          setSubmitError(error.replaceClassMembers);
+          setSubmitError(error.replaceClassMembers); // don't need to move to onError
           setShowErrorDetectedDialog(true);
         } else {
           if (unblockHandle) {
@@ -150,6 +154,8 @@ const MemberEdit = ({
     }
   }, [backToMemberList, dispatchStart, error.replaceClassMembers, history, loading.replaceClassMembers]);
 
+  // block user leaving current page through browser close button and refresh button
+  // (if any dialog is shown, or contents have been changed)
   useBeforeunload((e) => {
     if (showErrorDetectedDialog || showDuplicateIdentityDialog) {
       e.preventDefault();
@@ -197,11 +203,11 @@ const MemberEdit = ({
       unblockAndReturn();
     }
   };
-  const handleSubmitUnsave = () => {
+  const handleUnsave = () => {
     setShowUnsavedChangesDialog(false);
     unblockAndReturn();
   };
-  const handleSubmitSave = () => {
+  const handleSave = () => {
     setShowUnsavedChangesDialog(false);
 
     if (TAChanged || studentChanged || guestChanged) {
@@ -301,7 +307,7 @@ const MemberEdit = ({
         <Button onClick={handleClickCancel} className={classes.leftButton}>
           Cancel
         </Button>
-        <Button onClick={handleSubmitSave} color="primary">
+        <Button onClick={handleSave} color="primary">
           Save
         </Button>
       </div>
@@ -326,8 +332,8 @@ const MemberEdit = ({
             </Button>
           </div>
           <div>
-            <Button onClick={handleSubmitUnsave}>Don’t Save</Button>
-            <Button onClick={handleSubmitSave} color="primary">
+            <Button onClick={handleUnsave}>Don’t Save</Button>
+            <Button onClick={handleSave} color="primary">
               Save
             </Button>
           </div>
