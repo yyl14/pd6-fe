@@ -81,6 +81,7 @@ export default function TaskAddingCard({ open, setOpen }) {
     setType('Coding Problem');
     setTitle('');
     setLabel('');
+    setDisabled(true);
     setOpen(false);
   };
 
@@ -90,6 +91,14 @@ export default function TaskAddingCard({ open, setOpen }) {
     } else {
       setDisabled(false);
     }
+  };
+
+  const handleCancel = () => {
+    setType('Coding Problem');
+    setTitle('');
+    setLabel('');
+    setDisabled(true);
+    setOpen(false);
   };
 
   if (loading.readChallenge || commonLoading.fetchCourse || commonLoading.fetchClass) {
@@ -167,7 +176,7 @@ export default function TaskAddingCard({ open, setOpen }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={handleCancel}>Cancel</Button>
           <Button disabled={disabled} color="primary" onClick={handleCreate}>
             Create
           </Button>
