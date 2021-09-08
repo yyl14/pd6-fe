@@ -25,6 +25,14 @@ export default function MemberList() {
 
   const [edit, setEdit] = useState(false);
 
+  useEffect(() => {
+    dispatch(fetchCourses(authToken));
+  }, [authToken, dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchClasses(authToken, courseId));
+  }, [authToken, courseId, dispatch]);
+
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
     if (loading.fetchCourses || loading.fetchClasses) {
       // still loading
