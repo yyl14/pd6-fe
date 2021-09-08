@@ -138,21 +138,10 @@ const MemberEdit = ({
   });
 
   useEffect(() => {
-    if (dispatchStart) {
-      if (!loading.replaceClassMembers) {
-        if (error.replaceClassMembers) {
-          setSubmitError(error.replaceClassMembers);
-          setShowErrorDetectedDialog(true);
-        } else {
-          if (unblockHandle) {
-            unblockHandle.current();
-            history.push(targetLocation.current);
-          }
-          backToMemberList();
-        }
-      }
+    if (error.replaceClassMembers) {
+      setSubmitError(error.replaceClassMembers);
     }
-  }, [backToMemberList, dispatchStart, error.replaceClassMembers, history, loading.replaceClassMembers]);
+  }, [error.replaceClassMembers]);
 
   // block user leaving current page through browser close button and refresh button
   // (if any dialog is shown, or contents have been changed)
@@ -252,7 +241,9 @@ const MemberEdit = ({
 
         const replacingList = handleBlankList(TATransformedList.concat(studentTransformedList, guestTransformedList));
 
-        dispatch(replaceClassMembers(authToken, classId, replacingList));
+        dispatch(
+          replaceClassMembers(authToken, classId, replacingList, unblockAndReturn, () => setShowErrorDetectedDialog(true)),
+        );
         setDispatchStart(true);
       }
     } else {

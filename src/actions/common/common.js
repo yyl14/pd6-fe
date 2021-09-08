@@ -81,7 +81,7 @@ const fetchClassMemberWithAccountReferral = (token, classId) => async (dispatch)
   }
 };
 
-const replaceClassMembers = (token, classId, replacingList) => async (dispatch) => {
+const replaceClassMembers = (token, classId, replacingList, onSuccess, onError) => async (dispatch) => {
   try {
     const config = {
       headers: {
@@ -91,21 +91,16 @@ const replaceClassMembers = (token, classId, replacingList) => async (dispatch) 
     dispatch({ type: commonConstants.REPLACE_CLASS_MEMBERS_START });
 
     const res = await agent.put(`/class/${classId}/member`, replacingList, config);
-    if (res.data.success) {
-      dispatch({
-        type: commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS,
-      });
-    } else {
-      dispatch({
-        type: commonConstants.REPLACE_CLASS_MEMBERS_FAIL,
-        error: res.data.error,
-      });
-    }
+    dispatch({
+      type: commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS,
+    });
+    onSuccess();
   } catch (error) {
     dispatch({
       type: commonConstants.REPLACE_CLASS_MEMBERS_FAIL,
       error,
     });
+    onError();
   }
 };
 
