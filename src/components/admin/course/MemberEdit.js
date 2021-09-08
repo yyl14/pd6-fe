@@ -90,6 +90,7 @@ const MemberEdit = ({
   // unblock user leaving current page through header and sidebar links
   // and push to original target location if necessary
   const unblockAndReturn = (needRedirection) => {
+    backToMemberList();
     if (unblockHandle) {
       unblockHandle.current();
       setShowDuplicateIdentityDialog(false);
@@ -97,9 +98,6 @@ const MemberEdit = ({
       if (needRedirection) {
         history.push(targetLocation.current);
       }
-    }
-    if (!needRedirection) {
-      backToMemberList();
     }
   };
   // remove empty elements in an array
