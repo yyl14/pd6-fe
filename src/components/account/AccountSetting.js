@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Snackbar } from '@material-ui/core';
+
 import { fetchStudentCards, browsePendingStudentCards } from '../../actions/user/user';
 import { getInstitutes } from '../../actions/common/common';
 import GeneralLoading from '../GeneralLoading';
@@ -24,6 +26,16 @@ export default function AccountSetting() {
   const studentCards = useSelector((state) => state.studentCards);
   const pendingStudentCards = useSelector((state) => state.pendingStudentCards);
   const loading = useSelector((state) => state.loading.user);
+
+  const [showSnackbar, setShowSnackbar] = useState(true);
+
+  useEffect(() => {
+    if (account.role === 'GUEST') {
+      setShowSnackbar(true);
+    } else {
+      setShowSnackbar(false);
+    }
+  }, [account.role]);
 
   useEffect(() => {
     if (!loading.user.makeStudentCardDefault) {
@@ -103,6 +115,13 @@ export default function AccountSetting() {
       </div>
 
       <NewPassword />
+      <Snackbar
+        open={showSnackbar}
+        style={{ width: '600px' }}
+        autoHideDuration={3000}
+        message="Please verify your institute email to activate your PDOGS account."
+        onClose={() => setShowSnackbar(false)}
+      />
     </div>
   );
 }
