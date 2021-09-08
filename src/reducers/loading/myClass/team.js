@@ -132,19 +132,19 @@ export default function team(state = initialState, action) {
     case teamConstants.ADD_TEAM_MEMBER_START: {
       return {
         ...state,
-        editTeamMember: true,
+        addTeamMember: true,
       };
     }
     case teamConstants.ADD_TEAM_MEMBER_SUCCESS: {
       return {
         ...state,
-        editTeamMember: false,
+        addTeamMember: false,
       };
     }
     case teamConstants.ADD_TEAM_MEMBER_FAIL: {
       return {
         ...state,
-        editTeamMember: false,
+        addTeamMember: false,
       };
     }
 
