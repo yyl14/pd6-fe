@@ -38,10 +38,12 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '16px',
   },
   children: {
-    maxWidth: '79%',
     padding: '0px',
     margin: '0px',
     wordBreak: 'break-word',
+  },
+  childrenMaxWidth: {
+    maxWidth: '79%',
   },
 }));
 
@@ -108,7 +110,7 @@ export default function AlignedText({
           {text}
         </Typography>
       </div>
-      <div className={classes.children} ref={ref}>
+      <div className={`${classes.children} ${childrenType === 'text' && classes.childrenMaxWidth}`} ref={ref}>
         {children}
       </div>
     </div>
