@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
-import { fetchClassMembers, fetchClassMemberWithAccountReferral } from '../../../actions/common/common';
+import { fetchClassMembers } from '../../../actions/common/common';
 import AutoTable from '../../ui/AutoTable';
 import PageTitle from '../../ui/PageTitle';
 import MemberEdit from './MemberEdit';
@@ -40,8 +40,8 @@ export default function MemberList() {
         <MemberEdit
           dispatch={dispatch}
           authToken={authToken}
+          classes={classes}
           classId={classId}
-          members={classes.byId[classId].memberIds.map((id) => members.byId[id])}
           backToMemberList={() => setEdit(false)}
           loading={loading}
         />
@@ -95,7 +95,6 @@ export default function MemberList() {
             ]}
             refetch={(browseParams, ident) => {
               dispatch(fetchClassMembers(authToken, classId, browseParams, ident));
-              dispatch(fetchClassMemberWithAccountReferral(authToken, classId));
             }}
             refetchErrors={[error]}
             columns={[
