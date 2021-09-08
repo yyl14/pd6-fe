@@ -80,7 +80,6 @@ const MemberEdit = ({
   const [guestChanged, setGuestChanged] = useState(false);
   const [duplicateList, setDuplicateList] = useState([]);
   const [submitError, setSubmitError] = useState('');
-  const [dispatchStart, setDispatchStart] = useState(false);
   const [showUnsavedChangesDialog, setShowUnsavedChangesDialog] = useState(false);
   const [showDuplicateIdentityDialog, setShowDuplicateIdentityDialog] = useState(false);
   const [showErrorDetectedDialog, setShowErrorDetectedDialog] = useState(false);
@@ -244,7 +243,6 @@ const MemberEdit = ({
         dispatch(
           replaceClassMembers(authToken, classId, replacingList, unblockAndReturn, () => setShowErrorDetectedDialog(true)),
         );
-        setDispatchStart(true);
       }
     } else {
       unblockAndReturn();

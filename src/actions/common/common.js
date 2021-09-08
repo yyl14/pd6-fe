@@ -90,7 +90,7 @@ const replaceClassMembers = (token, classId, replacingList, onSuccess, onError) 
     };
     dispatch({ type: commonConstants.REPLACE_CLASS_MEMBERS_START });
 
-    const res = await agent.put(`/class/${classId}/member`, replacingList, config);
+    await agent.put(`/class/${classId}/member`, replacingList, config);
     dispatch({
       type: commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS,
     });
