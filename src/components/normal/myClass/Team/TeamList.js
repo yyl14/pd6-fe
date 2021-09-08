@@ -81,7 +81,7 @@ export default function TeamList() {
     if (addInputs.label !== '' && addInputs.teamName !== '') {
       setDisabled(false);
     }
-  }, [addInputs.label, addInputs.teamName, selectedFile.length]);
+  }, [addInputs.label, addInputs.teamName]);
 
   useEffect(() => {
     if (importInput !== '' && selectedFile !== []) {
@@ -90,11 +90,6 @@ export default function TeamList() {
   }, [importInput, selectedFile]);
 
   const handleImportChange = (event) => {
-    // if (event.target.value === '') {
-    //   setDisabled(true);
-    //   setImportInput(event.target.value);
-    //   return;
-    // }
     setImportInput(event.target.value);
   };
 
@@ -117,7 +112,7 @@ export default function TeamList() {
 
   const submitImport = () => {
     if (importInput !== '' && selectedFile !== []) {
-      selectedFile.map((file) => dispatch(importTeam(authToken, classId, file)));
+      selectedFile.map((file) => dispatch(importTeam(authToken, classId, importInput, file)));
     }
     setShowImportDialog(false);
     clearImportInput();
