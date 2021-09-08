@@ -103,10 +103,8 @@ const MemberEdit = ({
   const handleBlankList = (list) => list.filter((element) => element !== '' && element.account_referral !== '');
 
   useEffect(() => {
-    if (!loading.replaceClassMembers) {
-      dispatch(fetchClassMemberWithAccountReferral(authToken, classId));
-    }
-  }, [authToken, classId, dispatch, loading.replaceClassMembers]);
+    dispatch(fetchClassMemberWithAccountReferral(authToken, classId));
+  }, [authToken, classId, dispatch]);
 
   useEffect(() => {
     const classMembers = classes.byId[classId].memberIds.map((id) => members.byId[id]);
@@ -130,7 +128,7 @@ const MemberEdit = ({
           .join('\n'),
       );
     }
-  }, [classId, classes.byId, members.byId]);
+  }, [classId, classes.byId, error.fetchClassMemberWithAccountReferral, members.byId]);
 
   // block user leaving current page through header and sidebar links (if contents have been changed)
   useEffect(() => {
