@@ -71,7 +71,6 @@ const MemberEdit = ({
 
   const members = useSelector((state) => state.classMembers);
   const error = useSelector((state) => state.error.common.common);
-  const loading = useSelector((state) => state.loading.common.common);
 
   const [TA, setTA] = useState([]);
   const [student, setStudent] = useState([]);
@@ -89,13 +88,15 @@ const MemberEdit = ({
   const history = useHistory();
 
   // unblock user leaving current page through header and sidebar links
-  // and push to original target location
-  const unblockAndReturn = () => {
+  // and push to original target location if necessary
+  const unblockAndReturn = (needRedirection) => {
     if (unblockHandle) {
       unblockHandle.current();
       setShowDuplicateIdentityDialog(false);
       setShowErrorDetectedDialog(false);
-      history.push(targetLocation.current);
+      if (needRedirection) {
+        history.push(targetLocation.current);
+      }
     }
     backToMemberList();
   };
@@ -197,14 +198,14 @@ const MemberEdit = ({
     if (TAChanged || studentChanged || guestChanged) {
       setShowUnsavedChangesDialog(true);
     } else {
-      unblockAndReturn();
+      unblockAndReturn(false);
     }
   };
   const handleUnsave = () => {
     setShowUnsavedChangesDialog(false);
-    unblockAndReturn();
+    unblockAndReturn(true);
   };
-  const handleSave = () => {
+  const handleSave = (saveWithDialog) => {
     setShowUnsavedChangesDialog(false);
 
     if (TAChanged || studentChanged || guestChanged) {
@@ -249,12 +250,19 @@ const MemberEdit = ({
 
         const replacingList = handleBlankList(TATransformedList.concat(studentTransformedList, guestTransformedList));
 
+        // if data is saved with dialog, redirection is needed
         dispatch(
-          replaceClassMembers(authToken, classId, replacingList, unblockAndReturn, () => setShowErrorDetectedDialog(true)),
+          replaceClassMembers(
+            authToken,
+            classId,
+            replacingList,
+            () => unblockAndReturn(saveWithDialog),
+            () => setShowErrorDetectedDialog(true),
+          ),
         );
       }
     } else {
-      unblockAndReturn();
+      unblockAndReturn(false);
     }
   };
 
@@ -311,7 +319,7 @@ const MemberEdit = ({
         <Button onClick={handleClickCancel} className={classNames.leftButton}>
           Cancel
         </Button>
-        <Button onClick={handleSave} color="primary">
+        <Button onClick={() => handleSave(false)} color="primary">
           Save
         </Button>
       </div>
@@ -326,18 +334,16 @@ const MemberEdit = ({
           </Typography>
         </DialogContent>
         <DialogActions className={classNames.dialogButtons}>
-          <div>
-            <Button
-              variant="outlined"
-              onClick={() => setShowUnsavedChangesDialog(false)}
-              className={classNames.backToEditButton}
-            >
-              Back to Edit
-            </Button>
-          </div>
+          <Button
+            variant="outlined"
+            onClick={() => setShowUnsavedChangesDialog(false)}
+            className={classNames.backToEditButton}
+          >
+            Back to Edit
+          </Button>
           <div>
             <Button onClick={handleUnsave}>Don’t Save</Button>
-            <Button onClick={handleSave} color="primary">
+            <Button onClick={() => handleSave(true)} color="primary">
               Save
             </Button>
           </div>
