@@ -13,7 +13,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import { replaceClassMembers } from '../../../actions/common/common';
+import { fetchClassMemberWithAccountReferral, replaceClassMembers } from '../../../actions/common/common';
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -65,10 +65,11 @@ const useStyles = makeStyles(() => ({
 
 /* This is a level 4 component (page component) */
 const MemberEdit = ({
-  dispatch, authToken, classId, backToMemberList, members,
+  dispatch, authToken, classes, classId, backToMemberList,
 }) => {
-  const classes = useStyles();
+  const classNames = useStyles();
 
+  const members = useSelector((state) => state.classMembers);
   const error = useSelector((state) => state.error.common.common);
   const loading = useSelector((state) => state.loading.common.common);
 
@@ -102,27 +103,34 @@ const MemberEdit = ({
   const handleBlankList = (list) => list.filter((element) => element !== '' && element.account_referral !== '');
 
   useEffect(() => {
-    if (members !== undefined) {
+    if (!loading.replaceClassMembers) {
+      dispatch(fetchClassMemberWithAccountReferral(authToken, classId));
+    }
+  }, [authToken, classId, dispatch, loading.replaceClassMembers]);
+
+  useEffect(() => {
+    const classMembers = classes.byId[classId].memberIds.map((id) => members.byId[id]);
+    if (classMembers !== undefined) {
       setTA(
-        members
-          .filter((item) => item.role === 'MANAGER')
+        classMembers
+          .filter((item) => item.member_role === 'MANAGER')
           .map((member) => member.member_referral)
           .join('\n'),
       );
       setStudent(
-        members
-          .filter((item) => item.role === 'NORMAL')
+        classMembers
+          .filter((item) => item.member_role === 'NORMAL')
           .map((member) => member.member_referral)
           .join('\n'),
       );
       setGuest(
-        members
-          .filter((item) => item.role === 'GUEST')
+        classMembers
+          .filter((item) => item.member_role === 'GUEST')
           .map((member) => member.member_referral)
           .join('\n'),
       );
     }
-  }, [members]);
+  }, [classId, classes.byId, members.byId]);
 
   // block user leaving current page through header and sidebar links (if contents have been changed)
   useEffect(() => {
@@ -157,8 +165,9 @@ const MemberEdit = ({
     setTA(e.target.value);
     setTAChanged(
       e.target.value
-        !== members
-          .filter((item) => item.role === 'MANAGER')
+        !== classes.byId[classId].memberIds
+          .map((id) => members.byId[id])
+          .filter((item) => item.member_role === 'MANAGER')
           .map((member) => member.member_referral)
           .join('\n'),
     );
@@ -167,8 +176,9 @@ const MemberEdit = ({
     setStudent(e.target.value);
     setStudentChanged(
       e.target.value
-        !== members
-          .filter((item) => item.role === 'NORMAL')
+        !== classes.byId[classId].memberIds
+          .map((id) => members.byId[id])
+          .filter((item) => item.member_role === 'NORMAL')
           .map((member) => member.member_referral)
           .join('\n'),
     );
@@ -177,8 +187,9 @@ const MemberEdit = ({
     setGuest(e.target.value);
     setGuestChanged(
       e.target.value
-        !== members
-          .filter((item) => item.role === 'GUEST')
+        !== classes.byId[classId].memberIds
+          .map((id) => members.byId[id])
+          .filter((item) => item.member_role === 'GUEST')
           .map((member) => member.member_referral)
           .join('\n'),
     );
@@ -251,40 +262,46 @@ const MemberEdit = ({
 
   return (
     <div>
-      <Card className={classes.card} variant="outlined">
-        <div className={classes.editorCol}>
-          <div className={classes.editorItem}>
+      <Card className={classNames.card} variant="outlined">
+        <div className={classNames.editorCol}>
+          <div className={classNames.editorItem}>
             <Typography variant="body1">TA</Typography>
           </div>
-          <div className={classes.editorItem}>
-            <Typography variant="caption">List of student ID</Typography>
-          </div>
-          <TextField className={classes.textField} value={TA} onChange={(e) => handleChangeTA(e)} multiline rows={20} />
-        </div>
-        <div className={classes.editorCol}>
-          <div className={classes.editorItem}>
-            <Typography variant="body1">Student</Typography>
-          </div>
-          <div className={classes.editorItem}>
+          <div className={classNames.editorItem}>
             <Typography variant="caption">List of student ID</Typography>
           </div>
           <TextField
-            className={classes.textField}
+            className={classNames.textField}
+            value={TA}
+            onChange={(e) => handleChangeTA(e)}
+            multiline
+            rows={20}
+          />
+        </div>
+        <div className={classNames.editorCol}>
+          <div className={classNames.editorItem}>
+            <Typography variant="body1">Student</Typography>
+          </div>
+          <div className={classNames.editorItem}>
+            <Typography variant="caption">List of student ID</Typography>
+          </div>
+          <TextField
+            className={classNames.textField}
             value={student}
             onChange={(e) => handleChangeStudent(e)}
             multiline
             rows={20}
           />
         </div>
-        <div className={classes.editorCol}>
-          <div className={classes.editorItem}>
+        <div className={classNames.editorCol}>
+          <div className={classNames.editorItem}>
             <Typography variant="body1">Guest</Typography>
           </div>
-          <div className={classes.editorItem}>
+          <div className={classNames.editorItem}>
             <Typography variant="caption">List of student ID</Typography>
           </div>
           <TextField
-            className={classes.textField}
+            className={classNames.textField}
             value={guest}
             onChange={(e) => handleChangeGuest(e)}
             multiline
@@ -292,8 +309,8 @@ const MemberEdit = ({
           />
         </div>
       </Card>
-      <div className={classes.buttonsBar}>
-        <Button onClick={handleClickCancel} className={classes.leftButton}>
+      <div className={classNames.buttonsBar}>
+        <Button onClick={handleClickCancel} className={classNames.leftButton}>
           Cancel
         </Button>
         <Button onClick={handleSave} color="primary">
@@ -305,17 +322,17 @@ const MemberEdit = ({
         <DialogTitle>
           <Typography variant="h4">Unsaved Changes</Typography>
         </DialogTitle>
-        <DialogContent className={classes.dialogContent}>
+        <DialogContent className={classNames.dialogContent}>
           <Typography variant="body1">
             You have unsaved changes, do you want to save your changes or back to edit?
           </Typography>
         </DialogContent>
-        <DialogActions className={classes.dialogButtons}>
+        <DialogActions className={classNames.dialogButtons}>
           <div>
             <Button
               variant="outlined"
               onClick={() => setShowUnsavedChangesDialog(false)}
-              className={classes.backToEditButton}
+              className={classNames.backToEditButton}
             >
               Back to Edit
             </Button>
@@ -333,11 +350,11 @@ const MemberEdit = ({
         <DialogTitle>
           <Typography variant="h4">Duplicate Identity</Typography>
         </DialogTitle>
-        <DialogContent className={classes.dialogContent}>
+        <DialogContent className={classNames.dialogContent}>
           <Typography variant="body1">
             The following accounts appear in more than one column. Please remove duplicate identities.
           </Typography>
-          <div className={classes.duplicateList}>
+          <div className={classNames.duplicateList}>
             {duplicateList.map((accountReferral) => (
               <Typography variant="body1" key={accountReferral}>
                 {accountReferral}
@@ -349,7 +366,7 @@ const MemberEdit = ({
           <Button
             color="primary"
             onClick={() => setShowDuplicateIdentityDialog(false)}
-            className={classes.buttonFlexEnd}
+            className={classNames.buttonFlexEnd}
           >
             Back to Edit
           </Button>
@@ -360,14 +377,18 @@ const MemberEdit = ({
         <DialogTitle>
           <Typography variant="h4">Error Detected</Typography>
         </DialogTitle>
-        <DialogContent className={classes.dialogContent}>
+        <DialogContent className={classNames.dialogContent}>
           <Typography variant="body1">Save member failed due to the following reasons:</Typography>
-          <Typography variant="body1" className={classes.duplicateList}>
+          <Typography variant="body1" className={classNames.duplicateList}>
             {submitError === 'IllegalInput' ? 'Illegal Input' : submitError}
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={() => setShowErrorDetectedDialog(false)} className={classes.buttonFlexEnd}>
+          <Button
+            color="primary"
+            onClick={() => setShowErrorDetectedDialog(false)}
+            className={classNames.buttonFlexEnd}
+          >
             Back to Edit
           </Button>
         </DialogActions>
