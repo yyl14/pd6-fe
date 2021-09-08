@@ -63,7 +63,7 @@ export default function ChallengeList() {
     scoredBy: 'Last Score',
     showTime: 'On End Time',
   });
-  const [error, setError] = useState(false);
+  const [error] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [isManager, setIsManager] = useState(false);
 
