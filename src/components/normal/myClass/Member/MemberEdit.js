@@ -98,7 +98,9 @@ const MemberEdit = ({
         history.push(targetLocation.current);
       }
     }
-    backToMemberList();
+    if (!needRedirection) {
+      backToMemberList();
+    }
   };
   // remove empty elements in an array
   const handleBlankList = (list) => list.filter((element) => element !== '' && element.account_referral !== '');
