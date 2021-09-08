@@ -314,7 +314,6 @@ export default function TeamList() {
         </DialogActions>
       </Dialog>
       <Snackbar
-        severity="error"
         open={showAddDialog && hasError}
         onClose={handleCloseError}
         message={`Error: ${error.myClass.team.addTeam}`}
@@ -364,7 +363,6 @@ export default function TeamList() {
         </DialogActions>
       </Dialog>
       <Snackbar
-        severity="error"
         open={showImportDialog && hasError}
         onClose={handleCloseError}
         message={`Error: ${error.myClass.team.importTeam}`}
