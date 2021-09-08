@@ -1,29 +1,46 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
+import { Button, CircularProgress } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 import StudentInfoCard from './StudentInfoCard';
 import SimpleBar from '../ui/SimpleBar';
 
-export default function StudentInfo(props) {
-  const defaultCard = props.cards.filter((p) => p.is_default === true);
-  const unDefaultCard = props.cards.filter((p) => p.is_default === false);
+export default function StudentInfo({ cards, handleEdit }) {
+  const defaultCard = cards.filter((p) => p.is_default === true);
+  const nonDefaultCard = cards.filter((p) => p.is_default === false);
+  const loading = useSelector((state) => state.loading);
   return (
     <div>
       <SimpleBar
         title="Student Information"
         buttons={(
           <>
-            <Button onClick={() => props.handleEdit()}>Edit</Button>
+            <Button onClick={() => handleEdit()}>Edit</Button>
           </>
         )}
       >
-        {(props.cards) ? (
+        {cards && (
           <div>
-            {defaultCard.map((p) => <StudentInfoCard key={p.id} isDefault={p.is_default} studentId={p.student_id} email={p.email} instituteId={p.institute_id} />)}
+            {defaultCard.map((p) => (
+              <StudentInfoCard
+                key={p.id}
+                isDefault={p.is_default}
+                studentId={p.student_id}
+                email={p.email}
+                instituteId={p.institute_id}
+              />
+            ))}
             <p> </p>
-            {unDefaultCard.map((p) => <StudentInfoCard key={p.id} isDefault={p.is_default} studentId={p.student_id} email={p.email} instituteId={p.institute_id} />)}
+            {nonDefaultCard.map((p) => (
+              <StudentInfoCard
+                key={p.id}
+                isDefault={p.is_default}
+                studentId={p.student_id}
+                email={p.email}
+                instituteId={p.institute_id}
+              />
+            ))}
           </div>
-        )
-          : <></>}
+        )}
       </SimpleBar>
     </div>
   );

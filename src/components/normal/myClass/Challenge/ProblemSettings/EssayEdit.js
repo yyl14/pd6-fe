@@ -18,10 +18,7 @@ import Icon from '../../../../ui/icon/index';
 import NoMatch from '../../../../noMatch';
 import { editEssay } from '../../../../../actions/myClass/essay';
 
-const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
+const useStyles = makeStyles(() => ({
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end',
@@ -98,8 +95,12 @@ export default function EssayEdit({ closeEdit, role = 'NORMAL' }) {
         />
       </SimpleBar>
       <div className={classNames.buttons}>
-        <Button color="default" onClick={() => closeEdit()}>Cancel</Button>
-        <Button color="primary" onClick={handleClickSave}>Save</Button>
+        <Button color="default" onClick={() => closeEdit()}>
+          Cancel
+        </Button>
+        <Button color="primary" onClick={handleClickSave}>
+          Save
+        </Button>
       </div>
     </>
   );

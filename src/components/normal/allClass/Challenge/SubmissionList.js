@@ -8,19 +8,12 @@ import AlignedText from '../../../ui/AlignedText';
 import CustomTable from '../../../ui/CustomTable';
 import NoMatch from '../../../noMatch';
 import SimpleBar from '../../../ui/SimpleBar';
-import {
-  readSubmission,
-  readSubmissionDetail,
-  readProblemScore,
-} from '../../../../actions/myClass/problem';
+import PageTitle from '../../../ui/PageTitle';
+import { readSubmission, readSubmissionDetail, readProblemScore } from '../../../../actions/myClass/problem';
 import { browseTasksUnderChallenge } from '../../../../actions/myClass/challenge';
 import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-}));
+const useStyles = makeStyles((theme) => ({}));
 
 /* This is a level 4 component (page component) */
 export default function SubmissionList() {
@@ -74,7 +67,7 @@ export default function SubmissionList() {
                 key: id,
                 id,
                 submit_time: moment(submissions[id].submit_time).format('YYYY-MM-DD, HH:mm'),
-                status: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].status
+                status: judgments[judgmentIds.filter((key) => judgments[key].submission_id === id)[0]].verdict
                   .toLowerCase()
                   .split(' ')
                   .map((word) => word[0].toUpperCase() + word.substring(1))
@@ -116,14 +109,7 @@ export default function SubmissionList() {
 
   return (
     <>
-      <Typography className={classNames.pageHeader} variant="h3">
-        {challenges[challengeId].title}
-        {' '}
-        /
-        {problems[problemId].challenge_label}
-        {' '}
-        / My Submission
-      </Typography>
+      <PageTitle text={`${challenges[challengeId].title} / ${problems[problemId].challenge_label} / My Submission`} />
       <SimpleBar title="Submission Information">
         <AlignedText text="Your Latest Score" childrenType="text">
           <Typography variant="body1">{problems[problemId].score}</Typography>

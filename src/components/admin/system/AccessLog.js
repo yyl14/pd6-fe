@@ -1,25 +1,13 @@
 import React from 'react';
-import { Typography, makeStyles } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 
 import { fetchAccessLog } from '../../../actions/admin/system';
 import AutoTable from '../../ui/AutoTable';
-
-const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-  paper: {
-    minWidth: '800px',
-    minHeight: '550px',
-  },
-}));
+import PageTitle from '../../ui/PageTitle';
 
 /* This is a level 4 component (page component) */
 export default function AccessLog() {
-  const classes = useStyles();
-
   const error = useSelector((state) => state.error.admin.system.fetchAccessLog);
   const accountError = useSelector((state) => state.error.common.common.fetchAccount);
 
@@ -32,9 +20,7 @@ export default function AccessLog() {
 
   return (
     <>
-      <Typography variant="h3" className={classes.pageHeader}>
-        Access Log
-      </Typography>
+      <PageTitle text="Access Log" />
       <AutoTable
         ident="Access Log Table"
         hasFilter

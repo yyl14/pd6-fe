@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import {
   Button,
   Typography,
@@ -11,13 +10,10 @@ import {
   FormControl,
   Select,
   MenuItem,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
+  Snackbar,
+  CircularProgress,
 } from '@material-ui/core';
-import { addStudentCard, makeStudentCardDefault } from '../../actions/admin/account';
+import { addStudentCard } from '../../actions/user/user';
 import StudentInfoCard from './StudentInfoCard';
 import SimpleBar from '../ui/SimpleBar';
 import AlignedText from '../ui/AlignedText';
@@ -32,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     width: '350px',
   },
   mailfield: {
-    width: '150px',
+    width: '200px',
     marginRight: '10px',
   },
   row: {
@@ -73,15 +69,22 @@ const useStyles = makeStyles((theme) => ({
 
 export default function StudentInfoEdit(props) {
   const classes = useStyles();
-  const [cards, setCards] = useState(props.cards); // new card isn't here
-  const [defaultCardId, setDefaultCardId] = useState(null);
-  const [changed, setChanged] = useState(false);
-  const [disabledTwoCards, setDisabledTwoCards] = useState(false);
+  const [cards, setCards] = useState(props.cards);
+  const [pendingCards, setPendingCards] = useState(props.pendingCards);
   const [add, setAdd] = useState(false); // addCard block
-  const [popUp, setPopUp] = useState(false);
+  const [snackbar, setSnackbar] = useState(false);
+  const [errorSnackbar, setErrorSnackbar] = useState(false);
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
   const [addInputs, setAddInputs] = useState({
     institute: 'National Taiwan University',
+    studentId: '',
+    email: '',
+  });
+  const [errors, setErrors] = useState({
+    studentId: false,
+    email: false,
+  });
+  const [errorTexts, setErrorTexts] = useState({
     studentId: '',
     email: '',
   });
@@ -89,36 +92,60 @@ export default function StudentInfoEdit(props) {
   const institutesId = useSelector((state) => state.institutes.allIds);
   const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
 
-  const { accountId } = useParams();
+  const accountId = useSelector((state) => state.user.id);
   const authToken = useSelector((state) => state.auth.token);
+
+  const loading = useSelector((state) => state.loading);
+  const error = useSelector((state) => state.error);
+
   const dispatch = useDispatch();
 
-  const updateStatus = (studentId, cardId) => {
-    const updated = cards.map((p) => (p.student_id === studentId ? { ...p, is_default: true } : { ...p, is_default: false }));
-    setCards(updated);
-    setDefaultCardId(cardId);
-  };
-
-  const handleSave = () => {
-    if (defaultCardId !== null && changed === true) {
-      dispatch(makeStudentCardDefault(authToken, accountId, defaultCardId));
+  useEffect(() => {
+    if (props.cards) {
+      setCards(props.cards);
     }
-    props.handleBack();
-  };
+  }, [props.cards]);
+
+  useEffect(() => {
+    if (props.pendingCards) {
+      setPendingCards(props.pendingCards);
+    }
+  }, [props.pendingCards]);
+
+  useEffect(() => {
+    if (error.user.user.addStudentCard) {
+      setErrorSnackbar(true);
+    }
+  }, [error.user.user.addStudentCard]);
 
   const handleAddCancel = () => {
     setAdd(false);
     setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
-    setDisabledTwoCards(false);
+    setEmailTail('@ntu.edu.tw');
+    setErrors({ studentId: false, email: false });
+    setErrorTexts({ studentId: '', email: '' });
   };
 
   const handleAddSave = () => {
+    if (addInputs.studentId === '' || addInputs.email === '') {
+      if (addInputs.studentId === '') {
+        setErrors((ori) => ({ ...ori, studentId: true }));
+        setErrorTexts((ori) => ({ ...ori, studentId: "Can't be empty" }));
+      }
+      if (addInputs.email === '') {
+        setErrors((ori) => ({ ...ori, email: true }));
+        setErrorTexts((ori) => ({ ...ori, email: "Can't be empty" }));
+      }
+      return;
+    }
     const inputInstituteId = institutesId.filter((id) => institutes[id].full_name === addInputs.institute);
     if (inputInstituteId.length !== 0) {
-      dispatch(addStudentCard(authToken, accountId, inputInstituteId[0], addInputs.email, addInputs.studentId));
-      setPopUp(true);
+      dispatch(
+        addStudentCard(authToken, accountId, inputInstituteId[0], addInputs.email, addInputs.studentId, () => setSnackbar(true)),
+      );
     }
     setAdd(false);
+    setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
   };
 
   const handleChange = (e) => {
@@ -126,31 +153,41 @@ export default function StudentInfoEdit(props) {
     setAddInputs((input) => ({ ...input, [name]: value }));
 
     if (name === 'institute') {
-      const inputInstituteId = institutesId.filter((id) => id.full_name === value);
+      const inputInstituteId = institutesId.filter((id) => institutes[id].full_name === value);
       if (inputInstituteId.length !== 0) {
-        setEmailTail(institutes[inputInstituteId[0]].email_domain);
+        setEmailTail(`@${institutes[inputInstituteId[0]].email_domain}`);
       } else {
         setEmailTail('@ntu.edu.tw');
       }
+    }
+    if (name === 'studentId' && value !== '') {
+      setErrors((ori) => ({ ...ori, studentId: false }));
+      setErrorTexts((ori) => ({ ...ori, studentId: '' }));
+    }
+    if (name === 'email' && value !== '') {
+      setErrors((ori) => ({ ...ori, email: false }));
+      setErrorTexts((ori) => ({ ...ori, email: '' }));
     }
   };
 
   return (
     <div>
       <SimpleBar title="Student Information">
-        {cards ? (
+        {cards && (
           <div>
             {cards.map((p) => {
               if (p.is_default === true) {
                 return (
-                  <StudentInfoCard
-                    key={p.id}
-                    editMode
-                    isDefault={p.is_default}
-                    studentId={p.student_id}
-                    email={p.email}
-                    instituteId={p.institute_id}
-                  />
+                  <div key={p.id}>
+                    <StudentInfoCard
+                      key={p.id}
+                      isDefault={p.is_default}
+                      studentId={p.student_id}
+                      email={p.email}
+                      instituteId={p.institute_id}
+                    />
+                    <p />
+                  </div>
                 );
               }
               return <div key={p.id} />;
@@ -159,26 +196,41 @@ export default function StudentInfoEdit(props) {
             {cards.map((p) => {
               if (p.is_default === false) {
                 return (
-                  <StudentInfoCard
-                    key={p.id}
-                    editMode
-                    id={p.id}
-                    isDefault={p.is_default}
-                    studentId={p.student_id}
-                    email={p.email}
-                    instituteId={p.institute_id}
-                    updateStatus={updateStatus}
-                    setChanged={setChanged}
-                  />
+                  <div key={p.id}>
+                    <StudentInfoCard
+                      key={p.id}
+                      id={p.id}
+                      isDefault={p.is_default}
+                      studentId={p.student_id}
+                      email={p.email}
+                      instituteId={p.institute_id}
+                    />
+                    <p />
+                  </div>
                 );
               }
               return <div key={p.id} />;
             })}
           </div>
-        ) : (
-          <></>
         )}
-        {add ? (
+        {pendingCards && (
+          <div>
+            {pendingCards.map((p) => (
+              <div key={p.id}>
+                <StudentInfoCard
+                  key={p.id}
+                  pending
+                  id={p.id}
+                  email={p.email}
+                  studentId={p.student_id}
+                  instituteId={p.institute_id}
+                />
+                <p />
+              </div>
+            ))}
+          </div>
+        )}
+        {add && (
           <div className={classes.addBlock}>
             <Card variant="outlined">
               <CardContent className={classes.addCard}>
@@ -204,6 +256,8 @@ export default function StudentInfoEdit(props) {
                       className={classes.textfield}
                       value={addInputs.studentId}
                       onChange={(e) => handleChange(e)}
+                      error={errors.studentId}
+                      helperText={errorTexts.studentId}
                     />
                   </AlignedText>
                 </div>
@@ -217,6 +271,8 @@ export default function StudentInfoEdit(props) {
                     className={classes.mailfield}
                     value={addInputs.email}
                     onChange={(e) => handleChange(e)}
+                    error={errors.email}
+                    helperText={errorTexts.email}
                   />
                   <Typography>{emailTail}</Typography>
                 </div>
@@ -229,51 +285,34 @@ export default function StudentInfoEdit(props) {
               </CardContent>
             </Card>
           </div>
-        ) : (
-          <></>
         )}
-        {!disabledTwoCards ? (
+        {!add && !pendingCards.length && !loading.user.user.addStudentCard && (
           <div className={classes.buttonContainer}>
             <div className={classes.addButton}>
-              <Button
-                onClick={() => {
-                  setAdd(true);
-                  setDisabledTwoCards(true);
-                }}
-              >
-                +
-              </Button>
+              <Button onClick={() => setAdd(true)}>+</Button>
             </div>
           </div>
-        ) : (
-          <></>
         )}
-        <Dialog open={popUp} onClose={() => setPopUp(false)} maxWidth="md">
-          <DialogTitle>
-            <Typography variant="h4">Verification email sent</Typography>
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              <Typography variant="body1" color="textPrimary">
-                Please check your mailbox to activate this student information, then it will appear here.
-              </Typography>
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setPopUp(false)}>Done</Button>
-          </DialogActions>
-        </Dialog>
-        <Button
-          onClick={() => {
-            props.handleBack();
-          }}
-        >
-          Cancel
-        </Button>
-        <Button color="primary" type="submit" onClick={handleSave}>
-          Save
-        </Button>
+        {loading.user.user.addStudentCard && (
+          <div className={classes.buttonContainer}>
+            <div className={classes.addButton}>
+              <CircularProgress />
+            </div>
+          </div>
+        )}
       </SimpleBar>
+      <Snackbar
+        open={snackbar}
+        autoHideDuration={3000}
+        message="Verification email sent! Please check your mailbox."
+        onClose={() => setSnackbar(false)}
+      />
+      <Snackbar
+        open={errorSnackbar}
+        autoHideDuration={3000}
+        message={error.user.user.addStudentCard ? `Error: ${error.user.user.addStudentCard.toString()}` : 'Error'}
+        onClose={() => setErrorSnackbar(false)}
+      />
     </div>
   );
 }

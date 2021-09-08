@@ -126,7 +126,7 @@ export default function DateRangePicker({
       setValue((prevValue) => [
         {
           ...prevValue[0],
-          endDate: moment(prevValue[0].startDate)
+          endDate: moment(prevValue[0].endDate)
             .set({ hour: parsed.get('hour'), minute: parsed.get('minute') })
             .toDate(),
         },

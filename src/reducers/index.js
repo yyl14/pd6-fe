@@ -27,6 +27,7 @@ import loading from './loading/index';
 import error from './error/index';
 import component from './component';
 import essaySubmission from './essaySubmission';
+import pendingStudentCards from './pendingStudentCards';
 
 export default combineReducers({
   auth,
@@ -57,4 +58,5 @@ export default combineReducers({
   downloadLinks,
   essaySubmission,
   component,
+  pendingStudentCards,
 });
