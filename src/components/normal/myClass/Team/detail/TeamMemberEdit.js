@@ -21,6 +21,7 @@ import SimpleTable from '../../../../ui/SimpleTable';
 import {
   addTeamMember, editTeamMember, deleteTeamMember, fetchTeamMembers,
 } from '../../../../../actions/myClass/team';
+import systemRoleTransformation from '../../../../../function/systemRoleTransformation';
 
 const useStyles = makeStyles(() => ({
   select: {
@@ -28,7 +29,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function TeamMemberEdit(props) {
+export default function TeamMemberEdit({ setOriginData, isManager, handleBack }) {
   const classNames = useStyles();
   const { teamId } = useParams();
   const dispatch = useDispatch();
@@ -36,9 +37,19 @@ export default function TeamMemberEdit(props) {
   const authToken = useSelector((state) => state.auth.token);
   const teamMembers = useSelector((state) => state.teamMembers.byId);
   const teamMemberIds = useSelector((state) => state.teamMembers.allIds);
+  const loading = useSelector((state) => state.loading.myClass.team);
 
-  const [tableData, setTableData] = useState([]);
-  const { setOriginData } = props;
+  const [tableData, setTableData] = useState(
+    teamMemberIds.map((id) => ({
+      id: teamMembers[id] ? teamMembers[id].member_id : '',
+      username: teamMembers[id] ? teamMembers[id].account.username : '',
+      student_id: teamMembers[id] ? teamMembers[id].account.student_id : '',
+      real_name: teamMembers[id] ? teamMembers[id].account.real_name : '',
+      role: systemRoleTransformation(teamMembers[id].role),
+      path: '/',
+    })),
+  );
+  // const { setOriginData } = props;
   const [tempAddData, setTempAddData] = useState([]);
   const [popUp, setPopUp] = useState(false);
   const [inputs, setInputs] = useState({
@@ -47,8 +58,10 @@ export default function TeamMemberEdit(props) {
   });
 
   useEffect(() => {
-    setTableData(props.tableData);
-  }, [props.tableData]);
+    if (!loading.addTeamMember && !loading.editTeamMember && !loading.deleteTeamMember) {
+      fetchTeamMembers(authToken, teamId, {});
+    }
+  }, [authToken, loading.addTeamMember, loading.deleteTeamMember, loading.editTeamMember, teamId]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -64,12 +77,13 @@ export default function TeamMemberEdit(props) {
 
   const handleCancel = () => {
     // delete unsaved added members
-    tempAddData.map((item) => teamMemberIds.map((id) => (
-      item === teamMembers[id].account.username
-      || item === teamMembers[id].account.real_name
-      || item === teamMembers[id].account.student_id)
-      && dispatch(deleteTeamMember(authToken, teamId, teamMembers[id].member_id))));
-    props.handleBack();
+    tempAddData.map((item) => teamMemberIds.map(
+      (id) => (item === teamMembers[id].account.username
+            || item === teamMembers[id].account.real_name
+            || item === teamMembers[id].account.student_id)
+          && dispatch(deleteTeamMember(authToken, teamId, teamMembers[id].member_id)),
+    ));
+    handleBack();
   };
 
   const handleSave = () => {
@@ -86,7 +100,7 @@ export default function TeamMemberEdit(props) {
       }
     });
     setOriginData(tableData);
-    props.handleBack();
+    handleBack();
   };
 
   const handleAdd = () => {
@@ -98,17 +112,16 @@ export default function TeamMemberEdit(props) {
       const newTempAdd = [...tempAddData, inputs.student];
       setTempAddData(newTempAdd);
     }
-    dispatch(fetchTeamMembers(authToken, teamId, {}));
   };
 
   return (
     <div>
       <SimpleBar title="Team Member" noIndent>
         <SimpleTable
-          isEdit={props.isManager}
-          hasDelete={props.isManager}
+          isEdit={isManager}
+          hasDelete={isManager}
           buttons={
-            props.isManager && (
+            isManager && (
               <Button color="primary" onClick={() => setPopUp(true)}>
                 <MdAdd />
               </Button>
