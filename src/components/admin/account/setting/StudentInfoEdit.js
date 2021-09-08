@@ -12,6 +12,7 @@ import {
   Select,
   MenuItem,
   Snackbar,
+  CircularProgress,
 } from '@material-ui/core';
 import { addStudentCard } from '../../../../actions/admin/account';
 import StudentInfoCard from './StudentInfoCard';
@@ -71,9 +72,7 @@ export default function StudentInfoEdit(props) {
   const classes = useStyles();
   const [cards, setCards] = useState(props.cards);
   const [pendingCards, setPendingCards] = useState(props.pendingCards);
-  const [disabledTwoCards, setDisabledTwoCards] = useState(false);
   const [add, setAdd] = useState(false); // addCard block
-  // const [popUp, setPopUp] = useState(false);
   const [snackbar, setSnackbar] = useState(false);
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
   const [addInputs, setAddInputs] = useState({
@@ -93,6 +92,7 @@ export default function StudentInfoEdit(props) {
   const institutes = useSelector((state) => state.institutes.byId);
   const institutesId = useSelector((state) => state.institutes.allIds);
   const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
+  const loading = useSelector((state) => state.loading);
 
   const { accountId } = useParams();
   const authToken = useSelector((state) => state.auth.token);
@@ -114,7 +114,6 @@ export default function StudentInfoEdit(props) {
     setAdd(false);
     setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
     setEmailTail('@ntu.edu.tw');
-    setDisabledTwoCards(false);
     setErrors({ studentId: false, email: false });
     setErrorTexts({ studentId: '', email: '' });
   };
@@ -137,7 +136,6 @@ export default function StudentInfoEdit(props) {
       setSnackbar(true);
     }
     setAdd(false);
-    setDisabledTwoCards(false);
     setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
   };
 
@@ -280,17 +278,23 @@ export default function StudentInfoEdit(props) {
             </Card>
           </div>
         )}
-        {!disabledTwoCards && (
+        {!add && !pendingCards.length && !loading.admin.account.addStudentCard && (
           <div className={classes.buttonContainer}>
             <div className={classes.addButton}>
               <Button
                 onClick={() => {
                   setAdd(true);
-                  setDisabledTwoCards(true);
                 }}
               >
                 +
               </Button>
+            </div>
+          </div>
+        )}
+        {loading.admin.account.addStudentCard && (
+          <div className={classes.buttonContainer}>
+            <div className={classes.addButton}>
+              <CircularProgress />
             </div>
           </div>
         )}
