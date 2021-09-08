@@ -317,7 +317,7 @@ export default function TeamList() {
         severity="error"
         open={showAddDialog && hasError}
         onClose={handleCloseError}
-        message={`Error: ${error.addTeam}`}
+        message={`Error: ${error.myClass.team.addTeam}`}
       />
 
       <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} fullWidth maxWidth="sm">
@@ -367,7 +367,7 @@ export default function TeamList() {
         severity="error"
         open={showImportDialog && hasError}
         onClose={handleCloseError}
-        message={`Error: ${error.importTeam}`}
+        message={`Error: ${error.myClass.team.importTeam}`}
       />
     </>
   );
