@@ -63,11 +63,11 @@ export default function ChallengeList() {
     scoredBy: 'Last Score',
     showTime: 'On End Time',
   });
-  const [error] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [isManager, setIsManager] = useState(false);
 
   const authToken = useSelector((state) => state.auth.token);
+  const error = useSelector((state) => state.loading.myClass.challenge);
   const loading = useSelector((state) => state.loading.myClass.challenge);
   const commonLoading = useSelector((state) => state.loading.common.common);
   const challenges = useSelector((state) => state.challenges);
@@ -187,7 +187,7 @@ export default function ChallengeList() {
         refetch={(browseParams, ident) => {
           dispatch(fetchChallenges(authToken, classId, browseParams, ident));
         }}
-        refetchErrors={[error]}
+        refetchErrors={[error.fetchChallenges]}
         refreshLoadings={[loading.addChallenge]}
         columns={[
           {
