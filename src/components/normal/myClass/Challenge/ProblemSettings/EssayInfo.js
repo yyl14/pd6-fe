@@ -61,6 +61,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   const challenges = useSelector((state) => state.challenges.byId);
   const essaySubmission = useSelector((state) => state.essaySubmission);
   const userId = useSelector((state) => state.user.id);
+  console.log('essaySubmission', essaySubmission, 'Id', essaySubmission.byId, 'allIds', essaySubmission.allIds);
 
   const uploadFail = useSelector((state) => state.error.myClass.essaySubmission);
 
@@ -103,15 +104,6 @@ export default function EssayInfo({ role = 'NORMAL' }) {
     }
   };
 
-  const handleClickLink = () => {
-    const fileToDownload = Object.keys(essaySubmission.byId).map((key) => ({
-      uuid: essaySubmission.byId[key].content_file_uuid,
-      filename: essaySubmission.byId[key].filename,
-      as_attachment: false,
-    }));
-    fileToDownload.map((file) => dispatch(downloadFile(authToken, file)));
-  };
-
   const handleSubmitDelete = () => {
     dispatch(deleteEssay(authToken, essayId));
     setHasRequest(true);
@@ -140,9 +132,23 @@ export default function EssayInfo({ role = 'NORMAL' }) {
     });
   }, [essayId, essaySubmission.allIds, essaySubmission.byId, userId]);
 
+  const handleClickLink = () => {
+    if (essaySubmission.byId[uploadRecord].account_id === userId) {
+      if (essaySubmission.byId[uploadRecord].essay_id === parseInt(essayId, 10)) {
+        const fileToDownload = {
+          uuid: essaySubmission.byId[uploadRecord].content_file_uuid,
+          filename: essaySubmission.byId[uploadRecord].filename,
+          as_attachment: false,
+        };
+        dispatch(downloadFile(authToken, fileToDownload));
+      }
+    }
+  };
+
   if (essay[essayId] === undefined) {
     return <NoMatch />;
   }
+  console.log('test', essaySubmission.byId, '111', essaySubmission.byId[uploadRecord]);
 
   return (
     <>
@@ -214,9 +220,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
           <Typography>
             File below was failed to be uploaded:
             <br />
-            {/* {uploadSuccessOrNot &&
-              ({essaySubmission.byId[uploadRecord].filename});
-            } */}
+            {/* {essaySubmission.byId[uploadRecord]} */}
           </Typography>
         </DialogContent>
         <DialogActions>
