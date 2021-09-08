@@ -56,7 +56,9 @@ export default function AccountSetting() {
     setPendingCards(
       account.pendingStudentCards.reduce((acc, key) => {
         if (pendingStudentCards.byId[key]) {
-          return [...acc, pendingStudentCards.byId[key]];
+          if (pendingStudentCards.byId[key].institute_id !== null) {
+            return [...acc, pendingStudentCards.byId[key]];
+          }
         }
         return [...acc];
       }, []),
