@@ -64,7 +64,7 @@ export default function ChallengeList() {
     showTime: 'On End Time',
   });
   const [error, setError] = useState(false);
-  const [errorText, setErrorText] = useState('');
+  const [disabled, setDisabled] = useState(true);
   const [isManager, setIsManager] = useState(false);
 
   const authToken = useSelector((state) => state.auth.token);
@@ -103,18 +103,12 @@ export default function ChallengeList() {
     const { name, value } = e.target;
     setInputs((input) => ({ ...input, [name]: value }));
 
-    if (name === 'title' && value !== '') {
-      setError(false);
-      setErrorText('');
-    }
+    if (name === 'title' && value === '') {
+      setDisabled(true);
+    } else setDisabled(false);
   };
 
   const handleAdd = () => {
-    if (inputs.title === '') {
-      setError(true);
-      setErrorText("Can't be empty");
-      return;
-    }
     const body = {
       title: inputs.title,
       scoredBy: inputs.scoredBy === 'Last Score' ? 'LAST' : 'BEST',
@@ -123,6 +117,7 @@ export default function ChallengeList() {
       endTime: dateRangePicker[0].endDate.toISOString(),
     };
     dispatch(addChallenge(authToken, classId, body));
+    setDisabled(true);
     setPopUp(false);
     setInputs({
       title: '',
@@ -140,6 +135,7 @@ export default function ChallengeList() {
 
   const handleCancel = () => {
     setPopUp(false);
+    setDisabled(true);
     setInputs({
       title: '',
       scoredBy: 'Last Score',
@@ -246,13 +242,7 @@ export default function ChallengeList() {
             </Typography>
           </AlignedText>
           <AlignedText text="Title" childrenType="field" maxWidth="md">
-            <TextField
-              value={inputs.title}
-              name="title"
-              onChange={(e) => handleChange(e)}
-              error={error}
-              helperText={errorText}
-            />
+            <TextField value={inputs.title} name="title" onChange={(e) => handleChange(e)} />
           </AlignedText>
           <div className={className.gap}>
             <DateRangePicker vertical value={dateRangePicker} setValue={setDateRangePicker} />
@@ -284,7 +274,7 @@ export default function ChallengeList() {
           <Button onClick={handleCancel} color="default">
             Cancel
           </Button>
-          <Button onClick={handleAdd} color="primary">
+          <Button onClick={handleAdd} color="primary" disabled={disabled}>
             Create
           </Button>
         </DialogActions>
