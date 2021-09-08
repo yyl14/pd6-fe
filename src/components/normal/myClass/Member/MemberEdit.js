@@ -140,7 +140,7 @@ const MemberEdit = ({
       }
       return true;
     });
-  });
+  }, [TAChanged, guestChanged, history, studentChanged]);
 
   useEffect(() => {
     if (error.replaceClassMembers) {
