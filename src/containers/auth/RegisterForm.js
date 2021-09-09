@@ -179,8 +179,9 @@ export default function RegisterForm() {
     }
 
     if (name === 'confirmPassword' || name === 'password') {
-      const statusP = checkPassword(inputs.password, value);
-      if (statusP === "Passwords don't match") {
+      // const statusP = checkPassword(inputs.password, value);
+      const statusP = `${checkPassword(inputs.password, value)} ${checkPassword(inputs.confirmPassword, value)}`;
+      if (statusP === "Passwords don't match Passwords don't match") {
         setErrors((input) => ({ ...input, confirmPassword: true }));
         setErrorTexts((input) => ({ ...input, confirmPassword: "Passwords don't match" }));
       } else {
