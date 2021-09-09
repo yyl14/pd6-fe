@@ -61,12 +61,12 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   const challenges = useSelector((state) => state.challenges.byId);
   const essaySubmission = useSelector((state) => state.essaySubmission);
   const userId = useSelector((state) => state.user.id);
-  console.log('essaySubmission', essaySubmission, 'Id', essaySubmission.byId, 'allIds', essaySubmission.allIds);
 
   const uploadFail = useSelector((state) => state.error.myClass.essaySubmission);
 
   const [uploadRecord, setUploadRecord] = useState();
   const [selectedFile, setSelectedFile] = useState([]);
+  const [fileName, setFileName] = useState();
 
   const [popUpUpload, setPopUpUpload] = useState(false);
   const [popUpFail, setPopUpFail] = useState(false);
@@ -93,11 +93,12 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   };
 
   const handleUpload = () => {
-    if (uploadRecord) {
+    if (uploadRecord.length !== 0) {
       dispatch(reUploadEssay(authToken, uploadRecord, selectedFile[0]));
     } else {
       dispatch(uploadEssay(authToken, essayId, selectedFile[0]));
     }
+    setFileName(selectedFile[0].name);
     setSelectedFile([]);
     if (!!uploadFail.reUploadEssay || !!uploadFail.uploadEssay) {
       setPopUpFail(true);
@@ -122,14 +123,11 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   }, [authToken, dispatch, essayId]);
 
   useEffect(() => {
-    essaySubmission.allIds.map((id) => {
-      if (essaySubmission.byId[id].account_id === userId) {
-        if (essaySubmission.byId[id].essay_id === parseInt(essayId, 10)) {
-          setUploadRecord(id);
-        }
-      }
-      return <></>;
-    });
+    setUploadRecord(
+      essaySubmission.allIds.filter(
+        (id) => essaySubmission.byId[id].account_id === userId && essaySubmission.byId[id].essay_id === parseInt(essayId, 10),
+      ),
+    );
   }, [essayId, essaySubmission.allIds, essaySubmission.byId, userId]);
 
   const handleClickLink = () => {
@@ -148,7 +146,6 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   if (essay[essayId] === undefined) {
     return <NoMatch />;
   }
-  console.log('test', essaySubmission.byId, '111', essaySubmission.byId[uploadRecord]);
 
   return (
     <>
@@ -220,7 +217,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
           <Typography>
             File below was failed to be uploaded:
             <br />
-            {/* {essaySubmission.byId[uploadRecord]} */}
+            {fileName}
           </Typography>
         </DialogContent>
         <DialogActions>
