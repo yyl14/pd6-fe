@@ -268,11 +268,9 @@ export default function InstituteSetting() {
           <Typography variant="h4">Rename institute</Typography>
         </DialogTitle>
         <DialogContent>
-          <div style={{ color: 'red' }}>
-            <AlignedText text="Full Name" childrenType="text">
-              <Typography variant="body1">{institutes[instituteId].full_name}</Typography>
-            </AlignedText>
-          </div>
+          <AlignedText text="Full Name" childrenType="text" textColor="secondary">
+            <Typography variant="body1">{institutes[instituteId].full_name}</Typography>
+          </AlignedText>
           <AlignedText text="New Name" childrenType="field">
             <TextField id="newName" name="newName" value={newSetting.newName} onChange={handleChange('newName')} />
           </AlignedText>
@@ -306,11 +304,9 @@ export default function InstituteSetting() {
           <Typography variant="h4">Change institute Initialism</Typography>
         </DialogTitle>
         <DialogContent>
-          <div style={{ color: 'red' }}>
-            <AlignedText text="Current Initialism" childrenType="text">
-              <Typography variant="body1">{institutes[instituteId].abbreviated_name}</Typography>
-            </AlignedText>
-          </div>
+          <AlignedText text="Current Initialism" childrenType="text" textColor="secondary">
+            <Typography variant="body1">{institutes[instituteId].abbreviated_name}</Typography>
+          </AlignedText>
           <AlignedText text="New Initialism" childrenType="field">
             <TextField
               id="newInitialism"
@@ -343,11 +339,9 @@ export default function InstituteSetting() {
           <Typography variant="h4">Change institute email</Typography>
         </DialogTitle>
         <DialogContent>
-          <div style={{ color: 'red' }}>
-            <AlignedText text="Current Email" childrenType="text">
-              <Typography variant="body1">{institutes[instituteId].email_domain}</Typography>
-            </AlignedText>
-          </div>
+          <AlignedText text="Current Email" childrenType="text" textColor="secondary">
+            <Typography variant="body1">{institutes[instituteId].email_domain}</Typography>
+          </AlignedText>
           <AlignedText text="New Email" childrenType="field">
             <TextField
               id="newEmail"
