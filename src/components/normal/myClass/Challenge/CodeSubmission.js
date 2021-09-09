@@ -60,7 +60,7 @@ export default function CodeSubmission() {
   }, [cookies.lang, submitLang.allIds, submitLang.byId]);
 
   const handleSubmit = () => {
-    if (langId === -1) {
+    if (langId === '') {
       return;
     }
     dispatch(submitCode(authToken, problemId, langId, code));
