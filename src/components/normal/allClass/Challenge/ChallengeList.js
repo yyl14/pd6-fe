@@ -32,9 +32,6 @@ const useStyles = makeStyles((theme) => ({
   item: {
     width: '190px',
   },
-  textfield: {
-    width: '350px',
-  },
   gap: {
     marginBottom: theme.spacing(2),
     marginTop: theme.spacing(3),
