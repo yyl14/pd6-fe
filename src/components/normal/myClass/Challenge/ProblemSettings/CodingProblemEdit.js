@@ -47,7 +47,7 @@ const useStyles = makeStyles(() => ({
     width: '400px',
   },
   textfield2: {
-    width: '60vw',
+    width: '100%',
   },
   loadButtons: {
     width: 'max-content',

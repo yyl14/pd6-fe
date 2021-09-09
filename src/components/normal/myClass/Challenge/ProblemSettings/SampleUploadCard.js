@@ -13,8 +13,11 @@ import AlignedText from '../../../../ui/AlignedText';
 import IOFileUploadArea from '../../../../ui/IOFileUploadArea';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
+  dialogTitle: {
+    marginBottom: '-8px',
+  },
+  instructions: {
+    marginBottom: '10px',
   },
   sampleArea: {
     marginTop: '50px',
@@ -62,18 +65,20 @@ export default function SampleUploadCard({
 
   return (
     <>
-      <Dialog open={popUp} onClose={() => closePopUp()} fullWidth>
-        <DialogTitle id="dialog-slide-title">
+      <Dialog open={popUp} onClose={() => closePopUp()} maxWidth="md">
+        <DialogTitle id="dialog-slide-title" className={classes.dialogTitle}>
           <Typography variant="h4">Upload Sample Data</Typography>
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body2">Please name your files in the following manner:</Typography>
-          <Typography variant="body2" className={classes.reminder}>
-            sample1.in （範例測資 1 的 input）
-          </Typography>
-          <Typography variant="body2" className={classes.reminder}>
-            sample1.out （範例測資 1 的 output）
-          </Typography>
+          <div className={classes.instructions}>
+            <Typography variant="body2">Please name your files in the following manner:</Typography>
+            <Typography variant="body2" className={classes.reminder}>
+              sample1.in （範例測資 1 的 input）
+            </Typography>
+            <Typography variant="body2" className={classes.reminder}>
+              sample1.out （範例測資 1 的 output）
+            </Typography>
+          </div>
           <AlignedText text="Default Time(ms)" childrenType="field">
             <TextField id="time" value={time} onChange={(e) => setTime(e.target.value)} />
           </AlignedText>

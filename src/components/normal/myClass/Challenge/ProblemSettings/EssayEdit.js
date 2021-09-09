@@ -1,33 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  TextField,
-  FormControlLabel,
-  Switch,
-} from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { Button, makeStyles, TextField } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
-import Icon from '../../../../ui/icon/index';
-import NoMatch from '../../../../noMatch';
 import { editEssay } from '../../../../../actions/myClass/essay';
 
 const useStyles = makeStyles(() => ({
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end',
+    marginTop: '-15px',
   },
   textfield: {
     width: '400px',
   },
   textfield2: {
-    width: '60vw',
+    width: '100%',
   },
 }));
 
@@ -36,7 +24,6 @@ export default function EssayEdit({ closeEdit, role = 'NORMAL' }) {
   const {
     courseId, classId, challengeId, essayId,
   } = useParams();
-  const history = useHistory();
   const classNames = useStyles();
 
   const dispatch = useDispatch();
