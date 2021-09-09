@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
   },
-  textfield: {
+  selectList: {
     width: '350px',
   },
   mailfield: {
@@ -230,7 +230,7 @@ export default function StudentInfoEdit(props) {
                   <div className={classes.item}>
                     <Typography>Institute</Typography>
                   </div>
-                  <FormControl variant="outlined" className={classes.textfield}>
+                  <FormControl variant="outlined" className={classes.selectList}>
                     <Select value={addInputs.institute} name="institute" onChange={(e) => handleChange(e)}>
                       {enableInstitutesId.map((item) => (
                         <MenuItem key={item} value={institutes[item].full_name}>
@@ -245,7 +245,6 @@ export default function StudentInfoEdit(props) {
                     <TextField
                       variant="outlined"
                       name="studentId"
-                      className={classes.textfield}
                       value={addInputs.studentId}
                       onChange={(e) => handleChange(e)}
                       error={errors.studentId}

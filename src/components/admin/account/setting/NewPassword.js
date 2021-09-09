@@ -20,9 +20,6 @@ import AlignedText from '../../../ui/AlignedText';
 import { editPassword } from '../../../../actions/admin/account';
 
 const useStyles = makeStyles((theme) => ({
-  textfield: {
-    width: '350px',
-  },
   gap: {
     marginTop: theme.spacing(2),
   },
@@ -70,7 +67,6 @@ export default function NewPassword() {
         <SimpleBar title="Password">
           <AlignedText text="New Password" childrenType="field" maxWidth="lg">
             <TextField
-              className={classes.textfield}
               value={password}
               error={error}
               helperText={errorText}
