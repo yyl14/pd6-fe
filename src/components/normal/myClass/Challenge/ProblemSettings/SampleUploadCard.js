@@ -44,13 +44,15 @@ export default function SampleUploadCard({
   const [memory, setMemory] = useState(65535);
 
   const handleConfirm = () => {
-    const newSelectedFile = selectedFile.map((data) => ({
-      ...data,
-      no: data.id,
-      time_limit: time,
-      memory_limit: memory,
-    }));
-    setSelectedFile(newSelectedFile);
+    const newSelectedFile = Object.keys(selectedFile).reduce((acc, key) => ({
+      ...acc,
+      [key]: {
+        ...selectedFile[key],
+        no: selectedFile[key].id,
+        time_limit: time,
+        memory_limit: memory,
+      },
+    }), {});
     handleTempUpload(newSelectedFile);
     closePopUp();
   };

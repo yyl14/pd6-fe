@@ -145,7 +145,7 @@ export default function CodingProblemEdit({ closeEdit }) {
       const testcasesId = problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
       const samplesId = problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
       testcasesId.sort((a, b) => testcaseTransToNumber(a) - testcaseTransToNumber(b));
-      samplesId.sort((a, b) => sampleTransToNumber(a) > sampleTransToNumber(b));
+      samplesId.sort((a, b) => sampleTransToNumber(a) - sampleTransToNumber(b));
       setSampleDataIds(samplesId);
       setTestcaseDataIds(testcasesId);
       if (testcasesId.length === 0) {
@@ -154,32 +154,36 @@ export default function CodingProblemEdit({ closeEdit }) {
         setStatus(!testcases[testcasesId[0]].is_disabled);
       }
       // set original table data
-      const data = samplesId.map((id) => ({
-        id: testcases[id].id,
-        no: sampleTransToNumber(id),
-        time_limit: testcases[id].time_limit,
-        memory_limit: testcases[id].memory_limit,
-        score: testcases[id].score,
-        input_filename: testcases[id].input_filename,
-        output_filename: testcases[id].output_filename,
-        in_file: null,
-        out_file: null,
-        new: false,
-      }));
-      setSampleTableData(data);
-      const data2 = testcasesId.map((id) => ({
-        id: testcases[id].id,
-        no: testcaseTransToNumber(id),
-        time_limit: testcases[id].time_limit,
-        memory_limit: testcases[id].memory_limit,
-        score: testcases[id].score,
-        input_filename: testcases[id].input_filename,
-        output_filename: testcases[id].output_filename,
-        in_file: null,
-        out_file: null,
-        new: false,
-      }));
-      setTestcaseTableData(data2);
+      setSampleTableData(samplesId.reduce((acc, id) => ({
+        ...acc,
+        [id]: {
+          id: testcases[id].id,
+          no: sampleTransToNumber(id),
+          time_limit: testcases[id].time_limit,
+          memory_limit: testcases[id].memory_limit,
+          score: testcases[id].score,
+          input_filename: testcases[id].input_filename,
+          output_filename: testcases[id].output_filename,
+          in_file: null,
+          out_file: null,
+          new: false,
+        },
+      }), {}));
+      setTestcaseTableData(testcasesId.reduce((acc, id) => ({
+        ...acc,
+        [id]: {
+          id: testcases[id].id,
+          no: testcaseTransToNumber(id),
+          time_limit: testcases[id].time_limit,
+          memory_limit: testcases[id].memory_limit,
+          score: testcases[id].score,
+          input_filename: testcases[id].input_filename,
+          output_filename: testcases[id].output_filename,
+          in_file: null,
+          out_file: null,
+          new: false,
+        },
+      }), {}));
     }
   }, [problems, problemId, testcases, sampleTransToNumber, testcaseTransToNumber]);
 
@@ -192,9 +196,9 @@ export default function CodingProblemEdit({ closeEdit }) {
       : [],
   );
 
-  const [tempSelectedFileS, setTempSelectedFileS] = useState([]);
-  const [tempSelectedFileT, setTempSelectedFileT] = useState([]);
-  const [tempSelectedFileA, setTempSelectedFileA] = useState([]);
+  const [cardSelectedFileS, setCardSelectedFileS] = useState({});
+  const [cardSelectedFileT, setCardSelectedFileT] = useState({});
+  const [cardSelectedFileA, setCardSelectedFileA] = useState([]);
   const [selectedFileA, setSelectedFileA] = useState([]);
 
   const [samplePopUp, setSamplePopUp] = useState(false);
@@ -211,116 +215,109 @@ export default function CodingProblemEdit({ closeEdit }) {
     setTestingPopUp(false);
   };
 
-  const handleSampleTempUpload = (newSelectedFiles) => {
-    const newTableData = sampleTableData.reduce((acc, data) => {
-      const selectedData = newSelectedFiles.filter((file) => data.no === file.no);
-      if (selectedData.length === 0) {
-        return [...acc, data];
-      }
-      return [
-        ...acc,
-        {
-          id: data.id,
-          no: data.no,
-          time_limit: selectedData[0].time_limit,
-          memory_limit: selectedData[0].memory_limit,
-          input_filename: selectedData[0].in === null ? data.input_filename : selectedData[0].in.name,
-          output_filename: selectedData[0].out === null ? data.output_filename : selectedData[0].out.name,
-          in_file: selectedData[0].in === null ? data.in_file : selectedData[0].in,
-          out_file: selectedData[0].out === null ? data.out_file : selectedData[0].out,
-          new: data.new,
-        },
-      ];
-    }, []);
+  const handleSetSampleTableData = (tableData) => {
+    setSampleTableData(tableData.reduce((acc, item) => ({
+      ...acc,
+      [item.id]: item,
+    }), {}));
+  };
+  const handleSetTestcaseTableData = (tableData) => {
+    setTestcaseTableData(tableData.reduce((acc, item) => ({
+      ...acc,
+      [item.id]: item,
+    }), {}));
+  };
 
-    newSelectedFiles.map((item) => {
-      const selectedData = sampleTableData.filter((data) => data.no === item.no);
-      if (selectedData.length === 0) {
-        newTableData.push({
-          id: -item.no,
-          no: item.no,
-          time_limit: item.time_limit,
-          memory_limit: item.memory_limit,
-          input_filename: item.in === null ? null : item.in.name,
-          output_filename: item.out === null ? null : item.out.name,
-          in_file: item.in,
-          out_file: item.out,
-          new: true,
-        });
+  const handleSampleConfirm = (newSelectedFiles) => {
+    const newTableData = Object.keys(newSelectedFiles).reduce((acc, item) => {
+      if (Object.keys(sampleTableData).filter((key) => sampleTableData[key].no === newSelectedFiles[item].no).length === 0) {
+        // this is new case
+        return {
+          ...acc,
+          [item]: {
+            id: -item,
+            no: newSelectedFiles[item].no,
+            time_limit: newSelectedFiles[item].time_limit,
+            memory_limit: newSelectedFiles[item].memory_limit,
+            input_filename: newSelectedFiles[item].in === null ? null : newSelectedFiles[item].in.name,
+            output_filename: newSelectedFiles[item].out === null ? null : newSelectedFiles[item].out.name,
+            in_file: newSelectedFiles[item].in,
+            out_file: newSelectedFiles[item].out,
+            new: true,
+          },
+        };
       }
-      return item;
-    });
-    // console.log(newTableData);
-    // setSelectedFileS(tempSelectedFileS);
+      // testcase has been existed
+      return {
+        ...acc,
+        [item]: {
+          id: item,
+          no: newSelectedFiles[item].no,
+          time_limit: newSelectedFiles[item].time_limit,
+          memory_limit: newSelectedFiles[item].memory_limit,
+          input_filename: newSelectedFiles[item].in === null ? sampleTableData[item].input_filename : newSelectedFiles[item].in.name,
+          output_filename: newSelectedFiles[item].out === null ? sampleTableData[item].output_filename : newSelectedFiles[item].out.name,
+          in_file: newSelectedFiles[item].in === null ? sampleTableData[item].in_file : newSelectedFiles[item].in,
+          out_file: newSelectedFiles[item].out === null ? sampleTableData[item].out_file : newSelectedFiles[item].out,
+          new: sampleTableData[item].new,
+        },
+      };
+    }, sampleTableData);
     setSampleTableData(newTableData);
-    setTempSelectedFileS([]);
+    setCardSelectedFileS({});
     setHasChange(true);
   };
 
-  const handleTestingTempUpload = (newSelectedFiles) => {
-    const newTableData = testcaseTableData.reduce((acc, data) => {
-      const selectedData = newSelectedFiles.filter((file) => data.no === file.no);
-      if (selectedData.length === 0) {
-        return [...acc, data];
+  const handleTestingConfirm = (newSelectedFiles) => {
+    const newTableData = Object.keys(newSelectedFiles).reduce((acc, item) => {
+      if (Object.keys(testcaseTableData).filter((key) => testcaseTableData[key].no === newSelectedFiles[item].no).length === 0) {
+        // this is new case
+        return {
+          ...acc,
+          [item]: {
+            id: -item,
+            no: newSelectedFiles[item].no,
+            score: newSelectedFiles[item].score,
+            time_limit: newSelectedFiles[item].time_limit,
+            memory_limit: newSelectedFiles[item].memory_limit,
+            input_filename: newSelectedFiles[item].in === null ? null : newSelectedFiles[item].in.name,
+            output_filename: newSelectedFiles[item].out === null ? null : newSelectedFiles[item].out.name,
+            in_file: newSelectedFiles[item].in,
+            out_file: newSelectedFiles[item].out,
+            new: true,
+          },
+        };
       }
-      return [
+      // testcase has been existed
+      return {
         ...acc,
-        {
-          id: data.id,
-          no: data.no,
-          score: data.score,
-          time_limit: selectedData[0].time_limit,
-          memory_limit: selectedData[0].memory_limit,
-          input_filename: selectedData[0].in === null ? data.input_filename : selectedData[0].in.name,
-          output_filename: selectedData[0].out === null ? data.output_filename : selectedData[0].out.name,
-          in_file: selectedData[0].in === null ? data.in_file : selectedData[0].in,
-          out_file: selectedData[0].out === null ? data.out_file : selectedData[0].out,
-          new: data.new,
+        [item]: {
+          id: item,
+          no: newSelectedFiles[item].no,
+          score: newSelectedFiles[item].score,
+          time_limit: newSelectedFiles[item].time_limit,
+          memory_limit: newSelectedFiles[item].memory_limit,
+          input_filename: newSelectedFiles[item].in === null ? testcaseTableData[item].input_filename : newSelectedFiles[item].in.name,
+          output_filename: newSelectedFiles[item].out === null ? testcaseTableData[item].output_filename : newSelectedFiles[item].out.name,
+          in_file: newSelectedFiles[item].in === null ? testcaseTableData[item].in_file : newSelectedFiles[item].in,
+          out_file: newSelectedFiles[item].out === null ? testcaseTableData[item].out_file : newSelectedFiles[item].out,
+          new: testcaseTableData[item].new,
         },
-      ];
-    }, []);
-
-    newSelectedFiles.map((item) => {
-      const selectedData = testcaseTableData.filter((data) => data.no === item.no);
-      if (selectedData.length === 0) {
-        newTableData.push({
-          id: -item.no,
-          no: item.no,
-          score: item.score,
-          time_limit: item.time_limit,
-          memory_limit: item.memory_limit,
-          input_filename: item.in === null ? null : item.in.name,
-          output_filename: item.out === null ? null : item.out.name,
-          in_file: item.in,
-          out_file: item.out,
-          new: true,
-        });
-      }
-      return item;
-    });
-    // console.log(newTableData);
+      };
+    }, testcaseTableData);
     setTestcaseTableData(newTableData);
-    // setSelectedFileT(tempSelectedFileT);
-    setTempSelectedFileT([]);
+    setCardSelectedFileT({});
     setHasChange(true);
   };
 
-  const handleAssistTempUpload = () => {
+  const handleAssistConfirm = () => {
     // add file name to table;
-    const newData = assistTableData;
-    const selectedFile = selectedFileA;
-    tempSelectedFileA.forEach((file) => {
-      let flag = false;
-      assistTableData.every((item) => {
-        if (item.filename === file.name) {
-          flag = true;
-          return false;
-        }
-        return true;
-      });
-      if (flag === false) {
-        newData.push({ id: file.name, filename: file.name });
+    const selectedFile = [...selectedFileA];
+    const newData = cardSelectedFileA.reduce((acc, file) => {
+      if (assistTableData.filter((item) => item.filename === file.name).length === 0) {
+        return [...acc, { id: file.name, filename: file.name }];
       }
+
       const filteredFile = selectedFileA.filter((oriFile) => oriFile.name === file.name);
       if (filteredFile.length === 0) {
         selectedFile.push(file);
@@ -329,10 +326,11 @@ export default function CodingProblemEdit({ closeEdit }) {
         selectedFile.splice(index, 1);
         selectedFile.push(file);
       }
-    });
+      return acc;
+    }, assistTableData);
     setAssistTableData(newData);
     setSelectedFileA(selectedFile);
-    setTempSelectedFileA([]);
+    setCardSelectedFileA([]);
     setHasChange(true);
   };
 
@@ -664,8 +662,8 @@ export default function CodingProblemEdit({ closeEdit }) {
               type: 'string',
             },
           ]}
-          data={sampleTableData}
-          setData={setSampleTableData}
+          data={Object.keys(sampleTableData).map((key) => sampleTableData[key])}
+          setData={handleSetSampleTableData}
         />
       </SimpleBar>
       <SimpleBar
@@ -745,8 +743,8 @@ export default function CodingProblemEdit({ closeEdit }) {
               type: 'string',
             },
           ]}
-          data={testcaseTableData}
-          setData={setTestcaseTableData}
+          data={Object.keys(testcaseTableData).map((key) => testcaseTableData[key])}
+          setData={handleSetTestcaseTableData}
         />
       </SimpleBar>
       <SimpleBar title="Assisting Data (Optional)" noIndent>
@@ -788,23 +786,23 @@ export default function CodingProblemEdit({ closeEdit }) {
       <SampleUploadCard
         popUp={samplePopUp}
         closePopUp={handleClosePopUp}
-        selectedFile={tempSelectedFileS}
-        setSelectedFile={setTempSelectedFileS}
-        handleTempUpload={handleSampleTempUpload}
+        selectedFile={cardSelectedFileS}
+        setSelectedFile={setCardSelectedFileS}
+        handleTempUpload={handleSampleConfirm}
       />
       <AssistingDataUploadCard
         popUp={assistPopUp}
         closePopUp={handleClosePopUp}
-        selectedFile={tempSelectedFileA}
-        setSelectedFile={setTempSelectedFileA}
-        handleTempUpload={handleAssistTempUpload}
+        selectedFile={cardSelectedFileA}
+        setSelectedFile={setCardSelectedFileA}
+        handleTempUpload={handleAssistConfirm}
       />
       <TestingDataUploadCard
         popUp={testingPopUp}
         closePopUp={handleClosePopUp}
-        selectedFile={tempSelectedFileT}
-        setSelectedFile={setTempSelectedFileT}
-        handleTempUpload={handleTestingTempUpload}
+        selectedFile={cardSelectedFileT}
+        setSelectedFile={setCardSelectedFileT}
+        handleTempUpload={handleTestingConfirm}
       />
       <Dialog open={warningPopUp} onClose={() => setWarningPopUp(false)} fullWidth>
         <DialogTitle id="dialog-slide-title">

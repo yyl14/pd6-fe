@@ -187,7 +187,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   }, [authToken, dispatch, problemId]);
 
   if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
-    console.log('magic');
     return <GeneralLoading />;
   }
 

@@ -116,8 +116,9 @@ export default function IOFileUploadArea({
     const newFiles = [...e.target.files];
     const newSelectedFiles = newFiles.reduce((acc, file) => {
       const [index, type] = parseIndexAndType(file.name);
-      if (!Number.isInteger(index)) {
+      if (!Number.isInteger(index) || index === 0) {
         setErrorPopup(true);
+        return { ...acc };
       }
       if (type === 'in') {
         if (acc[index] === undefined) {
