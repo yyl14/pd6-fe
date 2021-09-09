@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { fetchClassMembers, fetchClassMemberWithAccountReferral } from '../../../../actions/common/common';
+import { fetchClassMembers } from '../../../../actions/common/common';
 import AutoTable from '../../../ui/AutoTable';
 import PageTitle from '../../../ui/PageTitle';
 import MemberEdit from './MemberEdit';
@@ -27,7 +27,6 @@ export default function MemberList() {
   useEffect(() => {
     if (!loading.replaceClassMembers) {
       dispatch(fetchClassMembers(authToken, classId));
-      dispatch(fetchClassMemberWithAccountReferral(authToken, classId));
     }
   }, [authToken, classId, dispatch, loading.replaceClassMembers]);
 
@@ -66,7 +65,7 @@ export default function MemberList() {
           dispatch={dispatch}
           authToken={authToken}
           classId={classId}
-          members={classes.byId[classId].memberIds.map((id) => members.byId[id])}
+          classes={classes}
           backToMemberList={() => setEdit(false)}
           loading={loading}
         />
@@ -128,7 +127,6 @@ export default function MemberList() {
             ]}
             refetch={(browseParams, ident) => {
               dispatch(fetchClassMembers(authToken, classId, browseParams, ident));
-              dispatch(fetchClassMemberWithAccountReferral(authToken, classId));
             }}
             refetchErrors={[error]}
             columns={[

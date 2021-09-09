@@ -11,6 +11,7 @@ const byId = (state = {}, action) => {
           [item.member_id]: {
             ...item,
             member_referral: state[item.member_id] ? state[item.member_id].member_referral : '',
+            member_role: state[item.member_id] ? state[item.member_id].member_role : '',
           },
         }),
         state,
@@ -23,6 +24,7 @@ const byId = (state = {}, action) => {
           ...acc,
           [item.member_id]: {
             member_referral: item.member_referral,
+            member_role: item.member_role,
             institute_abbreviated_name: state[item.member_id] ? state[item.member_id].institute_abbreviated_name : '',
             member_id: state[item.member_id] ? state[item.member_id].member_id : '',
             real_name: state[item.member_id] ? state[item.member_id].real_name : '',

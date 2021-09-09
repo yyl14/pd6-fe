@@ -2,15 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-  Button,
-  TextField,
-  Typography,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
+  Button, TextField, Typography, makeStyles,
 } from '@material-ui/core';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
@@ -30,16 +22,13 @@ export default function BasicInfoEdit(props) {
   const [inputs, setInputs] = useState({
     realName: props.realName,
     nickName: props.nickName,
-    altMail: props.altMail ? props.altMail : '',
+    altMail: props.altMail,
   });
-  const [popUp, setPopUp] = useState(false);
   const [errors, setErrors] = useState({
     realName: false,
-    nickName: false,
   });
   const [errorTexts, setErrorTexts] = useState({
     realName: '',
-    nickName: '',
   });
   const classes = useStyles();
 
@@ -48,39 +37,22 @@ export default function BasicInfoEdit(props) {
   const dispatch = useDispatch();
 
   const handleSave = () => {
-    if (inputs.realName === '' || inputs.nickName === '') {
-      if (inputs.realName === '') {
-        setErrors((ori) => ({ ...ori, realName: true }));
-        setErrorTexts((ori) => ({ ...ori, realName: "Can't be empty" }));
-      }
-      if (inputs.nickName === '') {
-        setErrors((ori) => ({ ...ori, nickName: true }));
-        setErrorTexts((ori) => ({ ...ori, nickName: "Can't be empty" }));
-      }
+    if (inputs.realName === '') {
+      setErrors((ori) => ({ ...ori, realName: true }));
+      setErrorTexts((ori) => ({ ...ori, realName: "Can't be empty" }));
       return;
     }
-    if (inputs.altMail !== props.altMail) {
-      if (inputs.altMail !== '') {
-        dispatch(editAccount(authToken, accountId, userName, inputs.realName, inputs.nickName, inputs.altMail));
-        setPopUp(true);
-        return;
-      }
-    }
-    if ((inputs.altMail === '' && props.altMail === null) || inputs.altMail === props.altMail) {
-      if (inputs.realName !== props.realName || inputs.nickName !== props.nickName) {
-        dispatch(editAccount(authToken, accountId, userName, inputs.realName, inputs.nickName, null));
-      }
-    } else {
-      dispatch(editAccount(authToken, accountId, userName, inputs.realName, inputs.nickName, ''));
-    }
-
-    props.handleBack();
+    const altMailChanged = inputs.altMail !== props.altMail && inputs.altMail !== '';
+    dispatch(
+      editAccount(authToken, accountId, inputs.realName, inputs.nickName, altMailChanged ? inputs.altMail : null),
+    );
+    props.handleBack(altMailChanged ? 'Alternative email will be updated once it’s verified.' : '');
   };
 
   const handleCancel = () => {
-    props.handleBack();
-    setErrors({ realName: false, nickName: false });
-    setErrorTexts({ realName: '', nickName: '' });
+    props.handleBack('');
+    setErrors({ realName: false });
+    setErrorTexts({ realName: '' });
   };
 
   const handleChange = (e) => {
@@ -91,14 +63,6 @@ export default function BasicInfoEdit(props) {
       setErrors((ori) => ({ ...ori, realName: false }));
       setErrorTexts((ori) => ({ ...ori, realName: '' }));
     }
-    if (name === 'nickName' && value !== '') {
-      setErrors((ori) => ({ ...ori, nickName: false }));
-      setErrorTexts((ori) => ({ ...ori, nickName: '' }));
-    }
-  };
-
-  const done = () => {
-    props.handleBack();
   };
 
   return (
@@ -125,8 +89,6 @@ export default function BasicInfoEdit(props) {
               value={inputs.nickName}
               onChange={(e) => handleChange(e)}
               className={classes.textfield}
-              error={errors.nickName}
-              helperText={errorTexts.nickName}
             />
           </AlignedText>
           <AlignedText text="Alternative Email" childrenType="field" maxWidth="lg">
@@ -145,28 +107,6 @@ export default function BasicInfoEdit(props) {
           </div>
         </>
       </SimpleBar>
-      <Dialog open={popUp} onClose={() => setPopUp(false)} maxWidth="md">
-        <DialogTitle>
-          <Typography variant="h4">Verification email sent</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            <Typography variant="body1" color="textPrimary">
-              Please check your mailbox to activate this alternative email, then it will appear here.
-            </Typography>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setPopUp(false);
-              done();
-            }}
-          >
-            Done
-          </Button>
-        </DialogActions>
-      </Dialog>
     </div>
   );
 }
