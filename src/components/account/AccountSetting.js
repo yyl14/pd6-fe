@@ -29,6 +29,15 @@ export default function AccountSetting() {
   const loading = useSelector((state) => state.loading.user);
 
   useEffect(() => {
+    if (account.role === 'GUEST') {
+      setMessage('Please verify your institute email to activate your PDOGS account.');
+      setShowSnackbar(true);
+    } else {
+      setShowSnackbar(false);
+    }
+  }, [account.role]);
+
+  useEffect(() => {
     if (!loading.user.makeStudentCardDefault) {
       dispatch(fetchStudentCards(authToken, accountId));
     }
@@ -112,7 +121,15 @@ export default function AccountSetting() {
       </div>
 
       <NewPassword />
-      <Snackbar open={showSnackbar} autoHideDuration={3000} message={message} onClose={() => setShowSnackbar(false)} />
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowSnackbar(false);
+          setMessage('');
+        }}
+        message={message}
+      />
     </div>
   );
 }
