@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Snackbar, SnackbarContent } from '@material-ui/core';
+import { Snackbar } from '@material-ui/core';
 
 import { fetchStudentCards, browsePendingStudentCards } from '../../actions/user/user';
 import { getInstitutes } from '../../actions/common/common';
