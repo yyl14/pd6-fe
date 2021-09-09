@@ -107,10 +107,10 @@ export default function CodingProblemEdit({ closeEdit }) {
   const sampleTransToNumber = useCallback(
     (id) => {
       if (testcases[id].input_filename !== null) {
-        return parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10);
+        return Number(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')));
       }
       if (testcases[id].output_filename !== null) {
-        return parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10);
+        return Number(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')));
       }
       return 0;
     },
@@ -120,10 +120,10 @@ export default function CodingProblemEdit({ closeEdit }) {
   const testcaseTransToNumber = useCallback(
     (id) => {
       if (testcases[id].input_filename !== null) {
-        return parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10);
+        return Number(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')));
       }
       if (testcases[id].output_filename !== null) {
-        return parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10);
+        return Number(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')));
       }
       return 0;
     },
@@ -144,24 +144,8 @@ export default function CodingProblemEdit({ closeEdit }) {
     if (problems[problemId] && problems[problemId].testcaseIds) {
       const testcasesId = problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
       const samplesId = problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
-      testcasesId.sort((a, b) => {
-        if (testcaseTransToNumber(a) < testcaseTransToNumber(b)) {
-          return -1;
-        }
-        if (testcaseTransToNumber(a) > testcaseTransToNumber(b)) {
-          return 1;
-        }
-        return 0;
-      });
-      samplesId.sort((a, b) => {
-        if (sampleTransToNumber(a) < sampleTransToNumber(b)) {
-          return -1;
-        }
-        if (sampleTransToNumber(a) > sampleTransToNumber(b)) {
-          return 1;
-        }
-        return 0;
-      });
+      testcasesId.sort((a, b) => testcaseTransToNumber(a) - testcaseTransToNumber(b));
+      samplesId.sort((a, b) => sampleTransToNumber(a) > sampleTransToNumber(b));
       setSampleDataIds(samplesId);
       setTestcaseDataIds(testcasesId);
       if (testcasesId.length === 0) {
@@ -516,6 +500,7 @@ export default function CodingProblemEdit({ closeEdit }) {
   };
 
   useEffect(() => {
+    console.log(hasRequest, !loading.editProblem, !loading.deleteTestcase, !loading.deleteAssistingData, !loading.editAssistingData, !loading.addAssistingData, !loading.editTestcase, !loading.uploadTestcaseInput, !loading.uploadTestcaseOutput, !loading.addTestcase);
     if (
       hasRequest
       && !loading.editProblem
@@ -528,6 +513,7 @@ export default function CodingProblemEdit({ closeEdit }) {
       && !loading.uploadTestcaseOutput
       && !loading.addTestcase
     ) {
+      console.log('hello');
       closeEdit();
     }
   }, [

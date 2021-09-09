@@ -106,12 +106,12 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   }, [uploadError.length]);
 
   const handleDelete = () => {
-    problems[problemId].assistingDataIds.forEach((id) => {
-      dispatch(deleteAssistingData(authToken, id));
-    });
-    problems[problemId].testcaseIds.forEach((id) => {
-      dispatch(deleteTestcase(authToken, id));
-    });
+    // problems[problemId].assistingDataIds.forEach((id) => {
+    //   dispatch(deleteAssistingData(authToken, id));
+    // });
+    // problems[problemId].testcaseIds.forEach((id) => {
+    //   dispatch(deleteTestcase(authToken, id));
+    // });
     dispatch(deleteProblem(authToken, problemId));
 
     setDeletePopUp(false);
@@ -137,6 +137,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     setEmailSentPopup(true);
   };
 
+  // parse filename to get sample number
   const sampleTransToNumber = useCallback(
     (id) => {
       if (testcases[id].input_filename !== null) {
@@ -150,6 +151,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     [testcases],
   );
 
+  // parse filename to get testcase number
   const testcaseTransToNumber = useCallback(
     (id) => {
       if (testcases[id].input_filename !== null) {
@@ -167,24 +169,8 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     if (problems[problemId] && problems[problemId].testcaseIds) {
       const testcasesId = problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
       const samplesId = problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
-      testcasesId.sort((a, b) => {
-        if (testcaseTransToNumber(a) < testcaseTransToNumber(b)) {
-          return -1;
-        }
-        if (testcaseTransToNumber(a) > testcaseTransToNumber(b)) {
-          return 1;
-        }
-        return 0;
-      });
-      samplesId.sort((a, b) => {
-        if (sampleTransToNumber(a) < sampleTransToNumber(b)) {
-          return -1;
-        }
-        if (sampleTransToNumber(a) > sampleTransToNumber(b)) {
-          return 1;
-        }
-        return 0;
-      });
+      testcasesId.sort((a, b) => testcaseTransToNumber(a) - testcaseTransToNumber(b));
+      samplesId.sort((a, b) => sampleTransToNumber(a) - sampleTransToNumber(b));
       setSampleDataIds(samplesId);
       setTestcaseDataIds(testcasesId);
       if (testcasesId.length === 0) {
@@ -201,6 +187,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   }, [authToken, dispatch, problemId]);
 
   if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
+    console.log('magic');
     return <GeneralLoading />;
   }
 
