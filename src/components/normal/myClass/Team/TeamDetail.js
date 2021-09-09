@@ -55,7 +55,7 @@ export default function ChallengeList() {
 
   useEffect(() => {
     if (!loading.addTeamMember && !loading.editTeamMember && !loading.deleteTeamMember) {
-      dispatch(fetchTeamMembers(authToken, teamId, {}));
+      dispatch(fetchTeamMembers(authToken, teamId));
     }
   }, [authToken, dispatch, teamId, loading.addTeamMember, loading.deleteTeamMember, loading.editTeamMember]);
 
@@ -94,7 +94,6 @@ export default function ChallengeList() {
   if (teams[teamId] === undefined || teamMemberIds === undefined) {
     return <NoMatch />;
   }
-  // console.log(tableData);
 
   return (
     <>

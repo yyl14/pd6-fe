@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   makeStyles,
   Button,
@@ -18,9 +18,7 @@ import { MdAdd } from 'react-icons/md';
 import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleTable from '../../../../ui/SimpleTable';
-import {
-  addTeamMember, editTeamMember, deleteTeamMember, fetchTeamMembers,
-} from '../../../../../actions/myClass/team';
+import { addTeamMember, editTeamMember, deleteTeamMember } from '../../../../../actions/myClass/team';
 import systemRoleTransformation from '../../../../../function/systemRoleTransformation';
 
 const useStyles = makeStyles(() => ({
@@ -37,7 +35,6 @@ export default function TeamMemberEdit({ setOriginData, isManager, handleBack })
   const authToken = useSelector((state) => state.auth.token);
   const teamMembers = useSelector((state) => state.teamMembers.byId);
   const teamMemberIds = useSelector((state) => state.teamMembers.allIds);
-  const loading = useSelector((state) => state.loading.myClass.team);
 
   const [tableData, setTableData] = useState(
     teamMemberIds.map((id) => ({
@@ -49,19 +46,12 @@ export default function TeamMemberEdit({ setOriginData, isManager, handleBack })
       path: '/',
     })),
   );
-  // const { setOriginData } = props;
   const [tempAddData, setTempAddData] = useState([]);
   const [popUp, setPopUp] = useState(false);
   const [inputs, setInputs] = useState({
     student: '',
     role: 'Normal',
   });
-
-  useEffect(() => {
-    if (!loading.addTeamMember && !loading.editTeamMember && !loading.deleteTeamMember) {
-      fetchTeamMembers(authToken, teamId, {});
-    }
-  }, [authToken, loading.addTeamMember, loading.deleteTeamMember, loading.editTeamMember, teamId]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
