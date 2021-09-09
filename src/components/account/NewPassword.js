@@ -22,10 +22,6 @@ import AlignedText from '../ui/AlignedText';
 import { editPassword } from '../../actions/user/user';
 
 const useStyles = makeStyles(() => ({
-  textField: {
-    width: '350px',
-    marginBottom: '23px',
-  },
   buttons: {
     marginLeft: '-5px',
   },
@@ -139,7 +135,6 @@ export default function NewPassword() {
           <>
             <AlignedText text="Current Password" childrenType="field" maxWidth="lg">
               <TextField
-                className={classes.textField}
                 value={oldPassword}
                 variant="outlined"
                 type={showPassword.oldPassword ? 'text' : 'password'}
@@ -167,7 +162,6 @@ export default function NewPassword() {
 
             <AlignedText text="New Password" childrenType="field" maxWidth="lg">
               <TextField
-                className={classes.textField}
                 value={newPassword}
                 variant="outlined"
                 type={showPassword.newPassword ? 'text' : 'password'}
@@ -194,7 +188,6 @@ export default function NewPassword() {
             </AlignedText>
             <AlignedText text="Confirmed Password" childrenType="field" maxWidth="lg">
               <TextField
-                className={classes.textField}
                 value={confirmPassword}
                 variant="outlined"
                 type={showPassword.confirmPassword ? 'text' : 'password'}

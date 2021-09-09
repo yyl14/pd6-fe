@@ -7,11 +7,7 @@ import SimpleBar from '../ui/SimpleBar';
 import AlignedText from '../ui/AlignedText';
 import { editAccount } from '../../actions/user/user';
 
-const useStyles = makeStyles(() => ({
-  textfield: {
-    width: '350px',
-  },
-}));
+const useStyles = makeStyles(() => ({}));
 
 export default function BasicInfoEdit(props) {
   const [realName] = useState(props.realName);
@@ -54,7 +50,6 @@ export default function BasicInfoEdit(props) {
               onChange={(e) => {
                 setNickName(e.target.value);
               }}
-              className={classes.textfield}
               error={error}
               helperText={errorText}
             />
@@ -65,7 +60,6 @@ export default function BasicInfoEdit(props) {
               onChange={(e) => {
                 setAltMail(e.target.value);
               }}
-              className={classes.textfield}
             />
           </AlignedText>
           <Button onClick={handleCancel}>Cancel</Button>
