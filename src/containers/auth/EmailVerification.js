@@ -70,25 +70,20 @@ export default function EmailVerification() {
   const classes = useStyles();
   const query = useQuery();
   const history = useHistory();
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState('Email Verifying...');
   const queryString = useCallback(query.get('code'), []);
 
   useEffect(() => {
     const onSuccess = () => {
-      setShowSnackbar(true);
       setMessage('Email Verify Succeed.');
       setTimeout(() => {
-        setShowSnackbar(false);
         history.push('/login');
       }, 3000);
     };
 
     const onError = () => {
-      setShowSnackbar(true);
       setMessage('Fail to verify Email.');
       setTimeout(() => {
-        setShowSnackbar(false);
         history.push('/login');
       }, 3000);
     };
@@ -105,19 +100,12 @@ export default function EmailVerification() {
         </div> */}
         <div className={classes.picContainer} />
         <div className={classes.messageContainer}>
-          <span>Email Verifying...</span>
+          <span>{message}</span>
         </div>
         <div className={classes.tipsContainer}>
           <span>Turning to login page in a few seconds.</span>
         </div>
       </div>
-      <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        open={showSnackbar}
-        onClose={() => setShowSnackbar(false)}
-        message={message}
-        key="verifyResult"
-      />
     </div>
   );
 }
