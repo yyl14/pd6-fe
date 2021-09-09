@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Button, makeStyles, TextField, MenuItem, FormControl, Select,
+  Button, makeStyles, TextField, MenuItem, FormControl, Select, Snackbar,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
@@ -45,8 +45,6 @@ export default function CodeSubmission() {
   const submitLang = useSelector((state) => state.submitLangs);
   const [lang, setLang] = useState([]);
   const authToken = useSelector((state) => state.auth.token);
-  // const error = useSelector((state) => state.error);
-  // const loading = useSelector((state) => state.loading.myClass);
 
   const [langId, setLangId] = useState(-1);
   const [code, setCode] = useState('');
