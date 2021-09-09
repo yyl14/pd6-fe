@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import {
-  makeStyles, Snackbar,
-} from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect, useCallback } from 'react';
+import { makeStyles, Snackbar } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
 import { emailVerification } from '../../actions/user/auth';
-import GeneralLoading from '../../components/GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -74,29 +71,30 @@ export default function EmailVerification() {
   const query = useQuery();
   const history = useHistory();
   const [showSnackbar, setShowSnackbar] = useState(false);
-  const verifying = useSelector((state) => state.loading.user.auth.emailVerification);
-  const verifyErr = useSelector((state) => state.error.user.auth.emailVerification);
-  const verifyOver = useSelector((state) => state.auth.verificationDone);
+  const [message, setMessage] = useState('');
+  const queryString = useCallback(query.get('code'), []);
 
   useEffect(() => {
-    if (!verifyOver) {
-      dispatch(emailVerification(query.get('code')));
-    } else {
+    const onSuccess = () => {
       setShowSnackbar(true);
+      setMessage('Email Verify Succeed.');
       setTimeout(() => {
         setShowSnackbar(false);
-        history.push('/');
+        history.push('/login');
       }, 3000);
-    }
-  }, [dispatch, query, verifyOver, verifyErr, history]);
+    };
 
-  useEffect(() => {
-    if (verifying) {
-      return <GeneralLoading />;
-    }
+    const onError = () => {
+      setShowSnackbar(true);
+      setMessage('Fail to verify Email.');
+      setTimeout(() => {
+        setShowSnackbar(false);
+        history.push('/login');
+      }, 3000);
+    };
 
-    return null;
-  }, [verifying]);
+    dispatch(emailVerification(queryString, onSuccess, onError));
+  }, [dispatch, history, queryString]);
 
   return (
     <div className={classes.wrapper}>
@@ -117,7 +115,7 @@ export default function EmailVerification() {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         open={showSnackbar}
         onClose={() => setShowSnackbar(false)}
-        message={verifyErr === null ? 'Email Verify Succeed.' : 'Fail to verify Email.'}
+        message={message}
         key="verifyResult"
       />
     </div>
