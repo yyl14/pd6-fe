@@ -99,130 +99,83 @@ export default function IOFileUploadArea({
   const [fileNum, setFileNum] = useState(0);
   const [errorPopup, setErrorPopup] = useState(false);
 
-  const handleUploadFile = (e) => {
-    const newFiles = Object.keys(e.target.files).map((key) => e.target.files[key]);
+  const parseIndexAndType = (fileName) => {
     switch (uploadCase) {
-      case 'sample': {
-        const newSelectedFile = [...selectedFile];
-        // console.log(newSelectedFile);
-        newFiles.forEach((file) => {
-          const index = parseInt(file.name.slice(6, file.name.indexOf('.')), 10);
-          if (!Number.isInteger(index)) {
-            setErrorPopup(true);
-            // console.log('file format error');
-            return;
-          }
-          const type = file.name.slice(file.name.indexOf('.') + 1);
-          if (type === 'in') {
-            if (newSelectedFile[index] === undefined) {
-              newSelectedFile[index] = {
-                id: index,
-                in: file,
-                out: null,
-              };
-            } else {
-              newSelectedFile[index] = {
-                ...newSelectedFile[index],
-                in: file,
-              };
-            }
-          } else if (type === 'out') {
-            if (newSelectedFile[index] === undefined) {
-              newSelectedFile[index] = {
-                id: index,
-                in: null,
-                out: file,
-              };
-            } else {
-              newSelectedFile[index] = {
-                ...newSelectedFile[index],
-                out: file,
-              };
-            }
-          } else {
-            setErrorPopup(true);
-            // console.log('File Format Error');
-          }
-          // console.log(newSelectedFile[index]);
-        });
-        setSelectedFile(newSelectedFile);
-        // console.log('this is for sample');
-        break;
-      }
-      case 'testcase': {
-        const newSelectedFile = [...selectedFile];
-        // console.log(newSelectedFile);
-        newFiles.forEach((file) => {
-          const index = parseInt(file.name.slice(0, file.name.indexOf('.')), 10);
-          if (!Number.isInteger(index)) {
-            setErrorPopup(true);
-            // console.log('file format error');
-            return;
-          }
-          const type = file.name.slice(file.name.indexOf('.') + 1);
-          if (type === 'in') {
-            if (newSelectedFile[index] === undefined) {
-              newSelectedFile[index] = {
-                id: index,
-                in: file,
-                out: null,
-              };
-            } else {
-              newSelectedFile[index] = {
-                ...newSelectedFile[index],
-                in: file,
-              };
-            }
-          } else if (type === 'out') {
-            if (newSelectedFile[index] === undefined) {
-              newSelectedFile[index] = {
-                id: index,
-                in: null,
-                out: file,
-              };
-            } else {
-              newSelectedFile[index] = {
-                ...newSelectedFile[index],
-                out: file,
-              };
-            }
-          } else {
-            setErrorPopup(true);
-            // console.log('File Format Error');
-          }
-          // console.log(newSelectedFile[index]);
-        });
-        setSelectedFile(newSelectedFile);
-        // console.log('this is for sample');
-        break;
-      }
-      default:
+      case 'sample':
+        return [Number(fileName.slice(6, fileName.indexOf('.'))), fileName.slice(fileName.indexOf('.') + 1)];
+      case 'testcase':
+        return [Number(fileName.slice(0, fileName.indexOf('.'))), fileName.slice(fileName.indexOf('.') + 1)];
+      default: {
         setErrorPopup(true);
+        return [null, null];
+      }
     }
   };
 
+  const handleUploadFile = (e) => {
+    const newFiles = [...e.target.files];
+    const newSelectedFiles = newFiles.reduce((acc, file) => {
+      const [index, type] = parseIndexAndType(file.name);
+      if (!Number.isInteger(index)) {
+        setErrorPopup(true);
+      }
+      if (type === 'in') {
+        if (acc[index] === undefined) {
+          // no corresponding .out file
+          return {
+            ...acc,
+            [index]: {
+              id: index,
+              in: file,
+              out: null,
+            },
+          };
+        }
+        return {
+          ...acc,
+          [index]: {
+            ...acc[index],
+            in: file,
+          },
+        };
+      }
+      if (type === 'out') {
+        if (acc[index] === undefined) {
+          // no corresponding .in file
+          return {
+            ...acc,
+            [index]: {
+              id: index,
+              in: null,
+              out: file,
+            },
+          };
+        }
+        return {
+          ...acc,
+          [index]: {
+            ...acc[index],
+            out: file,
+          },
+        };
+      }
+      // error
+      setErrorPopup(true);
+      return acc;
+    }, selectedFile);
+
+    // object to array
+    setSelectedFile(newSelectedFiles);
+  };
+
   const handleDelete = (e, deleteRow) => {
-    // eslint-disable-next-line no-unused-vars
-    const filtered = selectedFile.filter((file, index, arr) => file !== deleteRow);
+    const filtered = selectedFile.filter((file) => file !== deleteRow);
     setSelectedFile(filtered);
   };
 
   useEffect(() => {
-    const newTableData = [];
-    let newNum = 0;
-    selectedFile.forEach((item) => {
-      if (item !== undefined) {
-        if (item.in !== null) {
-          newNum += 1;
-        }
-        if (item.out !== null) {
-          newNum += 1;
-        }
-        newTableData.push(item);
-      }
-    });
-    setFileNum(newNum);
-    setTableData(newTableData);
+    setFileNum(Object.keys(selectedFile).length);
+    setTableData(Object.keys(selectedFile).map((key) => selectedFile[key]));
   }, [selectedFile]);
 
   return (

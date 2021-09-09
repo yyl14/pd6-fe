@@ -88,7 +88,7 @@ export default function SampleUploadCard({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleCancel()} color="default">
+          <Button onClick={handleCancel} color="default">
             Cancel
           </Button>
           <Button onClick={handleConfirm} color="primary">
