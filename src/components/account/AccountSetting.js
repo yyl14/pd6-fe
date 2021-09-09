@@ -119,12 +119,8 @@ export default function AccountSetting() {
         open={showSnackbar}
         autoHideDuration={3000}
         onClose={() => setShowSnackbar(false)}
-      >
-        <SnackbarContent
-          style={{ fontSize: '0.95rem' }}
-          message="Please verify your institute email to activate your PDOGS account."
-        />
-      </Snackbar>
+        message="Please verify your institute email to activate your PDOGS account."
+      />
     </div>
   );
 }
