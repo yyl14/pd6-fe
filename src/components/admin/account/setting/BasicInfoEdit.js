@@ -8,9 +8,10 @@ import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import { editAccount } from '../../../../actions/admin/account';
 
-const useStyles = makeStyles((theme) => ({
-  gap: {
-    marginTop: theme.spacing(2),
+const useStyles = makeStyles(() => ({
+  buttons: {
+    marginTop: '6px',
+    marginLeft: '-5px',
   },
 }));
 
@@ -85,7 +86,7 @@ export default function BasicInfoEdit(props) {
           <AlignedText text="Alternative Email" childrenType="field" maxWidth="lg">
             <TextField value={inputs.altMail} name="altMail" onChange={(e) => handleChange(e)} />
           </AlignedText>
-          <div className={classes.gap}>
+          <div className={classes.buttons}>
             <Button onClick={handleCancel}>Cancel</Button>
             <Button color="primary" type="submit" onClick={handleSave}>
               Save
