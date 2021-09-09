@@ -10,6 +10,7 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Snackbar,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
@@ -63,6 +64,8 @@ export default function TeamList() {
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [disabled, setDisabled] = useState(true);
+  const [hasRequest, setHasRequest] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   const [selectedFile, setSelectedFile] = useState([]);
   const [importInput, setImportInput] = useState('');
@@ -114,25 +117,59 @@ export default function TeamList() {
     if (importInput !== '' && selectedFile !== []) {
       selectedFile.map((file) => dispatch(importTeam(authToken, classId, importInput, file)));
     }
-    setShowImportDialog(false);
-    clearImportInput();
-    setDisabled(true);
+    setHasRequest(true);
   };
 
   const submitAdd = () => {
     if (addInputs.label !== '' && addInputs.teamName !== '') {
       dispatch(addTeam(authToken, classId, addInputs.teamName, addInputs.label));
     }
-    setShowAddDialog(false);
-    clearAddInput();
-    setDisabled(true);
+    setHasRequest(true);
   };
+
+  useEffect(() => {
+    if (hasRequest && showAddDialog && !loading.addTeam) {
+      if (error.addTeam === null) {
+        clearAddInput();
+        setShowAddDialog(false);
+        setHasRequest(false);
+        setDisabled(true);
+      } else {
+        setHasError(true);
+      }
+    } else if (hasRequest && showImportDialog && !loading.importTeam) {
+      if (error.importTeam === null) {
+        clearImportInput();
+        setShowImportDialog(false);
+        setHasRequest(false);
+        setDisabled(true);
+      } else {
+        setHasError(true);
+      }
+    }
+  }, [
+    error.addTeam,
+    error.importTeam,
+    hasRequest,
+    loading.addTeam,
+    loading.importTeam,
+    showAddDialog,
+    showImportDialog,
+  ]);
 
   const downloadTemplate = () => {
     setShowImportDialog(false);
     dispatch(downloadTeamFile(authToken));
   };
 
+  const handleCloseError = () => {
+    setHasError(false);
+    setHasRequest(false);
+  };
+
+  if (loading.fetchTeams) {
+    return <GeneralLoading />;
+  }
   if (courses[courseId] === undefined || classes[classId] === undefined) {
     if (loading.fetchCourse || loading.fetchClass) {
       return <GeneralLoading />;
@@ -251,6 +288,7 @@ export default function TeamList() {
           <Button
             onClick={() => {
               setShowImportDialog(false);
+              setHasRequest(false);
               clearImportInput();
               setDisabled(true);
             }}
@@ -270,6 +308,12 @@ export default function TeamList() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={showAddDialog && hasError}
+        onClose={handleCloseError}
+        message={`Error: ${error.myClass.team.addTeam}`}
+      />
+
       <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} fullWidth maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Create New Team</Typography>
@@ -293,6 +337,7 @@ export default function TeamList() {
           <Button
             onClick={() => {
               setShowAddDialog(false);
+              setHasRequest(false);
               clearAddInput();
               setDisabled(true);
             }}
@@ -312,6 +357,11 @@ export default function TeamList() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={showImportDialog && hasError}
+        onClose={handleCloseError}
+        message={`Error: ${error.myClass.team.importTeam}`}
+      />
     </>
   );
 }

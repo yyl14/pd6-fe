@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import {
@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
+  DialogContentText,
   TextField,
   FormControl,
   Select,
@@ -49,10 +50,19 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [title, setTitle] = useState('');
   const [disabled, setDisabled] = useState(true);
 
-  const handleCreate = () => {
-    if (label === '' || title === '') {
-      return;
+  useEffect(() => {
+    if (!loading.addProblem && !loading.addEssay && !loading.addPeerReview) {
+      dispatch(browseTasksUnderChallenge(authToken, challengeId));
     }
+  }, [authToken, challengeId, dispatch, loading.addEssay, loading.addPeerReview, loading.addProblem]);
+
+  useEffect(() => {
+    if (label !== '' && title !== '') {
+      setDisabled(false);
+    } else setDisabled(true);
+  }, [label, title]);
+
+  const handleCreate = () => {
     switch (type) {
       case 'Coding Problem': {
         dispatch(addProblem(authToken, challengeId, label, title, history, courseId, classId));
@@ -70,22 +80,19 @@ export default function TaskAddingCard({ open, setOpen }) {
         break;
       }
     }
-
-    setTimeout(() => {
-      dispatch(browseTasksUnderChallenge(authToken, challengeId));
-    }, 500);
     setType('Coding Problem');
     setTitle('');
     setLabel('');
+    setDisabled(true);
     setOpen(false);
   };
 
-  const checkDisabled = (curLabel, curTitle) => {
-    if (curLabel === '' || curTitle === '') {
-      setDisabled(true);
-    } else {
-      setDisabled(false);
-    }
+  const handleCancel = () => {
+    setType('Coding Problem');
+    setTitle('');
+    setLabel('');
+    setDisabled(true);
+    setOpen(false);
   };
 
   if (loading.readChallenge || commonLoading.fetchCourse || commonLoading.fetchClass) {
@@ -145,7 +152,6 @@ export default function TaskAddingCard({ open, setOpen }) {
               value={label}
               onChange={(e) => {
                 setLabel(e.target.value);
-                checkDisabled(e.target.value, title);
               }}
             />
           </AlignedText>
@@ -155,13 +161,12 @@ export default function TaskAddingCard({ open, setOpen }) {
               value={title}
               onChange={(e) => {
                 setTitle(e.target.value);
-                checkDisabled(label, e.target.value);
               }}
             />
           </AlignedText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={handleCancel}>Cancel</Button>
           <Button disabled={disabled} color="primary" onClick={handleCreate}>
             Create
           </Button>
