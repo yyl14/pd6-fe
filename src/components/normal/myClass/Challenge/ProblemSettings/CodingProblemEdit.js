@@ -24,9 +24,9 @@ import TestingDataUploadCard from './TestingDataUploadCard';
 
 import {
   editProblemInfo,
-  editSamples,
-  editTestcases,
-  editAssistingData,
+  saveSamples,
+  saveTestcases,
+  saveAssistingData,
   readProblemInfo,
 } from '../../../../../actions/myClass/problem';
 
@@ -324,7 +324,7 @@ export default function CodingProblemEdit({ closeEdit }) {
       }
 
       const newArray = acc;
-      newArray[index] = { id: file.name, filename: file.name, file };
+      newArray[index] = { id: acc[index].id, filename: file.name, file };
       return newArray;
     }, assistTableData);
     setAssistTableData(newData);
@@ -352,9 +352,9 @@ export default function CodingProblemEdit({ closeEdit }) {
       ),
     );
 
-    dispatch(editSamples(authToken, testcases, sampleDataIds, sampleTableData, () => { setHandleSamplesSuccess(true); }, handleFileUploadFail));
-    dispatch(editTestcases(authToken, testcases, testcaseDataIds, testcaseTableData, status, () => { setHandleTestcasesSuccess(true); }, handleFileUploadFail));
-    dispatch(editAssistingData(authToken, assistingData, problems[problemId].assistingDataIds, assistTableData, () => { setHandleAssistingDataSuccess(true); }, handleFileUploadFail));
+    dispatch(saveSamples(authToken, testcases, sampleDataIds, sampleTableData, () => { setHandleSamplesSuccess(true); }, handleFileUploadFail));
+    dispatch(saveTestcases(authToken, testcases, testcaseDataIds, testcaseTableData, status, () => { setHandleTestcasesSuccess(true); }, handleFileUploadFail));
+    dispatch(saveAssistingData(authToken, problemId, assistingData, problems[problemId].assistingDataIds, assistTableData, () => { setHandleAssistingDataSuccess(true); }, handleFileUploadFail));
 
     setDisabled(true);
   };

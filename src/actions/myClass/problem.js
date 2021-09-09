@@ -685,7 +685,7 @@ const clearUploadFail = () => (dispatch) => {
   dispatch({ type: problemConstants.CLEAR_UPLOAD_FAIL_RECORD });
 };
 
-const editSamples = (token, testcases, sampleDataIds, sampleTableData, onSuccess, onError) => async (dispatch) => {
+const saveSamples = (token, testcases, sampleDataIds, sampleTableData, onSuccess, onError) => async (dispatch) => {
   sampleDataIds.map((id) => {
     if (sampleTableData[id] === undefined) {
       // delete data
@@ -737,7 +737,7 @@ const editSamples = (token, testcases, sampleDataIds, sampleTableData, onSuccess
   onSuccess();
 };
 
-const editTestcases = (token, testcases, testcaseDataIds, testcaseTableData, status, onSuccess, onError) => async (dispatch) => {
+const saveTestcases = (token, testcases, testcaseDataIds, testcaseTableData, status, onSuccess, onError) => async (dispatch) => {
   testcaseDataIds.map((id) => {
     if (testcaseTableData[id] === undefined) {
       // delete data
@@ -792,18 +792,51 @@ const editTestcases = (token, testcases, testcaseDataIds, testcaseTableData, sta
   onSuccess();
 };
 
-const editAssistingData = (token, assistingData, assistingDataIds, assistTableData, onSuccess, onError) => async (dispatch) => {
-  assistingDataIds.map((id) => {
+const saveAssistingData = (token, problemId, assistingData, assistingDataIds, assistTableData, onSuccess, onError) => async (dispatch) => {
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+  };
+  const config2 = {
+    headers: {
+      'auth-token': token,
+    },
+    'Content-Type': 'multipart/form-data',
+  };
+  assistingDataIds.map(async (id) => {
     if (assistTableData.filter((item) => item.filename === assistingData[id].filename).length === 0) {
-      console.log('delete assisting data: ', assistingData[id].filename);
+      // delete assisting data
+      try {
+        await agent.delete(`/assisting-data/${id}`, config);
+      } catch (error) {
+        console.log(error);
+      }
     }
     return id;
   });
-  assistTableData.map((item) => {
+  assistTableData.map(async (item) => {
     if (assistingDataIds.filter((id) => assistingData[id].filename === item.filename).length === 0) {
-      console.log('add assisting data: ', item.filename);
-    } else {
-      console.log('edit assisting data: ', item.filename);
+      // add assisting data
+      const formData = new FormData();
+      formData.append('assisting_data', item.file);
+
+      try {
+        await agent.post(`/problem/${problemId}/assisting-data`, formData, config2);
+      } catch (error) {
+        // console.log(error);
+        onError(item.filename);
+      }
+    } else if (item.file !== null) {
+      // edit assisting data
+      const formData = new FormData();
+      formData.append('assisting_data_file', item.file);
+      try {
+        await agent.put(`/assisting-data/${item.id}`, formData, config2);
+      } catch (error) {
+        // console.log(error);
+        onError(item.filename);
+      }
     }
     return item;
   });
@@ -834,7 +867,7 @@ export {
   downloadAllSamples,
   downloadAllTestcases,
   clearUploadFail,
-  editSamples,
-  editTestcases,
-  editAssistingData,
+  saveSamples,
+  saveTestcases,
+  saveAssistingData,
 };
