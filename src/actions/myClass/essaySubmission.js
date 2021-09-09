@@ -34,11 +34,12 @@ const uploadEssay = (token, essayId, file) => async (dispatch) => {
     const formData = new FormData();
     formData.append('essay_file', file);
 
-    await agent.post(`/essay/${essayId}/essay-submission`, formData, config);
-
+    const res = await agent.post(`/essay/${essayId}/essay-submission`, formData, config);
     dispatch({
       type: essayConstants.UPLOAD_ESSAY_SUBMISSION_SUCCESS,
+      payload: res.data.data,
     });
+    dispatch(readEssaySubmission(token, res.data.data));
   } catch (error) {
     dispatch({
       type: essayConstants.UPLOAD_ESSAY_SUBMISSION_FAIL,
@@ -60,6 +61,7 @@ const reUploadEssay = (token, essaySubmissionId, file) => async (dispatch) => {
     formData.append('essay_file', file);
 
     await agent.put(`/essay-submission/${essaySubmissionId}`, formData, config);
+    dispatch(readEssaySubmission(token, essaySubmissionId));
     dispatch({
       type: essayConstants.RE_UPLOAD_ESSAY_SUBMISSION_SUCCESS,
     });

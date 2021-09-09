@@ -125,7 +125,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
         (id) => essaySubmission.byId[id].account_id === userId && essaySubmission.byId[id].essay_id === parseInt(essayId, 10),
       ),
     );
-  }, [essayId, essaySubmission.allIds, essaySubmission.byId, userId]);
+  }, [essayId, essaySubmission, essaySubmission.allIds, essaySubmission.byId, userId]);
 
   const handleClickLink = () => {
     if (essaySubmission.byId[uploadRecord].account_id === userId) {
