@@ -66,9 +66,6 @@ export default function TaskAddingCard({ open, setOpen }) {
   }, [label, title]);
 
   const handleCreate = () => {
-    if (label === '' || title === '') {
-      return;
-    }
     switch (type) {
       case 'Coding Problem': {
         dispatch(addProblem(authToken, challengeId, label, title, history, courseId, classId));
