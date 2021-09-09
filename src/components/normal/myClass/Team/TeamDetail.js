@@ -54,17 +54,19 @@ export default function ChallengeList() {
   }, [authToken, dispatch, loading.editTeam, teamId]);
 
   useEffect(() => {
-    dispatch(fetchTeamMembers(authToken, teamId, {}));
-  }, [authToken, dispatch, teamId]);
+    if (!loading.addTeamMember && !loading.editTeamMember && !loading.deleteTeamMember) {
+      dispatch(fetchTeamMembers(authToken, teamId));
+    }
+  }, [authToken, dispatch, teamId, loading.addTeamMember, loading.deleteTeamMember, loading.editTeamMember]);
 
   useEffect(() => {
     setTableData(
       teamMemberIds.map((id) => ({
-        id: teamMembers[id] ? teamMembers[id].account.member_id : '',
+        id: teamMembers[id] ? teamMembers[id].member_id : '',
         username: teamMembers[id] ? teamMembers[id].account.username : '',
         student_id: teamMembers[id] ? teamMembers[id].account.student_id : '',
         real_name: teamMembers[id] ? teamMembers[id].account.real_name : '',
-        role: systemRoleTransformation(teamMembers[id].account.role),
+        role: systemRoleTransformation(teamMembers[id].role),
         path: '/',
       })),
     );
@@ -92,7 +94,6 @@ export default function ChallengeList() {
   if (teams[teamId] === undefined || teamMemberIds === undefined) {
     return <NoMatch />;
   }
-  // console.log(tableData);
 
   return (
     <>
