@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import {
@@ -53,6 +53,18 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [title, setTitle] = useState('');
   const [disabled, setDisabled] = useState(true);
 
+  useEffect(() => {
+    if (!loading.addProblem && !loading.addEssay && !loading.addPeerReview) {
+      dispatch(browseTasksUnderChallenge(authToken, challengeId));
+    }
+  }, [authToken, challengeId, dispatch, loading.addEssay, loading.addPeerReview, loading.addProblem]);
+
+  useEffect(() => {
+    if (label !== '' && title !== '') {
+      setDisabled(false);
+    } else setDisabled(true);
+  }, [label, title]);
+
   const handleCreate = () => {
     if (label === '' || title === '') {
       return;
@@ -74,23 +86,11 @@ export default function TaskAddingCard({ open, setOpen }) {
         break;
       }
     }
-
-    setTimeout(() => {
-      dispatch(browseTasksUnderChallenge(authToken, challengeId));
-    }, 500);
     setType('Coding Problem');
     setTitle('');
     setLabel('');
     setDisabled(true);
     setOpen(false);
-  };
-
-  const checkDisabled = (curLabel, curTitle) => {
-    if (curLabel === '' || curTitle === '') {
-      setDisabled(true);
-    } else {
-      setDisabled(false);
-    }
   };
 
   const handleCancel = () => {
@@ -159,7 +159,6 @@ export default function TaskAddingCard({ open, setOpen }) {
                 value={label}
                 onChange={(e) => {
                   setLabel(e.target.value);
-                  checkDisabled(e.target.value, title);
                 }}
               />
             </AlignedText>
@@ -169,7 +168,6 @@ export default function TaskAddingCard({ open, setOpen }) {
                 value={title}
                 onChange={(e) => {
                   setTitle(e.target.value);
-                  checkDisabled(label, e.target.value);
                 }}
               />
             </AlignedText>
