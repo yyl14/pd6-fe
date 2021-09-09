@@ -418,22 +418,20 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           <Typography variant="h4">Delete Problem</Typography>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText variant="body1" color="secondary">
-            <AlignedText text="Class" childrenType="text">
-              <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
-            </AlignedText>
-            <AlignedText text="Title" childrenType="text">
+          <AlignedText text="Class" childrenType="text" textColor="secondary">
+            <Typography variant="body1">{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
+          </AlignedText>
+          <AlignedText text="Title" childrenType="text" textColor="secondary">
+            <Typography variant="body1">
               {problems[problemId] === undefined ? 'error' : problems[problemId].title}
-            </AlignedText>
-            <AlignedText text="Label" childrenType="text">
-              <Typography>
-                {problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label}
-              </Typography>
-            </AlignedText>
-            <Typography variant="body2" color="textPrimary">
-              Once you delete a problem, there is no going back. Please be certain.
             </Typography>
-          </DialogContentText>
+          </AlignedText>
+          <AlignedText text="Label" childrenType="text" textColor="secondary">
+            <Typography variant="body1">
+              {problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label}
+            </Typography>
+          </AlignedText>
+          <Typography variant="body2">Once you delete a problem, there is no going back. Please be certain.</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDeletePopUp(false)}>Cancel</Button>
