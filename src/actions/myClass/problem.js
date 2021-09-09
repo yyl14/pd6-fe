@@ -685,6 +685,18 @@ const clearUploadFail = () => (dispatch) => {
   dispatch({ type: problemConstants.CLEAR_UPLOAD_FAIL_RECORD });
 };
 
+const handleEditSamples = (token, testcases, sampleDataIds, sampleTableData, onSuccess, onError) => async (dispatch) => {
+  onSuccess();
+};
+
+const handleEditTestcases = (token, testcases, testcaseDataIds, testcaseTableData, onSuccess, onError) => async (dispatch) => {
+  onSuccess();
+};
+
+const handleEditAssistingData = (token, assistingData, assistTableData, selectedFileA, onSuccess, onError) => async (dispatch) => {
+  onSuccess();
+};
+
 export {
   readProblemInfo,
   editProblemInfo,
@@ -708,4 +720,7 @@ export {
   downloadAllSamples,
   downloadAllTestcases,
   clearUploadFail,
+  handleEditSamples,
+  handleEditTestcases,
+  handleEditAssistingData,
 };

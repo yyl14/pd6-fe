@@ -29,12 +29,9 @@ import GeneralLoading from '../../../../GeneralLoading';
 import {
   browseTestcase,
   browseAssistingData,
-  deleteAssistingData,
-  deleteTestcase,
   deleteProblem,
   downloadAllSamples,
   downloadAllTestcases,
-  clearUploadFail,
 } from '../../../../../actions/myClass/problem';
 
 import { downloadFile } from '../../../../../actions/common/common';
@@ -95,15 +92,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const [testcaseDataIds, setTestcaseDataIds] = useState([]);
   const [deletePopUp, setDeletePopUp] = useState(false);
   const [emailSentPopup, setEmailSentPopup] = useState(false);
-  const uploadError = useSelector((state) => state.error.myClass.problem.uploadFailFilename);
-  const [uploadFailCardPopup, setUploadFailCardPopup] = useState(false);
   // console.log('uploadError: ', uploadError);
-
-  useEffect(() => {
-    if (uploadError.length !== 0) {
-      setUploadFailCardPopup(true);
-    }
-  }, [uploadError.length]);
 
   const handleDelete = () => {
     // problems[problemId].assistingDataIds.forEach((id) => {
@@ -437,37 +426,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setEmailSentPopup(false)} color="primary">
-            Done
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog
-        open={uploadFailCardPopup}
-        onClose={() => {
-          setUploadFailCardPopup(false);
-          dispatch(clearUploadFail());
-        }}
-        fullWidth
-      >
-        <DialogTitle id="dialog-slide-title">
-          <Typography variant="h4">Upload Fail</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body2">File below was failed to be uploaded:</Typography>
-          {uploadError.map((filename) => (
-            <Typography variant="body2" key={filename}>
-              {filename}
-            </Typography>
-          ))}
-        </DialogContent>
-        <DialogActions className={classNames.filterButton}>
-          <Button
-            color="default"
-            onClick={() => {
-              setUploadFailCardPopup(false);
-              dispatch(clearUploadFail());
-            }}
-          >
             Done
           </Button>
         </DialogActions>
