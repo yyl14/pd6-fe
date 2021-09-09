@@ -349,7 +349,7 @@ const deleteAssistingData = (token, assistingId) => async (dispatch) => {
   }
 };
 
-const editAssistingData = (token, assistingId, file) => async (dispatch) => {
+const editAssistingData1 = (token, assistingId, file) => async (dispatch) => {
   dispatch({ type: problemConstants.EDIT_ASSISTING_DATA_START });
   const config = {
     headers: {
@@ -685,15 +685,129 @@ const clearUploadFail = () => (dispatch) => {
   dispatch({ type: problemConstants.CLEAR_UPLOAD_FAIL_RECORD });
 };
 
-const handleEditSamples = (token, testcases, sampleDataIds, sampleTableData, onSuccess, onError) => async (dispatch) => {
+const editSamples = (token, testcases, sampleDataIds, sampleTableData, onSuccess, onError) => async (dispatch) => {
+  sampleDataIds.map((id) => {
+    if (sampleTableData[id] === undefined) {
+      // delete data
+      // console.log(testcases[id].input_filename, ' should be deleted');
+      console.log('delete sample: ', testcases[id].input_filename);
+    }
+    return id;
+  });
+  Object.keys(sampleTableData).map((id) => {
+    if (sampleTableData[id].new) {
+      // add testcase with file
+      console.log('add sample with file: ', id);
+      // dispatch(
+      //   addTestcaseWithFile(
+      //     authToken,
+      //     problemId,
+      //     true,
+      //     0,
+      //     data.time_limit,
+      //     data.memory_limit,
+      //     false,
+      //     data.in_file,
+      //     data.out_file,
+      //   ),
+      // );
+    } else {
+      // console.log(data.no, ' is original testcase');
+      // check basic info
+      if (
+        testcases[id].time_limit !== sampleTableData[id].time_limit
+          || testcases[id].memory_limit !== sampleTableData[id].memory_limit
+          || testcases[id].is_disabled !== false
+      ) {
+        console.log('edit sample info', id);
+        // dispatch(editTestcase(authToken, data.id, true, 0, data.time_limit, data.memory_limit, !status));
+      }
+      // upload file
+      if (sampleTableData[id].in_file !== null) {
+        console.log('upload sample in', id);
+        // dispatch(uploadTestcaseInput(authToken, data.id, data.in_file));
+      }
+      if (sampleTableData[id].out_file !== null) {
+        console.log('upload sample out', id);
+        // dispatch(uploadTestcaseOutput(authToken, data.id, data.out_file));
+      }
+    }
+    return id;
+  });
   onSuccess();
 };
 
-const handleEditTestcases = (token, testcases, testcaseDataIds, testcaseTableData, onSuccess, onError) => async (dispatch) => {
+const editTestcases = (token, testcases, testcaseDataIds, testcaseTableData, status, onSuccess, onError) => async (dispatch) => {
+  testcaseDataIds.map((id) => {
+    if (testcaseTableData[id] === undefined) {
+      // delete data
+      // console.log(testcases[id].input_filename, ' should be deleted');
+      // dispatch(deleteTestcase(authToken, id));
+    }
+    return id;
+  });
+
+  Object.keys(testcaseTableData).map((id) => {
+    if (testcaseTableData[id].new) {
+      console.log('add testcase with file: ', id);
+      // add testcase with file
+      // console.log(data.no, ' should be added.');
+      // dispatch(
+      //   addTestcaseWithFile(
+      //     authToken,
+      //     problemId,
+      //     false,
+      //     data.score,
+      //     data.time_limit,
+      //     data.memory_limit,
+      //     !status,
+      //     data.in_file,
+      //     data.out_file,
+      //   ),
+      // );
+    } else {
+      // console.log(data.no, ' is original testcase');
+      // check basic info
+      if (
+        testcases[id].time_limit !== testcaseTableData[id].time_limit
+          || testcases[id].memory_limit !== testcaseTableData[id].memory_limit
+          || testcases[id].score !== testcaseTableData[id].score
+          || testcases[id].is_disabled !== !status
+      ) {
+        console.log('edit testcase info', id);
+        // dispatch(editTestcase(authToken, data.id, false, data.score, data.time_limit, data.memory_limit, !status));
+      }
+      // upload file
+      if (testcaseTableData[id].in_file !== null) {
+        console.log('upload testcase in', id);
+        // dispatch(uploadTestcaseInput(authToken, data.id, data.in_file));
+      }
+      if (testcaseTableData[id].out_file !== null) {
+        console.log('upload testcase out', id);
+        // dispatch(uploadTestcaseOutput(authToken, data.id, data.out_file));
+      }
+    }
+    return id;
+  });
   onSuccess();
 };
 
-const handleEditAssistingData = (token, assistingData, assistTableData, selectedFileA, onSuccess, onError) => async (dispatch) => {
+const editAssistingData = (token, assistingData, assistingDataIds, assistTableData, onSuccess, onError) => async (dispatch) => {
+  assistingDataIds.map((id) => {
+    if (assistTableData.filter((item) => item.filename === assistingData[id].filename).length === 0) {
+      console.log('delete assisting data: ', assistingData[id].filename);
+    }
+    return id;
+  });
+  assistTableData.map((item) => {
+    if (assistingDataIds.filter((id) => assistingData[id].filename === item.filename).length === 0) {
+      console.log('add assisting data: ', item.filename);
+    } else {
+      console.log('edit assisting data: ', item.filename);
+    }
+    return item;
+  });
+
   onSuccess();
 };
 
@@ -707,7 +821,7 @@ export {
   browseAssistingData,
   deleteTestcase,
   deleteAssistingData,
-  editAssistingData,
+  editAssistingData1,
   addAssistingData,
   submitCode,
   editTestcase,
@@ -720,7 +834,7 @@ export {
   downloadAllSamples,
   downloadAllTestcases,
   clearUploadFail,
-  handleEditSamples,
-  handleEditTestcases,
-  handleEditAssistingData,
+  editSamples,
+  editTestcases,
+  editAssistingData,
 };

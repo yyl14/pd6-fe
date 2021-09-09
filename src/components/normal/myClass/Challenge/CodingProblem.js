@@ -74,7 +74,6 @@ export default function CodingProblem() {
   }, [classId, userClasses]);
 
   useEffect(() => {
-    console.log('hello');
     dispatch(readProblemInfo(authToken, problemId));
   }, [authToken, dispatch, problemId]);
 
