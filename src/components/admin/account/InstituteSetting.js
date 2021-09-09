@@ -274,13 +274,7 @@ export default function InstituteSetting() {
             </AlignedText>
           </div>
           <AlignedText text="New Name" childrenType="field">
-            <TextField
-              id="newName"
-              name="newName"
-              value={newSetting.newName}
-              onChange={handleChange('newName')}
-              className={classes.inputField}
-            />
+            <TextField id="newName" name="newName" value={newSetting.newName} onChange={handleChange('newName')} />
           </AlignedText>
           <Typography variant="body1" className={classes.warningText}>
             Once you change the institute’s name, all related members will be affected. Please be certain.
@@ -323,7 +317,6 @@ export default function InstituteSetting() {
               name="newInitialism"
               value={newSetting.newInitialism}
               onChange={handleChange('newInitialism')}
-              className={classes.inputField}
             />
           </AlignedText>
           <Typography variant="body1" className={classes.warningText}>
@@ -363,7 +356,6 @@ export default function InstituteSetting() {
               onChange={handleChange('newEmail')}
               error={error}
               helperText={errorText}
-              className={classes.inputField}
             />
           </AlignedText>
           <Typography variant="body1" className={classes.warningText}>

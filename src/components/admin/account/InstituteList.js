@@ -27,9 +27,6 @@ const useStyles = makeStyles(() => ({
   popUpLayout: {
     width: '100%',
   },
-  // inputField: {
-  //   width: 340,
-  // },
   statusSwitch: {
     marginTop: '8px',
   },
