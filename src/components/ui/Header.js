@@ -216,10 +216,6 @@ export default function Header() {
             basePath: '/admin/system',
             path: '/admin/system/accesslog',
           },
-          {
-            text: 'About',
-            path: '/about',
-          },
         ]);
         setMenuList([
           { title: 'My Profile', link: '/my-profile' },
@@ -245,21 +241,21 @@ export default function Header() {
             //   basePath: '/problem-set',
             //   path: '/problem-set',
             // },
-            {
-              text: 'PDAO',
-              basePath: '/pdao',
-              path: '/pdao',
-            },
-            {
-              text: 'Ranklist',
-              basePath: '/ranklist',
-              path: '/ranklist',
-            },
-            {
-              text: 'System',
-              basePath: '/system',
-              path: '/system',
-            },
+            // {
+            //   text: 'PDAO',
+            //   basePath: '/pdao',
+            //   path: '/pdao',
+            // },
+            // {
+            //   text: 'Ranklist',
+            //   basePath: '/ranklist',
+            //   path: '/ranklist',
+            // },
+            // {
+            //   text: 'System',
+            //   basePath: '/system',
+            //   path: '/system',
+            // },
           ]);
         } else {
           setItemList([
@@ -273,21 +269,21 @@ export default function Header() {
             //   basePath: '/problem-set',
             //   path: '/problem-set',
             // },
-            {
-              text: 'PDAO',
-              basePath: '/pdao',
-              path: '/pdao',
-            },
-            {
-              text: 'Ranklist',
-              basePath: '/ranklist',
-              path: '/ranklist',
-            },
-            {
-              text: 'System',
-              basePath: '/system',
-              path: '/system',
-            },
+            // {
+            //   text: 'PDAO',
+            //   basePath: '/pdao',
+            //   path: '/pdao',
+            // },
+            // {
+            //   text: 'Ranklist',
+            //   basePath: '/ranklist',
+            //   path: '/ranklist',
+            // },
+            // {
+            //   text: 'System',
+            //   basePath: '/system',
+            //   path: '/system',
+            // },
           ]);
         }
         setMenuList([

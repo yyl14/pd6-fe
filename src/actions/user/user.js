@@ -1,32 +1,31 @@
 import agent from '../agent';
 import { userConstants } from './constants';
 
-const editAccount = (token, id, userName, realName, nickName, email) => (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
-  dispatch({ type: userConstants.EDIT_SELF_ACCOUNT_START });
-
-  agent
-    .patch(`/account/${id}`, { nickname: nickName, alternative_email: email }, config)
-    .then(() => {
-      dispatch({
-        type: userConstants.EDIT_SELF_ACCOUNT_SUCCESS,
-        payload: {
-          id,
-          nickname: nickName,
-          alternative_email: email,
-        },
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        type: userConstants.EDIT_SELF_ACCOUNT_FAIL,
-        error,
-      });
+const editAccount = (token, id, nickName, email) => async (dispatch) => {
+  try {
+    const config = {
+      headers: { 'auth-token': token },
+    };
+    dispatch({ type: userConstants.EDIT_SELF_ACCOUNT_START });
+    const accountInfo = { nickname: nickName };
+    if (email) {
+      accountInfo.alternative_email = email;
+    }
+    const res = await agent.patch(`/account/${id}`, accountInfo, config);
+    dispatch({
+      type: userConstants.EDIT_SELF_ACCOUNT_SUCCESS,
+      payload: {
+        id,
+        nickname: nickName,
+        alternative_email: email,
+      },
     });
+  } catch (error) {
+    dispatch({
+      type: userConstants.EDIT_SELF_ACCOUNT_FAIL,
+      error,
+    });
+  }
 };
 
 const makeStudentCardDefault = (token, id, cardId) => (dispatch) => {

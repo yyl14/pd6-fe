@@ -77,22 +77,21 @@ export const addTeam = (token, classId, teamName, newLabel) => (dispatch) => {
     });
 };
 
-export const importTeam = (token, classId, file) => async (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-      'Content-Type': 'multipart/form-data',
-    },
-  };
-  const formData = new FormData();
-  formData.append('team_file', file);
-
+export const importTeam = (token, classId, label, file) => async (dispatch) => {
   try {
+    const config = {
+      headers: {
+        'auth-token': token,
+        'Content-Type': 'multipart/form-data',
+      },
+      params: { label },
+    };
+    const formData = new FormData();
+    formData.append('team_file', file);
+
     dispatch({ type: teamConstants.IMPORT_TEAM_START });
     await agent.post(`/class/${classId}/team-import`, formData, config);
-    dispatch({
-      type: teamConstants.IMPORT_TEAM_SUCCESS,
-    });
+    dispatch({ type: teamConstants.IMPORT_TEAM_SUCCESS });
   } catch (error) {
     dispatch({
       type: teamConstants.IMPORT_TEAM_FAIL,

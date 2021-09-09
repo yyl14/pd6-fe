@@ -103,33 +103,26 @@ const editInstitute = (token, id, abbreviatedName, fullName, emailDomain, isDisa
 };
 
 // SM: edit any account
-const editAccount = (token, id, userName, realName, nickName, email) => (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
-  dispatch({ type: accountConstants.EDIT_ACCOUNT_START });
+const editAccount = (token, id, realName, nickName, email) => async (dispatch) => {
+  try {
+    const config = {
+      headers: { 'auth-token': token },
+    };
+    dispatch({ type: accountConstants.EDIT_ACCOUNT_START });
 
-  agent
-    .patch(`/account/${id}`, { real_name: realName, nickname: nickName, alternative_email: email }, config)
-    .then(() => {
-      dispatch({
-        type: accountConstants.EDIT_ACCOUNT_SUCCESS,
-        payload: {
-          id,
-          real_name: realName,
-          nickname: nickName,
-          alternative_email: email,
-        },
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        type: accountConstants.EDIT_ACCOUNT_FAIL,
-        error,
-      });
+    const accountInfo = { real_name: realName, nickname: nickName };
+    if (email) {
+      accountInfo.alternative_email = email;
+    }
+
+    const res = await agent.patch(`/account/${id}`, accountInfo, config);
+    dispatch({ type: accountConstants.EDIT_ACCOUNT_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: accountConstants.EDIT_ACCOUNT_FAIL,
+      error,
     });
+  }
 };
 
 // SM: delete any account
