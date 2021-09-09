@@ -7,7 +7,12 @@ import SimpleBar from '../ui/SimpleBar';
 import AlignedText from '../ui/AlignedText';
 import { editAccount } from '../../actions/user/user';
 
-const useStyles = makeStyles(() => ({}));
+const useStyles = makeStyles(() => ({
+  buttons: {
+    marginTop: '6px',
+    marginLeft: '-5px',
+  },
+}));
 
 export default function BasicInfoEdit(props) {
   const [realName] = useState(props.realName);
@@ -62,10 +67,12 @@ export default function BasicInfoEdit(props) {
               }}
             />
           </AlignedText>
-          <Button onClick={handleCancel}>Cancel</Button>
-          <Button color="primary" type="submit" onClick={handleSave}>
-            Save
-          </Button>
+          <div className={classes.buttons}>
+            <Button onClick={handleCancel}>Cancel</Button>
+            <Button color="primary" type="submit" onClick={handleSave}>
+              Save
+            </Button>
+          </div>
         </>
       </SimpleBar>
     </div>

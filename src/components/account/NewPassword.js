@@ -23,6 +23,7 @@ import { editPassword } from '../../actions/user/user';
 
 const useStyles = makeStyles(() => ({
   buttons: {
+    marginTop: '6px',
     marginLeft: '-5px',
   },
 }));
