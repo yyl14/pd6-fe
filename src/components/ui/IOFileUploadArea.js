@@ -165,7 +165,7 @@ export default function IOFileUploadArea({
     }, selectedFile);
 
     // object to array
-    setSelectedFile(Object.keys(newSelectedFiles).map((key) => newSelectedFiles[key]));
+    setSelectedFile(newSelectedFiles);
   };
 
   const handleDelete = (e, deleteRow) => {
@@ -174,8 +174,8 @@ export default function IOFileUploadArea({
   };
 
   useEffect(() => {
-    setFileNum(selectedFile.length);
-    setTableData(selectedFile);
+    setFileNum(Object.keys(selectedFile).length);
+    setTableData(Object.keys(selectedFile).map((key) => selectedFile[key]));
   }, [selectedFile]);
 
   return (
