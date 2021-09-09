@@ -2,13 +2,16 @@ import { userConstants } from '../../../actions/user/constants';
 
 const initialState = {
   editAccount: null,
-  fetchStudentCard: null,
+  fetchStudentCards: null,
   addStudentCard: null,
   makeStudentCardDefault: null,
   resetPassword: null,
   editPassword: null,
   getNotify: null,
   readNotify: null,
+  browsePendingStudentCards: null,
+  resendEmailVerification: null,
+  deletePendingStudentCard: null,
 };
 
 export default function user(state = initialState, action) {
@@ -38,13 +41,13 @@ export default function user(state = initialState, action) {
     case userConstants.GET_SELF_STUDENT_CARD_SUCCESS: {
       return {
         ...state,
-        fetchStudentCard: null,
+        fetchStudentCards: null,
       };
     }
     case userConstants.GET_SELF_STUDENT_CARD_FAIL: {
       return {
         ...state,
-        fetchStudentCard: action.error,
+        fetchStudentCards: action.error,
       };
     }
     case userConstants.ADD_SELF_STUDENT_CARD_SUCCESS: {
@@ -71,13 +74,13 @@ export default function user(state = initialState, action) {
         editPassword: action.error,
       };
     }
-    case userConstants.USER_GET_NOTIFY: {
+    case userConstants.USER_BROWSE_ANNOUNCEMENT_SUCCESS: {
       return {
         ...state,
         getNotify: null,
       };
     }
-    case userConstants.USER_GET_NOTIFY_FAIL: {
+    case userConstants.USER_BROWSE_ANNOUNCEMENT_FAIL: {
       return {
         ...state,
         getNotify: action.error,
@@ -93,6 +96,44 @@ export default function user(state = initialState, action) {
       return {
         ...state,
         readNotify: action.error,
+      };
+    }
+    case userConstants.BROWSE_SELF_PENDING_STUDENT_CARDS_SUCCESS: {
+      return {
+        ...state,
+        browsePendingStudentCards: null,
+      };
+    }
+    case userConstants.BROWSE_SELF_PENDING_STUDENT_CARDS_FAIL: {
+      return {
+        ...state,
+        browsePendingStudentCards: action.error,
+      };
+    }
+
+    case userConstants.RESEND_SELF_EMAIL_VERIFICATION_SUCCESS: {
+      return {
+        ...state,
+        resendEmailVerification: null,
+      };
+    }
+    case userConstants.RESEND_SELF_EMAIL_VERIFICATION_FAIL: {
+      return {
+        ...state,
+        resendEmailVerification: action.error,
+      };
+    }
+
+    case userConstants.DELETE_SELF_PENDING_STUDENT_CARD_SUCCESS: {
+      return {
+        ...state,
+        deletePendingStudentCard: null,
+      };
+    }
+    case userConstants.DELETE_SELF_PENDING_STUDENT_CARD_FAIL: {
+      return {
+        ...state,
+        deletePendingStudentCard: action.error,
       };
     }
     default: {

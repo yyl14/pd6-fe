@@ -1,15 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Button,
-  TextField,
-  Typography,
-  makeStyles,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
+  Button, TextField, Typography, makeStyles,
 } from '@material-ui/core';
 import SimpleBar from '../ui/SimpleBar';
 import AlignedText from '../ui/AlignedText';
@@ -25,34 +17,25 @@ export default function BasicInfoEdit(props) {
   const [realName] = useState(props.realName);
   const [userName] = useState(props.userName);
   const [nickName, setNickName] = useState(props.nickName);
-  const [altMail, setAltMail] = useState(props.altMail ? props.altMail : '');
-  const [disabled, setDisabled] = useState(true);
+  const [altMail, setAltMail] = useState(props.altMail);
   const classes = useStyles();
+  const [error, setError] = useState(false);
+  const [errorText, setErrorText] = useState('');
 
   const accountId = useSelector((state) => state.user.id);
   const authToken = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
 
-  const [popUp, setPopUp] = useState(false);
-
   const handleSave = () => {
-    if (altMail !== props.altMail) {
-      if (altMail !== '') {
-        dispatch(editAccount(authToken, accountId, userName, realName, nickName, altMail));
-        setPopUp(true);
-        return;
-      }
-    }
-    if ((altMail === '' && props.altMail === null) || altMail === props.altMail) {
-      dispatch(editAccount(authToken, accountId, userName, realName, nickName, null));
-    } else {
-      dispatch(editAccount(authToken, accountId, userName, realName, nickName, ''));
-    }
-    props.handleBack();
+    const altMailChanged = altMail !== props.altMail && altMail !== '';
+    dispatch(editAccount(authToken, accountId, nickName, altMailChanged ? altMail : null));
+    props.handleBack(altMailChanged ? 'Alternative email will be updated once it’s verified.' : '');
   };
 
-  const done = () => {
-    props.handleBack();
+  const handleCancel = () => {
+    props.handleBack('');
+    setError(false);
+    setErrorText('');
   };
 
   return (
@@ -70,9 +53,10 @@ export default function BasicInfoEdit(props) {
               value={nickName}
               onChange={(e) => {
                 setNickName(e.target.value);
-                setDisabled(false);
               }}
               className={classes.textfield}
+              error={error}
+              helperText={errorText}
             />
           </AlignedText>
           <AlignedText text="Alternative Email" childrenType="field" maxWidth="lg">
@@ -80,42 +64,16 @@ export default function BasicInfoEdit(props) {
               value={altMail}
               onChange={(e) => {
                 setAltMail(e.target.value);
-                setDisabled(false);
               }}
               className={classes.textfield}
             />
           </AlignedText>
-          <Button onClick={() => props.handleBack()}>Cancel</Button>
-          <Button color="primary" type="submit" disabled={disabled} onClick={handleSave}>
+          <Button onClick={handleCancel}>Cancel</Button>
+          <Button color="primary" type="submit" onClick={handleSave}>
             Save
           </Button>
         </>
       </SimpleBar>
-      <Dialog
-        open={popUp}
-        keepMounted
-        onClose={() => setPopUp(false)}
-      >
-        <DialogTitle id="alert-dialog-slide-title">
-          <Typography variant="h4">Verification email sent</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Please check your mailbox to activate this alternative email, then it will appear here.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setPopUp(false);
-              done();
-            }}
-            color="default"
-          >
-            Done
-          </Button>
-        </DialogActions>
-      </Dialog>
     </div>
   );
 }

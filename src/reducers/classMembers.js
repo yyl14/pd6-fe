@@ -11,6 +11,7 @@ const byId = (state = {}, action) => {
           [item.member_id]: {
             ...item,
             member_referral: state[item.member_id] ? state[item.member_id].member_referral : '',
+            member_role: state[item.member_id] ? state[item.member_id].member_role : '',
           },
         }),
         state,
@@ -23,6 +24,7 @@ const byId = (state = {}, action) => {
           ...acc,
           [item.member_id]: {
             member_referral: item.member_referral,
+            member_role: item.member_role,
             institute_abbreviated_name: state[item.member_id] ? state[item.member_id].institute_abbreviated_name : '',
             member_id: state[item.member_id] ? state[item.member_id].member_id : '',
             real_name: state[item.member_id] ? state[item.member_id].real_name : '',
@@ -41,6 +43,7 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
+    case commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_SUCCESS:
     case commonConstants.FETCH_CLASS_MEMBERS_SUCCESS: {
       const { data } = action.payload;
       return [...new Set([...data.map((item) => item.member_id), ...state])];

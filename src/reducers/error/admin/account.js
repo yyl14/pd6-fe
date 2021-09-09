@@ -11,9 +11,13 @@ const initialState = {
   deleteAccount: null,
   editPassword: null,
 
-  fetchStudentCard: null,
+  fetchStudentCards: null,
   addStudentCard: null,
   makeStudentCardDefault: null,
+
+  browsePendingStudentCards: null,
+  resendEmailVerification: null,
+  deletePendingStudentCard: null,
 };
 
 export default function account(state = initialState, action) {
@@ -125,16 +129,16 @@ export default function account(state = initialState, action) {
       };
     }
 
-    case accountConstants.FETCH_STUDENT_CARD_SUCCESS: {
+    case accountConstants.FETCH_STUDENT_CARDS_SUCCESS: {
       return {
         ...state,
-        fetchStudentCard: null,
+        fetchStudentCards: null,
       };
     }
-    case accountConstants.FETCH_STUDENT_CARD_FAIL: {
+    case accountConstants.FETCH_STUDENT_CARDS_FAIL: {
       return {
         ...state,
-        fetchStudentCard: action.error,
+        fetchStudentCards: action.error,
       };
     }
 
@@ -161,6 +165,45 @@ export default function account(state = initialState, action) {
       return {
         ...state,
         makeStudentCardDefault: action.error,
+      };
+    }
+
+    case accountConstants.BROWSE_PENDING_STUDENT_CARDS_SUCCESS: {
+      return {
+        ...state,
+        browsePendingStudentCards: null,
+      };
+    }
+    case accountConstants.BROWSE_PENDING_STUDENT_CARDS_FAIL: {
+      return {
+        ...state,
+        browsePendingStudentCards: action.error,
+      };
+    }
+
+    case accountConstants.RESEND_EMAIL_VERIFICATION_SUCCESS: {
+      return {
+        ...state,
+        resendEmailVerification: null,
+      };
+    }
+    case accountConstants.RESEND_EMAIL_VERIFICATION_FAIL: {
+      return {
+        ...state,
+        resendEmailVerification: action.error,
+      };
+    }
+
+    case accountConstants.DELETE_PENDING_STUDENT_CARD_SUCCESS: {
+      return {
+        ...state,
+        deletePendingStudentCard: null,
+      };
+    }
+    case accountConstants.DELETE_PENDING_STUDENT_CARD_FAIL: {
+      return {
+        ...state,
+        deletePendingStudentCard: action.error,
       };
     }
 

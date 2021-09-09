@@ -2,10 +2,10 @@ import {
   makeStyles, FormControl, Select, MenuItem, ListItemText,
 } from '@material-ui/core';
 
-import React, { useState } from 'react';
+import React from 'react';
 import CustomCheckbox from './CustomCheckbox';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   selectField: {
     width: '350px',
     marginRight: '5px',
@@ -57,7 +57,9 @@ export default function MultiSelect({ options, value, setValue }) {
           renderValue={displaySelection}
           multiple
         >
-          <MenuItem value="Select all" className={classes.selectList}>Select all</MenuItem>
+          <MenuItem value="Select all" className={classes.selectList}>
+            Select all
+          </MenuItem>
           {options.map((option) => (
             <MenuItem key={option} value={option} className={classes.selectList}>
               <CustomCheckbox isChecked={value.indexOf(option) > -1} />

@@ -39,8 +39,16 @@ export default function MyClass() {
   }, [auth.isAuthenticated, classId, history, user.classes]);
 
   useEffect(() => {
-    dispatch(fetchClass(authToken, classId));
-    dispatch(fetchCourse(authToken, courseId));
+    if (!courseId || !classId) {
+      history.push(`/my-class/${user.classes[0].course_id}/${user.classes[0].class_id}/challenge`);
+    }
+  });
+
+  useEffect(() => {
+    if (classId && courseId) {
+      dispatch(fetchClass(authToken, classId));
+      dispatch(fetchCourse(authToken, courseId));
+    }
   }, [authToken, classId, courseId, dispatch]);
 
   return (

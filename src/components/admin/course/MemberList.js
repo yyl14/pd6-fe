@@ -1,24 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Typography, Button, makeStyles } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
-import { fetchClassMembers, fetchClassMemberWithAccountReferral } from '../../../actions/common/common';
+import { fetchClassMembers } from '../../../actions/common/common';
 import AutoTable from '../../ui/AutoTable';
+import PageTitle from '../../ui/PageTitle';
 import MemberEdit from './MemberEdit';
 import NoMatch from '../../noMatch';
 import systemRoleTransformation from '../../../function/systemRoleTransformation';
 
-const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-}));
-
 /* This is a level 4 component (page component) */
 export default function MemberList() {
   const { courseId, classId } = useParams();
-  const classNames = useStyles();
 
   const dispatch = useDispatch();
 
@@ -29,6 +23,8 @@ export default function MemberList() {
   const loading = useSelector((state) => state.loading.admin.course);
   const error = useSelector((state) => state.error.common.common.fetchClassMembers);
 
+  const [edit, setEdit] = useState(false);
+
   useEffect(() => {
     dispatch(fetchCourses(authToken));
   }, [authToken, dispatch]);
@@ -36,8 +32,6 @@ export default function MemberList() {
   useEffect(() => {
     dispatch(fetchClasses(authToken, courseId));
   }, [authToken, courseId, dispatch]);
-
-  const [edit, setEdit] = useState(false);
 
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
     if (loading.fetchCourses || loading.fetchClasses) {
@@ -49,15 +43,13 @@ export default function MemberList() {
 
   return (
     <>
-      <Typography variant="h3" className={classNames.pageHeader}>
-        {`${courses.byId[courseId].name} / ${classes.byId[classId].name} / Member`}
-      </Typography>
+      <PageTitle text={`${courses.byId[courseId].name} / ${classes.byId[classId].name} / Member`} />
       {edit ? (
         <MemberEdit
           dispatch={dispatch}
           authToken={authToken}
+          classes={classes}
           classId={classId}
-          members={classes.byId[classId].memberIds.map((id) => members.byId[id])}
           backToMemberList={() => setEdit(false)}
           loading={loading}
         />
@@ -111,7 +103,6 @@ export default function MemberList() {
             ]}
             refetch={(browseParams, ident) => {
               dispatch(fetchClassMembers(authToken, classId, browseParams, ident));
-              dispatch(fetchClassMemberWithAccountReferral(authToken, classId));
             }}
             refetchErrors={[error]}
             columns={[

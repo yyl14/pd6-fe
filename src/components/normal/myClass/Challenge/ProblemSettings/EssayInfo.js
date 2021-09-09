@@ -24,10 +24,7 @@ import { uploadEssay, reUploadEssay, browseEssaySubmission } from '../../../../.
 import { downloadFile } from '../../../../../actions/common/common';
 import { browseTasksUnderChallenge } from '../../../../../actions/myClass/challenge';
 
-const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
+const useStyles = makeStyles(() => ({
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end',

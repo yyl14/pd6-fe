@@ -56,6 +56,21 @@ const byId = (state = {}, action) => {
       };
     }
 
+    case commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_SUCCESS: {
+      const { classId, data } = action.payload;
+      return {
+        ...state,
+        [classId]: {
+          ...state[classId],
+          memberIds: data.map((item) => item.member_id),
+          gradeIds: state[classId] ? state[classId].gradeIds : [],
+          teamIds: state[classId] ? state[classId].teamIds : [],
+          challengeIds: state[classId] ? state[classId].challengeIds : [],
+          submissionIds: state[classId] ? state[classId].submissionIds : [],
+        },
+      };
+    }
+
     case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {
       const { classId, data } = action.payload;
       return {
@@ -108,9 +123,9 @@ const byId = (state = {}, action) => {
         [classId]: {
           ...state[classId],
           challengeIds: challenges.map((item) => item.id),
-          teamIds: state[classId] ? state[classId].teamIds : [],
           gradeIds: state[classId] ? state[classId].gradeIds : [],
           memberIds: state[classId] ? state[classId].memberIds : [],
+          teamIds: state[classId] ? state[classId].teamIds : [],
           submissionIds: state[classId] ? state[classId].submissionIds : [],
         },
       };
@@ -123,9 +138,9 @@ const byId = (state = {}, action) => {
         [classId]: {
           ...state[classId],
           submissionIds: data.map((item) => item.id),
-          teamIds: state[classId] ? state[classId].teamIds : [],
           gradeIds: state[classId] ? state[classId].gradeIds : [],
           memberIds: state[classId] ? state[classId].memberIds : [],
+          teamIds: state[classId] ? state[classId].teamIds : [],
           challengeIds: state[classId] ? state[classId].challengeIds : [],
         },
       };

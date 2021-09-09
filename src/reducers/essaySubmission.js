@@ -3,10 +3,6 @@ import { essayConstants } from '../actions/myClass/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    case essayConstants.UPLOAD_ESSAY_SUBMISSION_SUCCESS: {
-      const data = action.payload;
-      return { ...state, [data]: { id: data } };
-    }
     case essayConstants.READ_ESSAY_SUBMISSION_SUCCESS: {
       const data = action.payload;
       return {
@@ -44,6 +40,7 @@ const allIds = (state = [], action) => {
       return state.includes(action.payload) ? state : state.concat([action.payload]);
     case essayConstants.BROWSE_ESSAY_SUBMISSION_SUCCESS:
       return action.payload.map((item) => item.id);
+
     default:
       return state;
   }

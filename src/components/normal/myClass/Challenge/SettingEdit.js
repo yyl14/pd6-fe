@@ -11,9 +11,6 @@ import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   contentField: {
     width: '720px',
   },
@@ -53,9 +50,7 @@ export default function SettingEdit({ challengeId, challenge, setEdit }) {
       end_time: duration[0].endDate.toISOString(),
       publicize_type: publicizeType,
       selection_type: selectionType,
-      description: challenge.description,
     };
-    // console.log('call edit challenge api', challengeId, body);
     dispatch(editChallenge(authToken, challengeId, body));
     setHasRequest(true);
   };

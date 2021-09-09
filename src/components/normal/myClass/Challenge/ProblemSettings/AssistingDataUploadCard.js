@@ -42,10 +42,11 @@ export default function AssistingDataUploadCard({
         fullWidth
       >
         <DialogTitle id="dialog-slide-title">
-          <Typography variant="h4">Upload File</Typography>
+          <Typography variant="h4">Upload Assisting Data</Typography>
         </DialogTitle>
         <DialogContent>
-          <FileUploadArea text="PDF file" fileAcceptFormat=".pdf" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
+          <Typography variant="body2">Assisting Data are files shared among all testing data (e.g. a csv file) They will be placed under /challenge/assist</Typography>
+          <FileUploadArea text="Assisting Data" fileAcceptFormat=".pdf, .csv" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => handleCancel()} color="default">

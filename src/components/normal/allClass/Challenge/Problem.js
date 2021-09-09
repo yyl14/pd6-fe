@@ -16,11 +16,7 @@ import CodingProblem from './CodingProblem';
 import { readProblem, readProblemInfo } from '../../../../actions/myClass/problem';
 import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-}));
+const useStyles = makeStyles((theme) => ({}));
 
 /* This is a level 4 component (page component) */
 /* judge the problem type on this level */
