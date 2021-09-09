@@ -24,11 +24,14 @@ import sortData from '../../../function/sort';
 import GeneralLoading from '../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
-  popUpLayout: {
-    width: '100%',
+  dialogTitle: {
+    marginBottom: '-18px',
   },
   statusSwitch: {
-    marginTop: '8px',
+    marginTop: '22px',
+  },
+  dialogButtons: {
+    marginTop: '13px',
   },
 }));
 
@@ -190,13 +193,12 @@ export default function InstituteList() {
         open={popUp}
         keepMounted
         onClose={() => setPopUp(false)}
-        className={classes.popUpLayout}
         aria-labelledby="dialog-slide-title"
         aria-describedby="dialog-slide-description"
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle id="dialog-slide-title">
+        <DialogTitle id="dialog-slide-title" className={classes.dialogTitle}>
           <Typography variant="h4">Add Institute</Typography>
         </DialogTitle>
         <DialogContent>
@@ -207,7 +209,6 @@ export default function InstituteList() {
               placeholder="e.g. National Taiwan University"
               value={inputs.fullName}
               onChange={(e) => handleChange(e)}
-              className={classes.inputField}
             />
           </AlignedText>
           <AlignedText text="Initialism" childrenType="field">
@@ -217,7 +218,6 @@ export default function InstituteList() {
               placeholder="e.g. NTU"
               value={inputs.initialism}
               onChange={(e) => handleChange(e)}
-              className={classes.inputField}
             />
           </AlignedText>
           <AlignedText text="Email" childrenType="field">
@@ -227,7 +227,6 @@ export default function InstituteList() {
               placeholder="e.g. ntu.edu.tw"
               value={inputs.email}
               onChange={(e) => handleChange(e)}
-              className={classes.inputField}
             />
           </AlignedText>
           <AlignedText text="Status">
@@ -238,7 +237,7 @@ export default function InstituteList() {
             />
           </AlignedText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions className={classes.dialogButtons}>
           <Button
             onClick={() => {
               cancel();
