@@ -7,9 +7,23 @@ import getTextFromUrl from '../../function/getTextFromUrl';
 // WITH BROWSE PARAMS
 const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => async (dispatch) => {
   try {
+    const adjustedBrowseParams = {
+      ...browseParams,
+      filter: browseParams.filter.reduce((acc, item) => {
+        if (item[0] === 'id') {
+          if (item[2] === '') {
+            return [];
+          }
+          return [...acc, [item[0], item[1], [item[2]]]];
+        }
+        return [...acc, item];
+      }, []),
+    };
     const config1 = {
-      headers: { 'auth-token': token },
-      params: browseParamsTransForm(browseParams),
+      headers: {
+        'auth-token': token,
+      },
+      params: browseParamsTransForm(adjustedBrowseParams),
     };
     dispatch({
       type: submissionConstants.FETCH_SUBMISSIONS_START,
