@@ -68,7 +68,7 @@ export default function AllClassChallenge({
                 path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
               },
             ].concat(
-              problems.allIds
+              challenges[challengeId].problemIds
                 .map((id) => problems.byId[id])
                 .map(({ id, challenge_label }) => ({
                   text: challenge_label,
