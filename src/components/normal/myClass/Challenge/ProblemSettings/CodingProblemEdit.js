@@ -275,6 +275,7 @@ export default function CodingProblemEdit({ closeEdit }) {
     setSampleTableData(newTableData);
     setCardSelectedFileS({});
     setHasChange(true);
+    setSamplePopUp(false);
   };
 
   const handleTestingConfirm = (newSelectedFiles) => {
@@ -318,6 +319,7 @@ export default function CodingProblemEdit({ closeEdit }) {
     setTestcaseTableData(newTableData);
     setCardSelectedFileT({});
     setHasChange(true);
+    setTestingPopUp(false);
   };
 
   const handleAssistConfirm = () => {
@@ -335,6 +337,7 @@ export default function CodingProblemEdit({ closeEdit }) {
     setAssistTableData(newData);
     setCardSelectedFileA([]);
     setHasChange(true);
+    setAssistPopUp(false);
   };
 
   const handleFileUploadFail = (filename) => {

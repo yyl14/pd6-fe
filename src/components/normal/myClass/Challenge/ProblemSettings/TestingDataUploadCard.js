@@ -59,7 +59,6 @@ export default function TestingDataUploadCard({
       },
     }), {});
     handleTempUpload(newSelectedFile);
-    closePopUp();
   };
 
   const handleCancel = () => {
