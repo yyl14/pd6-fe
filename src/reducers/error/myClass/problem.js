@@ -23,6 +23,7 @@ const initialState = {
   downloadSamples: null,
   downloadTestcases: null,
   uploadFailFilename: [],
+  rejudgeSubmission: null,
 };
 
 export default function problem(state = initialState, action) {
@@ -158,6 +159,16 @@ export default function problem(state = initialState, action) {
         uploadFailFilename: state.uploadFailFilename.concat([action.filename]),
       };
     }
+    case problemConstants.REJUDGE_SUBMISSION_SUCCESS:
+      return {
+        ...state,
+        rejudgeSubmission: null,
+      };
+    case problemConstants.REJUDGE_SUBMISSION_FAIL:
+      return {
+        ...state,
+        rejudgeSubmission: action.error,
+      };
 
     default: {
       return state;

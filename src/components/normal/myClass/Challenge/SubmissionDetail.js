@@ -11,7 +11,12 @@ import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
 import PageTitle from '../../../ui/PageTitle';
 import GeneralLoading from '../../../GeneralLoading';
-import { readSubmissionDetail, browseJudgeCases, readTestcase } from '../../../../actions/myClass/problem';
+import {
+  readSubmissionDetail,
+  browseJudgeCases,
+  readTestcase,
+  rejudgeSubmission,
+} from '../../../../actions/myClass/problem';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
 import NoMatch from '../../../noMatch';
 import CodeArea from '../../../ui/CodeArea';
@@ -62,9 +67,11 @@ export default function SubmissionDetail() {
   const loading = useSelector((state) => state.loading.myClass.problem);
 
   useEffect(() => {
-    dispatch(readSubmissionDetail(authToken, submissionId));
-    dispatch(fetchSubmission(authToken, submissionId));
-  }, [authToken, challengeId, dispatch, problemId, submissionId]);
+    if (!loading.rejudgeSubmission) {
+      dispatch(readSubmissionDetail(authToken, submissionId));
+      dispatch(fetchSubmission(authToken, submissionId));
+    }
+  }, [authToken, challengeId, dispatch, loading.rejudgeSubmission, problemId, submissionId]);
 
   useEffect(() => {
     setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
@@ -76,13 +83,13 @@ export default function SubmissionDetail() {
         ),
       );
     }
-  }, [authToken, dispatch, judgmentIds, judgments, submissionId]);
+  }, [authToken, dispatch, judgmentIds, judgments, submissionId, loading.rejudgeSubmission]);
 
   useEffect(() => {
     if (judgeCases.byId !== undefined) {
       judgeCases.allIds.map((id) => dispatch(readTestcase(authToken, id)));
     }
-  }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId]);
+  }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId, loading.rejudgeSubmission]);
 
   useEffect(() => {
     if (testcaseIds !== [] && judgeCases.allIds !== []) {
@@ -103,7 +110,16 @@ export default function SubmissionDetail() {
           })),
       );
     }
-  }, [judgeCases, judgeCases.allIds, judgeCases.byId, judgmentId, judgments.byId, testcaseIds, testcases]);
+  }, [
+    judgeCases,
+    judgeCases.allIds,
+    judgeCases.byId,
+    judgmentId,
+    judgments.byId,
+    testcaseIds,
+    testcases,
+    loading.rejudgeSubmission,
+  ]);
 
   useEffect(() => {
     if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
@@ -119,7 +135,7 @@ export default function SubmissionDetail() {
     || judgeCases.allIds === undefined
     || testcaseIds === undefined
   ) {
-    if (loading.readSubmissionDetail || loading.browseJudgeCases || loading.readTestcase) {
+    if (loading.readSubmissionDetail || loading.browseJudgeCases || loading.readTestcase || loading.rejudgeSubmission) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -131,7 +147,7 @@ export default function SubmissionDetail() {
   };
 
   const handleRejudge = () => {
-    // rejudge
+    dispatch(rejudgeSubmission(authToken, submissionId));
     setPopUp(false);
   };
 
