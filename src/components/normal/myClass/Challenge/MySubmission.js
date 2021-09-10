@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Typography, Button } from '@material-ui/core';
+import { Typography, Button, Snackbar } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import Icon from '../../../ui/icon/index';
@@ -28,6 +28,8 @@ export default function MySubmission() {
   const submissions = useSelector((state) => state.submissions);
   const judgments = useSelector((state) => state.judgments);
   const loading = useSelector((state) => state.loading.myClass.problem);
+  const error = useSelector((state) => state.error.myClass.problem);
+  const [snackbar, setSnackbar] = useState(false);
 
   useEffect(() => {
     if (!loading.browseTasksUnderChallenge) {
@@ -40,6 +42,12 @@ export default function MySubmission() {
       submissions.allIds.map((id) => dispatch(readSubmissionDetail(authToken, id)));
     }
   }, [authToken, challengeId, dispatch, problemId, submissions]);
+
+  useEffect(() => {
+    if (!loading.submitCode && error.submitCode) {
+      setSnackbar(true);
+    } else setSnackbar(false);
+  }, [error.submitCode, loading.submitCode]);
 
   if (
     challenges.byId[challengeId] === undefined
@@ -139,6 +147,12 @@ export default function MySubmission() {
           };
         }}
         hasLink
+      />
+      <Snackbar
+        message="Error: code submission failed"
+        open={snackbar}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar(false)}
       />
     </>
   );

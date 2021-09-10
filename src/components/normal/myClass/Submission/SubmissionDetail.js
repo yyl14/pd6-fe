@@ -20,6 +20,7 @@ import {
   readTestcase,
   fetchSubmission,
   getAccountBatch,
+  rejudgeSubmission,
 } from '../../../../actions/myClass/submission';
 import { readProblemInfo } from '../../../../actions/myClass/problem';
 import { fetchChallenge } from '../../../../actions/common/common';
@@ -73,11 +74,14 @@ export default function SubmissionDetail() {
   const testcases = useSelector((state) => state.testcases.byId);
   const testcaseIds = useSelector((state) => state.testcases.allIds);
   const authToken = useSelector((state) => state.auth.token);
+  const loading = useSelector((state) => state.loading.myClass.submissions);
 
   useEffect(() => {
-    dispatch(readSubmissionDetail(authToken, submissionId));
-    dispatch(fetchSubmission(authToken, submissionId));
-  }, [authToken, dispatch, submissionId]);
+    if (!loading.rejudgeSubmission) {
+      dispatch(readSubmissionDetail(authToken, submissionId));
+      dispatch(fetchSubmission(authToken, submissionId));
+    }
+  }, [authToken, dispatch, loading.rejudgeSubmission, submissionId]);
 
   useEffect(() => {
     if (submissions[submissionId] !== undefined) {
@@ -96,25 +100,27 @@ export default function SubmissionDetail() {
   }, [authToken, dispatch, problemId, problems.allIds, problems.byId, submissionId, submissions]);
 
   useEffect(() => {
-    setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
-    if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
-      dispatch(
-        browseJudgeCases(
-          authToken,
-          judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-        ),
-      );
+    if (!loading.rejudgeSubmission) {
+      setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
+      if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
+        dispatch(
+          browseJudgeCases(
+            authToken,
+            judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
+          ),
+        );
+      }
     }
-  }, [authToken, dispatch, judgmentIds, judgments, submissionId]);
+  }, [authToken, dispatch, judgmentIds, judgments, submissionId, loading.rejudgeSubmission]);
 
   useEffect(() => {
-    if (judgeCases.byId !== undefined) {
+    if (!loading.rejudgeSubmission && judgeCases.byId !== undefined) {
       judgeCases.allIds.map((id) => dispatch(readTestcase(authToken, id)));
     }
-  }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId]);
+  }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId, loading.rejudgeSubmission]);
 
   useEffect(() => {
-    if (testcaseIds !== [] && judgeCases.allIds !== []) {
+    if (!loading.rejudgeSubmission && testcaseIds !== [] && judgeCases.allIds !== []) {
       setTableData(
         judgeCases.allIds
           .filter((id) => judgeCases.byId[id].judgment_id === judgmentId)
@@ -132,7 +138,15 @@ export default function SubmissionDetail() {
           })),
       );
     }
-  }, [judgeCases.allIds, judgeCases.byId, judgmentId, judgments.byId, testcaseIds, testcases]);
+  }, [
+    judgeCases.allIds,
+    judgeCases.byId,
+    judgmentId,
+    judgments.byId,
+    testcaseIds,
+    testcases,
+    loading.rejudgeSubmission,
+  ]);
 
   useEffect(() => {
     if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
@@ -158,7 +172,7 @@ export default function SubmissionDetail() {
   };
 
   const handleRejudge = () => {
-    // rejudge
+    dispatch(rejudgeSubmission(authToken, submissionId));
     setPopUp(false);
   };
   return (
@@ -225,9 +239,7 @@ export default function SubmissionDetail() {
               )}
             </div>
           ) : (
-            <Typography variant="body1" color="secondary">
-              Waiting For Judge
-            </Typography>
+            <Typography variant="body1">Waiting For Judge</Typography>
           )}
         </AlignedText>
         <AlignedText text="Score" childrenType="text">
