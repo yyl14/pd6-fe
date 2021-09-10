@@ -8,7 +8,9 @@ import getTextFromUrl from '../../function/getTextFromUrl';
 const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => async (dispatch) => {
   try {
     const config1 = {
-      headers: { 'auth-token': token },
+      headers: {
+        'auth-token': token,
+      },
       params: browseParamsTransForm(browseParams),
     };
     dispatch({
@@ -231,6 +233,25 @@ const getAccountBatch = (token, accountId) => async (dispatch) => {
   }
 };
 
+const rejudgeSubmission = (token, submissionId) => async (dispatch) => {
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+  };
+  dispatch({ type: submissionConstants.REJUDGE_SUBMISSION_START });
+  try {
+    await agent.post(`/submission/${submissionId}/rejudge`, {}, config);
+
+    dispatch({ type: submissionConstants.REJUDGE_SUBMISSION_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: submissionConstants.REJUDGE_SUBMISSION_FAIL,
+      error,
+    });
+  }
+};
+
 export {
   fetchClassSubmissions,
   fetchSubmission,
@@ -239,4 +260,5 @@ export {
   browseJudgeCases,
   readTestcase,
   getAccountBatch,
+  rejudgeSubmission,
 };

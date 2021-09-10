@@ -45,8 +45,6 @@ export default function CodeSubmission() {
   const submitLang = useSelector((state) => state.submitLangs);
   const [lang, setLang] = useState([]);
   const authToken = useSelector((state) => state.auth.token);
-  // const error = useSelector((state) => state.error);
-  // const loading = useSelector((state) => state.loading.myClass);
 
   const [langId, setLangId] = useState(-1);
   const [code, setCode] = useState('');
@@ -66,7 +64,7 @@ export default function CodeSubmission() {
   };
 
   const handleSubmit = () => {
-    if (langId === -1) {
+    if (langId === '') {
       return;
     }
     dispatch(submitCode(authToken, problemId, langId, code, onSubmitSuccess));

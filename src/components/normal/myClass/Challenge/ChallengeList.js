@@ -67,7 +67,7 @@ export default function ChallengeList() {
   const [isManager, setIsManager] = useState(false);
 
   const authToken = useSelector((state) => state.auth.token);
-  const error = useSelector((state) => state.loading.myClass.challenge);
+  const error = useSelector((state) => state.error.myClass.challenge);
   const loading = useSelector((state) => state.loading.myClass.challenge);
   const commonLoading = useSelector((state) => state.loading.common.common);
   const challenges = useSelector((state) => state.challenges);
@@ -89,7 +89,7 @@ export default function ChallengeList() {
   useEffect(() => {
     if (userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
       setIsManager(true);
-    }
+    } else setIsManager(false);
   }, [classId, userClasses]);
 
   if (courses[courseId] === undefined || classes[classId] === undefined) {

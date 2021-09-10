@@ -26,7 +26,6 @@ export default function AssistingDataUploadCard({
 
   const handleConfirm = () => {
     handleTempUpload();
-    closePopUp();
   };
 
   const handleCancel = () => {

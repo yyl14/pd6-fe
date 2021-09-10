@@ -753,6 +753,25 @@ const saveAssistingData = (token, problemId, assistingData, assistingDataIds, as
   onSuccess();
 };
 
+const rejudgeSubmission = (token, submissionId) => async (dispatch) => {
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+  };
+  dispatch({ type: problemConstants.REJUDGE_SUBMISSION_START });
+  try {
+    await agent.post(`/submission/${submissionId}/rejudge`, {}, config);
+
+    dispatch({ type: problemConstants.REJUDGE_SUBMISSION_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: problemConstants.REJUDGE_SUBMISSION_FAIL,
+      error,
+    });
+  }
+};
+
 export {
   readProblemInfo,
   editProblemInfo,
@@ -768,6 +787,7 @@ export {
   readProblemScore,
   downloadAllSamples,
   downloadAllTestcases,
+  rejudgeSubmission,
   saveSamples,
   saveTestcases,
   saveAssistingData,
