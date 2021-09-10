@@ -74,25 +74,27 @@ export default function SubmissionDetail() {
   }, [authToken, challengeId, dispatch, loading.rejudgeSubmission, problemId, submissionId]);
 
   useEffect(() => {
-    setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
-    if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
-      dispatch(
-        browseJudgeCases(
-          authToken,
-          judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-        ),
-      );
+    if (!loading.rejudgeSubmission) {
+      setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
+      if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
+        dispatch(
+          browseJudgeCases(
+            authToken,
+            judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
+          ),
+        );
+      }
     }
   }, [authToken, dispatch, judgmentIds, judgments, submissionId, loading.rejudgeSubmission]);
 
   useEffect(() => {
-    if (judgeCases.byId !== undefined) {
+    if (!loading.rejudgeSubmission && judgeCases.byId !== undefined) {
       judgeCases.allIds.map((id) => dispatch(readTestcase(authToken, id)));
     }
   }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId, loading.rejudgeSubmission]);
 
   useEffect(() => {
-    if (testcaseIds !== [] && judgeCases.allIds !== []) {
+    if (!loading.rejudgeSubmission && testcaseIds !== [] && judgeCases.allIds !== []) {
       setTableData(
         judgeCases.allIds
           .filter((id) => judgeCases.byId[id].judgment_id === judgmentId)
