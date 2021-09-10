@@ -100,7 +100,7 @@ const userRegister = (username, password, nickname, realName, emailPrefix, insti
   }
 };
 
-const emailVerification = (code) => async (dispatch) => {
+const emailVerification = (code, onSuccess, onError) => async (dispatch) => {
   const config = {
     params: {
       code,
@@ -111,11 +111,13 @@ const emailVerification = (code) => async (dispatch) => {
     dispatch({ type: authConstants.EMAIL_VERIFICATION_START });
     await agent.get('/email-verification', config);
     dispatch({ type: authConstants.EMAIL_VERIFICATION_SUCCESS });
+    onSuccess();
   } catch (error) {
     dispatch({
       type: authConstants.EMAIL_VERIFICATION_FAIL,
       error,
     });
+    onError();
   }
 };
 

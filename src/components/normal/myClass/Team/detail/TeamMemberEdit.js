@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   makeStyles,
   Button,
@@ -18,17 +18,19 @@ import { MdAdd } from 'react-icons/md';
 import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleTable from '../../../../ui/SimpleTable';
-import {
-  addTeamMember, editTeamMember, deleteTeamMember, fetchTeamMembers,
-} from '../../../../../actions/myClass/team';
+import { addTeamMember, editTeamMember, deleteTeamMember } from '../../../../../actions/myClass/team';
+import systemRoleTransformation from '../../../../../function/systemRoleTransformation';
 
 const useStyles = makeStyles(() => ({
   select: {
     width: '350px',
   },
+  buttons: {
+    marginTop: '6px',
+  },
 }));
 
-export default function TeamMemberEdit(props) {
+export default function TeamMemberEdit({ setOriginData, isManager, handleBack }) {
   const classNames = useStyles();
   const { teamId } = useParams();
   const dispatch = useDispatch();
@@ -37,18 +39,22 @@ export default function TeamMemberEdit(props) {
   const teamMembers = useSelector((state) => state.teamMembers.byId);
   const teamMemberIds = useSelector((state) => state.teamMembers.allIds);
 
-  const [tableData, setTableData] = useState([]);
-  const { setOriginData } = props;
+  const [tableData, setTableData] = useState(
+    teamMemberIds.map((id) => ({
+      id: teamMembers[id] ? teamMembers[id].member_id : '',
+      username: teamMembers[id] ? teamMembers[id].account.username : '',
+      student_id: teamMembers[id] ? teamMembers[id].account.student_id : '',
+      real_name: teamMembers[id] ? teamMembers[id].account.real_name : '',
+      role: systemRoleTransformation(teamMembers[id].role),
+      path: '/',
+    })),
+  );
   const [tempAddData, setTempAddData] = useState([]);
   const [popUp, setPopUp] = useState(false);
   const [inputs, setInputs] = useState({
     student: '',
     role: 'Normal',
   });
-
-  useEffect(() => {
-    setTableData(props.tableData);
-  }, [props.tableData]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -64,12 +70,13 @@ export default function TeamMemberEdit(props) {
 
   const handleCancel = () => {
     // delete unsaved added members
-    tempAddData.map((item) => teamMemberIds.map((id) => (
-      item === teamMembers[id].account.username
-      || item === teamMembers[id].account.real_name
-      || item === teamMembers[id].account.student_id)
-      && dispatch(deleteTeamMember(authToken, teamId, teamMembers[id].member_id))));
-    props.handleBack();
+    tempAddData.map((item) => teamMemberIds.map(
+      (id) => (item === teamMembers[id].account.username
+            || item === teamMembers[id].account.real_name
+            || item === teamMembers[id].account.student_id)
+          && dispatch(deleteTeamMember(authToken, teamId, teamMembers[id].member_id)),
+    ));
+    handleBack();
   };
 
   const handleSave = () => {
@@ -86,7 +93,7 @@ export default function TeamMemberEdit(props) {
       }
     });
     setOriginData(tableData);
-    props.handleBack();
+    handleBack();
   };
 
   const handleAdd = () => {
@@ -98,17 +105,16 @@ export default function TeamMemberEdit(props) {
       const newTempAdd = [...tempAddData, inputs.student];
       setTempAddData(newTempAdd);
     }
-    dispatch(fetchTeamMembers(authToken, teamId, {}));
   };
 
   return (
     <div>
       <SimpleBar title="Team Member" noIndent>
         <SimpleTable
-          isEdit={props.isManager}
-          hasDelete={props.isManager}
+          isEdit={isManager}
+          hasDelete={isManager}
           buttons={
-            props.isManager && (
+            isManager && (
               <Button color="primary" onClick={() => setPopUp(true)}>
                 <MdAdd />
               </Button>
@@ -153,11 +159,12 @@ export default function TeamMemberEdit(props) {
             },
           ]}
         />
-
-        <Button onClick={handleCancel}>Cancel</Button>
-        <Button color="primary" type="submit" onClick={handleSave}>
-          Save
-        </Button>
+        <div className={classNames.buttons}>
+          <Button onClick={handleCancel}>Cancel</Button>
+          <Button color="primary" type="submit" onClick={handleSave}>
+            Save
+          </Button>
+        </div>
       </SimpleBar>
 
       <Dialog open={popUp} onClose={() => setPopUp(false)} maxWidth="md">
@@ -165,7 +172,7 @@ export default function TeamMemberEdit(props) {
           <Typography variant="h4">Add Member</Typography>
         </DialogTitle>
         <DialogContent>
-          <AlignedText text="Student" maxWidth="mg" childrenType="field">
+          <AlignedText text="Student" maxWidth="md" childrenType="field">
             <TextField
               name="student"
               placeholder="Student ID / Email / #Username"

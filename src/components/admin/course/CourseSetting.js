@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Typography, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { fetchCourses, renameCourse, deleteCourse } from '../../../actions/admin/course';
+import { renameCourse, deleteCourse } from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 import PageTitle from '../../ui/PageTitle';
@@ -23,12 +23,6 @@ export default function CourseSetting() {
   const [showRenameDialog, setShowRenameDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [newCourseName, setNewCourseName] = useState('');
-
-  useEffect(() => {
-    if (!loading.renameCourse) {
-      dispatch(fetchCourses(authToken));
-    }
-  }, [authToken, courseId, dispatch, loading.renameCourse]);
 
   const getCourseType = (courseType) => {
     switch (courseType) {
@@ -118,11 +112,7 @@ export default function CourseSetting() {
           </AlignedText>
 
           <AlignedText text="New Name" childrenType="field">
-            <TextField
-              style={{ width: '350px' }}
-              variant="outlined"
-              onChange={(e) => setNewCourseName(e.target.value)}
-            />
+            <TextField variant="outlined" onChange={(e) => setNewCourseName(e.target.value)} />
           </AlignedText>
         </DialogContent>
         <DialogContent>

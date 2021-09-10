@@ -13,6 +13,14 @@ const useStyles = makeStyles(() => ({
   contentField: {
     width: '720px',
   },
+  dateRangePicker: {
+    marginTop: '15px',
+    marginBottom: '9px',
+  },
+  buttons: {
+    marginTop: '-32px',
+    marginLeft: '-5px',
+  },
 }));
 
 /* This is a level 4 component (page component) */
@@ -57,7 +65,7 @@ const AnnouncementAdd = () => {
           <TextField value={addTitle} onChange={(e) => setAddTitle(e.target.value)} />
         </AlignedText>
         <AlignedText text="Duration" childrenType="field">
-          <DateRangePicker value={dateRangePicker} setValue={setDateRangePicker} />
+          <DateRangePicker className={classes.dateRangePicker} value={dateRangePicker} setValue={setDateRangePicker} />
         </AlignedText>
         <AlignedText text="Content" childrenType="field">
           <TextField
@@ -70,10 +78,12 @@ const AnnouncementAdd = () => {
         </AlignedText>
       </SimpleBar>
       {/* TODO: re-write with ui components SimpleBar and DatePicker  */}
-      <Button onClick={backToHomePage}>Cancel</Button>
-      <Button color="primary" onClick={handleClickSave}>
-        Save
-      </Button>
+      <div className={classes.buttons}>
+        <Button onClick={backToHomePage}>Cancel</Button>
+        <Button color="primary" onClick={handleClickSave}>
+          Save
+        </Button>
+      </div>
     </>
   );
 };

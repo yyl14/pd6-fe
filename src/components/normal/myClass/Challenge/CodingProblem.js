@@ -74,10 +74,12 @@ export default function CodingProblem() {
   }, [classId, userClasses]);
 
   useEffect(() => {
-    if (!loading.editProblem) {
-      dispatch(readProblemInfo(authToken, problemId));
-    }
-  }, [authToken, dispatch, loading.editProblem, problemId]);
+    dispatch(readProblemInfo(authToken, problemId));
+  }, [authToken, dispatch, problemId]);
+
+  useEffect(() => {
+    setEdit(false);
+  }, [problemId]);
 
   if (loading.readProblem || loading.readChallenge) {
     return <GeneralLoading />;

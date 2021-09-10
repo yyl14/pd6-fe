@@ -19,12 +19,10 @@ import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import { editPassword } from '../../../../actions/admin/account';
 
-const useStyles = makeStyles((theme) => ({
-  textfield: {
-    width: '350px',
-  },
-  gap: {
-    marginTop: theme.spacing(2),
+const useStyles = makeStyles(() => ({
+  buttons: {
+    marginTop: '6px',
+    marginLeft: '-5px',
   },
 }));
 
@@ -70,7 +68,6 @@ export default function NewPassword() {
         <SimpleBar title="Password">
           <AlignedText text="New Password" childrenType="field" maxWidth="lg">
             <TextField
-              className={classes.textfield}
               value={password}
               error={error}
               helperText={errorText}
@@ -95,7 +92,7 @@ export default function NewPassword() {
               }}
             />
           </AlignedText>
-          <div className={classes.gap}>
+          <div className={classes.buttons}>
             <Button onClick={handleCancel}>Cancel</Button>
             <Button color="primary" type="submit" onClick={handleResetPassword}>
               Save

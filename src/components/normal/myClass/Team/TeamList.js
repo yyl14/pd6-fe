@@ -10,6 +10,7 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Snackbar,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
@@ -30,8 +31,11 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.grey.A400,
     marginLeft: theme.spacing(2),
   },
-  templateBtn: {
-    marginRight: '115px',
+  importDialogButtons: {
+    paddingLeft: '19px',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 }));
 
@@ -63,6 +67,8 @@ export default function TeamList() {
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [disabled, setDisabled] = useState(true);
+  const [hasRequest, setHasRequest] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   const [selectedFile, setSelectedFile] = useState([]);
   const [importInput, setImportInput] = useState('');
@@ -114,25 +120,59 @@ export default function TeamList() {
     if (importInput !== '' && selectedFile !== []) {
       selectedFile.map((file) => dispatch(importTeam(authToken, classId, importInput, file)));
     }
-    setShowImportDialog(false);
-    clearImportInput();
-    setDisabled(true);
+    setHasRequest(true);
   };
 
   const submitAdd = () => {
     if (addInputs.label !== '' && addInputs.teamName !== '') {
       dispatch(addTeam(authToken, classId, addInputs.teamName, addInputs.label));
     }
-    setShowAddDialog(false);
-    clearAddInput();
-    setDisabled(true);
+    setHasRequest(true);
   };
+
+  useEffect(() => {
+    if (hasRequest && showAddDialog && !loading.addTeam) {
+      if (error.addTeam === null) {
+        clearAddInput();
+        setShowAddDialog(false);
+        setHasRequest(false);
+        setDisabled(true);
+      } else {
+        setHasError(true);
+      }
+    } else if (hasRequest && showImportDialog && !loading.importTeam) {
+      if (error.importTeam === null) {
+        clearImportInput();
+        setShowImportDialog(false);
+        setHasRequest(false);
+        setDisabled(true);
+      } else {
+        setHasError(true);
+      }
+    }
+  }, [
+    error.addTeam,
+    error.importTeam,
+    hasRequest,
+    loading.addTeam,
+    loading.importTeam,
+    showAddDialog,
+    showImportDialog,
+  ]);
 
   const downloadTemplate = () => {
     setShowImportDialog(false);
     dispatch(downloadTeamFile(authToken));
   };
 
+  const handleCloseError = () => {
+    setHasError(false);
+    setHasRequest(false);
+  };
+
+  if (loading.fetchTeams) {
+    return <GeneralLoading />;
+  }
   if (courses[courseId] === undefined || classes[classId] === undefined) {
     if (loading.fetchCourse || loading.fetchClass) {
       return <GeneralLoading />;
@@ -206,7 +246,7 @@ export default function TeamList() {
         })}
         hasLink
       />
-      <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} fullWidth maxWidth="sm">
+      <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} maxWidth="md">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Import Team</Typography>
         </DialogTitle>
@@ -237,9 +277,8 @@ export default function TeamList() {
             setSelectedFile={setSelectedFile}
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions className={classNames.importDialogButtons}>
           <StyledButton
-            className={classNames.templateBtn}
             variant="outlined"
             startIcon={<Icon.Download />}
             onClick={() => {
@@ -248,29 +287,38 @@ export default function TeamList() {
           >
             Template
           </StyledButton>
-          <Button
-            onClick={() => {
-              setShowImportDialog(false);
-              clearImportInput();
-              setDisabled(true);
-            }}
-            color="default"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={() => {
-              submitImport();
-              setDisabled(true);
-            }}
-            color="primary"
-            disabled={disabled}
-          >
-            Confirm
-          </Button>
+          <div>
+            <Button
+              onClick={() => {
+                setShowImportDialog(false);
+                setHasRequest(false);
+                clearImportInput();
+                setDisabled(true);
+              }}
+              color="default"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                submitImport();
+                setDisabled(true);
+              }}
+              color="primary"
+              disabled={disabled}
+            >
+              Confirm
+            </Button>
+          </div>
         </DialogActions>
       </Dialog>
-      <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} fullWidth maxWidth="sm">
+      <Snackbar
+        open={showAddDialog && hasError}
+        onClose={handleCloseError}
+        message={`Error: ${error.myClass.team.addTeam}`}
+      />
+
+      <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} maxWidth="md">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Create New Team</Typography>
         </DialogTitle>
@@ -288,11 +336,11 @@ export default function TeamList() {
         <DialogContent>
           <Typography variant="body2">Visit team page to add team member after creating.</Typography>
         </DialogContent>
-
         <DialogActions>
           <Button
             onClick={() => {
               setShowAddDialog(false);
+              setHasRequest(false);
               clearAddInput();
               setDisabled(true);
             }}
@@ -312,6 +360,11 @@ export default function TeamList() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={showImportDialog && hasError}
+        onClose={handleCloseError}
+        message={`Error: ${error.myClass.team.importTeam}`}
+      />
     </>
   );
 }

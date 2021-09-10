@@ -24,7 +24,6 @@ import Icon from '../../../ui/icon/index';
 import {
   fetchClassGrade, addClassGrade, importClassGrade, downloadGradeFile,
 } from '../../../../actions/myClass/grade';
-import { fetchClassMembers } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
@@ -36,8 +35,14 @@ const useStyles = makeStyles((theme) => ({
   templateBtn: {
     marginRight: '155px',
   },
+  importDialogButtons: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: '19px',
+  },
   addGradeDiaText: {
-    marginTop: '20px',
+    marginTop: '16px',
   },
 }));
 
@@ -277,20 +282,20 @@ export default function GradeList() {
         hasLink
       />
 
-      <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} fullWidth maxWidth="sm">
+      <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} maxWidth="md">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Add New Grade</Typography>
         </DialogTitle>
         <DialogContent>
-          <AlignedText text="Class" maxWidth="mg" childrenType="text">
+          <AlignedText text="Class" maxWidth="md" childrenType="text">
             <Typography variant="body1">
               {`${courses[courseId] ? courses[courseId].name : ''} ${classes[classId] ? classes[classId].name : ''}`}
             </Typography>
           </AlignedText>
-          <AlignedText text="Title" maxWidth="mg" childrenType="field">
+          <AlignedText text="Title" maxWidth="md" childrenType="field">
             <TextField name="title" value={addInputs.title} onChange={(e) => handleChange(e)} />
           </AlignedText>
-          <AlignedText text="Receiver" maxWidth="mg" childrenType="field">
+          <AlignedText text="Receiver" maxWidth="md" childrenType="field">
             <TextField
               name="receiver"
               placeholder="Student ID / Email / #Username"
@@ -298,10 +303,10 @@ export default function GradeList() {
               onChange={(e) => handleChange(e)}
             />
           </AlignedText>
-          <AlignedText text="Score" maxWidth="mg" childrenType="field">
+          <AlignedText text="Score" maxWidth="md" childrenType="field">
             <TextField name="score" value={addInputs.score} onChange={(e) => handleChange(e)} />
           </AlignedText>
-          <AlignedText text="Comment" maxWidth="mg" childrenType="field">
+          <AlignedText text="Comment" maxWidth="md" childrenType="field">
             <TextField
               name="comment"
               placeholder="(Optional)"
@@ -309,8 +314,6 @@ export default function GradeList() {
               onChange={(e) => handleChange(e)}
             />
           </AlignedText>
-        </DialogContent>
-        <DialogContent>
           <Typography variant="body2" className={classNames.addGradeDiaText}>
             You will be the grader for this grade.
           </Typography>
@@ -331,7 +334,7 @@ export default function GradeList() {
         message={`Error: ${error.addClassGrade}`}
       />
 
-      <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} fullWidth maxWidth="sm">
+      <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} maxWidth="md">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Import Grades.byId</Typography>
         </DialogTitle>
@@ -352,12 +355,12 @@ export default function GradeList() {
           <Typography variant="body2">Download template file for more instructions.</Typography>
         </DialogContent>
         <DialogContent>
-          <AlignedText text="Class" maxWidth="mg" childrenType="text">
+          <AlignedText text="Class" maxWidth="md" childrenType="text">
             <Typography variant="body1">
               {`${courses[courseId] ? courses[courseId].name : ''} ${classes[classId] ? classes[classId].name : ''}`}
             </Typography>
           </AlignedText>
-          <AlignedText text="Title" maxWidth="mg" childrenType="field">
+          <AlignedText text="Title" maxWidth="md" childrenType="field">
             <TextField id="title" name="title" value={inputTitle} onChange={(e) => handleChange(e)} />
           </AlignedText>
           <FileUploadArea
@@ -367,9 +370,8 @@ export default function GradeList() {
             setSelectedFile={setSelectedFile}
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions className={classNames.importDialogButtons}>
           <StyledButton
-            className={classNames.templateBtn}
             variant="outlined"
             startIcon={<Icon.Download />}
             onClick={() => {
@@ -378,12 +380,14 @@ export default function GradeList() {
           >
             Template
           </StyledButton>
-          <Button onClick={handleCancel} color="default">
-            Cancel
-          </Button>
-          <Button disabled={isDisabled} onClick={handleSubmit} color="primary">
-            Add
-          </Button>
+          <div>
+            <Button onClick={handleCancel} color="default">
+              Cancel
+            </Button>
+            <Button disabled={isDisabled} onClick={handleSubmit} color="primary">
+              Add
+            </Button>
+          </div>
         </DialogActions>
       </Dialog>
       <Snackbar
