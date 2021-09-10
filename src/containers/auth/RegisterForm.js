@@ -121,7 +121,7 @@ export default function RegisterForm() {
   }, [dispatch]);
 
   const transform = (school) => {
-    const ids = enableInstitutesId.filter((item) => (institutes[item].full_name === school));
+    const ids = enableInstitutesId.filter((item) => institutes[item].full_name === school);
     return ids.length === 0 ? 1 : ids[0];
   };
 
@@ -179,9 +179,10 @@ export default function RegisterForm() {
     }
 
     if (name === 'confirmPassword' || name === 'password') {
-      // const statusP = checkPassword(inputs.password, value);
-      const statusP = `${checkPassword(inputs.password, value)} ${checkPassword(inputs.confirmPassword, value)}`;
-      if (statusP === "Passwords don't match Passwords don't match") {
+      if (
+        checkPassword(inputs.password, value) === "Passwords don't match"
+        && checkPassword(inputs.confirmPassword, value) === "Passwords don't match"
+      ) {
         setErrors((input) => ({ ...input, confirmPassword: true }));
         setErrorTexts((input) => ({ ...input, confirmPassword: "Passwords don't match" }));
       } else {
