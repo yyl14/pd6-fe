@@ -59,14 +59,19 @@ export default function CodeSubmission() {
     }
   }, [cookies.lang, submitLang.allIds, submitLang.byId]);
 
+  const onSubmitSuccess = () => {
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
+  };
+
   const handleSubmit = () => {
     if (langId === '') {
       return;
     }
-    dispatch(submitCode(authToken, problemId, langId, code));
-    const daysToExpire = new Date(2147483647 * 1000);
+    dispatch(submitCode(authToken, problemId, langId, code, onSubmitSuccess));
+
+    // remember submit language
+    const daysToExpire = new Date(2147483647 * 1000); // until year 2038
     setCookie('lang', langId, { path: '/', expires: daysToExpire });
-    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
   };
 
   useEffect(() => {
@@ -124,7 +129,7 @@ export default function CodeSubmission() {
         >
           Cancel
         </Button>
-        <Button color="primary" onClick={handleSubmit} disabled={langId === -1}>
+        <Button color="primary" onClick={handleSubmit} disabled={code === '' || langId === -1}>
           Submit
         </Button>
       </div>

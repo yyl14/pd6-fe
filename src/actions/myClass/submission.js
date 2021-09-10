@@ -100,6 +100,7 @@ const fetchSubmission = (token, submissionId) => (dispatch) => {
         };
         agent.get(`/s3-file/${res.data.data.content_file_uuid}/url`, config2).then(async (res2) => {
           const code = await getTextFromUrl(res2.data.data.url);
+
           dispatch({
             type: submissionConstants.FETCH_SUBMISSION_SUCCESS,
             payload: { submissionId, data: { ...res.data.data, content: code } },
@@ -144,6 +145,7 @@ const fetchJudgement = (token, submissionId) => (dispatch) => {
     });
 };
 
+// fetch latest judgement
 const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
   const config = {
     headers: {
