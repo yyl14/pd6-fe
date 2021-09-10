@@ -56,7 +56,7 @@ export default function SubmissionList() {
             reduxStateId: 'id',
             label: 'ID',
             type: 'TEXT',
-            operation: 'IN',
+            operation: '=',
           },
           // {
           //   reduxStateId: 'username',
