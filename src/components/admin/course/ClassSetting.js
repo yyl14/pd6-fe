@@ -28,16 +28,6 @@ const ClassSetting = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [newClassName, setNewClassName] = useState('');
 
-  useEffect(() => {
-    dispatch(fetchCourses(authToken));
-  }, [authToken, dispatch]);
-
-  useEffect(() => {
-    if (!loading.renameClass) {
-      dispatch(fetchClasses(authToken, courseId));
-    }
-  }, [authToken, courseId, dispatch, loading.renameClass]);
-
   const getCourseType = (courseType) => {
     switch (courseType) {
       case 'LESSON':
