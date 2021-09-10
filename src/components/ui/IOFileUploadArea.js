@@ -170,7 +170,17 @@ export default function IOFileUploadArea({
   };
 
   const handleDelete = (e, deleteRow) => {
-    const filtered = selectedFile.filter((file) => file !== deleteRow);
+    const filtered = Object.keys(selectedFile).reduce((acc, key) => {
+      if (Number(key) === Number(deleteRow.id)) {
+        console.log('hello');
+        return acc;
+      }
+      return {
+        ...acc,
+        [key]: selectedFile[key],
+      };
+    }, {});
+    console.log(filtered);
     setSelectedFile(filtered);
   };
 

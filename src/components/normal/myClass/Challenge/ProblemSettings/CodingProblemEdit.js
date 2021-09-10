@@ -30,6 +30,8 @@ import {
   readProblemInfo,
 } from '../../../../../actions/myClass/problem';
 
+import GeneralLoading from '../../../../GeneralLoading';
+
 const useStyles = makeStyles(() => ({
   sampleArea: {
     marginTop: '50px',
@@ -83,7 +85,7 @@ export default function CodingProblemEdit({ closeEdit }) {
   const testcases = useSelector((state) => state.testcases.byId);
   const [sampleDataIds, setSampleDataIds] = useState([]);
   const [testcaseDataIds, setTestcaseDataIds] = useState([]);
-  // const loading = useSelector((state) => state.loading.myClass.problem);
+  const loading = useSelector((state) => state.loading.myClass.problem);
   const [hasChange, setHasChange] = useState(false);
 
   const [label, setLabel] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label);
@@ -234,11 +236,12 @@ export default function CodingProblemEdit({ closeEdit }) {
 
   const handleSampleConfirm = (newSelectedFiles) => {
     const newTableData = Object.keys(newSelectedFiles).reduce((acc, item) => {
-      if (Object.keys(sampleTableData).filter((key) => sampleTableData[key].no === newSelectedFiles[item].no).length === 0) {
+      const keys = Object.keys(sampleTableData).filter((key) => sampleTableData[key].no === newSelectedFiles[item].no);
+      if (keys.length === 0) {
         // this is new case
         return {
           ...acc,
-          [item]: {
+          [-item]: {
             id: -item,
             no: newSelectedFiles[item].no,
             time_limit: newSelectedFiles[item].time_limit,
@@ -254,16 +257,16 @@ export default function CodingProblemEdit({ closeEdit }) {
       // testcase has been existed
       return {
         ...acc,
-        [item]: {
+        [keys[0]]: {
           id: item,
           no: newSelectedFiles[item].no,
           time_limit: newSelectedFiles[item].time_limit,
           memory_limit: newSelectedFiles[item].memory_limit,
-          input_filename: newSelectedFiles[item].in === null ? sampleTableData[item].input_filename : newSelectedFiles[item].in.name,
-          output_filename: newSelectedFiles[item].out === null ? sampleTableData[item].output_filename : newSelectedFiles[item].out.name,
-          in_file: newSelectedFiles[item].in === null ? sampleTableData[item].in_file : newSelectedFiles[item].in,
-          out_file: newSelectedFiles[item].out === null ? sampleTableData[item].out_file : newSelectedFiles[item].out,
-          new: sampleTableData[item].new,
+          input_filename: newSelectedFiles[item].in === null ? sampleTableData[keys[0]].input_filename : newSelectedFiles[item].in.name,
+          output_filename: newSelectedFiles[item].out === null ? sampleTableData[keys[0]].output_filename : newSelectedFiles[item].out.name,
+          in_file: newSelectedFiles[item].in === null ? sampleTableData[keys[0]].in_file : newSelectedFiles[item].in,
+          out_file: newSelectedFiles[item].out === null ? sampleTableData[keys[0]].out_file : newSelectedFiles[item].out,
+          new: sampleTableData[keys[0]].new,
         },
       };
     }, sampleTableData);
@@ -274,11 +277,12 @@ export default function CodingProblemEdit({ closeEdit }) {
 
   const handleTestingConfirm = (newSelectedFiles) => {
     const newTableData = Object.keys(newSelectedFiles).reduce((acc, item) => {
-      if (Object.keys(testcaseTableData).filter((key) => testcaseTableData[key].no === newSelectedFiles[item].no).length === 0) {
+      const keys = Object.keys(testcaseTableData).filter((key) => testcaseTableData[key].no === newSelectedFiles[item].no);
+      if (keys.length === 0) {
         // this is new case
         return {
           ...acc,
-          [item]: {
+          [-item]: {
             id: -item,
             no: newSelectedFiles[item].no,
             score: newSelectedFiles[item].score,
@@ -295,17 +299,17 @@ export default function CodingProblemEdit({ closeEdit }) {
       // testcase has been existed
       return {
         ...acc,
-        [item]: {
+        [keys[0]]: {
           id: item,
           no: newSelectedFiles[item].no,
           score: newSelectedFiles[item].score,
           time_limit: newSelectedFiles[item].time_limit,
           memory_limit: newSelectedFiles[item].memory_limit,
-          input_filename: newSelectedFiles[item].in === null ? testcaseTableData[item].input_filename : newSelectedFiles[item].in.name,
-          output_filename: newSelectedFiles[item].out === null ? testcaseTableData[item].output_filename : newSelectedFiles[item].out.name,
-          in_file: newSelectedFiles[item].in === null ? testcaseTableData[item].in_file : newSelectedFiles[item].in,
-          out_file: newSelectedFiles[item].out === null ? testcaseTableData[item].out_file : newSelectedFiles[item].out,
-          new: testcaseTableData[item].new,
+          input_filename: newSelectedFiles[item].in === null ? testcaseTableData[keys[0]].input_filename : newSelectedFiles[item].in.name,
+          output_filename: newSelectedFiles[item].out === null ? testcaseTableData[keys[0]].output_filename : newSelectedFiles[item].out.name,
+          in_file: newSelectedFiles[item].in === null ? testcaseTableData[keys[0]].in_file : newSelectedFiles[item].in,
+          out_file: newSelectedFiles[item].out === null ? testcaseTableData[keys[0]].out_file : newSelectedFiles[item].out,
+          new: testcaseTableData[keys[0]].new,
         },
       };
     }, testcaseTableData);
@@ -351,8 +355,8 @@ export default function CodingProblemEdit({ closeEdit }) {
       ),
     );
 
-    dispatch(saveSamples(authToken, testcases, sampleDataIds, sampleTableData, () => { setHandleSamplesSuccess(true); }, handleFileUploadFail));
-    dispatch(saveTestcases(authToken, testcases, testcaseDataIds, testcaseTableData, status, () => { setHandleTestcasesSuccess(true); }, handleFileUploadFail));
+    dispatch(saveSamples(authToken, problemId, testcases, sampleDataIds, sampleTableData, () => { setHandleSamplesSuccess(true); }, handleFileUploadFail));
+    dispatch(saveTestcases(authToken, problemId, testcases, testcaseDataIds, testcaseTableData, status, () => { setHandleTestcasesSuccess(true); }, handleFileUploadFail));
     dispatch(saveAssistingData(authToken, problemId, assistingData, problems[problemId].assistingDataIds, assistTableData, () => { setHandleAssistingDataSuccess(true); }, handleFileUploadFail));
 
     setDisabled(true);
@@ -365,6 +369,10 @@ export default function CodingProblemEdit({ closeEdit }) {
       closeEdit();
     }
   };
+
+  if (loading.editProblem || loading.deleteProblem || loading.deleteTestcase || loading.deleteAssistingData || loading.editAssistingData || loading.addAssistingData || loading.editTestcase || loading.uploadTestcaseInput || loading.uploadTestcaseOutput || loading.addTestcase) {
+    return <GeneralLoading />;
+  }
 
   return (
     <>

@@ -42,8 +42,6 @@ const readSubmission = (token, accountId, problemId, browseParams, tableId = nul
   try {
     const res = await agent.get('/submission', config);
     const { data: submissions, total_count } = res.data.data;
-    // console.log('readSubmission config:', config);
-    // console.log('readSubmission submissions:', submissions);
     dispatch({
       type: problemConstants.READ_SUBMISSION_SUCCESS,
       payload: submissions,
@@ -306,28 +304,6 @@ const deleteProblem = (token, problemId) => async (dispatch) => {
   }
 };
 
-const deleteTestcase = (token, testcaseId) => async (dispatch) => {
-  dispatch({ type: problemConstants.DELETE_TESTCASE_START });
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
-  try {
-    await agent.delete(`/testcase/${testcaseId}`, config);
-
-    dispatch({
-      type: problemConstants.DELETE_TESTCASE_SUCCESS,
-      payload: testcaseId,
-    });
-  } catch (error) {
-    dispatch({
-      type: problemConstants.DELETE_TESTCASE_FAIL,
-      error,
-    });
-  }
-};
-
 const submitCode = (token, problemId, languageId, content) => async (dispatch) => {
   dispatch({ type: problemConstants.SUBMIT_PROBLEM_START });
   const config = {
@@ -385,138 +361,6 @@ const editTestcase = (token, testcaseId, isSample, score, timeLimit, memoryLimit
       type: problemConstants.EDIT_TESTCASE_FAIL,
       error,
     });
-  }
-};
-
-const uploadTestcaseInput = (token, testcaseId, file) => async (dispatch) => {
-  // just upload input file
-  dispatch({ type: problemConstants.UPLOAD_TESTCASE_INPUT_START });
-  const config = {
-    headers: {
-      'auth-token': token,
-      'Content-Type': 'multipart/form-data',
-    },
-  };
-  const formData = new FormData();
-  formData.append('input_file', file);
-
-  try {
-    await agent.put(`/testcase/${testcaseId}/input-data`, formData, config);
-
-    dispatch({
-      type: problemConstants.UPLOAD_TESTCASE_INPUT_SUCCESS,
-    });
-  } catch (error) {
-    dispatch({
-      type: problemConstants.UPLOAD_TESTCASE_INPUT_FAIL,
-      error,
-    });
-    dispatch({
-      type: problemConstants.UPLOAD_DATA_FAIL,
-      filename: file.name,
-    });
-  }
-};
-
-const uploadTestcaseOutput = (token, testcaseId, file) => async (dispatch) => {
-  // just upload output file
-  dispatch({ type: problemConstants.UPLOAD_TESTCASE_OUTPUT_START });
-  const config = {
-    headers: {
-      'auth-token': token,
-      'Content-Type': 'multipart/form-data',
-    },
-  };
-  const formData = new FormData();
-  formData.append('output_file', file);
-
-  try {
-    await agent.put(`/testcase/${testcaseId}/output-data`, formData, config);
-
-    dispatch({
-      type: problemConstants.UPLOAD_TESTCASE_OUTPUT_SUCCESS,
-    });
-  } catch (error) {
-    dispatch({
-      type: problemConstants.UPLOAD_TESTCASE_OUTPUT_FAIL,
-      error,
-    });
-    dispatch({
-      type: problemConstants.UPLOAD_DATA_FAIL,
-      filename: file.name,
-    });
-  }
-};
-
-const addTestcaseWithFile = (token, problemId, isSample, score, timeLimit, memoryLimit, isDisabled, inputFile = null, outputFile = null) => async (dispatch) => {
-  // judge whether there exists inputFile or outputFile
-  dispatch({ type: problemConstants.ADD_TESTCASE_START });
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
-  const body = {
-    is_sample: isSample,
-    score,
-    time_limit: timeLimit,
-    memory_limit: memoryLimit,
-    is_disabled: isDisabled,
-  };
-  try {
-    const res = await agent.post(`/problem/${problemId}/testcase`, body, config);
-    // console.log('add testcase info', res.data);
-
-    // try to upload file
-    const testcaseId = res.data.data.id;
-    const fileAuth = {
-      headers: {
-        'auth-token': token,
-        'Content-Type': 'multipart/form-data',
-      },
-    };
-    if (inputFile != null) {
-      const formData = new FormData();
-      formData.append('input_file', inputFile);
-      const inRes = await agent.put(`/testcase/${testcaseId}/input-data`, formData, fileAuth);
-      // console.log('add testcase input file', inRes);
-      if (!inRes.data.success) {
-        dispatch({
-          type: problemConstants.ADD_TESTCASE_FAIL,
-          error: inRes.data.error,
-        });
-      }
-    }
-    if (outputFile != null) {
-      const formData = new FormData();
-      formData.append('output_file', outputFile);
-      const outRes = await agent.put(`/testcase/${testcaseId}/output-data`, formData, fileAuth);
-      // console.log('add testcase output file', outRes);
-      if (!outRes.data.success) {
-        dispatch({
-          type: problemConstants.ADD_TESTCASE_FAIL,
-          error: outRes.data.error,
-        });
-      }
-    }
-    dispatch({ type: problemConstants.ADD_TESTCASE_SUCCESS });
-  } catch (error) {
-    dispatch({
-      type: problemConstants.ADD_TESTCASE_FAIL,
-      error,
-    });
-    if (inputFile != null) {
-      dispatch({
-        type: problemConstants.UPLOAD_DATA_FAIL,
-        filename: inputFile.name,
-      });
-    }
-    if (outputFile != null) {
-      dispatch({
-        type: problemConstants.UPLOAD_DATA_FAIL,
-        filename: outputFile.name,
-      });
-    }
   }
 };
 
@@ -607,114 +451,241 @@ const downloadAllTestcases = (token, problemId, as_attachment) => async (dispatc
   }
 };
 
-const clearUploadFail = () => (dispatch) => {
-  dispatch({ type: problemConstants.CLEAR_UPLOAD_FAIL_RECORD });
-};
-
-const saveSamples = (token, testcases, sampleDataIds, sampleTableData, onSuccess, onError) => async (dispatch) => {
-  sampleDataIds.map((id) => {
-    if (sampleTableData[id] === undefined) {
+const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData, onSuccess, onError) => async (dispatch) => {
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+  };
+  const fileConfig = {
+    headers: {
+      'auth-token': token,
+      'Content-Type': 'multipart/form-data',
+    },
+  };
+  await Promise.all(
+    sampleDataIds.map(async (id) => {
+      if (sampleTableData[id] === undefined) {
       // delete data
-      // console.log(testcases[id].input_filename, ' should be deleted');
-      console.log('delete sample: ', testcases[id].input_filename);
-    }
-    return id;
-  });
-  Object.keys(sampleTableData).map((id) => {
-    if (sampleTableData[id].new) {
+        try {
+          dispatch({ type: problemConstants.DELETE_TESTCASE_START });
+          await agent.delete(`/testcase/${id}`, config);
+          dispatch({
+            type: problemConstants.DELETE_TESTCASE_SUCCESS,
+          });
+        } catch (error) {
+          dispatch({
+            type: problemConstants.DELETE_TESTCASE_FAIL,
+            error,
+          });
+        }
+      }
+      return id;
+    }),
+  );
+
+  await Promise.all(
+    Object.keys(sampleTableData).map(async (id) => {
+      if (sampleTableData[id].new) {
       // add testcase with file
-      console.log('add sample with file: ', id);
-      // dispatch(
-      //   addTestcaseWithFile(
-      //     authToken,
-      //     problemId,
-      //     true,
-      //     0,
-      //     data.time_limit,
-      //     data.memory_limit,
-      //     false,
-      //     data.in_file,
-      //     data.out_file,
-      //   ),
-      // );
-    } else {
-      // console.log(data.no, ' is original testcase');
+        dispatch({ type: problemConstants.ADD_TESTCASE_START });
+        const body = {
+          is_sample: true,
+          score: 0,
+          time_limit: sampleTableData[id].time_limit,
+          memory_limit: sampleTableData[id].memory_limit,
+          is_disabled: false,
+        };
+        try {
+          const res = await agent.post(`/problem/${problemId}/testcase`, body, config);
+          const testcaseId = res.data.data.id;
+          if (sampleTableData[id].in_file != null) {
+            const formData = new FormData();
+            formData.append('input_file', sampleTableData[id].in_file);
+            await agent.put(`/testcase/${testcaseId}/input-data`, formData, fileConfig);
+          }
+          if (sampleTableData[id].out_file != null) {
+            const formData = new FormData();
+            formData.append('output_file', sampleTableData[id].out_file);
+            await agent.put(`/testcase/${testcaseId}/output-data`, formData, fileConfig);
+          }
+          dispatch({ type: problemConstants.ADD_TESTCASE_SUCCESS });
+        } catch (error) {
+          dispatch({
+            type: problemConstants.ADD_TESTCASE_FAIL,
+            error,
+          });
+          if (sampleTableData[id].in_file != null) {
+            onError(sampleTableData[id].in_file.name);
+          }
+          if (sampleTableData[id].out_file != null) {
+            onError(sampleTableData[id].out_file.name);
+          }
+        }
+      } else {
       // check basic info
-      if (
-        testcases[id].time_limit !== sampleTableData[id].time_limit
+        if (
+          testcases[id].time_limit !== sampleTableData[id].time_limit
           || testcases[id].memory_limit !== sampleTableData[id].memory_limit
           || testcases[id].is_disabled !== false
-      ) {
-        console.log('edit sample info', id);
-        // dispatch(editTestcase(authToken, data.id, true, 0, data.time_limit, data.memory_limit, !status));
+        ) {
+          await dispatch(editTestcase(token, id, true, 0, sampleTableData[id].time_limit, sampleTableData[id].memory_limit, false));
+        }
+        // upload file
+        if (sampleTableData[id].in_file !== null) {
+          try {
+            dispatch({ type: problemConstants.UPLOAD_TESTCASE_INPUT_START });
+            const formData = new FormData();
+            formData.append('input_file', sampleTableData[id].in_file);
+            await agent.put(`/testcase/${id}/input-data`, formData, fileConfig);
+            dispatch({ type: problemConstants.UPLOAD_TESTCASE_INPUT_SUCCESS });
+          } catch (error) {
+            dispatch({
+              type: problemConstants.UPLOAD_TESTCASE_INPUT_FAIL,
+              error,
+            });
+            onError(sampleTableData[id].in_file.name);
+          }
+        }
+        if (sampleTableData[id].out_file !== null) {
+          try {
+            dispatch({ type: problemConstants.UPLOAD_TESTCASE_OUTPUT_START });
+            const formData = new FormData();
+            formData.append('input_file', sampleTableData[id].out_file);
+            await agent.put(`/testcase/${id}/output-data`, formData, fileConfig);
+            dispatch({ type: problemConstants.UPLOAD_TESTCASE_OUTPUT_SUCCESS });
+          } catch (error) {
+            dispatch({
+              type: problemConstants.UPLOAD_TESTCASE_OUTPUT_FAIL,
+              error,
+            });
+            onError(sampleTableData[id].out_file.name);
+          }
+        }
       }
-      // upload file
-      if (sampleTableData[id].in_file !== null) {
-        console.log('upload sample in', id);
-        // dispatch(uploadTestcaseInput(authToken, data.id, data.in_file));
-      }
-      if (sampleTableData[id].out_file !== null) {
-        console.log('upload sample out', id);
-        // dispatch(uploadTestcaseOutput(authToken, data.id, data.out_file));
-      }
-    }
-    return id;
-  });
+      return id;
+    }),
+  );
+
   onSuccess();
 };
 
-const saveTestcases = (token, testcases, testcaseDataIds, testcaseTableData, status, onSuccess, onError) => async (dispatch) => {
-  testcaseDataIds.map((id) => {
-    if (testcaseTableData[id] === undefined) {
+const saveTestcases = (token, problemId, testcases, testcaseDataIds, testcaseTableData, status, onSuccess, onError) => async (dispatch) => {
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+  };
+  const fileConfig = {
+    headers: {
+      'auth-token': token,
+      'Content-Type': 'multipart/form-data',
+    },
+  };
+  await Promise.all(
+    testcaseDataIds.map(async (id) => {
+      if (testcaseTableData[id] === undefined) {
       // delete data
-      // console.log(testcases[id].input_filename, ' should be deleted');
-      // dispatch(deleteTestcase(authToken, id));
-    }
-    return id;
-  });
+        try {
+          dispatch({ type: problemConstants.DELETE_TESTCASE_START });
+          await agent.delete(`/testcase/${id}`, config);
+          dispatch({
+            type: problemConstants.DELETE_TESTCASE_SUCCESS,
+          });
+        } catch (error) {
+          dispatch({
+            type: problemConstants.DELETE_TESTCASE_FAIL,
+            error,
+          });
+        }
+      }
+      return id;
+    }),
+  );
 
-  Object.keys(testcaseTableData).map((id) => {
-    if (testcaseTableData[id].new) {
-      console.log('add testcase with file: ', id);
+  await Promise.all(
+    Object.keys(testcaseTableData).map(async (id) => {
+      if (testcaseTableData[id].new) {
       // add testcase with file
-      // console.log(data.no, ' should be added.');
-      // dispatch(
-      //   addTestcaseWithFile(
-      //     authToken,
-      //     problemId,
-      //     false,
-      //     data.score,
-      //     data.time_limit,
-      //     data.memory_limit,
-      //     !status,
-      //     data.in_file,
-      //     data.out_file,
-      //   ),
-      // );
-    } else {
-      // console.log(data.no, ' is original testcase');
+        dispatch({ type: problemConstants.ADD_TESTCASE_START });
+        const body = {
+          is_sample: false,
+          score: testcaseTableData[id].score,
+          time_limit: testcaseTableData[id].time_limit,
+          memory_limit: testcaseTableData[id].memory_limit,
+          is_disabled: !status,
+        };
+        try {
+          const res = await agent.post(`/problem/${problemId}/testcase`, body, config);
+          const testcaseId = res.data.data.id;
+          if (testcaseTableData[id].in_file != null) {
+            const formData = new FormData();
+            formData.append('input_file', testcaseTableData[id].in_file);
+            await agent.put(`/testcase/${testcaseId}/input-data`, formData, fileConfig);
+          }
+          if (testcaseTableData[id].out_file != null) {
+            const formData = new FormData();
+            formData.append('output_file', testcaseTableData[id].out_file);
+            await agent.put(`/testcase/${testcaseId}/output-data`, formData, fileConfig);
+          }
+          dispatch({ type: problemConstants.ADD_TESTCASE_SUCCESS });
+        } catch (error) {
+          dispatch({
+            type: problemConstants.ADD_TESTCASE_FAIL,
+            error,
+          });
+          if (testcaseTableData[id].in_file != null) {
+            onError(testcaseTableData[id].in_file.name);
+          }
+          if (testcaseTableData[id].out_file != null) {
+            onError(testcaseTableData[id].out_file.name);
+          }
+        }
+      } else {
       // check basic info
-      if (
-        testcases[id].time_limit !== testcaseTableData[id].time_limit
+        if (
+          testcases[id].time_limit !== testcaseTableData[id].time_limit
           || testcases[id].memory_limit !== testcaseTableData[id].memory_limit
           || testcases[id].score !== testcaseTableData[id].score
           || testcases[id].is_disabled !== !status
-      ) {
-        console.log('edit testcase info', id);
-        // dispatch(editTestcase(authToken, data.id, false, data.score, data.time_limit, data.memory_limit, !status));
+        ) {
+          await dispatch(editTestcase(token, id, false, testcaseTableData[id].score, testcaseTableData[id].time_limit, testcaseTableData[id].memory_limit, !status));
+        }
+        // upload file
+        if (testcaseTableData[id].in_file !== null) {
+          try {
+            dispatch({ type: problemConstants.UPLOAD_TESTCASE_INPUT_START });
+            const formData = new FormData();
+            formData.append('input_file', testcaseTableData[id].in_file);
+            await agent.put(`/testcase/${id}/input-data`, formData, fileConfig);
+            dispatch({ type: problemConstants.UPLOAD_TESTCASE_INPUT_SUCCESS });
+          } catch (error) {
+            dispatch({
+              type: problemConstants.UPLOAD_TESTCASE_INPUT_FAIL,
+              error,
+            });
+            onError(testcaseTableData[id].in_file.name);
+          }
+        }
+        if (testcaseTableData[id].out_file !== null) {
+          try {
+            dispatch({ type: problemConstants.UPLOAD_TESTCASE_OUTPUT_START });
+            const formData = new FormData();
+            formData.append('input_file', testcaseTableData[id].out_file);
+            await agent.put(`/testcase/${id}/output-data`, formData, fileConfig);
+            dispatch({ type: problemConstants.UPLOAD_TESTCASE_OUTPUT_SUCCESS });
+          } catch (error) {
+            dispatch({
+              type: problemConstants.UPLOAD_TESTCASE_OUTPUT_FAIL,
+              error,
+            });
+            onError(testcaseTableData[id].out_file.name);
+          }
+        }
       }
-      // upload file
-      if (testcaseTableData[id].in_file !== null) {
-        console.log('upload testcase in', id);
-        // dispatch(uploadTestcaseInput(authToken, data.id, data.in_file));
-      }
-      if (testcaseTableData[id].out_file !== null) {
-        console.log('upload testcase out', id);
-        // dispatch(uploadTestcaseOutput(authToken, data.id, data.out_file));
-      }
-    }
-    return id;
-  });
+      return id;
+    }),
+  );
   onSuccess();
 };
 
@@ -739,7 +710,6 @@ const saveAssistingData = (token, problemId, assistingData, assistingDataIds, as
           await agent.delete(`/assisting-data/${id}`, config);
           dispatch({ type: problemConstants.DELETE_ASSISTING_DATA_SUCCESS });
         } catch (error) {
-          console.log(error);
           dispatch({ type: problemConstants.DELETE_ASSISTING_DATA_FAIL, error });
         }
       }
@@ -790,18 +760,13 @@ export {
   readSubmission,
   browseTestcase,
   browseAssistingData,
-  deleteTestcase,
   submitCode,
   editTestcase,
-  uploadTestcaseInput,
-  uploadTestcaseOutput,
-  addTestcaseWithFile,
   browseJudgeCases,
   readTestcase,
   readProblemScore,
   downloadAllSamples,
   downloadAllTestcases,
-  clearUploadFail,
   saveSamples,
   saveTestcases,
   saveAssistingData,
