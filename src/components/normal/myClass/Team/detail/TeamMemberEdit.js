@@ -25,6 +25,9 @@ const useStyles = makeStyles(() => ({
   select: {
     width: '350px',
   },
+  buttons: {
+    marginTop: '6px',
+  },
 }));
 
 export default function TeamMemberEdit({ setOriginData, isManager, handleBack }) {
@@ -156,11 +159,12 @@ export default function TeamMemberEdit({ setOriginData, isManager, handleBack })
             },
           ]}
         />
-
-        <Button onClick={handleCancel}>Cancel</Button>
-        <Button color="primary" type="submit" onClick={handleSave}>
-          Save
-        </Button>
+        <div className={classNames.buttons}>
+          <Button onClick={handleCancel}>Cancel</Button>
+          <Button color="primary" type="submit" onClick={handleSave}>
+            Save
+          </Button>
+        </div>
       </SimpleBar>
 
       <Dialog open={popUp} onClose={() => setPopUp(false)} maxWidth="md">
@@ -168,7 +172,7 @@ export default function TeamMemberEdit({ setOriginData, isManager, handleBack })
           <Typography variant="h4">Add Member</Typography>
         </DialogTitle>
         <DialogContent>
-          <AlignedText text="Student" maxWidth="mg" childrenType="field">
+          <AlignedText text="Student" maxWidth="md" childrenType="field">
             <TextField
               name="student"
               placeholder="Student ID / Email / #Username"

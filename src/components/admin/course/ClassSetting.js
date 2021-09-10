@@ -125,11 +125,7 @@ const ClassSetting = () => {
             <Typography variant="body1">{classes.byId[classId].name}</Typography>
           </AlignedText>
           <AlignedText text="New Name" maxWidth="md" childrenType="field">
-            <TextField
-              style={{ width: '350px' }}
-              variant="outlined"
-              onChange={(e) => setNewClassName(e.target.value)}
-            />
+            <TextField variant="outlined" onChange={(e) => setNewClassName(e.target.value)} />
           </AlignedText>
         </DialogContent>
         <DialogContent>

@@ -118,11 +118,7 @@ export default function CourseSetting() {
           </AlignedText>
 
           <AlignedText text="New Name" childrenType="field">
-            <TextField
-              style={{ width: '350px' }}
-              variant="outlined"
-              onChange={(e) => setNewCourseName(e.target.value)}
-            />
+            <TextField variant="outlined" onChange={(e) => setNewCourseName(e.target.value)} />
           </AlignedText>
         </DialogContent>
         <DialogContent>

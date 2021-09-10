@@ -10,16 +10,16 @@ import AlignedText from '../../../../ui/AlignedText';
 import { editGrade } from '../../../../../actions/myClass/grade';
 
 const useStyles = makeStyles((theme) => ({
-  textFieldScore: {
-    width: '350px',
-  },
   textFieldComment: {
-    width: '980px',
-    marginBottom: '16px',
+    width: '44vw',
   },
   textLink: {
     textDecoration: 'none',
     color: theme.palette.primary.main,
+  },
+  buttons: {
+    marginTop: '12px',
+    marginLeft: '-5px',
   },
 }));
 
@@ -60,7 +60,7 @@ export default function BasicInfoEdit(props) {
             <Typography variant="body1">{props.grade.title}</Typography>
           </AlignedText>
           <AlignedText text="Score" maxWidth="lg" childrenType="field">
-            <TextField className={classNames.textFieldScore} value={score} onChange={(e) => setScore(e.target.value)} />
+            <TextField value={score} onChange={(e) => setScore(e.target.value)} />
           </AlignedText>
           <AlignedText text="Comment" maxWidth="lg" childrenType="field">
             <TextField
@@ -74,7 +74,7 @@ export default function BasicInfoEdit(props) {
           <AlignedText text="Submitted Time" maxWidth="lg" childrenType="text">
             <Typography variant="body1">{moment(props.grade.time).format('YYYY-MM-DD, HH:mm')}</Typography>
           </AlignedText>
-          <div>
+          <div className={classNames.buttons}>
             <Button onClick={() => props.handleBack()}>Cancel</Button>
             <Button color="primary" type="submit" onClick={handleSave}>
               Save

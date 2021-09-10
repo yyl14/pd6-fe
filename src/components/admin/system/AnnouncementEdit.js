@@ -16,6 +16,10 @@ const useStyles = makeStyles(() => ({
     marginTop: '15px',
     marginBottom: '9px',
   },
+  buttons: {
+    marginTop: '-32px',
+    marginLeft: '-5px',
+  },
 }));
 
 export default function AnnouncementEdit(props) {
@@ -65,16 +69,12 @@ export default function AnnouncementEdit(props) {
           />
         </AlignedText>
       </SimpleBar>
-      <Button
-        onClick={() => {
-          props.setEdit(false);
-        }}
-      >
-        Cancel
-      </Button>
-      <Button color="primary" onClick={handleClickSave}>
-        Save
-      </Button>
+      <div className={classes.buttons}>
+        <Button onClick={() => props.setEdit(false)}>Cancel</Button>
+        <Button color="primary" onClick={handleClickSave}>
+          Save
+        </Button>
+      </div>
     </>
   );
 }

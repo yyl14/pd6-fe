@@ -47,7 +47,7 @@ const useStyles = makeStyles(() => ({
     width: '400px',
   },
   textfield2: {
-    width: '60vw',
+    width: '100%',
   },
   loadButtons: {
     width: 'max-content',
@@ -55,13 +55,13 @@ const useStyles = makeStyles(() => ({
   statusSwitch: {
     marginTop: '20px',
   },
-  clearButton: {
-    marginLeft: '24px',
-    backgroundColor: '#FFFFFF',
-    border: 'solid',
-    borderColor: '#DDDDDD',
+  dialogTitle: {
+    marginBottom: '-8px',
   },
-  filterButton: {
+  backToEditButton: {
+    marginLeft: '24px',
+  },
+  dialogButtons: {
     justifyContent: 'space-between',
   },
 }));
@@ -821,24 +821,22 @@ export default function CodingProblemEdit({ closeEdit }) {
         setSelectedFile={setTempSelectedFileT}
         handleTempUpload={handleTestingTempUpload}
       />
-      <Dialog open={warningPopUp} onClose={() => setWarningPopUp(false)} fullWidth>
-        <DialogTitle id="dialog-slide-title">
+      <Dialog open={warningPopUp} onClose={() => setWarningPopUp(false)} maxWidth="md">
+        <DialogTitle id="dialog-slide-title" className={classNames.dialogTitle}>
           <Typography variant="h4">Unsaved Changes</Typography>
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body2">
+          <Typography variant="body1">
             You have unsaved changes, do you want to save your changes or back to edit?
           </Typography>
         </DialogContent>
-        <DialogActions className={classNames.filterButton}>
+        <DialogActions className={classNames.dialogButtons}>
+          <Button onClick={() => setWarningPopUp(false)} className={classNames.backToEditButton} variant="outlined">
+            Back to Edit
+          </Button>
           <div>
-            <Button onClick={() => setWarningPopUp(false)} className={classNames.clearButton}>
-              Back to Edit
-            </Button>
-          </div>
-          <div>
-            <Button color="default" onClick={() => closeEdit()}>
-              Do not Save
+            <Button color="default" onClick={closeEdit}>
+              Don’t Save
             </Button>
             <Button color="primary" onClick={handleSave}>
               Save
