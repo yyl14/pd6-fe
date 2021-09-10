@@ -250,7 +250,7 @@ const browseAssistingData = (token, problemId) => async (dispatch) => {
   }
 };
 
-const editProblemInfo = (token, problemId, label, title, score, testcaseDisabled, description, ioDescription, source, hint) => async (dispatch) => {
+const editProblemInfo = (token, problemId, label, title, score, testcaseDisabled, description, ioDescription, source, hint, onSuccess) => async (dispatch) => {
   dispatch({ type: problemConstants.EDIT_PROBLEM_START });
   const config = {
     headers: {
@@ -280,6 +280,7 @@ const editProblemInfo = (token, problemId, label, title, score, testcaseDisabled
       error,
     });
   }
+  onSuccess();
 };
 
 const deleteProblem = (token, problemId) => async (dispatch) => {

@@ -100,6 +100,7 @@ export default function CodingProblemEdit({ closeEdit }) {
   const [hint, setHint] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].hint);
   const [status, setStatus] = useState(false);
 
+  const [handleInfoSuccess, setHandleInfoSuccess] = useState(false);
   const [handleSamplesSuccess, setHandleSamplesSuccess] = useState(false);
   const [handleTestcasesSuccess, setHandleTestcasesSuccess] = useState(false);
   const [handleAssistingDataSuccess, setHandleAssistingDataSuccess] = useState(false);
@@ -204,16 +205,17 @@ export default function CodingProblemEdit({ closeEdit }) {
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    if (handleSamplesSuccess && handleTestcasesSuccess && handleAssistingDataSuccess) {
+    if (handleSamplesSuccess && handleTestcasesSuccess && handleAssistingDataSuccess && handleInfoSuccess) {
       if (uploadFailFilename.length === 0) {
         dispatch(readProblemInfo(authToken, problemId));
         setDisabled(false);
         closeEdit();
       } else {
+        setDisabled(false);
         setUploadFailCardPopup(true);
       }
     }
-  }, [authToken, closeEdit, dispatch, handleAssistingDataSuccess, handleSamplesSuccess, handleTestcasesSuccess, problemId, uploadFailFilename.length]);
+  }, [authToken, closeEdit, dispatch, handleAssistingDataSuccess, handleInfoSuccess, handleSamplesSuccess, handleTestcasesSuccess, problemId, uploadFailFilename.length]);
 
   const handleClosePopUp = () => {
     setSamplePopUp(false);
@@ -352,6 +354,7 @@ export default function CodingProblemEdit({ closeEdit }) {
         ioDescription,
         source,
         hint,
+        () => { setHandleInfoSuccess(true); },
       ),
     );
 
@@ -370,7 +373,7 @@ export default function CodingProblemEdit({ closeEdit }) {
     }
   };
 
-  if (loading.editProblem || loading.deleteProblem || loading.deleteTestcase || loading.deleteAssistingData || loading.editAssistingData || loading.addAssistingData || loading.editTestcase || loading.uploadTestcaseInput || loading.uploadTestcaseOutput || loading.addTestcase) {
+  if (loading.editProblem || loading.deleteProblem || loading.deleteTestcase || loading.deleteAssistingData || loading.editAssistingData || loading.addAssistingData || loading.editTestcase || loading.uploadTestcaseInput || loading.uploadTestcaseOutput || loading.addTestcase || disabled) {
     return <GeneralLoading />;
   }
 
