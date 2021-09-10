@@ -8,7 +8,9 @@ import getTextFromUrl from '../../function/getTextFromUrl';
 const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => async (dispatch) => {
   try {
     const config1 = {
-      headers: { 'auth-token': token },
+      headers: {
+        'auth-token': token,
+      },
       params: browseParamsTransForm(browseParams),
     };
     dispatch({
