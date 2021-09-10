@@ -67,16 +67,15 @@ export default function AllClassChallenge({
                 icon: <Icon.Info />,
                 path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
               },
-            ]
-              .concat(
-                problems.allIds
-                  .map((id) => problems.byId[id])
-                  .map(({ id, challenge_label }) => ({
-                    text: challenge_label,
-                    icon: <Icon.Code />,
-                    path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${id}`,
-                  })),
-              )
+            ].concat(
+              problems.allIds
+                .map((id) => problems.byId[id])
+                .map(({ id, challenge_label }) => ({
+                  text: challenge_label,
+                  icon: <Icon.Code />,
+                  path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${id}`,
+                })),
+            ) /*
               .concat(
                 essays.allIds
                   .map((id) => essays.byId[id])
@@ -85,7 +84,7 @@ export default function AllClassChallenge({
                     icon: <Icon.Paper />,
                     path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/essay/${id}`,
                   })),
-              ),
+              ), */,
           );
         } else {
           setItemList([
@@ -97,8 +96,11 @@ export default function AllClassChallenge({
           ]);
         }
       }
-    } else if (mode === 'submission' && challenges[challengeId] !== undefined
-    && problems.byId[problemId] !== undefined) {
+    } else if (
+      mode === 'submission'
+      && challenges[challengeId] !== undefined
+      && problems.byId[problemId] !== undefined
+    ) {
       // if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
       //   setTAicon(<Icon.TA className={classNames.titleTA} />);
       // }
@@ -191,22 +193,22 @@ export default function AllClassChallenge({
           </div>
           <Divider variant="middle" className={classNames.divider} />
           {display === 'unfold' && (
-          <List>
-            {itemList.map((item) => (
-              <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
-                <ListItemIcon
-                  className={classNames.itemIcon}
-                  style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
-                />
-              </ListItem>
-            ))}
-          </List>
+            <List>
+              {itemList.map((item) => (
+                <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
+                  <ListItemIcon
+                    className={classNames.itemIcon}
+                    style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item.text}
+                    className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
+                  />
+                </ListItem>
+              ))}
+            </List>
           )}
         </div>
         <div className={classNames.bottomSpace} />
