@@ -328,80 +328,6 @@ const deleteTestcase = (token, testcaseId) => async (dispatch) => {
   }
 };
 
-const deleteAssistingData = (token, assistingId) => async (dispatch) => {
-  dispatch({ type: problemConstants.DELETE_ASSISTING_DATA_START });
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
-  try {
-    await agent.delete(`/assisting-data/${assistingId}`, config);
-    dispatch({
-      type: problemConstants.DELETE_ASSISTING_DATA_SUCCESS,
-      payload: assistingId,
-    });
-  } catch (error) {
-    dispatch({
-      type: problemConstants.DELETE_ASSISTING_DATA_FAIL,
-      error,
-    });
-  }
-};
-
-const editAssistingData1 = (token, assistingId, file) => async (dispatch) => {
-  dispatch({ type: problemConstants.EDIT_ASSISTING_DATA_START });
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-    'Content-Type': 'multipart/form-data',
-  };
-  const formData = new FormData();
-  formData.append('assisting_data_file', file);
-
-  try {
-    await agent.put(`/assisting-data/${assistingId}`, formData, config);
-
-    dispatch({
-      type: problemConstants.EDIT_ASSISTING_DATA_SUCCESS,
-    });
-  } catch (error) {
-    dispatch({
-      type: problemConstants.EDIT_ASSISTING_DATA_FAIL,
-      error,
-    });
-  }
-};
-
-const addAssistingData = (token, problemId, file) => async (dispatch) => {
-  dispatch({ type: problemConstants.ADD_ASSISTING_DATA_START });
-  const config = {
-    headers: {
-      'auth-token': token,
-      'Content-Type': 'multipart/form-data',
-    },
-  };
-  const formData = new FormData();
-  formData.append('assisting_data', file);
-
-  try {
-    await agent.post(`/problem/${problemId}/assisting-data`, formData, config);
-    dispatch({
-      type: problemConstants.ADD_ASSISTING_DATA_SUCCESS,
-    });
-  } catch (error) {
-    dispatch({
-      type: problemConstants.ADD_ASSISTING_DATA_FAIL,
-      error,
-    });
-    dispatch({
-      type: problemConstants.UPLOAD_DATA_FAIL,
-      filename: file.name,
-    });
-  }
-};
-
 const submitCode = (token, problemId, languageId, content) => async (dispatch) => {
   dispatch({ type: problemConstants.SUBMIT_PROBLEM_START });
   const config = {
@@ -804,42 +730,54 @@ const saveAssistingData = (token, problemId, assistingData, assistingDataIds, as
     },
     'Content-Type': 'multipart/form-data',
   };
-  assistingDataIds.map(async (id) => {
-    if (assistTableData.filter((item) => item.filename === assistingData[id].filename).length === 0) {
-      // delete assisting data
-      try {
-        await agent.delete(`/assisting-data/${id}`, config);
-      } catch (error) {
-        console.log(error);
+  await Promise.all(
+    assistingDataIds.map(async (id) => {
+      if (assistTableData.filter((item) => item.filename === assistingData[id].filename).length === 0) {
+        // delete assisting data
+        try {
+          dispatch({ type: problemConstants.DELETE_ASSISTING_DATA_START });
+          await agent.delete(`/assisting-data/${id}`, config);
+          dispatch({ type: problemConstants.DELETE_ASSISTING_DATA_SUCCESS });
+        } catch (error) {
+          console.log(error);
+          dispatch({ type: problemConstants.DELETE_ASSISTING_DATA_FAIL, error });
+        }
       }
-    }
-    return id;
-  });
-  assistTableData.map(async (item) => {
-    if (assistingDataIds.filter((id) => assistingData[id].filename === item.filename).length === 0) {
-      // add assisting data
-      const formData = new FormData();
-      formData.append('assisting_data', item.file);
+      return id;
+    }),
+  );
 
-      try {
-        await agent.post(`/problem/${problemId}/assisting-data`, formData, config2);
-      } catch (error) {
-        // console.log(error);
-        onError(item.filename);
-      }
-    } else if (item.file !== null) {
+  await Promise.all(
+    assistTableData.map(async (item) => {
+      if (assistingDataIds.filter((id) => assistingData[id].filename === item.filename).length === 0) {
+      // add assisting data
+        const formData = new FormData();
+        formData.append('assisting_data', item.file);
+
+        try {
+          dispatch({ type: problemConstants.ADD_ASSISTING_DATA_START });
+          await agent.post(`/problem/${problemId}/assisting-data`, formData, config2);
+          dispatch({ type: problemConstants.ADD_ASSISTING_DATA_SUCCESS });
+        } catch (error) {
+          onError(item.filename);
+          dispatch({ type: problemConstants.ADD_ASSISTING_DATA_FAIL, error });
+        }
+      } else if (item.file !== null) {
       // edit assisting data
-      const formData = new FormData();
-      formData.append('assisting_data_file', item.file);
-      try {
-        await agent.put(`/assisting-data/${item.id}`, formData, config2);
-      } catch (error) {
-        // console.log(error);
-        onError(item.filename);
+        const formData = new FormData();
+        formData.append('assisting_data_file', item.file);
+        try {
+          dispatch({ type: problemConstants.EDIT_ASSISTING_DATA_START });
+          await agent.put(`/assisting-data/${item.id}`, formData, config2);
+          dispatch({ type: problemConstants.EDIT_ASSISTING_DATA_SUCCESS });
+        } catch (error) {
+          onError(item.filename);
+          dispatch({ type: problemConstants.ADD_ASSISTING_DATA_FAIL, error });
+        }
       }
-    }
-    return item;
-  });
+      return item;
+    }),
+  );
 
   onSuccess();
 };
@@ -853,9 +791,6 @@ export {
   browseTestcase,
   browseAssistingData,
   deleteTestcase,
-  deleteAssistingData,
-  editAssistingData1,
-  addAssistingData,
   submitCode,
   editTestcase,
   uploadTestcaseInput,

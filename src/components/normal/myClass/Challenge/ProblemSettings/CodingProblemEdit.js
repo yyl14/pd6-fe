@@ -83,7 +83,7 @@ export default function CodingProblemEdit({ closeEdit }) {
   const testcases = useSelector((state) => state.testcases.byId);
   const [sampleDataIds, setSampleDataIds] = useState([]);
   const [testcaseDataIds, setTestcaseDataIds] = useState([]);
-  const loading = useSelector((state) => state.loading.myClass.problem);
+  // const loading = useSelector((state) => state.loading.myClass.problem);
   const [hasChange, setHasChange] = useState(false);
 
   const [label, setLabel] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label);
@@ -193,7 +193,6 @@ export default function CodingProblemEdit({ closeEdit }) {
   const [cardSelectedFileS, setCardSelectedFileS] = useState({});
   const [cardSelectedFileT, setCardSelectedFileT] = useState({});
   const [cardSelectedFileA, setCardSelectedFileA] = useState([]);
-  const [selectedFileA, setSelectedFileA] = useState([]);
 
   const [samplePopUp, setSamplePopUp] = useState(false);
   const [assistPopUp, setAssistPopUp] = useState(false);
