@@ -29,12 +29,9 @@ import GeneralLoading from '../../../../GeneralLoading';
 import {
   browseTestcase,
   browseAssistingData,
-  deleteAssistingData,
-  deleteTestcase,
   deleteProblem,
   downloadAllSamples,
   downloadAllTestcases,
-  clearUploadFail,
 } from '../../../../../actions/myClass/problem';
 
 import { downloadFile } from '../../../../../actions/common/common';
@@ -95,23 +92,15 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const [testcaseDataIds, setTestcaseDataIds] = useState([]);
   const [deletePopUp, setDeletePopUp] = useState(false);
   const [emailSentPopup, setEmailSentPopup] = useState(false);
-  const uploadError = useSelector((state) => state.error.myClass.problem.uploadFailFilename);
-  const [uploadFailCardPopup, setUploadFailCardPopup] = useState(false);
   // console.log('uploadError: ', uploadError);
 
-  useEffect(() => {
-    if (uploadError.length !== 0) {
-      setUploadFailCardPopup(true);
-    }
-  }, [uploadError.length]);
-
   const handleDelete = () => {
-    problems[problemId].assistingDataIds.forEach((id) => {
-      dispatch(deleteAssistingData(authToken, id));
-    });
-    problems[problemId].testcaseIds.forEach((id) => {
-      dispatch(deleteTestcase(authToken, id));
-    });
+    // problems[problemId].assistingDataIds.forEach((id) => {
+    //   dispatch(deleteAssistingData(authToken, id));
+    // });
+    // problems[problemId].testcaseIds.forEach((id) => {
+    //   dispatch(deleteTestcase(authToken, id));
+    // });
     dispatch(deleteProblem(authToken, problemId));
 
     setDeletePopUp(false);
@@ -137,6 +126,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     setEmailSentPopup(true);
   };
 
+  // parse filename to get sample number
   const sampleTransToNumber = useCallback(
     (id) => {
       if (testcases[id].input_filename !== null) {
@@ -150,6 +140,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     [testcases],
   );
 
+  // parse filename to get testcase number
   const testcaseTransToNumber = useCallback(
     (id) => {
       if (testcases[id].input_filename !== null) {
@@ -167,24 +158,8 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     if (problems[problemId] && problems[problemId].testcaseIds) {
       const testcasesId = problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
       const samplesId = problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
-      testcasesId.sort((a, b) => {
-        if (testcaseTransToNumber(a) < testcaseTransToNumber(b)) {
-          return -1;
-        }
-        if (testcaseTransToNumber(a) > testcaseTransToNumber(b)) {
-          return 1;
-        }
-        return 0;
-      });
-      samplesId.sort((a, b) => {
-        if (sampleTransToNumber(a) < sampleTransToNumber(b)) {
-          return -1;
-        }
-        if (sampleTransToNumber(a) > sampleTransToNumber(b)) {
-          return 1;
-        }
-        return 0;
-      });
+      testcasesId.sort((a, b) => testcaseTransToNumber(a) - testcaseTransToNumber(b));
+      samplesId.sort((a, b) => sampleTransToNumber(a) - sampleTransToNumber(b));
       setSampleDataIds(samplesId);
       setTestcaseDataIds(testcasesId);
       if (testcasesId.length === 0) {
@@ -449,37 +424,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setEmailSentPopup(false)} color="primary">
-            Done
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog
-        open={uploadFailCardPopup}
-        onClose={() => {
-          setUploadFailCardPopup(false);
-          dispatch(clearUploadFail());
-        }}
-        fullWidth
-      >
-        <DialogTitle id="dialog-slide-title">
-          <Typography variant="h4">Upload Fail</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body2">File below was failed to be uploaded:</Typography>
-          {uploadError.map((filename) => (
-            <Typography variant="body2" key={filename}>
-              {filename}
-            </Typography>
-          ))}
-        </DialogContent>
-        <DialogActions className={classNames.filterButton}>
-          <Button
-            color="default"
-            onClick={() => {
-              setUploadFailCardPopup(false);
-              dispatch(clearUploadFail());
-            }}
-          >
             Done
           </Button>
         </DialogActions>

@@ -47,13 +47,15 @@ export default function SampleUploadCard({
   const [memory, setMemory] = useState(65535);
 
   const handleConfirm = () => {
-    const newSelectedFile = selectedFile.map((data) => ({
-      ...data,
-      no: data.id,
-      time_limit: time,
-      memory_limit: memory,
-    }));
-    setSelectedFile(newSelectedFile);
+    const newSelectedFile = Object.keys(selectedFile).reduce((acc, key) => ({
+      ...acc,
+      [key]: {
+        ...selectedFile[key],
+        no: selectedFile[key].id,
+        time_limit: time,
+        memory_limit: memory,
+      },
+    }), {});
     handleTempUpload(newSelectedFile);
     closePopUp();
   };
@@ -93,7 +95,7 @@ export default function SampleUploadCard({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleCancel()} color="default">
+          <Button onClick={handleCancel} color="default">
             Cancel
           </Button>
           <Button onClick={handleConfirm} color="primary">

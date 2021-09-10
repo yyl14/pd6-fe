@@ -48,7 +48,6 @@ export default function Challenge() {
     loading.challenge.editChallenge,
     loading.problem.deleteEssay,
     loading.problem.deleteProblem,
-    loading.problem.editProblem,
   ]);
 
   if (challenges[challengeId] === undefined) {

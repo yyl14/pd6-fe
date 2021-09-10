@@ -221,6 +221,11 @@ export default function problem(state = initialState, action) {
         ...state,
         submitCode: false,
       };
+    case problemConstants.EDIT_TESTCASE_START:
+      return {
+        ...state,
+        editTestcase: true,
+      };
     case problemConstants.EDIT_TESTCASE_SUCCESS:
       return {
         ...state,
@@ -230,11 +235,6 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         editTestcase: false,
-      };
-    case problemConstants.EDIT_TESTCASE_START:
-      return {
-        ...state,
-        editTestcase: true,
       };
     case problemConstants.UPLOAD_TESTCASE_INPUT_START:
       return {
