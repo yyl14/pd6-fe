@@ -13,8 +13,11 @@ import AlignedText from '../../../../ui/AlignedText';
 import IOFileUploadArea from '../../../../ui/IOFileUploadArea';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
+  dialogTitle: {
+    marginBottom: '-8px',
+  },
+  instructions: {
+    marginBottom: '10px',
   },
   sampleArea: {
     marginTop: '50px',
@@ -44,13 +47,15 @@ export default function SampleUploadCard({
   const [memory, setMemory] = useState(65535);
 
   const handleConfirm = () => {
-    const newSelectedFile = selectedFile.map((data) => ({
-      ...data,
-      no: data.id,
-      time_limit: time,
-      memory_limit: memory,
-    }));
-    setSelectedFile(newSelectedFile);
+    const newSelectedFile = Object.keys(selectedFile).reduce((acc, key) => ({
+      ...acc,
+      [key]: {
+        ...selectedFile[key],
+        no: selectedFile[key].id,
+        time_limit: time,
+        memory_limit: memory,
+      },
+    }), {});
     handleTempUpload(newSelectedFile);
     closePopUp();
   };
@@ -62,18 +67,20 @@ export default function SampleUploadCard({
 
   return (
     <>
-      <Dialog open={popUp} onClose={() => closePopUp()} fullWidth>
-        <DialogTitle id="dialog-slide-title">
+      <Dialog open={popUp} onClose={() => closePopUp()} maxWidth="md">
+        <DialogTitle id="dialog-slide-title" className={classes.dialogTitle}>
           <Typography variant="h4">Upload Sample Data</Typography>
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body2">Please name your files in the following manner:</Typography>
-          <Typography variant="body2" className={classes.reminder}>
-            sample1.in （範例測資 1 的 input）
-          </Typography>
-          <Typography variant="body2" className={classes.reminder}>
-            sample1.out （範例測資 1 的 output）
-          </Typography>
+          <div className={classes.instructions}>
+            <Typography variant="body2">Please name your files in the following manner:</Typography>
+            <Typography variant="body2" className={classes.reminder}>
+              sample1.in （範例測資 1 的 input）
+            </Typography>
+            <Typography variant="body2" className={classes.reminder}>
+              sample1.out （範例測資 1 的 output）
+            </Typography>
+          </div>
           <AlignedText text="Default Time(ms)" childrenType="field">
             <TextField id="time" value={time} onChange={(e) => setTime(e.target.value)} />
           </AlignedText>
@@ -88,7 +95,7 @@ export default function SampleUploadCard({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleCancel()} color="default">
+          <Button onClick={handleCancel} color="default">
             Cancel
           </Button>
           <Button onClick={handleConfirm} color="primary">

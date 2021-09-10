@@ -11,16 +11,16 @@ import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 
 const useStyles = makeStyles(() => ({
-  contentField: {
-    width: '720px',
-  },
   dateRangePicker: {
+    width: '44vw',
     marginTop: '15px',
-    marginBottom: '16px',
+    marginBottom: '0px',
   },
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end',
+    marginTop: '-10px',
+    marginRight: '-5px',
   },
 }));
 
@@ -66,13 +66,13 @@ export default function SettingEdit({ challengeId, challenge, setEdit }) {
   return (
     <>
       <SimpleBar title="Information">
-        <AlignedText text="Title" childrenType="field">
+        <AlignedText text="Title" childrenType="field" maxWidth="lg">
           <TextField defaultValue={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
         </AlignedText>
-        <AlignedText text="Duration" childrenType="field">
+        <AlignedText text="Duration" childrenType="field" maxWidth="lg">
           <DateRangePicker className={classes.dateRangePicker} value={duration} setValue={setDuration} />
         </AlignedText>
-        <AlignedText text="Scored by" childrenType="radio">
+        <AlignedText text="Scored by" childrenType="radio" maxWidth="lg">
           <RadioGroupForm
             options={[
               {
@@ -89,7 +89,7 @@ export default function SettingEdit({ challengeId, challenge, setEdit }) {
             flexDirection="row"
           />
         </AlignedText>
-        <AlignedText text="Shown in Problem Set" childrenType="radio">
+        <AlignedText text="Shown in Problem Set" childrenType="radio" maxWidth="lg">
           <RadioGroupForm
             options={[
               {

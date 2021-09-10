@@ -38,10 +38,15 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '16px',
   },
   children: {
-    maxWidth: '79%',
     padding: '0px',
     margin: '0px',
     wordBreak: 'break-word',
+  },
+  fieldBottomMargin: {
+    marginBottom: '17px',
+  },
+  textMaxWidth: {
+    maxWidth: '79%',
   },
 }));
 
@@ -100,6 +105,16 @@ export default function AlignedText({
       }
     }
   };
+  const childrenAdditionalStyle = (type) => {
+    switch (type) {
+      case 'field':
+        return classes.fieldBottomMargin;
+      case 'text':
+        return classes.textMaxWidth;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className={`${classes.wrapper} ${textColorSelect(textColor)}`}>
@@ -108,7 +123,7 @@ export default function AlignedText({
           {text}
         </Typography>
       </div>
-      <div className={classes.children} ref={ref}>
+      <div className={`${classes.children} ${childrenAdditionalStyle(childrenType)}`} ref={ref}>
         {children}
       </div>
     </div>
