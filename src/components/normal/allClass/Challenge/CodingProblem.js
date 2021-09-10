@@ -31,7 +31,16 @@ export default function CodingProblem() {
   const courses = useSelector((state) => state.courses.byId);
   const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges.byId);
+  //  const error = useSelector((state) => state.error.myClass.problem);
+  const loading = useSelector((state) => state.loading.myClass.problem);
   const commonLoading = useSelector((state) => state.loading.common);
+
+  if (loading.readProblem || loading.readChallenge) {
+    return <GeneralLoading />;
+  }
+  // if (error.readChallenge != null || error.readProblem != null) {
+  //   return <div>System Exception</div>;
+  // }
 
   if (
     problems[problemId] === undefined
