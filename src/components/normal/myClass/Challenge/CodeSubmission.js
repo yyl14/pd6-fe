@@ -131,7 +131,7 @@ export default function CodeSubmission() {
         >
           Cancel
         </Button>
-        <Button color="primary" onClick={handleSubmit} disabled={langId === -1}>
+        <Button color="primary" onClick={handleSubmit} disabled={code === '' || langId === -1}>
           Submit
         </Button>
       </div>
