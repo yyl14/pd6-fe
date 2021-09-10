@@ -1,12 +1,8 @@
 import { problemConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
-  browseChallengeOverview: false,
-  editChallenge: false,
-  browseTasksUnderChallenge: false,
   readProblem: false,
   readSubmission: false,
-  readChallenge: false,
   readJudgment: false,
   browseTestcase: false,
   browseAssistingData: false,
@@ -24,61 +20,13 @@ const initialState = {
   browseJudgeCases: false,
   readTestcase: false,
   readProblemScore: false,
+  downloadSamples: false,
+  downloadTestcases: false,
+  rejudgeSubmission: false,
 };
 
 export default function problem(state = initialState, action) {
   switch (action.type) {
-    case problemConstants.READ_CHALLENGE_START:
-      return {
-        ...state,
-        browseChallengeOverview: true,
-        readChallenge: true,
-      };
-    case problemConstants.READ_CHALLENGE_SUCCESS:
-      return {
-        ...state,
-        browseChallengeOverview: false,
-        readChallenge: false,
-      };
-    case problemConstants.READ_CHALLENGE_FAIL:
-      return {
-        ...state,
-        browseChallengeOverview: false,
-        readChallenge: false,
-      };
-
-    case problemConstants.EDIT_CHALLENGE_START:
-      return {
-        ...state,
-        editChallenge: true,
-      };
-    case problemConstants.EDIT_CHALLENGE_SUCCESS:
-      return {
-        ...state,
-        editChallenge: false,
-      };
-    case problemConstants.EDIT_CHALLENGE_FAIL:
-      return {
-        ...state,
-        editChallenge: false,
-      };
-
-    case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_START:
-      return {
-        ...state,
-        browseTasksUnderChallenge: true,
-      };
-    case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS:
-      return {
-        ...state,
-        browseTasksUnderChallenge: false,
-      };
-    case problemConstants.BROWSE_TASKS_UNDER_CHALLENGE_FAIL:
-      return {
-        ...state,
-        browseTasksUnderChallenge: false,
-      };
-
     case problemConstants.READ_PROBLEM_START:
       return {
         ...state,
@@ -274,6 +222,11 @@ export default function problem(state = initialState, action) {
         ...state,
         submitCode: false,
       };
+    case problemConstants.EDIT_TESTCASE_START:
+      return {
+        ...state,
+        editTestcase: true,
+      };
     case problemConstants.EDIT_TESTCASE_SUCCESS:
       return {
         ...state,
@@ -283,11 +236,6 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         editTestcase: false,
-      };
-    case problemConstants.EDIT_TESTCASE_START:
-      return {
-        ...state,
-        editTestcase: true,
       };
     case problemConstants.UPLOAD_TESTCASE_INPUT_START:
       return {
@@ -363,6 +311,51 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         readProblemScore: false,
+      };
+    case problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_START:
+      return {
+        ...state,
+        downloadSamples: true,
+      };
+    case problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_SUCCESS:
+      return {
+        ...state,
+        downloadSamples: false,
+      };
+    case problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_FAIL:
+      return {
+        ...state,
+        downloadSamples: false,
+      };
+    case problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_START:
+      return {
+        ...state,
+        downloadTestcases: true,
+      };
+    case problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_SUCCESS:
+      return {
+        ...state,
+        downloadTestcases: false,
+      };
+    case problemConstants.DOWNLOAD_ALL_NON_SAMPLE_TESTCASE_FAIL:
+      return {
+        ...state,
+        downloadTestcases: false,
+      };
+    case problemConstants.REJUDGE_SUBMISSION_START:
+      return {
+        ...state,
+        rejudgeSubmission: true,
+      };
+    case problemConstants.REJUDGE_SUBMISSION_SUCCESS:
+      return {
+        ...state,
+        rejudgeSubmission: false,
+      };
+    case problemConstants.REJUDGE_SUBMISSION_FAIL:
+      return {
+        ...state,
+        rejudgeSubmission: false,
       };
     default: {
       return state;

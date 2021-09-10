@@ -1,100 +1,71 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { makeStyles, Button, Typography } from '@material-ui/core';
-import CustomTable from '../../ui/CustomTable';
-import AlignedText from '../../ui/AlignedText';
+import PageTitle from '../../ui/PageTitle';
+import AutoTable from '../../ui/AutoTable';
 import { fetchAccounts } from '../../../actions/admin/account';
-import GeneralLoading from '../../GeneralLoading';
-
-const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-  popUpLayout: {
-    width: '100%',
-  },
-  selectField: {
-    minWidth: 210,
-  },
-  filterButton: {
-    justifyContent: 'space-between',
-  },
-  clearButton: {
-    backgroundColor: '#FFFFFF',
-    border: 'solid',
-    borderColor: '#DDDDDD',
-  },
-}));
 
 export default function AccountList() {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
-  const accounts = useSelector((state) => state.accounts.byId);
-  const accountsID = useSelector((state) => state.accounts.allIds);
+  const accounts = useSelector((state) => state.accounts);
   const authToken = useSelector((state) => state.auth.token);
-  // const error = useSelector((state) => state.admin.account.error);
-  const loading = useSelector((state) => state.loading.admin.account);
-  const [tableData, setTableData] = useState([]);
-
-  useEffect(() => {
-    if (!loading.editAccount && !loading.deleteAccount && !loading.makeStudentCardDefault) {
-      dispatch(fetchAccounts(authToken));
-    }
-  }, [authToken, dispatch, loading.deleteAccount, loading.editAccount, loading.makeStudentCardDefault]);
-
-  useEffect(() => {
-    setTableData(
-      accountsID.map((id) => ({
-        ...accounts[id],
-        path: `/admin/account/account/${id}/setting`,
-      })),
-    );
-  }, [accounts, accountsID]);
-
-  if (loading.fetchAccounts) {
-    return <GeneralLoading />;
-  }
+  const error = useSelector((state) => state.error.admin.account.fetchAccounts);
 
   return (
     <>
-      <Typography variant="h3" className={classes.pageHeader}>
-        Account
-      </Typography>
-      <CustomTable
-        hasSearch
-        searchWidthOption={3}
-        searchPlaceholder="Student ID / Real Name / Username"
-        data={tableData}
+      <PageTitle text="Account" />
+      <AutoTable
+        ident="Account Table"
+        hasFilter
+        hasLink
+        filterConfig={[
+          {
+            reduxStateId: 'username',
+            label: 'Username',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          // {
+          //   reduxStateId: 'student_id',
+          //   label: 'Student ID',
+          //   type: 'TEXT',
+          //   operation: 'LIKE',
+          // },
+          {
+            reduxStateId: 'real_name',
+            label: 'Real Name',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+        ]}
+        refetch={(browseParams, ident) => {
+          dispatch(fetchAccounts(authToken, browseParams, ident));
+        }}
+        refetchErrors={[error]}
         columns={[
           {
-            id: 'username',
-            label: 'Username',
-            minWidth: 50,
+            name: 'Username',
             align: 'center',
-            width: 120,
-            type: 'link',
-            link_id: 'path',
-          },
-          {
-            id: 'student_id',
-            label: 'Student ID',
-            minWidth: 50,
-            align: 'center',
-            width: 120,
             type: 'string',
           },
           {
-            id: 'real_name',
-            label: 'Real Name',
-            minWidth: 50,
+            name: 'Student ID',
             align: 'center',
-            width: 120,
+            type: 'string',
+          },
+          {
+            name: 'Real Name',
+            align: 'center',
             type: 'string',
           },
         ]}
-        hasLink
-        linkName="path"
+        reduxData={accounts}
+        reduxDataToRows={(item) => ({
+          Username: item.username,
+          'Student ID': item.student_id,
+          'Real Name': item.real_name,
+          link: `/admin/account/account/${item.id}/setting`,
+        })}
       />
     </>
   );

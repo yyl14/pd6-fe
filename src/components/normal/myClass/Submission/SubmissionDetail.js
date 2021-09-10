@@ -1,42 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  TextField,
-  IconButton,
+  Typography, Button, makeStyles, Dialog, DialogTitle, DialogActions, DialogContent,
 } from '@material-ui/core';
-import { useHistory, useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import moment from 'moment';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import CodeArea from '../../../ui/CodeArea';
 import Icon from '../../../ui/icon/index';
 import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
+import PageTitle from '../../../ui/PageTitle';
 
 import GeneralLoading from '../../../GeneralLoading';
 
 import {
   readSubmissionDetail,
-  readProblem,
-  browseChallengeOverview,
   browseJudgeCases,
   readTestcase,
   fetchSubmission,
   getAccountBatch,
+  rejudgeSubmission,
 } from '../../../../actions/myClass/submission';
+import { readProblemInfo } from '../../../../actions/myClass/problem';
+import { fetchChallenge } from '../../../../actions/common/common';
 
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   textLink: {
     textDecoration: 'none',
     color: theme.palette.primary.main,
@@ -54,26 +45,14 @@ const useStyles = makeStyles((theme) => ({
   resultTable: {
     width: '100%',
   },
-  codeContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-  },
-  codeField: {
-    width: '100%',
-  },
-  copyIcon: {
-    transform: 'translate(-20px, -230px)',
-    zIndex: '1000',
-  },
 }));
 
 /* This is a level 4 component (page component) */
 export default function SubmissionDetail() {
   const { courseId, classId, submissionId } = useParams();
-  const history = useHistory();
+  // const history = useHistory();
   const classNames = useStyles();
-  const [color, setColor] = useState('blue');
+  // const [color, setColor] = useState('blue');
   const [popUp, setPopUp] = useState(false);
   const [role, setRole] = useState('NORMAL');
   const [tableData, setTableData] = useState([]);
@@ -95,55 +74,53 @@ export default function SubmissionDetail() {
   const testcases = useSelector((state) => state.testcases.byId);
   const testcaseIds = useSelector((state) => state.testcases.allIds);
   const authToken = useSelector((state) => state.auth.token);
+  const loading = useSelector((state) => state.loading.myClass.submissions);
 
   useEffect(() => {
-    dispatch(readSubmissionDetail(authToken, submissionId));
-    dispatch(fetchSubmission(authToken, submissionId));
-  }, [authToken, dispatch, submissionId]);
+    if (!loading.rejudgeSubmission) {
+      dispatch(readSubmissionDetail(authToken, submissionId));
+      dispatch(fetchSubmission(authToken, submissionId));
+    }
+  }, [authToken, dispatch, loading.rejudgeSubmission, submissionId]);
 
   useEffect(() => {
     if (submissions[submissionId] !== undefined) {
       dispatch(getAccountBatch(authToken, submissions[submissionId].account_id));
-      dispatch(readProblem(authToken, submissions[submissionId].problem_id));
+      dispatch(readProblemInfo(authToken, submissions[submissionId].problem_id));
       setProblemId(submissions[submissionId].problem_id);
       setAccountId(submissions[submissionId].account_id);
     }
   }, [authToken, dispatch, submissionId, submissions]);
 
   useEffect(() => {
-    if (problems.allIds !== [] && submissions[submissionId] !== undefined) {
-      problems.allIds.filter((id) => {
-        if (id === submissions[submissionId].problem_id) {
-          dispatch(
-            browseChallengeOverview(authToken, problems.byId[submissions[submissionId].problem_id].challenge_id),
-          );
-          setChallengeId(problems.byId[submissions[submissionId].problem_id].challenge_id);
-        }
-        return '';
-      });
+    if (problems.byId[problemId] !== undefined && submissions[submissionId] !== undefined) {
+      dispatch(fetchChallenge(authToken, problems.byId[problemId].challenge_id));
+      setChallengeId(problems.byId[problemId].challenge_id);
     }
-  }, [authToken, dispatch, problems, submissionId, submissions]);
+  }, [authToken, dispatch, problemId, problems.allIds, problems.byId, submissionId, submissions]);
 
   useEffect(() => {
-    setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
-    if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
-      dispatch(
-        browseJudgeCases(
-          authToken,
-          judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-        ),
-      );
+    if (!loading.rejudgeSubmission) {
+      setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
+      if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
+        dispatch(
+          browseJudgeCases(
+            authToken,
+            judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
+          ),
+        );
+      }
     }
-  }, [authToken, dispatch, judgmentIds, judgments, submissionId]);
+  }, [authToken, dispatch, judgmentIds, judgments, submissionId, loading.rejudgeSubmission]);
 
   useEffect(() => {
-    if (judgeCases.byId !== undefined) {
+    if (!loading.rejudgeSubmission && judgeCases.byId !== undefined) {
       judgeCases.allIds.map((id) => dispatch(readTestcase(authToken, id)));
     }
-  }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId]);
+  }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId, loading.rejudgeSubmission]);
 
   useEffect(() => {
-    if (testcaseIds !== [] && judgeCases.allIds !== []) {
+    if (!loading.rejudgeSubmission && testcaseIds !== [] && judgeCases.allIds !== []) {
       setTableData(
         judgeCases.allIds
           .filter((id) => judgeCases.byId[id].judgment_id === judgmentId)
@@ -152,7 +129,7 @@ export default function SubmissionDetail() {
             no: testcaseIds.map((key) => (id === key ? testcases[key].input_filename.split('.')[0] : '')),
             time: judgeCases.byId[id].time_lapse,
             memory: judgeCases.byId[id].peak_memory,
-            status: judgeCases.byId[id].status
+            status: judgeCases.byId[id].verdict
               .toLowerCase()
               .split(' ')
               .map((word) => word[0].toUpperCase() + word.substring(1))
@@ -161,16 +138,20 @@ export default function SubmissionDetail() {
           })),
       );
     }
-  }, [judgeCases.allIds, judgeCases.byId, judgmentId, judgments.byId, testcaseIds, testcases]);
+  }, [
+    judgeCases.allIds,
+    judgeCases.byId,
+    judgmentId,
+    judgments.byId,
+    testcaseIds,
+    testcases,
+    loading.rejudgeSubmission,
+  ]);
 
   useEffect(() => {
-    user.classes.forEach((value) => {
-      if (value.class_id === parseInt(classId, 10)) {
-        if (value.role === 'MANAGER') {
-          setRole('MANAGER');
-        }
-      }
-    });
+    if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
+      setRole('MANAGER');
+    }
   }, [user.classes, classId]);
 
   if (
@@ -185,27 +166,18 @@ export default function SubmissionDetail() {
     return <GeneralLoading />;
   }
 
-  // if (error.readSubmission) {
-  //   console.log(error.readSubmission);
-  //   return (<div>{error.readSubmission}</div>);
-  // }
-
   const handleRefresh = () => {
     dispatch(readSubmissionDetail(authToken, submissionId));
     dispatch(fetchSubmission(authToken, submissionId));
   };
 
   const handleRejudge = () => {
-    // rejudge
+    dispatch(rejudgeSubmission(authToken, submissionId));
     setPopUp(false);
   };
   return (
     <>
-      <Typography className={classNames.pageHeader} variant="h3">
-        {submissionId}
-        {' '}
-        / Submission Detail
-      </Typography>
+      <PageTitle text={`${submissionId} / Submission Detail`} />
       <div className={classNames.generalButtons}>
         {role === 'MANAGER' && (
           <Button
@@ -252,13 +224,13 @@ export default function SubmissionDetail() {
         <AlignedText text="Status" childrenType="text">
           {judgments[judgmentId] !== undefined ? (
             <div>
-              {judgments[judgmentId].status === 'ACCEPTED' ? (
+              {judgments[judgmentId].verdict === 'ACCEPTED' ? (
                 <Typography variant="body1">
-                  {judgments[judgmentId].status.charAt(0).concat(judgments[judgmentId].status.slice(1).toLowerCase())}
+                  {judgments[judgmentId].verdict.charAt(0).concat(judgments[judgmentId].verdict.slice(1).toLowerCase())}
                 </Typography>
               ) : (
                 <Typography variant="body1" color="secondary">
-                  {judgments[judgmentId].status
+                  {judgments[judgmentId].verdict
                     .toLowerCase()
                     .split(' ')
                     .map((word) => word[0].toUpperCase() + word.substring(1))
@@ -267,9 +239,7 @@ export default function SubmissionDetail() {
               )}
             </div>
           ) : (
-            <Typography variant="body1" color="secondary">
-              Waiting For Judge
-            </Typography>
+            <Typography variant="body1">Waiting For Judge</Typography>
           )}
         </AlignedText>
         <AlignedText text="Score" childrenType="text">
@@ -339,21 +309,7 @@ export default function SubmissionDetail() {
         />
       </SimpleBar>
       <SimpleBar title="Code" noIndent>
-        <div className={classNames.codeContent}>
-          <TextField
-            className={classNames.codeField}
-            value={submissions[submissionId].content}
-            disabled
-            multiline
-            minRows={10}
-            maxRows={20}
-          />
-          <CopyToClipboard text={submissions[submissionId].content}>
-            <IconButton className={classNames.copyIcon}>
-              <Icon.Copy />
-            </IconButton>
-          </CopyToClipboard>
-        </div>
+        <CodeArea value={submissions[submissionId].content} />
       </SimpleBar>
       <Dialog
         maxWidth="md"

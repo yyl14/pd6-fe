@@ -1,31 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import { TextField } from '@material-ui/core';
-import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import prism from 'react-syntax-highlighter/dist/esm/styles/prism/prism';
+import CopyToClipboardButton from './CopyToClipboardButton';
 
 const useStyles = makeStyles({
-  root: {
-    width: '1091px',
+  codeContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+  },
+  buttonWrapper: {
+    height: 0,
+    width: 0,
+  },
+  codeField: {
+    width: '100%',
+  },
+  copyIcon: {
+    transform: 'translate(-50px, 20px)',
+    zIndex: '1000',
   },
 });
 
-export default function CodeArea(
-  codeString,
-) {
-  const classes = useStyles();
+export default function CodeArea({ value }) {
+  const classNames = useStyles();
   return (
-    <TextField
-      className={classes.root}
-      multiline
-      rows={15}
-    >
-      <SyntaxHighlighter language={['python', 'cpp', 'c']} style={docco}>
-        {codeString}
-      </SyntaxHighlighter>
-    </TextField>
-
+    <div className={classNames.codeContent}>
+      <div className={classNames.buttonWrapper}>
+        <CopyToClipboardButton className={classNames.copyIcon} text={value} />
+      </div>
+      <TextField className={classNames.codeField} value={value} disabled multiline minRows={10} />
+    </div>
   );
 }

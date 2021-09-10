@@ -1,28 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, TextField, makeStyles } from '@material-ui/core';
 import moment from 'moment-timezone';
 
 import { editChallenge } from '../../../../actions/myClass/challenge';
+import { fetchChallenge } from '../../../../actions/common/common';
 import RadioGroupForm from '../../../ui/RadioGroupForm';
 import DateRangePicker from '../../../ui/DateRangePicker';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 
-const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-  contentField: {
-    width: '720px',
-  },
+const useStyles = makeStyles(() => ({
   dateRangePicker: {
+    width: '44vw',
     marginTop: '15px',
-    marginBottom: '16px',
+    marginBottom: '0px',
   },
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end',
+    marginTop: '-10px',
+    marginRight: '-5px',
   },
 }));
 
@@ -31,6 +29,7 @@ export default function SettingEdit({ challengeId, challenge, setEdit }) {
 
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
+  const editLoading = useSelector((state) => state.loading.myClass.challenge.editChallenge);
 
   const [editTitle, setEditTitle] = useState(challenge.title);
   const [duration, setDuration] = useState([
@@ -42,6 +41,7 @@ export default function SettingEdit({ challengeId, challenge, setEdit }) {
   ]);
   const [selectionType, setSelectionType] = useState(challenge.selection_type);
   const [publicizeType, setPublicizeType] = useState(challenge.publicize_type);
+  const [hasRequest, setHasRequest] = useState(false);
 
   const handleClickSave = () => {
     const body = {
@@ -50,23 +50,29 @@ export default function SettingEdit({ challengeId, challenge, setEdit }) {
       end_time: duration[0].endDate.toISOString(),
       publicize_type: publicizeType,
       selection_type: selectionType,
-      description: challenge.description,
     };
-    // console.log('call edit challenge api', challengeId, body);
     dispatch(editChallenge(authToken, challengeId, body));
-    setEdit(false);
+    setHasRequest(true);
   };
+
+  useEffect(() => {
+    if (hasRequest && !editLoading) {
+      setHasRequest(false);
+      dispatch(fetchChallenge(authToken, challengeId));
+      setEdit(false);
+    }
+  }, [authToken, challengeId, dispatch, editLoading, hasRequest, setEdit]);
 
   return (
     <>
       <SimpleBar title="Information">
-        <AlignedText text="Title" childrenType="field">
+        <AlignedText text="Title" childrenType="field" maxWidth="lg">
           <TextField defaultValue={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
         </AlignedText>
-        <AlignedText text="Duration" childrenType="field">
+        <AlignedText text="Duration" childrenType="field" maxWidth="lg">
           <DateRangePicker className={classes.dateRangePicker} value={duration} setValue={setDuration} />
         </AlignedText>
-        <AlignedText text="Scored by" childrenType="radio">
+        <AlignedText text="Scored by" childrenType="radio" maxWidth="lg">
           <RadioGroupForm
             options={[
               {
@@ -83,7 +89,7 @@ export default function SettingEdit({ challengeId, challenge, setEdit }) {
             flexDirection="row"
           />
         </AlignedText>
-        <AlignedText text="Shown in Problem Set" childrenType="radio">
+        <AlignedText text="Shown in Problem Set" childrenType="radio" maxWidth="lg">
           <RadioGroupForm
             options={[
               {

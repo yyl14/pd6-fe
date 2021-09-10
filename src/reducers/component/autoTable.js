@@ -53,7 +53,7 @@ const allIds = (state = [], action) => {
   switch (action.type) {
     case autoTableConstants.AUTO_TABLE_MOUNT: {
       const { tableId } = action.payload;
-      return [...new Set([...state], [tableId])];
+      return [...new Set([...state, tableId])];
     }
     default:
       return state;

@@ -1,6 +1,7 @@
 import { challengeConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
+  browseTasksUnderChallenge: false,
   fetchChallenges: false,
   addChallenge: false,
   editChallenge: false,
@@ -14,7 +15,23 @@ const initialState = {
 
 export default function challenge(state = initialState, action) {
   switch (action.type) {
-    case challengeConstants.FETCH_CHALLENGES_REQUEST: {
+    case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_START:
+      return {
+        ...state,
+        browseTasksUnderChallenge: true,
+      };
+    case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS:
+      return {
+        ...state,
+        browseTasksUnderChallenge: false,
+      };
+    case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_FAIL:
+      return {
+        ...state,
+        browseTasksUnderChallenge: false,
+      };
+
+    case challengeConstants.FETCH_CHALLENGES_START: {
       return {
         ...state,
         fetchChallenges: true,
@@ -33,7 +50,7 @@ export default function challenge(state = initialState, action) {
       };
     }
 
-    case challengeConstants.ADD_CHALLENGE_REQUEST: {
+    case challengeConstants.ADD_CHALLENGE_START: {
       return {
         ...state,
         addChallenge: true,
@@ -52,7 +69,7 @@ export default function challenge(state = initialState, action) {
       };
     }
 
-    case challengeConstants.EDIT_CHALLENGE_REQUEST: {
+    case challengeConstants.EDIT_CHALLENGE_START: {
       return {
         ...state,
         editChallenge: true,
@@ -71,7 +88,7 @@ export default function challenge(state = initialState, action) {
       };
     }
 
-    case challengeConstants.DELETE_CHALLENGE_REQUEST: {
+    case challengeConstants.DELETE_CHALLENGE_START: {
       return {
         ...state,
         deleteChallenge: true,
@@ -90,7 +107,7 @@ export default function challenge(state = initialState, action) {
       };
     }
 
-    case challengeConstants.FETCH_CHALLENGE_SUMMARY_REQUEST: {
+    case challengeConstants.FETCH_CHALLENGE_SUMMARY_START: {
       return {
         ...state,
         fetchChallengeSummary: true,
@@ -109,7 +126,7 @@ export default function challenge(state = initialState, action) {
       };
     }
 
-    case challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_REQUEST: {
+    case challengeConstants.FETCH_CHALLENGE_MEMBER_SUBMISSION_START: {
       return {
         ...state,
         fetchChallengeMemberSubmission: true,

@@ -2,32 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import {
-  Typography,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  TextField,
-  makeStyles,
+  Typography, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField,
 } from '@material-ui/core';
 import {
-  fetchCourses, fetchClasses, fetchMembers, renameClass, deleteClass,
+  fetchCourses, fetchClasses, renameClass, deleteClass,
 } from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
+import PageTitle from '../../ui/PageTitle';
 import NoMatch from '../../noMatch';
-
-const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-}));
 
 /* This is a level 4 component (page component) */
 const ClassSetting = () => {
-  const classNames = useStyles();
   const { courseId, classId } = useParams();
   const history = useHistory();
 
@@ -41,16 +27,6 @@ const ClassSetting = () => {
   const [showRenameDialog, setShowRenameDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [newClassName, setNewClassName] = useState('');
-
-  useEffect(() => {
-    dispatch(fetchCourses(authToken));
-  }, [authToken, dispatch]);
-
-  useEffect(() => {
-    if (!loading.renameClass) {
-      dispatch(fetchClasses(authToken, courseId));
-    }
-  }, [authToken, courseId, dispatch, loading.renameClass]);
 
   const getCourseType = (courseType) => {
     switch (courseType) {
@@ -83,10 +59,7 @@ const ClassSetting = () => {
 
   return (
     <div className="class-setting">
-      <Typography variant="h3" className={classNames.pageHeader}>
-        {`${courses.byId[courseId].name} / ${classes.byId[classId].name} / Setting`}
-      </Typography>
-
+      <PageTitle text={`${courses.byId[courseId].name} / ${classes.byId[classId].name} / Setting`} />
       <SimpleBar title="Course Information">
         <AlignedText text="Type" maxWidth="lg" childrenType="text">
           <Typography variant="body1">{getCourseType(courses.byId[courseId].type)}</Typography>
@@ -142,11 +115,7 @@ const ClassSetting = () => {
             <Typography variant="body1">{classes.byId[classId].name}</Typography>
           </AlignedText>
           <AlignedText text="New Name" maxWidth="md" childrenType="field">
-            <TextField
-              style={{ width: '350px' }}
-              variant="outlined"
-              onChange={(e) => setNewClassName(e.target.value)}
-            />
+            <TextField variant="outlined" onChange={(e) => setNewClassName(e.target.value)} />
           </AlignedText>
         </DialogContent>
         <DialogContent>

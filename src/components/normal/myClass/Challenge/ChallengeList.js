@@ -17,15 +17,17 @@ import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
-import CustomTable from '../../../ui/CustomTable';
+import AutoTable from '../../../ui/AutoTable';
+import PageTitle from '../../../ui/PageTitle';
 import DateRangePicker from '../../../ui/DateRangePicker';
 import { fetchChallenges, addChallenge } from '../../../../actions/myClass/challenge';
-import { fetchClass, fetchCourse } from '../../../../actions/common/common';
 import GeneralLoading from '../../../GeneralLoading';
+import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
+  dateRangePicker: {
+    marginTop: '16px',
+    marginBottom: '16px',
   },
   row: {
     display: 'flex',
@@ -36,12 +38,8 @@ const useStyles = makeStyles((theme) => ({
   item: {
     width: '190px',
   },
-  textfield: {
+  selectList: {
     width: '350px',
-  },
-  gap: {
-    marginBottom: theme.spacing(2),
-    marginTop: theme.spacing(3),
   },
 }));
 
@@ -51,7 +49,6 @@ export default function ChallengeList() {
   const className = useStyles();
   const dispatch = useDispatch();
 
-  const [tableData, setTableData] = useState([]);
   const [dateRangePicker, setDateRangePicker] = useState([
     {
       startDate: moment().startOf('week').toDate(),
@@ -60,100 +57,58 @@ export default function ChallengeList() {
     },
   ]);
 
-  const [currentTime, setCurrentTime] = useState(moment());
   const [popUp, setPopUp] = useState(false);
   const [inputs, setInputs] = useState({
     title: '',
     scoredBy: 'Last Score',
     showTime: 'On End Time',
   });
-  const [error, setError] = useState(false);
-  const [errorText, setErrorText] = useState('');
+  const [disabled, setDisabled] = useState(true);
   const [isManager, setIsManager] = useState(false);
 
   const authToken = useSelector((state) => state.auth.token);
+  const error = useSelector((state) => state.error.myClass.challenge);
   const loading = useSelector((state) => state.loading.myClass.challenge);
-  const challenges = useSelector((state) => state.challenges.byId);
-  const challengesID = useSelector((state) => state.challenges.allIds);
+  const commonLoading = useSelector((state) => state.loading.common.common);
+  const challenges = useSelector((state) => state.challenges);
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
 
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-  }, [dispatch, authToken, classId, courseId]);
-
-  useEffect(() => {
-    if (!loading.addChallenge) {
-      dispatch(fetchChallenges(authToken, classId));
+  const getStatus = (id) => {
+    const currentTime = moment();
+    if (currentTime.isBefore(moment(challenges.byId[id].start_time))) {
+      return 'Not Yet';
     }
-  }, [authToken, classId, dispatch, loading.addChallenge]);
-
-  useEffect(() => {
-    const getStatus = (id) => {
-      if (currentTime.isBefore(moment(challenges[id].start_time))) {
-        return 'Not Yet';
-      }
-      if (currentTime.isBefore(moment(challenges[id].end_time))) {
-        return 'Opened';
-      }
-      return 'Closed';
-    };
-    if (classes[classId]) {
-      if (isManager) {
-        setTableData(
-          classes[classId].challengeIds.reduce((acc, b) => ([b, ...acc]), []).map((id) => ({
-            title: challenges[id].title,
-            path: `/my-class/${courseId}/${classId}/challenge/${id}`,
-            startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
-            endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
-            status: getStatus(id),
-          })),
-        );
-      } else {
-        setTableData(
-          classes[classId].challengeIds
-            .filter((id) => getStatus(id) !== 'Not Yet')
-            .reduce((acc, b) => ([b, ...acc]), [])
-            .map((id) => ({
-              title: challenges[id].title,
-              path: `/my-class/${courseId}/${classId}/challenge/${id}`,
-              startTime: moment(challenges[id].start_time).format('YYYY-MM-DD, HH:mm'),
-              endTime: moment(challenges[id].end_time).format('YYYY-MM-DD, HH:mm'),
-              status: getStatus(id),
-            })),
-        );
-      }
+    if (currentTime.isBefore(moment(challenges.byId[id].end_time))) {
+      return 'Opened';
     }
-  }, [challenges, challengesID, classId, classes, courseId, currentTime, isManager]);
+    return 'Closed';
+  };
 
   useEffect(() => {
     if (userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
       setIsManager(true);
-    }
+    } else setIsManager(false);
   }, [classId, userClasses]);
 
-  if (loading.fetchChallenges || courses[courseId] === undefined || classes[classId] === undefined) {
-    return <GeneralLoading />;
+  if (courses[courseId] === undefined || classes[classId] === undefined) {
+    if (commonLoading.fetchClass || commonLoading.fetchCourse) {
+      return <GeneralLoading />;
+    }
+    return <NoMatch />;
   }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInputs((input) => ({ ...input, [name]: value }));
 
-    if (name === 'title' && value !== '') {
-      setError(false);
-      setErrorText('');
-    }
+    if (name === 'title' && value === '') {
+      setDisabled(true);
+    } else setDisabled(false);
   };
 
   const handleAdd = () => {
-    if (inputs.title === '') {
-      setError(true);
-      setErrorText("Can't be empty");
-      return;
-    }
     const body = {
       title: inputs.title,
       scoredBy: inputs.scoredBy === 'Last Score' ? 'LAST' : 'BEST',
@@ -162,6 +117,7 @@ export default function ChallengeList() {
       endTime: dateRangePicker[0].endDate.toISOString(),
     };
     dispatch(addChallenge(authToken, classId, body));
+    setDisabled(true);
     setPopUp(false);
     setInputs({
       title: '',
@@ -179,6 +135,7 @@ export default function ChallengeList() {
 
   const handleCancel = () => {
     setPopUp(false);
+    setDisabled(true);
     setInputs({
       title: '',
       scoredBy: 'Last Score',
@@ -195,16 +152,9 @@ export default function ChallengeList() {
 
   return (
     <>
-      <Typography className={className.pageHeader} variant="h3">
-        {courses[courseId].name}
-        {' '}
-        {classes[classId].name}
-        {' '}
-        / Challenge
-      </Typography>
-
-      <CustomTable
-        hasSearch
+      <PageTitle text={`${courses[courseId].name} ${classes[classId].name} / Challenge`} />
+      <AutoTable
+        ident={`Challenge list ${classId}`}
         buttons={
           isManager && (
             <>
@@ -214,73 +164,94 @@ export default function ChallengeList() {
             </>
           )
         }
-        data={tableData}
+        hasFilter
+        filterConfig={[
+          {
+            reduxStateId: 'title',
+            label: 'Title',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          {
+            reduxStateId: 'status',
+            label: 'Status',
+            type: 'ENUM_SINGLE',
+            operation: 'IN',
+            options: [
+              { value: 'Not Yet', label: 'Not Yet' },
+              { value: 'Opened', label: 'Opened' },
+              { value: 'Closed', label: 'Closed' },
+            ],
+          },
+        ]}
+        refetch={(browseParams, ident) => {
+          dispatch(fetchChallenges(authToken, classId, browseParams, ident));
+        }}
+        refetchErrors={[error.fetchChallenges]}
+        refreshLoadings={[loading.addChallenge]}
         columns={[
           {
-            id: 'title',
-            label: 'Title',
-            minWidth: 150,
+            name: 'Title',
             align: 'center',
+            minWidth: 150,
             width: 200,
             type: 'string',
           },
           {
-            id: 'startTime',
-            label: 'Start Time',
-            minWidth: 50,
+            name: 'Start Time',
             align: 'center',
+            minWidth: 50,
             width: 180,
             type: 'string',
           },
           {
-            id: 'endTime',
-            label: 'End Time',
-            minWidth: 50,
+            name: 'End Time',
             align: 'center',
+            minWidth: 50,
             width: 180,
             type: 'string',
           },
           {
-            id: 'status',
-            label: 'Status',
-            minWidth: 50,
+            name: 'Status',
             align: 'center',
+            minWidth: 50,
             width: 100,
             type: 'string',
           },
         ]}
+        reduxData={challenges}
+        reduxDataToRows={(item) => ({
+          Title: item.title,
+          'Start Time': moment(item.start_time).format('YYYY-MM-DD, HH:mm'),
+          'End Time': moment(item.end_time).format('YYYY-MM-DD, HH:mm'),
+          Status: getStatus(item.id),
+          link: `/my-class/${courseId}/${classId}/challenge/${item.id}`,
+        })}
         hasLink
-        linkName="path"
       />
-      <Dialog open={popUp} keepMounted onClose={() => setPopUp(false)} maxWidth="md">
+      <Dialog open={popUp} keepMounted onClose={() => setPopUp(false)} maxWidth="604px">
         <DialogTitle>
           <Typography variant="h4">Create New Challenge</Typography>
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Class" childrenType="text" maxWidth="md">
-            <Typography>
-              {courses[courseId].name}
-              {' '}
-              {classes[classId].name}
-            </Typography>
+            <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
           </AlignedText>
           <AlignedText text="Title" childrenType="field" maxWidth="md">
-            <TextField
-              value={inputs.title}
-              name="title"
-              onChange={(e) => handleChange(e)}
-              error={error}
-              helperText={errorText}
-            />
+            <TextField value={inputs.title} name="title" onChange={(e) => handleChange(e)} />
           </AlignedText>
-          <div className={className.gap}>
-            <DateRangePicker vertical value={dateRangePicker} setValue={setDateRangePicker} />
-          </div>
+          <Typography variant="body1">Duration</Typography>
+          <DateRangePicker
+            vertical
+            value={dateRangePicker}
+            setValue={setDateRangePicker}
+            className={className.dateRangePicker}
+          />
           <div className={className.row}>
             <div className={className.item}>
               <Typography>Scored by</Typography>
             </div>
-            <FormControl variant="outlined" className={className.textfield}>
+            <FormControl variant="outlined" className={className.selectList}>
               <Select value={inputs.scoredBy} name="scoredBy" onChange={(e) => handleChange(e)}>
                 <MenuItem value="Last Score">Last Score</MenuItem>
                 <MenuItem value="Best Score">Best Score</MenuItem>
@@ -291,7 +262,7 @@ export default function ChallengeList() {
             <div className={className.item}>
               <Typography>Shown in problem set</Typography>
             </div>
-            <FormControl variant="outlined" className={className.textfield}>
+            <FormControl variant="outlined" className={className.selectList}>
               <Select value={inputs.showTime} name="showTime" onChange={(e) => handleChange(e)}>
                 <MenuItem value="On End Time">On End Time</MenuItem>
                 <MenuItem value="On Start Time">On Start Time</MenuItem>
@@ -303,7 +274,7 @@ export default function ChallengeList() {
           <Button onClick={handleCancel} color="default">
             Cancel
           </Button>
-          <Button onClick={handleAdd} color="primary">
+          <Button onClick={handleAdd} color="primary" disabled={disabled}>
             Create
           </Button>
         </DialogActions>

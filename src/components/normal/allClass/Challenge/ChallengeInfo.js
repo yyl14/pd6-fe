@@ -2,31 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { Typography, makeStyles } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
-import {
-  browseChallengeOverview,
-  browseTasksUnderChallenge,
-  readProblemScore,
-} from '../../../../actions/myClass/problem';
+import PageTitle from '../../../ui/PageTitle';
+import { readProblemScore } from '../../../../actions/myClass/problem';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-  descriptionField: {
-    width: '60vw',
-  },
   table: {
     width: '100%',
-  },
-  buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
   },
 }));
 
@@ -41,22 +29,11 @@ export default function ChallengeInfo() {
   const [tableData, setTableData] = useState([]);
 
   const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.myClass.problem);
-  const userClasses = useSelector((state) => state.user.classes);
+  const commonLoading = useSelector((state) => state.loading.common.common);
   const challenges = useSelector((state) => state.challenges.byId);
   const problems = useSelector((state) => state.problem.byId);
   const essays = useSelector((state) => state.essays.byId);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
-
-  useEffect(() => {
-    if (!loading.editChallenge) {
-      dispatch(browseChallengeOverview(authToken, challengeId));
-    }
-  }, [authToken, challengeId, dispatch, loading.editChallenge]);
-
-  useEffect(() => {
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
-  }, [authToken, challengeId, dispatch]);
 
   useEffect(() => {
     if (challenges[challengeId] !== undefined) {
@@ -82,12 +59,11 @@ export default function ChallengeInfo() {
       if (challenges[challengeId].problemIds.reduce((acc, item) => acc && problems[item] !== undefined, true)) {
         // problems are complete
         setTableData(
-          challenges[challengeId].problemIds
-            .map((id) => ({
-              challenge_label: problems[id].challenge_label,
-              score: problems[id].score,
-              id: `coding-${id}`,
-            }))
+          challenges[challengeId].problemIds.map((id) => ({
+            challenge_label: problems[id].challenge_label,
+            score: problems[id].score,
+            id: `coding-${id}`,
+          })) /*
             .concat(
               challenges[challengeId].essayIds.map((id) => ({
                 challenge_label: essays[id].challenge_label,
@@ -97,28 +73,26 @@ export default function ChallengeInfo() {
                 challenge_label: peerReviews[id].challenge_label,
                 id: `peer-${id}`,
               })),
-            ),
+            ) */,
         );
       }
     }
   }, [authToken, challengeId, challenges, essays, peerReviews, problems]);
 
   if (challenges[challengeId] === undefined) {
-    if (!loading.browseChallengeOverview) {
-      return <NoMatch />;
+    if (commonLoading.fetchChallenge) {
+      return <GeneralLoading />;
     }
-    return <GeneralLoading />;
+    return <NoMatch />;
   }
 
   return (
     <>
-      <Typography className={classes.pageHeader} variant="h3">
-        {`${challenges[challengeId].title} / Info`}
-      </Typography>
-      <SimpleBar title="Description">
-        <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
-          {challenges[challengeId].description}
-        </Typography>
+      <PageTitle text={`${challenges[challengeId].title} / Info`} />
+      <SimpleBar title="Description" noIndent>
+        <MathpixLoader>
+          <MathpixMarkdown text={challenges[challengeId].description} />
+        </MathpixLoader>
       </SimpleBar>
       <SimpleBar title="Challenge Information">
         <>

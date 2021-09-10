@@ -1,17 +1,15 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Typography, Button, makeStyles } from '@material-ui/core';
+import { Button, makeStyles } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import Icon from '../../../ui/icon/index';
+import PageTitle from '../../../ui/PageTitle';
 
 import CodingProblemInfo from './ProblemSettings/CodingProblemInfo';
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   sampleArea: {
     marginTop: '50px',
   },
@@ -33,7 +31,16 @@ export default function CodingProblem() {
   const courses = useSelector((state) => state.courses.byId);
   const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges.byId);
+  //  const error = useSelector((state) => state.error.myClass.problem);
+  const loading = useSelector((state) => state.loading.myClass.problem);
   const commonLoading = useSelector((state) => state.loading.common);
+
+  if (loading.readProblem || loading.readChallenge) {
+    return <GeneralLoading />;
+  }
+  // if (error.readChallenge != null || error.readProblem != null) {
+  //   return <div>System Exception</div>;
+  // }
 
   if (
     problems[problemId] === undefined
@@ -49,11 +56,11 @@ export default function CodingProblem() {
 
   return (
     <>
-      <Typography className={classNames.pageHeader} variant="h3">
-        {`${challenges[challengeId] === undefined ? 'error' : challenges[challengeId].title} / ${
+      <PageTitle
+        text={`${challenges[challengeId] === undefined ? 'error' : challenges[challengeId].title} / ${
           problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label
         }`}
-      </Typography>
+      />
       <div className={classNames.generalButtons}>
         <Button
           variant="outlined"

@@ -4,8 +4,17 @@ import challenge from './challenge';
 import member from './member';
 import problem from './problem';
 import submissions from './submissions';
+import team from './team';
 import judgements from './judgements';
+import essaySubmission from './essaySubmission';
 
 export default combineReducers({
-  grade, challenge, member, problem, submissions, judgements,
+  grade,
+  challenge,
+  member,
+  problem,
+  submissions,
+  team,
+  judgements,
+  essaySubmission,
 });

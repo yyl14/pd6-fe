@@ -1,10 +1,16 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import {
-  Button, Card, CardContent, Typography, makeStyles,
+  Button, Card, CardContent, Typography, makeStyles, Snackbar,
 } from '@material-ui/core';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
+import {
+  deletePendingStudentCard,
+  makeStudentCardDefault,
+  resendEmailVerification,
+} from '../../../../actions/admin/account';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -16,8 +22,11 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
     marginBottom: '10px',
   },
-  defaultStar: {
-    marginRight: ' 8px',
+  starIcon: {
+    marginRight: '5px',
+  },
+  pendingIcon: {
+    marginRight: '13px',
   },
   cardContent: {
     height: '106px',
@@ -46,11 +55,24 @@ const useStyles = makeStyles(() => ({
 export default function StudentInfoCard(props) {
   const classes = useStyles();
   const disabled = props.isDefault;
+  const authToken = useSelector((state) => state.auth.token);
   const institutes = useSelector((state) => state.institutes.byId);
   const institutesId = useSelector((state) => state.institutes.allIds);
+  const [snackbar, setSnackbar] = useState(false);
+  const dispatch = useDispatch();
+  const { accountId } = useParams();
 
-  const handleClick = () => {
-    props.updateStatus(props.studentId, props.id);
+  const handleSetDefault = (cardId) => {
+    dispatch(makeStudentCardDefault(authToken, accountId, cardId));
+  };
+
+  const handleResend = (emailVerificationId) => {
+    dispatch(resendEmailVerification(authToken, emailVerificationId));
+    setSnackbar(true);
+  };
+
+  const handleDelete = (emailVerificationId) => {
+    dispatch(deletePendingStudentCard(authToken, emailVerificationId));
   };
 
   const transform = (instituteId) => {
@@ -64,13 +86,12 @@ export default function StudentInfoCard(props) {
   return (
     <div className={classes.root}>
       <div className={classes.defaultHeader}>
-        {props.isDefault ? <Icon.StarIcon style={{ color: 'ffe81e' }} className={classes.defaultStar} /> : <></>}
-        <Typography variant="body1">
-          {transform(props.instituteId)}
-        </Typography>
+        {props.isDefault && <Icon.StarIcon style={{ color: 'ffe81e' }} className={classes.starIcon} />}
+        {props.pending && <Icon.Warning style={{ color: '656565' }} className={classes.pendingIcon} />}
+        <Typography variant="body1">{transform(props.instituteId)}</Typography>
       </div>
       <Card variant="outlined">
-        {props.editMode ? (
+        {!props.pending ? (
           <CardContent className={classes.editCardContent}>
             <div>
               <AlignedText text="Student ID" childrenType="text">
@@ -83,11 +104,18 @@ export default function StudentInfoCard(props) {
               </AlignedText>
             </div>
             <div className={classes.defaultButton}>
-              <Button disabled={disabled} onClick={() => { handleClick(); props.setChanged(true); }}>Set as Default</Button>
+              <Button
+                disabled={disabled}
+                onClick={() => {
+                  handleSetDefault(props.id);
+                }}
+              >
+                Set as Default
+              </Button>
             </div>
           </CardContent>
         ) : (
-          <CardContent className={classes.cardContent}>
+          <CardContent className={classes.editCardContent}>
             <div>
               <AlignedText text="Student ID" childrenType="text">
                 <Typography variant="body1">{props.studentId}</Typography>
@@ -98,9 +126,32 @@ export default function StudentInfoCard(props) {
                 <Typography variant="body1">{props.email}</Typography>
               </AlignedText>
             </div>
+            <div className={classes.defaultButton}>
+              <Button
+                onClick={() => {
+                  handleDelete(props.id);
+                }}
+              >
+                Delete
+              </Button>
+              <Button
+                onClick={() => {
+                  handleResend(props.id);
+                }}
+                color="primary"
+              >
+                Resend
+              </Button>
+            </div>
           </CardContent>
         )}
       </Card>
+      <Snackbar
+        open={snackbar}
+        autoHideDuration={3000}
+        message="Verification email sent! Please check your mailbox."
+        onClose={() => setSnackbar(false)}
+      />
     </div>
   );
 }

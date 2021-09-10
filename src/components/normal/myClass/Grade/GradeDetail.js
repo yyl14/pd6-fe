@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { fetchClassMembers } from '../../../../actions/common/common';
-import { fetchClassGrade } from '../../../../actions/myClass/grade';
+import { fetchGrade } from '../../../../actions/myClass/grade';
+import PageTitle from '../../../ui/PageTitle';
 
 import GradeInfo from './detail/GradeInfo';
 import Grader from './detail/Grader';
@@ -13,23 +11,15 @@ import GradeDelete from './detail/GradeDelete';
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
-const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-}));
-
 /* This is a level 4 component (page component) */
-export default function AccountSetting() {
-  const classNames = useStyles();
+export default function GradeDetail() {
   const dispatch = useDispatch();
   const { classId, gradeId } = useParams();
 
   const authToken = useSelector((state) => state.auth.token);
-  const members = useSelector((state) => state.classMembers.byId);
-  const grades = useSelector((state) => state.grades.byId);
+  const accounts = useSelector((state) => state.accounts);
+  const grades = useSelector((state) => state.grades);
   const loading = useSelector((state) => state.loading.myClass.grade);
-  const commonLoading = useSelector((state) => state.loading.common.common);
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
 
@@ -39,23 +29,15 @@ export default function AccountSetting() {
   const [editGradeInfo, setEditGradeInfo] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchClassMembers(authToken, classId));
-  }, [dispatch, authToken, classId]);
-
-  useEffect(() => {
     if (!loading.editGrade) {
-      dispatch(fetchClassGrade(authToken, classId));
+      dispatch(fetchGrade(authToken, gradeId));
     }
-  }, [dispatch, authToken, classId, loading.editGrade]);
+  }, [dispatch, authToken, loading.editGrade, gradeId]);
 
   useEffect(() => {
-    user.classes.forEach((item) => {
-      if (item.class_id === parseInt(classId, 10)) {
-        if (item.role === 'MANAGER') {
-          setIsManager(true);
-        }
-      }
-    });
+    if (user.classes) {
+      if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') setIsManager(true);
+    }
   }, [classId, user.classes]);
 
   const handleBack = () => {
@@ -65,9 +47,8 @@ export default function AccountSetting() {
   const handleEdit = () => {
     setEditGradeInfo(true);
   };
-
-  if (grades[gradeId] === undefined || members === undefined) {
-    if (loading.fetchClassGrade || commonLoading.fetchClassMembers) {
+  if (grades.byId[gradeId] === undefined) {
+    if (loading.fetchGrade || loading.editGrade) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -75,31 +56,32 @@ export default function AccountSetting() {
 
   return (
     <>
-      <Typography variant="h3" className={classNames.pageHeader}>
-        Grade / Detail
-      </Typography>
+      <PageTitle text="Grade / Detail" />
 
       {editGradeInfo ? (
         <GradeInfoEdit
-          receiver={members[grades[gradeId].receiver_id]}
-          grade={grades[gradeId]}
+          receiver={accounts.byId[grades.byId[gradeId].receiver_id]}
+          grade={grades.byId[gradeId]}
           link={userLink}
           handleBack={handleBack}
         />
       ) : (
         <GradeInfo
           isManager={isManager}
-          receiver={members[grades[gradeId].receiver_id]}
-          grade={grades[gradeId]}
+          receiver={accounts.byId[grades.byId[gradeId].receiver_id]}
+          grade={grades.byId[gradeId]}
           link={userLink}
           handleEdit={handleEdit}
         />
       )}
 
-      <Grader grader={members[grades[gradeId].grader_id]} link={graderLink} />
+      <Grader grader={accounts.byId[grades.byId[gradeId].grader_id]} link={graderLink} />
 
       {isManager && (
-        <GradeDelete username={members[grades[gradeId].receiver_id].username} title={grades[gradeId].title} />
+        <GradeDelete
+          username={accounts.byId[grades.byId[gradeId].receiver_id].username}
+          title={grades.byId[gradeId].title}
+        />
       )}
     </>
   );

@@ -52,6 +52,10 @@ const useStyles = makeStyles((theme) => ({
   },
   titleText: {
     flex: '5',
+    marginRight: '15px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
   titleRightIcon: {
     marginTop: 'auto',
@@ -72,6 +76,12 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+  },
+  addIconItem: {
+    color: theme.palette.grey.A400,
+  },
+  addIconItemClicked: {
+    color: theme.palette.primary.main,
   },
   activeItemText: {
     flex: '10',

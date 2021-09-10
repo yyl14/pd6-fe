@@ -15,14 +15,12 @@ import {
 import { useParams } from 'react-router-dom';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
+import PageTitle from '../../ui/PageTitle';
 import { getInstitute, editInstitute } from '../../../actions/admin/account';
 import NoMatch from '../../noMatch';
 import GeneralLoading from '../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   warningText: {
     marginTop: '10px',
   },
@@ -34,7 +32,7 @@ export default function InstituteSetting() {
   const { instituteId } = useParams();
   const institutes = useSelector((state) => state.institutes.byId);
   const authToken = useSelector((state) => state.auth.token);
-  const pageError = useSelector((state) => state.error.admin.account);
+  // const pageError = useSelector((state) => state.error.admin.account);
   const loading = useSelector((state) => state.loading.admin.account);
 
   const dispatch = useDispatch();
@@ -168,9 +166,7 @@ export default function InstituteSetting() {
 
   return (
     <>
-      <Typography variant="h3" className={classes.pageHeader}>
-        {`${institutes[instituteId].abbreviated_name} / Setting`}
-      </Typography>
+      <PageTitle text={`${institutes[instituteId].abbreviated_name} / Setting`} />
       <SimpleBar title="Institute Information">
         <AlignedText text="Full Name" maxWidth="lg" childrenType="text">
           <Typography variant="body1">{institutes[instituteId].full_name}</Typography>
@@ -212,7 +208,7 @@ export default function InstituteSetting() {
           <>
             <Button
               color="secondary"
-              onClick={(prevState) => {
+              onClick={() => {
                 setSettingStatus((input) => ({ ...input, changeInitialism: true }));
               }}
             >
@@ -231,7 +227,7 @@ export default function InstituteSetting() {
           <>
             <Button
               color="secondary"
-              onClick={(prevState) => {
+              onClick={() => {
                 setSettingStatus((input) => ({ ...input, changeEmail: true }));
               }}
             >
@@ -251,7 +247,7 @@ export default function InstituteSetting() {
           <>
             <Button
               color="secondary"
-              onClick={(prevState) => {
+              onClick={() => {
                 setSettingStatus((input) => ({ ...input, changeStatus: true }));
                 setNewSetting((input) => ({ ...input, newStatus: institutes[instituteId].is_disabled }));
               }}
@@ -272,19 +268,11 @@ export default function InstituteSetting() {
           <Typography variant="h4">Rename institute</Typography>
         </DialogTitle>
         <DialogContent>
-          <div style={{ color: 'red' }}>
-            <AlignedText text="Full Name" childrenType="text">
-              <Typography variant="body1">{institutes[instituteId].full_name}</Typography>
-            </AlignedText>
-          </div>
+          <AlignedText text="Full Name" childrenType="text" textColor="secondary">
+            <Typography variant="body1">{institutes[instituteId].full_name}</Typography>
+          </AlignedText>
           <AlignedText text="New Name" childrenType="field">
-            <TextField
-              id="newName"
-              name="newName"
-              value={newSetting.newName}
-              onChange={handleChange('newName')}
-              className={classes.inputField}
-            />
+            <TextField id="newName" name="newName" value={newSetting.newName} onChange={handleChange('newName')} />
           </AlignedText>
           <Typography variant="body1" className={classes.warningText}>
             Once you change the institute’s name, all related members will be affected. Please be certain.
@@ -299,6 +287,7 @@ export default function InstituteSetting() {
               handleEditInstitute('newName');
             }}
             color="secondary"
+            disabled={newSetting.newName === ''}
           >
             Rename
           </Button>
@@ -315,18 +304,15 @@ export default function InstituteSetting() {
           <Typography variant="h4">Change institute Initialism</Typography>
         </DialogTitle>
         <DialogContent>
-          <div style={{ color: 'red' }}>
-            <AlignedText text="Current Initialism" childrenType="text">
-              <Typography variant="body1">{institutes[instituteId].abbreviated_name}</Typography>
-            </AlignedText>
-          </div>
+          <AlignedText text="Current Initialism" childrenType="text" textColor="secondary">
+            <Typography variant="body1">{institutes[instituteId].abbreviated_name}</Typography>
+          </AlignedText>
           <AlignedText text="New Initialism" childrenType="field">
             <TextField
               id="newInitialism"
               name="newInitialism"
               value={newSetting.newInitialism}
               onChange={handleChange('newInitialism')}
-              className={classes.inputField}
             />
           </AlignedText>
           <Typography variant="body1" className={classes.warningText}>
@@ -342,6 +328,7 @@ export default function InstituteSetting() {
               handleEditInstitute('newInitialism');
             }}
             color="secondary"
+            disabled={newSetting.newInitialism === ''}
           >
             Rename
           </Button>
@@ -352,11 +339,9 @@ export default function InstituteSetting() {
           <Typography variant="h4">Change institute email</Typography>
         </DialogTitle>
         <DialogContent>
-          <div style={{ color: 'red' }}>
-            <AlignedText text="Current Email" childrenType="text">
-              <Typography variant="body1">{institutes[instituteId].email_domain}</Typography>
-            </AlignedText>
-          </div>
+          <AlignedText text="Current Email" childrenType="text" textColor="secondary">
+            <Typography variant="body1">{institutes[instituteId].email_domain}</Typography>
+          </AlignedText>
           <AlignedText text="New Email" childrenType="field">
             <TextField
               id="newEmail"
@@ -365,7 +350,6 @@ export default function InstituteSetting() {
               onChange={handleChange('newEmail')}
               error={error}
               helperText={errorText}
-              className={classes.inputField}
             />
           </AlignedText>
           <Typography variant="body1" className={classes.warningText}>
@@ -382,6 +366,7 @@ export default function InstituteSetting() {
               handleEditInstitute('newEmail');
             }}
             color="secondary"
+            disabled={newSetting.newEmail === ''}
           >
             Modify
           </Button>

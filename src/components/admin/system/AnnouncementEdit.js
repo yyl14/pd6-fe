@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, TextField, makeStyles } from '@material-ui/core';
 import moment from 'moment-timezone';
@@ -9,16 +8,17 @@ import DateRangePicker from '../../ui/DateRangePicker';
 import AlignedText from '../../ui/AlignedText';
 import { editAnnouncement } from '../../../actions/admin/system';
 
-const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
+const useStyles = makeStyles(() => ({
   contentField: {
     width: '720px',
   },
   dateRangePicker: {
     marginTop: '15px',
     marginBottom: '9px',
+  },
+  buttons: {
+    marginTop: '-32px',
+    marginLeft: '-5px',
   },
 }));
 
@@ -38,9 +38,7 @@ export default function AnnouncementEdit(props) {
   ]);
   const [editContent, setEditContent] = useState(props.editContent);
 
-  const history = useHistory();
   const handleClickSave = () => {
-    console.log(dateRangePicker[0].startDate, dateRangePicker[0].endDate);
     const body = {
       title: editTitle,
       content: editContent,
@@ -71,16 +69,12 @@ export default function AnnouncementEdit(props) {
           />
         </AlignedText>
       </SimpleBar>
-      <Button
-        onClick={() => {
-          props.setEdit(false);
-        }}
-      >
-        Cancel
-      </Button>
-      <Button color="primary" onClick={handleClickSave}>
-        Save
-      </Button>
+      <div className={classes.buttons}>
+        <Button onClick={() => props.setEdit(false)}>Cancel</Button>
+        <Button color="primary" onClick={handleClickSave}>
+          Save
+        </Button>
+      </div>
     </>
   );
 }

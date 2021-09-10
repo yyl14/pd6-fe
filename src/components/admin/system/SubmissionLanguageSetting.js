@@ -10,24 +10,16 @@ import {
   DialogTitle,
   FormControlLabel,
   Switch,
-  makeStyles,
 } from '@material-ui/core';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
+import PageTitle from '../../ui/PageTitle';
 import NoMatch from '../../noMatch';
 import { editSubmitLanguage, fetchSubmitLanguage } from '../../../actions/admin/system';
 import GeneralLoading from '../../GeneralLoading';
 
-const useStyle = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-}));
-
 /* This is a level 4 component (page component) */
 export default function LangSetting() {
-  const classes = useStyle();
-
   const dispatch = useDispatch();
   const { languageId } = useParams();
   const authToken = useSelector((state) => state.auth.token);
@@ -75,10 +67,7 @@ export default function LangSetting() {
 
   return (
     <>
-      <Typography variant="h3" className={classes.pageHeader}>
-        {`${submitLang[languageId].name} ${submitLang[languageId].version} / Setting`}
-      </Typography>
-
+      <PageTitle text={`${submitLang[languageId].name} ${submitLang[languageId].version} / Setting`} />
       <SimpleBar title="Submission Language Information">
         <AlignedText text="Language" childrenType="text">
           <Typography variant="body1">{submitLang[languageId].name}</Typography>

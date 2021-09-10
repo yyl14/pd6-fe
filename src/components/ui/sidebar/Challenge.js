@@ -204,6 +204,13 @@ export default function Challenge({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [challengeId, challenges, classId, courseId, problems, essays, history, location.pathname, mode]);
 
+  const addTaskItemColor = (popup) => {
+    if (popup) {
+      return classNames.addIconItemClicked;
+    }
+    return classNames.addIconItem;
+  };
+
   const foldChallenge = () => {
     setDisplay('fold');
   };
@@ -273,10 +280,13 @@ export default function Challenge({
                 && userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER'
                 && challenges[challengeId] !== undefined && (
                   <ListItem button key="Task" onClick={() => setAddTaskPopUp(true)} className={classNames.item}>
-                    <ListItemIcon className={classNames.itemIcon} style={{ color: '' }}>
+                    <ListItemIcon className={`${classNames.itemIcon} ${addTaskItemColor(addTaskPopUp)}`}>
                       <Icon.AddBox />
                     </ListItemIcon>
-                    <ListItemText primary="Task" className={classNames.itemText} />
+                    <ListItemText
+                      primary="Task"
+                      className={`${classNames.itemText} ${addTaskItemColor(addTaskPopUp)}`}
+                    />
                   </ListItem>
               )}
             </List>

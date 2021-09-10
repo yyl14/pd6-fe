@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // https://mathpix.com/docs/mathpix-markdown/overview
 import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
@@ -29,19 +29,19 @@ import GeneralLoading from '../../../../GeneralLoading';
 import {
   browseTestcase,
   browseAssistingData,
-  deleteAssistingData,
-  deleteTestcase,
   deleteProblem,
+  downloadAllSamples,
+  downloadAllTestcases,
 } from '../../../../../actions/myClass/problem';
 
 import { downloadFile } from '../../../../../actions/common/common';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   sampleArea: {
     marginTop: '50px',
+  },
+  sampleName: {
+    marginBottom: '16px',
   },
   buttons: {
     display: 'flex',
@@ -91,14 +91,16 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const [sampleDataIds, setSampleDataIds] = useState([]);
   const [testcaseDataIds, setTestcaseDataIds] = useState([]);
   const [deletePopUp, setDeletePopUp] = useState(false);
+  const [emailSentPopup, setEmailSentPopup] = useState(false);
+  // console.log('uploadError: ', uploadError);
 
   const handleDelete = () => {
-    problems[problemId].assistingDataIds.forEach((id) => {
-      dispatch(deleteAssistingData(authToken, id));
-    });
-    problems[problemId].testcaseIds.forEach((id) => {
-      dispatch(deleteTestcase(authToken, id));
-    });
+    // problems[problemId].assistingDataIds.forEach((id) => {
+    //   dispatch(deleteAssistingData(authToken, id));
+    // });
+    // problems[problemId].testcaseIds.forEach((id) => {
+    //   dispatch(deleteTestcase(authToken, id));
+    // });
     dispatch(deleteProblem(authToken, problemId));
 
     setDeletePopUp(false);
@@ -115,117 +117,50 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   };
 
   const downloadAllSampleFile = () => {
-    const files = sampleDataIds.reduce((acc, id) => {
-      if (testcases[id].input_file_uuid !== null && testcases[id].output_file_uuid !== null) {
-        console.log('hello');
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].input_file_uuid,
-            filename: testcases[id].input_filename,
-            as_attachment: false,
-          },
-          {
-            uuid: testcases[id].output_file_uuid,
-            filename: testcases[id].output_filename,
-            as_attachment: false,
-          },
-        ];
-      }
-      if (testcases[id].input_file_uuid !== null) {
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].input_file_uuid,
-            filename: testcases[id].input_filename,
-            as_attachment: false,
-          },
-        ];
-      }
-      if (testcases[id].output_file_uuid !== null) {
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].output_file_uuid,
-            filename: testcases[id].output_filename,
-            as_attachment: false,
-          },
-        ];
-      }
-
-      return acc;
-    }, []);
-    // console.log(files);
-    files.map((file) => dispatch(downloadFile(authToken, file)));
+    dispatch(downloadAllSamples(authToken, problemId, true));
+    setEmailSentPopup(true);
   };
 
   const downloadAllTestingFile = () => {
-    const files = testcaseDataIds.reduce((acc, id) => {
-      if (testcases[id].input_file_uuid !== null && testcases[id].output_file_uuid !== null) {
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].input_file_uuid,
-            filename: testcases[id].input_filename,
-            as_attachment: false,
-          },
-          {
-            uuid: testcases[id].output_file_uuid,
-            filename: testcases[id].output_filename,
-            as_attachment: false,
-          },
-        ];
-      }
-      if (testcases[id].input_file_uuid !== null) {
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].input_file_uuid,
-            filename: testcases[id].input_filename,
-            as_attachment: false,
-          },
-        ];
-      }
-      if (testcases[id].output_file_uuid !== null) {
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].output_file_uuid,
-            filename: testcases[id].output_filename,
-            as_attachment: false,
-          },
-        ];
-      }
-
-      return acc;
-    }, []);
-    files.map((file) => dispatch(downloadFile(authToken, file)));
+    dispatch(downloadAllTestcases(authToken, problemId, true));
+    setEmailSentPopup(true);
   };
 
-  const sampleTrans2no = (id) => {
-    if (testcases[id].input_filename !== null) {
-      return parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10);
-    }
-    if (testcases[id].output_filename !== null) {
-      return parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10);
-    }
-    return 0;
-  };
+  // parse filename to get sample number
+  const sampleTransToNumber = useCallback(
+    (id) => {
+      if (testcases[id].input_filename !== null) {
+        return Number(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')));
+      }
+      if (testcases[id].output_filename !== null) {
+        return Number(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')));
+      }
+      return 0;
+    },
+    [testcases],
+  );
 
-  const testcaseTrans2no = (id) => {
-    if (testcases[id].input_filename !== null) {
-      return parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10);
-    }
-    if (testcases[id].output_filename !== null) {
-      return parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10);
-    }
-    return 0;
-  };
+  // parse filename to get testcase number
+  const testcaseTransToNumber = useCallback(
+    (id) => {
+      if (testcases[id].input_filename !== null) {
+        return Number(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')));
+      }
+      if (testcases[id].output_filename !== null) {
+        return Number(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')));
+      }
+      return 0;
+    },
+    [testcases],
+  );
 
   useEffect(() => {
     if (problems[problemId] && problems[problemId].testcaseIds) {
       const testcasesId = problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
-      setSampleDataIds(problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample));
+      const samplesId = problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
+      testcasesId.sort((a, b) => testcaseTransToNumber(a) - testcaseTransToNumber(b));
+      samplesId.sort((a, b) => sampleTransToNumber(a) - sampleTransToNumber(b));
+      setSampleDataIds(samplesId);
       setTestcaseDataIds(testcasesId);
       if (testcasesId.length === 0) {
         setStatus(false);
@@ -233,7 +168,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         setStatus(!testcases[testcasesId[0]].is_disabled);
       }
     }
-  }, [problems, problemId, testcases]);
+  }, [problems, problemId, testcases, sampleTransToNumber, testcaseTransToNumber]);
 
   useEffect(() => {
     dispatch(browseTestcase(authToken, problemId));
@@ -250,28 +185,28 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
 
   return (
     <>
-      <SimpleBar title="Title" noIndent>
+      <SimpleBar title="Title">
         <Typography variant="body2">
           {problems[problemId] === undefined ? 'error' : problems[problemId].title}
         </Typography>
       </SimpleBar>
-      <SimpleBar title="Description" noIndent>
-        <MathpixLoader>
+      <SimpleBar title="Description">
+        <MathpixLoader style={{ padding: 0 }}>
           <MathpixMarkdown text={problems[problemId].description} />
         </MathpixLoader>
       </SimpleBar>
-      <SimpleBar title="About Input and Output" noIndent>
-        <MathpixLoader>
+      <SimpleBar title="About Input and Output">
+        <MathpixLoader style={{ padding: 0 }}>
           <MathpixMarkdown text={problems[problemId].io_description} htmlTags />
         </MathpixLoader>
       </SimpleBar>
       {problems[problemId].source !== '' && (
-        <SimpleBar title="Source" noIndent>
+        <SimpleBar title="Source">
           <Typography variant="body2">{problems[problemId].source}</Typography>
         </SimpleBar>
       )}
       {problems[problemId].hint !== '' && (
-        <SimpleBar title="Hint" noIndent>
+        <SimpleBar title="Hint">
           <Typography variant="body2">{problems[problemId].hint}</Typography>
         </SimpleBar>
       )}
@@ -318,7 +253,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           ]}
           data={sampleDataIds.map((id) => ({
             id,
-            no: sampleTrans2no(id),
+            no: sampleTransToNumber(id),
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
           }))}
@@ -327,7 +262,9 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           <Grid container spacing={3}>
             {sampleDataIds.map((id) => (
               <Grid item xs={6} key={id}>
-                <Typography variant="body2">{`Sample ${sampleTrans2no(id)}`}</Typography>
+                <Typography variant="h6" className={classNames.sampleName}>
+                  {`Sample ${sampleTransToNumber(id)}`}
+                </Typography>
                 <SampleTestArea input={testcases[id].input} output={testcases[id].output} />
               </Grid>
             ))}
@@ -337,13 +274,15 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       <SimpleBar
         noIndent
         title="Testing Data"
-        buttons={(
-          <FormControlLabel
-            control={<Switch checked={status} name="status" color="primary" disabled />}
-            label={status ? 'Enabled' : 'Disabled'}
-            className={classNames.statusSwitch}
-          />
-        )}
+        buttons={
+          role === 'MANAGER' && (
+            <FormControlLabel
+              control={<Switch checked={status} name="status" color="primary" disabled />}
+              label={status ? 'Enabled' : 'Disabled'}
+              className={classNames.statusSwitch}
+            />
+          )
+        }
       >
         {role === 'MANAGER' && (
           <StyledButton
@@ -395,7 +334,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           ]}
           data={testcaseDataIds.map((id) => ({
             id,
-            no: testcaseTrans2no(id),
+            no: testcaseTransToNumber(id),
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
             score: testcases[id].score,
@@ -454,27 +393,38 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           <Typography variant="h4">Delete Problem</Typography>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText variant="body1" color="secondary">
-            <AlignedText text="Class" childrenType="text">
-              <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
-            </AlignedText>
-            <AlignedText text="Title" childrenType="text">
+          <AlignedText text="Class" childrenType="text" textColor="secondary">
+            <Typography variant="body1">{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
+          </AlignedText>
+          <AlignedText text="Title" childrenType="text" textColor="secondary">
+            <Typography variant="body1">
               {problems[problemId] === undefined ? 'error' : problems[problemId].title}
-            </AlignedText>
-            <AlignedText text="Label" childrenType="text">
-              <Typography>
-                {problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label}
-              </Typography>
-            </AlignedText>
-            <Typography variant="body2" color="textPrimary">
-              Once you delete a problem, there is no going back. Please be certain.
             </Typography>
-          </DialogContentText>
+          </AlignedText>
+          <AlignedText text="Label" childrenType="text" textColor="secondary">
+            <Typography variant="body1">
+              {problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label}
+            </Typography>
+          </AlignedText>
+          <Typography variant="body2">Once you delete a problem, there is no going back. Please be certain.</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDeletePopUp(false)}>Cancel</Button>
           <Button color="secondary" onClick={handleDelete}>
             Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={emailSentPopup} keepMounted onClose={() => setEmailSentPopup(false)}>
+        <DialogTitle id="alert-dialog-slide-title">
+          <Typography variant="h4">All Testcases sent</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">Please check your mailbox.</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEmailSentPopup(false)} color="primary">
+            Done
           </Button>
         </DialogActions>
       </Dialog>

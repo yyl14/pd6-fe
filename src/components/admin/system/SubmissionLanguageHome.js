@@ -1,20 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import CustomTable from '../../ui/CustomTable';
+import PageTitle from '../../ui/PageTitle';
 import { fetchSubmitLanguage } from '../../../actions/admin/system';
-
-const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-}));
 
 /* This is a level 4 component (page component) */
 export default function SubmissionLanguageHome() {
-  const classes = useStyles();
-
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
   const submitLang = useSelector((state) => state.submitLangs.byId);
@@ -47,9 +38,7 @@ export default function SubmissionLanguageHome() {
 
   return (
     <>
-      <Typography variant="h3" className={classes.pageHeader}>
-        Submission Language
-      </Typography>
+      <PageTitle text="Submission Language" />
       <CustomTable
         hasSearch={false}
         data={tableData}

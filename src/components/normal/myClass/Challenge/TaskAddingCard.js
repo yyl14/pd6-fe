@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 import {
   Typography,
   Button,
@@ -14,19 +15,15 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
 import NoMatch from '../../../noMatch';
 
-import { readChallenge, browseTasksUnderChallenge } from '../../../../actions/myClass/problem';
-import { addProblem, addEssay, addPeerReview } from '../../../../actions/myClass/challenge';
-import { fetchClass, fetchCourse } from '../../../../actions/common/common';
+import {
+  addProblem, addEssay, addPeerReview, browseTasksUnderChallenge,
+} from '../../../../actions/myClass/challenge';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   selectedIcon: {
     marginRight: '20px',
   },
@@ -36,6 +33,7 @@ const useStyles = makeStyles(() => ({
 export default function TaskAddingCard({ open, setOpen }) {
   const { courseId, classId, challengeId } = useParams();
   const classNames = useStyles();
+  const history = useHistory();
 
   const dispatch = useDispatch();
 
@@ -52,50 +50,50 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [title, setTitle] = useState('');
   const [disabled, setDisabled] = useState(true);
 
-  const handleCreate = () => {
-    if (label === '' || title === '') {
-      return;
+  useEffect(() => {
+    if (!loading.addProblem && !loading.addEssay && !loading.addPeerReview) {
+      dispatch(browseTasksUnderChallenge(authToken, challengeId));
     }
+  }, [authToken, challengeId, dispatch, loading.addEssay, loading.addPeerReview, loading.addProblem]);
+
+  useEffect(() => {
+    if (label !== '' && title !== '') {
+      setDisabled(false);
+    } else setDisabled(true);
+  }, [label, title]);
+
+  const handleCreate = () => {
     switch (type) {
       case 'Coding Problem': {
-        dispatch(addProblem(authToken, challengeId, label, title));
+        dispatch(addProblem(authToken, challengeId, label, title, history, courseId, classId));
         break;
       }
       case 'Essay(PDF)': {
-        dispatch(addEssay(authToken, challengeId, label, title));
+        dispatch(addEssay(authToken, challengeId, label, title, history, courseId, classId));
         break;
       }
       case 'Peer Review': {
-        dispatch(addPeerReview(authToken, challengeId, label, title));
+        dispatch(addPeerReview(authToken, challengeId, label, title, history, courseId, classId));
         break;
       }
       default: {
         break;
       }
     }
-
-    setTimeout(() => {
-      dispatch(browseTasksUnderChallenge(authToken, challengeId));
-    }, 500);
     setType('Coding Problem');
     setTitle('');
     setLabel('');
+    setDisabled(true);
     setOpen(false);
   };
 
-  const checkDisabled = (curLabel, curTitle) => {
-    if (curLabel === '' || curTitle === '') {
-      setDisabled(true);
-    } else {
-      setDisabled(false);
-    }
+  const handleCancel = () => {
+    setType('Coding Problem');
+    setTitle('');
+    setLabel('');
+    setDisabled(true);
+    setOpen(false);
   };
-
-  useEffect(() => {
-    dispatch(fetchClass(authToken, classId));
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(readChallenge(authToken, challengeId));
-  }, [authToken, challengeId, classId, courseId, dispatch]);
 
   if (loading.readChallenge || commonLoading.fetchCourse || commonLoading.fetchClass) {
     return <></>;
@@ -112,67 +110,63 @@ export default function TaskAddingCard({ open, setOpen }) {
           <Typography variant="h4">Create New Task</Typography>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText color="textPrimary">
-            <AlignedText text="Class" childrenType="text">
-              <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
-            </AlignedText>
-            <AlignedText text="Challenge" childrenType="text">
-              <Typography>{`${challenges[challengeId].title}`}</Typography>
-            </AlignedText>
-            <AlignedText text="Type" childrenType="field">
-              <FormControl variant="outlined">
-                <Select
-                  labelId="sort"
-                  id="sort"
-                  value={type}
-                  onChange={(e) => {
-                    setType(e.target.value);
-                  }}
-                  style={{ width: '350px' }}
-                >
-                  <MenuItem value="Coding Problem">
-                    <Icon.Code className={classNames.selectedIcon} />
-                    Coding Problem
-                  </MenuItem>
-                  <MenuItem value="Essay(PDF)" disabled>
-                    <Icon.Paper className={classNames.selectedIcon} />
-                    Essay(PDF)
-                  </MenuItem>
-                  <MenuItem value="Peer Review" disabled>
-                    <Icon.Peerreview className={classNames.selectedIcon} />
-                    Peer Review
-                  </MenuItem>
-                  <MenuItem value="Coding Project" disabled>
-                    <Icon.Project className={classNames.selectedIcon} />
-                    Coding Project
-                  </MenuItem>
-                </Select>
-              </FormControl>
-            </AlignedText>
-            <AlignedText text="Label" childrenType="field">
-              <TextField
-                id="label"
-                value={label}
+          <AlignedText text="Class" childrenType="text">
+            <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
+          </AlignedText>
+          <AlignedText text="Challenge" childrenType="text">
+            <Typography>{`${challenges[challengeId].title}`}</Typography>
+          </AlignedText>
+          <AlignedText text="Type" childrenType="field">
+            <FormControl variant="outlined">
+              <Select
+                labelId="sort"
+                id="sort"
+                value={type}
                 onChange={(e) => {
-                  setLabel(e.target.value);
-                  checkDisabled(e.target.value, title);
+                  setType(e.target.value);
                 }}
-              />
-            </AlignedText>
-            <AlignedText text="Title" childrenType="field">
-              <TextField
-                id="title"
-                value={title}
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                  checkDisabled(label, e.target.value);
-                }}
-              />
-            </AlignedText>
-          </DialogContentText>
+                style={{ width: '350px' }}
+              >
+                <MenuItem value="Coding Problem">
+                  <Icon.Code className={classNames.selectedIcon} />
+                  Coding Problem
+                </MenuItem>
+                <MenuItem value="Essay(PDF)">
+                  <Icon.Paper className={classNames.selectedIcon} />
+                  Essay(PDF)
+                </MenuItem>
+                <MenuItem value="Peer Review" disabled>
+                  <Icon.Peerreview className={classNames.selectedIcon} />
+                  Peer Review
+                </MenuItem>
+                <MenuItem value="Coding Project" disabled>
+                  <Icon.Project className={classNames.selectedIcon} />
+                  Coding Project
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </AlignedText>
+          <AlignedText text="Label" childrenType="field">
+            <TextField
+              id="label"
+              value={label}
+              onChange={(e) => {
+                setLabel(e.target.value);
+              }}
+            />
+          </AlignedText>
+          <AlignedText text="Title" childrenType="field">
+            <TextField
+              id="title"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+            />
+          </AlignedText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={handleCancel}>Cancel</Button>
           <Button disabled={disabled} color="primary" onClick={handleCreate}>
             Create
           </Button>

@@ -12,6 +12,7 @@ const mono = {
   white: '#FFFFFF',
   veryLightGray: '#F8F8F8',
   lightGray: '#EAEAEA',
+  emptyGray: '#C4C4C4',
   gray: '#CACACA',
   semiDarkGray: '#AAAAAA',
   darkGray: '#656565',
@@ -44,6 +45,7 @@ const palette = {
     300: mono.gray, // root backgroundColor for Contained Buttons, etc.
     A100: mono.lightGray,
     A400: mono.darkGray,
+    A500: mono.emptyGray,
     A700: mono.semiDarkGray,
   },
 
@@ -560,7 +562,7 @@ const overrides = {
   MuiSnackbarContent: {
     root: {
       width: '600px',
-      padding: '0px 20px',
+      padding: '16px 20px',
       borderRadius: '12px',
       boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
       backgroundColor: mono.black,
@@ -575,7 +577,7 @@ const overrides = {
     message: {
       display: 'flex',
       alignItems: 'center',
-      height: '57px',
+      minHeight: '25px',
       padding: '0px',
     },
     action: {

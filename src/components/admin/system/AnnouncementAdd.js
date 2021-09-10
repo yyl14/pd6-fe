@@ -1,21 +1,25 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Button, TextField, Typography, makeStyles,
-} from '@material-ui/core';
+import { Button, TextField, makeStyles } from '@material-ui/core';
 import moment from 'moment';
 import DateRangePicker from '../../ui/DateRangePicker';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
+import PageTitle from '../../ui/PageTitle';
 import { addAnnouncement } from '../../../actions/admin/system';
 
-const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
+const useStyles = makeStyles(() => ({
   contentField: {
     width: '720px',
+  },
+  dateRangePicker: {
+    marginTop: '15px',
+    marginBottom: '9px',
+  },
+  buttons: {
+    marginTop: '-32px',
+    marginLeft: '-5px',
   },
 }));
 
@@ -49,22 +53,19 @@ const AnnouncementAdd = () => {
       post_time: dateRangePicker[0].startDate.toISOString(),
       expire_time: dateRangePicker[0].endDate.toISOString(),
     };
-    console.log(body);
     dispatch(addAnnouncement(authToken, body));
     backToHomePage();
   };
 
   return (
     <>
-      <Typography variant="h3" className={classes.pageHeader}>
-        (Draft) / Setting
-      </Typography>
+      <PageTitle text="(Draft) / Setting" />
       <SimpleBar title="Announcement">
         <AlignedText text="Title" childrenType="field">
           <TextField value={addTitle} onChange={(e) => setAddTitle(e.target.value)} />
         </AlignedText>
         <AlignedText text="Duration" childrenType="field">
-          <DateRangePicker value={dateRangePicker} setValue={setDateRangePicker} />
+          <DateRangePicker className={classes.dateRangePicker} value={dateRangePicker} setValue={setDateRangePicker} />
         </AlignedText>
         <AlignedText text="Content" childrenType="field">
           <TextField
@@ -77,10 +78,12 @@ const AnnouncementAdd = () => {
         </AlignedText>
       </SimpleBar>
       {/* TODO: re-write with ui components SimpleBar and DatePicker  */}
-      <Button onClick={backToHomePage}>Cancel</Button>
-      <Button color="primary" onClick={handleClickSave}>
-        Save
-      </Button>
+      <div className={classes.buttons}>
+        <Button onClick={backToHomePage}>Cancel</Button>
+        <Button color="primary" onClick={handleClickSave}>
+          Save
+        </Button>
+      </div>
     </>
   );
 };

@@ -1,21 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  TextField,
+  Typography, Button, makeStyles, Dialog, DialogTitle, DialogActions, DialogContent,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
-import SimpleBar from '../../../ui/SimpleBar';
-import SimpleTable from '../../../ui/SimpleTable';
-import SampleTestArea from '../../../ui/SampleTestArea';
 import Icon from '../../../ui/icon/index';
 import AlignedText from '../../../ui/AlignedText';
+import PageTitle from '../../../ui/PageTitle';
 
 import CodingProblemInfo from './ProblemSettings/CodingProblemInfo';
 import CodingProblemEdit from './ProblemSettings/CodingProblemEdit';
@@ -25,9 +16,6 @@ import GeneralLoading from '../../../GeneralLoading';
 import { readProblemInfo } from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
   sampleArea: {
     marginTop: '50px',
   },
@@ -57,7 +45,7 @@ export default function CodingProblem() {
   const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   const authToken = useSelector((state) => state.auth.token);
-  const error = useSelector((state) => state.error.myClass.problem);
+  //  const error = useSelector((state) => state.error.myClass.problem);
   const loading = useSelector((state) => state.loading.myClass.problem);
   const commonLoading = useSelector((state) => state.loading.common);
   const [role, setRole] = useState('NORMAL');
@@ -86,8 +74,12 @@ export default function CodingProblem() {
   }, [classId, userClasses]);
 
   useEffect(() => {
-    dispatch(readProblemInfo(authToken, problemId, challengeId));
-  }, [authToken, dispatch, problemId, challengeId]);
+    dispatch(readProblemInfo(authToken, problemId));
+  }, [authToken, dispatch, problemId]);
+
+  useEffect(() => {
+    setEdit(false);
+  }, [problemId]);
 
   if (loading.readProblem || loading.readChallenge) {
     return <GeneralLoading />;
@@ -110,11 +102,11 @@ export default function CodingProblem() {
 
   return (
     <>
-      <Typography className={classNames.pageHeader} variant="h3">
-        {`${challenges[challengeId] === undefined ? 'error' : challenges[challengeId].title} / ${
+      <PageTitle
+        text={`${challenges[challengeId] === undefined ? 'error' : challenges[challengeId].title} / ${
           problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label
         }`}
-      </Typography>
+      />
       {!edit && role === 'MANAGER' ? (
         <div>
           <div className={classNames.managerButtons}>

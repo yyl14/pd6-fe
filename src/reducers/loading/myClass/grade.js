@@ -1,8 +1,10 @@
 import { gradeConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
+  fetchGrade: false,
   fetchClassGrade: false,
   addClassGrade: false,
+  importClassGrade: false,
   fetchAccountGrade: false,
   downloadGradeFile: false,
   deleteGrade: false,
@@ -11,6 +13,24 @@ const initialState = {
 
 export default function grade(state = initialState, action) {
   switch (action.type) {
+    case gradeConstants.FETCH_GRADE_START: {
+      return {
+        ...state,
+        fetchGrade: true,
+      };
+    }
+    case gradeConstants.FETCH_GRADE_SUCCESS: {
+      return {
+        ...state,
+        fetchGrade: false,
+      };
+    }
+    case gradeConstants.FETCH_GRADE_FAIL: {
+      return {
+        ...state,
+        fetchGrade: false,
+      };
+    }
     case gradeConstants.FETCH_CLASS_GRADE_START: {
       return {
         ...state,
@@ -46,6 +66,25 @@ export default function grade(state = initialState, action) {
       return {
         ...state,
         addClassGrade: false,
+      };
+    }
+
+    case gradeConstants.IMPORT_CLASS_GRADE_START: {
+      return {
+        ...state,
+        importClassGrade: true,
+      };
+    }
+    case gradeConstants.IMPORT_CLASS_GRADE_SUCCESS: {
+      return {
+        ...state,
+        importClassGrade: false,
+      };
+    }
+    case gradeConstants.IMPORT_CLASS_GRADE_FAIL: {
+      return {
+        ...state,
+        importClassGrade: false,
       };
     }
 

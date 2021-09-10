@@ -2,7 +2,16 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-  Button, TextField, makeStyles, InputAdornment, IconButton,
+  Button,
+  TextField,
+  makeStyles,
+  InputAdornment,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Typography,
 } from '@material-ui/core';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
@@ -10,12 +19,10 @@ import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import { editPassword } from '../../../../actions/admin/account';
 
-const useStyles = makeStyles((theme) => ({
-  textfield: {
-    width: '350px',
-  },
-  gap: {
-    marginTop: theme.spacing(2),
+const useStyles = makeStyles(() => ({
+  buttons: {
+    marginTop: '6px',
+    marginLeft: '-5px',
   },
 }));
 
@@ -26,6 +33,7 @@ export default function NewPassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState('');
+  const [dialog, setDialog] = useState(false);
 
   const { accountId } = useParams();
   const authToken = useSelector((state) => state.auth.token);
@@ -37,6 +45,11 @@ export default function NewPassword() {
       setErrorText("Can't be empty");
       return;
     }
+    setDialog(true);
+  };
+
+  const handleConfirm = () => {
+    setDialog(false);
     dispatch(editPassword(authToken, accountId, password));
     setEdit(false);
     setPassword('');
@@ -52,13 +65,9 @@ export default function NewPassword() {
   return (
     <>
       {edit ? (
-        <SimpleBar
-          title="Password"
-        >
-
+        <SimpleBar title="Password">
           <AlignedText text="New Password" childrenType="field" maxWidth="lg">
             <TextField
-              className={classes.textfield}
               value={password}
               error={error}
               helperText={errorText}
@@ -70,7 +79,12 @@ export default function NewPassword() {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={() => { setShowPassword(!showPassword); }} edge="end">
+                    <IconButton
+                      onClick={() => {
+                        setShowPassword(!showPassword);
+                      }}
+                      edge="end"
+                    >
                       {showPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
@@ -78,17 +92,9 @@ export default function NewPassword() {
               }}
             />
           </AlignedText>
-          <div className={classes.gap}>
-            <Button
-              onClick={handleCancel}
-            >
-              Cancel
-            </Button>
-            <Button
-              color="primary"
-              type="submit"
-              onClick={handleResetPassword}
-            >
+          <div className={classes.buttons}>
+            <Button onClick={handleCancel}>Cancel</Button>
+            <Button color="primary" type="submit" onClick={handleResetPassword}>
               Save
             </Button>
           </div>
@@ -103,7 +109,22 @@ export default function NewPassword() {
           )}
         />
       )}
-
+      <Dialog open={dialog} maxWidth="md">
+        <DialogTitle>
+          <Typography variant="h4">Change Password</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body1" color="textPrimary">
+            Do you want to change this account’s password?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDialog(false)}>Cancel</Button>
+          <Button color="secondary" onClick={handleConfirm}>
+            Change
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
