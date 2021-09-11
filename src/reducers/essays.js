@@ -8,16 +8,26 @@ const byId = (state = {}, action) => {
       return data.essay.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, essaySubmissionId: null } }), {});
     }
     case essayConstants.READ_ESSAY_SUCCESS: {
-      const data = action.payload;
+      const { essay, submission } = action.payload;
       return {
         ...state,
-        [data.id]: {
-          ...data,
-          essaySubmissionId: null,
+        [essay.id]: {
+          ...essay,
+          essaySubmissionId: submission.length === 0 ? null : submission[0].id,
         },
       };
     }
     case essayConstants.READ_ESSAY_SUBMISSION_SUCCESS: {
+      const data = action.payload;
+      return {
+        ...state,
+        [data.essay_id]: {
+          ...state[data.essay_id],
+          essaySubmissionId: data.id,
+        },
+      };
+    }
+    case essayConstants.UPLOAD_ESSAY_SUBMISSION_SUCCESS: {
       const data = action.payload;
       return {
         ...state,
@@ -40,7 +50,7 @@ const allIds = (state = [], action) => {
       return data.essay.map((item) => item.id);
     }
     case essayConstants.READ_ESSAY_SUCCESS:
-      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+      return state.includes(action.payload.essay.id) ? state : state.concat([action.payload.essay.id]);
     default:
       return state;
   }
