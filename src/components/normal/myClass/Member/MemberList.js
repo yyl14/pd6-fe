@@ -72,7 +72,7 @@ export default function MemberList() {
       ) : (
         <>
           <AutoTable
-            ident="MyClass Member Table"
+            ident={`MyClass Member Table ${classId}`}
             hasFilter
             buttons={
               isManager ? (
