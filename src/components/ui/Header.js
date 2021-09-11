@@ -216,10 +216,6 @@ export default function Header() {
             basePath: '/admin/system',
             path: '/admin/system/accesslog',
           },
-          {
-            text: 'About',
-            path: '/about',
-          },
         ]);
         setMenuList([
           { title: 'My Profile', link: '/my-profile' },
@@ -245,21 +241,21 @@ export default function Header() {
             //   basePath: '/problem-set',
             //   path: '/problem-set',
             // },
-            {
-              text: 'PDAO',
-              basePath: '/pdao',
-              path: '/pdao',
-            },
-            {
-              text: 'Ranklist',
-              basePath: '/ranklist',
-              path: '/ranklist',
-            },
-            {
-              text: 'System',
-              basePath: '/system',
-              path: '/system',
-            },
+            // {
+            //   text: 'PDAO',
+            //   basePath: '/pdao',
+            //   path: '/pdao',
+            // },
+            // {
+            //   text: 'Ranklist',
+            //   basePath: '/ranklist',
+            //   path: '/ranklist',
+            // },
+            // {
+            //   text: 'System',
+            //   basePath: '/system',
+            //   path: '/system',
+            // },
           ]);
         } else {
           setItemList([
@@ -273,21 +269,21 @@ export default function Header() {
             //   basePath: '/problem-set',
             //   path: '/problem-set',
             // },
-            {
-              text: 'PDAO',
-              basePath: '/pdao',
-              path: '/pdao',
-            },
-            {
-              text: 'Ranklist',
-              basePath: '/ranklist',
-              path: '/ranklist',
-            },
-            {
-              text: 'System',
-              basePath: '/system',
-              path: '/system',
-            },
+            // {
+            //   text: 'PDAO',
+            //   basePath: '/pdao',
+            //   path: '/pdao',
+            // },
+            // {
+            //   text: 'Ranklist',
+            //   basePath: '/ranklist',
+            //   path: '/ranklist',
+            // },
+            // {
+            //   text: 'System',
+            //   basePath: '/system',
+            //   path: '/system',
+            // },
           ]);
         }
         setMenuList([
@@ -410,32 +406,34 @@ export default function Header() {
               {unreadNotifyExist && <div className={classes.unreadDot} />}
               {notifyDropdown && (
                 <div className={classes.notificationDropdownContent} ref={notifyRef}>
-                  {notifyList.map((notify) => (
-                    <div
-                      key={notify.title}
-                      className={
-                        notify.is_deleted
-                          ? `${classes.eachNotify}`
-                          : `${classes.eachNotify} ${classes.unreadNotification}`
-                      }
-                      role="button"
-                      tabIndex={notify.id}
-                      // onClick={() => readNotification(notify.id)}
-                      // onKeyDown={() => readNotification(notify.id)}
-                    >
-                      <div className={classes.notificationHead}>
-                        <Typography variant="h6" className={classes.notificationTitle}>
-                          {notify.title}
-                        </Typography>
-                        <Typography variant="body2" className={classes.notificationDays}>
-                          {`${moment(new Date()).diff(moment(notify.post_time), 'days')} days`}
-                        </Typography>
-                      </div>
-                      <Typography variant="body" className={classes.notificationContent}>
-                        {notify.content}
-                      </Typography>
-                    </div>
-                  ))}
+                  {notifyList.map(
+                    // between post time and expire time
+                    (notify) => moment(new Date()).diff(moment(notify.post_time), 'days') >= 0
+                      && moment(notify.expire_time).diff(moment(new Date()), 'days') >= 0 && (
+                        <div
+                          key={notify.title}
+                          className={
+                            notify.is_deleted
+                              ? `${classes.eachNotify}`
+                              : `${classes.eachNotify} ${classes.unreadNotification}`
+                          }
+                          role="button"
+                          tabIndex={notify.id}
+                        >
+                          <div className={classes.notificationHead}>
+                            <Typography variant="h6" className={classes.notificationTitle}>
+                              {notify.title}
+                            </Typography>
+                            <Typography variant="body2" className={classes.notificationDays}>
+                              {`${moment(new Date()).diff(moment(notify.post_time), 'days')} days ago`}
+                            </Typography>
+                          </div>
+                          <Typography variant="body" className={classes.notificationContent}>
+                            {notify.content}
+                          </Typography>
+                        </div>
+                    ),
+                  )}
                 </div>
               )}
             </div>

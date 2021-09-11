@@ -8,12 +8,10 @@ import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
 import { editAccount } from '../../../../actions/admin/account';
 
-const useStyles = makeStyles((theme) => ({
-  textfield: {
-    width: '350px',
-  },
-  gap: {
-    marginTop: theme.spacing(2),
+const useStyles = makeStyles(() => ({
+  buttons: {
+    marginTop: '6px',
+    marginLeft: '-5px',
   },
 }));
 
@@ -78,28 +76,17 @@ export default function BasicInfoEdit(props) {
               value={inputs.realName}
               variant="outlined"
               onChange={(e) => handleChange(e)}
-              className={classes.textfield}
               error={errors.realName}
               helperText={errorTexts.realName}
             />
           </AlignedText>
           <AlignedText text="Nickname" childrenType="field" maxWidth="lg">
-            <TextField
-              name="nickName"
-              value={inputs.nickName}
-              onChange={(e) => handleChange(e)}
-              className={classes.textfield}
-            />
+            <TextField name="nickName" value={inputs.nickName} onChange={(e) => handleChange(e)} />
           </AlignedText>
           <AlignedText text="Alternative Email" childrenType="field" maxWidth="lg">
-            <TextField
-              value={inputs.altMail}
-              name="altMail"
-              onChange={(e) => handleChange(e)}
-              className={classes.textfield}
-            />
+            <TextField value={inputs.altMail} name="altMail" onChange={(e) => handleChange(e)} />
           </AlignedText>
-          <div className={classes.gap}>
+          <div className={classes.buttons}>
             <Button onClick={handleCancel}>Cancel</Button>
             <Button color="primary" type="submit" onClick={handleSave}>
               Save

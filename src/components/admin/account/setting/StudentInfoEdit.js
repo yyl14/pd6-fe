@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
   },
-  textfield: {
+  selectList: {
     width: '350px',
   },
   mailfield: {
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: theme.spacing(3),
+    marginBottom: theme.spacing(2),
   },
   item: {
     width: '190px',
@@ -64,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
   },
   buttons: {
     alignSelf: 'flex-end',
+    marginTop: '7px',
     marginRight: '23px',
   },
 }));
@@ -230,7 +231,7 @@ export default function StudentInfoEdit(props) {
                   <div className={classes.item}>
                     <Typography>Institute</Typography>
                   </div>
-                  <FormControl variant="outlined" className={classes.textfield}>
+                  <FormControl variant="outlined" className={classes.selectList}>
                     <Select value={addInputs.institute} name="institute" onChange={(e) => handleChange(e)}>
                       {enableInstitutesId.map((item) => (
                         <MenuItem key={item} value={institutes[item].full_name}>
@@ -240,19 +241,16 @@ export default function StudentInfoEdit(props) {
                     </Select>
                   </FormControl>
                 </div>
-                <div className={classes.row}>
-                  <AlignedText text="Student ID" childrenType="field">
-                    <TextField
-                      variant="outlined"
-                      name="studentId"
-                      className={classes.textfield}
-                      value={addInputs.studentId}
-                      onChange={(e) => handleChange(e)}
-                      error={errors.studentId}
-                      helperText={errorTexts.studentId}
-                    />
-                  </AlignedText>
-                </div>
+                <AlignedText text="Student ID" childrenType="field">
+                  <TextField
+                    variant="outlined"
+                    name="studentId"
+                    value={addInputs.studentId}
+                    onChange={(e) => handleChange(e)}
+                    error={errors.studentId}
+                    helperText={errorTexts.studentId}
+                  />
+                </AlignedText>
                 <div className={classes.mailrow}>
                   <div className={classes.item}>
                     <Typography>Email</Typography>

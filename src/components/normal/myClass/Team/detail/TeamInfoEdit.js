@@ -9,11 +9,9 @@ import AlignedText from '../../../../ui/AlignedText';
 import { editTeam } from '../../../../../actions/myClass/team';
 
 const useStyles = makeStyles(() => ({
-  textField: {
-    width: '350px',
-  },
-  label: {
-    marginTop: '38px',
+  buttons: {
+    marginLeft: '-5px',
+    marginTop: '16px',
   },
 }));
 
@@ -38,35 +36,25 @@ export default function BasicInfoEdit(props) {
       <SimpleBar title="Team Information">
         <>
           <AlignedText text="Team Name" maxWidth="lg" childrenType="field">
-            <TextField
-              className={classNames.textField}
-              value={teamName}
-              onChange={(e) => setTeamName(e.target.value)}
-            />
+            <TextField value={teamName} onChange={(e) => setTeamName(e.target.value)} />
           </AlignedText>
           {props.isManager ? (
             <AlignedText text="Label" maxWidth="lg" childrenType="field">
-              <TextField
-                className={classNames.textField}
-                value={label}
-                onChange={(e) => setLabel(e.target.value)}
-              />
+              <TextField value={label} onChange={(e) => setLabel(e.target.value)} />
             </AlignedText>
           ) : (
-            <div className={classNames.label}>
+            <div>
               <AlignedText text="Label" maxWidth="lg" childrenType="text">
                 <Typography variant="body1">{label}</Typography>
               </AlignedText>
             </div>
           )}
-          <Button onClick={() => props.handleBack()}>Cancel</Button>
-          <Button
-            color="primary"
-            type="submit"
-            onClick={handleSave}
-          >
-            Save
-          </Button>
+          <div className={classNames.buttons}>
+            <Button onClick={() => props.handleBack()}>Cancel</Button>
+            <Button color="primary" type="submit" onClick={handleSave}>
+              Save
+            </Button>
+          </div>
         </>
       </SimpleBar>
     </div>

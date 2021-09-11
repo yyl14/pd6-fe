@@ -35,7 +35,7 @@ export default function AllClass({
 
   useEffect(() => {
     dispatch(fetchCourses(authToken));
-    dispatch(fetchClasses(courseId));
+    dispatch(fetchClasses(authToken, courseId));
   }, [authToken, courseId, dispatch]);
 
   useEffect(() => {
@@ -109,22 +109,22 @@ export default function AllClass({
           </div>
           <Divider variant="middle" className={classNames.divider} />
           {display === 'unfold' && (
-          <List>
-            {itemList.map((item) => (
-              <ListItem button key={item.path} onClick={() => history.push(item.path)} className={classNames.item}>
-                <ListItemIcon
-                  className={classNames.itemIcon}
-                  style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
-                />
-              </ListItem>
-            ))}
-          </List>
+            <List>
+              {itemList.map((item) => (
+                <ListItem button key={item.path} onClick={() => history.push(item.path)} className={classNames.item}>
+                  <ListItemIcon
+                    className={classNames.itemIcon}
+                    style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item.text}
+                    className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
+                  />
+                </ListItem>
+              ))}
+            </List>
           )}
         </div>
         <div className={classNames.bottomSpace} />

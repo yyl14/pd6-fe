@@ -4,7 +4,6 @@ import moment from 'moment';
 import {
   Typography,
   Button,
-  makeStyles,
   Dialog,
   DialogTitle,
   DialogActions,
@@ -24,13 +23,6 @@ import { uploadEssay, reUploadEssay, browseEssaySubmission } from '../../../../.
 import { downloadFile } from '../../../../../actions/common/common';
 import { browseTasksUnderChallenge } from '../../../../../actions/myClass/challenge';
 
-const useStyles = makeStyles(() => ({
-  buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
-}));
-
 const StyledButton = withStyles({
   outlined: {
     '& path': {
@@ -45,7 +37,6 @@ export default function EssayInfo({ role = 'NORMAL' }) {
     courseId, classId, challengeId, essayId,
   } = useParams();
   const history = useHistory();
-  const classNames = useStyles();
   const [currentTime, setCurrentTime] = useState(moment());
 
   const dispatch = useDispatch();
@@ -179,7 +170,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
         </SimpleBar>
       )}
       {/* Upload dialog */}
-      <Dialog maxWidth="lg" open={popUpUpload} keepMounted onClose={handleClosePopUpUpload}>
+      <Dialog maxWidth="md" open={popUpUpload} keepMounted onClose={handleClosePopUpUpload}>
         <DialogTitle>
           <Typography variant="h4">Upload File</Typography>
         </DialogTitle>

@@ -25,6 +25,10 @@ import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
+  dateRangePicker: {
+    marginTop: '16px',
+    marginBottom: '16px',
+  },
   row: {
     display: 'flex',
     flexDirection: 'row',
@@ -34,12 +38,8 @@ const useStyles = makeStyles((theme) => ({
   item: {
     width: '190px',
   },
-  textfield: {
+  selectList: {
     width: '350px',
-  },
-  gap: {
-    marginBottom: theme.spacing(2),
-    marginTop: theme.spacing(3),
   },
 }));
 
@@ -67,7 +67,7 @@ export default function ChallengeList() {
   const [isManager, setIsManager] = useState(false);
 
   const authToken = useSelector((state) => state.auth.token);
-  const error = useSelector((state) => state.loading.myClass.challenge);
+  const error = useSelector((state) => state.error.myClass.challenge);
   const loading = useSelector((state) => state.loading.myClass.challenge);
   const commonLoading = useSelector((state) => state.loading.common.common);
   const challenges = useSelector((state) => state.challenges);
@@ -89,7 +89,7 @@ export default function ChallengeList() {
   useEffect(() => {
     if (userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
       setIsManager(true);
-    }
+    } else setIsManager(false);
   }, [classId, userClasses]);
 
   if (courses[courseId] === undefined || classes[classId] === undefined) {
@@ -229,29 +229,29 @@ export default function ChallengeList() {
         })}
         hasLink
       />
-      <Dialog open={popUp} keepMounted onClose={() => setPopUp(false)} maxWidth="md">
+      <Dialog open={popUp} keepMounted onClose={() => setPopUp(false)} maxWidth="604px">
         <DialogTitle>
           <Typography variant="h4">Create New Challenge</Typography>
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Class" childrenType="text" maxWidth="md">
-            <Typography>
-              {courses[courseId].name}
-              {' '}
-              {classes[classId].name}
-            </Typography>
+            <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
           </AlignedText>
           <AlignedText text="Title" childrenType="field" maxWidth="md">
             <TextField value={inputs.title} name="title" onChange={(e) => handleChange(e)} />
           </AlignedText>
-          <div className={className.gap}>
-            <DateRangePicker vertical value={dateRangePicker} setValue={setDateRangePicker} />
-          </div>
+          <Typography variant="body1">Duration</Typography>
+          <DateRangePicker
+            vertical
+            value={dateRangePicker}
+            setValue={setDateRangePicker}
+            className={className.dateRangePicker}
+          />
           <div className={className.row}>
             <div className={className.item}>
               <Typography>Scored by</Typography>
             </div>
-            <FormControl variant="outlined" className={className.textfield}>
+            <FormControl variant="outlined" className={className.selectList}>
               <Select value={inputs.scoredBy} name="scoredBy" onChange={(e) => handleChange(e)}>
                 <MenuItem value="Last Score">Last Score</MenuItem>
                 <MenuItem value="Best Score">Best Score</MenuItem>
@@ -262,7 +262,7 @@ export default function ChallengeList() {
             <div className={className.item}>
               <Typography>Shown in problem set</Typography>
             </div>
-            <FormControl variant="outlined" className={className.textfield}>
+            <FormControl variant="outlined" className={className.selectList}>
               <Select value={inputs.showTime} name="showTime" onChange={(e) => handleChange(e)}>
                 <MenuItem value="On End Time">On End Time</MenuItem>
                 <MenuItem value="On Start Time">On Start Time</MenuItem>
