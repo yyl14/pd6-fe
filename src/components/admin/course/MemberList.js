@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
 import { fetchClassMembers } from '../../../actions/common/common';
 import AutoTable from '../../ui/AutoTable';
 import PageTitle from '../../ui/PageTitle';
@@ -48,7 +47,7 @@ export default function MemberList() {
       ) : (
         <>
           <AutoTable
-            ident="Class Member Table"
+            ident={`Class Member Table ${classId}`}
             hasFilter
             buttons={<Button onClick={() => setEdit(true)}>Edit</Button>}
             filterConfig={[
