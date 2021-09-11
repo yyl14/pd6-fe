@@ -18,8 +18,8 @@ import Icon from '../../../../ui/icon/index';
 import AlignedText from '../../../../ui/AlignedText';
 import NoMatch from '../../../../noMatch';
 import FileUploadArea from '../../../../ui/FileUploadArea';
-import { deleteEssay, readEssay } from '../../../../../actions/myClass/essay';
-import { uploadEssay, reUploadEssay, browseEssaySubmission } from '../../../../../actions/myClass/essaySubmission';
+import { deleteEssay } from '../../../../../actions/myClass/essay';
+import { uploadEssay, reUploadEssay } from '../../../../../actions/myClass/essaySubmission';
 import { downloadFile } from '../../../../../actions/common/common';
 import { browseTasksUnderChallenge } from '../../../../../actions/myClass/challenge';
 
@@ -37,11 +37,11 @@ export default function EssayInfo({ role = 'NORMAL' }) {
     courseId, classId, challengeId, essayId,
   } = useParams();
   const history = useHistory();
-  const [currentTime, setCurrentTime] = useState(moment());
+  const [currentTime] = useState(moment());
 
   const dispatch = useDispatch();
 
-  const loading = useSelector((state) => state.loading.myClass.essay);
+  // const loading = useSelector((state) => state.loading.myClass.essay);
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
   const essay = useSelector((state) => state.essays.byId);
@@ -50,15 +50,12 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   const essaySubmission = useSelector((state) => state.essaySubmission);
   const userId = useSelector((state) => state.user.id);
 
-  const uploadFail = useSelector((state) => state.error.myClass.essaySubmission);
-
-  const [uploadRecord, setUploadRecord] = useState();
+  const [uploadRecord, setUploadRecord] = useState(0);
   const [selectedFile, setSelectedFile] = useState([]);
   const [fileName, setFileName] = useState();
 
   const [popUpUpload, setPopUpUpload] = useState(false);
   const [popUpFail, setPopUpFail] = useState(false);
-  const [hasRequest, setHasRequest] = useState(false);
   const [popUpDelete, setPopUpDelete] = useState(false);
 
   const handleClickUpload = () => {
@@ -81,46 +78,38 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   };
 
   const handleUpload = () => {
-    if (uploadRecord.length !== 0) {
-      dispatch(reUploadEssay(authToken, uploadRecord, selectedFile[0]));
+    if (uploadRecord !== 0) {
+      dispatch(reUploadEssay(authToken, uploadRecord, selectedFile[0], () => { setPopUpFail(true); }));
     } else {
-      dispatch(uploadEssay(authToken, essayId, selectedFile[0]));
+      dispatch(uploadEssay(authToken, essayId, selectedFile[0], () => { setPopUpFail(true); }));
     }
     setFileName(selectedFile[0].name);
     setSelectedFile([]);
-    if (!!uploadFail.reUploadEssay || !!uploadFail.uploadEssay) {
-      setPopUpFail(true);
-    }
+  };
+
+  const handleDeleteSuccess = () => {
+    dispatch(browseTasksUnderChallenge(authToken, challengeId));
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
   };
 
   const handleSubmitDelete = () => {
-    dispatch(deleteEssay(authToken, essayId));
-    setHasRequest(true);
+    dispatch(deleteEssay(authToken, essayId, handleDeleteSuccess));
   };
 
+  // useEffect(() => {
+  //   dispatch(browseEssaySubmission(essayId, authToken));
+  // }, [authToken, dispatch, essayId]);
+
   useEffect(() => {
-    if (hasRequest && !loading.deleteEssay) {
-      setHasRequest(false);
-      dispatch(browseTasksUnderChallenge(authToken, challengeId));
-      history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
+    if (essay[essayId] === undefined) {
+      return;
     }
-  }, [authToken, challengeId, classId, courseId, dispatch, hasRequest, history, loading.deleteEssay]);
-
-  useEffect(() => {
-    dispatch(browseEssaySubmission(essayId, authToken));
-  }, [authToken, dispatch, essayId]);
-
-  useEffect(() => {
-    setUploadRecord(
-      essaySubmission.allIds.filter(
-        (id) => essaySubmission.byId[id].account_id === userId && essaySubmission.byId[id].essay_id === parseInt(essayId, 10),
-      ),
-    );
-  }, [essayId, essaySubmission, essaySubmission.allIds, essaySubmission.byId, userId]);
+    setUploadRecord(essay[essayId].essaySubmissionId ? essay[essayId].essaySubmissionId : 0);
+  }, [essay, essayId]);
 
   const handleClickLink = () => {
     if (essaySubmission.byId[uploadRecord].account_id === userId) {
-      if (essaySubmission.byId[uploadRecord].essay_id === parseInt(essayId, 10)) {
+      if (essaySubmission.byId[uploadRecord].essay_id === Number(essayId)) {
         const fileToDownload = {
           uuid: essaySubmission.byId[uploadRecord].content_file_uuid,
           filename: essaySubmission.byId[uploadRecord].filename,
@@ -176,7 +165,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
         </DialogTitle>
         <DialogContent>
           <FileUploadArea
-            text="Assisting Data"
+            text="PDF File"
             fileAcceptFormat=".pdf"
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}

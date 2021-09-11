@@ -20,9 +20,9 @@ const useStyles = makeStyles(() => ({
 }));
 
 /* This is a level 4 component (page component) */
-export default function EssayEdit({ closeEdit, role = 'NORMAL' }) {
+export default function EssayEdit({ closeEdit }) {
   const {
-    courseId, classId, challengeId, essayId,
+    essayId,
   } = useParams();
   const classNames = useStyles();
 
@@ -30,18 +30,13 @@ export default function EssayEdit({ closeEdit, role = 'NORMAL' }) {
 
   const essays = useSelector((state) => state.essays.byId);
   const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.myClass.essay);
+  // const loading = useSelector((state) => state.loading.myClass.essay);
 
   const [label, setLabel] = useState(essays[essayId] === undefined ? 'error' : essays[essayId].challenge_label);
   const [title, setTitle] = useState(essays[essayId] === undefined ? 'error' : essays[essayId].title);
   const [description, setDescription] = useState(essays[essayId] === undefined ? 'error' : essays[essayId].description);
 
   const handleClickSave = () => {
-    const body = {
-      label,
-      title,
-      description,
-    };
     dispatch(editEssay(authToken, essayId, label, title, description));
     closeEdit();
   };

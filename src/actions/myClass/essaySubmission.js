@@ -22,7 +22,7 @@ const readEssaySubmission = (token, essaySubmissionId) => async (dispatch) => {
   }
 };
 
-const uploadEssay = (token, essayId, file) => async (dispatch) => {
+const uploadEssay = (token, essayId, file, onError) => async (dispatch) => {
   try {
     dispatch({ type: essayConstants.UPLOAD_ESSAY_SUBMISSION_START });
     const config = {
@@ -35,9 +35,10 @@ const uploadEssay = (token, essayId, file) => async (dispatch) => {
     formData.append('essay_file', file);
 
     const res = await agent.post(`/essay/${essayId}/essay-submission`, formData, config);
+    const res2 = await agent.get(`/essay-submission/${res.data.data}`, config);
     dispatch({
       type: essayConstants.UPLOAD_ESSAY_SUBMISSION_SUCCESS,
-      payload: res.data.data,
+      payload: res2.data.data,
     });
     dispatch(readEssaySubmission(token, res.data.data));
   } catch (error) {
@@ -45,10 +46,11 @@ const uploadEssay = (token, essayId, file) => async (dispatch) => {
       type: essayConstants.UPLOAD_ESSAY_SUBMISSION_FAIL,
       error,
     });
+    onError();
   }
 };
 
-const reUploadEssay = (token, essaySubmissionId, file) => async (dispatch) => {
+const reUploadEssay = (token, essaySubmissionId, file, onError) => async (dispatch) => {
   try {
     dispatch({ type: essayConstants.RE_UPLOAD_ESSAY_SUBMISSION_START });
     const config = {
@@ -70,6 +72,7 @@ const reUploadEssay = (token, essaySubmissionId, file) => async (dispatch) => {
       type: essayConstants.RE_UPLOAD_ESSAY_SUBMISSION_FAIL,
       error,
     });
+    onError();
   }
 };
 
@@ -96,7 +99,7 @@ const downloadAllEssaySubmission = (token, essayId, as_attachment) => async (dis
   }
 };
 
-const browseEssaySubmission = (essayId, token) => async (dispatch) => {
+const browseEssaySubmission = (token, essayId) => async (dispatch) => {
   try {
     const auth = {
       headers: {
