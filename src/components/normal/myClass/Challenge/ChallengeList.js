@@ -229,7 +229,7 @@ export default function ChallengeList() {
         })}
         hasLink
       />
-      <Dialog open={popUp} keepMounted onClose={() => setPopUp(false)} maxWidth="604px">
+      <Dialog open={popUp} keepMounted onClose={() => setPopUp(false)} style={{ maxWidth: '604px' }}>
         <DialogTitle>
           <Typography variant="h4">Create New Challenge</Typography>
         </DialogTitle>
