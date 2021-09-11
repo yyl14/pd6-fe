@@ -6,13 +6,14 @@ import TeamInfo from './detail/TeamInfo';
 import TeamInfoEdit from './detail/TeamInfoEdit';
 import TeamMember from './detail/TeamMember';
 import TeamMemberEdit from './detail/TeamMemberEdit';
+import TeamDelete from './detail/TeamDelete';
 import NoMatch from '../../../noMatch';
 import systemRoleTransformation from '../../../../function/systemRoleTransformation';
 import GeneralLoading from '../../../GeneralLoading';
 import PageTitle from '../../../ui/PageTitle';
 
 /* This is a level 4 component (page component) */
-export default function ChallengeList() {
+export default function TeamDetail() {
   const dispatch = useDispatch();
   const { classId, teamId } = useParams();
 
@@ -123,6 +124,13 @@ export default function ChallengeList() {
         />
       ) : (
         <TeamMember isManager={isManager} tableData={tableData} handleEdit={handleMemberEdit} />
+      )}
+
+      {isManager && (
+        <TeamDelete
+          teamName={teams[teamId].name}
+          label={teams[teamId].label}
+        />
       )}
     </>
   );

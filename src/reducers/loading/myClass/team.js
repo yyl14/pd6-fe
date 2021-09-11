@@ -6,6 +6,7 @@ const initialState = {
   addTeam: false,
   importTeam: false,
   editTeam: false,
+  deleteTeam: false,
 
   fetchTeamMember: false,
   addTeamMember: false,
@@ -107,6 +108,25 @@ export default function team(state = initialState, action) {
       return {
         ...state,
         editTeam: false,
+      };
+    }
+
+    case teamConstants.DELETE_TEAM_START: {
+      return {
+        ...state,
+        deleteTeam: true,
+      };
+    }
+    case teamConstants.DELETE_TEAM_SUCCESS: {
+      return {
+        ...state,
+        deleteTeam: false,
+      };
+    }
+    case teamConstants.DELETE_TEAM_FAIL: {
+      return {
+        ...state,
+        deleteTeam: false,
       };
     }
 
