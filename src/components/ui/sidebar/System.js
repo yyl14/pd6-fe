@@ -37,6 +37,10 @@ export default function System({
       history.push('/admin/system/submitlang');
     };
 
+    const goBackToSystem = () => {
+      history.push('/all-class');
+    };
+
     if (mode === 'main') {
       setTitle('System');
       setItemList([
@@ -96,6 +100,25 @@ export default function System({
           text: 'Setting',
           path: `${baseURL}/submitlang/${languageId}/setting`,
           icon: <Icon.SettingsIcon />,
+        },
+      ]);
+    } else if (mode === 'system') {
+      setArrow(
+        <IconButton className={classes.arrow} onClick={goBackToSystem}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
+      setTitle('System');
+      setItemList([
+        {
+          text: 'About',
+          path: '/system/about',
+          icon: <Icon.Warning />,
+        },
+        {
+          text: 'Access Log',
+          path: '/system/accesslog',
+          icon: <Icon.Paper />,
         },
       ]);
     }
