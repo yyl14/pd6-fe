@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Typography, Button, makeStyles, Dialog, DialogTitle, DialogActions, DialogContent,
@@ -75,13 +75,12 @@ export default function SubmissionDetail() {
   const testcaseIds = useSelector((state) => state.testcases.allIds);
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.submissions);
+  const [rejudge, setRejudge] = useState(false);
 
   useEffect(() => {
-    if (!loading.rejudgeSubmission) {
-      dispatch(readSubmissionDetail(authToken, submissionId));
-      dispatch(fetchSubmission(authToken, submissionId));
-    }
-  }, [authToken, dispatch, loading.rejudgeSubmission, submissionId]);
+    dispatch(readSubmissionDetail(authToken, submissionId));
+    dispatch(fetchSubmission(authToken, submissionId));
+  }, [authToken, dispatch, submissionId]);
 
   useEffect(() => {
     if (submissions[submissionId] !== undefined) {
@@ -100,7 +99,7 @@ export default function SubmissionDetail() {
   }, [authToken, dispatch, problemId, problems.allIds, problems.byId, submissionId, submissions]);
 
   useEffect(() => {
-    if (!loading.rejudgeSubmission) {
+    if (rejudge === false) {
       setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
       if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
         dispatch(
@@ -110,23 +109,56 @@ export default function SubmissionDetail() {
           ),
         );
       }
+    } else {
+      setJudgmentId(
+        judgmentIds
+          .reduce((acc, b) => [b, ...acc], [])
+          .filter((id) => judgments[id].submission_id === Number(submissionId))[0],
+      );
+      if (
+        judgmentIds
+          .reduce((acc, b) => [b, ...acc], [])
+          .filter((id) => judgments[id].submission_id === Number(submissionId))[0]
+      ) {
+        dispatch(
+          browseJudgeCases(
+            authToken,
+            judgmentIds
+              .reduce((acc, b) => [b, ...acc], [])
+              .filter((id) => judgments[id].submission_id === Number(submissionId))[0],
+          ),
+        );
+      }
     }
-  }, [authToken, dispatch, judgmentIds, judgments, submissionId, loading.rejudgeSubmission]);
+  }, [authToken, dispatch, judgmentIds, judgments, rejudge, submissionId]);
 
   useEffect(() => {
-    if (!loading.rejudgeSubmission && judgeCases.byId !== undefined) {
+    if (judgeCases.byId !== undefined) {
       judgeCases.allIds.map((id) => dispatch(readTestcase(authToken, id)));
     }
-  }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId, loading.rejudgeSubmission]);
+  }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId]);
+
+  const transformTestcase = useCallback(
+    (id) => {
+      if (testcases[id].input_filename !== null) {
+        return testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.'));
+      }
+      if (testcases[id].output_filename !== null) {
+        return testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.'));
+      }
+      return 0;
+    },
+    [testcases],
+  );
 
   useEffect(() => {
-    if (!loading.rejudgeSubmission && testcaseIds !== [] && judgeCases.allIds !== []) {
+    if (testcaseIds !== [] && judgeCases.allIds !== []) {
       setTableData(
         judgeCases.allIds
           .filter((id) => judgeCases.byId[id].judgment_id === judgmentId)
           .map((id) => ({
             id,
-            no: testcaseIds.map((key) => (id === key ? testcases[key].input_filename.split('.')[0] : '')),
+            no: testcaseIds.map((key) => (id === key ? transformTestcase(key) : '')),
             time: judgeCases.byId[id].time_lapse,
             memory: judgeCases.byId[id].peak_memory,
             status: judgeCases.byId[id].verdict
@@ -138,15 +170,7 @@ export default function SubmissionDetail() {
           })),
       );
     }
-  }, [
-    judgeCases.allIds,
-    judgeCases.byId,
-    judgmentId,
-    judgments.byId,
-    testcaseIds,
-    testcases,
-    loading.rejudgeSubmission,
-  ]);
+  }, [judgeCases.allIds, judgeCases.byId, judgmentId, judgments.byId, testcaseIds, testcases, transformTestcase]);
 
   useEffect(() => {
     if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
@@ -168,10 +192,10 @@ export default function SubmissionDetail() {
 
   const handleRefresh = () => {
     dispatch(readSubmissionDetail(authToken, submissionId));
-    dispatch(fetchSubmission(authToken, submissionId));
   };
 
   const handleRejudge = () => {
+    setRejudge(true);
     dispatch(rejudgeSubmission(authToken, submissionId));
     setPopUp(false);
   };
