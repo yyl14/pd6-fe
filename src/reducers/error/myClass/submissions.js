@@ -7,7 +7,6 @@ const initialState = {
   readSubmissionDetail: null,
   browseJudgeCases: null,
   readTestcase: null,
-  getAccountBatch: null,
   rejudgeSubmission: null,
 };
 
@@ -67,12 +66,6 @@ export default function submissions(state = initialState, action) {
       return {
         ...state,
         readTestcase: action.error,
-      };
-    }
-    case submissionConstants.GET_ACCOUNT_BATCH_FAIL: {
-      return {
-        ...state,
-        getAccountBatch: action.error,
       };
     }
     case submissionConstants.REJUDGE_SUBMISSION_SUCCESS:

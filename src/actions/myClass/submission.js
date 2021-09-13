@@ -212,27 +212,6 @@ const readTestcase = (token, testcaseId) => async (dispatch) => {
   }
 };
 
-const getAccountBatch = (token, accountId) => async (dispatch) => {
-  dispatch({ type: submissionConstants.GET_ACCOUNT_BATCH_START });
-  const config = {
-    headers: { 'auth-token': token },
-    params: { account_ids: JSON.stringify([accountId]) },
-  };
-  try {
-    const res = await agent.get('/account-summary/batch', config);
-
-    dispatch({
-      type: submissionConstants.GET_ACCOUNT_BATCH_SUCCESS,
-      payload: { data: res.data.data[0], accountId },
-    });
-  } catch (error) {
-    dispatch({
-      type: submissionConstants.GET_ACCOUNT_BATCH_FAIL,
-      error,
-    });
-  }
-};
-
 const rejudgeSubmission = (token, submissionId) => async (dispatch) => {
   const config = {
     headers: {
@@ -259,6 +238,5 @@ export {
   readSubmissionDetail,
   browseJudgeCases,
   readTestcase,
-  getAccountBatch,
   rejudgeSubmission,
 };
