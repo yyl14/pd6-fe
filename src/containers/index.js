@@ -5,6 +5,8 @@ import {
 import { useCookies } from 'react-cookie';
 
 import React, { useEffect } from 'react';
+import { makeStyles, Fab } from '@material-ui/core';
+import FeedbackIcon from '@material-ui/icons/Feedback';
 import Normal from './normal';
 import Admin from './admin';
 import Account from './account';
@@ -14,7 +16,16 @@ import { getUserInfo } from '../actions/user/auth';
 
 import '../styles/index.css';
 
+const useStyles = makeStyles(() => ({
+  bugReport: {
+    position: 'fixed',
+    right: '3.5vw',
+    bottom: '5vh',
+  },
+}));
+
 function Index() {
+  const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
   const auth = useSelector((state) => state.auth);
@@ -61,6 +72,7 @@ function Index() {
         <Route path="/my-profile" component={Account} />
         <Route path="/" component={Normal} />
       </Switch>
+      <Fab href="https://forms.gle/KaYJnXwgvsovzqVG7" target="_blank" className={classes.bugReport}><FeedbackIcon /></Fab>
     </div>
   );
 }
