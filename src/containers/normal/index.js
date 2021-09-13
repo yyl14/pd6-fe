@@ -37,7 +37,8 @@ export default function Normal() {
             <Route exact path="/my-class" component={MyClass} />
             <Route path="/my-class/:courseId/:classId" component={MyClass} />
             <Route path="/all-class" component={AllClass} />
-            <Route path="/problem-set" component={ProblemSet} />
+            <Route exact path="/problem-set" component={ProblemSet} />
+            <Route path="/problem-set/:courseId/:classId" component={ProblemSet} />
             <Route exact path="/" component={GeneralLoading} />
             <Route component={NoMatch} />
           </Switch>

@@ -17,6 +17,7 @@ import Grade from './sidebar/Grade';
 import Team from './sidebar/Team';
 import AllClass from './sidebar/AllClass';
 import AllClassChallenge from './sidebar/AllClassChallenge';
+import ProblemSet from './sidebar/ProblemSet';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -132,7 +133,6 @@ export default function Sidebar() {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
-  // const [mode, setMode] = useState('course');
 
   return (
     <Switch>
@@ -271,6 +271,14 @@ export default function Sidebar() {
       <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/essay/:essayId">
         <AllClassChallenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
+
+      {/* {Problem Set} */}
+      <Route exact path="/problem-set">
+        <ProblemSet classNames={classes} history={history} location={location} mode="main" />
+      </Route>
+      {/* <Route exact path="/problem-set/:courseId/:classId">
+        <ProblemSet classNames={classes} history={history} location={location} mode="main" />
+      </Route> */}
     </Switch>
   );
 }
