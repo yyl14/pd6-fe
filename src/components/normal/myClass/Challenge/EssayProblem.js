@@ -75,14 +75,11 @@ export default function EssayProblem() {
   };
 
   useEffect(() => {
-    userClasses.forEach((value) => {
-      if (value.class_id === Number(classId)) {
-        if (value.role === 'MANAGER') {
-          setRole('MANAGER');
-        }
-      }
-    });
+    if (userClasses.filter((item) => item.class_id === Number(classId)).length !== 0) {
+      setRole(userClasses.filter((item) => item.class_id === Number(classId))[0].role);
+    }
   }, [classId, userClasses]);
+
   useEffect(() => {
     dispatch(readEssay(authToken, essayId));
     // dispatch(browseEssaySubmission(authToken, essayId));

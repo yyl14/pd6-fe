@@ -74,7 +74,7 @@ export default function SubmissionDetail() {
   const testcases = useSelector((state) => state.testcases.byId);
   const testcaseIds = useSelector((state) => state.testcases.allIds);
   const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.myClass.submissions);
+  // const loading = useSelector((state) => state.loading.myClass.submissions);
   const [rejudge, setRejudge] = useState(false);
 
   useEffect(() => {
@@ -173,8 +173,8 @@ export default function SubmissionDetail() {
   }, [judgeCases.allIds, judgeCases.byId, judgmentId, judgments.byId, testcaseIds, testcases, transformTestcase]);
 
   useEffect(() => {
-    if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
-      setRole('MANAGER');
+    if (user.classes.filter((item) => item.class_id === Number(classId)).length !== 0) {
+      setRole(user.classes.filter((item) => item.class_id === Number(classId))[0].role);
     }
   }, [user.classes, classId]);
 

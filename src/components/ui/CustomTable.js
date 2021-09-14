@@ -6,22 +6,18 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow,
   TextField,
   Button,
-  Grid,
   MenuItem,
-  InputBase,
   FormControl,
   Select,
   InputAdornment,
   IconButton,
 } from '@material-ui/core';
 
-import Tooltip from '@material-ui/core/Tooltip';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import React, { useState, useEffect, useLocation } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Icon from './icon/index';
 
@@ -175,38 +171,36 @@ export default function CustomTable({
   const [search, setSearch] = useState('');
   const [filterData, setFilterData] = useState(data);
 
-  const [filters, setFilters] = useState([]);
-
   const handleChangePage = (event, newPage) => {
     if (newPage + 1 <= Math.ceil(filterData.length / rowsPerPage) && newPage >= 0) {
       setPageInput(newPage + 1);
     }
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+  // const handleChangeRowsPerPage = (event) => {
+  //   setRowsPerPage(+event.target.value);
+  //   setPage(0);
+  // };
 
-  const searchWidth = (searchWidthOptions) => {
-    switch (searchWidthOptions) {
-      case 1:
-        return classes.search;
-      case 2:
-        return classes.search2;
-      case 3:
-        return classes.search3;
-      default:
-        return classes.search;
-    }
-  };
+  // const searchWidth = (searchWidthOptions) => {
+  //   switch (searchWidthOptions) {
+  //     case 1:
+  //       return classes.search;
+  //     case 2:
+  //       return classes.search2;
+  //     case 3:
+  //       return classes.search3;
+  //     default:
+  //       return classes.search;
+  //   }
+  // };
 
-  const labelMoveLeft = (icon, cols, col) => {
-    if (icon && icon[cols.findIndex((x) => x.id === col.id)]) {
-      return classes.columnLabelMoveLeft;
-    }
-    return classes.columnLabelDefault;
-  };
+  // const labelMoveLeft = (icon, cols, col) => {
+  //   if (icon && icon[cols.findIndex((x) => x.id === col.id)]) {
+  //     return classes.columnLabelMoveLeft;
+  //   }
+  //   return classes.columnLabelDefault;
+  // };
 
   // TODO: table refetch
   // useEffect(()=>{
