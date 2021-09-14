@@ -13,7 +13,7 @@ import CodingProblemEdit from './ProblemSettings/CodingProblemEdit';
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
-import { readProblemInfo } from '../../../../actions/myClass/problem';
+import { readProblemInfo, rejudgeProblem } from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles(() => ({
   sampleArea: {
@@ -58,7 +58,7 @@ export default function CodingProblem() {
   };
 
   const handleRejudge = () => {
-    // TODO: rejudge problem
+    dispatch(rejudgeProblem(authToken, problemId));
     setRejudgePopUp(false);
   };
 
