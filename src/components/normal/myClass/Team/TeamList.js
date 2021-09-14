@@ -131,8 +131,8 @@ export default function TeamList() {
   };
 
   useEffect(() => {
-    if (hasRequest && showAddDialog && !loading.addTeam) {
-      if (error.addTeam === null) {
+    if (hasRequest && showAddDialog && !loading.myClass.team.addTeam) {
+      if (error.myClass.team.addTeam === null) {
         clearAddInput();
         setShowAddDialog(false);
         setHasRequest(false);
@@ -140,8 +140,8 @@ export default function TeamList() {
       } else {
         setHasError(true);
       }
-    } else if (hasRequest && showImportDialog && !loading.importTeam) {
-      if (error.importTeam === null) {
+    } else if (hasRequest && showImportDialog && !loading.myClass.team.importTeam) {
+      if (error.myClass.team.importTeam === null) {
         clearImportInput();
         setShowImportDialog(false);
         setHasRequest(false);
@@ -151,11 +151,11 @@ export default function TeamList() {
       }
     }
   }, [
-    error.addTeam,
-    error.importTeam,
+    error.myClass.team.addTeam,
+    error.myClass.team.importTeam,
     hasRequest,
-    loading.addTeam,
-    loading.importTeam,
+    loading.myClass.team.addTeam,
+    loading.myClass.team.importTeam,
     showAddDialog,
     showImportDialog,
   ]);
@@ -170,11 +170,8 @@ export default function TeamList() {
     setHasRequest(false);
   };
 
-  if (loading.fetchTeams) {
-    return <GeneralLoading />;
-  }
   if (courses[courseId] === undefined || classes[classId] === undefined) {
-    if (loading.fetchCourse || loading.fetchClass) {
+    if (loading.myClass.team.fetchCourse || loading.myClass.team.fetchClass) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -188,16 +185,11 @@ export default function TeamList() {
         buttons={
           isManager && (
             <>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => setShowImportDialog(true)}
-                startIcon={<Icon.Folder />}
-              >
-                Import
-              </Button>
-              <Button color="primary" onClick={() => setShowAddDialog(true)}>
+              <Button variant="outlined" color="primary" onClick={() => setShowAddDialog(true)}>
                 <MdAdd />
+              </Button>
+              <Button color="primary" onClick={() => setShowImportDialog(true)} startIcon={<Icon.Folder />}>
+                Import
               </Button>
             </>
           )
