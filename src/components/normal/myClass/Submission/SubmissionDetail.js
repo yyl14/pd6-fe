@@ -17,10 +17,11 @@ import GeneralLoading from '../../../GeneralLoading';
 import {
   readSubmissionDetail,
   browseJudgeCases,
-  readTestcase,
+  // readTestcase,
   fetchSubmission,
   getAccountBatch,
   rejudgeSubmission,
+  browseTestcases,
 } from '../../../../actions/myClass/submission';
 import { readProblemInfo } from '../../../../actions/myClass/problem';
 import { fetchChallenge } from '../../../../actions/common/common';
@@ -133,10 +134,10 @@ export default function SubmissionDetail() {
   }, [authToken, dispatch, judgmentIds, judgments, rejudge, submissionId]);
 
   useEffect(() => {
-    if (judgeCases.byId !== undefined) {
-      judgeCases.allIds.map((id) => dispatch(readTestcase(authToken, id)));
+    if (problemId !== '') {
+      dispatch(browseTestcases(authToken, problemId));
     }
-  }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId]);
+  }, [authToken, dispatch, problemId]);
 
   const transformTestcase = useCallback(
     (id) => {

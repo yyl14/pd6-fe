@@ -9,6 +9,7 @@ const initialState = {
   readTestcase: false,
   getAccountBatch: false,
   rejudgeSubmission: false,
+  browseTestcases: false,
 };
 
 export default function submissions(state = initialState, action) {
@@ -87,24 +88,24 @@ export default function submissions(state = initialState, action) {
         browseJudgeCases: false,
       };
     }
-    case submissionConstants.READ_TESTCASE_START: {
-      return {
-        ...state,
-        readTestcase: true,
-      };
-    }
-    case submissionConstants.READ_TESTCASE_SUCCESS: {
-      return {
-        ...state,
-        readTestcase: false,
-      };
-    }
-    case submissionConstants.READ_TESTCASE_FAIL: {
-      return {
-        ...state,
-        readTestcase: false,
-      };
-    }
+    // case submissionConstants.READ_TESTCASE_START: {
+    //   return {
+    //     ...state,
+    //     readTestcase: true,
+    //   };
+    // }
+    // case submissionConstants.READ_TESTCASE_SUCCESS: {
+    //   return {
+    //     ...state,
+    //     readTestcase: false,
+    //   };
+    // }
+    // case submissionConstants.READ_TESTCASE_FAIL: {
+    //   return {
+    //     ...state,
+    //     readTestcase: false,
+    //   };
+    // }
     case submissionConstants.GET_ACCOUNT_BATCH_START: {
       return {
         ...state,
@@ -137,6 +138,21 @@ export default function submissions(state = initialState, action) {
       return {
         ...state,
         rejudgeSubmission: false,
+      };
+    case submissionConstants.BROWSE_TESTCASES_START:
+      return {
+        ...state,
+        browseTestcases: true,
+      };
+    case submissionConstants.BROWSE_TESTCASES_SUCCESS:
+      return {
+        ...state,
+        browseTestcases: false,
+      };
+    case submissionConstants.BROWSE_TESTCASES_FAIL:
+      return {
+        ...state,
+        browseTestcases: false,
       };
     default:
       return state;

@@ -14,7 +14,8 @@ import GeneralLoading from '../../../GeneralLoading';
 import {
   readSubmissionDetail,
   browseJudgeCases,
-  readTestcase,
+  // readTestcase,
+  browseTestcases,
   rejudgeSubmission,
 } from '../../../../actions/myClass/problem';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
@@ -106,11 +107,15 @@ export default function SubmissionDetail() {
     }
   }, [authToken, dispatch, judgmentIds, judgments, rejudge, submissionId]);
 
+  // useEffect(() => {
+  //   if (judgeCases.byId !== undefined) {
+  //     judgeCases.allIds.map((id) => dispatch(readTestcase(authToken, id)));
+  //   }
+  // }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId]);
+
   useEffect(() => {
-    if (judgeCases.byId !== undefined) {
-      judgeCases.allIds.map((id) => dispatch(readTestcase(authToken, id)));
-    }
-  }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId]);
+    dispatch(browseTestcases(authToken, problemId));
+  }, [authToken, dispatch, problemId]);
 
   const transformTestcase = useCallback(
     (id) => {

@@ -9,7 +9,12 @@ import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
 import PageTitle from '../../../ui/PageTitle';
 import GeneralLoading from '../../../GeneralLoading';
-import { readSubmissionDetail, browseJudgeCases, readTestcase } from '../../../../actions/myClass/problem';
+import {
+  readSubmissionDetail,
+  browseJudgeCases,
+  readTestcase,
+  browseTestcases,
+} from '../../../../actions/myClass/problem';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
 import NoMatch from '../../../noMatch';
 import CodeArea from '../../../ui/CodeArea';
@@ -74,11 +79,15 @@ export default function SubmissionDetail() {
     }
   }, [authToken, dispatch, judgmentIds, judgments, submissionId]);
 
+  // useEffect(() => {
+  //   if (judgeCases.byId !== undefined) {
+  //     judgeCases.allIds.map((id) => dispatch(readTestcase(authToken, id)));
+  //   }
+  // }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId]);
+
   useEffect(() => {
-    if (judgeCases.byId !== undefined) {
-      judgeCases.allIds.map((id) => dispatch(readTestcase(authToken, id)));
-    }
-  }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId]);
+    dispatch(browseTestcases(authToken, problemId));
+  }, [authToken, dispatch, problemId]);
 
   const transformTestcase = useCallback(
     (id) => {

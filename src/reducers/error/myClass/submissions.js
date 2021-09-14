@@ -9,6 +9,7 @@ const initialState = {
   readTestcase: null,
   getAccountBatch: null,
   rejudgeSubmission: null,
+  browseTestcases: null,
 };
 
 export default function submissions(state = initialState, action) {
@@ -63,12 +64,12 @@ export default function submissions(state = initialState, action) {
         browseJudgeCases: action.error,
       };
     }
-    case submissionConstants.READ_TESTCASE_FAIL: {
-      return {
-        ...state,
-        readTestcase: action.error,
-      };
-    }
+    // case submissionConstants.READ_TESTCASE_FAIL: {
+    //   return {
+    //     ...state,
+    //     readTestcase: action.error,
+    //   };
+    // }
     case submissionConstants.GET_ACCOUNT_BATCH_FAIL: {
       return {
         ...state,
@@ -84,6 +85,16 @@ export default function submissions(state = initialState, action) {
       return {
         ...state,
         rejudgeSubmission: action.error,
+      };
+    case submissionConstants.BROWSE_TESTCASES_SUCCESS:
+      return {
+        ...state,
+        browseTestcases: null,
+      };
+    case submissionConstants.BROWSE_TESTCASES_FAIL:
+      return {
+        ...state,
+        browseTestcases: action.error,
       };
     default:
       return state;

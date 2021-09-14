@@ -365,23 +365,22 @@ const editTestcase = (token, testcaseId, isSample, score, timeLimit, memoryLimit
   }
 };
 
-const readTestcase = (token, testcaseId) => async (dispatch) => {
-  dispatch({ type: problemConstants.READ_TESTCASE_START });
+const browseTestcases = (token, problemId) => async (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
     },
   };
   try {
-    const res = await agent.get(`/testcase/${testcaseId}`, config);
-
+    dispatch({ type: problemConstants.BROWSE_TESTCASES_START });
+    const res = await agent.get(`/problem/${problemId}/testcase`, config);
     dispatch({
-      type: problemConstants.READ_TESTCASE_SUCCESS,
+      type: problemConstants.BROWSE_TESTCASES_SUCCESS,
       payload: res.data.data,
     });
   } catch (error) {
     dispatch({
-      type: problemConstants.READ_TESTCASE_FAIL,
+      type: problemConstants.BROWSE_TESTCASES_FAIL,
       error,
     });
   }
@@ -467,7 +466,7 @@ const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData
   await Promise.all(
     sampleDataIds.map(async (id) => {
       if (sampleTableData[id] === undefined) {
-      // delete data
+        // delete data
         try {
           dispatch({ type: problemConstants.DELETE_TESTCASE_START });
           await agent.delete(`/testcase/${id}`, config);
@@ -488,7 +487,7 @@ const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData
   await Promise.all(
     Object.keys(sampleTableData).map(async (id) => {
       if (sampleTableData[id].new) {
-      // add testcase with file
+        // add testcase with file
         dispatch({ type: problemConstants.ADD_TESTCASE_START });
         const body = {
           is_sample: true,
@@ -524,13 +523,15 @@ const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData
           }
         }
       } else {
-      // check basic info
+        // check basic info
         if (
           testcases[id].time_limit !== sampleTableData[id].time_limit
-          || testcases[id].memory_limit !== sampleTableData[id].memory_limit
-          || testcases[id].is_disabled !== false
+            || testcases[id].memory_limit !== sampleTableData[id].memory_limit
+            || testcases[id].is_disabled !== false
         ) {
-          await dispatch(editTestcase(token, id, true, 0, sampleTableData[id].time_limit, sampleTableData[id].memory_limit, false));
+          await dispatch(
+            editTestcase(token, id, true, 0, sampleTableData[id].time_limit, sampleTableData[id].memory_limit, false),
+          );
         }
         // upload file
         if (sampleTableData[id].in_file !== null) {
@@ -586,7 +587,7 @@ const saveTestcases = (token, problemId, testcases, testcaseDataIds, testcaseTab
   await Promise.all(
     testcaseDataIds.map(async (id) => {
       if (testcaseTableData[id] === undefined) {
-      // delete data
+        // delete data
         try {
           dispatch({ type: problemConstants.DELETE_TESTCASE_START });
           await agent.delete(`/testcase/${id}`, config);
@@ -607,7 +608,7 @@ const saveTestcases = (token, problemId, testcases, testcaseDataIds, testcaseTab
   await Promise.all(
     Object.keys(testcaseTableData).map(async (id) => {
       if (testcaseTableData[id].new) {
-      // add testcase with file
+        // add testcase with file
         dispatch({ type: problemConstants.ADD_TESTCASE_START });
         const body = {
           is_sample: false,
@@ -643,14 +644,24 @@ const saveTestcases = (token, problemId, testcases, testcaseDataIds, testcaseTab
           }
         }
       } else {
-      // check basic info
+        // check basic info
         if (
           testcases[id].time_limit !== testcaseTableData[id].time_limit
-          || testcases[id].memory_limit !== testcaseTableData[id].memory_limit
-          || testcases[id].score !== testcaseTableData[id].score
-          || testcases[id].is_disabled !== !status
+            || testcases[id].memory_limit !== testcaseTableData[id].memory_limit
+            || testcases[id].score !== testcaseTableData[id].score
+            || testcases[id].is_disabled !== !status
         ) {
-          await dispatch(editTestcase(token, id, false, testcaseTableData[id].score, testcaseTableData[id].time_limit, testcaseTableData[id].memory_limit, !status));
+          await dispatch(
+            editTestcase(
+              token,
+              id,
+              false,
+              testcaseTableData[id].score,
+              testcaseTableData[id].time_limit,
+              testcaseTableData[id].memory_limit,
+              !status,
+            ),
+          );
         }
         // upload file
         if (testcaseTableData[id].in_file !== null) {
@@ -721,7 +732,7 @@ const saveAssistingData = (token, problemId, assistingData, assistingDataIds, as
   await Promise.all(
     assistTableData.map(async (item) => {
       if (assistingDataIds.filter((id) => assistingData[id].filename === item.filename).length === 0) {
-      // add assisting data
+        // add assisting data
         const formData = new FormData();
         formData.append('assisting_data', item.file);
 
@@ -734,7 +745,7 @@ const saveAssistingData = (token, problemId, assistingData, assistingDataIds, as
           dispatch({ type: problemConstants.ADD_ASSISTING_DATA_FAIL, error });
         }
       } else if (item.file !== null) {
-      // edit assisting data
+        // edit assisting data
         const formData = new FormData();
         formData.append('assisting_data_file', item.file);
         try {
@@ -783,7 +794,8 @@ export {
   submitCode,
   editTestcase,
   browseJudgeCases,
-  readTestcase,
+  // readTestcase,
+  browseTestcases,
   readProblemScore,
   downloadAllSamples,
   downloadAllTestcases,
