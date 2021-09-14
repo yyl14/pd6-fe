@@ -19,13 +19,15 @@ const useStyles = makeStyles(() => ({
     width: '300px',
   },
   codingField: {
-    width: '47vw',
+    flexGrow: 1,
+    width: 'auto',
   },
   bottomButton: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
     marginTop: '35px',
+    marginRight: '-5px',
   },
 }));
 
@@ -68,7 +70,7 @@ export default function CodeSubmission() {
     dispatch(submitCode(authToken, problemId, langId, code));
     const daysToExpire = new Date(2147483647 * 1000);
     setCookie('lang', langId, { path: '/', expires: daysToExpire });
-    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
+    history.push(`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
   };
 
   useEffect(() => {
@@ -122,7 +124,7 @@ export default function CodeSubmission() {
       <div className={classNames.bottomButton}>
         <Button
           color="default"
-          onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`)}
+          onClick={() => history.push(`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`)}
         >
           Cancel
         </Button>
