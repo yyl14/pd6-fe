@@ -15,6 +15,7 @@ import {
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdAdd } from 'react-icons/md';
+import Icon from '../../../../ui/icon/index';
 import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleTable from '../../../../ui/SimpleTable';
@@ -110,6 +111,11 @@ export default function TeamMemberEdit({ setOriginData, isManager, handleBack })
   return (
     <div>
       <SimpleBar title="Team Member" noIndent>
+        {/* {isManager && (
+          <Button variant="outlined" color="primary" onClick={() => setPopUp(true)} startIcon={<Icon.AddBoxIcon />}>
+            Add Team member
+          </Button>
+        )} */}
         <SimpleTable
           isEdit={isManager}
           hasDelete={isManager}
