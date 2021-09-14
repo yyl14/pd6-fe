@@ -106,14 +106,14 @@ export default function ClassList() {
             id: 'name',
             label: 'Class',
             minWidth: 100,
-            width: 120,
+            width: 300,
             align: 'center',
           },
           {
             id: 'memberCount',
             label: 'Member Count',
-            minWidth: 180,
-            width: 120,
+            minWidth: 150,
+            width: 150,
             align: 'center',
           },
         ]}

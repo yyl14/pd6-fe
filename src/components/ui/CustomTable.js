@@ -78,6 +78,7 @@ const useStyles = makeStyles((theme) => ({
     background: 'white',
     borderBottomWidth: '1px',
     borderBottomColor: theme.palette.grey.A400,
+    width: 'fit-content',
   },
   column: {
     display: 'flex',
@@ -294,14 +295,7 @@ export default function CustomTable({
                   </React.Fragment>
                 ))}
 
-                {
-                  // TODO: simplify this
-                  hasLink ? (
-                    <TableCell key="link" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
-                  ) : (
-                    <TableCell key="blank" align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
-                  )
-                }
+                <TableCell key={hasLink ? 'link' : 'blank'} align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
               </TableRow>
             </TableHead>
             <TableBody>
