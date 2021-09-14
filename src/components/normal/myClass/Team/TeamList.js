@@ -171,7 +171,7 @@ export default function TeamList() {
   };
 
   if (courses[courseId] === undefined || classes[classId] === undefined) {
-    if (loading.myClass.team.fetchCourse || loading.myClass.team.fetchClass) {
+    if (loading.common.common.fetchCourse || loading.common.common.fetchClass || loading.myClass.team.fetchTeams) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
