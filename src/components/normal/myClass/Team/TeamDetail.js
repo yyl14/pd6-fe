@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Snackbar } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { fetchTeam, fetchTeamMembers } from '../../../../actions/myClass/team';
 import TeamInfo from './detail/TeamInfo';
@@ -22,6 +23,8 @@ export default function TeamDetail() {
   const teamMembers = useSelector((state) => state.teamMembers.byId);
   const teamMemberIds = useSelector((state) => state.teamMembers.allIds);
   const loading = useSelector((state) => state.loading.myClass.team);
+  const error = useSelector((state) => state.error);
+  const [hasError, setHasError] = useState(false);
 
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
@@ -73,6 +76,13 @@ export default function TeamDetail() {
     );
   }, [teamMemberIds, teamMembers]);
 
+  useEffect(() => {
+    console.log(error.myClass.team.addTeamMember);
+    if (editTeamMember && error.myClass.team.addTeamMember !== null) {
+      setHasError(true);
+    }
+  }, [editTeamMember, error.myClass.team.addTeamMember]);
+
   const handleInfoBack = () => {
     setEditTeamInfo(false);
   };
@@ -87,6 +97,11 @@ export default function TeamDetail() {
 
   const handleMemberEdit = () => {
     setEditTeamMember(true);
+  };
+
+  const handleCloseError = () => {
+    error.myClass.team.addTeamMember = null;
+    setHasError(false);
   };
 
   if (loading.fetchTeam || loading.fetchTeamMember) {
@@ -126,12 +141,9 @@ export default function TeamDetail() {
         <TeamMember isManager={isManager} tableData={tableData} handleEdit={handleMemberEdit} />
       )}
 
-      {isManager && (
-        <TeamDelete
-          teamName={teams[teamId].name}
-          label={teams[teamId].label}
-        />
-      )}
+      {isManager && <TeamDelete teamName={teams[teamId].name} label={teams[teamId].label} />}
+
+      <Snackbar open={hasError} onClose={handleCloseError} message="未註冊此門課程的同學，無法加入team" />
     </>
   );
 }
