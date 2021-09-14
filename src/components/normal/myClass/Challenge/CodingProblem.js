@@ -64,13 +64,9 @@ export default function CodingProblem() {
 
   // console.log(userClasses);
   useEffect(() => {
-    userClasses.forEach((value) => {
-      if (value.class_id === parseInt(classId, 10)) {
-        if (value.role === 'MANAGER') {
-          setRole('MANAGER');
-        }
-      }
-    });
+    if (userClasses.filter((item) => item.class_id === Number(classId)).length !== 0) {
+      setRole(userClasses.filter((item) => item.class_id === Number(classId))[0].role);
+    }
   }, [classId, userClasses]);
 
   useEffect(() => {
