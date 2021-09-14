@@ -315,7 +315,7 @@ export default function TeamList() {
           <Typography variant="h4">Create New Team</Typography>
         </DialogTitle>
         <DialogContent>
-          <AlignedText text="Class" maxWidth="lg" childrenType="text">
+          <AlignedText text="Class" maxWidth="md" childrenType="text">
             <Typography variant="body1">{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
           </AlignedText>
           <AlignedText text="Label" maxWidth="lg" childrenType="field">
