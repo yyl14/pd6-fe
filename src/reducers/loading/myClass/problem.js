@@ -23,6 +23,7 @@ const initialState = {
   downloadSamples: false,
   downloadTestcases: false,
   rejudgeSubmission: false,
+  rejudgeProblem: false,
 };
 
 export default function problem(state = initialState, action) {
@@ -356,6 +357,21 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         rejudgeSubmission: false,
+      };
+    case problemConstants.REJUDGE_PROBLEM_START:
+      return {
+        ...state,
+        rejudgeProblem: true,
+      };
+    case problemConstants.REJUDGE_PROBLEM_SUCCESS:
+      return {
+        ...state,
+        rejudgeProblem: false,
+      };
+    case problemConstants.REJUDGE_PROBLEM_FAIL:
+      return {
+        ...state,
+        rejudgeProblem: false,
       };
     default: {
       return state;
