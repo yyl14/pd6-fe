@@ -336,7 +336,7 @@ export default function GradeList() {
 
       <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} maxWidth="md">
         <DialogTitle id="dialog-slide-title">
-          <Typography variant="h4">Import Grades.byId</Typography>
+          <Typography variant="h4">Import Grades</Typography>
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2">Grade file format:</Typography>
