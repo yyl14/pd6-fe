@@ -145,8 +145,6 @@ export default function SampleTestArea({ input, output }) {
     return classes.actions;
   };
 
-  console.log(input.split('\n'));
-
   return (
     <div ref={ref}>
       <Card className={classes.root} variant="outlined">
