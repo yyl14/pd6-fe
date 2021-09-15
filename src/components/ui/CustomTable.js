@@ -305,7 +305,7 @@ export default function CustomTable({
               column.type: 'text', 'number', 'link', 'date'
               */
                 filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row[columns[0].id]} className={classes.row}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id} className={classes.row}>
                     {columns.map((column) => {
                       if (column.type === 'link') {
                         const link = row[column.link_id];

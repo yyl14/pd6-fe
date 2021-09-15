@@ -474,7 +474,7 @@ function AutoTable({
               column.type: 'text', 'number', 'link', 'date'
               */
                 rowData.map((row) => (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row[columns[0].id]} className={classes.row}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id} className={classes.row}>
                     <TableCell key={`${row.id}-left`} className={classes.tableRowContainerLeftSpacing} />
                     {columns.map((column) => {
                       const value = row[column.name];
