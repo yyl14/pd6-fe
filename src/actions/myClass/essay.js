@@ -41,6 +41,7 @@ const editEssay = (token, essayId, label, title, description) => async (dispatch
       type: essayConstants.EDIT_ESSAY_SUCCESS,
       payload: { essayId, content: body },
     });
+    dispatch(readEssay(token, essayId));
   } catch (error) {
     dispatch({
       type: essayConstants.EDIT_ESSAY_FAIL,
