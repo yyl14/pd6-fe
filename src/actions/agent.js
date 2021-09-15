@@ -17,7 +17,6 @@ agent.interceptors.response.use(
       if (res.data.error.toString() === 'LoginExpired') {
         dispatch({ type: authConstants.TOKEN_EXPIRED });
       }
-
       return Promise.reject(res.data.error);
     }
     return res;
