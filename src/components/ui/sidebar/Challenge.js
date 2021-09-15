@@ -29,11 +29,11 @@ export default function Challenge({
   const problems = useSelector((state) => state.problem);
   const essays = useSelector((state) => state.essays);
 
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-    dispatch(fetchChallenges(authToken, classId));
-  }, [dispatch, authToken, classId, courseId]);
+  // useEffect(() => {
+  //   dispatch(fetchCourse(authToken, courseId));
+  //   dispatch(fetchClass(authToken, classId));
+  //   dispatch(fetchChallenges(authToken, classId));
+  // }, [dispatch, authToken, classId, courseId]);
 
   const [display, setDisplay] = useState('unfold');
 
