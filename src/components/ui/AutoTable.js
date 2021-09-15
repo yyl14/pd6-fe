@@ -582,7 +582,9 @@ function AutoTable({
         open={isError}
         autoHideDuration={6000}
         message={`Error refetching data: ${
-          Boolean(refetchErrors.filter((error) => !!error)[0]) && refetchErrors.filter((error) => !!error)[0].toString()
+          Boolean(refetchErrors.filter((error) => !!error)[0])
+            ? refetchErrors.filter((error) => !!error)[0].toString()
+            : ''
         }`}
       />
     </>
