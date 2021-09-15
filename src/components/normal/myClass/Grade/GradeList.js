@@ -268,6 +268,7 @@ export default function GradeList() {
         ]}
         reduxData={grades}
         reduxDataToRows={(item) => ({
+          id: item.id,
           Username: {
             text: accounts.byId[item.receiver_id] ? accounts.byId[item.receiver_id].username : '',
             path: `/admin/account/account/${item.receiver_id}/setting`,

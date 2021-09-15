@@ -226,6 +226,7 @@ export default function ChallengeList() {
         ]}
         reduxData={challenges}
         reduxDataToRows={(item) => ({
+          id: item.id,
           Title: item.title,
           'Start Time': moment(item.start_time).format('YYYY-MM-DD, HH:mm'),
           'End Time': moment(item.end_time).format('YYYY-MM-DD, HH:mm'),
