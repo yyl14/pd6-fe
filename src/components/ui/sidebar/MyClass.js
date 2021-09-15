@@ -19,9 +19,9 @@ export default function MyClass({
   const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
 
-  useEffect(() => {
-    userClasses.map(({ course_id }) => dispatch(fetchCourse(authToken, course_id)));
-  }, [dispatch, authToken, classId, courseId, userClasses]);
+  // useEffect(() => {
+  //   userClasses.map(({ course_id }) => dispatch(fetchCourse(authToken, course_id)));
+  // }, [dispatch, authToken, classId, courseId, userClasses]);
 
   const [display, setDisplay] = useState([]); // 0: fold, 1: unfold
   const [titles, setTitles] = useState([]);
