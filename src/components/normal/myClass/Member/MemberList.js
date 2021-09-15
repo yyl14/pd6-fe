@@ -34,14 +34,7 @@ export default function MemberList() {
   const [isManager, setIsManager] = useState(false);
 
   useEffect(() => {
-    userClasses.map((item) => {
-      if (`${item.class_id}` === classId) {
-        if (item.role === 'MANAGER') {
-          setIsManager(true);
-        }
-      }
-      return <></>;
-    });
+    setIsManager(userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER');
   }, [classId, userClasses]);
 
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
@@ -72,7 +65,7 @@ export default function MemberList() {
       ) : (
         <>
           <AutoTable
-            ident="MyClass Member Table"
+            ident={`MyClass Member Table ${classId}`}
             hasFilter
             buttons={
               isManager ? (

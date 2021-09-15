@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Button, makeStyles } from '@material-ui/core';
 import { useParams, Link } from 'react-router-dom';
@@ -80,6 +80,19 @@ export default function SubmissionDetail() {
     }
   }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId]);
 
+  const transformTestcase = useCallback(
+    (id) => {
+      if (testcases[id].input_filename !== null) {
+        return testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.'));
+      }
+      if (testcases[id].output_filename !== null) {
+        return testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.'));
+      }
+      return 0;
+    },
+    [testcases],
+  );
+
   useEffect(() => {
     if (testcaseIds !== [] && judgeCases.allIds !== []) {
       setTableData(
@@ -87,7 +100,7 @@ export default function SubmissionDetail() {
           .filter((id) => judgeCases.byId[id].judgment_id === judgmentId)
           .map((id) => ({
             id,
-            no: testcaseIds.map((key) => (id === key ? testcases[key].input_filename.split('.')[0] : '')),
+            no: testcaseIds.map((key) => (id === key ? transformTestcase(key) : '')),
             time: judgeCases.byId[id].time_lapse,
             memory: judgeCases.byId[id].peak_memory,
             status: judgeCases.byId[id].verdict
@@ -99,7 +112,16 @@ export default function SubmissionDetail() {
           })),
       );
     }
-  }, [judgeCases, judgeCases.allIds, judgeCases.byId, judgmentId, judgments.byId, testcaseIds, testcases]);
+  }, [
+    judgeCases,
+    judgeCases.allIds,
+    judgeCases.byId,
+    judgmentId,
+    judgments.byId,
+    testcaseIds,
+    testcases,
+    transformTestcase,
+  ]);
 
   if (
     problems.byId[problemId] === undefined
@@ -117,7 +139,6 @@ export default function SubmissionDetail() {
 
   const handleRefresh = () => {
     dispatch(readSubmissionDetail(authToken, submissionId));
-    dispatch(fetchSubmission(authToken, submissionId));
   };
 
   return (
@@ -144,13 +165,13 @@ export default function SubmissionDetail() {
           <Typography variant="body1">{user.real_name}</Typography>
         </AlignedText>
         <AlignedText text="Challenge" childrenType="text">
-          <Link to={`/my-class/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
+          <Link to={`/all-class/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
             <Typography variant="body1">{challenges.byId[challengeId].title}</Typography>
           </Link>
         </AlignedText>
         <AlignedText text="Task Label" childrenType="text">
           <Link
-            to={`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`}
+            to={`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`}
             className={classNames.textLink}
           >
             <Typography variant="body1">{problems.byId[problemId].challenge_label}</Typography>
@@ -177,9 +198,7 @@ export default function SubmissionDetail() {
               )}
             </div>
           ) : (
-            <Typography variant="body1" color="secondary">
-              Waiting For Judge
-            </Typography>
+            <Typography variant="body1">Waiting For Judge</Typography>
           )}
         </AlignedText>
         <AlignedText text="Score" childrenType="text">

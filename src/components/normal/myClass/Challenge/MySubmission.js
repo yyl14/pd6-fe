@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Typography, Button, Snackbar } from '@material-ui/core';
+import { Typography, Snackbar } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import Icon from '../../../ui/icon/index';
 import AlignedText from '../../../ui/AlignedText';
 import AutoTable from '../../../ui/AutoTable';
 import NoMatch from '../../../noMatch';

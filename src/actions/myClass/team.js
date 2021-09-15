@@ -251,3 +251,19 @@ export const deleteTeamMember = (token, teamId, memberId) => async (dispatch) =>
     });
   }
 };
+
+export const deleteTeam = (token, teamId, onSuccess, onError) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    dispatch({ type: teamConstants.DELETE_TEAM_START });
+    await agent.delete(`/team/${teamId}`, config);
+    dispatch({ type: teamConstants.DELETE_TEAM_SUCCESS });
+    onSuccess();
+  } catch (error) {
+    dispatch({
+      type: teamConstants.DELETE_TEAM_FAIL,
+      error,
+    });
+    onError(error);
+  }
+};

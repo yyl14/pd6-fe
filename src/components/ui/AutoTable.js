@@ -46,11 +46,19 @@ const useStyles = makeStyles((theme) => ({
   },
   search: {
     marginRight: '5px',
-    width: '350px',
+    width: 'auto',
+    flexShrink: 100,
+  },
+  searchFields: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    flexShrink: 1,
   },
   buttons: {
     marginTop: '3px',
     height: '60px',
+    flexShrink: 0,
   },
   children: {
     margin: '16px 0px 50px 50px',
@@ -64,6 +72,7 @@ const useStyles = makeStyles((theme) => ({
   filterSelect: {
     marginRight: '10px',
     minWidth: '180px',
+    flexShrink: 0,
   },
   filterItem: {
     minWidth: '180px',
@@ -465,7 +474,7 @@ function AutoTable({
               column.type: 'text', 'number', 'link', 'date'
               */
                 rowData.map((row) => (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row[columns[0].id]} className={classes.row}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id} className={classes.row}>
                     <TableCell key={`${row.id}-left`} className={classes.tableRowContainerLeftSpacing} />
                     {columns.map((column) => {
                       const value = row[column.name];

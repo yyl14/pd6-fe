@@ -19,13 +19,15 @@ const useStyles = makeStyles(() => ({
     width: '300px',
   },
   codingField: {
-    width: '47vw',
+    flexGrow: 1,
+    width: 'auto',
   },
   bottomButton: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
     marginTop: '35px',
+    marginRight: '-5px',
   },
 }));
 

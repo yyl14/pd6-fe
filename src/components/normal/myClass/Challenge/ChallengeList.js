@@ -25,6 +25,11 @@ import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
+  textField: {
+    width: 'auto',
+    flexGrow: 1,
+    flexShrink: 1,
+  },
   dateRangePicker: {
     marginTop: '16px',
     marginBottom: '16px',
@@ -221,6 +226,7 @@ export default function ChallengeList() {
         ]}
         reduxData={challenges}
         reduxDataToRows={(item) => ({
+          id: item.id,
           Title: item.title,
           'Start Time': moment(item.start_time).format('YYYY-MM-DD, HH:mm'),
           'End Time': moment(item.end_time).format('YYYY-MM-DD, HH:mm'),
@@ -229,7 +235,7 @@ export default function ChallengeList() {
         })}
         hasLink
       />
-      <Dialog open={popUp} keepMounted onClose={() => setPopUp(false)} maxWidth="604px">
+      <Dialog open={popUp} keepMounted onClose={() => setPopUp(false)} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Create New Challenge</Typography>
         </DialogTitle>
@@ -238,7 +244,12 @@ export default function ChallengeList() {
             <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
           </AlignedText>
           <AlignedText text="Title" childrenType="field" maxWidth="md">
-            <TextField value={inputs.title} name="title" onChange={(e) => handleChange(e)} />
+            <TextField
+              className={className.textField}
+              value={inputs.title}
+              name="title"
+              onChange={(e) => handleChange(e)}
+            />
           </AlignedText>
           <Typography variant="body1">Duration</Typography>
           <DateRangePicker

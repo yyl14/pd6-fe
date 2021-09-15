@@ -13,7 +13,7 @@ import CodingProblemEdit from './ProblemSettings/CodingProblemEdit';
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
-import { readProblemInfo } from '../../../../actions/myClass/problem';
+import { readProblemInfo, rejudgeProblem } from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles(() => ({
   sampleArea: {
@@ -58,19 +58,15 @@ export default function CodingProblem() {
   };
 
   const handleRejudge = () => {
-    // TODO: rejudge problem
+    dispatch(rejudgeProblem(authToken, problemId));
     setRejudgePopUp(false);
   };
 
   // console.log(userClasses);
   useEffect(() => {
-    userClasses.forEach((value) => {
-      if (value.class_id === parseInt(classId, 10)) {
-        if (value.role === 'MANAGER') {
-          setRole('MANAGER');
-        }
-      }
-    });
+    if (userClasses.filter((item) => item.class_id === Number(classId)).length !== 0) {
+      setRole(userClasses.filter((item) => item.class_id === Number(classId))[0].role);
+    }
   }, [classId, userClasses]);
 
   useEffect(() => {
