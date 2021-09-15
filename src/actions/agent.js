@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useCookies } from 'react-cookie';
 import reduxStore from '../store';
 import { authConstants } from './user/constants';
 
@@ -7,6 +8,7 @@ const agent = axios.create({
 });
 
 const { dispatch } = reduxStore;
+const [, , removeCookie] = useCookies(['id', 'token']);
 agent.interceptors.response.use(
   (res) => {
     // 2xx
@@ -15,8 +17,8 @@ agent.interceptors.response.use(
       console.log(res);
 
       if (res.data.error.toString() === 'LoginExpired') {
-        document.cookie.id = '';
-        document.cookie.token = '';
+        removeCookie('token', { path: '/' });
+        removeCookie('id', { path: '/' });
         dispatch({ type: authConstants.AUTH_LOGOUT });
       }
 
