@@ -12,7 +12,7 @@ import Admin from './admin';
 import Account from './account';
 // import NoMatch from '../components/noMatch';
 
-import { getUserInfo } from '../actions/user/auth';
+import { getUserInfo, userLogout } from '../actions/user/auth';
 
 import '../styles/index.css';
 
