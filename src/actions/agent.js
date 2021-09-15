@@ -1,12 +1,12 @@
 import axios from 'axios';
-import reduxStore from '../store';
+import store from '../store';
 import { authConstants } from './user/constants';
 
 const agent = axios.create({
   baseURL: process.env.REACT_APP_API_ROOT,
 });
 
-const { dispatch } = reduxStore;
+const { dispatch } = store;
 agent.interceptors.response.use(
   (res) => {
     // 2xx
