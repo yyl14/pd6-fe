@@ -214,6 +214,7 @@ function AutoTable({
     }
   ],
   */
+  defaultSort = [],
   refetch, // function to call when table change page / filter / sort / clicked Refresh
   /*
   example value:
@@ -416,6 +417,10 @@ function AutoTable({
       );
     }
   }, [refetchErrors, displayedReduxData]);
+
+  useEffect(() => {
+    setSort(defaultSort);
+  }, [defaultSort]);
 
   return (
     <>

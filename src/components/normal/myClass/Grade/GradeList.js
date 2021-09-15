@@ -229,6 +229,7 @@ export default function GradeList() {
             )}
           </>
         )}
+        defaultSort={[['update_time', 'DESC']]}
         refetch={(browseParams, ident) => {
           dispatch(fetchClassGrade(authToken, classId, browseParams, ident));
         }}
