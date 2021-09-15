@@ -4,30 +4,24 @@ import moment from 'moment';
 import {
   Typography,
   Button,
-  makeStyles,
   Dialog,
   DialogTitle,
   DialogActions,
   DialogContent,
+  DialogContentText,
   Link,
   withStyles,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
 import Icon from '../../../../ui/icon/index';
+import AlignedText from '../../../../ui/AlignedText';
 import NoMatch from '../../../../noMatch';
 import FileUploadArea from '../../../../ui/FileUploadArea';
-import { deleteEssay, readEssay } from '../../../../../actions/myClass/essay';
+import { deleteEssay } from '../../../../../actions/myClass/essay';
 import { uploadEssay, reUploadEssay } from '../../../../../actions/myClass/essaySubmission';
 import { downloadFile } from '../../../../../actions/common/common';
 import { browseTasksUnderChallenge } from '../../../../../actions/myClass/challenge';
-
-const useStyles = makeStyles(() => ({
-  buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
-}));
 
 const StyledButton = withStyles({
   outlined: {
@@ -43,25 +37,26 @@ export default function EssayInfo({ role = 'NORMAL' }) {
     courseId, classId, challengeId, essayId,
   } = useParams();
   const history = useHistory();
-  const classNames = useStyles();
-  const [currentTime, setCurrentTime] = useState(moment());
+  const [currentTime] = useState(moment());
 
   const dispatch = useDispatch();
 
-  const loading = useSelector((state) => state.loading.myClass.essay);
+  // const loading = useSelector((state) => state.loading.myClass.essay);
+  const classes = useSelector((state) => state.classes.byId);
+  const courses = useSelector((state) => state.courses.byId);
   const essay = useSelector((state) => state.essays.byId);
   const authToken = useSelector((state) => state.auth.token);
   const challenges = useSelector((state) => state.challenges.byId);
-  const essaySubmission = useSelector((state) => state.essaySubmission.byId);
-  const submissionIds = useSelector((state) => state.essaySubmission.allIds);
-  const uploadFail = useSelector((state) => state.error.myClass.essaySubmission);
+  const essaySubmission = useSelector((state) => state.essaySubmission);
+  const userId = useSelector((state) => state.user.id);
 
-  const [uploadOrNot, setUploadOrNot] = useState(false);
+  const [uploadRecord, setUploadRecord] = useState(0);
   const [selectedFile, setSelectedFile] = useState([]);
+  const [fileName, setFileName] = useState();
 
   const [popUpUpload, setPopUpUpload] = useState(false);
   const [popUpFail, setPopUpFail] = useState(false);
-  const [hasRequest, setHasRequest] = useState(false);
+  const [popUpDelete, setPopUpDelete] = useState(false);
 
   const handleClickUpload = () => {
     setPopUpUpload(true);
@@ -74,40 +69,56 @@ export default function EssayInfo({ role = 'NORMAL' }) {
     setPopUpFail(false);
   };
 
-  const handleUpload = () => {
-    if (uploadOrNot === false) {
-      dispatch(uploadEssay(authToken, essayId, selectedFile[0]));
-      setUploadOrNot(true);
-    } else {
-      dispatch(reUploadEssay(authToken, essay[essayId].essaySubmissionId, selectedFile[0]));
-    }
-    setSelectedFile([]);
-    if (!!uploadFail.reUploadEssay || !!uploadFail.uploadEssay) {
-      setPopUpFail(true);
-    }
+  const handleClickDelete = () => {
+    setPopUpDelete(true);
   };
 
-  const handleClickLink = () => {
-    const fileToDownload = Object.keys(essaySubmission).map((key) => ({
-      uuid: essaySubmission[key].content_file_uuid,
-      filename: essaySubmission[key].filename,
-      as_attachment: false,
-    }));
-    fileToDownload.map((file) => dispatch(downloadFile(authToken, file)));
+  const handleCloseDelete = () => {
+    setPopUpDelete(false);
+  };
+
+  const handleUpload = () => {
+    if (uploadRecord !== 0) {
+      dispatch(reUploadEssay(authToken, uploadRecord, selectedFile[0], () => { setPopUpFail(true); }));
+    } else {
+      dispatch(uploadEssay(authToken, essayId, selectedFile[0], () => { setPopUpFail(true); }));
+    }
+    setFileName(selectedFile[0].name);
+    setSelectedFile([]);
+  };
+
+  const handleDeleteSuccess = () => {
+    dispatch(browseTasksUnderChallenge(authToken, challengeId));
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
   };
 
   const handleSubmitDelete = () => {
-    dispatch(deleteEssay(authToken, essayId));
-    setHasRequest(true);
+    dispatch(deleteEssay(authToken, essayId, handleDeleteSuccess));
   };
 
+  // useEffect(() => {
+  //   dispatch(browseEssaySubmission(essayId, authToken));
+  // }, [authToken, dispatch, essayId]);
+
   useEffect(() => {
-    if (hasRequest && !loading.deleteEssay) {
-      setHasRequest(false);
-      dispatch(browseTasksUnderChallenge(authToken, challengeId));
-      history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
+    if (essay[essayId] === undefined) {
+      return;
     }
-  }, [authToken, challengeId, classId, courseId, dispatch, hasRequest, history, loading.deleteEssay]);
+    setUploadRecord(essay[essayId].essaySubmissionId ? essay[essayId].essaySubmissionId : 0);
+  }, [essay, essayId]);
+
+  const handleClickLink = () => {
+    if (essaySubmission.byId[uploadRecord].account_id === userId) {
+      if (essaySubmission.byId[uploadRecord].essay_id === Number(essayId)) {
+        const fileToDownload = {
+          uuid: essaySubmission.byId[uploadRecord].content_file_uuid,
+          filename: essaySubmission.byId[uploadRecord].filename,
+          as_attachment: false,
+        };
+        dispatch(downloadFile(authToken, fileToDownload));
+      }
+    }
+  };
 
   if (essay[essayId] === undefined) {
     return <NoMatch />;
@@ -124,27 +135,21 @@ export default function EssayInfo({ role = 'NORMAL' }) {
           </StyledButton>
         )}
       </SimpleBar>
-      {essaySubmission
-        && submissionIds.map((id) => {
-          if (uploadOrNot) {
-            return (
-              <div>
-                <Link href onClick={handleClickLink}>
-                  {essaySubmission[id].filename}
-                </Link>
-                {' '}
-                {moment(essaySubmission[id].submit_time).format('YYYY-MM-DD, HH:mm')}
-              </div>
-            );
-          }
-          return id;
-        })}
+      {essaySubmission.byId[uploadRecord] && (
+        <div>
+          <Link href onClick={handleClickLink}>
+            {essaySubmission.byId[uploadRecord].filename}
+          </Link>
+          {' '}
+          {moment(essaySubmission.byId[uploadRecord].submit_time).format('YYYY-MM-DD, HH:mm')}
+        </div>
+      )}
       {role === 'MANAGER' && (
         <SimpleBar
           title="Delete Task"
           childrenButtons={(
             <>
-              <Button color="secondary" onClick={handleSubmitDelete}>
+              <Button color="secondary" onClick={handleClickDelete}>
                 Delete
               </Button>
             </>
@@ -154,13 +159,13 @@ export default function EssayInfo({ role = 'NORMAL' }) {
         </SimpleBar>
       )}
       {/* Upload dialog */}
-      <Dialog maxWidth="lg" open={popUpUpload} keepMounted onClose={handleClosePopUpUpload}>
+      <Dialog maxWidth="md" open={popUpUpload} keepMounted onClose={handleClosePopUpUpload}>
         <DialogTitle>
           <Typography variant="h4">Upload File</Typography>
         </DialogTitle>
         <DialogContent>
           <FileUploadArea
-            text="Assisting Data"
+            text="PDF File"
             fileAcceptFormat=".pdf"
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
@@ -180,7 +185,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
           </Button>
         </DialogActions>
       </Dialog>
-      {/* Upload dialog */}
+      {/* Upload Failed dialog */}
       <Dialog maxWidth="lg" open={popUpFail} keepMounted onClose={handleClosePopUpFail}>
         <DialogTitle>
           <Typography variant="h4">Upload Failed</Typography>
@@ -189,17 +194,39 @@ export default function EssayInfo({ role = 'NORMAL' }) {
           <Typography>
             File below was failed to be uploaded:
             <br />
-            {essaySubmission
-              && submissionIds.map((id) => {
-                if (uploadOrNot) {
-                  return <div>{essaySubmission[id].filename}</div>;
-                }
-                return id;
-              })}
+            {fileName}
           </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePopUpFail}>Done</Button>
+        </DialogActions>
+      </Dialog>
+      {/* Delete dialog */}
+      <Dialog maxWidth="lg" open={popUpDelete} keepMounted onClose={handleCloseDelete}>
+        <DialogTitle>
+          <Typography variant="h4">Delete Essay</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText variant="body1" color="secondary">
+            <AlignedText text="Class" childrenType="text">
+              <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
+            </AlignedText>
+            <AlignedText text="Title" childrenType="text">
+              <Typography>{challenges[challengeId].title}</Typography>
+            </AlignedText>
+            <AlignedText text="Label" childrenType="text">
+              <Typography>{essay[essayId].challenge_label}</Typography>
+            </AlignedText>
+            <Typography variant="body2" color="textPrimary">
+              Once you delete a essay, there is no going back. Please be certain.
+            </Typography>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDelete}>Cancel</Button>
+          <Button onClick={handleSubmitDelete} color="secondary">
+            Delete
+          </Button>
         </DialogActions>
       </Dialog>
     </>

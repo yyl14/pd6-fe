@@ -8,7 +8,9 @@ import getTextFromUrl from '../../function/getTextFromUrl';
 const fetchClassSubmissions = (token, browseParams, tableId = null, classId) => async (dispatch) => {
   try {
     const config1 = {
-      headers: { 'auth-token': token },
+      headers: {
+        'auth-token': token,
+      },
       params: browseParamsTransForm(browseParams),
     };
     dispatch({
@@ -98,6 +100,7 @@ const fetchSubmission = (token, submissionId) => (dispatch) => {
         };
         agent.get(`/s3-file/${res.data.data.content_file_uuid}/url`, config2).then(async (res2) => {
           const code = await getTextFromUrl(res2.data.data.url);
+
           dispatch({
             type: submissionConstants.FETCH_SUBMISSION_SUCCESS,
             payload: { submissionId, data: { ...res.data.data, content: code } },
@@ -142,6 +145,7 @@ const fetchJudgement = (token, submissionId) => (dispatch) => {
     });
 };
 
+// fetch latest judgement
 const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
   const config = {
     headers: {
@@ -229,6 +233,25 @@ const getAccountBatch = (token, accountId) => async (dispatch) => {
   }
 };
 
+const rejudgeSubmission = (token, submissionId) => async (dispatch) => {
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+  };
+  dispatch({ type: submissionConstants.REJUDGE_SUBMISSION_START });
+  try {
+    await agent.post(`/submission/${submissionId}/rejudge`, {}, config);
+
+    dispatch({ type: submissionConstants.REJUDGE_SUBMISSION_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: submissionConstants.REJUDGE_SUBMISSION_FAIL,
+      error,
+    });
+  }
+};
+
 export {
   fetchClassSubmissions,
   fetchSubmission,
@@ -237,4 +260,5 @@ export {
   browseJudgeCases,
   readTestcase,
   getAccountBatch,
+  rejudgeSubmission,
 };

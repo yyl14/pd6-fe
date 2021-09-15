@@ -22,6 +22,8 @@ const initialState = {
   readProblemScore: false,
   downloadSamples: false,
   downloadTestcases: false,
+  rejudgeSubmission: false,
+  rejudgeProblem: false,
 };
 
 export default function problem(state = initialState, action) {
@@ -221,6 +223,11 @@ export default function problem(state = initialState, action) {
         ...state,
         submitCode: false,
       };
+    case problemConstants.EDIT_TESTCASE_START:
+      return {
+        ...state,
+        editTestcase: true,
+      };
     case problemConstants.EDIT_TESTCASE_SUCCESS:
       return {
         ...state,
@@ -230,11 +237,6 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         editTestcase: false,
-      };
-    case problemConstants.EDIT_TESTCASE_START:
-      return {
-        ...state,
-        editTestcase: true,
       };
     case problemConstants.UPLOAD_TESTCASE_INPUT_START:
       return {
@@ -340,6 +342,36 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         downloadTestcases: false,
+      };
+    case problemConstants.REJUDGE_SUBMISSION_START:
+      return {
+        ...state,
+        rejudgeSubmission: true,
+      };
+    case problemConstants.REJUDGE_SUBMISSION_SUCCESS:
+      return {
+        ...state,
+        rejudgeSubmission: false,
+      };
+    case problemConstants.REJUDGE_SUBMISSION_FAIL:
+      return {
+        ...state,
+        rejudgeSubmission: false,
+      };
+    case problemConstants.REJUDGE_PROBLEM_START:
+      return {
+        ...state,
+        rejudgeProblem: true,
+      };
+    case problemConstants.REJUDGE_PROBLEM_SUCCESS:
+      return {
+        ...state,
+        rejudgeProblem: false,
+      };
+    case problemConstants.REJUDGE_PROBLEM_FAIL:
+      return {
+        ...state,
+        rejudgeProblem: false,
       };
     default: {
       return state;

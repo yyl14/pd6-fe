@@ -81,7 +81,7 @@ const fetchClassMemberWithAccountReferral = (token, classId) => async (dispatch)
   }
 };
 
-const replaceClassMembers = (token, classId, replacingList) => async (dispatch) => {
+const replaceClassMembers = (token, classId, replacingList, onSuccess, onError) => async (dispatch) => {
   try {
     const config = {
       headers: {
@@ -90,22 +90,17 @@ const replaceClassMembers = (token, classId, replacingList) => async (dispatch) 
     };
     dispatch({ type: commonConstants.REPLACE_CLASS_MEMBERS_START });
 
-    const res = await agent.put(`/class/${classId}/member`, replacingList, config);
-    if (res.data.success) {
-      dispatch({
-        type: commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS,
-      });
-    } else {
-      dispatch({
-        type: commonConstants.REPLACE_CLASS_MEMBERS_FAIL,
-        error: res.data.error,
-      });
-    }
+    await agent.put(`/class/${classId}/member`, replacingList, config);
+    dispatch({
+      type: commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS,
+    });
+    onSuccess();
   } catch (error) {
     dispatch({
       type: commonConstants.REPLACE_CLASS_MEMBERS_FAIL,
       error,
     });
+    onError();
   }
 };
 
@@ -301,6 +296,28 @@ const fetchAllChallengesProblems = (token, classId) => async (dispatch) => {
   }
 };
 
+const fetchProblems = (token) => async (dispatch) => {
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+  };
+
+  try {
+    dispatch({ type: commonConstants.FETCH_PROBLEMS_START });
+    const res = await agent.get('/problem', config);
+    dispatch({
+      type: commonConstants.FETCH_PROBLEMS_SUCCESS,
+      payload: res.data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: commonConstants.FETCH_PROBLEMS_FAIL,
+      error,
+    });
+  }
+};
+
 export {
   getInstitutes,
   fetchClassMembers,
@@ -314,4 +331,5 @@ export {
   downloadFile,
   fetchDownloadFileUrl,
   fetchAllChallengesProblems,
+  fetchProblems,
 };

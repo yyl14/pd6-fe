@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchStudentCards } from '../../../../actions/admin/account';
+import { Snackbar } from '@material-ui/core';
+import { fetchStudentCards, browsePendingStudentCards } from '../../../../actions/admin/account';
 import { fetchAccount, getInstitutes } from '../../../../actions/common/common';
 import PageTitle from '../../../ui/PageTitle';
 import NoMatch from '../../../noMatch';
 import BasicInfo from './BasicInfo';
 import BasicInfoEdit from './BasicInfoEdit';
-import StudentInfo from './StudentInfo';
 import StudentInfoEdit from './StudentInfoEdit';
 import AccountDelete from './AccountDelete';
 import NewPassword from './NewPassword';
@@ -17,16 +17,19 @@ import GeneralLoading from '../../../GeneralLoading';
 
 export default function AccountSetting() {
   const [cards, setCards] = useState([]);
+  const [pendingCards, setPendingCards] = useState([]);
   const [editBasicInfo, setEditBasicInfo] = useState(false);
-  const [editStudInfo, setEditStudInfo] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [message, setMessage] = useState('');
 
   const dispatch = useDispatch();
   const { accountId } = useParams();
+
   const authToken = useSelector((state) => state.auth.token);
-  const accounts = useSelector((state) => state.accounts.byId);
-  const studentCards = useSelector((state) => state.studentCards.byId);
+  const accounts = useSelector((state) => state.accounts);
+  const studentCards = useSelector((state) => state.studentCards);
+  const pendingStudentCards = useSelector((state) => state.pendingStudentCards);
   const loading = useSelector((state) => state.loading.admin.account);
-  const account = accounts[accountId];
 
   useEffect(() => {
     if (!loading.editAccount) {
@@ -41,69 +44,94 @@ export default function AccountSetting() {
   }, [accountId, authToken, dispatch, loading.makeStudentCardDefault]);
 
   useEffect(() => {
+    if (!loading.deletePendingStudentCard && !loading.addStudentCard) {
+      dispatch(browsePendingStudentCards(authToken, accountId));
+    }
+  }, [accountId, authToken, dispatch, loading.addStudentCard, loading.deletePendingStudentCard]);
+
+  useEffect(() => {
+    if (accounts.byId[accountId]) {
+      setCards(
+        accounts.byId[accountId].studentCard.reduce((acc, key) => {
+          if (studentCards.byId[key]) {
+            return [...acc, studentCards.byId[key]];
+          }
+          return [...acc];
+        }, []),
+      );
+    }
+  }, [accountId, accounts, loading.fetchStudentCards, studentCards]);
+
+  useEffect(() => {
+    if (accounts.byId[accountId]) {
+      setPendingCards(
+        accounts.byId[accountId].pendingStudentCard.reduce((acc, key) => {
+          if (pendingStudentCards.byId[key]) {
+            if (pendingStudentCards.byId[key].institute_id !== null) {
+              return [...acc, pendingStudentCards.byId[key]];
+            }
+          }
+          return [...acc];
+        }, []),
+      );
+    }
+  }, [accountId, accounts, pendingStudentCards]);
+
+  useEffect(() => {
     dispatch(getInstitutes());
   }, [dispatch]);
 
-  useEffect(() => {
-    setCards(Object.values(studentCards));
-  }, [studentCards]);
-
-  if (accounts[accountId] === undefined || studentCards === undefined) {
-    if (loading.fetchAccount || loading.fetchStudentCards) {
+  if (accounts.byId[accountId] === undefined || studentCards.byId === undefined) {
+    if (loading.fetchAccount || loading.fetchStudentCards || loading.browsePendingStudentCards) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
   }
 
-  const handleBasicBack = () => {
+  const handleBasicBack = (msg) => {
     setEditBasicInfo(false);
+    if (msg !== '') {
+      setMessage(msg);
+      setShowSnackbar(true);
+    }
   };
 
   const handleBasicEdit = () => {
     setEditBasicInfo(true);
   };
 
-  const handleStudBack = () => {
-    setEditStudInfo(false);
-  };
-
-  const handleStudEdit = () => {
-    setEditStudInfo(true);
-  };
-
   return (
     <div>
-      <PageTitle text={`${account.username} / Setting`} />
+      <PageTitle text={`${accounts.byId[accountId].username} / Setting`} />
       {editBasicInfo ? (
         <BasicInfoEdit
           handleBack={handleBasicBack}
-          realName={account.real_name}
-          userName={account.username}
-          nickName={account.nickname}
-          altMail={account.alternative_email}
+          realName={accounts.byId[accountId].real_name}
+          userName={accounts.byId[accountId].username}
+          nickName={accounts.byId[accountId].nickname}
+          altMail={accounts.byId[accountId].alternative_email}
         />
       ) : (
         <BasicInfo
           handleEdit={handleBasicEdit}
-          realName={account.real_name}
-          userName={account.username}
-          nickName={account.nickname}
-          altMail={account.alternative_email}
+          realName={accounts.byId[accountId].real_name}
+          userName={accounts.byId[accountId].username}
+          nickName={accounts.byId[accountId].nickname}
+          altMail={accounts.byId[accountId].alternative_email}
         />
       )}
 
-      {editStudInfo ? (
-        <div>
-          <StudentInfoEdit handleBack={handleStudBack} cards={cards} />
-        </div>
-      ) : (
-        <div>
-          <StudentInfo handleEdit={handleStudEdit} cards={cards} />
-        </div>
-      )}
+      <div>
+        <StudentInfoEdit cards={cards} pendingCards={pendingCards} />
+      </div>
 
       <NewPassword />
-      <AccountDelete userName={account.username} cards={cards} realName={account.real_name} />
+      <AccountDelete
+        userName={accounts.byId[accountId].username}
+        cards={cards}
+        realName={accounts.byId[accountId].real_name}
+      />
+      <Snackbar open={showSnackbar} autoHideDuration={3000} message={message} onClose={() => setShowSnackbar(false)} />
     </div>
   );
 }

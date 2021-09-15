@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
-import { fetchClassMembers, fetchClassMemberWithAccountReferral } from '../../../actions/common/common';
+import { fetchClassMembers } from '../../../actions/common/common';
 import AutoTable from '../../ui/AutoTable';
 import PageTitle from '../../ui/PageTitle';
 import MemberEdit from './MemberEdit';
@@ -40,15 +39,15 @@ export default function MemberList() {
         <MemberEdit
           dispatch={dispatch}
           authToken={authToken}
+          classes={classes}
           classId={classId}
-          members={classes.byId[classId].memberIds.map((id) => members.byId[id])}
           backToMemberList={() => setEdit(false)}
           loading={loading}
         />
       ) : (
         <>
           <AutoTable
-            ident="Class Member Table"
+            ident={`Class Member Table ${classId}`}
             hasFilter
             buttons={<Button onClick={() => setEdit(true)}>Edit</Button>}
             filterConfig={[
@@ -95,7 +94,6 @@ export default function MemberList() {
             ]}
             refetch={(browseParams, ident) => {
               dispatch(fetchClassMembers(authToken, classId, browseParams, ident));
-              dispatch(fetchClassMemberWithAccountReferral(authToken, classId));
             }}
             refetchErrors={[error]}
             columns={[

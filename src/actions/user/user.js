@@ -1,32 +1,31 @@
 import agent from '../agent';
 import { userConstants } from './constants';
 
-const editAccount = (token, id, userName, realName, nickName, email) => (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
-  dispatch({ type: userConstants.EDIT_SELF_ACCOUNT_START });
-
-  agent
-    .patch(`/account/${id}`, { nickname: nickName, alternative_email: email }, config)
-    .then(() => {
-      dispatch({
-        type: userConstants.EDIT_SELF_ACCOUNT_SUCCESS,
-        payload: {
-          id,
-          nickname: nickName,
-          alternative_email: email,
-        },
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        type: userConstants.EDIT_SELF_ACCOUNT_FAIL,
-        error,
-      });
+const editAccount = (token, id, nickName, email) => async (dispatch) => {
+  try {
+    const config = {
+      headers: { 'auth-token': token },
+    };
+    dispatch({ type: userConstants.EDIT_SELF_ACCOUNT_START });
+    const accountInfo = { nickname: nickName };
+    if (email) {
+      accountInfo.alternative_email = email;
+    }
+    const res = await agent.patch(`/account/${id}`, accountInfo, config);
+    dispatch({
+      type: userConstants.EDIT_SELF_ACCOUNT_SUCCESS,
+      payload: {
+        id,
+        nickname: nickName,
+        alternative_email: email,
+      },
     });
+  } catch (error) {
+    dispatch({
+      type: userConstants.EDIT_SELF_ACCOUNT_FAIL,
+      error,
+    });
+  }
 };
 
 const makeStudentCardDefault = (token, id, cardId) => (dispatch) => {
@@ -77,7 +76,7 @@ const fetchStudentCards = (token, id) => (dispatch) => {
     });
 };
 
-const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (dispatch) => {
+const addStudentCard = (token, id, instituteId, emailPrefix, studentId, onSuccess) => (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
@@ -97,6 +96,7 @@ const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (disp
     )
     .then(() => {
       dispatch({ type: userConstants.ADD_SELF_STUDENT_CARD_SUCCESS });
+      onSuccess();
     })
     .catch((error) => {
       dispatch({
@@ -106,7 +106,7 @@ const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (disp
     });
 };
 
-const editPassword = (token, id, oldPassword, newPassword) => (dispatch) => {
+const editPassword = (token, id, oldPassword, newPassword, onSuccess) => (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
@@ -125,6 +125,7 @@ const editPassword = (token, id, oldPassword, newPassword) => (dispatch) => {
     )
     .then(() => {
       dispatch({ type: userConstants.EDIT_SELF_PASSWORD_SUCCESS });
+      onSuccess();
     })
     .catch((error) => {
       dispatch({
@@ -178,6 +179,66 @@ const userBrowseAnnouncement = (authToken) => async (dispatch) => {
 //     });
 //   }
 // };
+const browsePendingStudentCards = (token, accountId) => async (dispatch) => {
+  dispatch({ type: userConstants.BROWSE_SELF_PENDING_STUDENT_CARDS_START });
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    const res = await agent.get(`/account/${accountId}/email-verification`, config);
+    dispatch({
+      type: userConstants.BROWSE_SELF_PENDING_STUDENT_CARDS_SUCCESS,
+      payload: res.data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: userConstants.BROWSE_SELF_PENDING_STUDENT_CARDS_FAIL,
+      error,
+    });
+  }
+};
+
+const resendEmailVerification = (token, emailVerificationId) => async (dispatch) => {
+  dispatch({ type: userConstants.RESEND_SELF_EMAIL_VERIFICATION_START });
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    await agent.post(`/email-verification/${emailVerificationId}/resend`, {}, config);
+    dispatch({
+      type: userConstants.RESEND_SELF_EMAIL_VERIFICATION_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: userConstants.RESEND_SELF_EMAIL_VERIFICATION_FAIL,
+      error,
+    });
+  }
+};
+
+const deletePendingStudentCard = (token, emailVerificationId) => async (dispatch) => {
+  dispatch({ type: userConstants.DELETE_SELF_PENDING_STUDENT_CARD_START });
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    await agent.delete(`/email-verification/${emailVerificationId}`, config);
+    dispatch({
+      type: userConstants.DELETE_SELF_PENDING_STUDENT_CARD_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: userConstants.DELETE_SELF_PENDING_STUDENT_CARD_FAIL,
+      error,
+    });
+  }
+};
 
 export {
   editAccount,
@@ -186,5 +247,8 @@ export {
   addStudentCard,
   editPassword,
   userBrowseAnnouncement,
+  browsePendingStudentCards,
+  resendEmailVerification,
+  deletePendingStudentCard,
   // userReadAnnouncement,
 };

@@ -2,9 +2,11 @@ import { teamConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
   fetchTeams: null,
+  fetchTeam: null,
   addTeam: null,
   importTeam: null,
   editTeam: null,
+  deleteTeam: null,
 
   fetchTeamMember: null,
   addTeamMember: null,
@@ -24,6 +26,19 @@ export default function team(state = initialState, action) {
       return {
         ...state,
         fetchTeams: action.error,
+      };
+    }
+
+    case teamConstants.FETCH_TEAM_SUCCESS: {
+      return {
+        ...state,
+        fetchTeam: null,
+      };
+    }
+    case teamConstants.FETCH_TEAM_FAIL: {
+      return {
+        ...state,
+        fetchTeam: action.error,
       };
     }
 
@@ -66,16 +81,35 @@ export default function team(state = initialState, action) {
       };
     }
 
-    case teamConstants.FETCH_TEAM_MEMBER_SUCCESS: {
+    case teamConstants.FETCH_TEAM_MEMBERS_SUCCESS: {
       return {
         ...state,
         fetchTeamMember: null,
       };
     }
-    case teamConstants.FETCH_TEAM_MEMBER_FAIL: {
+    case teamConstants.FETCH_TEAM_MEMBERS_FAIL: {
       return {
         ...state,
         fetchTeamMember: action.error,
+      };
+    }
+
+    case teamConstants.DELETE_TEAM_START: {
+      return {
+        ...state,
+        deleteTeam: null,
+      };
+    }
+    case teamConstants.DELETE_TEAM_SUCCESS: {
+      return {
+        ...state,
+        deleteTeam: null,
+      };
+    }
+    case teamConstants.DELETE_TEAM_FAIL: {
+      return {
+        ...state,
+        deleteTeam: action.error,
       };
     }
 

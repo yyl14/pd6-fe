@@ -103,33 +103,26 @@ const editInstitute = (token, id, abbreviatedName, fullName, emailDomain, isDisa
 };
 
 // SM: edit any account
-const editAccount = (token, id, userName, realName, nickName, email) => (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
-  dispatch({ type: accountConstants.EDIT_ACCOUNT_START });
+const editAccount = (token, id, realName, nickName, email) => async (dispatch) => {
+  try {
+    const config = {
+      headers: { 'auth-token': token },
+    };
+    dispatch({ type: accountConstants.EDIT_ACCOUNT_START });
 
-  agent
-    .patch(`/account/${id}`, { real_name: realName, nickname: nickName, alternative_email: email }, config)
-    .then(() => {
-      dispatch({
-        type: accountConstants.EDIT_ACCOUNT_SUCCESS,
-        payload: {
-          id,
-          real_name: realName,
-          nickname: nickName,
-          alternative_email: email,
-        },
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        type: accountConstants.EDIT_ACCOUNT_FAIL,
-        error,
-      });
+    const accountInfo = { real_name: realName, nickname: nickName };
+    if (email) {
+      accountInfo.alternative_email = email;
+    }
+
+    const res = await agent.patch(`/account/${id}`, accountInfo, config);
+    dispatch({ type: accountConstants.EDIT_ACCOUNT_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: accountConstants.EDIT_ACCOUNT_FAIL,
+      error,
     });
+  }
 };
 
 // SM: delete any account
@@ -294,6 +287,67 @@ const fetchAccounts = (token, browseParams, tableId = null) => async (dispatch) 
   }
 };
 
+const browsePendingStudentCards = (token, accountId) => async (dispatch) => {
+  dispatch({ type: accountConstants.BROWSE_PENDING_STUDENT_CARDS_START });
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    const res = await agent.get(`/account/${accountId}/email-verification`, config);
+    dispatch({
+      type: accountConstants.BROWSE_PENDING_STUDENT_CARDS_SUCCESS,
+      payload: { accountId, data: res.data.data },
+    });
+  } catch (error) {
+    dispatch({
+      type: accountConstants.BROWSE_PENDING_STUDENT_CARDS_FAIL,
+      error,
+    });
+  }
+};
+
+const resendEmailVerification = (token, emailVerificationId) => async (dispatch) => {
+  dispatch({ type: accountConstants.RESEND_EMAIL_VERIFICATION_START });
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    await agent.post(`/email-verification/${emailVerificationId}/resend`, {}, config);
+    dispatch({
+      type: accountConstants.RESEND_EMAIL_VERIFICATION_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: accountConstants.RESEND_EMAIL_VERIFICATION_FAIL,
+      error,
+    });
+  }
+};
+
+const deletePendingStudentCard = (token, emailVerificationId) => async (dispatch) => {
+  dispatch({ type: accountConstants.DELETE_PENDING_STUDENT_CARD_START });
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    await agent.delete(`/email-verification/${emailVerificationId}`, config);
+    dispatch({
+      type: accountConstants.DELETE_PENDING_STUDENT_CARD_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: accountConstants.DELETE_PENDING_STUDENT_CARD_FAIL,
+      error,
+    });
+  }
+};
+
 export {
   getInstitute,
   addInstitute,
@@ -305,4 +359,7 @@ export {
   addStudentCard,
   editPassword,
   fetchAccounts,
+  browsePendingStudentCards,
+  resendEmailVerification,
+  deletePendingStudentCard,
 };

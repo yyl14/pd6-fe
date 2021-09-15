@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { problemConstants, submissionConstants, challengeConstants } from '../actions/myClass/constant';
+import { problemConstants, challengeConstants } from '../actions/myClass/constant';
 import { commonConstants } from '../actions/common/constant';
 
 const byId = (state = {}, action) => {
@@ -70,7 +70,6 @@ const byId = (state = {}, action) => {
     }
 
     case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
-      // console.log(action);
       const { problems } = action.payload;
       return problems.reduce(
         (acc, item) => ({
@@ -95,6 +94,20 @@ const byId = (state = {}, action) => {
         },
       };
     }
+
+    case commonConstants.FETCH_PROBLEMS_SUCCESS: {
+      const data = action.payload;
+      return data.reduce(
+        (acc, problem) => ({
+          ...acc,
+          [problem.id]: {
+            ...problem,
+          },
+        }),
+        state,
+      );
+    }
+
     default:
       return state;
   }
@@ -112,6 +125,11 @@ const allIds = (state = [], action) => {
     case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
       const { problems } = action.payload;
       return [...new Set([...problems.map((item) => item.id), ...state])];
+    }
+
+    case commonConstants.FETCH_PROBLEMS_SUCCESS: {
+      const data = action.payload;
+      return [...new Set([...data.map((item) => item.id), ...state])];
     }
 
     default:

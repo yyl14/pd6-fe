@@ -1,5 +1,9 @@
+import moment from 'moment';
+
 import agent from '../agent';
 import { challengeConstants } from './constant';
+import { autoTableConstants } from '../component/constant';
+import browseParamsTransForm from '../../function/browseParamsTransform';
 
 const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
   try {
@@ -22,19 +26,51 @@ const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
   }
 };
 
-// fetch all challenges under class
-const fetchChallenges = (token, classId) => async (dispatch) => {
+const fetchChallenges = (token, classId, browseParams, tableId = null) => async (dispatch) => {
   try {
+    // transform status to time comparison
+    const adjustedBrowseParams = {
+      ...browseParams,
+      filter: browseParams.filter.reduce((acc, item) => {
+        if (item[0] === 'status') {
+          const currentTime = moment().toISOString();
+
+          if (item[2][0] === 'Not Yet') {
+            return [...acc, ['start_time', '>', currentTime]];
+          }
+          if (item[2][0] === 'Closed') {
+            return [...acc, ['end_time', '<', currentTime]];
+          }
+          if (item[2][0] === 'Opened') {
+            return [...acc, ['start_time', '<', currentTime], ['end_time', '>', currentTime]];
+          }
+        }
+        return [...acc, item];
+      }, []),
+    };
+
     const config = {
       headers: {
         'auth-token': token,
       },
+      params: browseParamsTransForm(adjustedBrowseParams),
     };
     dispatch({ type: challengeConstants.FETCH_CHALLENGES_START });
     const res = await agent.get(`/class/${classId}/challenge`, config);
+    const { data: challenges, total_count } = res.data.data;
     dispatch({
       type: challengeConstants.FETCH_CHALLENGES_SUCCESS,
-      payload: { classId, data: res.data.data.data },
+      payload: { classId, data: challenges },
+    });
+
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: challenges.map((item) => item.id),
+        offset: browseParams.offset,
+      },
     });
   } catch (error) {
     dispatch({

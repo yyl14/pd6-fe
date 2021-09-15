@@ -9,6 +9,9 @@ const initialState = {
   editPassword: null,
   getNotify: null,
   readNotify: null,
+  browsePendingStudentCards: null,
+  resendEmailVerification: null,
+  deletePendingStudentCard: null,
 };
 
 export default function user(state = initialState, action) {
@@ -93,6 +96,44 @@ export default function user(state = initialState, action) {
       return {
         ...state,
         readNotify: action.error,
+      };
+    }
+    case userConstants.BROWSE_SELF_PENDING_STUDENT_CARDS_SUCCESS: {
+      return {
+        ...state,
+        browsePendingStudentCards: null,
+      };
+    }
+    case userConstants.BROWSE_SELF_PENDING_STUDENT_CARDS_FAIL: {
+      return {
+        ...state,
+        browsePendingStudentCards: action.error,
+      };
+    }
+
+    case userConstants.RESEND_SELF_EMAIL_VERIFICATION_SUCCESS: {
+      return {
+        ...state,
+        resendEmailVerification: null,
+      };
+    }
+    case userConstants.RESEND_SELF_EMAIL_VERIFICATION_FAIL: {
+      return {
+        ...state,
+        resendEmailVerification: action.error,
+      };
+    }
+
+    case userConstants.DELETE_SELF_PENDING_STUDENT_CARD_SUCCESS: {
+      return {
+        ...state,
+        deletePendingStudentCard: null,
+      };
+    }
+    case userConstants.DELETE_SELF_PENDING_STUDENT_CARD_FAIL: {
+      return {
+        ...state,
+        deletePendingStudentCard: action.error,
       };
     }
     default: {

@@ -29,13 +29,7 @@ export default function auth(state = initialState, action) {
         fetchAccount: action.error,
       };
     case authConstants.AUTH_LOGOUT:
-      return {
-        login: null,
-        logout: null,
-        forgetPassword: null,
-        signup: null,
-        fetchAccount: null,
-      };
+      return initialState;
     case authConstants.FORGET_PASSWORD_SUCCESS:
       return {
         ...state,
