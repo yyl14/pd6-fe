@@ -188,16 +188,11 @@ export default function TeamList() {
         buttons={
           isManager && (
             <>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => setShowImportDialog(true)}
-                startIcon={<Icon.Folder />}
-              >
-                Import
-              </Button>
-              <Button color="primary" onClick={() => setShowAddDialog(true)}>
+              <Button variant="outlined" color="primary" onClick={() => setShowAddDialog(true)}>
                 <MdAdd />
+              </Button>
+              <Button color="primary" onClick={() => setShowImportDialog(true)} startIcon={<Icon.Folder />}>
+                Import
               </Button>
             </>
           )
