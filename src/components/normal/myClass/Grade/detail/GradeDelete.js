@@ -34,7 +34,7 @@ export default function GradeDelete(props) {
     <>
       <SimpleBar
         title="Delete Grade"
-        buttons={(
+        childrenButtons={(
           <>
             <Button
               color="secondary"
