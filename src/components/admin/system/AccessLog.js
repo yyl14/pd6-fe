@@ -16,8 +16,6 @@ export default function AccessLog() {
   const accounts = useSelector((state) => state.accounts);
   const dispatch = useDispatch();
 
-  console.log(accountError);
-
   return (
     <>
       <PageTitle text="Access Log" />
@@ -59,6 +57,7 @@ export default function AccessLog() {
 
           // TODO account id ?
         ]}
+        defaultSort={['access_time', 'DESC']}
         refetch={(browseParams, ident) => {
           dispatch(fetchAccessLog(authToken, browseParams, ident));
         }}
@@ -83,21 +82,25 @@ export default function AccessLog() {
             name: 'IP',
             align: 'center',
             type: 'string',
+            sortable: 'ip',
           },
           {
             name: 'Resource Path',
             align: 'center',
             type: 'string',
+            sortable: 'resource_path',
           },
           {
             name: 'Request Method',
             align: 'center',
             type: 'string',
+            sortable: 'request_method',
           },
           {
             name: 'Access Time',
             align: 'center',
             type: 'string',
+            sortable: 'access_time',
           },
         ]}
         reduxData={logs}
