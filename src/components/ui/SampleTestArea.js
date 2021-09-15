@@ -145,6 +145,8 @@ export default function SampleTestArea({ input, output }) {
     return classes.actions;
   };
 
+  console.log(input.split('\n'));
+
   return (
     <div ref={ref}>
       <Card className={classes.root} variant="outlined">
@@ -164,7 +166,7 @@ export default function SampleTestArea({ input, output }) {
               </div>
               <div className={classes.content} ref={inputRef}>
                 <Typography variant="body1">
-                  {input.split('\r').map((string) => (
+                  {input.split('\n').map((string) => (
                     <>
                       {string}
                       <br />
@@ -186,7 +188,7 @@ export default function SampleTestArea({ input, output }) {
               </div>
               <div className={classes.content} ref={outputRef}>
                 <Typography variant="body1">
-                  {output.split('\r').map((string) => (
+                  {output.split('\n').map((string) => (
                     <>
                       {string}
                       <br />
