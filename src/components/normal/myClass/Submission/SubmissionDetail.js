@@ -18,12 +18,11 @@ import {
   readSubmissionDetail,
   browseJudgeCases,
   fetchSubmission,
-  getAccountBatch,
   rejudgeSubmission,
   browseTestcases,
 } from '../../../../actions/myClass/submission';
 import { readProblemInfo } from '../../../../actions/myClass/problem';
-import { fetchChallenge } from '../../../../actions/common/common';
+import { getAccountBatch, fetchChallenge } from '../../../../actions/common/common';
 
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
