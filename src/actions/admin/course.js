@@ -22,7 +22,7 @@ export const fetchCourses = (token) => (dispatch) => {
     });
 };
 
-export const addCourse = (token, name, type, history) => (dispatch) => {
+export const addCourse = (token, name, type, history, onError) => (dispatch) => {
   const config = {
     headers: { 'auth-token': token },
   };
@@ -52,6 +52,7 @@ export const addCourse = (token, name, type, history) => (dispatch) => {
     })
     .catch((error) => {
       dispatch({ type: courseConstants.ADD_COURSE_FAIL, error });
+      onError();
     });
 };
 
