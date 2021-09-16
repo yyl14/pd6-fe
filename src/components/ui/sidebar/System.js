@@ -111,8 +111,8 @@ export default function System({
       setTitle('System');
       setItemList([
         {
-          text: 'About',
-          path: '/system/about',
+          text: 'Team',
+          path: '/system/team',
           icon: <Icon.Warning />,
         },
         {

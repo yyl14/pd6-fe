@@ -1,11 +1,9 @@
 import React from 'react';
 
-function NoMatch() {
+export default function System() {
   return (
     <div>
       <h1>System Page... 💩</h1>
     </div>
   );
 }
-
-export default NoMatch;

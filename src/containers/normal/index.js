@@ -12,7 +12,7 @@ import NoMatch from '../../components/noMatch';
 import Header from '../../components/ui/Header';
 import Sidebar from '../../components/ui/Sidebar';
 import system from './system';
-import About from './about';
+import Team from './team';
 import AccessLog from './accessLog';
 
 export default function Normal() {
@@ -44,7 +44,7 @@ export default function Normal() {
             <Route path="/problem-set/:courseId/:classId" component={ProblemSet} />
             <Route exact path="/" component={GeneralLoading} />
             <Route exact path="/system" component={system} />
-            <Route exact path="/system/about" component={About} />
+            <Route exact path="/system/team" component={Team} />
             <Route exact path="/system/accesslog" component={AccessLog} />
             <Route component={NoMatch} />
           </Switch>

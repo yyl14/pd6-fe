@@ -284,7 +284,7 @@ export default function Sidebar() {
       <Route exact path="/system">
         <System classes={classes} history={history} location={location} mode="system" />
       </Route>
-      <Route exact path="/system/about">
+      <Route exact path="/system/team">
         <System classes={classes} history={history} location={location} mode="system" />
       </Route>
       <Route exact path="/system/accesslog">
