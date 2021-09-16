@@ -142,7 +142,7 @@ export default function TeamDetail() {
 
       {isManager && <TeamDelete teamName={teams[teamId].name} label={teams[teamId].label} />}
 
-      <Snackbar open={hasError} onClose={handleCloseError} message="未註冊此門課程的同學，無法加入team" />
+      <Snackbar open={hasError} onClose={handleCloseError} message={`Error: ${error.myClass.team.addTeamMember}`} />
     </>
   );
 }
