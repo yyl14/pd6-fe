@@ -43,7 +43,7 @@ export default function TestingDataUploadCard({
   // const error = useSelector((state) => state.error);
   // const loading = useSelector((state) => state.loading.myClass.problem);
 
-  const [time, setTime] = useState(100000);
+  const [time, setTime] = useState(1000);
   const [memory, setMemory] = useState(65535);
   const [score, setScore] = useState(2);
 

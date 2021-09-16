@@ -260,7 +260,7 @@ export default function CodingProblemEdit({ closeEdit }) {
       return {
         ...acc,
         [keys[0]]: {
-          id: item,
+          id: Number(keys[0]),
           no: newSelectedFiles[item].no,
           time_limit: newSelectedFiles[item].time_limit,
           memory_limit: newSelectedFiles[item].memory_limit,
@@ -272,6 +272,7 @@ export default function CodingProblemEdit({ closeEdit }) {
         },
       };
     }, sampleTableData);
+    console.log(newTableData);
     setSampleTableData(newTableData);
     setCardSelectedFileS({});
     setHasChange(true);
@@ -303,7 +304,7 @@ export default function CodingProblemEdit({ closeEdit }) {
       return {
         ...acc,
         [keys[0]]: {
-          id: item,
+          id: Number(keys[0]),
           no: newSelectedFiles[item].no,
           score: newSelectedFiles[item].score,
           time_limit: newSelectedFiles[item].time_limit,

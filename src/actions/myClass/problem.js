@@ -553,7 +553,7 @@ const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData
           try {
             dispatch({ type: problemConstants.UPLOAD_TESTCASE_OUTPUT_START });
             const formData = new FormData();
-            formData.append('input_file', sampleTableData[id].out_file);
+            formData.append('output_file', sampleTableData[id].out_file);
             await agent.put(`/testcase/${id}/output-data`, formData, fileConfig);
             dispatch({ type: problemConstants.UPLOAD_TESTCASE_OUTPUT_SUCCESS });
           } catch (error) {
@@ -683,7 +683,7 @@ const saveTestcases = (token, problemId, testcases, testcaseDataIds, testcaseTab
           try {
             dispatch({ type: problemConstants.UPLOAD_TESTCASE_OUTPUT_START });
             const formData = new FormData();
-            formData.append('input_file', testcaseTableData[id].out_file);
+            formData.append('output_file', testcaseTableData[id].out_file);
             await agent.put(`/testcase/${id}/output-data`, formData, fileConfig);
             dispatch({ type: problemConstants.UPLOAD_TESTCASE_OUTPUT_SUCCESS });
           } catch (error) {
