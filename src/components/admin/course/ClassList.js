@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography, Button, Dialog, DialogTitle, DialogActions, DialogContent, TextField,
+  Typography,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  TextField,
+  Snackbar,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
@@ -24,9 +31,11 @@ export default function ClassList() {
   const classes = useSelector((state) => state.classes);
 
   const loading = useSelector((state) => state.loading.admin.course);
+  const error = useSelector((state) => state.error.admin.course);
 
   const [addCourseName, setAddCourseName] = useState('');
   const [addClassName, setAddClassName] = useState('');
+  const [hasError, setHasError] = useState(false);
 
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
 
@@ -62,8 +71,8 @@ export default function ClassList() {
   };
   const onAddCourse = (name) => {
     setAddCourseName('');
-    history.push(`/admin/course/course/${courseId}/class-list`);
-    dispatch(addCourse(authToken, name, getCourseType(addType).toUpperCase(), history));
+    // history.push(`/admin/course/course/${courseId}/class-list`);
+    dispatch(addCourse(authToken, name, getCourseType(addType).toUpperCase(), history, () => setHasError(true)));
   };
   const onAddClass = (name) => {
     setAddClassName('');
@@ -166,6 +175,7 @@ export default function ClassList() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar open={hasError} onClose={() => setHasError(false)} message={`Error: ${error.addCourse}`} />
     </>
   );
 }
