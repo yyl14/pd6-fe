@@ -185,12 +185,12 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         </Typography>
       </SimpleBar>
       <SimpleBar title="Description">
-        <MathpixLoader style={{ padding: 0 }}>
+        <MathpixLoader>
           <MathpixMarkdown text={problems[problemId].description} />
         </MathpixLoader>
       </SimpleBar>
       <SimpleBar title="About Input and Output">
-        <MathpixLoader style={{ padding: 0 }}>
+        <MathpixLoader>
           <MathpixMarkdown text={problems[problemId].io_description} htmlTags />
         </MathpixLoader>
       </SimpleBar>
