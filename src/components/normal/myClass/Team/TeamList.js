@@ -86,12 +86,16 @@ export default function TeamList() {
   useEffect(() => {
     if (addInputs.label !== '' && addInputs.teamName !== '') {
       setDisabled(false);
+    } else {
+      setDisabled(true);
     }
   }, [addInputs.label, addInputs.teamName]);
 
   useEffect(() => {
     if (importInput !== '' && selectedFile !== []) {
       setDisabled(false);
+    } else {
+      setDisabled(true);
     }
   }, [importInput, selectedFile]);
 
@@ -116,49 +120,65 @@ export default function TeamList() {
     });
   };
 
+  const addTeamSuccess = () => {
+    clearAddInput();
+    setShowAddDialog(false);
+    setHasRequest(false);
+    setDisabled(true);
+  };
+
+  const importTeamSuccess = () => {
+    clearImportInput();
+    setShowImportDialog(false);
+    setHasRequest(false);
+    setDisabled(true);
+  };
+
   const submitImport = () => {
     if (importInput !== '' && selectedFile !== []) {
-      selectedFile.map((file) => dispatch(importTeam(authToken, classId, importInput, file)));
+      selectedFile.map((file) => dispatch(importTeam(authToken, classId, importInput, file, importTeamSuccess, () => setHasError(true))));
     }
     setHasRequest(true);
   };
 
   const submitAdd = () => {
     if (addInputs.label !== '' && addInputs.teamName !== '') {
-      dispatch(addTeam(authToken, classId, addInputs.teamName, addInputs.label));
+      dispatch(
+        addTeam(authToken, classId, addInputs.teamName, addInputs.label, addTeamSuccess, () => setHasError(true)),
+      );
     }
     setHasRequest(true);
   };
 
-  useEffect(() => {
-    if (hasRequest && showAddDialog && !loading.addTeam) {
-      if (error.addTeam === null) {
-        clearAddInput();
-        setShowAddDialog(false);
-        setHasRequest(false);
-        setDisabled(true);
-      } else {
-        setHasError(true);
-      }
-    } else if (hasRequest && showImportDialog && !loading.importTeam) {
-      if (error.importTeam === null) {
-        clearImportInput();
-        setShowImportDialog(false);
-        setHasRequest(false);
-        setDisabled(true);
-      } else {
-        setHasError(true);
-      }
-    }
-  }, [
-    error.addTeam,
-    error.importTeam,
-    hasRequest,
-    loading.addTeam,
-    loading.importTeam,
-    showAddDialog,
-    showImportDialog,
-  ]);
+  // useEffect(() => {
+  //   if (hasRequest && showAddDialog && !loading.addTeam) {
+  //     if (error.addTeam === null) {
+  //       clearAddInput();
+  //       setShowAddDialog(false);
+  //       setHasRequest(false);
+  //       setDisabled(true);
+  //     } else {
+  //       setHasError(true);
+  //     }
+  //   } else if (hasRequest && showImportDialog && !loading.importTeam) {
+  //     if (error.importTeam === null) {
+  //       clearImportInput();
+  //       setShowImportDialog(false);
+  //       setHasRequest(false);
+  //       setDisabled(true);
+  //     } else {
+  //       setHasError(true);
+  //     }
+  //   }
+  // }, [
+  //   error.addTeam,
+  //   error.importTeam,
+  //   hasRequest,
+  //   loading.addTeam,
+  //   loading.importTeam,
+  //   showAddDialog,
+  //   showImportDialog,
+  // ]);
 
   const downloadTemplate = () => {
     setShowImportDialog(false);
