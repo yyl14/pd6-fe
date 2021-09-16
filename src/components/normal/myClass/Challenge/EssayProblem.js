@@ -19,7 +19,7 @@ import PageTitle from '../../../ui/PageTitle';
 import EssayInfo from './ProblemSettings/EssayInfo';
 import EssayEdit from './ProblemSettings/EssayEdit';
 import { readEssay } from '../../../../actions/myClass/essay';
-import { downloadAllEssaySubmission, browseEssaySubmission } from '../../../../actions/myClass/essaySubmission';
+import { downloadAllEssaySubmission } from '../../../../actions/myClass/essaySubmission';
 
 import NoMatch from '../../../noMatch';
 

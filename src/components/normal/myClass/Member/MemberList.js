@@ -24,12 +24,6 @@ export default function MemberList() {
   const error = useSelector((state) => state.error.common.common.fetchClassMembers);
   const userClasses = useSelector((state) => state.user.classes);
 
-  useEffect(() => {
-    if (!loading.replaceClassMembers) {
-      dispatch(fetchClassMembers(authToken, classId));
-    }
-  }, [authToken, classId, dispatch, loading.replaceClassMembers]);
-
   const [edit, setEdit] = useState(false);
   const [isManager, setIsManager] = useState(false);
 

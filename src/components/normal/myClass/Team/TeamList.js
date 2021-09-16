@@ -28,7 +28,7 @@ import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   reminder: {
-    color: theme.palette.grey.A400,
+    color: theme.palette.grey.A700,
     marginLeft: theme.spacing(2),
   },
   importDialogButtons: {
@@ -86,12 +86,16 @@ export default function TeamList() {
   useEffect(() => {
     if (addInputs.label !== '' && addInputs.teamName !== '') {
       setDisabled(false);
+    } else {
+      setDisabled(true);
     }
   }, [addInputs.label, addInputs.teamName]);
 
   useEffect(() => {
     if (importInput !== '' && selectedFile !== []) {
       setDisabled(false);
+    } else {
+      setDisabled(true);
     }
   }, [importInput, selectedFile]);
 
@@ -131,8 +135,8 @@ export default function TeamList() {
   };
 
   useEffect(() => {
-    if (hasRequest && showAddDialog && !loading.addTeam) {
-      if (error.addTeam === null) {
+    if (hasRequest && showAddDialog && !loading.myClass.team.addTeam) {
+      if (error.myClass.team.addTeam === null) {
         clearAddInput();
         setShowAddDialog(false);
         setHasRequest(false);
@@ -140,8 +144,8 @@ export default function TeamList() {
       } else {
         setHasError(true);
       }
-    } else if (hasRequest && showImportDialog && !loading.importTeam) {
-      if (error.importTeam === null) {
+    } else if (hasRequest && showImportDialog && !loading.myClass.team.importTeam) {
+      if (error.myClass.team.importTeam === null) {
         clearImportInput();
         setShowImportDialog(false);
         setHasRequest(false);
@@ -151,11 +155,11 @@ export default function TeamList() {
       }
     }
   }, [
-    error.addTeam,
-    error.importTeam,
+    error.myClass.team.addTeam,
+    error.myClass.team.importTeam,
     hasRequest,
-    loading.addTeam,
-    loading.importTeam,
+    loading.myClass.team.addTeam,
+    loading.myClass.team.importTeam,
     showAddDialog,
     showImportDialog,
   ]);
@@ -170,11 +174,8 @@ export default function TeamList() {
     setHasRequest(false);
   };
 
-  if (loading.fetchTeams) {
-    return <GeneralLoading />;
-  }
   if (courses[courseId] === undefined || classes[classId] === undefined) {
-    if (loading.fetchCourse || loading.fetchClass) {
+    if (loading.common.common.fetchCourse || loading.common.common.fetchClass || loading.myClass.team.fetchTeams) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -188,16 +189,11 @@ export default function TeamList() {
         buttons={
           isManager && (
             <>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => setShowImportDialog(true)}
-                startIcon={<Icon.Folder />}
-              >
-                Import
-              </Button>
-              <Button color="primary" onClick={() => setShowAddDialog(true)}>
+              <Button variant="outlined" color="primary" onClick={() => setShowAddDialog(true)}>
                 <MdAdd />
+              </Button>
+              <Button color="primary" onClick={() => setShowImportDialog(true)} startIcon={<Icon.Folder />}>
+                Import
               </Button>
             </>
           )
@@ -261,7 +257,13 @@ export default function TeamList() {
           <Typography variant="body2" className={classNames.reminder}>
             Member N (N=2~10): Same as Team Manager
           </Typography>
-          <Typography variant="body2"> Download template file for more instructions.</Typography>
+          <Typography variant="body2">
+            Notice that PDOGS only accept files encoded in
+            {' '}
+            <b>ASCII / UTF-8</b>
+            {' '}
+            charset.
+          </Typography>
         </DialogContent>
         <DialogContent>
           <AlignedText text="Class" maxWidth="md" childrenType="text">
@@ -271,7 +273,7 @@ export default function TeamList() {
             <TextField id="title" name="title" value={importInput} onChange={(e) => handleImportChange(e)} />
           </AlignedText>
           <FileUploadArea
-            text="Grading File"
+            text="File"
             fileAcceptFormat=".csv"
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}

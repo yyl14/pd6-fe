@@ -38,12 +38,18 @@ function Index() {
     // console.log(auth.isAuthenticated, Boolean(cookies.id && cookies.token));
     if (!auth.isAuthenticated) {
       if (cookies.id && cookies.token) {
-        dispatch(getUserInfo(cookies.id, cookies.token));
+        if (auth.tokenExpired) {
+          removeCookie('token', { path: '/' });
+          removeCookie('id', { path: '/' });
+          history.push('/login');
+        } else {
+          dispatch(getUserInfo(cookies.id, cookies.token));
+        }
       } else {
         history.push('/login');
       }
     }
-  }, [auth.isAuthenticated, cookies, cookies.id, cookies.token, dispatch, history]);
+  }, [auth.isAuthenticated, auth.tokenExpired, cookies, cookies.id, cookies.token, dispatch, history, removeCookie]);
 
   useEffect(() => {
     if (auth.isAuthenticated && location.pathname === '/') {
