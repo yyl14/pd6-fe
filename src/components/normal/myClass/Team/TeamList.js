@@ -28,7 +28,7 @@ import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   reminder: {
-    color: theme.palette.grey.A400,
+    color: theme.palette.grey.A700,
     marginLeft: theme.spacing(2),
   },
   importDialogButtons: {
@@ -260,7 +260,13 @@ export default function TeamList() {
           <Typography variant="body2" className={classNames.reminder}>
             Member N (N=2~10): Same as Team Manager
           </Typography>
-          <Typography variant="body2"> Download template file for more instructions.</Typography>
+          <Typography variant="body2">
+            Notice that PDOGS only accept files encoded in
+            {' '}
+            <b>ASCII / UTF-8</b>
+            {' '}
+            charset.
+          </Typography>
         </DialogContent>
         <DialogContent>
           <AlignedText text="Class" maxWidth="mg" childrenType="text">
@@ -270,7 +276,7 @@ export default function TeamList() {
             <TextField id="title" name="title" value={importInput} onChange={(e) => handleImportChange(e)} />
           </AlignedText>
           <FileUploadArea
-            text="Grading File"
+            text="File"
             fileAcceptFormat=".csv"
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
