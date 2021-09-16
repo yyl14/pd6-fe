@@ -77,7 +77,6 @@ export default function TeamDetail() {
   }, [teamMemberIds, teamMembers]);
 
   useEffect(() => {
-    console.log(error.myClass.team.addTeamMember);
     if (editTeamMember && error.myClass.team.addTeamMember !== null) {
       setHasError(true);
     }
