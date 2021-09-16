@@ -24,7 +24,7 @@ export default function TeamDetail() {
   const teamMemberIds = useSelector((state) => state.teamMembers.allIds);
   const loading = useSelector((state) => state.loading.myClass.team);
   const error = useSelector((state) => state.error);
-  const [hasError, setHasError] = useState(false);
+  const [addMemberFail, setAddMemberFail] = useState(false);
 
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
@@ -76,12 +76,6 @@ export default function TeamDetail() {
     );
   }, [teamMemberIds, teamMembers]);
 
-  useEffect(() => {
-    if (editTeamMember && error.myClass.team.addTeamMember !== null) {
-      setHasError(true);
-    }
-  }, [editTeamMember, error.myClass.team.addTeamMember]);
-
   const handleInfoBack = () => {
     setEditTeamInfo(false);
   };
@@ -99,8 +93,8 @@ export default function TeamDetail() {
   };
 
   const handleCloseError = () => {
+    setAddMemberFail(false);
     error.myClass.team.addTeamMember = null;
-    setHasError(false);
   };
 
   if (loading.fetchTeam || loading.fetchTeamMember) {
@@ -132,9 +126,9 @@ export default function TeamDetail() {
       {editTeamMember ? (
         <TeamMemberEdit
           isManager={isManager}
-          tableData={tableData}
           setOriginData={setTableData}
           handleBack={handleMemberBack}
+          setAddMemberFail={setAddMemberFail}
         />
       ) : (
         <TeamMember isManager={isManager} tableData={tableData} handleEdit={handleMemberEdit} />
@@ -142,7 +136,11 @@ export default function TeamDetail() {
 
       {isManager && <TeamDelete teamName={teams[teamId].name} label={teams[teamId].label} />}
 
-      <Snackbar open={hasError} onClose={handleCloseError} message={`Error: ${error.myClass.team.addTeamMember}`} />
+      <Snackbar
+        open={addMemberFail}
+        onClose={handleCloseError}
+        message={`Error: ${error.myClass.team.addTeamMember}`}
+      />
     </>
   );
 }
