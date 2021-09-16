@@ -191,22 +191,43 @@ const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
   }
 };
 
-const readTestcase = (token, testcaseId) => async (dispatch) => {
+const browseTestcases = (token, problemId) => async (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
     },
   };
   try {
-    dispatch({ type: submissionConstants.READ_TESTCASE_START });
-    const res = await agent.get(`/testcase/${testcaseId}`, config);
+    dispatch({ type: submissionConstants.BROWSE_TESTCASES_START });
+    const res = await agent.get(`/problem/${problemId}/testcase`, config);
     dispatch({
-      type: submissionConstants.READ_TESTCASE_SUCCESS,
+      type: submissionConstants.BROWSE_TESTCASES_SUCCESS,
       payload: res.data.data,
     });
   } catch (error) {
     dispatch({
-      type: submissionConstants.READ_TESTCASE_FAIL,
+      type: submissionConstants.BROWSE_TESTCASES_FAIL,
+      error,
+    });
+  }
+};
+
+const getAccountBatch = (token, accountId) => async (dispatch) => {
+  dispatch({ type: submissionConstants.GET_ACCOUNT_BATCH_START });
+  const config = {
+    headers: { 'auth-token': token },
+    params: { account_ids: JSON.stringify([accountId]) },
+  };
+  try {
+    const res = await agent.get('/account-summary/batch', config);
+
+    dispatch({
+      type: submissionConstants.GET_ACCOUNT_BATCH_SUCCESS,
+      payload: { data: res.data.data[0], accountId },
+    });
+  } catch (error) {
+    dispatch({
+      type: submissionConstants.GET_ACCOUNT_BATCH_FAIL,
       error,
     });
   }
@@ -237,6 +258,7 @@ export {
   fetchJudgement,
   readSubmissionDetail,
   browseJudgeCases,
-  readTestcase,
+  browseTestcases,
+  getAccountBatch,
   rejudgeSubmission,
 };

@@ -86,12 +86,16 @@ export default function TeamList() {
   useEffect(() => {
     if (addInputs.label !== '' && addInputs.teamName !== '') {
       setDisabled(false);
+    } else {
+      setDisabled(true);
     }
   }, [addInputs.label, addInputs.teamName]);
 
   useEffect(() => {
     if (importInput !== '' && selectedFile !== []) {
       setDisabled(false);
+    } else {
+      setDisabled(true);
     }
   }, [importInput, selectedFile]);
 
