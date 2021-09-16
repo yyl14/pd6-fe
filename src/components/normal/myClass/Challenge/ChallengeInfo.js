@@ -138,7 +138,6 @@ export default function ChallengeInfo() {
       <SimpleBar
         title="Description"
         buttons={<>{isManager && !editMode && <Button onClick={handleEdit}>Edit</Button>}</>}
-        noIndent
       >
         {editMode ? (
           <div>
