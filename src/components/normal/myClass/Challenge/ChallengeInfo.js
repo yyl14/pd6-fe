@@ -30,7 +30,7 @@ export default function ChallengeInfo() {
   const { classId, challengeId } = useParams();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [currentTime, setCurrentTime] = useState(moment());
+  const [currentTime] = useState(moment());
   const [status, setStatus] = useState('');
   const [isManager, setIsManager] = useState(false);
   const [editMode, setEditMode] = useState(false);

@@ -95,12 +95,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   // console.log('uploadError: ', uploadError);
 
   const handleDelete = () => {
-    // problems[problemId].assistingDataIds.forEach((id) => {
-    //   dispatch(deleteAssistingData(authToken, id));
-    // });
-    // problems[problemId].testcaseIds.forEach((id) => {
-    //   dispatch(deleteTestcase(authToken, id));
-    // });
     dispatch(deleteProblem(authToken, problemId));
 
     setDeletePopUp(false);

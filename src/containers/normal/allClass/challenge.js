@@ -45,7 +45,7 @@ function Challenge() {
         />
         <Route
           exact
-          path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId/all-submission/:submissionId"
+          path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId"
           component={SubmissionDetail}
         />
         <Route component={NoMatch} />

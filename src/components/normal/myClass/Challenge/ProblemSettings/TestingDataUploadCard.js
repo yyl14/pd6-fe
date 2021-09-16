@@ -101,7 +101,7 @@ export default function TestingDataUploadCard({
           <Button onClick={handleCancel} color="default">
             Cancel
           </Button>
-          <Button onClick={handleConfirm} color="primary">
+          <Button disabled={Object.keys(selectedFile).length === 0} onClick={handleConfirm} color="primary">
             Confirm
           </Button>
         </DialogActions>

@@ -81,6 +81,7 @@ export default function AnnouncementHome() {
         ]}
         reduxData={announcements}
         reduxDataToRows={(item) => ({
+          id: item.id,
           Title: item.title,
           'Post Time': moment(item.post_time).format('YYYY-MM-DD, HH:mm'),
           'End Time': moment(item.expire_time).format('YYYY-MM-DD, HH:mm'),
