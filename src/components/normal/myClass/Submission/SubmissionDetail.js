@@ -17,7 +17,6 @@ import GeneralLoading from '../../../GeneralLoading';
 import {
   readSubmissionDetail,
   browseJudgeCases,
-  // readTestcase,
   fetchSubmission,
   getAccountBatch,
   rejudgeSubmission,
@@ -51,9 +50,7 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 export default function SubmissionDetail() {
   const { courseId, classId, submissionId } = useParams();
-  // const history = useHistory();
   const classNames = useStyles();
-  // const [color, setColor] = useState('blue');
   const [popUp, setPopUp] = useState(false);
   const [role, setRole] = useState('NORMAL');
   const [tableData, setTableData] = useState([]);
@@ -84,7 +81,7 @@ export default function SubmissionDetail() {
   }, [authToken, dispatch, submissionId]);
 
   useEffect(() => {
-    if (submissions[submissionId] !== undefined) {
+    if (submissions[submissionId]) {
       dispatch(getAccountBatch(authToken, submissions[submissionId].account_id));
       dispatch(readProblemInfo(authToken, submissions[submissionId].problem_id));
       setProblemId(submissions[submissionId].problem_id);
@@ -93,11 +90,11 @@ export default function SubmissionDetail() {
   }, [authToken, dispatch, submissionId, submissions]);
 
   useEffect(() => {
-    if (problems.byId[problemId] !== undefined && submissions[submissionId] !== undefined) {
+    if (problems.byId[problemId]) {
       dispatch(fetchChallenge(authToken, problems.byId[problemId].challenge_id));
       setChallengeId(problems.byId[problemId].challenge_id);
     }
-  }, [authToken, dispatch, problemId, problems.allIds, problems.byId, submissionId, submissions]);
+  }, [authToken, dispatch, problemId, problems.byId]);
 
   useEffect(() => {
     if (rejudge === false) {
@@ -171,7 +168,7 @@ export default function SubmissionDetail() {
           })),
       );
     }
-  }, [judgeCases.allIds, judgeCases.byId, judgmentId, judgments.byId, testcaseIds, testcases, transformTestcase]);
+  }, [judgeCases, judgmentId, judgments.byId, testcaseIds, testcases, transformTestcase]);
 
   useEffect(() => {
     if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {

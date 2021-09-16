@@ -14,7 +14,6 @@ import GeneralLoading from '../../../GeneralLoading';
 import {
   readSubmissionDetail,
   browseJudgeCases,
-  // readTestcase,
   browseTestcases,
   rejudgeSubmission,
 } from '../../../../actions/myClass/problem';
@@ -107,12 +106,6 @@ export default function SubmissionDetail() {
     }
   }, [authToken, dispatch, judgmentIds, judgments, rejudge, submissionId]);
 
-  // useEffect(() => {
-  //   if (judgeCases.byId !== undefined) {
-  //     judgeCases.allIds.map((id) => dispatch(readTestcase(authToken, id)));
-  //   }
-  // }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId]);
-
   useEffect(() => {
     dispatch(browseTestcases(authToken, problemId));
   }, [authToken, dispatch, problemId]);
@@ -149,16 +142,7 @@ export default function SubmissionDetail() {
           })),
       );
     }
-  }, [
-    judgeCases,
-    judgeCases.allIds,
-    judgeCases.byId,
-    judgmentId,
-    judgments.byId,
-    testcaseIds,
-    testcases,
-    transformTestcase,
-  ]);
+  }, [judgeCases, judgmentId, judgments.byId, testcaseIds, testcases, transformTestcase]);
 
   useEffect(() => {
     if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {

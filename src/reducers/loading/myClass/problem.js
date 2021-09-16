@@ -18,7 +18,6 @@ const initialState = {
   uploadTestcaseOutput: false,
   addTestcase: false,
   browseJudgeCases: false,
-  readTestcase: false,
   readProblemScore: false,
   downloadSamples: false,
   downloadTestcases: false,
@@ -283,21 +282,7 @@ export default function problem(state = initialState, action) {
         ...state,
         addTestcase: false,
       };
-    // case problemConstants.READ_TESTCASE_START:
-    //   return {
-    //     ...state,
-    //     readTestcase: true,
-    //   };
-    // case problemConstants.READ_TESTCASE_SUCCESS:
-    //   return {
-    //     ...state,
-    //     readTestcase: false,
-    //   };
-    // case problemConstants.READ_TESTCASE_FAIL:
-    //   return {
-    //     ...state,
-    //     readTestcase: false,
-    //   };
+
     case problemConstants.READ_PROBLEM_SCORE_START:
       return {
         ...state,

@@ -191,27 +191,6 @@ const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
   }
 };
 
-// const readTestcase = (token, testcaseId) => async (dispatch) => {
-//   const config = {
-//     headers: {
-//       'auth-token': token,
-//     },
-//   };
-//   try {
-//     dispatch({ type: submissionConstants.READ_TESTCASE_START });
-//     const res = await agent.get(`/testcase/${testcaseId}`, config);
-//     dispatch({
-//       type: submissionConstants.READ_TESTCASE_SUCCESS,
-//       payload: res.data.data,
-//     });
-//   } catch (error) {
-//     dispatch({
-//       type: submissionConstants.READ_TESTCASE_FAIL,
-//       error,
-//     });
-//   }
-// };
-
 const browseTestcases = (token, problemId) => async (dispatch) => {
   const config = {
     headers: {
@@ -278,7 +257,6 @@ export {
   fetchJudgement,
   readSubmissionDetail,
   browseJudgeCases,
-  // readTestcase,
   browseTestcases,
   getAccountBatch,
   rejudgeSubmission,

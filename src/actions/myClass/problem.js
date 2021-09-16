@@ -794,7 +794,6 @@ export {
   submitCode,
   editTestcase,
   browseJudgeCases,
-  // readTestcase,
   browseTestcases,
   readProblemScore,
   downloadAllSamples,

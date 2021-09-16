@@ -7,19 +7,6 @@ const byId = (state = {}, action) => {
       const { problemId, testcases } = action.payload;
       return testcases.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
-    // case problemConstants.READ_TESTCASE_SUCCESS: {
-    //   return {
-    //     ...state,
-    //     [action.payload.id]: action.payload,
-    //   };
-    // }
-    // case submissionConstants.READ_TESTCASE_SUCCESS: {
-    //   return {
-    //     ...state,
-    //     [action.payload.id]: action.payload,
-    //   };
-    // }
-
     case submissionConstants.BROWSE_TESTCASES_SUCCESS: {
       return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
@@ -34,12 +21,6 @@ const allIds = (state = [], action) => {
       const { problemId, testcases } = action.payload;
       return [...new Set([...testcases.map((item) => item.id), ...state])];
     }
-    // case problemConstants.READ_TESTCASE_SUCCESS: {
-    //   return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
-    // }
-    // case submissionConstants.READ_TESTCASE_SUCCESS: {
-    //   return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
-    // }
     case submissionConstants.BROWSE_TESTCASES_SUCCESS: {
       return [...new Set([...action.payload.map((item) => item.id), ...state])];
     }
