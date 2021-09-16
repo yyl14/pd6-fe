@@ -348,8 +348,8 @@ function AutoTable({
   useEffect(() => {
     dispatch(autoTableMount(ident));
     // set defaultSort
-    setSort([defaultSort]);
     if (defaultSort !== undefined) {
+      setSort([defaultSort]);
       setOrder({ key: defaultSort[0][0], order: defaultSort[0][1].toLowerCase() });
     }
   }, [ident]);
