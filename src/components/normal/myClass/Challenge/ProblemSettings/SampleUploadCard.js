@@ -12,7 +12,7 @@ import {
 import AlignedText from '../../../../ui/AlignedText';
 import IOFileUploadArea from '../../../../ui/IOFileUploadArea';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   dialogTitle: {
     marginBottom: '-8px',
   },
@@ -27,7 +27,8 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'flex-end',
   },
   reminder: {
-    color: '#AAAAAA',
+    color: theme.palette.grey.A700,
+    marginLeft: theme.spacing(2),
   },
 }));
 
@@ -78,6 +79,13 @@ export default function SampleUploadCard({
             </Typography>
             <Typography variant="body2" className={classes.reminder}>
               sample1.out （範例測資 1 的 output）
+            </Typography>
+            <Typography variant="body2">
+              Notice that PDOGS only accept files encoded in
+              {' '}
+              <b>ASCII / UTF-8</b>
+              {' '}
+              charset.
             </Typography>
           </div>
           <AlignedText text="Default Time(ms)" childrenType="field">
