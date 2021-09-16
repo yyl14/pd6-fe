@@ -268,6 +268,7 @@ export default function GradeList() {
         ]}
         reduxData={grades}
         reduxDataToRows={(item) => ({
+          id: item.id,
           Username: {
             text: accounts.byId[item.receiver_id] ? accounts.byId[item.receiver_id].username : '',
             path: `/admin/account/account/${item.receiver_id}/setting`,
@@ -336,7 +337,7 @@ export default function GradeList() {
 
       <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} maxWidth="md">
         <DialogTitle id="dialog-slide-title">
-          <Typography variant="h4">Import Grades.byId</Typography>
+          <Typography variant="h4">Import Grades</Typography>
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2">Grade file format:</Typography>

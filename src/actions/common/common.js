@@ -296,6 +296,28 @@ const fetchAllChallengesProblems = (token, classId) => async (dispatch) => {
   }
 };
 
+const fetchProblems = (token) => async (dispatch) => {
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+  };
+
+  try {
+    dispatch({ type: commonConstants.FETCH_PROBLEMS_START });
+    const res = await agent.get('/problem', config);
+    dispatch({
+      type: commonConstants.FETCH_PROBLEMS_SUCCESS,
+      payload: res.data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: commonConstants.FETCH_PROBLEMS_FAIL,
+      error,
+    });
+  }
+};
+
 export {
   getInstitutes,
   fetchClassMembers,
@@ -309,4 +331,5 @@ export {
   downloadFile,
   fetchDownloadFileUrl,
   fetchAllChallengesProblems,
+  fetchProblems,
 };

@@ -22,10 +22,10 @@ export default function Submission({
 
   const submissions = useSelector((state) => state.submissions);
 
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-  }, [dispatch, authToken, classId, courseId]);
+  // useEffect(() => {
+  //   dispatch(fetchCourse(authToken, courseId));
+  //   dispatch(fetchClass(authToken, classId));
+  // }, [dispatch, authToken, classId, courseId]);
 
   const [display, setDisplay] = useState('unfold');
 

@@ -154,13 +154,13 @@ export default function SubmissionDetail() {
           <Typography variant="body1">{user.real_name}</Typography>
         </AlignedText>
         <AlignedText text="Challenge" childrenType="text">
-          <Link to={`/my-class/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
+          <Link to={`/all-class/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
             <Typography variant="body1">{challenges.byId[challengeId].title}</Typography>
           </Link>
         </AlignedText>
         <AlignedText text="Task Label" childrenType="text">
           <Link
-            to={`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`}
+            to={`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`}
             className={classNames.textLink}
           >
             <Typography variant="body1">{problems.byId[problemId].challenge_label}</Typography>

@@ -163,7 +163,14 @@ export default function SampleTestArea({ input, output }) {
                 </div>
               </div>
               <div className={classes.content} ref={inputRef}>
-                <Typography variant="body1">{input}</Typography>
+                <Typography variant="body1">
+                  {input.split('\n').map((string) => (
+                    <>
+                      {string}
+                      <br />
+                    </>
+                  ))}
+                </Typography>
               </div>
             </>
           )}
@@ -178,7 +185,14 @@ export default function SampleTestArea({ input, output }) {
                 </div>
               </div>
               <div className={classes.content} ref={outputRef}>
-                <Typography variant="body1">{output}</Typography>
+                <Typography variant="body1">
+                  {output.split('\n').map((string) => (
+                    <>
+                      {string}
+                      <br />
+                    </>
+                  ))}
+                </Typography>
               </div>
             </>
           )}

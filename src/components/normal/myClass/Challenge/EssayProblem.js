@@ -19,7 +19,7 @@ import PageTitle from '../../../ui/PageTitle';
 import EssayInfo from './ProblemSettings/EssayInfo';
 import EssayEdit from './ProblemSettings/EssayEdit';
 import { readEssay } from '../../../../actions/myClass/essay';
-import { downloadAllEssaySubmission, browseEssaySubmission } from '../../../../actions/myClass/essaySubmission';
+import { downloadAllEssaySubmission } from '../../../../actions/myClass/essaySubmission';
 
 import NoMatch from '../../../noMatch';
 
@@ -75,14 +75,11 @@ export default function EssayProblem() {
   };
 
   useEffect(() => {
-    userClasses.forEach((value) => {
-      if (value.class_id === Number(classId)) {
-        if (value.role === 'MANAGER') {
-          setRole('MANAGER');
-        }
-      }
-    });
+    if (userClasses.filter((item) => item.class_id === Number(classId)).length !== 0) {
+      setRole(userClasses.filter((item) => item.class_id === Number(classId))[0].role);
+    }
   }, [classId, userClasses]);
+
   useEffect(() => {
     dispatch(readEssay(authToken, essayId));
     // dispatch(browseEssaySubmission(authToken, essayId));

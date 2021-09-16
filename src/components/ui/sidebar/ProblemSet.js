@@ -17,14 +17,16 @@ export default function ProblemSet({
   const authToken = useSelector((state) => state.auth.token);
   const classes = useSelector((state) => state.classes);
   const courses = useSelector((state) => state.courses);
+  const [hasFetchClasses, setHasFetchClasses] = useState(false);
 
   const [display, setDisplay] = useState([]); // 0: fold, 1: unfold
 
   useEffect(() => {
-    if (courses) {
+    if (courses && !hasFetchClasses) {
       courses.allIds.map((id) => dispatch(fetchClasses(authToken, id)));
+      setHasFetchClasses(true);
     }
-  }, [authToken, courses, dispatch]);
+  }, [authToken, courses, dispatch, hasFetchClasses]);
 
   useEffect(() => {
     dispatch(fetchCourses(authToken));
@@ -33,7 +35,6 @@ export default function ProblemSet({
   const changeFoldCourse = (id) => {
     const newList = [...display];
     newList[id] = !newList[id];
-    console.log(newList);
     setDisplay(newList);
   };
 
