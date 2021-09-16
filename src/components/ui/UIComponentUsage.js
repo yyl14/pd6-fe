@@ -114,8 +114,8 @@ export default function UIComponentUsage() {
   const [switchStatus, setSwitchStatus] = useState(false);
   const [dateRangePicker, setDateRangePicker] = useState([
     {
-      startDate: moment().startOf('week').toDate(),
-      endDate: moment().endOf('week').toDate(),
+      startDate: moment().toDate(),
+      endDate: moment().add(7, 'days').toDate(),
       key: 'selection',
     },
   ]);
