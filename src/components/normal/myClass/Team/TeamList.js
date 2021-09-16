@@ -266,10 +266,10 @@ export default function TeamList() {
           </Typography>
         </DialogContent>
         <DialogContent>
-          <AlignedText text="Class" maxWidth="mg" childrenType="text">
+          <AlignedText text="Class" maxWidth="md" childrenType="text">
             <Typography variant="body1">{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
           </AlignedText>
-          <AlignedText text="Label" maxWidth="mg" childrenType="field">
+          <AlignedText text="Label" maxWidth="md" childrenType="field">
             <TextField id="title" name="title" value={importInput} onChange={(e) => handleImportChange(e)} />
           </AlignedText>
           <FileUploadArea
@@ -328,10 +328,10 @@ export default function TeamList() {
           <AlignedText text="Class" maxWidth="md" childrenType="text">
             <Typography variant="body1">{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
           </AlignedText>
-          <AlignedText text="Label" maxWidth="lg" childrenType="field">
+          <AlignedText text="Label" maxWidth="md" childrenType="field">
             <TextField name="label" value={addInputs.label} onChange={(e) => handleAddChange(e)} />
           </AlignedText>
-          <AlignedText text="Team Name" maxWidth="lg" childrenType="field">
+          <AlignedText text="Team Name" maxWidth="md" childrenType="field">
             <TextField name="teamName" value={addInputs.teamName} onChange={(e) => handleAddChange(e)} />
           </AlignedText>
         </DialogContent>
