@@ -150,36 +150,6 @@ export default function TeamList() {
     setHasRequest(true);
   };
 
-  // useEffect(() => {
-  //   if (hasRequest && showAddDialog && !loading.addTeam) {
-  //     if (error.addTeam === null) {
-  //       clearAddInput();
-  //       setShowAddDialog(false);
-  //       setHasRequest(false);
-  //       setDisabled(true);
-  //     } else {
-  //       setHasError(true);
-  //     }
-  //   } else if (hasRequest && showImportDialog && !loading.importTeam) {
-  //     if (error.importTeam === null) {
-  //       clearImportInput();
-  //       setShowImportDialog(false);
-  //       setHasRequest(false);
-  //       setDisabled(true);
-  //     } else {
-  //       setHasError(true);
-  //     }
-  //   }
-  // }, [
-  //   error.addTeam,
-  //   error.importTeam,
-  //   hasRequest,
-  //   loading.addTeam,
-  //   loading.importTeam,
-  //   showAddDialog,
-  //   showImportDialog,
-  // ]);
-
   const downloadTemplate = () => {
     setShowImportDialog(false);
     dispatch(downloadTeamFile(authToken));
