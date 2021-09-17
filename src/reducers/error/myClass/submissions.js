@@ -6,6 +6,7 @@ const initialState = {
   browseChallengeOverview: null,
   readSubmissionDetail: null,
   browseJudgeCases: null,
+  readTestcase: null,
   getAccountBatch: null,
   rejudgeSubmission: null,
   browseTestcases: null,
@@ -61,6 +62,12 @@ export default function submissions(state = initialState, action) {
       return {
         ...state,
         browseJudgeCases: action.error,
+      };
+    }
+    case submissionConstants.READ_TESTCASE_FAIL: {
+      return {
+        ...state,
+        readTestcase: action.error,
       };
     }
     case submissionConstants.GET_ACCOUNT_BATCH_FAIL: {

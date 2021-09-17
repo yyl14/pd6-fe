@@ -29,7 +29,7 @@ import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   reminder: {
-    color: theme.palette.grey.A400,
+    color: theme.palette.grey.A700,
     marginLeft: theme.spacing(2),
   },
   templateBtn: {
@@ -353,7 +353,13 @@ export default function GradeList() {
           <Typography variant="body2" className={classNames.reminder}>
             Grader: same as receiver
           </Typography>
-          <Typography variant="body2">Download template file for more instructions.</Typography>
+          <Typography variant="body2">
+            Notice that PDOGS only accept files encoded in
+            {' '}
+            <b>ASCII / UTF-8</b>
+            {' '}
+            charset.
+          </Typography>
         </DialogContent>
         <DialogContent>
           <AlignedText text="Class" maxWidth="md" childrenType="text">
@@ -365,7 +371,7 @@ export default function GradeList() {
             <TextField id="title" name="title" value={inputTitle} onChange={(e) => handleChange(e)} />
           </AlignedText>
           <FileUploadArea
-            text="Grading File"
+            text="File"
             fileAcceptFormat=".csv"
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}

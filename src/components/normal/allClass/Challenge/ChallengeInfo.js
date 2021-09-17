@@ -89,7 +89,7 @@ export default function ChallengeInfo() {
   return (
     <>
       <PageTitle text={`${challenges[challengeId].title} / Info`} />
-      <SimpleBar title="Description" noIndent>
+      <SimpleBar title="Description">
         <MathpixLoader>
           <MathpixMarkdown text={challenges[challengeId].description} />
         </MathpixLoader>
