@@ -120,49 +120,35 @@ export default function TeamList() {
     });
   };
 
+  const addTeamSuccess = () => {
+    clearAddInput();
+    setShowAddDialog(false);
+    setHasRequest(false);
+    setDisabled(true);
+  };
+
+  const importTeamSuccess = () => {
+    clearImportInput();
+    setShowImportDialog(false);
+    setHasRequest(false);
+    setDisabled(true);
+  };
+
   const submitImport = () => {
     if (importInput !== '' && selectedFile !== []) {
-      selectedFile.map((file) => dispatch(importTeam(authToken, classId, importInput, file)));
+      selectedFile.map((file) => dispatch(importTeam(authToken, classId, importInput, file, importTeamSuccess, () => setHasError(true))));
     }
     setHasRequest(true);
   };
 
   const submitAdd = () => {
     if (addInputs.label !== '' && addInputs.teamName !== '') {
-      dispatch(addTeam(authToken, classId, addInputs.teamName, addInputs.label));
+      dispatch(
+        addTeam(authToken, classId, addInputs.teamName, addInputs.label, addTeamSuccess, () => setHasError(true)),
+      );
     }
     setHasRequest(true);
   };
-
-  useEffect(() => {
-    if (hasRequest && showAddDialog && !loading.myClass.team.addTeam) {
-      if (error.myClass.team.addTeam === null) {
-        clearAddInput();
-        setShowAddDialog(false);
-        setHasRequest(false);
-        setDisabled(true);
-      } else {
-        setHasError(true);
-      }
-    } else if (hasRequest && showImportDialog && !loading.myClass.team.importTeam) {
-      if (error.myClass.team.importTeam === null) {
-        clearImportInput();
-        setShowImportDialog(false);
-        setHasRequest(false);
-        setDisabled(true);
-      } else {
-        setHasError(true);
-      }
-    }
-  }, [
-    error.myClass.team.addTeam,
-    error.myClass.team.importTeam,
-    hasRequest,
-    loading.myClass.team.addTeam,
-    loading.myClass.team.importTeam,
-    showAddDialog,
-    showImportDialog,
-  ]);
 
   const downloadTemplate = () => {
     setShowImportDialog(false);
