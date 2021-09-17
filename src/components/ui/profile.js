@@ -4,22 +4,31 @@ import { Typography, makeStyles } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
   mainContent: {
     position: 'relative',
-    width: '100%',
+    width: '222px',
+    marginBottom: '19px',
+    textAlign: 'center',
   },
   imageAndLinks: {
+    width: '222px',
     '&:hover $image': {
       opacity: '0.3',
     },
     '&:hover $overlapLinks': {
       opacity: '1',
       transition: 'transform 0.25s',
-      transform: 'translateY(-20px)',
+      transform: 'translateY(55px)',
     },
   },
   image: {
-    width: '100%',
+    width: '134px',
+    height: '134px',
     display: 'block',
     borderRadius: '50%',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: '8.65px',
     opacity: '1',
     zIndex: '-1',
   },
@@ -27,24 +36,29 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    display: 'flex',
-    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
     zIndex: '1',
     opacity: '0',
     transition: 'opacity 0.25s',
-    transform: 'translateY(25px)',
+    transform: 'translateY(80px)',
+  },
+  Facebook_link: {
+    margin: '7.5px',
+  },
+  Github_link: {
+    margin: '7.5px',
+  },
+  Linkedin_link: {
+    margin: '7.5px',
   },
   name: {
     fontWeight: 'bold',
-    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
   description: {
     color: 'gray',
-    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -70,17 +84,13 @@ export default function Profile({
               <img src="../../../images/Linkedin.png" alt="LinkedinIcon" />
             </a>
           </div>
-          <img src={img_url} alt="pic" className={classes.image} />
+          <div className={classes.image} style={{ backgroundImage: `url(${img_url})` }} />
         </div>
-        <div className={classes}>
-          <Typography variant="h6" className={classes.name}>
-            {name}
-          </Typography>
+        <div className={classes.name}>
+          <Typography variant="h6">{name}</Typography>
         </div>
-        <div className={classes}>
-          <Typography variant="body2" className={classes.description}>
-            {description}
-          </Typography>
+        <div className={classes.description}>
+          <Typography variant="body2">{description}</Typography>
         </div>
       </div>
     </>
