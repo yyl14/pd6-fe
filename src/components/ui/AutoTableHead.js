@@ -42,7 +42,7 @@ const AutoTableHead = ({
     <div className={hasFilter ? classes.topContent1 : classes.topContent2}>
       {hasFilter && (
         <div className={classes.filterWrapper}>
-          <div>
+          <div className={classes.searchFields}>
             <FormControl variant="outlined">
               <Select
                 autoWidth

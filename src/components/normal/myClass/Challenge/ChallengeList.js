@@ -25,6 +25,15 @@ import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
+  textField: {
+    width: 'auto',
+    flexGrow: 1,
+    flexShrink: 1,
+  },
+  dateRangePicker: {
+    marginTop: '16px',
+    marginBottom: '16px',
+  },
   row: {
     display: 'flex',
     flexDirection: 'row',
@@ -34,12 +43,8 @@ const useStyles = makeStyles((theme) => ({
   item: {
     width: '190px',
   },
-  textfield: {
+  selectList: {
     width: '350px',
-  },
-  gap: {
-    marginBottom: theme.spacing(2),
-    marginTop: theme.spacing(3),
   },
 }));
 
@@ -51,8 +56,8 @@ export default function ChallengeList() {
 
   const [dateRangePicker, setDateRangePicker] = useState([
     {
-      startDate: moment().startOf('week').toDate(),
-      endDate: moment().endOf('week').toDate(),
+      startDate: moment().toDate(),
+      endDate: moment().add(7, 'days').toDate(),
       key: 'selection',
     },
   ]);
@@ -63,11 +68,11 @@ export default function ChallengeList() {
     scoredBy: 'Last Score',
     showTime: 'On End Time',
   });
-  const [error, setError] = useState(false);
-  const [errorText, setErrorText] = useState('');
+  const [disabled, setDisabled] = useState(true);
   const [isManager, setIsManager] = useState(false);
 
   const authToken = useSelector((state) => state.auth.token);
+  const error = useSelector((state) => state.error.myClass.challenge);
   const loading = useSelector((state) => state.loading.myClass.challenge);
   const commonLoading = useSelector((state) => state.loading.common.common);
   const challenges = useSelector((state) => state.challenges);
@@ -89,7 +94,7 @@ export default function ChallengeList() {
   useEffect(() => {
     if (userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
       setIsManager(true);
-    }
+    } else setIsManager(false);
   }, [classId, userClasses]);
 
   if (courses[courseId] === undefined || classes[classId] === undefined) {
@@ -103,18 +108,12 @@ export default function ChallengeList() {
     const { name, value } = e.target;
     setInputs((input) => ({ ...input, [name]: value }));
 
-    if (name === 'title' && value !== '') {
-      setError(false);
-      setErrorText('');
-    }
+    if (name === 'title' && value === '') {
+      setDisabled(true);
+    } else setDisabled(false);
   };
 
   const handleAdd = () => {
-    if (inputs.title === '') {
-      setError(true);
-      setErrorText("Can't be empty");
-      return;
-    }
     const body = {
       title: inputs.title,
       scoredBy: inputs.scoredBy === 'Last Score' ? 'LAST' : 'BEST',
@@ -123,6 +122,7 @@ export default function ChallengeList() {
       endTime: dateRangePicker[0].endDate.toISOString(),
     };
     dispatch(addChallenge(authToken, classId, body));
+    setDisabled(true);
     setPopUp(false);
     setInputs({
       title: '',
@@ -131,8 +131,8 @@ export default function ChallengeList() {
     });
     setDateRangePicker([
       {
-        startDate: moment().startOf('week').toDate(),
-        endDate: moment().endOf('week').toDate(),
+        startDate: moment().toDate(),
+        endDate: moment().add(7, 'days').toDate(),
         key: 'selection',
       },
     ]);
@@ -140,6 +140,7 @@ export default function ChallengeList() {
 
   const handleCancel = () => {
     setPopUp(false);
+    setDisabled(true);
     setInputs({
       title: '',
       scoredBy: 'Last Score',
@@ -147,8 +148,8 @@ export default function ChallengeList() {
     });
     setDateRangePicker([
       {
-        startDate: moment().startOf('week').toDate(),
-        endDate: moment().endOf('week').toDate(),
+        startDate: moment().toDate(),
+        endDate: moment().add(7, 'days').toDate(),
         key: 'selection',
       },
     ]);
@@ -191,7 +192,7 @@ export default function ChallengeList() {
         refetch={(browseParams, ident) => {
           dispatch(fetchChallenges(authToken, classId, browseParams, ident));
         }}
-        refetchErrors={[error]}
+        refetchErrors={[error.fetchChallenges]}
         refreshLoadings={[loading.addChallenge]}
         columns={[
           {
@@ -225,6 +226,7 @@ export default function ChallengeList() {
         ]}
         reduxData={challenges}
         reduxDataToRows={(item) => ({
+          id: item.id,
           Title: item.title,
           'Start Time': moment(item.start_time).format('YYYY-MM-DD, HH:mm'),
           'End Time': moment(item.end_time).format('YYYY-MM-DD, HH:mm'),
@@ -239,29 +241,28 @@ export default function ChallengeList() {
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Class" childrenType="text" maxWidth="md">
-            <Typography>
-              {courses[courseId].name}
-              {' '}
-              {classes[classId].name}
-            </Typography>
+            <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
           </AlignedText>
           <AlignedText text="Title" childrenType="field" maxWidth="md">
             <TextField
+              className={className.textField}
               value={inputs.title}
               name="title"
               onChange={(e) => handleChange(e)}
-              error={error}
-              helperText={errorText}
             />
           </AlignedText>
-          <div className={className.gap}>
-            <DateRangePicker vertical value={dateRangePicker} setValue={setDateRangePicker} />
-          </div>
+          <Typography variant="body1">Duration</Typography>
+          <DateRangePicker
+            vertical
+            value={dateRangePicker}
+            setValue={setDateRangePicker}
+            className={className.dateRangePicker}
+          />
           <div className={className.row}>
             <div className={className.item}>
               <Typography>Scored by</Typography>
             </div>
-            <FormControl variant="outlined" className={className.textfield}>
+            <FormControl variant="outlined" className={className.selectList}>
               <Select value={inputs.scoredBy} name="scoredBy" onChange={(e) => handleChange(e)}>
                 <MenuItem value="Last Score">Last Score</MenuItem>
                 <MenuItem value="Best Score">Best Score</MenuItem>
@@ -272,7 +273,7 @@ export default function ChallengeList() {
             <div className={className.item}>
               <Typography>Shown in problem set</Typography>
             </div>
-            <FormControl variant="outlined" className={className.textfield}>
+            <FormControl variant="outlined" className={className.selectList}>
               <Select value={inputs.showTime} name="showTime" onChange={(e) => handleChange(e)}>
                 <MenuItem value="On End Time">On End Time</MenuItem>
                 <MenuItem value="On Start Time">On Start Time</MenuItem>
@@ -284,7 +285,7 @@ export default function ChallengeList() {
           <Button onClick={handleCancel} color="default">
             Cancel
           </Button>
-          <Button onClick={handleAdd} color="primary">
+          <Button onClick={handleAdd} color="primary" disabled={disabled}>
             Create
           </Button>
         </DialogActions>

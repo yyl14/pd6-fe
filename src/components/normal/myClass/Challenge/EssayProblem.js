@@ -19,7 +19,6 @@ import PageTitle from '../../../ui/PageTitle';
 import EssayInfo from './ProblemSettings/EssayInfo';
 import EssayEdit from './ProblemSettings/EssayEdit';
 import { readEssay } from '../../../../actions/myClass/essay';
-import { fetchChallenges } from '../../../../actions/myClass/challenge';
 import { downloadAllEssaySubmission } from '../../../../actions/myClass/essaySubmission';
 
 import NoMatch from '../../../noMatch';
@@ -61,13 +60,13 @@ export default function EssayProblem() {
     setEdit(false);
   };
 
-  const [popUp, setPopUpUp] = useState(false);
+  const [popup, setPopup] = useState(false);
 
   const handleClickDownload = () => {
-    setPopUpUp(true);
+    setPopup(true);
   };
   const handleClosePopUp = () => {
-    setPopUpUp(false);
+    setPopup(false);
   };
 
   const handleDownload = () => {
@@ -76,20 +75,14 @@ export default function EssayProblem() {
   };
 
   useEffect(() => {
-    dispatch(fetchChallenges(authToken, classId));
-  }, [authToken, classId, dispatch]);
+    if (userClasses.filter((item) => item.class_id === Number(classId)).length !== 0) {
+      setRole(userClasses.filter((item) => item.class_id === Number(classId))[0].role);
+    }
+  }, [classId, userClasses]);
 
   useEffect(() => {
-    userClasses.forEach((value) => {
-      if (value.class_id === parseInt(classId, 10)) {
-        if (value.role === 'MANAGER') {
-          setRole('MANAGER');
-        }
-      }
-    });
-  }, [classId, userClasses]);
-  useEffect(() => {
     dispatch(readEssay(authToken, essayId));
+    // dispatch(browseEssaySubmission(authToken, essayId));
   }, [authToken, dispatch, essayId]);
 
   if (essays[essayId] === undefined) {
@@ -111,9 +104,9 @@ export default function EssayProblem() {
           </StyledButton>
         </div>
       )}
-      {edit ? <EssayEdit closeEdit={handleCloseEdit} role={role} /> : <EssayInfo role={role} />}
+      {edit ? <EssayEdit closeEdit={handleCloseEdit} /> : <EssayInfo role={role} />}
       {/* Upload dialog */}
-      <Dialog open={popUp} keepMounted onClose={handleClosePopUp} maxWidth="md">
+      <Dialog open={popup} keepMounted onClose={handleClosePopUp} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Download All Files</Typography>
         </DialogTitle>

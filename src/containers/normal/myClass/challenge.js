@@ -19,15 +19,39 @@ export default function Challenge() {
   const authToken = useSelector((state) => state.auth.token);
   const { challengeId } = useParams();
   const challenges = useSelector((state) => state.challenges.byId);
-  const loading = useSelector((state) => state.loading.myClass.challenge);
+  const loading = useSelector((state) => state.loading.myClass);
 
   useEffect(() => {
-    dispatch(fetchChallenge(authToken, challengeId));
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
-  }, [authToken, challengeId, dispatch]);
+    if (
+      !loading.challenge.addChallenge
+      && !loading.challenge.editChallenge
+      && !loading.challenge.deleteChallenge
+      && !loading.challenge.addProblem
+      && !loading.challenge.addEssay
+      && !loading.challenge.addPeerReview
+      && !loading.problem.deleteProblem
+      && !loading.problem.deleteEssay
+      // && !loading.problem.deletePeerReview
+    ) {
+      dispatch(fetchChallenge(authToken, challengeId));
+      dispatch(browseTasksUnderChallenge(authToken, challengeId));
+    }
+  }, [
+    authToken,
+    challengeId,
+    dispatch,
+    loading.challenge.addChallenge,
+    loading.challenge.addEssay,
+    loading.challenge.addPeerReview,
+    loading.challenge.addProblem,
+    loading.challenge.deleteChallenge,
+    loading.challenge.editChallenge,
+    loading.problem.deleteEssay,
+    loading.problem.deleteProblem,
+  ]);
 
   if (challenges[challengeId] === undefined) {
-    if (loading.readChallenge) {
+    if (loading.challenge.readChallenge) {
       return <GeneralLoading />;
     }
     return <NoMatch />;

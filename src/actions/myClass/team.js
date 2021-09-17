@@ -77,22 +77,21 @@ export const addTeam = (token, classId, teamName, newLabel) => (dispatch) => {
     });
 };
 
-export const importTeam = (token, classId, file) => async (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-      'Content-Type': 'multipart/form-data',
-    },
-  };
-  const formData = new FormData();
-  formData.append('team_file', file);
-
+export const importTeam = (token, classId, label, file) => async (dispatch) => {
   try {
+    const config = {
+      headers: {
+        'auth-token': token,
+        'Content-Type': 'multipart/form-data',
+      },
+      params: { label },
+    };
+    const formData = new FormData();
+    formData.append('team_file', file);
+
     dispatch({ type: teamConstants.IMPORT_TEAM_START });
     await agent.post(`/class/${classId}/team-import`, formData, config);
-    dispatch({
-      type: teamConstants.IMPORT_TEAM_SUCCESS,
-    });
+    dispatch({ type: teamConstants.IMPORT_TEAM_SUCCESS });
   } catch (error) {
     dispatch({
       type: teamConstants.IMPORT_TEAM_FAIL,
@@ -166,16 +165,14 @@ export const editTeam = (token, teamId, teamName, classId, newLabel) => (dispatc
     });
 };
 
-// WITH BROWSE PARAMS
-export const fetchTeamMembers = (token, teamId, browseParams, tableId = null) => async (dispatch) => {
+export const fetchTeamMembers = (token, teamId) => async (dispatch) => {
   try {
     const config1 = {
       headers: { 'auth-token': token },
-      params: browseParamsTransForm(browseParams),
     };
     dispatch({ type: teamConstants.FETCH_TEAM_MEMBERS_START });
     const res1 = await agent.get(`/team/${teamId}/member`, config1);
-    const { data, total_count } = res1.data.data;
+    const { data } = res1.data;
 
     // Batch browse account
     const accountIds = data.map((item) => item.member_id);
@@ -189,15 +186,6 @@ export const fetchTeamMembers = (token, teamId, browseParams, tableId = null) =>
       type: teamConstants.FETCH_TEAM_MEMBERS_SUCCESS,
       payload: { teamId, data, accounts: res2.data.data },
     });
-    dispatch({
-      type: autoTableConstants.AUTO_TABLE_UPDATE,
-      payload: {
-        tableId,
-        totalCount: total_count,
-        dataIds: accountIds,
-        offset: browseParams.offset,
-      },
-    });
   } catch (error) {
     dispatch({
       type: teamConstants.FETCH_TEAM_MEMBERS_FAIL,
@@ -206,7 +194,7 @@ export const fetchTeamMembers = (token, teamId, browseParams, tableId = null) =>
   }
 };
 
-export const addTeamMember = (token, teamId, student, role) => async (dispatch) => {
+export const addTeamMember = (token, teamId, student, role, onSuccess, onError) => async (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
@@ -218,11 +206,13 @@ export const addTeamMember = (token, teamId, student, role) => async (dispatch) 
     dispatch({ type: teamConstants.ADD_TEAM_MEMBER_START });
     await agent.post(`/team/${teamId}/member`, body, config);
     dispatch({ type: teamConstants.ADD_TEAM_MEMBER_SUCCESS });
+    onSuccess();
   } catch (error) {
     dispatch({
       type: teamConstants.ADD_TEAM_MEMBER_FAIL,
       error,
     });
+    onError();
   }
 };
 
@@ -250,20 +240,32 @@ export const editTeamMember = (token, teamId, memberId, role) => (dispatch) => {
     });
 };
 
-export const deleteTeamMember = (token, teamId, memberId) => (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
+export const deleteTeamMember = (token, teamId, memberId) => async (dispatch) => {
   try {
+    const config = { headers: { 'auth-token': token } };
     dispatch({ type: teamConstants.DELETE_TEAM_MEMBER_START });
-    agent.delete(`/team/${teamId}/member/${memberId}`, config);
+    await agent.delete(`/team/${teamId}/member/${memberId}`, config);
     dispatch({ type: teamConstants.DELETE_TEAM_MEMBER_SUCCESS });
   } catch (error) {
     dispatch({
       type: teamConstants.DELETE_TEAM_MEMBER_FAIL,
       error,
     });
+  }
+};
+
+export const deleteTeam = (token, teamId, onSuccess, onError) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    dispatch({ type: teamConstants.DELETE_TEAM_START });
+    await agent.delete(`/team/${teamId}`, config);
+    dispatch({ type: teamConstants.DELETE_TEAM_SUCCESS });
+    onSuccess();
+  } catch (error) {
+    dispatch({
+      type: teamConstants.DELETE_TEAM_FAIL,
+      error,
+    });
+    onError(error);
   }
 };

@@ -18,10 +18,12 @@ const initialState = {
   uploadTestcaseOutput: false,
   addTestcase: false,
   browseJudgeCases: false,
-  readTestcase: false,
   readProblemScore: false,
   downloadSamples: false,
   downloadTestcases: false,
+  rejudgeSubmission: false,
+  browseTestcases: false,
+  rejudgeProblem: false,
 };
 
 export default function problem(state = initialState, action) {
@@ -221,6 +223,11 @@ export default function problem(state = initialState, action) {
         ...state,
         submitCode: false,
       };
+    case problemConstants.EDIT_TESTCASE_START:
+      return {
+        ...state,
+        editTestcase: true,
+      };
     case problemConstants.EDIT_TESTCASE_SUCCESS:
       return {
         ...state,
@@ -230,11 +237,6 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         editTestcase: false,
-      };
-    case problemConstants.EDIT_TESTCASE_START:
-      return {
-        ...state,
-        editTestcase: true,
       };
     case problemConstants.UPLOAD_TESTCASE_INPUT_START:
       return {
@@ -281,21 +283,7 @@ export default function problem(state = initialState, action) {
         ...state,
         addTestcase: false,
       };
-    case problemConstants.READ_TESTCASE_START:
-      return {
-        ...state,
-        readTestcase: true,
-      };
-    case problemConstants.READ_TESTCASE_SUCCESS:
-      return {
-        ...state,
-        readTestcase: false,
-      };
-    case problemConstants.READ_TESTCASE_FAIL:
-      return {
-        ...state,
-        readTestcase: false,
-      };
+
     case problemConstants.READ_PROBLEM_SCORE_START:
       return {
         ...state,
@@ -340,6 +328,51 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         downloadTestcases: false,
+      };
+    case problemConstants.REJUDGE_SUBMISSION_START:
+      return {
+        ...state,
+        rejudgeSubmission: true,
+      };
+    case problemConstants.REJUDGE_SUBMISSION_SUCCESS:
+      return {
+        ...state,
+        rejudgeSubmission: false,
+      };
+    case problemConstants.REJUDGE_SUBMISSION_FAIL:
+      return {
+        ...state,
+        rejudgeSubmission: false,
+      };
+    case problemConstants.BROWSE_TESTCASES_START:
+      return {
+        ...state,
+        browseTestcases: true,
+      };
+    case problemConstants.BROWSE_TESTCASES_SUCCESS:
+      return {
+        ...state,
+        browseTestcases: false,
+      };
+    case problemConstants.BROWSE_TESTCASES_FAIL:
+      return {
+        ...state,
+        browseTestcases: false,
+      };
+    case problemConstants.REJUDGE_PROBLEM_START:
+      return {
+        ...state,
+        rejudgeProblem: true,
+      };
+    case problemConstants.REJUDGE_PROBLEM_SUCCESS:
+      return {
+        ...state,
+        rejudgeProblem: false,
+      };
+    case problemConstants.REJUDGE_PROBLEM_FAIL:
+      return {
+        ...state,
+        rejudgeProblem: false,
       };
     default: {
       return state;

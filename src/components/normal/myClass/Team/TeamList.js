@@ -10,6 +10,7 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Snackbar,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
@@ -27,11 +28,14 @@ import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   reminder: {
-    color: theme.palette.grey.A400,
+    color: theme.palette.grey.A700,
     marginLeft: theme.spacing(2),
   },
-  templateBtn: {
-    marginRight: '115px',
+  importDialogButtons: {
+    paddingLeft: '19px',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 }));
 
@@ -63,6 +67,8 @@ export default function TeamList() {
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [disabled, setDisabled] = useState(true);
+  const [hasRequest, setHasRequest] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   const [selectedFile, setSelectedFile] = useState([]);
   const [importInput, setImportInput] = useState('');
@@ -80,21 +86,20 @@ export default function TeamList() {
   useEffect(() => {
     if (addInputs.label !== '' && addInputs.teamName !== '') {
       setDisabled(false);
+    } else {
+      setDisabled(true);
     }
-  }, [addInputs.label, addInputs.teamName, selectedFile.length]);
+  }, [addInputs.label, addInputs.teamName]);
 
   useEffect(() => {
     if (importInput !== '' && selectedFile !== []) {
       setDisabled(false);
+    } else {
+      setDisabled(true);
     }
   }, [importInput, selectedFile]);
 
   const handleImportChange = (event) => {
-    // if (event.target.value === '') {
-    //   setDisabled(true);
-    //   setImportInput(event.target.value);
-    //   return;
-    // }
     setImportInput(event.target.value);
   };
 
@@ -117,29 +122,60 @@ export default function TeamList() {
 
   const submitImport = () => {
     if (importInput !== '' && selectedFile !== []) {
-      selectedFile.map((file) => dispatch(importTeam(authToken, classId, file)));
+      selectedFile.map((file) => dispatch(importTeam(authToken, classId, importInput, file)));
     }
-    setShowImportDialog(false);
-    clearImportInput();
-    setDisabled(true);
+    setHasRequest(true);
   };
 
   const submitAdd = () => {
     if (addInputs.label !== '' && addInputs.teamName !== '') {
       dispatch(addTeam(authToken, classId, addInputs.teamName, addInputs.label));
     }
-    setShowAddDialog(false);
-    clearAddInput();
-    setDisabled(true);
+    setHasRequest(true);
   };
+
+  useEffect(() => {
+    if (hasRequest && showAddDialog && !loading.myClass.team.addTeam) {
+      if (error.myClass.team.addTeam === null) {
+        clearAddInput();
+        setShowAddDialog(false);
+        setHasRequest(false);
+        setDisabled(true);
+      } else {
+        setHasError(true);
+      }
+    } else if (hasRequest && showImportDialog && !loading.myClass.team.importTeam) {
+      if (error.myClass.team.importTeam === null) {
+        clearImportInput();
+        setShowImportDialog(false);
+        setHasRequest(false);
+        setDisabled(true);
+      } else {
+        setHasError(true);
+      }
+    }
+  }, [
+    error.myClass.team.addTeam,
+    error.myClass.team.importTeam,
+    hasRequest,
+    loading.myClass.team.addTeam,
+    loading.myClass.team.importTeam,
+    showAddDialog,
+    showImportDialog,
+  ]);
 
   const downloadTemplate = () => {
     setShowImportDialog(false);
     dispatch(downloadTeamFile(authToken));
   };
 
+  const handleCloseError = () => {
+    setHasError(false);
+    setHasRequest(false);
+  };
+
   if (courses[courseId] === undefined || classes[classId] === undefined) {
-    if (loading.fetchCourse || loading.fetchClass) {
+    if (loading.common.common.fetchCourse || loading.common.common.fetchClass || loading.myClass.team.fetchTeams) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -153,16 +189,11 @@ export default function TeamList() {
         buttons={
           isManager && (
             <>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => setShowImportDialog(true)}
-                startIcon={<Icon.Folder />}
-              >
-                Import
-              </Button>
-              <Button color="primary" onClick={() => setShowAddDialog(true)}>
+              <Button variant="outlined" color="primary" onClick={() => setShowAddDialog(true)}>
                 <MdAdd />
+              </Button>
+              <Button color="primary" onClick={() => setShowImportDialog(true)} startIcon={<Icon.Folder />}>
+                Import
               </Button>
             </>
           )
@@ -211,7 +242,7 @@ export default function TeamList() {
         })}
         hasLink
       />
-      <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} fullWidth maxWidth="sm">
+      <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} maxWidth="md">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Import Team</Typography>
         </DialogTitle>
@@ -226,25 +257,30 @@ export default function TeamList() {
           <Typography variant="body2" className={classNames.reminder}>
             Member N (N=2~10): Same as Team Manager
           </Typography>
-          <Typography variant="body2"> Download template file for more instructions.</Typography>
+          <Typography variant="body2">
+            Notice that PDOGS only accept files encoded in
+            {' '}
+            <b>ASCII / UTF-8</b>
+            {' '}
+            charset.
+          </Typography>
         </DialogContent>
         <DialogContent>
-          <AlignedText text="Class" maxWidth="mg" childrenType="text">
+          <AlignedText text="Class" maxWidth="md" childrenType="text">
             <Typography variant="body1">{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
           </AlignedText>
-          <AlignedText text="Label" maxWidth="mg" childrenType="field">
+          <AlignedText text="Label" maxWidth="md" childrenType="field">
             <TextField id="title" name="title" value={importInput} onChange={(e) => handleImportChange(e)} />
           </AlignedText>
           <FileUploadArea
-            text="Grading File"
+            text="File"
             fileAcceptFormat=".csv"
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions className={classNames.importDialogButtons}>
           <StyledButton
-            className={classNames.templateBtn}
             variant="outlined"
             startIcon={<Icon.Download />}
             onClick={() => {
@@ -253,51 +289,60 @@ export default function TeamList() {
           >
             Template
           </StyledButton>
-          <Button
-            onClick={() => {
-              setShowImportDialog(false);
-              clearImportInput();
-              setDisabled(true);
-            }}
-            color="default"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={() => {
-              submitImport();
-              setDisabled(true);
-            }}
-            color="primary"
-            disabled={disabled}
-          >
-            Confirm
-          </Button>
+          <div>
+            <Button
+              onClick={() => {
+                setShowImportDialog(false);
+                setHasRequest(false);
+                clearImportInput();
+                setDisabled(true);
+              }}
+              color="default"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                submitImport();
+                setDisabled(true);
+              }}
+              color="primary"
+              disabled={disabled}
+            >
+              Confirm
+            </Button>
+          </div>
         </DialogActions>
       </Dialog>
-      <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} fullWidth maxWidth="sm">
+      <Snackbar
+        open={showAddDialog && hasError}
+        onClose={handleCloseError}
+        message={`Error: ${error.myClass.team.addTeam}`}
+      />
+
+      <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} maxWidth="md">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Create New Team</Typography>
         </DialogTitle>
         <DialogContent>
-          <AlignedText text="Class" maxWidth="lg" childrenType="text">
+          <AlignedText text="Class" maxWidth="md" childrenType="text">
             <Typography variant="body1">{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
           </AlignedText>
-          <AlignedText text="Label" maxWidth="lg" childrenType="field">
+          <AlignedText text="Label" maxWidth="md" childrenType="field">
             <TextField name="label" value={addInputs.label} onChange={(e) => handleAddChange(e)} />
           </AlignedText>
-          <AlignedText text="Team Name" maxWidth="lg" childrenType="field">
+          <AlignedText text="Team Name" maxWidth="md" childrenType="field">
             <TextField name="teamName" value={addInputs.teamName} onChange={(e) => handleAddChange(e)} />
           </AlignedText>
         </DialogContent>
         <DialogContent>
           <Typography variant="body2">Visit team page to add team member after creating.</Typography>
         </DialogContent>
-
         <DialogActions>
           <Button
             onClick={() => {
               setShowAddDialog(false);
+              setHasRequest(false);
               clearAddInput();
               setDisabled(true);
             }}
@@ -317,6 +362,11 @@ export default function TeamList() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={showImportDialog && hasError}
+        onClose={handleCloseError}
+        message={`Error: ${error.myClass.team.importTeam}`}
+      />
     </>
   );
 }

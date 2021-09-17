@@ -1,22 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import 'katex/dist/katex.min.css';
-import Latex from 'react-latex-next';
+// https://mathpix.com/docs/mathpix-markdown/overview
+import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 import { Typography, makeStyles, Grid } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
 import SimpleTable from '../../../../ui/SimpleTable';
 import SampleTestArea from '../../../../ui/SampleTestArea';
+
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
 
 import { browseTestcase, browseAssistingData } from '../../../../../actions/myClass/problem';
-import { browseTasksUnderChallenge } from '../../../../../actions/myClass/challenge';
-import { downloadFile } from '../../../../../actions/common/common';
 
 const useStyles = makeStyles(() => ({
   sampleArea: {
     marginTop: '50px',
+  },
+  sampleName: {
+    marginBottom: '16px',
+  },
+  buttons: {
+    display: 'flex',
+    justifyContent: 'flex-end',
   },
   table: {
     width: '100%',
@@ -24,13 +30,14 @@ const useStyles = makeStyles(() => ({
   content: {
     whiteSpace: 'pre-line',
   },
+  statusSwitch: {
+    marginTop: '20px',
+  },
 }));
 
 /* This is a level 4 component (page component) */
-export default function CodingProblemInfo({ role = 'NORMAL' }) {
-  const {
-    courseId, classId, challengeId, problemId,
-  } = useParams();
+export default function CodingProblemInfo() {
+  const { courseId, classId, problemId } = useParams();
   const classNames = useStyles();
 
   const dispatch = useDispatch();
@@ -39,153 +46,64 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const courses = useSelector((state) => state.courses.byId);
   const problems = useSelector((state) => state.problem.byId);
   const testcases = useSelector((state) => state.testcases.byId);
-  const [sampleDataIds, setSampleDataIds] = useState([]);
-  const [testcaseDataIds, setTestcaseDataIds] = useState([]);
-
-  const assistingData = useSelector((state) => state.assistingData.byId);
+  const [status, setStatus] = useState(false);
 
   const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
-  const downloadAllAssistingFile = () => {
-    const files = problems[problemId].assistingDataIds.map((id) => ({
-      uuid: assistingData[id].s3_file_uuid,
-      filename: assistingData[id].filename,
-      as_attachment: false,
-    }));
-    files.map((file) => dispatch(downloadFile(authToken, file)));
-  };
+  const [sampleDataIds, setSampleDataIds] = useState([]);
+  const [testcaseDataIds, setTestcaseDataIds] = useState([]);
+  // console.log('uploadError: ', uploadError);
 
-  const downloadAllSampleFile = () => {
-    const files = sampleDataIds.reduce((acc, id) => {
-      if (testcases[id].input_file_uuid !== null && testcases[id].output_file_uuid !== null) {
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].input_file_uuid,
-            filename: testcases[id].input_filename,
-            as_attachment: false,
-          },
-          {
-            uuid: testcases[id].output_file_uuid,
-            filename: testcases[id].output_filename,
-            as_attachment: false,
-          },
-        ];
+  // parse filename to get sample number
+  const sampleTransToNumber = useCallback(
+    (id) => {
+      if (testcases[id].input_filename !== null) {
+        return Number(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')));
       }
-      if (testcases[id].input_file_uuid !== null) {
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].input_file_uuid,
-            filename: testcases[id].input_filename,
-            as_attachment: false,
-          },
-        ];
+      if (testcases[id].output_filename !== null) {
+        return Number(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')));
       }
-      if (testcases[id].output_file_uuid !== null) {
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].output_file_uuid,
-            filename: testcases[id].output_filename,
-            as_attachment: false,
-          },
-        ];
-      }
+      return 0;
+    },
+    [testcases],
+  );
 
-      return acc;
-    }, []);
-    // console.log(files);
-    files.map((file) => dispatch(downloadFile(authToken, file)));
-  };
-
-  const downloadAllTestingFile = () => {
-    const files = testcaseDataIds.reduce((acc, id) => {
-      if (testcases[id].input_file_uuid !== null && testcases[id].output_file_uuid !== null) {
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].input_file_uuid,
-            filename: testcases[id].input_filename,
-            as_attachment: false,
-          },
-          {
-            uuid: testcases[id].output_file_uuid,
-            filename: testcases[id].output_filename,
-            as_attachment: false,
-          },
-        ];
+  // parse filename to get testcase number
+  const testcaseTransToNumber = useCallback(
+    (id) => {
+      if (testcases[id].input_filename !== null) {
+        return Number(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')));
       }
-      if (testcases[id].input_file_uuid !== null) {
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].input_file_uuid,
-            filename: testcases[id].input_filename,
-            as_attachment: false,
-          },
-        ];
+      if (testcases[id].output_filename !== null) {
+        return Number(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')));
       }
-      if (testcases[id].output_file_uuid !== null) {
-        return [
-          ...acc,
-          {
-            uuid: testcases[id].output_file_uuid,
-            filename: testcases[id].output_filename,
-            as_attachment: false,
-          },
-        ];
-      }
-
-      return acc;
-    }, []);
-    files.map((file) => dispatch(downloadFile(authToken, file)));
-  };
-
-  const sampleTrans2no = (id) => {
-    if (testcases[id].input_filename !== null) {
-      return parseInt(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')), 10);
-    }
-    if (testcases[id].output_filename !== null) {
-      return parseInt(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')), 10);
-    }
-    return 0;
-  };
-
-  const testcaseTrans2no = (id) => {
-    if (testcases[id].input_filename !== null) {
-      return parseInt(testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.')), 10);
-    }
-    if (testcases[id].output_filename !== null) {
-      return parseInt(testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.')), 10);
-    }
-    return 0;
-  };
+      return 0;
+    },
+    [testcases],
+  );
 
   useEffect(() => {
     if (problems[problemId] && problems[problemId].testcaseIds) {
-      setSampleDataIds(problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample));
-      setTestcaseDataIds(problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample));
+      const testcasesId = problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
+      const samplesId = problems[problemId].testcaseIds.filter((id) => testcases[id].is_sample);
+      testcasesId.sort((a, b) => testcaseTransToNumber(a) - testcaseTransToNumber(b));
+      samplesId.sort((a, b) => sampleTransToNumber(a) - sampleTransToNumber(b));
+      setSampleDataIds(samplesId);
+      setTestcaseDataIds(testcasesId);
+      if (testcasesId.length === 0) {
+        setStatus(false);
+      } else {
+        setStatus(!testcases[testcasesId[0]].is_disabled);
+      }
     }
-  }, [problems, problemId, testcases]);
-
-  // console.log(problems);
-
-  useEffect(() => {
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
-  }, [authToken, challengeId, dispatch]);
+  }, [problems, problemId, testcases, sampleTransToNumber, testcaseTransToNumber]);
 
   useEffect(() => {
     dispatch(browseTestcase(authToken, problemId));
     dispatch(browseAssistingData(authToken, problemId));
   }, [authToken, dispatch, problemId]);
-
-  // useEffect(() => {
-  //   dispatch(fetchClass(authToken, classId));
-  //   dispatch(fetchCourse(authToken, courseId));
-  // }, [authToken, classId, courseId, dispatch]);
 
   if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
     return <GeneralLoading />;
@@ -203,14 +121,14 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         </Typography>
       </SimpleBar>
       <SimpleBar title="Description">
-        <Typography variant="body2" className={classNames.content}>
-          <Latex>{problems[problemId].description}</Latex>
-        </Typography>
+        <MathpixLoader>
+          <MathpixMarkdown text={problems[problemId].description} />
+        </MathpixLoader>
       </SimpleBar>
       <SimpleBar title="About Input and Output">
-        <Typography variant="body2" className={classNames.content}>
-          <Latex>{problems[problemId].io_description}</Latex>
-        </Typography>
+        <MathpixLoader>
+          <MathpixMarkdown text={problems[problemId].io_description} htmlTags />
+        </MathpixLoader>
       </SimpleBar>
       {problems[problemId].source !== '' && (
         <SimpleBar title="Source">
@@ -255,7 +173,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           ]}
           data={sampleDataIds.map((id) => ({
             id,
-            no: sampleTrans2no(id),
+            no: sampleTransToNumber(id),
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
           }))}
@@ -264,14 +182,16 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           <Grid container spacing={3}>
             {sampleDataIds.map((id) => (
               <Grid item xs={6} key={id}>
-                <Typography variant="body2">{`Sample ${sampleTrans2no(id)}`}</Typography>
+                <Typography variant="h6" className={classNames.sampleName}>
+                  {`Sample ${sampleTransToNumber(id)}`}
+                </Typography>
                 <SampleTestArea input={testcases[id].input} output={testcases[id].output} />
               </Grid>
             ))}
           </Grid>
         </div>
       </SimpleBar>
-      <SimpleBar title="Testing Data" noIndent>
+      <SimpleBar noIndent title="Testing Data">
         <SimpleTable
           className={classNames.table}
           isEdit={false}
@@ -312,7 +232,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           ]}
           data={testcaseDataIds.map((id) => ({
             id,
-            no: testcaseTrans2no(id),
+            no: testcaseTransToNumber(id),
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
             score: testcases[id].score,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Typography,
   Button,
@@ -14,19 +14,9 @@ export default function AssistingDataUploadCard({
 }) {
   // const error = useSelector((state) => state.error);
   // const loading = useSelector((state) => state.loading.myClass.problem);
-  const [disabled, setDisabled] = useState(true);
-
-  useEffect(() => {
-    if (selectedFile.length !== 0 && disabled) {
-      setDisabled(false);
-    } else if (selectedFile.length === 0 && !disabled) {
-      setDisabled(true);
-    }
-  }, [disabled, selectedFile.length]);
 
   const handleConfirm = () => {
     handleTempUpload();
-    closePopUp();
   };
 
   const handleCancel = () => {
@@ -55,9 +45,9 @@ export default function AssistingDataUploadCard({
           <Button
             onClick={() => handleConfirm()}
             color="primary"
-            disabled={disabled}
+            disabled={selectedFile.length === 0}
           >
-            Upload
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>

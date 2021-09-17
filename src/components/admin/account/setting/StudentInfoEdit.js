@@ -12,6 +12,7 @@ import {
   Select,
   MenuItem,
   Snackbar,
+  CircularProgress,
 } from '@material-ui/core';
 import { addStudentCard } from '../../../../actions/admin/account';
 import StudentInfoCard from './StudentInfoCard';
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
   },
-  textfield: {
+  selectList: {
     width: '350px',
   },
   mailfield: {
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: theme.spacing(3),
+    marginBottom: theme.spacing(2),
   },
   item: {
     width: '190px',
@@ -63,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
   },
   buttons: {
     alignSelf: 'flex-end',
+    marginTop: '7px',
     marginRight: '23px',
   },
 }));
@@ -71,9 +73,7 @@ export default function StudentInfoEdit(props) {
   const classes = useStyles();
   const [cards, setCards] = useState(props.cards);
   const [pendingCards, setPendingCards] = useState(props.pendingCards);
-  const [disabledTwoCards, setDisabledTwoCards] = useState(false);
   const [add, setAdd] = useState(false); // addCard block
-  // const [popUp, setPopUp] = useState(false);
   const [snackbar, setSnackbar] = useState(false);
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
   const [addInputs, setAddInputs] = useState({
@@ -93,6 +93,7 @@ export default function StudentInfoEdit(props) {
   const institutes = useSelector((state) => state.institutes.byId);
   const institutesId = useSelector((state) => state.institutes.allIds);
   const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
+  const loading = useSelector((state) => state.loading);
 
   const { accountId } = useParams();
   const authToken = useSelector((state) => state.auth.token);
@@ -114,7 +115,6 @@ export default function StudentInfoEdit(props) {
     setAdd(false);
     setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
     setEmailTail('@ntu.edu.tw');
-    setDisabledTwoCards(false);
     setErrors({ studentId: false, email: false });
     setErrorTexts({ studentId: '', email: '' });
   };
@@ -137,7 +137,6 @@ export default function StudentInfoEdit(props) {
       setSnackbar(true);
     }
     setAdd(false);
-    setDisabledTwoCards(false);
     setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
   };
 
@@ -232,7 +231,7 @@ export default function StudentInfoEdit(props) {
                   <div className={classes.item}>
                     <Typography>Institute</Typography>
                   </div>
-                  <FormControl variant="outlined" className={classes.textfield}>
+                  <FormControl variant="outlined" className={classes.selectList}>
                     <Select value={addInputs.institute} name="institute" onChange={(e) => handleChange(e)}>
                       {enableInstitutesId.map((item) => (
                         <MenuItem key={item} value={institutes[item].full_name}>
@@ -242,19 +241,16 @@ export default function StudentInfoEdit(props) {
                     </Select>
                   </FormControl>
                 </div>
-                <div className={classes.row}>
-                  <AlignedText text="Student ID" childrenType="field">
-                    <TextField
-                      variant="outlined"
-                      name="studentId"
-                      className={classes.textfield}
-                      value={addInputs.studentId}
-                      onChange={(e) => handleChange(e)}
-                      error={errors.studentId}
-                      helperText={errorTexts.studentId}
-                    />
-                  </AlignedText>
-                </div>
+                <AlignedText text="Student ID" childrenType="field">
+                  <TextField
+                    variant="outlined"
+                    name="studentId"
+                    value={addInputs.studentId}
+                    onChange={(e) => handleChange(e)}
+                    error={errors.studentId}
+                    helperText={errorTexts.studentId}
+                  />
+                </AlignedText>
                 <div className={classes.mailrow}>
                   <div className={classes.item}>
                     <Typography>Email</Typography>
@@ -280,17 +276,23 @@ export default function StudentInfoEdit(props) {
             </Card>
           </div>
         )}
-        {!disabledTwoCards && (
+        {!add && !pendingCards.length && !loading.admin.account.addStudentCard && (
           <div className={classes.buttonContainer}>
             <div className={classes.addButton}>
               <Button
                 onClick={() => {
                   setAdd(true);
-                  setDisabledTwoCards(true);
                 }}
               >
                 +
               </Button>
+            </div>
+          </div>
+        )}
+        {loading.admin.account.addStudentCard && (
+          <div className={classes.buttonContainer}>
+            <div className={classes.addButton}>
+              <CircularProgress />
             </div>
           </div>
         )}

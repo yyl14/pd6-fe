@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { fetchClassMembers, fetchClassMemberWithAccountReferral } from '../../../../actions/common/common';
+import { fetchClassMembers } from '../../../../actions/common/common';
 import AutoTable from '../../../ui/AutoTable';
 import PageTitle from '../../../ui/PageTitle';
 import MemberEdit from './MemberEdit';
@@ -24,25 +24,11 @@ export default function MemberList() {
   const error = useSelector((state) => state.error.common.common.fetchClassMembers);
   const userClasses = useSelector((state) => state.user.classes);
 
-  useEffect(() => {
-    if (!loading.replaceClassMembers) {
-      dispatch(fetchClassMembers(authToken, classId));
-      dispatch(fetchClassMemberWithAccountReferral(authToken, classId));
-    }
-  }, [authToken, classId, dispatch, loading.replaceClassMembers]);
-
   const [edit, setEdit] = useState(false);
   const [isManager, setIsManager] = useState(false);
 
   useEffect(() => {
-    userClasses.map((item) => {
-      if (`${item.class_id}` === classId) {
-        if (item.role === 'MANAGER') {
-          setIsManager(true);
-        }
-      }
-      return <></>;
-    });
+    setIsManager(userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER');
   }, [classId, userClasses]);
 
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
@@ -66,14 +52,14 @@ export default function MemberList() {
           dispatch={dispatch}
           authToken={authToken}
           classId={classId}
-          members={classes.byId[classId].memberIds.map((id) => members.byId[id])}
+          classes={classes}
           backToMemberList={() => setEdit(false)}
           loading={loading}
         />
       ) : (
         <>
           <AutoTable
-            ident="MyClass Member Table"
+            ident={`MyClass Member Table ${classId}`}
             hasFilter
             buttons={
               isManager ? (
@@ -128,7 +114,6 @@ export default function MemberList() {
             ]}
             refetch={(browseParams, ident) => {
               dispatch(fetchClassMembers(authToken, classId, browseParams, ident));
-              dispatch(fetchClassMemberWithAccountReferral(authToken, classId));
             }}
             refetchErrors={[error]}
             columns={[

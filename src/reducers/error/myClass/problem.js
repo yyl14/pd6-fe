@@ -18,11 +18,12 @@ const initialState = {
   uploadTestcaseOutput: null,
   addTestcase: null,
   browseJudgeCases: null,
-  readTestcase: null,
   readProblemScore: null,
   downloadSamples: null,
   downloadTestcases: null,
-  uploadFailFilename: [],
+  rejudgeSubmission: null,
+  browseTestcases: null,
+  rejudgeProblem: null,
 };
 
 export default function problem(state = initialState, action) {
@@ -113,11 +114,6 @@ export default function problem(state = initialState, action) {
         ...state,
         addTestcase: action.error,
       };
-    case problemConstants.READ_TESTCASE_FAIL:
-      return {
-        ...state,
-        readTestcase: action.error,
-      };
     case problemConstants.READ_PROBLEM_SCORE_FAIL:
       return {
         ...state,
@@ -146,19 +142,38 @@ export default function problem(state = initialState, action) {
         downloadTestcases: action.error,
       };
 
-    case problemConstants.CLEAR_UPLOAD_FAIL_RECORD: {
+    case problemConstants.REJUDGE_SUBMISSION_SUCCESS:
       return {
         ...state,
-        uploadFailFilename: [],
+        rejudgeSubmission: null,
       };
-    }
-    case problemConstants.UPLOAD_DATA_FAIL: {
+    case problemConstants.REJUDGE_SUBMISSION_FAIL:
       return {
         ...state,
-        uploadFailFilename: state.uploadFailFilename.concat([action.filename]),
+        rejudgeSubmission: action.error,
       };
-    }
 
+    case problemConstants.BROWSE_TESTCASES_SUCCESS:
+      return {
+        ...state,
+        browseTestcases: null,
+      };
+    case problemConstants.BROWSE_TESTCASES_FAIL:
+      return {
+        ...state,
+        browseTestcases: action.error,
+      };
+
+    case problemConstants.REJUDGE_PROBLEM_SUCCESS:
+      return {
+        ...state,
+        rejudgeProblem: null,
+      };
+    case problemConstants.REJUDGE_PROBLEM_FAIL:
+      return {
+        ...state,
+        rejudgeProblem: action.error,
+      };
     default: {
       return state;
     }

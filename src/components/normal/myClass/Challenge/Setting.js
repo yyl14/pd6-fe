@@ -106,7 +106,7 @@ export default function Setting() {
       )}
       <Dialog open={warningPopUp} onClose={() => setWarningPopUp(false)} fullWidth>
         <DialogTitle id="dialog-slide-title">
-          <Typography variant="h4">Delete Changes</Typography>
+          <Typography variant="h4">Delete Challenge</Typography>
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Class" maxWidth="lg" childrenType="text" textColor="secondary">

@@ -268,19 +268,11 @@ export default function InstituteSetting() {
           <Typography variant="h4">Rename institute</Typography>
         </DialogTitle>
         <DialogContent>
-          <div style={{ color: 'red' }}>
-            <AlignedText text="Full Name" childrenType="text">
-              <Typography variant="body1">{institutes[instituteId].full_name}</Typography>
-            </AlignedText>
-          </div>
+          <AlignedText text="Full Name" childrenType="text" textColor="secondary">
+            <Typography variant="body1">{institutes[instituteId].full_name}</Typography>
+          </AlignedText>
           <AlignedText text="New Name" childrenType="field">
-            <TextField
-              id="newName"
-              name="newName"
-              value={newSetting.newName}
-              onChange={handleChange('newName')}
-              className={classes.inputField}
-            />
+            <TextField id="newName" name="newName" value={newSetting.newName} onChange={handleChange('newName')} />
           </AlignedText>
           <Typography variant="body1" className={classes.warningText}>
             Once you change the institute’s name, all related members will be affected. Please be certain.
@@ -312,18 +304,15 @@ export default function InstituteSetting() {
           <Typography variant="h4">Change institute Initialism</Typography>
         </DialogTitle>
         <DialogContent>
-          <div style={{ color: 'red' }}>
-            <AlignedText text="Current Initialism" childrenType="text">
-              <Typography variant="body1">{institutes[instituteId].abbreviated_name}</Typography>
-            </AlignedText>
-          </div>
+          <AlignedText text="Current Initialism" childrenType="text" textColor="secondary">
+            <Typography variant="body1">{institutes[instituteId].abbreviated_name}</Typography>
+          </AlignedText>
           <AlignedText text="New Initialism" childrenType="field">
             <TextField
               id="newInitialism"
               name="newInitialism"
               value={newSetting.newInitialism}
               onChange={handleChange('newInitialism')}
-              className={classes.inputField}
             />
           </AlignedText>
           <Typography variant="body1" className={classes.warningText}>
@@ -350,11 +339,9 @@ export default function InstituteSetting() {
           <Typography variant="h4">Change institute email</Typography>
         </DialogTitle>
         <DialogContent>
-          <div style={{ color: 'red' }}>
-            <AlignedText text="Current Email" childrenType="text">
-              <Typography variant="body1">{institutes[instituteId].email_domain}</Typography>
-            </AlignedText>
-          </div>
+          <AlignedText text="Current Email" childrenType="text" textColor="secondary">
+            <Typography variant="body1">{institutes[instituteId].email_domain}</Typography>
+          </AlignedText>
           <AlignedText text="New Email" childrenType="field">
             <TextField
               id="newEmail"
@@ -363,7 +350,6 @@ export default function InstituteSetting() {
               onChange={handleChange('newEmail')}
               error={error}
               helperText={errorText}
-              className={classes.inputField}
             />
           </AlignedText>
           <Typography variant="body1" className={classes.warningText}>

@@ -3,14 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { Typography, makeStyles } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
+import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
 import PageTitle from '../../../ui/PageTitle';
 import { readProblemScore } from '../../../../actions/myClass/problem';
-import { browseTasksUnderChallenge } from '../../../../actions/myClass/challenge';
-import { fetchChallenge } from '../../../../actions/common/common';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
@@ -30,22 +29,11 @@ export default function ChallengeInfo() {
   const [tableData, setTableData] = useState([]);
 
   const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.myClass.problem);
-  const userClasses = useSelector((state) => state.user.classes);
+  const commonLoading = useSelector((state) => state.loading.common.common);
   const challenges = useSelector((state) => state.challenges.byId);
   const problems = useSelector((state) => state.problem.byId);
   const essays = useSelector((state) => state.essays.byId);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
-
-  useEffect(() => {
-    if (!loading.editChallenge) {
-      dispatch(fetchChallenge(authToken, challengeId));
-    }
-  }, [authToken, challengeId, dispatch, loading.editChallenge]);
-
-  useEffect(() => {
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
-  }, [authToken, challengeId, dispatch]);
 
   useEffect(() => {
     if (challenges[challengeId] !== undefined) {
@@ -71,12 +59,11 @@ export default function ChallengeInfo() {
       if (challenges[challengeId].problemIds.reduce((acc, item) => acc && problems[item] !== undefined, true)) {
         // problems are complete
         setTableData(
-          challenges[challengeId].problemIds
-            .map((id) => ({
-              challenge_label: problems[id].challenge_label,
-              score: problems[id].score,
-              id: `coding-${id}`,
-            }))
+          challenges[challengeId].problemIds.map((id) => ({
+            challenge_label: problems[id].challenge_label,
+            score: problems[id].score,
+            id: `coding-${id}`,
+          })) /*
             .concat(
               challenges[challengeId].essayIds.map((id) => ({
                 challenge_label: essays[id].challenge_label,
@@ -86,26 +73,26 @@ export default function ChallengeInfo() {
                 challenge_label: peerReviews[id].challenge_label,
                 id: `peer-${id}`,
               })),
-            ),
+            ) */,
         );
       }
     }
   }, [authToken, challengeId, challenges, essays, peerReviews, problems]);
 
   if (challenges[challengeId] === undefined) {
-    if (!loading.browseChallengeOverview) {
-      return <NoMatch />;
+    if (commonLoading.fetchChallenge) {
+      return <GeneralLoading />;
     }
-    return <GeneralLoading />;
+    return <NoMatch />;
   }
 
   return (
     <>
       <PageTitle text={`${challenges[challengeId].title} / Info`} />
       <SimpleBar title="Description">
-        <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
-          {challenges[challengeId].description}
-        </Typography>
+        <MathpixLoader>
+          <MathpixMarkdown text={challenges[challengeId].description} />
+        </MathpixLoader>
       </SimpleBar>
       <SimpleBar title="Challenge Information">
         <>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Snackbar } from '@material-ui/core';
 import { fetchStudentCards, browsePendingStudentCards } from '../../actions/user/user';
 import { getInstitutes } from '../../actions/common/common';
 import GeneralLoading from '../GeneralLoading';
@@ -16,6 +17,8 @@ export default function AccountSetting() {
   const [cards, setCards] = useState([]);
   const [pendingCards, setPendingCards] = useState([]);
   const [editBasicInfo, setEditBasicInfo] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [message, setMessage] = useState('');
 
   const dispatch = useDispatch();
   const accountId = useSelector((state) => state.user.id);
@@ -24,6 +27,15 @@ export default function AccountSetting() {
   const studentCards = useSelector((state) => state.studentCards);
   const pendingStudentCards = useSelector((state) => state.pendingStudentCards);
   const loading = useSelector((state) => state.loading.user);
+
+  useEffect(() => {
+    if (account.role === 'GUEST') {
+      setMessage('Please verify your institute email to activate your PDOGS account.');
+      setShowSnackbar(true);
+    } else {
+      setShowSnackbar(false);
+    }
+  }, [account.role]);
 
   useEffect(() => {
     if (!loading.user.makeStudentCardDefault) {
@@ -56,7 +68,9 @@ export default function AccountSetting() {
     setPendingCards(
       account.pendingStudentCards.reduce((acc, key) => {
         if (pendingStudentCards.byId[key]) {
-          return [...acc, pendingStudentCards.byId[key]];
+          if (pendingStudentCards.byId[key].institute_id !== null) {
+            return [...acc, pendingStudentCards.byId[key]];
+          }
         }
         return [...acc];
       }, []),
@@ -70,8 +84,12 @@ export default function AccountSetting() {
     return <NoMatch />;
   }
 
-  const handleBasicBack = () => {
+  const handleBasicBack = (msg) => {
     setEditBasicInfo(false);
+    if (msg !== '') {
+      setMessage(msg);
+      setShowSnackbar(true);
+    }
   };
 
   const handleBasicEdit = () => {
@@ -103,6 +121,15 @@ export default function AccountSetting() {
       </div>
 
       <NewPassword />
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowSnackbar(false);
+          setMessage('');
+        }}
+        message={message}
+      />
     </div>
   );
 }

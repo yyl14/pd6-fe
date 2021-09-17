@@ -11,8 +11,7 @@ import NoMatch from '../../../components/noMatch';
 function ProblemSet() {
   return (
     <Switch>
-      <Route exact path="/problem-set" component={PlaceHolder} />
-      <Route exact path="/problem-set/:courseId" component={PlaceHolder} />
+      <Route exact path="/problem-set" component={Problem} />
       <Route path="/problem-set/:courseId/:classId" component={Problem} />
       <Route component={NoMatch} />
     </Switch>

@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Switch, Route, useParams,
-} from 'react-router-dom';
-import ChallengeList from '../../../components/normal/allClass/Challenge/ChallengeList';
+import { Switch, Route, useParams } from 'react-router-dom';
 import ChallengeInfo from '../../../components/normal/allClass/Challenge/ChallengeInfo';
 import Problem from '../../../components/normal/allClass/Challenge/Problem';
 import CodeSubmission from '../../../components/normal/allClass/Challenge/CodeSubmission';
@@ -11,7 +8,7 @@ import SubmissionList from '../../../components/normal/allClass/Challenge/Submis
 import SubmissionDetail from '../../../components/normal/allClass/Challenge/SubmissionDetail';
 import NoMatch from '../../../components/noMatch';
 
-import { fetchCourse, fetchClass } from '../../../actions/common/common';
+import { fetchCourse, fetchClass, fetchChallenge } from '../../../actions/common/common';
 import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
 
 /* This is a level 3 container (main page container) */
@@ -26,6 +23,7 @@ function Challenge() {
 
   useEffect(() => {
     if (challengeId !== undefined) {
+      dispatch(fetchChallenge(authToken, challengeId));
       dispatch(browseTasksUnderChallenge(authToken, challengeId));
     }
   }, [authToken, challengeId, dispatch]);
@@ -33,7 +31,6 @@ function Challenge() {
   return (
     <>
       <Switch>
-        <Route exact path="/all-class/:courseId/:classId/challenge" component={ChallengeList} />
         <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId" component={ChallengeInfo} />
         <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId" component={Problem} />
         <Route
@@ -48,7 +45,7 @@ function Challenge() {
         />
         <Route
           exact
-          path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId/all-submission/:submissionId"
+          path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId"
           component={SubmissionDetail}
         />
         <Route component={NoMatch} />

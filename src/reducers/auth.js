@@ -3,7 +3,7 @@ import { authConstants } from '../actions/user/constants';
 const initialState = {
   isAuthenticated: false,
   token: '',
-  verificationDone: false,
+  tokenExpired: false,
 };
 
 export default function auth(state = initialState, action) {
@@ -12,23 +12,19 @@ export default function auth(state = initialState, action) {
       return {
         isAuthenticated: !!action.user,
         token: action.user.token,
-        verificationDone: false,
+        tokenExpired: false,
       };
     case authConstants.AUTH_LOGOUT:
       return {
         isAuthenticated: false,
         token: '',
-        verificationDone: false,
+        tokenExpired: false,
       };
-    case authConstants.EMAIL_VERIFICATION_SUCCESS:
+    case authConstants.TOKEN_EXPIRED:
       return {
-        ...state,
-        verificationDone: true,
-      };
-    case authConstants.EMAIL_VERIFICATION_FAIL:
-      return {
-        ...state,
-        verificationDone: true,
+        isAuthenticated: false,
+        token: '',
+        tokenExpired: true,
       };
     default:
       return state;

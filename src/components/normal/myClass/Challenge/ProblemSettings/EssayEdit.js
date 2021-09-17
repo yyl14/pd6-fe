@@ -1,60 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  TextField,
-  FormControlLabel,
-  Switch,
-} from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { Button, makeStyles, TextField } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
-import Icon from '../../../../ui/icon/index';
-import NoMatch from '../../../../noMatch';
 import { editEssay } from '../../../../../actions/myClass/essay';
 
 const useStyles = makeStyles(() => ({
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end',
+    marginTop: '-15px',
   },
   textfield: {
     width: '400px',
   },
   textfield2: {
-    width: '60vw',
+    width: '100%',
   },
 }));
 
 /* This is a level 4 component (page component) */
-export default function EssayEdit({ closeEdit, role = 'NORMAL' }) {
+export default function EssayEdit({ closeEdit }) {
   const {
-    courseId, classId, challengeId, essayId,
+    essayId,
   } = useParams();
-  const history = useHistory();
   const classNames = useStyles();
 
   const dispatch = useDispatch();
 
   const essays = useSelector((state) => state.essays.byId);
   const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.myClass.essay);
+  // const loading = useSelector((state) => state.loading.myClass.essay);
 
   const [label, setLabel] = useState(essays[essayId] === undefined ? 'error' : essays[essayId].challenge_label);
   const [title, setTitle] = useState(essays[essayId] === undefined ? 'error' : essays[essayId].title);
   const [description, setDescription] = useState(essays[essayId] === undefined ? 'error' : essays[essayId].description);
 
   const handleClickSave = () => {
-    const body = {
-      label,
-      title,
-      description,
-    };
     dispatch(editEssay(authToken, essayId, label, title, description));
     closeEdit();
   };

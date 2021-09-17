@@ -562,7 +562,7 @@ const overrides = {
   MuiSnackbarContent: {
     root: {
       width: '600px',
-      padding: '0px 20px',
+      padding: '16px 20px',
       borderRadius: '12px',
       boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
       backgroundColor: mono.black,
@@ -577,7 +577,7 @@ const overrides = {
     message: {
       display: 'flex',
       alignItems: 'center',
-      height: '57px',
+      minHeight: '25px',
       padding: '0px',
     },
     action: {

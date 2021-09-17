@@ -12,6 +12,8 @@ const initialState = {
   fetchChallenge: false,
   fetchAllChallengesProblems: false,
   fetchDownloadFileUrl: false,
+  fetchProblems: false,
+  getAccountBatch: false,
 };
 
 export default function common(state = initialState, action) {
@@ -216,6 +218,41 @@ export default function common(state = initialState, action) {
       return {
         ...state,
         fetchDownloadFileUrl: false,
+      };
+    }
+
+    case commonConstants.FETCH_PROBLEMS_START:
+      return {
+        ...state,
+        fetchProblems: true,
+      };
+    case commonConstants.FETCH_PROBLEMS_SUCCESS:
+      return {
+        ...state,
+        fetchProblems: false,
+      };
+    case commonConstants.FETCH_PROBLEMS_FAIL:
+      return {
+        ...state,
+        fetchProblems: false,
+      };
+
+    case commonConstants.GET_ACCOUNT_BATCH_START: {
+      return {
+        ...state,
+        getAccountBatch: true,
+      };
+    }
+    case commonConstants.GET_ACCOUNT_BATCH_SUCCESS: {
+      return {
+        ...state,
+        getAccountBatch: false,
+      };
+    }
+    case commonConstants.GET_ACCOUNT_BATCH_FAIL: {
+      return {
+        ...state,
+        getAccountBatch: false,
       };
     }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Typography, Button, makeStyles, Dialog, DialogTitle, DialogActions, DialogContent,
@@ -11,7 +11,12 @@ import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
 import PageTitle from '../../../ui/PageTitle';
 import GeneralLoading from '../../../GeneralLoading';
-import { readSubmissionDetail, browseJudgeCases, readTestcase } from '../../../../actions/myClass/problem';
+import {
+  readSubmissionDetail,
+  browseJudgeCases,
+  browseTestcases,
+  rejudgeSubmission,
+} from '../../../../actions/myClass/problem';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
 import NoMatch from '../../../noMatch';
 import CodeArea from '../../../ui/CodeArea';
@@ -60,6 +65,7 @@ export default function SubmissionDetail() {
   const testcaseIds = useSelector((state) => state.testcases.allIds);
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.problem);
+  const [rejudge, setRejudge] = useState(false);
 
   useEffect(() => {
     dispatch(readSubmissionDetail(authToken, submissionId));
@@ -67,22 +73,55 @@ export default function SubmissionDetail() {
   }, [authToken, challengeId, dispatch, problemId, submissionId]);
 
   useEffect(() => {
-    setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
-    if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
-      dispatch(
-        browseJudgeCases(
-          authToken,
-          judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-        ),
+    if (rejudge === false) {
+      setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
+      if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
+        dispatch(
+          browseJudgeCases(
+            authToken,
+            judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
+          ),
+        );
+      }
+    } else {
+      setJudgmentId(
+        judgmentIds
+          .reduce((acc, b) => [b, ...acc], [])
+          .filter((id) => judgments[id].submission_id === Number(submissionId))[0],
       );
+      if (
+        judgmentIds
+          .reduce((acc, b) => [b, ...acc], [])
+          .filter((id) => judgments[id].submission_id === Number(submissionId))[0]
+      ) {
+        dispatch(
+          browseJudgeCases(
+            authToken,
+            judgmentIds
+              .reduce((acc, b) => [b, ...acc], [])
+              .filter((id) => judgments[id].submission_id === Number(submissionId))[0],
+          ),
+        );
+      }
     }
-  }, [authToken, dispatch, judgmentIds, judgments, submissionId]);
+  }, [authToken, dispatch, judgmentIds, judgments, rejudge, submissionId]);
 
   useEffect(() => {
-    if (judgeCases.byId !== undefined) {
-      judgeCases.allIds.map((id) => dispatch(readTestcase(authToken, id)));
-    }
-  }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId]);
+    dispatch(browseTestcases(authToken, problemId));
+  }, [authToken, dispatch, problemId]);
+
+  const transformTestcase = useCallback(
+    (id) => {
+      if (testcases[id].input_filename !== null) {
+        return testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.'));
+      }
+      if (testcases[id].output_filename !== null) {
+        return testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.'));
+      }
+      return 0;
+    },
+    [testcases],
+  );
 
   useEffect(() => {
     if (testcaseIds !== [] && judgeCases.allIds !== []) {
@@ -91,7 +130,7 @@ export default function SubmissionDetail() {
           .filter((id) => judgeCases.byId[id].judgment_id === judgmentId)
           .map((id) => ({
             id,
-            no: testcaseIds.map((key) => (id === key ? testcases[key].input_filename.split('.')[0] : '')),
+            no: testcaseIds.map((key) => (id === key ? transformTestcase(key) : '')),
             time: judgeCases.byId[id].time_lapse,
             memory: judgeCases.byId[id].peak_memory,
             status: judgeCases.byId[id].verdict
@@ -103,7 +142,7 @@ export default function SubmissionDetail() {
           })),
       );
     }
-  }, [judgeCases, judgeCases.allIds, judgeCases.byId, judgmentId, judgments.byId, testcaseIds, testcases]);
+  }, [judgeCases, judgmentId, judgments.byId, testcaseIds, testcases, transformTestcase]);
 
   useEffect(() => {
     if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
@@ -119,7 +158,7 @@ export default function SubmissionDetail() {
     || judgeCases.allIds === undefined
     || testcaseIds === undefined
   ) {
-    if (loading.readSubmissionDetail || loading.browseJudgeCases || loading.readTestcase) {
+    if (loading.readSubmissionDetail || loading.browseJudgeCases || loading.readTestcase || loading.rejudgeSubmission) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -131,7 +170,8 @@ export default function SubmissionDetail() {
   };
 
   const handleRejudge = () => {
-    // rejudge
+    setRejudge(true);
+    dispatch(rejudgeSubmission(authToken, submissionId));
     setPopUp(false);
   };
 
@@ -201,9 +241,7 @@ export default function SubmissionDetail() {
               )}
             </div>
           ) : (
-            <Typography variant="body1" color="secondary">
-              Waiting For Judge
-            </Typography>
+            <Typography variant="body1">Waiting For Judge</Typography>
           )}
         </AlignedText>
         <AlignedText text="Score" childrenType="text">

@@ -6,6 +6,7 @@ const initialState = {
   addTeam: false,
   importTeam: false,
   editTeam: false,
+  deleteTeam: false,
 
   fetchTeamMember: false,
   addTeamMember: false,
@@ -110,6 +111,25 @@ export default function team(state = initialState, action) {
       };
     }
 
+    case teamConstants.DELETE_TEAM_START: {
+      return {
+        ...state,
+        deleteTeam: true,
+      };
+    }
+    case teamConstants.DELETE_TEAM_SUCCESS: {
+      return {
+        ...state,
+        deleteTeam: false,
+      };
+    }
+    case teamConstants.DELETE_TEAM_FAIL: {
+      return {
+        ...state,
+        deleteTeam: false,
+      };
+    }
+
     case teamConstants.FETCH_TEAM_MEMBERS_START: {
       return {
         ...state,
@@ -132,19 +152,19 @@ export default function team(state = initialState, action) {
     case teamConstants.ADD_TEAM_MEMBER_START: {
       return {
         ...state,
-        editTeamMember: true,
+        addTeamMember: true,
       };
     }
     case teamConstants.ADD_TEAM_MEMBER_SUCCESS: {
       return {
         ...state,
-        editTeamMember: false,
+        addTeamMember: false,
       };
     }
     case teamConstants.ADD_TEAM_MEMBER_FAIL: {
       return {
         ...state,
-        editTeamMember: false,
+        addTeamMember: false,
       };
     }
 

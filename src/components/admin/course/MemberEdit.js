@@ -13,7 +13,9 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import { replaceClassMembers } from '../../../actions/common/common';
+import { useCookies } from 'react-cookie';
+import { fetchClassMemberWithAccountReferral, replaceClassMembers } from '../../../actions/common/common';
+import { getUserInfo } from '../../../actions/user/auth';
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -65,12 +67,12 @@ const useStyles = makeStyles(() => ({
 
 /* This is a level 4 component (page component) */
 const MemberEdit = ({
-  dispatch, authToken, classId, backToMemberList, members,
+  dispatch, authToken, classes, classId, backToMemberList,
 }) => {
-  const classes = useStyles();
+  const classNames = useStyles();
 
+  const members = useSelector((state) => state.classMembers);
   const error = useSelector((state) => state.error.common.common);
-  const loading = useSelector((state) => state.loading.common.common);
 
   const [TA, setTA] = useState([]);
   const [student, setStudent] = useState([]);
@@ -80,48 +82,59 @@ const MemberEdit = ({
   const [guestChanged, setGuestChanged] = useState(false);
   const [duplicateList, setDuplicateList] = useState([]);
   const [submitError, setSubmitError] = useState('');
-  const [dispatchStart, setDispatchStart] = useState(false);
   const [showUnsavedChangesDialog, setShowUnsavedChangesDialog] = useState(false);
   const [showDuplicateIdentityDialog, setShowDuplicateIdentityDialog] = useState(false);
   const [showErrorDetectedDialog, setShowErrorDetectedDialog] = useState(false);
+  const [cookies] = useCookies(['id']);
   const unblockHandle = useRef();
   const targetLocation = useRef();
   const history = useHistory();
 
-  const unblockAndReturn = () => {
+  // unblock user leaving current page through header and sidebar links
+  // and push to original target location if necessary
+  const unblockAndReturn = (needRedirection) => {
+    backToMemberList();
     if (unblockHandle) {
       unblockHandle.current();
       setShowDuplicateIdentityDialog(false);
       setShowErrorDetectedDialog(false);
-      history.push(targetLocation.current);
+      if (needRedirection) {
+        history.push(targetLocation.current);
+      }
     }
-    backToMemberList();
   };
+  // remove empty elements in an array
   const handleBlankList = (list) => list.filter((element) => element !== '' && element.account_referral !== '');
 
   useEffect(() => {
-    if (!dispatchStart) {
+    dispatch(fetchClassMemberWithAccountReferral(authToken, classId));
+  }, [authToken, classId, dispatch]);
+
+  useEffect(() => {
+    const classMembers = classes.byId[classId].memberIds.map((id) => members.byId[id]);
+    if (classMembers !== undefined) {
       setTA(
-        members
-          .filter((item) => item.role === 'MANAGER')
+        classMembers
+          .filter((item) => item.member_role === 'MANAGER')
           .map((member) => member.member_referral)
           .join('\n'),
       );
       setStudent(
-        members
-          .filter((item) => item.role === 'NORMAL')
+        classMembers
+          .filter((item) => item.member_role === 'NORMAL')
           .map((member) => member.member_referral)
           .join('\n'),
       );
       setGuest(
-        members
-          .filter((item) => item.role === 'GUEST')
+        classMembers
+          .filter((item) => item.member_role === 'GUEST')
           .map((member) => member.member_referral)
           .join('\n'),
       );
     }
-  }, [dispatchStart, members]);
+  }, [classId, classes.byId, error.fetchClassMemberWithAccountReferral, members.byId]);
 
+  // block user leaving current page through header and sidebar links (if contents have been changed)
   useEffect(() => {
     unblockHandle.current = history.block((tl) => {
       if (TAChanged || studentChanged || guestChanged) {
@@ -131,25 +144,16 @@ const MemberEdit = ({
       }
       return true;
     });
-  });
+  }, [TAChanged, guestChanged, history, studentChanged]);
 
   useEffect(() => {
-    if (dispatchStart) {
-      if (!loading.replaceClassMembers) {
-        if (error.replaceClassMembers) {
-          setSubmitError(error.replaceClassMembers);
-          setShowErrorDetectedDialog(true);
-        } else {
-          if (unblockHandle) {
-            unblockHandle.current();
-            history.push(targetLocation.current);
-          }
-          backToMemberList();
-        }
-      }
+    if (error.replaceClassMembers) {
+      setSubmitError(error.replaceClassMembers);
     }
-  }, [backToMemberList, dispatchStart, error.replaceClassMembers, history, loading.replaceClassMembers]);
+  }, [error.replaceClassMembers]);
 
+  // block user leaving current page through browser close button and refresh button
+  // (if any dialog is shown, or contents have been changed)
   useBeforeunload((e) => {
     if (showErrorDetectedDialog || showDuplicateIdentityDialog) {
       e.preventDefault();
@@ -163,8 +167,9 @@ const MemberEdit = ({
     setTA(e.target.value);
     setTAChanged(
       e.target.value
-        !== members
-          .filter((item) => item.role === 'MANAGER')
+        !== classes.byId[classId].memberIds
+          .map((id) => members.byId[id])
+          .filter((item) => item.member_role === 'MANAGER')
           .map((member) => member.member_referral)
           .join('\n'),
     );
@@ -173,8 +178,9 @@ const MemberEdit = ({
     setStudent(e.target.value);
     setStudentChanged(
       e.target.value
-        !== members
-          .filter((item) => item.role === 'NORMAL')
+        !== classes.byId[classId].memberIds
+          .map((id) => members.byId[id])
+          .filter((item) => item.member_role === 'NORMAL')
           .map((member) => member.member_referral)
           .join('\n'),
     );
@@ -183,8 +189,9 @@ const MemberEdit = ({
     setGuest(e.target.value);
     setGuestChanged(
       e.target.value
-        !== members
-          .filter((item) => item.role === 'GUEST')
+        !== classes.byId[classId].memberIds
+          .map((id) => members.byId[id])
+          .filter((item) => item.member_role === 'GUEST')
           .map((member) => member.member_referral)
           .join('\n'),
     );
@@ -194,14 +201,14 @@ const MemberEdit = ({
     if (TAChanged || studentChanged || guestChanged) {
       setShowUnsavedChangesDialog(true);
     } else {
-      unblockAndReturn();
+      unblockAndReturn(false);
     }
   };
-  const handleSubmitUnsave = () => {
+  const handleUnsave = () => {
     setShowUnsavedChangesDialog(false);
-    unblockAndReturn();
+    unblockAndReturn(true);
   };
-  const handleSubmitSave = () => {
+  const handleSave = (saveWithDialog) => {
     setShowUnsavedChangesDialog(false);
 
     if (TAChanged || studentChanged || guestChanged) {
@@ -246,50 +253,67 @@ const MemberEdit = ({
 
         const replacingList = handleBlankList(TATransformedList.concat(studentTransformedList, guestTransformedList));
 
-        dispatch(replaceClassMembers(authToken, classId, replacingList));
-        setDispatchStart(true);
+        // if data is saved with dialog, redirection is needed
+        dispatch(
+          replaceClassMembers(
+            authToken,
+            classId,
+            replacingList,
+            () => {
+              unblockAndReturn(saveWithDialog);
+              dispatch(getUserInfo(cookies.id, authToken));
+            },
+            () => setShowErrorDetectedDialog(true),
+          ),
+        );
       }
     } else {
-      unblockAndReturn();
+      unblockAndReturn(false);
     }
   };
 
   return (
     <div>
-      <Card className={classes.card} variant="outlined">
-        <div className={classes.editorCol}>
-          <div className={classes.editorItem}>
+      <Card className={classNames.card} variant="outlined">
+        <div className={classNames.editorCol}>
+          <div className={classNames.editorItem}>
             <Typography variant="body1">TA</Typography>
           </div>
-          <div className={classes.editorItem}>
-            <Typography variant="caption">List of student ID</Typography>
-          </div>
-          <TextField className={classes.textField} value={TA} onChange={(e) => handleChangeTA(e)} multiline rows={20} />
-        </div>
-        <div className={classes.editorCol}>
-          <div className={classes.editorItem}>
-            <Typography variant="body1">Student</Typography>
-          </div>
-          <div className={classes.editorItem}>
+          <div className={classNames.editorItem}>
             <Typography variant="caption">List of student ID</Typography>
           </div>
           <TextField
-            className={classes.textField}
+            className={classNames.textField}
+            value={TA}
+            onChange={(e) => handleChangeTA(e)}
+            multiline
+            rows={20}
+          />
+        </div>
+        <div className={classNames.editorCol}>
+          <div className={classNames.editorItem}>
+            <Typography variant="body1">Student</Typography>
+          </div>
+          <div className={classNames.editorItem}>
+            <Typography variant="caption">List of student ID</Typography>
+          </div>
+          <TextField
+            className={classNames.textField}
             value={student}
             onChange={(e) => handleChangeStudent(e)}
             multiline
             rows={20}
           />
         </div>
-        <div className={classes.editorCol}>
-          <div className={classes.editorItem}>
+        <div className={classNames.editorCol}>
+          <div className={classNames.editorItem}>
             <Typography variant="body1">Guest</Typography>
           </div>
-          <div className={classes.editorItem}>
+          <div className={classNames.editorItem}>
             <Typography variant="caption">List of student ID</Typography>
           </div>
           <TextField
-            className={classes.textField}
+            className={classNames.textField}
             value={guest}
             onChange={(e) => handleChangeGuest(e)}
             multiline
@@ -297,11 +321,11 @@ const MemberEdit = ({
           />
         </div>
       </Card>
-      <div className={classes.buttonsBar}>
-        <Button onClick={handleClickCancel} className={classes.leftButton}>
+      <div className={classNames.buttonsBar}>
+        <Button onClick={handleClickCancel} className={classNames.leftButton}>
           Cancel
         </Button>
-        <Button onClick={handleSubmitSave} color="primary">
+        <Button onClick={() => handleSave(false)} color="primary">
           Save
         </Button>
       </div>
@@ -310,24 +334,22 @@ const MemberEdit = ({
         <DialogTitle>
           <Typography variant="h4">Unsaved Changes</Typography>
         </DialogTitle>
-        <DialogContent className={classes.dialogContent}>
+        <DialogContent className={classNames.dialogContent}>
           <Typography variant="body1">
             You have unsaved changes, do you want to save your changes or back to edit?
           </Typography>
         </DialogContent>
-        <DialogActions className={classes.dialogButtons}>
+        <DialogActions className={classNames.dialogButtons}>
+          <Button
+            variant="outlined"
+            onClick={() => setShowUnsavedChangesDialog(false)}
+            className={classNames.backToEditButton}
+          >
+            Back to Edit
+          </Button>
           <div>
-            <Button
-              variant="outlined"
-              onClick={() => setShowUnsavedChangesDialog(false)}
-              className={classes.backToEditButton}
-            >
-              Back to Edit
-            </Button>
-          </div>
-          <div>
-            <Button onClick={handleSubmitUnsave}>Don’t Save</Button>
-            <Button onClick={handleSubmitSave} color="primary">
+            <Button onClick={handleUnsave}>Don’t Save</Button>
+            <Button onClick={() => handleSave(true)} color="primary">
               Save
             </Button>
           </div>
@@ -338,11 +360,11 @@ const MemberEdit = ({
         <DialogTitle>
           <Typography variant="h4">Duplicate Identity</Typography>
         </DialogTitle>
-        <DialogContent className={classes.dialogContent}>
+        <DialogContent className={classNames.dialogContent}>
           <Typography variant="body1">
             The following accounts appear in more than one column. Please remove duplicate identities.
           </Typography>
-          <div className={classes.duplicateList}>
+          <div className={classNames.duplicateList}>
             {duplicateList.map((accountReferral) => (
               <Typography variant="body1" key={accountReferral}>
                 {accountReferral}
@@ -354,7 +376,7 @@ const MemberEdit = ({
           <Button
             color="primary"
             onClick={() => setShowDuplicateIdentityDialog(false)}
-            className={classes.buttonFlexEnd}
+            className={classNames.buttonFlexEnd}
           >
             Back to Edit
           </Button>
@@ -365,14 +387,18 @@ const MemberEdit = ({
         <DialogTitle>
           <Typography variant="h4">Error Detected</Typography>
         </DialogTitle>
-        <DialogContent className={classes.dialogContent}>
+        <DialogContent className={classNames.dialogContent}>
           <Typography variant="body1">Save member failed due to the following reasons:</Typography>
-          <Typography variant="body1" className={classes.duplicateList}>
+          <Typography variant="body1" className={classNames.duplicateList}>
             {submitError === 'IllegalInput' ? 'Illegal Input' : submitError}
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={() => setShowErrorDetectedDialog(false)} className={classes.buttonFlexEnd}>
+          <Button
+            color="primary"
+            onClick={() => setShowErrorDetectedDialog(false)}
+            className={classNames.buttonFlexEnd}
+          >
             Back to Edit
           </Button>
         </DialogActions>
