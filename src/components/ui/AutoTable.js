@@ -304,7 +304,7 @@ function AutoTable({
   };
 
   const onSort = (key) => {
-    console.log('sort :', [[key, order.order.toUpperCase()]]);
+    // console.log('sort :', [[key, order.order.toUpperCase()]]);
     if (order.order === 'asc') {
       setOrder({ key, order: 'desc' });
       setSort([[key, 'DESC'], defaultSort]);
