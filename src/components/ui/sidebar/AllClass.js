@@ -65,7 +65,7 @@ export default function AllClass({
       setTitle(courses.byId[courseId].name);
       setItemList(
         courses.byId[courseId].classIds
-          .sort()
+          .sort((a, b) => a.name - b.name)
           .map((id) => classes.byId[id])
           .map(({ id, name }) => ({
             type: 'Class',
