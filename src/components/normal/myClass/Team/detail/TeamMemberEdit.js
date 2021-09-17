@@ -11,10 +11,12 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Snackbar,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdAdd } from 'react-icons/md';
+import Icon from '../../../../ui/icon/index';
 import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleTable from '../../../../ui/SimpleTable';
@@ -30,7 +32,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function TeamMemberEdit({ setOriginData, isManager, handleBack }) {
+export default function TeamMemberEdit({
+  setOriginData, isManager, handleBack, setAddMemberFail,
+}) {
   const classNames = useStyles();
   const { teamId } = useParams();
   const dispatch = useDispatch();
@@ -96,12 +100,15 @@ export default function TeamMemberEdit({ setOriginData, isManager, handleBack })
     handleBack();
   };
 
-  const handleAdd = () => {
+  const addMemberSuccess = () => {
     setPopUp(false);
     clearInputs();
+  };
+
+  const handleAdd = () => {
     if (inputs.student !== '') {
       const role = inputs.role === 'Normal' ? 'NORMAL' : 'MANAGER';
-      dispatch(addTeamMember(authToken, teamId, inputs.student, role));
+      dispatch(addTeamMember(authToken, teamId, inputs.student, role, addMemberSuccess, () => setAddMemberFail(true)));
       const newTempAdd = [...tempAddData, inputs.student];
       setTempAddData(newTempAdd);
     }
@@ -110,6 +117,11 @@ export default function TeamMemberEdit({ setOriginData, isManager, handleBack })
   return (
     <div>
       <SimpleBar title="Team Member" noIndent>
+        {/* {isManager && (
+          <Button variant="outlined" color="primary" onClick={() => setPopUp(true)} startIcon={<Icon.AddBoxIcon />}>
+            Add Team member
+          </Button>
+        )} */}
         <SimpleTable
           isEdit={isManager}
           hasDelete={isManager}

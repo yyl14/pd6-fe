@@ -28,7 +28,7 @@ import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   reminder: {
-    color: theme.palette.grey.A400,
+    color: theme.palette.grey.A700,
     marginLeft: theme.spacing(2),
   },
   importDialogButtons: {
@@ -86,12 +86,16 @@ export default function TeamList() {
   useEffect(() => {
     if (addInputs.label !== '' && addInputs.teamName !== '') {
       setDisabled(false);
+    } else {
+      setDisabled(true);
     }
   }, [addInputs.label, addInputs.teamName]);
 
   useEffect(() => {
     if (importInput !== '' && selectedFile !== []) {
       setDisabled(false);
+    } else {
+      setDisabled(true);
     }
   }, [importInput, selectedFile]);
 
@@ -116,49 +120,35 @@ export default function TeamList() {
     });
   };
 
+  const addTeamSuccess = () => {
+    clearAddInput();
+    setShowAddDialog(false);
+    setHasRequest(false);
+    setDisabled(true);
+  };
+
+  const importTeamSuccess = () => {
+    clearImportInput();
+    setShowImportDialog(false);
+    setHasRequest(false);
+    setDisabled(true);
+  };
+
   const submitImport = () => {
     if (importInput !== '' && selectedFile !== []) {
-      selectedFile.map((file) => dispatch(importTeam(authToken, classId, importInput, file)));
+      selectedFile.map((file) => dispatch(importTeam(authToken, classId, importInput, file, importTeamSuccess, () => setHasError(true))));
     }
     setHasRequest(true);
   };
 
   const submitAdd = () => {
     if (addInputs.label !== '' && addInputs.teamName !== '') {
-      dispatch(addTeam(authToken, classId, addInputs.teamName, addInputs.label));
+      dispatch(
+        addTeam(authToken, classId, addInputs.teamName, addInputs.label, addTeamSuccess, () => setHasError(true)),
+      );
     }
     setHasRequest(true);
   };
-
-  useEffect(() => {
-    if (hasRequest && showAddDialog && !loading.addTeam) {
-      if (error.addTeam === null) {
-        clearAddInput();
-        setShowAddDialog(false);
-        setHasRequest(false);
-        setDisabled(true);
-      } else {
-        setHasError(true);
-      }
-    } else if (hasRequest && showImportDialog && !loading.importTeam) {
-      if (error.importTeam === null) {
-        clearImportInput();
-        setShowImportDialog(false);
-        setHasRequest(false);
-        setDisabled(true);
-      } else {
-        setHasError(true);
-      }
-    }
-  }, [
-    error.addTeam,
-    error.importTeam,
-    hasRequest,
-    loading.addTeam,
-    loading.importTeam,
-    showAddDialog,
-    showImportDialog,
-  ]);
 
   const downloadTemplate = () => {
     setShowImportDialog(false);
@@ -170,11 +160,8 @@ export default function TeamList() {
     setHasRequest(false);
   };
 
-  if (loading.fetchTeams) {
-    return <GeneralLoading />;
-  }
   if (courses[courseId] === undefined || classes[classId] === undefined) {
-    if (loading.fetchCourse || loading.fetchClass) {
+    if (loading.common.common.fetchCourse || loading.common.common.fetchClass || loading.myClass.team.fetchTeams) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -188,16 +175,11 @@ export default function TeamList() {
         buttons={
           isManager && (
             <>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => setShowImportDialog(true)}
-                startIcon={<Icon.Folder />}
-              >
-                Import
-              </Button>
-              <Button color="primary" onClick={() => setShowAddDialog(true)}>
+              <Button variant="outlined" color="primary" onClick={() => setShowAddDialog(true)}>
                 <MdAdd />
+              </Button>
+              <Button color="primary" onClick={() => setShowImportDialog(true)} startIcon={<Icon.Folder />}>
+                Import
               </Button>
             </>
           )
@@ -261,17 +243,23 @@ export default function TeamList() {
           <Typography variant="body2" className={classNames.reminder}>
             Member N (N=2~10): Same as Team Manager
           </Typography>
-          <Typography variant="body2"> Download template file for more instructions.</Typography>
+          <Typography variant="body2">
+            Notice that PDOGS only accept files encoded in
+            {' '}
+            <b>ASCII / UTF-8</b>
+            {' '}
+            charset.
+          </Typography>
         </DialogContent>
         <DialogContent>
-          <AlignedText text="Class" maxWidth="mg" childrenType="text">
+          <AlignedText text="Class" maxWidth="md" childrenType="text">
             <Typography variant="body1">{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
           </AlignedText>
-          <AlignedText text="Label" maxWidth="mg" childrenType="field">
+          <AlignedText text="Label" maxWidth="md" childrenType="field">
             <TextField id="title" name="title" value={importInput} onChange={(e) => handleImportChange(e)} />
           </AlignedText>
           <FileUploadArea
-            text="Grading File"
+            text="File"
             fileAcceptFormat=".csv"
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
@@ -323,13 +311,13 @@ export default function TeamList() {
           <Typography variant="h4">Create New Team</Typography>
         </DialogTitle>
         <DialogContent>
-          <AlignedText text="Class" maxWidth="lg" childrenType="text">
+          <AlignedText text="Class" maxWidth="md" childrenType="text">
             <Typography variant="body1">{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
           </AlignedText>
-          <AlignedText text="Label" maxWidth="lg" childrenType="field">
+          <AlignedText text="Label" maxWidth="md" childrenType="field">
             <TextField name="label" value={addInputs.label} onChange={(e) => handleAddChange(e)} />
           </AlignedText>
-          <AlignedText text="Team Name" maxWidth="lg" childrenType="field">
+          <AlignedText text="Team Name" maxWidth="md" childrenType="field">
             <TextField name="teamName" value={addInputs.teamName} onChange={(e) => handleAddChange(e)} />
           </AlignedText>
         </DialogContent>

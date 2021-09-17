@@ -44,6 +44,8 @@ const useStyles = makeStyles((theme) => ({
   },
   fieldBottomMargin: {
     marginBottom: '17px',
+    display: 'flex',
+    flexGrow: 1,
   },
   textMaxWidth: {
     maxWidth: '79%',

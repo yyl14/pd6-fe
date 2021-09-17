@@ -12,7 +12,7 @@ import {
 import AlignedText from '../../../../ui/AlignedText';
 import IOFileUploadArea from '../../../../ui/IOFileUploadArea';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   dialogTitle: {
     marginBottom: '-8px',
   },
@@ -27,7 +27,8 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'flex-end',
   },
   reminder: {
-    color: '#AAAAAA',
+    color: theme.palette.grey.A700,
+    marginLeft: theme.spacing(2),
   },
 }));
 
@@ -43,21 +44,24 @@ export default function TestingDataUploadCard({
   // const error = useSelector((state) => state.error);
   // const loading = useSelector((state) => state.loading.myClass.problem);
 
-  const [time, setTime] = useState(100000);
+  const [time, setTime] = useState(1000);
   const [memory, setMemory] = useState(65535);
   const [score, setScore] = useState(2);
 
   const handleConfirm = () => {
-    const newSelectedFile = Object.keys(selectedFile).reduce((acc, key) => ({
-      ...acc,
-      [key]: {
-        ...selectedFile[key],
-        no: selectedFile[key].id,
-        score,
-        time_limit: time,
-        memory_limit: memory,
-      },
-    }), {});
+    const newSelectedFile = Object.keys(selectedFile).reduce(
+      (acc, key) => ({
+        ...acc,
+        [key]: {
+          ...selectedFile[key],
+          no: selectedFile[key].id,
+          score,
+          time_limit: time,
+          memory_limit: memory,
+        },
+      }),
+      {},
+    );
     handleTempUpload(newSelectedFile);
   };
 
@@ -80,6 +84,13 @@ export default function TestingDataUploadCard({
             <Typography variant="body2" className={classes.reminder}>
               1.out （測資 1 的 output）
             </Typography>
+            <Typography variant="body2">
+              Notice that PDOGS only accept files encoded in
+              {' '}
+              <b>ASCII / UTF-8</b>
+              {' '}
+              charset.
+            </Typography>
           </div>
           <AlignedText text="Default Time(ms)" childrenType="field">
             <TextField id="time" value={time} onChange={(e) => setTime(e.target.value)} />
@@ -101,7 +112,7 @@ export default function TestingDataUploadCard({
           <Button onClick={handleCancel} color="default">
             Cancel
           </Button>
-          <Button onClick={handleConfirm} color="primary">
+          <Button disabled={Object.keys(selectedFile).length === 0} onClick={handleConfirm} color="primary">
             Confirm
           </Button>
         </DialogActions>

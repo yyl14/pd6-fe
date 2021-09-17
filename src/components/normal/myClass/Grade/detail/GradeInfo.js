@@ -41,7 +41,7 @@ export default function GradeInfo(props) {
           <AlignedText text="Real Name" maxWidth="lg" childrenType="text">
             <Typography variant="body1">{props.receiver.real_name}</Typography>
           </AlignedText>
-          <AlignedText text="Challenge Title" maxWidth="lg" childrenType="text">
+          <AlignedText text="Title" maxWidth="lg" childrenType="text">
             <Typography variant="body1">{props.grade.title}</Typography>
           </AlignedText>
           <AlignedText text="Score" maxWidth="lg" childrenType="text">
@@ -51,7 +51,7 @@ export default function GradeInfo(props) {
             <Typography variant="body1">{props.grade.comment}</Typography>
           </AlignedText>
           <AlignedText text="Submitted Time" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">{moment(props.grade.time).format('YYYY-MM-DD, HH:mm')}</Typography>
+            <Typography variant="body1">{moment(props.grade.update_time).format('YYYY-MM-DD, HH:mm')}</Typography>
           </AlignedText>
         </>
       </SimpleBar>

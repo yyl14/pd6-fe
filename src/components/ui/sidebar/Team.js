@@ -18,9 +18,9 @@ export default function Team({
   const authToken = useSelector((state) => state.auth.token);
   const teams = useSelector((state) => state.teams);
 
-  useEffect(() => {
-    dispatch(fetchTeams(authToken, classId));
-  }, [dispatch, authToken, classId, courseId]);
+  // useEffect(() => {
+  //   dispatch(fetchTeams(authToken, classId));
+  // }, [dispatch, authToken, classId, courseId]);
 
   const [display, setDisplay] = useState('unfold');
 

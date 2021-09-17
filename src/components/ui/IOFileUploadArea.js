@@ -180,7 +180,6 @@ export default function IOFileUploadArea({
         [key]: selectedFile[key],
       };
     }, {});
-    console.log(filtered);
     setSelectedFile(filtered);
   };
 
@@ -234,7 +233,7 @@ export default function IOFileUploadArea({
                   <TableCell
                     key="input"
                     align="center"
-                    style={{ minWidth: 50, width: 80, border: 'none' }}
+                    style={{ minWidth: 150, width: 150, border: 'none' }}
                     className={classes.fileNameCell}
                   >
                     <div className={classes.column}>
@@ -244,7 +243,7 @@ export default function IOFileUploadArea({
                   <TableCell
                     key="output"
                     align="center"
-                    style={{ minWidth: 50, width: 80, border: 'none' }}
+                    style={{ minWidth: 150, width: 150, border: 'none' }}
                     className={classes.fileNameCell}
                   >
                     <div className={classes.column}>
@@ -256,12 +255,12 @@ export default function IOFileUploadArea({
               <TableBody>
                 {tableData.map((row) => (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.id} className={classes.row}>
-                    <TableCell align="left" className={classes.fileNameCell}>
+                    <TableCell align="center" className={classes.fileNameCell}>
                       <Typography variant="body2">
                         {row.in === undefined || row.in === null ? '' : row.in.name}
                       </Typography>
                     </TableCell>
-                    <TableCell align="left" className={classes.fileNameCell}>
+                    <TableCell align="center" className={classes.fileNameCell}>
                       <Typography variant="body2">
                         {row.out === undefined || row.out === null ? '' : row.out.name}
                       </Typography>
