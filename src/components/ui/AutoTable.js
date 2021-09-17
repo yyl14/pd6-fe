@@ -66,9 +66,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
   },
-  container: {
-    maxHeight: 800,
-  },
+
   filterSelect: {
     marginRight: '10px',
     minWidth: '180px',
@@ -177,7 +175,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const itemsPerPage = [5, 10, 25, 50, 100];
+const itemsPerPage = [10, 25, 50, 100];
 
 function AutoTable({
   ident, // unique identifier for this table, used in dynamic redux state
@@ -248,7 +246,7 @@ function AutoTable({
   const classes = useStyles();
   const [curPage, setCurPage] = useState(0); // curPage * rowsPerPage = offset
   const [pageInput, setPageInput] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5); // limit
+  const [rowsPerPage, setRowsPerPage] = useState(10); // limit
 
   const [filter, setFilter] = useState([]);
   const [sort, setSort] = useState([]);
