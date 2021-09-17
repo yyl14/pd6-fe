@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import Icon from './icon/index';
 import { userLogout } from '../../actions/user/auth';
-import { userBrowseAnnouncement, userReadAnnouncement } from '../../actions/user/user';
+import { userBrowseAnnouncement } from '../../actions/user/user';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
