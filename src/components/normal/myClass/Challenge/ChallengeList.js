@@ -189,6 +189,7 @@ export default function ChallengeList() {
             ],
           },
         ]}
+        defaultSort={['start_time', 'DESC']}
         refetch={(browseParams, ident) => {
           dispatch(fetchChallenges(authToken, classId, browseParams, ident));
         }}
