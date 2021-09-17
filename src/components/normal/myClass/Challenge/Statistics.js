@@ -56,7 +56,6 @@ export default function Statistics() {
   const challenges = useSelector((state) => state.challenges.byId);
   const problems = useSelector((state) => state.problem.byId);
   const essays = useSelector((state) => state.essays.byId);
-  const submissions = useSelector((state) => state.submissions.byId);
   const downloadLinks = useSelector((state) => state.downloadLinks.byId);
   const accounts = useSelector((state) => state.accounts);
 
@@ -88,6 +87,7 @@ export default function Statistics() {
         align: 'center',
         width: 500,
         type: 'link',
+        isExternal: true,
         link_id: `problem-${id}-link`,
       }));
       const essayList = challenges[challengeId].essayIds.map((id) => ({
@@ -115,15 +115,12 @@ export default function Statistics() {
         }
 
         if (member.problem_scores) {
-          member.problem_scores.map((judgement) => {
-            if (submissions[judgement.submission_id]) {
-              const problemId = submissions[judgement.submission_id].problem_id;
-              memberChallengeDetail[`problem-${problemId}`] = judgement.score;
-              memberChallengeDetail[
-                `problem-${problemId}-link`
-              ] = `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${judgement.submission_id}`;
-            }
-            return judgement;
+          member.problem_scores.map((p) => {
+            memberChallengeDetail[`problem-${p.problem_id}`] = p.judgment.score;
+            memberChallengeDetail[
+              `problem-${p.problem_id}-link`
+            ] = `${window.location.origin}/my-class/${courseId}/${classId}/submission/${p.judgment.submission_id}`;
+            return p;
           });
         }
 
@@ -140,7 +137,7 @@ export default function Statistics() {
       });
       setScoreboardData(memberSubmissionList);
     }
-  }, [classId, courseId, challenges, challengeId, essays, problems, submissions, downloadLinks, accounts]);
+  }, [accounts.byId, challengeId, challenges, classId, courseId, downloadLinks, essays, problems]);
 
   useEffect(() => {
     if (
@@ -150,9 +147,6 @@ export default function Statistics() {
     ) {
       setChallengeTitle(challenges[challengeId].title);
       challenges[challengeId].statistics.memberSubmission.map((member) => {
-        if (member.problem_scores) {
-          member.problem_scores.map((judgement) => dispatch(fetchSubmission(authToken, judgement.submission_id)));
-        }
         if (member.essay_submissions) {
           member.essay_submissions.map((record) => dispatch(
             fetchDownloadFileUrl(authToken, {
@@ -165,7 +159,7 @@ export default function Statistics() {
         return member;
       });
     }
-  }, [authToken, challengeId, dispatch, challenges]);
+  }, [authToken, challengeId, challenges, dispatch]);
 
   useEffect(() => {
     // assemble html data to copy
@@ -180,11 +174,10 @@ export default function Statistics() {
     scoreboardData.map((row) => {
       tableHTML += '<tr>';
       scoreboardTitle.map((column) => {
-        const value = row[column.id] ? row[column.id] : '';
+        const value = row[column.id] !== undefined ? row[column.id] : '';
         if (column.type === 'link') {
           const link = row[column.link_id] ? row[column.link_id] : '';
-          const url = column.isExternal ? link : `${window.location.origin}${link}`;
-          tableHTML += `<td><a href='${url}'>${value}</a></td>`;
+          tableHTML += `<td><a href='${link}'>${value}</a></td>`;
         } else {
           tableHTML += `<td>${value}</td>`;
         }

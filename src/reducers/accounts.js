@@ -127,7 +127,7 @@ const byId = (state = {}, action) => {
       );
     }
 
-    case submissionConstants.GET_ACCOUNT_BATCH_SUCCESS: {
+    case commonConstants.GET_ACCOUNT_BATCH_SUCCESS: {
       const { accountId, data } = action.payload;
       return {
         ...state,
@@ -183,7 +183,7 @@ const allIds = (state = [], action) => {
       return [...new Set([...accounts.map((item) => item.id), ...state])];
     }
 
-    case submissionConstants.GET_ACCOUNT_BATCH_SUCCESS: {
+    case commonConstants.GET_ACCOUNT_BATCH_SUCCESS: {
       const { accountId } = action.payload;
       return state.includes(accountId) ? state : state.concat([accountId]);
     }

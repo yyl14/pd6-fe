@@ -23,10 +23,7 @@ import SampleUploadCard from './SampleUploadCard';
 import TestingDataUploadCard from './TestingDataUploadCard';
 
 import {
-  editProblemInfo,
-  saveSamples,
-  saveTestcases,
-  readProblemInfo,
+  editProblemInfo, saveSamples, saveTestcases, readProblemInfo,
 } from '../../../../../actions/myClass/problem';
 // saveAssistingData,
 
@@ -150,36 +147,46 @@ export default function CodingProblemEdit({ closeEdit }) {
         setStatus(!testcases[testcasesId[0]].is_disabled);
       }
       // set original table data
-      setSampleTableData(samplesId.reduce((acc, id) => ({
-        ...acc,
-        [id]: {
-          id: testcases[id].id,
-          no: sampleTransToNumber(id),
-          time_limit: testcases[id].time_limit,
-          memory_limit: testcases[id].memory_limit,
-          score: testcases[id].score,
-          input_filename: testcases[id].input_filename,
-          output_filename: testcases[id].output_filename,
-          in_file: null,
-          out_file: null,
-          new: false,
-        },
-      }), {}));
-      setTestcaseTableData(testcasesId.reduce((acc, id) => ({
-        ...acc,
-        [id]: {
-          id: testcases[id].id,
-          no: testcaseTransToNumber(id),
-          time_limit: testcases[id].time_limit,
-          memory_limit: testcases[id].memory_limit,
-          score: testcases[id].score,
-          input_filename: testcases[id].input_filename,
-          output_filename: testcases[id].output_filename,
-          in_file: null,
-          out_file: null,
-          new: false,
-        },
-      }), {}));
+      setSampleTableData(
+        samplesId.reduce(
+          (acc, id) => ({
+            ...acc,
+            [id]: {
+              id: testcases[id].id,
+              no: sampleTransToNumber(id),
+              time_limit: testcases[id].time_limit,
+              memory_limit: testcases[id].memory_limit,
+              score: testcases[id].score,
+              input_filename: testcases[id].input_filename,
+              output_filename: testcases[id].output_filename,
+              in_file: null,
+              out_file: null,
+              new: false,
+            },
+          }),
+          {},
+        ),
+      );
+      setTestcaseTableData(
+        testcasesId.reduce(
+          (acc, id) => ({
+            ...acc,
+            [id]: {
+              id: testcases[id].id,
+              no: testcaseTransToNumber(id),
+              time_limit: testcases[id].time_limit,
+              memory_limit: testcases[id].memory_limit,
+              score: testcases[id].score,
+              input_filename: testcases[id].input_filename,
+              output_filename: testcases[id].output_filename,
+              in_file: null,
+              out_file: null,
+              new: false,
+            },
+          }),
+          {},
+        ),
+      );
     }
   }, [problems, problemId, testcases, sampleTransToNumber, testcaseTransToNumber]);
 
@@ -215,7 +222,16 @@ export default function CodingProblemEdit({ closeEdit }) {
         setUploadFailCardPopup(true);
       }
     }
-  }, [authToken, closeEdit, dispatch, handleInfoSuccess, handleSamplesSuccess, handleTestcasesSuccess, problemId, uploadFailFilename.length]);
+  }, [
+    authToken,
+    closeEdit,
+    dispatch,
+    handleInfoSuccess,
+    handleSamplesSuccess,
+    handleTestcasesSuccess,
+    problemId,
+    uploadFailFilename.length,
+  ]);
 
   const handleClosePopUp = () => {
     setSamplePopUp(false);
@@ -224,16 +240,26 @@ export default function CodingProblemEdit({ closeEdit }) {
   };
 
   const handleSetSampleTableData = (tableData) => {
-    setSampleTableData(tableData.reduce((acc, item) => ({
-      ...acc,
-      [item.id]: item,
-    }), {}));
+    setSampleTableData(
+      tableData.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item.id]: item,
+        }),
+        {},
+      ),
+    );
   };
   const handleSetTestcaseTableData = (tableData) => {
-    setTestcaseTableData(tableData.reduce((acc, item) => ({
-      ...acc,
-      [item.id]: item,
-    }), {}));
+    setTestcaseTableData(
+      tableData.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item.id]: item,
+        }),
+        {},
+      ),
+    );
   };
 
   const handleSampleConfirm = (newSelectedFiles) => {
@@ -260,18 +286,26 @@ export default function CodingProblemEdit({ closeEdit }) {
       return {
         ...acc,
         [keys[0]]: {
-          id: item,
+          id: Number(keys[0]),
           no: newSelectedFiles[item].no,
           time_limit: newSelectedFiles[item].time_limit,
           memory_limit: newSelectedFiles[item].memory_limit,
-          input_filename: newSelectedFiles[item].in === null ? sampleTableData[keys[0]].input_filename : newSelectedFiles[item].in.name,
-          output_filename: newSelectedFiles[item].out === null ? sampleTableData[keys[0]].output_filename : newSelectedFiles[item].out.name,
+          input_filename:
+            newSelectedFiles[item].in === null
+              ? sampleTableData[keys[0]].input_filename
+              : newSelectedFiles[item].in.name,
+          output_filename:
+            newSelectedFiles[item].out === null
+              ? sampleTableData[keys[0]].output_filename
+              : newSelectedFiles[item].out.name,
           in_file: newSelectedFiles[item].in === null ? sampleTableData[keys[0]].in_file : newSelectedFiles[item].in,
-          out_file: newSelectedFiles[item].out === null ? sampleTableData[keys[0]].out_file : newSelectedFiles[item].out,
+          out_file:
+            newSelectedFiles[item].out === null ? sampleTableData[keys[0]].out_file : newSelectedFiles[item].out,
           new: sampleTableData[keys[0]].new,
         },
       };
     }, sampleTableData);
+    console.log(newTableData);
     setSampleTableData(newTableData);
     setCardSelectedFileS({});
     setHasChange(true);
@@ -280,7 +314,9 @@ export default function CodingProblemEdit({ closeEdit }) {
 
   const handleTestingConfirm = (newSelectedFiles) => {
     const newTableData = Object.keys(newSelectedFiles).reduce((acc, item) => {
-      const keys = Object.keys(testcaseTableData).filter((key) => testcaseTableData[key].no === newSelectedFiles[item].no);
+      const keys = Object.keys(testcaseTableData).filter(
+        (key) => testcaseTableData[key].no === newSelectedFiles[item].no,
+      );
       if (keys.length === 0) {
         // this is new case
         return {
@@ -303,15 +339,22 @@ export default function CodingProblemEdit({ closeEdit }) {
       return {
         ...acc,
         [keys[0]]: {
-          id: item,
+          id: Number(keys[0]),
           no: newSelectedFiles[item].no,
           score: newSelectedFiles[item].score,
           time_limit: newSelectedFiles[item].time_limit,
           memory_limit: newSelectedFiles[item].memory_limit,
-          input_filename: newSelectedFiles[item].in === null ? testcaseTableData[keys[0]].input_filename : newSelectedFiles[item].in.name,
-          output_filename: newSelectedFiles[item].out === null ? testcaseTableData[keys[0]].output_filename : newSelectedFiles[item].out.name,
+          input_filename:
+            newSelectedFiles[item].in === null
+              ? testcaseTableData[keys[0]].input_filename
+              : newSelectedFiles[item].in.name,
+          output_filename:
+            newSelectedFiles[item].out === null
+              ? testcaseTableData[keys[0]].output_filename
+              : newSelectedFiles[item].out.name,
           in_file: newSelectedFiles[item].in === null ? testcaseTableData[keys[0]].in_file : newSelectedFiles[item].in,
-          out_file: newSelectedFiles[item].out === null ? testcaseTableData[keys[0]].out_file : newSelectedFiles[item].out,
+          out_file:
+            newSelectedFiles[item].out === null ? testcaseTableData[keys[0]].out_file : newSelectedFiles[item].out,
           new: testcaseTableData[keys[0]].new,
         },
       };
@@ -345,24 +388,55 @@ export default function CodingProblemEdit({ closeEdit }) {
   };
 
   const handleSave = () => {
+    const newFullScore = Object.keys(testcaseTableData).reduce(
+      (acc, key) => acc + Number(testcaseTableData[key].score),
+      0,
+    );
     dispatch(
       editProblemInfo(
         authToken,
         problemId,
         label,
         title,
-        problems[problemId].full_score,
+        newFullScore,
         !status,
         description,
         ioDescription,
         source,
         hint,
-        () => { setHandleInfoSuccess(true); },
+        () => {
+          setHandleInfoSuccess(true);
+        },
       ),
     );
 
-    dispatch(saveSamples(authToken, problemId, testcases, sampleDataIds, sampleTableData, () => { setHandleSamplesSuccess(true); }, handleFileUploadFail));
-    dispatch(saveTestcases(authToken, problemId, testcases, testcaseDataIds, testcaseTableData, status, () => { setHandleTestcasesSuccess(true); }, handleFileUploadFail));
+    dispatch(
+      saveSamples(
+        authToken,
+        problemId,
+        testcases,
+        sampleDataIds,
+        sampleTableData,
+        () => {
+          setHandleSamplesSuccess(true);
+        },
+        handleFileUploadFail,
+      ),
+    );
+    dispatch(
+      saveTestcases(
+        authToken,
+        problemId,
+        testcases,
+        testcaseDataIds,
+        testcaseTableData,
+        status,
+        () => {
+          setHandleTestcasesSuccess(true);
+        },
+        handleFileUploadFail,
+      ),
+    );
     // dispatch(saveAssistingData(authToken, problemId, assistingData, problems[problemId].assistingDataIds, assistTableData, () => { setHandleAssistingDataSuccess(true); }, handleFileUploadFail));
 
     setDisabled(true);
@@ -376,7 +450,19 @@ export default function CodingProblemEdit({ closeEdit }) {
     }
   };
 
-  if (loading.editProblem || loading.deleteProblem || loading.deleteTestcase || loading.deleteAssistingData || loading.editAssistingData || loading.addAssistingData || loading.editTestcase || loading.uploadTestcaseInput || loading.uploadTestcaseOutput || loading.addTestcase || disabled) {
+  if (
+    loading.editProblem
+    || loading.deleteProblem
+    || loading.deleteTestcase
+    || loading.deleteAssistingData
+    || loading.editAssistingData
+    || loading.addAssistingData
+    || loading.editTestcase
+    || loading.uploadTestcaseInput
+    || loading.uploadTestcaseOutput
+    || loading.addTestcase
+    || disabled
+  ) {
     return <GeneralLoading />;
   }
 

@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import Icon from './icon/index';
 import { userLogout } from '../../actions/user/auth';
-import { userBrowseAnnouncement, userReadAnnouncement } from '../../actions/user/user';
+import { userBrowseAnnouncement } from '../../actions/user/user';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -69,9 +69,9 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 2,
   },
   notificationDropdownContent: {
-    position: 'absolute',
+    position: 'fixed',
     backgroundColor: theme.palette.primary.contrastText,
-    right: '-120px',
+    right: '30px',
     top: '39px',
     minWidth: '460px',
     maxHeight: '423px',
@@ -137,9 +137,9 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   userDropdownContent: {
-    position: 'absolute',
+    position: 'fixed',
     backgroundColor: theme.palette.primary.contrastText,
-    marginLeft: '-40px',
+    right: '30px',
     minWidth: '140px',
     zIndex: '1',
     boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
@@ -172,6 +172,7 @@ export default function Header() {
 
   const user = useSelector((state) => state.user);
   const authToken = useSelector((state) => state.auth.token);
+  const systemLoading = useSelector((state) => state.loading.admin.system);
 
   const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   HH:mm'));
   const [itemList, setItemList] = useState([]);
@@ -194,8 +195,10 @@ export default function Header() {
   }, [user.classes.length]);
 
   useEffect(() => {
-    dispatch(userBrowseAnnouncement(authToken));
-  }, [authToken, dispatch]);
+    if (!systemLoading.editAnnouncement && !systemLoading.addAnnouncement && !systemLoading.deleteAnnouncement) {
+      dispatch(userBrowseAnnouncement(authToken));
+    }
+  }, [authToken, dispatch, systemLoading.editAnnouncement, systemLoading.addAnnouncement, systemLoading.deleteAnnouncement]);
 
   useEffect(() => {
     switch (user.role) {

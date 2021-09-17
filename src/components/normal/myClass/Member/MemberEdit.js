@@ -13,7 +13,9 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { useSelector } from 'react-redux';
+import { useCookies } from 'react-cookie';
 import { fetchClassMemberWithAccountReferral, replaceClassMembers } from '../../../../actions/common/common';
+import { getUserInfo } from '../../../../actions/user/auth';
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -83,6 +85,7 @@ const MemberEdit = ({
   const [showUnsavedChangesDialog, setShowUnsavedChangesDialog] = useState(false);
   const [showDuplicateIdentityDialog, setShowDuplicateIdentityDialog] = useState(false);
   const [showErrorDetectedDialog, setShowErrorDetectedDialog] = useState(false);
+  const [cookies] = useCookies(['id']);
   const unblockHandle = useRef();
   const targetLocation = useRef();
   const history = useHistory();
@@ -256,7 +259,10 @@ const MemberEdit = ({
             authToken,
             classId,
             replacingList,
-            () => unblockAndReturn(saveWithDialog),
+            () => {
+              unblockAndReturn(saveWithDialog);
+              dispatch(getUserInfo(cookies.id, authToken));
+            },
             () => setShowErrorDetectedDialog(true),
           ),
         );
