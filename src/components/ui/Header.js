@@ -172,6 +172,7 @@ export default function Header() {
 
   const user = useSelector((state) => state.user);
   const authToken = useSelector((state) => state.auth.token);
+  const systemLoading = useSelector((state) => state.loading.admin.system);
 
   const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   HH:mm'));
   const [itemList, setItemList] = useState([]);
@@ -194,8 +195,10 @@ export default function Header() {
   }, [user.classes.length]);
 
   useEffect(() => {
-    dispatch(userBrowseAnnouncement(authToken));
-  }, [authToken, dispatch]);
+    if (!systemLoading.editAnnouncement && !systemLoading.addAnnouncement && !systemLoading.deleteAnnouncement) {
+      dispatch(userBrowseAnnouncement(authToken));
+    }
+  }, [authToken, dispatch, systemLoading.editAnnouncement, systemLoading.addAnnouncement, systemLoading.deleteAnnouncement]);
 
   useEffect(() => {
     switch (user.role) {
