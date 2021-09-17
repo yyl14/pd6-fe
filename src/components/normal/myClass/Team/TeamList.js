@@ -17,10 +17,11 @@ import { MdAdd } from 'react-icons/md';
 import AlignedText from '../../../ui/AlignedText';
 import AutoTable from '../../../ui/AutoTable';
 import FileUploadArea from '../../../ui/FileUploadArea';
+import AddTeamMemberArea from '../../../ui/AddTeamMemberArea';
 import PageTitle from '../../../ui/PageTitle';
 import Icon from '../../../ui/icon/index';
 import {
-  fetchTeams, addTeam, importTeam, downloadTeamFile,
+  fetchTeams, importTeam, createTeamWithMember, downloadTeamFile,
 } from '../../../../actions/myClass/team';
 
 import NoMatch from '../../../noMatch';
@@ -66,11 +67,12 @@ export default function TeamList() {
 
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [disabled, setDisabled] = useState(true);
-  const [hasRequest, setHasRequest] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const [importError, setImportError] = useState(false);
+  const [createTeamErr, setCreateTeamErr] = useState(false);
+  const [addMemberErr, setAddMemberErr] = useState(false);
 
   const [selectedFile, setSelectedFile] = useState([]);
+  const [selectedMember, setSelectedMember] = useState([]);
   const [importInput, setImportInput] = useState('');
   const [addInputs, setAddInputs] = useState({
     label: '',
@@ -82,22 +84,6 @@ export default function TeamList() {
       if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') setIsManager(true);
     }
   }, [classId, user.classes]);
-
-  useEffect(() => {
-    if (addInputs.label !== '' && addInputs.teamName !== '') {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
-  }, [addInputs.label, addInputs.teamName]);
-
-  useEffect(() => {
-    if (importInput !== '' && selectedFile !== []) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
-  }, [importInput, selectedFile]);
 
   const handleImportChange = (event) => {
     setImportInput(event.target.value);
@@ -118,51 +104,41 @@ export default function TeamList() {
       label: '',
       teamName: '',
     });
+    setSelectedMember([]);
+  };
+
+  const addTeamSuccess = () => {
+    clearAddInput();
+    setShowAddDialog(false);
+  };
+
+  const importTeamSuccess = () => {
+    clearImportInput();
+    setShowImportDialog(false);
   };
 
   const submitImport = () => {
     if (importInput !== '' && selectedFile !== []) {
-      selectedFile.map((file) => dispatch(importTeam(authToken, classId, importInput, file)));
+      selectedFile.map((file) => dispatch(importTeam(authToken, classId, importInput, file, importTeamSuccess, () => setImportError(true))));
     }
-    setHasRequest(true);
   };
 
   const submitAdd = () => {
-    if (addInputs.label !== '' && addInputs.teamName !== '') {
-      dispatch(addTeam(authToken, classId, addInputs.teamName, addInputs.label));
+    if (addInputs.label !== '' && addInputs.teamName !== '' && selectedMember !== []) {
+      dispatch(
+        createTeamWithMember(
+          authToken,
+          classId,
+          addInputs.teamName,
+          addInputs.label,
+          selectedMember,
+          addTeamSuccess,
+          () => setCreateTeamErr(true),
+          () => setAddMemberErr(true),
+        ),
+      );
     }
-    setHasRequest(true);
   };
-
-  useEffect(() => {
-    if (hasRequest && showAddDialog && !loading.addTeam) {
-      if (error.addTeam === null) {
-        clearAddInput();
-        setShowAddDialog(false);
-        setHasRequest(false);
-        setDisabled(true);
-      } else {
-        setHasError(true);
-      }
-    } else if (hasRequest && showImportDialog && !loading.importTeam) {
-      if (error.importTeam === null) {
-        clearImportInput();
-        setShowImportDialog(false);
-        setHasRequest(false);
-        setDisabled(true);
-      } else {
-        setHasError(true);
-      }
-    }
-  }, [
-    error.addTeam,
-    error.importTeam,
-    hasRequest,
-    loading.addTeam,
-    loading.importTeam,
-    showAddDialog,
-    showImportDialog,
-  ]);
 
   const downloadTemplate = () => {
     setShowImportDialog(false);
@@ -170,15 +146,13 @@ export default function TeamList() {
   };
 
   const handleCloseError = () => {
-    setHasError(false);
-    setHasRequest(false);
+    setImportError(false);
+    setCreateTeamErr(false);
+    setAddMemberErr(false);
   };
 
-  if (loading.fetchTeams) {
-    return <GeneralLoading />;
-  }
   if (courses[courseId] === undefined || classes[classId] === undefined) {
-    if (loading.fetchCourse || loading.fetchClass) {
+    if (loading.fetchCourse || loading.fetchClass || loading.fetchTeams) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -263,10 +237,10 @@ export default function TeamList() {
           <Typography variant="body2"> Download template file for more instructions.</Typography>
         </DialogContent>
         <DialogContent>
-          <AlignedText text="Class" maxWidth="mg" childrenType="text">
+          <AlignedText text="Class" maxWidth="md" childrenType="text">
             <Typography variant="body1">{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
           </AlignedText>
-          <AlignedText text="Label" maxWidth="mg" childrenType="field">
+          <AlignedText text="Label" maxWidth="md" childrenType="field">
             <TextField id="title" name="title" value={importInput} onChange={(e) => handleImportChange(e)} />
           </AlignedText>
           <FileUploadArea
@@ -290,39 +264,30 @@ export default function TeamList() {
             <Button
               onClick={() => {
                 setShowImportDialog(false);
-                setHasRequest(false);
                 clearImportInput();
-                setDisabled(true);
               }}
               color="default"
             >
               Cancel
             </Button>
             <Button
-              onClick={() => {
-                submitImport();
-                setDisabled(true);
-              }}
+              onClick={submitImport}
               color="primary"
-              disabled={disabled}
+              disabled={!(importInput !== '' && Object.keys(selectedFile).length !== 0)}
             >
               Confirm
             </Button>
           </div>
         </DialogActions>
       </Dialog>
-      <Snackbar
-        open={showAddDialog && hasError}
-        onClose={handleCloseError}
-        message={`Error: ${error.myClass.team.addTeam}`}
-      />
+      <Snackbar open={importError} onClose={handleCloseError} message={`Error: ${error.myClass.team.importTeam}`} />
 
       <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} maxWidth="md">
         <DialogTitle id="dialog-slide-title">
           <Typography variant="h4">Create New Team</Typography>
         </DialogTitle>
         <DialogContent>
-          <AlignedText text="Class" maxWidth="lg" childrenType="text">
+          <AlignedText text="Class" maxWidth="md" childrenType="text">
             <Typography variant="body1">{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
           </AlignedText>
           <AlignedText text="Label" maxWidth="lg" childrenType="field">
@@ -331,38 +296,38 @@ export default function TeamList() {
           <AlignedText text="Team Name" maxWidth="lg" childrenType="field">
             <TextField name="teamName" value={addInputs.teamName} onChange={(e) => handleAddChange(e)} />
           </AlignedText>
-        </DialogContent>
-        <DialogContent>
-          <Typography variant="body2">Visit team page to add team member after creating.</Typography>
+          <AddTeamMemberArea text="Member List" selectedMember={selectedMember} setSelectedMember={setSelectedMember} />
         </DialogContent>
         <DialogActions>
           <Button
             onClick={() => {
               setShowAddDialog(false);
-              setHasRequest(false);
               clearAddInput();
-              setDisabled(true);
             }}
             color="default"
           >
             Cancel
           </Button>
           <Button
-            onClick={() => {
-              submitAdd();
-              setDisabled(true);
-            }}
+            onClick={submitAdd}
             color="primary"
-            disabled={disabled}
+            disabled={
+              !(addInputs.label !== '' && addInputs.teamName !== '' && Object.keys(selectedMember).length !== 0)
+            }
           >
             Create
           </Button>
         </DialogActions>
       </Dialog>
       <Snackbar
-        open={showImportDialog && hasError}
+        open={createTeamErr}
         onClose={handleCloseError}
-        message={`Error: ${error.myClass.team.importTeam}`}
+        message={`Create team fail: ${error.myClass.team.addTeam}`}
+      />
+      <Snackbar
+        open={addMemberErr}
+        onClose={handleCloseError}
+        message={`Add team members fail: ${error.myClass.team.addTeamMember}`}
       />
     </>
   );
