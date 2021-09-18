@@ -193,7 +193,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
         </DialogActions>
       </Dialog>
       {/* Upload Failed dialog */}
-      <Dialog maxWidth="lg" open={popUpFail} keepMounted onClose={handleClosePopUpFail}>
+      <Dialog maxWidth="md" open={popUpFail} keepMounted onClose={handleClosePopUpFail}>
         <DialogTitle>
           <Typography variant="h4">Upload Failed</Typography>
         </DialogTitle>
@@ -212,7 +212,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
         </DialogActions>
       </Dialog>
       {/* Delete dialog */}
-      <Dialog maxWidth="lg" open={popUpDelete} keepMounted onClose={handleCloseDelete}>
+      <Dialog maxWidth="md" open={popUpDelete} keepMounted onClose={handleCloseDelete}>
         <DialogTitle>
           <Typography variant="h4">Delete Essay</Typography>
         </DialogTitle>
