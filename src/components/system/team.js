@@ -71,7 +71,7 @@ export default function Team() {
         <SimpleBar title="PM" noIndent>
           <div className={classes.profile}>
             <Profile
-              img_url="../../../images/doge.png"
+              img_url="../../../images/Kiyume.jpg"
               name="鄭允頎 Kiyume"
               description="PM"
               FB_link="http://fb.com/e9cf87fc"
@@ -98,7 +98,7 @@ export default function Team() {
               Linkedin_link="http://www.linkedin.com/in/wpbag"
             />
             <Profile
-              img_url="../../../images/doge.png"
+              img_url="../../../images/DerekLu.jpg"
               name="盧德原 Derek Lu"
               description="Design"
               FB_link="https://www.facebook.com/derekdylu"
@@ -154,14 +154,14 @@ export default function Team() {
             Linkedin_link="https://www.linkedin.com/in/an-yun-cheng"
           />
           <Profile
-            img_url="../../../images/doge.png"
+            img_url="../../../images/DaphneHou.jpg"
             name="侯維書 Daphne Hou"
             description="FE"
             FB_link="https://www.facebook.com/daphne.hou.9/"
             Linkedin_link="https://www.linkedin.com/in/daphne-hou-2016ab220/"
           />
           <Profile
-            img_url="../../../images/amberliu.JPG"
+            img_url="../../../images/amberliu.jpg"
             name="劉亞絜 amberliu"
             description="FE"
             FB_link="https://www.facebook.com/profile.php?id=100006116703389"
