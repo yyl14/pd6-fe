@@ -9,7 +9,6 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
-  Button,
   IconButton,
 } from '@material-ui/core';
 import Icon from '../icon/index';
@@ -98,6 +97,23 @@ export default function System({
           icon: <Icon.SettingsIcon />,
         },
       ]);
+    } else if (mode === 'system') {
+      if (location.pathname === '/system') {
+        history.push('/system/team');
+      }
+      setTitle('System');
+      setItemList([
+        {
+          text: 'Team',
+          path: '/system/team',
+          icon: <Icon.Warning />,
+        },
+        // {
+        //   text: 'Access Log',
+        //   path: '/system/accesslog',
+        //   icon: <Icon.Paper />,
+        // },
+      ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname, history, mode, announcementList, languageList, announcementId, languageId]);
@@ -137,6 +153,7 @@ export default function System({
         classes={{ paper: classes.drawerPaper }}
       >
         {mode === 'main' ? <div className={classes.topSpace} /> : arrow}
+        {mode === 'system' && <div className={classes.topSpace} />}
         <div className={classes.title}>
           {display === 'unfold' ? (
             <Icon.TriangleDown className={classes.titleIcon} onClick={foldSystem} />

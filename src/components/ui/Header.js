@@ -239,26 +239,26 @@ export default function Header() {
               basePath: '/all-class',
               path: '/all-class',
             },
-            // {
-            //   text: 'Problem Set',
-            //   basePath: '/problem-set',
-            //   path: '/problem-set',
-            // },
-            // {
-            //   text: 'PDAO',
-            //   basePath: '/pdao',
-            //   path: '/pdao',
-            // },
-            // {
-            //   text: 'Ranklist',
-            //   basePath: '/ranklist',
-            //   path: '/ranklist',
-            // },
-            // {
-            //   text: 'System',
-            //   basePath: '/system',
-            //   path: '/system',
-            // },
+            {
+              text: 'Problem Set',
+              basePath: '/problem-set',
+              path: '/problem-set',
+            },
+            {
+              text: 'PDAO',
+              basePath: '/pdao',
+              path: '/pdao',
+            },
+            {
+              text: 'Ranklist',
+              basePath: '/ranklist',
+              path: '/ranklist',
+            },
+            {
+              text: 'System',
+              basePath: '/system',
+              path: '/system',
+            },
           ]);
         } else {
           setItemList([
@@ -267,26 +267,26 @@ export default function Header() {
               basePath: '/all-class',
               path: '/all-class',
             },
-            // {
-            //   text: 'Problem Set',
-            //   basePath: '/problem-set',
-            //   path: '/problem-set',
-            // },
-            // {
-            //   text: 'PDAO',
-            //   basePath: '/pdao',
-            //   path: '/pdao',
-            // },
-            // {
-            //   text: 'Ranklist',
-            //   basePath: '/ranklist',
-            //   path: '/ranklist',
-            // },
-            // {
-            //   text: 'System',
-            //   basePath: '/system',
-            //   path: '/system',
-            // },
+            {
+              text: 'Problem Set',
+              basePath: '/problem-set',
+              path: '/problem-set',
+            },
+            {
+              text: 'PDAO',
+              basePath: '/pdao',
+              path: '/pdao',
+            },
+            {
+              text: 'Ranklist',
+              basePath: '/ranklist',
+              path: '/ranklist',
+            },
+            {
+              text: 'System',
+              basePath: '/system',
+              path: '/system',
+            },
           ]);
         }
         setMenuList([
