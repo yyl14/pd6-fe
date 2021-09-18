@@ -1,10 +1,23 @@
 import { combineReducers } from 'redux';
 import { accountConstants, systemConstants } from '../actions/admin/constant';
 import { gradeConstants, submissionConstants, challengeConstants } from '../actions/myClass/constant';
+import { userConstants } from '../actions/user/constants';
 import { commonConstants } from '../actions/common/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
+    case userConstants.READ_OTHERS_ACCOUNT_SUCCESS: {
+      return {
+        ...state,
+        [action.payload.id]: {
+          ...action.payload,
+          studentCard: [],
+          gradeIds: [],
+          pendingStudentCard: [],
+        },
+      };
+    }
+
     case accountConstants.FETCH_ACCOUNTS_SUCCESS: {
       return action.payload.reduce(
         (acc, item) => ({
@@ -186,6 +199,10 @@ const allIds = (state = [], action) => {
     case commonConstants.GET_ACCOUNT_BATCH_SUCCESS: {
       const { accountId } = action.payload;
       return state.includes(accountId) ? state : state.concat([accountId]);
+    }
+
+    case userConstants.READ_OTHERS_ACCOUNT_SUCCESS: {
+      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
     }
 
     default:

@@ -12,10 +12,23 @@ const initialState = {
   browsePendingStudentCards: null,
   resendEmailVerification: null,
   deletePendingStudentCard: null,
+  readOthersAccount: null,
 };
 
 export default function user(state = initialState, action) {
   switch (action.type) {
+    case userConstants.READ_OTHERS_ACCOUNT_SUCCESS: {
+      return {
+        ...state,
+        readOthersAccount: null,
+      };
+    }
+    case userConstants.READ_OTHERS_ACCOUNT_FAIL:
+      return {
+        ...state,
+        readOthersAccount: action.error,
+      };
+
     case userConstants.EDIT_SELF_ACCOUNT_SUCCESS: {
       return {
         ...state,

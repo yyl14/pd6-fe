@@ -1,33 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider,
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
-export default function MyProfile({
+export default function UserProfile({
   classes, history, location, mode,
 }) {
-  const account = useSelector((state) => state.user);
+  const { accountId } = useParams();
+  const accounts = useSelector((state) => state.accounts.byId);
   const [display, setDisplay] = useState('unfold');
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
 
   useEffect(() => {
-    // console.log(account);
-    if (mode === 'main') {
-      setTitle(account.username);
+    if (mode === 'main' && accounts[accountId] !== undefined) {
+      setTitle(accounts[accountId].username);
       setItemList([
         {
-          text: 'Setting',
-          path: '/my-profile',
+          text: 'Profile',
+          path: `/user-profile/${accountId}`,
           icon: (
-            <Icon.SettingsIcon />
+            <Icon.PersonIcon />
           ),
         },
       ]);
     }
-  }, [account, mode]);
+  }, [accountId, accounts, mode]);
 
   const foldAccount = () => {
     setDisplay('fold');
