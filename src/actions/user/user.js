@@ -240,6 +240,27 @@ const deletePendingStudentCard = (token, emailVerificationId) => async (dispatch
   }
 };
 
+const readAccount = (token, accountId) => async (dispatch) => {
+  dispatch({ type: userConstants.READ_OTHERS_ACCOUNT_START });
+  try {
+    const config = {
+      headers: {
+        'Auth-Token': token,
+      },
+    };
+    const res = await agent.get(`/account/${accountId}`, config);
+    dispatch({
+      type: userConstants.READ_OTHERS_ACCOUNT_SUCCESS,
+      payload: res.data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: userConstants.READ_OTHERS_ACCOUNT_FAIL,
+      error,
+    });
+  }
+};
+
 export {
   editAccount,
   makeStudentCardDefault,
@@ -251,4 +272,5 @@ export {
   resendEmailVerification,
   deletePendingStudentCard,
   // userReadAnnouncement,
+  readAccount,
 };

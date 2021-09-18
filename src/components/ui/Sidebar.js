@@ -9,6 +9,7 @@ import Account from './sidebar/Account';
 import Course from './sidebar/Course';
 import System from './sidebar/System';
 import MyProfile from './sidebar/MyProfile';
+import UserProfile from './sidebar/UserProfile';
 
 import MyClass from './sidebar/MyClass';
 import Challenge from './sidebar/Challenge';
@@ -141,6 +142,12 @@ export default function Sidebar() {
       <Route exact path="/my-profile">
         <MyProfile classes={classes} history={history} location={location} mode="main" />
       </Route>
+
+      {/* {Other's Profile} */}
+      <Route exact path="/user-profile/:accountId">
+        <UserProfile classes={classes} history={history} location={location} mode="main" />
+      </Route>
+
       {/* {Admin} */}
       {/* {Course} */}
       <Route exact path="/admin/course/course/">

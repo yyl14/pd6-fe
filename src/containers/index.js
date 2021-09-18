@@ -10,6 +10,7 @@ import FeedbackIcon from '@material-ui/icons/Feedback';
 import Normal from './normal';
 import Admin from './admin';
 import Account from './account';
+import User from './user';
 // import NoMatch from '../components/noMatch';
 
 import { getUserInfo } from '../actions/user/auth';
@@ -76,6 +77,7 @@ function Index() {
       <Switch>
         <Route path="/admin" component={Admin} />
         <Route path="/my-profile" component={Account} />
+        <Route exact path="/user-profile/:accountId" component={User} />
         <Route path="/" component={Normal} />
       </Switch>
       <Fab href="https://forms.gle/KaYJnXwgvsovzqVG7" target="_blank" className={classes.bugReport}><FeedbackIcon /></Fab>
