@@ -21,14 +21,14 @@ import AutoTable from '../../ui/AutoTable';
 import AlignedText from '../../ui/AlignedText';
 import FileUploadArea from '../../ui/FileUploadArea';
 import Icon from '../../ui/icon/index';
-import { fetchAccounts } from '../../../actions/admin/account';
+import { fetchAccounts, addAccount } from '../../../actions/admin/account';
 
 const useStyles = makeStyles((theme) => ({
   addDialogGap: {
     marginTop: '60px',
   },
   reminder: {
-    color: theme.palette.grey.A400,
+    color: theme.palette.grey.A700,
     marginLeft: theme.spacing(2),
   },
   importDialogButtons: {
@@ -62,6 +62,8 @@ export default function AccountList() {
   const [showPassword, setShowPassword] = useState({ pw1: false, pw2: false });
   const [selectedFile, setSelectedFile] = useState([]);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [pwError, setPwError] = useState(false);
+  const [errorText, setErrorText] = useState('');
   const [hasError, setHasError] = useState(false);
   // const [hasRequest, setHasRequest] = useState(false);
 
@@ -93,6 +95,20 @@ export default function AccountList() {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setAddInputs((input) => ({ ...input, [name]: value }));
+
+    if (name === 'password1') {
+      if (value === addInputs.password2) {
+        setPwError(false);
+        setErrorText('');
+      }
+    }
+
+    if (name === 'password2') {
+      if (value === addInputs.password1) {
+        setPwError(false);
+        setErrorText('');
+      }
+    }
   };
 
   const handleCancel = () => {
@@ -107,6 +123,8 @@ export default function AccountList() {
     });
     setShowPassword({ pw1: false, pw2: false });
     setSelectedFile([]);
+    setPwError(false);
+    setErrorText('');
   };
 
   const addAccountSuccess = () => {
@@ -118,6 +136,8 @@ export default function AccountList() {
       password2: '',
       altMail: '',
     });
+    setPwError(false);
+    setErrorText('');
     setShowPassword({ pw1: false, pw2: false });
     // setHasRequest(false);
   };
@@ -132,13 +152,28 @@ export default function AccountList() {
     if (showImportDialog) {
       // selectedFile.map((file) => dispatch(importAccount(authToken, file, importAccountSuccess, () => setHasError(true))));
     } else if (showAddDialog) {
-      // dispatch(addAccount(authToken, addInputs.realName, addInputs.userName, addInputs.password1, addInputs.altMail, addAccountSuccess, () => setHasError(true)));
+      if (addInputs.password1 !== addInputs.password2) {
+        setPwError(true);
+        setErrorText("Passwords don't match");
+        return;
+      }
+      dispatch(
+        addAccount(
+          authToken,
+          addInputs.realName,
+          addInputs.userName,
+          addInputs.password1,
+          addInputs.altMail,
+          addAccountSuccess,
+          () => setHasError(true),
+        ),
+      );
     }
     // setHasRequest(true);
   };
 
   const downloadTemplate = () => {
-    // dispatch(downloadGradeFile(authToken));
+    // dispatch(downloadAccountFile(authToken));
     setShowImportDialog(false);
   };
 
@@ -199,16 +234,11 @@ export default function AccountList() {
         })}
         buttons={(
           <>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => setShowImportDialog(true)}
-              startIcon={<Icon.Folder />}
-            >
-              Import
-            </Button>
-            <Button color="primary" onClick={() => setShowAddDialog(true)}>
+            <Button variant="outlined" color="primary" onClick={() => setShowAddDialog(true)}>
               <Icon.Add />
+            </Button>
+            <Button color="primary" onClick={() => setShowImportDialog(true)} startIcon={<Icon.Folder />}>
+              Import
             </Button>
           </>
         )}
@@ -274,6 +304,8 @@ export default function AccountList() {
                 </InputAdornment>
               ),
             }}
+            error={pwError}
+            helperText={errorText}
           />
           <TextField
             name="altMail"
@@ -314,7 +346,13 @@ export default function AccountList() {
           <Typography variant="body2" className={classNames.reminder}>
             Nickname: String (Optional)
           </Typography>
-          <Typography variant="body2">Notice that PDOGS only accept files encoded in ASCII/UTF-8 charset</Typography>
+          <Typography variant="body2">
+            Notice that PDOGS only accept files encoded in
+            {' '}
+            <b>ASCII / UTF-8</b>
+            {' '}
+            charset.
+          </Typography>
         </DialogContent>
         <DialogContent>
           <FileUploadArea
