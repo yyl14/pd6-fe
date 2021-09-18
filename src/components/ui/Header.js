@@ -239,21 +239,21 @@ export default function Header() {
               basePath: '/all-class',
               path: '/all-class',
             },
-            {
-              text: 'Problem Set',
-              basePath: '/problem-set',
-              path: '/problem-set',
-            },
-            {
-              text: 'PDAO',
-              basePath: '/pdao',
-              path: '/pdao',
-            },
-            {
-              text: 'Ranklist',
-              basePath: '/ranklist',
-              path: '/ranklist',
-            },
+            // {
+            //   text: 'Problem Set',
+            //   basePath: '/problem-set',
+            //   path: '/problem-set',
+            // },
+            // {
+            //   text: 'PDAO',
+            //   basePath: '/pdao',
+            //   path: '/pdao',
+            // },
+            // {
+            //   text: 'Ranklist',
+            //   basePath: '/ranklist',
+            //   path: '/ranklist',
+            // },
             {
               text: 'System',
               basePath: '/system',
@@ -267,21 +267,21 @@ export default function Header() {
               basePath: '/all-class',
               path: '/all-class',
             },
-            {
-              text: 'Problem Set',
-              basePath: '/problem-set',
-              path: '/problem-set',
-            },
-            {
-              text: 'PDAO',
-              basePath: '/pdao',
-              path: '/pdao',
-            },
-            {
-              text: 'Ranklist',
-              basePath: '/ranklist',
-              path: '/ranklist',
-            },
+            // {
+            //   text: 'Problem Set',
+            //   basePath: '/problem-set',
+            //   path: '/problem-set',
+            // },
+            // {
+            //   text: 'PDAO',
+            //   basePath: '/pdao',
+            //   path: '/pdao',
+            // },
+            // {
+            //   text: 'Ranklist',
+            //   basePath: '/ranklist',
+            //   path: '/ranklist',
+            // },
             {
               text: 'System',
               basePath: '/system',
