@@ -62,6 +62,8 @@ export default function AccountList() {
   const [showPassword, setShowPassword] = useState({ pw1: false, pw2: false });
   const [selectedFile, setSelectedFile] = useState([]);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  // const [hasRequest, setHasRequest] = useState(false);
 
   const accounts = useSelector((state) => state.accounts);
   const authToken = useSelector((state) => state.auth.token);
@@ -96,7 +98,6 @@ export default function AccountList() {
   const handleCancel = () => {
     setShowAddDialog(false);
     setShowImportDialog(false);
-    setIsDisabled(true);
     setAddInputs({
       realName: '',
       userName: '',
@@ -108,10 +109,32 @@ export default function AccountList() {
     setSelectedFile([]);
   };
 
-  const handleSubmit = (event) => {
-    // if (showAddDialog) {
-    // } else if (showImportDialog) {
-    // }
+  const addAccountSuccess = () => {
+    setShowAddDialog(false);
+    setAddInputs({
+      realName: '',
+      userName: '',
+      password1: '',
+      password2: '',
+      altMail: '',
+    });
+    setShowPassword({ pw1: false, pw2: false });
+    // setHasRequest(false);
+  };
+
+  const importAccountSuccess = () => {
+    setSelectedFile([]);
+    setShowImportDialog(false);
+    // setHasRequest(false);
+  };
+
+  const handleSubmit = () => {
+    if (showImportDialog) {
+      // selectedFile.map((file) => dispatch(importAccount(authToken, file, importAccountSuccess, () => setHasError(true))));
+    } else if (showAddDialog) {
+      // dispatch(addAccount(authToken, addInputs.realName, addInputs.userName, addInputs.password1, addInputs.altMail, addAccountSuccess, () => setHasError(true)));
+    }
+    // setHasRequest(true);
   };
 
   const downloadTemplate = () => {
@@ -265,7 +288,7 @@ export default function AccountList() {
             Cancel
           </Button>
           <Button disabled={isDisabled} onClick={handleSubmit} color="primary">
-            Add
+            Create
           </Button>
         </DialogActions>
       </Dialog>
@@ -288,11 +311,14 @@ export default function AccountList() {
           <Typography variant="body2" className={classNames.reminder}>
             Email: String (Optional)
           </Typography>
-          <Typography variant="body2">Download template file for more instructions.</Typography>
+          <Typography variant="body2" className={classNames.reminder}>
+            Nickname: String (Optional)
+          </Typography>
+          <Typography variant="body2">Notice that PDOGS only accept files encoded in ASCII/UTF-8 charset</Typography>
         </DialogContent>
         <DialogContent>
           <FileUploadArea
-            text="File (utf-8 Format)"
+            text="File"
             fileAcceptFormat=".csv"
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
@@ -313,7 +339,7 @@ export default function AccountList() {
               Cancel
             </Button>
             <Button disabled={isDisabled} onClick={handleSubmit} color="primary">
-              Add
+              Confirm
             </Button>
           </div>
         </DialogActions>
