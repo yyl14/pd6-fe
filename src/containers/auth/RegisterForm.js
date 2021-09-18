@@ -233,6 +233,26 @@ export default function RegisterForm() {
     setErrorPopup(false);
   };
 
+  const onNextPage = () => {
+    let errorCnt = 0;
+
+    labelName.map((name) => {
+      if (name === 'username' || name === 'password' || name === 'confirmPassword') {
+        return name; // second page content
+      }
+      if (inputs[name].trim() === '') {
+        setErrors((input) => ({ ...input, [name]: true }));
+        setErrorTexts((input) => ({ ...input, [name]: "Can't be empty" }));
+        errorCnt += 1;
+      }
+      return name;
+    });
+
+    if (errorCnt === 0) {
+      setNextPage(true);
+    }
+  };
+
   useEffect(() => {
     if (!registerLoading && hasRequest) {
       // IllegalCharacter, InvalidInstitute, SystemException
@@ -332,7 +352,7 @@ export default function RegisterForm() {
                 </Typography>
               </div>
               <div className={classNames.authButtons}>
-                <Button disabled={disabled} onClick={() => setNextPage(true)} color="primary">
+                <Button disabled={disabled} onClick={onNextPage} color="primary">
                   Next
                 </Button>
               </div>
