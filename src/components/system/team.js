@@ -207,7 +207,7 @@ export default function Team() {
             Linkedin_link="https://www.linkedin.com/in/daphne-hou-2016ab220/"
           />
           <Profile
-            img_url="../../../images/amberliu.jpg"
+            img_url="../../../images/amberliu.JPG"
             name="劉亞絜 amberliu"
             description="FE"
             FB_link="https://www.facebook.com/profile.php?id=100006116703389"
@@ -238,7 +238,7 @@ export default function Team() {
               Linkedin_link="http://linkedin.com/in/chessyhsu"
             />
             <Profile
-              img_url="../../../images/sheeeeeeeep.jpg"
+              img_url="../../../images/sheeeeeeeep.JPG"
               name="鄭揚 Sheeeeeeeep"
               description="BE"
               FB_link="https://www.facebook.com/sheep1129588/"
@@ -252,7 +252,7 @@ export default function Team() {
               Linkedin_link="http://www.linkedin.com/in/pinyuho"
             />
             <Profile
-              img_url="../../../images/wsa.jpg"
+              img_url="../../../images/wsa.JPG"
               name="王紹安 wsa"
               description="BE"
               FB_link="https://www.facebook.com/profile.php?id=100008141530919"
@@ -271,7 +271,7 @@ export default function Team() {
               Linkedin_link="https://www.linkedin.com/in/fredred/"
             />
             <Profile
-              img_url="../../../images/jtc.jpg"
+              img_url="../../../images/jtc.JPG"
               name="陳杰彤 jtc"
               description="DevOps"
               FB_link="https://www.facebook.com/jtongchenzip/"
