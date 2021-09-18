@@ -69,9 +69,9 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 2,
   },
   notificationDropdownContent: {
-    position: 'absolute',
+    position: 'fixed',
     backgroundColor: theme.palette.primary.contrastText,
-    right: '-120px',
+    right: '30px',
     top: '39px',
     minWidth: '460px',
     maxHeight: '423px',
@@ -137,9 +137,9 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   userDropdownContent: {
-    position: 'absolute',
+    position: 'fixed',
     backgroundColor: theme.palette.primary.contrastText,
-    marginLeft: '-40px',
+    right: '30px',
     minWidth: '140px',
     zIndex: '1',
     boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
@@ -254,11 +254,11 @@ export default function Header() {
             //   basePath: '/ranklist',
             //   path: '/ranklist',
             // },
-            // {
-            //   text: 'System',
-            //   basePath: '/system',
-            //   path: '/system',
-            // },
+            {
+              text: 'System',
+              basePath: '/system',
+              path: '/system',
+            },
           ]);
         } else {
           setItemList([
@@ -282,11 +282,11 @@ export default function Header() {
             //   basePath: '/ranklist',
             //   path: '/ranklist',
             // },
-            // {
-            //   text: 'System',
-            //   basePath: '/system',
-            //   path: '/system',
-            // },
+            {
+              text: 'System',
+              basePath: '/system',
+              path: '/system',
+            },
           ]);
         }
         setMenuList([
