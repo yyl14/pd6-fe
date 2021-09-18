@@ -18,6 +18,7 @@ import Team from './sidebar/Team';
 import AllClass from './sidebar/AllClass';
 import AllClassChallenge from './sidebar/AllClassChallenge';
 import ProblemSet from './sidebar/ProblemSet';
+import ProblemSetChallenge from './sidebar/ProblemSetChallenge';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -278,6 +279,12 @@ export default function Sidebar() {
       </Route>
       <Route exact path="/problem-set/:courseId/:classId">
         <ProblemSet classNames={classes} history={history} location={location} mode="main" />
+      </Route>
+      <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId">
+        <ProblemSetChallenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId">
+        <ProblemSetChallenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
 
       {/* {System} */}
