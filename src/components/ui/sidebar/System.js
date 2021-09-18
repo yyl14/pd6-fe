@@ -9,7 +9,6 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
-  Button,
   IconButton,
 } from '@material-ui/core';
 import Icon from '../icon/index';
@@ -109,11 +108,11 @@ export default function System({
           path: '/system/team',
           icon: <Icon.Warning />,
         },
-        {
-          text: 'Access Log',
-          path: '/system/accesslog',
-          icon: <Icon.Paper />,
-        },
+        // {
+        //   text: 'Access Log',
+        //   path: '/system/accesslog',
+        //   icon: <Icon.Paper />,
+        // },
       ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

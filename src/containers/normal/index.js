@@ -11,8 +11,8 @@ import GeneralLoading from '../../components/GeneralLoading';
 import NoMatch from '../../components/noMatch';
 import Header from '../../components/ui/Header';
 import Sidebar from '../../components/ui/Sidebar';
-import Team from './team';
-import AccessLog from './accessLog';
+import Team from '../../components/system/team';
+import AccessLog from '../../components/system/accessLog';
 
 export default function Normal() {
   const history = useHistory();

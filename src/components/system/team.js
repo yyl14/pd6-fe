@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Typography, makeStyles } from '@material-ui/core';
-import SimpleBar from '../../components/ui/SimpleBar';
-import Profile from '../../components/ui/profile';
+import { Button, makeStyles } from '@material-ui/core';
+import SimpleBar from '../ui/SimpleBar';
+import Profile from '../ui/profile';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   PDOGS_Content_Display: {
     display: 'block',
   },
@@ -33,8 +33,9 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
   },
   Backend_images: {
+    width: '100%',
     display: 'flex',
-    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   DevOps_images: {
     display: 'flex',
@@ -73,7 +74,6 @@ const useStyles = makeStyles((theme) => ({
 export default function Team() {
   const classes = useStyles();
 
-  const [buttonStyle, setButtonStyle] = useState('#yellow');
   const [display, setDisplay] = useState([true, false, false]);
 
   const handleClick6 = () => {
@@ -156,35 +156,6 @@ export default function Team() {
         <SimpleBar title="Frontend" />
         <div className={classes.Frontend_images}>
           <Profile
-            img_url="../../../images/Duge.jpg"
-            name="盧慶原 Duge"
-            description="FE"
-            FB_link="https://www.facebook.com/DuckChingYuan"
-            Github_link="https://github.com/duge03705022"
-          />
-          <Profile
-            img_url="../../../images/HuangFu.jpg"
-            name="皇甫立翔 HuangFu"
-            description="FE"
-            FB_link="https://www.facebook.com/Peter.HaungFu/"
-            Github_link="https://github.com/peterhuangfu"
-            Linkedin_link="https://www.linkedin.com/in/li-hsiang-huang-fu-0b1825184/"
-          />
-          <Profile
-            img_url="../../../images/pochunwu.jpg"
-            name="吳泊諄 Po-Chun Wu"
-            description="FE"
-            FB_link="https://www.facebook.com/profile.php?id=100027240108806"
-            Linkedin_link="https://www.linkedin.com/in/pochunwu2000/"
-          />
-          <Profile
-            img_url="../../../images/Ray.jpg"
-            name="李旻叡 Ray"
-            description="FE"
-            FB_link="https://www.facebook.com/profile.php?id=100003519372915"
-            Github_link="https://github.com/raymanlee89"
-          />
-          <Profile
             img_url="../../../images/timicienio.jpg"
             name="陳以潼 timicienio"
             description="FE"
@@ -198,6 +169,35 @@ export default function Team() {
             description="FE"
             FB_link="https://www.facebook.com/gary.hu.5680"
             Linkedin_link="http://www.linkedin.com/in/gary-hu-2000"
+          />
+          <Profile
+            img_url="../../../images/HuangFu.jpg"
+            name="皇甫立翔 HuangFu"
+            description="FE"
+            FB_link="https://www.facebook.com/Peter.HaungFu/"
+            Github_link="https://github.com/peterhuangfu"
+            Linkedin_link="https://www.linkedin.com/in/li-hsiang-huang-fu-0b1825184/"
+          />
+          <Profile
+            img_url="../../../images/Ray.jpg"
+            name="李旻叡 Ray"
+            description="FE"
+            FB_link="https://www.facebook.com/profile.php?id=100003519372915"
+            Github_link="https://github.com/raymanlee89"
+          />
+          <Profile
+            img_url="../../../images/pochunwu.jpg"
+            name="吳泊諄 Po-Chun Wu"
+            description="FE"
+            FB_link="https://www.facebook.com/profile.php?id=100027240108806"
+            Linkedin_link="https://www.linkedin.com/in/pochunwu2000/"
+          />
+          <Profile
+            img_url="../../../images/erica.jpg"
+            name="鄭安芸 erica"
+            description="FE"
+            FB_link="https://www.facebook.com/profile.php?id=100006123196027"
+            Linkedin_link="https://www.linkedin.com/in/an-yun-cheng"
           />
           <Profile
             img_url="../../../images/doge.png"
@@ -214,18 +214,18 @@ export default function Team() {
             Linkedin_link="https://www.linkedin.com/in/amber-liu-2b05651a2/"
           />
           <Profile
-            img_url="../../../images/erica.jpg"
-            name="鄭安芸 erica"
-            description="FE"
-            FB_link="https://www.facebook.com/profile.php?id=100006123196027"
-            Linkedin_link="https://www.linkedin.com/in/an-yun-cheng"
-          />
-          <Profile
             img_url="../../../images/wilson.jpg"
             name="徐懷山 wilson"
             description="FE"
             FB_link="https://www.facebook.com/Hsu.Wilson0915/"
             Linkedin_link="https://www.linkedin.com/in/wilson-hsu-4976b31b7/"
+          />
+          <Profile
+            img_url="../../../images/Duge.jpg"
+            name="盧慶原 Duge"
+            description="FE"
+            FB_link="https://www.facebook.com/DuckChingYuan"
+            Github_link="https://github.com/duge03705022"
           />
         </div>
         <SimpleBar title="Backend" noIndent>
