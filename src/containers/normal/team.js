@@ -10,6 +10,14 @@ const useStyles = makeStyles((theme) => ({
   PDOGS_Content_Hide: {
     display: 'none',
   },
+  PDOGS_Button_default: {
+    backgroundColor: 'rgba(248, 248, 248, 1)',
+    color: 'rgba(30, 165, 255, 1)',
+  },
+  PDOGS_Button_Clicked: {
+    backgroundColor: 'rgba(30, 165, 255, 1)',
+    color: 'rgba(255, 255, 255, 1)',
+  },
   // PDOGS 6
   PM_images: {
     display: 'flex',
@@ -65,25 +73,47 @@ const useStyles = makeStyles((theme) => ({
 export default function Team() {
   const classes = useStyles();
 
-  const [display, setDisplay] = useState([]);
+  const [buttonStyle, setButtonStyle] = useState('#yellow');
+  const [display, setDisplay] = useState([true, false, false]);
 
-  const handleClick6 = () => {};
-  const handleClick4s = () => {};
-  const handleClick1 = () => {};
+  const handleClick6 = () => {
+    setDisplay([true, false, false]);
+  };
+  const handleClick4s = () => {
+    setDisplay([false, true, false]);
+  };
+  const handleClick1 = () => {
+    setDisplay([false, false, true]);
+  };
 
   return (
     <div>
       <h1>Develop Team</h1>
-      <Button variant="outlined" color="primary" className={classes.button6} onClick={handleClick6}>
+      <Button
+        variant="outlined"
+        color="primary"
+        className={display[0] === true ? classes.PDOGS_Button_Clicked : classes.PDOGS_Button_default}
+        onClick={handleClick6}
+      >
         PDOGS 6
       </Button>
-      <Button variant="outlined" color="primary" className={classes.button4s} onClick={handleClick4s}>
+      <Button
+        variant="outlined"
+        color="primary"
+        className={display[1] === true ? classes.PDOGS_Button_Clicked : classes.PDOGS_Button_default}
+        onClick={handleClick4s}
+      >
         PDOGS 4S
       </Button>
-      <Button variant="outlined" color="primary" className={classes.button1} onClick={handleClick1}>
+      <Button
+        variant="outlined"
+        color="primary"
+        className={display[2] === true ? classes.PDOGS_Button_Clicked : classes.PDOGS_Button_default}
+        onClick={handleClick1}
+      >
         PDOGS 1.0 &amp; 2.0
       </Button>
-      <div className={classes.PDOGS6}>
+      <div className={display[0] === true ? classes.PDOGS_Content_Display : classes.PDOGS_Content_Hide}>
         <SimpleBar title="PM" noIndent>
           <div className={classes.PM_images}>
             <Profile
@@ -250,7 +280,7 @@ export default function Team() {
           </div>
         </SimpleBar>
       </div>
-      <div className={classes.PDOGS4S}>
+      <div className={display[1] === true ? classes.PDOGS_Content_Display : classes.PDOGS_Content_Hide}>
         <SimpleBar title="Core Develop Team" />
         <div className={classes.coreDevelopTeam}>
           <Profile img_url="../../../images/doge.png" name="虞翔皓 Shouko" description="System" />
@@ -318,7 +348,7 @@ export default function Team() {
           </div>
         </SimpleBar>
       </div>
-      <div className={classes.PDOGS1}>
+      <div className={display[2] === true ? classes.PDOGS_Content_Display : classes.PDOGS_Content_Hide}>
         <SimpleBar title="System" noIndent>
           <Profile img_url="../../../images/doge.png" name="孫羽君 illeanore" />
         </SimpleBar>

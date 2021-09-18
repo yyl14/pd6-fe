@@ -11,7 +11,6 @@ import GeneralLoading from '../../components/GeneralLoading';
 import NoMatch from '../../components/noMatch';
 import Header from '../../components/ui/Header';
 import Sidebar from '../../components/ui/Sidebar';
-import system from './system';
 import Team from './team';
 import AccessLog from './accessLog';
 
@@ -43,7 +42,7 @@ export default function Normal() {
             <Route exact path="/problem-set" component={ProblemSet} />
             <Route path="/problem-set/:courseId/:classId" component={ProblemSet} />
             <Route exact path="/" component={GeneralLoading} />
-            <Route exact path="/system" component={system} />
+            <Route exact path="/system" component={Team} />
             <Route exact path="/system/team" component={Team} />
             <Route exact path="/system/accesslog" component={AccessLog} />
             <Route component={NoMatch} />

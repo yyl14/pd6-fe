@@ -37,10 +37,6 @@ export default function System({
       history.push('/admin/system/submitlang');
     };
 
-    const goBackToSystem = () => {
-      history.push('/all-class');
-    };
-
     if (mode === 'main') {
       setTitle('System');
       setItemList([
@@ -103,11 +99,9 @@ export default function System({
         },
       ]);
     } else if (mode === 'system') {
-      setArrow(
-        <IconButton className={classes.arrow} onClick={goBackToSystem}>
-          <Icon.ArrowBackRoundedIcon />
-        </IconButton>,
-      );
+      if (location.pathname === '/system') {
+        history.push('/system/team');
+      }
       setTitle('System');
       setItemList([
         {
@@ -160,6 +154,7 @@ export default function System({
         classes={{ paper: classes.drawerPaper }}
       >
         {mode === 'main' ? <div className={classes.topSpace} /> : arrow}
+        {mode === 'system' && <div className={classes.topSpace} />}
         <div className={classes.title}>
           {display === 'unfold' ? (
             <Icon.TriangleDown className={classes.titleIcon} onClick={foldSystem} />
