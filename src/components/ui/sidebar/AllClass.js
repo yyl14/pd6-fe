@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
 } from '@material-ui/core';
-import { ContactSupportOutlined } from '@material-ui/icons';
 import Icon from '../icon/index';
 
 import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
@@ -12,7 +11,7 @@ import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
 export default function AllClass({
   classNames, history, location, mode,
 }) {
-  const { courseId, classId } = useParams();
+  const { courseId } = useParams();
   const baseURL = '/all-class';
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
@@ -31,7 +30,6 @@ export default function AllClass({
   const [arrow, setArrow] = useState(null);
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
-  const [TAicons, setTAicons] = useState([]);
 
   useEffect(() => {
     dispatch(fetchCourses(authToken));
