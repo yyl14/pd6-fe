@@ -49,6 +49,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   const challenges = useSelector((state) => state.challenges.byId);
   const essaySubmission = useSelector((state) => state.essaySubmission);
   const userId = useSelector((state) => state.user.id);
+  const uploadError = useSelector((state) => state.error.myClass.essaySubmission.uploadEssay);
 
   const [uploadRecord, setUploadRecord] = useState(0);
   const [selectedFile, setSelectedFile] = useState([]);
@@ -79,9 +80,17 @@ export default function EssayInfo({ role = 'NORMAL' }) {
 
   const handleUpload = () => {
     if (uploadRecord !== 0) {
-      dispatch(reUploadEssay(authToken, uploadRecord, selectedFile[0], () => { setPopUpFail(true); }));
+      dispatch(
+        reUploadEssay(authToken, uploadRecord, selectedFile[0], () => {
+          setPopUpFail(true);
+        }),
+      );
     } else {
-      dispatch(uploadEssay(authToken, essayId, selectedFile[0], () => { setPopUpFail(true); }));
+      dispatch(
+        uploadEssay(authToken, essayId, selectedFile[0], () => {
+          setPopUpFail(true);
+        }),
+      );
     }
     setFileName(selectedFile[0].name);
     setSelectedFile([]);
@@ -129,11 +138,9 @@ export default function EssayInfo({ role = 'NORMAL' }) {
       <SimpleBar title="Title">{essay[essayId] === undefined ? 'error' : essay[essayId].title}</SimpleBar>
       <SimpleBar title="Description">{essay[essayId] === undefined ? 'error' : essay[essayId].description}</SimpleBar>
       <SimpleBar title="File">
-        {currentTime.isBefore(moment(challenges[challengeId].end_time)) && (
-          <StyledButton variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>
-            Upload
-          </StyledButton>
-        )}
+        <StyledButton variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>
+          Upload
+        </StyledButton>
       </SimpleBar>
       {essaySubmission.byId[uploadRecord] && (
         <div>
@@ -192,9 +199,12 @@ export default function EssayInfo({ role = 'NORMAL' }) {
         </DialogTitle>
         <DialogContent>
           <Typography>
-            File below was failed to be uploaded:
+            Failed to upload the following file:
             <br />
             {fileName}
+            <br />
+            <br />
+            {`Failed Reason: ${uploadError}`}
           </Typography>
         </DialogContent>
         <DialogActions>
