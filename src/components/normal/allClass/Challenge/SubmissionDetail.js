@@ -9,7 +9,7 @@ import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
 import PageTitle from '../../../ui/PageTitle';
 import GeneralLoading from '../../../GeneralLoading';
-import { readSubmissionDetail, browseJudgeCases, readTestcase } from '../../../../actions/myClass/problem';
+import { readSubmissionDetail, browseJudgeCases, browseTestcases } from '../../../../actions/myClass/problem';
 import { fetchSubmission } from '../../../../actions/myClass/submission';
 import NoMatch from '../../../noMatch';
 import CodeArea from '../../../ui/CodeArea';
@@ -75,10 +75,8 @@ export default function SubmissionDetail() {
   }, [authToken, dispatch, judgmentIds, judgments, submissionId]);
 
   useEffect(() => {
-    if (judgeCases.byId !== undefined) {
-      judgeCases.allIds.map((id) => dispatch(readTestcase(authToken, id)));
-    }
-  }, [authToken, dispatch, judgeCases.allIds, judgeCases.byId]);
+    dispatch(browseTestcases(authToken, problemId));
+  }, [authToken, dispatch, problemId]);
 
   const transformTestcase = useCallback(
     (id) => {
@@ -112,16 +110,7 @@ export default function SubmissionDetail() {
           })),
       );
     }
-  }, [
-    judgeCases,
-    judgeCases.allIds,
-    judgeCases.byId,
-    judgmentId,
-    judgments.byId,
-    testcaseIds,
-    testcases,
-    transformTestcase,
-  ]);
+  }, [judgeCases, judgmentId, judgments.byId, testcaseIds, testcases, transformTestcase]);
 
   if (
     problems.byId[problemId] === undefined
@@ -165,13 +154,13 @@ export default function SubmissionDetail() {
           <Typography variant="body1">{user.real_name}</Typography>
         </AlignedText>
         <AlignedText text="Challenge" childrenType="text">
-          <Link to={`/my-class/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
+          <Link to={`/all-class/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
             <Typography variant="body1">{challenges.byId[challengeId].title}</Typography>
           </Link>
         </AlignedText>
         <AlignedText text="Task Label" childrenType="text">
           <Link
-            to={`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`}
+            to={`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`}
             className={classNames.textLink}
           >
             <Typography variant="body1">{problems.byId[problemId].challenge_label}</Typography>

@@ -11,29 +11,51 @@ import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
 export default function ProblemSet({
   classNames, history, location, mode,
 }) {
-  // const { courseId, classId } = useParams();
+  const { courseId: currentCourseId, classId: currentClassId } = useParams();
   const baseURL = '/problem-set';
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
   const classes = useSelector((state) => state.classes);
   const courses = useSelector((state) => state.courses);
-
   const [display, setDisplay] = useState([]); // 0: fold, 1: unfold
 
   useEffect(() => {
-    if (courses) {
+    if (courses.allIds.length > 0) {
       courses.allIds.map((id) => dispatch(fetchClasses(authToken, id)));
     }
-  }, [authToken, courses, dispatch]);
+  }, [authToken, courses.allIds, dispatch]);
 
   useEffect(() => {
     dispatch(fetchCourses(authToken));
   }, [authToken, dispatch]);
 
+  useEffect(() => {
+    if (currentCourseId !== undefined && currentClassId !== undefined) return;
+    const defaultCourseId = courses.allIds[0];
+    if (courses.byId[defaultCourseId]) {
+      const relatedClassIds = courses.byId[defaultCourseId].classIds;
+      if (relatedClassIds && relatedClassIds.length > 0) {
+        const defaultClassId = relatedClassIds[0];
+        history.push(`${baseURL}/${defaultCourseId}/${defaultClassId}`);
+      }
+    }
+  }, [courses, currentClassId, currentCourseId, history]);
+
+  // has course and class id in url
+  useEffect(() => {
+    const foldIndex = courses.allIds.indexOf(Number(currentCourseId));
+    if (foldIndex !== -1) {
+      const newList = display.length > 0 ? [...display] : courses.allIds.map(() => 0);
+      if (newList[foldIndex] !== 1) {
+        newList[foldIndex] = 1;
+        setDisplay(newList);
+      }
+    }
+  }, [courses.allIds, currentCourseId, display]);
+
   const changeFoldCourse = (id) => {
     const newList = [...display];
     newList[id] = !newList[id];
-    console.log(newList);
     setDisplay(newList);
   };
 
@@ -70,10 +92,20 @@ export default function ProblemSet({
                       className={classNames.item}
                       onClick={() => history.push(`${baseURL}/${courseId}/${classId}`)}
                     >
-                      <ListItemIcon className={classNames.itemIcon}>
+                      <ListItemIcon
+                        className={classNames.itemIcon}
+                        style={{ color: location.pathname === `${baseURL}/${courseId}/${classId}` ? '#1EA5FF' : '' }}
+                      >
                         <Icon.Challenge />
                       </ListItemIcon>
-                      <ListItemText primary={classes.byId[classId].name} className={classNames.itemText} />
+                      <ListItemText
+                        primary={classes.byId[classId].name}
+                        className={
+                          location.pathname === `${baseURL}/${courseId}/${classId}`
+                            ? classNames.activeItemText
+                            : classNames.itemText
+                        }
+                      />
                     </ListItem>
                   ))}
                 </List>

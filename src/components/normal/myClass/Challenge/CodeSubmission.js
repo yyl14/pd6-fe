@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import moment from 'moment';
 import {
   Button, makeStyles, TextField, MenuItem, FormControl, Select, Snackbar,
 } from '@material-ui/core';
@@ -19,13 +20,18 @@ const useStyles = makeStyles(() => ({
     width: '300px',
   },
   codingField: {
-    width: '47vw',
+    flexGrow: 1,
+    width: 'auto',
   },
   bottomButton: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
     marginTop: '35px',
+    marginRight: '-5px',
+  },
+  snackbarWidth: {
+    width: '650px',
   },
 }));
 
@@ -48,6 +54,17 @@ export default function CodeSubmission() {
 
   const [langId, setLangId] = useState(-1);
   const [code, setCode] = useState('');
+
+  const [warningPopup, setWarningPopup] = useState(false);
+  const [currentTime] = useState(moment());
+
+  useEffect(() => {
+    if (challenges[challengeId] !== undefined) {
+      if (currentTime.isAfter(moment(challenges[challengeId].end_time))) {
+        setWarningPopup(true);
+      }
+    }
+  }, [challengeId, challenges, currentTime]);
 
   useEffect(() => {
     const enabledIds = submitLang.allIds.filter((id) => !submitLang.byId[id].is_disabled);
@@ -133,6 +150,14 @@ export default function CodeSubmission() {
           Submit
         </Button>
       </div>
+      <Snackbar
+        open={warningPopup}
+        ContentProps={{
+          className: classNames.snackbarWidth,
+        }}
+        message="Submission over deadline will not be considered in score calculation."
+        onClose={() => setWarningPopup(false)}
+      />
     </>
   );
 }

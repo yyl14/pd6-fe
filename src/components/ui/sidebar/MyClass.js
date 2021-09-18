@@ -19,9 +19,9 @@ export default function MyClass({
   const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
 
-  useEffect(() => {
-    userClasses.map(({ course_id }) => dispatch(fetchCourse(authToken, course_id)));
-  }, [dispatch, authToken, classId, courseId, userClasses]);
+  // useEffect(() => {
+  //   userClasses.map(({ course_id }) => dispatch(fetchCourse(authToken, course_id)));
+  // }, [dispatch, authToken, classId, courseId, userClasses]);
 
   const [display, setDisplay] = useState([]); // 0: fold, 1: unfold
   const [titles, setTitles] = useState([]);
@@ -41,72 +41,74 @@ export default function MyClass({
         setTitles(userClasses.map((item) => `${item.course_name} ${item.class_name}`));
 
         setItemLists(
-          userClasses.map((item) => {
-            switch (item.role) {
-              case 'MANAGER': {
-                return [
-                  {
-                    text: 'Challenge',
-                    icon: <Icon.Challenge />,
-                    path: `${baseURL}/${item.course_id}/${item.class_id}/challenge`,
-                  },
-                  {
-                    text: 'Submission',
-                    icon: <Icon.Submission />,
-                    path: `${baseURL}/${item.course_id}/${item.class_id}/submission`,
-                  },
-                  {
-                    text: 'Grade',
-                    icon: <Icon.Grade />,
-                    path: `${baseURL}/${item.course_id}/${item.class_id}/grade`,
-                  },
-                  {
-                    text: 'Team',
-                    icon: <Icon.Team />,
-                    path: `${baseURL}/${item.course_id}/${item.class_id}/team`,
-                  },
-                  {
-                    text: 'Member',
-                    icon: <Icon.Member />,
-                    path: `${baseURL}/${item.course_id}/${item.class_id}/member`,
-                  },
-                ];
+          userClasses
+            .sort((item) => item.id)
+            .map((item) => {
+              switch (item.role) {
+                case 'MANAGER': {
+                  return [
+                    {
+                      text: 'Challenge',
+                      icon: <Icon.Challenge />,
+                      path: `${baseURL}/${item.course_id}/${item.class_id}/challenge`,
+                    },
+                    {
+                      text: 'Submission',
+                      icon: <Icon.Submission />,
+                      path: `${baseURL}/${item.course_id}/${item.class_id}/submission`,
+                    },
+                    {
+                      text: 'Grade',
+                      icon: <Icon.Grade />,
+                      path: `${baseURL}/${item.course_id}/${item.class_id}/grade`,
+                    },
+                    {
+                      text: 'Team',
+                      icon: <Icon.Team />,
+                      path: `${baseURL}/${item.course_id}/${item.class_id}/team`,
+                    },
+                    {
+                      text: 'Member',
+                      icon: <Icon.Member />,
+                      path: `${baseURL}/${item.course_id}/${item.class_id}/member`,
+                    },
+                  ];
+                }
+                case 'NORMAL': {
+                  return [
+                    {
+                      text: 'Challenge',
+                      icon: <Icon.Challenge />,
+                      path: `${baseURL}/${item.course_id}/${item.class_id}/challenge`,
+                    },
+                    {
+                      text: 'Grade',
+                      icon: <Icon.Grade />,
+                      path: `${baseURL}/${item.course_id}/${item.class_id}/grade`,
+                    },
+                    {
+                      text: 'Team',
+                      icon: <Icon.Team />,
+                      path: `${baseURL}/${item.course_id}/${item.class_id}/team`,
+                    },
+                    {
+                      text: 'Member',
+                      icon: <Icon.Member />,
+                      path: `${baseURL}/${item.course_id}/${item.class_id}/member`,
+                    },
+                  ];
+                }
+                default: {
+                  return [
+                    {
+                      text: 'Challenge',
+                      icon: <Icon.Challenge />,
+                      path: `${baseURL}/${item.course_id}/${item.class_id}/challenge`,
+                    },
+                  ];
+                }
               }
-              case 'NORMAL': {
-                return [
-                  {
-                    text: 'Challenge',
-                    icon: <Icon.Challenge />,
-                    path: `${baseURL}/${item.course_id}/${item.class_id}/challenge`,
-                  },
-                  {
-                    text: 'Grade',
-                    icon: <Icon.Grade />,
-                    path: `${baseURL}/${item.course_id}/${item.class_id}/grade`,
-                  },
-                  {
-                    text: 'Team',
-                    icon: <Icon.Team />,
-                    path: `${baseURL}/${item.course_id}/${item.class_id}/team`,
-                  },
-                  {
-                    text: 'Member',
-                    icon: <Icon.Member />,
-                    path: `${baseURL}/${item.course_id}/${item.class_id}/member`,
-                  },
-                ];
-              }
-              default: {
-                return [
-                  {
-                    text: 'Challenge',
-                    icon: <Icon.Challenge />,
-                    path: `${baseURL}/${item.course_id}/${item.class_id}/challenge`,
-                  },
-                ];
-              }
-            }
-          }),
+            }),
         );
       }
     }
@@ -119,23 +121,6 @@ export default function MyClass({
   const unfoldMyClass = (id) => {
     setDisplay(display.map((item, index) => (index === id ? 1 : item)));
   };
-
-  if (
-    (courseId !== undefined && courses[courseId] === undefined)
-    || (classId !== undefined && classes[classId] === undefined)
-  ) {
-    return (
-      <div>
-        <Drawer
-          className={classNames.drawer}
-          variant="permanent"
-          anchor="left"
-          PaperProps={{ elevation: 5 }}
-          classes={{ paper: classNames.drawerPaper }}
-        />
-      </div>
-    );
-  }
 
   return (
     <div>

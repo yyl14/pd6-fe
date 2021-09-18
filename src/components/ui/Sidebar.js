@@ -276,9 +276,9 @@ export default function Sidebar() {
       <Route exact path="/problem-set">
         <ProblemSet classNames={classes} history={history} location={location} mode="main" />
       </Route>
-      {/* <Route exact path="/problem-set/:courseId/:classId">
+      <Route exact path="/problem-set/:courseId/:classId">
         <ProblemSet classNames={classes} history={history} location={location} mode="main" />
-      </Route> */}
+      </Route>
 
       {/* {System} */}
       <Route exact path="/system">

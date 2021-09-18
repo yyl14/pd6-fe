@@ -18,11 +18,12 @@ const initialState = {
   uploadTestcaseOutput: null,
   addTestcase: null,
   browseJudgeCases: null,
-  readTestcase: null,
   readProblemScore: null,
   downloadSamples: null,
   downloadTestcases: null,
   rejudgeSubmission: null,
+  browseTestcases: null,
+  rejudgeProblem: null,
 };
 
 export default function problem(state = initialState, action) {
@@ -113,11 +114,6 @@ export default function problem(state = initialState, action) {
         ...state,
         addTestcase: action.error,
       };
-    case problemConstants.READ_TESTCASE_FAIL:
-      return {
-        ...state,
-        readTestcase: action.error,
-      };
     case problemConstants.READ_PROBLEM_SCORE_FAIL:
       return {
         ...state,
@@ -155,6 +151,28 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         rejudgeSubmission: action.error,
+      };
+
+    case problemConstants.BROWSE_TESTCASES_SUCCESS:
+      return {
+        ...state,
+        browseTestcases: null,
+      };
+    case problemConstants.BROWSE_TESTCASES_FAIL:
+      return {
+        ...state,
+        browseTestcases: action.error,
+      };
+
+    case problemConstants.REJUDGE_PROBLEM_SUCCESS:
+      return {
+        ...state,
+        rejudgeProblem: null,
+      };
+    case problemConstants.REJUDGE_PROBLEM_FAIL:
+      return {
+        ...state,
+        rejudgeProblem: action.error,
       };
     default: {
       return state;

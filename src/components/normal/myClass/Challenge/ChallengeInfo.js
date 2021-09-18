@@ -30,7 +30,7 @@ export default function ChallengeInfo() {
   const { classId, challengeId } = useParams();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [currentTime, setCurrentTime] = useState(moment());
+  const [currentTime] = useState(moment());
   const [status, setStatus] = useState('');
   const [isManager, setIsManager] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -138,7 +138,6 @@ export default function ChallengeInfo() {
       <SimpleBar
         title="Description"
         buttons={<>{isManager && !editMode && <Button onClick={handleEdit}>Edit</Button>}</>}
-        noIndent
       >
         {editMode ? (
           <div>
