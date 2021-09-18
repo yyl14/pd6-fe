@@ -5,6 +5,7 @@ const useStyles = makeStyles((theme) => ({
   mainContent: {
     position: 'relative',
     width: '222px',
+    height: '187.78px',
     marginBottom: '19px',
     textAlign: 'center',
   },
@@ -12,10 +13,11 @@ const useStyles = makeStyles((theme) => ({
     width: '222px',
     '&:hover $image': {
       opacity: '0.3',
+      transition: 'opacity 0.3s',
     },
     '&:hover $overlapLinks': {
       opacity: '1',
-      transition: 'transform 0.25s',
+      transition: ['transform 0.25s', 'opacity 0.25s'],
       transform: 'translateY(55px)',
     },
   },
@@ -35,22 +37,21 @@ const useStyles = makeStyles((theme) => ({
   overlapLinks: {
     position: 'absolute',
     width: '100%',
-    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: '1',
     opacity: '0',
-    transition: 'opacity 0.25s',
+    transition: ['transform 0.25s', 'opacity 0.25s'],
     transform: 'translateY(80px)',
   },
   Facebook_link: {
-    margin: '7.5px',
+    margin: '5px',
   },
   Github_link: {
-    margin: '7.5px',
+    margin: '5px',
   },
   Linkedin_link: {
-    margin: '7.5px',
+    margin: '5px',
   },
   name: {
     fontWeight: 'bold',
