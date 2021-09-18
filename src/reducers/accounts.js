@@ -202,7 +202,7 @@ const allIds = (state = [], action) => {
     }
 
     case userConstants.READ_OTHERS_ACCOUNT_SUCCESS: {
-      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+      return [...new Set([action.payload.id, ...state])];
     }
 
     default:

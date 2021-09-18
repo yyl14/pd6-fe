@@ -247,12 +247,11 @@ const readAccount = (token, accountId) => async (dispatch) => {
       headers: {
         'Auth-Token': token,
       },
-      params: { account_ids: JSON.stringify([accountId]) },
     };
-    const res = await agent.get('/account-summary/batch', config);
+    const res = await agent.get(`/account/${accountId}`, config);
     dispatch({
       type: userConstants.READ_OTHERS_ACCOUNT_SUCCESS,
-      payload: res.data.data[0],
+      payload: res.data.data,
     });
   } catch (error) {
     dispatch({
