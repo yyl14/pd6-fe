@@ -5,6 +5,7 @@ const useStyles = makeStyles((theme) => ({
   mainContent: {
     position: 'relative',
     width: '222px',
+    height: '187.78px',
     marginBottom: '19px',
     textAlign: 'center',
   },
@@ -35,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
   overlapLinks: {
     position: 'absolute',
     width: '100%',
-    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: '1',
