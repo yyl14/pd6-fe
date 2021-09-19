@@ -37,7 +37,6 @@ export default function EssayInfo({ role = 'NORMAL' }) {
     courseId, classId, challengeId, essayId,
   } = useParams();
   const history = useHistory();
-  const [currentTime] = useState(moment());
 
   const dispatch = useDispatch();
 
@@ -110,22 +109,22 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   // }, [authToken, dispatch, essayId]);
 
   useEffect(() => {
-    if (essay[essayId] === undefined) {
-      return;
+    if (essay[essayId] !== undefined) {
+      setUploadRecord(essay[essayId].essaySubmissionId ? essay[essayId].essaySubmissionId : 0);
     }
-    setUploadRecord(essay[essayId].essaySubmissionId ? essay[essayId].essaySubmissionId : 0);
   }, [essay, essayId]);
 
   const handleClickLink = () => {
-    if (essaySubmission.byId[uploadRecord].account_id === userId) {
-      if (essaySubmission.byId[uploadRecord].essay_id === Number(essayId)) {
-        const fileToDownload = {
-          uuid: essaySubmission.byId[uploadRecord].content_file_uuid,
-          filename: essaySubmission.byId[uploadRecord].filename,
-          as_attachment: false,
-        };
-        dispatch(downloadFile(authToken, fileToDownload));
-      }
+    if (
+      essaySubmission.byId[uploadRecord].account_id === userId
+      && essaySubmission.byId[uploadRecord].essay_id === Number(essayId)
+    ) {
+      const fileToDownload = {
+        uuid: essaySubmission.byId[uploadRecord].content_file_uuid,
+        filename: essaySubmission.byId[uploadRecord].filename,
+        as_attachment: false,
+      };
+      dispatch(downloadFile(authToken, fileToDownload));
     }
   };
 
