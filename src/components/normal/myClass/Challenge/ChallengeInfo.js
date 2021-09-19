@@ -157,7 +157,7 @@ export default function ChallengeInfo() {
           </div>
         ) : (
           <MathpixLoader>
-            <MathpixMarkdown text={challenges[challengeId].description} />
+            <MathpixMarkdown text={challenges[challengeId].description} htmlTags />
           </MathpixLoader>
         )}
       </SimpleBar>
