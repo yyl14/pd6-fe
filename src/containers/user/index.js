@@ -17,9 +17,7 @@ function User() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (accounts[accountId] === undefined) {
-      dispatch(readAccount(authToken, accountId));
-    }
+    dispatch(readAccount(authToken, accountId));
   }, [accountId, accounts, authToken, dispatch]);
 
   return (
