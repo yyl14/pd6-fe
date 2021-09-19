@@ -49,7 +49,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   const challenges = useSelector((state) => state.challenges.byId);
   const essaySubmission = useSelector((state) => state.essaySubmission);
   const userId = useSelector((state) => state.user.id);
-  const uploadError = useSelector((state) => state.error.myClass.essaySubmission.uploadEssay);
+  const error = useSelector((state) => state.error.myClass.essaySubmission);
 
   const [uploadRecord, setUploadRecord] = useState(0);
   const [selectedFile, setSelectedFile] = useState([]);
@@ -204,7 +204,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
             {fileName}
             <br />
             <br />
-            {`Failed Reason: ${uploadError}`}
+            {`Failed Reason: ${uploadRecord === 0 ? error.uploadEssay : error.reUploadEssay}`}
           </Typography>
         </DialogContent>
         <DialogActions>
