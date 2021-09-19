@@ -30,10 +30,8 @@ export default function MySubmission() {
   const [snackbar, setSnackbar] = useState(false);
 
   useEffect(() => {
-    if (!loading.browseTasksUnderChallenge) {
-      dispatch(readProblemScore(authToken, problemId));
-    }
-  }, [authToken, dispatch, loading.browseTasksUnderChallenge, problemId]);
+    dispatch(readProblemScore(authToken, problemId));
+  }, [authToken, dispatch, problemId]);
 
   useEffect(() => {
     if (submissions.allIds !== []) {
