@@ -73,7 +73,7 @@ export default function Team() {
             <Profile
               img_url="../../../images/Kiyume.jpg"
               name="鄭允頎 Kiyume"
-              description="PM"
+              description="PM, Webserver, Judge Core, Migration, DevOps"
               FB_link="http://fb.com/e9cf87fc"
               Linkedin_link="http://www.linkedin.com/in/yunchi-cheng"
             />
@@ -154,14 +154,14 @@ export default function Team() {
             Linkedin_link="https://www.linkedin.com/in/an-yun-cheng"
           />
           <Profile
-            img_url="../../../images/DaphneHou.jpg"
+            img_url="../../../images/DaphneHou.JPG"
             name="侯維書 Daphne Hou"
             description="FE"
             FB_link="https://www.facebook.com/daphne.hou.9/"
             Linkedin_link="https://www.linkedin.com/in/daphne-hou-2016ab220/"
           />
           <Profile
-            img_url="../../../images/amberliu.jpg"
+            img_url="../../../images/amberliu.JPG"
             name="劉亞絜 amberliu"
             description="FE"
             FB_link="https://www.facebook.com/profile.php?id=100006116703389"
@@ -177,7 +177,7 @@ export default function Team() {
           <Profile
             img_url="../../../images/Duge.jpg"
             name="盧慶原 Duge"
-            description="FE"
+            description="前端打雜94我"
             FB_link="https://www.facebook.com/DuckChingYuan"
             Github_link="https://github.com/duge03705022"
           />
@@ -187,28 +187,28 @@ export default function Team() {
             <Profile
               img_url="../../../images/chessy.png"
               name="徐嘉琪 Chessy"
-              description="BE"
+              description="Webserver"
               FB_link="https://www.facebook.com/profile.php?id=100001355608650"
               Linkedin_link="http://linkedin.com/in/chessyhsu"
             />
             <Profile
               img_url="../../../images/sheeeeeeeep.JPG"
               name="鄭揚 Sheeeeeeeep"
-              description="BE"
+              description="Webserver, Migration"
               FB_link="https://www.facebook.com/sheep1129588/"
               Linkedin_link="https://www.linkedin.com/in/yangcheng1229/"
             />
             <Profile
               img_url="../../../images/pollyho.jpg"
               name="何品諭 pollyho"
-              description="BE"
+              description="Webserver"
               FB_link="https://www.facebook.com/profile.php?id=100005192733634"
               Linkedin_link="http://www.linkedin.com/in/pinyuho"
             />
             <Profile
               img_url="../../../images/wsa.JPG"
               name="王紹安 wsa"
-              description="BE"
+              description="Webserver"
               FB_link="https://www.facebook.com/profile.php?id=100008141530919"
               Linkedin_link="http://linkedin.com/in/benson-wang-a01ba91bb"
             />
@@ -227,7 +227,7 @@ export default function Team() {
             <Profile
               img_url="../../../images/jtc.JPG"
               name="陳杰彤 jtc"
-              description="DevOps"
+              description="DevOps, Judge Core"
               FB_link="https://www.facebook.com/jtongchenzip/"
               Linkedin_link="https://www.linkedin.com/in/jtongchen/"
             />
@@ -296,7 +296,7 @@ export default function Team() {
             FB_link="https://www.facebook.com/ethan4ever"
           />
           <Profile
-            img_url="../../../images/doge.png"
+            img_url="../../../images/Kiyume.jpg"
             name="鄭允頎 Kiyume"
             description="Supportive Developers"
             FB_link="http://fb.com/e9cf87fc"
@@ -349,7 +349,13 @@ export default function Team() {
       </div>
       <div className={display[2] === true ? classes.PDOGS_Content_Display : classes.PDOGS_Content_Hide}>
         <SimpleBar title="System" noIndent>
-          <Profile img_url="../../../images/doge.png" name="孫羽君 illeanore" />
+          <Profile img_url="../../../images/doge.png" name="李孟修 flf2ko" />
+        </SimpleBar>
+        <SimpleBar title="Image" noIndent>
+          <div className={classes.profile}>
+            <Profile img_url="../../../images/doge.png" name="孫羽君 illeanore" />
+            <Profile img_url="../../../images/doge.png" name="洪蕾曜 yaohappy" />
+          </div>
         </SimpleBar>
       </div>
     </div>

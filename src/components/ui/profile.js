@@ -44,13 +44,7 @@ const useStyles = makeStyles((theme) => ({
     transition: ['transform 0.25s', 'opacity 0.25s'],
     transform: 'translateY(80px)',
   },
-  Facebook_link: {
-    margin: '5px',
-  },
-  Github_link: {
-    margin: '5px',
-  },
-  Linkedin_link: {
+  socialLink: {
     margin: '5px',
   },
   name: {
@@ -75,15 +69,21 @@ export default function Profile({
       <div className={classes.mainContent}>
         <div className={classes.imageAndLinks}>
           <div className={classes.overlapLinks}>
-            <a href={FB_link} className={classes.Facebook_link}>
-              <img src="../../../images/Facebook.png" alt="FacebookIcon" />
-            </a>
-            <a href={Github_link} className={classes.Github_link}>
-              <img src="../../../images/Github.png" alt="GithubIcon" />
-            </a>
-            <a href={Linkedin_link} className={classes.Linkedin_link}>
-              <img src="../../../images/Linkedin.png" alt="LinkedinIcon" />
-            </a>
+            {FB_link && (
+              <a href={FB_link} className={classes.socialLink}>
+                <img src="../../../images/Facebook.png" alt="FacebookIcon" />
+              </a>
+            )}
+            {Github_link && (
+              <a href={Github_link} className={classes.socialLink}>
+                <img src="../../../images/Github.png" alt="GithubIcon" />
+              </a>
+            )}
+            {Linkedin_link && (
+              <a href={Linkedin_link} className={classes.socialLink}>
+                <img src="../../../images/Linkedin.png" alt="LinkedinIcon" />
+              </a>
+            )}
           </div>
           <div className={classes.image} style={{ backgroundImage: `url(${img_url})` }} />
         </div>
