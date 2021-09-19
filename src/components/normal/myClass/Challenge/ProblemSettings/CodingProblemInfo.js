@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // https://mathpix.com/docs/mathpix-markdown/overview
+// https://github.com/Mathpix/mathpix-markdown-it
 import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 import {
   Typography,
@@ -191,7 +192,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       </SimpleBar>
       <SimpleBar title="Description">
         <MathpixLoader>
-          <MathpixMarkdown text={problems[problemId].description} />
+          <MathpixMarkdown text={problems[problemId].description} htmlTags />
         </MathpixLoader>
       </SimpleBar>
       <SimpleBar title="About Input and Output">

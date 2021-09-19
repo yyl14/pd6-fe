@@ -66,7 +66,6 @@ export default function TeamList() {
 
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [disabled, setDisabled] = useState(true);
   const [hasRequest, setHasRequest] = useState(false);
   const [hasError, setHasError] = useState(false);
 
@@ -82,22 +81,6 @@ export default function TeamList() {
       if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') setIsManager(true);
     }
   }, [classId, user.classes]);
-
-  useEffect(() => {
-    if (addInputs.label !== '' && addInputs.teamName !== '') {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
-  }, [addInputs.label, addInputs.teamName]);
-
-  useEffect(() => {
-    if (importInput !== '' && selectedFile !== []) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
-  }, [importInput, selectedFile]);
 
   const handleImportChange = (event) => {
     setImportInput(event.target.value);
@@ -124,14 +107,12 @@ export default function TeamList() {
     clearAddInput();
     setShowAddDialog(false);
     setHasRequest(false);
-    setDisabled(true);
   };
 
   const importTeamSuccess = () => {
     clearImportInput();
     setShowImportDialog(false);
     setHasRequest(false);
-    setDisabled(true);
   };
 
   const submitImport = () => {
@@ -210,7 +191,7 @@ export default function TeamList() {
             align: 'center',
             minWidth: 150,
             width: 200,
-            type: 'string',
+            type: 'link',
           },
           {
             name: 'Label',
@@ -222,7 +203,10 @@ export default function TeamList() {
         ]}
         reduxData={teams}
         reduxDataToRows={(item) => ({
-          'Team Name': item.name,
+          'Team Name': {
+            text: item.name,
+            path: `/my-class/${courseId}/${classId}/team/${item.id}`,
+          },
           Label: item.label,
           link: `/my-class/${courseId}/${classId}/team/${item.id}`,
         })}
@@ -281,7 +265,6 @@ export default function TeamList() {
                 setShowImportDialog(false);
                 setHasRequest(false);
                 clearImportInput();
-                setDisabled(true);
               }}
               color="default"
             >
@@ -290,10 +273,9 @@ export default function TeamList() {
             <Button
               onClick={() => {
                 submitImport();
-                setDisabled(true);
               }}
               color="primary"
-              disabled={disabled}
+              disabled={!(importInput !== '' && Object.keys(selectedFile).length !== 0)}
             >
               Confirm
             </Button>
@@ -330,7 +312,6 @@ export default function TeamList() {
               setShowAddDialog(false);
               setHasRequest(false);
               clearAddInput();
-              setDisabled(true);
             }}
             color="default"
           >
@@ -339,10 +320,9 @@ export default function TeamList() {
           <Button
             onClick={() => {
               submitAdd();
-              setDisabled(true);
             }}
             color="primary"
-            disabled={disabled}
+            disabled={!(addInputs.label !== '' && addInputs.teamName !== '')}
           >
             Create
           </Button>

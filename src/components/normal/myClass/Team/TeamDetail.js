@@ -71,7 +71,7 @@ export default function TeamDetail() {
         student_id: teamMembers[id] ? teamMembers[id].account.student_id : '',
         real_name: teamMembers[id] ? teamMembers[id].account.real_name : '',
         role: systemRoleTransformation(teamMembers[id].role),
-        path: '/',
+        path: `/user-profile/${teamMembers[id].member_id}`,
       })),
     );
   }, [teamMemberIds, teamMembers]);

@@ -142,6 +142,7 @@ export default function ChallengeInfo() {
         {editMode ? (
           <div>
             <TextField
+              placeholder="(Text, LaTeX, Markdown and HTML supported)"
               className={classes.descriptionField}
               value={inputs}
               onChange={(e) => setInputs(e.target.value)}
@@ -157,7 +158,7 @@ export default function ChallengeInfo() {
           </div>
         ) : (
           <MathpixLoader>
-            <MathpixMarkdown text={challenges[challengeId].description} />
+            <MathpixMarkdown text={challenges[challengeId].description} htmlTags />
           </MathpixLoader>
         )}
       </SimpleBar>

@@ -19,13 +19,16 @@ import SimpleTable from '../../../../ui/SimpleTable';
 import Icon from '../../../../ui/icon/index';
 
 import SampleUploadCard from './SampleUploadCard';
-// import AssistingDataUploadCard from './AssistingDataUploadCard';
+import AssistingDataUploadCard from './AssistingDataUploadCard';
 import TestingDataUploadCard from './TestingDataUploadCard';
 
 import {
-  editProblemInfo, saveSamples, saveTestcases, readProblemInfo,
+  editProblemInfo,
+  saveSamples,
+  saveTestcases,
+  readProblemInfo,
+  saveAssistingData,
 } from '../../../../../actions/myClass/problem';
-// saveAssistingData,
 
 import GeneralLoading from '../../../../GeneralLoading';
 
@@ -78,7 +81,7 @@ export default function CodingProblemEdit({ closeEdit }) {
   const problems = useSelector((state) => state.problem.byId);
   const authToken = useSelector((state) => state.auth.token);
 
-  // const assistingData = useSelector((state) => state.assistingData.byId);
+  const assistingData = useSelector((state) => state.assistingData.byId);
   const testcases = useSelector((state) => state.testcases.byId);
   const [sampleDataIds, setSampleDataIds] = useState([]);
   const [testcaseDataIds, setTestcaseDataIds] = useState([]);
@@ -100,7 +103,7 @@ export default function CodingProblemEdit({ closeEdit }) {
   const [handleInfoSuccess, setHandleInfoSuccess] = useState(false);
   const [handleSamplesSuccess, setHandleSamplesSuccess] = useState(false);
   const [handleTestcasesSuccess, setHandleTestcasesSuccess] = useState(false);
-  // const [handleAssistingDataSuccess, setHandleAssistingDataSuccess] = useState(false);
+  const [handleAssistingDataSuccess, setHandleAssistingDataSuccess] = useState(false);
   const [uploadFailFilename, setUploadFailFilename] = useState([]);
   const [uploadFailCardPopup, setUploadFailCardPopup] = useState(false);
 
@@ -190,29 +193,33 @@ export default function CodingProblemEdit({ closeEdit }) {
     }
   }, [problems, problemId, testcases, sampleTransToNumber, testcaseTransToNumber]);
 
-  // const [assistTableData, setAssistTableData] = useState(
-  //   problems[problemId] !== undefined
-  //     ? problems[problemId].assistingDataIds.map((id) => ({
-  //       id,
-  //       filename: assistingData[id].filename,
-  //       file: null,
-  //     }))
-  //     : [],
-  // );
+  const [assistTableData, setAssistTableData] = useState([]);
+
+  useEffect(() => {
+    if (problems[problemId] !== undefined) {
+      setAssistTableData(
+        problems[problemId].assistingDataIds.map((id) => ({
+          id,
+          filename: assistingData[id].filename,
+          file: null,
+        })),
+      );
+    }
+  }, [assistingData, problemId, problems]);
 
   const [cardSelectedFileS, setCardSelectedFileS] = useState({});
   const [cardSelectedFileT, setCardSelectedFileT] = useState({});
-  // const [cardSelectedFileA, setCardSelectedFileA] = useState([]);
+  const [cardSelectedFileA, setCardSelectedFileA] = useState([]);
 
   const [samplePopUp, setSamplePopUp] = useState(false);
-  // const [assistPopUp, setAssistPopUp] = useState(false);
+  const [assistPopUp, setAssistPopUp] = useState(false);
   const [testingPopUp, setTestingPopUp] = useState(false);
   const [warningPopUp, setWarningPopUp] = useState(false);
 
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    if (handleSamplesSuccess && handleTestcasesSuccess && handleInfoSuccess) {
+    if (handleSamplesSuccess && handleTestcasesSuccess && handleInfoSuccess && handleAssistingDataSuccess) {
       if (uploadFailFilename.length === 0) {
         dispatch(readProblemInfo(authToken, problemId));
         setDisabled(false);
@@ -226,6 +233,7 @@ export default function CodingProblemEdit({ closeEdit }) {
     authToken,
     closeEdit,
     dispatch,
+    handleAssistingDataSuccess,
     handleInfoSuccess,
     handleSamplesSuccess,
     handleTestcasesSuccess,
@@ -235,7 +243,7 @@ export default function CodingProblemEdit({ closeEdit }) {
 
   const handleClosePopUp = () => {
     setSamplePopUp(false);
-    // setAssistPopUp(false);
+    setAssistPopUp(false);
     setTestingPopUp(false);
   };
 
@@ -365,23 +373,23 @@ export default function CodingProblemEdit({ closeEdit }) {
     setTestingPopUp(false);
   };
 
-  // const handleAssistConfirm = () => {
-  //   // add file to table;
-  //   const newData = cardSelectedFileA.reduce((acc, file) => {
-  //     const index = assistTableData.findIndex((item) => item.filename === file.name);
-  //     if (index === -1) {
-  //       return [...acc, { id: file.name, filename: file.name, file }];
-  //     }
+  const handleAssistConfirm = () => {
+    // add file to table;
+    const newData = cardSelectedFileA.reduce((acc, file) => {
+      const index = assistTableData.findIndex((item) => item.filename === file.name);
+      if (index === -1) {
+        return [...acc, { id: file.name, filename: file.name, file }];
+      }
 
-  //     const newArray = acc;
-  //     newArray[index] = { id: acc[index].id, filename: file.name, file };
-  //     return newArray;
-  //   }, assistTableData);
-  //   setAssistTableData(newData);
-  //   setCardSelectedFileA([]);
-  //   setHasChange(true);
-  //   setAssistPopUp(false);
-  // };
+      const newArray = acc;
+      newArray[index] = { id: acc[index].id, filename: file.name, file };
+      return newArray;
+    }, assistTableData);
+    setAssistTableData(newData);
+    setCardSelectedFileA([]);
+    setHasChange(true);
+    setAssistPopUp(false);
+  };
 
   const handleFileUploadFail = (filename) => {
     setUploadFailFilename([...uploadFailFilename, filename]);
@@ -437,7 +445,19 @@ export default function CodingProblemEdit({ closeEdit }) {
         handleFileUploadFail,
       ),
     );
-    // dispatch(saveAssistingData(authToken, problemId, assistingData, problems[problemId].assistingDataIds, assistTableData, () => { setHandleAssistingDataSuccess(true); }, handleFileUploadFail));
+    dispatch(
+      saveAssistingData(
+        authToken,
+        problemId,
+        assistingData,
+        problems[problemId].assistingDataIds,
+        assistTableData,
+        () => {
+          setHandleAssistingDataSuccess(true);
+        },
+        handleFileUploadFail,
+      ),
+    );
 
     setDisabled(true);
   };
@@ -492,6 +512,7 @@ export default function CodingProblemEdit({ closeEdit }) {
       </SimpleBar>
       <SimpleBar title="Description" noIndent>
         <TextField
+          placeholder="(Text, LaTeX, Markdown and HTML supported)"
           value={description}
           variant="outlined"
           onChange={(e) => {
@@ -506,6 +527,7 @@ export default function CodingProblemEdit({ closeEdit }) {
       </SimpleBar>
       <SimpleBar title="About Input and Output" noIndent>
         <TextField
+          placeholder="(Text, LaTeX, Markdown and HTML supported)"
           value={ioDescription}
           variant="outlined"
           onChange={(e) => {
@@ -686,7 +708,7 @@ export default function CodingProblemEdit({ closeEdit }) {
           setData={handleSetTestcaseTableData}
         />
       </SimpleBar>
-      {/* <SimpleBar title="Assisting Data (Optional)" noIndent>
+      <SimpleBar title="Assisting Data (Optional)" noIndent>
         <div className={classNames.loadButtons}>
           <StyledButton
             variant="outlined"
@@ -713,7 +735,7 @@ export default function CodingProblemEdit({ closeEdit }) {
           data={assistTableData}
           setData={setAssistTableData}
         />
-      </SimpleBar> */}
+      </SimpleBar>
       <div className={classNames.buttons}>
         <Button color="default" onClick={handleCancel}>
           Cancel
@@ -729,13 +751,13 @@ export default function CodingProblemEdit({ closeEdit }) {
         setSelectedFile={setCardSelectedFileS}
         handleTempUpload={handleSampleConfirm}
       />
-      {/* <AssistingDataUploadCard
+      <AssistingDataUploadCard
         popUp={assistPopUp}
         closePopUp={handleClosePopUp}
         selectedFile={cardSelectedFileA}
         setSelectedFile={setCardSelectedFileA}
         handleTempUpload={handleAssistConfirm}
-      /> */}
+      />
       <TestingDataUploadCard
         popUp={testingPopUp}
         closePopUp={handleClosePopUp}
