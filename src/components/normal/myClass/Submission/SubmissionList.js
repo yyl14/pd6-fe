@@ -137,7 +137,7 @@ export default function SubmissionList() {
           {
             name: 'Username',
             align: 'center',
-            type: 'string',
+            type: 'link',
           },
           {
             name: 'Student ID',
@@ -174,7 +174,10 @@ export default function SubmissionList() {
         reduxDataToRows={(item) => ({
           id: item.id,
           ID: item.id,
-          Username: accounts.byId[item.account_id] ? accounts.byId[item.account_id].username : '',
+          Username: {
+            text: accounts.byId[item.account_id] ? accounts.byId[item.account_id].username : '',
+            path: `/user-profile/${accounts.byId[item.account_id].id}`,
+          },
           'Student ID': accounts.byId[item.account_id] ? accounts.byId[item.account_id].student_id : '',
           'Real Name': accounts.byId[item.account_id] ? accounts.byId[item.account_id].real_name : '',
           Challenge: {

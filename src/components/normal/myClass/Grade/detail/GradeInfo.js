@@ -30,7 +30,7 @@ export default function GradeInfo(props) {
         <>
           <AlignedText text="Username" maxWidth="lg" childrenType="text">
             <Typography variant="body1">
-              <Link to={props.link} className={classNames.textLink}>
+              <Link to={`/user-profile/${props.receiver.id}`} className={classNames.textLink}>
                 {props.receiver.username}
               </Link>
             </Typography>

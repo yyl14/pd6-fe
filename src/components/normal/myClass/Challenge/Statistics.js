@@ -25,7 +25,8 @@ const accountColumn = [
     minWidth: 150,
     align: 'center',
     width: 500,
-    type: 'string',
+    type: 'link',
+    link_id: 'path',
   },
   {
     id: 'student_id',
@@ -112,6 +113,7 @@ export default function Statistics() {
           memberChallengeDetail.username = classMember.username;
           memberChallengeDetail.student_id = classMember.student_id;
           memberChallengeDetail.real_name = classMember.real_name;
+          memberChallengeDetail.path = `/user-profile/${classMember.id}`;
         }
 
         if (member.problem_scores) {

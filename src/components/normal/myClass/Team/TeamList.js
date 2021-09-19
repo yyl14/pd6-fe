@@ -191,7 +191,7 @@ export default function TeamList() {
             align: 'center',
             minWidth: 150,
             width: 200,
-            type: 'string',
+            type: 'link',
           },
           {
             name: 'Label',
@@ -203,7 +203,10 @@ export default function TeamList() {
         ]}
         reduxData={teams}
         reduxDataToRows={(item) => ({
-          'Team Name': item.name,
+          'Team Name': {
+            text: item.name,
+            path: `/my-class/${courseId}/${classId}/team/${item.id}`,
+          },
           Label: item.label,
           link: `/my-class/${courseId}/${classId}/team/${item.id}`,
         })}
