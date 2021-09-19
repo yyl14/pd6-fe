@@ -108,6 +108,18 @@ const byId = (state = {}, action) => {
       );
     }
 
+    case problemConstants.BROWSE_TESTCASES_SUCCESS: {
+      const { problemId, testcases } = action.payload;
+      const testcaseIds = testcases.map((item) => item.id);
+      return {
+        ...state,
+        [problemId]: {
+          ...state[problemId],
+          testcaseIds,
+        },
+      };
+    }
+
     default:
       return state;
   }
