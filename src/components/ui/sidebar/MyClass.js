@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider,
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
-import { fetchCourse } from '../../../actions/common/common';
-
 export default function MyClass({
   classNames, history, location, mode,
 }) {
   const { courseId, classId } = useParams();
   const baseURL = '/my-class';
-  const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.token);
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
@@ -42,7 +38,7 @@ export default function MyClass({
 
         setItemLists(
           userClasses
-            .sort((item) => item.id)
+            .sort((a, b) => a.name - b.name)
             .map((item) => {
               switch (item.role) {
                 case 'MANAGER': {

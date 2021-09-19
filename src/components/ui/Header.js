@@ -254,11 +254,11 @@ export default function Header() {
             //   basePath: '/ranklist',
             //   path: '/ranklist',
             // },
-            // {
-            //   text: 'System',
-            //   basePath: '/system',
-            //   path: '/system',
-            // },
+            {
+              text: 'System',
+              basePath: '/system',
+              path: '/system',
+            },
           ]);
         } else {
           setItemList([
@@ -282,11 +282,11 @@ export default function Header() {
             //   basePath: '/ranklist',
             //   path: '/ranklist',
             // },
-            // {
-            //   text: 'System',
-            //   basePath: '/system',
-            //   path: '/system',
-            // },
+            {
+              text: 'System',
+              basePath: '/system',
+              path: '/system',
+            },
           ]);
         }
         setMenuList([

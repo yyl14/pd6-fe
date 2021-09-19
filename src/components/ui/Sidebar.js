@@ -9,6 +9,7 @@ import Account from './sidebar/Account';
 import Course from './sidebar/Course';
 import System from './sidebar/System';
 import MyProfile from './sidebar/MyProfile';
+import UserProfile from './sidebar/UserProfile';
 
 import MyClass from './sidebar/MyClass';
 import Challenge from './sidebar/Challenge';
@@ -18,6 +19,7 @@ import Team from './sidebar/Team';
 import AllClass from './sidebar/AllClass';
 import AllClassChallenge from './sidebar/AllClassChallenge';
 import ProblemSet from './sidebar/ProblemSet';
+import ProblemSetChallenge from './sidebar/ProblemSetChallenge';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -140,6 +142,12 @@ export default function Sidebar() {
       <Route exact path="/my-profile">
         <MyProfile classes={classes} history={history} location={location} mode="main" />
       </Route>
+
+      {/* {Other's Profile} */}
+      <Route exact path="/user-profile/:accountId">
+        <UserProfile classes={classes} history={history} location={location} mode="main" />
+      </Route>
+
       {/* {Admin} */}
       {/* {Course} */}
       <Route exact path="/admin/course/course/">
@@ -278,6 +286,23 @@ export default function Sidebar() {
       </Route>
       <Route exact path="/problem-set/:courseId/:classId">
         <ProblemSet classNames={classes} history={history} location={location} mode="main" />
+      </Route>
+      <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId">
+        <ProblemSetChallenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId">
+        <ProblemSetChallenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+
+      {/* {System} */}
+      <Route exact path="/system">
+        <System classes={classes} history={history} location={location} mode="system" />
+      </Route>
+      <Route exact path="/system/team">
+        <System classes={classes} history={history} location={location} mode="system" />
+      </Route>
+      <Route exact path="/system/accesslog">
+        <System classes={classes} history={history} location={location} mode="system" />
       </Route>
     </Switch>
   );

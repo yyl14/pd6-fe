@@ -135,6 +135,7 @@ export default function MySubmission() {
         reduxDataToRows={(item) => {
           const lastJudgmentId = judgments.allIds.filter((key) => judgments.byId[key].submission_id === item.id)[0];
           return {
+            id: item.id,
             'Submission ID': item.id,
             Status: lastJudgmentId
               ? judgments.byId[lastJudgmentId].verdict
