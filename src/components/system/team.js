@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, makeStyles } from '@material-ui/core';
 import SimpleBar from '../ui/SimpleBar';
-import Profile from '../ui/Profile';
+import Profile from '../ui/profile';
 
 const useStyles = makeStyles(() => ({
   PDOGS_Content_Display: {
@@ -154,14 +154,14 @@ export default function Team() {
             Linkedin_link="https://www.linkedin.com/in/an-yun-cheng"
           />
           <Profile
-            img_url="../../../images/DaphneHou.jpg"
+            img_url="../../../images/DaphneHou.JPG"
             name="侯維書 Daphne Hou"
             description="FE"
             FB_link="https://www.facebook.com/daphne.hou.9/"
             Linkedin_link="https://www.linkedin.com/in/daphne-hou-2016ab220/"
           />
           <Profile
-            img_url="../../../images/amberliu.jpg"
+            img_url="../../../images/amberliu.JPG"
             name="劉亞絜 amberliu"
             description="FE"
             FB_link="https://www.facebook.com/profile.php?id=100006116703389"
