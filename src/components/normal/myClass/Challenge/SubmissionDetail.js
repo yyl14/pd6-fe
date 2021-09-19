@@ -197,7 +197,7 @@ export default function SubmissionDetail() {
           <Typography variant="body1">{submissionId}</Typography>
         </AlignedText>
         <AlignedText text="Username" childrenType="text">
-          <Link to="/my-profile" className={classNames.textLink}>
+          <Link to={`/user-profile/${user.id}`} className={classNames.textLink}>
             <Typography variant="body1">{user.username}</Typography>
           </Link>
         </AlignedText>

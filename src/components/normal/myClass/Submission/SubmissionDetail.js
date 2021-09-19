@@ -218,7 +218,9 @@ export default function SubmissionDetail() {
           <Typography variant="body1">{submissionId}</Typography>
         </AlignedText>
         <AlignedText text="Username" childrenType="text">
-          <Typography variant="body1">{accounts.byId[accountId].username}</Typography>
+          <Link to={`/user-profile/${accounts.byId[accountId].id}`} className={classNames.textLink}>
+            <Typography variant="body1">{accounts.byId[accountId].username}</Typography>
+          </Link>
         </AlignedText>
         <AlignedText text="Student ID" childrenType="text">
           <Typography variant="body1">{accounts.byId[accountId].student_id}</Typography>

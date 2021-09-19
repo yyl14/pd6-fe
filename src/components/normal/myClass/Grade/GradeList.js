@@ -272,8 +272,7 @@ export default function GradeList() {
           id: item.id,
           Username: {
             text: accounts.byId[item.receiver_id] ? accounts.byId[item.receiver_id].username : '',
-            path: `/my-class/${courseId}/${classId}/grade`,
-            // TODO: other's profile
+            path: `/user-profile/${accounts.byId[item.receiver_id].id}`,
           },
           'Student ID': accounts.byId[item.receiver_id] ? accounts.byId[item.receiver_id].student_id : '',
           'Real Name': accounts.byId[item.receiver_id] ? accounts.byId[item.receiver_id].real_name : '',
