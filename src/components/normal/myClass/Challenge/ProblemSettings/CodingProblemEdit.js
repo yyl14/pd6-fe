@@ -189,15 +189,17 @@ export default function CodingProblemEdit({ closeEdit }) {
     }
   }, [problems, problemId, testcases, sampleTransToNumber, testcaseTransToNumber]);
 
-  const [assistTableData, setAssistTableData] = useState(
-    problems[problemId] !== undefined
-      ? problems[problemId].assistingDataIds.map((id) => ({
+  const [assistTableData, setAssistTableData] = useState([]);
+
+  useEffect(() => {
+    if (problems[problemId] !== undefined) {
+      setAssistTableData(problems[problemId].assistingDataIds.map((id) => ({
         id,
         filename: assistingData[id].filename,
         file: null,
-      }))
-      : [],
-  );
+      })));
+    }
+  }, [assistingData, problemId, problems]);
 
   const [cardSelectedFileS, setCardSelectedFileS] = useState({});
   const [cardSelectedFileT, setCardSelectedFileT] = useState({});
