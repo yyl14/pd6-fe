@@ -11,6 +11,7 @@ import {
   DialogContentText,
   Link,
   withStyles,
+  makeStyles,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
@@ -31,13 +32,19 @@ const StyledButton = withStyles({
   },
 })(Button);
 
+const useStyles = makeStyles(() => ({
+  uploadedFile: {
+    marginLeft: 50,
+  },
+}));
+
 /* This is a level 4 component (page component) */
 export default function EssayInfo({ role = 'NORMAL' }) {
   const {
     courseId, classId, challengeId, essayId,
   } = useParams();
   const history = useHistory();
-
+  const classNames = useStyles();
   const dispatch = useDispatch();
 
   // const loading = useSelector((state) => state.loading.myClass.essay);
@@ -136,20 +143,20 @@ export default function EssayInfo({ role = 'NORMAL' }) {
     <>
       <SimpleBar title="Title">{essay[essayId] === undefined ? 'error' : essay[essayId].title}</SimpleBar>
       <SimpleBar title="Description">{essay[essayId] === undefined ? 'error' : essay[essayId].description}</SimpleBar>
-      <SimpleBar title="File">
+      <SimpleBar title="File" noIndent>
         <StyledButton variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>
           Upload
         </StyledButton>
+        {essaySubmission.byId[uploadRecord] && (
+          <div className={classNames.uploadedFile}>
+            <Link href onClick={handleClickLink}>
+              {essaySubmission.byId[uploadRecord].filename}
+            </Link>
+            {' '}
+            {moment(essaySubmission.byId[uploadRecord].submit_time).format('YYYY-MM-DD, HH:mm')}
+          </div>
+        )}
       </SimpleBar>
-      {essaySubmission.byId[uploadRecord] && (
-        <div>
-          <Link href onClick={handleClickLink}>
-            {essaySubmission.byId[uploadRecord].filename}
-          </Link>
-          {' '}
-          {moment(essaySubmission.byId[uploadRecord].submit_time).format('YYYY-MM-DD, HH:mm')}
-        </div>
-      )}
       {role === 'MANAGER' && (
         <SimpleBar
           title="Delete Task"
