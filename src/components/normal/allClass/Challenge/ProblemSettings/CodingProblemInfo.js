@@ -122,7 +122,7 @@ export default function CodingProblemInfo() {
       </SimpleBar>
       <SimpleBar title="Description">
         <MathpixLoader>
-          <MathpixMarkdown text={problems[problemId].description} />
+          <MathpixMarkdown text={problems[problemId].description} htmlTags />
         </MathpixLoader>
       </SimpleBar>
       <SimpleBar title="About Input and Output">
