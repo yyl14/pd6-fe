@@ -121,29 +121,29 @@ const fetchSubmission = (token, submissionId) => (dispatch) => {
     });
 };
 
-const fetchJudgement = (token, submissionId) => (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
-  dispatch({ type: submissionConstants.FETCH_JUDGEMENT_START });
+// const fetchJudgement = (token, submissionId) => (dispatch) => {
+//   const config = {
+//     headers: {
+//       'auth-token': token,
+//     },
+//   };
+//   dispatch({ type: submissionConstants.FETCH_JUDGEMENT_START });
 
-  agent
-    .get(`/submission/${submissionId}/judgment`, config)
-    .then((res) => {
-      dispatch({
-        type: submissionConstants.FETCH_JUDGEMENT_SUCCESS,
-        payload: { submissionId, data: res.data.data },
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        type: submissionConstants.FETCH_JUDGEMENT_FAIL,
-        error,
-      });
-    });
-};
+//   agent
+//     .get(`/submission/${submissionId}/judgment`, config)
+//     .then((res) => {
+//       dispatch({
+//         type: submissionConstants.FETCH_JUDGEMENT_SUCCESS,
+//         payload: { submissionId, data: res.data.data },
+//       });
+//     })
+//     .catch((error) => {
+//       dispatch({
+//         type: submissionConstants.FETCH_JUDGEMENT_FAIL,
+//         error,
+//       });
+//     });
+// };
 
 // fetch latest judgement
 const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
@@ -255,7 +255,7 @@ const rejudgeSubmission = (token, submissionId) => async (dispatch) => {
 export {
   fetchClassSubmissions,
   fetchSubmission,
-  fetchJudgement,
+  // fetchJudgement,
   readSubmissionDetail,
   browseJudgeCases,
   browseTestcases,

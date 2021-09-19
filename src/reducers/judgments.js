@@ -3,10 +3,10 @@ import { submissionConstants, problemConstants } from '../actions/myClass/consta
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    case submissionConstants.FETCH_JUDGEMENT_SUCCESS: {
-      const { data } = action.payload;
-      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.judgments);
-    }
+    // case submissionConstants.FETCH_JUDGEMENT_SUCCESS: {
+    //   const { data } = action.payload;
+    //   return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+    // }
     case problemConstants.READ_SUBMISSION_JUDGE_SUCCESS: {
       return {
         ...state,
@@ -21,8 +21,7 @@ const byId = (state = {}, action) => {
     }
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       const { judgments } = action.payload;
-      // console.log(judgments);
-      return judgments.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, studentCard: [], gradeIds: [] } }), state);
+      return judgments.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
     default:
       return state;
@@ -31,15 +30,15 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
+    // case submissionConstants.FETCH_JUDGEMENT_SUCCESS: {
+    //   const { data } = action.payload;
+    //   return [...new Set([...data.map((item) => item.id), ...state])];
+    // }
     case problemConstants.READ_SUBMISSION_JUDGE_SUCCESS: {
-      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+      return [...new Set([...action.payload.id, ...state])];
     }
     case submissionConstants.READ_SUBMISSION_JUDGE_SUCCESS: {
-      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
-    }
-    case submissionConstants.FETCH_JUDGEMENT_SUCCESS: {
-      const { data } = action.payload;
-      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.judgments);
+      return [...new Set([...action.payload.id, ...state])];
     }
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       return [...new Set([...action.payload.judgments.map((item) => item.id), ...state])];

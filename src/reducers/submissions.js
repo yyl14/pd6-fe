@@ -11,11 +11,11 @@ const byId = (state = {}, action) => {
       const { submissionId, data } = action.payload;
       return {
         ...state,
-        [parseInt(submissionId, 10)]: data,
+        [Number(submissionId)]: data,
       };
     }
     case problemConstants.READ_SUBMISSION_SUCCESS: {
-      return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), {});
+      return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
 
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
