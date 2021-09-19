@@ -12,7 +12,8 @@ const byId = (state = {}, action) => {
       return testcases.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
     case submissionConstants.BROWSE_TESTCASES_SUCCESS: {
-      return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+      const { testcases } = action.payload;
+      return testcases.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
     default:
       return state;
@@ -30,7 +31,8 @@ const allIds = (state = [], action) => {
       return [...new Set([...testcases.map((item) => item.id), ...state])];
     }
     case submissionConstants.BROWSE_TESTCASES_SUCCESS: {
-      return [...new Set([...action.payload.map((item) => item.id), ...state])];
+      const { testcases } = action.payload;
+      return [...new Set([...testcases.map((item) => item.id), ...state])];
     }
     default:
       return state;

@@ -121,7 +121,7 @@ export default function SubmissionDetail() {
       }
       return 0;
     },
-    [testcases.byId],
+    [testcases],
   );
 
   const transformTestcase = useCallback(
@@ -134,13 +134,17 @@ export default function SubmissionDetail() {
       }
       return 0;
     },
-    [testcases.byId],
+    [testcases],
   );
 
   useEffect(() => {
     if (problems.byId[problemId] && problems.byId[problemId].testcaseIds) {
-      const testcasesId = problems.byId[problemId].testcaseIds.filter((id) => !testcases.byId[id].is_sample);
-      const samplesId = problems.byId[problemId].testcaseIds.filter((id) => testcases.byId[id].is_sample);
+      const testcasesId = problems.byId[problemId].testcaseIds.filter(
+        (id) => !testcases.byId[id].is_sample && !testcases.byId[id].is_deleted,
+      );
+      const samplesId = problems.byId[problemId].testcaseIds.filter(
+        (id) => testcases.byId[id].is_sample && !testcases.byId[id].is_deleted,
+      );
       testcasesId.sort((a, b) => transformTestcase(a).localeCompare(transformTestcase(b)));
       samplesId.sort((a, b) => transformSample(a).localeCompare(transformSample(b)));
       setSampleDataIds(samplesId);
@@ -154,20 +158,28 @@ export default function SubmissionDetail() {
         sampleDataIds.concat(testcaseDataIds).map((id) => ({
           id,
           no: transformTestcase(id),
-          time: judgeCases.byId[id] ? judgeCases.byId[id].time_lapse : '',
-          memory: judgeCases.byId[id] ? judgeCases.byId[id].peak_memory : '',
-          status: judgeCases.byId[id]
-            ? judgeCases.byId[id].verdict
-              .toLowerCase()
-              .split(' ')
-              .map((word) => word[0].toUpperCase() + word.substring(1))
-              .join(' ')
-            : '',
-          score: judgeCases.byId[id] ? judgeCases.byId[id].score : '',
+          time: judgeCases.allIds
+            .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
+            .map((key) => (key === id ? judgeCases.byId[id].time_lapse : '')),
+          memory: judgeCases.allIds
+            .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
+            .map((key) => (key === id ? judgeCases.byId[id].peak_memory : '')),
+          status: judgeCases.allIds
+            .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
+            .map((key) => (key === id
+              ? judgeCases.byId[id].verdict
+                .toLowerCase()
+                .split(' ')
+                .map((word) => word[0].toUpperCase() + word.substring(1))
+                .join(' ')
+              : '')),
+          score: judgeCases.allIds
+            .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
+            .map((key) => (key === id ? judgeCases.byId[id].score : '')),
         })),
       );
     }
-  }, [judgeCases.allIds, judgeCases.byId, sampleDataIds, testcaseDataIds, transformTestcase]);
+  }, [judgeCases.allIds, judgeCases.byId, judgmentId, sampleDataIds, testcaseDataIds, transformTestcase]);
 
   useEffect(() => {
     if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
