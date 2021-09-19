@@ -126,35 +126,21 @@ export default function RegisterForm() {
   };
 
   const onSubmit = () => {
-    let errorCnt = 0;
-    const newInputs = {};
+    const newInputs = labelName.reduce((acc, item) => ({ ...acc, [item]: inputs[item].trim() }), {});
+    let hasError = labelName.reduce((acc, item) => (acc || newInputs[item] === ''), false);
 
-    labelName.map((name) => {
-      newInputs[name] = inputs[name].trim();
-      if (newInputs[name] === '') {
-        setErrors((input) => ({ ...input, [name]: true }));
-        setErrorTexts((input) => ({ ...input, [name]: "Can't be empty" }));
-        errorCnt += 1;
-      }
-      return name;
-    });
+    setErrors(labelName.reduce((acc, item) => ({ ...acc, [item]: newInputs[item] === '' }), {}));
+    setErrorTexts(labelName.reduce((acc, item) => ({ ...acc, [item]: newInputs[item] === '' ? "Can't be empty" : '' }), {}));
 
     // check password
     const statusP = checkPassword(newInputs.password, newInputs.confirmPassword);
     if (statusP === "Passwords don't match") {
       setErrors((input) => ({ ...input, confirmPassword: true }));
       setErrorTexts((input) => ({ ...input, confirmPassword: statusP }));
-      errorCnt += 1;
+      hasError = true;
     }
 
-    labelName.map((name) => {
-      if (errors[name] === true) {
-        errorCnt += 1;
-      }
-      return name;
-    });
-
-    if (errorCnt === 0) {
+    if (!hasError) {
       dispatch(
         userRegister(
           inputs.username,
@@ -234,21 +220,17 @@ export default function RegisterForm() {
   };
 
   const onNextPage = () => {
-    let errorCnt = 0;
+    const checkError = (name) => {
+      if (name === 'username' || name === 'password' || name === 'confirmPassword') return false;
+      if (inputs[name].trim() !== '') return false;
+      return true;
+    };
 
-    labelName.map((name) => {
-      if (name === 'username' || name === 'password' || name === 'confirmPassword') {
-        return name; // second page content
-      }
-      if (inputs[name].trim() === '') {
-        setErrors((input) => ({ ...input, [name]: true }));
-        setErrorTexts((input) => ({ ...input, [name]: "Can't be empty" }));
-        errorCnt += 1;
-      }
-      return name;
-    });
+    setErrors(labelName.reduce((acc, item) => ({ ...acc, [item]: checkError(item) }), {}));
+    setErrorTexts(labelName.reduce((acc, item) => ({ ...acc, [item]: checkError(item) ? "Can't be empty" : '' }), {}));
+    const hasError = labelName.reduce((acc, item) => (acc || checkError(item)), false);
 
-    if (errorCnt === 0) {
+    if (!hasError) {
       setNextPage(true);
     }
   };
