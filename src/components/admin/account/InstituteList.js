@@ -11,7 +11,6 @@ import {
   TextField,
   FormControlLabel,
   Switch,
-  Snackbar,
 } from '@material-ui/core';
 import { MdAdd } from 'react-icons/md';
 import PageTitle from '../../ui/PageTitle';
@@ -63,8 +62,6 @@ export default function InstituteList() {
     sort: '(None)',
   });
 
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-
   useEffect(() => {
     if (!loading.addInstitute) {
       dispatch(getInstitutes());
@@ -87,21 +84,7 @@ export default function InstituteList() {
   };
 
   const add = () => {
-    dispatch(
-      addInstitute(
-        authToken,
-        inputs.initialism,
-        inputs.fullName,
-        inputs.email,
-        !inputs.status,
-        () => {
-          setSnackbarMessage('');
-        },
-        (msg) => {
-          setSnackbarMessage(msg);
-        },
-      ),
-    );
+    dispatch(addInstitute(authToken, inputs.initialism, inputs.fullName, inputs.email, !inputs.status));
     setPopUp(false);
     setInputs({
       fullName: '',
@@ -274,14 +257,6 @@ export default function InstituteList() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Snackbar
-        open={snackbarMessage !== ''}
-        autoHideDuration={3000}
-        onClose={() => {
-          setSnackbarMessage('');
-        }}
-        message={`Error: ${snackbarMessage}`}
-      />
     </>
   );
 }
