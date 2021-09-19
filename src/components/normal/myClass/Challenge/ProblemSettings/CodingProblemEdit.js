@@ -23,7 +23,11 @@ import AssistingDataUploadCard from './AssistingDataUploadCard';
 import TestingDataUploadCard from './TestingDataUploadCard';
 
 import {
-  editProblemInfo, saveSamples, saveTestcases, readProblemInfo, saveAssistingData,
+  editProblemInfo,
+  saveSamples,
+  saveTestcases,
+  readProblemInfo,
+  saveAssistingData,
 } from '../../../../../actions/myClass/problem';
 
 import GeneralLoading from '../../../../GeneralLoading';
@@ -193,11 +197,13 @@ export default function CodingProblemEdit({ closeEdit }) {
 
   useEffect(() => {
     if (problems[problemId] !== undefined) {
-      setAssistTableData(problems[problemId].assistingDataIds.map((id) => ({
-        id,
-        filename: assistingData[id].filename,
-        file: null,
-      })));
+      setAssistTableData(
+        problems[problemId].assistingDataIds.map((id) => ({
+          id,
+          filename: assistingData[id].filename,
+          file: null,
+        })),
+      );
     }
   }, [assistingData, problemId, problems]);
 
@@ -223,7 +229,17 @@ export default function CodingProblemEdit({ closeEdit }) {
         setUploadFailCardPopup(true);
       }
     }
-  }, [authToken, closeEdit, dispatch, handleAssistingDataSuccess, handleInfoSuccess, handleSamplesSuccess, handleTestcasesSuccess, problemId, uploadFailFilename.length]);
+  }, [
+    authToken,
+    closeEdit,
+    dispatch,
+    handleAssistingDataSuccess,
+    handleInfoSuccess,
+    handleSamplesSuccess,
+    handleTestcasesSuccess,
+    problemId,
+    uploadFailFilename.length,
+  ]);
 
   const handleClosePopUp = () => {
     setSamplePopUp(false);
@@ -429,7 +445,19 @@ export default function CodingProblemEdit({ closeEdit }) {
         handleFileUploadFail,
       ),
     );
-    dispatch(saveAssistingData(authToken, problemId, assistingData, problems[problemId].assistingDataIds, assistTableData, () => { setHandleAssistingDataSuccess(true); }, handleFileUploadFail));
+    dispatch(
+      saveAssistingData(
+        authToken,
+        problemId,
+        assistingData,
+        problems[problemId].assistingDataIds,
+        assistTableData,
+        () => {
+          setHandleAssistingDataSuccess(true);
+        },
+        handleFileUploadFail,
+      ),
+    );
 
     setDisabled(true);
   };
@@ -483,7 +511,7 @@ export default function CodingProblemEdit({ closeEdit }) {
         />
       </SimpleBar>
       <SimpleBar title="Description" noIndent>
-        <Typography variant="body1">*This area support LaTex and Markdown</Typography>
+        <Typography variant="body1">(Text, LaTeX, Markdown and HTML supported)</Typography>
         <br />
         <TextField
           value={description}
@@ -499,7 +527,7 @@ export default function CodingProblemEdit({ closeEdit }) {
         />
       </SimpleBar>
       <SimpleBar title="About Input and Output" noIndent>
-        <Typography variant="body1">*This area support LaTex and Markdown</Typography>
+        <Typography variant="body1">(Text, LaTeX, Markdown and HTML supported)</Typography>
         <br />
         <TextField
           value={ioDescription}
