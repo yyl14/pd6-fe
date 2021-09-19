@@ -46,6 +46,7 @@ export default function AllClass({
       setItemList(
         courses.allIds
           .map((id) => courses.byId[id])
+          .sort((a, b) => a.name.localeCompare(b.name))
           .map(({ id, type, name }) => ({
             type,
             text: name,
@@ -63,8 +64,8 @@ export default function AllClass({
       setTitle(courses.byId[courseId].name);
       setItemList(
         courses.byId[courseId].classIds
-          .sort((a, b) => a.name - b.name)
           .map((id) => classes.byId[id])
+          .sort((a, b) => a.name.localeCompare(b.name))
           .map(({ id, name }) => ({
             type: 'Class',
             text: name,
