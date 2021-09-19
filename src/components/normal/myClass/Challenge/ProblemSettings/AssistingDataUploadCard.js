@@ -35,7 +35,7 @@ export default function AssistingDataUploadCard({
           <Typography variant="h4">Upload Assisting Data</Typography>
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body2">Assisting Data are files shared among all testing data (e.g. a csv file) They will be placed under /challenge/assist</Typography>
+          <Typography variant="body2">Assisting Data are files shared among all testing data (e.g. a csv file) They will be placed under /assisting_data</Typography>
           <FileUploadArea text="Assisting Data" fileAcceptFormat=".csv" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
         </DialogContent>
         <DialogActions>
