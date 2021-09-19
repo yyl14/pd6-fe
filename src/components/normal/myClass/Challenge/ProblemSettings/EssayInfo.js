@@ -11,6 +11,7 @@ import {
   DialogContentText,
   Link,
   withStyles,
+  makeStyles,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
@@ -31,14 +32,19 @@ const StyledButton = withStyles({
   },
 })(Button);
 
+const useStyles = makeStyles(() => ({
+  uploadedFile: {
+    marginLeft: 50,
+  },
+}));
+
 /* This is a level 4 component (page component) */
 export default function EssayInfo({ role = 'NORMAL' }) {
   const {
     courseId, classId, challengeId, essayId,
   } = useParams();
   const history = useHistory();
-  const [currentTime] = useState(moment());
-
+  const classNames = useStyles();
   const dispatch = useDispatch();
 
   // const loading = useSelector((state) => state.loading.myClass.essay);
@@ -49,7 +55,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   const challenges = useSelector((state) => state.challenges.byId);
   const essaySubmission = useSelector((state) => state.essaySubmission);
   const userId = useSelector((state) => state.user.id);
-  const uploadError = useSelector((state) => state.error.myClass.essaySubmission.uploadEssay);
+  const error = useSelector((state) => state.error.myClass.essaySubmission);
 
   const [uploadRecord, setUploadRecord] = useState(0);
   const [selectedFile, setSelectedFile] = useState([]);
@@ -110,22 +116,22 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   // }, [authToken, dispatch, essayId]);
 
   useEffect(() => {
-    if (essay[essayId] === undefined) {
-      return;
+    if (essay[essayId] !== undefined) {
+      setUploadRecord(essay[essayId].essaySubmissionId ? essay[essayId].essaySubmissionId : 0);
     }
-    setUploadRecord(essay[essayId].essaySubmissionId ? essay[essayId].essaySubmissionId : 0);
   }, [essay, essayId]);
 
   const handleClickLink = () => {
-    if (essaySubmission.byId[uploadRecord].account_id === userId) {
-      if (essaySubmission.byId[uploadRecord].essay_id === Number(essayId)) {
-        const fileToDownload = {
-          uuid: essaySubmission.byId[uploadRecord].content_file_uuid,
-          filename: essaySubmission.byId[uploadRecord].filename,
-          as_attachment: false,
-        };
-        dispatch(downloadFile(authToken, fileToDownload));
-      }
+    if (
+      essaySubmission.byId[uploadRecord].account_id === userId
+      && essaySubmission.byId[uploadRecord].essay_id === Number(essayId)
+    ) {
+      const fileToDownload = {
+        uuid: essaySubmission.byId[uploadRecord].content_file_uuid,
+        filename: essaySubmission.byId[uploadRecord].filename,
+        as_attachment: false,
+      };
+      dispatch(downloadFile(authToken, fileToDownload));
     }
   };
 
@@ -137,20 +143,20 @@ export default function EssayInfo({ role = 'NORMAL' }) {
     <>
       <SimpleBar title="Title">{essay[essayId] === undefined ? 'error' : essay[essayId].title}</SimpleBar>
       <SimpleBar title="Description">{essay[essayId] === undefined ? 'error' : essay[essayId].description}</SimpleBar>
-      <SimpleBar title="File">
+      <SimpleBar title="File" noIndent>
         <StyledButton variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>
           Upload
         </StyledButton>
+        {essaySubmission.byId[uploadRecord] && (
+          <div className={classNames.uploadedFile}>
+            <Link href onClick={handleClickLink}>
+              {essaySubmission.byId[uploadRecord].filename}
+            </Link>
+            {' '}
+            {moment(essaySubmission.byId[uploadRecord].submit_time).format('YYYY-MM-DD, HH:mm')}
+          </div>
+        )}
       </SimpleBar>
-      {essaySubmission.byId[uploadRecord] && (
-        <div>
-          <Link href onClick={handleClickLink}>
-            {essaySubmission.byId[uploadRecord].filename}
-          </Link>
-          {' '}
-          {moment(essaySubmission.byId[uploadRecord].submit_time).format('YYYY-MM-DD, HH:mm')}
-        </div>
-      )}
       {role === 'MANAGER' && (
         <SimpleBar
           title="Delete Task"
@@ -204,7 +210,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
             {fileName}
             <br />
             <br />
-            {`Failed Reason: ${uploadError}`}
+            {`Failed Reason: ${uploadRecord === 0 ? error.uploadEssay : error.reUploadEssay}`}
           </Typography>
         </DialogContent>
         <DialogActions>
