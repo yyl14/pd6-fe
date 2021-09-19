@@ -141,9 +141,8 @@ export default function ChallengeInfo() {
       >
         {editMode ? (
           <div>
-            <Typography variant="body1">(Text, LaTeX, Markdown and HTML supported)</Typography>
-            <br />
             <TextField
+              placeholder="(Text, LaTeX, Markdown and HTML supported)"
               className={classes.descriptionField}
               value={inputs}
               onChange={(e) => setInputs(e.target.value)}

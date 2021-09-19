@@ -511,9 +511,8 @@ export default function CodingProblemEdit({ closeEdit }) {
         />
       </SimpleBar>
       <SimpleBar title="Description" noIndent>
-        <Typography variant="body1">(Text, LaTeX, Markdown and HTML supported)</Typography>
-        <br />
         <TextField
+          placeholder="(Text, LaTeX, Markdown and HTML supported)"
           value={description}
           variant="outlined"
           onChange={(e) => {
@@ -527,9 +526,8 @@ export default function CodingProblemEdit({ closeEdit }) {
         />
       </SimpleBar>
       <SimpleBar title="About Input and Output" noIndent>
-        <Typography variant="body1">(Text, LaTeX, Markdown and HTML supported)</Typography>
-        <br />
         <TextField
+          placeholder="(Text, LaTeX, Markdown and HTML supported)"
           value={ioDescription}
           variant="outlined"
           onChange={(e) => {
