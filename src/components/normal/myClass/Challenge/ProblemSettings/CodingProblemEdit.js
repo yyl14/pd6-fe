@@ -491,6 +491,8 @@ export default function CodingProblemEdit({ closeEdit }) {
         />
       </SimpleBar>
       <SimpleBar title="Description" noIndent>
+        <Typography variant="body1">*This area support LaTex and Markdown</Typography>
+        <br />
         <TextField
           value={description}
           variant="outlined"
@@ -505,6 +507,8 @@ export default function CodingProblemEdit({ closeEdit }) {
         />
       </SimpleBar>
       <SimpleBar title="About Input and Output" noIndent>
+        <Typography variant="body1">*This area support LaTex and Markdown</Typography>
+        <br />
         <TextField
           value={ioDescription}
           variant="outlined"

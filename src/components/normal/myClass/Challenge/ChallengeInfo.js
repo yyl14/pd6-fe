@@ -141,6 +141,8 @@ export default function ChallengeInfo() {
       >
         {editMode ? (
           <div>
+            <Typography variant="body1">*This area support LaTex and Markdown</Typography>
+            <br />
             <TextField
               className={classes.descriptionField}
               value={inputs}
