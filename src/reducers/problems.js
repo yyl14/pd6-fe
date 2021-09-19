@@ -11,7 +11,7 @@ const byId = (state = {}, action) => {
           ...acc,
           [item.id]: {
             ...item,
-            testcaseIds: [],
+            testcaseIds: state[item.id] ? state[item.id].testcaseIds : [],
             assistingDataIds: [],
             score: state[item.id] ? state[item.id].score : '',
           },
