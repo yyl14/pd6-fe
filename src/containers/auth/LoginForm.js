@@ -61,20 +61,18 @@ export default function LoginForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newUserName = username.trim();
-    const newPassword = password.trim();
 
-    if (newUserName === '') {
+    if (username === '') {
       setErrors((ori) => ({ ...ori, username: true }));
       setErrorTexts((ori) => ({ ...ori, username: "Can't be empty" }));
     }
-    if (newPassword === '') {
+    if (password === '') {
       setErrors((ori) => ({ ...ori, password: true }));
       setErrorTexts((ori) => ({ ...ori, password: "Can't be empty" }));
     }
 
-    if (errors.username === false && errors.password === false && newUserName !== '' && newPassword !== '') {
-      dispatch(userSignIn(newUserName, newPassword));
+    if (errors.username === false && errors.password === false && username !== '' && password !== '') {
+      dispatch(userSignIn(username, password));
     }
   };
   const handleUsernameChange = (e) => {
