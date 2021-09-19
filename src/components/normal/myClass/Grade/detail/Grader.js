@@ -19,7 +19,7 @@ export default function Grader(props) {
       <SimpleBar title="Grader">
         <AlignedText text="Username" maxWidth="lg" childrenType="text">
           <Typography variant="body1">
-            <Link to={props.link} className={classNames.textLink}>
+            <Link to={`/user-profile/${props.grader.id}`} className={classNames.textLink}>
               {props.grader.username}
             </Link>
           </Typography>

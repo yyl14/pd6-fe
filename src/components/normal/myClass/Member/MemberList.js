@@ -153,7 +153,7 @@ export default function MemberList() {
               id: item.member_id,
               Username: {
                 text: item.username,
-                path: `/my-class/${courseId}/${classId}/member`,
+                path: `/user-profile/${item.member_id}`,
               },
               'Student ID': item.student_id,
               'Real Name': item.real_name,
