@@ -34,7 +34,7 @@ export default function MySubmission() {
   }, [authToken, dispatch, problemId]);
 
   useEffect(() => {
-    if (submissions.allIds !== []) {
+    if (submissions.allIds) {
       submissions.allIds.map((id) => dispatch(readSubmissionDetail(authToken, id)));
     }
   }, [authToken, challengeId, dispatch, problemId, submissions]);

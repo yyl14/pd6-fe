@@ -121,7 +121,7 @@ export default function SubmissionDetail() {
   }, [problems, problemId, transformTestcase, transformSample, testcases]);
 
   useEffect(() => {
-    if (sampleDataIds !== [] && testcaseDataIds !== [] && judgeCases.allIds !== []) {
+    if (sampleDataIds && testcaseDataIds && judgeCases.allIds) {
       setTableData(
         sampleDataIds.concat(testcaseDataIds).map((id) => ({
           id,
@@ -207,7 +207,7 @@ export default function SubmissionDetail() {
           <Typography variant="body1">{problems.byId[problemId].title}</Typography>
         </AlignedText>
         <AlignedText text="Status" childrenType="text">
-          {judgments[judgmentId] !== undefined ? (
+          {judgments[judgmentId] ? (
             <div>
               {judgments[judgmentId].verdict === 'ACCEPTED' ? (
                 <Typography variant="body1">
@@ -228,7 +228,7 @@ export default function SubmissionDetail() {
           )}
         </AlignedText>
         <AlignedText text="Score" childrenType="text">
-          {judgments[judgmentId] !== undefined && (
+          {judgments[judgmentId] && (
             <div>
               <Typography variant="body1">{judgments[judgmentId].score}</Typography>
             </div>
