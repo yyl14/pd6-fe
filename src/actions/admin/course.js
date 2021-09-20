@@ -121,34 +121,23 @@ export const fetchClasses = (token, courseId) => (dispatch) => {
     });
 };
 
-export const addClass = (token, courseId, name, isHidden) => (dispatch) => {
-  const config = {
-    headers: { 'auth-token': token },
-  };
-
-  dispatch({ type: courseConstants.ADD_CLASS_START });
-
-  agent
-    .post(`/course/${courseId}/class`, { name }, config)
-    .then((res) => {
-      const { data } = res.data;
-      const { id } = data;
-      dispatch({
-        type: courseConstants.ADD_CLASS_SUCCESS,
-        payload: {
-          courseId,
-          data: {
-            id,
-            name,
-            is_hidden: isHidden,
-            is_deleted: false,
-          },
-        },
-      });
-    })
-    .catch((error) => {
-      dispatch({ type: courseConstants.ADD_CLASS_FAIL, error });
+export const addClass = (token, courseId, name, onSuccess, onError) => async (dispatch) => {
+  try {
+    const config = {
+      headers: { 'auth-token': token },
+      params: { course_id: courseId },
+    };
+    dispatch({ type: courseConstants.ADD_CLASS_START });
+    await agent.post(`/course/${courseId}/class`, { name }, config);
+    dispatch({ type: courseConstants.ADD_CLASS_SUCCESS });
+    onSuccess();
+  } catch (error) {
+    dispatch({
+      type: courseConstants.ADD_CLASS_FAIL,
+      error,
     });
+    onError();
+  }
 };
 
 export const renameClass = (token, classId, newName) => (dispatch) => {
