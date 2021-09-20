@@ -521,7 +521,10 @@ function AutoTable({
                       return (
                         <React.Fragment key={`${row.id}-${column.name}`}>
                           <TableCell className={classes.tableColumnLeftSpacing} />
-                          <TableCell align={column.align}>
+                          <TableCell
+                            align={column.align}
+                            style={{ color: (column.colors && column.colors[value]) && column.colors[value] }}
+                          >
                             {column.format && typeof value === 'number' ? column.format(value) : value}
                           </TableCell>
                         </React.Fragment>
