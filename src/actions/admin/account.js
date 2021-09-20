@@ -27,7 +27,7 @@ const getInstitute = (token, instituteId) => (dispatch) => {
     });
 };
 
-const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled) => (dispatch) => {
+const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled, onSuccess, onError) => (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
@@ -57,12 +57,14 @@ const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled)
           is_disabled: isDisabled,
         },
       });
+      onSuccess();
     })
     .catch((error) => {
       dispatch({
         type: accountConstants.ADD_INSTITUTE_FAIL,
         error,
       });
+      onError();
     });
 };
 
