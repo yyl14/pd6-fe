@@ -79,6 +79,7 @@ export default function AnnouncementHome() {
             type: 'string',
           },
         ]}
+        defaultSort={['post_time', 'DESC']}
         reduxData={announcements}
         reduxDataToRows={(item) => ({
           id: item.id,
