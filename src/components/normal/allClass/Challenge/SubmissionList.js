@@ -91,7 +91,7 @@ export default function SubmissionList() {
             colors: {
               'Waiting For Judge': 'default',
               'No Status': 'error',
-              ACCEPTED: 'default',
+              ACCEPTED: 'primary',
               'WRONG ANSWER': 'error',
               'MEMORY LIMIT EXCEED': 'error',
               'TIME LIMIT EXCEED': 'error',
