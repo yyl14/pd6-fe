@@ -69,27 +69,6 @@ export const renameCourse = (token, courseId, name, onSuccess, onError) => async
     });
     onError();
   }
-  // const config = { headers: { 'auth-token': token } };
-  // const body = { name: newName };
-  // dispatch({ type: courseConstants.RENAME_COURSE_START });
-
-  // agent
-  //   .patch(`/course/${courseId}`, body, config)
-  //   .then(() => {
-  //     dispatch({
-  //       type: courseConstants.RENAME_COURSE_SUCCESS,
-  //       payload: {
-  //         courseId,
-  //         newName,
-  //       },
-  //     });
-  //   })
-  //   .catch((error) => {
-  //     dispatch({
-  //       type: courseConstants.RENAME_COURSE_FAIL,
-  //       error,
-  //     });
-  //   });
 };
 
 export const deleteCourse = (token, courseId) => (dispatch) => {
@@ -178,27 +157,6 @@ export const renameClass = (token, classId, name, onSuccess, onError) => async (
     });
     onError();
   }
-
-  // const config = { headers: { 'auth-token': token } };
-  // dispatch({ type: courseConstants.RENAME_CLASS_START });
-
-  // agent
-  //   .patch(`/class/${classId}`, { name: newName }, config)
-  //   .then(() => {
-  //     dispatch({
-  //       type: courseConstants.RENAME_CLASS_SUCCESS,
-  //       payload: {
-  //         classId,
-  //         newName,
-  //       },
-  //     });
-  //   })
-  //   .catch((error) => {
-  //     dispatch({
-  //       type: courseConstants.RENAME_CLASS_FAIL,
-  //       error,
-  //     });
-  //   });
 };
 
 export const deleteClass = (token, courseId, classId) => (dispatch) => {
