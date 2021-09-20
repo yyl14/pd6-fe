@@ -509,7 +509,7 @@ function AutoTable({
                           <React.Fragment key={`${row.id}-${column.name}`}>
                             <TableCell className={classes.tableColumnLeftSpacing} />
                             <TableCell align={column.align}>
-                              <Link to={value.path} className={classes.textLink} replace>
+                              <Link to={value.path} className={classes.textLink}>
                                 {column.format && typeof value.text === 'number'
                                   ? column.format(value.text)
                                   : value.text}
