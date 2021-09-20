@@ -11,6 +11,7 @@ import {
   TextField,
   FormControlLabel,
   Switch,
+  Snackbar,
 } from '@material-ui/core';
 import { MdAdd } from 'react-icons/md';
 import PageTitle from '../../ui/PageTitle';
@@ -42,7 +43,7 @@ export default function InstituteList() {
   const institutes = useSelector((state) => state.institutes.byId);
   const institutesID = useSelector((state) => state.institutes.allIds);
   const authToken = useSelector((state) => state.auth.token);
-  // const pageError = useSelector((state) => state.error.admin.account);
+  const error = useSelector((state) => state.error.admin.account);
   const loading = useSelector((state) => state.loading.admin.account);
 
   const [transformedData, setTransformedData] = useState([]);
@@ -61,6 +62,8 @@ export default function InstituteList() {
     filter: ['Select all'],
     sort: '(None)',
   });
+
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   useEffect(() => {
     if (!loading.addInstitute) {
@@ -84,7 +87,21 @@ export default function InstituteList() {
   };
 
   const add = () => {
-    dispatch(addInstitute(authToken, inputs.initialism, inputs.fullName, inputs.email, !inputs.status));
+    dispatch(
+      addInstitute(
+        authToken,
+        inputs.initialism,
+        inputs.fullName,
+        inputs.email,
+        !inputs.status,
+        () => {
+          setShowSnackbar(false);
+        },
+        () => {
+          setShowSnackbar(true);
+        },
+      ),
+    );
     setPopUp(false);
     setInputs({
       fullName: '',
@@ -257,6 +274,14 @@ export default function InstituteList() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowSnackbar(false);
+        }}
+        message={`Error: ${error.addInstitute}`}
+      />
     </>
   );
 }
