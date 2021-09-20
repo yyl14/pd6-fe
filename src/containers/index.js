@@ -58,7 +58,8 @@ function Index() {
         history.push('/admin/course/course');
       } else if (user.role.indexOf('NORMAL') !== -1 || user.role === 'NORMAL') {
         if (user.classes.length !== 0) {
-          history.push(`/my-class/${user.classes[0].course_id}/${user.classes[0].class_id}/challenge`);
+          const sortedClasses = user.classes.sort((a, b) => b.class_name.localeCompare(a.class_name) || b.course_name.localeCompare(a.course_name));
+          history.push(`/my-class/${sortedClasses[0].course_id}/${sortedClasses[0].class_id}/challenge`);
         } else {
           history.push('/all-class');
         }
