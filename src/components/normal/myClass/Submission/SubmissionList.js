@@ -176,7 +176,7 @@ export default function SubmissionList() {
           ID: item.id,
           Username: {
             text: accounts.byId[item.account_id] ? accounts.byId[item.account_id].username : '',
-            path: `/user-profile/${accounts.byId[item.account_id].id}`,
+            path: accounts.byId[item.account_id] ? `/user-profile/${accounts.byId[item.account_id].id}` : '',
           },
           'Student ID': accounts.byId[item.account_id] ? accounts.byId[item.account_id].student_id : '',
           'Real Name': accounts.byId[item.account_id] ? accounts.byId[item.account_id].real_name : '',
