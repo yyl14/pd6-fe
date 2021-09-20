@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle,
+  Typography,
+  TextField,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Snackbar,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 
@@ -18,11 +25,13 @@ export default function CourseSetting() {
   const authToken = useSelector((state) => state.auth.token);
   const courses = useSelector((state) => state.courses);
   const loading = useSelector((state) => state.loading.admin.course);
+  const error = useSelector((state) => state.error.admin.course);
   const dispatch = useDispatch();
 
   const [showRenameDialog, setShowRenameDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [newCourseName, setNewCourseName] = useState('');
+  const [hasError, setHasError] = useState(false);
 
   const getCourseType = (courseType) => {
     switch (courseType) {
@@ -42,9 +51,16 @@ export default function CourseSetting() {
     setShowDeleteDialog(true);
   };
 
-  const onRename = () => {
+  const renameCourseSuccess = () => {
+    setNewCourseName('');
     setShowRenameDialog(false);
-    dispatch(renameCourse(authToken, courseId, newCourseName, false));
+  };
+  const closeSnackbar = () => {
+    setHasError(false);
+  };
+
+  const onRename = () => {
+    dispatch(renameCourse(authToken, courseId, newCourseName, renameCourseSuccess, () => setHasError(true)));
   };
   const onDelete = () => {
     setShowDeleteDialog(false);
@@ -121,12 +137,20 @@ export default function CourseSetting() {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowRenameDialog(false)}>Cancel</Button>
+          <Button
+            onClick={() => {
+              setShowRenameDialog(false);
+              setNewCourseName('');
+            }}
+          >
+            Cancel
+          </Button>
           <Button onClick={onRename} color="secondary">
             Rename
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar open={showRenameDialog && hasError} onClose={closeSnackbar} message={`Error: ${error.renameCourse}`} />
 
       <Dialog open={showDeleteDialog || loading.deleteCourse} maxWidth="md">
         <DialogTitle>
