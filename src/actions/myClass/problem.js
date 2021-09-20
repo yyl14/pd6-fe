@@ -376,7 +376,7 @@ const browseTestcases = (token, problemId) => async (dispatch) => {
     const res = await agent.get(`/problem/${problemId}/testcase`, config);
     dispatch({
       type: problemConstants.BROWSE_TESTCASES_SUCCESS,
-      payload: res.data.data,
+      payload: { problemId, testcases: res.data.data },
     });
   } catch (error) {
     dispatch({
