@@ -174,9 +174,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     // alignItems: 'center',
   },
-  default: { color: '#000000' },
-  error: { color: '#EA3222' },
-  primary: { color: '#1EA5FF' },
+  default: { color: theme.palette.black.dark },
+  error: { color: theme.palette.secondary.main },
+  primary: { color: theme.palette.primary.main },
 }));
 
 const itemsPerPage = [10, 25, 50, 100];
@@ -527,7 +527,6 @@ function AutoTable({
                           <TableCell
                             align={column.align}
                             className={(column.colors && column.colors[value]) && classes[column.colors[value]]}
-                            // style={{ color: (column.colors && column.colors[value]) && classes.cellColors[column.colors[value]] }}
                           >
                             {column.format && typeof value === 'number' ? column.format(value) : value}
                           </TableCell>
