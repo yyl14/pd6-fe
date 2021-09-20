@@ -55,28 +55,41 @@ export const addCourse = (token, name, type, history) => (dispatch) => {
     });
 };
 
-export const renameCourse = (token, courseId, newName) => (dispatch) => {
-  const config = { headers: { 'auth-token': token } };
-  const body = { name: newName };
-  dispatch({ type: courseConstants.RENAME_COURSE_START });
-
-  agent
-    .patch(`/course/${courseId}`, body, config)
-    .then(() => {
-      dispatch({
-        type: courseConstants.RENAME_COURSE_SUCCESS,
-        payload: {
-          courseId,
-          newName,
-        },
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        type: courseConstants.RENAME_COURSE_FAIL,
-        error,
-      });
+export const renameCourse = (token, courseId, name, onSuccess, onError) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    dispatch({ type: courseConstants.RENAME_COURSE_START });
+    await agent.patch(`/course/${courseId}`, { name }, config);
+    dispatch({ type: courseConstants.RENAME_COURSE_SUCCESS });
+    onSuccess();
+  } catch (error) {
+    dispatch({
+      type: courseConstants.RENAME_COURSE_FAIL,
+      error,
     });
+    onError();
+  }
+  // const config = { headers: { 'auth-token': token } };
+  // const body = { name: newName };
+  // dispatch({ type: courseConstants.RENAME_COURSE_START });
+
+  // agent
+  //   .patch(`/course/${courseId}`, body, config)
+  //   .then(() => {
+  //     dispatch({
+  //       type: courseConstants.RENAME_COURSE_SUCCESS,
+  //       payload: {
+  //         courseId,
+  //         newName,
+  //       },
+  //     });
+  //   })
+  //   .catch((error) => {
+  //     dispatch({
+  //       type: courseConstants.RENAME_COURSE_FAIL,
+  //       error,
+  //     });
+  //   });
 };
 
 export const deleteCourse = (token, courseId) => (dispatch) => {
@@ -151,27 +164,41 @@ export const addClass = (token, courseId, name, isHidden) => (dispatch) => {
     });
 };
 
-export const renameClass = (token, classId, newName) => (dispatch) => {
-  const config = { headers: { 'auth-token': token } };
-  dispatch({ type: courseConstants.RENAME_CLASS_START });
-
-  agent
-    .patch(`/class/${classId}`, { name: newName }, config)
-    .then(() => {
-      dispatch({
-        type: courseConstants.RENAME_CLASS_SUCCESS,
-        payload: {
-          classId,
-          newName,
-        },
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        type: courseConstants.RENAME_CLASS_FAIL,
-        error,
-      });
+export const renameClass = (token, classId, name, onSuccess, onError) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    dispatch({ type: courseConstants.RENAME_CLASS_START });
+    await agent.patch(`/class/${classId}`, { name }, config);
+    dispatch({ type: courseConstants.RENAME_CLASS_SUCCESS });
+    onSuccess();
+  } catch (error) {
+    dispatch({
+      type: courseConstants.RENAME_CLASS_FAIL,
+      error,
     });
+    onError();
+  }
+
+  // const config = { headers: { 'auth-token': token } };
+  // dispatch({ type: courseConstants.RENAME_CLASS_START });
+
+  // agent
+  //   .patch(`/class/${classId}`, { name: newName }, config)
+  //   .then(() => {
+  //     dispatch({
+  //       type: courseConstants.RENAME_CLASS_SUCCESS,
+  //       payload: {
+  //         classId,
+  //         newName,
+  //       },
+  //     });
+  //   })
+  //   .catch((error) => {
+  //     dispatch({
+  //       type: courseConstants.RENAME_CLASS_FAIL,
+  //       error,
+  //     });
+  //   });
 };
 
 export const deleteClass = (token, courseId, classId) => (dispatch) => {
