@@ -22,37 +22,45 @@ export const fetchCourses = (token) => (dispatch) => {
     });
 };
 
-export const addCourse = (token, name, type, history) => (dispatch) => {
-  const config = {
-    headers: { 'auth-token': token },
-  };
-  const body = { name, type };
-
-  dispatch({ type: courseConstants.ADD_COURSE_START });
-
-  agent
-    .post('/course', body, config)
-    .then((res) => {
-      const { data } = res.data;
-      const { id } = data;
-      dispatch({
-        type: courseConstants.ADD_COURSE_SUCCESS,
-        payload: {
-          courseId: id,
-          data: {
-            id,
-            name,
-            type,
-            is_hidden: false,
-            is_deleted: false,
-          },
-        },
-      });
-      history.push(`/admin/course/course/${id}/class-list`);
-    })
-    .catch((error) => {
-      dispatch({ type: courseConstants.ADD_COURSE_FAIL, error });
+export const addCourse = (token, name, type, onSuccess, onError) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    const body = { name, type };
+    dispatch({ type: courseConstants.ADD_COURSE_START });
+    await agent.post('/course', body, config);
+    dispatch({ type: courseConstants.ADD_COURSE_SUCCESS });
+    onSuccess();
+  } catch (error) {
+    dispatch({
+      type: courseConstants.ADD_COURSE_FAIL,
+      error,
     });
+    onError();
+  }
+
+  // agent
+  //   .post('/course', body, config)
+  //   .then((res) => {
+  //     const { data } = res.data;
+  //     const { id } = data;
+  //     dispatch({
+  //       type: courseConstants.ADD_COURSE_SUCCESS,
+  //       payload: {
+  //         courseId: id,
+  //         data: {
+  //           id,
+  //           name,
+  //           type,
+  //           is_hidden: false,
+  //           is_deleted: false,
+  //         },
+  //       },
+  //     });
+  //     history.push(`/admin/course/course/${id}/class-list`);
+  //   })
+  //   .catch((error) => {
+  //     dispatch({ type: courseConstants.ADD_COURSE_FAIL, error });
+  //   });
 };
 
 export const renameCourse = (token, courseId, newName) => (dispatch) => {
