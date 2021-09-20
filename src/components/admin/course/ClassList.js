@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography, Button, Dialog, DialogTitle, DialogActions, DialogContent, TextField,
+  Typography,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  TextField,
+  Snackbar,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
@@ -24,11 +31,13 @@ export default function ClassList() {
   const classes = useSelector((state) => state.classes);
 
   const loading = useSelector((state) => state.loading.admin.course);
+  const error = useSelector((state) => state.error.admin.course);
 
   const [addCourseName, setAddCourseName] = useState('');
   const [addClassName, setAddClassName] = useState('');
 
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     if (!loading.addClass && !loading.renameClass && !loading.deleteClass) {
@@ -60,10 +69,19 @@ export default function ClassList() {
   const onClickSetting = () => {
     history.push(`/admin/course/course/${courseId}/setting`);
   };
-  const onAddCourse = (name) => {
+
+  const addCourseSuccess = () => {
     setAddCourseName('');
     history.push(`/admin/course/course/${courseId}/class-list`);
-    dispatch(addCourse(authToken, name, getCourseType(addType).toUpperCase(), history));
+  };
+  const closeSnackbar = () => {
+    setHasError(false);
+  };
+
+  const onAddCourse = (name) => {
+    dispatch(
+      addCourse(authToken, name, getCourseType(addType).toUpperCase(), addCourseSuccess, () => setHasError(true)),
+    );
   };
   const onAddClass = (name) => {
     setAddClassName('');
@@ -134,7 +152,14 @@ export default function ClassList() {
           </AlignedText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => history.push(`/admin/course/course/${courseId}/class-list`)}>Cancel</Button>
+          <Button
+            onClick={() => {
+              setAddCourseName('');
+              history.push(`/admin/course/course/${courseId}/class-list`);
+            }}
+          >
+            Cancel
+          </Button>
           <Button
             onClick={() => onAddCourse(addCourseName)}
             color="primary"
@@ -144,6 +169,12 @@ export default function ClassList() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={addType !== undefined && hasError}
+        onClose={closeSnackbar}
+        message={`Error: ${error.addCourse}`}
+      />
+
       <Dialog open={showAddClassDialog || loading.addClass} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Create a new class</Typography>
