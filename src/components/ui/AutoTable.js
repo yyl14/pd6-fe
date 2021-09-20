@@ -174,6 +174,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     // alignItems: 'center',
   },
+  default: { color: '#000000' },
+  error: { color: '#EA3222' },
+  primary: { color: '#1EA5FF' },
 }));
 
 const itemsPerPage = [10, 25, 50, 100];
@@ -523,7 +526,8 @@ function AutoTable({
                           <TableCell className={classes.tableColumnLeftSpacing} />
                           <TableCell
                             align={column.align}
-                            style={{ color: (column.colors && column.colors[value]) && column.colors[value] }}
+                            className={(column.colors && column.colors[value]) && classes[column.colors[value]]}
+                            // style={{ color: (column.colors && column.colors[value]) && classes.cellColors[column.colors[value]] }}
                           >
                             {column.format && typeof value === 'number' ? column.format(value) : value}
                           </TableCell>
