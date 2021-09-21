@@ -107,6 +107,9 @@ export default function CodingProblemEdit({ closeEdit }) {
   const [uploadFailFilename, setUploadFailFilename] = useState([]);
   const [uploadFailCardPopup, setUploadFailCardPopup] = useState(false);
 
+  const [sampleTableData, setSampleTableData] = useState([]);
+  const [testcaseTableData, setTestcaseTableData] = useState([]);
+
   const sampleTransToNumber = useCallback(
     (id) => {
       if (testcases[id].input_filename !== null) {
@@ -133,8 +136,25 @@ export default function CodingProblemEdit({ closeEdit }) {
     [testcases],
   );
 
-  const [sampleTableData, setSampleTableData] = useState([]);
-  const [testcaseTableData, setTestcaseTableData] = useState([]);
+  const sampleTrans = (id) => {
+    if (sampleTableData[id].input_filename !== null) {
+      return Number(sampleTableData[id].input_filename.slice(6, sampleTableData[id].input_filename.indexOf('.')));
+    }
+    if (sampleTableData[id].output_filename !== null) {
+      return Number(sampleTableData[id].output_filename.slice(6, sampleTableData[id].output_filename.indexOf('.')));
+    }
+    return 0;
+  };
+
+  const testcaseTrans = (id) => {
+    if (testcaseTableData[id].input_filename !== null) {
+      return Number(testcaseTableData[id].input_filename.slice(0, testcaseTableData[id].input_filename.indexOf('.')));
+    }
+    if (testcaseTableData[id].output_filename !== null) {
+      return Number(testcaseTableData[id].output_filename.slice(0, testcaseTableData[id].output_filename.indexOf('.')));
+    }
+    return 0;
+  };
 
   useEffect(() => {
     if (problems[problemId] && problems[problemId].testcaseIds) {
@@ -623,7 +643,9 @@ export default function CodingProblemEdit({ closeEdit }) {
               type: 'string',
             },
           ]}
-          data={Object.keys(sampleTableData).map((key) => sampleTableData[key])}
+          data={Object.keys(sampleTableData)
+            .sort((a, b) => sampleTrans(a) - sampleTrans(b))
+            .map((key) => sampleTableData[key])}
           setData={handleSetSampleTableData}
         />
       </SimpleBar>
@@ -704,7 +726,9 @@ export default function CodingProblemEdit({ closeEdit }) {
               type: 'string',
             },
           ]}
-          data={Object.keys(testcaseTableData).map((key) => testcaseTableData[key])}
+          data={Object.keys(testcaseTableData)
+            .sort((a, b) => testcaseTrans(a) - testcaseTrans(b))
+            .map((key) => testcaseTableData[key])}
           setData={handleSetTestcaseTableData}
         />
       </SimpleBar>
