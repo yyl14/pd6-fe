@@ -84,17 +84,17 @@ export default function SubmissionList() {
             align: 'center',
             type: 'string',
             colors: {
-              'Waiting For Judge': 'default',
+              'Waiting for judge': 'default',
               'No Status': 'error',
-              ACCEPTED: 'primary',
-              'WRONG ANSWER': 'error',
-              'MEMORY LIMIT EXCEED': 'error',
-              'TIME LIMIT EXCEED': 'error',
-              'RUNTIME ERROR': 'error',
-              'COMPILE ERROR': 'error',
-              'CONTACT MANAGER': 'error',
-              'FORBIDDEN ACTION': 'error',
-              'SYSTEM ERROR': 'error',
+              Accepted: 'primary',
+              'Wrong Answer': 'error',
+              'Memory Limit Exceed': 'error',
+              'Time Limit Exceed': 'error',
+              'Runtime Error': 'error',
+              'Compile Error': 'error',
+              'Contact Manager': 'error',
+              'Forbidden Action': 'error',
+              'System Error': 'error',
             },
           },
           {
@@ -129,7 +129,7 @@ export default function SubmissionList() {
                 .split(' ')
                 .map((word) => word[0].toUpperCase() + word.substring(1))
                 .join(' ')
-              : 'Waiting For Judge',
+              : 'Waiting for judge',
             Score: lastJudgmentId ? judgments.byId[lastJudgmentId].score : '-',
             'Used Time(ms)': lastJudgmentId ? judgments.byId[lastJudgmentId].total_time : '-',
             'Used Memory(kb)': lastJudgmentId ? judgments.byId[lastJudgmentId].max_memory : '-',

@@ -209,7 +209,7 @@ export default function SubmissionDetail() {
         <AlignedText text="Status" childrenType="text">
           {judgments[judgmentId] ? (
             <div>
-              {judgments[judgmentId].verdict === 'ACCEPTED' ? (
+              {judgments[judgmentId].verdict === 'Accepted' ? (
                 <Typography variant="body1">
                   {judgments[judgmentId].verdict.charAt(0).concat(judgments[judgmentId].verdict.slice(1).toLowerCase())}
                 </Typography>
@@ -224,7 +224,7 @@ export default function SubmissionDetail() {
               )}
             </div>
           ) : (
-            <Typography variant="body1">Waiting For Judge</Typography>
+            <Typography variant="body1">Waiting for judge</Typography>
           )}
         </AlignedText>
         <AlignedText text="Score" childrenType="text">
