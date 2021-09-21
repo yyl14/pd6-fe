@@ -38,7 +38,7 @@ export default function MyClass({
 
         setItemLists(
           userClasses
-            .sort((a, b) => (b.class_name.localeCompare(a.class_name) || b.course_name.localeCompare(a.course_name)))
+            .sort((a, b) => b.class_name.localeCompare(a.class_name) || b.course_name.localeCompare(a.course_name))
             .map((item) => {
               switch (item.role) {
                 case 'MANAGER': {
@@ -141,7 +141,7 @@ export default function MyClass({
                   {titles[id]}
                 </Typography>
                 {userClass.role === 'MANAGER' && (
-                  <div className={classNames.titleRightIcon}>
+                  <div className={classNames.titleRightIcon} style={{ marginRight: '0px' }}>
                     <Icon.TA />
                   </div>
                 )}

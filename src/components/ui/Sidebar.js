@@ -65,6 +65,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 'auto',
     flex: '1',
     marginLeft: '10px',
+    marginRight: '7px',
+    width: '18px',
   },
   itemIcon: {
     flex: '1',
