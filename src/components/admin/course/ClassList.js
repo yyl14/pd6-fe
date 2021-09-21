@@ -37,7 +37,7 @@ export default function ClassList() {
   const [addClassName, setAddClassName] = useState('');
 
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const [showSnackBar, setShowSnackBar] = useState(false);
 
   useEffect(() => {
     if (!loading.addClass && !loading.renameClass && !loading.deleteClass) {
@@ -75,12 +75,12 @@ export default function ClassList() {
     history.push(`/admin/course/course/${courseId}/class-list`);
   };
   const closeSnackbar = () => {
-    setHasError(false);
+    setShowSnackBar(false);
   };
 
   const onAddCourse = (name) => {
     dispatch(
-      addCourse(authToken, name, getCourseType(addType).toUpperCase(), addCourseSuccess, () => setHasError(true)),
+      addCourse(authToken, name, getCourseType(addType).toUpperCase(), addCourseSuccess, () => setShowSnackBar(true)),
     );
   };
   const onAddClass = (name) => {
@@ -170,7 +170,7 @@ export default function ClassList() {
         </DialogActions>
       </Dialog>
       <Snackbar
-        open={addType !== undefined && hasError}
+        open={addType !== undefined && showSnackBar}
         onClose={closeSnackbar}
         message={`Error: ${error.addCourse}`}
       />
