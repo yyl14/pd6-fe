@@ -165,7 +165,7 @@ export default function ClassList() {
           <Button
             onClick={() => onAddCourse(addCourseName)}
             color="primary"
-            disabled={getCourseType(addType) === 'Unknown'}
+            disabled={getCourseType(addType) === 'Unknown' || addCourseName === ''}
           >
             Create
           </Button>
@@ -201,7 +201,11 @@ export default function ClassList() {
           >
             Cancel
           </Button>
-          <Button color="primary" onClick={() => onAddClass(addClassName)} disabled={loading.addClass}>
+          <Button
+            color="primary"
+            onClick={() => onAddClass(addClassName)}
+            disabled={loading.addClass || addClassName === ''}
+          >
             Create
           </Button>
         </DialogActions>
