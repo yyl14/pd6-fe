@@ -31,7 +31,7 @@ export default function CourseSetting() {
   const [showRenameDialog, setShowRenameDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [newCourseName, setNewCourseName] = useState('');
-  const [hasError, setHasError] = useState(false);
+  const [showSnackBar, setShowSnackBar] = useState(false);
 
   const getCourseType = (courseType) => {
     switch (courseType) {
@@ -56,11 +56,11 @@ export default function CourseSetting() {
     setShowRenameDialog(false);
   };
   const closeSnackbar = () => {
-    setHasError(false);
+    setShowSnackBar(false);
   };
 
   const onRename = () => {
-    dispatch(renameCourse(authToken, courseId, newCourseName, renameCourseSuccess, () => setHasError(true)));
+    dispatch(renameCourse(authToken, courseId, newCourseName, renameCourseSuccess, () => setShowSnackBar(true)));
   };
   const onDelete = () => {
     setShowDeleteDialog(false);
@@ -150,7 +150,7 @@ export default function CourseSetting() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Snackbar open={showRenameDialog && hasError} onClose={closeSnackbar} message={`Error: ${error.renameCourse}`} />
+      <Snackbar open={showRenameDialog && showSnackBar} onClose={closeSnackbar} message={`Error: ${error.renameCourse}`} />
 
       <Dialog open={showDeleteDialog || loading.deleteCourse} maxWidth="md">
         <DialogTitle>

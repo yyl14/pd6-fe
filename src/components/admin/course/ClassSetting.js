@@ -33,7 +33,7 @@ const ClassSetting = () => {
   const [showRenameDialog, setShowRenameDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [newClassName, setNewClassName] = useState('');
-  const [hasError, setHasError] = useState(false);
+  const [showSnackBar, setShowSnackBar] = useState(false);
 
   const getCourseType = (courseType) => {
     switch (courseType) {
@@ -51,11 +51,11 @@ const ClassSetting = () => {
     setShowRenameDialog(false);
   };
   const closeSnackbar = () => {
-    setHasError(false);
+    setShowSnackBar(false);
   };
 
   const onRename = () => {
-    dispatch(renameClass(authToken, classId, newClassName, renameClassSuccess, () => setHasError(true)));
+    dispatch(renameClass(authToken, classId, newClassName, renameClassSuccess, () => setShowSnackBar(true)));
   };
   const onDelete = () => {
     setShowDeleteDialog(false);
@@ -151,7 +151,11 @@ const ClassSetting = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <Snackbar open={showRenameDialog && hasError} onClose={closeSnackbar} message={`Error: ${error.renameClass}`} />
+      <Snackbar
+        open={showRenameDialog && showSnackBar}
+        onClose={closeSnackbar}
+        message={`Error: ${error.renameClass}`}
+      />
 
       <Dialog open={showDeleteDialog || loading.deleteClass} maxWidth="md">
         <DialogTitle>
