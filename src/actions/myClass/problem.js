@@ -98,7 +98,7 @@ const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
 
     dispatch({
       type: problemConstants.BROWSE_JUDGE_CASES_SUCCESS,
-      payload: res.data.data,
+      payload: { judgmentId, data: res.data.data },
     });
   } catch (error) {
     dispatch({

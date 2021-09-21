@@ -252,6 +252,7 @@ export default function SubmissionDetail() {
     dispatch(rejudgeSubmission(authToken, submissionId));
     setPopUp(false);
   };
+
   return (
     <>
       <PageTitle text={`${submissionId} / Submission Detail`} />
