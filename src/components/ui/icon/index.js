@@ -71,6 +71,7 @@ import { ReactComponent as Sort } from './sort.svg';
 import { ReactComponent as Star } from './star.svg';
 import { ReactComponent as Team } from './team.svg';
 import { ReactComponent as Warning } from './warning.svg';
+import { ReactComponent as Profile } from './profile.svg';
 
 export default {
   HistoryIcon,
@@ -145,4 +146,5 @@ export default {
   Star,
   Team,
   Warning,
+  Profile,
 };
