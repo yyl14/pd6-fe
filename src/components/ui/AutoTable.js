@@ -174,6 +174,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     // alignItems: 'center',
   },
+  default: { color: theme.palette.black.dark },
+  error: { color: theme.palette.secondary.main },
+  primary: { color: theme.palette.primary.main },
 }));
 
 const itemsPerPage = [10, 25, 50, 100];
@@ -400,13 +403,16 @@ function AutoTable({
 
   // table refetch
   useEffect(() => {
+    // remove ['something', '=', '']
+    const adjustFilter = (oriFilter) => oriFilter.filter((item) => !(item[1] === '=' && item[2] === ''));
+
     if (!dataComplete) {
       // console.log('refetch');
       refetch(
         {
           limit: rowsPerPage,
           offset: curPage * rowsPerPage,
-          filter,
+          filter: adjustFilter(filter),
           sort,
         },
         ident,
@@ -509,7 +515,7 @@ function AutoTable({
                           <React.Fragment key={`${row.id}-${column.name}`}>
                             <TableCell className={classes.tableColumnLeftSpacing} />
                             <TableCell align={column.align}>
-                              <Link to={value.path} className={classes.textLink} replace>
+                              <Link to={value.path} className={classes.textLink}>
                                 {column.format && typeof value.text === 'number'
                                   ? column.format(value.text)
                                   : value.text}
@@ -521,7 +527,10 @@ function AutoTable({
                       return (
                         <React.Fragment key={`${row.id}-${column.name}`}>
                           <TableCell className={classes.tableColumnLeftSpacing} />
-                          <TableCell align={column.align}>
+                          <TableCell
+                            align={column.align}
+                            className={column.colors && column.colors[value] && classes[column.colors[value]]}
+                          >
                             {column.format && typeof value === 'number' ? column.format(value) : value}
                           </TableCell>
                         </React.Fragment>

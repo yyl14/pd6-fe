@@ -89,23 +89,17 @@ export default function ProblemSet({
                     <ListItem
                       button
                       key={classId}
-                      className={classNames.item}
+                      className={
+                        location.pathname === `${baseURL}/${courseId}/${classId}`
+                          ? `${classNames.active} ${classNames.item}`
+                          : classNames.item
+                      }
                       onClick={() => history.push(`${baseURL}/${courseId}/${classId}`)}
                     >
-                      <ListItemIcon
-                        className={classNames.itemIcon}
-                        style={{ color: location.pathname === `${baseURL}/${courseId}/${classId}` ? '#1EA5FF' : '' }}
-                      >
+                      <ListItemIcon className={classNames.itemIcon}>
                         <Icon.Challenge />
                       </ListItemIcon>
-                      <ListItemText
-                        primary={classes.byId[classId].name}
-                        className={
-                          location.pathname === `${baseURL}/${courseId}/${classId}`
-                            ? classNames.activeItemText
-                            : classNames.itemText
-                        }
-                      />
+                      <ListItemText primary={classes.byId[classId].name} className={classNames.itemText} />
                     </ListItem>
                   ))}
                 </List>

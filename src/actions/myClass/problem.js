@@ -87,18 +87,18 @@ const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
 };
 
 const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
-  dispatch({ type: problemConstants.BROWSE_JUDGE_CASES_START });
   const config = {
     headers: {
       'auth-token': token,
     },
   };
   try {
+    dispatch({ type: problemConstants.BROWSE_JUDGE_CASES_START });
     const res = await agent.get(`/judgment/${judgmentId}/judge-case`, config);
 
     dispatch({
       type: problemConstants.BROWSE_JUDGE_CASES_SUCCESS,
-      payload: res.data.data,
+      payload: { judgmentId, data: res.data.data },
     });
   } catch (error) {
     dispatch({
@@ -376,7 +376,7 @@ const browseTestcases = (token, problemId) => async (dispatch) => {
     const res = await agent.get(`/problem/${problemId}/testcase`, config);
     dispatch({
       type: problemConstants.BROWSE_TESTCASES_SUCCESS,
-      payload: res.data.data,
+      payload: { problemId, testcases: res.data.data },
     });
   } catch (error) {
     dispatch({

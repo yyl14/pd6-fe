@@ -38,9 +38,7 @@ export default function MyClass({
 
         setItemLists(
           userClasses
-            .sort((a, b) => (a.course_name.localeCompare(b.course_name)
-              ? a.course_name.localeCompare(b.course_name)
-              : a.class_name.localeCompare(b.class_name)))
+            .sort((a, b) => (b.class_name.localeCompare(a.class_name) || b.course_name.localeCompare(a.course_name)))
             .map((item) => {
               switch (item.role) {
                 case 'MANAGER': {
@@ -156,18 +154,12 @@ export default function MyClass({
                       button
                       key={item.text}
                       onClick={() => history.push(item.path)}
-                      className={classNames.item}
+                      className={
+                        location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item
+                      }
                     >
-                      <ListItemIcon
-                        className={classNames.itemIcon}
-                        style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                      >
-                        {item.icon}
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={item.text}
-                        className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
-                      />
+                      <ListItemIcon className={classNames.itemIcon}>{item.icon}</ListItemIcon>
+                      <ListItemText primary={item.text} className={classNames.itemText} />
                     </ListItem>
                   ))}
                 </List>

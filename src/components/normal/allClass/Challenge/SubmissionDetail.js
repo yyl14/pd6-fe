@@ -43,6 +43,8 @@ export default function SubmissionDetail() {
   const classNames = useStyles();
   const [tableData, setTableData] = useState([]);
   const [judgmentId, setJudgmentId] = useState('');
+  const [testcaseDataIds, setTestcaseDataIds] = useState([]);
+  const [sampleDataIds, setSampleDataIds] = useState([]);
   const dispatch = useDispatch();
 
   const submissions = useSelector((state) => state.submissions.byId);
@@ -52,8 +54,7 @@ export default function SubmissionDetail() {
   const problems = useSelector((state) => state.problem);
   const user = useSelector((state) => state.user);
   const judgeCases = useSelector((state) => state.judgeCases);
-  const testcases = useSelector((state) => state.testcases.byId);
-  const testcaseIds = useSelector((state) => state.testcases.allIds);
+  const testcases = useSelector((state) => state.testcases);
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
@@ -78,13 +79,26 @@ export default function SubmissionDetail() {
     dispatch(browseTestcases(authToken, problemId));
   }, [authToken, dispatch, problemId]);
 
+  const transformSample = useCallback(
+    (id) => {
+      if (testcases.byId[id].input_filename !== null) {
+        return testcases.byId[id].input_filename.slice(6, testcases.byId[id].input_filename.indexOf('.'));
+      }
+      if (testcases.byId[id].output_filename !== null) {
+        return testcases.byId[id].output_filename.slice(6, testcases.byId[id].output_filename.indexOf('.'));
+      }
+      return 0;
+    },
+    [testcases],
+  );
+
   const transformTestcase = useCallback(
     (id) => {
-      if (testcases[id].input_filename !== null) {
-        return testcases[id].input_filename.slice(0, testcases[id].input_filename.indexOf('.'));
+      if (testcases.byId[id].input_filename !== null) {
+        return testcases.byId[id].input_filename.slice(0, testcases.byId[id].input_filename.indexOf('.'));
       }
-      if (testcases[id].output_filename !== null) {
-        return testcases[id].output_filename.slice(0, testcases[id].output_filename.indexOf('.'));
+      if (testcases.byId[id].output_filename !== null) {
+        return testcases.byId[id].output_filename.slice(0, testcases.byId[id].output_filename.indexOf('.'));
       }
       return 0;
     },
@@ -92,25 +106,48 @@ export default function SubmissionDetail() {
   );
 
   useEffect(() => {
-    if (testcaseIds !== [] && judgeCases.allIds !== []) {
+    if (problems.byId[problemId] && problems.byId[problemId].testcaseIds) {
+      const testcasesId = problems.byId[problemId].testcaseIds.filter(
+        (id) => !testcases.byId[id].is_sample && !testcases.byId[id].is_deleted,
+      );
+      const samplesId = problems.byId[problemId].testcaseIds.filter(
+        (id) => testcases.byId[id].is_sample && !testcases.byId[id].is_deleted,
+      );
+      testcasesId.sort((a, b) => transformTestcase(a).localeCompare(transformTestcase(b)));
+      samplesId.sort((a, b) => transformSample(a).localeCompare(transformSample(b)));
+      setSampleDataIds(samplesId);
+      setTestcaseDataIds(testcasesId);
+    }
+  }, [problems, problemId, transformTestcase, transformSample, testcases]);
+
+  useEffect(() => {
+    if (sampleDataIds && testcaseDataIds && judgeCases.allIds) {
       setTableData(
-        judgeCases.allIds
-          .filter((id) => judgeCases.byId[id].judgment_id === judgmentId)
-          .map((id) => ({
-            id,
-            no: testcaseIds.map((key) => (id === key ? transformTestcase(key) : '')),
-            time: judgeCases.byId[id].time_lapse,
-            memory: judgeCases.byId[id].peak_memory,
-            status: judgeCases.byId[id].verdict
-              .toLowerCase()
-              .split(' ')
-              .map((word) => word[0].toUpperCase() + word.substring(1))
-              .join(' '),
-            score: judgeCases.byId[id].score,
-          })),
+        sampleDataIds.concat(testcaseDataIds).map((id) => ({
+          id,
+          no: transformTestcase(id),
+          time: judgeCases.allIds
+            .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
+            .map((key) => (key === id ? judgeCases.byId[id].time_lapse : '')),
+          memory: judgeCases.allIds
+            .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
+            .map((key) => (key === id ? judgeCases.byId[id].peak_memory : '')),
+          status: judgeCases.allIds
+            .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
+            .map((key) => (key === id
+              ? judgeCases.byId[id].verdict
+                .toLowerCase()
+                .split(' ')
+                .map((word) => word[0].toUpperCase() + word.substring(1))
+                .join(' ')
+              : '')),
+          score: judgeCases.allIds
+            .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
+            .map((key) => (key === id ? judgeCases.byId[id].score : '')),
+        })),
       );
     }
-  }, [judgeCases, judgmentId, judgments.byId, testcaseIds, testcases, transformTestcase]);
+  }, [judgeCases.allIds, judgeCases.byId, judgmentId, sampleDataIds, testcaseDataIds, transformTestcase]);
 
   if (
     problems.byId[problemId] === undefined
@@ -118,7 +155,7 @@ export default function SubmissionDetail() {
     || submissions[submissionId] === undefined
     || judgments === undefined
     || judgeCases.allIds === undefined
-    || testcaseIds === undefined
+    || testcases.allIds === undefined
   ) {
     if (loading.readSubmissionDetail || loading.browseJudgeCases || loading.readTestcase) {
       return <GeneralLoading />;
@@ -170,9 +207,9 @@ export default function SubmissionDetail() {
           <Typography variant="body1">{problems.byId[problemId].title}</Typography>
         </AlignedText>
         <AlignedText text="Status" childrenType="text">
-          {judgments[judgmentId] !== undefined ? (
+          {judgments[judgmentId] ? (
             <div>
-              {judgments[judgmentId].verdict === 'ACCEPTED' ? (
+              {judgments[judgmentId].verdict === 'Accepted' ? (
                 <Typography variant="body1">
                   {judgments[judgmentId].verdict.charAt(0).concat(judgments[judgmentId].verdict.slice(1).toLowerCase())}
                 </Typography>
@@ -187,11 +224,11 @@ export default function SubmissionDetail() {
               )}
             </div>
           ) : (
-            <Typography variant="body1">Waiting For Judge</Typography>
+            <Typography variant="body1">Waiting for judge</Typography>
           )}
         </AlignedText>
         <AlignedText text="Score" childrenType="text">
-          {judgments[judgmentId] !== undefined && (
+          {judgments[judgmentId] && (
             <div>
               <Typography variant="body1">{judgments[judgmentId].score}</Typography>
             </div>

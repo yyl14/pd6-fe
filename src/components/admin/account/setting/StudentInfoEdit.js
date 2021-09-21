@@ -74,7 +74,8 @@ export default function StudentInfoEdit(props) {
   const [cards, setCards] = useState(props.cards);
   const [pendingCards, setPendingCards] = useState(props.pendingCards);
   const [add, setAdd] = useState(false); // addCard block
-  const [snackbar, setSnackbar] = useState(false);
+  const [mailSnackBar, setMailSnackBar] = useState(false);
+  const [showSnackBar, setShowSnackBar] = useState(false);
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
   const [addInputs, setAddInputs] = useState({
     institute: 'National Taiwan University',
@@ -94,6 +95,7 @@ export default function StudentInfoEdit(props) {
   const institutesId = useSelector((state) => state.institutes.allIds);
   const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
   const loading = useSelector((state) => state.loading);
+  const error = useSelector((state) => state.error.admin.account);
 
   const { accountId } = useParams();
   const authToken = useSelector((state) => state.auth.token);
@@ -119,6 +121,10 @@ export default function StudentInfoEdit(props) {
     setErrorTexts({ studentId: '', email: '' });
   };
 
+  const addStudentCardSuccess = () => {
+    setMailSnackBar(true);
+  };
+
   const handleAddSave = () => {
     if (addInputs.studentId === '' || addInputs.email === '') {
       if (addInputs.studentId === '') {
@@ -133,8 +139,17 @@ export default function StudentInfoEdit(props) {
     }
     const inputInstituteId = institutesId.filter((id) => institutes[id].full_name === addInputs.institute);
     if (inputInstituteId.length !== 0) {
-      dispatch(addStudentCard(authToken, accountId, inputInstituteId[0], addInputs.email, addInputs.studentId));
-      setSnackbar(true);
+      dispatch(
+        addStudentCard(
+          authToken,
+          accountId,
+          inputInstituteId[0],
+          addInputs.email,
+          addInputs.studentId,
+          addStudentCardSuccess,
+          () => setShowSnackBar(true),
+        ),
+      );
     }
     setAdd(false);
     setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
@@ -297,10 +312,16 @@ export default function StudentInfoEdit(props) {
           </div>
         )}
         <Snackbar
-          open={snackbar}
+          open={mailSnackBar}
           autoHideDuration={3000}
           message="Verification email sent! Please check your mailbox."
-          onClose={() => setSnackbar(false)}
+          onClose={() => setMailSnackBar(false)}
+        />
+        <Snackbar
+          open={showSnackBar}
+          autoHideDuration={3000}
+          message={`Error: ${error.addStudentCard}`}
+          onClose={() => setShowSnackBar(false)}
         />
       </SimpleBar>
     </div>

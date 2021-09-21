@@ -50,7 +50,7 @@ export default function AllClass({
           .map(({ id, type, name }) => ({
             type,
             text: name,
-            icon: <Icon.PeopleIcon />,
+            icon: <Icon.Member />,
             path: `${baseURL}/${id}`,
           })),
       );
@@ -110,17 +110,16 @@ export default function AllClass({
           {display === 'unfold' && (
             <List>
               {itemList.map((item) => (
-                <ListItem button key={item.path} onClick={() => history.push(item.path)} className={classNames.item}>
-                  <ListItemIcon
-                    className={classNames.itemIcon}
-                    style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.text}
-                    className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
-                  />
+                <ListItem
+                  button
+                  key={item.path}
+                  onClick={() => history.push(item.path)}
+                  className={
+                    location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item
+                  }
+                >
+                  <ListItemIcon className={classNames.itemIcon}>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.text} className={classNames.itemText} />
                 </ListItem>
               ))}
             </List>

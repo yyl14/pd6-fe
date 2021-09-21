@@ -2,14 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-  Drawer,
-  Typography,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-  IconButton,
+  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
@@ -41,17 +34,17 @@ export default function System({
       setItemList([
         {
           text: 'Access Log',
-          icon: <Icon.DescriptionIcon />,
+          icon: <Icon.Paper />,
           path: `${baseURL}/accesslog`,
         },
         {
           text: 'Announcement',
-          icon: <Icon.NotificationsIcon />,
+          icon: <Icon.Bell />,
           path: `${baseURL}/announcement`,
         },
         {
           text: 'Submission Language',
-          icon: <Icon.CodeIcon />,
+          icon: <Icon.Code />,
           path: `${baseURL}/submitlang`,
         },
       ]);
@@ -66,7 +59,7 @@ export default function System({
         {
           text: 'Setting',
           path: `${baseURL}/announcement/add`,
-          icon: <Icon.SettingsIcon />,
+          icon: <Icon.Setting />,
         },
       ]);
     } else if (mode === 'announcement' && announcementList.byId[announcementId]) {
@@ -80,7 +73,7 @@ export default function System({
         {
           text: 'Setting',
           path: `${baseURL}/announcement/${announcementId}/setting`,
-          icon: <Icon.SettingsIcon />,
+          icon: <Icon.Setting />,
         },
       ]);
     } else if (mode === 'language' && languageList.byId[languageId]) {
@@ -94,7 +87,7 @@ export default function System({
         {
           text: 'Setting',
           path: `${baseURL}/submitlang/${languageId}/setting`,
-          icon: <Icon.SettingsIcon />,
+          icon: <Icon.Setting />,
         },
       ]);
     } else if (mode === 'system') {
@@ -168,17 +161,14 @@ export default function System({
         {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
-              <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classes.item}>
-                <ListItemIcon
-                  className={classes.itemIcon}
-                  style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  className={location.pathname === item.path ? classes.activeItemText : classes.itemText}
-                />
+              <ListItem
+                button
+                key={item.text}
+                onClick={() => history.push(item.path)}
+                className={location.pathname === item.path ? `${classes.active} ${classes.item}` : classes.item}
+              >
+                <ListItemIcon className={classes.itemIcon}>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} className={classes.itemText} />
               </ListItem>
             ))}
           </List>
