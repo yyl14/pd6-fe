@@ -23,6 +23,10 @@ const byId = (state = {}, action) => {
       const { judgments } = action.payload;
       return judgments.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
+    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
+      const { judgments } = action.payload;
+      return judgments.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+    }
     default:
       return state;
   }
@@ -41,6 +45,9 @@ const allIds = (state = [], action) => {
       return [...new Set([...action.payload.id, ...state])];
     }
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
+      return [...new Set([...action.payload.judgments.map((item) => item.id), ...state])];
+    }
+    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
       return [...new Set([...action.payload.judgments.map((item) => item.id), ...state])];
     }
     default:

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Typography } from '@material-ui/core';
+import { Typography, Snackbar } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import AlignedText from '../../../ui/AlignedText';
@@ -8,13 +8,13 @@ import AutoTable from '../../../ui/AutoTable';
 import NoMatch from '../../../noMatch';
 import SimpleBar from '../../../ui/SimpleBar';
 import PageTitle from '../../../ui/PageTitle';
-import { readSubmission, readSubmissionDetail, readProblemScore } from '../../../../actions/myClass/problem';
+import { viewMySubmissionUnderProblem, readProblemInfo, readProblemScore } from '../../../../actions/myClass/problem';
 import GeneralLoading from '../../../GeneralLoading';
 
 const TableIdent = 'My Submission Table';
 
 /* This is a level 4 component (page component) */
-export default function SubmissionList() {
+export default function MySubmission() {
   const {
     courseId, classId, challengeId, problemId,
   } = useParams();
@@ -27,33 +27,21 @@ export default function SubmissionList() {
   const submissions = useSelector((state) => state.submissions);
   const judgments = useSelector((state) => state.judgments);
   const loading = useSelector((state) => state.loading.myClass.problem);
+  const error = useSelector((state) => state.error.myClass.problem);
+  const [snackbar, setSnackbar] = useState(false);
 
   useEffect(() => {
-    if (!loading.browseTasksUnderChallenge) {
-      dispatch(readProblemScore(authToken, problemId));
-    }
-  }, [authToken, dispatch, loading.browseTasksUnderChallenge, problemId]);
+    if (!loading.submitCode && error.submitCode) {
+      setSnackbar(true);
+    } else setSnackbar(false);
+  }, [error.submitCode, loading.submitCode]);
 
   useEffect(() => {
-    if (submissions.allIds !== []) {
-      submissions.allIds.map((id) => dispatch(readSubmissionDetail(authToken, id)));
-    }
-  }, [authToken, challengeId, dispatch, problemId, submissions]);
+    dispatch(readProblemInfo(authToken, problemId));
+  }, [authToken, dispatch, problemId]);
 
-  if (
-    challenges.byId[challengeId] === undefined
-    || problems.byId[problemId] === undefined
-    || submissions.byId === undefined
-    || judgments.byId === undefined
-    || problems.byId[problemId].score === undefined
-  ) {
-    if (
-      loading.readSubmission
-      || loading.readSubmissionDetail
-      || loading.readProblemScore
-      || loading.browseTasksUnderChallenge
-      || loading.readProblemScore
-    ) {
+  if (challenges.byId[challengeId] === undefined || problems.byId[problemId] === undefined) {
+    if (loading.viewMySubmissionUnderProblem || loading.readProblem || loading.readChallenge) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -65,8 +53,13 @@ export default function SubmissionList() {
         text={`${challenges.byId[challengeId].title} / ${problems.byId[problemId].challenge_label} / My Submission`}
       />
       <SimpleBar title="Submission Information">
-        <AlignedText text="My Last Score" childrenType="text">
-          <Typography variant="body1">{problems.byId[problemId].score}</Typography>
+        <AlignedText
+          text={`My ${challenges.byId[challengeId].selection_type[0].concat(
+            challenges.byId[challengeId].selection_type.slice(1).toLowerCase(),
+          )} Score`}
+          childrenType="text"
+        >
+          <Typography variant="body1">{problems.byId[problemId].score ? problems.byId[problemId].score : 0}</Typography>
         </AlignedText>
       </SimpleBar>
       <AutoTable
@@ -76,16 +69,18 @@ export default function SubmissionList() {
         hasFilter
         filterConfig={[
           {
-            reduxStateId: 'submit_time',
-            label: 'Submit Time',
-            type: 'DATE',
-            operation: 'LIKE',
+            reduxStateId: 'submission_id',
+            label: 'Submission ID',
+            type: 'TEXT',
+            operation: '=',
           },
         ]}
+        defaultSort={['submit_time', 'DESC']}
         refetch={(browseParams, ident) => {
-          dispatch(readSubmission(authToken, accountId, problemId, browseParams, ident));
+          dispatch(viewMySubmissionUnderProblem(authToken, accountId, problemId, browseParams, ident));
+          dispatch(readProblemScore(authToken, problemId));
         }}
-        refetchErrors={[]}
+        refetchErrors={[error.viewMySubmissionUnderProblem]}
         columns={[
           {
             name: 'Submission ID',
@@ -116,28 +111,33 @@ export default function SubmissionList() {
             name: 'Submit Time',
             align: 'center',
             type: 'string',
+            sortable: 'submit_time',
           },
         ]}
         reduxData={submissions}
-        reduxDataToRows={(item) => {
-          const lastJudgmentId = judgments.allIds.filter((key) => judgments.byId[key].submission_id === item.id)[0];
-          return {
-            'Submission ID': item.id,
-            Status: lastJudgmentId
-              ? judgments.byId[lastJudgmentId].verdict
-                .toLowerCase()
-                .split(' ')
-                .map((word) => word[0].toUpperCase() + word.substring(1))
-                .join(' ')
-              : 'Waiting For Judge',
-            Score: lastJudgmentId ? judgments.byId[lastJudgmentId].score : '-',
-            'Used Time(ms)': lastJudgmentId ? judgments.byId[lastJudgmentId].total_time : '-',
-            'Used Memory(kb)': lastJudgmentId ? judgments.byId[lastJudgmentId].max_memory : '-',
-            'Submit Time': moment(item.submit_time).format('YYYY-MM-DD, HH:mm'),
-            link: `/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${item.id}`,
-          };
-        }}
+        reduxDataToRows={(item) => ({
+          id: item.id,
+          'Submission ID': item.id,
+          Status: item.verdict === null
+            ? 'Waiting For Judge'
+            : item.verdict
+              .toLowerCase()
+              .split(' ')
+              .map((word) => word[0].toUpperCase() + word.substring(1))
+              .join(' '),
+          Score: item.latestJudgment !== null && judgments.byId[item.latestJudgment] !== undefined ? judgments.byId[item.latestJudgment].score : '-',
+          'Used Time(ms)': item.latestJudgment !== null && judgments.byId[item.latestJudgment] !== undefined ? judgments.byId[item.latestJudgment].total_time : '-',
+          'Used Memory(kb)': item.latestJudgment !== null && judgments.byId[item.latestJudgment] !== undefined ? judgments.byId[item.latestJudgment].max_memory : '-',
+          'Submit Time': moment(item.submit_time).format('YYYY-MM-DD, HH:mm'),
+          link: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${item.id}`,
+        })}
         hasLink
+      />
+      <Snackbar
+        message="Error: code submission failed"
+        open={snackbar}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar(false)}
       />
     </>
   );
