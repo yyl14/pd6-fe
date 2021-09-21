@@ -70,9 +70,9 @@ export default function ClassList() {
     history.push(`/admin/course/course/${courseId}/setting`);
   };
 
-  const addCourseSuccess = () => {
+  const addCourseSuccess = (newCourseId) => {
     setAddCourseName('');
-    history.push(`/admin/course/course/${courseId}/class-list`);
+    history.push(`/admin/course/course/${newCourseId}/class-list`);
   };
   const closeSnackbar = () => {
     setShowSnackBar(false);

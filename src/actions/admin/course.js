@@ -27,9 +27,9 @@ export const addCourse = (token, name, type, onSuccess, onError) => async (dispa
     const config = { headers: { 'auth-token': token } };
     const body = { name, type };
     dispatch({ type: courseConstants.ADD_COURSE_START });
-    await agent.post('/course', body, config);
+    const res = await agent.post('/course', body, config);
     dispatch({ type: courseConstants.ADD_COURSE_SUCCESS });
-    onSuccess();
+    onSuccess(res.data.data.id);
   } catch (error) {
     dispatch({
       type: courseConstants.ADD_COURSE_FAIL,
