@@ -98,7 +98,7 @@ export default function CodingProblemEdit({ closeEdit }) {
   );
   const [source, setSource] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].source);
   const [hint, setHint] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].hint);
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState(true);
 
   const [handleInfoSuccess, setHandleInfoSuccess] = useState(false);
   const [handleSamplesSuccess, setHandleSamplesSuccess] = useState(false);
@@ -165,7 +165,7 @@ export default function CodingProblemEdit({ closeEdit }) {
       setSampleDataIds(samplesId);
       setTestcaseDataIds(testcasesId);
       if (testcasesId.length === 0) {
-        setStatus(false);
+        setStatus(true);
       } else {
         setStatus(!testcases[testcasesId[0]].is_disabled);
       }
