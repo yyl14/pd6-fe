@@ -91,7 +91,7 @@ export default function SubmissionList() {
           //     { value: 'Other - Contact Staff', label: 'Other - Contact Staff' },
           //     { value: 'Restricted function', label: 'Restricted function' },
           //     { value: 'System Error', label: 'System Error' },
-          //     { value: 'Waiting for Judge', label: 'Waiting for Judge' },
+          //     { value: 'Waiting for judge', label: 'Waiting for judge' },
           //   ],
           // },
           // {
@@ -164,17 +164,17 @@ export default function SubmissionList() {
             align: 'center',
             type: 'string',
             colors: {
-              'Waiting For Judge': 'default',
+              'Waiting for judge': 'default',
               'No Status': 'error',
-              ACCEPTED: 'primary',
-              'WRONG ANSWER': 'error',
-              'MEMORY LIMIT EXCEED': 'error',
-              'TIME LIMIT EXCEED': 'error',
-              'RUNTIME ERROR': 'error',
-              'COMPILE ERROR': 'error',
-              'CONTACT MANAGER': 'error',
-              'FORBIDDEN ACTION': 'error',
-              'SYSTEM ERROR': 'error',
+              Accepted: 'primary',
+              'Wrong Answer': 'error',
+              'Memory Limit Exceed': 'error',
+              'Time Limit Exceed': 'error',
+              'Runtime Error': 'error',
+              'Compile Error': 'error',
+              'Contact Manager': 'error',
+              'Forbidden Action': 'error',
+              'System Error': 'error',
             },
           },
           {
@@ -212,7 +212,7 @@ export default function SubmissionList() {
           },
           Status: judgments.allIds.filter((key) => judgments.byId[key].submission_id === item.id)[0]
             ? judgments.byId[judgments.allIds.filter((key) => judgments.byId[key].submission_id === item.id)[0]].verdict
-            : 'No Status',
+            : 'Waiting for judge',
           Time: moment(item.submit_time).format('YYYY-MM-DD, HH:mm:ss'),
           link: `/my-class/${courseId}/${classId}/submission/${item.id}`,
         })}

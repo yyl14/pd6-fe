@@ -151,33 +151,28 @@ export default function SubmissionDetail() {
       setTestcaseDataIds(testcasesId);
     }
   }, [problems, problemId, transformTestcase, transformSample, testcases]);
-
+  console.log(judgeCases.allIds);
   useEffect(() => {
     if (sampleDataIds && testcaseDataIds && judgeCases.allIds) {
       setTableData(
-        sampleDataIds
+        []
+          .concat(sampleDataIds)
           .concat(testcaseDataIds)
           .map((id) => ({
             id,
             no: transformTestcase(id),
             time: judgeCases.allIds
               .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id ? judgeCases.byId[id].time_lapse : '')),
+              .map((key) => (key === id ? judgeCases.byId[id].time_lapse : '-')),
             memory: judgeCases.allIds
               .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id ? judgeCases.byId[id].peak_memory : '')),
+              .map((key) => (key === id ? judgeCases.byId[id].peak_memory : '-')),
             status: judgeCases.allIds
               .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id
-                ? judgeCases.byId[id].verdict
-                  .toLowerCase()
-                  .split(' ')
-                  .map((word) => word[0].toUpperCase() + word.substring(1))
-                  .join(' ')
-                : '')),
+              .map((key) => (key === id ? judgeCases.byId[id].verdict : '-')),
             score: judgeCases.allIds
               .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id ? judgeCases.byId[id].score : '')),
+              .map((key) => (key === id ? judgeCases.byId[id].score : '-')),
           }))
           .sort((a, b) => {
             if (!a.no.includes('sample') && b.no.includes('sample')) return 1;
@@ -282,7 +277,7 @@ export default function SubmissionDetail() {
         <AlignedText text="Status" childrenType="text">
           {judgments[judgmentId] ? (
             <div>
-              {judgments[judgmentId].verdict === 'ACCEPTED' ? (
+              {judgments[judgmentId].verdict === 'Accepted' ? (
                 <Typography variant="body1">
                   {judgments[judgmentId].verdict.charAt(0).concat(judgments[judgmentId].verdict.slice(1).toLowerCase())}
                 </Typography>
@@ -297,7 +292,7 @@ export default function SubmissionDetail() {
               )}
             </div>
           ) : (
-            <Typography variant="body1">Waiting For Judge</Typography>
+            <Typography variant="body1">Waiting for judge</Typography>
           )}
         </AlignedText>
         <AlignedText text="Score" childrenType="text">
