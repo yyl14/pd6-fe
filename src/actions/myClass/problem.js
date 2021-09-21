@@ -26,7 +26,7 @@ const readProblemInfo = (token, problemId) => async (dispatch) => {
   }
 };
 
-// WITH BROWSE API
+// WITH BROWSE PARAM
 const readSubmission = (token, accountId, problemId, browseParams, tableId = null) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_SUBMISSION_START });
   const temp = {
