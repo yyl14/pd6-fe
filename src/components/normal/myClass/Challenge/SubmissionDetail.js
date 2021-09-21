@@ -180,8 +180,6 @@ export default function SubmissionDetail() {
               .map((key) => (key === id ? judgeCases.byId[id].score : '')),
           }))
           .sort((a, b) => {
-            const noa = a.no;
-            const nob = b.no;
             if (!a.no.includes('sample') && b.no.includes('sample')) return 1;
             if (a.no.includes('sample') && !b.no.includes('sample')) return -1;
             if (
