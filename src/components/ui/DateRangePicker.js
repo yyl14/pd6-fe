@@ -77,7 +77,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+const dateFormatExamples = [
+  '9 27 2021',
+  '09272021',
+  '092721',
+  'sep 27 2021',
+  'Sep 27 2021',
+  'SEP 27 2021',
+  'sep 27, 2021',
+  'Sep 27, 2021',
+  'SEP 27, 2021',
+];
+const timeFormatExamples = ['9:10', '13:15', '1530', '150', '930', '900'];
 
 export default function DateRangePicker({
   className = '', value, setValue, vertical,
@@ -89,108 +100,236 @@ export default function DateRangePicker({
   const [endDate, setEndDate] = useState('');
   const [endTime, setEndTime] = useState('');
 
+  const [timePlaceHolder, setTimePlaceHolder] = useState(0);
+  const [datePlaceHolder, setDatePlaceHolder] = useState(0);
+
+  // suggestion on input formats
   useEffect(() => {
-    setStartDate(
-      `${
-        monthNames[value[0].startDate.getMonth()]
-      } ${value[0].startDate.getDate()}, ${value[0].startDate.getFullYear()}`,
-    );
-    setEndDate(
-      `${monthNames[value[0].endDate.getMonth()]} ${value[0].endDate.getDate()}, ${value[0].endDate.getFullYear()}`,
-    );
-    setStartTime(value[0].startDate.toLocaleString('en-GB').substring(12, 17));
-    setEndTime(value[0].endDate.toLocaleString('en-GB').substring(12, 17));
+    const interval = setInterval(() => {
+      setTimePlaceHolder((prev) => (prev + 1) % timeFormatExamples.length);
+      setDatePlaceHolder((prev) => (prev + 1) % dateFormatExamples.length);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    setStartDate(moment(value[0].startDate).format('MMM DD, YYYY').toUpperCase());
+    setEndDate(moment(value[0].endDate).format('MMM DD, YYYY').toUpperCase());
+    setStartTime(moment(value[0].startDate).format('HH:mm'));
+    setEndTime(moment(value[0].endDate).format('HH:mm'));
   }, [value]);
 
   const onStartTimeBlur = (e) => {
     e.preventDefault();
-    const parsed = moment(e.target.value, ['HHmm', 'HH:mm']);
+    const parsed = moment(e.target.value, ['HHmm', 'HH:mm', 'Hmm', 'H:mm']);
+
     if (parsed.isValid()) {
-      setValue((prevValue) => [
-        {
-          ...prevValue[0],
-          startDate: moment(prevValue[0].startDate)
-            .set({ hour: parsed.get('hour'), minute: parsed.get('minute') })
-            .toDate(),
-        },
-      ]);
+      if (
+        moment(value[0].startDate)
+          .set({ hour: parsed.get('hour'), minute: parsed.get('minute') })
+          .isAfter(moment(value[0].endDate))
+      ) {
+        // start > end: set end to one minute later
+        setValue((prevValue) => [
+          {
+            ...prevValue[0],
+            startDate: moment(prevValue[0].startDate)
+              .set({ hour: parsed.get('hour'), minute: parsed.get('minute') })
+              .toDate(),
+            endDate: moment(prevValue[0].startDate)
+              .set({ hour: parsed.get('hour'), minute: parsed.get('minute') })
+              .add(1, 'm')
+              .toDate(),
+          },
+        ]);
+      } else {
+        setValue((prevValue) => [
+          {
+            ...prevValue[0],
+            startDate: moment(prevValue[0].startDate)
+              .set({ hour: parsed.get('hour'), minute: parsed.get('minute') })
+              .toDate(),
+          },
+        ]);
+      }
     } else {
-      setStartTime(value[0].startDate.toLocaleString('en-GB').substring(12, 17));
+      setStartTime(moment(value[0].startDate).format('HH:mm'));
     }
   };
 
   const onEndTimeBlur = (e) => {
     e.preventDefault();
-    const parsed = moment(e.target.value, ['HHmm', 'HH:mm']);
+    const parsed = moment(e.target.value, ['HHmm', 'HH:mm', 'Hm', 'H:m']);
     if (parsed.isValid()) {
-      setValue((prevValue) => [
-        {
-          ...prevValue[0],
-          endDate: moment(prevValue[0].endDate)
-            .set({ hour: parsed.get('hour'), minute: parsed.get('minute') })
-            .toDate(),
-        },
-      ]);
+      if (
+        moment(value[0].endDate)
+          .set({ hour: parsed.get('hour'), minute: parsed.get('minute') })
+          .isBefore(moment(value[0].startDate))
+      ) {
+        // end < start: set start to one minute before
+        setValue((prevValue) => [
+          {
+            ...prevValue[0],
+            endDate: moment(value[0].endDate)
+              .set({ hour: parsed.get('hour'), minute: parsed.get('minute') })
+              .toDate(),
+            startDate: moment(value[0].endDate)
+              .set({ hour: parsed.get('hour'), minute: parsed.get('minute') })
+              .subtract(1, 'm')
+              .toDate(),
+          },
+        ]);
+      } else {
+        setValue((prevValue) => [
+          {
+            ...prevValue[0],
+            endDate: moment(value[0].endDate)
+              .set({ hour: parsed.get('hour'), minute: parsed.get('minute') })
+              .toDate(),
+          },
+        ]);
+      }
     } else {
-      setEndTime(value[0].endDate.toLocaleString('en-GB').substring(12, 17));
+      setEndTime(moment(value[0].endDate).format('HH:mm'));
+    }
+  };
+
+  const onStartDateBlur = (e) => {
+    e.preventDefault();
+    const parsed = moment(e.target.value, ['MMM D, YYYY', 'M D YYYY', 'M D YY', 'MMDDYYYY', 'MMDDYY']);
+    if (parsed.isValid()) {
+      if (
+        moment(value[0].startDate)
+          .set({ month: parsed.get('month'), date: parsed.get('date'), year: parsed.get('year') })
+          .isAfter(moment(value[0].endDate))
+      ) {
+        // start > end: set end to one day later
+        setValue((prevValue) => [
+          {
+            ...prevValue[0],
+            startDate: moment(prevValue[0].startDate)
+              .set({ month: parsed.get('month'), date: parsed.get('date'), year: parsed.get('year') })
+              .toDate(),
+            endDate: moment(prevValue[0].startDate)
+              .set({ month: parsed.get('month'), date: parsed.get('date'), year: parsed.get('year') })
+              .add(1, 'd')
+              .toDate(),
+          },
+        ]);
+      } else {
+        setValue((prevValue) => [
+          {
+            ...prevValue[0],
+            startDate: moment(prevValue[0].startDate)
+              .set({ month: parsed.get('month'), date: parsed.get('date'), year: parsed.get('year') })
+              .toDate(),
+          },
+        ]);
+      }
+    } else {
+      setStartDate(moment(value[0].startDate).format('MMM DD, YYYY').toUpperCase());
+    }
+  };
+
+  const onEndDateBlur = (e) => {
+    e.preventDefault();
+    const parsed = moment(e.target.value, ['MMM D, YYYY', 'M D YYYY', 'M D YY', 'MMDDYYYY', 'MMDDYY']);
+    if (parsed.isValid()) {
+      if (
+        moment(value[0].endDate)
+          .set({ month: parsed.get('month'), date: parsed.get('date'), year: parsed.get('year') })
+          .isBefore(moment(value[0].startDate))
+      ) {
+        // end < start: set start to one day before
+        setValue((prevValue) => [
+          {
+            ...prevValue[0],
+            endDate: moment(value[0].endDate)
+              .set({ month: parsed.get('month'), date: parsed.get('date'), year: parsed.get('year') })
+              .toDate(),
+            startDate: moment(value[0].endDate)
+              .set({ month: parsed.get('month'), date: parsed.get('date'), year: parsed.get('year') })
+              .subtract(1, 'd')
+              .toDate(),
+          },
+        ]);
+      } else {
+        setValue((prevValue) => [
+          {
+            ...prevValue[0],
+            endDate: moment(value[0].endDate)
+              .set({ month: parsed.get('month'), date: parsed.get('date'), year: parsed.get('year') })
+              .toDate(),
+          },
+        ]);
+      }
+    } else {
+      setEndDate(moment(value[0].startDate).format('MMM DD, YYYY').toUpperCase());
     }
   };
 
   return (
-    <div className={`${className} ${vertical ? classes.wrapperVertical : classes.wrapper}`}>
-      <DateRange
-        showDateDisplay={false}
-        showMonthAndYearPickers={false}
-        editableDateInputs
-        onChange={(item) => setValue([item.selection])}
-        moveRangeOnFirstSelection={false}
-        ranges={value}
-        color="#FFFFFF"
-      />
-      {/* <div className={vertical ? classes.fieldsWrapperVertical : classes.fieldsWrapper}> */}
-      <FormControl className={vertical ? classes.fieldsWrapperVertical : classes.fieldsWrapper}>
-        <div className={`${vertical ? classes.startDateFieldVertical : classes.startDateField}`}>
-          <TextField
-            className={classes.dateField}
-            label="Start Date"
-            InputLabelProps={{ shrink: true }}
-            InputProps={{
-              notched: false,
-              readOnly: true,
-              disabled: true,
-            }}
-            value={startDate}
-          />
-          <TextField
-            className={classes.timeField}
-            onFocus={(event) => event.target.select()}
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
-            onBlur={(e) => onStartTimeBlur(e)}
-          />
-        </div>
-        <div className={`${vertical ? classes.endDateFieldVertical : classes.endDateField}`}>
-          <TextField
-            className={classes.dateField}
-            label="End Date"
-            InputLabelProps={{ shrink: true }}
-            InputProps={{
-              notched: false,
-              readOnly: true,
-              disabled: true,
-            }}
-            value={endDate}
-          />
-          <TextField
-            className={classes.timeField}
-            onFocus={(event) => event.target.select()}
-            value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
-            onBlur={(e) => onEndTimeBlur(e)}
-          />
-        </div>
-      </FormControl>
-      {/* </div> */}
-    </div>
+    <>
+      <div className={`${className} ${vertical ? classes.wrapperVertical : classes.wrapper}`}>
+        <DateRange
+          showDateDisplay={false}
+          showMonthAndYearPickers={false}
+          editableDateInputs
+          onChange={(item) => setValue([item.selection])}
+          moveRangeOnFirstSelection={false}
+          ranges={value}
+          color="#FFFFFF"
+        />
+        {/* <div className={vertical ? classes.fieldsWrapperVertical : classes.fieldsWrapper}> */}
+        <FormControl className={vertical ? classes.fieldsWrapperVertical : classes.fieldsWrapper}>
+          <div className={`${vertical ? classes.startDateFieldVertical : classes.startDateField}`}>
+            <TextField
+              className={classes.dateField}
+              placeholder={dateFormatExamples[datePlaceHolder]}
+              onFocus={(event) => event.target.select()}
+              label="Start Date"
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                notched: false,
+              }}
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              onBlur={(e) => onStartDateBlur(e)}
+            />
+            <TextField
+              className={classes.timeField}
+              placeholder={timeFormatExamples[timePlaceHolder]}
+              onFocus={(event) => event.target.select()}
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              onBlur={(e) => onStartTimeBlur(e)}
+            />
+          </div>
+          <div className={`${vertical ? classes.endDateFieldVertical : classes.endDateField}`}>
+            <TextField
+              className={classes.dateField}
+              placeholder={dateFormatExamples[datePlaceHolder]}
+              onFocus={(event) => event.target.select()}
+              label="End Date"
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                notched: false,
+              }}
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              onBlur={(e) => onEndDateBlur(e)}
+            />
+            <TextField
+              className={classes.timeField}
+              placeholder={timeFormatExamples[timePlaceHolder]}
+              onFocus={(event) => event.target.select()}
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              onBlur={(e) => onEndTimeBlur(e)}
+            />
+          </div>
+        </FormControl>
+      </div>
+    </>
   );
 }

@@ -38,9 +38,7 @@ export default function MyClass({
 
         setItemLists(
           userClasses
-            .sort((a, b) => (a.course_name.localeCompare(b.course_name)
-              ? a.course_name.localeCompare(b.course_name)
-              : a.class_name.localeCompare(b.class_name)))
+            .sort((a, b) => (b.class_name.localeCompare(a.class_name) || b.course_name.localeCompare(a.course_name)))
             .map((item) => {
               switch (item.role) {
                 case 'MANAGER': {

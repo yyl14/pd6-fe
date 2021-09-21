@@ -70,6 +70,10 @@ export default function ClassList() {
     history.push(`/admin/course/course/${courseId}/setting`);
   };
 
+  const addClassSuccess = () => {
+    setAddClassName('');
+    setShowAddClassDialog(false);
+  };
   const addCourseSuccess = (newCourseId) => {
     setAddCourseName('');
     history.push(`/admin/course/course/${newCourseId}/class-list`);
@@ -84,9 +88,7 @@ export default function ClassList() {
     );
   };
   const onAddClass = (name) => {
-    setAddClassName('');
-    setShowAddClassDialog(false);
-    dispatch(addClass(authToken, courseId, name, false));
+    dispatch(addClass(authToken, courseId, name, addClassSuccess, () => setShowSnackBar(true)));
   };
 
   if (courses.byId[courseId] === undefined || courses.byId[courseId].name === undefined) {
@@ -191,12 +193,24 @@ export default function ClassList() {
           </AlignedText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowAddClassDialog(false)}>Cancel</Button>
+          <Button
+            onClick={() => {
+              setShowAddClassDialog(false);
+              setAddClassName('');
+            }}
+          >
+            Cancel
+          </Button>
           <Button color="primary" onClick={() => onAddClass(addClassName)} disabled={loading.addClass}>
             Create
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={showAddClassDialog && showSnackBar}
+        onClose={closeSnackbar}
+        message={`Error: ${error.addClass}`}
+      />
     </>
   );
 }

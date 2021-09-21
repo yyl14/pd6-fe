@@ -174,6 +174,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     // alignItems: 'center',
   },
+  default: { color: theme.palette.black.dark },
+  error: { color: theme.palette.secondary.main },
+  primary: { color: theme.palette.primary.main },
 }));
 
 const itemsPerPage = [10, 25, 50, 100];
@@ -521,7 +524,10 @@ function AutoTable({
                       return (
                         <React.Fragment key={`${row.id}-${column.name}`}>
                           <TableCell className={classes.tableColumnLeftSpacing} />
-                          <TableCell align={column.align}>
+                          <TableCell
+                            align={column.align}
+                            className={(column.colors && column.colors[value]) && classes[column.colors[value]]}
+                          >
                             {column.format && typeof value === 'number' ? column.format(value) : value}
                           </TableCell>
                         </React.Fragment>
