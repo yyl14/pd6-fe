@@ -125,6 +125,10 @@ export default function EssayInfo({ role = 'NORMAL' }) {
 
   useEffect(() => {
     setDisabledUpload(selectedFile.length === 0);
+    if (selectedFile.length > 1) {
+      const newSelectedFile = selectedFile.slice(1);
+      setSelectedFile(newSelectedFile);
+    }
   }, [selectedFile]);
 
   const handleClickLink = () => {
