@@ -81,7 +81,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const courses = useSelector((state) => state.courses.byId);
   const problems = useSelector((state) => state.problem.byId);
   const testcases = useSelector((state) => state.testcases.byId);
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState(true);
 
   const assistingData = useSelector((state) => state.assistingData.byId);
 
@@ -158,7 +158,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       setSampleDataIds(samplesId);
       setTestcaseDataIds(testcasesId);
       if (testcasesId.length === 0) {
-        setStatus(false);
+        setStatus(true);
       } else {
         setStatus(!testcases[testcasesId[0]].is_disabled);
       }
