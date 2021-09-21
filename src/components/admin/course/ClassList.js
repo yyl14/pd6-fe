@@ -37,7 +37,7 @@ export default function ClassList() {
   const [addClassName, setAddClassName] = useState('');
 
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const [showSnackBar, setShowSnackBar] = useState(false);
 
   useEffect(() => {
     if (!loading.addClass && !loading.renameClass && !loading.deleteClass) {
@@ -75,7 +75,7 @@ export default function ClassList() {
     setShowAddClassDialog(false);
   };
   const closeSnackbar = () => {
-    setHasError(false);
+    setShowSnackBar(false);
   };
 
   const onAddCourse = (name) => {
@@ -84,7 +84,7 @@ export default function ClassList() {
     dispatch(addCourse(authToken, name, getCourseType(addType).toUpperCase(), history));
   };
   const onAddClass = (name) => {
-    dispatch(addClass(authToken, courseId, name, addClassSuccess, () => setHasError(true)));
+    dispatch(addClass(authToken, courseId, name, addClassSuccess, () => setShowSnackBar(true)));
   };
 
   if (courses.byId[courseId] === undefined || courses.byId[courseId].name === undefined) {
@@ -189,7 +189,11 @@ export default function ClassList() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Snackbar open={showAddClassDialog && hasError} onClose={closeSnackbar} message={`Error: ${error.addClass}`} />
+      <Snackbar
+        open={showAddClassDialog && showSnackBar}
+        onClose={closeSnackbar}
+        message={`Error: ${error.addClass}`}
+      />
     </>
   );
 }
