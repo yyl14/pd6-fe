@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import AlignedText from '../../../ui/AlignedText';
 import AutoTable from '../../../ui/AutoTable';
-import NoMatch from '../../../noMatch';
 import SimpleBar from '../../../ui/SimpleBar';
 import PageTitle from '../../../ui/PageTitle';
 import { readSubmission, readSubmissionDetail, readProblemScore } from '../../../../actions/myClass/problem';
@@ -31,13 +30,11 @@ export default function MySubmission() {
   const [snackbar, setSnackbar] = useState(false);
 
   useEffect(() => {
-    if (!loading.browseTasksUnderChallenge) {
-      dispatch(readProblemScore(authToken, problemId));
-    }
-  }, [authToken, dispatch, loading.browseTasksUnderChallenge, problemId]);
+    dispatch(readProblemScore(authToken, problemId));
+  }, [authToken, dispatch, problemId]);
 
   useEffect(() => {
-    if (submissions.allIds !== []) {
+    if (submissions.allIds) {
       submissions.allIds.map((id) => dispatch(readSubmissionDetail(authToken, id)));
     }
   }, [authToken, challengeId, dispatch, problemId, submissions]);
@@ -53,18 +50,8 @@ export default function MySubmission() {
     || problems.byId[problemId] === undefined
     || submissions.byId === undefined
     || judgments.byId === undefined
-    || problems.byId[problemId].score === undefined
   ) {
-    if (
-      loading.readSubmission
-      || loading.readSubmissionDetail
-      || loading.readProblemScore
-      || loading.browseTasksUnderChallenge
-      || loading.readProblemScore
-    ) {
-      return <GeneralLoading />;
-    }
-    return <NoMatch />;
+    return <GeneralLoading />;
   }
 
   return (
@@ -109,6 +96,19 @@ export default function MySubmission() {
             name: 'Status',
             align: 'center',
             type: 'string',
+            colors: {
+              'Waiting For Judge': 'default',
+              'No Status': 'error',
+              ACCEPTED: 'primary',
+              'WRONG ANSWER': 'error',
+              'MEMORY LIMIT EXCEED': 'error',
+              'TIME LIMIT EXCEED': 'error',
+              'RUNTIME ERROR': 'error',
+              'COMPILE ERROR': 'error',
+              'CONTACT MANAGER': 'error',
+              'FORBIDDEN ACTION': 'error',
+              'SYSTEM ERROR': 'error',
+            },
           },
           {
             name: 'Score',

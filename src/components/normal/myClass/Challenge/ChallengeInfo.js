@@ -56,13 +56,13 @@ export default function ChallengeInfo() {
   }, [authToken, challengeId, dispatch, hasRequest, loading.editChallenge]);
 
   useEffect(() => {
-    if (challenges[challengeId] !== undefined) {
+    if (challenges[challengeId]) {
       challenges[challengeId].problemIds.map((id) => dispatch(readProblemScore(authToken, id)));
     }
   }, [authToken, challengeId, challenges, dispatch]);
 
   useEffect(() => {
-    if (challenges[challengeId] !== undefined) {
+    if (challenges[challengeId]) {
       if (currentTime.isBefore(moment(challenges[challengeId].start_time))) {
         setStatus('Not Yet');
       } else if (currentTime.isBefore(moment(challenges[challengeId].end_time))) {

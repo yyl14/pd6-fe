@@ -163,6 +163,19 @@ export default function SubmissionList() {
             name: 'Status',
             align: 'center',
             type: 'string',
+            colors: {
+              'Waiting For Judge': 'default',
+              'No Status': 'error',
+              ACCEPTED: 'primary',
+              'WRONG ANSWER': 'error',
+              'MEMORY LIMIT EXCEED': 'error',
+              'TIME LIMIT EXCEED': 'error',
+              'RUNTIME ERROR': 'error',
+              'COMPILE ERROR': 'error',
+              'CONTACT MANAGER': 'error',
+              'FORBIDDEN ACTION': 'error',
+              'SYSTEM ERROR': 'error',
+            },
           },
           {
             name: 'Time',
@@ -176,7 +189,7 @@ export default function SubmissionList() {
           ID: item.id,
           Username: {
             text: accounts.byId[item.account_id] ? accounts.byId[item.account_id].username : '',
-            path: `/user-profile/${accounts.byId[item.account_id].id}`,
+            path: accounts.byId[item.account_id] ? `/user-profile/${accounts.byId[item.account_id].id}` : '',
           },
           'Student ID': accounts.byId[item.account_id] ? accounts.byId[item.account_id].student_id : '',
           'Real Name': accounts.byId[item.account_id] ? accounts.byId[item.account_id].real_name : '',

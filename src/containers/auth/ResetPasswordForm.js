@@ -180,16 +180,12 @@ export default function ResetPassword() {
               onClick={(e) => handleSubmit(e)}
               color="primary"
             >
-              Send
+              Reset
             </Button>
           </form>
         </CardContent>
       </Card>
-      <Dialog
-        open={popUp}
-        keepMounted
-        onClose={() => handleClosePopUp()}
-      >
+      <Dialog open={popUp} keepMounted onClose={() => handleClosePopUp()}>
         <DialogTitle id="alert-dialog-slide-title">
           <Typography variant="h4">Password reset success</Typography>
         </DialogTitle>

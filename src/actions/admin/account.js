@@ -27,7 +27,7 @@ const getInstitute = (token, instituteId) => (dispatch) => {
     });
 };
 
-const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled) => (dispatch) => {
+const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled, onSuccess, onError) => (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
@@ -57,12 +57,14 @@ const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled)
           is_disabled: isDisabled,
         },
       });
+      onSuccess();
     })
     .catch((error) => {
       dispatch({
         type: accountConstants.ADD_INSTITUTE_FAIL,
         error,
       });
+      onError();
     });
 };
 
@@ -200,7 +202,7 @@ const fetchStudentCards = (token, id) => (dispatch) => {
 };
 
 // SM: edit any account
-const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (dispatch) => {
+const addStudentCard = (token, id, instituteId, emailPrefix, studentId, onSuccess, onError) => (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
@@ -219,12 +221,14 @@ const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (disp
     )
     .then(() => {
       dispatch({ type: accountConstants.ADD_STUDENT_CARD_SUCCESS });
+      onSuccess();
     })
     .catch((error) => {
       dispatch({
         type: accountConstants.ADD_STUDENT_CARD_FAIL,
         error,
       });
+      onError();
     });
 };
 
