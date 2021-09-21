@@ -163,16 +163,16 @@ export default function SubmissionDetail() {
             no: transformTestcase(id),
             time: judgeCases.allIds
               .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id ? judgeCases.byId[id].time_lapse : '-')),
+              .map((key) => (key === id ? judgeCases.byId[id].time_lapse : '')),
             memory: judgeCases.allIds
               .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id ? judgeCases.byId[id].peak_memory : '-')),
+              .map((key) => (key === id ? judgeCases.byId[id].peak_memory : '')),
             status: judgeCases.allIds
               .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id ? judgeCases.byId[id].verdict : '-')),
+              .map((key) => (key === id ? judgeCases.byId[id].verdict : '')),
             score: judgeCases.allIds
               .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id ? judgeCases.byId[id].score : '-')),
+              .map((key) => (key === id ? judgeCases.byId[id].score : '')),
           }))
           .sort((a, b) => {
             if (!a.no.includes('sample') && b.no.includes('sample')) return 1;
