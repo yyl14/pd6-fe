@@ -155,28 +155,47 @@ export default function SubmissionDetail() {
   useEffect(() => {
     if (sampleDataIds && testcaseDataIds && judgeCases.allIds) {
       setTableData(
-        sampleDataIds.concat(testcaseDataIds).map((id) => ({
-          id,
-          no: transformTestcase(id),
-          time: judgeCases.allIds
-            .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-            .map((key) => (key === id ? judgeCases.byId[id].time_lapse : '')),
-          memory: judgeCases.allIds
-            .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-            .map((key) => (key === id ? judgeCases.byId[id].peak_memory : '')),
-          status: judgeCases.allIds
-            .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-            .map((key) => (key === id
-              ? judgeCases.byId[id].verdict
-                .toLowerCase()
-                .split(' ')
-                .map((word) => word[0].toUpperCase() + word.substring(1))
-                .join(' ')
-              : '')),
-          score: judgeCases.allIds
-            .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-            .map((key) => (key === id ? judgeCases.byId[id].score : '')),
-        })),
+        sampleDataIds
+          .concat(testcaseDataIds)
+          .map((id) => ({
+            id,
+            no: transformTestcase(id),
+            time: judgeCases.allIds
+              .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
+              .map((key) => (key === id ? judgeCases.byId[id].time_lapse : '')),
+            memory: judgeCases.allIds
+              .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
+              .map((key) => (key === id ? judgeCases.byId[id].peak_memory : '')),
+            status: judgeCases.allIds
+              .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
+              .map((key) => (key === id
+                ? judgeCases.byId[id].verdict
+                  .toLowerCase()
+                  .split(' ')
+                  .map((word) => word[0].toUpperCase() + word.substring(1))
+                  .join(' ')
+                : '')),
+            score: judgeCases.allIds
+              .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
+              .map((key) => (key === id ? judgeCases.byId[id].score : '')),
+          }))
+          .sort((a, b) => {
+            if (!a.no.includes('sample') && b.no.includes('sample')) return 1;
+            if (a.no.includes('sample') && !b.no.includes('sample')) return -1;
+            if (
+              a.no.includes('sample')
+              && b.no.includes('sample')
+              && Number(a.no.substring(6)) > Number(b.no.substring(6))
+            ) return 1;
+            if (
+              a.no.includes('sample')
+              && b.no.includes('sample')
+              && Number(a.no.substring(6)) < Number(b.no.substring(6))
+            ) return -1;
+            if (!a.no.includes('sample') && !b.no.includes('sample') && Number(a.no) > Number(b.no)) return 1;
+            if (!a.no.includes('sample') && !b.no.includes('sample') && Number(a.no) < Number(b.no)) return -1;
+            return 0;
+          }),
       );
     }
   }, [judgeCases.allIds, judgeCases.byId, judgmentId, sampleDataIds, testcaseDataIds, transformTestcase]);
