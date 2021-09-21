@@ -82,9 +82,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function FileUploadArea({
-  text, fileAcceptFormat = '.pdf', selectedFile, setSelectedFile,
+  text,
+  fileAcceptFormat = '.pdf',
+  selectedFile,
+  setSelectedFile,
+  fileAmountLimit = true,
 }) {
   const classes = useStyles();
+
+  const [disabledBrowse, setDisabledBrowse] = useState(false);
 
   const handleUploadFile = (e) => {
     const newFiles = Object.keys(e.target.files).map((key) => e.target.files[key]);
@@ -95,6 +101,10 @@ export default function FileUploadArea({
     const filtered = selectedFile.filter((file, index, arr) => file !== deleteFile);
     setSelectedFile(filtered);
   };
+
+  useEffect(() => {
+    setDisabledBrowse(selectedFile.length !== 0);
+  }, [selectedFile]);
 
   return (
     <>
@@ -112,7 +122,7 @@ export default function FileUploadArea({
             type="file"
             accept={fileAcceptFormat}
             onChange={(e) => handleUploadFile(e)}
-            multiple
+            multiple={fileAmountLimit}
           />
           <Button
             className={classes.browseButton}
