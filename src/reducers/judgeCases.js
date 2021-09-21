@@ -38,11 +38,11 @@ const allIds = (state = [], action) => {
   switch (action.type) {
     case problemConstants.BROWSE_JUDGE_CASES_SUCCESS: {
       const { data } = action.payload;
-      return [...new Set(...state, ...data.map((item) => item.testcase_id))];
+      return [...new Set([...state, ...data.map((item) => item.testcase_id)])];
     }
     case submissionConstants.BROWSE_JUDGE_CASES_SUCCESS: {
       const { data } = action.payload;
-      return [...new Set(...state, ...data.map((item) => item.testcase_id))];
+      return [...new Set([...state, ...data.map((item) => item.testcase_id)])];
     }
     default:
       return state;

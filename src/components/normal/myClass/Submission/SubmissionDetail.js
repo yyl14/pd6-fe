@@ -253,6 +253,8 @@ export default function SubmissionDetail() {
     setPopUp(false);
   };
 
+  console.log(judgments);
+
   return (
     <>
       <PageTitle text={`${submissionId} / Submission Detail`} />

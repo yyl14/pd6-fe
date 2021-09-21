@@ -151,7 +151,7 @@ export default function SubmissionDetail() {
       setTestcaseDataIds(testcasesId);
     }
   }, [problems, problemId, transformTestcase, transformSample, testcases]);
-
+  console.log(judgeCases.allIds);
   useEffect(() => {
     if (sampleDataIds && testcaseDataIds && judgeCases.allIds) {
       setTableData(

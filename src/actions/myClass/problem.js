@@ -87,13 +87,13 @@ const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
 };
 
 const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
-  dispatch({ type: problemConstants.BROWSE_JUDGE_CASES_START });
   const config = {
     headers: {
       'auth-token': token,
     },
   };
   try {
+    dispatch({ type: problemConstants.BROWSE_JUDGE_CASES_START });
     const res = await agent.get(`/judgment/${judgmentId}/judge-case`, config);
 
     dispatch({
