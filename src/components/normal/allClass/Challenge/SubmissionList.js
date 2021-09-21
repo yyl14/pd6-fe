@@ -5,11 +5,11 @@ import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import AlignedText from '../../../ui/AlignedText';
 import AutoTable from '../../../ui/AutoTable';
-import NoMatch from '../../../noMatch';
 import SimpleBar from '../../../ui/SimpleBar';
 import PageTitle from '../../../ui/PageTitle';
 import { viewMySubmissionUnderProblem, readProblemInfo, readProblemScore } from '../../../../actions/myClass/problem';
 import GeneralLoading from '../../../GeneralLoading';
+import NoMatch from '../../../noMatch';
 
 const TableIdent = 'My Submission Table';
 
@@ -91,6 +91,19 @@ export default function MySubmission() {
             name: 'Status',
             align: 'center',
             type: 'string',
+            colors: {
+              'Waiting For Judge': 'default',
+              'No Status': 'error',
+              ACCEPTED: 'primary',
+              'WRONG ANSWER': 'error',
+              'MEMORY LIMIT EXCEED': 'error',
+              'TIME LIMIT EXCEED': 'error',
+              'RUNTIME ERROR': 'error',
+              'COMPILE ERROR': 'error',
+              'CONTACT MANAGER': 'error',
+              'FORBIDDEN ACTION': 'error',
+              'SYSTEM ERROR': 'error',
+            },
           },
           {
             name: 'Score',

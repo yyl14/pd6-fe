@@ -320,7 +320,7 @@ export default function CustomTable({
                                   {column.format && typeof value === 'number' ? column.format(value) : value}
                                 </a>
                               ) : (
-                                <Link to={link} className={classes.textLink} replace>
+                                <Link to={link} className={classes.textLink}>
                                   {column.format && typeof value === 'number' ? column.format(value) : value}
                                 </Link>
                               )}

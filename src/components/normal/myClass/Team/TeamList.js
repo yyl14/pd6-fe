@@ -66,8 +66,7 @@ export default function TeamList() {
 
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [hasRequest, setHasRequest] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const [showSnackBar, setShowSnackBar] = useState(false);
 
   const [selectedFile, setSelectedFile] = useState([]);
   const [importInput, setImportInput] = useState('');
@@ -106,29 +105,25 @@ export default function TeamList() {
   const addTeamSuccess = () => {
     clearAddInput();
     setShowAddDialog(false);
-    setHasRequest(false);
   };
 
   const importTeamSuccess = () => {
     clearImportInput();
     setShowImportDialog(false);
-    setHasRequest(false);
   };
 
   const submitImport = () => {
     if (importInput !== '' && selectedFile !== []) {
-      selectedFile.map((file) => dispatch(importTeam(authToken, classId, importInput, file, importTeamSuccess, () => setHasError(true))));
+      selectedFile.map((file) => dispatch(importTeam(authToken, classId, importInput, file, importTeamSuccess, () => setShowSnackBar(true))));
     }
-    setHasRequest(true);
   };
 
   const submitAdd = () => {
     if (addInputs.label !== '' && addInputs.teamName !== '') {
       dispatch(
-        addTeam(authToken, classId, addInputs.teamName, addInputs.label, addTeamSuccess, () => setHasError(true)),
+        addTeam(authToken, classId, addInputs.teamName, addInputs.label, addTeamSuccess, () => setShowSnackBar(true)),
       );
     }
-    setHasRequest(true);
   };
 
   const downloadTemplate = () => {
@@ -137,8 +132,7 @@ export default function TeamList() {
   };
 
   const handleCloseError = () => {
-    setHasError(false);
-    setHasRequest(false);
+    setShowSnackBar(false);
   };
 
   if (courses[courseId] === undefined || classes[classId] === undefined) {
@@ -263,7 +257,6 @@ export default function TeamList() {
             <Button
               onClick={() => {
                 setShowImportDialog(false);
-                setHasRequest(false);
                 clearImportInput();
               }}
               color="default"
@@ -283,7 +276,7 @@ export default function TeamList() {
         </DialogActions>
       </Dialog>
       <Snackbar
-        open={showAddDialog && hasError}
+        open={showAddDialog && showSnackBar}
         onClose={handleCloseError}
         message={`Error: ${error.myClass.team.addTeam}`}
       />
@@ -310,7 +303,6 @@ export default function TeamList() {
           <Button
             onClick={() => {
               setShowAddDialog(false);
-              setHasRequest(false);
               clearAddInput();
             }}
             color="default"
@@ -329,7 +321,7 @@ export default function TeamList() {
         </DialogActions>
       </Dialog>
       <Snackbar
-        open={showImportDialog && hasError}
+        open={showImportDialog && showSnackBar}
         onClose={handleCloseError}
         message={`Error: ${error.myClass.team.importTeam}`}
       />

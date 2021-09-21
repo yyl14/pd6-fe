@@ -198,7 +198,13 @@ export default function Header() {
     if (!systemLoading.editAnnouncement && !systemLoading.addAnnouncement && !systemLoading.deleteAnnouncement) {
       dispatch(userBrowseAnnouncement(authToken));
     }
-  }, [authToken, dispatch, systemLoading.editAnnouncement, systemLoading.addAnnouncement, systemLoading.deleteAnnouncement]);
+  }, [
+    authToken,
+    dispatch,
+    systemLoading.editAnnouncement,
+    systemLoading.addAnnouncement,
+    systemLoading.deleteAnnouncement,
+  ]);
 
   useEffect(() => {
     switch (user.role) {
@@ -350,7 +356,12 @@ export default function Header() {
   useEffect(() => {
     const ns = user.notifications.sort((a, b) => new Date(b.post_time).getTime() - new Date(a.post_time).getTime());
     setNotifyList(ns);
-    setUnreadNotifyExist(!!ns.filter((e) => !e.is_deleted).length);
+    setUnreadNotifyExist(
+      ns.filter(
+        (notify) => moment(new Date()).diff(moment(notify.post_time), 'days') >= 0
+          && moment(notify.expire_time).diff(moment(new Date()), 'days') >= 0,
+      ).length !== 0,
+    );
   }, [user.notifications]);
 
   const toggleNotify = () => {
