@@ -65,7 +65,7 @@ export default function MySubmission() {
       <AutoTable
         ident={TableIdent + problemId}
         hasRefreshButton
-        refreshLoadings={[loading.submitCode]}
+        refreshLoadings={[loading.submitCode, loading.rejudgeSubmission]}
         hasFilter
         filterConfig={[
           {
