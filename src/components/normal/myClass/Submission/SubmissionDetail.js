@@ -198,9 +198,22 @@ export default function SubmissionDetail() {
           score: judgeCases.allIds
             .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
             .map((key) => (key === id ? judgeCases.byId[id].score : '')),
-        })),
+        })).sort((a, b) => {
+          const noa = a.no;
+          const nob = b.no;
+          if (!noa.includes('sample') && nob.includes('sample')) return 1;
+          if (noa.includes('sample') && !nob.includes('sample')) return -1;
+          if (noa.includes('sample') && nob.includes('sample') && Number(noa.substring(6)) > Number(nob.substring(6))) return 1;
+          if (noa.includes('sample') && nob.includes('sample') && Number(noa.substring(6)) < Number(nob.substring(6))) return -1;
+          if (!noa.includes('sample') && !nob.includes('sample') && Number(noa) > Number(nob)) return 1;
+          if (!noa.includes('sample') && !nob.includes('sample') && Number(noa) < Number(nob)) return -1;
+          return 0;
+        }),
       );
     }
+    console.log(tableData);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [judgeCases.allIds, judgeCases.byId, judgmentId, sampleDataIds, testcaseDataIds, transformTestcase]);
 
   useEffect(() => {
