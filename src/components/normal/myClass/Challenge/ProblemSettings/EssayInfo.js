@@ -125,10 +125,6 @@ export default function EssayInfo({ role = 'NORMAL' }) {
 
   useEffect(() => {
     setDisabledUpload(selectedFile.length === 0);
-    if (selectedFile.length > 1) {
-      const newSelectedFile = selectedFile.slice(1);
-      setSelectedFile(newSelectedFile);
-    }
   }, [selectedFile]);
 
   const handleClickLink = () => {
@@ -192,7 +188,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
             fileAcceptFormat=".pdf"
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
-            fileAmountLimit={false}
+            multipleFiles={false}
           />
         </DialogContent>
         <DialogActions>

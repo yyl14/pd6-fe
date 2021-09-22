@@ -86,11 +86,18 @@ export default function FileUploadArea({
   fileAcceptFormat = '.pdf',
   selectedFile,
   setSelectedFile,
-  fileAmountLimit = true,
+  multipleFiles = true,
 }) {
   const classes = useStyles();
 
-  const [disabledBrowse, setDisabledBrowse] = useState(false);
+  useEffect(() => {
+    if (multipleFiles === false) {
+      if (selectedFile.length > 1) {
+        const newSelectedFile = selectedFile.slice(1);
+        setSelectedFile(newSelectedFile);
+      }
+    }
+  }, [multipleFiles, selectedFile, setSelectedFile]);
 
   const handleUploadFile = (e) => {
     const newFiles = Object.keys(e.target.files).map((key) => e.target.files[key]);
@@ -101,10 +108,6 @@ export default function FileUploadArea({
     const filtered = selectedFile.filter((file, index, arr) => file !== deleteFile);
     setSelectedFile(filtered);
   };
-
-  useEffect(() => {
-    setDisabledBrowse(selectedFile.length !== 0);
-  }, [selectedFile]);
 
   return (
     <>
@@ -122,7 +125,7 @@ export default function FileUploadArea({
             type="file"
             accept={fileAcceptFormat}
             onChange={(e) => handleUploadFile(e)}
-            multiple={fileAmountLimit}
+            multiple={multipleFiles}
           />
           <Button
             className={classes.browseButton}
