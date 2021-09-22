@@ -377,7 +377,6 @@ const overrides = {
   MuiInputBase: {
     root: {
       height: '45px',
-
       backgroundColor: mono.white,
     },
     multiline: {

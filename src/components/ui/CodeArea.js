@@ -1,7 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { TextField } from '@material-ui/core';
+import { InputBase, withStyles } from '@material-ui/core';
 import CopyToClipboardButton from './CopyToClipboardButton';
+import '../../index.css';
 
 const useStyles = makeStyles({
   codeContent: {
@@ -15,13 +16,21 @@ const useStyles = makeStyles({
   },
   codeField: {
     width: '100%',
-    fontFamily: 'Fira Code VF !important',
   },
   copyIcon: {
     transform: 'translate(-50px, 20px)',
     zIndex: '1000',
   },
 });
+
+const StyledTextField = withStyles({
+  root: {
+    fontFamily: 'Cascadia',
+  },
+  input: {
+    margin: '15px',
+  },
+})(InputBase);
 
 export default function CodeArea({ value }) {
   const classNames = useStyles();
@@ -30,7 +39,7 @@ export default function CodeArea({ value }) {
       <div className={classNames.buttonWrapper}>
         <CopyToClipboardButton className={classNames.copyIcon} text={value} />
       </div>
-      <TextField className={classNames.codeField} value={value} disabled multiline minRows={10} />
+      <StyledTextField className={classNames.codeField} value={value} disabled multiline minRows={10} />
     </div>
   );
 }
