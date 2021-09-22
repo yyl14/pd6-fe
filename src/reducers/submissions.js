@@ -11,6 +11,7 @@ const verdictMapping = new Map([
   ['CONTACT MANAGER', 'Contact Manager'],
   ['FORBIDDEN ACTION', 'Forbidden Action'],
   ['SYSTEM ERROR', 'System Error'],
+  [null, null],
 ]);
 
 const byId = (state = {}, action) => {
@@ -45,7 +46,10 @@ const byId = (state = {}, action) => {
     }
     case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
       const { submissions } = action.payload;
-      return submissions.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, verdict: verdictMapping.get(item.verdict) } }), state);
+      return submissions.reduce(
+        (acc, item) => ({ ...acc, [item.id]: { ...item, verdict: verdictMapping.get(item.verdict) } }),
+        state,
+      );
     }
     default:
       return state;
