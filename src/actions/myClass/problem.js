@@ -819,18 +819,17 @@ const viewMySubmissionUnderProblem = (token, accountId, problemId, browseParams,
   };
   try {
     const res = await agent.get('/view/my-submission', config);
-    let { data: submissions } = res.data.data;
-    const { total_count } = res.data.data;
+    const { data, total_count } = res.data.data;
     let judgments = [];
-    if (submissions.length !== 0) {
+    if (data.length !== 0) {
       const config2 = {
         headers: { 'auth-token': token },
-        params: { submission_ids: JSON.stringify(submissions.map((item) => item.submission_id)) },
+        params: { submission_ids: JSON.stringify(data.map((item) => item.submission_id)) },
       };
       const res2 = await agent.get('/submission/judgment/batch', config2);
       judgments = res2.data.data;
     }
-    submissions = submissions.map((item) => {
+    const submissions = data.map((item) => {
       const latestJudgment = judgments.filter((judgment) => judgment.submission_id === item.submission_id);
       return {
         id: item.submission_id,
