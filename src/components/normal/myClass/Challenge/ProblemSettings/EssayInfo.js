@@ -57,6 +57,8 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   const userId = useSelector((state) => state.user.id);
   const error = useSelector((state) => state.error.myClass.essaySubmission);
 
+  const [disabledUpload, setDisabledUpload] = useState(true);
+
   const [uploadRecord, setUploadRecord] = useState(0);
   const [selectedFile, setSelectedFile] = useState([]);
   const [fileName, setFileName] = useState();
@@ -121,6 +123,10 @@ export default function EssayInfo({ role = 'NORMAL' }) {
     }
   }, [essay, essayId]);
 
+  useEffect(() => {
+    setDisabledUpload(selectedFile.length === 0);
+  }, [selectedFile]);
+
   const handleClickLink = () => {
     if (
       essaySubmission.byId[uploadRecord].account_id === userId
@@ -182,11 +188,13 @@ export default function EssayInfo({ role = 'NORMAL' }) {
             fileAcceptFormat=".pdf"
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
+            multipleFiles={false}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePopUpUpload}>Cancel</Button>
           <Button
+            disabled={disabledUpload}
             onClick={() => {
               handleUpload();
               setSelectedFile([]);
