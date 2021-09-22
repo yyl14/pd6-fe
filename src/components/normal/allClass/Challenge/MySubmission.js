@@ -28,12 +28,12 @@ export default function MySubmission() {
   const judgments = useSelector((state) => state.judgments);
   const loading = useSelector((state) => state.loading.myClass.problem);
   const error = useSelector((state) => state.error.myClass.problem);
-  const [snackbar, setSnackbar] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   useEffect(() => {
     if (!loading.submitCode && error.submitCode) {
-      setSnackbar(true);
-    } else setSnackbar(false);
+      setShowSnackbar(true);
+    } else setShowSnackbar(false);
   }, [error.submitCode, loading.submitCode]);
 
   useEffect(() => {
@@ -148,9 +148,9 @@ export default function MySubmission() {
       />
       <Snackbar
         message="Error: code submission failed"
-        open={snackbar}
+        open={showSnackbar}
         autoHideDuration={3000}
-        onClose={() => setSnackbar(false)}
+        onClose={() => setShowSnackbar(false)}
       />
     </>
   );
