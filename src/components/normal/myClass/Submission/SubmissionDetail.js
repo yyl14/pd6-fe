@@ -23,7 +23,6 @@ import {
 } from '../../../../actions/myClass/submission';
 import { readProblemInfo } from '../../../../actions/myClass/problem';
 import { getAccountBatch, fetchChallenge } from '../../../../actions/common/common';
-import '../../../../index.css';
 
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
