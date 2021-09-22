@@ -2,7 +2,6 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { InputBase, withStyles } from '@material-ui/core';
 import CopyToClipboardButton from './CopyToClipboardButton';
-import '../../index.css';
 
 const useStyles = makeStyles({
   codeContent: {
