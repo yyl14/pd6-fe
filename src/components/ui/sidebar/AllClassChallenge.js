@@ -182,7 +182,9 @@ export default function AllClassChallenge({
                   button
                   key={item.text}
                   onClick={() => history.push(item.path)}
-                  className={location.pathname === item.path ? `${classes.active} ${classes.item}` : classes.item}
+                  className={
+                    location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item
+                  }
                 >
                   <ListItemIcon className={classNames.itemIcon}>{item.icon}</ListItemIcon>
                   <ListItemText primary={item.text} className={classNames.itemText} />
