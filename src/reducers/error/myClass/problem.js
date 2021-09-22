@@ -37,7 +37,7 @@ export default function problem(state = initialState, action) {
     case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS:
       return {
         ...state,
-        viewMySubmissionUnderProblem: action.null,
+        viewMySubmissionUnderProblem: null,
       };
     case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_FAIL:
       return {
