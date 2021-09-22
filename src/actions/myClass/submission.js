@@ -181,7 +181,7 @@ const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
     const res = await agent.get(`/judgment/${judgmentId}/judge-case`, config);
     dispatch({
       type: submissionConstants.BROWSE_JUDGE_CASES_SUCCESS,
-      payload: res.data.data,
+      payload: { judgmentId, data: res.data.data },
     });
   } catch (error) {
     dispatch({

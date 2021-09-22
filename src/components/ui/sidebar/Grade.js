@@ -57,18 +57,12 @@ export default function Grade({
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}
       >
-        { arrow}
+        {arrow}
         <div className={classNames.title}>
           {display === 'unfold' ? (
-            <Icon.TriangleDown
-              className={classNames.titleIcon}
-              onClick={foldGrade}
-            />
+            <Icon.TriangleDown className={classNames.titleIcon} onClick={foldGrade} />
           ) : (
-            <Icon.TriangleRight
-              className={classNames.titleIcon}
-              onClick={unfoldGrade}
-            />
+            <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldGrade} />
           )}
           <Typography variant="h4" className={classNames.titleText}>
             {title}
@@ -78,12 +72,15 @@ export default function Grade({
         {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
-              <ListItem button key={item.text} className={classNames.item}>
-                <ListItemIcon className={classNames.itemIcon} style={{ color: location.pathname.includes(item.path) ? '#1EA5FF' : '' }}>{item.icon}</ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  className={location.pathname.includes(item.path) ? classNames.activeItemText : classNames.itemText}
-                />
+              <ListItem
+                button
+                key={item.text}
+                className={
+                  location.pathname.includes(item.path) ? `${classNames.active} ${classNames.item}` : classNames.item
+                }
+              >
+                <ListItemIcon className={classNames.itemIcon}>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} className={classNames.itemText} />
               </ListItem>
             ))}
           </List>

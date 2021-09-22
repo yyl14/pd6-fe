@@ -22,9 +22,7 @@ export default function UserProfile({
         {
           text: 'Profile',
           path: `/user-profile/${accountId}`,
-          icon: (
-            <Icon.PersonIcon />
-          ),
+          icon: <Icon.Profile />,
         },
       ]);
     }
@@ -62,18 +60,14 @@ export default function UserProfile({
         {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
-              <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classes.item}>
-                <ListItemIcon
-                  className={classes.itemIcon}
-                  style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                >
-                  {item.icon}
-
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  className={location.pathname === item.path ? classes.activeItemText : classes.itemText}
-                />
+              <ListItem
+                button
+                key={item.text}
+                onClick={() => history.push(item.path)}
+                className={location.pathname === item.path ? `${classes.active} ${classes.item}` : classes.item}
+              >
+                <ListItemIcon className={classes.itemIcon}>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} className={classes.itemText} />
               </ListItem>
             ))}
           </List>

@@ -65,11 +65,13 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 'auto',
     flex: '1',
     marginLeft: '10px',
+    marginRight: '7px',
+    width: '18px',
   },
   itemIcon: {
     flex: '1',
     width: '18px',
-    color: theme.palette.black.main,
+    color: 'inherit',
     marginLeft: '35px',
     marginRight: '-15px',
   },
@@ -86,13 +88,8 @@ const useStyles = makeStyles((theme) => ({
   addIconItemClicked: {
     color: theme.palette.primary.main,
   },
-  activeItemText: {
-    flex: '10',
+  active: {
     color: theme.palette.primary.main,
-    width: '30px',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
   },
 
   greyIcon: {

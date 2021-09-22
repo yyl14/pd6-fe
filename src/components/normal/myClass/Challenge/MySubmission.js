@@ -92,17 +92,17 @@ export default function MySubmission() {
             align: 'center',
             type: 'string',
             colors: {
-              'Waiting For Judge': 'default',
+              'Waiting for judge': 'default',
               'No Status': 'error',
-              ACCEPTED: 'primary',
-              'WRONG ANSWER': 'error',
-              'MEMORY LIMIT EXCEED': 'error',
-              'TIME LIMIT EXCEED': 'error',
-              'RUNTIME ERROR': 'error',
-              'COMPILE ERROR': 'error',
-              'CONTACT MANAGER': 'error',
-              'FORBIDDEN ACTION': 'error',
-              'SYSTEM ERROR': 'error',
+              Accepted: 'primary',
+              'Wrong Answer': 'error',
+              'Memory Limit Exceed': 'error',
+              'Time Limit Exceed': 'error',
+              'Runtime Error': 'error',
+              'Compile Error': 'error',
+              'Contact Manager': 'error',
+              'Forbidden Action': 'error',
+              'System Error': 'error',
             },
           },
           {
@@ -131,16 +131,10 @@ export default function MySubmission() {
         reduxDataToRows={(item) => ({
           id: item.id,
           'Submission ID': item.id,
-          Status: item.verdict === null
-            ? 'Waiting For Judge'
-            : item.verdict
-              .toLowerCase()
-              .split(' ')
-              .map((word) => word[0].toUpperCase() + word.substring(1))
-              .join(' '),
-          Score: item.latestJudgment !== null && judgments.byId[item.latestJudgment] !== undefined ? judgments.byId[item.latestJudgment].score : '-',
-          'Used Time(ms)': item.latestJudgment !== null && judgments.byId[item.latestJudgment] !== undefined ? judgments.byId[item.latestJudgment].total_time : '-',
-          'Used Memory(kb)': item.latestJudgment !== null && judgments.byId[item.latestJudgment] !== undefined ? judgments.byId[item.latestJudgment].max_memory : '-',
+          Status: item.verdict === null ? 'Waiting For Judge' : item.verdict,
+          Score: item.latestJudgmentId !== null && judgments.byId[item.latestJudgmentId] !== undefined ? judgments.byId[item.latestJudgmentId].score : '-',
+          'Used Time(ms)': item.latestJudgmentId !== null && judgments.byId[item.latestJudgmentId] !== undefined ? judgments.byId[item.latestJudgmentId].total_time : '-',
+          'Used Memory(kb)': item.latestJudgmentId !== null && judgments.byId[item.latestJudgmentId] !== undefined ? judgments.byId[item.latestJudgmentId].max_memory : '-',
           'Submit Time': moment(item.submit_time).format('YYYY-MM-DD, HH:mm'),
           link: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${item.id}`,
         })}

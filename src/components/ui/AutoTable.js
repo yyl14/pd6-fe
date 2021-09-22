@@ -403,13 +403,16 @@ function AutoTable({
 
   // table refetch
   useEffect(() => {
+    // remove ['something', '=', '']
+    const adjustFilter = (oriFilter) => oriFilter.filter((item) => !(item[1] === '=' && item[2] === ''));
+
     if (!dataComplete) {
       // console.log('refetch');
       refetch(
         {
           limit: rowsPerPage,
           offset: curPage * rowsPerPage,
-          filter,
+          filter: adjustFilter(filter),
           sort,
         },
         ident,
@@ -526,7 +529,7 @@ function AutoTable({
                           <TableCell className={classes.tableColumnLeftSpacing} />
                           <TableCell
                             align={column.align}
-                            className={(column.colors && column.colors[value]) && classes[column.colors[value]]}
+                            className={column.colors && column.colors[value] && classes[column.colors[value]]}
                           >
                             {column.format && typeof value === 'number' ? column.format(value) : value}
                           </TableCell>
