@@ -15,6 +15,7 @@ const useStyles = makeStyles({
   },
   codeField: {
     width: '100%',
+    fontFamily: 'Fira Code VF !important',
   },
   copyIcon: {
     transform: 'translate(-50px, 20px)',
