@@ -162,10 +162,10 @@ export default function SubmissionDetail() {
           .map((id) => ({
             id,
             no: transformTestcase(id),
-            time: array.filter((key) => key === id) ? judgeCases.byId[id].time_lapse : '',
-            memory: array.filter((key) => key === id) ? judgeCases.byId[id].peak_memory : '',
-            status: array.filter((key) => key === id) ? judgeCases.byId[id].verdict : '',
-            score: array.filter((key) => key === id) ? judgeCases.byId[id].score : '',
+            time: array.filter((key) => key === id)[0] ? judgeCases.byId[id].time_lapse : '',
+            memory: array.filter((key) => key === id)[0] ? judgeCases.byId[id].peak_memory : '',
+            status: array.filter((key) => key === id)[0] ? judgeCases.byId[id].verdict : '',
+            score: array.filter((key) => key === id)[0] ? judgeCases.byId[id].score : '',
           }))
           .sort((a, b) => {
             if (!a.no.includes('sample') && b.no.includes('sample')) return 1;
