@@ -2,7 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import {
-  Button, makeStyles, TextField, MenuItem, FormControl, Select, Snackbar,
+  Button,
+  makeStyles,
+  TextField,
+  MenuItem,
+  FormControl,
+  Select,
+  Snackbar,
+  withStyles,
+  InputBase,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
@@ -19,10 +27,6 @@ const useStyles = makeStyles(() => ({
   selectField: {
     width: '300px',
   },
-  codingField: {
-    flexGrow: 1,
-    width: 'auto',
-  },
   bottomButton: {
     display: 'flex',
     flexDirection: 'row',
@@ -34,6 +38,27 @@ const useStyles = makeStyles(() => ({
     width: '650px',
   },
 }));
+
+const StyledTextField = withStyles({
+  root: {
+    marginTop: '23px',
+    width: '100%',
+    height: 'auto',
+    borderRadius: '10px',
+    border: '2px solid',
+    borderColor: 'rgba(202, 202, 202, 1)',
+  },
+  formControl: {
+    flexGrow: 1,
+    width: 'auto',
+  },
+  input: {
+    margin: '15px',
+  },
+  focused: {
+    borderColor: '#1EA5FF',
+  },
+})(InputBase);
 
 /* This is a level 4 component (page component) */
 export default function CodeSubmission() {
@@ -129,8 +154,8 @@ export default function CodeSubmission() {
         </FormControl>
       </AlignedText>
       <AlignedText text="Content" maxWidth="lg" childrenType="field">
-        <TextField
-          className={classNames.codingField}
+        <StyledTextField
+          style={{ fontFamily: 'Cascadia' }}
           value={code}
           onChange={(e) => {
             setCode(e.target.value);

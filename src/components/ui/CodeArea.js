@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { InputBase, withStyles } from '@material-ui/core';
 import CopyToClipboardButton from './CopyToClipboardButton';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   codeContent: {
     display: 'flex',
     flexDirection: 'column',
@@ -15,12 +15,16 @@ const useStyles = makeStyles({
   },
   codeField: {
     width: '100%',
+    borderRadius: '10px',
+    background: theme.palette.grey[100],
+    border: '1px solid',
+    borderColor: theme.palette.grey[300],
   },
   copyIcon: {
     transform: 'translate(-50px, 20px)',
     zIndex: '1000',
   },
-});
+}));
 
 const StyledTextField = withStyles({
   root: {
