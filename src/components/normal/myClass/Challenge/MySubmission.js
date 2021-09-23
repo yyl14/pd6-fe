@@ -60,14 +60,16 @@ export default function MySubmission() {
         text={`${challenges.byId[challengeId].title} / ${problems.byId[problemId].challenge_label} / My Submission`}
       />
       <SimpleBar title="Submission Information">
-        <AlignedText
-          text={`My ${challenges.byId[challengeId].selection_type[0].concat(
-            challenges.byId[challengeId].selection_type.slice(1).toLowerCase(),
-          )} Score`}
-          childrenType="text"
-        >
-          <Typography variant="body1">{problems.byId[problemId].score}</Typography>
-        </AlignedText>
+        {challenges.byId[challengeId].selection_type && (
+          <AlignedText
+            text={`My ${challenges.byId[challengeId].selection_type[0].concat(
+              challenges.byId[challengeId].selection_type.slice(1).toLowerCase(),
+            )} Score`}
+            childrenType="text"
+          >
+            <Typography variant="body1">{problems.byId[problemId].score}</Typography>
+          </AlignedText>
+        )}
       </SimpleBar>
       <AutoTable
         ident={TableIdent + problemId}
