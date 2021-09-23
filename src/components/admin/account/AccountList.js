@@ -21,7 +21,7 @@ import AutoTable from '../../ui/AutoTable';
 import AlignedText from '../../ui/AlignedText';
 import FileUploadArea from '../../ui/FileUploadArea';
 import Icon from '../../ui/icon/index';
-import { fetchAccounts, addAccount } from '../../../actions/admin/account';
+import { fetchAccounts, addAccount, downloadAccountFile } from '../../../actions/admin/account';
 
 const useStyles = makeStyles((theme) => ({
   addDialogGap: {
@@ -64,12 +64,12 @@ export default function AccountList() {
   const [isDisabled, setIsDisabled] = useState(false);
   const [pwError, setPwError] = useState(false);
   const [errorText, setErrorText] = useState('');
-  const [hasError, setHasError] = useState(false);
+  const [showSnackBar, setShowSnackBar] = useState(false);
   // const [hasRequest, setHasRequest] = useState(false);
 
   const accounts = useSelector((state) => state.accounts);
   const authToken = useSelector((state) => state.auth.token);
-  const error = useSelector((state) => state.error.admin.account.fetchAccounts);
+  const error = useSelector((state) => state.error.admin.account);
 
   useEffect(() => {
     if (showImportDialog) {
@@ -150,7 +150,7 @@ export default function AccountList() {
 
   const handleSubmit = () => {
     if (showImportDialog) {
-      // selectedFile.map((file) => dispatch(importAccount(authToken, file, importAccountSuccess, () => setHasError(true))));
+      // selectedFile.map((file) => dispatch(importAccount(authToken, file, importAccountSuccess, () => setShowSnackBar(true))));
     } else if (showAddDialog) {
       if (addInputs.password1 !== addInputs.password2) {
         setPwError(true);
@@ -165,7 +165,7 @@ export default function AccountList() {
           addInputs.password1,
           addInputs.altMail,
           addAccountSuccess,
-          () => setHasError(true),
+          () => setShowSnackBar(true),
         ),
       );
     }
@@ -173,7 +173,7 @@ export default function AccountList() {
   };
 
   const downloadTemplate = () => {
-    // dispatch(downloadAccountFile(authToken));
+    dispatch(downloadAccountFile(authToken));
     setShowImportDialog(false);
   };
 
@@ -207,7 +207,7 @@ export default function AccountList() {
         refetch={(browseParams, ident) => {
           dispatch(fetchAccounts(authToken, browseParams, ident));
         }}
-        refetchErrors={[error]}
+        refetchErrors={[error.fetchAccounts]}
         columns={[
           {
             name: 'Username',
@@ -324,6 +324,14 @@ export default function AccountList() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={showSnackBar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowSnackBar(false);
+        }}
+        message={`Error: ${error.addAccount}`}
+      />
 
       <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} maxWidth="md">
         <DialogTitle id="dialog-slide-title">
@@ -382,6 +390,14 @@ export default function AccountList() {
           </div>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={showSnackBar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowSnackBar(false);
+        }}
+        message={`Error: ${error.importAccount}`}
+      />
     </>
   );
 }

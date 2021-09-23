@@ -362,17 +362,15 @@ const addAccount = (token, realName, userName, password, altMail, onSuccess, onE
     //   alternative_email: altMail,
     // };
     dispatch({ type: accountConstants.ADD_ACCOUNT_START });
-    console.log(
-      await agent.post(
-        '/account-normal',
-        {
-          real_name: realName,
-          username: userName,
-          password,
-          alternative_email: altMail,
-        },
-        config,
-      ),
+    await agent.post(
+      '/account-normal',
+      {
+        real_name: realName,
+        username: userName,
+        password,
+        alternative_email: altMail,
+      },
+      config,
     );
     dispatch({ type: accountConstants.ADD_ACCOUNT_SUCCESS });
     onSuccess();
