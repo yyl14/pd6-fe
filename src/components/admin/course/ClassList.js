@@ -35,7 +35,6 @@ export default function ClassList() {
 
   const [addCourseName, setAddCourseName] = useState('');
   const [addClassName, setAddClassName] = useState('');
-  const [hasError, setHasError] = useState(false);
 
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
   const [showSnackBar, setShowSnackBar] = useState(false);
