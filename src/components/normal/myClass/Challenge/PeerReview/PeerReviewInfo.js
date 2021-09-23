@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
 
 /* This is a level 4 component (page component) */
 // This page is for both normal and manager.
-// 依據身分分別給予不同 component (PeerReviewEdit, BasicInfo, Overview)
+// Render different component according to role and call correct api (PeerReviewEdit, BasicInfo, Overview)
 export default function PeerReviewInfo() {
   return (
     <>

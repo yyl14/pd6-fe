@@ -17,7 +17,7 @@ export default function peerReview(state = initialState, action) {
     case peerReviewConstants.READ_PEER_REVIEW_SUCCESS: {
       return {
         ...state,
-        readPeerReview: true,
+        readPeerReview: false,
       };
     }
     case peerReviewConstants.READ_PEER_REVIEW_FAIL: {
