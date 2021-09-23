@@ -26,7 +26,7 @@ const allIds = (state = [], action) => {
       return [...new Set([...data.peer_review.map((item) => item.id), ...state])];
     }
     case peerReviewConstants.READ_PEER_REVIEW_SUCCESS: {
-      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+      return [...new Set([action.payload.id, ...state])];
     }
     default:
       return state;
