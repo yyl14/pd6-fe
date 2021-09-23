@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
 } from '@material-ui/core';
-import { ContactSupportOutlined } from '@material-ui/icons';
 import Icon from '../icon/index';
 
 import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
@@ -12,7 +11,7 @@ import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
 export default function AllClass({
   classNames, history, location, mode,
 }) {
-  const { courseId, classId } = useParams();
+  const { courseId } = useParams();
   const baseURL = '/all-class';
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
@@ -31,7 +30,6 @@ export default function AllClass({
   const [arrow, setArrow] = useState(null);
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
-  const [TAicons, setTAicons] = useState([]);
 
   useEffect(() => {
     dispatch(fetchCourses(authToken));
@@ -48,10 +46,11 @@ export default function AllClass({
       setItemList(
         courses.allIds
           .map((id) => courses.byId[id])
+          .sort((a, b) => a.name.localeCompare(b.name))
           .map(({ id, type, name }) => ({
             type,
             text: name,
-            icon: <Icon.PeopleIcon />,
+            icon: <Icon.Member />,
             path: `${baseURL}/${id}`,
           })),
       );
@@ -65,8 +64,8 @@ export default function AllClass({
       setTitle(courses.byId[courseId].name);
       setItemList(
         courses.byId[courseId].classIds
-          .sort()
           .map((id) => classes.byId[id])
+          .sort((a, b) => a.name.localeCompare(b.name))
           .map(({ id, name }) => ({
             type: 'Class',
             text: name,
@@ -111,17 +110,16 @@ export default function AllClass({
           {display === 'unfold' && (
             <List>
               {itemList.map((item) => (
-                <ListItem button key={item.path} onClick={() => history.push(item.path)} className={classNames.item}>
-                  <ListItemIcon
-                    className={classNames.itemIcon}
-                    style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.text}
-                    className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
-                  />
+                <ListItem
+                  button
+                  key={item.path}
+                  onClick={() => history.push(item.path)}
+                  className={
+                    location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item
+                  }
+                >
+                  <ListItemIcon className={classNames.itemIcon}>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.text} className={classNames.itemText} />
                 </ListItem>
               ))}
             </List>

@@ -61,9 +61,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
   },
-  container: {
-    maxHeight: 800,
-  },
   tableRowContainerLeftSpacing: {
     width: '15px',
     padding: '0px',
@@ -295,7 +292,12 @@ export default function CustomTable({
                   </React.Fragment>
                 ))}
 
-                <TableCell key={hasLink ? 'link' : 'blank'} align="right" className={classes.tableHeadCell} style={{ minWidth: 20 }} />
+                <TableCell
+                  key={hasLink ? 'link' : 'blank'}
+                  align="right"
+                  className={classes.tableHeadCell}
+                  style={{ minWidth: 20 }}
+                />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -318,7 +320,7 @@ export default function CustomTable({
                                   {column.format && typeof value === 'number' ? column.format(value) : value}
                                 </a>
                               ) : (
-                                <Link to={link} className={classes.textLink} replace>
+                                <Link to={link} className={classes.textLink}>
                                   {column.format && typeof value === 'number' ? column.format(value) : value}
                                 </Link>
                               )}

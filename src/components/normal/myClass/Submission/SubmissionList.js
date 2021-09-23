@@ -91,7 +91,7 @@ export default function SubmissionList() {
           //     { value: 'Other - Contact Staff', label: 'Other - Contact Staff' },
           //     { value: 'Restricted function', label: 'Restricted function' },
           //     { value: 'System Error', label: 'System Error' },
-          //     { value: 'Waiting for Judge', label: 'Waiting for Judge' },
+          //     { value: 'Waiting for judge', label: 'Waiting for judge' },
           //   ],
           // },
           // {
@@ -137,7 +137,7 @@ export default function SubmissionList() {
           {
             name: 'Username',
             align: 'center',
-            type: 'string',
+            type: 'link',
           },
           {
             name: 'Student ID',
@@ -163,6 +163,19 @@ export default function SubmissionList() {
             name: 'Status',
             align: 'center',
             type: 'string',
+            colors: {
+              'Waiting for judge': 'default',
+              'No Status': 'error',
+              Accepted: 'primary',
+              'Wrong Answer': 'error',
+              'Memory Limit Exceed': 'error',
+              'Time Limit Exceed': 'error',
+              'Runtime Error': 'error',
+              'Compile Error': 'error',
+              'Contact Manager': 'error',
+              'Forbidden Action': 'error',
+              'System Error': 'error',
+            },
           },
           {
             name: 'Time',
@@ -174,7 +187,10 @@ export default function SubmissionList() {
         reduxDataToRows={(item) => ({
           id: item.id,
           ID: item.id,
-          Username: accounts.byId[item.account_id] ? accounts.byId[item.account_id].username : '',
+          Username: {
+            text: accounts.byId[item.account_id] ? accounts.byId[item.account_id].username : '',
+            path: accounts.byId[item.account_id] ? `/user-profile/${accounts.byId[item.account_id].id}` : '',
+          },
           'Student ID': accounts.byId[item.account_id] ? accounts.byId[item.account_id].student_id : '',
           'Real Name': accounts.byId[item.account_id] ? accounts.byId[item.account_id].real_name : '',
           Challenge: {
@@ -196,7 +212,7 @@ export default function SubmissionList() {
           },
           Status: judgments.allIds.filter((key) => judgments.byId[key].submission_id === item.id)[0]
             ? judgments.byId[judgments.allIds.filter((key) => judgments.byId[key].submission_id === item.id)[0]].verdict
-            : 'No Status',
+            : 'Waiting for judge',
           Time: moment(item.submit_time).format('YYYY-MM-DD, HH:mm:ss'),
           link: `/my-class/${courseId}/${classId}/submission/${item.id}`,
         })}

@@ -52,32 +52,23 @@ export const fetchTeam = (token, teamId) => async (dispatch) => {
   }
 };
 
-export const addTeam = (token, classId, teamName, newLabel) => (dispatch) => {
-  const config = { headers: { 'auth-token': token } };
-  dispatch({ type: teamConstants.ADD_TEAM_START });
-  agent
-    .post(
-      `/class/${classId}/team`,
-      {
-        name: teamName,
-        label: newLabel,
-      },
-      config,
-    )
-    .then(() => {
-      dispatch({
-        type: teamConstants.ADD_TEAM_SUCCESS,
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        type: teamConstants.ADD_TEAM_FAIL,
-        error,
-      });
+export const addTeam = (token, classId, name, label, onSuccess, onError) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    dispatch({ type: teamConstants.ADD_TEAM_MEMBER_START });
+    await agent.post(`/class/${classId}/team`, { name, label }, config);
+    dispatch({ type: teamConstants.ADD_TEAM_MEMBER_SUCCESS });
+    onSuccess();
+  } catch (error) {
+    dispatch({
+      type: teamConstants.ADD_TEAM_MEMBER_FAIL,
+      error,
     });
+    onError();
+  }
 };
 
-export const importTeam = (token, classId, label, file) => async (dispatch) => {
+export const importTeam = (token, classId, label, file, onSuccess, onError) => async (dispatch) => {
   try {
     const config = {
       headers: {
@@ -92,11 +83,13 @@ export const importTeam = (token, classId, label, file) => async (dispatch) => {
     dispatch({ type: teamConstants.IMPORT_TEAM_START });
     await agent.post(`/class/${classId}/team-import`, formData, config);
     dispatch({ type: teamConstants.IMPORT_TEAM_SUCCESS });
+    onSuccess();
   } catch (error) {
     dispatch({
       type: teamConstants.IMPORT_TEAM_FAIL,
       error,
     });
+    onError();
   }
 };
 

@@ -11,6 +11,7 @@ import {
   DialogContentText,
   Link,
   withStyles,
+  makeStyles,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
@@ -31,14 +32,19 @@ const StyledButton = withStyles({
   },
 })(Button);
 
+const useStyles = makeStyles(() => ({
+  uploadedFile: {
+    marginLeft: 50,
+  },
+}));
+
 /* This is a level 4 component (page component) */
 export default function EssayInfo({ role = 'NORMAL' }) {
   const {
     courseId, classId, challengeId, essayId,
   } = useParams();
   const history = useHistory();
-  const [currentTime] = useState(moment());
-
+  const classNames = useStyles();
   const dispatch = useDispatch();
 
   // const loading = useSelector((state) => state.loading.myClass.essay);
@@ -49,6 +55,9 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   const challenges = useSelector((state) => state.challenges.byId);
   const essaySubmission = useSelector((state) => state.essaySubmission);
   const userId = useSelector((state) => state.user.id);
+  const error = useSelector((state) => state.error.myClass.essaySubmission);
+
+  const [disabledUpload, setDisabledUpload] = useState(true);
 
   const [uploadRecord, setUploadRecord] = useState(0);
   const [selectedFile, setSelectedFile] = useState([]);
@@ -79,9 +88,17 @@ export default function EssayInfo({ role = 'NORMAL' }) {
 
   const handleUpload = () => {
     if (uploadRecord !== 0) {
-      dispatch(reUploadEssay(authToken, uploadRecord, selectedFile[0], () => { setPopUpFail(true); }));
+      dispatch(
+        reUploadEssay(authToken, uploadRecord, selectedFile[0], () => {
+          setPopUpFail(true);
+        }),
+      );
     } else {
-      dispatch(uploadEssay(authToken, essayId, selectedFile[0], () => { setPopUpFail(true); }));
+      dispatch(
+        uploadEssay(authToken, essayId, selectedFile[0], () => {
+          setPopUpFail(true);
+        }),
+      );
     }
     setFileName(selectedFile[0].name);
     setSelectedFile([]);
@@ -101,22 +118,26 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   // }, [authToken, dispatch, essayId]);
 
   useEffect(() => {
-    if (essay[essayId] === undefined) {
-      return;
+    if (essay[essayId] !== undefined) {
+      setUploadRecord(essay[essayId].essaySubmissionId ? essay[essayId].essaySubmissionId : 0);
     }
-    setUploadRecord(essay[essayId].essaySubmissionId ? essay[essayId].essaySubmissionId : 0);
   }, [essay, essayId]);
 
+  useEffect(() => {
+    setDisabledUpload(selectedFile.length === 0);
+  }, [selectedFile]);
+
   const handleClickLink = () => {
-    if (essaySubmission.byId[uploadRecord].account_id === userId) {
-      if (essaySubmission.byId[uploadRecord].essay_id === Number(essayId)) {
-        const fileToDownload = {
-          uuid: essaySubmission.byId[uploadRecord].content_file_uuid,
-          filename: essaySubmission.byId[uploadRecord].filename,
-          as_attachment: false,
-        };
-        dispatch(downloadFile(authToken, fileToDownload));
-      }
+    if (
+      essaySubmission.byId[uploadRecord].account_id === userId
+      && essaySubmission.byId[uploadRecord].essay_id === Number(essayId)
+    ) {
+      const fileToDownload = {
+        uuid: essaySubmission.byId[uploadRecord].content_file_uuid,
+        filename: essaySubmission.byId[uploadRecord].filename,
+        as_attachment: false,
+      };
+      dispatch(downloadFile(authToken, fileToDownload));
     }
   };
 
@@ -128,22 +149,20 @@ export default function EssayInfo({ role = 'NORMAL' }) {
     <>
       <SimpleBar title="Title">{essay[essayId] === undefined ? 'error' : essay[essayId].title}</SimpleBar>
       <SimpleBar title="Description">{essay[essayId] === undefined ? 'error' : essay[essayId].description}</SimpleBar>
-      <SimpleBar title="File">
-        {currentTime.isBefore(moment(challenges[challengeId].end_time)) && (
-          <StyledButton variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>
-            Upload
-          </StyledButton>
+      <SimpleBar title="File" noIndent>
+        <StyledButton variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>
+          Upload
+        </StyledButton>
+        {essaySubmission.byId[uploadRecord] && (
+          <div className={classNames.uploadedFile}>
+            <Link href onClick={handleClickLink}>
+              {essaySubmission.byId[uploadRecord].filename}
+            </Link>
+            {' '}
+            {moment(essaySubmission.byId[uploadRecord].submit_time).format('YYYY-MM-DD, HH:mm')}
+          </div>
         )}
       </SimpleBar>
-      {essaySubmission.byId[uploadRecord] && (
-        <div>
-          <Link href onClick={handleClickLink}>
-            {essaySubmission.byId[uploadRecord].filename}
-          </Link>
-          {' '}
-          {moment(essaySubmission.byId[uploadRecord].submit_time).format('YYYY-MM-DD, HH:mm')}
-        </div>
-      )}
       {role === 'MANAGER' && (
         <SimpleBar
           title="Delete Task"
@@ -169,11 +188,13 @@ export default function EssayInfo({ role = 'NORMAL' }) {
             fileAcceptFormat=".pdf"
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
+            multipleFiles={false}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePopUpUpload}>Cancel</Button>
           <Button
+            disabled={disabledUpload}
             onClick={() => {
               handleUpload();
               setSelectedFile([]);
@@ -186,15 +207,18 @@ export default function EssayInfo({ role = 'NORMAL' }) {
         </DialogActions>
       </Dialog>
       {/* Upload Failed dialog */}
-      <Dialog maxWidth="lg" open={popUpFail} keepMounted onClose={handleClosePopUpFail}>
+      <Dialog maxWidth="md" open={popUpFail} keepMounted onClose={handleClosePopUpFail}>
         <DialogTitle>
           <Typography variant="h4">Upload Failed</Typography>
         </DialogTitle>
         <DialogContent>
           <Typography>
-            File below was failed to be uploaded:
+            Failed to upload the following file:
             <br />
             {fileName}
+            <br />
+            <br />
+            {`Failed Reason: ${uploadRecord === 0 ? error.uploadEssay : error.reUploadEssay}`}
           </Typography>
         </DialogContent>
         <DialogActions>
@@ -202,7 +226,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
         </DialogActions>
       </Dialog>
       {/* Delete dialog */}
-      <Dialog maxWidth="lg" open={popUpDelete} keepMounted onClose={handleCloseDelete}>
+      <Dialog maxWidth="md" open={popUpDelete} keepMounted onClose={handleCloseDelete}>
         <DialogTitle>
           <Typography variant="h4">Delete Essay</Typography>
         </DialogTitle>

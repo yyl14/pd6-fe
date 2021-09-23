@@ -97,17 +97,15 @@ export default function Team({
         {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
-              <ListItem button key={item.text} className={classNames.item}>
-                <ListItemIcon
-                  className={classNames.itemIcon}
-                  style={{ color: location.pathname.includes(item.path) ? '#1EA5FF' : '' }}
-                >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  className={location.pathname.includes(item.path) ? classNames.activeItemText : classNames.itemText}
-                />
+              <ListItem
+                button
+                key={item.text}
+                className={
+                  location.pathname.includes(item.path) ? `${classNames.active} ${classNames.item}` : classNames.item
+                }
+              >
+                <ListItemIcon className={classNames.itemIcon}>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} className={classNames.itemText} />
               </ListItem>
             ))}
           </List>

@@ -4,6 +4,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableSortLabel,
   TableContainer,
   TableHead,
   TableRow,
@@ -66,9 +67,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
   },
-  container: {
-    maxHeight: 800,
-  },
+
   filterSelect: {
     marginRight: '10px',
     minWidth: '180px',
@@ -175,9 +174,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     // alignItems: 'center',
   },
+  default: { color: theme.palette.black.dark },
+  error: { color: theme.palette.secondary.main },
+  primary: { color: theme.palette.primary.main },
 }));
 
-const itemsPerPage = [5, 10, 25, 50, 100];
+const itemsPerPage = [10, 25, 50, 100];
 
 function AutoTable({
   ident, // unique identifier for this table, used in dynamic redux state
@@ -214,6 +216,7 @@ function AutoTable({
     }
   ],
   */
+  defaultSort,
   refetch, // function to call when table change page / filter / sort / clicked Refresh
   /*
   example value:
@@ -248,10 +251,11 @@ function AutoTable({
   const classes = useStyles();
   const [curPage, setCurPage] = useState(0); // curPage * rowsPerPage = offset
   const [pageInput, setPageInput] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5); // limit
+  const [rowsPerPage, setRowsPerPage] = useState(10); // limit
 
   const [filter, setFilter] = useState([]);
   const [sort, setSort] = useState([]);
+  const [order, setOrder] = useState({ key: '', order: 'asc' }); // use by TableSortLabel
 
   const [displayedRange, setDisplayedRange] = useState([]);
   const [displayedReduxData, setDisplayedReduxData] = useState([]);
@@ -300,6 +304,18 @@ function AutoTable({
     return 100;
   };
 
+  const onSort = (key) => {
+    // console.log('sort :', [[key, order.order.toUpperCase()]]);
+    if (order.order === 'asc') {
+      setOrder({ key, order: 'desc' });
+      setSort([[key, 'DESC'], defaultSort]);
+    } else {
+      setOrder({ key, order: 'asc' });
+      setSort([[key, 'ASC'], defaultSort]);
+    }
+    setDataComplete(false);
+  };
+
   // page change from input
   useEffect(() => {
     if (
@@ -332,6 +348,11 @@ function AutoTable({
   // table mount, create dynamic redux state
   useEffect(() => {
     dispatch(autoTableMount(ident));
+    // set defaultSort
+    if (defaultSort !== undefined) {
+      setSort([defaultSort]);
+      setOrder({ key: defaultSort[0][0], order: defaultSort[0][1].toLowerCase() });
+    }
   }, [ident]);
 
   useEffect(() => {
@@ -382,13 +403,16 @@ function AutoTable({
 
   // table refetch
   useEffect(() => {
+    // remove ['something', '=', '']
+    const adjustFilter = (oriFilter) => oriFilter.filter((item) => !(item[1] === '=' && item[2] === ''));
+
     if (!dataComplete) {
       // console.log('refetch');
       refetch(
         {
           limit: rowsPerPage,
           offset: curPage * rowsPerPage,
-          filter,
+          filter: adjustFilter(filter),
           sort,
         },
         ident,
@@ -448,6 +472,14 @@ function AutoTable({
                       style={{ minWidth: column.minWidth, width: column.width }}
                     >
                       <b>{column.name}</b>
+                      {column.sortable && (
+                        <TableSortLabel
+                          active={order.key === column.sortable}
+                          direction={order.key === column.sortable ? order.order : 'asc'}
+                          onClick={() => onSort(column.sortable)}
+                        />
+                      )}
+
                       {/* <div className={classes.column}>
                         <div className={labelMoveLeft(columnComponent, columns, column)}>
                           <b>{column.label}</b>
@@ -483,7 +515,7 @@ function AutoTable({
                           <React.Fragment key={`${row.id}-${column.name}`}>
                             <TableCell className={classes.tableColumnLeftSpacing} />
                             <TableCell align={column.align}>
-                              <Link to={value.path} className={classes.textLink} replace>
+                              <Link to={value.path} className={classes.textLink}>
                                 {column.format && typeof value.text === 'number'
                                   ? column.format(value.text)
                                   : value.text}
@@ -495,7 +527,10 @@ function AutoTable({
                       return (
                         <React.Fragment key={`${row.id}-${column.name}`}>
                           <TableCell className={classes.tableColumnLeftSpacing} />
-                          <TableCell align={column.align}>
+                          <TableCell
+                            align={column.align}
+                            className={column.colors && column.colors[value] && classes[column.colors[value]]}
+                          >
                             {column.format && typeof value === 'number' ? column.format(value) : value}
                           </TableCell>
                         </React.Fragment>

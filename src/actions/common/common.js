@@ -296,19 +296,30 @@ const fetchAllChallengesProblems = (token, classId) => async (dispatch) => {
   }
 };
 
-const fetchProblems = (token) => async (dispatch) => {
+const fetchProblems = (token, classId, browseParams, tableId = null) => async (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
     },
+    params: browseParamsTransForm(browseParams),
   };
 
   try {
     dispatch({ type: commonConstants.FETCH_PROBLEMS_START });
-    const res = await agent.get('/problem', config);
+    const res = await agent.get(`/class/${classId}/view/problem-set`, config);
+    const { data, total_count } = res.data.data;
     dispatch({
       type: commonConstants.FETCH_PROBLEMS_SUCCESS,
-      payload: res.data.data,
+      payload: data,
+    });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: data.map((item) => item.problem_id),
+        offset: browseParams.offset,
+      },
     });
   } catch (error) {
     dispatch({

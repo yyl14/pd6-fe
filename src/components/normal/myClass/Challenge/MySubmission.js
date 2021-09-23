@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import AlignedText from '../../../ui/AlignedText';
 import AutoTable from '../../../ui/AutoTable';
-import NoMatch from '../../../noMatch';
 import SimpleBar from '../../../ui/SimpleBar';
 import PageTitle from '../../../ui/PageTitle';
 import { readSubmission, readSubmissionDetail, readProblemScore } from '../../../../actions/myClass/problem';
@@ -31,13 +30,11 @@ export default function MySubmission() {
   const [snackbar, setSnackbar] = useState(false);
 
   useEffect(() => {
-    if (!loading.browseTasksUnderChallenge) {
-      dispatch(readProblemScore(authToken, problemId));
-    }
-  }, [authToken, dispatch, loading.browseTasksUnderChallenge, problemId]);
+    dispatch(readProblemScore(authToken, problemId));
+  }, [authToken, dispatch, problemId]);
 
   useEffect(() => {
-    if (submissions.allIds !== []) {
+    if (submissions.allIds) {
       submissions.allIds.map((id) => dispatch(readSubmissionDetail(authToken, id)));
     }
   }, [authToken, challengeId, dispatch, problemId, submissions]);
@@ -53,18 +50,8 @@ export default function MySubmission() {
     || problems.byId[problemId] === undefined
     || submissions.byId === undefined
     || judgments.byId === undefined
-    || problems.byId[problemId].score === undefined
   ) {
-    if (
-      loading.readSubmission
-      || loading.readSubmissionDetail
-      || loading.readProblemScore
-      || loading.browseTasksUnderChallenge
-      || loading.readProblemScore
-    ) {
-      return <GeneralLoading />;
-    }
-    return <NoMatch />;
+    return <GeneralLoading />;
   }
 
   return (
@@ -109,6 +96,19 @@ export default function MySubmission() {
             name: 'Status',
             align: 'center',
             type: 'string',
+            colors: {
+              'Waiting for judge': 'default',
+              'No Status': 'error',
+              Accepted: 'primary',
+              'Wrong Answer': 'error',
+              'Memory Limit Exceed': 'error',
+              'Time Limit Exceed': 'error',
+              'Runtime Error': 'error',
+              'Compile Error': 'error',
+              'Contact Manager': 'error',
+              'Forbidden Action': 'error',
+              'System Error': 'error',
+            },
           },
           {
             name: 'Score',
@@ -135,6 +135,7 @@ export default function MySubmission() {
         reduxDataToRows={(item) => {
           const lastJudgmentId = judgments.allIds.filter((key) => judgments.byId[key].submission_id === item.id)[0];
           return {
+            id: item.id,
             'Submission ID': item.id,
             Status: lastJudgmentId
               ? judgments.byId[lastJudgmentId].verdict
@@ -142,7 +143,7 @@ export default function MySubmission() {
                 .split(' ')
                 .map((word) => word[0].toUpperCase() + word.substring(1))
                 .join(' ')
-              : 'Waiting For Judge',
+              : 'Waiting for judge',
             Score: lastJudgmentId ? judgments.byId[lastJudgmentId].score : '-',
             'Used Time(ms)': lastJudgmentId ? judgments.byId[lastJudgmentId].total_time : '-',
             'Used Memory(kb)': lastJudgmentId ? judgments.byId[lastJudgmentId].max_memory : '-',

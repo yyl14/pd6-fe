@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // https://mathpix.com/docs/mathpix-markdown/overview
+// https://github.com/Mathpix/mathpix-markdown-it
 import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 import {
   Typography,
@@ -80,7 +81,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const courses = useSelector((state) => state.courses.byId);
   const problems = useSelector((state) => state.problem.byId);
   const testcases = useSelector((state) => state.testcases.byId);
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState(true);
 
   const assistingData = useSelector((state) => state.assistingData.byId);
 
@@ -157,7 +158,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       setSampleDataIds(samplesId);
       setTestcaseDataIds(testcasesId);
       if (testcasesId.length === 0) {
-        setStatus(false);
+        setStatus(true);
       } else {
         setStatus(!testcases[testcasesId[0]].is_disabled);
       }
@@ -166,8 +167,13 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
 
   useEffect(() => {
     dispatch(browseTestcase(authToken, problemId));
-    dispatch(browseAssistingData(authToken, problemId));
   }, [authToken, dispatch, problemId]);
+
+  useEffect(() => {
+    if (role === 'MANAGER') {
+      dispatch(browseAssistingData(authToken, problemId));
+    }
+  }, [authToken, dispatch, problemId, role]);
 
   if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
     return <GeneralLoading />;
@@ -186,7 +192,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       </SimpleBar>
       <SimpleBar title="Description">
         <MathpixLoader>
-          <MathpixMarkdown text={problems[problemId].description} />
+          <MathpixMarkdown text={problems[problemId].description} htmlTags />
         </MathpixLoader>
       </SimpleBar>
       <SimpleBar title="About Input and Output">

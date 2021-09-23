@@ -274,13 +274,17 @@ const MemberEdit = ({
 
   return (
     <div>
+      <Typography variant="body1">
+        Account: NTU Student ID, Institute Email or #Username (priority from high to low accordingly)
+      </Typography>
+      <br />
       <Card className={classNames.card} variant="outlined">
         <div className={classNames.editorCol}>
           <div className={classNames.editorItem}>
             <Typography variant="body1">TA</Typography>
           </div>
           <div className={classNames.editorItem}>
-            <Typography variant="caption">List of student ID</Typography>
+            <Typography variant="caption">List of Accounts</Typography>
           </div>
           <TextField
             className={classNames.textField}
@@ -288,6 +292,7 @@ const MemberEdit = ({
             onChange={(e) => handleChangeTA(e)}
             multiline
             rows={20}
+            placeholder="B01234567&#10;aaa@ntnu.edu.tw&#10;#pdogs"
           />
         </div>
         <div className={classNames.editorCol}>
@@ -295,7 +300,7 @@ const MemberEdit = ({
             <Typography variant="body1">Student</Typography>
           </div>
           <div className={classNames.editorItem}>
-            <Typography variant="caption">List of student ID</Typography>
+            <Typography variant="caption">List of Accounts</Typography>
           </div>
           <TextField
             className={classNames.textField}
@@ -303,6 +308,7 @@ const MemberEdit = ({
             onChange={(e) => handleChangeStudent(e)}
             multiline
             rows={20}
+            placeholder="B01234567&#10;aaa@ntnu.edu.tw&#10;#pdogs"
           />
         </div>
         <div className={classNames.editorCol}>
@@ -310,7 +316,7 @@ const MemberEdit = ({
             <Typography variant="body1">Guest</Typography>
           </div>
           <div className={classNames.editorItem}>
-            <Typography variant="caption">List of student ID</Typography>
+            <Typography variant="caption">List of Accounts</Typography>
           </div>
           <TextField
             className={classNames.textField}
@@ -318,6 +324,7 @@ const MemberEdit = ({
             onChange={(e) => handleChangeGuest(e)}
             multiline
             rows={20}
+            placeholder="B01234567&#10;aaa@ntnu.edu.tw&#10;#pdogs"
           />
         </div>
       </Card>
@@ -329,7 +336,6 @@ const MemberEdit = ({
           Save
         </Button>
       </div>
-
       <Dialog open={showUnsavedChangesDialog} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Unsaved Changes</Typography>
@@ -355,7 +361,6 @@ const MemberEdit = ({
           </div>
         </DialogActions>
       </Dialog>
-
       <Dialog open={showDuplicateIdentityDialog} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Duplicate Identity</Typography>
@@ -382,7 +387,6 @@ const MemberEdit = ({
           </Button>
         </DialogActions>
       </Dialog>
-
       <Dialog open={showErrorDetectedDialog} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Error Detected</Typography>

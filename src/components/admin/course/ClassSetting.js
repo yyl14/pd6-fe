@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import {
-  Typography, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField,
+  Typography,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Snackbar,
 } from '@material-ui/core';
-import {
-  fetchCourses, fetchClasses, renameClass, deleteClass,
-} from '../../../actions/admin/course';
+import { renameClass, deleteClass } from '../../../actions/admin/course';
 import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 import PageTitle from '../../ui/PageTitle';
@@ -23,10 +28,12 @@ const ClassSetting = () => {
   const courses = useSelector((state) => state.courses);
   const classes = useSelector((state) => state.classes);
   const loading = useSelector((state) => state.loading.admin.course);
+  const error = useSelector((state) => state.error.admin.course);
 
   const [showRenameDialog, setShowRenameDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [newClassName, setNewClassName] = useState('');
+  const [showSnackBar, setShowSnackBar] = useState(false);
 
   const getCourseType = (courseType) => {
     switch (courseType) {
@@ -39,9 +46,16 @@ const ClassSetting = () => {
     }
   };
 
-  const onRename = () => {
+  const renameClassSuccess = () => {
+    setNewClassName('');
     setShowRenameDialog(false);
-    dispatch(renameClass(authToken, classId, newClassName, false));
+  };
+  const closeSnackbar = () => {
+    setShowSnackBar(false);
+  };
+
+  const onRename = () => {
+    dispatch(renameClass(authToken, classId, newClassName, renameClassSuccess, () => setShowSnackBar(true)));
   };
   const onDelete = () => {
     setShowDeleteDialog(false);
@@ -124,12 +138,24 @@ const ClassSetting = () => {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowRenameDialog(false)}>Cancel</Button>
+          <Button
+            onClick={() => {
+              setShowRenameDialog(false);
+              setNewClassName('');
+            }}
+          >
+            Cancel
+          </Button>
           <Button onClick={onRename} color="secondary">
             Rename
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={showRenameDialog && showSnackBar}
+        onClose={closeSnackbar}
+        message={`Error: ${error.renameClass}`}
+      />
 
       <Dialog open={showDeleteDialog || loading.deleteClass} maxWidth="md">
         <DialogTitle>

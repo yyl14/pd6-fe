@@ -38,6 +38,7 @@ export default function ClassList() {
   const [hasError, setHasError] = useState(false);
 
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
+  const [showSnackBar, setShowSnackBar] = useState(false);
 
   useEffect(() => {
     if (!loading.addClass && !loading.renameClass && !loading.deleteClass) {
@@ -69,15 +70,26 @@ export default function ClassList() {
   const onClickSetting = () => {
     history.push(`/admin/course/course/${courseId}/setting`);
   };
-  const onAddCourse = (name) => {
-    setAddCourseName('');
-    // history.push(`/admin/course/course/${courseId}/class-list`);
-    dispatch(addCourse(authToken, name, getCourseType(addType).toUpperCase(), history, () => setHasError(true)));
-  };
-  const onAddClass = (name) => {
+
+  const addClassSuccess = () => {
     setAddClassName('');
     setShowAddClassDialog(false);
-    dispatch(addClass(authToken, courseId, name, false));
+  };
+  const addCourseSuccess = (newCourseId) => {
+    setAddCourseName('');
+    history.push(`/admin/course/course/${newCourseId}/class-list`);
+  };
+  const closeSnackbar = () => {
+    setShowSnackBar(false);
+  };
+
+  const onAddCourse = (name) => {
+    dispatch(
+      addCourse(authToken, name, getCourseType(addType).toUpperCase(), addCourseSuccess, () => setShowSnackBar(true)),
+    );
+  };
+  const onAddClass = (name) => {
+    dispatch(addClass(authToken, courseId, name, addClassSuccess, () => setShowSnackBar(true)));
   };
 
   if (courses.byId[courseId] === undefined || courses.byId[courseId].name === undefined) {
@@ -143,16 +155,29 @@ export default function ClassList() {
           </AlignedText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => history.push(`/admin/course/course/${courseId}/class-list`)}>Cancel</Button>
+          <Button
+            onClick={() => {
+              setAddCourseName('');
+              history.push(`/admin/course/course/${courseId}/class-list`);
+            }}
+          >
+            Cancel
+          </Button>
           <Button
             onClick={() => onAddCourse(addCourseName)}
             color="primary"
-            disabled={getCourseType(addType) === 'Unknown'}
+            disabled={getCourseType(addType) === 'Unknown' || addCourseName === ''}
           >
             Create
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={addType !== undefined && showSnackBar}
+        onClose={closeSnackbar}
+        message={`Error: ${error.addCourse}`}
+      />
+
       <Dialog open={showAddClassDialog || loading.addClass} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Create a new class</Typography>
@@ -169,13 +194,28 @@ export default function ClassList() {
           </AlignedText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowAddClassDialog(false)}>Cancel</Button>
-          <Button color="primary" onClick={() => onAddClass(addClassName)} disabled={loading.addClass}>
+          <Button
+            onClick={() => {
+              setShowAddClassDialog(false);
+              setAddClassName('');
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            color="primary"
+            onClick={() => onAddClass(addClassName)}
+            disabled={loading.addClass || addClassName === ''}
+          >
             Create
           </Button>
         </DialogActions>
       </Dialog>
-      <Snackbar open={hasError} onClose={() => setHasError(false)} message={`Error: ${error.addCourse}`} />
+      <Snackbar
+        open={showAddClassDialog && showSnackBar}
+        onClose={closeSnackbar}
+        message={`Error: ${error.addClass}`}
+      />
     </>
   );
 }

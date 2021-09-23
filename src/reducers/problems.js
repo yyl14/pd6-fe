@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { problemConstants, challengeConstants } from '../actions/myClass/constant';
+import { problemConstants, challengeConstants, submissionConstants } from '../actions/myClass/constant';
 import { commonConstants } from '../actions/common/constant';
 
 const byId = (state = {}, action) => {
@@ -11,9 +11,9 @@ const byId = (state = {}, action) => {
           ...acc,
           [item.id]: {
             ...item,
-            testcaseIds: [],
+            testcaseIds: state[item.id] ? state[item.id].testcaseIds : [],
             assistingDataIds: [],
-            score: state[data.id] ? state[data.id].score : '',
+            score: state[item.id] ? state[item.id].score : '',
           },
         }),
         state,
@@ -25,7 +25,7 @@ const byId = (state = {}, action) => {
         ...state,
         [data.id]: {
           ...data,
-          testcaseIds: [],
+          testcaseIds: state[data.id] ? state[data.id].testcaseIds : [],
           assistingDataIds: [],
           score: state[data.id] ? state[data.id].score : '',
         },
@@ -100,12 +100,37 @@ const byId = (state = {}, action) => {
       return data.reduce(
         (acc, problem) => ({
           ...acc,
-          [problem.id]: {
+          [problem.problem_id]: {
             ...problem,
+            ...state[problem.problem_id],
           },
         }),
         state,
       );
+    }
+
+    case problemConstants.BROWSE_TESTCASES_SUCCESS: {
+      const { problemId, testcases } = action.payload;
+      const testcaseIds = testcases.map((item) => item.id);
+      return {
+        ...state,
+        [problemId]: {
+          ...state[problemId],
+          testcaseIds,
+        },
+      };
+    }
+
+    case submissionConstants.BROWSE_TESTCASES_SUCCESS: {
+      const { problemId, testcases } = action.payload;
+      const testcaseIds = testcases.map((item) => item.id);
+      return {
+        ...state,
+        [problemId]: {
+          ...state[problemId],
+          testcaseIds,
+        },
+      };
     }
 
     default:
@@ -129,7 +154,7 @@ const allIds = (state = [], action) => {
 
     case commonConstants.FETCH_PROBLEMS_SUCCESS: {
       const data = action.payload;
-      return [...new Set([...data.map((item) => item.id), ...state])];
+      return [...new Set([...data.map((item) => item.problem_id), ...state])];
     }
 
     default:

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import moment from 'moment';
 import {
   Button, makeStyles, TextField, MenuItem, FormControl, Select, Snackbar,
 } from '@material-ui/core';
@@ -29,6 +30,9 @@ const useStyles = makeStyles(() => ({
     marginTop: '35px',
     marginRight: '-5px',
   },
+  snackbarWidth: {
+    width: '650px',
+  },
 }));
 
 /* This is a level 4 component (page component) */
@@ -48,8 +52,19 @@ export default function CodeSubmission() {
   const [lang, setLang] = useState([]);
   const authToken = useSelector((state) => state.auth.token);
 
-  const [langId, setLangId] = useState(-1);
+  const [langId, setLangId] = useState('');
   const [code, setCode] = useState('');
+
+  const [warningPopup, setWarningPopup] = useState(false);
+  const [currentTime] = useState(moment());
+
+  useEffect(() => {
+    if (challenges[challengeId] !== undefined) {
+      if (currentTime.isAfter(moment(challenges[challengeId].end_time))) {
+        setWarningPopup(true);
+      }
+    }
+  }, [challengeId, challenges, currentTime]);
 
   useEffect(() => {
     const enabledIds = submitLang.allIds.filter((id) => !submitLang.byId[id].is_disabled);
@@ -57,7 +72,11 @@ export default function CodeSubmission() {
     if (cookies.lang) {
       if (enabledIds.includes(Number(cookies.lang))) {
         setLangId(Number(cookies.lang));
+      } else if (enabledIds.length !== 0) {
+        setLangId(enabledIds[0]);
       }
+    } else if (enabledIds.length !== 0) {
+      setLangId(enabledIds[0]);
     }
   }, [cookies.lang, submitLang.allIds, submitLang.byId]);
 
@@ -94,16 +113,13 @@ export default function CodeSubmission() {
       <AlignedText text="Language" maxWidth="lg" childrenType="field">
         <FormControl variant="outlined" className={classNames.selectField}>
           <Select
-            labelId="sort"
-            id="sort"
+            labelId="lang"
+            id="lang"
             value={langId}
             onChange={(e) => {
               setLangId(e.target.value);
             }}
           >
-            <MenuItem key={-1} value="">
-              <em>None</em>
-            </MenuItem>
             {lang.map((key) => (
               <MenuItem key={submitLang.byId[key].id} value={submitLang.byId[key].id}>
                 {`${submitLang.byId[key].name} ${submitLang.byId[key].version}`}
@@ -135,6 +151,14 @@ export default function CodeSubmission() {
           Submit
         </Button>
       </div>
+      <Snackbar
+        open={warningPopup}
+        ContentProps={{
+          className: classNames.snackbarWidth,
+        }}
+        message="Submission over deadline will not be considered in score calculation."
+        onClose={() => setWarningPopup(false)}
+      />
     </>
   );
 }
