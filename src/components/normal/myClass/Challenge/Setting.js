@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions,
+  Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, makeStyles,
 } from '@material-ui/core';
 import moment from 'moment';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
@@ -15,8 +15,15 @@ import NoMatch from '../../../noMatch';
 import SettingEdit from './SettingEdit';
 import GeneralLoading from '../../../GeneralLoading';
 
+const useStyles = makeStyles(() => ({
+  duration: {
+    transform: 'translateY(-3px)',
+  },
+}));
+
 /* This is a level 4 component (page component) */
 export default function Setting() {
+  const classes = useStyles();
   const { courseId, classId, challengeId } = useParams();
   const history = useHistory();
 
@@ -70,7 +77,7 @@ export default function Setting() {
               <Typography variant="body1">{challenge.title}</Typography>
             </AlignedText>
             <AlignedText text="Duration" maxWidth="lg" childrenType="text">
-              <Typography variant="body1">
+              <Typography variant="body1" className={classes.duration}>
                 {moment(challenge.start_time).format('YYYY/MM/DD HH:mm')}
                 <ArrowRightIcon style={{ transform: 'translate(0, 5px)' }} />
                 {moment(challenge.end_time).format('YYYY/MM/DD HH:mm')}
