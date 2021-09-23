@@ -10,6 +10,7 @@ import FeedbackIcon from '@material-ui/icons/Feedback';
 import Normal from './normal';
 import Admin from './admin';
 import Account from './account';
+import User from './user';
 // import NoMatch from '../components/noMatch';
 
 import { getUserInfo } from '../actions/user/auth';
@@ -57,7 +58,8 @@ function Index() {
         history.push('/admin/course/course');
       } else if (user.role.indexOf('NORMAL') !== -1 || user.role === 'NORMAL') {
         if (user.classes.length !== 0) {
-          history.push(`/my-class/${user.classes[0].course_id}/${user.classes[0].class_id}/challenge`);
+          const sortedClasses = user.classes.sort((a, b) => b.class_name.localeCompare(a.class_name) || b.course_name.localeCompare(a.course_name));
+          history.push(`/my-class/${sortedClasses[0].course_id}/${sortedClasses[0].class_id}/challenge`);
         } else {
           history.push('/all-class');
         }
@@ -76,6 +78,7 @@ function Index() {
       <Switch>
         <Route path="/admin" component={Admin} />
         <Route path="/my-profile" component={Account} />
+        <Route exact path="/user-profile/:accountId" component={User} />
         <Route path="/" component={Normal} />
       </Switch>
       <Fab href="https://forms.gle/KaYJnXwgvsovzqVG7" target="_blank" className={classes.bugReport}><FeedbackIcon /></Fab>

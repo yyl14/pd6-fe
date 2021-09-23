@@ -39,7 +39,6 @@ export default function AllClassChallenge({
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
   const [arrow, setArrow] = useState(null);
-  const [TAicon, setTAicon] = useState();
 
   useEffect(() => {
     const goBackToChallenge = () => {
@@ -75,16 +74,7 @@ export default function AllClassChallenge({
                   icon: <Icon.Code />,
                   path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${id}`,
                 })),
-            ) /*
-              .concat(
-                essays.allIds
-                  .map((id) => essays.byId[id])
-                  .map(({ id, challenge_label }) => ({
-                    text: challenge_label,
-                    icon: <Icon.Paper />,
-                    path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/essay/${id}`,
-                  })),
-              ), */,
+            ),
           );
         } else {
           setItemList([
@@ -101,9 +91,6 @@ export default function AllClassChallenge({
       && challenges[challengeId] !== undefined
       && problems.byId[problemId] !== undefined
     ) {
-      // if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
-      //   setTAicon(<Icon.TA className={classNames.titleTA} />);
-      // }
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToProblem}>
           <Icon.ArrowBackRoundedIcon />
@@ -123,9 +110,6 @@ export default function AllClassChallenge({
         },
       ]);
     } else if (mode === 'submission_detail') {
-      // if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
-      //   setTAicon(<Icon.TA className={classNames.titleTA} />);
-      // }
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToSubmission}>
           <Icon.ArrowBackRoundedIcon />
@@ -189,23 +173,21 @@ export default function AllClassChallenge({
             <Typography variant="h4" className={classNames.titleText}>
               {title}
             </Typography>
-            {TAicon}
           </div>
           <Divider variant="middle" className={classNames.divider} />
           {display === 'unfold' && (
             <List>
               {itemList.map((item) => (
-                <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
-                  <ListItemIcon
-                    className={classNames.itemIcon}
-                    style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.text}
-                    className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
-                  />
+                <ListItem
+                  button
+                  key={item.text}
+                  onClick={() => history.push(item.path)}
+                  className={
+                    location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item
+                  }
+                >
+                  <ListItemIcon className={classNames.itemIcon}>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.text} className={classNames.itemText} />
                 </ListItem>
               ))}
             </List>

@@ -9,6 +9,7 @@ import Account from './sidebar/Account';
 import Course from './sidebar/Course';
 import System from './sidebar/System';
 import MyProfile from './sidebar/MyProfile';
+import UserProfile from './sidebar/UserProfile';
 
 import MyClass from './sidebar/MyClass';
 import Challenge from './sidebar/Challenge';
@@ -18,6 +19,7 @@ import Team from './sidebar/Team';
 import AllClass from './sidebar/AllClass';
 import AllClassChallenge from './sidebar/AllClassChallenge';
 import ProblemSet from './sidebar/ProblemSet';
+import ProblemSetChallenge from './sidebar/ProblemSetChallenge';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -63,11 +65,13 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 'auto',
     flex: '1',
     marginLeft: '10px',
+    marginRight: '7px',
+    width: '18px',
   },
   itemIcon: {
     flex: '1',
     width: '18px',
-    color: theme.palette.black.main,
+    color: 'inherit',
     marginLeft: '35px',
     marginRight: '-15px',
   },
@@ -84,13 +88,8 @@ const useStyles = makeStyles((theme) => ({
   addIconItemClicked: {
     color: theme.palette.primary.main,
   },
-  activeItemText: {
-    flex: '10',
+  active: {
     color: theme.palette.primary.main,
-    width: '30px',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
   },
 
   greyIcon: {
@@ -140,6 +139,12 @@ export default function Sidebar() {
       <Route exact path="/my-profile">
         <MyProfile classes={classes} history={history} location={location} mode="main" />
       </Route>
+
+      {/* {Other's Profile} */}
+      <Route exact path="/user-profile/:accountId">
+        <UserProfile classes={classes} history={history} location={location} mode="main" />
+      </Route>
+
       {/* {Admin} */}
       {/* {Course} */}
       <Route exact path="/admin/course/course/">
@@ -278,6 +283,12 @@ export default function Sidebar() {
       </Route>
       <Route exact path="/problem-set/:courseId/:classId">
         <ProblemSet classNames={classes} history={history} location={location} mode="main" />
+      </Route>
+      <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId">
+        <ProblemSetChallenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId">
+        <ProblemSetChallenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
 
       {/* {System} */}

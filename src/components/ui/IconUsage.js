@@ -14,14 +14,9 @@ const StyledPaper = withStyles({
   },
 })(Paper);
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     display: 'inline-block',
-  },
-  svg: {
-    '& path': {
-      fill: theme.palette.primary.main,
-    },
   },
 }));
 
@@ -30,7 +25,7 @@ export default function IconList() {
 
   return (
     <div>
-      <pre> visit /components/ui/IconUsage.js</pre>
+      <h1>svg icon</h1>
       <Grid className={classes.root}>
         <StyledPaper>
           <Icon.Dots style={{ color: 'orange' }} />
@@ -216,6 +211,17 @@ export default function IconList() {
           <Icon.Code />
           <p>Code</p>
         </StyledPaper>
+        <StyledPaper>
+          <Icon.Profile />
+          <p>Profile</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.Setting />
+          <p>Setting</p>
+        </StyledPaper>
+      </Grid>
+      <h1>MUI icon</h1>
+      <Grid className={classes.root}>
         <StyledPaper>
           <Icon.HistoryIcon />
           <p>HistoryIcon</p>

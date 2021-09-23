@@ -82,9 +82,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function FileUploadArea({
-  text, fileAcceptFormat = '.pdf', selectedFile, setSelectedFile,
+  text,
+  fileAcceptFormat = '.pdf',
+  selectedFile,
+  setSelectedFile,
+  multipleFiles = true,
 }) {
   const classes = useStyles();
+
+  useEffect(() => {
+    if (multipleFiles === false) {
+      if (selectedFile.length > 1) {
+        const newSelectedFile = selectedFile.slice(1);
+        setSelectedFile(newSelectedFile);
+      }
+    }
+  }, [multipleFiles, selectedFile, setSelectedFile]);
 
   const handleUploadFile = (e) => {
     const newFiles = Object.keys(e.target.files).map((key) => e.target.files[key]);
@@ -112,7 +125,7 @@ export default function FileUploadArea({
             type="file"
             accept={fileAcceptFormat}
             onChange={(e) => handleUploadFile(e)}
-            multiple
+            multiple={multipleFiles}
           />
           <Button
             className={classes.browseButton}

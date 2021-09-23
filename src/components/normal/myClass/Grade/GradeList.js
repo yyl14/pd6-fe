@@ -82,7 +82,7 @@ export default function GradeList() {
   const [inputTitle, setInputTitle] = useState('');
   const [selectedFile, setSelectedFile] = useState([]);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const [showSnackBar, setShowSnackBar] = useState(false);
   const [hasRequest, setHasRequest] = useState(false);
 
   useEffect(() => {
@@ -108,7 +108,7 @@ export default function GradeList() {
         setInputTitle('');
         setSelectedFile([]);
       } else {
-        setHasError(true);
+        setShowSnackBar(true);
       }
     } else if (showAddDialog && hasRequest && !loading.addClassGrade) {
       if (error.addClassGrade === null) {
@@ -122,7 +122,7 @@ export default function GradeList() {
           comment: '',
         });
       } else {
-        setHasError(true);
+        setShowSnackBar(true);
       }
     }
   }, [error, hasRequest, loading.addClassGrade, loading.importClassGrade, showAddDialog, showImportDialog]);
@@ -180,7 +180,7 @@ export default function GradeList() {
   };
 
   const handleCloseError = () => {
-    setHasError(false);
+    setShowSnackBar(false);
     setHasRequest(false);
   };
 
@@ -272,8 +272,7 @@ export default function GradeList() {
           id: item.id,
           Username: {
             text: accounts.byId[item.receiver_id] ? accounts.byId[item.receiver_id].username : '',
-            path: `/my-class/${courseId}/${classId}/grade`,
-            // TODO: other's profile
+            path: `/user-profile/${accounts.byId[item.receiver_id].id}`,
           },
           'Student ID': accounts.byId[item.receiver_id] ? accounts.byId[item.receiver_id].student_id : '',
           'Real Name': accounts.byId[item.receiver_id] ? accounts.byId[item.receiver_id].real_name : '',
@@ -332,7 +331,7 @@ export default function GradeList() {
       </Dialog>
       <Snackbar
         severity="error"
-        open={showAddDialog && hasError}
+        open={showAddDialog && showSnackBar}
         onClose={handleCloseError}
         message={`Error: ${error.addClassGrade}`}
       />
@@ -401,7 +400,7 @@ export default function GradeList() {
       </Dialog>
       <Snackbar
         severity="error"
-        open={showImportDialog && hasError}
+        open={showImportDialog && showSnackBar}
         onClose={handleCloseError}
         message={`Error: ${error.importClassGrade}`}
       />

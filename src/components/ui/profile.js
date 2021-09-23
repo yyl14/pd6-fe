@@ -5,6 +5,7 @@ const useStyles = makeStyles((theme) => ({
   mainContent: {
     position: 'relative',
     width: '222px',
+    height: '187.78px',
     marginBottom: '19px',
     textAlign: 'center',
   },
@@ -12,10 +13,11 @@ const useStyles = makeStyles((theme) => ({
     width: '222px',
     '&:hover $image': {
       opacity: '0.3',
+      transition: 'opacity 0.3s',
     },
     '&:hover $overlapLinks': {
       opacity: '1',
-      transition: 'transform 0.25s',
+      transition: ['transform 0.25s', 'opacity 0.25s'],
       transform: 'translateY(55px)',
     },
   },
@@ -35,22 +37,15 @@ const useStyles = makeStyles((theme) => ({
   overlapLinks: {
     position: 'absolute',
     width: '100%',
-    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: '1',
     opacity: '0',
-    transition: 'opacity 0.25s',
+    transition: ['transform 0.25s', 'opacity 0.25s'],
     transform: 'translateY(80px)',
   },
-  Facebook_link: {
-    margin: '7.5px',
-  },
-  Github_link: {
-    margin: '7.5px',
-  },
-  Linkedin_link: {
-    margin: '7.5px',
+  socialLink: {
+    margin: '5px',
   },
   name: {
     fontWeight: 'bold',
@@ -74,15 +69,21 @@ export default function Profile({
       <div className={classes.mainContent}>
         <div className={classes.imageAndLinks}>
           <div className={classes.overlapLinks}>
-            <a href={FB_link} className={classes.Facebook_link}>
-              <img src="../../../images/Facebook.png" alt="FacebookIcon" />
-            </a>
-            <a href={Github_link} className={classes.Github_link}>
-              <img src="../../../images/Github.png" alt="GithubIcon" />
-            </a>
-            <a href={Linkedin_link} className={classes.Linkedin_link}>
-              <img src="../../../images/Linkedin.png" alt="LinkedinIcon" />
-            </a>
+            {FB_link && (
+              <a href={FB_link} className={classes.socialLink}>
+                <img src="../../../images/Facebook.png" alt="FacebookIcon" />
+              </a>
+            )}
+            {Github_link && (
+              <a href={Github_link} className={classes.socialLink}>
+                <img src="../../../images/Github.png" alt="GithubIcon" />
+              </a>
+            )}
+            {Linkedin_link && (
+              <a href={Linkedin_link} className={classes.socialLink}>
+                <img src="../../../images/Linkedin.png" alt="LinkedinIcon" />
+              </a>
+            )}
           </div>
           <div className={classes.image} style={{ backgroundImage: `url(${img_url})` }} />
         </div>

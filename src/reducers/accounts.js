@@ -1,10 +1,23 @@
 import { combineReducers } from 'redux';
 import { accountConstants, systemConstants } from '../actions/admin/constant';
 import { gradeConstants, submissionConstants, challengeConstants } from '../actions/myClass/constant';
+import { userConstants } from '../actions/user/constants';
 import { commonConstants } from '../actions/common/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
+    case userConstants.READ_OTHERS_ACCOUNT_SUCCESS: {
+      return {
+        ...state,
+        [action.payload.id]: {
+          ...action.payload,
+          studentCard: [],
+          gradeIds: [],
+          pendingStudentCard: [],
+        },
+      };
+    }
+
     case accountConstants.FETCH_ACCOUNTS_SUCCESS: {
       return action.payload.reduce(
         (acc, item) => ({
@@ -16,7 +29,7 @@ const byId = (state = {}, action) => {
             pendingStudentCard: [],
           },
         }),
-        {},
+        state,
       );
     }
     case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
@@ -167,7 +180,7 @@ const byId = (state = {}, action) => {
 const allIds = (state = [], action) => {
   switch (action.type) {
     case accountConstants.FETCH_ACCOUNTS_SUCCESS: {
-      return action.payload.map((item) => item.id);
+      return [...new Set([...action.payload.map((item) => item.id), ...state])];
     }
     case systemConstants.FETCH_ACCESS_LOG_SUCCESS: {
       const { accounts } = action.payload;
@@ -175,7 +188,8 @@ const allIds = (state = [], action) => {
     }
 
     case commonConstants.FETCH_ACCOUNT_SUCCESS: {
-      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+      const { id } = action.payload;
+      return [...new Set([id, ...state])];
     }
 
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
@@ -185,7 +199,11 @@ const allIds = (state = [], action) => {
 
     case commonConstants.GET_ACCOUNT_BATCH_SUCCESS: {
       const { accountId } = action.payload;
-      return state.includes(accountId) ? state : state.concat([accountId]);
+      return [...new Set([accountId, ...state])];
+    }
+
+    case userConstants.READ_OTHERS_ACCOUNT_SUCCESS: {
+      return [...new Set([action.payload.id, ...state])];
     }
 
     default:
