@@ -259,38 +259,6 @@ const editPassword = (token, id, newPassword) => (dispatch) => {
     });
 };
 
-// // SM: fetch all accounts
-// const fetchAccounts = (token, browseParams, tableId = null) => async (dispatch) => {
-//   try {
-//     dispatch({ type: accountConstants.FETCH_ACCOUNTS_START });
-//     const config = {
-//       headers: { 'auth-token': token },
-//       params: browseParamsTransForm(browseParams),
-//     };
-//     const res = await agent.get('/account', config);
-//     const { data, total_count } = res.data.data;
-
-//     dispatch({
-//       type: accountConstants.FETCH_ACCOUNTS_SUCCESS,
-//       payload: data,
-//     });
-//     dispatch({
-//       type: autoTableConstants.AUTO_TABLE_UPDATE,
-//       payload: {
-//         tableId,
-//         totalCount: total_count,
-//         dataIds: data.map((item) => item.id),
-//         offset: browseParams.offset,
-//       },
-//     });
-//   } catch (error) {
-//     dispatch({
-//       type: accountConstants.FETCH_ACCOUNTS_FAIL,
-//       error,
-//     });
-//   }
-// };
-
 const browsePendingStudentCards = (token, accountId) => async (dispatch) => {
   dispatch({ type: accountConstants.BROWSE_PENDING_STUDENT_CARDS_START });
   try {
@@ -362,7 +330,6 @@ export {
   fetchStudentCards,
   addStudentCard,
   editPassword,
-  // fetchAccounts,
   browsePendingStudentCards,
   resendEmailVerification,
   deletePendingStudentCard,
