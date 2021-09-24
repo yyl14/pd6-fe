@@ -1,26 +1,22 @@
 import { combineReducers } from 'redux';
 import { submissionConstants, problemConstants } from '../actions/myClass/constant';
+import { viewConstants } from '../actions/api/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    case submissionConstants.FETCH_ALL_SUBMISSIONS_SUCCESS: {
+    case viewConstants.BROWSE_SUBMISSION_UNDER_CLASS_SUCCESS: {
       const { data } = action.payload;
-      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.submissions);
+      return data.submissions.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
     case submissionConstants.FETCH_SUBMISSION_SUCCESS: {
       const { submissionId, data } = action.payload;
       return {
         ...state,
-        [parseInt(submissionId, 10)]: data,
+        [Number(submissionId)]: data,
       };
     }
     case problemConstants.READ_SUBMISSION_SUCCESS: {
       return action.payload.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), {});
-    }
-
-    case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
-      const { data } = action.payload;
-      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
 
     default:
@@ -30,20 +26,16 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
+    case viewConstants.BROWSE_SUBMISSION_UNDER_CLASS_SUCCESS: {
+      const { data } = action.payload;
+      return [...new Set([...data.submissions.map((item) => item.id), ...state])];
+    }
     case problemConstants.READ_SUBMISSION_SUCCESS: {
       return action.payload.map((item) => item.id);
-    }
-    case submissionConstants.FETCH_ALL_SUBMISSIONS_SUCCESS: {
-      const { data } = action.payload;
-      return data.map((item) => item.id);
     }
     case submissionConstants.FETCH_SUBMISSION_SUCCESS: {
       const { submissionId } = action.payload;
       return state.includes(Number(submissionId)) ? state : state.concat([Number(submissionId)]);
-    }
-    case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
-      const { data } = action.payload;
-      return [...new Set([...data.map((item) => item.id), ...state])];
     }
 
     default:
