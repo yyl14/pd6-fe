@@ -57,12 +57,15 @@ const byId = (state = {}, action) => {
     }
 
     case commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_SUCCESS: {
-      const { classId, data } = action.payload;
+      const {
+        classId,
+        data: { classMembers },
+      } = action.payload;
       return {
         ...state,
         [classId]: {
           ...state[classId],
-          memberIds: data.map((item) => item.member_id),
+          memberIds: classMembers.map((item) => item.id),
           gradeIds: state[classId] ? state[classId].gradeIds : [],
           teamIds: state[classId] ? state[classId].teamIds : [],
           challengeIds: state[classId] ? state[classId].challengeIds : [],

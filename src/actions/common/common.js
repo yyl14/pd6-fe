@@ -69,9 +69,24 @@ const fetchClassMemberWithAccountReferral = (token, classId) => async (dispatch)
     };
     dispatch({ type: commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_START });
     const res = await agent.get(`/class/${classId}/member/account-referral`, config);
+    const { data } = res.data;
     dispatch({
       type: commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_SUCCESS,
-      payload: { classId, data: res.data.data },
+      payload: {
+        classId,
+        data: {
+          classMembers: data.map(({ member_id, member_role }) => ({
+            id: `${classId}-${member_id}`,
+            account_id: member_id,
+            class_id: classId,
+            role: member_role,
+          })),
+          accounts: data.map(({ member_id, member_referral }) => ({
+            id: member_id,
+            referral: member_referral,
+          })),
+        },
+      },
     });
   } catch (error) {
     dispatch({

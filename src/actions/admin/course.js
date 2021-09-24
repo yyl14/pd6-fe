@@ -37,30 +37,6 @@ export const addCourse = (token, name, type, onSuccess, onError) => async (dispa
     });
     onError();
   }
-
-  // agent
-  //   .post('/course', body, config)
-  //   .then((res) => {
-  //     const { data } = res.data;
-  //     const { id } = data;
-  //     dispatch({
-  //       type: courseConstants.ADD_COURSE_SUCCESS,
-  //       payload: {
-  //         courseId: id,
-  //         data: {
-  //           id,
-  //           name,
-  //           type,
-  //           is_hidden: false,
-  //           is_deleted: false,
-  //         },
-  //       },
-  //     });
-  //     history.push(`/admin/course/course/${id}/class-list`);
-  //   })
-  //   .catch((error) => {
-  //     dispatch({ type: courseConstants.ADD_COURSE_FAIL, error });
-  //   });
 };
 
 export const renameCourse = (token, courseId, name, onSuccess, onError) => async (dispatch) => {

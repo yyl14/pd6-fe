@@ -5,7 +5,7 @@ import moment from 'moment';
 
 // import DateRangePicker from '../../../ui/DateRangePicker';
 import { fetchAllChallengesProblems } from '../../../../actions/common/common';
-import { fetchClassSubmissions } from '../../../../actions/myClass/submission';
+import { browseSubmissionUnderClass } from '../../../../actions/api/view';
 import AutoTable from '../../../ui/AutoTable';
 import PageTitle from '../../../ui/PageTitle';
 
@@ -15,30 +15,29 @@ import GeneralLoading from '../../../GeneralLoading';
 /* This is a level 4 component (page component) */
 export default function SubmissionList() {
   const { courseId, classId } = useParams();
-  const allClass = useSelector((state) => state.classes.byId);
-  const courses = useSelector((state) => state.courses.byId);
-  const loading = useSelector((state) => state.loading.myClass.submissions);
-  const error = useSelector((state) => state.error.myClass.submissions);
-  const accountError = useSelector((state) => state.error.common.common.fetchAccount);
+  const classes = useSelector((state) => state.classes);
+  const courses = useSelector((state) => state.courses);
+  const loading = useSelector((state) => state.loading);
+  const viewError = useSelector((state) => state.error.api.view);
   const commonLoading = useSelector((state) => state.loading.common.common);
   const submissions = useSelector((state) => state.submissions);
-  const authToken = useSelector((state) => state.auth.token);
   const accounts = useSelector((state) => state.accounts);
   const challenges = useSelector((state) => state.challenges);
   const problems = useSelector((state) => state.problem);
   const judgments = useSelector((state) => state.judgments);
+  const authToken = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchAllChallengesProblems(authToken, classId));
   }, [authToken, classId, dispatch]);
 
-  if (courses[courseId] === undefined || allClass[classId] === undefined || submissions.allIds === undefined) {
+  if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
     if (
       commonLoading.fetchCourse
       || commonLoading.fetchClass
-      || commonLoading.fetchAllChallengesProblems
-      || loading.fetchClassSubmissions
+      // || commonLoading.fetchAllChallengesProblems
+      // || loading.fetchClassSubmissions
     ) {
       return <GeneralLoading />;
     }
@@ -47,7 +46,7 @@ export default function SubmissionList() {
 
   return (
     <>
-      <PageTitle text={`${courses[courseId].name} ${allClass[classId].name} / Submission`} />
+      <PageTitle text={`${courses.byId[courseId].name} ${classes.byId[classId].name} / Submission`} />
       <AutoTable
         ident={`Class Submission Table ${classId}`}
         hasFilter
@@ -58,58 +57,41 @@ export default function SubmissionList() {
             type: 'TEXT',
             operation: '=',
           },
-          // {
-          //   reduxStateId: 'username',
-          //   label: 'Username',
-          //   type: 'TEXT',
-          //   operation: 'LIKE',
-          // },
-          // {
-          //   reduxStateId: 'student_id',
-          //   label: 'Student ID',
-          //   type: 'TEXT',
-          //   operation: 'LIKE',
-          // },
-          // {
-          //   reduxStateId: 'real_name',
-          //   label: 'Real Name',
-          //   type: 'TEXT',
-          //   operation: 'LIKE',
-          // },
-          // {
-          //   reduxStateId: 'status',
-          //   label: 'Status',
-          //   type: 'ENUM',
-          //   operation: 'IN',
-          //   options: [
-          //     { value: 'Accepted', label: 'Accepted' },
-          //     { value: 'Wrong Answer', label: 'Wrong Answer' },
-          //     { value: 'Memory Limit Exceed', label: 'Memory Limit Exceed' },
-          //     { value: 'Time Limit Exceed', label: 'Time Limit Exceed' },
-          //     { value: 'Runtime Error', label: 'Runtime Error' },
-          //     { value: 'Compile Error', label: 'Compile Error' },
-          //     { value: 'Other - Contact Staff', label: 'Other - Contact Staff' },
-          //     { value: 'Restricted function', label: 'Restricted function' },
-          //     { value: 'System Error', label: 'System Error' },
-          //     { value: 'Waiting for judge', label: 'Waiting for judge' },
-          //   ],
-          // },
-          // {
-          //   reduxStateId: 'challenge_id',
-          //   label: 'Challenge',
-          //   type: 'ENUM',
-          //   operation: 'IN',
-          //   options: allClass[classId].challengeIds.map((id) => ({
-          //     value: id,
-          //     label: challenges.byId[id].title,
-          //   })),
-          // },
+          {
+            reduxStateId: 'username',
+            label: 'Username',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          {
+            reduxStateId: 'student_id',
+            label: 'Student ID',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          {
+            reduxStateId: 'real_name',
+            label: 'Real Name',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+
+          {
+            reduxStateId: 'challenge_id',
+            label: 'Challenge',
+            type: 'ENUM',
+            operation: 'IN',
+            options: classes.byId[classId].challengeIds.map((id) => ({
+              value: id,
+              label: challenges.byId[id].title,
+            })),
+          },
           {
             reduxStateId: 'problem_id',
             label: 'Problem',
             type: 'ENUM',
             operation: 'IN',
-            options: allClass[classId].challengeIds
+            options: classes.byId[classId].challengeIds
               .map((id) => problems.allIds.filter((problemId) => problems.byId[problemId].challenge_id === id))
               .flat()
               .map((problemId) => ({
@@ -118,16 +100,34 @@ export default function SubmissionList() {
               })),
           },
           {
-            reduxStateId: 'submit_time',
-            label: 'Time',
-            type: 'DATE',
-            operation: 'LIKE',
+            reduxStateId: 'status',
+            label: 'Status',
+            type: 'ENUM',
+            operation: 'IN',
+            options: [
+              { value: 'Accepted', label: 'Accepted' },
+              { value: 'Wrong Answer', label: 'Wrong Answer' },
+              { value: 'Memory Limit Exceed', label: 'Memory Limit Exceed' },
+              { value: 'Time Limit Exceed', label: 'Time Limit Exceed' },
+              { value: 'Runtime Error', label: 'Runtime Error' },
+              { value: 'Compile Error', label: 'Compile Error' },
+              { value: 'Other - Contact Staff', label: 'Other - Contact Staff' },
+              { value: 'Restricted function', label: 'Restricted function' },
+              { value: 'System Error', label: 'System Error' },
+              { value: 'Waiting for judge', label: 'Waiting for judge' },
+            ],
           },
+          // {
+          //   reduxStateId: 'submit_time',
+          //   label: 'Time',
+          //   type: 'DATE',
+          //   operation: 'LIKE',
+          // },
         ]}
         refetch={(browseParams, ident) => {
-          dispatch(fetchClassSubmissions(authToken, browseParams, ident, classId));
+          dispatch(browseSubmissionUnderClass(authToken, classId, browseParams, ident));
         }}
-        refetchErrors={[error.fetchClassSubmissions, accountError]}
+        refetchErrors={[viewError.browseSubmissionUnderClass]}
         columns={[
           {
             name: 'ID',
