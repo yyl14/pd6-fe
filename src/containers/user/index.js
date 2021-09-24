@@ -13,12 +13,11 @@ function User() {
   // const history = useHistory();
   // const location = useLocation();
   const authToken = useSelector((state) => state.user.token);
-  const accounts = useSelector((state) => state.accounts.byId);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(readAccount(authToken, accountId));
-  }, [accountId, accounts, authToken, dispatch]);
+  }, [accountId, authToken, dispatch]);
 
   return (
     <div>
