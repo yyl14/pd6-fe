@@ -71,6 +71,7 @@ const MemberEdit = ({
 }) => {
   const classNames = useStyles();
 
+  const accounts = useSelector((state) => state.accounts);
   const members = useSelector((state) => state.classMembers);
   const error = useSelector((state) => state.error.common.common);
 
@@ -132,7 +133,7 @@ const MemberEdit = ({
           .join('\n'),
       );
     }
-  }, [classId, classes.byId, error.fetchClassMemberWithAccountReferral, members.byId]);
+  }, [accounts.byId, classId, classes.byId, error.fetchClassMemberWithAccountReferral, members.byId]);
 
   // block user leaving current page through header and sidebar links (if contents have been changed)
   useEffect(() => {

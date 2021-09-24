@@ -15,6 +15,7 @@ const byId = (state = {}, action) => {
     case viewConstants.BROWSE_CLASS_MEMBER_SUCCESS:
     case commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_SUCCESS: {
       const { classMembers } = action.payload.data;
+
       return classMembers.reduce(
         (acc, item) => ({
           ...acc,

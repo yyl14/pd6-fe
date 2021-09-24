@@ -43,7 +43,7 @@ const browseAccessLog = (token, browseParams, tableId = null) => async (dispatch
       payload: {
         tableId,
         totalCount: total_count,
-        dataIds: data.map((item) => item.submission_id),
+        dataIds: data.map((item) => item.access_log_id),
         offset: browseParams.offset,
       },
     });
@@ -110,27 +110,29 @@ const browseClassMember = (token, classId, browseParams, tableId = null) => asyn
     const res = await agent.get(`/class/${classId}/view/member`, config);
     const { data, total_count } = res.data.data;
     dispatch({
-      type: viewConstants.BROWSE_CLASS_MEMBER_START,
-      data: {
-        classMembers: data.map(({
-          account_id, class_id, role, abbreviated_name,
-        }) => ({
-          id: `${class_id}-${account_id}`,
-          account_id,
-          class_id,
-          role,
-          abbreviated_name,
-        })),
-        accounts: data.map(({
-          account_id, username, real_name, student_id,
-        }) => ({
-          id: account_id,
-          username,
-          real_name,
-          student_id,
-        })),
+      type: viewConstants.BROWSE_CLASS_MEMBER_SUCCESS,
+      payload: {
+        data: {
+          classMembers: data.map(({
+            account_id, class_id, role, abbreviated_name,
+          }) => ({
+            id: `${class_id}-${account_id}`,
+            account_id,
+            class_id,
+            role,
+            institute_abbreviated_name: abbreviated_name,
+          })),
+          accounts: data.map(({
+            account_id, username, real_name, student_id,
+          }) => ({
+            id: account_id,
+            username,
+            real_name,
+            student_id,
+          })),
+        },
+        classId,
       },
-      classId,
     });
     dispatch({
       type: autoTableConstants.AUTO_TABLE_UPDATE,
@@ -162,31 +164,33 @@ const browseSubmissionUnderClass = (token, classId, browseParams, tableId = null
     const { data, total_count } = res.data.data;
     dispatch({
       type: viewConstants.BROWSE_SUBMISSION_UNDER_CLASS_SUCCESS,
-      data: {
-        submissions: data.map(({
-          submission_id, account_id, challenge_id, problem_id, verdict, submit_time,
-        }) => ({
-          id: submission_id,
-          account_id,
-          challenge_id,
-          problem_id,
-          verdict,
-          submit_time,
-        })),
-        accounts: data.map(({
-          account_id, username, real_name, student_id,
-        }) => ({
-          id: account_id,
-          username,
-          real_name,
-          student_id,
-        })),
-        challenges: data.map(({ challenge_id, challenge_title }) => ({
-          id: challenge_id,
-          title: challenge_title,
-        })),
+      payload: {
+        data: {
+          submissions: data.map(({
+            submission_id, account_id, challenge_id, problem_id, verdict, submit_time,
+          }) => ({
+            id: submission_id,
+            account_id,
+            challenge_id,
+            problem_id,
+            verdict,
+            submit_time,
+          })),
+          accounts: data.map(({
+            account_id, username, real_name, student_id,
+          }) => ({
+            id: account_id,
+            username,
+            real_name,
+            student_id,
+          })),
+          challenges: data.map(({ challenge_id, challenge_title }) => ({
+            id: challenge_id,
+            title: challenge_title,
+          })),
+        },
+        classId,
       },
-      classId,
     });
     dispatch({
       type: autoTableConstants.AUTO_TABLE_UPDATE,
@@ -205,9 +209,6 @@ const browseSubmissionUnderClass = (token, classId, browseParams, tableId = null
   }
 };
 
-export default {
-  browseAccessLog,
-  browseAccountWithDefaultStudentId,
-  browseClassMember,
-  browseSubmissionUnderClass,
+export {
+  browseAccessLog, browseAccountWithDefaultStudentId, browseClassMember, browseSubmissionUnderClass,
 };
