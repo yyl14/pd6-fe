@@ -86,6 +86,9 @@ const useStyles = makeStyles((theme) => ({
       background: theme.palette.grey[300],
     },
   },
+  default: { color: theme.palette.black.dark },
+  error: { color: theme.palette.secondary.main },
+  primary: { color: theme.palette.primary.main },
 }));
 
 export default function SimpleTable({
@@ -212,7 +215,11 @@ export default function SimpleTable({
                       );
                     }
                     return (
-                      <TableCell key={column.id} align={column.align}>
+                      <TableCell
+                        key={column.id}
+                        align={column.align}
+                        className={column.colors && column.colors[value] && classes[column.colors[value]]}
+                      >
                         {column.format && typeof value === 'number' ? column.format(value) : value}
                       </TableCell>
                     );

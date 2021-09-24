@@ -176,30 +176,17 @@ export default function SubmissionDetail() {
 
   useEffect(() => {
     if (sampleDataIds && testcaseDataIds && judgeCases.allIds) {
+      const filteredJudgeCases = judgeCases.allIds.filter((key) => judgeCases.byId[key].judgment_id === judgmentId);
       setTableData(
         sampleDataIds
           .concat(testcaseDataIds)
           .map((id) => ({
             id,
             no: transformTestcase(id),
-            time: judgeCases.allIds
-              .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id ? judgeCases.byId[id].time_lapse : '')),
-            memory: judgeCases.allIds
-              .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id ? judgeCases.byId[id].peak_memory : '')),
-            status: judgeCases.allIds
-              .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id
-                ? judgeCases.byId[id].verdict
-                  .toLowerCase()
-                  .split(' ')
-                  .map((word) => word[0].toUpperCase() + word.substring(1))
-                  .join(' ')
-                : '')),
-            score: judgeCases.allIds
-              .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id ? judgeCases.byId[id].score : '')),
+            time: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].time_lapse : '',
+            memory: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].peak_memory : '',
+            status: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].verdict : '',
+            score: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].score : '',
           }))
           .sort((a, b) => {
             if (!a.no.includes('sample') && b.no.includes('sample')) return 1;
@@ -220,7 +207,6 @@ export default function SubmissionDetail() {
           }),
       );
     }
-    console.log(tableData);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [judgeCases.allIds, judgeCases.byId, judgmentId, sampleDataIds, testcaseDataIds, transformTestcase]);
@@ -252,8 +238,6 @@ export default function SubmissionDetail() {
     dispatch(rejudgeSubmission(authToken, submissionId));
     setPopUp(false);
   };
-
-  console.log(judgments);
 
   return (
     <>
@@ -307,16 +291,12 @@ export default function SubmissionDetail() {
           {judgments[judgmentId] ? (
             <div>
               {judgments[judgmentId].verdict === 'Accepted' ? (
-                <Typography variant="body1">
-                  {judgments[judgmentId].verdict.charAt(0).concat(judgments[judgmentId].verdict.slice(1).toLowerCase())}
+                <Typography variant="body1" color="primary">
+                  {judgments[judgmentId].verdict}
                 </Typography>
               ) : (
                 <Typography variant="body1" color="secondary">
-                  {judgments[judgmentId].verdict
-                    .toLowerCase()
-                    .split(' ')
-                    .map((word) => word[0].toUpperCase() + word.substring(1))
-                    .join(' ')}
+                  {judgments[judgmentId].verdict}
                 </Typography>
               )}
             </div>
@@ -377,6 +357,19 @@ export default function SubmissionDetail() {
               align: 'center',
               width: 600,
               type: 'string',
+              colors: {
+                'Waiting for judge': 'default',
+                'No Status': 'error',
+                Accepted: 'primary',
+                'Wrong Answer': 'error',
+                'Memory Limit Exceed': 'error',
+                'Time Limit Exceed': 'error',
+                'Runtime Error': 'error',
+                'Compile Error': 'error',
+                'Contact Manager': 'error',
+                'Forbidden Action': 'error',
+                'System Error': 'error',
+              },
             },
             {
               id: 'score',
