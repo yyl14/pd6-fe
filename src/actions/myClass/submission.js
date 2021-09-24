@@ -121,29 +121,29 @@ const fetchSubmission = (token, submissionId) => (dispatch) => {
     });
 };
 
-const fetchJudgement = (token, submissionId) => (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
-  dispatch({ type: submissionConstants.FETCH_JUDGEMENT_START });
+// const fetchJudgement = (token, submissionId) => (dispatch) => {
+//   const config = {
+//     headers: {
+//       'auth-token': token,
+//     },
+//   };
+//   dispatch({ type: submissionConstants.FETCH_JUDGEMENT_START });
 
-  agent
-    .get(`/submission/${submissionId}/judgment`, config)
-    .then((res) => {
-      dispatch({
-        type: submissionConstants.FETCH_JUDGEMENT_SUCCESS,
-        payload: { submissionId, data: res.data.data },
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        type: submissionConstants.FETCH_JUDGEMENT_FAIL,
-        error,
-      });
-    });
-};
+//   agent
+//     .get(`/submission/${submissionId}/judgment`, config)
+//     .then((res) => {
+//       dispatch({
+//         type: submissionConstants.FETCH_JUDGEMENT_SUCCESS,
+//         payload: { submissionId, data: res.data.data },
+//       });
+//     })
+//     .catch((error) => {
+//       dispatch({
+//         type: submissionConstants.FETCH_JUDGEMENT_FAIL,
+//         error,
+//       });
+//     });
+// };
 
 // fetch latest judgement
 const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
@@ -212,27 +212,6 @@ const browseTestcases = (token, problemId) => async (dispatch) => {
   }
 };
 
-const getAccountBatch = (token, accountId) => async (dispatch) => {
-  dispatch({ type: submissionConstants.GET_ACCOUNT_BATCH_START });
-  const config = {
-    headers: { 'auth-token': token },
-    params: { account_ids: JSON.stringify([accountId]) },
-  };
-  try {
-    const res = await agent.get('/account-summary/batch', config);
-
-    dispatch({
-      type: submissionConstants.GET_ACCOUNT_BATCH_SUCCESS,
-      payload: { data: res.data.data[0], accountId },
-    });
-  } catch (error) {
-    dispatch({
-      type: submissionConstants.GET_ACCOUNT_BATCH_FAIL,
-      error,
-    });
-  }
-};
-
 const rejudgeSubmission = (token, submissionId) => async (dispatch) => {
   const config = {
     headers: {
@@ -255,10 +234,9 @@ const rejudgeSubmission = (token, submissionId) => async (dispatch) => {
 export {
   fetchClassSubmissions,
   fetchSubmission,
-  fetchJudgement,
+  // fetchJudgement,
   readSubmissionDetail,
   browseJudgeCases,
   browseTestcases,
-  getAccountBatch,
   rejudgeSubmission,
 };

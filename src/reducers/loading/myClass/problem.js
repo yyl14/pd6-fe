@@ -24,10 +24,26 @@ const initialState = {
   rejudgeSubmission: false,
   browseTestcases: false,
   rejudgeProblem: false,
+  viewMySubmissionUnderProblem: false,
 };
 
 export default function problem(state = initialState, action) {
   switch (action.type) {
+    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_START:
+      return {
+        ...state,
+        viewMySubmissionUnderProblem: true,
+      };
+    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS:
+      return {
+        ...state,
+        viewMySubmissionUnderProblem: false,
+      };
+    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_FAIL:
+      return {
+        ...state,
+        viewMySubmissionUnderProblem: false,
+      };
     case problemConstants.READ_PROBLEM_START:
       return {
         ...state,
