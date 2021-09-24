@@ -1,7 +1,8 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import ProblemList from '../../../components/normal/problemSet/ProblemList';
-import ProblemInfo from '../../../components/normal/problemSet/ProblemInfo';
+import ProblemDetail from '../../../components/normal/problemSet/ProblemDetail';
+import ChallengeInfo from '../../../components/normal/problemSet/ChallengeInfo';
 import CodeSubmission from '../../../components/normal/problemSet/CodeSubmission';
 import SubmissionList from '../../../components/normal/problemSet/SubmissionList';
 import SubmissionDetail from '../../../components/normal/problemSet/SubmissionDetail';
@@ -12,21 +13,27 @@ function Problem() {
   return (
     <>
       <Switch>
+        <Route exact path="/problem-set" component={ProblemList} />
         <Route exact path="/problem-set/:courseId/:classId" component={ProblemList} />
-        <Route exact path="/problem-set/:courseId/:classId/:challengeId/:problemId" component={ProblemInfo} />
+        <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId" component={ChallengeInfo} />
         <Route
           exact
-          path="/problem-set/:courseId/:classId/:challengeId/:problemId/code-submission"
+          path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId"
+          component={ProblemDetail}
+        />
+        <Route
+          exact
+          path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId/code-submission"
           component={CodeSubmission}
         />
         <Route
           exact
-          path="/problem-set/:courseId/:classId/:challengeId/:problemId/my-submission"
+          path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId/my-submission"
           component={SubmissionList}
         />
         <Route
           exact
-          path="/problem-set/:courseId/:classId/:challengeId/:problemId/all-submission/:submissionId"
+          path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId"
           component={SubmissionDetail}
         />
         <Route component={NoMatch} />
