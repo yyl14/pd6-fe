@@ -55,6 +55,9 @@ export default function Challenge({
     const goBackToSubmission = () => {
       history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
     };
+    const goBackToMySubmission = () => {
+      history.push('/my-submission');
+    };
     if (mode === 'challenge' && userClasses.length !== 0 && userClasses.find((x) => x.class_id === Number(classId))) {
       // console.log(userClasses);
       if (
@@ -205,6 +208,27 @@ export default function Challenge({
           text: 'Submission Detail',
           icon: <Icon.Code />,
           path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${submissionId}`,
+        },
+      ]);
+    } else if (
+      mode === 'mysubmission_detail'
+      && userClasses.length !== 0
+      && userClasses.find((x) => x.class_id === Number(classId))
+    ) {
+      if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
+        setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
+      }
+      setArrow(
+        <IconButton className={classNames.arrow} onClick={goBackToMySubmission}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
+      setTitle(submissionId);
+      setItemList([
+        {
+          text: 'Submission Detail',
+          icon: <Icon.Code />,
+          path: `/my-submission/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${submissionId}`,
         },
       ]);
     }

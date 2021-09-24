@@ -296,7 +296,7 @@ export default function Header() {
           ]);
         }
         setMenuList([
-          // { title: 'My Submission', link: '/my-submission' },
+          { title: 'My Submission', link: '/my-submission' },
           { title: 'My Profile', link: '/my-profile' },
           { title: 'Logout', link: '/logout' },
         ]);

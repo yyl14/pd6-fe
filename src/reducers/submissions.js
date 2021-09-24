@@ -21,6 +21,13 @@ const byId = (state = {}, action) => {
       const { data } = action.payload;
       return data.submissions.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
     }
+    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+      const { data } = action.payload;
+      return data.submissions.reduce(
+        (acc, item) => ({ ...acc, [item.id]: { ...item, verdict: verdictMapping.get(item.verdict) } }),
+        state,
+      );
+    }
     case submissionConstants.FETCH_SUBMISSION_SUCCESS: {
       const { submissionId, data } = action.payload;
       return {
@@ -64,6 +71,10 @@ const byId = (state = {}, action) => {
 const allIds = (state = [], action) => {
   switch (action.type) {
     case viewConstants.BROWSE_SUBMISSION_UNDER_CLASS_SUCCESS: {
+      const { data } = action.payload;
+      return [...new Set([...data.submissions.map((item) => item.id), ...state])];
+    }
+    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
       const { data } = action.payload;
       return [...new Set([...data.submissions.map((item) => item.id), ...state])];
     }

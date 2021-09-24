@@ -209,6 +209,61 @@ const browseSubmissionUnderClass = (token, classId, browseParams, tableId = null
   }
 };
 
+const browseMySubmission = (token, accountId, browseParams, tableId = null) => async (dispatch) => {
+  try {
+    const temp = {
+      ...browseParams,
+      account_id: accountId,
+    };
+    const config = {
+      headers: {
+        'auth-token': token,
+      },
+      params: browseParamsTransForm(temp),
+    };
+    dispatch({ type: viewConstants.BROWSE_MYSUBMISSION_START });
+    const res = await agent.get('/view/my-submission', config);
+    const { data, total_count } = res.data.data;
+    dispatch({
+      type: viewConstants.BROWSE_MYSUBMISSION_SUCCESS,
+      payload: {
+        data: {
+          submissions: data.map(({
+            submission_id, course_id, course_name, class_id, class_name, challenge_id, challenge_title, problem_id, challenge_label, verdict, submit_time, account_id,
+          }) => ({
+            id: submission_id,
+            course_id,
+            course_name,
+            class_id,
+            class_name,
+            challenge_id,
+            challenge_title,
+            problem_id,
+            challenge_label,
+            verdict,
+            submit_time,
+            account_id,
+          })),
+        },
+      },
+    });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: data.map((item) => item.submission_id),
+        offset: browseParams.offset,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: viewConstants.BROWSE_MYSUBMISSION_FAIL,
+      error,
+    });
+  }
+};
+
 export {
-  browseAccessLog, browseAccountWithDefaultStudentId, browseClassMember, browseSubmissionUnderClass,
+  browseAccessLog, browseAccountWithDefaultStudentId, browseClassMember, browseSubmissionUnderClass, browseMySubmission,
 };

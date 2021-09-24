@@ -317,6 +317,12 @@ export default function Sidebar() {
       <Route exact path="/system/accesslog">
         <System classes={classes} history={history} location={location} mode="system" />
       </Route>
+
+      {/* {My Submission} */}
+      <Route exact path="/my-submission/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId">
+        <Challenge classNames={classes} history={history} location={location} mode="mysubmission_detail" />
+      </Route>
     </Switch>
+
   );
 }

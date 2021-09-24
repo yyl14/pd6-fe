@@ -52,7 +52,7 @@ export default function SubmissionList() {
         hasFilter
         filterConfig={[
           {
-            reduxStateId: 'id',
+            reduxStateId: 'submission_id',
             label: 'ID',
             type: 'TEXT',
             operation: '=',
