@@ -4,7 +4,7 @@ import ProblemList from '../../../components/normal/problemSet/ProblemList';
 import ProblemDetail from '../../../components/normal/problemSet/ProblemDetail';
 import ChallengeInfo from '../../../components/normal/problemSet/ChallengeInfo';
 import CodeSubmission from '../../../components/normal/problemSet/CodeSubmission';
-import SubmissionList from '../../../components/normal/problemSet/SubmissionList';
+import MySubmission from '../../../components/normal/problemSet/MySubmission';
 import SubmissionDetail from '../../../components/normal/problemSet/SubmissionDetail';
 import NoMatch from '../../../components/noMatch';
 
@@ -29,7 +29,7 @@ function Problem() {
         <Route
           exact
           path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId/my-submission"
-          component={SubmissionList}
+          component={MySubmission}
         />
         <Route
           exact
