@@ -176,17 +176,17 @@ export default function SubmissionDetail() {
 
   useEffect(() => {
     if (sampleDataIds && testcaseDataIds && judgeCases.allIds) {
-      const array = judgeCases.allIds.filter((key) => judgeCases.byId[key].judgment_id === judgmentId);
+      const filteredJudgeCases = judgeCases.allIds.filter((key) => judgeCases.byId[key].judgment_id === judgmentId);
       setTableData(
         sampleDataIds
           .concat(testcaseDataIds)
           .map((id) => ({
             id,
             no: transformTestcase(id),
-            time: array.filter((key) => key === id)[0] ? judgeCases.byId[id].time_lapse : '',
-            memory: array.filter((key) => key === id)[0] ? judgeCases.byId[id].peak_memory : '',
-            status: array.filter((key) => key === id)[0] ? judgeCases.byId[id].verdict : '',
-            score: array.filter((key) => key === id)[0] ? judgeCases.byId[id].score : '',
+            time: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].time_lapse : '',
+            memory: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].peak_memory : '',
+            status: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].verdict : '',
+            score: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].score : '',
           }))
           .sort((a, b) => {
             if (!a.no.includes('sample') && b.no.includes('sample')) return 1;
