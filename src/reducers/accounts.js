@@ -11,6 +11,7 @@ const prototype = {
   real_name: null,
   role: null,
   student_id: null,
+  referral: null,
   studentCardIds: [],
   pendingStudentCardIds: [],
   gradeIds: [],
@@ -134,20 +135,6 @@ const byId = (state = {}, action) => {
         },
       };
     }
-
-    // case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
-    //   const { accounts } = action.payload;
-    //   return accounts.reduce(
-    //     (acc, item) => ({
-    //       ...acc,
-    //       [item.id]: {
-    //         ...prototype,
-    //         ...item,
-    //       },
-    //     }),
-    //     state,
-    //   );
-    // }
 
     case commonConstants.GET_ACCOUNT_BATCH_SUCCESS: {
       const { accountId, data } = action.payload;

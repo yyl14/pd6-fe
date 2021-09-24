@@ -116,19 +116,19 @@ const MemberEdit = ({
       setTA(
         classMembers
           .filter((item) => item.member_role === 'MANAGER')
-          .map((member) => member.member_referral)
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
       );
       setStudent(
         classMembers
           .filter((item) => item.member_role === 'NORMAL')
-          .map((member) => member.member_referral)
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
       );
       setGuest(
         classMembers
           .filter((item) => item.member_role === 'GUEST')
-          .map((member) => member.member_referral)
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
       );
     }
@@ -170,7 +170,7 @@ const MemberEdit = ({
         !== classes.byId[classId].memberIds
           .map((id) => members.byId[id])
           .filter((item) => item.member_role === 'MANAGER')
-          .map((member) => member.member_referral)
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
     );
   };
@@ -181,7 +181,7 @@ const MemberEdit = ({
         !== classes.byId[classId].memberIds
           .map((id) => members.byId[id])
           .filter((item) => item.member_role === 'NORMAL')
-          .map((member) => member.member_referral)
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
     );
   };
@@ -192,7 +192,7 @@ const MemberEdit = ({
         !== classes.byId[classId].memberIds
           .map((id) => members.byId[id])
           .filter((item) => item.member_role === 'GUEST')
-          .map((member) => member.member_referral)
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
     );
   };
