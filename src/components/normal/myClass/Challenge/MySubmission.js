@@ -59,7 +59,7 @@ export default function MySubmission() {
           )} Score`}
           childrenType="text"
         >
-          <Typography variant="body1">{problems.byId[problemId].score ? problems.byId[problemId].score : 0}</Typography>
+          <Typography variant="body1">{problems.byId[problemId].score ? problems.byId[problemId].score : '-'}</Typography>
         </AlignedText>
       </SimpleBar>
       <AutoTable

@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
   textColorDefault: {},
   alignedTextWrapper: {
     boxSizing: 'content-box',
+    flexShrink: 0,
   },
   alignedTextWrapperMd: {
     width: '190px',

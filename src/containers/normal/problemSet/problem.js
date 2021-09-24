@@ -1,53 +1,39 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  Switch, Route, useParams,
-} from 'react-router-dom';
-// import Problem from '../../../components/normal/allClass/Challenge/Problem';
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 import ProblemList from '../../../components/normal/problemSet/ProblemList';
-import ProblemInfo from '../../../components/normal/problemSet/ProblemInfo';
+import ProblemDetail from '../../../components/normal/problemSet/ProblemDetail';
+import ChallengeInfo from '../../../components/normal/problemSet/ChallengeInfo';
 import CodeSubmission from '../../../components/normal/problemSet/CodeSubmission';
 import SubmissionList from '../../../components/normal/problemSet/SubmissionList';
 import SubmissionDetail from '../../../components/normal/problemSet/SubmissionDetail';
 import NoMatch from '../../../components/noMatch';
 
-import { fetchCourse, fetchClass } from '../../../actions/common/common';
-import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
-
 /* This is a level 3 container (main page container) */
 function Problem() {
-  const { courseId, classId, challengeId } = useParams();
-  const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.token);
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-  }, [authToken, classId, courseId, dispatch]);
-
-  useEffect(() => {
-    if (challengeId !== undefined) {
-      dispatch(browseTasksUnderChallenge(authToken, challengeId));
-    }
-  }, [authToken, challengeId, dispatch]);
-
   return (
     <>
       <Switch>
+        <Route exact path="/problem-set" component={ProblemList} />
         <Route exact path="/problem-set/:courseId/:classId" component={ProblemList} />
-        <Route exact path="/problem-set/:courseId/:classId/:challengeId/:problemId" component={ProblemInfo} />
+        <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId" component={ChallengeInfo} />
         <Route
           exact
-          path="/problem-set/:courseId/:classId/:challengeId/:problemId/code-submission"
+          path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId"
+          component={ProblemDetail}
+        />
+        <Route
+          exact
+          path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId/code-submission"
           component={CodeSubmission}
         />
         <Route
           exact
-          path="/problem-set/:courseId/:classId/:challengeId/:problemId/my-submission"
+          path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId/my-submission"
           component={SubmissionList}
         />
         <Route
           exact
-          path="/problem-set/:courseId/:classId/:challengeId/:problemId/all-submission/:submissionId"
+          path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId"
           component={SubmissionDetail}
         />
         <Route component={NoMatch} />

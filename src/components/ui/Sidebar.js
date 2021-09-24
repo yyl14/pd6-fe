@@ -219,6 +219,18 @@ export default function Sidebar() {
       <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/essay/:essayId">
         <Challenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId">
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/summary">
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/detail/:recordId">
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/review/:recordId">
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
       {/* {Submission} */}
       <Route exact path="/my-class/:courseId/:classId/submission">
         <MyClass classNames={classes} history={history} location={location} mode="main" />

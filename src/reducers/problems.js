@@ -100,8 +100,9 @@ const byId = (state = {}, action) => {
       return data.reduce(
         (acc, problem) => ({
           ...acc,
-          [problem.id]: {
+          [problem.problem_id]: {
             ...problem,
+            ...state[problem.problem_id],
           },
         }),
         state,
@@ -153,7 +154,7 @@ const allIds = (state = [], action) => {
 
     case commonConstants.FETCH_PROBLEMS_SUCCESS: {
       const data = action.payload;
-      return [...new Set([...data.map((item) => item.id), ...state])];
+      return [...new Set([...data.map((item) => item.problem_id), ...state])];
     }
 
     default:

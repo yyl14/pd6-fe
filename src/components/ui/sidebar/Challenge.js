@@ -28,6 +28,7 @@ export default function Challenge({
 
   const problems = useSelector((state) => state.problem);
   const essays = useSelector((state) => state.essays);
+  const peerReviews = useSelector((state) => state.peerReviews);
 
   // useEffect(() => {
   //   dispatch(fetchCourse(authToken, courseId));
@@ -101,6 +102,13 @@ export default function Challenge({
                 text: challenge_label,
                 icon: <Icon.Paper />,
                 path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/essay/${id}`,
+              })),
+            challenges[challengeId].peerReviewIds
+              .map((id) => peerReviews.byId[id])
+              .map(({ id, challenge_label }) => ({
+                text: challenge_label,
+                icon: <Icon.Paper />,
+                path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${id}`,
               })),
           ),
         );
