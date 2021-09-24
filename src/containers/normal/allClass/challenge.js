@@ -4,7 +4,7 @@ import { Switch, Route, useParams } from 'react-router-dom';
 import ChallengeInfo from '../../../components/normal/allClass/Challenge/ChallengeInfo';
 import Problem from '../../../components/normal/allClass/Challenge/Problem';
 import CodeSubmission from '../../../components/normal/allClass/Challenge/CodeSubmission';
-import SubmissionList from '../../../components/normal/allClass/Challenge/SubmissionList';
+import MySubmission from '../../../components/normal/allClass/Challenge/MySubmission';
 import SubmissionDetail from '../../../components/normal/allClass/Challenge/SubmissionDetail';
 import NoMatch from '../../../components/noMatch';
 
@@ -41,7 +41,7 @@ function Challenge() {
         <Route
           exact
           path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission"
-          component={SubmissionList}
+          component={MySubmission}
         />
         <Route
           exact

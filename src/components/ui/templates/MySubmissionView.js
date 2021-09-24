@@ -3,18 +3,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Snackbar } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import AlignedText from '../../../ui/AlignedText';
-import AutoTable from '../../../ui/AutoTable';
-import SimpleBar from '../../../ui/SimpleBar';
-import PageTitle from '../../../ui/PageTitle';
-import { viewMySubmissionUnderProblem, readProblemInfo, readProblemScore } from '../../../../actions/myClass/problem';
-import GeneralLoading from '../../../GeneralLoading';
-import NoMatch from '../../../noMatch';
-
-const TableIdent = 'My Submission Table';
+import AlignedText from '../AlignedText';
+import AutoTable from '../AutoTable';
+import SimpleBar from '../SimpleBar';
+import PageTitle from '../PageTitle';
+import { viewMySubmissionUnderProblem, readProblemInfo, readProblemScore } from '../../../actions/myClass/problem';
+import GeneralLoading from '../../GeneralLoading';
+import NoMatch from '../../noMatch';
 
 /* This is a level 4 component (page component) */
-export default function MySubmission() {
+export default function MySubmission({ baseUrl, isProblemSet }) {
   const {
     courseId, classId, challengeId, problemId,
   } = useParams();
@@ -54,16 +52,23 @@ export default function MySubmission() {
       />
       <SimpleBar title="Submission Information">
         <AlignedText
-          text={`My ${challenges.byId[challengeId].selection_type[0].concat(
-            challenges.byId[challengeId].selection_type.slice(1).toLowerCase(),
-          )} Score`}
+          text={
+            isProblemSet
+              ? 'My Best Score'
+              : `My ${challenges.byId[challengeId].selection_type[0].concat(
+                challenges.byId[challengeId].selection_type.slice(1).toLowerCase(),
+              )} Score`
+          }
           childrenType="text"
         >
-          <Typography variant="body1">{problems.byId[problemId].score ? problems.byId[problemId].score : '-'}</Typography>
+          {/* TODO: Change score below according to `isProblemSet` */}
+          <Typography variant="body1">
+            {problems.byId[problemId].score ? problems.byId[problemId].score : '-'}
+          </Typography>
         </AlignedText>
       </SimpleBar>
       <AutoTable
-        ident={TableIdent + problemId}
+        ident={`${baseUrl} submission table ${problemId}`}
         hasRefreshButton
         refreshLoadings={[loading.submitCode, loading.rejudgeSubmission]}
         hasFilter
@@ -94,7 +99,7 @@ export default function MySubmission() {
             colors: {
               'Waiting for judge': 'default',
               'No Status': 'error',
-              Accepted: 'primary',
+              Accepted: 'default',
               'Wrong Answer': 'error',
               'Memory Limit Exceed': 'error',
               'Time Limit Exceed': 'error',
@@ -145,7 +150,7 @@ export default function MySubmission() {
               ? judgments.byId[item.latestJudgmentId].max_memory
               : '-',
           'Submit Time': moment(item.submit_time).format('YYYY-MM-DD, HH:mm'),
-          link: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${item.id}`,
+          link: `${baseUrl}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${item.id}`,
         })}
         hasLink
       />

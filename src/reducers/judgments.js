@@ -11,6 +11,7 @@ const verdictMapping = new Map([
   ['CONTACT MANAGER', 'Contact Manager'],
   ['FORBIDDEN ACTION', 'Forbidden Action'],
   ['SYSTEM ERROR', 'System Error'],
+  [null, null],
 ]);
 
 const byId = (state = {}, action) => {
@@ -41,6 +42,13 @@ const byId = (state = {}, action) => {
         state,
       );
     }
+    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
+      const { judgments } = action.payload;
+      return judgments.reduce(
+        (acc, item) => ({ ...acc, [item.id]: { ...item, verdict: verdictMapping.get(item.verdict) } }),
+        state,
+      );
+    }
     default:
       return state;
   }
@@ -48,17 +56,20 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
+    // case submissionConstants.FETCH_JUDGEMENT_SUCCESS: {
+    //   const { data } = action.payload;
+    //   return [...new Set([...data.map((item) => item.id), ...state])];
+    // }
     case problemConstants.READ_SUBMISSION_JUDGE_SUCCESS: {
-      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+      return [...new Set([...action.payload.id, ...state])];
     }
     case submissionConstants.READ_SUBMISSION_JUDGE_SUCCESS: {
-      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
-    }
-    case submissionConstants.FETCH_JUDGEMENT_SUCCESS: {
-      const { data } = action.payload;
-      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state.judgments);
+      return [...new Set([...action.payload.id, ...state])];
     }
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
+      return [...new Set([...action.payload.judgments.map((item) => item.id), ...state])];
+    }
+    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
       return [...new Set([...action.payload.judgments.map((item) => item.id), ...state])];
     }
     default:

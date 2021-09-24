@@ -4,13 +4,11 @@ import {
   Switch, Route, useHistory, useLocation,
 } from 'react-router-dom';
 
-// import { Autocomplete } from '@material-ui/lab';
 import Account from './sidebar/Account';
 import Course from './sidebar/Course';
 import System from './sidebar/System';
 import MyProfile from './sidebar/MyProfile';
 import UserProfile from './sidebar/UserProfile';
-
 import MyClass from './sidebar/MyClass';
 import Challenge from './sidebar/Challenge';
 import Submission from './sidebar/Submission';
@@ -285,9 +283,6 @@ export default function Sidebar() {
       <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId">
         <AllClassChallenge classNames={classes} history={history} location={location} mode="submission_detail" />
       </Route>
-      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/essay/:essayId">
-        <AllClassChallenge classNames={classes} history={history} location={location} mode="challenge" />
-      </Route>
 
       {/* {Problem Set} */}
       <Route exact path="/problem-set">
@@ -301,6 +296,15 @@ export default function Sidebar() {
       </Route>
       <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId">
         <ProblemSetChallenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId/my-submission">
+        <ProblemSetChallenge classNames={classes} history={history} location={location} mode="submission" />
+      </Route>
+      <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId/code-submission">
+        <ProblemSetChallenge classNames={classes} history={history} location={location} mode="submission" />
+      </Route>
+      <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId">
+        <ProblemSetChallenge classNames={classes} history={history} location={location} mode="submission_detail" />
       </Route>
 
       {/* {System} */}

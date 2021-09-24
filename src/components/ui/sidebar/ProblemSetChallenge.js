@@ -78,19 +78,41 @@ export default function ProblemSetChallenge({
           ]);
         }
       }
+    } else if (mode === 'submission' && challenges[challengeId] && problems.byId[problemId]) {
+      setArrow(
+        <IconButton className={classNames.arrow} onClick={goBackToProblem}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
+      setTitle(`${challenges[challengeId].title} / ${problems.byId[problemId].challenge_label}`);
+      setItemList([
+        {
+          text: 'Code Submission',
+          icon: <Icon.Code />,
+          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`,
+        },
+        {
+          text: 'My Submission',
+          icon: <Icon.Statistic />,
+          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`,
+        },
+      ]);
+    } else if (mode === 'submission_detail') {
+      setArrow(
+        <IconButton className={classNames.arrow} onClick={goBackToSubmission}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
+      setTitle(submissionId);
+      setItemList([
+        {
+          text: 'Submission Detail',
+          icon: <Icon.Code />,
+          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${submissionId}`,
+        },
+      ]);
     }
-  }, [
-    challengeId,
-    challenges,
-    classId,
-    classNames.arrow,
-    courseId,
-    history,
-    mode,
-    problemId,
-    problems.allIds.length,
-    problems.byId,
-  ]);
+  }, [challengeId, challenges, classId, classNames.arrow, courseId, history, mode, problemId, problems.allIds.length, problems.byId, submissionId]);
 
   const foldChallenge = () => {
     setDisplay(false);

@@ -1,22 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  Typography,
-  Button,
-  makeStyles,
-} from '@material-ui/core';
-import { useParams, Link } from 'react-router-dom';
-
-import NoMatch from '../../noMatch';
-import GeneralLoading from '../../GeneralLoading';
-
-const useStyles = makeStyles(() => ({
-}));
+import React from 'react';
+import CodeSubmissionView from '../../ui/templates/CodeSubmissionView';
 
 /* This is a level 4 component (page component) */
 export default function CodeSubmission() {
-  return (
-    <>
-    </>
-  );
+  const baseUrl = '/problem-set';
+
+  return <CodeSubmissionView baseUrl={baseUrl} isProblemSet />;
 }
