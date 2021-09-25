@@ -422,8 +422,8 @@ export default function Header() {
                 <div className={classes.notificationDropdownContent} ref={notifyRef}>
                   {notifyList.map(
                     // between post time and expire time
-                    (notify) => moment(new Date()).diff(moment(notify.post_time), 'days') >= 0
-                      && moment(notify.expire_time).adiff(moment(new Date()), 'days') >= 0 && (
+                    (notify) => moment().diff(moment(notify.post_time), 'days') >= 0
+                      && moment(notify.expire_time).diff(moment(new Date()), 'days') >= 0 && (
                         <div
                           key={notify.title}
                           className={
