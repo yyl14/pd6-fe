@@ -57,7 +57,6 @@ export default function SubmissionDetail() {
 
   const submissions = useSelector((state) => state.submissions.byId);
   const judgments = useSelector((state) => state.judgments.byId);
-  const judgmentIds = useSelector((state) => state.judgments.allIds);
   const challenges = useSelector((state) => state.challenges);
   const problems = useSelector((state) => state.problem);
   const user = useSelector((state) => state.user);
@@ -65,6 +64,8 @@ export default function SubmissionDetail() {
   const testcases = useSelector((state) => state.testcases);
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.problem);
+  const submissionLoading = useSelector((state) => state.loading.myClass.problem);
+  const commonLoading = useSelector((state) => state.loading.common.common);
   const [rejudge, setRejudge] = useState(false);
 
   useEffect(() => {
@@ -73,38 +74,15 @@ export default function SubmissionDetail() {
   }, [authToken, challengeId, dispatch, problemId, submissionId]);
 
   useEffect(() => {
-    if (rejudge === false) {
-      setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
-      if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
+    if (submissions[submissionId] !== undefined && submissions[submissionId].latestJudgmentId) {
+      if (submissions[submissionId].latestJudgmentId !== judgmentId) {
+        setJudgmentId(submissions[submissionId].latestJudgmentId);
         dispatch(
-          browseJudgeCases(
-            authToken,
-            judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-          ),
-        );
-      }
-    } else {
-      setJudgmentId(
-        judgmentIds
-          .reduce((acc, b) => [b, ...acc], [])
-          .filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-      );
-      if (
-        judgmentIds
-          .reduce((acc, b) => [b, ...acc], [])
-          .filter((id) => judgments[id].submission_id === Number(submissionId))[0]
-      ) {
-        dispatch(
-          browseJudgeCases(
-            authToken,
-            judgmentIds
-              .reduce((acc, b) => [b, ...acc], [])
-              .filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-          ),
+          browseJudgeCases(authToken, submissions[submissionId].latestJudgmentId),
         );
       }
     }
-  }, [authToken, dispatch, judgmentIds, judgments, rejudge, submissionId]);
+  }, [authToken, dispatch, submissionId, submissions, rejudge, judgmentId]);
 
   useEffect(() => {
     dispatch(browseTestcases(authToken, problemId));
@@ -201,7 +179,7 @@ export default function SubmissionDetail() {
     || judgeCases.allIds === undefined
     || testcases.allIds === undefined
   ) {
-    if (loading.readSubmissionDetail || loading.browseJudgeCases || loading.readTestcase || loading.rejudgeSubmission) {
+    if (loading.browseJudgeCases || loading.readTestcase || loading.rejudgeSubmission || submissionLoading.fetchSubmission || submissionLoading.readSubmissionDetail || commonLoading.fetchCourse || commonLoading.fetchClass || commonLoading.fetchChallenge) {
       return <GeneralLoading />;
     }
     return <NoMatch />;

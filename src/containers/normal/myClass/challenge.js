@@ -20,6 +20,7 @@ export default function Challenge() {
   const { challengeId } = useParams();
   const challenges = useSelector((state) => state.challenges.byId);
   const loading = useSelector((state) => state.loading.myClass);
+  const commonLoading = useSelector((state) => state.loading.common.common);
 
   useEffect(() => {
     if (
@@ -51,7 +52,7 @@ export default function Challenge() {
   ]);
 
   if (challenges[challengeId] === undefined) {
-    if (loading.challenge.readChallenge) {
+    if (commonLoading.fetchChallenge) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
