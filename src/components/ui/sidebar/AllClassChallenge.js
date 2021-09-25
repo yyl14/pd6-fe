@@ -45,7 +45,7 @@ export default function AllClassChallenge({
       history.push(`${baseURL}/${courseId}/${classId}/challenge`);
     };
     const goBackToProblem = () => {
-      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}`);
+      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}`);
     };
     const goBackToSubmission = () => {
       history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
