@@ -223,10 +223,16 @@ export default function Sidebar() {
       <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/summary">
         <Challenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
-      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/detail/:recordId">
+      <Route
+        exact
+        path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/detail/:recordId"
+      >
         <Challenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
-      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/review/:recordId">
+      <Route
+        exact
+        path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/review/:recordId"
+      >
         <Challenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
       {/* {Submission} */}
@@ -319,10 +325,9 @@ export default function Sidebar() {
       </Route>
 
       {/* {My Submission} */}
-      <Route exact path="/my-submission/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId">
-        <Challenge classNames={classes} history={history} location={location} mode="mysubmission_detail" />
+      <Route exact path="/my-submission/:courseId/:classId/:challengeId/:problemId/:submissionId">
+        <Challenge classNames={classes} history={history} location={location} mode="my_submission_detail" />
       </Route>
     </Switch>
-
   );
 }

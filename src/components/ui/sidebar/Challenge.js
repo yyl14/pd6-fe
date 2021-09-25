@@ -211,7 +211,7 @@ export default function Challenge({
         },
       ]);
     } else if (
-      mode === 'mysubmission_detail'
+      mode === 'my_submission_detail'
       && userClasses.length !== 0
       && userClasses.find((x) => x.class_id === Number(classId))
     ) {
@@ -228,7 +228,7 @@ export default function Challenge({
         {
           text: 'Submission Detail',
           icon: <Icon.Code />,
-          path: `/my-submission/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${submissionId}`,
+          path: `/my-submission/${courseId}/${classId}/${challengeId}/${problemId}/${submissionId}`,
         },
       ]);
     }

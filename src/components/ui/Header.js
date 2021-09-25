@@ -462,7 +462,7 @@ export default function Header() {
                 <Typography
                   variant="h6"
                   className={
-                    location.pathname === '/my-profile' || location.pathname === '/my-submission'
+                    location.pathname === '/my-profile' || location.pathname.slice(0, 14) === '/my-submission'
                       ? classes.active
                       : null
                   }

@@ -11,7 +11,7 @@ import Normal from './normal';
 import Admin from './admin';
 import Account from './account';
 import User from './user';
-import Submission from './mySubmission';
+import MySubmission from './mySubmission';
 // import NoMatch from '../components/noMatch';
 
 import { getUserInfo } from '../actions/user/auth';
@@ -59,7 +59,9 @@ function Index() {
         history.push('/admin/course/course');
       } else if (user.role.indexOf('NORMAL') !== -1 || user.role === 'NORMAL') {
         if (user.classes.length !== 0) {
-          const sortedClasses = user.classes.sort((a, b) => b.class_name.localeCompare(a.class_name) || b.course_name.localeCompare(a.course_name));
+          const sortedClasses = user.classes.sort(
+            (a, b) => b.class_name.localeCompare(a.class_name) || b.course_name.localeCompare(a.course_name),
+          );
           history.push(`/my-class/${sortedClasses[0].course_id}/${sortedClasses[0].class_id}/challenge`);
         } else {
           history.push('/all-class');
@@ -79,11 +81,13 @@ function Index() {
       <Switch>
         <Route path="/admin" component={Admin} />
         <Route path="/my-profile" component={Account} />
-        <Route path="/my-submission" component={Submission} />
+        <Route path="/my-submission" component={MySubmission} />
         <Route exact path="/user-profile/:accountId" component={User} />
         <Route path="/" component={Normal} />
       </Switch>
-      <Fab href="https://forms.gle/KaYJnXwgvsovzqVG7" target="_blank" className={classes.bugReport}><FeedbackIcon /></Fab>
+      <Fab href="https://forms.gle/KaYJnXwgvsovzqVG7" target="_blank" className={classes.bugReport}>
+        <FeedbackIcon />
+      </Fab>
     </div>
   );
 }
