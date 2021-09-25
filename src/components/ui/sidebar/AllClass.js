@@ -37,7 +37,11 @@ export default function AllClass({
             path: `${baseURL}/${id}`,
           })),
       );
-    } else if (mode === 'course' && courses.byId[courseId] !== undefined) {
+    } else if (
+      mode === 'course'
+      && courses.byId[courseId] !== undefined
+      && courses.byId[courseId].classIds !== undefined
+    ) {
       // console.log(courses, classes);
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToMain}>
@@ -57,7 +61,7 @@ export default function AllClass({
           })),
       );
     }
-  }, [classNames.arrow, classes, courseId, courses, history, mode]);
+  }, [classNames.arrow, classes.byId, courseId, courses, history, mode]);
 
   const fold = () => {
     setDisplay('fold');

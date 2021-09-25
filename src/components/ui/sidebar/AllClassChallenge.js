@@ -42,7 +42,7 @@ export default function AllClassChallenge({
       history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
     };
     if (mode === 'challenge') {
-      if (challenges[challengeId] !== undefined) {
+      if (challenges[challengeId] !== undefined && challenges[challengeId].problemIds !== undefined) {
         setArrow(
           <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
             <Icon.ArrowBackRoundedIcon />
