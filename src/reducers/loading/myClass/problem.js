@@ -19,6 +19,7 @@ const initialState = {
   addTestcase: false,
   browseJudgeCases: false,
   readProblemScore: false,
+  readProblemBestScore: false,
   downloadSamples: false,
   downloadTestcases: false,
   rejudgeSubmission: false,
@@ -315,6 +316,23 @@ export default function problem(state = initialState, action) {
         ...state,
         readProblemScore: false,
       };
+
+    case problemConstants.READ_PROBLEM_BEST_SCORE_START:
+      return {
+        ...state,
+        readProblemBestScore: true,
+      };
+    case problemConstants.READ_PROBLEM_BEST_SCORE_SUCCESS:
+      return {
+        ...state,
+        readProblemBestScore: false,
+      };
+    case problemConstants.READ_PROBLEM_BEST_SCORE_FAIL:
+      return {
+        ...state,
+        readProblemBestScore: false,
+      };
+
     case problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_START:
       return {
         ...state,

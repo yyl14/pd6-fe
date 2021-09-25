@@ -7,7 +7,11 @@ import AlignedText from '../../../ui/AlignedText';
 import AutoTable from '../../../ui/AutoTable';
 import SimpleBar from '../../../ui/SimpleBar';
 import PageTitle from '../../../ui/PageTitle';
-import { viewMySubmissionUnderProblem, readProblemInfo, readProblemScore } from '../../../../actions/myClass/problem';
+import {
+  viewMySubmissionUnderProblem,
+  readProblemInfo,
+  readProblemBestScore,
+} from '../../../../actions/myClass/problem';
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
 
@@ -53,13 +57,10 @@ export default function MySubmission() {
         text={`${challenges.byId[challengeId].title} / ${problems.byId[problemId].challenge_label} / My Submission`}
       />
       <SimpleBar title="Submission Information">
-        <AlignedText
-          text={`My ${challenges.byId[challengeId].selection_type[0].concat(
-            challenges.byId[challengeId].selection_type.slice(1).toLowerCase(),
-          )} Score`}
-          childrenType="text"
-        >
-          <Typography variant="body1">{problems.byId[problemId].score ? problems.byId[problemId].score : 0}</Typography>
+        <AlignedText text="My Best Score" childrenType="text">
+          <Typography variant="body1">
+            {problems.byId[problemId].score.toString() ? problems.byId[problemId].score.toString() : '-'}
+          </Typography>
         </AlignedText>
       </SimpleBar>
       <AutoTable
@@ -78,7 +79,7 @@ export default function MySubmission() {
         defaultSort={['submit_time', 'DESC']}
         refetch={(browseParams, ident) => {
           dispatch(viewMySubmissionUnderProblem(authToken, accountId, problemId, browseParams, ident));
-          dispatch(readProblemScore(authToken, problemId));
+          dispatch(readProblemBestScore(authToken, problemId));
         }}
         refetchErrors={[error.viewMySubmissionUnderProblem]}
         columns={[
