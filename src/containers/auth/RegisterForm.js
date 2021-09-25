@@ -31,7 +31,7 @@ import GeneralLoading from '../../components/GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   authForm: {
-    width: '90%',
+    width: '55%',
   },
   authTextFields: {
     width: '100%',
