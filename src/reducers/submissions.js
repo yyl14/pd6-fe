@@ -19,7 +19,7 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case viewConstants.BROWSE_SUBMISSION_UNDER_CLASS_SUCCESS: {
       const { data } = action.payload;
-      return data.submissions.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+      return data.submissions.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, verdict: verdictMapping.get(item.verdict) } }), state);
     }
     case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
       const { data } = action.payload;

@@ -78,11 +78,11 @@ export default function SubmissionDetail() {
 
   useEffect(() => {
     if (submissions[submissionId]) {
-      if (accountId !== submissions[submissionId].account_id) {
+      if (accountId !== submissions[submissionId].account_id && submissions[submissionId].account_id !== undefined) {
         dispatch(getAccountBatch(authToken, submissions[submissionId].account_id));
         setAccountId(submissions[submissionId].account_id);
       }
-      if (problemId !== submissions[submissionId].problem_id) {
+      if (problemId !== submissions[submissionId].problem_id && submissions[submissionId].problem_id !== undefined) {
         dispatch(readProblemInfo(authToken, submissions[submissionId].problem_id));
         setProblemId(submissions[submissionId].problem_id);
       }
