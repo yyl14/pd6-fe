@@ -1,7 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import MySubmissionList from '../../components/account/mySubmission/SubmissionList';
-// import SubmissionDetail from '../../components/normal/allClass/Challenge/SubmissionDetail';
+import MySubmission from '../../components/account/mySubmission/MySubmission';
 import NoMatch from '../../components/noMatch';
 
 import Header from '../../components/ui/Header';
@@ -12,9 +11,9 @@ export default function Submission() {
       <Header />
       <Switch>
         <Route exact path="/my-submission">
-          <div className="layout-content-container-no-sidebar">
+          <div className="layout-content-container layout-content-container-no-sidebar">
             <div className="layout-content">
-              <MySubmissionList />
+              <MySubmission />
             </div>
           </div>
         </Route>

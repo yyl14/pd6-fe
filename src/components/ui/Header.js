@@ -422,7 +422,7 @@ export default function Header() {
                 <div className={classes.notificationDropdownContent} ref={notifyRef}>
                   {notifyList.map(
                     // between post time and expire time
-                    (notify) => moment(new Date()).diff(moment(notify.post_time), 'days') >= 0
+                    (notify) => moment().diff(moment(notify.post_time), 'days') >= 0
                       && moment(notify.expire_time).diff(moment(new Date()), 'days') >= 0 && (
                         <div
                           key={notify.title}
@@ -459,7 +459,14 @@ export default function Header() {
               tabIndex="-1"
             >
               <button type="button" className={classes.userButton}>
-                <Typography variant="h6" className={location.pathname === '/my-profile' ? classes.active : null}>
+                <Typography
+                  variant="h6"
+                  className={
+                    location.pathname === '/my-profile' || location.pathname === '/my-submission'
+                      ? classes.active
+                      : null
+                  }
+                >
                   {user.username}
                 </Typography>
               </button>
