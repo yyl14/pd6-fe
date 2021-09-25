@@ -12,12 +12,11 @@ import SimpleTable from '../SimpleTable';
 import PageTitle from '../PageTitle';
 import GeneralLoading from '../../GeneralLoading';
 import {
-  readSubmissionDetail,
   browseJudgeCases,
   browseTestcases,
   rejudgeSubmission,
 } from '../../../actions/myClass/problem';
-import { fetchSubmission } from '../../../actions/myClass/submission';
+import { readSubmissionDetail, fetchSubmission } from '../../../actions/myClass/submission';
 import NoMatch from '../../noMatch';
 import CodeArea from '../CodeArea';
 

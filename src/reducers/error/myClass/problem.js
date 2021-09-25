@@ -3,7 +3,6 @@ import { problemConstants } from '../../../actions/myClass/constant';
 const initialState = {
   readProblem: null,
   readSubmission: null,
-  readJudgment: null,
   browseTestcase: null,
   browseAssistingData: null,
   editProblem: null,
@@ -57,11 +56,6 @@ export default function problem(state = initialState, action) {
         readSubmission: action.error,
       };
 
-    case problemConstants.READ_SUBMISSION_JUDGE_FAIL:
-      return {
-        ...state,
-        readJudgment: action.error,
-      };
     case problemConstants.BROWSE_JUDGE_CASES_FAIL:
       return {
         ...state,

@@ -3,7 +3,6 @@ import { problemConstants } from '../../../actions/myClass/constant';
 const initialState = {
   readProblem: false,
   readSubmission: false,
-  readJudgment: false,
   browseTestcase: false,
   browseAssistingData: false,
   editProblem: false,
@@ -74,21 +73,6 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         readSubmission: false,
-      };
-    case problemConstants.READ_SUBMISSION_JUDGE_START:
-      return {
-        ...state,
-        readJudgment: true,
-      };
-    case problemConstants.READ_SUBMISSION_JUDGE_SUCCESS:
-      return {
-        ...state,
-        readJudgment: false,
-      };
-    case problemConstants.READ_SUBMISSION_JUDGE_FAIL:
-      return {
-        ...state,
-        readJudgment: false,
       };
     case problemConstants.BROWSE_JUDGE_CASES_START:
       return {

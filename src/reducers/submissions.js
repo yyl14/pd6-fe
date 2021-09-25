@@ -32,7 +32,7 @@ const byId = (state = {}, action) => {
       const { submissionId, data } = action.payload;
       return {
         ...state,
-        [Number(submissionId)]: { ...data, latestJudgmentId: null },
+        [Number(submissionId)]: { ...state[Number(submissionId)], ...data },
       };
     }
     case problemConstants.READ_SUBMISSION_SUCCESS: {
@@ -44,16 +44,11 @@ const byId = (state = {}, action) => {
       return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, latestJudgmentId: null } }), state);
     }
 
-    case problemConstants.READ_SUBMISSION_JUDGE_SUCCESS: {
-      return {
-        ...state,
-        [action.payload.submission_id]: { ...state[action.payload.submission_id], latestJudgmentId: action.payload.id },
-      };
-    }
     case submissionConstants.READ_SUBMISSION_JUDGE_SUCCESS: {
+      const { submissionId, judgment } = action.payload;
       return {
         ...state,
-        [action.payload.submission_id]: { ...state[action.payload.submission_id], latestJudgmentId: action.payload.id },
+        [submissionId]: { ...state[submissionId], latestJudgmentId: judgment.id },
       };
     }
     case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
@@ -83,7 +78,7 @@ const allIds = (state = [], action) => {
     }
     case submissionConstants.FETCH_SUBMISSION_SUCCESS: {
       const { submissionId } = action.payload;
-      return state.includes(Number(submissionId)) ? state : state.concat([Number(submissionId)]);
+      return [...new Set([submissionId, ...state])];
     }
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       const { data } = action.payload;
