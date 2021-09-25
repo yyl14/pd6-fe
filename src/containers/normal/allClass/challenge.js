@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Switch, Route, useParams } from 'react-router-dom';
+import ChallengeList from '../../../components/normal/allClass/Challenge/ChallengeList';
 import ChallengeInfo from '../../../components/normal/allClass/Challenge/ChallengeInfo';
 import Problem from '../../../components/normal/allClass/Challenge/Problem';
 import CodeSubmission from '../../../components/normal/allClass/Challenge/CodeSubmission';
 import MySubmission from '../../../components/normal/allClass/Challenge/MySubmission';
 import SubmissionDetail from '../../../components/normal/allClass/Challenge/SubmissionDetail';
+
 import NoMatch from '../../../components/noMatch';
 
 import { fetchCourse, fetchClass, fetchChallenge } from '../../../actions/common/common';
@@ -31,6 +33,7 @@ function Challenge() {
   return (
     <>
       <Switch>
+        <Route exact path="/all-class/:courseId/:classId/challenge" component={ChallengeList} />
         <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId" component={ChallengeInfo} />
         <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId" component={Problem} />
         <Route

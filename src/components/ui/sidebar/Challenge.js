@@ -30,12 +30,6 @@ export default function Challenge({
   const essays = useSelector((state) => state.essays);
   const peerReviews = useSelector((state) => state.peerReviews);
 
-  // useEffect(() => {
-  //   dispatch(fetchCourse(authToken, courseId));
-  //   dispatch(fetchClass(authToken, classId));
-  //   dispatch(fetchChallenges(authToken, classId));
-  // }, [dispatch, authToken, classId, courseId]);
-
   const [display, setDisplay] = useState('unfold');
 
   const [title, setTitle] = useState('');

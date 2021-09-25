@@ -6,9 +6,6 @@ import {
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
-import { fetchChallenges } from '../../../actions/myClass/challenge';
-import { fetchClass, fetchCourse } from '../../../actions/common/common';
-
 export default function AllClassChallenge({
   classNames, history, location, mode,
 }) {
@@ -27,12 +24,6 @@ export default function AllClassChallenge({
 
   const problems = useSelector((state) => state.problem);
   const essays = useSelector((state) => state.essays);
-
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-    dispatch(fetchChallenges(authToken, classId));
-  }, [dispatch, authToken, classId, courseId]);
 
   const [display, setDisplay] = useState('unfold');
 
