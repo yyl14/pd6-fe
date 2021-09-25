@@ -6,35 +6,18 @@ import {
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
-import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
-
 export default function AllClass({
   classNames, history, location, mode,
 }) {
   const { courseId } = useParams();
   const baseURL = '/all-class';
-  const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.token);
   const classes = useSelector((state) => state.classes);
   const courses = useSelector((state) => state.courses);
-
-  useEffect(() => {
-    dispatch(fetchCourses(authToken));
-  }, [dispatch, authToken, location.pathname]);
-
-  useEffect(() => {
-    dispatch(fetchClasses(authToken, courseId));
-  }, [authToken, courseId, dispatch, location.pathname]);
 
   const [display, setDisplay] = useState('unfold'); // 0: fold, 1: unfold
   const [arrow, setArrow] = useState(null);
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
-
-  useEffect(() => {
-    dispatch(fetchCourses(authToken));
-    dispatch(fetchClasses(authToken, courseId));
-  }, [authToken, courseId, dispatch]);
 
   useEffect(() => {
     // console.log(courses, classes);
@@ -54,7 +37,7 @@ export default function AllClass({
             path: `${baseURL}/${id}`,
           })),
       );
-    } else if (mode === 'course' && courses.byId[courseId].classIds !== undefined) {
+    } else if (mode === 'course' && courses.byId[courseId] !== undefined) {
       // console.log(courses, classes);
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToMain}>

@@ -14,7 +14,7 @@ export default function ChallengeList() {
   const dispatch = useDispatch();
 
   const authToken = useSelector((state) => state.auth.token);
-  const error = useSelector((state) => state.loading.myClass.challenge);
+  const error = useSelector((state) => state.error.myClass.challenge);
   const loading = useSelector((state) => state.loading.myClass.challenge);
   const commonLoading = useSelector((state) => state.loading.common.common);
   const challenges = useSelector((state) => state.challenges);
