@@ -5,7 +5,7 @@ import { browseMySubmission } from '../../../actions/api/view';
 import AutoTable from '../../ui/AutoTable';
 import PageTitle from '../../ui/PageTitle';
 
-export default function MySubmission() {
+export default function SubmissionList() {
   const dispatch = useDispatch();
   const submissions = useSelector((state) => state.submissions);
   const authToken = useSelector((state) => state.auth.token);
@@ -101,7 +101,7 @@ export default function MySubmission() {
           },
           Status: item.verdict === null ? 'Waiting For Judge' : item.verdict,
           'Submitted Time': moment(item.submit_time).format('YYYY-MM-DD, HH:mm'),
-          link: `/all-class/${item.course_id}/${item.class_id}/challenge/${item.challenge_id}/${item.problem_id}/my-submission/${item.id}`,
+          link: `/my-submission/${item.course_id}/${item.class_id}/${item.challenge_id}/${item.problem_id}/${item.id}`,
         })}
         hasLink
       />

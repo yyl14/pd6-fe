@@ -11,6 +11,7 @@ import PageTitle from '../../ui/PageTitle';
 import GeneralLoading from '../../GeneralLoading';
 import { readSubmissionDetail, browseJudgeCases, browseTestcases } from '../../../actions/myClass/problem';
 import { fetchSubmission } from '../../../actions/myClass/submission';
+import { fetchCourse, fetchClass, fetchChallenge } from '../../../actions/common/common';
 import NoMatch from '../../noMatch';
 import CodeArea from '../../ui/CodeArea';
 // import { browseSubmitLang } from '../../../../actions/common/common';
@@ -37,7 +38,9 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 export default function SubmissionDetail() {
-  const { problemId, submissionId } = useParams();
+  const {
+    courseId, classId, challengeId, problemId, submissionId,
+  } = useParams();
   const classNames = useStyles();
   const [tableData, setTableData] = useState([]);
   const [judgmentId, setJudgmentId] = useState('');
@@ -57,9 +60,15 @@ export default function SubmissionDetail() {
   const loading = useSelector((state) => state.loading.myClass.problem);
 
   useEffect(() => {
+    dispatch(fetchCourse(authToken, courseId));
+    dispatch(fetchClass(authToken, classId));
+    dispatch(fetchChallenge(authToken, challengeId));
+  }, [authToken, challengeId, classId, courseId, dispatch]);
+
+  useEffect(() => {
     dispatch(readSubmissionDetail(authToken, submissionId));
     dispatch(fetchSubmission(authToken, submissionId));
-  }, [authToken, dispatch, problemId, submissionId]);
+  }, [authToken, dispatch, submissionId]);
 
   useEffect(() => {
     setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
