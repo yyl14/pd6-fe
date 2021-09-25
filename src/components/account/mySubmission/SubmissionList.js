@@ -16,10 +16,6 @@ export default function MySubmissionList() {
   const courses = useSelector((state) => state.courses.byId);
   const classes = useSelector((state) => state.classes.byId);
 
-  useEffect(() => {
-    console.log(accountId, authToken, submissions);
-  }, [accountId, authToken, submissions]);
-
   return (
     <>
       <PageTitle text="My Submission" />
