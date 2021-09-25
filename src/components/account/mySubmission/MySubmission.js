@@ -5,7 +5,7 @@ import { browseMySubmission } from '../../../actions/api/view';
 import AutoTable from '../../ui/AutoTable';
 import PageTitle from '../../ui/PageTitle';
 
-export default function MySubmissionList() {
+export default function MySubmission() {
   const dispatch = useDispatch();
   const submissions = useSelector((state) => state.submissions);
   const authToken = useSelector((state) => state.auth.token);
