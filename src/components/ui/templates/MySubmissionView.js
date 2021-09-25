@@ -7,7 +7,12 @@ import AlignedText from '../AlignedText';
 import AutoTable from '../AutoTable';
 import SimpleBar from '../SimpleBar';
 import PageTitle from '../PageTitle';
-import { viewMySubmissionUnderProblem, readProblemInfo, readProblemScore } from '../../../actions/myClass/problem';
+import {
+  viewMySubmissionUnderProblem,
+  readProblemInfo,
+  readProblemScore,
+  readProblemBestScore,
+} from '../../../actions/myClass/problem';
 import GeneralLoading from '../../GeneralLoading';
 import NoMatch from '../../noMatch';
 
@@ -61,9 +66,8 @@ export default function MySubmission({ baseUrl, isProblemSet }) {
           }
           childrenType="text"
         >
-          {/* TODO: Change score below according to `isProblemSet` */}
           <Typography variant="body1">
-            {problems.byId[problemId].score ? problems.byId[problemId].score : '-'}
+            {problems.byId[problemId].score.toString() ? problems.byId[problemId].score.toString() : '-'}
           </Typography>
         </AlignedText>
       </SimpleBar>
@@ -83,7 +87,11 @@ export default function MySubmission({ baseUrl, isProblemSet }) {
         defaultSort={['submit_time', 'DESC']}
         refetch={(browseParams, ident) => {
           dispatch(viewMySubmissionUnderProblem(authToken, accountId, problemId, browseParams, ident));
-          dispatch(readProblemScore(authToken, problemId));
+          if (isProblemSet) {
+            dispatch(readProblemBestScore(authToken, problemId));
+          } else {
+            dispatch(readProblemScore(authToken, problemId));
+          }
         }}
         refetchErrors={[error.viewMySubmissionUnderProblem]}
         columns={[

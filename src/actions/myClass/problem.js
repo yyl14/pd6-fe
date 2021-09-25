@@ -409,6 +409,28 @@ const readProblemScore = (token, problemId) => async (dispatch) => {
   }
 };
 
+const readProblemBestScore = (token, problemId) => async (dispatch) => {
+  dispatch({ type: problemConstants.READ_PROBLEM_BEST_SCORE_START });
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+  };
+  try {
+    const res = await agent.get(`/problem/${problemId}/best-score`, config);
+
+    dispatch({
+      type: problemConstants.READ_PROBLEM_BEST_SCORE_SUCCESS,
+      payload: { data: res.data.data, problemId },
+    });
+  } catch (error) {
+    dispatch({
+      type: problemConstants.READ_PROBLEM_BEST_SCORE_FAIL,
+      error,
+    });
+  }
+};
+
 const downloadAllSamples = (token, problemId, as_attachment) => async (dispatch) => {
   const config = {
     headers: {
@@ -870,6 +892,7 @@ export {
   browseJudgeCases,
   browseTestcases,
   readProblemScore,
+  readProblemBestScore,
   downloadAllSamples,
   downloadAllTestcases,
   rejudgeSubmission,

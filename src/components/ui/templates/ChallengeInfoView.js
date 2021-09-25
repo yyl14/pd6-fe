@@ -11,7 +11,7 @@ import AlignedText from '../AlignedText';
 import SimpleBar from '../SimpleBar';
 import SimpleTable from '../SimpleTable';
 import PageTitle from '../PageTitle';
-import { readProblemScore } from '../../../actions/myClass/problem';
+import { readProblemScore, readProblemBestScore } from '../../../actions/myClass/problem';
 import { editChallenge } from '../../../actions/myClass/challenge';
 import { fetchChallenge } from '../../../actions/common/common';
 import GeneralLoading from '../../GeneralLoading';
@@ -53,9 +53,13 @@ export default function ChallengeInfo({ isManager, isProblemSet }) {
 
   useEffect(() => {
     if (challenges[challengeId]) {
-      challenges[challengeId].problemIds.map((id) => dispatch(readProblemScore(authToken, id)));
+      if (isProblemSet) {
+        challenges[challengeId].problemIds.map((id) => dispatch(readProblemBestScore(authToken, id)));
+      } else {
+        challenges[challengeId].problemIds.map((id) => dispatch(readProblemScore(authToken, id)));
+      }
     }
-  }, [authToken, challengeId, challenges, dispatch]);
+  }, [authToken, challengeId, challenges, dispatch, isProblemSet]);
 
   useEffect(() => {
     if (challenges[challengeId]) {

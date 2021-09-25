@@ -96,6 +96,18 @@ const byId = (state = {}, action) => {
       };
     }
 
+    case problemConstants.READ_PROBLEM_BEST_SCORE_SUCCESS: {
+      const { data, problemId } = action.payload;
+
+      return {
+        ...state,
+        [problemId]: {
+          ...state[problemId],
+          score: data.score,
+        },
+      };
+    }
+
     case commonConstants.FETCH_PROBLEMS_SUCCESS: {
       const data = action.payload;
       return data.reduce(
