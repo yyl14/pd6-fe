@@ -46,30 +46,6 @@ const fetchSubmission = (token, submissionId) => (dispatch) => {
     });
 };
 
-// const fetchJudgement = (token, submissionId) => (dispatch) => {
-//   const config = {
-//     headers: {
-//       'auth-token': token,
-//     },
-//   };
-//   dispatch({ type: submissionConstants.FETCH_JUDGEMENT_START });
-
-//   agent
-//     .get(`/submission/${submissionId}/judgment`, config)
-//     .then((res) => {
-//       dispatch({
-//         type: submissionConstants.FETCH_JUDGEMENT_SUCCESS,
-//         payload: { submissionId, data: res.data.data },
-//       });
-//     })
-//     .catch((error) => {
-//       dispatch({
-//         type: submissionConstants.FETCH_JUDGEMENT_FAIL,
-//         error,
-//       });
-//     });
-// };
-
 // fetch latest judgement
 const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
   const config = {
@@ -84,7 +60,7 @@ const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
 
     dispatch({
       type: submissionConstants.READ_SUBMISSION_JUDGE_SUCCESS,
-      payload: res.data.data,
+      payload: { submissionId, judgment: res.data.data },
     });
   } catch (error) {
     dispatch({

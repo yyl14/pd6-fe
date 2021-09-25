@@ -64,29 +64,6 @@ const readSubmission = (token, accountId, problemId, browseParams, tableId = nul
   }
 };
 
-const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
-  dispatch({ type: problemConstants.READ_SUBMISSION_JUDGE_START });
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
-
-  try {
-    const res = await agent.get(`/submission/${submissionId}/latest-judgment`, config);
-
-    dispatch({
-      type: problemConstants.READ_SUBMISSION_JUDGE_SUCCESS,
-      payload: res.data.data,
-    });
-  } catch (error) {
-    dispatch({
-      type: problemConstants.READ_SUBMISSION_JUDGE_FAIL,
-      error,
-    });
-  }
-};
-
 const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
   const config = {
     headers: {
@@ -883,7 +860,6 @@ export {
   readProblemInfo,
   editProblemInfo,
   deleteProblem,
-  readSubmissionDetail,
   readSubmission,
   browseTestcase,
   browseAssistingData,

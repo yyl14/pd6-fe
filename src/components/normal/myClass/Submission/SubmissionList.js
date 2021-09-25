@@ -17,14 +17,13 @@ export default function SubmissionList() {
   const { courseId, classId } = useParams();
   const classes = useSelector((state) => state.classes);
   const courses = useSelector((state) => state.courses);
-  const loading = useSelector((state) => state.loading);
+  // const loading = useSelector((state) => state.loading);
   const viewError = useSelector((state) => state.error.api.view);
   const commonLoading = useSelector((state) => state.loading.common.common);
   const submissions = useSelector((state) => state.submissions);
   const accounts = useSelector((state) => state.accounts);
   const challenges = useSelector((state) => state.challenges);
   const problems = useSelector((state) => state.problem);
-  const judgments = useSelector((state) => state.judgments);
   const authToken = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
 
@@ -33,12 +32,7 @@ export default function SubmissionList() {
   }, [authToken, classId, dispatch]);
 
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
-    if (
-      commonLoading.fetchCourse
-      || commonLoading.fetchClass
-      // || commonLoading.fetchAllChallengesProblems
-      // || loading.fetchClassSubmissions
-    ) {
+    if (commonLoading.fetchCourse || commonLoading.fetchClass) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -210,9 +204,7 @@ export default function SubmissionList() {
               }`
               : '',
           },
-          Status: judgments.allIds.filter((key) => judgments.byId[key].submission_id === item.id)[0]
-            ? judgments.byId[judgments.allIds.filter((key) => judgments.byId[key].submission_id === item.id)[0]].verdict
-            : 'Waiting for judge',
+          Status: item.verdict !== null ? item.verdict : 'Waiting for judge',
           Time: moment(item.submit_time).format('YYYY-MM-DD, HH:mm:ss'),
           link: `/my-class/${courseId}/${classId}/submission/${item.id}`,
         })}

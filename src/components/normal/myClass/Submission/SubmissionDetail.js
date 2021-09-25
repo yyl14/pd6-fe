@@ -61,7 +61,6 @@ export default function SubmissionDetail() {
 
   const submissions = useSelector((state) => state.submissions.byId);
   const judgments = useSelector((state) => state.judgments.byId);
-  const judgmentIds = useSelector((state) => state.judgments.allIds);
   const challenges = useSelector((state) => state.challenges);
   const problems = useSelector((state) => state.problem);
   const user = useSelector((state) => state.user);
@@ -79,59 +78,28 @@ export default function SubmissionDetail() {
 
   useEffect(() => {
     if (submissions[submissionId]) {
-      dispatch(getAccountBatch(authToken, submissions[submissionId].account_id));
-      dispatch(readProblemInfo(authToken, submissions[submissionId].problem_id));
-      setProblemId(submissions[submissionId].problem_id);
-      setAccountId(submissions[submissionId].account_id);
+      if (accountId !== submissions[submissionId].account_id && submissions[submissionId].account_id !== undefined) {
+        dispatch(getAccountBatch(authToken, submissions[submissionId].account_id));
+        setAccountId(submissions[submissionId].account_id);
+      }
+      if (problemId !== submissions[submissionId].problem_id && submissions[submissionId].problem_id !== undefined) {
+        dispatch(readProblemInfo(authToken, submissions[submissionId].problem_id));
+        setProblemId(submissions[submissionId].problem_id);
+      }
     }
-  }, [authToken, dispatch, submissionId, submissions]);
+  }, [accountId, authToken, dispatch, problemId, submissionId, submissions]);
 
   useEffect(() => {
     if (problems.byId[problemId]) {
-      dispatch(fetchChallenge(authToken, problems.byId[problemId].challenge_id));
-      setChallengeId(problems.byId[problemId].challenge_id);
-    }
-  }, [authToken, dispatch, problemId, problems.byId]);
-
-  useEffect(() => {
-    if (rejudge === false) {
-      setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
-      if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
-        dispatch(
-          browseJudgeCases(
-            authToken,
-            judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-          ),
-        );
-      }
-    } else {
-      setJudgmentId(
-        judgmentIds
-          .reduce((acc, b) => [b, ...acc], [])
-          .filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-      );
       if (
-        judgmentIds
-          .reduce((acc, b) => [b, ...acc], [])
-          .filter((id) => judgments[id].submission_id === Number(submissionId))[0]
+        challengeId !== problems.byId[problemId].challenge_id
+        && problems.byId[problemId].challenge_id !== undefined
       ) {
-        dispatch(
-          browseJudgeCases(
-            authToken,
-            judgmentIds
-              .reduce((acc, b) => [b, ...acc], [])
-              .filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-          ),
-        );
+        dispatch(fetchChallenge(authToken, problems.byId[problemId].challenge_id));
+        setChallengeId(problems.byId[problemId].challenge_id);
       }
     }
-  }, [authToken, dispatch, judgmentIds, judgments, rejudge, submissionId]);
-
-  useEffect(() => {
-    if (problemId) {
-      dispatch(browseTestcases(authToken, problemId));
-    }
-  }, [authToken, dispatch, problemId]);
+  }, [authToken, challengeId, challenges, dispatch, problemId, problems.byId]);
 
   const transformSample = useCallback(
     (id) => {
@@ -172,7 +140,22 @@ export default function SubmissionDetail() {
       setSampleDataIds(samplesId);
       setTestcaseDataIds(testcasesId);
     }
-  }, [problemId, problems.byId, testcases.byId, transformSample, transformTestcase]);
+  }, [problems, problemId, transformTestcase, transformSample, testcases]);
+
+  useEffect(() => {
+    if (problemId) {
+      dispatch(browseTestcases(authToken, problemId));
+    }
+  }, [authToken, dispatch, problemId]);
+
+  useEffect(() => {
+    if (submissions[submissionId]?.latestJudgmentId) {
+      if (submissions[submissionId].latestJudgmentId !== judgmentId) {
+        setJudgmentId(submissions[submissionId].latestJudgmentId);
+        dispatch(browseJudgeCases(authToken, submissions[submissionId].latestJudgmentId));
+      }
+    }
+  }, [authToken, dispatch, submissionId, submissions, rejudge, judgmentId]);
 
   useEffect(() => {
     if (sampleDataIds && testcaseDataIds && judgeCases.allIds) {

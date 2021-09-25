@@ -23,16 +23,11 @@ const byId = (state = {}, action) => {
         state.judgments,
       );
     }
-    case problemConstants.READ_SUBMISSION_JUDGE_SUCCESS: {
-      return {
-        ...state,
-        [action.payload.id]: { ...action.payload, verdict: verdictMapping.get(action.payload.verdict) },
-      };
-    }
     case submissionConstants.READ_SUBMISSION_JUDGE_SUCCESS: {
+      const { judgment } = action.payload;
       return {
         ...state,
-        [action.payload.id]: { ...action.payload, verdict: verdictMapping.get(action.payload.verdict) },
+        [judgment.id]: { ...judgment, verdict: verdictMapping.get(judgment.verdict) },
       };
     }
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
@@ -56,15 +51,9 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
-    // case submissionConstants.FETCH_JUDGEMENT_SUCCESS: {
-    //   const { data } = action.payload;
-    //   return [...new Set([...data.map((item) => item.id), ...state])];
-    // }
-    case problemConstants.READ_SUBMISSION_JUDGE_SUCCESS: {
-      return [...new Set([...action.payload.id, ...state])];
-    }
     case submissionConstants.READ_SUBMISSION_JUDGE_SUCCESS: {
-      return [...new Set([...action.payload.id, ...state])];
+      const { judgment } = action.payload;
+      return [...new Set([judgment.id, ...state])];
     }
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       return [...new Set([...action.payload.judgments.map((item) => item.id), ...state])];
