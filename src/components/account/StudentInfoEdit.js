@@ -26,13 +26,8 @@ const useStyles = makeStyles((theme) => ({
   },
   selectList: {
     width: '350px',
-    // width: '250px', // no NTUST in dev, so set width to 250px to see if wrapping is successful
   },
-  wrapItem: {
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  },
+
   mailfield: {
     width: '200px',
     marginRight: '10px',
@@ -246,7 +241,12 @@ export default function StudentInfoEdit(props) {
                     <Typography>Institute</Typography>
                   </div>
                   <FormControl variant="outlined" className={classes.selectList}>
-                    <Select value={addInputs.institute} name="institute" onChange={(e) => handleChange(e)} className={classes.wrapItem}>
+                    <Select
+                      value={addInputs.institute}
+                      name="institute"
+                      onChange={(e) => handleChange(e)}
+                      className={classes.wrapItem}
+                    >
                       {enableInstitutesId.map((item) => (
                         <MenuItem key={item} value={institutes[item].full_name}>
                           {institutes[item].full_name}
