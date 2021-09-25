@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
   },
   selectList: {
     width: '350px',
-    // width: '250px', // no NTUST in dev, so set width to 250px to see if wrapping is successful
   },
   wrapItem: {
     whiteSpace: 'nowrap',
