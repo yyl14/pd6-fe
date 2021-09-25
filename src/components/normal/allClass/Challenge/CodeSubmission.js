@@ -46,7 +46,7 @@ const StyledTextField = withStyles((theme) => ({
   focused: {
     borderColor: theme.palette.primary.main,
   },
-}(InputBase)));
+}))(InputBase);
 
 /* This is a level 4 component (page component) */
 export default function CodeSubmission() {
