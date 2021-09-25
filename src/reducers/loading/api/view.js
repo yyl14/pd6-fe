@@ -5,6 +5,7 @@ const initialState = {
   browseAccountWithDefaultStudentId: false,
   browseClassMember: false,
   browseSubmissionUnderClass: false,
+  browseMySubmission: false,
 };
 
 export default function view(state = initialState, action) {
@@ -62,6 +63,20 @@ export default function view(state = initialState, action) {
       return {
         ...state,
         browseSubmissionUnderClass: false,
+      };
+    }
+
+    case viewConstants.BROWSE_MYSUBMISSION_START: {
+      return {
+        ...state,
+        browseMySubmission: true,
+      };
+    }
+    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS:
+    case viewConstants.BROWSE_MYSUBMISSION_FAIL: {
+      return {
+        ...state,
+        browseMySubmission: false,
       };
     }
     default: {

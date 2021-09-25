@@ -4,6 +4,7 @@ import { commonConstants } from '../actions/common/constant';
 import {
   gradeConstants, teamConstants, challengeConstants, submissionConstants,
 } from '../actions/myClass/constant';
+import { viewConstants } from '../actions/api/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -148,7 +149,10 @@ const byId = (state = {}, action) => {
         },
       };
     }
-
+    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+      const { classes } = action.payload.data;
+      return classes.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+    }
     default:
       return state;
   }
@@ -165,6 +169,10 @@ const allIds = (state = [], action) => {
       const { id } = action.payload;
       // console.log(id);
       return [...new Set([id, ...state])];
+    }
+    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+      const { classes } = action.payload.data;
+      return [...new Set([...classes.map((item) => item.id), ...state])];
     }
     default:
       return state;

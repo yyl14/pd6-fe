@@ -11,6 +11,7 @@ import Normal from './normal';
 import Admin from './admin';
 import Account from './account';
 import User from './user';
+import Submission from './mySubmission';
 // import NoMatch from '../components/noMatch';
 
 import { getUserInfo } from '../actions/user/auth';
@@ -78,6 +79,7 @@ function Index() {
       <Switch>
         <Route path="/admin" component={Admin} />
         <Route path="/my-profile" component={Account} />
+        <Route path="/my-submission" component={Submission} />
         <Route exact path="/user-profile/:accountId" component={User} />
         <Route path="/" component={Normal} />
       </Switch>

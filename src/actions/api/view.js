@@ -209,6 +209,80 @@ const browseSubmissionUnderClass = (token, classId, browseParams, tableId = null
   }
 };
 
+const browseMySubmission = (token, accountId, browseParams, tableId = null) => async (dispatch) => {
+  try {
+    const temp = {
+      ...browseParams,
+      account_id: accountId,
+    };
+    const config = {
+      headers: {
+        'auth-token': token,
+      },
+      params: browseParamsTransForm(temp),
+    };
+    dispatch({ type: viewConstants.BROWSE_MYSUBMISSION_START });
+    const res = await agent.get('/view/my-submission', config);
+    const { data, total_count } = res.data.data;
+    dispatch({
+      type: viewConstants.BROWSE_MYSUBMISSION_SUCCESS,
+      payload: {
+        data: {
+          submissions: data.map(({
+            submission_id, course_id, class_id, challenge_id, problem_id, verdict, submit_time,
+          }) => ({
+            id: submission_id,
+            course_id,
+            class_id,
+            challenge_id,
+            problem_id,
+            verdict,
+            submit_time,
+          })),
+          courses: data.map(({
+            course_id, course_name,
+          }) => ({
+            id: course_id,
+            name: course_name,
+          })),
+          classes: data.map(({
+            class_id, class_name,
+          }) => ({
+            id: class_id,
+            name: class_name,
+          })),
+          challenges: data.map(({
+            challenge_id, challenge_title,
+          }) => ({
+            id: challenge_id,
+            title: challenge_title,
+          })),
+          problems: data.map(({
+            problem_id, challenge_label,
+          }) => ({
+            id: problem_id,
+            challenge_label,
+          })),
+        },
+      },
+    });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: data.map((item) => item.submission_id),
+        offset: browseParams.offset,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: viewConstants.BROWSE_MYSUBMISSION_FAIL,
+      error,
+    });
+  }
+};
+
 export {
-  browseAccessLog, browseAccountWithDefaultStudentId, browseClassMember, browseSubmissionUnderClass,
+  browseAccessLog, browseAccountWithDefaultStudentId, browseClassMember, browseSubmissionUnderClass, browseMySubmission,
 };

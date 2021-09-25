@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { challengeConstants } from '../actions/myClass/constant';
 import { commonConstants } from '../actions/common/constant';
+import { viewConstants } from '../actions/api/constant';
 
 const emptyStatistics = {
   summary: [],
@@ -97,6 +98,10 @@ const byId = (state = {}, action) => {
         state,
       );
     }
+    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+      const { challenges } = action.payload.data;
+      return challenges.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+    }
     default:
       return state;
   }
@@ -115,7 +120,10 @@ const allIds = (state = [], action) => {
       const { challenges } = action.payload;
       return [...new Set([...challenges.map((item) => item.id), ...state])];
     }
-
+    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+      const { challenges } = action.payload.data;
+      return [...new Set([...challenges.map((item) => item.id), ...state])];
+    }
     default:
       return state;
   }
