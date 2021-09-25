@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { fetchChallengeSummary, fetchChallengeMemberSubmission } from '../../../../actions/myClass/challenge';
 import { fetchDownloadFileUrl } from '../../../../actions/common/common';
-import { fetchSubmission } from '../../../../actions/myClass/submission';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
 import CustomTable from '../../../ui/CustomTable';

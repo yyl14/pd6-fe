@@ -49,7 +49,6 @@ export default function SubmissionDetail() {
 
   const submissions = useSelector((state) => state.submissions.byId);
   const judgments = useSelector((state) => state.judgments.byId);
-  const judgmentIds = useSelector((state) => state.judgments.allIds);
   const challenges = useSelector((state) => state.challenges);
   const problems = useSelector((state) => state.problem);
   const user = useSelector((state) => state.user);
@@ -64,16 +63,15 @@ export default function SubmissionDetail() {
   }, [authToken, challengeId, dispatch, problemId, submissionId]);
 
   useEffect(() => {
-    setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
-    if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
-      dispatch(
-        browseJudgeCases(
-          authToken,
-          judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-        ),
-      );
+    if (submissions[submissionId] !== undefined && submissions[submissionId].latestJudgmentId) {
+      if (submissions[submissionId].latestJudgmentId !== judgmentId) {
+        setJudgmentId(submissions[submissionId].latestJudgmentId);
+        dispatch(
+          browseJudgeCases(authToken, submissions[submissionId].latestJudgmentId),
+        );
+      }
     }
-  }, [authToken, dispatch, judgmentIds, judgments, submissionId]);
+  }, [authToken, dispatch, judgmentId, submissionId, submissions]);
 
   useEffect(() => {
     dispatch(browseTestcases(authToken, problemId));
