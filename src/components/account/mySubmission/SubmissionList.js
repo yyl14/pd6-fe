@@ -2,9 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { browseMySubmission } from '../../../actions/api/view';
-import AlignedText from '../../ui/AlignedText';
 import AutoTable from '../../ui/AutoTable';
-import NoMatch from '../../noMatch';
 import PageTitle from '../../ui/PageTitle';
 
 export default function MySubmissionList() {
@@ -13,9 +11,15 @@ export default function MySubmissionList() {
   const authToken = useSelector((state) => state.auth.token);
   const accountId = useSelector((state) => state.user.id);
   const viewError = useSelector((state) => state.error.api.view);
+  const problems = useSelector((state) => state.problem.byId);
+  const challenges = useSelector((state) => state.challenges.byId);
+  const courses = useSelector((state) => state.courses.byId);
+  const classes = useSelector((state) => state.classes.byId);
+
   useEffect(() => {
     console.log(accountId, authToken, submissions);
   }, [accountId, authToken, submissions]);
+
   return (
     <>
       <PageTitle text="My Submission" />
@@ -89,19 +93,19 @@ export default function MySubmissionList() {
         reduxDataToRows={(item) => ({
           id: item.id,
           'Submission ID': item.id,
-          Course: item.course_name,
+          Course: courses[item.course_id] ? courses[item.course_id].name : '-',
           Class: {
-            text: item.class_name,
-            path: `/my-class/${item.course_id}/${item.class_id}/challenge`,
+            text: classes[item.class_id] ? classes[item.class_id].name : '-',
+            path: `/all-class/${item.course_id}/${item.class_id}/challenge`,
           },
-          Challenge: item.challenge_title,
+          Challenge: challenges[item.challenge_id] ? challenges[item.challenge_id].title : '-',
           Task: {
-            text: item.challenge_label,
-            path: `/my-class/${item.course_id}/${item.class_id}/challenge/${item.challenge_id}/${item.problem_id}`,
+            text: problems[item.problem_id] ? problems[item.problem_id].challenge_label : '-',
+            path: `/all-class/${item.course_id}/${item.class_id}/challenge/${item.challenge_id}/${item.problem_id}`,
           },
           Status: item.verdict === null ? 'Waiting For Judge' : item.verdict,
           'Submitted Time': moment(item.submit_time).format('YYYY-MM-DD, HH:mm'),
-          link: `/my-submission/${item.course_id}/${item.class_id}/challenge/${item.challenge_id}/${item.problem_id}/my-submission/${item.id}`,
+          link: `/all-class/${item.course_id}/${item.class_id}/challenge/${item.challenge_id}/${item.problem_id}/my-submission/${item.id}`,
         })}
         hasLink
       />

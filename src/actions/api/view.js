@@ -229,20 +229,39 @@ const browseMySubmission = (token, accountId, browseParams, tableId = null) => a
       payload: {
         data: {
           submissions: data.map(({
-            submission_id, course_id, course_name, class_id, class_name, challenge_id, challenge_title, problem_id, challenge_label, verdict, submit_time, account_id,
+            submission_id, course_id, class_id, challenge_id, problem_id, verdict, submit_time,
           }) => ({
             id: submission_id,
             course_id,
-            course_name,
             class_id,
-            class_name,
             challenge_id,
-            challenge_title,
             problem_id,
-            challenge_label,
             verdict,
             submit_time,
-            account_id,
+          })),
+          courses: data.map(({
+            course_id, course_name,
+          }) => ({
+            id: course_id,
+            name: course_name,
+          })),
+          classes: data.map(({
+            class_id, class_name,
+          }) => ({
+            id: class_id,
+            name: class_name,
+          })),
+          challenges: data.map(({
+            challenge_id, challenge_title,
+          }) => ({
+            id: challenge_id,
+            title: challenge_title,
+          })),
+          problems: data.map(({
+            problem_id, challenge_label,
+          }) => ({
+            id: problem_id,
+            challenge_label,
           })),
         },
       },
