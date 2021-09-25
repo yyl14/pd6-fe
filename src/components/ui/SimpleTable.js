@@ -22,9 +22,6 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     overflowX: 'hide',
   },
-  container: {
-    maxHeight: 800,
-  },
   topContent: {
     background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
@@ -135,7 +132,7 @@ export default function SimpleTable({
         <div className={classes.buttons}>{buttons}</div>
       </div>
       <Paper className={classes.root} elevation={0}>
-        <TableContainer className={classes.container}>
+        <TableContainer>
           <Table>
             <TableHead className={classes.tableHead}>
               <TableRow>
