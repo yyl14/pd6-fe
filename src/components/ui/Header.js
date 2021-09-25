@@ -240,16 +240,16 @@ export default function Header() {
               basePath: '/my-class',
               path: '/my-class',
             },
-            // {
-            //   text: 'All Class',
-            //   basePath: '/all-class',
-            //   path: '/all-class',
-            // },
             {
-              text: 'Problem Set',
-              basePath: '/problem-set',
-              path: '/problem-set',
+              text: 'All Class',
+              basePath: '/all-class',
+              path: '/all-class',
             },
+            // {
+            //   text: 'Problem Set',
+            //   basePath: '/problem-set',
+            //   path: '/problem-set',
+            // },
             // {
             //   text: 'PDAO',
             //   basePath: '/pdao',
@@ -268,16 +268,16 @@ export default function Header() {
           ]);
         } else {
           setItemList([
-            // {
-            //   text: 'All Class',
-            //   basePath: '/all-class',
-            //   path: '/all-class',
-            // },
             {
-              text: 'Problem Set',
-              basePath: '/problem-set',
-              path: '/problem-set',
+              text: 'All Class',
+              basePath: '/all-class',
+              path: '/all-class',
             },
+            // {
+            //   text: 'Problem Set',
+            //   basePath: '/problem-set',
+            //   path: '/problem-set',
+            // },
             // {
             //   text: 'PDAO',
             //   basePath: '/pdao',
