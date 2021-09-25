@@ -27,14 +27,14 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const StyledTextField = withStyles({
+const StyledTextField = withStyles((theme) => ({
   root: {
     marginTop: '23px',
     width: '100%',
     height: 'auto',
     borderRadius: '10px',
     border: '2px solid',
-    borderColor: 'rgba(202, 202, 202, 1)',
+    borderColor: theme.palette.grey[300],
   },
   formControl: {
     flexGrow: 1,
@@ -44,9 +44,9 @@ const StyledTextField = withStyles({
     margin: '15px',
   },
   focused: {
-    borderColor: '#1EA5FF',
+    borderColor: theme.palette.primary.main,
   },
-})(InputBase);
+}(InputBase)));
 
 /* This is a level 4 component (page component) */
 export default function CodeSubmission() {
