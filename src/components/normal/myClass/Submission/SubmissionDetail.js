@@ -91,7 +91,10 @@ export default function SubmissionDetail() {
 
   useEffect(() => {
     if (problems.byId[problemId]) {
-      if (challengeId !== problems.byId[problemId].challenge_id && problems.byId[problemId].challenge_id !== undefined) {
+      if (
+        challengeId !== problems.byId[problemId].challenge_id
+        && problems.byId[problemId].challenge_id !== undefined
+      ) {
         dispatch(fetchChallenge(authToken, problems.byId[problemId].challenge_id));
         setChallengeId(problems.byId[problemId].challenge_id);
       }
@@ -146,12 +149,10 @@ export default function SubmissionDetail() {
   }, [authToken, dispatch, problemId]);
 
   useEffect(() => {
-    if (submissions[submissionId] !== undefined && submissions[submissionId].latestJudgmentId) {
+    if (submissions[submissionId]?.latestJudgmentId) {
       if (submissions[submissionId].latestJudgmentId !== judgmentId) {
         setJudgmentId(submissions[submissionId].latestJudgmentId);
-        dispatch(
-          browseJudgeCases(authToken, submissions[submissionId].latestJudgmentId),
-        );
+        dispatch(browseJudgeCases(authToken, submissions[submissionId].latestJudgmentId));
       }
     }
   }, [authToken, dispatch, submissionId, submissions, rejudge, judgmentId]);

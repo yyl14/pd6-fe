@@ -63,12 +63,10 @@ export default function SubmissionDetail() {
   }, [authToken, challengeId, dispatch, problemId, submissionId]);
 
   useEffect(() => {
-    if (submissions[submissionId] !== undefined && submissions[submissionId].latestJudgmentId) {
+    if (submissions[submissionId]?.latestJudgmentId) {
       if (submissions[submissionId].latestJudgmentId !== judgmentId) {
         setJudgmentId(submissions[submissionId].latestJudgmentId);
-        dispatch(
-          browseJudgeCases(authToken, submissions[submissionId].latestJudgmentId),
-        );
+        dispatch(browseJudgeCases(authToken, submissions[submissionId].latestJudgmentId));
       }
     }
   }, [authToken, dispatch, judgmentId, submissionId, submissions]);

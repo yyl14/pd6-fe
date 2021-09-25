@@ -11,11 +11,7 @@ import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
 import PageTitle from '../../../ui/PageTitle';
 import GeneralLoading from '../../../GeneralLoading';
-import {
-  browseJudgeCases,
-  browseTestcases,
-  rejudgeSubmission,
-} from '../../../../actions/myClass/problem';
+import { browseJudgeCases, browseTestcases, rejudgeSubmission } from '../../../../actions/myClass/problem';
 import { readSubmissionDetail, fetchSubmission } from '../../../../actions/myClass/submission';
 import NoMatch from '../../../noMatch';
 import CodeArea from '../../../ui/CodeArea';
@@ -74,12 +70,10 @@ export default function SubmissionDetail() {
   }, [authToken, challengeId, dispatch, problemId, submissionId]);
 
   useEffect(() => {
-    if (submissions[submissionId] !== undefined && submissions[submissionId].latestJudgmentId) {
+    if (submissions[submissionId]?.latestJudgmentId) {
       if (submissions[submissionId].latestJudgmentId !== judgmentId) {
         setJudgmentId(submissions[submissionId].latestJudgmentId);
-        dispatch(
-          browseJudgeCases(authToken, submissions[submissionId].latestJudgmentId),
-        );
+        dispatch(browseJudgeCases(authToken, submissions[submissionId].latestJudgmentId));
       }
     }
   }, [authToken, dispatch, submissionId, submissions, rejudge, judgmentId]);
@@ -179,7 +173,16 @@ export default function SubmissionDetail() {
     || judgeCases.allIds === undefined
     || testcases.allIds === undefined
   ) {
-    if (loading.browseJudgeCases || loading.readTestcase || loading.rejudgeSubmission || submissionLoading.fetchSubmission || submissionLoading.readSubmissionDetail || commonLoading.fetchCourse || commonLoading.fetchClass || commonLoading.fetchChallenge) {
+    if (
+      loading.browseJudgeCases
+      || loading.readTestcase
+      || loading.rejudgeSubmission
+      || submissionLoading.fetchSubmission
+      || submissionLoading.readSubmissionDetail
+      || commonLoading.fetchCourse
+      || commonLoading.fetchClass
+      || commonLoading.fetchChallenge
+    ) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
