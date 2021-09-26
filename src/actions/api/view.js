@@ -19,13 +19,14 @@ const browseAccessLog = (token, browseParams, tableId = null) => async (dispatch
       payload: {
         data: {
           accessLogs: data.map(({
-            access_log_id, account_id, resource_path, request_method, access_time,
+            access_log_id, account_id, resource_path, request_method, access_time, ip,
           }) => ({
             id: access_log_id,
             account_id,
             resource_path,
             request_method,
             access_time,
+            ip,
           })),
           accounts: data.map(({
             account_id, student_id, username, real_name,
