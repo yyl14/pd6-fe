@@ -653,7 +653,7 @@ export default function CodingProblemEdit({ closeEdit }) {
         title="Testing Data"
         buttons={(
           <FormControlLabel
-            control={<Switch checked={status} onChange={() => setStatus(!status)} name="status" color="primary" />}
+            control={<Switch checked={status} onChange={() => { setStatus(!status); setHasChange(true); }} name="status" color="primary" />}
             label={status ? 'Enabled' : 'Disabled'}
             className={classNames.statusSwitch}
           />
