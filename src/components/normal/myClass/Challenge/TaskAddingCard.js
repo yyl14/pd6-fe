@@ -20,7 +20,11 @@ import Icon from '../../../ui/icon/index';
 import NoMatch from '../../../noMatch';
 
 import {
-  addProblem, addEssay, addPeerReview, browseTasksUnderChallenge,
+  addProblem,
+  addEssay,
+  addPeerReview,
+  browseTasksUnderChallenge,
+  fetchChallenges,
 } from '../../../../actions/myClass/challenge';
 
 const useStyles = makeStyles(() => ({
@@ -49,7 +53,7 @@ export default function TaskAddingCard({ open, setOpen }) {
 
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
-  const challenges = useSelector((state) => state.challenges.byId);
+  const challenges = useSelector((state) => state.challenges);
   const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
@@ -59,15 +63,11 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [label, setLabel] = useState('');
   const [title, setTitle] = useState('');
   const [disabled, setDisabled] = useState(true);
-  const [challenge, setChallenge] = useState();
+  const [peerReviewChallengeItem, setPeerReviewChallengeItem] = useState();
   const [task, setTask] = useState();
   const [maxScore, setMaxScore] = useState(3);
   const [minScore, setMinScore] = useState(1);
   const [peerNumbers, setPeerNumbers] = useState();
-
-  useEffect(() => {
-    console.log('type', type);
-  }, [type]);
 
   useEffect(() => {
     if (!loading.addProblem && !loading.addEssay && !loading.addPeerReview) {
@@ -80,6 +80,14 @@ export default function TaskAddingCard({ open, setOpen }) {
       setDisabled(false);
     } else setDisabled(true);
   }, [label, title]);
+
+  useEffect(() => {
+    dispatch(fetchChallenges(authToken, classId));
+  }, [authToken, classId, dispatch]);
+
+  useEffect(() => {
+    console.log('fetch', challenges);
+  }, [challenges]);
 
   const handleCreate = () => {
     switch (type) {
@@ -118,7 +126,7 @@ export default function TaskAddingCard({ open, setOpen }) {
     return <></>;
   }
 
-  if (classes[classId] === undefined || courses[courseId] === undefined || challenges[challengeId] === undefined) {
+  if (classes[classId] === undefined || courses[courseId] === undefined || challenges.byId[challengeId] === undefined) {
     return <NoMatch />;
   }
 
@@ -133,7 +141,7 @@ export default function TaskAddingCard({ open, setOpen }) {
             <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
           </AlignedText>
           <AlignedText text="Challenge" childrenType="text">
-            <Typography>{`${challenges[challengeId].title}`}</Typography>
+            <Typography>{`${challenges.byId[challengeId].title}`}</Typography>
           </AlignedText>
           <AlignedText text="Type" childrenType="field">
             <FormControl variant="outlined">
@@ -191,16 +199,19 @@ export default function TaskAddingCard({ open, setOpen }) {
                 <Select
                   labelId="sort"
                   id="sort"
-                  value={type}
+                  value={peerReviewChallengeItem}
                   onChange={(e) => {
-                    setChallenge(e.target.value);
+                    setPeerReviewChallengeItem(e.target.value);
+                    console.log('111', e);
+                    console.log('222', e.target);
                   }}
                   style={{ width: '350px' }}
                 >
-                  <MenuItem value="Challenge">
-                    <Icon.Code className={classNames.selectedIcon} />
-                    ChallengeTest
-                  </MenuItem>
+                  {challenges.allIds.map((id) => (
+                    <MenuItem key={id} value={challenges.byId[id].title}>
+                      {challenges.byId[id].title}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </AlignedText>
