@@ -59,7 +59,7 @@ export default function MySubmission() {
       <SimpleBar title="Submission Information">
         <AlignedText text="My Best Score" childrenType="text">
           <Typography variant="body1">
-            {problems.byId[problemId].score.toString() ? problems.byId[problemId].score.toString() : '-'}
+            {problems.byId[problemId].score?.toString() ? problems.byId[problemId].score.toString() : '-'}
           </Typography>
         </AlignedText>
       </SimpleBar>
