@@ -59,12 +59,15 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [label, setLabel] = useState('');
   const [title, setTitle] = useState('');
   const [disabled, setDisabled] = useState(true);
-  const [PeerReviewCard, setPeerReviewCard] = useState(false);
   const [challenge, setChallenge] = useState();
   const [task, setTask] = useState();
   const [maxScore, setMaxScore] = useState(3);
   const [minScore, setMinScore] = useState(1);
   const [peerNumbers, setPeerNumbers] = useState();
+
+  useEffect(() => {
+    console.log('type', type);
+  }, [type]);
 
   useEffect(() => {
     if (!loading.addProblem && !loading.addEssay && !loading.addPeerReview) {
@@ -180,9 +183,7 @@ export default function TaskAddingCard({ open, setOpen }) {
               }}
             />
           </AlignedText>
-          <div
-            className={PeerReviewCard === false ? classNames.peerReviewCard_display : classNames.peerReviewCard_hide}
-          >
+          <div className={type === 'Peer Review' ? classNames.peerReviewCard_display : classNames.peerReviewCard_hide}>
             <hr />
             <h3>Peer Review Task</h3>
             <AlignedText text="Challenge" childrenType="field">
