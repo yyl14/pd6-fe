@@ -197,8 +197,8 @@ export const addTeamMember = (token, teamId, student, role, onSuccess, onError) 
   try {
     dispatch({ type: teamConstants.ADD_TEAM_MEMBER_START });
     const res = await agent.post(`/team/${teamId}/member`, body, config);
-    dispatch({ type: teamConstants.ADD_TEAM_MEMBER_SUCCESS });
-    onSuccess(res.data.data.id[0]);
+    dispatch({ type: teamConstants.ADD_TEAM_MEMBER_SUCCESS, payload: { teamId, memberId: res.data.data.id[0] } });
+    onSuccess();
   } catch (error) {
     dispatch({
       type: teamConstants.ADD_TEAM_MEMBER_FAIL,

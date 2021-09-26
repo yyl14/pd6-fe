@@ -38,6 +38,7 @@ export default function TeamMemberEdit({
   const dispatch = useDispatch();
 
   const authToken = useSelector((state) => state.auth.token);
+  const teams = useSelector((state) => state.teams.byId);
   const teamMembers = useSelector((state) => state.teamMembers.byId);
   const teamMemberIds = useSelector((state) => state.teamMembers.allIds);
 
@@ -50,7 +51,6 @@ export default function TeamMemberEdit({
       role: systemRoleTransformation(teamMembers[id].role),
     })),
   );
-  const [tempAdd, setTempAdd] = useState([]);
   const [popUp, setPopUp] = useState(false);
   const [inputs, setInputs] = useState({
     student: '',
@@ -77,7 +77,7 @@ export default function TeamMemberEdit({
     //         || item === teamMembers[id].account.student_id)
     //       && dispatch(deleteTeamMember(authToken, teamId, teamMembers[id].member_id)),
     // ));
-    tempAdd.map((id) => dispatch(deleteTeamMember(authToken, teamId, id)));
+    teams[teamId].tempAddMember.map((id) => dispatch(deleteTeamMember(authToken, teamId, id)));
     handleBack();
   };
 
@@ -98,13 +98,12 @@ export default function TeamMemberEdit({
     handleBack();
   };
 
-  const addMemberSuccess = (newMemberId) => {
-    setTempAdd([...tempAdd, newMemberId]);
+  const addMemberSuccess = () => {
     setPopUp(false);
     clearInputs();
   };
 
-  console.log(tempAdd);
+  console.log(teams[teamId].tempAddMember);
 
   const handleAdd = () => {
     const role = inputs.role === 'Normal' ? 'NORMAL' : 'MANAGER';
