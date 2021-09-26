@@ -10,7 +10,7 @@ const prototype = {
   id: null,
   name: null,
   course_id: null,
-  is_deleted: false,
+  is_deleted: null,
   memberIds: [],
   gradeIds: [],
   teamIds: [],

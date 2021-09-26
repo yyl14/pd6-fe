@@ -7,7 +7,7 @@ const prototype = {
   id: null,
   name: null,
   type: null,
-  is_deleted: false,
+  is_deleted: null,
   classIds: [],
 };
 

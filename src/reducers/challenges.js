@@ -18,7 +18,7 @@ const prototype = {
   description: null,
   start_time: null,
   end_time: null,
-  is_deleted: false,
+  is_deleted: null,
   problemIds: [],
   peerReviewIds: [],
   specialJudgeIds: [],

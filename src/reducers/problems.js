@@ -14,7 +14,7 @@ const prototype = {
   io_description: null,
   source: null,
   hint: null,
-  is_deleted: false,
+  is_deleted: null,
   testcaseIds: [],
   assistingDataIds: [],
   score: '',
