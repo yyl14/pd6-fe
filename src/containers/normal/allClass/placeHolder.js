@@ -13,7 +13,7 @@ function PlaceHolder() {
 
   useEffect(() => {
     dispatch(fetchCourses(authToken));
-  });
+  }, [authToken, dispatch]);
 
   useEffect(() => {
     if (courseId !== undefined) {

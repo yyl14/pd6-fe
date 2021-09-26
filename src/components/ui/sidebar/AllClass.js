@@ -13,6 +13,7 @@ export default function AllClass({
   const baseURL = '/all-class';
   const classes = useSelector((state) => state.classes);
   const courses = useSelector((state) => state.courses);
+  const loading = useSelector((state) => state.loading);
 
   const [display, setDisplay] = useState('unfold'); // 0: fold, 1: unfold
   const [arrow, setArrow] = useState(null);
