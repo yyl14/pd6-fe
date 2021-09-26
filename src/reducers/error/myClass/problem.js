@@ -101,6 +101,11 @@ export default function problem(state = initialState, action) {
         ...state,
         addAssistingData: action.error,
       };
+    case problemConstants.SUBMIT_PROBLEM_START:
+      return {
+        ...state,
+        submitCode: null,
+      };
     case problemConstants.SUBMIT_PROBLEM_FAIL:
       return {
         ...state,
