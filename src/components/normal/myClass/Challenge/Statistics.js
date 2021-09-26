@@ -195,7 +195,7 @@ export default function Statistics() {
   return (
     <>
       <PageTitle text={`${challengeTitle} / Statistics`} />
-      <SimpleBar title="Statistics" />
+      <SimpleBar title="Global Statistics" />
       <SimpleTable
         data={statisticsData}
         columns={[
@@ -234,7 +234,7 @@ export default function Statistics() {
         ]}
       />
       <div className={classes.placeholder} />
-      <SimpleBar title="Scoreboard" />
+      <SimpleBar title="Class Scoreboard" />
       <CustomTable
         buttons={(
           <CopyToClipboard options={{ format: 'text/html' }} text={scoreboardHTML} onCopy={() => setShowSnackbar(true)}>
