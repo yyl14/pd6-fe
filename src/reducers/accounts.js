@@ -88,6 +88,21 @@ const byId = (state = {}, action) => {
       };
     }
 
+    case commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_SUCCESS: {
+      const { accounts } = action.payload.data;
+      return accounts.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item.id]: {
+            ...prototype,
+            ...state[action.payload.id],
+            ...item,
+          },
+        }),
+        state,
+      );
+    }
+
     case accountConstants.FETCH_STUDENT_CARDS_SUCCESS: {
       const { id, data } = action.payload;
       return {
