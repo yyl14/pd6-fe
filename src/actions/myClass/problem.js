@@ -4,7 +4,7 @@ import { autoTableConstants } from '../component/constant';
 import browseParamsTransForm from '../../function/browseParamsTransform';
 import getTextFromUrl from '../../function/getTextFromUrl';
 
-const readProblemInfo = (token, problemId) => async (dispatch) => {
+const readProblemInfo = (token, problemId, onSuccess, onError) => async (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
@@ -18,11 +18,17 @@ const readProblemInfo = (token, problemId) => async (dispatch) => {
       type: problemConstants.READ_PROBLEM_SUCCESS,
       payload: res.data.data,
     });
+    if (typeof onSuccess === 'function') {
+      onSuccess();
+    }
   } catch (error) {
     dispatch({
       type: problemConstants.READ_PROBLEM_FAIL,
       error,
     });
+    if (typeof onError === 'function') {
+      onError();
+    }
   }
 };
 
