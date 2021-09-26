@@ -3,6 +3,23 @@ import { problemConstants, challengeConstants, submissionConstants } from '../ac
 import { commonConstants } from '../actions/common/constant';
 import { viewConstants } from '../actions/api/constant';
 
+const prototype = {
+  id: null,
+  challenge_id: null,
+  challenge_label: null,
+  title: null,
+  setter_id: null,
+  full_score: null,
+  description: null,
+  io_description: null,
+  source: null,
+  hint: null,
+  is_deleted: false,
+  testcaseIds: [],
+  assistingDataIds: [],
+  score: '',
+};
+
 const byId = (state = {}, action) => {
   switch (action.type) {
     case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
@@ -147,7 +164,7 @@ const byId = (state = {}, action) => {
     }
     case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
       const { problems } = action.payload.data;
-      return problems.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+      return problems.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
     }
 
     default:

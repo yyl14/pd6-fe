@@ -8,6 +8,24 @@ const emptyStatistics = {
   memberSubmission: [],
 };
 
+const prototype = {
+  id: null,
+  class_id: null,
+  publicize_type: null,
+  selection_type: null,
+  title: null,
+  setter_id: null,
+  description: null,
+  start_time: null,
+  end_time: null,
+  is_deleted: false,
+  problemIds: [],
+  peerReviewIds: [],
+  specialJudgeIds: [],
+  essayIds: [],
+  statistics: emptyStatistics,
+};
+
 const byId = (state = {}, action) => {
   switch (action.type) {
     case challengeConstants.FETCH_CHALLENGES_SUCCESS: {
@@ -100,7 +118,7 @@ const byId = (state = {}, action) => {
     }
     case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
       const { challenges } = action.payload.data;
-      return challenges.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+      return challenges.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
     }
     default:
       return state;
