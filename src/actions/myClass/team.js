@@ -194,12 +194,11 @@ export const addTeamMember = (token, teamId, student, role, onSuccess, onError) 
     },
   };
   const body = [{ account_referral: student, role }];
-  // console.log('body', body);
   try {
     dispatch({ type: teamConstants.ADD_TEAM_MEMBER_START });
-    await agent.post(`/team/${teamId}/member`, body, config);
+    const res = await agent.post(`/team/${teamId}/member`, body, config);
     dispatch({ type: teamConstants.ADD_TEAM_MEMBER_SUCCESS });
-    onSuccess();
+    onSuccess(res.data.data.id[0]);
   } catch (error) {
     dispatch({
       type: teamConstants.ADD_TEAM_MEMBER_FAIL,

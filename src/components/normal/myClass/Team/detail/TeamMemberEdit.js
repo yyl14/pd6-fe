@@ -11,12 +11,10 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Snackbar,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdAdd } from 'react-icons/md';
-import Icon from '../../../../ui/icon/index';
 import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleTable from '../../../../ui/SimpleTable';
@@ -50,10 +48,9 @@ export default function TeamMemberEdit({
       student_id: teamMembers[id] ? teamMembers[id].account.student_id : '',
       real_name: teamMembers[id] ? teamMembers[id].account.real_name : '',
       role: systemRoleTransformation(teamMembers[id].role),
-      path: '/',
     })),
   );
-  const [tempAddData, setTempAddData] = useState([]);
+  const [tempAdd, setTempAdd] = useState([]);
   const [popUp, setPopUp] = useState(false);
   const [inputs, setInputs] = useState({
     student: '',
@@ -74,12 +71,13 @@ export default function TeamMemberEdit({
 
   const handleCancel = () => {
     // delete unsaved added members
-    tempAddData.map((item) => teamMemberIds.map(
-      (id) => (item === teamMembers[id].account.username
-            || item === teamMembers[id].account.real_name
-            || item === teamMembers[id].account.student_id)
-          && dispatch(deleteTeamMember(authToken, teamId, teamMembers[id].member_id)),
-    ));
+    // tempAddData.map((item) => teamMemberIds.map(
+    //   (id) => (item === teamMembers[id].account.username
+    //         || item === teamMembers[id].account.real_name
+    //         || item === teamMembers[id].account.student_id)
+    //       && dispatch(deleteTeamMember(authToken, teamId, teamMembers[id].member_id)),
+    // ));
+    tempAdd.map((id) => dispatch(deleteTeamMember(authToken, teamId, id)));
     handleBack();
   };
 
@@ -100,18 +98,17 @@ export default function TeamMemberEdit({
     handleBack();
   };
 
-  const addMemberSuccess = () => {
+  const addMemberSuccess = (newMemberId) => {
+    setTempAdd([...tempAdd, newMemberId]);
     setPopUp(false);
     clearInputs();
   };
 
+  console.log(tempAdd);
+
   const handleAdd = () => {
-    if (inputs.student !== '') {
-      const role = inputs.role === 'Normal' ? 'NORMAL' : 'MANAGER';
-      dispatch(addTeamMember(authToken, teamId, inputs.student, role, addMemberSuccess, () => setAddMemberFail(true)));
-      const newTempAdd = [...tempAddData, inputs.student];
-      setTempAddData(newTempAdd);
-    }
+    const role = inputs.role === 'Normal' ? 'NORMAL' : 'MANAGER';
+    dispatch(addTeamMember(authToken, teamId, inputs.student, role, addMemberSuccess, () => setAddMemberFail(true)));
   };
 
   return (
