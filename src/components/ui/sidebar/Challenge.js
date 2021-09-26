@@ -204,12 +204,8 @@ export default function Challenge({
           path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${submissionId}`,
         },
       ]);
-    } else if (
-      mode === 'my_submission_detail'
-      && userClasses.length !== 0
-      && userClasses.find((x) => x.class_id === Number(classId))
-    ) {
-      if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
+    } else if (mode === 'my_submission_detail') {
+      if (userClasses.find((x) => x.class_id === Number(classId))?.role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
       }
       setArrow(
