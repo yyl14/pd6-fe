@@ -57,6 +57,7 @@ export default function Challenge({
       if (
         userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER'
         && challenges[challengeId] !== undefined
+        && challenges[challengeId].problemIds !== undefined
       ) {
         // console.log(problems, essays, userClasses);
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
