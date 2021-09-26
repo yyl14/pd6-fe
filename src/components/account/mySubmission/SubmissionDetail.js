@@ -58,6 +58,7 @@ export default function SubmissionDetail() {
   const testcases = useSelector((state) => state.testcases);
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.problem);
+  const userClasses = useSelector((state) => state.user.classes);
 
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
@@ -204,13 +205,20 @@ export default function SubmissionDetail() {
           <Typography variant="body1">{user.real_name}</Typography>
         </AlignedText>
         <AlignedText text="Challenge" childrenType="text">
-          <Link to={`/all-class/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
+          <Link
+            to={`/${
+              userClasses.filter((c) => c.class_id === Number(classId)).length === 0 ? 'all-class' : 'my-class'
+            }/${courseId}/${classId}/challenge/${challengeId}`}
+            className={classNames.textLink}
+          >
             <Typography variant="body1">{challenges.byId[challengeId].title}</Typography>
           </Link>
         </AlignedText>
         <AlignedText text="Task Label" childrenType="text">
           <Link
-            to={`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`}
+            to={`/${
+              userClasses.filter((c) => c.class_id === Number(classId)).length === 0 ? 'all-class' : 'my-class'
+            }/${courseId}/${classId}/challenge/${challengeId}/${problemId}`}
             className={classNames.textLink}
           >
             <Typography variant="body1">{problems.byId[problemId].challenge_label}</Typography>

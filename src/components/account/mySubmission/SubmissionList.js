@@ -15,6 +15,7 @@ export default function SubmissionList() {
   const challenges = useSelector((state) => state.challenges.byId);
   const courses = useSelector((state) => state.courses.byId);
   const classes = useSelector((state) => state.classes.byId);
+  const userClasses = useSelector((state) => state.user.classes);
 
   return (
     <>
@@ -92,12 +93,16 @@ export default function SubmissionList() {
           Course: courses[item.course_id] ? courses[item.course_id].name : '-',
           Class: {
             text: classes[item.class_id] ? classes[item.class_id].name : '-',
-            path: `/all-class/${item.course_id}/${item.class_id}/challenge`,
+            path: `/${
+              userClasses.filter((c) => c.class_id === item.class_id).length === 0 ? 'all-class' : 'my-class'
+            }/${item.course_id}/${item.class_id}/challenge`,
           },
           Challenge: challenges[item.challenge_id] ? challenges[item.challenge_id].title : '-',
           Task: {
             text: problems[item.problem_id] ? problems[item.problem_id].challenge_label : '-',
-            path: `/all-class/${item.course_id}/${item.class_id}/challenge/${item.challenge_id}/${item.problem_id}`,
+            path: `/${
+              userClasses.filter((c) => c.class_id === item.class_id).length === 0 ? 'all-class' : 'my-class'
+            }/${item.course_id}/${item.class_id}/challenge/${item.challenge_id}/${item.problem_id}`,
           },
           Status: item.verdict === null ? 'Waiting For Judge' : item.verdict,
           'Submitted Time': moment(item.submit_time).format('YYYY-MM-DD, HH:mm'),
