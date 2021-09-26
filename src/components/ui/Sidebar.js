@@ -4,13 +4,11 @@ import {
   Switch, Route, useHistory, useLocation,
 } from 'react-router-dom';
 
-// import { Autocomplete } from '@material-ui/lab';
 import Account from './sidebar/Account';
 import Course from './sidebar/Course';
 import System from './sidebar/System';
 import MyProfile from './sidebar/MyProfile';
 import UserProfile from './sidebar/UserProfile';
-
 import MyClass from './sidebar/MyClass';
 import Challenge from './sidebar/Challenge';
 import Submission from './sidebar/Submission';
@@ -65,6 +63,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 'auto',
     flex: '1',
     marginLeft: '10px',
+    marginRight: '7px',
+    width: '18px',
   },
   itemIcon: {
     flex: '1',
@@ -217,6 +217,24 @@ export default function Sidebar() {
       <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/essay/:essayId">
         <Challenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId">
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/summary">
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route
+        exact
+        path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/detail/:recordId"
+      >
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route
+        exact
+        path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/review/:recordId"
+      >
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
       {/* {Submission} */}
       <Route exact path="/my-class/:courseId/:classId/submission">
         <MyClass classNames={classes} history={history} location={location} mode="main" />
@@ -271,9 +289,6 @@ export default function Sidebar() {
       <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId">
         <AllClassChallenge classNames={classes} history={history} location={location} mode="submission_detail" />
       </Route>
-      <Route exact path="/all-class/:courseId/:classId/challenge/:challengeId/essay/:essayId">
-        <AllClassChallenge classNames={classes} history={history} location={location} mode="challenge" />
-      </Route>
 
       {/* {Problem Set} */}
       <Route exact path="/problem-set">
@@ -288,6 +303,15 @@ export default function Sidebar() {
       <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId">
         <ProblemSetChallenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
+      <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId/my-submission">
+        <ProblemSetChallenge classNames={classes} history={history} location={location} mode="submission" />
+      </Route>
+      <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId/code-submission">
+        <ProblemSetChallenge classNames={classes} history={history} location={location} mode="submission" />
+      </Route>
+      <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId">
+        <ProblemSetChallenge classNames={classes} history={history} location={location} mode="submission_detail" />
+      </Route>
 
       {/* {System} */}
       <Route exact path="/system">
@@ -298,6 +322,11 @@ export default function Sidebar() {
       </Route>
       <Route exact path="/system/accesslog">
         <System classes={classes} history={history} location={location} mode="system" />
+      </Route>
+
+      {/* {My Submission} */}
+      <Route exact path="/my-submission/:courseId/:classId/:challengeId/:problemId/:submissionId">
+        <Challenge classNames={classes} history={history} location={location} mode="my_submission_detail" />
       </Route>
     </Switch>
   );

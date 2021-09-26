@@ -22,9 +22,6 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     overflowX: 'hide',
   },
-  container: {
-    maxHeight: 800,
-  },
   topContent: {
     background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
@@ -86,6 +83,9 @@ const useStyles = makeStyles((theme) => ({
       background: theme.palette.grey[300],
     },
   },
+  default: { color: theme.palette.black.dark },
+  error: { color: theme.palette.secondary.main },
+  primary: { color: theme.palette.primary.main },
 }));
 
 export default function SimpleTable({
@@ -132,7 +132,7 @@ export default function SimpleTable({
         <div className={classes.buttons}>{buttons}</div>
       </div>
       <Paper className={classes.root} elevation={0}>
-        <TableContainer className={classes.container}>
+        <TableContainer>
           <Table>
             <TableHead className={classes.tableHead}>
               <TableRow>
@@ -212,7 +212,11 @@ export default function SimpleTable({
                       );
                     }
                     return (
-                      <TableCell key={column.id} align={column.align}>
+                      <TableCell
+                        key={column.id}
+                        align={column.align}
+                        className={column.colors && column.colors[value] && classes[column.colors[value]]}
+                      >
                         {column.format && typeof value === 'number' ? column.format(value) : value}
                       </TableCell>
                     );

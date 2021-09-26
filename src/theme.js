@@ -472,11 +472,14 @@ const overrides = {
   MuiSelect: {
     outlined: {
       padding: '10px 0px 10px 15px',
-      display: 'flex',
       alignItems: 'center',
     },
     selectMenu: {
       // height: '1.1876em',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+
     },
   },
   MuiSwitch: {

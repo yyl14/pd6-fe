@@ -6,9 +6,6 @@ import {
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
-import { fetchChallenges } from '../../../actions/myClass/challenge';
-import { fetchClass, fetchCourse } from '../../../actions/common/common';
-
 export default function AllClassChallenge({
   classNames, history, location, mode,
 }) {
@@ -28,12 +25,6 @@ export default function AllClassChallenge({
   const problems = useSelector((state) => state.problem);
   const essays = useSelector((state) => state.essays);
 
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-    dispatch(fetchChallenges(authToken, classId));
-  }, [dispatch, authToken, classId, courseId]);
-
   const [display, setDisplay] = useState('unfold');
 
   const [title, setTitle] = useState('');
@@ -45,13 +36,13 @@ export default function AllClassChallenge({
       history.push(`${baseURL}/${courseId}/${classId}/challenge`);
     };
     const goBackToProblem = () => {
-      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}`);
+      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}`);
     };
     const goBackToSubmission = () => {
       history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
     };
     if (mode === 'challenge') {
-      if (challenges[challengeId] !== undefined) {
+      if (challenges[challengeId] !== undefined && challenges[challengeId].problemIds !== undefined) {
         setArrow(
           <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
             <Icon.ArrowBackRoundedIcon />
@@ -182,7 +173,9 @@ export default function AllClassChallenge({
                   button
                   key={item.text}
                   onClick={() => history.push(item.path)}
-                  className={location.pathname === item.path ? `${classes.active} ${classes.item}` : classes.item}
+                  className={
+                    location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item
+                  }
                 >
                   <ListItemIcon className={classNames.itemIcon}>{item.icon}</ListItemIcon>
                   <ListItemText primary={item.text} className={classNames.itemText} />

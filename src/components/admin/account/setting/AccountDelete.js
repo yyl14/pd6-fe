@@ -44,7 +44,7 @@ export default function AccountDelete(props) {
         setErrorPopup(true);
       } else {
         setHasRequest(false);
-        history.push('/admin/account/account/');
+        history.push('/admin/account/account');
       }
     }
   }, [deleteLoading, deleteError, hasRequest, history]);

@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { fetchChallengeSummary, fetchChallengeMemberSubmission } from '../../../../actions/myClass/challenge';
 import { fetchDownloadFileUrl } from '../../../../actions/common/common';
-import { fetchSubmission } from '../../../../actions/myClass/submission';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
 import CustomTable from '../../../ui/CustomTable';
@@ -196,7 +195,7 @@ export default function Statistics() {
   return (
     <>
       <PageTitle text={`${challengeTitle} / Statistics`} />
-      <SimpleBar title="Statistics" />
+      <SimpleBar title="Global Statistics" />
       <SimpleTable
         data={statisticsData}
         columns={[
@@ -235,7 +234,7 @@ export default function Statistics() {
         ]}
       />
       <div className={classes.placeholder} />
-      <SimpleBar title="Scoreboard" />
+      <SimpleBar title="Class Scoreboard" />
       <CustomTable
         buttons={(
           <CopyToClipboard options={{ format: 'text/html' }} text={scoreboardHTML} onCopy={() => setShowSnackbar(true)}>

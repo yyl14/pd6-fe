@@ -6,8 +6,6 @@ const initialState = {
   browseChallengeOverview: false,
   readSubmissionDetail: false,
   browseJudgeCases: false,
-  readTestcase: false,
-  getAccountBatch: false,
   rejudgeSubmission: false,
   browseTestcases: false,
 };
@@ -86,42 +84,6 @@ export default function submissions(state = initialState, action) {
       return {
         ...state,
         browseJudgeCases: false,
-      };
-    }
-    case submissionConstants.READ_TESTCASE_START: {
-      return {
-        ...state,
-        readTestcase: true,
-      };
-    }
-    case submissionConstants.READ_TESTCASE_SUCCESS: {
-      return {
-        ...state,
-        readTestcase: false,
-      };
-    }
-    case submissionConstants.READ_TESTCASE_FAIL: {
-      return {
-        ...state,
-        readTestcase: false,
-      };
-    }
-    case submissionConstants.GET_ACCOUNT_BATCH_START: {
-      return {
-        ...state,
-        getAccountBatch: true,
-      };
-    }
-    case submissionConstants.GET_ACCOUNT_BATCH_SUCCESS: {
-      return {
-        ...state,
-        getAccountBatch: false,
-      };
-    }
-    case submissionConstants.GET_ACCOUNT_BATCH_FAIL: {
-      return {
-        ...state,
-        getAccountBatch: false,
       };
     }
     case submissionConstants.REJUDGE_SUBMISSION_START:

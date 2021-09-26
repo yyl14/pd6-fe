@@ -2,14 +2,14 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PageTitle from '../../ui/PageTitle';
 import AutoTable from '../../ui/AutoTable';
-import { fetchAccounts } from '../../../actions/admin/account';
+import { browseAccountWithDefaultStudentId } from '../../../actions/api/view';
 
 export default function AccountList() {
   const dispatch = useDispatch();
 
   const accounts = useSelector((state) => state.accounts);
   const authToken = useSelector((state) => state.auth.token);
-  const error = useSelector((state) => state.error.admin.account.fetchAccounts);
+  const error = useSelector((state) => state.error.api.view.browseAccountWithDefaultStudentId);
 
   return (
     <>
@@ -25,12 +25,12 @@ export default function AccountList() {
             type: 'TEXT',
             operation: 'LIKE',
           },
-          // {
-          //   reduxStateId: 'student_id',
-          //   label: 'Student ID',
-          //   type: 'TEXT',
-          //   operation: 'LIKE',
-          // },
+          {
+            reduxStateId: 'student_id',
+            label: 'Student ID',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
           {
             reduxStateId: 'real_name',
             label: 'Real Name',
@@ -39,7 +39,7 @@ export default function AccountList() {
           },
         ]}
         refetch={(browseParams, ident) => {
-          dispatch(fetchAccounts(authToken, browseParams, ident));
+          dispatch(browseAccountWithDefaultStudentId(authToken, browseParams, ident));
         }}
         refetchErrors={[error]}
         columns={[
@@ -47,16 +47,19 @@ export default function AccountList() {
             name: 'Username',
             align: 'center',
             type: 'string',
+            sortable: 'username',
           },
           {
             name: 'Student ID',
             align: 'center',
             type: 'string',
+            sortable: 'student_id',
           },
           {
             name: 'Real Name',
             align: 'center',
             type: 'string',
+            sortable: 'real_name',
           },
         ]}
         reduxData={accounts}

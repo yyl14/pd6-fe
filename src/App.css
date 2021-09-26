@@ -15,6 +15,13 @@
   height: calc(100vh - 55px);
   justify-items: center;
   overflow-y: scroll;
+  min-width: 700px;
+}
+
+.layout-content-container-no-sidebar {
+  left: unset;
+  width: 100%;
+  transition: 0.5s;
 }
 
 .layout-content {

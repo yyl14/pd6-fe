@@ -3,7 +3,6 @@ import { problemConstants } from '../../../actions/myClass/constant';
 const initialState = {
   readProblem: false,
   readSubmission: false,
-  readJudgment: false,
   browseTestcase: false,
   browseAssistingData: false,
   editProblem: false,
@@ -19,15 +18,32 @@ const initialState = {
   addTestcase: false,
   browseJudgeCases: false,
   readProblemScore: false,
+  readProblemBestScore: false,
   downloadSamples: false,
   downloadTestcases: false,
   rejudgeSubmission: false,
   browseTestcases: false,
   rejudgeProblem: false,
+  viewMySubmissionUnderProblem: false,
 };
 
 export default function problem(state = initialState, action) {
   switch (action.type) {
+    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_START:
+      return {
+        ...state,
+        viewMySubmissionUnderProblem: true,
+      };
+    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS:
+      return {
+        ...state,
+        viewMySubmissionUnderProblem: false,
+      };
+    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_FAIL:
+      return {
+        ...state,
+        viewMySubmissionUnderProblem: false,
+      };
     case problemConstants.READ_PROBLEM_START:
       return {
         ...state,
@@ -57,21 +73,6 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         readSubmission: false,
-      };
-    case problemConstants.READ_SUBMISSION_JUDGE_START:
-      return {
-        ...state,
-        readJudgment: true,
-      };
-    case problemConstants.READ_SUBMISSION_JUDGE_SUCCESS:
-      return {
-        ...state,
-        readJudgment: false,
-      };
-    case problemConstants.READ_SUBMISSION_JUDGE_FAIL:
-      return {
-        ...state,
-        readJudgment: false,
       };
     case problemConstants.BROWSE_JUDGE_CASES_START:
       return {
@@ -299,6 +300,23 @@ export default function problem(state = initialState, action) {
         ...state,
         readProblemScore: false,
       };
+
+    case problemConstants.READ_PROBLEM_BEST_SCORE_START:
+      return {
+        ...state,
+        readProblemBestScore: true,
+      };
+    case problemConstants.READ_PROBLEM_BEST_SCORE_SUCCESS:
+      return {
+        ...state,
+        readProblemBestScore: false,
+      };
+    case problemConstants.READ_PROBLEM_BEST_SCORE_FAIL:
+      return {
+        ...state,
+        readProblemBestScore: false,
+      };
+
     case problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_START:
       return {
         ...state,
