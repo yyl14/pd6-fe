@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { challengeConstants } from '../actions/myClass/constant';
 import { commonConstants } from '../actions/common/constant';
-import { viewConstants } from '../actions/api/constant';
+import { viewConstants, peerReviewConstants } from '../actions/api/constant';
 
 const emptyStatistics = {
   summary: [],
@@ -120,6 +120,18 @@ const byId = (state = {}, action) => {
       const { challenges } = action.payload.data;
       return challenges.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
     }
+
+    case peerReviewConstants.READ_PEER_REVIEW_SUCCESS: {
+      return {
+        ...state,
+        [action.payload.challenge_id]: {
+          ...prototype,
+          ...state[action.payload.challenge_id],
+          peerReviewIds: state[action.payload.challenge_id] ? state[action.payload.challenge_id].peerReviewIds.concat([action.payload.id]) : [action.payload.id],
+        },
+      };
+    }
+
     default:
       return state;
   }
