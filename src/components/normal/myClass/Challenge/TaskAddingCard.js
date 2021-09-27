@@ -24,8 +24,9 @@ import {
   addEssay,
   addPeerReview,
   browseTasksUnderChallenge,
-  fetchChallenges,
+  peerReviewFetchChallenges,
 } from '../../../../actions/myClass/challenge';
+import { readProblemInfo } from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles(() => ({
   selectedIcon: {
@@ -55,6 +56,7 @@ export default function TaskAddingCard({ open, setOpen }) {
   const courses = useSelector((state) => state.courses.byId);
   const challenges = useSelector((state) => state.challenges);
   const authToken = useSelector((state) => state.auth.token);
+  const problems = useSelector((state) => state.problem);
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
   const commonLoading = useSelector((state) => state.loading.common);
@@ -63,8 +65,10 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [label, setLabel] = useState('');
   const [title, setTitle] = useState('');
   const [disabled, setDisabled] = useState(true);
-  const [peerReviewChallengeItem, setPeerReviewChallengeItem] = useState();
-  const [task, setTask] = useState();
+  const [peerReviewChallengeId, setPeerReviewChallengeId] = useState();
+  const [peerReviewChallengeIds, setPeerReviewChallengeIds] = useState([]);
+  const [taskLabel, setTaskLabel] = useState();
+  const [taskId, setTaskId] = useState([]);
   const [maxScore, setMaxScore] = useState(3);
   const [minScore, setMinScore] = useState(1);
   const [peerNumbers, setPeerNumbers] = useState();
@@ -82,11 +86,20 @@ export default function TaskAddingCard({ open, setOpen }) {
   }, [label, title]);
 
   useEffect(() => {
-    dispatch(fetchChallenges(authToken, classId));
+    dispatch(peerReviewFetchChallenges(authToken, classId));
   }, [authToken, classId, dispatch]);
 
   useEffect(() => {
-    console.log('fetch', challenges);
+    const temp = challenges.allIds.filter((id) => challenges.byId[id].class_id === Number(classId));
+    setPeerReviewChallengeIds(temp);
+  }, [challenges.allIds, challenges.byId, classId]);
+
+  // useEffect(() => {
+  //   peerReviewChallengeIds.map((id) => dispatch(browseTasksUnderChallenge(authToken, id)));
+  // });
+
+  useEffect(() => {
+    console.log('challenges:', challenges);
   }, [challenges]);
 
   const handleCreate = () => {
@@ -199,16 +212,14 @@ export default function TaskAddingCard({ open, setOpen }) {
                 <Select
                   labelId="sort"
                   id="sort"
-                  value={peerReviewChallengeItem}
+                  value={peerReviewChallengeId}
                   onChange={(e) => {
-                    setPeerReviewChallengeItem(e.target.value);
-                    console.log('111', e);
-                    console.log('222', e.target);
+                    setPeerReviewChallengeId(e.target.value);
                   }}
                   style={{ width: '350px' }}
                 >
-                  {challenges.allIds.map((id) => (
-                    <MenuItem key={id} value={challenges.byId[id].title}>
+                  {peerReviewChallengeIds.map((id) => (
+                    <MenuItem key={id} value={id}>
                       {challenges.byId[id].title}
                     </MenuItem>
                   ))}
@@ -220,16 +231,16 @@ export default function TaskAddingCard({ open, setOpen }) {
                 <Select
                   labelId="sort"
                   id="sort"
-                  value={type}
+                  value={taskLabel}
                   onChange={(e) => {
-                    setTask(e.target.value);
+                    setTaskLabel(e.target.value);
                   }}
                   style={{ width: '350px' }}
                 >
-                  <MenuItem value="Task">
-                    <Icon.Code className={classNames.selectedIcon} />
-                    TaskTest
-                  </MenuItem>
+                  <MenuItem value="hi">hi</MenuItem>
+                  {/* {probleID.map((id) => (
+                  <MenuItem value={problems.byId[id].challenge_label}>{problems.byId[id].challenge_label}</MenuItem>
+                  ))} */}
                 </Select>
               </FormControl>
             </AlignedText>

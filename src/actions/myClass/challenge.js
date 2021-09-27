@@ -80,6 +80,28 @@ const fetchChallenges = (token, classId, browseParams, tableId = null) => async 
   }
 };
 
+const peerReviewFetchChallenges = (token, classId) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'auth-token': token,
+      },
+    };
+    dispatch({ type: challengeConstants.FETCH_CHALLENGES_START });
+    const res = await agent.get(`/class/${classId}/challenge`, config);
+    const { data: challenges } = res.data.data;
+    dispatch({
+      type: challengeConstants.FETCH_CHALLENGES_SUCCESS,
+      payload: { classId, data: challenges },
+    });
+  } catch (error) {
+    dispatch({
+      type: challengeConstants.FETCH_CHALLENGES_FAIL,
+      error,
+    });
+  }
+};
+
 // add a challenge under class
 const addChallenge = (token, classId, body) => async (dispatch) => {
   try {
@@ -308,4 +330,5 @@ export {
   addProblem,
   addEssay,
   addPeerReview,
+  peerReviewFetchChallenges,
 };
