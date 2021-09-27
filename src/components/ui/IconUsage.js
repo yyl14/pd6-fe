@@ -32,6 +32,10 @@ export default function IconList() {
           <p>Dots</p>
         </StyledPaper>
         <StyledPaper>
+          <Icon.Info />
+          <p>Info</p>
+        </StyledPaper>
+        <StyledPaper>
           <Icon.FilterIdle />
           <p>FilterIdle</p>
         </StyledPaper>
@@ -218,6 +222,18 @@ export default function IconList() {
         <StyledPaper>
           <Icon.Setting />
           <p>Setting</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.Facebook />
+          <p>Facebook</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.Github />
+          <p>Github</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.LinkedIn />
+          <p>LinkedIn</p>
         </StyledPaper>
       </Grid>
       <h1>MUI icon</h1>
