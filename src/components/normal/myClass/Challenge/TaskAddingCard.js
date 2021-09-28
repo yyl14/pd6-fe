@@ -26,7 +26,6 @@ import {
   browseTasksUnderChallenge,
   peerReviewFetchChallenges,
 } from '../../../../actions/myClass/challenge';
-import { readProblemInfo } from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles(() => ({
   selectedIcon: {
