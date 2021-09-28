@@ -99,7 +99,7 @@ export default function System({
         {
           text: 'Team',
           path: '/system/team',
-          icon: <Icon.Warning />,
+          icon: <Icon.Info />,
         },
         // {
         //   text: 'Access Log',
