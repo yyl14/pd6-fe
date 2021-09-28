@@ -66,9 +66,7 @@ export default function MySubmission({ baseUrl, isProblemSet }) {
           }
           childrenType="text"
         >
-          <Typography variant="body1">
-            {problems.byId[problemId].score.toString() ? problems.byId[problemId].score.toString() : '-'}
-          </Typography>
+          <Typography variant="body1">{problems.byId[problemId].score?.toString() ?? 0}</Typography>
         </AlignedText>
       </SimpleBar>
       <AutoTable
