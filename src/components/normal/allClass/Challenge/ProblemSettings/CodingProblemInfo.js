@@ -222,7 +222,7 @@ export default function CodingProblemInfo() {
             },
             {
               id: 'score',
-              label: 'score',
+              label: 'Score',
               minWidth: 50,
               align: 'center',
               width: 100,
