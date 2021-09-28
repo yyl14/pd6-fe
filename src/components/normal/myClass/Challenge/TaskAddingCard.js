@@ -67,11 +67,10 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [disabled, setDisabled] = useState(true);
   const [peerReviewChallengeId, setPeerReviewChallengeId] = useState();
   const [peerReviewChallengeIds, setPeerReviewChallengeIds] = useState([]);
-  const [taskLabel, setTaskLabel] = useState();
-  const [taskId, setTaskId] = useState([]);
+  const [taskLabelId, setTaskLabelId] = useState();
   const [maxScore, setMaxScore] = useState(3);
   const [minScore, setMinScore] = useState(1);
-  const [peerNumbers, setPeerNumbers] = useState();
+  const [peerNumber, setPeerNumber] = useState(2);
 
   useEffect(() => {
     if (!loading.addProblem && !loading.addEssay && !loading.addPeerReview) {
@@ -80,10 +79,24 @@ export default function TaskAddingCard({ open, setOpen }) {
   }, [authToken, challengeId, dispatch, loading.addEssay, loading.addPeerReview, loading.addProblem]);
 
   useEffect(() => {
-    if (label !== '' && title !== '') {
-      setDisabled(false);
+    if (type === 'Coding Problem' || type === 'Essay(PDF)') {
+      if (label !== '' && title !== '') {
+        setDisabled(false);
+      }
+    } else if (type === 'Peer Review') {
+      if (
+        label !== ''
+        && title !== ''
+        && peerReviewChallengeId !== undefined
+        && taskLabelId !== undefined
+        && maxScore !== ''
+        && minScore !== ''
+        && peerNumber !== ''
+      ) {
+        setDisabled(false);
+      }
     } else setDisabled(true);
-  }, [label, title]);
+  }, [label, maxScore, minScore, peerNumber, peerReviewChallengeId, taskLabelId, title, type]);
 
   useEffect(() => {
     dispatch(peerReviewFetchChallenges(authToken, classId));
@@ -94,13 +107,11 @@ export default function TaskAddingCard({ open, setOpen }) {
     setPeerReviewChallengeIds(temp);
   }, [challenges.allIds, challenges.byId, classId]);
 
-  // useEffect(() => {
-  //   peerReviewChallengeIds.map((id) => dispatch(browseTasksUnderChallenge(authToken, id)));
-  // });
-
   useEffect(() => {
-    console.log('challenges:', challenges);
-  }, [challenges]);
+    if (peerReviewChallengeId !== undefined) {
+      dispatch(browseTasksUnderChallenge(authToken, peerReviewChallengeId));
+    }
+  }, [authToken, dispatch, peerReviewChallengeId]);
 
   const handleCreate = () => {
     switch (type) {
@@ -231,16 +242,18 @@ export default function TaskAddingCard({ open, setOpen }) {
                 <Select
                   labelId="sort"
                   id="sort"
-                  value={taskLabel}
+                  value={taskLabelId}
                   onChange={(e) => {
-                    setTaskLabel(e.target.value);
+                    setTaskLabelId(e.target.value);
                   }}
                   style={{ width: '350px' }}
                 >
-                  <MenuItem value="hi">hi</MenuItem>
-                  {/* {probleID.map((id) => (
-                  <MenuItem value={problems.byId[id].challenge_label}>{problems.byId[id].challenge_label}</MenuItem>
-                  ))} */}
+                  {peerReviewChallengeId !== undefined
+                    && challenges.byId[peerReviewChallengeId].problemIds.map((id) => (
+                      <MenuItem key={id} value={id}>
+                        {problems.byId[id].challenge_label}
+                      </MenuItem>
+                    ))}
                 </Select>
               </FormControl>
             </AlignedText>
@@ -267,10 +280,10 @@ export default function TaskAddingCard({ open, setOpen }) {
             <AlignedText text="Student is Assigned" childrenType="field">
               <TextField
                 id="peerNumbers"
-                value={peerNumbers}
+                value={peerNumber}
                 style={{ width: '150px' }}
                 onChange={(e) => {
-                  setPeerNumbers(e.target.value);
+                  setPeerNumber(e.target.value);
                 }}
               />
               <Typography className={classNames.peerBottomText}>Peers Respectively</Typography>
