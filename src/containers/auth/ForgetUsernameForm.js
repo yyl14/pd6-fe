@@ -11,13 +11,15 @@ import {
   DialogContent,
   DialogTitle,
   makeStyles,
+  Link,
 } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
 import { userForgetUsername } from '../../actions/user/auth';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   authForm: {
     width: '50%',
   },
@@ -26,7 +28,11 @@ const useStyles = makeStyles(() => ({
     marginTop: '55px',
   },
   authButtons: {
-    marginTop: '57px',
+    marginTop: '44px',
+    marginBottom: '30px',
+  },
+  authLink: {
+    color: theme.palette.grey.A400,
   },
 }));
 
