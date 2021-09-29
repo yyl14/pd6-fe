@@ -5,8 +5,7 @@ import {
   Button,
   makeStyles,
 } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
-import { readPeerReview, readPeerReviewRecord } from '../../../../../actions/api/peerReview';
+import { useParams, Link } from 'react-router-dom';
 
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
@@ -15,10 +14,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 /* This is a level 4 component (page component) */
-// This page is only for class normal.
-export default function PeerReviewRecord() {
+// This page is for both normal and manager.
+// Render different component according to role and call correct api.
+// If normal, account id should be himself.
+// Only normal has edit mode.
+export default function ReviewedRecord() {
   const {
-    classId, challengeId, peerReviewId, recordId,
+    classId, challengeId, peerReviewId, accountId, recordId,
   } = useParams();
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -41,21 +43,9 @@ export default function PeerReviewRecord() {
     }
   }, [classId, userClasses]);
 
-  useEffect(() => {
-    dispatch(readPeerReview(authToken, peerReviewId));
-    dispatch(readPeerReviewRecord(authToken, recordId));
-  }, [authToken, dispatch, peerReviewId, recordId]);
-
-  if (peerReviews[peerReviewId] === undefined || peerReviewRecords[recordId] === undefined) {
-    if (loading.readPeerReview || loading.readPeerReviewRecord) {
-      return <GeneralLoading />;
-    }
-    return <NoMatch />;
-  }
-
   return (
     <>
-      <div>PeerReviewRecord</div>
+      <div>PeerReviewDetail</div>
     </>
   );
 }

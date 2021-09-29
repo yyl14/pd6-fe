@@ -16,7 +16,8 @@ const prototype = {
   start_time: null,
   end_time: null,
   is_deleted: null,
-  recordIds: [],
+  receiveRecordIds: [],
+  reviewRecordIds: [],
 };
 
 const byId = (state = {}, action) => {
@@ -31,16 +32,16 @@ const byId = (state = {}, action) => {
         [action.payload.id]: { ...prototype, ...state[action.payload.id], ...action.payload },
       };
     }
-    case peerReviewConstants.READ_PEER_REVIEW_RECORD_SUCCESS: {
-      return {
-        ...state,
-        [action.payload.peer_review_id]: {
-          ...prototype,
-          ...state[action.payload.peer_review_id],
-          recordIds: state[action.payload.peer_review_id] ? state[action.payload.peer_review_id].recordIds.concat([action.payload.id]) : [action.payload.id],
-        },
-      };
-    }
+    // case peerReviewConstants.READ_PEER_REVIEW_RECORD_SUCCESS: {
+    //   return {
+    //     ...state,
+    //     [action.payload.peer_review_id]: {
+    //       ...prototype,
+    //       ...state[action.payload.peer_review_id],
+    //       recordIds: state[action.payload.peer_review_id] ? state[action.payload.peer_review_id].recordIds.concat([action.payload.id]) : [action.payload.id],
+    //     },
+    //   };
+    // }
 
     default:
       return state;

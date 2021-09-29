@@ -7,8 +7,8 @@ import {
 } from '@material-ui/core';
 import { useParams, Link } from 'react-router-dom';
 
-import BasicInfo from './BasicInfo';
-import Overview from './Overview';
+import BasicInfo from './Element/BasicInfo';
+import Overview from './Element/Overview';
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
 

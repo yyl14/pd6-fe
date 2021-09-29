@@ -15,10 +15,10 @@ const useStyles = makeStyles(() => ({
 
 /* This is a level 4 component (page component) */
 // This page is only for class manager.
-export default function PeerReviewSummary() {
+export default function GraderSummary() {
   return (
     <>
-      <div>PeerReviewSummary</div>
+      <div>PeerReviewGraderSummary</div>
     </>
   );
 }
