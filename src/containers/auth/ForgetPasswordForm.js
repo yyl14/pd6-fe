@@ -35,6 +35,7 @@ export default function ForgetPasswordForm() {
   const dispatch = useDispatch();
   const error = useSelector((state) => state.error.user.auth.forgetPassword);
   const loading = useSelector((state) => state.loading.user.auth.forgetPassword);
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [showError, setShowError] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -42,7 +43,18 @@ export default function ForgetPasswordForm() {
   const [popUp, setPopUp] = useState(false);
   const [submit, setSubmit] = useState(false);
 
-  const handleChange = (event) => {
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
+
+    if (username === '') {
+      setDisabled(true);
+      return;
+    }
+
+    setDisabled(email === '');
+  };
+
+  const handleEmailChange = (event) => {
     if (event.target.value === '') {
       setEmail(event.target.value);
       setErrorText('');
@@ -63,7 +75,7 @@ export default function ForgetPasswordForm() {
       setEmail(event.target.value);
       setErrorText('');
       setShowError(false);
-      setDisabled(false);
+      setDisabled(username === '');
     }
   };
 
@@ -114,11 +126,18 @@ export default function ForgetPasswordForm() {
             <TextField
               // required
               className={`auth-form-input ${classNames.authTextFields}`}
+              label="Username"
+              value={username}
+              onChange={(e) => handleUsernameChange(e)}
+            />
+            <TextField
+              // required
+              className={`auth-form-input ${classNames.authTextFields}`}
               error={showError}
               helperText={errorText}
               label="Registered / Alternative Email"
               value={email}
-              onChange={(e) => handleChange(e)}
+              onChange={(e) => handleEmailChange(e)}
             />
             <Button
               className={classNames.authButtons}
