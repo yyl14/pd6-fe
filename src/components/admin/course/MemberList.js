@@ -85,10 +85,13 @@ export default function MemberList() {
                 label: 'Institute',
                 type: 'ENUM',
                 operation: 'IN',
-                options: Object.values(institutes.byId).map((item) => ({
-                  value: item.abbreviated_name,
-                  label: item.abbreviated_name,
-                })),
+                options: institutes.allIds.map((id) => {
+                  const item = institutes.byId[id];
+                  return ({
+                    value: item.abbreviated_name,
+                    label: item.abbreviated_name,
+                  });
+                }),
               },
               {
                 reduxStateId: 'role',
