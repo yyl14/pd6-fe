@@ -17,7 +17,7 @@ export default function ForgetUsername() {
           <ForgetUsernameForm />
         </Grid>
         <Typography className="auth-title" variant="h3">
-          Lost your puppy? Find Username
+          Forgot username? We can help!
         </Typography>
         <Trademark />
       </Grid>

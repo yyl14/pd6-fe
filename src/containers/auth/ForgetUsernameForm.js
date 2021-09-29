@@ -130,6 +130,15 @@ export default function ForgetUsernameForm() {
               Send
             </Button>
           </form>
+
+          <Typography variant="body2" className={classNames.authLink}>
+            Lost your puppy?
+            {' '}
+            <Link component={RouterLink} to="/forget-username">
+              Find Username
+            </Link>
+            {' '}
+          </Typography>
         </CardContent>
       </Card>
 
