@@ -77,10 +77,10 @@ const userForgetUsername = (email) => async (dispatch) => {
   }
 };
 
-const userForgetPassword = (email) => async (dispatch) => {
+const userForgetPassword = (username, email) => async (dispatch) => {
   try {
     dispatch({ type: authConstants.FORGET_PASSWORD_START });
-    await agent.post('/account/forget-password', { email });
+    await agent.post('/account/forget-password', { username, email });
     dispatch({ type: authConstants.FORGET_PASSWORD_SUCCESS });
   } catch (error) {
     dispatch({ type: authConstants.FORGET_PASSWORD_FAIL, error });
