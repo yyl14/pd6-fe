@@ -51,13 +51,7 @@ export default function ForgetPasswordForm() {
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
-
-    if (event.target.value === '') {
-      setDisabled(true);
-      return;
-    }
-
-    setDisabled(email === '');
+    setDisabled(event.target.value === '' || email === '');
   };
 
   const handleEmailChange = (event) => {
@@ -157,7 +151,7 @@ export default function ForgetPasswordForm() {
           </form>
 
           <Typography variant="body2" className={classNames.authLink}>
-            Forget your username?
+            Forgot your username?
             {' '}
             <Link component={RouterLink} to="/forget-username">
               Find username
