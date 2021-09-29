@@ -1,17 +1,7 @@
 import { useState, useEffect } from 'react';
 import React, { useSelector, useDispatch } from 'react-redux';
 import {
-  Button,
-  TextField,
-  Card,
-  CardContent,
-  Typography,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  makeStyles,
-  Link,
+  Button, TextField, Card, CardContent, Typography, makeStyles, Link, Snackbar,
 } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import { userForgetUsername } from '../../actions/user/auth';
@@ -45,7 +35,7 @@ export default function ForgetUsernameForm() {
   const [showError, setShowError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [disabled, setDisabled] = useState(true);
-  const [popUp, setPopUp] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
   const [submit, setSubmit] = useState(false);
 
   const handleChange = (event) => {
@@ -79,11 +69,8 @@ export default function ForgetUsernameForm() {
       return;
     }
     dispatch(userForgetUsername(email.trim()));
+    setShowSnackbar(true);
     setSubmit(true);
-  };
-
-  const handleClosePopUp = () => {
-    setPopUp(false);
   };
 
   useEffect(() => {
@@ -104,7 +91,6 @@ export default function ForgetUsernameForm() {
         setDisabled(true);
       } else {
         setSubmit(false);
-        setPopUp(true);
         setErrorText('');
         setShowError(false);
         setDisabled(false);
@@ -140,33 +126,22 @@ export default function ForgetUsernameForm() {
           <Typography variant="body2" className={classNames.authLink}>
             Lost your puppy?
             {' '}
-            <Link component={RouterLink} to="/forget-username">
-              Find Username
+            <Link component={RouterLink} to="/forget-password">
+              Reset password
             </Link>
             {' '}
           </Typography>
         </CardContent>
       </Card>
 
-      <Dialog
-        open={popUp}
-        keepMounted
-        onClose={() => handleClosePopUp()}
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle id="alert-dialog-slide-title">
-          <Typography variant="h4">Username email sent</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body1">Please check your mailbox to the account.</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleClosePopUp()} color="primary">
-            Done
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowSnackbar(false);
+        }}
+        message="Username information will be sent to your mailbox if your email is valid."
+      />
     </>
   );
 }
