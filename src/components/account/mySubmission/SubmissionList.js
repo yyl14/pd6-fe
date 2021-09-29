@@ -90,16 +90,16 @@ export default function SubmissionList() {
         reduxDataToRows={(item) => ({
           id: item.id,
           'Submission ID': item.id,
-          Course: courses[item.course_id] ? courses[item.course_id].name : '-',
+          Course: courses[item.course_id] ? courses[item.course_id].name : '',
           Class: {
-            text: classes[item.class_id] ? classes[item.class_id].name : '-',
+            text: classes[item.class_id] ? classes[item.class_id].name : '',
             path: `/${
               userClasses.filter((c) => c.class_id === item.class_id).length === 0 ? 'all-class' : 'my-class'
             }/${item.course_id}/${item.class_id}/challenge`,
           },
-          Challenge: challenges[item.challenge_id] ? challenges[item.challenge_id].title : '-',
+          Challenge: challenges[item.challenge_id] ? challenges[item.challenge_id].title : '',
           Task: {
-            text: problems[item.problem_id] ? problems[item.problem_id].challenge_label : '-',
+            text: problems[item.problem_id] ? problems[item.problem_id].challenge_label : '',
             path: `/${
               userClasses.filter((c) => c.class_id === item.class_id).length === 0 ? 'all-class' : 'my-class'
             }/${item.course_id}/${item.class_id}/challenge/${item.challenge_id}/${item.problem_id}`,

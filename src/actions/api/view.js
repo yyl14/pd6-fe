@@ -229,41 +229,43 @@ const browseMySubmission = (token, accountId, browseParams, tableId = null) => a
       type: viewConstants.BROWSE_MYSUBMISSION_SUCCESS,
       payload: {
         data: {
-          submissions: data.map(({
-            submission_id, course_id, class_id, challenge_id, problem_id, verdict, submit_time,
-          }) => ({
-            id: submission_id,
-            course_id,
-            class_id,
-            challenge_id,
-            problem_id,
-            verdict,
-            submit_time,
-          })),
-          courses: data.map(({
-            course_id, course_name,
-          }) => ({
-            id: course_id,
-            name: course_name,
-          })),
-          classes: data.map(({
-            class_id, class_name,
-          }) => ({
-            id: class_id,
-            name: class_name,
-          })),
-          challenges: data.map(({
-            challenge_id, challenge_title,
-          }) => ({
-            id: challenge_id,
-            title: challenge_title,
-          })),
-          problems: data.map(({
-            problem_id, challenge_label,
-          }) => ({
-            id: problem_id,
-            challenge_label,
-          })),
+          submissions: data.map(
+            ({
+              submission_id, course_id, class_id, challenge_id, problem_id, verdict, submit_time,
+            }) => ({
+              id: submission_id,
+              course_id,
+              class_id,
+              challenge_id,
+              problem_id,
+              verdict,
+              submit_time,
+            }),
+          ),
+          courses: data
+            .map(({ course_id, course_name }) => ({
+              id: course_id,
+              name: course_name,
+            }))
+            .filter((item) => item.id !== null),
+          classes: data
+            .map(({ class_id, class_name }) => ({
+              id: class_id,
+              name: class_name,
+            }))
+            .filter((item) => item.id !== null),
+          challenges: data
+            .map(({ challenge_id, challenge_title }) => ({
+              id: challenge_id,
+              title: challenge_title,
+            }))
+            .filter((item) => item.id !== null),
+          problems: data
+            .map(({ problem_id, challenge_label }) => ({
+              id: problem_id,
+              challenge_label,
+            }))
+            .filter((item) => item.id !== null),
         },
       },
     });
@@ -285,5 +287,9 @@ const browseMySubmission = (token, accountId, browseParams, tableId = null) => a
 };
 
 export {
-  browseAccessLog, browseAccountWithDefaultStudentId, browseClassMember, browseSubmissionUnderClass, browseMySubmission,
+  browseAccessLog,
+  browseAccountWithDefaultStudentId,
+  browseClassMember,
+  browseSubmissionUnderClass,
+  browseMySubmission,
 };

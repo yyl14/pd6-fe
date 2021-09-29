@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Snackbar, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { fetchChallengeSummary, fetchChallengeMemberSubmission } from '../../../../actions/myClass/challenge';
 import { fetchDownloadFileUrl } from '../../../../actions/common/common';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
 import CustomTable from '../../../ui/CustomTable';
 import PageTitle from '../../../ui/PageTitle';
-import Icon from '../../../ui/icon/index';
+import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
 
 const useStyles = makeStyles(() => ({
   placeholder: {
     height: '50px',
+  },
+  copyButton: {
+    marginRight: '10px',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
   },
 }));
 
@@ -59,7 +64,6 @@ export default function Statistics() {
   const downloadLinks = useSelector((state) => state.downloadLinks.byId);
   const accounts = useSelector((state) => state.accounts);
 
-  const [showSnackbar, setShowSnackbar] = useState(false);
   const [statisticsData, setStatisticsData] = useState([]);
   const [scoreboardTitle, setScoreboardTitle] = useState(accountColumn);
   const [scoreboardData, setScoreboardData] = useState([]);
@@ -237,20 +241,12 @@ export default function Statistics() {
       <SimpleBar title="Class Scoreboard" />
       <CustomTable
         buttons={(
-          <CopyToClipboard options={{ format: 'text/html' }} text={scoreboardHTML} onCopy={() => setShowSnackbar(true)}>
-            <Button>
-              <Icon.Copy />
-            </Button>
-          </CopyToClipboard>
+          <div className={classes.copyButton}>
+            <CopyToClipboardButton text={scoreboardHTML} />
+          </div>
         )}
         data={scoreboardData}
         columns={scoreboardTitle}
-      />
-      <Snackbar
-        open={showSnackbar}
-        autoHideDuration={2000}
-        message="Entire table is copied to clipboard."
-        onClose={() => setShowSnackbar(false)}
       />
     </>
   );

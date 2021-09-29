@@ -146,15 +146,15 @@ export default function MySubmission({ baseUrl, isProblemSet }) {
           Score:
             item.latestJudgmentId !== null && judgments.byId[item.latestJudgmentId] !== undefined
               ? judgments.byId[item.latestJudgmentId].score
-              : '-',
+              : '',
           'Used Time(ms)':
             item.latestJudgmentId !== null && judgments.byId[item.latestJudgmentId] !== undefined
               ? judgments.byId[item.latestJudgmentId].total_time
-              : '-',
+              : '',
           'Used Memory(kb)':
             item.latestJudgmentId !== null && judgments.byId[item.latestJudgmentId] !== undefined
               ? judgments.byId[item.latestJudgmentId].max_memory
-              : '-',
+              : '',
           'Submit Time': moment(item.submit_time).format('YYYY-MM-DD, HH:mm'),
           link: `${baseUrl}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${item.id}`,
         })}
