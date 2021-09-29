@@ -168,6 +168,10 @@ export default function LoginForm() {
           Lost your puppy?
           {' '}
           <Link component={RouterLink} to="/forget-password">
+            Find username
+          </Link>
+          {' or '}
+          <Link component={RouterLink} to="/forget-password">
             Reset password
           </Link>
         </Typography>
