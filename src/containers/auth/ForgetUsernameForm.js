@@ -140,8 +140,8 @@ export default function ForgetUsernameForm() {
           <Typography variant="body2" className={classNames.authLink}>
             Lost your puppy?
             {' '}
-            <Link component={RouterLink} to="/forget-username">
-              Find Username
+            <Link component={RouterLink} to="/forget-password">
+              Reset password
             </Link>
             {' '}
           </Typography>
