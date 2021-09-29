@@ -4,11 +4,12 @@ const initialState = {
   readPeerReview: null,
   editPeerReview: null,
   deletePeerReview: null,
+  readPeerReviewRecord: null,
 };
 
-export default function peerReview(state = initialState, action) {
+export default function view(state = initialState, action) {
   switch (action.type) {
-    case peerReviewConstants.READ_PEER_REVIEW_SUCCESS: {
+    case peerReviewConstants.READ_PEER_REVIEW_START: {
       return {
         ...state,
         readPeerReview: null,
@@ -20,7 +21,7 @@ export default function peerReview(state = initialState, action) {
         readPeerReview: action.error,
       };
     }
-    case peerReviewConstants.EDIT_PEER_REVIEW_SUCCESS: {
+    case peerReviewConstants.EDIT_PEER_REVIEW_START: {
       return {
         ...state,
         editPeerReview: null,
@@ -32,7 +33,7 @@ export default function peerReview(state = initialState, action) {
         editPeerReview: action.error,
       };
     }
-    case peerReviewConstants.DELETE_PEER_REVIEW_SUCCESS: {
+    case peerReviewConstants.DELETE_PEER_REVIEW_START: {
       return {
         ...state,
         deletePeerReview: null,
@@ -42,6 +43,18 @@ export default function peerReview(state = initialState, action) {
       return {
         ...state,
         deletePeerReview: action.error,
+      };
+    }
+    case peerReviewConstants.READ_PEER_REVIEW_RECORD_START: {
+      return {
+        ...state,
+        readPeerReviewRecord: null,
+      };
+    }
+    case peerReviewConstants.READ_PEER_REVIEW_RECORD_FAIL: {
+      return {
+        ...state,
+        readPeerReviewRecord: action.error,
       };
     }
 
