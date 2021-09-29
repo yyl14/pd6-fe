@@ -67,6 +67,16 @@ const userLogout = (history) => (dispatch) => {
   history.push('/login');
 };
 
+const userForgetUsername = (email) => async (dispatch) => {
+  try {
+    dispatch({ type: authConstants.FORGET_USERNAME_START });
+    await agent.post('/account/forget-username', { email });
+    dispatch({ type: authConstants.FORGET_USERNAME_SUCCESS });
+  } catch (error) {
+    dispatch({ type: authConstants.FORGET_USERNAME_FAIL, error });
+  }
+};
+
 const userForgetPassword = (email) => async (dispatch) => {
   try {
     dispatch({ type: authConstants.FORGET_PASSWORD_START });
@@ -135,5 +145,5 @@ const userResetPassword = (code, password) => async (dispatch) => {
 };
 
 export {
-  getUserInfo, userSignIn, userLogout, userForgetPassword, userRegister, emailVerification, userResetPassword,
+  getUserInfo, userSignIn, userLogout, userForgetUsername, userForgetPassword, userRegister, emailVerification, userResetPassword,
 };
