@@ -13,7 +13,7 @@ import {
   makeStyles,
   Link,
 } from '@material-ui/core';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { userForgetPassword } from '../../actions/user/auth';
 
 import '../../styles/auth.css';
@@ -39,7 +39,8 @@ const useStyles = makeStyles((theme) => ({
 export default function ForgetPasswordForm() {
   const classNames = useStyles();
   const dispatch = useDispatch();
-  const error = useSelector((state) => state.error.user.auth.forgetPassword);
+  const history = useHistory();
+  const error = useSelector((state) => state.error.user.auth);
   const loading = useSelector((state) => state.loading.user.auth.forgetPassword);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -47,15 +48,29 @@ export default function ForgetPasswordForm() {
   const [errorText, setErrorText] = useState('');
   const [disabled, setDisabled] = useState(true);
   const [popUp, setPopUp] = useState(false);
-  const [submit, setSubmit] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (showError) {
       return;
     }
-    dispatch(userForgetPassword(username, email.trim()));
-    setSubmit(true);
+
+    const onSuccess = () => {
+      setPopUp(true);
+      setErrorText('');
+      setShowError(false);
+
+      setTimeout(() => {
+        history.push('/login');
+      }, 3000);
+    };
+
+    const onError = () => {
+      setErrorText(`Error: ${error.forgetPassword}`);
+      setShowError(true);
+    };
+
+    dispatch(userForgetPassword(username, email.trim(), onSuccess, onError));
   };
 
   const handleClosePopUp = () => {
@@ -82,32 +97,6 @@ export default function ForgetPasswordForm() {
       setDisabled(false);
     }
   }, [email, username]);
-
-  useEffect(() => {
-    if (loading === false && submit === true) {
-      if (error !== null) {
-        switch (error.toString()) {
-          case 'Error: NotFound': {
-            setErrorText('Unregistered email address.');
-            break;
-          }
-          default: {
-            setErrorText(error.toString());
-            break;
-          }
-        }
-        setSubmit(false);
-        setShowError(true);
-        setDisabled(true);
-      } else {
-        setSubmit(false);
-        setPopUp(true);
-        setErrorText('');
-        setShowError(false);
-        setDisabled(false);
-      }
-    }
-  }, [error, loading, submit]);
 
   return (
     <>
