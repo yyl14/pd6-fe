@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
 
 /* This is a level 4 component (page component) */
 // This page is only for class manager.
-export default function PeerReviewSummary() {
+export default function ReceiverSummary() {
   return (
     <>
       <div>PeerReviewSummary</div>

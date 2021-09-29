@@ -7,9 +7,6 @@ import {
 import Icon from '../icon/index';
 import TaskAddingCard from '../../normal/myClass/Challenge/TaskAddingCard';
 
-import { fetchChallenges } from '../../../actions/myClass/challenge';
-import { fetchClass, fetchCourse } from '../../../actions/common/common';
-
 export default function Challenge({
   classNames, history, location, mode,
 }) {
@@ -143,6 +140,13 @@ export default function Challenge({
                   text: challenge_label,
                   icon: <Icon.Paper />,
                   path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/essay/${id}`,
+                })),
+              challenges[challengeId].peerReviewIds
+                .map((id) => peerReviews.byId[id])
+                .map(({ id, challenge_label }) => ({
+                  text: challenge_label,
+                  icon: <Icon.Paper />,
+                  path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${id}`,
                 })),
             ),
           );

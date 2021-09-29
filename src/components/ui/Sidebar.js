@@ -220,18 +220,21 @@ export default function Sidebar() {
       <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId">
         <Challenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
-      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/summary">
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receiver-summary">
+        <Challenge classNames={classes} history={history} location={location} mode="challenge" />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/grader-summary">
         <Challenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
       <Route
         exact
-        path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/detail/:recordId"
+        path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receive/:accountId/:recordId"
       >
         <Challenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
       <Route
         exact
-        path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/review/:recordId"
+        path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/review/:accountId/:recordId"
       >
         <Challenge classNames={classes} history={history} location={location} mode="challenge" />
       </Route>
