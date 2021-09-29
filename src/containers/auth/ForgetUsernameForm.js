@@ -54,7 +54,7 @@ export default function ForgetUsernameForm() {
     };
 
     const onError = () => {
-      setErrorText(`Error: ${error.forgetUsername}`);
+      setErrorText('Error');
       setShowError(true);
     };
 

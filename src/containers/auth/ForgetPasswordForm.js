@@ -66,7 +66,7 @@ export default function ForgetPasswordForm() {
     };
 
     const onError = () => {
-      setErrorText(`Error: ${error.forgetPassword}`);
+      setErrorText('Error');
       setShowError(true);
     };
 
