@@ -46,7 +46,7 @@ export default function ForgetPasswordForm() {
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
 
-    if (username === '') {
+    if (event.target.value === '') {
       setDisabled(true);
       return;
     }
@@ -84,7 +84,7 @@ export default function ForgetPasswordForm() {
     if (showError) {
       return;
     }
-    dispatch(userForgetPassword(email.trim()));
+    dispatch(userForgetPassword(username, email.trim()));
     setSubmit(true);
   };
 
