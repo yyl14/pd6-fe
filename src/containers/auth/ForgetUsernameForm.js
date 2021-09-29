@@ -14,7 +14,7 @@ import {
   Link,
 } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
-import { userForgetPassword } from '../../actions/user/auth';
+import { userForgetUsername } from '../../actions/user/auth';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
@@ -36,12 +36,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ForgetPasswordForm() {
+export default function ForgetUsernameForm() {
   const classNames = useStyles();
   const dispatch = useDispatch();
-  const error = useSelector((state) => state.error.user.auth.forgetPassword);
-  const loading = useSelector((state) => state.loading.user.auth.forgetPassword);
-  const [username, setUsername] = useState('');
+  const error = useSelector((state) => state.error.user.auth.forgetUsername);
+  const loading = useSelector((state) => state.loading.user.auth.forgetUsername);
   const [email, setEmail] = useState('');
   const [showError, setShowError] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -49,12 +48,7 @@ export default function ForgetPasswordForm() {
   const [popUp, setPopUp] = useState(false);
   const [submit, setSubmit] = useState(false);
 
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
-    setDisabled(event.target.value === '' || email === '');
-  };
-
-  const handleEmailChange = (event) => {
+  const handleChange = (event) => {
     if (event.target.value === '') {
       setEmail(event.target.value);
       setErrorText('');
@@ -75,7 +69,7 @@ export default function ForgetPasswordForm() {
       setEmail(event.target.value);
       setErrorText('');
       setShowError(false);
-      setDisabled(username === '');
+      setDisabled(false);
     }
   };
 
@@ -84,7 +78,7 @@ export default function ForgetPasswordForm() {
     if (showError) {
       return;
     }
-    dispatch(userForgetPassword(username, email.trim()));
+    dispatch(userForgetUsername(email.trim()));
     setSubmit(true);
   };
 
@@ -126,18 +120,11 @@ export default function ForgetPasswordForm() {
             <TextField
               // required
               className={`auth-form-input ${classNames.authTextFields}`}
-              label="Username"
-              value={username}
-              onChange={(e) => handleUsernameChange(e)}
-            />
-            <TextField
-              // required
-              className={`auth-form-input ${classNames.authTextFields}`}
               error={showError}
               helperText={errorText}
               label="Registered / Alternative Email"
               value={email}
-              onChange={(e) => handleEmailChange(e)}
+              onChange={(e) => handleChange(e)}
             />
             <Button
               className={classNames.authButtons}
@@ -151,10 +138,10 @@ export default function ForgetPasswordForm() {
           </form>
 
           <Typography variant="body2" className={classNames.authLink}>
-            Forgot your username?
+            Lost your puppy?
             {' '}
-            <Link component={RouterLink} to="/forget-username">
-              Find username
+            <Link component={RouterLink} to="/forget-password">
+              Reset password
             </Link>
             {' '}
           </Typography>
@@ -169,7 +156,7 @@ export default function ForgetPasswordForm() {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle id="alert-dialog-slide-title">
-          <Typography variant="h4">Password reset email sent</Typography>
+          <Typography variant="h4">Username email sent</Typography>
         </DialogTitle>
         <DialogContent>
           <Typography variant="body1">Please check your mailbox to the account.</Typography>
