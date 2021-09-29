@@ -11,13 +11,15 @@ import {
   DialogContent,
   DialogTitle,
   makeStyles,
+  Link,
 } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
 import { userForgetPassword } from '../../actions/user/auth';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   authForm: {
     width: '50%',
   },
@@ -26,7 +28,11 @@ const useStyles = makeStyles(() => ({
     marginTop: '55px',
   },
   authButtons: {
-    marginTop: '57px',
+    marginTop: '44px',
+    marginBottom: '30px',
+  },
+  authLink: {
+    color: theme.palette.grey.A400,
   },
 }));
 
@@ -149,6 +155,15 @@ export default function ForgetPasswordForm() {
               Send
             </Button>
           </form>
+
+          <Typography variant="body2" className={classNames.authLink}>
+            Lost your puppy?
+            {' '}
+            <Link component={RouterLink} to="/forget-password">
+              Reset password
+            </Link>
+            {' '}
+          </Typography>
         </CardContent>
       </Card>
 
