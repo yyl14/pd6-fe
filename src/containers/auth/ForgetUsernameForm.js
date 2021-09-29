@@ -38,31 +38,6 @@ export default function ForgetUsernameForm() {
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [submit, setSubmit] = useState(false);
 
-  const handleChange = (event) => {
-    if (event.target.value === '') {
-      setEmail(event.target.value);
-      setErrorText('');
-      setShowError(false);
-      setDisabled(true);
-      return;
-    }
-
-    const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const status = emailRe.test(event.target.value);
-
-    if (!status) {
-      setEmail(event.target.value);
-      setErrorText('Invalid email address');
-      setShowError(true);
-      setDisabled(true);
-    } else {
-      setEmail(event.target.value);
-      setErrorText('');
-      setShowError(false);
-      setDisabled(false);
-    }
-  };
-
   const handleSubmit = (event) => {
     event.preventDefault();
     if (showError) {
@@ -72,6 +47,24 @@ export default function ForgetUsernameForm() {
     setShowSnackbar(true);
     setSubmit(true);
   };
+
+  useEffect(() => {
+    const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const status = emailRe.test(email);
+    if (email === '') {
+      setErrorText('');
+      setShowError(false);
+      setDisabled(true);
+    } else if (!status) {
+      setErrorText('Invalid email address');
+      setShowError(true);
+      setDisabled(true);
+    } else {
+      setErrorText('');
+      setShowError(false);
+      setDisabled(false);
+    }
+  }, [email]);
 
   useEffect(() => {
     if (loading === false && submit === true) {
@@ -110,7 +103,7 @@ export default function ForgetUsernameForm() {
               helperText={errorText}
               label="Registered / Alternative Email"
               value={email}
-              onChange={(e) => handleChange(e)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <Button
               className={classNames.authButtons}
