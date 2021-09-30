@@ -6,16 +6,11 @@ import {
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
-import { fetchClass, fetchCourse } from '../../../actions/common/common';
-
 export default function Submission({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const { courseId, classId, submissionId } = useParams();
   const baseURL = '/my-class';
-  const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.myClass.challenge);
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
@@ -82,8 +77,9 @@ export default function Submission({
     return (
       <div>
         <Drawer
+          open={open}
+          onClose={onClose}
           className={classNames.drawer}
-          variant="permanent"
           anchor="left"
           PaperProps={{ elevation: 5 }}
           classes={{ paper: classNames.drawerPaper }}
@@ -95,8 +91,9 @@ export default function Submission({
   return (
     <div>
       <Drawer
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}

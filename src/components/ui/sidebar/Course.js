@@ -7,7 +7,7 @@ import {
 import Icon from '../icon/index';
 
 export default function Course({
-  classes, history, location, mode,
+  classes, history, location, mode, open, onClose,
 }) {
   const { courseId, classId } = useParams();
   const courseList = useSelector((state) => state.courses);
@@ -135,8 +135,9 @@ export default function Course({
     return (
       <div>
         <Drawer
+          open={open}
+          onClose={onClose}
           className={classes.drawer}
-          variant="permanent"
           anchor="left"
           PaperProps={{ elevation: 5 }}
           classes={{ paper: classes.drawerPaper }}
@@ -148,8 +149,9 @@ export default function Course({
   return (
     <div>
       <Drawer
+        open={open}
+        onClose={onClose}
         className={classes.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classes.drawerPaper }}

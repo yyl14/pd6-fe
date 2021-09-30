@@ -7,7 +7,7 @@ import {
 import Icon from '../icon/index';
 
 export default function System({
-  classes, history, location, mode,
+  classes, history, location, mode, open, onClose,
 }) {
   const { announcementId, languageId } = useParams();
   const announcementList = useSelector((state) => state.announcements);
@@ -126,8 +126,9 @@ export default function System({
     return (
       <div>
         <Drawer
+          open={open}
+          onClose={onClose}
           className={classes.drawer}
-          variant="permanent"
           anchor="left"
           PaperProps={{ elevation: 5 }}
           classes={{ paper: classes.drawerPaper }}
@@ -139,8 +140,9 @@ export default function System({
   return (
     <div>
       <Drawer
+        open={open}
+        onClose={onClose}
         className={classes.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classes.drawerPaper }}

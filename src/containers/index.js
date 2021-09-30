@@ -1,12 +1,13 @@
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Switch, Route, useHistory, useLocation,
 } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
-import React, { useEffect } from 'react';
 import { makeStyles, Fab } from '@material-ui/core';
-import FeedbackIcon from '@material-ui/icons/Feedback';
+import { Feedback, Menu } from '@material-ui/icons';
+
 import Normal from './normal';
 import Admin from './admin';
 import Account from './account';
@@ -21,6 +22,12 @@ import { getUserInfo } from '../actions/user/auth';
 import '../styles/index.css';
 
 const useStyles = makeStyles(() => ({
+  toggleSidebar: {
+    zIndex: 2000,
+    position: 'fixed',
+    left: '3.5vw',
+    bottom: '5vh',
+  },
   bugReport: {
     position: 'fixed',
     right: '3.5vw',
@@ -36,6 +43,13 @@ function Index() {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [cookies, , removeCookie] = useCookies(['id', 'token']);
+
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [disableSidebar, setDisableSidebar] = useState(false);
+
+  const toggleSidebar = () => {
+    setShowSidebar((state) => !state);
+  };
 
   useEffect(() => {
     if (!auth.isAuthenticated) {
@@ -72,32 +86,50 @@ function Index() {
     }
   }, [auth.isAuthenticated, history, location.pathname, user.classes, user.classes.length, user.role]);
 
+  // configure the path names in which sidebars are disabled
+  useEffect(() => {
+    const disableSidebarPaths = ['/my-submission'];
+    if (disableSidebarPaths.reduce((acc, item) => acc || item === location.pathname, false)) {
+      setDisableSidebar(true);
+    } else {
+      setDisableSidebar(false);
+    }
+  }, [location.pathname]);
+
   if (!auth.isAuthenticated) {
     return <></>;
   }
-  // layout-content-container-no-sidebar
 
   return (
-    <div className="wrapper">
-      <Header />
-      <Sidebar />
-      <div>
-        <div className="layout-content-container ">
-          <div className="layout-content">
-            <Switch>
-              <Route path="/admin" component={Admin} />
-              <Route path="/my-profile" component={Account} />
-              <Route path="/my-submission" component={MySubmission} />
-              <Route exact path="/user-profile/:accountId" component={User} />
-              <Route path="/" component={Normal} />
-            </Switch>
+    <>
+      <div className="wrapper">
+        <Header />
+        <Sidebar open={showSidebar && !disableSidebar} onClose={() => setShowSidebar(false)} />
+        <div>
+          <div
+            className={`layout-content-container${
+              showSidebar && !disableSidebar ? '' : ' layout-content-container-no-sidebar'
+            }`}
+          >
+            <div className="layout-content">
+              <Switch>
+                <Route path="/admin" component={Admin} />
+                <Route path="/my-profile" component={Account} />
+                <Route path="/my-submission" component={MySubmission} />
+                <Route exact path="/user-profile/:accountId" component={User} />
+                <Route path="/" component={Normal} />
+              </Switch>
+            </div>
           </div>
         </div>
+        <Fab onClick={toggleSidebar} className={classes.toggleSidebar} disabled={disableSidebar}>
+          <Menu />
+        </Fab>
+        <Fab href="https://forms.gle/KaYJnXwgvsovzqVG7" target="_blank" className={classes.bugReport}>
+          <Feedback />
+        </Fab>
       </div>
-      <Fab href="https://forms.gle/KaYJnXwgvsovzqVG7" target="_blank" className={classes.bugReport}>
-        <FeedbackIcon />
-      </Fab>
-    </div>
+    </>
   );
 }
 

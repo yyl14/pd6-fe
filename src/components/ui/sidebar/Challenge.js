@@ -8,7 +8,7 @@ import Icon from '../icon/index';
 import TaskAddingCard from '../../normal/myClass/Challenge/TaskAddingCard';
 
 export default function Challenge({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const {
     courseId, classId, challengeId, problemId, submissionId,
@@ -253,8 +253,9 @@ export default function Challenge({
     return (
       <div>
         <Drawer
+          open={open}
+          onClose={onClose}
           className={classNames.drawer}
-          variant="permanent"
           anchor="left"
           PaperProps={{ elevation: 5 }}
           classes={{ paper: classNames.drawerPaper }}
@@ -266,8 +267,9 @@ export default function Challenge({
   return (
     <div>
       <Drawer
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}
