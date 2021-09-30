@@ -103,8 +103,8 @@ function Index() {
   return (
     <>
       <div className="wrapper">
-        <Header />
         <Sidebar open={showSidebar && !disableSidebar} onClose={() => setShowSidebar(false)} />
+        <Header />
         <div>
           <div
             className={`layout-content-container${
