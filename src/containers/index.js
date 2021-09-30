@@ -44,7 +44,7 @@ function Index() {
   const dispatch = useDispatch();
   const [cookies, , removeCookie] = useCookies(['id', 'token']);
 
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false);
   const [disableSidebar, setDisableSidebar] = useState(false);
 
   const toggleSidebar = () => {
@@ -103,8 +103,8 @@ function Index() {
   return (
     <>
       <div className="wrapper">
-        <Sidebar open={showSidebar && !disableSidebar} onClose={() => setShowSidebar(false)} />
         <Header />
+        <Sidebar open={showSidebar && !disableSidebar} onClose={() => setShowSidebar(false)} />
         <div>
           <div
             className={`layout-content-container${

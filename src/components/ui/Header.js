@@ -13,7 +13,6 @@ import { userBrowseAnnouncement } from '../../actions/user/user';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
-    zIndex: 3000,
     minHeight: '55px',
     height: '55px',
     background: theme.palette.black.main,
