@@ -23,7 +23,7 @@ import '../styles/index.css';
 
 const useStyles = makeStyles(() => ({
   toggleSidebar: {
-    zIndex: 2000,
+    zIndex: 1250,
     position: 'fixed',
     left: '3.5vw',
     top: 'calc(95vh - 55px)',
