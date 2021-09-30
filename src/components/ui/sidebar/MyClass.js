@@ -121,6 +121,7 @@ export default function MyClass({
   return (
     <div>
       <Drawer
+        variant="persistent"
         open={open}
         onClose={onClose}
         className={classNames.drawer}

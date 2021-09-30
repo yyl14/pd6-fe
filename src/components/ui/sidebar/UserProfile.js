@@ -39,6 +39,7 @@ export default function UserProfile({
   return (
     <div>
       <Drawer
+        variant="persistent"
         open={open}
         onClose={onClose}
         className={classes.drawer}

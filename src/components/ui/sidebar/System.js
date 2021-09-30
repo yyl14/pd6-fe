@@ -126,6 +126,7 @@ export default function System({
     return (
       <div>
         <Drawer
+          variant="persistent"
           open={open}
           onClose={onClose}
           className={classes.drawer}
@@ -140,6 +141,7 @@ export default function System({
   return (
     <div>
       <Drawer
+        variant="persistent"
         open={open}
         onClose={onClose}
         className={classes.drawer}

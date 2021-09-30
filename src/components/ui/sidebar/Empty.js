@@ -6,9 +6,9 @@ export default function Empty({ classNames, open }) {
   return (
     <div>
       <Drawer
+        variant="persistent"
         open={false}
         // className={classNames.drawer}
-        // variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}

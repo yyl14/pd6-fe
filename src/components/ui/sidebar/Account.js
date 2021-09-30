@@ -90,6 +90,7 @@ export default function Account({
     return (
       <div>
         <Drawer
+          variant="persistent"
           open={open}
           onClose={onClose}
           className={classes.drawer}
@@ -104,6 +105,7 @@ export default function Account({
   return (
     <div>
       <Drawer
+        variant="persistent"
         open={open}
         onClose={onClose}
         className={classes.drawer}

@@ -44,7 +44,7 @@ function Index() {
   const dispatch = useDispatch();
   const [cookies, , removeCookie] = useCookies(['id', 'token']);
 
-  const [showSidebar, setShowSidebar] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(true);
   const [disableSidebar, setDisableSidebar] = useState(false);
 
   const toggleSidebar = () => {
