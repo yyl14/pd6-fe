@@ -12,7 +12,9 @@ import Admin from './admin';
 import Account from './account';
 import User from './user';
 import MySubmission from './mySubmission';
-// import NoMatch from '../components/noMatch';
+
+import Sidebar from '../components/ui/Sidebar';
+import Header from '../components/ui/Header';
 
 import { getUserInfo } from '../actions/user/auth';
 
@@ -33,11 +35,9 @@ function Index() {
   const auth = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  // eslint-disable-next-line no-unused-vars
-  const [cookies, setCookie, removeCookie] = useCookies(['id', 'token']);
+  const [cookies, , removeCookie] = useCookies(['id', 'token']);
 
   useEffect(() => {
-    // console.log(auth.isAuthenticated, Boolean(cookies.id && cookies.token));
     if (!auth.isAuthenticated) {
       if (cookies.id && cookies.token) {
         if (auth.tokenExpired) {
@@ -75,16 +75,25 @@ function Index() {
   if (!auth.isAuthenticated) {
     return <></>;
   }
+  // layout-content-container-no-sidebar
 
   return (
     <div className="wrapper">
-      <Switch>
-        <Route path="/admin" component={Admin} />
-        <Route path="/my-profile" component={Account} />
-        <Route path="/my-submission" component={MySubmission} />
-        <Route exact path="/user-profile/:accountId" component={User} />
-        <Route path="/" component={Normal} />
-      </Switch>
+      <Header />
+      <Sidebar />
+      <div>
+        <div className="layout-content-container ">
+          <div className="layout-content">
+            <Switch>
+              <Route path="/admin" component={Admin} />
+              <Route path="/my-profile" component={Account} />
+              <Route path="/my-submission" component={MySubmission} />
+              <Route exact path="/user-profile/:accountId" component={User} />
+              <Route path="/" component={Normal} />
+            </Switch>
+          </div>
+        </div>
+      </div>
       <Fab href="https://forms.gle/KaYJnXwgvsovzqVG7" target="_blank" className={classes.bugReport}>
         <FeedbackIcon />
       </Fab>
