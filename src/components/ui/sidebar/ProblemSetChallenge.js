@@ -9,7 +9,7 @@ import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse, fetchChallenge } from '../../../actions/common/common';
 
 export default function ProblemSetChallenge({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const {
     courseId, classId, challengeId, problemId, submissionId,
@@ -112,7 +112,19 @@ export default function ProblemSetChallenge({
         },
       ]);
     }
-  }, [challengeId, challenges, classId, classNames.arrow, courseId, history, mode, problemId, problems.allIds.length, problems.byId, submissionId]);
+  }, [
+    challengeId,
+    challenges,
+    classId,
+    classNames.arrow,
+    courseId,
+    history,
+    mode,
+    problemId,
+    problems.allIds.length,
+    problems.byId,
+    submissionId,
+  ]);
 
   const foldChallenge = () => {
     setDisplay(false);
@@ -125,8 +137,9 @@ export default function ProblemSetChallenge({
   return (
     <div>
       <Drawer
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}

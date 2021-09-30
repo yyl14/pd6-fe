@@ -9,7 +9,7 @@ import Icon from '../icon/index';
 import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
 
 export default function ProblemSet({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const { courseId: currentCourseId, classId: currentClassId } = useParams();
   const baseURL = '/problem-set';
@@ -62,8 +62,9 @@ export default function ProblemSet({
   return (
     <div>
       <Drawer
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}

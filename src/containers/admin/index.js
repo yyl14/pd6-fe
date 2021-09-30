@@ -12,9 +12,6 @@ import Announcement from './system/announcement';
 
 import NoMatch from '../../components/noMatch';
 
-import Header from '../../components/ui/Header';
-import Sidebar from '../../components/ui/Sidebar';
-
 /* This is a level 2 container (role container) */
 export default function Admin() {
   const history = useHistory();
@@ -30,23 +27,15 @@ export default function Admin() {
   }, [auth.isAuthenticated, history, user.role]);
 
   return (
-    <div>
-      <Header role={user.role} />
-      <Sidebar />
-      <div className="layout-content-container">
-        <div className="layout-content">
-          <Switch>
-            <Route path="/admin/course/course" component={Course} />
-            <Route path="/admin/course/class/:courseId/:classId" component={Class} />
-            <Route path="/admin/account/institute" component={Institute} />
-            <Route path="/admin/account/account" component={Account} />
-            <Route path="/admin/system/accesslog" component={AccessLog} />
-            <Route path="/admin/system/announcement" component={Announcement} />
-            <Route path="/admin/system/submitlang" component={SubmitLang} />
-            <Route component={NoMatch} />
-          </Switch>
-        </div>
-      </div>
-    </div>
+    <Switch>
+      <Route path="/admin/course/course" component={Course} />
+      <Route path="/admin/course/class/:courseId/:classId" component={Class} />
+      <Route path="/admin/account/institute" component={Institute} />
+      <Route path="/admin/account/account" component={Account} />
+      <Route path="/admin/system/accesslog" component={AccessLog} />
+      <Route path="/admin/system/announcement" component={Announcement} />
+      <Route path="/admin/system/submitlang" component={SubmitLang} />
+      <Route component={NoMatch} />
+    </Switch>
   );
 }

@@ -6,7 +6,7 @@ import {
 import Icon from '../icon/index';
 
 export default function MyProfile({
-  classes, history, location, mode,
+  classes, history, location, mode, open, onClose,
 }) {
   const account = useSelector((state) => state.user);
   const [display, setDisplay] = useState('unfold');
@@ -37,8 +37,9 @@ export default function MyProfile({
   return (
     <div>
       <Drawer
+        open={open}
+        onClose={onClose}
         className={classes.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classes.drawerPaper }}
