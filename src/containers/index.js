@@ -26,12 +26,12 @@ const useStyles = makeStyles(() => ({
     zIndex: 2000,
     position: 'fixed',
     left: '3.5vw',
-    bottom: '5vh',
+    top: 'calc(95vh - 55px)',
   },
   bugReport: {
     position: 'fixed',
     right: '3.5vw',
-    bottom: '5vh',
+    top: 'calc(95vh - 55px)',
   },
 }));
 
