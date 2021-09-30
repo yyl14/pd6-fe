@@ -77,6 +77,7 @@ export default function Submission({
     return (
       <div>
         <Drawer
+          variant="persistent"
           open={open}
           onClose={onClose}
           className={classNames.drawer}
@@ -91,6 +92,7 @@ export default function Submission({
   return (
     <div>
       <Drawer
+        variant="persistent"
         open={open}
         onClose={onClose}
         className={classNames.drawer}

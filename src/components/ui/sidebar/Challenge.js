@@ -253,6 +253,7 @@ export default function Challenge({
     return (
       <div>
         <Drawer
+          variant="persistent"
           open={open}
           onClose={onClose}
           className={classNames.drawer}
@@ -267,6 +268,7 @@ export default function Challenge({
   return (
     <div>
       <Drawer
+        variant="persistent"
         open={open}
         onClose={onClose}
         className={classNames.drawer}

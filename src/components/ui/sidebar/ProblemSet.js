@@ -62,6 +62,7 @@ export default function ProblemSet({
   return (
     <div>
       <Drawer
+        variant="persistent"
         open={open}
         onClose={onClose}
         className={classNames.drawer}

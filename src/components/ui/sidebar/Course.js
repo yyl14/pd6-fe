@@ -135,6 +135,7 @@ export default function Course({
     return (
       <div>
         <Drawer
+          variant="persistent"
           open={open}
           onClose={onClose}
           className={classes.drawer}
@@ -149,6 +150,7 @@ export default function Course({
   return (
     <div>
       <Drawer
+        variant="persistent"
         open={open}
         onClose={onClose}
         className={classes.drawer}

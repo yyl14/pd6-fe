@@ -137,6 +137,7 @@ export default function ProblemSetChallenge({
   return (
     <div>
       <Drawer
+        variant="persistent"
         open={open}
         onClose={onClose}
         className={classNames.drawer}
