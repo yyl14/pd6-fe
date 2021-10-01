@@ -27,6 +27,10 @@ const useStyles = makeStyles(() => ({
   textfield: {
     width: '400px',
   },
+  buttons: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
 }));
 
 /* This is a level 4 component (page component) */
@@ -57,6 +61,11 @@ export default function ReviewedRecord() {
   const peerReviews = useSelector((state) => state.peerReviews.byId);
   const peerReviewRecords = useSelector((state) => state.peerReviewRecords.byId);
 
+  const handleSubmit = () => {
+    console.log(score);
+    setEdit(false);
+  };
+
   useEffect(() => {
     setScore(peerReviewRecords[recordId].score);
     setComment(peerReviewRecords[recordId].comment);
@@ -86,6 +95,8 @@ export default function ReviewedRecord() {
         ? <PageTitle text={`Peer Review Detail / Peer ${peerId}`} />
         : <PageTitle text={`${challenges[challengeId].title} / ${peerReviews[peerReviewId].challenge_label} / Peer ${peerId}`} />}
 
+      {!edit && role === 'NORMAL' && <Button onClick={() => setEdit(true)}>Edit</Button>}
+
       {role === 'MANAGER' ? <BasicInfo />
         : (
           <SimpleBar title="Description">
@@ -95,12 +106,12 @@ export default function ReviewedRecord() {
           </SimpleBar>
         )}
       {role === 'MANAGER'
-        ? (
+          && (
           <>
             <ReceiverInfo accountId={6} />
             <GraderInfo accountId={6} reviewedTime="2021-10-01T12:07:22.478Z" />
           </>
-        ) : (<></>)}
+          )}
       <ProblemDescription />
       <SimpleBar title="Code" noIndent>
         <CodeArea value="" />
@@ -137,7 +148,6 @@ export default function ReviewedRecord() {
               />
               {`${peerReviewRecords[recordId].comment}`}
             </SimpleBar>
-
           </>
         ) : (
           <>
@@ -147,6 +157,14 @@ export default function ReviewedRecord() {
             <SimpleBar title="Comment">
               {`${peerReviewRecords[recordId].comment}`}
             </SimpleBar>
+            <div className={classes.buttons}>
+              <Button color="default" onClick={() => { setEdit(false); }}>
+                Cancel
+              </Button>
+              <Button color="primary" onClick={handleSubmit}>
+                Submit
+              </Button>
+            </div>
           </>
         )}
     </>
