@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { fetchClassMembers } from '../../../actions/common/common';
+import { browseClassMember } from '../../../actions/api/view';
 import AutoTable from '../../ui/AutoTable';
 import PageTitle from '../../ui/PageTitle';
 import MemberEdit from './MemberEdit';
 import NoMatch from '../../noMatch';
 import systemRoleTransformation from '../../../function/systemRoleTransformation';
+import { getInstitutes } from '../../../actions/common/common';
 
 /* This is a level 4 component (page component) */
 export default function MemberList() {
@@ -16,13 +17,19 @@ export default function MemberList() {
   const dispatch = useDispatch();
 
   const authToken = useSelector((state) => state.auth.token);
+  const accounts = useSelector((state) => state.accounts);
   const courses = useSelector((state) => state.courses);
   const classes = useSelector((state) => state.classes);
   const members = useSelector((state) => state.classMembers);
+  const institutes = useSelector((state) => state.institutes);
   const loading = useSelector((state) => state.loading.admin.course);
   const error = useSelector((state) => state.error.common.common.fetchClassMembers);
 
   const [edit, setEdit] = useState(false);
+
+  useEffect(() => {
+    dispatch(getInstitutes());
+  }, [authToken, dispatch]);
 
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
     if (loading.fetchCourses || loading.fetchClasses) {
@@ -47,39 +54,45 @@ export default function MemberList() {
       ) : (
         <>
           <AutoTable
-            ident={`Class Member Table ${classId}`}
+            ident={`SM Member Table ${classId}`}
             hasFilter
-            buttons={<Button onClick={() => setEdit(true)}>Edit</Button>}
+            buttons={(
+              <>
+                <Button onClick={() => setEdit(true)}>Edit</Button>
+              </>
+            )}
             filterConfig={[
-              // {
-              //   reduxStateId: 'username',
-              //   label: 'Username',
-              //   type: 'TEXT',
-              //   operation: 'LIKE',
-              // },
-              // {
-              //   reduxStateId: 'student_id',
-              //   label: 'Student ID',
-              //   type: 'TEXT',
-              //   operation: 'LIKE',
-              // },
-              // {
-              //   reduxStateId: 'real_name',
-              //   label: 'Real Name',
-              //   type: 'TEXT',
-              //   operation: 'LIKE',
-              // },
-              // {
-              //   reduxStateId: 'institute_abbreviated_name',
-              //   label: 'Institute',
-              //   type: 'ENUM',
-              //   operation: 'IN',
-              //   options: [
-              //     { value: 'NTU', label: 'NTU' },
-              //     { value: 'NTNU', label: 'NTNU' },
-              //     { value: 'NTUST', label: 'NTUST' },
-              //   ],
-              // },
+              {
+                reduxStateId: 'username',
+                label: 'Username',
+                type: 'TEXT',
+                operation: 'LIKE',
+              },
+              {
+                reduxStateId: 'student_id',
+                label: 'Student ID',
+                type: 'TEXT',
+                operation: 'LIKE',
+              },
+              {
+                reduxStateId: 'real_name',
+                label: 'Real Name',
+                type: 'TEXT',
+                operation: 'LIKE',
+              },
+              {
+                reduxStateId: 'abbreviated_name',
+                label: 'Institute',
+                type: 'ENUM',
+                operation: 'IN',
+                options: institutes.allIds.map((id) => {
+                  const item = institutes.byId[id];
+                  return ({
+                    value: item.abbreviated_name,
+                    label: item.abbreviated_name,
+                  });
+                }),
+              },
               {
                 reduxStateId: 'role',
                 label: 'Role',
@@ -93,7 +106,7 @@ export default function MemberList() {
               },
             ]}
             refetch={(browseParams, ident) => {
-              dispatch(fetchClassMembers(authToken, classId, browseParams, ident));
+              dispatch(browseClassMember(authToken, classId, browseParams, ident));
             }}
             refetchErrors={[error]}
             columns={[
@@ -130,13 +143,13 @@ export default function MemberList() {
             ]}
             reduxData={members}
             reduxDataToRows={(item) => ({
-              id: item.member_id,
+              id: item.id,
               Username: {
-                text: item.username,
-                path: `my-class/${courseId}/${classId}/member`,
+                text: accounts.byId[item.account_id].username,
+                path: `/admin/account/account/${item.account_id}/setting`,
               },
-              'Student ID': item.student_id,
-              'Real Name': item.real_name,
+              'Student ID': accounts.byId[item.account_id].student_id,
+              'Real Name': accounts.byId[item.account_id].real_name,
               Institute: item.institute_abbreviated_name,
               Role: systemRoleTransformation(item.role),
             })}

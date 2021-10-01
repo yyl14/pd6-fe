@@ -29,7 +29,7 @@ import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   reminder: {
-    color: theme.palette.grey.A400,
+    color: theme.palette.grey.A700,
     marginLeft: theme.spacing(2),
   },
   templateBtn: {
@@ -82,7 +82,7 @@ export default function GradeList() {
   const [inputTitle, setInputTitle] = useState('');
   const [selectedFile, setSelectedFile] = useState([]);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const [showSnackBar, setShowSnackBar] = useState(false);
   const [hasRequest, setHasRequest] = useState(false);
 
   useEffect(() => {
@@ -108,7 +108,7 @@ export default function GradeList() {
         setInputTitle('');
         setSelectedFile([]);
       } else {
-        setHasError(true);
+        setShowSnackBar(true);
       }
     } else if (showAddDialog && hasRequest && !loading.addClassGrade) {
       if (error.addClassGrade === null) {
@@ -122,7 +122,7 @@ export default function GradeList() {
           comment: '',
         });
       } else {
-        setHasError(true);
+        setShowSnackBar(true);
       }
     }
   }, [error, hasRequest, loading.addClassGrade, loading.importClassGrade, showAddDialog, showImportDialog]);
@@ -180,7 +180,7 @@ export default function GradeList() {
   };
 
   const handleCloseError = () => {
-    setHasError(false);
+    setShowSnackBar(false);
     setHasRequest(false);
   };
 
@@ -229,6 +229,7 @@ export default function GradeList() {
             )}
           </>
         )}
+        defaultSort={['update_time', 'DESC']}
         refetch={(browseParams, ident) => {
           dispatch(fetchClassGrade(authToken, classId, browseParams, ident));
         }}
@@ -271,7 +272,7 @@ export default function GradeList() {
           id: item.id,
           Username: {
             text: accounts.byId[item.receiver_id] ? accounts.byId[item.receiver_id].username : '',
-            path: `/admin/account/account/${item.receiver_id}/setting`,
+            path: `/user-profile/${accounts.byId[item.receiver_id].id}`,
           },
           'Student ID': accounts.byId[item.receiver_id] ? accounts.byId[item.receiver_id].student_id : '',
           'Real Name': accounts.byId[item.receiver_id] ? accounts.byId[item.receiver_id].real_name : '',
@@ -330,7 +331,7 @@ export default function GradeList() {
       </Dialog>
       <Snackbar
         severity="error"
-        open={showAddDialog && hasError}
+        open={showAddDialog && showSnackBar}
         onClose={handleCloseError}
         message={`Error: ${error.addClassGrade}`}
       />
@@ -353,7 +354,13 @@ export default function GradeList() {
           <Typography variant="body2" className={classNames.reminder}>
             Grader: same as receiver
           </Typography>
-          <Typography variant="body2">Download template file for more instructions.</Typography>
+          <Typography variant="body2">
+            Notice that PDOGS only accept files encoded in
+            {' '}
+            <b>ASCII / UTF-8</b>
+            {' '}
+            charset.
+          </Typography>
         </DialogContent>
         <DialogContent>
           <AlignedText text="Class" maxWidth="md" childrenType="text">
@@ -365,7 +372,7 @@ export default function GradeList() {
             <TextField id="title" name="title" value={inputTitle} onChange={(e) => handleChange(e)} />
           </AlignedText>
           <FileUploadArea
-            text="Grading File"
+            text="File"
             fileAcceptFormat=".csv"
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
@@ -393,7 +400,7 @@ export default function GradeList() {
       </Dialog>
       <Snackbar
         severity="error"
-        open={showImportDialog && hasError}
+        open={showImportDialog && showSnackBar}
         onClose={handleCloseError}
         message={`Error: ${error.importClassGrade}`}
       />

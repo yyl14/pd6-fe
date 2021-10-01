@@ -11,7 +11,7 @@ import SampleTestArea from '../../../../ui/SampleTestArea';
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
 
-import { browseTestcase, browseAssistingData } from '../../../../../actions/myClass/problem';
+import { browseTestcase } from '../../../../../actions/myClass/problem';
 
 const useStyles = makeStyles(() => ({
   sampleArea: {
@@ -46,7 +46,7 @@ export default function CodingProblemInfo() {
   const courses = useSelector((state) => state.courses.byId);
   const problems = useSelector((state) => state.problem.byId);
   const testcases = useSelector((state) => state.testcases.byId);
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState(true);
 
   const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
@@ -93,7 +93,7 @@ export default function CodingProblemInfo() {
       setSampleDataIds(samplesId);
       setTestcaseDataIds(testcasesId);
       if (testcasesId.length === 0) {
-        setStatus(false);
+        setStatus(true);
       } else {
         setStatus(!testcases[testcasesId[0]].is_disabled);
       }
@@ -102,7 +102,6 @@ export default function CodingProblemInfo() {
 
   useEffect(() => {
     dispatch(browseTestcase(authToken, problemId));
-    dispatch(browseAssistingData(authToken, problemId));
   }, [authToken, dispatch, problemId]);
 
   if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
@@ -122,7 +121,7 @@ export default function CodingProblemInfo() {
       </SimpleBar>
       <SimpleBar title="Description">
         <MathpixLoader>
-          <MathpixMarkdown text={problems[problemId].description} />
+          <MathpixMarkdown text={problems[problemId].description} htmlTags />
         </MathpixLoader>
       </SimpleBar>
       <SimpleBar title="About Input and Output">
@@ -223,7 +222,7 @@ export default function CodingProblemInfo() {
             },
             {
               id: 'score',
-              label: 'score',
+              label: 'Score',
               minWidth: 50,
               align: 'center',
               width: 100,

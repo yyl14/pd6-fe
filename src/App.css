@@ -15,6 +15,14 @@
   height: calc(100vh - 55px);
   justify-items: center;
   overflow-y: scroll;
+  min-width: 700px;
+  transition: 225ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.layout-content-container-no-sidebar {
+  left: 0;
+  width: 100%;
+  transition: 225ms cubic-bezier(0, 0, 0.2, 1);
 }
 
 .layout-content {

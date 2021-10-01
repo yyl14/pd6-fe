@@ -1,6 +1,24 @@
 import { combineReducers } from 'redux';
-import { problemConstants, challengeConstants } from '../actions/myClass/constant';
+import { problemConstants, challengeConstants, submissionConstants } from '../actions/myClass/constant';
 import { commonConstants } from '../actions/common/constant';
+import { viewConstants } from '../actions/api/constant';
+
+const prototype = {
+  id: null,
+  challenge_id: null,
+  challenge_label: null,
+  title: null,
+  setter_id: null,
+  full_score: null,
+  description: null,
+  io_description: null,
+  source: null,
+  hint: null,
+  is_deleted: null,
+  testcaseIds: [],
+  assistingDataIds: [],
+  score: '',
+};
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -11,9 +29,9 @@ const byId = (state = {}, action) => {
           ...acc,
           [item.id]: {
             ...item,
-            testcaseIds: [],
+            testcaseIds: state[item.id] ? state[item.id].testcaseIds : [],
             assistingDataIds: [],
-            score: state[data.id] ? state[data.id].score : '',
+            score: state[item.id] ? state[item.id].score : '',
           },
         }),
         state,
@@ -25,7 +43,7 @@ const byId = (state = {}, action) => {
         ...state,
         [data.id]: {
           ...data,
-          testcaseIds: [],
+          testcaseIds: state[data.id] ? state[data.id].testcaseIds : [],
           assistingDataIds: [],
           score: state[data.id] ? state[data.id].score : '',
         },
@@ -95,17 +113,58 @@ const byId = (state = {}, action) => {
       };
     }
 
+    case problemConstants.READ_PROBLEM_BEST_SCORE_SUCCESS: {
+      const { data, problemId } = action.payload;
+
+      return {
+        ...state,
+        [problemId]: {
+          ...state[problemId],
+          score: data.score,
+        },
+      };
+    }
+
     case commonConstants.FETCH_PROBLEMS_SUCCESS: {
       const data = action.payload;
       return data.reduce(
         (acc, problem) => ({
           ...acc,
-          [problem.id]: {
+          [problem.problem_id]: {
             ...problem,
+            ...state[problem.problem_id],
           },
         }),
         state,
       );
+    }
+
+    case problemConstants.BROWSE_TESTCASES_SUCCESS: {
+      const { problemId, testcases } = action.payload;
+      const testcaseIds = testcases.map((item) => item.id);
+      return {
+        ...state,
+        [problemId]: {
+          ...state[problemId],
+          testcaseIds,
+        },
+      };
+    }
+
+    case submissionConstants.BROWSE_TESTCASES_SUCCESS: {
+      const { problemId, testcases } = action.payload;
+      const testcaseIds = testcases.map((item) => item.id);
+      return {
+        ...state,
+        [problemId]: {
+          ...state[problemId],
+          testcaseIds,
+        },
+      };
+    }
+    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+      const { problems } = action.payload.data;
+      return problems.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
     }
 
     default:
@@ -129,7 +188,11 @@ const allIds = (state = [], action) => {
 
     case commonConstants.FETCH_PROBLEMS_SUCCESS: {
       const data = action.payload;
-      return [...new Set([...data.map((item) => item.id), ...state])];
+      return [...new Set([...data.map((item) => item.problem_id), ...state])];
+    }
+    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+      const { problems } = action.payload.data;
+      return [...new Set([...problems.map((item) => item.id), ...state])];
     }
 
     default:

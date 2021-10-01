@@ -13,16 +13,11 @@ const initialState = {
   fetchAllChallengesProblems: null,
   fetchDownloadFileUrl: null,
   fetchProblems: null,
+  getAccountBatch: null,
 };
 
 export default function common(state = initialState, action) {
   switch (action.type) {
-    case commonConstants.GET_INSTITUTE_START: {
-      return {
-        ...state,
-        fetchInstitutes: null,
-      };
-    }
     case commonConstants.GET_INSTITUTE_SUCCESS: {
       return {
         ...state,
@@ -71,16 +66,16 @@ export default function common(state = initialState, action) {
         replaceClassMembers: action.error,
       };
     }
-    case commonConstants.BROWSE_SUBMISSION_LANG_FAIL: {
-      return {
-        ...state,
-        browseSubmitLang: action.error,
-      };
-    }
     case commonConstants.BROWSE_SUBMISSION_LANG_SUCCESS: {
       return {
         ...state,
         browseSubmitLang: null,
+      };
+    }
+    case commonConstants.BROWSE_SUBMISSION_LANG_FAIL: {
+      return {
+        ...state,
+        browseSubmitLang: action.error,
       };
     }
     case commonConstants.FETCH_COURSE_SUCCESS: {
@@ -168,6 +163,19 @@ export default function common(state = initialState, action) {
       return {
         ...state,
         fetchProblems: action.error,
+      };
+    }
+
+    case commonConstants.GET_ACCOUNT_BATCH_SUCCESS: {
+      return {
+        ...state,
+        getAccountBatch: null,
+      };
+    }
+    case commonConstants.GET_ACCOUNT_BATCH_FAIL: {
+      return {
+        ...state,
+        getAccountBatch: action.error,
       };
     }
 

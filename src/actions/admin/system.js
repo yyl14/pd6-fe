@@ -3,51 +3,6 @@ import { systemConstants } from './constant';
 import { autoTableConstants } from '../component/constant';
 import browseParamsTransForm from '../../function/browseParamsTransform';
 
-// Access log
-// WITH BROWSE PARAMS
-const fetchAccessLog = (token, browseParams, tableId = null) => async (dispatch) => {
-  try {
-    dispatch({
-      type: systemConstants.FETCH_ACCESS_LOG_START,
-    });
-    const config1 = {
-      headers: { 'auth-token': token },
-      params: browseParamsTransForm(browseParams),
-    };
-    const res1 = await agent.get('/access-log', config1);
-    const { data: logs, total_count } = res1.data.data;
-
-    // Batch browse account
-    const accountIds = logs.map((item) => Number(item.account_id));
-    const config2 = {
-      headers: { 'auth-token': token },
-      params: { account_ids: JSON.stringify(accountIds) },
-    };
-
-    const res2 = await agent.get('/account-summary/batch', config2);
-    const { data: accounts } = res2.data;
-
-    dispatch({
-      type: systemConstants.FETCH_ACCESS_LOG_SUCCESS,
-      payload: { data: logs, accounts: accounts.filter((item) => item !== null) },
-    });
-
-    dispatch({
-      type: autoTableConstants.AUTO_TABLE_UPDATE,
-      payload: {
-        tableId,
-        totalCount: total_count,
-        dataIds: logs.map((item) => item.id),
-        offset: browseParams.offset,
-      },
-    });
-  } catch (error) {
-    dispatch({
-      type: systemConstants.FETCH_ACCESS_LOG_FAIL,
-      error,
-    });
-  }
-};
 // Announcement
 const fetchAnnouncement = (token, browseParams, tableId = null) => async (dispatch) => {
   try {
@@ -231,7 +186,6 @@ const editSubmitLanguage = (token, id, name, version, isDisabled) => (dispatch) 
 };
 
 export {
-  fetchAccessLog,
   fetchAnnouncement,
   readAnnouncement,
   editAnnouncement,

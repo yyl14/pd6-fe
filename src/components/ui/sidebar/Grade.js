@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
@@ -7,7 +6,7 @@ import {
 import Icon from '../icon/index';
 
 export default function Grade({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const { courseId, classId } = useParams();
   const baseURL = '/my-class';
@@ -51,24 +50,20 @@ export default function Grade({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}
       >
-        { arrow}
+        {arrow}
         <div className={classNames.title}>
           {display === 'unfold' ? (
-            <Icon.TriangleDown
-              className={classNames.titleIcon}
-              onClick={foldGrade}
-            />
+            <Icon.TriangleDown className={classNames.titleIcon} onClick={foldGrade} />
           ) : (
-            <Icon.TriangleRight
-              className={classNames.titleIcon}
-              onClick={unfoldGrade}
-            />
+            <Icon.TriangleRight className={classNames.titleIcon} onClick={unfoldGrade} />
           )}
           <Typography variant="h4" className={classNames.titleText}>
             {title}
@@ -78,12 +73,15 @@ export default function Grade({
         {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
-              <ListItem button key={item.text} className={classNames.item}>
-                <ListItemIcon className={classNames.itemIcon} style={{ color: location.pathname.includes(item.path) ? '#1EA5FF' : '' }}>{item.icon}</ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  className={location.pathname.includes(item.path) ? classNames.activeItemText : classNames.itemText}
-                />
+              <ListItem
+                button
+                key={item.text}
+                className={
+                  location.pathname.includes(item.path) ? `${classNames.active} ${classNames.item}` : classNames.item
+                }
+              >
+                <ListItemIcon className={classNames.itemIcon}>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} className={classNames.itemText} />
               </ListItem>
             ))}
           </List>

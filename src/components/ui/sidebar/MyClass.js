@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider,
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
-import { fetchCourse } from '../../../actions/common/common';
-
 export default function MyClass({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const { courseId, classId } = useParams();
   const baseURL = '/my-class';
-  const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.token);
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
@@ -42,7 +38,7 @@ export default function MyClass({
 
         setItemLists(
           userClasses
-            .sort((item) => item.id)
+            .sort((a, b) => b.class_name.localeCompare(a.class_name) || b.course_name.localeCompare(a.course_name))
             .map((item) => {
               switch (item.role) {
                 case 'MANAGER': {
@@ -125,8 +121,10 @@ export default function MyClass({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}
@@ -145,7 +143,7 @@ export default function MyClass({
                   {titles[id]}
                 </Typography>
                 {userClass.role === 'MANAGER' && (
-                  <div className={classNames.titleRightIcon}>
+                  <div className={classNames.titleRightIcon} style={{ marginRight: '0px' }}>
                     <Icon.TA />
                   </div>
                 )}
@@ -158,18 +156,12 @@ export default function MyClass({
                       button
                       key={item.text}
                       onClick={() => history.push(item.path)}
-                      className={classNames.item}
+                      className={
+                        location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item
+                      }
                     >
-                      <ListItemIcon
-                        className={classNames.itemIcon}
-                        style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                      >
-                        {item.icon}
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={item.text}
-                        className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
-                      />
+                      <ListItemIcon className={classNames.itemIcon}>{item.icon}</ListItemIcon>
+                      <ListItemText primary={item.text} className={classNames.itemText} />
                     </ListItem>
                   ))}
                 </List>

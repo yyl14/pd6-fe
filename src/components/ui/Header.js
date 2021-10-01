@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import Icon from './icon/index';
 import { userLogout } from '../../actions/user/auth';
-import { userBrowseAnnouncement, userReadAnnouncement } from '../../actions/user/user';
+import { userBrowseAnnouncement } from '../../actions/user/user';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -69,9 +69,9 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 2,
   },
   notificationDropdownContent: {
-    position: 'absolute',
+    position: 'fixed',
     backgroundColor: theme.palette.primary.contrastText,
-    right: '-120px',
+    right: '30px',
     top: '39px',
     minWidth: '460px',
     maxHeight: '423px',
@@ -137,9 +137,9 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   userDropdownContent: {
-    position: 'absolute',
+    position: 'fixed',
     backgroundColor: theme.palette.primary.contrastText,
-    marginLeft: '-40px',
+    right: '30px',
     minWidth: '140px',
     zIndex: '1',
     boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
@@ -172,6 +172,7 @@ export default function Header() {
 
   const user = useSelector((state) => state.user);
   const authToken = useSelector((state) => state.auth.token);
+  const systemLoading = useSelector((state) => state.loading.admin.system);
 
   const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   HH:mm'));
   const [itemList, setItemList] = useState([]);
@@ -194,8 +195,16 @@ export default function Header() {
   }, [user.classes.length]);
 
   useEffect(() => {
-    dispatch(userBrowseAnnouncement(authToken));
-  }, [authToken, dispatch]);
+    if (!systemLoading.editAnnouncement && !systemLoading.addAnnouncement && !systemLoading.deleteAnnouncement) {
+      dispatch(userBrowseAnnouncement(authToken));
+    }
+  }, [
+    authToken,
+    dispatch,
+    systemLoading.editAnnouncement,
+    systemLoading.addAnnouncement,
+    systemLoading.deleteAnnouncement,
+  ]);
 
   useEffect(() => {
     switch (user.role) {
@@ -251,11 +260,11 @@ export default function Header() {
             //   basePath: '/ranklist',
             //   path: '/ranklist',
             // },
-            // {
-            //   text: 'System',
-            //   basePath: '/system',
-            //   path: '/system',
-            // },
+            {
+              text: 'System',
+              basePath: '/system',
+              path: '/system',
+            },
           ]);
         } else {
           setItemList([
@@ -279,15 +288,15 @@ export default function Header() {
             //   basePath: '/ranklist',
             //   path: '/ranklist',
             // },
-            // {
-            //   text: 'System',
-            //   basePath: '/system',
-            //   path: '/system',
-            // },
+            {
+              text: 'System',
+              basePath: '/system',
+              path: '/system',
+            },
           ]);
         }
         setMenuList([
-          // { title: 'My Submission', link: '/my-submission' },
+          { title: 'My Submission', link: '/my-submission' },
           { title: 'My Profile', link: '/my-profile' },
           { title: 'Logout', link: '/logout' },
         ]);
@@ -347,7 +356,12 @@ export default function Header() {
   useEffect(() => {
     const ns = user.notifications.sort((a, b) => new Date(b.post_time).getTime() - new Date(a.post_time).getTime());
     setNotifyList(ns);
-    setUnreadNotifyExist(!!ns.filter((e) => !e.is_deleted).length);
+    setUnreadNotifyExist(
+      ns.filter(
+        (notify) => moment(new Date()).diff(moment(notify.post_time), 'days') >= 0
+          && moment(notify.expire_time).diff(moment(new Date()), 'days') >= 0,
+      ).length !== 0,
+    );
   }, [user.notifications]);
 
   const toggleNotify = () => {
@@ -408,7 +422,7 @@ export default function Header() {
                 <div className={classes.notificationDropdownContent} ref={notifyRef}>
                   {notifyList.map(
                     // between post time and expire time
-                    (notify) => moment(new Date()).diff(moment(notify.post_time), 'days') >= 0
+                    (notify) => moment().diff(moment(notify.post_time), 'days') >= 0
                       && moment(notify.expire_time).diff(moment(new Date()), 'days') >= 0 && (
                         <div
                           key={notify.title}
@@ -445,7 +459,14 @@ export default function Header() {
               tabIndex="-1"
             >
               <button type="button" className={classes.userButton}>
-                <Typography variant="h6" className={location.pathname === '/my-profile' ? classes.active : null}>
+                <Typography
+                  variant="h6"
+                  className={
+                    location.pathname === '/my-profile' || location.pathname.slice(0, 14) === '/my-submission'
+                      ? classes.active
+                      : null
+                  }
+                >
                   {user.username}
                 </Typography>
               </button>

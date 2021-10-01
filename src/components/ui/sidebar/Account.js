@@ -7,7 +7,7 @@ import {
 import Icon from '../icon/index';
 
 export default function Account({
-  menuItems, classes, history, location, mode,
+  classes, history, location, mode, open, onClose,
 }) {
   const { instituteId, accountId } = useParams();
   const instituteList = useSelector((state) => state.institutes);
@@ -34,41 +34,41 @@ export default function Account({
       setItemList([
         {
           text: 'Institute',
-          icon: (
-            <Icon.SchoolIcon />
-          ),
+          icon: <Icon.Institute />,
           path: `${baseURL}/institute`,
         },
         {
           text: 'Account',
-          icon: (
-            <Icon.PersonIcon />
-          ),
+          icon: <Icon.Profile />,
           path: `${baseURL}/account`,
         },
       ]);
     } else if (mode === 'institute' && instituteList.byId[instituteId]) {
-      setArrow(<IconButton className={classes.arrow} onClick={goBackToInstitute}><Icon.ArrowBackRoundedIcon /></IconButton>);
+      setArrow(
+        <IconButton className={classes.arrow} onClick={goBackToInstitute}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
       setTitle(instituteList.byId[instituteId].abbreviated_name);
       setItemList([
         {
           text: 'Setting',
           path: `${baseURL}/institute/${instituteId}/setting`,
-          icon: (
-            <Icon.SettingsIcon />
-          ),
+          icon: <Icon.SettingsIcon />,
         },
       ]);
     } else if (mode === 'account' && accountList.byId[accountId]) {
-      setArrow(<IconButton className={classes.arrow} onClick={goBackToAccount}><Icon.ArrowBackRoundedIcon /></IconButton>);
+      setArrow(
+        <IconButton className={classes.arrow} onClick={goBackToAccount}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
       setTitle(accountList.byId[accountId].username);
       setItemList([
         {
           text: 'Setting',
           path: `${baseURL}/account/${accountId}/setting`,
-          icon: (
-            <Icon.SettingsIcon />
-          ),
+          icon: <Icon.SettingsIcon />,
         },
       ]);
     }
@@ -90,8 +90,10 @@ export default function Account({
     return (
       <div>
         <Drawer
+          variant="persistent"
+          open={open}
+          onClose={onClose}
           className={classes.drawer}
-          variant="permanent"
           anchor="left"
           PaperProps={{ elevation: 5 }}
           classes={{ paper: classes.drawerPaper }}
@@ -103,8 +105,10 @@ export default function Account({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classes.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classes.drawerPaper }}
@@ -124,18 +128,14 @@ export default function Account({
         {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
-              <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classes.item}>
-                <ListItemIcon
-                  className={classes.itemIcon}
-                  style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                >
-                  {item.icon}
-
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  className={location.pathname === item.path ? classes.activeItemText : classes.itemText}
-                />
+              <ListItem
+                button
+                key={item.text}
+                onClick={() => history.push(item.path)}
+                className={location.pathname === item.path ? `${classes.active} ${classes.item}` : classes.item}
+              >
+                <ListItemIcon className={classes.itemIcon}>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} className={classes.itemText} />
               </ListItem>
             ))}
           </List>

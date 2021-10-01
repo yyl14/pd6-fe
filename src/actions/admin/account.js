@@ -27,7 +27,7 @@ const getInstitute = (token, instituteId) => (dispatch) => {
     });
 };
 
-const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled) => (dispatch) => {
+const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled, onSuccess, onError) => (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
@@ -57,12 +57,14 @@ const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled)
           is_disabled: isDisabled,
         },
       });
+      onSuccess();
     })
     .catch((error) => {
       dispatch({
         type: accountConstants.ADD_INSTITUTE_FAIL,
         error,
       });
+      onError();
     });
 };
 
@@ -200,7 +202,7 @@ const fetchStudentCards = (token, id) => (dispatch) => {
 };
 
 // SM: edit any account
-const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (dispatch) => {
+const addStudentCard = (token, id, instituteId, emailPrefix, studentId, onSuccess, onError) => (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
@@ -219,12 +221,14 @@ const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (disp
     )
     .then(() => {
       dispatch({ type: accountConstants.ADD_STUDENT_CARD_SUCCESS });
+      onSuccess();
     })
     .catch((error) => {
       dispatch({
         type: accountConstants.ADD_STUDENT_CARD_FAIL,
         error,
       });
+      onError();
     });
 };
 
@@ -253,38 +257,6 @@ const editPassword = (token, id, newPassword) => (dispatch) => {
         error,
       });
     });
-};
-
-// SM: fetch all accounts
-const fetchAccounts = (token, browseParams, tableId = null) => async (dispatch) => {
-  try {
-    dispatch({ type: accountConstants.FETCH_ACCOUNTS_START });
-    const config = {
-      headers: { 'auth-token': token },
-      params: browseParamsTransForm(browseParams),
-    };
-    const res = await agent.get('/account', config);
-    const { data, total_count } = res.data.data;
-
-    dispatch({
-      type: accountConstants.FETCH_ACCOUNTS_SUCCESS,
-      payload: data,
-    });
-    dispatch({
-      type: autoTableConstants.AUTO_TABLE_UPDATE,
-      payload: {
-        tableId,
-        totalCount: total_count,
-        dataIds: data.map((item) => item.id),
-        offset: browseParams.offset,
-      },
-    });
-  } catch (error) {
-    dispatch({
-      type: accountConstants.FETCH_ACCOUNTS_FAIL,
-      error,
-    });
-  }
 };
 
 const browsePendingStudentCards = (token, accountId) => async (dispatch) => {
@@ -358,7 +330,6 @@ export {
   fetchStudentCards,
   addStudentCard,
   editPassword,
-  fetchAccounts,
   browsePendingStudentCards,
   resendEmailVerification,
   deletePendingStudentCard,

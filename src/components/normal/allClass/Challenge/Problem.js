@@ -1,20 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Typography,
-  Button,
-  makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  TextField,
-} from '@material-ui/core';
+import { makeStyles, Snackbar } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 
 import CodingProblem from './CodingProblem';
-import { readProblem, readProblemInfo } from '../../../../actions/myClass/problem';
+import { readProblemInfo } from '../../../../actions/myClass/problem';
 import GeneralLoading from '../../../GeneralLoading';
+import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({}));
 
@@ -24,20 +16,26 @@ export default function Problem() {
   const {
     courseId, classId, challengeId, problemId,
   } = useParams();
-  const history = useHistory();
   const classNames = useStyles();
 
   const problem = useSelector((state) => state.problem.byId);
-  // const problemIDs = useSelector((state) => state.problem.allIds);
   const authToken = useSelector((state) => state.auth.token);
-  // const error = useSelector((state) => state.error);
+  const error = useSelector((state) => state.error.myClass.problem);
   const loading = useSelector((state) => state.loading.myClass.problem);
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(readProblemInfo(authToken, problemId, challengeId));
-  }, [authToken, dispatch, problemId, challengeId]);
+    dispatch(
+      readProblemInfo(
+        authToken,
+        problemId,
+        () => setShowSnackbar(false),
+        () => setShowSnackbar(true),
+      ),
+    );
+  }, [authToken, dispatch, problemId]);
 
   if (loading.readProblem) {
     return <GeneralLoading />;
@@ -45,7 +43,14 @@ export default function Problem() {
 
   return (
     <>
-      <CodingProblem />
+      {showSnackbar ? (
+        <>
+          <NoMatch />
+          <Snackbar open={showSnackbar} message={`Error: ${error.readProblem}`} />
+        </>
+      ) : (
+        <CodingProblem />
+      )}
     </>
   );
 }

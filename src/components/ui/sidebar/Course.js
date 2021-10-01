@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
@@ -7,7 +7,7 @@ import {
 import Icon from '../icon/index';
 
 export default function Course({
-  classes, history, location, mode,
+  classes, history, location, mode, open, onClose,
 }) {
   const { courseId, classId } = useParams();
   const courseList = useSelector((state) => state.courses);
@@ -89,7 +89,7 @@ export default function Course({
         {
           text: 'Setting',
           path: `${baseURL}/course/${courseId}/setting`,
-          icon: <Icon.SettingsIcon />,
+          icon: <Icon.Setting />,
         },
       ]);
     } else if (mode === 'class' && courseList.byId[courseId] && classList.byId[classId]) {
@@ -103,12 +103,12 @@ export default function Course({
         {
           text: 'Member',
           path: `${baseURL}/class/${courseId}/${classId}/member`,
-          icon: <Icon.PeopleIcon />,
+          icon: <Icon.Member />,
         },
         {
           text: 'Setting',
           path: `${baseURL}/class/${courseId}/${classId}/setting`,
-          icon: <Icon.SettingsIcon />,
+          icon: <Icon.Setting />,
         },
       ]);
     }
@@ -135,8 +135,10 @@ export default function Course({
     return (
       <div>
         <Drawer
+          variant="persistent"
+          open={open}
+          onClose={onClose}
           className={classes.drawer}
-          variant="permanent"
           anchor="left"
           PaperProps={{ elevation: 5 }}
           classes={{ paper: classes.drawerPaper }}
@@ -148,8 +150,10 @@ export default function Course({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classes.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classes.drawerPaper }}
@@ -179,14 +183,17 @@ export default function Course({
                   className={item.text !== 'Lesson' ? classes.item : classes.addItem}
                 >
                   <ListItemIcon
-                    className={classes.itemIcon}
-                    style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
+                    className={
+                          location.pathname === item.path ? `${classes.active} ${classes.itemIcon}` : classes.itemIcon
+                        }
                   >
                     {item.icon}
                   </ListItemIcon>
                   <ListItemText
                     primary={item.text}
-                    className={location.pathname === item.path ? classes.activeItemText : classes.itemText}
+                    className={
+                          location.pathname === item.path ? `${classes.active} ${classes.itemText}` : classes.itemText
+                        }
                   />
                 </ListItem>
                 ),
@@ -218,14 +225,21 @@ export default function Course({
                       className={item.text !== 'Contest' ? classes.item : classes.addItem}
                     >
                       <ListItemIcon
-                        className={classes.itemIcon}
-                        style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
+                        className={
+                              location.pathname === item.path
+                                ? `${classes.active} ${classes.itemIcon}`
+                                : classes.itemIcon
+                            }
                       >
                         {item.icon}
                       </ListItemIcon>
                       <ListItemText
                         primary={item.text}
-                        className={location.pathname === item.path ? classes.activeItemText : classes.itemText}
+                        className={
+                              location.pathname === item.path
+                                ? `${classes.active} ${classes.itemText}`
+                                : classes.itemText
+                            }
                       />
                     </ListItem>
                     ),

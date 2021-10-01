@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Snackbar } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { fetchTeam, fetchTeamMembers } from '../../../../actions/myClass/team';
 import TeamInfo from './detail/TeamInfo';
@@ -22,6 +23,8 @@ export default function TeamDetail() {
   const teamMembers = useSelector((state) => state.teamMembers.byId);
   const teamMemberIds = useSelector((state) => state.teamMembers.allIds);
   const loading = useSelector((state) => state.loading.myClass.team);
+  const error = useSelector((state) => state.error);
+  const [addMemberFail, setAddMemberFail] = useState(false);
 
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
@@ -68,7 +71,7 @@ export default function TeamDetail() {
         student_id: teamMembers[id] ? teamMembers[id].account.student_id : '',
         real_name: teamMembers[id] ? teamMembers[id].account.real_name : '',
         role: systemRoleTransformation(teamMembers[id].role),
-        path: '/',
+        path: `/user-profile/${teamMembers[id].member_id}`,
       })),
     );
   }, [teamMemberIds, teamMembers]);
@@ -87,6 +90,11 @@ export default function TeamDetail() {
 
   const handleMemberEdit = () => {
     setEditTeamMember(true);
+  };
+
+  const handleCloseError = () => {
+    setAddMemberFail(false);
+    error.myClass.team.addTeamMember = null;
   };
 
   if (loading.fetchTeam || loading.fetchTeamMember) {
@@ -118,20 +126,21 @@ export default function TeamDetail() {
       {editTeamMember ? (
         <TeamMemberEdit
           isManager={isManager}
-          tableData={tableData}
           setOriginData={setTableData}
           handleBack={handleMemberBack}
+          setAddMemberFail={setAddMemberFail}
         />
       ) : (
         <TeamMember isManager={isManager} tableData={tableData} handleEdit={handleMemberEdit} />
       )}
 
-      {isManager && (
-        <TeamDelete
-          teamName={teams[teamId].name}
-          label={teams[teamId].label}
-        />
-      )}
+      {isManager && <TeamDelete teamName={teams[teamId].name} label={teams[teamId].label} />}
+
+      <Snackbar
+        open={addMemberFail}
+        onClose={handleCloseError}
+        message={`Error: ${error.myClass.team.addTeamMember}`}
+      />
     </>
   );
 }

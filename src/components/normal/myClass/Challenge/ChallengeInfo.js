@@ -56,13 +56,13 @@ export default function ChallengeInfo() {
   }, [authToken, challengeId, dispatch, hasRequest, loading.editChallenge]);
 
   useEffect(() => {
-    if (challenges[challengeId] !== undefined) {
+    if (challenges[challengeId]) {
       challenges[challengeId].problemIds.map((id) => dispatch(readProblemScore(authToken, id)));
     }
   }, [authToken, challengeId, challenges, dispatch]);
 
   useEffect(() => {
-    if (challenges[challengeId] !== undefined) {
+    if (challenges[challengeId]) {
       if (currentTime.isBefore(moment(challenges[challengeId].start_time))) {
         setStatus('Not Yet');
       } else if (currentTime.isBefore(moment(challenges[challengeId].end_time))) {
@@ -138,11 +138,11 @@ export default function ChallengeInfo() {
       <SimpleBar
         title="Description"
         buttons={<>{isManager && !editMode && <Button onClick={handleEdit}>Edit</Button>}</>}
-        noIndent
       >
         {editMode ? (
           <div>
             <TextField
+              placeholder="(Text, LaTeX, Markdown and HTML supported)"
               className={classes.descriptionField}
               value={inputs}
               onChange={(e) => setInputs(e.target.value)}
@@ -158,7 +158,7 @@ export default function ChallengeInfo() {
           </div>
         ) : (
           <MathpixLoader>
-            <MathpixMarkdown text={challenges[challengeId].description} />
+            <MathpixMarkdown text={challenges[challengeId].description} htmlTags />
           </MathpixLoader>
         )}
       </SimpleBar>

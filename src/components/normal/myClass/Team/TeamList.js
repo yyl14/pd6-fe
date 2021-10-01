@@ -29,7 +29,7 @@ import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   reminder: {
-    color: theme.palette.grey.A400,
+    color: theme.palette.grey.A700,
     marginLeft: theme.spacing(2),
   },
   importDialogButtons: {
@@ -67,9 +67,9 @@ export default function TeamList() {
 
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [importError, setImportError] = useState(false);
-  const [createTeamErr, setCreateTeamErr] = useState(false);
-  const [addMemberErr, setAddMemberErr] = useState(false);
+  const [showImpTeamSnackBar, setShowImpTeamSnackBar] = useState(false);
+  const [showAddMemSnackBar, setShowAddMemSnackBar] = useState(false);
+  const [showAddTeamSnackBar, setShowAddTeamSnackBar] = useState(false);
 
   const [selectedFile, setSelectedFile] = useState([]);
   const [selectedMember, setSelectedMember] = useState([]);
@@ -119,7 +119,9 @@ export default function TeamList() {
 
   const submitImport = () => {
     if (importInput !== '' && selectedFile !== []) {
-      selectedFile.map((file) => dispatch(importTeam(authToken, classId, importInput, file, importTeamSuccess, () => setImportError(true))));
+      selectedFile.map((file) => dispatch(
+        importTeam(authToken, classId, importInput, file, importTeamSuccess, () => setShowImpTeamSnackBar(true)),
+      ));
     }
   };
 
@@ -133,8 +135,8 @@ export default function TeamList() {
           addInputs.label,
           selectedMember,
           addTeamSuccess,
-          () => setCreateTeamErr(true),
-          () => setAddMemberErr(true),
+          () => setShowAddTeamSnackBar(true),
+          () => setShowAddMemSnackBar(true),
         ),
       );
     }
@@ -146,13 +148,13 @@ export default function TeamList() {
   };
 
   const handleCloseError = () => {
-    setImportError(false);
-    setCreateTeamErr(false);
-    setAddMemberErr(false);
+    setShowImpTeamSnackBar(false);
+    setShowAddTeamSnackBar(false);
+    setShowAddMemSnackBar(false);
   };
 
   if (courses[courseId] === undefined || classes[classId] === undefined) {
-    if (loading.fetchCourse || loading.fetchClass || loading.fetchTeams) {
+    if (loading.common.common.fetchCourse || loading.common.common.fetchClass || loading.myClass.team.fetchTeams) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -201,7 +203,7 @@ export default function TeamList() {
             align: 'center',
             minWidth: 150,
             width: 200,
-            type: 'string',
+            type: 'link',
           },
           {
             name: 'Label',
@@ -213,7 +215,10 @@ export default function TeamList() {
         ]}
         reduxData={teams}
         reduxDataToRows={(item) => ({
-          'Team Name': item.name,
+          'Team Name': {
+            text: item.name,
+            path: `/my-class/${courseId}/${classId}/team/${item.id}`,
+          },
           Label: item.label,
           link: `/my-class/${courseId}/${classId}/team/${item.id}`,
         })}
@@ -234,7 +239,13 @@ export default function TeamList() {
           <Typography variant="body2" className={classNames.reminder}>
             Member N (N=2~10): Same as Team Manager
           </Typography>
-          <Typography variant="body2"> Download template file for more instructions.</Typography>
+          <Typography variant="body2">
+            Notice that PDOGS only accept files encoded in
+            {' '}
+            <b>ASCII / UTF-8</b>
+            {' '}
+            charset.
+          </Typography>
         </DialogContent>
         <DialogContent>
           <AlignedText text="Class" maxWidth="md" childrenType="text">
@@ -244,7 +255,7 @@ export default function TeamList() {
             <TextField id="title" name="title" value={importInput} onChange={(e) => handleImportChange(e)} />
           </AlignedText>
           <FileUploadArea
-            text="Grading File"
+            text="File"
             fileAcceptFormat=".csv"
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
@@ -280,7 +291,11 @@ export default function TeamList() {
           </div>
         </DialogActions>
       </Dialog>
-      <Snackbar open={importError} onClose={handleCloseError} message={`Error: ${error.myClass.team.importTeam}`} />
+      <Snackbar
+        open={showImpTeamSnackBar}
+        onClose={handleCloseError}
+        message={`Error: ${error.myClass.team.importTeam}`}
+      />
 
       <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} maxWidth="md">
         <DialogTitle id="dialog-slide-title">
@@ -290,10 +305,10 @@ export default function TeamList() {
           <AlignedText text="Class" maxWidth="md" childrenType="text">
             <Typography variant="body1">{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
           </AlignedText>
-          <AlignedText text="Label" maxWidth="lg" childrenType="field">
+          <AlignedText text="Label" maxWidth="md" childrenType="field">
             <TextField name="label" value={addInputs.label} onChange={(e) => handleAddChange(e)} />
           </AlignedText>
-          <AlignedText text="Team Name" maxWidth="lg" childrenType="field">
+          <AlignedText text="Team Name" maxWidth="md" childrenType="field">
             <TextField name="teamName" value={addInputs.teamName} onChange={(e) => handleAddChange(e)} />
           </AlignedText>
           <AddTeamMemberArea text="Member List" selectedMember={selectedMember} setSelectedMember={setSelectedMember} />
@@ -320,12 +335,12 @@ export default function TeamList() {
         </DialogActions>
       </Dialog>
       <Snackbar
-        open={createTeamErr}
+        open={showAddTeamSnackBar}
         onClose={handleCloseError}
         message={`Create team fail: ${error.myClass.team.addTeam}`}
       />
       <Snackbar
-        open={addMemberErr}
+        open={showAddMemSnackBar}
         onClose={handleCloseError}
         message={`Add team members fail: ${error.myClass.team.addTeamMember}`}
       />

@@ -36,7 +36,6 @@ import ErrorText from './ErrorText';
 import MultiSelect from './MultiSelect';
 import CustomCheckbox from './CustomCheckbox';
 import AutoTable from './AutoTable';
-import { fetchAccessLog } from '../../actions/admin/system';
 
 const useStyles = makeStyles((theme) => ({
   bigTitle: {
@@ -114,8 +113,8 @@ export default function UIComponentUsage() {
   const [switchStatus, setSwitchStatus] = useState(false);
   const [dateRangePicker, setDateRangePicker] = useState([
     {
-      startDate: moment().startOf('week').toDate(),
-      endDate: moment().endOf('week').toDate(),
+      startDate: moment().toDate(),
+      endDate: moment().add(7, 'days').toDate(),
       key: 'selection',
     },
   ]);
@@ -526,7 +525,7 @@ export default function UIComponentUsage() {
         <Typography variant="h4">Auto Table</Typography>
         <hr className={classes.divider} style={{ width: '460px' }} />
         <div className={classes.wideComponent}>
-          <AutoTable
+          {/* <AutoTable
             ident="Access Log Table"
             hasFilter
             filterConfig={[
@@ -618,7 +617,7 @@ export default function UIComponentUsage() {
               'Request Method': item.request_method,
               'Access Time': moment(item.access_time).format('YYYY-MM-DD, HH:mm:ss'),
             })}
-          />
+          /> */}
         </div>
       </div>
       <div className={classes.wrapper}>

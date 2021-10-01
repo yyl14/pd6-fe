@@ -9,8 +9,8 @@ import ProblemSet from './problemSet';
 
 import GeneralLoading from '../../components/GeneralLoading';
 import NoMatch from '../../components/noMatch';
-import Header from '../../components/ui/Header';
-import Sidebar from '../../components/ui/Sidebar';
+import Team from '../../components/system/team';
+import AccessLog from '../../components/system/accessLog';
 
 export default function Normal() {
   const history = useHistory();
@@ -27,23 +27,18 @@ export default function Normal() {
   }, [auth.isAuthenticated, history, user.role]);
 
   return (
-    <div>
-      <Header role={user.role} hasClass={user.classes.length !== 0} />
-      <Sidebar />
-      <div className="layout-content-container">
-        <div className="layout-content">
-          <Switch>
-            {/* For redirection */}
-            <Route exact path="/my-class" component={MyClass} />
-            <Route path="/my-class/:courseId/:classId" component={MyClass} />
-            <Route path="/all-class" component={AllClass} />
-            <Route exact path="/problem-set" component={ProblemSet} />
-            <Route path="/problem-set/:courseId/:classId" component={ProblemSet} />
-            <Route exact path="/" component={GeneralLoading} />
-            <Route component={NoMatch} />
-          </Switch>
-        </div>
-      </div>
-    </div>
+    <Switch>
+      {/* For redirection */}
+      <Route exact path="/my-class" component={MyClass} />
+      <Route path="/my-class/:courseId/:classId" component={MyClass} />
+      <Route path="/all-class" component={AllClass} />
+      <Route exact path="/problem-set" component={ProblemSet} />
+      <Route path="/problem-set/:courseId/:classId" component={ProblemSet} />
+      <Route exact path="/" component={GeneralLoading} />
+      <Route exact path="/system" component={Team} />
+      <Route exact path="/system/team" component={Team} />
+      <Route exact path="/system/accesslog" component={AccessLog} />
+      <Route component={NoMatch} />
+    </Switch>
   );
 }
