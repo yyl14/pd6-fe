@@ -34,7 +34,7 @@ export default function AllClass({
           .map(({ id, type, name }) => ({
             type,
             text: name,
-            icon: <Icon.Member />,
+            icon: <Icon.Class />,
             path: `${baseURL}/${id}`,
           })),
       );
