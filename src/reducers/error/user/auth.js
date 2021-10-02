@@ -4,6 +4,7 @@ const initialState = {
   auth: null,
   login: null,
   logout: null,
+  forgetUsername: null,
   forgetPassword: null,
   signup: null,
   fetchAccount: null,
@@ -30,6 +31,16 @@ export default function auth(state = initialState, action) {
       };
     case authConstants.AUTH_LOGOUT:
       return initialState;
+    case authConstants.FORGET_USERNAME_SUCCESS:
+      return {
+        ...state,
+        forgetUsername: null,
+      };
+    case authConstants.FORGET_USERNAME_FAIL:
+      return {
+        ...state,
+        forgetUsername: action.error,
+      };
     case authConstants.FORGET_PASSWORD_SUCCESS:
       return {
         ...state,
