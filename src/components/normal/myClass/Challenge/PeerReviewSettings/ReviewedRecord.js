@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
+  Typography,
   Button,
   TextField,
   FormControl,
@@ -8,16 +9,16 @@ import {
   MenuItem,
   makeStyles,
 } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 
+import AlignedText from '../../../../ui/AlignedText';
 import SimpleBar from '../../../../ui/SimpleBar';
 import PageTitle from '../../../../ui/PageTitle';
 
 import BasicInfo from './Element/BasicInfo';
 import ReceiverInfo from './Element/ReceiverInfo';
 import GraderInfo from './Element/GraderInfo';
-import ProblemDescription from './Element/ProblemDescription';
 import CodeArea from '../../../../ui/CodeArea';
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
@@ -39,7 +40,7 @@ const useStyles = makeStyles(() => ({
 // Only normal has edit mode.
 export default function ReviewedRecord() {
   const {
-    classId, challengeId, peerReviewId, accountId, recordId,
+    courseId, classId, challengeId, peerReviewId, accountId, recordId,
   } = useParams();
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -62,6 +63,7 @@ export default function ReviewedRecord() {
 
   const handleSubmit = () => {
     console.log(score);
+    // dispatch submit review result
     setEdit(false);
   };
 
@@ -99,13 +101,24 @@ export default function ReviewedRecord() {
     return <NoMatch />;
   }
 
+  if (role === 'GUEST') {
+    return <NoMatch />;
+  }
+
   return (
     <>
       {role === 'MANAGER'
         ? <PageTitle text={`Peer Review Detail / Peer ${peerId}`} />
         : <PageTitle text={`${challenges[challengeId].title} / ${peerReviews[peerReviewId].challenge_label} / Peer ${peerId}`} />}
 
-      {!edit && role === 'NORMAL' && <Button onClick={() => setEdit(true)}>Edit</Button>}
+      {role === 'NORMAL'
+                && (
+                <SimpleBar title="Original Problem">
+                  <Link target="_blank" to={`/my-class/${courseId}/${classId}/challenge/${challengeId}/${peerReviews[peerReviewId].setter_id}`}>
+                    {`${challenges[challengeId].title}`}
+                  </Link>
+                </SimpleBar>
+                )}
 
       {role === 'MANAGER' ? <BasicInfo />
         : (
@@ -122,14 +135,25 @@ export default function ReviewedRecord() {
             <GraderInfo accountId={peerReviewRecords[recordId].grader_id} reviewedTime={peerReviewRecords[recordId].submit_time} />
           </>
           )}
-      <ProblemDescription />
+
       <SimpleBar title="Code" noIndent>
         <CodeArea value={peerReviewRecords[recordId].code} />
       </SimpleBar>
-      {edit
-        ? (
+      {role === 'MANAGER'
+          && (
           <>
-            <SimpleBar title="Score" noIndent>
+            <SimpleBar title="Score">
+              {`${peerReviewRecords[recordId].score}`}
+            </SimpleBar>
+            <SimpleBar title="Comment">
+              {`${peerReviewRecords[recordId].comment}`}
+            </SimpleBar>
+          </>
+          )}
+      {role === 'NORMAL' && edit ? (
+        <>
+          <SimpleBar title="Review" noIndent>
+            <AlignedText text="Score" childrenType="field">
               <FormControl variant="outlined">
                 <Select
                   labelId="score"
@@ -146,37 +170,43 @@ export default function ReviewedRecord() {
                   ))}
                 </Select>
               </FormControl>
-            </SimpleBar>
-            <SimpleBar title="Comment" noIndent>
-              <TextField
-                value={comment}
-                variant="outlined"
-                onChange={(e) => {
-                  setComment(e.target.value);
-                }}
-                className={classes.textfield}
-              />
-              {`${peerReviewRecords[recordId].comment}`}
-            </SimpleBar>
-          </>
-        ) : (
-          <>
-            <SimpleBar title="Score">
-              {`${peerReviewRecords[recordId].score}`}
-            </SimpleBar>
-            <SimpleBar title="Comment">
-              {`${peerReviewRecords[recordId].comment}`}
-            </SimpleBar>
-            <div className={classes.buttons}>
-              <Button color="default" onClick={() => { setEdit(false); }}>
-                Cancel
-              </Button>
-              <Button color="primary" onClick={handleSubmit}>
-                Submit
-              </Button>
-            </div>
-          </>
-        )}
+            </AlignedText>
+            <TextField
+              value={comment}
+              variant="outlined"
+              onChange={(e) => {
+                setComment(e.target.value);
+              }}
+              className={classes.textfield}
+            />
+            <AlignedText text="Comment" childrenType="text" />
+          </SimpleBar>
+          <div className={classes.buttons}>
+            <Button color="default" onClick={() => { setEdit(false); }}>
+              Cancel
+            </Button>
+            <Button color="primary" onClick={handleSubmit}>
+              Submit
+            </Button>
+          </div>
+        </>
+      ) : (
+        <>
+          <SimpleBar title="Review" buttons={<Button onClick={() => setEdit(true)}>Edit</Button>}>
+            <AlignedText text="Score" childrenType="text">
+              <Typography variant="body1">
+                {`${peerReviewRecords[recordId].score}`}
+              </Typography>
+            </AlignedText>
+            <AlignedText text="Comment" childrenType="text">
+              <Typography variant="body1">
+                {`${peerReviewRecords[recordId].comment}`}
+              </Typography>
+            </AlignedText>
+          </SimpleBar>
+          <SimpleBar title="Comment" />
+        </>
+      )}
     </>
   );
 }
