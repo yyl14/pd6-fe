@@ -11,7 +11,6 @@ import {
 import { useParams } from 'react-router-dom';
 import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 
-import AlignedText from '../../../../ui/AlignedText';
 import SimpleBar from '../../../../ui/SimpleBar';
 import PageTitle from '../../../../ui/PageTitle';
 
@@ -73,7 +72,11 @@ export default function ReviewedRecord() {
 
   useEffect(() => {
     setScoreRange(Array.from(new Array(peerReviews[peerReviewId].max_score - peerReviews[peerReviewId].min_score + 1), (x, i) => i + peerReviews[peerReviewId].min_score));
-  }, [peerReviewId, peerReviews]);
+    const id = peerReviews[peerReviewId].reviewRecordIds.findIndex((element) => element === recordId);
+    if (id !== -1) {
+      setPeerId(peerReviews[peerReviewId].reviewRecordIds[id]);
+    }
+  }, [peerReviewId, peerReviews, recordId]);
 
   useEffect(() => {
     const newRole = userClasses.filter((item) => item.class_id === Number(classId))[0].role;
@@ -82,7 +85,14 @@ export default function ReviewedRecord() {
     }
   }, [classId, userClasses]);
 
-  if (challenges[challengeId] === undefined) {
+  useEffect(() => {
+    // dispatch read review ids for this account
+    // dispatch read record with code
+    // if manager, must read receiver and grader info at the same time
+    // dispatch read problem info
+  }, []);
+
+  if (challenges[challengeId] === undefined || peerReviews[peerReviewId] === undefined || peerReviewRecords[recordId] === undefined) {
     if (commonLoading.fetchChallenge) {
       return <GeneralLoading />;
     }
@@ -108,13 +118,13 @@ export default function ReviewedRecord() {
       {role === 'MANAGER'
           && (
           <>
-            <ReceiverInfo accountId={6} />
-            <GraderInfo accountId={6} reviewedTime="2021-10-01T12:07:22.478Z" />
+            <ReceiverInfo accountId={peerReviewRecords[recordId].receiver_id} />
+            <GraderInfo accountId={peerReviewRecords[recordId].grader_id} reviewedTime={peerReviewRecords[recordId].submit_time} />
           </>
           )}
       <ProblemDescription />
       <SimpleBar title="Code" noIndent>
-        <CodeArea value="" />
+        <CodeArea value={peerReviewRecords[recordId].code} />
       </SimpleBar>
       {edit
         ? (
