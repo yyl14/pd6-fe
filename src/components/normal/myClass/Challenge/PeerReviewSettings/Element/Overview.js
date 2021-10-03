@@ -7,16 +7,18 @@ import {
 } from '@material-ui/core';
 import { useParams, Link } from 'react-router-dom';
 
-import NoMatch from '../../noMatch';
-import GeneralLoading from '../../GeneralLoading';
+import NoMatch from '../../../../../noMatch';
+import GeneralLoading from '../../../../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
 }));
 
 /* This is a level 4 component (page component) */
-export default function SubmissionList() {
+// This page is for normal.
+export default function Overview() {
   return (
     <>
+      <div>Overview</div>
     </>
   );
 }

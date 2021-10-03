@@ -6,35 +6,19 @@ import {
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
-import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
-
 export default function AllClass({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const { courseId } = useParams();
   const baseURL = '/all-class';
-  const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.token);
   const classes = useSelector((state) => state.classes);
   const courses = useSelector((state) => state.courses);
-
-  useEffect(() => {
-    dispatch(fetchCourses(authToken));
-  }, [dispatch, authToken, location.pathname]);
-
-  useEffect(() => {
-    dispatch(fetchClasses(authToken, courseId));
-  }, [authToken, courseId, dispatch, location.pathname]);
+  const loading = useSelector((state) => state.loading);
 
   const [display, setDisplay] = useState('unfold'); // 0: fold, 1: unfold
   const [arrow, setArrow] = useState(null);
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
-
-  useEffect(() => {
-    dispatch(fetchCourses(authToken));
-    dispatch(fetchClasses(authToken, courseId));
-  }, [authToken, courseId, dispatch]);
 
   useEffect(() => {
     // console.log(courses, classes);
@@ -50,11 +34,15 @@ export default function AllClass({
           .map(({ id, type, name }) => ({
             type,
             text: name,
-            icon: <Icon.Member />,
+            icon: <Icon.Class />,
             path: `${baseURL}/${id}`,
           })),
       );
-    } else if (mode === 'course' && courses.byId[courseId] !== undefined) {
+    } else if (
+      mode === 'course'
+      && courses.byId[courseId] !== undefined
+      && courses.byId[courseId].classIds !== undefined
+    ) {
       // console.log(courses, classes);
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToMain}>
@@ -74,7 +62,7 @@ export default function AllClass({
           })),
       );
     }
-  }, [classNames.arrow, classes, courseId, courses, history, mode]);
+  }, [classNames.arrow, classes.byId, courseId, courses, history, mode]);
 
   const fold = () => {
     setDisplay('fold');
@@ -87,8 +75,10 @@ export default function AllClass({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}

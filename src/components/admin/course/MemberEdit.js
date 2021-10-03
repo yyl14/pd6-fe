@@ -71,6 +71,7 @@ const MemberEdit = ({
 }) => {
   const classNames = useStyles();
 
+  const accounts = useSelector((state) => state.accounts);
   const members = useSelector((state) => state.classMembers);
   const error = useSelector((state) => state.error.common.common);
 
@@ -115,24 +116,24 @@ const MemberEdit = ({
     if (classMembers !== undefined) {
       setTA(
         classMembers
-          .filter((item) => item.member_role === 'MANAGER')
-          .map((member) => member.member_referral)
+          .filter((item) => item.role === 'MANAGER')
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
       );
       setStudent(
         classMembers
-          .filter((item) => item.member_role === 'NORMAL')
-          .map((member) => member.member_referral)
+          .filter((item) => item.role === 'NORMAL')
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
       );
       setGuest(
         classMembers
-          .filter((item) => item.member_role === 'GUEST')
-          .map((member) => member.member_referral)
+          .filter((item) => item.role === 'GUEST')
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
       );
     }
-  }, [classId, classes.byId, error.fetchClassMemberWithAccountReferral, members.byId]);
+  }, [accounts.byId, classId, classes.byId, members.byId]);
 
   // block user leaving current page through header and sidebar links (if contents have been changed)
   useEffect(() => {
@@ -169,8 +170,8 @@ const MemberEdit = ({
       e.target.value
         !== classes.byId[classId].memberIds
           .map((id) => members.byId[id])
-          .filter((item) => item.member_role === 'MANAGER')
-          .map((member) => member.member_referral)
+          .filter((item) => item.role === 'MANAGER')
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
     );
   };
@@ -180,8 +181,8 @@ const MemberEdit = ({
       e.target.value
         !== classes.byId[classId].memberIds
           .map((id) => members.byId[id])
-          .filter((item) => item.member_role === 'NORMAL')
-          .map((member) => member.member_referral)
+          .filter((item) => item.role === 'NORMAL')
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
     );
   };
@@ -191,8 +192,8 @@ const MemberEdit = ({
       e.target.value
         !== classes.byId[classId].memberIds
           .map((id) => members.byId[id])
-          .filter((item) => item.member_role === 'GUEST')
-          .map((member) => member.member_referral)
+          .filter((item) => item.role === 'GUEST')
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
     );
   };

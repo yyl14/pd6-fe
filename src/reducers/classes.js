@@ -4,6 +4,19 @@ import { commonConstants } from '../actions/common/constant';
 import {
   gradeConstants, teamConstants, challengeConstants, submissionConstants,
 } from '../actions/myClass/constant';
+import { viewConstants } from '../actions/api/constant';
+
+const prototype = {
+  id: null,
+  name: null,
+  course_id: null,
+  is_deleted: null,
+  memberIds: [],
+  gradeIds: [],
+  teamIds: [],
+  challengeIds: [],
+  submissionIds: [],
+};
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -57,12 +70,15 @@ const byId = (state = {}, action) => {
     }
 
     case commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_SUCCESS: {
-      const { classId, data } = action.payload;
+      const {
+        classId,
+        data: { classMembers },
+      } = action.payload;
       return {
         ...state,
         [classId]: {
           ...state[classId],
-          memberIds: data.map((item) => item.member_id),
+          memberIds: classMembers.map((item) => item.id),
           gradeIds: state[classId] ? state[classId].gradeIds : [],
           teamIds: state[classId] ? state[classId].teamIds : [],
           challengeIds: state[classId] ? state[classId].challengeIds : [],
@@ -145,7 +161,10 @@ const byId = (state = {}, action) => {
         },
       };
     }
-
+    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+      const { classes } = action.payload.data;
+      return classes.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
+    }
     default:
       return state;
   }
@@ -162,6 +181,10 @@ const allIds = (state = [], action) => {
       const { id } = action.payload;
       // console.log(id);
       return [...new Set([id, ...state])];
+    }
+    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+      const { classes } = action.payload.data;
+      return [...new Set([...classes.map((item) => item.id), ...state])];
     }
     default:
       return state;

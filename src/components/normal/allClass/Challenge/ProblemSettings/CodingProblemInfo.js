@@ -11,7 +11,7 @@ import SampleTestArea from '../../../../ui/SampleTestArea';
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
 
-import { browseTestcase, browseAssistingData } from '../../../../../actions/myClass/problem';
+import { browseTestcase } from '../../../../../actions/myClass/problem';
 
 const useStyles = makeStyles(() => ({
   sampleArea: {
@@ -102,7 +102,6 @@ export default function CodingProblemInfo() {
 
   useEffect(() => {
     dispatch(browseTestcase(authToken, problemId));
-    dispatch(browseAssistingData(authToken, problemId));
   }, [authToken, dispatch, problemId]);
 
   if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
@@ -223,7 +222,7 @@ export default function CodingProblemInfo() {
             },
             {
               id: 'score',
-              label: 'score',
+              label: 'Score',
               minWidth: 50,
               align: 'center',
               width: 100,

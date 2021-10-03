@@ -6,16 +6,11 @@ import {
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
-import { fetchTeams } from '../../../actions/myClass/team';
-import { fetchClass, fetchCourse } from '../../../actions/common/common';
-
 export default function Team({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const { courseId, classId, teamId } = useParams();
   const baseURL = '/my-class';
-  const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.token);
   const teams = useSelector((state) => state.teams);
 
   // useEffect(() => {
@@ -59,25 +54,13 @@ export default function Team({
     setDisplay('unfold');
   };
 
-  // if (teamId !== undefined && teams[teamId] === undefined) {
-  //   return (
-  //     <div>
-  //       <Drawer
-  //         className={classNames.drawer}
-  //         variant="permanent"
-  //         anchor="left"
-  //         PaperProps={{ elevation: 5 }}
-  //         classes={{ paper: classNames.drawerPaper }}
-  //       />
-  //     </div>
-  //   );
-  // }
-
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}

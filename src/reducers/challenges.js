@@ -1,10 +1,29 @@
 import { combineReducers } from 'redux';
 import { challengeConstants } from '../actions/myClass/constant';
 import { commonConstants } from '../actions/common/constant';
+import { viewConstants, peerReviewConstants } from '../actions/api/constant';
 
 const emptyStatistics = {
   summary: [],
   memberSubmission: [],
+};
+
+const prototype = {
+  id: null,
+  class_id: null,
+  publicize_type: null,
+  selection_type: null,
+  title: null,
+  setter_id: null,
+  description: null,
+  start_time: null,
+  end_time: null,
+  is_deleted: null,
+  problemIds: [],
+  peerReviewIds: [],
+  specialJudgeIds: [],
+  essayIds: [],
+  statistics: emptyStatistics,
 };
 
 const byId = (state = {}, action) => {
@@ -97,6 +116,22 @@ const byId = (state = {}, action) => {
         state,
       );
     }
+    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+      const { challenges } = action.payload.data;
+      return challenges.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
+    }
+
+    case peerReviewConstants.READ_PEER_REVIEW_SUCCESS: {
+      return {
+        ...state,
+        [action.payload.challenge_id]: {
+          ...prototype,
+          ...state[action.payload.challenge_id],
+          peerReviewIds: state[action.payload.challenge_id] ? state[action.payload.challenge_id].peerReviewIds.concat([action.payload.id]) : [action.payload.id],
+        },
+      };
+    }
+
     default:
       return state;
   }
@@ -115,7 +150,10 @@ const allIds = (state = [], action) => {
       const { challenges } = action.payload;
       return [...new Set([...challenges.map((item) => item.id), ...state])];
     }
-
+    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+      const { challenges } = action.payload.data;
+      return [...new Set([...challenges.map((item) => item.id), ...state])];
+    }
     default:
       return state;
   }

@@ -9,7 +9,7 @@ import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
 import PageTitle from '../../../ui/PageTitle';
-import { readProblemScore } from '../../../../actions/myClass/problem';
+import { readProblemBestScore } from '../../../../actions/myClass/problem';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
@@ -37,7 +37,7 @@ export default function ChallengeInfo() {
 
   useEffect(() => {
     if (challenges[challengeId] !== undefined) {
-      challenges[challengeId].problemIds.map((id) => dispatch(readProblemScore(authToken, id)));
+      challenges[challengeId].problemIds.map((id) => dispatch(readProblemBestScore(authToken, id)));
     }
   }, [authToken, challengeId, challenges, dispatch]);
 

@@ -11,6 +11,7 @@ const verdictMapping = new Map([
   ['CONTACT MANAGER', 'Contact Manager'],
   ['FORBIDDEN ACTION', 'Forbidden Action'],
   ['SYSTEM ERROR', 'System Error'],
+  [null, null],
 ]);
 
 const byId = (state = {}, action) => {

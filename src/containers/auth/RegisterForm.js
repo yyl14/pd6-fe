@@ -31,7 +31,7 @@ import GeneralLoading from '../../components/GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   authForm: {
-    width: '50%',
+    width: '70%',
   },
   authTextFields: {
     width: '100%',
@@ -127,10 +127,12 @@ export default function RegisterForm() {
 
   const onSubmit = () => {
     const newInputs = labelName.reduce((acc, item) => ({ ...acc, [item]: inputs[item].trim() }), {});
-    let hasError = labelName.reduce((acc, item) => (acc || newInputs[item] === ''), false);
+    let hasError = labelName.reduce((acc, item) => acc || newInputs[item] === '', false);
 
     setErrors(labelName.reduce((acc, item) => ({ ...acc, [item]: newInputs[item] === '' }), {}));
-    setErrorTexts(labelName.reduce((acc, item) => ({ ...acc, [item]: newInputs[item] === '' ? "Can't be empty" : '' }), {}));
+    setErrorTexts(
+      labelName.reduce((acc, item) => ({ ...acc, [item]: newInputs[item] === '' ? "Can't be empty" : '' }), {}),
+    );
 
     // check password
     const statusP = checkPassword(newInputs.password, newInputs.confirmPassword);
@@ -228,7 +230,7 @@ export default function RegisterForm() {
 
     setErrors(labelName.reduce((acc, item) => ({ ...acc, [item]: checkError(item) }), {}));
     setErrorTexts(labelName.reduce((acc, item) => ({ ...acc, [item]: checkError(item) ? "Can't be empty" : '' }), {}));
-    const hasError = labelName.reduce((acc, item) => (acc || checkError(item)), false);
+    const hasError = labelName.reduce((acc, item) => acc || checkError(item), false);
 
     if (!hasError) {
       setNextPage(true);

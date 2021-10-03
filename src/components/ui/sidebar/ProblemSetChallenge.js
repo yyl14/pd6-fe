@@ -9,7 +9,7 @@ import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
 import { fetchClass, fetchCourse, fetchChallenge } from '../../../actions/common/common';
 
 export default function ProblemSetChallenge({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const {
     courseId, classId, challengeId, problemId, submissionId,
@@ -78,6 +78,39 @@ export default function ProblemSetChallenge({
           ]);
         }
       }
+    } else if (mode === 'submission' && challenges[challengeId] && problems.byId[problemId]) {
+      setArrow(
+        <IconButton className={classNames.arrow} onClick={goBackToProblem}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
+      setTitle(`${challenges[challengeId].title} / ${problems.byId[problemId].challenge_label}`);
+      setItemList([
+        {
+          text: 'Code Submission',
+          icon: <Icon.Code />,
+          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`,
+        },
+        {
+          text: 'My Submission',
+          icon: <Icon.Statistic />,
+          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`,
+        },
+      ]);
+    } else if (mode === 'submission_detail') {
+      setArrow(
+        <IconButton className={classNames.arrow} onClick={goBackToSubmission}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
+      setTitle(submissionId);
+      setItemList([
+        {
+          text: 'Submission Detail',
+          icon: <Icon.Code />,
+          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${submissionId}`,
+        },
+      ]);
     }
   }, [
     challengeId,
@@ -90,6 +123,7 @@ export default function ProblemSetChallenge({
     problemId,
     problems.allIds.length,
     problems.byId,
+    submissionId,
   ]);
 
   const foldChallenge = () => {
@@ -103,8 +137,10 @@ export default function ProblemSetChallenge({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}

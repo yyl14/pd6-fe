@@ -3,6 +3,7 @@ import { authConstants } from '../../../actions/user/constants';
 const initialState = {
   login: false,
   logout: false,
+  forgetUsername: false,
   forgetPassword: false,
   signup: false,
   fetchAccount: false,
@@ -31,6 +32,21 @@ export default function auth(state = initialState, action) {
       return {
         ...state,
         fetchAccount: false,
+      };
+    case authConstants.FORGET_USERNAME_START:
+      return {
+        ...state,
+        forgetPassword: true,
+      };
+    case authConstants.FORGET_USERNAME_SUCCESS:
+      return {
+        ...state,
+        forgetPassword: false,
+      };
+    case authConstants.FORGET_USERNAME_FAIL:
+      return {
+        ...state,
+        forgetPassword: false,
       };
     case authConstants.FORGET_PASSWORD_START:
       return {
