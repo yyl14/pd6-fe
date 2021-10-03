@@ -282,14 +282,14 @@ export const createTeamWithMember = (token, classId, name, label, members, onSuc
       await agent.post(`/team/${teamId}/member`, body, config2);
       dispatch({ type: teamConstants.ADD_TEAM_MEMBER_SUCCESS });
     } catch (error) {
-      memberErr();
+      onMemberErr();
       dispatch({
         type: teamConstants.ADD_TEAM_MEMBER_FAIL,
         error,
       });
     }
   } catch (error) {
-    teamErr();
+    onTeamErr();
     dispatch({
       type: teamConstants.ADD_TEAM_FAIL,
       error,
