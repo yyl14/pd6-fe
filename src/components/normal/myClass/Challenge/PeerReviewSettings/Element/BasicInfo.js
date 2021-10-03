@@ -4,16 +4,8 @@ import {
   Typography,
   Button,
   makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
 } from '@material-ui/core';
-import { useParams, Link } from 'react-router-dom';
-
-import NoMatch from '../../../../../noMatch';
-import GeneralLoading from '../../../../../GeneralLoading';
+import { Link } from 'react-router-dom';
 
 import SimpleBar from '../../../../../ui/SimpleBar';
 import AlignedText from '../../../../../ui/AlignedText';

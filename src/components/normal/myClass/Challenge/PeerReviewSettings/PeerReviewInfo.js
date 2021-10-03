@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
   Button,
   makeStyles,
 } from '@material-ui/core';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import BasicInfo from './Element/BasicInfo';
 import Overview from './Element/Overview';
@@ -14,7 +13,6 @@ import GeneralLoading from '../../../../GeneralLoading';
 import PeerReviewEdit from './PeerReviewEdit';
 
 import PageTitle from '../../../../ui/PageTitle';
-import SimpleBar from '../../../../ui/SimpleBar';
 
 const useStyles = makeStyles(() => ({
   generalButtons: {
@@ -75,7 +73,9 @@ export default function PeerReviewInfo() {
       ) : (
         <>
           <BasicInfo role={role} />
-          {role !== 'MANAGER' && <Overview />}
+          {role !== 'MANAGER' && (
+            <Overview />
+          )}
         </>
       )}
     </>
