@@ -1,6 +1,5 @@
 ### Environment
-- [ ] development
-- [ ] production
+development
 
 ### Account
 
