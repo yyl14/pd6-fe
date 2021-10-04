@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Button,
-  makeStyles,
-} from '@material-ui/core';
+import { Button, makeStyles } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 
 import BasicInfo from './Element/BasicInfo';
@@ -44,6 +41,10 @@ export default function PeerReviewInfo() {
     console.log('View Peer Review');
   };
 
+  const handleCloseEdit = () => {
+    setEdit(false);
+  };
+
   useEffect(() => {
     if (userClasses.filter((item) => item.class_id === Number(classId)).length !== 0) {
       setRole(userClasses.filter((item) => item.class_id === Number(classId))[0].role);
@@ -64,18 +65,20 @@ export default function PeerReviewInfo() {
         </>
       ) : (
         <div className={classNames.generalButtons}>
-          <Button variant="outlined" onClick={handleView}>My Peer Reviews</Button>
-          <Button color="primary" onClick={handleView}>Peer Review</Button>
+          <Button variant="outlined" onClick={handleView}>
+            My Peer Reviews
+          </Button>
+          <Button color="primary" onClick={handleView}>
+            Peer Review
+          </Button>
         </div>
       )}
       {edit ? (
-        <PeerReviewEdit />
+        <PeerReviewEdit closeEdit={handleCloseEdit} />
       ) : (
         <>
           <BasicInfo role={role} />
-          {role !== 'MANAGER' && (
-            <Overview />
-          )}
+          {role !== 'MANAGER' && <Overview />}
         </>
       )}
     </>
