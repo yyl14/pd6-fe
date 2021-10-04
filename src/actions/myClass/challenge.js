@@ -285,7 +285,7 @@ const addEssay = (token, challengeId, label, title, history, courseId, classId) 
   }
 };
 
-const addPeerReview = (token, challengeId, label, title, history, courseId, classId) => async (dispatch) => {
+const addPeerReview = (token, challengeId, label, title, problemId, minScore, maxScore, maxReviewCount, history, courseId, classId) => async (dispatch) => {
   dispatch({ type: challengeConstants.ADD_PEER_REVIEW_START });
   const config = {
     headers: {
@@ -295,13 +295,11 @@ const addPeerReview = (token, challengeId, label, title, history, courseId, clas
   const body = {
     challenge_label: label,
     title,
-    target_problem_id: 0,
+    target_problem_id: problemId,
     description: '',
-    min_score: 0,
-    max_score: 0,
-    max_review_count: 0,
-    start_time: '2000-01-01T00:00:00.000Z',
-    end_time: '2000-01-01T00:00:00.000Z',
+    min_score: minScore,
+    max_score: maxScore,
+    max_review_count: maxReviewCount,
   };
   try {
     const res = await agent.post(`/challenge/${challengeId}/peer-review`, body, config);

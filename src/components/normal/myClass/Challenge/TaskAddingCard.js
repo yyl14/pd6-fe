@@ -9,7 +9,6 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  DialogContentText,
   TextField,
   FormControl,
   Select,
@@ -64,9 +63,9 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [label, setLabel] = useState('');
   const [title, setTitle] = useState('');
   const [disabled, setDisabled] = useState(true);
-  const [peerReviewChallengeId, setPeerReviewChallengeId] = useState();
+  const [peerReviewChallengeId, setPeerReviewChallengeId] = useState('');
   const [peerReviewChallengeIds, setPeerReviewChallengeIds] = useState([]);
-  const [taskLabelId, setTaskLabelId] = useState();
+  const [taskLabelId, setTaskLabelId] = useState('');
   const [maxScore, setMaxScore] = useState(3);
   const [minScore, setMinScore] = useState(1);
   const [peerNumber, setPeerNumber] = useState(2);
@@ -107,7 +106,7 @@ export default function TaskAddingCard({ open, setOpen }) {
   }, [challenges.allIds, challenges.byId, classId]);
 
   useEffect(() => {
-    if (peerReviewChallengeId !== undefined) {
+    if (peerReviewChallengeId !== undefined && peerReviewChallengeId !== '') {
       dispatch(browseTasksUnderChallenge(authToken, peerReviewChallengeId));
     }
   }, [authToken, dispatch, peerReviewChallengeId]);
@@ -123,7 +122,10 @@ export default function TaskAddingCard({ open, setOpen }) {
         break;
       }
       case 'Peer Review': {
-        dispatch(addPeerReview(authToken, challengeId, label, title, history, courseId, classId));
+        dispatch(addPeerReview(authToken, challengeId, label, title, taskLabelId, minScore, maxScore, peerNumber, history, courseId, classId));
+        setPeerReviewChallengeId('');
+        setPeerReviewChallengeIds([]);
+        setTaskLabelId('');
         break;
       }
       default: {
@@ -225,6 +227,7 @@ export default function TaskAddingCard({ open, setOpen }) {
                   value={peerReviewChallengeId}
                   onChange={(e) => {
                     setPeerReviewChallengeId(e.target.value);
+                    setTaskLabelId('');
                   }}
                   style={{ width: '350px' }}
                 >
@@ -247,7 +250,7 @@ export default function TaskAddingCard({ open, setOpen }) {
                   }}
                   style={{ width: '350px' }}
                 >
-                  {peerReviewChallengeId !== undefined
+                  {peerReviewChallengeId !== undefined && peerReviewChallengeId !== ''
                     && challenges.byId[peerReviewChallengeId].problemIds.map((id) => (
                       <MenuItem key={id} value={id}>
                         {problems.byId[id].challenge_label}
