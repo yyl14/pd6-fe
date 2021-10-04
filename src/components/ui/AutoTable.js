@@ -117,7 +117,11 @@ const useStyles = makeStyles((theme) => ({
   row: {
     height: '60px',
   },
-
+  tableBodyCell: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
   bottomWrapper: {
     display: 'flex',
     alignItems: 'center',
