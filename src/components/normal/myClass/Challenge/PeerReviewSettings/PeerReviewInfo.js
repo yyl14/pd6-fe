@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, makeStyles } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 import BasicInfo from './Element/BasicInfo';
 import Overview from './Element/Overview';
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
 import PeerReviewEdit from './PeerReviewEdit';
-
 import PageTitle from '../../../../ui/PageTitle';
+
+import { readPeerReview } from '../../../../../actions/api/peerReview';
 
 const useStyles = makeStyles(() => ({
   generalButtons: {
@@ -28,17 +29,34 @@ const useStyles = makeStyles(() => ({
 // This page is for both normal and manager.
 // Render different component according to role and call correct api (PeerReviewEdit, BasicInfo, Overview)
 export default function PeerReviewInfo() {
-  const { classId, challengeId } = useParams();
+  const {
+    courseId, classId, challengeId, peerReviewId,
+  } = useParams();
   const classNames = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
 
+  const authToken = useSelector((state) => state.auth.token);
   const userClasses = useSelector((state) => state.user.classes);
   const challenges = useSelector((state) => state.challenges.byId);
+  const peerReviews = useSelector((state) => state.peerReviews.byId);
 
   const [role, setRole] = useState('Normal');
   const [edit, setEdit] = useState(false);
 
-  const handleView = () => {
-    console.log('View Peer Review');
+  const clickViewPeerReview = () => {
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary`);
+  };
+
+  const clickReceivedPeerReviews = () => {
+    console.log('Received Peer Reviews');
+    // history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/:accountId/:recordId`);
+  };
+
+  const clickPeerReview = () => {
+    console.log('Peer Review');
+    // console.log('peerReviews', peerReviews);
+    // history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/:accountId/:recordId`);
   };
 
   useEffect(() => {
@@ -46,6 +64,14 @@ export default function PeerReviewInfo() {
       setRole(userClasses.filter((item) => item.class_id === Number(classId))[0].role);
     }
   }, [classId, userClasses]);
+
+  useEffect(() => {
+    dispatch(readPeerReview(authToken, peerReviewId));
+  }, [authToken, dispatch, peerReviewId]);
+
+  if (peerReviews[peerReviewId] === undefined) {
+    return <NoMatch />;
+  }
 
   return (
     <>
@@ -55,16 +81,16 @@ export default function PeerReviewInfo() {
           {!edit && (
             <div className={classNames.managerButtons}>
               <Button onClick={() => setEdit(true)}>Edit</Button>
-              <Button onClick={handleView}>View Peer Review</Button>
+              <Button onClick={clickViewPeerReview}>View Peer Review</Button>
             </div>
           )}
         </>
       ) : (
         <div className={classNames.generalButtons}>
-          <Button variant="outlined" onClick={handleView}>
-            My Peer Reviews
+          <Button variant="outlined" onClick={clickReceivedPeerReviews}>
+            Received Peer Reviews
           </Button>
-          <Button color="primary" onClick={handleView}>
+          <Button color="primary" onClick={clickPeerReview}>
             Peer Review
           </Button>
         </div>

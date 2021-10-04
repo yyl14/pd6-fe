@@ -5,10 +5,13 @@ import {
   Button,
   makeStyles,
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { useHistory, useParams, Link } from 'react-router-dom';
 
 import SimpleBar from '../../../../../ui/SimpleBar';
 import AlignedText from '../../../../../ui/AlignedText';
+
+import { deletePeerReview } from '../../../../../../actions/api/peerReview';
+import { readProblemInfo } from '../../../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
   textLink: {
@@ -26,31 +29,46 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 // This page is for both normal and manager.
 export default function BasicInfo({ role }) {
+  const {
+    courseId, classId, challengeId, peerReviewId,
+  } = useParams();
   const classNames = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const authToken = useSelector((state) => state.auth.token);
+  const peerReviews = useSelector((state) => state.peerReviews.byId);
+  const problems = useSelector((state) => state.problem.byId);
 
   const handleClickDelete = () => {
     console.log('delete task');
+    dispatch(deletePeerReview(authToken, peerReviewId));
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
   };
+
+  useEffect(() => {
+    dispatch(readProblemInfo(authToken, peerReviews[peerReviewId].target_problem_id));
+  }, [authToken, dispatch, peerReviews, peerReviewId]);
 
   return (
     <>
-      <SimpleBar title="Title">Peer Review of Hw3 Q1</SimpleBar>
+      <SimpleBar title="Title">{peerReviews[peerReviewId].title}</SimpleBar>
       {role === 'MANAGER' && (
-        <SimpleBar title="Description">Description</SimpleBar>
+        <SimpleBar title="Description">{peerReviews[peerReviewId].description}</SimpleBar>
       )}
       <SimpleBar title="Peer Review Information">
         <AlignedText text="Task to be Reviewed" childrenType="text">
           <Typography variant="body1">
-            <Link to="/" className={classNames.textLink}>
-              <Typography variant="body1">Hw3 / Q1</Typography>
+            <Link to={`/my-class/${courseId}/${classId}/challenge/${challengeId}/${peerReviewId}`} className={classNames.textLink}>
+              <Typography variant="body1">{`${peerReviews[peerReviewId].challenge_label} / ${problems[peerReviews[peerReviewId].target_problem_id] && problems[peerReviews[peerReviewId].target_problem_id].title}`}</Typography>
             </Link>
           </Typography>
         </AlignedText>
         <AlignedText text="Max Score" childrenType="text">
-          <Typography variant="body1">0</Typography>
+          <Typography variant="body1">{peerReviews[peerReviewId].max_score}</Typography>
         </AlignedText>
         <AlignedText text="Min Score" childrenType="text">
-          <Typography variant="body1">0</Typography>
+          <Typography variant="body1">{peerReviews[peerReviewId].min_score}</Typography>
         </AlignedText>
         <AlignedText text="Student is Assigned" childrenType="text">
           <Typography variant="body1">2 Peers Respectively</Typography>
