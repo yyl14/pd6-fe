@@ -191,6 +191,7 @@ export default function TeamList() {
             name: 'Team Name',
             align: 'center',
             minWidth: 150,
+            width: '50vw',
             type: 'link',
           },
         ]}
