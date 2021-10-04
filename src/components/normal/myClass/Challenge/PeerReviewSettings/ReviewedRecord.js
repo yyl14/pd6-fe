@@ -23,6 +23,8 @@ import CodeArea from '../../../../ui/CodeArea';
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
 
+import { browseAccountReviewedPeerReviewRecord } from '../../../../../actions/api/peerReview';
+
 const useStyles = makeStyles(() => ({
   textfield: {
     width: '400px',
@@ -89,10 +91,11 @@ export default function ReviewedRecord() {
 
   useEffect(() => {
     // dispatch read review ids for this account
+    dispatch(browseAccountReviewedPeerReviewRecord(authToken, peerReviewId, accountId));
     // dispatch read record with code
     // if manager, must read receiver and grader info at the same time
     // dispatch read problem info
-  }, []);
+  }, [accountId, authToken, dispatch, peerReviewId]);
 
   if (challenges[challengeId] === undefined || peerReviews[peerReviewId] === undefined || peerReviewRecords[recordId] === undefined) {
     if (commonLoading.fetchChallenge) {

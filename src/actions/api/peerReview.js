@@ -63,3 +63,21 @@ export const readPeerReviewRecord = (token, peerReviewRecordId) => async (dispat
     });
   }
 };
+
+export const browseAccountReviewedPeerReviewRecord = (token, peerReviewId, accountId) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    dispatch({ type: peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_START });
+    const res = await agent.get(`peer-review/${peerReviewId}/account/${accountId}/review`, config);
+
+    dispatch({
+      type: peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_SUCCESS,
+      payload: res.data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_FAIL,
+      error,
+    });
+  }
+};
