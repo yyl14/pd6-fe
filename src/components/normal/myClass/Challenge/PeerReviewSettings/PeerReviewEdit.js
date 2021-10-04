@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 import { useParams, Link } from 'react-router-dom';
+import { editPeerReview } from '../../../../../actions/api/peerReview';
 import SimpleBar from '../../../../ui/PageTitle';
 import AlignedText from '../../../../ui/AlignedText';
 import NoMatch from '../../../../noMatch';
@@ -42,11 +43,15 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.primary.dark,
     },
   },
+  buttons: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
 }));
 
 /* This is a level 4 component (page component) */
 // This page is for manager.
-export default function PeerReviewEdit({ closeEdit }) {
+export default function PeerReviewEdit({ setEdit }) {
   const { peerReviewId } = useParams();
   const classNames = useStyles();
   const dispatch = useDispatch();
@@ -63,19 +68,28 @@ export default function PeerReviewEdit({ closeEdit }) {
   const [description, setDescription] = useState(
     peerReviews.byId[peerReviewId] === undefined ? 'error' : peerReviews.byId[peerReviewId].description,
   );
-
   const [hasChange, setHasChange] = useState(false);
   const [warningPopUp, setWarningPopUp] = useState(false);
+
+  useEffect(() => {}, []);
 
   const handleCancel = () => {
     if (hasChange) {
       setWarningPopUp(true);
     } else {
-      closeEdit();
+      setEdit(false);
     }
   };
 
-  const handleSave = () => {};
+  const handleSave = () => {
+    const body = {
+      label,
+      title,
+      description,
+    };
+    // dispatch(editPeerReview(authToken, peerReviewId, body));
+    setEdit(false);
+  };
 
   return (
     <>
@@ -131,6 +145,14 @@ export default function PeerReviewEdit({ closeEdit }) {
           <Typography variant="body1">{`${peerReviews.byId[peerReviewId].max_review_count} Peers Respectively`}</Typography>
         </AlignedText>
       </SimpleBar>
+      <div className={classNames.buttons}>
+        <Button color="default" onClick={handleCancel}>
+          Cancel
+        </Button>
+        <Button color="primary" onClick={handleSave}>
+          Save
+        </Button>
+      </div>
 
       <Dialog open={warningPopUp} onClose={() => setWarningPopUp(false)} maxWidth="md">
         <DialogTitle id="dialog-slide-title" className={classNames.dialogTitle}>
@@ -146,7 +168,7 @@ export default function PeerReviewEdit({ closeEdit }) {
             Back to Edit
           </Button>
           <div>
-            <Button color="default" onClick={closeEdit}>
+            <Button color="default" onClick={() => setEdit(false)}>
               Don’t Save
             </Button>
             <Button color="primary" onClick={handleSave}>

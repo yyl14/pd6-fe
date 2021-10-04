@@ -41,10 +41,6 @@ export default function PeerReviewInfo() {
     console.log('View Peer Review');
   };
 
-  const handleCloseEdit = () => {
-    setEdit(false);
-  };
-
   useEffect(() => {
     if (userClasses.filter((item) => item.class_id === Number(classId)).length !== 0) {
       setRole(userClasses.filter((item) => item.class_id === Number(classId))[0].role);
@@ -74,7 +70,7 @@ export default function PeerReviewInfo() {
         </div>
       )}
       {edit ? (
-        <PeerReviewEdit closeEdit={handleCloseEdit} />
+        <PeerReviewEdit setEdit={setEdit} />
       ) : (
         <>
           <BasicInfo role={role} />

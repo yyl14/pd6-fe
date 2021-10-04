@@ -63,3 +63,21 @@ export const readPeerReviewRecord = (token, peerReviewRecordId) => async (dispat
     });
   }
 };
+
+export const editPeerReview = (token, peerReviewId, body) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'auth-token': token,
+      },
+    };
+    dispatch({ type: peerReviewConstants.EDIT_PEER_REVIEW_START });
+    await agent.patch(`/peer-review/${peerReviewId}`, body, config);
+    dispatch({ type: peerReviewConstants.EDIT_PEER_REVIEW_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: peerReviewConstants.EDIT_PEER_REVIEW_FAIL,
+      error,
+    });
+  }
+};
