@@ -48,13 +48,14 @@ const useStyles = makeStyles((theme) => ({
   search: {
     marginRight: '5px',
     width: 'auto',
-    flexShrink: 100,
+    minWidth: '89px',
+    flexShrink: 20,
   },
   searchFields: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-start',
-    flexShrink: 1,
+    flexShrink: 27,
   },
   buttons: {
     marginTop: '3px',
@@ -70,8 +71,7 @@ const useStyles = makeStyles((theme) => ({
 
   filterSelect: {
     marginRight: '10px',
-    minWidth: '180px',
-    flexShrink: 0,
+    width: 'auto',
   },
   filterItem: {
     minWidth: '180px',
