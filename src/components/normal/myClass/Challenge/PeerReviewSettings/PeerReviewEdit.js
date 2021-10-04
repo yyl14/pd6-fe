@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import { useParams, Link } from 'react-router-dom';
 import { editPeerReview } from '../../../../../actions/api/peerReview';
-import SimpleBar from '../../../../ui/PageTitle';
+import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
@@ -71,8 +71,6 @@ export default function PeerReviewEdit({ setEdit }) {
   const [hasChange, setHasChange] = useState(false);
   const [warningPopUp, setWarningPopUp] = useState(false);
 
-  useEffect(() => {}, []);
-
   const handleCancel = () => {
     if (hasChange) {
       setWarningPopUp(true);
@@ -87,6 +85,7 @@ export default function PeerReviewEdit({ setEdit }) {
       title,
       description,
     };
+    console.log('edit peer review');
     // dispatch(editPeerReview(authToken, peerReviewId, body));
     setEdit(false);
   };
