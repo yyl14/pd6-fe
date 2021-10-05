@@ -1,5 +1,6 @@
 import agent from '../agent';
-import { peerReviewConstants, readPeerReviewRecord } from '../api/constant';
+import { peerReviewConstants } from '../api/constant';
+import { readPeerReviewRecord } from '../api/peerReview';
 // import { autoTableConstants } from '../component/constant';
 // import browseParamsTransForm from '../../function/browseParamsTransform';
 import { readAccount } from '../user/user';

@@ -10,7 +10,8 @@ import GeneralLoading from '../../../../GeneralLoading';
 import PeerReviewEdit from './PeerReviewEdit';
 import PageTitle from '../../../../ui/PageTitle';
 
-import { readPeerReview, browseAccountReviewedPeerReviewRecord, assignPeerReviewRecord } from '../../../../../actions/api/peerReview';
+import { readPeerReview, assignPeerReviewRecord } from '../../../../../actions/api/peerReview';
+import { browseAccountReviewedPeerReviewRecordWithReading } from '../../../../../actions/myClass/peerReview';
 
 const useStyles = makeStyles(() => ({
   generalButtons: {
@@ -60,12 +61,10 @@ export default function PeerReviewInfo() {
   };
 
   const clickPeerReview = () => {
-    console.log('Peer Review');
     if (peerReviewRecords.allIds.length === 0) {
-      console.log('call assign peer review record', authToken, peerReviewId);
       dispatch(assignPeerReviewRecord(authToken, peerReviewId));
     } else {
-      const targetRecordId = peerReviewRecords.byId[peerReviewRecords.allIds[0]].receiver_id;
+      const targetRecordId = peerReviewRecords.allIds[0];
       history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${targetRecordId}`);
     }
   };
@@ -84,7 +83,7 @@ export default function PeerReviewInfo() {
 
   useEffect(() => {
     if (!apiLoading.assignPeerReviewRecord) {
-      dispatch(browseAccountReviewedPeerReviewRecord(authToken, peerReviewId, accountId));
+      dispatch(browseAccountReviewedPeerReviewRecordWithReading(authToken, peerReviewId, accountId));
     }
   }, [authToken, dispatch, peerReviewId, accountId, apiLoading.assignPeerReviewRecord]);
 

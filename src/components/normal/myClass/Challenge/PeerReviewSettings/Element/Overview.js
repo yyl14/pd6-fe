@@ -9,22 +9,17 @@ import SimpleTable from '../../../../../ui/SimpleTable';
 export default function Overview() {
   const peerReviewRecords = useSelector((state) => state.peerReviewRecords);
 
-  const [tableData, setTableData] = useState([
-    { peer: 'peer1', status: 'Not Yet' },
-    { peer: 'peer1', status: 'Not Yet' },
-  ]);
+  const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
-    setTableData(
-      peerReviewRecords.allIds.map((id) => {
-        const item = peerReviewRecords.byId[id];
-        return ({
-          peer: item.receiver_id,
-          status: item.submit_time,
-        });
-      }),
-    );
-    console.log('peerReviewRecords :', peerReviewRecords);
+    const newTableData = peerReviewRecords.allIds.map((id, i) => {
+      const item = peerReviewRecords.byId[id];
+      return ({
+        peer: `Peer${i + 1}`,
+        status: item.submit_time === null ? 'Not Yet' : 'Done',
+      });
+    });
+    setTableData(newTableData);
   }, [peerReviewRecords]);
 
   return (
