@@ -41,7 +41,6 @@ export default function BasicInfo({ role }) {
   const problems = useSelector((state) => state.problem.byId);
 
   const handleClickDelete = () => {
-    console.log('delete task');
     dispatch(deletePeerReview(authToken, peerReviewId));
     history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
   };

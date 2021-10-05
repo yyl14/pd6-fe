@@ -1,3 +1,5 @@
+import { useHistory } from 'react-router-dom';
+
 import agent from '../agent';
 import { peerReviewConstants } from '../api/constant';
 import { readPeerReviewRecord } from '../api/peerReview';
@@ -68,6 +70,56 @@ export const browseAccountReviewedPeerReviewRecordWithReading = (token, peerRevi
   } catch (error) {
     dispatch({
       type: peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_FAIL,
+      error,
+    });
+  }
+};
+
+export const assignPeerReviewRecordAndPush = (token, courseId, classId, challengeId, peerReviewId, accountId) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    dispatch({ type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_START });
+    const res = await agent.post(`peer-review/${peerReviewId}/record`, config);
+
+    const history = useHistory();
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${res.data.id}`);
+
+    dispatch({
+      type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_SUCCESS,
+      payload: res.data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_FAIL,
+      error,
+    });
+  }
+};
+
+export const browseAccountAllPeerReviewRecordWithReading = (token, peerReviewId, accountId) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    dispatch({ type: peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_START });
+    const res1 = await agent.get(`peer-review/${peerReviewId}/account/${accountId}/review`, config);
+
+    const res2 = await agent.get(`peer-review/${peerReviewId}/account/${accountId}/receive`, config);
+
+    const data = [].concat(res1.data.data, res2.data.data);
+
+    await Promise.all(
+      data.map(async (id) => {
+        dispatch(readPeerReviewRecord(token, id));
+        return id;
+      }),
+    );
+
+    dispatch({
+      type: peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_SUCCESS,
+      payload: { peerReviewId, reviewIds: data },
+    });
+  } catch (error) {
+    dispatch({
+      type: peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_FAIL,
       error,
     });
   }

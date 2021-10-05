@@ -8,11 +8,18 @@ import SimpleTable from '../../../../../ui/SimpleTable';
 // This page is for normal.
 export default function Overview() {
   const peerReviewRecords = useSelector((state) => state.peerReviewRecords);
+  const accountId = useSelector((state) => state.user.id);
 
   const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
-    const newTableData = peerReviewRecords.allIds.map((id, i) => {
+    const reviewPeerReviewRecordIds = peerReviewRecords.allIds.filter((id) => {
+      if (peerReviewRecords.byId[id].grader_id === accountId) {
+        return true;
+      }
+      return false;
+    });
+    const newTableData = reviewPeerReviewRecordIds.map((id, i) => {
       const item = peerReviewRecords.byId[id];
       return ({
         peer: `Peer${i + 1}`,

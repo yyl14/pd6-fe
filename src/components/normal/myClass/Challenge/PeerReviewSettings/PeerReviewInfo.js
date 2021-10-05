@@ -10,8 +10,8 @@ import GeneralLoading from '../../../../GeneralLoading';
 import PeerReviewEdit from './PeerReviewEdit';
 import PageTitle from '../../../../ui/PageTitle';
 
-import { readPeerReview, assignPeerReviewRecord } from '../../../../../actions/api/peerReview';
-import { browseAccountReviewedPeerReviewRecordWithReading } from '../../../../../actions/myClass/peerReview';
+import { readPeerReview } from '../../../../../actions/api/peerReview';
+import { browseAccountAllPeerReviewRecordWithReading, assignPeerReviewRecordAndPush } from '../../../../../actions/myClass/peerReview';
 
 const useStyles = makeStyles(() => ({
   generalButtons: {
@@ -56,15 +56,27 @@ export default function PeerReviewInfo() {
   };
 
   const clickReceivedPeerReviews = () => {
-    console.log('Received Peer Reviews');
-    // history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/:accountId/:recordId`);
+    const receivedPeerReviewRecordIds = peerReviewRecords.allIds.filter((id) => {
+      if (peerReviewRecords.byId[id].receiver_id === accountId) {
+        return true;
+      }
+      return false;
+    });
+    const targetRecordId = receivedPeerReviewRecordIds[0];
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${accountId}/${targetRecordId}`);
   };
 
   const clickPeerReview = () => {
-    if (peerReviewRecords.allIds.length === 0) {
-      dispatch(assignPeerReviewRecord(authToken, peerReviewId));
+    const reviewPeerReviewRecordIds = peerReviewRecords.allIds.filter((id) => {
+      if (peerReviewRecords.byId[id].grader_id === accountId) {
+        return true;
+      }
+      return false;
+    });
+    if (reviewPeerReviewRecordIds.length === 0) {
+      dispatch(assignPeerReviewRecordAndPush(authToken, courseId, classId, challengeId, peerReviewId, accountId));
     } else {
-      const targetRecordId = peerReviewRecords.allIds[0];
+      const targetRecordId = reviewPeerReviewRecordIds[0];
       history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${targetRecordId}`);
     }
   };
@@ -83,7 +95,7 @@ export default function PeerReviewInfo() {
 
   useEffect(() => {
     if (!apiLoading.assignPeerReviewRecord) {
-      dispatch(browseAccountReviewedPeerReviewRecordWithReading(authToken, peerReviewId, accountId));
+      dispatch(browseAccountAllPeerReviewRecordWithReading(authToken, peerReviewId, accountId));
     }
   }, [authToken, dispatch, peerReviewId, accountId, apiLoading.assignPeerReviewRecord]);
 
