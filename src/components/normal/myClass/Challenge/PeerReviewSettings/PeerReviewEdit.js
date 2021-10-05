@@ -130,21 +130,22 @@ export default function PeerReviewEdit({ setEdit }) {
       </SimpleBar>
       <SimpleBar title="Peer Review Information" noIndent>
         <AlignedText text="Task to be Reviewed" childrenType="text">
-          {problems[peerReviews[peerReviewId].target_problem_id] && (
+          <Typography variant="body1">
             <Link
-              to={`/my-class/${courseId}/${classId}/challenge/${
-                problems[peerReviews[peerReviewId].target_problem_id].challenge_id
-              }/${peerReviews[peerReviewId].target_problem_id}`}
+              to={`/my-class/${courseId}/${classId}/challenge/${peerReviews[peerReviewId].target_challenge_id}/${peerReviews[peerReviewId].target_problem_id}`}
               className={classNames.textLink}
             >
               <Typography variant="body1">
                 {`${
-                  challenges[problems[peerReviews[peerReviewId].target_problem_id].challenge_id]
-                  && challenges[problems[peerReviews[peerReviewId].target_problem_id].challenge_id].title
-                } / ${problems[peerReviews[peerReviewId].target_problem_id].challenge_label}`}
+                  challenges[peerReviews[peerReviewId].target_challenge_id]
+                && challenges[peerReviews[peerReviewId].target_challenge_id].title
+                } / ${
+                  problems[peerReviews[peerReviewId].target_problem_id]
+                && problems[peerReviews[peerReviewId].target_problem_id].challenge_label
+                }`}
               </Typography>
             </Link>
-          )}
+          </Typography>
         </AlignedText>
         <AlignedText text="Max Score" childrenType="text">
           <Typography variant="body1">{peerReviews[peerReviewId].max_score}</Typography>

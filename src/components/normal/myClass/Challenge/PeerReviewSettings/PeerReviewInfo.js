@@ -13,7 +13,11 @@ import PageTitle from '../../../../ui/PageTitle';
 import { readProblemInfo } from '../../../../../actions/myClass/problem';
 import { fetchChallenge } from '../../../../../actions/common/common';
 import { readPeerReview } from '../../../../../actions/api/peerReview';
-import { browseAccountAllPeerReviewRecordWithReading, assignPeerReviewRecordAndPush, getTargetProblemChallengeId } from '../../../../../actions/myClass/peerReview';
+import {
+  browseAccountAllPeerReviewRecordWithReading,
+  assignPeerReviewRecordAndPush,
+  getTargetProblemChallengeId,
+} from '../../../../../actions/myClass/peerReview';
 
 const useStyles = makeStyles(() => ({
   generalButtons: {
@@ -46,7 +50,6 @@ export default function PeerReviewInfo() {
   const peerReviews = useSelector((state) => state.peerReviews.byId);
   const peerReviewRecords = useSelector((state) => state.peerReviewRecords);
   const apiLoading = useSelector((state) => state.loading.api.peerReview);
-  const loading = useSelector((state) => state.loading.myClass.peerReview);
   const problemLoading = useSelector((state) => state.loading.myClass.problem);
   const challengeLoading = useSelector((state) => state.loading.common);
 
@@ -67,7 +70,9 @@ export default function PeerReviewInfo() {
       return false;
     });
     const targetRecordId = receivedPeerReviewRecordIds[0];
-    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${accountId}/${targetRecordId}`);
+    history.push(
+      `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${accountId}/${targetRecordId}`,
+    );
   };
 
   const clickPeerReview = () => {
@@ -78,10 +83,14 @@ export default function PeerReviewInfo() {
       return false;
     });
     if (reviewPeerReviewRecordIds.length === 0) {
-      dispatch(assignPeerReviewRecordAndPush(authToken, courseId, classId, challengeId, peerReviewId, accountId, history));
+      dispatch(
+        assignPeerReviewRecordAndPush(authToken, courseId, classId, challengeId, peerReviewId, accountId, history),
+      );
     } else {
       const targetRecordId = reviewPeerReviewRecordIds[0];
-      history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${targetRecordId}`);
+      history.push(
+        `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${targetRecordId}`,
+      );
     }
   };
 
@@ -92,10 +101,10 @@ export default function PeerReviewInfo() {
   }, [classId, userClasses]);
 
   useEffect(() => {
-    if (!loading.editPeerReview) {
+    if (!apiLoading.editPeerReview) {
       dispatch(readPeerReview(authToken, peerReviewId));
     }
-  }, [authToken, dispatch, loading.editPeerReview, peerReviewId]);
+  }, [authToken, dispatch, apiLoading.editPeerReview, peerReviewId]);
 
   useEffect(() => {
     if (!apiLoading.assignPeerReviewRecord) {
@@ -116,7 +125,7 @@ export default function PeerReviewInfo() {
 
   if (peerReviews[peerReviewId] === undefined) {
     if (
-      loading.editPeerReview
+      apiLoading.editPeerReview
       || apiLoading.assignPeerReviewRecord
       || problemLoading.readProblem
       || challengeLoading.fetchChallenge
@@ -128,7 +137,11 @@ export default function PeerReviewInfo() {
 
   return (
     <>
-      <PageTitle text={challenges[challengeId] === undefined ? 'error' : `${challenges[challengeId].title} / PR`} />
+      <PageTitle
+        text={`${challenges[challengeId] === undefined ? 'error' : challenges[challengeId].title} / ${
+          peerReviews[peerReviewId] === undefined ? 'error' : peerReviews[peerReviewId].challenge_label
+        }`}
+      />
       {role === 'MANAGER' ? (
         <>
           {!edit && (
