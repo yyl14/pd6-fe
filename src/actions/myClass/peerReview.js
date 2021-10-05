@@ -1,5 +1,3 @@
-import { useHistory } from 'react-router-dom';
-
 import agent from '../agent';
 import { peerReviewConstants } from '../api/constant';
 import { readPeerReviewRecord } from '../api/peerReview';
@@ -75,20 +73,22 @@ export const browseAccountReviewedPeerReviewRecordWithReading = (token, peerRevi
   }
 };
 
-export const assignPeerReviewRecordAndPush = (token, courseId, classId, challengeId, peerReviewId, accountId) => async (dispatch) => {
+export const assignPeerReviewRecordAndPush = (token, courseId, classId, challengeId, peerReviewId, accountId, history) => async (dispatch) => {
   try {
     const config = { headers: { 'auth-token': token } };
     dispatch({ type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_START });
-    const res = await agent.post(`peer-review/${peerReviewId}/record`, config);
+    const res = await agent.post(`peer-review/${peerReviewId}/record`, {}, config);
 
-    const history = useHistory();
-    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${res.data.id}`);
+    console.log('push', `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${res.data.data.id}`);
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${res.data.data.id}`);
+    console.log('succeed to push');
 
     dispatch({
       type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_SUCCESS,
       payload: res.data.data,
     });
   } catch (error) {
+    console.log('error :', error);
     dispatch({
       type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_FAIL,
       error,

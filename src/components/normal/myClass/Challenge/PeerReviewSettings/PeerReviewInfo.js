@@ -47,6 +47,8 @@ export default function PeerReviewInfo() {
   const peerReviewRecords = useSelector((state) => state.peerReviewRecords);
   const apiLoading = useSelector((state) => state.loading.api.peerReview);
   const loading = useSelector((state) => state.loading.myClass.peerReview);
+  const problemLoading = useSelector((state) => state.loading.myClass.problem);
+  const challengeLoading = useSelector((state) => state.loading.common);
 
   const [role, setRole] = useState('Normal');
   const [edit, setEdit] = useState(false);
@@ -76,7 +78,7 @@ export default function PeerReviewInfo() {
       return false;
     });
     if (reviewPeerReviewRecordIds.length === 0) {
-      dispatch(assignPeerReviewRecordAndPush(authToken, courseId, classId, challengeId, peerReviewId, accountId));
+      dispatch(assignPeerReviewRecordAndPush(authToken, courseId, classId, challengeId, peerReviewId, accountId, history));
     } else {
       const targetRecordId = reviewPeerReviewRecordIds[0];
       history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${targetRecordId}`);
@@ -113,7 +115,12 @@ export default function PeerReviewInfo() {
   }, [authToken, peerReviews, peerReviewId]);
 
   if (peerReviews[peerReviewId] === undefined) {
-    if (loading.editPeerReview || apiLoading.assignPeerReviewRecord) {
+    if (
+      loading.editPeerReview
+      || apiLoading.assignPeerReviewRecord
+      || problemLoading.readProblem
+      || challengeLoading.fetchChallenge
+    ) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
