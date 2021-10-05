@@ -10,8 +10,10 @@ import GeneralLoading from '../../../../GeneralLoading';
 import PeerReviewEdit from './PeerReviewEdit';
 import PageTitle from '../../../../ui/PageTitle';
 
+import { readProblemInfo } from '../../../../../actions/myClass/problem';
+import { fetchChallenge } from '../../../../../actions/common/common';
 import { readPeerReview } from '../../../../../actions/api/peerReview';
-import { browseAccountAllPeerReviewRecordWithReading, assignPeerReviewRecordAndPush } from '../../../../../actions/myClass/peerReview';
+import { browseAccountAllPeerReviewRecordWithReading, assignPeerReviewRecordAndPush, getTargetProblemChallengeId } from '../../../../../actions/myClass/peerReview';
 
 const useStyles = makeStyles(() => ({
   generalButtons: {
@@ -98,6 +100,17 @@ export default function PeerReviewInfo() {
       dispatch(browseAccountAllPeerReviewRecordWithReading(authToken, peerReviewId, accountId));
     }
   }, [authToken, dispatch, peerReviewId, accountId, apiLoading.assignPeerReviewRecord]);
+
+  useEffect(() => {
+    dispatch(getTargetProblemChallengeId(authToken, peerReviewId, peerReviews[peerReviewId].target_problem_id));
+    dispatch(readProblemInfo(authToken, peerReviews[peerReviewId].target_problem_id));
+  }, [authToken, dispatch, peerReviews, peerReviewId]);
+
+  useEffect(() => {
+    if (peerReviews[peerReviewId].target_challenge_id !== null) {
+      fetchChallenge(fetchChallenge(authToken, peerReviews[peerReviewId].target_challenge_id));
+    }
+  }, [authToken, peerReviews, peerReviewId]);
 
   if (peerReviews[peerReviewId] === undefined) {
     if (loading.editPeerReview || apiLoading.assignPeerReviewRecord) {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Typography,
@@ -11,7 +11,6 @@ import SimpleBar from '../../../../../ui/SimpleBar';
 import AlignedText from '../../../../../ui/AlignedText';
 
 import { deletePeerReview } from '../../../../../../actions/api/peerReview';
-import { readProblemInfo } from '../../../../../../actions/myClass/problem';
 
 const useStyles = makeStyles((theme) => ({
   textLink: {
@@ -39,15 +38,12 @@ export default function BasicInfo({ role }) {
   const authToken = useSelector((state) => state.auth.token);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
   const problems = useSelector((state) => state.problem.byId);
+  const challenges = useSelector((state) => state.challenges.byId);
 
   const handleClickDelete = () => {
     dispatch(deletePeerReview(authToken, peerReviewId));
     history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
   };
-
-  useEffect(() => {
-    dispatch(readProblemInfo(authToken, peerReviews[peerReviewId].target_problem_id));
-  }, [authToken, dispatch, peerReviews, peerReviewId]);
 
   return (
     <>
@@ -58,8 +54,8 @@ export default function BasicInfo({ role }) {
       <SimpleBar title="Peer Review Information">
         <AlignedText text="Task to be Reviewed" childrenType="text">
           <Typography variant="body1">
-            <Link to={`/my-class/${courseId}/${classId}/challenge/${challengeId}/${peerReviewId}`} className={classNames.textLink}>
-              <Typography variant="body1">{`${peerReviews[peerReviewId].challenge_label} / ${problems[peerReviews[peerReviewId].target_problem_id] && problems[peerReviews[peerReviewId].target_problem_id].title}`}</Typography>
+            <Link to={`/my-class/${courseId}/${classId}/challenge/${peerReviews[peerReviewId].target_challenge_id}/${peerReviews[peerReviewId].target_problem_id}`} className={classNames.textLink}>
+              <Typography variant="body1">{`${challenges[peerReviews[peerReviewId].target_challenge_id] && challenges[peerReviews[peerReviewId].target_challenge_id].title} / ${problems[peerReviews[peerReviewId].target_problem_id] && problems[peerReviews[peerReviewId].target_problem_id].challenge_label}`}</Typography>
             </Link>
           </Typography>
         </AlignedText>
