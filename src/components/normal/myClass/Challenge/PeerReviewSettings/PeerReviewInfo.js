@@ -10,7 +10,7 @@ import GeneralLoading from '../../../../GeneralLoading';
 import PeerReviewEdit from './PeerReviewEdit';
 import PageTitle from '../../../../ui/PageTitle';
 
-import { readPeerReview } from '../../../../../actions/api/peerReview';
+import { readPeerReview, browseAccountReviewedPeerReviewRecord, assignPeerReviewRecord } from '../../../../../actions/api/peerReview';
 
 const useStyles = makeStyles(() => ({
   generalButtons: {
@@ -37,9 +37,12 @@ export default function PeerReviewInfo() {
   const history = useHistory();
 
   const authToken = useSelector((state) => state.auth.token);
+  const accountId = useSelector((state) => state.user.id);
   const userClasses = useSelector((state) => state.user.classes);
   const challenges = useSelector((state) => state.challenges.byId);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
+  const peerReviewRecords = useSelector((state) => state.peerReviewRecords);
+  const apiLoading = useSelector((state) => state.loading.api.peerReview);
   const loading = useSelector((state) => state.loading.myClass.peerReview);
 
   const [role, setRole] = useState('Normal');
@@ -58,8 +61,13 @@ export default function PeerReviewInfo() {
 
   const clickPeerReview = () => {
     console.log('Peer Review');
-    // console.log('peerReviews', peerReviews);
-    // history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/:accountId/:recordId`);
+    if (peerReviewRecords.allIds.length === 0) {
+      console.log('call assign peer review record', authToken, peerReviewId);
+      dispatch(assignPeerReviewRecord(authToken, peerReviewId));
+    } else {
+      const targetRecordId = peerReviewRecords.byId[peerReviewRecords.allIds[0]].receiver_id;
+      history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${targetRecordId}`);
+    }
   };
 
   useEffect(() => {
@@ -73,6 +81,12 @@ export default function PeerReviewInfo() {
       dispatch(readPeerReview(authToken, peerReviewId));
     }
   }, [authToken, dispatch, loading.editPeerReview, peerReviewId]);
+
+  useEffect(() => {
+    if (!apiLoading.assignPeerReviewRecord) {
+      dispatch(browseAccountReviewedPeerReviewRecord(authToken, peerReviewId, accountId));
+    }
+  }, [authToken, dispatch, peerReviewId, accountId, apiLoading.assignPeerReviewRecord]);
 
   if (peerReviews[peerReviewId] === undefined) {
     return <NoMatch />;

@@ -71,7 +71,7 @@ export default function BasicInfo({ role }) {
           <Typography variant="body1">{peerReviews[peerReviewId].min_score}</Typography>
         </AlignedText>
         <AlignedText text="Student is Assigned" childrenType="text">
-          <Typography variant="body1">2 Peers Respectively</Typography>
+          <Typography variant="body1">{`${peerReviews[peerReviewId].max_review_count} ${peerReviews[peerReviewId].max_review_count > 1 ? 'Peers' : 'Peer'} Respectively`}</Typography>
         </AlignedText>
       </SimpleBar>
       {role === 'MANAGER' && (
