@@ -81,14 +81,14 @@ export default function AccessLog() {
             align: 'center',
             type: 'link',
             sortable: 'username',
-            width: '8vw',
+            minWidth: 150,
           },
           {
             name: 'Student ID',
             align: 'center',
             type: 'string',
             sortable: 'student_id',
-            width: '8vw',
+            minWidth: 150,
           },
           {
             name: 'Real Name',
