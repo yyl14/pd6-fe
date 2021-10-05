@@ -8,6 +8,7 @@ const prototype = {
   challenge_label: null,
   title: null,
   target_problem_id: null,
+  target_challenge_id: null,
   setter_id: null,
   description: null,
   min_score: null,
@@ -48,6 +49,14 @@ const byId = (state = {}, action) => {
       return {
         ...state,
         [peerReviewId]: { ...prototype, ...state.[peerReviewId], reviewRecordIds: reviewIds },
+      };
+    }
+
+    case peerReviewConstants.GET_TARGET_PROBLEM_CHALLENGE_ID_SUCCESS: {
+      const { peerReviewId, target_challenge_id } = action.payload;
+      return {
+        ...state,
+        [peerReviewId]: { ...prototype, ...state.[peerReviewId], target_challenge_id },
       };
     }
 
