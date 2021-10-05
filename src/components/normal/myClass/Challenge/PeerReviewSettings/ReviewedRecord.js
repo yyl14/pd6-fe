@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import { Link, useParams } from 'react-router-dom';
 import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
+import Icon from '../../../../ui/icon/index';
 
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleBar from '../../../../ui/SimpleBar';
@@ -23,7 +24,7 @@ import CodeArea from '../../../../ui/CodeArea';
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
 
-import { browseAccountReviewedPeerReviewRecord } from '../../../../../actions/api/peerReview';
+import { browseAccountReviewedPeerReviewRecord, submitPeerReviewRecord } from '../../../../../actions/api/peerReview';
 import { readPeerReviewRecord } from '../../../../../actions/myClass/peerReview';
 
 const useStyles = makeStyles((theme) => ({
@@ -73,9 +74,13 @@ export default function ReviewedRecord() {
   const peerReviews = useSelector((state) => state.peerReviews.byId);
   const peerReviewRecords = useSelector((state) => state.peerReviewRecords.byId);
 
+  const onSuccess = () => {
+    dispatch(readPeerReviewRecord(authToken, recordId));
+  };
+
   const handleSubmit = () => {
-    console.log(score);
     // dispatch submit review result
+    dispatch(submitPeerReviewRecord(authToken, recordId, score, comment, onSuccess));
     setEdit(false);
   };
 
@@ -136,6 +141,7 @@ export default function ReviewedRecord() {
                 <SimpleBar title="Original Problem">
                   <Link className={classes.textLink} to={`/my-class/${courseId}/${classId}/challenge/${peerReviews[peerReviewId].challenge_id}/${peerReviews[peerReviewId].target_problem_id}`} target="_blank" rel="noopener noreferrer">
                     {`${peerReviews[peerReviewId].challenge_label}`}
+                    <Icon.Project />
                   </Link>
                 </SimpleBar>
                 )}

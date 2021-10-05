@@ -81,3 +81,23 @@ export const browseAccountReviewedPeerReviewRecord = (token, peerReviewId, accou
     });
   }
 };
+
+export const submitPeerReviewRecord = (token, peerReviewRecordId, score, comment, onSuccess) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    const body = {
+      score,
+      comment,
+    };
+    dispatch({ type: peerReviewConstants.SUBMIT_PEER_REVIEW_RECORD_START });
+    await agent.patch(`peer-review-record/${peerReviewRecordId}`, body, config);
+
+    dispatch({ type: peerReviewConstants.SUBMIT_PEER_REVIEW_RECORD_SUCCESS });
+    onSuccess();
+  } catch (error) {
+    dispatch({
+      type: peerReviewConstants.SUBMIT_PEER_REVIEW_RECORD_FAIL,
+      error,
+    });
+  }
+};
