@@ -162,14 +162,14 @@ export default function TeamList() {
         hasFilter
         filterConfig={[
           {
-            reduxStateId: 'name',
-            label: 'Team Name',
+            reduxStateId: 'label',
+            label: 'Label',
             type: 'TEXT',
             operation: 'LIKE',
           },
           {
-            reduxStateId: 'label',
-            label: 'Label',
+            reduxStateId: 'name',
+            label: 'Team Name',
             type: 'TEXT',
             operation: 'LIKE',
           },
@@ -181,18 +181,16 @@ export default function TeamList() {
         refreshLoadings={[loading.myClass.team.addTeam, loading.myClass.team.importTeam, loading.myClass.team.editTeam]}
         columns={[
           {
-            name: 'Team Name',
-            align: 'center',
-            minWidth: 150,
-            width: 200,
-            type: 'link',
-          },
-          {
             name: 'Label',
             align: 'center',
             minWidth: 50,
-            width: 180,
             type: 'string',
+          },
+          {
+            name: 'Team Name',
+            align: 'center',
+            minWidth: 150,
+            type: 'link',
           },
         ]}
         reduxData={teams}

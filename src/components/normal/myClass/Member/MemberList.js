@@ -103,10 +103,10 @@ export default function MemberList() {
                 operation: 'IN',
                 options: institutes.allIds.map((id) => {
                   const item = institutes.byId[id];
-                  return ({
+                  return {
                     value: item.abbreviated_name,
                     label: item.abbreviated_name,
-                  });
+                  };
                 }),
               },
               {
@@ -129,31 +129,26 @@ export default function MemberList() {
               {
                 name: 'Username',
                 align: 'center',
-                width: 200,
                 type: 'link',
               },
               {
                 name: 'Student ID',
                 align: 'center',
-                width: 155,
                 type: 'string',
               },
               {
                 name: 'Real Name',
                 align: 'center',
-                width: 144,
                 type: 'string',
               },
               {
                 name: 'Institute',
                 align: 'center',
-                width: 165,
                 type: 'string',
               },
               {
                 name: 'Role',
                 align: 'center',
-                width: 127,
                 type: 'string',
               },
             ]}
