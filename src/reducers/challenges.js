@@ -121,17 +121,6 @@ const byId = (state = {}, action) => {
       return challenges.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
     }
 
-    case peerReviewConstants.READ_PEER_REVIEW_SUCCESS: {
-      return {
-        ...state,
-        [action.payload.challenge_id]: {
-          ...prototype,
-          ...state[action.payload.challenge_id],
-          peerReviewIds: state[action.payload.challenge_id] ? state[action.payload.challenge_id].peerReviewIds.concat([action.payload.id]) : [action.payload.id],
-        },
-      };
-    }
-
     default:
       return state;
   }

@@ -75,28 +75,24 @@ export default function ChallengeList() {
             name: 'Title',
             align: 'center',
             minWidth: 150,
-            width: 200,
             type: 'string',
           },
           {
             name: 'Start Time',
             align: 'center',
             minWidth: 50,
-            width: 180,
             type: 'string',
           },
           {
             name: 'End Time',
             align: 'center',
             minWidth: 50,
-            width: 180,
             type: 'string',
           },
           {
             name: 'Status',
             align: 'center',
             minWidth: 50,
-            width: 100,
             type: 'string',
           },
         ]}

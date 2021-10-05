@@ -5,6 +5,7 @@ const initialState = {
   editPeerReview: false,
   deletePeerReview: false,
   readPeerReviewRecord: false,
+  submitPeerReviewRecord: false,
   browseAccountReviewedPeerReviewRecord: false,
   assignPeerReviewRecord: false,
 };
@@ -64,6 +65,20 @@ export default function view(state = initialState, action) {
       return {
         ...state,
         readPeerReviewRecord: false,
+      };
+    }
+
+    case peerReviewConstants.SUBMIT_PEER_REVIEW_RECORD_START: {
+      return {
+        ...state,
+        submitPeerReviewRecord: true,
+      };
+    }
+    case peerReviewConstants.SUBMIT_PEER_REVIEW_RECORD_SUCCESS:
+    case peerReviewConstants.SUBMIT_PEER_REVIEW_RECORD_FAIL: {
+      return {
+        ...state,
+        submitPeerReviewRecord: false,
       };
     }
 
