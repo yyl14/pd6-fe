@@ -40,12 +40,15 @@ export default function PeerReviewInfo() {
   const userClasses = useSelector((state) => state.user.classes);
   const challenges = useSelector((state) => state.challenges.byId);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
+  const loading = useSelector((state) => state.loading.myClass.peerReview);
 
   const [role, setRole] = useState('Normal');
   const [edit, setEdit] = useState(false);
 
   const clickViewPeerReview = () => {
-    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary`);
+    history.push(
+      `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary`,
+    );
   };
 
   const clickReceivedPeerReviews = () => {
@@ -66,8 +69,10 @@ export default function PeerReviewInfo() {
   }, [classId, userClasses]);
 
   useEffect(() => {
-    dispatch(readPeerReview(authToken, peerReviewId));
-  }, [authToken, dispatch, peerReviewId]);
+    if (!loading.editPeerReview) {
+      dispatch(readPeerReview(authToken, peerReviewId));
+    }
+  }, [authToken, dispatch, loading.editPeerReview, peerReviewId]);
 
   if (peerReviews[peerReviewId] === undefined) {
     return <NoMatch />;

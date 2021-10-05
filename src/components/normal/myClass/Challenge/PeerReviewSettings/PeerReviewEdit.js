@@ -52,21 +52,23 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 // This page is for manager.
 export default function PeerReviewEdit({ setEdit }) {
-  const { peerReviewId } = useParams();
+  const { courseId, classId, peerReviewId } = useParams();
   const classNames = useStyles();
   const dispatch = useDispatch();
 
-  const peerReviews = useSelector((state) => state.peerReviews);
+  const peerReviews = useSelector((state) => state.peerReviews.byId);
+  const problems = useSelector((state) => state.problem.byId);
+  const challenges = useSelector((state) => state.challenges.byId);
   const authToken = useSelector((state) => state.auth.token);
 
   const [label, setLabel] = useState(
-    peerReviews.byId[peerReviewId] === undefined ? 'error' : peerReviews.byId[peerReviewId].challenge_label,
+    peerReviews[peerReviewId] === undefined ? 'error' : peerReviews[peerReviewId].challenge_label,
   );
   const [title, setTitle] = useState(
-    peerReviews.byId[peerReviewId] === undefined ? 'error' : peerReviews.byId[peerReviewId].title,
+    peerReviews[peerReviewId] === undefined ? 'error' : peerReviews[peerReviewId].title,
   );
   const [description, setDescription] = useState(
-    peerReviews.byId[peerReviewId] === undefined ? 'error' : peerReviews.byId[peerReviewId].description,
+    peerReviews[peerReviewId] === undefined ? 'error' : peerReviews[peerReviewId].description,
   );
   const [hasChange, setHasChange] = useState(false);
   const [warningPopUp, setWarningPopUp] = useState(false);
@@ -85,8 +87,7 @@ export default function PeerReviewEdit({ setEdit }) {
       title,
       description,
     };
-    console.log('edit peer review');
-    // dispatch(editPeerReview(authToken, peerReviewId, body));
+    dispatch(editPeerReview(authToken, peerReviewId, body));
     setEdit(false);
   };
 
@@ -131,17 +132,30 @@ export default function PeerReviewEdit({ setEdit }) {
       </SimpleBar>
       <SimpleBar title="Peer Review Information" noIndent>
         <AlignedText text="Task to be Reviewed" childrenType="text">
-          <Typography variant="body1">{peerReviews.byId[peerReviewId].target_problem_id}</Typography>
-          {/* <Typography variant="body1">HW3 / Q1</Typography> */}
+          {problems[peerReviews[peerReviewId].target_problem_id] && (
+            <Link
+              to={`/my-class/${courseId}/${classId}/challenge/${
+                problems[peerReviews[peerReviewId].target_problem_id].challenge_id
+              }/${peerReviews[peerReviewId].target_problem_id}`}
+              className={classNames.textLink}
+            >
+              <Typography variant="body1">
+                {`${
+                  challenges[problems[peerReviews[peerReviewId].target_problem_id].challenge_id]
+                  && challenges[problems[peerReviews[peerReviewId].target_problem_id].challenge_id].title
+                } / ${problems[peerReviews[peerReviewId].target_problem_id].challenge_label}`}
+              </Typography>
+            </Link>
+          )}
         </AlignedText>
         <AlignedText text="Max Score" childrenType="text">
-          <Typography variant="body1">{peerReviews.byId[peerReviewId].max_score}</Typography>
+          <Typography variant="body1">{peerReviews[peerReviewId].max_score}</Typography>
         </AlignedText>
         <AlignedText text="Min Score" childrenType="text">
-          <Typography variant="body1">{peerReviews.byId[peerReviewId].min_score}</Typography>
+          <Typography variant="body1">{peerReviews[peerReviewId].min_score}</Typography>
         </AlignedText>
         <AlignedText text="Student is Assigned" childrenType="text">
-          <Typography variant="body1">{`${peerReviews.byId[peerReviewId].max_review_count} Peers Respectively`}</Typography>
+          <Typography variant="body1">{`${peerReviews[peerReviewId].max_review_count} Peers Respectively`}</Typography>
         </AlignedText>
       </SimpleBar>
       <div className={classNames.buttons}>
