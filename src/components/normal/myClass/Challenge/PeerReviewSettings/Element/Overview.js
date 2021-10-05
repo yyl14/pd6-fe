@@ -27,7 +27,7 @@ export default function Overview() {
       });
     });
     setTableData(newTableData);
-  }, [peerReviewRecords]);
+  }, [peerReviewRecords, accountId]);
 
   return (
     <>

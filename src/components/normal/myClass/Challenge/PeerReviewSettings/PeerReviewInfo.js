@@ -100,6 +100,9 @@ export default function PeerReviewInfo() {
   }, [authToken, dispatch, peerReviewId, accountId, apiLoading.assignPeerReviewRecord]);
 
   if (peerReviews[peerReviewId] === undefined) {
+    if (loading.editPeerReview || apiLoading.assignPeerReviewRecord) {
+      return <GeneralLoading />;
+    }
     return <NoMatch />;
   }
 
