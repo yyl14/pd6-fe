@@ -24,8 +24,8 @@ import CodeArea from '../../../../ui/CodeArea';
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
 
-import { browseAccountReviewedPeerReviewRecord, submitPeerReviewRecord } from '../../../../../actions/api/peerReview';
-import { readPeerReviewRecord } from '../../../../../actions/myClass/peerReview';
+import { browseAccountReviewedPeerReviewRecord, submitPeerReviewRecord, readPeerReviewRecord } from '../../../../../actions/api/peerReview';
+import { readPeerReviewRecordWithCode } from '../../../../../actions/myClass/peerReview';
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
@@ -120,7 +120,7 @@ export default function ReviewedRecord() {
     // dispatch read review ids for this account
     dispatch(browseAccountReviewedPeerReviewRecord(authToken, peerReviewId, accountId));
     // dispatch read record with code
-    dispatch(readPeerReviewRecord(authToken, recordId));
+    dispatch(readPeerReviewRecordWithCode(authToken, recordId));
   }, [accountId, authToken, dispatch, peerReviewId, recordId]);
 
   if (challenges[challengeId] === undefined || peerReviews[peerReviewId] === undefined || peerReviewRecords[recordId] === undefined) {

@@ -1,11 +1,11 @@
 import agent from '../agent';
-import { peerReviewConstants } from '../api/constant';
+import { peerReviewConstants, readPeerReviewRecord } from '../api/constant';
 // import { autoTableConstants } from '../component/constant';
 // import browseParamsTransForm from '../../function/browseParamsTransform';
 import { readAccount } from '../user/user';
 import getTextFromUrl from '../../function/getTextFromUrl';
 
-export const readPeerReviewRecord = (token, peerReviewRecordId) => async (dispatch) => {
+export const readPeerReviewRecordWithCode = (token, peerReviewRecordId) => async (dispatch) => {
   try {
     const config = { headers: { 'auth-token': token } };
     dispatch({ type: peerReviewConstants.READ_PEER_REVIEW_RECORD_START });
@@ -47,6 +47,27 @@ export const readPeerReviewRecord = (token, peerReviewRecordId) => async (dispat
   }
 };
 
-export const debug = () => {
-  console.log('debug');
+export const browseAccountReviewedPeerReviewRecordWithReading = (token, peerReviewId, accountId) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    dispatch({ type: peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_START });
+    const res = await agent.get(`peer-review/${peerReviewId}/account/${accountId}/review`, config);
+
+    await Promise.all(
+      res.data.data.map(async (id) => {
+        dispatch(readPeerReviewRecord(token, id));
+        return id;
+      }),
+    );
+
+    dispatch({
+      type: peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_SUCCESS,
+      payload: { peerReviewId, reviewIds: res.data.data },
+    });
+  } catch (error) {
+    dispatch({
+      type: peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_FAIL,
+      error,
+    });
+  }
 };
