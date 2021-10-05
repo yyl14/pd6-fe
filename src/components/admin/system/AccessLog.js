@@ -71,7 +71,6 @@ export default function AccessLog() {
           //   operation: 'LIKE',
           // },
         ]}
-        defaultSort={['access_time', 'DESC']}
         refetch={(browseParams, ident) => {
           dispatch(browseAccessLog(authToken, browseParams, ident));
         }}
@@ -82,49 +81,49 @@ export default function AccessLog() {
             align: 'center',
             type: 'link',
             sortable: 'username',
-            width: '12vw',
+            width: '8vw',
           },
           {
             name: 'Student ID',
             align: 'center',
             type: 'string',
             sortable: 'student_id',
-            width: '12vw',
+            width: '8vw',
           },
           {
             name: 'Real Name',
             align: 'center',
             type: 'string',
             sortable: 'real_name',
-            width: '12vw',
+            width: '9vw',
           },
           {
             name: 'IP',
             align: 'center',
             type: 'string',
             sortable: 'ip',
-            width: '12vw',
+            width: '6vw',
           },
           {
             name: 'Resource Path',
             align: 'center',
             type: 'string',
             sortable: 'resource_path',
-            width: '13vw',
+            width: '10vw',
           },
           {
             name: 'Request Method',
             align: 'center',
             type: 'string',
             sortable: 'request_method',
-            width: '5vw',
+            width: '11vw',
           },
           {
             name: 'Access Time',
             align: 'center',
             type: 'string',
             sortable: 'access_time',
-            width: '13vw',
+            width: '10vw',
           },
         ]}
         reduxData={accessLogs}
