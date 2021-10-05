@@ -41,31 +41,37 @@ export default function SubmissionList() {
             name: 'Submission ID',
             align: 'center',
             type: 'string',
+            minWidth: 150,
           },
           {
             name: 'Course',
             align: 'center',
             type: 'string',
+            minWidth: 150,
           },
           {
             name: 'Class',
             align: 'center',
             type: 'link',
+            minWidth: 150,
           },
           {
             name: 'Challenge',
             align: 'center',
             type: 'string',
+            minWidth: 150,
           },
           {
             name: 'Task',
             align: 'center',
             type: 'link',
+            minWidth: 150,
           },
           {
             name: 'Status',
             align: 'center',
             type: 'string',
+            minWidth: 150,
             colors: {
               'Waiting for judge': 'default',
               'No Status': 'error',
@@ -84,6 +90,7 @@ export default function SubmissionList() {
             name: 'Submitted Time',
             align: 'center',
             type: 'string',
+            minWidth: 150,
           },
         ]}
         reduxData={submissions}
