@@ -75,6 +75,7 @@ import { ReactComponent as Profile } from './profile.svg';
 import { ReactComponent as Facebook } from './facebook.svg';
 import { ReactComponent as Github } from './github.svg';
 import { ReactComponent as LinkedIn } from './linkedin.svg';
+import { ReactComponent as NewWin } from './newwin.svg';
 
 export default {
   HistoryIcon,
@@ -153,4 +154,5 @@ export default {
   Team,
   Warning,
   Profile,
+  NewWin,
 };
