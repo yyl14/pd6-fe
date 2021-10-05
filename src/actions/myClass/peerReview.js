@@ -1,5 +1,6 @@
 import agent from '../agent';
-import { peerReviewConstants, readPeerReviewRecord } from '../api/constant';
+import { peerReviewConstants } from '../api/constant';
+import { readPeerReviewRecord } from '../api/peerReview';
 // import { autoTableConstants } from '../component/constant';
 // import browseParamsTransForm from '../../function/browseParamsTransform';
 import { readAccount } from '../user/user';
@@ -67,6 +68,28 @@ export const browseAccountReviewedPeerReviewRecordWithReading = (token, peerRevi
   } catch (error) {
     dispatch({
       type: peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_FAIL,
+      error,
+    });
+  }
+};
+
+export const getTargetProblemChallengeId = (token, peerReviewId, problemId) => async (dispatch) => {
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+  };
+
+  try {
+    dispatch({ type: peerReviewConstants.GET_TARGET_PROBLEM_CHALLENGE_ID_START });
+    const res = await agent.get(`/problem/${problemId}`, config);
+    dispatch({
+      type: peerReviewConstants.GET_TARGET_PROBLEM_CHALLENGE_ID_SUCCESS,
+      payload: { peerReviewId, target_challenge_id: res.data.data.challenge_id },
+    });
+  } catch (error) {
+    dispatch({
+      type: peerReviewConstants.GET_TARGET_PROBLEM_CHALLENGE_ID_FAIL,
       error,
     });
   }

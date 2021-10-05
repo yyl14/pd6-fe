@@ -2,6 +2,7 @@ import { peerReviewConstants } from '../../../actions/api/constant';
 
 const initialState = {
   readPeerReviewRecord: null,
+  getTargetProblemChallengeId: null,
 };
 
 export default function peerReview(state = initialState, action) {
@@ -16,6 +17,19 @@ export default function peerReview(state = initialState, action) {
       return {
         ...state,
         readPeerReviewRecord: action.error,
+      };
+    }
+
+    case peerReviewConstants.GET_TARGET_PROBLEM_CHALLENGE_ID_START: {
+      return {
+        ...state,
+        getTargetProblemChallengeId: null,
+      };
+    }
+    case peerReviewConstants.GET_TARGET_PROBLEM_CHALLENGE_ID_FAIL: {
+      return {
+        ...state,
+        getTargetProblemChallengeId: action.error,
       };
     }
 
