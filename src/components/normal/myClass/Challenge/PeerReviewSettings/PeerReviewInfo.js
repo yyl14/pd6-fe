@@ -42,13 +42,16 @@ export default function PeerReviewInfo() {
   const challenges = useSelector((state) => state.challenges.byId);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
   const peerReviewRecords = useSelector((state) => state.peerReviewRecords);
-  const loading = useSelector((state) => state.loading.api.peerReview);
+  const apiLoading = useSelector((state) => state.loading.api.peerReview);
+  const loading = useSelector((state) => state.loading.myClass.peerReview);
 
   const [role, setRole] = useState('Normal');
   const [edit, setEdit] = useState(false);
 
   const clickViewPeerReview = () => {
-    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary`);
+    history.push(
+      `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary`,
+    );
   };
 
   const clickReceivedPeerReviews = () => {
@@ -74,14 +77,16 @@ export default function PeerReviewInfo() {
   }, [classId, userClasses]);
 
   useEffect(() => {
-    dispatch(readPeerReview(authToken, peerReviewId));
-  }, [authToken, dispatch, peerReviewId]);
+    if (!loading.editPeerReview) {
+      dispatch(readPeerReview(authToken, peerReviewId));
+    }
+  }, [authToken, dispatch, loading.editPeerReview, peerReviewId]);
 
   useEffect(() => {
-    if (!loading.assignPeerReviewRecord) {
+    if (!apiLoading.assignPeerReviewRecord) {
       dispatch(browseAccountReviewedPeerReviewRecord(authToken, peerReviewId, accountId));
     }
-  }, [authToken, dispatch, peerReviewId, accountId, loading.assignPeerReviewRecord]);
+  }, [authToken, dispatch, peerReviewId, accountId, apiLoading.assignPeerReviewRecord]);
 
   if (peerReviews[peerReviewId] === undefined) {
     return <NoMatch />;
