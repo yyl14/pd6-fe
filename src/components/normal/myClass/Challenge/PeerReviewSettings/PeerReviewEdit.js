@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Typography,
@@ -14,8 +14,6 @@ import { useParams, Link } from 'react-router-dom';
 import { editPeerReview } from '../../../../../actions/api/peerReview';
 import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
-import NoMatch from '../../../../noMatch';
-import GeneralLoading from '../../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
@@ -155,7 +153,11 @@ export default function PeerReviewEdit({ setEdit }) {
           <Typography variant="body1">{peerReviews[peerReviewId].min_score}</Typography>
         </AlignedText>
         <AlignedText text="Student is Assigned" childrenType="text">
-          <Typography variant="body1">{`${peerReviews[peerReviewId].max_review_count} Peers Respectively`}</Typography>
+          <Typography variant="body1">
+            {`${peerReviews[peerReviewId].max_review_count} ${
+              peerReviews[peerReviewId].max_review_count > 1 ? 'Peers' : 'Peer'
+            } Respectively`}
+          </Typography>
         </AlignedText>
       </SimpleBar>
       <div className={classNames.buttons}>
