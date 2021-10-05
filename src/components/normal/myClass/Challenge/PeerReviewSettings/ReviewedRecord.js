@@ -45,6 +45,11 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.primary.dark,
     },
   },
+  newTabIcon: {
+    marginLeft: '10px',
+    transform: 'translateY(2px)',
+    color: theme.palette.black.main,
+  },
 }));
 
 /* This is a level 4 component (page component) */
@@ -141,7 +146,7 @@ export default function ReviewedRecord() {
                 <SimpleBar title="Original Problem">
                   <Link className={classes.textLink} to={`/my-class/${courseId}/${classId}/challenge/${peerReviews[peerReviewId].challenge_id}/${peerReviews[peerReviewId].target_problem_id}`} target="_blank" rel="noopener noreferrer">
                     {`${peerReviews[peerReviewId].challenge_label}`}
-                    <Icon.Project />
+                    <Icon.NewWin className={classes.newTabIcon} />
                   </Link>
                 </SimpleBar>
                 )}
