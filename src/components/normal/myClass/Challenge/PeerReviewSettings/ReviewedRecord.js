@@ -14,10 +14,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 /* This is a level 4 component (page component) */
-// This page is only for class manager.
-export default function PeerReviewSummary() {
+// This page is for both normal and manager.
+// Render different component according to role and call correct api.
+// If normal, account id should be himself.
+// Only normal has edit mode.
+export default function ReviewedRecord() {
   const {
-    classId, challengeId, peerReviewId,
+    classId, challengeId, peerReviewId, accountId, recordId,
   } = useParams();
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -33,13 +36,16 @@ export default function PeerReviewSummary() {
   const peerReviews = useSelector((state) => state.peerReviews.byId);
   const peerReviewRecords = useSelector((state) => state.peerReviewRecords.byId);
 
-  // if (peerReviews[peerReviewId] === undefined) {
-  //   return <NoMatch />;
-  // }
+  useEffect(() => {
+    const newRole = userClasses.filter((item) => item.class_id === Number(classId))[0].role;
+    if (newRole !== null || newRole !== undefined) {
+      setRole(newRole);
+    }
+  }, [classId, userClasses]);
 
   return (
     <>
-      <div>PeerReviewSummary</div>
+      <div>PeerReviewDetail</div>
     </>
   );
 }

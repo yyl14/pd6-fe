@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
@@ -8,6 +8,7 @@ import PageTitle from '../../ui/PageTitle';
 import MemberEdit from './MemberEdit';
 import NoMatch from '../../noMatch';
 import systemRoleTransformation from '../../../function/systemRoleTransformation';
+import { getInstitutes } from '../../../actions/common/common';
 
 /* This is a level 4 component (page component) */
 export default function MemberList() {
@@ -20,10 +21,15 @@ export default function MemberList() {
   const courses = useSelector((state) => state.courses);
   const classes = useSelector((state) => state.classes);
   const members = useSelector((state) => state.classMembers);
+  const institutes = useSelector((state) => state.institutes);
   const loading = useSelector((state) => state.loading.admin.course);
   const error = useSelector((state) => state.error.common.common.fetchClassMembers);
 
   const [edit, setEdit] = useState(false);
+
+  useEffect(() => {
+    dispatch(getInstitutes());
+  }, [authToken, dispatch]);
 
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
     if (loading.fetchCourses || loading.fetchClasses) {
@@ -79,11 +85,13 @@ export default function MemberList() {
                 label: 'Institute',
                 type: 'ENUM',
                 operation: 'IN',
-                options: [
-                  { value: 'NTU', label: 'NTU' },
-                  { value: 'NTNU', label: 'NTNU' },
-                  { value: 'NTUST', label: 'NTUST' },
-                ],
+                options: institutes.allIds.map((id) => {
+                  const item = institutes.byId[id];
+                  return ({
+                    value: item.abbreviated_name,
+                    label: item.abbreviated_name,
+                  });
+                }),
               },
               {
                 reduxStateId: 'role',

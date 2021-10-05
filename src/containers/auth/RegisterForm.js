@@ -145,7 +145,7 @@ export default function RegisterForm() {
     if (!hasError) {
       dispatch(
         userRegister(
-          inputs.username,
+          inputs.username.trim(),
           inputs.password,
           inputs.nickname,
           inputs.realName,

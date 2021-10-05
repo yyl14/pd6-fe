@@ -262,3 +262,38 @@ export const deleteTeam = (token, teamId, onSuccess, onError) => async (dispatch
     onError(error);
   }
 };
+
+export const createTeamWithMember = (token, classId, name, label, members, onSuccess, onTeamErr, onMemberErr) => async (dispatch) => {
+  const config1 = { headers: { 'auth-token': token } };
+  const config2 = { headers: { 'auth-token': token } };
+  const body = Object.values(members).map((member) => ({
+    account_referral: member.name,
+    role: member.role === 'Normal' ? 'NORMAL' : 'MANAGER',
+  }));
+
+  try {
+    dispatch({ type: teamConstants.ADD_TEAM_START });
+    const res = await agent.post(`/class/${classId}/team`, { name, label }, config1);
+    const teamId = res.data.data.id;
+    dispatch({ type: teamConstants.ADD_TEAM_SUCCESS });
+
+    try {
+      dispatch({ type: teamConstants.ADD_TEAM_MEMBER_START });
+      await agent.post(`/team/${teamId}/member`, body, config2);
+      dispatch({ type: teamConstants.ADD_TEAM_MEMBER_SUCCESS });
+    } catch (error) {
+      onMemberErr();
+      dispatch({
+        type: teamConstants.ADD_TEAM_MEMBER_FAIL,
+        error,
+      });
+    }
+  } catch (error) {
+    onTeamErr();
+    dispatch({
+      type: teamConstants.ADD_TEAM_FAIL,
+      error,
+    });
+  }
+  onSuccess();
+};

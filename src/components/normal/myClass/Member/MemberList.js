@@ -9,6 +9,7 @@ import MemberEdit from './MemberEdit';
 import NoMatch from '../../../noMatch';
 import systemRoleTransformation from '../../../../function/systemRoleTransformation';
 import GeneralLoading from '../../../GeneralLoading';
+import { getInstitutes } from '../../../../actions/common/common';
 
 /* This is a level 4 component (page component) */
 export default function MemberList() {
@@ -22,6 +23,7 @@ export default function MemberList() {
   const classes = useSelector((state) => state.classes);
   const members = useSelector((state) => state.classMembers);
   const userClasses = useSelector((state) => state.user.classes);
+  const institutes = useSelector((state) => state.institutes);
   const loading = useSelector((state) => state.loading.common.common);
   const error = useSelector((state) => state.error.api.view.browseClassMember);
 
@@ -31,6 +33,10 @@ export default function MemberList() {
   useEffect(() => {
     setIsManager(userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER');
   }, [classId, userClasses]);
+
+  useEffect(() => {
+    dispatch(getInstitutes());
+  }, [authToken, dispatch]);
 
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
     if (
@@ -95,11 +101,13 @@ export default function MemberList() {
                 label: 'Institute',
                 type: 'ENUM',
                 operation: 'IN',
-                options: [
-                  { value: 'NTU', label: 'NTU' },
-                  { value: 'NTNU', label: 'NTNU' },
-                  { value: 'NTUST', label: 'NTUST' },
-                ],
+                options: institutes.allIds.map((id) => {
+                  const item = institutes.byId[id];
+                  return ({
+                    value: item.abbreviated_name,
+                    label: item.abbreviated_name,
+                  });
+                }),
               },
               {
                 reduxStateId: 'role',

@@ -479,7 +479,6 @@ const overrides = {
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
-
     },
   },
   MuiSwitch: {
@@ -720,6 +719,10 @@ const props = {
 
   MuiDialogTitle: {
     disableTypography: true,
+  },
+
+  MuiDrawer: {
+    hideBackdrop: true,
   },
 };
 

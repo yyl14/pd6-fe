@@ -1,20 +1,10 @@
 import { useState, useEffect } from 'react';
 import React, { useSelector, useDispatch } from 'react-redux';
 import {
-  Button,
-  TextField,
-  Card,
-  CardContent,
-  Typography,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  makeStyles,
-  Link,
+  Button, TextField, Card, CardContent, Typography, makeStyles, Link, Snackbar,
 } from '@material-ui/core';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { userForgetPassword } from '../../actions/user/auth';
+import { userForgetUsername } from '../../actions/user/auth';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
@@ -36,18 +26,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ForgetPasswordForm() {
+export default function ForgetUsernameForm() {
   const classNames = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
   const error = useSelector((state) => state.error.user.auth);
-  const loading = useSelector((state) => state.loading.user.auth.forgetPassword);
-  const [username, setUsername] = useState('');
+  const loading = useSelector((state) => state.loading.user.auth.forgetUsername);
   const [email, setEmail] = useState('');
   const [showError, setShowError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [disabled, setDisabled] = useState(true);
-  const [popUp, setPopUp] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -56,7 +45,6 @@ export default function ForgetPasswordForm() {
     }
 
     const onSuccess = () => {
-      setPopUp(true);
       setErrorText('');
       setShowError(false);
 
@@ -70,20 +58,14 @@ export default function ForgetPasswordForm() {
       setShowError(true);
     };
 
-    dispatch(userForgetPassword(username, email.trim(), onSuccess, onError));
-  };
-
-  const handleClosePopUp = () => {
-    setPopUp(false);
+    dispatch(userForgetUsername(email.trim(), onSuccess, onError));
+    setShowSnackbar(true);
   };
 
   useEffect(() => {
     const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const status = emailRe.test(email);
-
-    if (username === '') {
-      setDisabled(true);
-    } else if (email === '') {
+    if (email === '') {
       setErrorText('');
       setShowError(false);
       setDisabled(true);
@@ -96,20 +78,13 @@ export default function ForgetPasswordForm() {
       setShowError(false);
       setDisabled(false);
     }
-  }, [email, username]);
+  }, [email]);
 
   return (
     <>
       <Card className="auth-form login-form" variant="outlined">
         <CardContent className="auth-form-content">
           <form className={`auth-form-content ${classNames.authForm}`} onSubmit={(e) => handleSubmit(e)}>
-            <TextField
-              // required
-              className={`auth-form-input ${classNames.authTextFields}`}
-              label="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
             <TextField
               // required
               className={`auth-form-input ${classNames.authTextFields}`}
@@ -131,35 +106,24 @@ export default function ForgetPasswordForm() {
           </form>
 
           <Typography variant="body2" className={classNames.authLink}>
-            Forgot your username?
+            Lost your puppy?
             {' '}
-            <Link component={RouterLink} to="/forget-username">
-              Find username
+            <Link component={RouterLink} to="/forget-password">
+              Reset password
             </Link>
             {' '}
           </Typography>
         </CardContent>
       </Card>
 
-      <Dialog
-        open={popUp}
-        keepMounted
-        onClose={() => handleClosePopUp()}
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle id="alert-dialog-slide-title">
-          <Typography variant="h4">Password reset email sent</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body1">Please check your mailbox to the account.</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleClosePopUp()} color="primary">
-            Done
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowSnackbar(false);
+        }}
+        message="Username information will be sent to your mailbox if your email is valid."
+      />
     </>
   );
 }

@@ -2,19 +2,17 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Switch, Route, useParams } from 'react-router-dom';
 
-import CodingProblem from './CodingProblem';
-
 import GeneralLoading from '../../../GeneralLoading';
-import EssayProblem from './EssayProblem';
-import CodeSubmission from './CodeSubmission';
-import MySubmission from './MySubmission';
-import SubmissionDetail from './SubmissionDetail';
-import PeerReview from './PeerReview';
+import PeerReviewInfo from './PeerReviewSettings/PeerReviewInfo';
+import ReceiverSummary from './PeerReviewSettings/ReceiverSummary';
+import GraderSummary from './PeerReviewSettings/GraderSummary';
+import ReviewedRecord from './PeerReviewSettings/ReviewedRecord';
+import ReceivedRecord from './PeerReviewSettings/ReceivedRecord';
 import NoMatch from '../../../noMatch';
 
 /* This is a level 4 component (page component) */
 /* judge the problem type on this level */
-export default function Task() {
+export default function PeerReview() {
   const { courseId, classId, challengeId } = useParams();
 
   // const problemIDs = useSelector((state) => state.problem.allIds);
@@ -37,28 +35,11 @@ export default function Task() {
   return (
     <>
       <Switch>
-        <Route
-          exact
-          path="/my-class/:courseId/:classId/challenge/:challengeId/essay/:essayId"
-          component={EssayProblem}
-        />
-        <Route
-          exact
-          path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/code-submission"
-          component={CodeSubmission}
-        />
-        <Route
-          exact
-          path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission"
-          component={MySubmission}
-        />
-        <Route
-          exact
-          path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId"
-          component={SubmissionDetail}
-        />
-        <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId" component={CodingProblem} />
-        <Route path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId" component={PeerReview} />
+        <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId" component={PeerReviewInfo} />
+        <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receiver-summary" component={ReceiverSummary} />
+        <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/grader-summary" component={GraderSummary} />
+        <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receive/:accountId/:recordId" component={ReceivedRecord} />
+        <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/review/:accountId/:recordId" component={ReviewedRecord} />
         <Route component={NoMatch} />
       </Switch>
     </>

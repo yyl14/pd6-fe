@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import theme from './theme';
 import Login from './containers/auth/Login';
 import Register from './containers/auth/Register';
+import ForgetUsername from './containers/auth/ForgetUsername';
 import ForgetPassword from './containers/auth/ForgetPassword';
 import ResetPassword from './containers/auth/ResetPassword';
 import EmailVerification from './containers/auth/EmailVerification';
@@ -44,6 +45,7 @@ class App extends Component {
               <Route path="/icon" component={IconUsage} />
               <Route path="/ui-component" component={UIComponentUsage} />
               <Route path="/login" component={Login} />
+              <Route path="/forget-username" component={ForgetUsername} />
               <Route path="/forget-password" component={ForgetPassword} />
               <Route path="/reset-password" component={ResetPassword} />
               <Route path="/register" component={Register} />

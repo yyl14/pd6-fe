@@ -7,7 +7,7 @@ import {
 import Icon from '../icon/index';
 
 export default function AllClass({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const { courseId } = useParams();
   const baseURL = '/all-class';
@@ -34,7 +34,7 @@ export default function AllClass({
           .map(({ id, type, name }) => ({
             type,
             text: name,
-            icon: <Icon.Member />,
+            icon: <Icon.Class />,
             path: `${baseURL}/${id}`,
           })),
       );
@@ -75,8 +75,10 @@ export default function AllClass({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}
