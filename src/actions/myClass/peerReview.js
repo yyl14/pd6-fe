@@ -8,7 +8,6 @@ export const readPeerReview = (token, peerReviewId) => async (dispatch) => {
     const config = { headers: { 'auth-token': token } };
     dispatch({ type: peerReviewConstants.READ_PEER_REVIEW_START });
     const res = await agent.get(`peer-review/${peerReviewId}`, config);
-
     dispatch({
       type: peerReviewConstants.READ_PEER_REVIEW_SUCCESS,
       payload: res.data.data,

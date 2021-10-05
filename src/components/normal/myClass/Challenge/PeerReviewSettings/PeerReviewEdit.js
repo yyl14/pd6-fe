@@ -83,7 +83,7 @@ export default function PeerReviewEdit({ setEdit }) {
 
   const handleSave = () => {
     const body = {
-      label,
+      challenge_label: label,
       title,
       description,
     };
