@@ -51,13 +51,6 @@ export default function Challenge() {
     loading.problem.deleteProblem,
   ]);
 
-  if (challenges[challengeId] === undefined) {
-    if (commonLoading.fetchChallenge) {
-      return <GeneralLoading />;
-    }
-    return <NoMatch />;
-  }
-
   return (
     <>
       <Switch>

@@ -24,14 +24,25 @@ import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
 
 import { browseAccountReviewedPeerReviewRecord } from '../../../../../actions/api/peerReview';
+import { readPeerReviewRecord } from '../../../../../actions/myClass/peerReview';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   textfield: {
-    width: '400px',
+    width: '40vw',
   },
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end',
+  },
+  textLink: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+    '&:hover': {
+      color: theme.palette.primary.hover,
+    },
+    '&:active': {
+      color: theme.palette.primary.dark,
+    },
   },
 }));
 
@@ -49,17 +60,16 @@ export default function ReviewedRecord() {
   const [role, setRole] = useState('GUEST');
   const [edit, setEdit] = useState(false);
   const [peerId, setPeerId] = useState(1);
-  const [scoreRange, setScoreRange] = useState([]);
   const [score, setScore] = useState('');
   const [comment, setComment] = useState('');
 
   const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.api.peerReviews);
-  const error = useSelector((state) => state.error.api.peerReviews);
+  const loading = useSelector((state) => state.loading.api.peerReview);
+  const pageLoading = useSelector((state) => state.loading.myClass.peerReview);
+  // const error = useSelector((state) => state.error.api.peerReviews);
   const commonLoading = useSelector((state) => state.loading.common.common);
   const userClasses = useSelector((state) => state.user.classes);
   const challenges = useSelector((state) => state.challenges.byId);
-  const problems = useSelector((state) => state.problem.byId);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
   const peerReviewRecords = useSelector((state) => state.peerReviewRecords.byId);
 
@@ -70,15 +80,22 @@ export default function ReviewedRecord() {
   };
 
   useEffect(() => {
-    setScore(peerReviewRecords[recordId].score);
-    setComment(peerReviewRecords[recordId].comment);
+    if (peerReviewRecords[recordId] !== undefined) {
+      if (peerReviewRecords[recordId].score !== null) {
+        setScore(peerReviewRecords[recordId].score);
+      }
+      if (peerReviewRecords[recordId].comment !== null) {
+        setComment(peerReviewRecords[recordId].comment);
+      }
+    }
   }, [peerReviewRecords, recordId]);
 
   useEffect(() => {
-    setScoreRange(Array.from(new Array(peerReviews[peerReviewId].max_score - peerReviews[peerReviewId].min_score + 1), (x, i) => i + peerReviews[peerReviewId].min_score));
-    const id = peerReviews[peerReviewId].reviewRecordIds.findIndex((element) => element === recordId);
-    if (id !== -1) {
-      setPeerId(peerReviews[peerReviewId].reviewRecordIds[id]);
+    if (peerReviews[peerReviewId] !== undefined) {
+      const id = peerReviews[peerReviewId].reviewRecordIds.findIndex((element) => element === Number(recordId));
+      if (id !== -1) {
+        setPeerId(id + 1);
+      }
     }
   }, [peerReviewId, peerReviews, recordId]);
 
@@ -93,12 +110,12 @@ export default function ReviewedRecord() {
     // dispatch read review ids for this account
     dispatch(browseAccountReviewedPeerReviewRecord(authToken, peerReviewId, accountId));
     // dispatch read record with code
-    // if manager, must read receiver and grader info at the same time
-    // dispatch read problem info
-  }, [accountId, authToken, dispatch, peerReviewId]);
+    dispatch(readPeerReviewRecord(authToken, recordId));
+  }, [accountId, authToken, dispatch, peerReviewId, recordId]);
 
   if (challenges[challengeId] === undefined || peerReviews[peerReviewId] === undefined || peerReviewRecords[recordId] === undefined) {
-    if (commonLoading.fetchChallenge) {
+    // console.log(loading);
+    if (commonLoading.fetchChallenge || loading.readPeerReview || pageLoading.readPeerReviewRecord) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -117,8 +134,8 @@ export default function ReviewedRecord() {
       {role === 'NORMAL'
                 && (
                 <SimpleBar title="Original Problem">
-                  <Link target="_blank" to={`/my-class/${courseId}/${classId}/challenge/${challengeId}/${peerReviews[peerReviewId].setter_id}`}>
-                    {`${challenges[challengeId].title}`}
+                  <Link className={classes.textLink} to={`/my-class/${courseId}/${classId}/challenge/${peerReviews[peerReviewId].challenge_id}/${peerReviews[peerReviewId].target_problem_id}`} target="_blank" rel="noopener noreferrer">
+                    {`${peerReviews[peerReviewId].challenge_label}`}
                   </Link>
                 </SimpleBar>
                 )}
@@ -146,70 +163,75 @@ export default function ReviewedRecord() {
           && (
           <>
             <SimpleBar title="Score">
-              {`${peerReviewRecords[recordId].score}`}
+              { peerReviewRecords[recordId].score === null ? '' : peerReviewRecords[recordId].score}
             </SimpleBar>
             <SimpleBar title="Comment">
-              {`${peerReviewRecords[recordId].comment}`}
+              { peerReviewRecords[recordId].comment === null ? '' : peerReviewRecords[recordId].comment}
             </SimpleBar>
           </>
           )}
-      {role === 'NORMAL' && edit ? (
-        <>
-          <SimpleBar title="Review" noIndent>
-            <AlignedText text="Score" childrenType="field">
-              <FormControl variant="outlined">
-                <Select
-                  labelId="score"
-                  id="score"
-                  value={score}
+      {
+        role === 'NORMAL' && (edit ? (
+          <>
+            <SimpleBar title="Review">
+              <AlignedText text="Score" childrenType="field">
+                <FormControl variant="outlined">
+                  <Select
+                    labelId="score"
+                    id="score"
+                    value={score}
+                    onChange={(e) => {
+                      setScore(e.target.value);
+                    }}
+                  >
+                    {Array.from(new Array(peerReviews[peerReviewId].max_score - peerReviews[peerReviewId].min_score + 1), (x, i) => i + peerReviews[peerReviewId].min_score).map((item) => (
+                      <MenuItem key={item} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </AlignedText>
+              <AlignedText text="Comment" childrenType="field">
+                <TextField
+                  value={comment}
+                  variant="outlined"
                   onChange={(e) => {
-                    setScore(e.target.value);
+                    setComment(e.target.value);
                   }}
-                >
-                  {scoreRange.map((item) => (
-                    <MenuItem key={item} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </AlignedText>
-            <TextField
-              value={comment}
-              variant="outlined"
-              onChange={(e) => {
-                setComment(e.target.value);
-              }}
-              className={classes.textfield}
-            />
-            <AlignedText text="Comment" childrenType="text" />
-          </SimpleBar>
-          <div className={classes.buttons}>
-            <Button color="default" onClick={() => { setEdit(false); }}>
-              Cancel
-            </Button>
-            <Button color="primary" onClick={handleSubmit}>
-              Submit
-            </Button>
-          </div>
-        </>
-      ) : (
-        <>
-          <SimpleBar title="Review" buttons={<Button onClick={() => setEdit(true)}>Edit</Button>}>
-            <AlignedText text="Score" childrenType="text">
-              <Typography variant="body1">
-                {`${peerReviewRecords[recordId].score}`}
-              </Typography>
-            </AlignedText>
-            <AlignedText text="Comment" childrenType="text">
-              <Typography variant="body1">
-                {`${peerReviewRecords[recordId].comment}`}
-              </Typography>
-            </AlignedText>
-          </SimpleBar>
-          <SimpleBar title="Comment" />
-        </>
-      )}
+                  className={classes.textfield}
+                  multiline
+                  minRows={5}
+                  maxRows={5}
+                />
+              </AlignedText>
+            </SimpleBar>
+            <div className={classes.buttons}>
+              <Button color="default" onClick={() => { setEdit(false); }}>
+                Cancel
+              </Button>
+              <Button color="primary" onClick={handleSubmit}>
+                Submit
+              </Button>
+            </div>
+          </>
+        ) : (
+          <>
+            <SimpleBar title="Review" buttons={<Button onClick={() => setEdit(true)}>Edit</Button>}>
+              <AlignedText text="Score" childrenType="text">
+                <Typography variant="body1">
+                  { peerReviewRecords[recordId].score === null ? '' : peerReviewRecords[recordId].score}
+                </Typography>
+              </AlignedText>
+              <AlignedText text="Comment" childrenType="text">
+                <Typography variant="body1">
+                  { peerReviewRecords[recordId].comment === null ? '' : peerReviewRecords[recordId].comment}
+                </Typography>
+              </AlignedText>
+            </SimpleBar>
+          </>
+        ))
+      }
     </>
   );
 }

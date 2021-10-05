@@ -720,10 +720,6 @@ const props = {
   MuiDialogTitle: {
     disableTypography: true,
   },
-
-  MuiDrawer: {
-    hideBackdrop: true,
-  },
 };
 
 const theme = createTheme({
