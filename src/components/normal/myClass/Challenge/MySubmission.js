@@ -86,6 +86,7 @@ export default function MySubmission() {
             name: 'Submission ID',
             align: 'center',
             type: 'string',
+            minWidth: 120,
           },
           {
             name: 'Status',
@@ -104,6 +105,7 @@ export default function MySubmission() {
               'Forbidden Action': 'error',
               'System Error': 'error',
             },
+            minWidth: 170,
           },
           {
             name: 'Score',
@@ -114,17 +116,20 @@ export default function MySubmission() {
             name: 'Used Time(ms)',
             align: 'center',
             type: 'string',
+            minWidth: 130,
           },
           {
             name: 'Used Memory(kb)',
             align: 'center',
             type: 'string',
+            minWidth: 150,
           },
           {
             name: 'Submit Time',
             align: 'center',
             type: 'string',
             sortable: 'submit_time',
+            minWidth: 130,
           },
         ]}
         reduxData={submissions}
