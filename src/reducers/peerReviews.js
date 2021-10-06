@@ -52,6 +52,14 @@ const byId = (state = {}, action) => {
       };
     }
 
+    case peerReviewConstants.BROWSE_ACCOUNT_RECEIVED_PEER_REVIEW_RECORD_SUCCESS: {
+      const { peerReviewId, receiveIds } = action.payload;
+      return {
+        ...state,
+        [peerReviewId]: { ...prototype, ...state.[peerReviewId], receiveRecordIds: receiveIds },
+      };
+    }
+
     case peerReviewConstants.GET_TARGET_PROBLEM_CHALLENGE_ID_SUCCESS: {
       const { peerReviewId, target_challenge_id } = action.payload;
       return {

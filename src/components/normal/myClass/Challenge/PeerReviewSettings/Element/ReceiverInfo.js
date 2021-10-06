@@ -22,7 +22,7 @@ export default function ReceiverInfo({ accountId }) {
   }
 
   return (
-    <SimpleBar title="Grader">
+    <SimpleBar title="Receiver">
       <>
         <AlignedText text="Username" childrenType="text">
           <Typography variant="body1">

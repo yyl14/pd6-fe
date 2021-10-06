@@ -75,6 +75,24 @@ export const browseAccountReviewedPeerReviewRecord = (token, peerReviewId, accou
   }
 };
 
+export const browseAccountReceivedPeerReviewRecord = (token, peerReviewId, accountId) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    dispatch({ type: peerReviewConstants.BROWSE_ACCOUNT_RECEIVED_PEER_REVIEW_RECORD_START });
+    const res = await agent.get(`peer-review/${peerReviewId}/account/${accountId}/receive`, config);
+
+    dispatch({
+      type: peerReviewConstants.BROWSE_ACCOUNT_RECEIVED_PEER_REVIEW_RECORD_SUCCESS,
+      payload: { peerReviewId, receiveIds: res.data.data },
+    });
+  } catch (error) {
+    dispatch({
+      type: peerReviewConstants.BROWSE_ACCOUNT_RECEIVED_PEER_REVIEW_RECORD_FAIL,
+      error,
+    });
+  }
+};
+
 export const submitPeerReviewRecord = (token, peerReviewRecordId, score, comment, onSuccess) => async (dispatch) => {
   try {
     const config = { headers: { 'auth-token': token } };
