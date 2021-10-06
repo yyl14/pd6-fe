@@ -159,7 +159,7 @@ export default function ReviewedRecord() {
         <PageTitle text={`Received Peer Review Detail / Peer ${peerId}`} />
       )}
 
-      <BasicInfo />
+      <BasicInfo role={role} />
 
       {role === 'MANAGER' && (
         <>
