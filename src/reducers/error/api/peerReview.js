@@ -7,6 +7,7 @@ const initialState = {
   readPeerReviewRecord: null,
   submitPeerReviewRecord: null,
   browseAccountReviewedPeerReviewRecord: null,
+  browseAccountReceivedPeerReviewRecord: null,
 };
 
 export default function view(state = initialState, action) {
@@ -83,7 +84,18 @@ export default function view(state = initialState, action) {
         browseAccountReviewedPeerReviewRecord: action.error,
       };
     }
-
+    case peerReviewConstants.BROWSE_ACCOUNT_RECEIVED_PEER_REVIEW_RECORD_START: {
+      return {
+        ...state,
+        browseAccountReceivedPeerReviewRecord: null,
+      };
+    }
+    case peerReviewConstants.BROWSE_ACCOUNT_RECEIVED_PEER_REVIEW_RECORD_FAIL: {
+      return {
+        ...state,
+        browseAccountReceivedPeerReviewRecord: action.error,
+      };
+    }
     default: {
       return state;
     }

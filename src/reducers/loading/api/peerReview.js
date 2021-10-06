@@ -7,6 +7,7 @@ const initialState = {
   readPeerReviewRecord: false,
   submitPeerReviewRecord: false,
   browseAccountReviewedPeerReviewRecord: false,
+  browseAccountReceivedPeerReviewRecord: false,
 };
 
 export default function view(state = initialState, action) {
@@ -92,6 +93,20 @@ export default function view(state = initialState, action) {
       return {
         ...state,
         browseAccountReviewedPeerReviewRecord: false,
+      };
+    }
+
+    case peerReviewConstants.BROWSE_ACCOUNT_RECEIVED_PEER_REVIEW_RECORD_START: {
+      return {
+        ...state,
+        browseAccountReceivedPeerReviewRecord: true,
+      };
+    }
+    case peerReviewConstants.BROWSE_ACCOUNT_RECEIVED_PEER_REVIEW_RECORD_SUCCESS:
+    case peerReviewConstants.BROWSE_ACCOUNT_RECEIVED_PEER_REVIEW_RECORD_FAIL: {
+      return {
+        ...state,
+        browseAccountReceivedPeerReviewRecord: false,
       };
     }
     default: {

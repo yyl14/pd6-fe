@@ -25,11 +25,7 @@ import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
 
 import { browseAccountReviewedPeerReviewRecord, submitPeerReviewRecord, readPeerReviewRecord } from '../../../../../actions/api/peerReview';
-<<<<<<< HEAD
-import { readPeerReviewRecordWithCode, getTargetProblemChallengeId } from '../../../../../actions/myClass/peerReview';
-=======
 import { readPeerReviewRecordWithCode } from '../../../../../actions/myClass/peerReview';
->>>>>>> development
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
@@ -69,13 +65,9 @@ export default function ReviewedRecord() {
   const dispatch = useDispatch();
   const [role, setRole] = useState('GUEST');
   const [edit, setEdit] = useState(false);
-  const [peerId, setPeerId] = useState(1);
+  const [peerId, setPeerId] = useState(-1);
   const [score, setScore] = useState('');
   const [comment, setComment] = useState('');
-<<<<<<< HEAD
-  const [hasGetChallengeId, setHasGetChallengeId] = useState(false);
-=======
->>>>>>> development
 
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.api.peerReview);
@@ -83,6 +75,7 @@ export default function ReviewedRecord() {
   // const error = useSelector((state) => state.error.api.peerReviews);
   const commonLoading = useSelector((state) => state.loading.common.common);
   const userClasses = useSelector((state) => state.user.classes);
+  const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
   const peerReviewRecords = useSelector((state) => state.peerReviewRecords.byId);
@@ -133,13 +126,13 @@ export default function ReviewedRecord() {
 
   if (challenges[challengeId] === undefined || peerReviews[peerReviewId] === undefined || peerReviewRecords[recordId] === undefined) {
     // console.log(loading);
-    if (commonLoading.fetchChallenge || loading.readPeerReview || pageLoading.readPeerReviewRecord) {
+    if (commonLoading.fetchChallenge || loading.readPeerReviewWithProblem || pageLoading.readPeerReviewRecord) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
   }
 
-  if (role === 'GUEST') {
+  if (role === 'GUEST' || peerId === -1) {
     return <NoMatch />;
   }
 
@@ -155,11 +148,7 @@ export default function ReviewedRecord() {
                   {peerReviews[peerReviewId].target_challenge_id !== null
                   && (
                   <Link className={classes.textLink} to={`/my-class/${courseId}/${classId}/challenge/${peerReviews[peerReviewId].target_challenge_id}/${peerReviews[peerReviewId].target_problem_id}`} target="_blank" rel="noopener noreferrer">
-<<<<<<< HEAD
-                    {`${peerReviews[peerReviewId].challenge_label}`}
-=======
                     {`${challenges[peerReviews[peerReviewId].target_challenge_id] && challenges[peerReviews[peerReviewId].target_challenge_id].title} / ${problems[peerReviews[peerReviewId].target_problem_id] && problems[peerReviews[peerReviewId].target_problem_id].challenge_label}`}
->>>>>>> development
                     <Icon.NewWin className={classes.newTabIcon} />
                   </Link>
                   )}

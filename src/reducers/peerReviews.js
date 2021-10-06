@@ -25,11 +25,7 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data } = action.payload;
-<<<<<<< HEAD
-      return data.peer_review.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
-=======
       return data.peer_review.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...state.[item.id], ...item } }), state);
->>>>>>> development
     }
     case peerReviewConstants.READ_PEER_REVIEW_SUCCESS: {
       return {
@@ -53,6 +49,14 @@ const byId = (state = {}, action) => {
       return {
         ...state,
         [peerReviewId]: { ...prototype, ...state.[peerReviewId], reviewRecordIds: reviewIds },
+      };
+    }
+
+    case peerReviewConstants.BROWSE_ACCOUNT_RECEIVED_PEER_REVIEW_RECORD_SUCCESS: {
+      const { peerReviewId, receiveIds } = action.payload;
+      return {
+        ...state,
+        [peerReviewId]: { ...prototype, ...state.[peerReviewId], receiveRecordIds: receiveIds },
       };
     }
 

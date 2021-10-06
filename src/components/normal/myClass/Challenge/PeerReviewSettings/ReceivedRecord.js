@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Typography, Button, TextField, FormControl, Select, MenuItem, makeStyles,
-} from '@material-ui/core';
-import { Link, useParams } from 'react-router-dom';
-import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
-import Icon from '../../../../ui/icon/index';
+import { Typography } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleBar from '../../../../ui/SimpleBar';
@@ -18,55 +14,20 @@ import CodeArea from '../../../../ui/CodeArea';
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
 
-import {
-  browseAccountReviewedPeerReviewRecord,
-  submitPeerReviewRecord,
-  readPeerReviewRecord,
-} from '../../../../../actions/api/peerReview';
-import { readPeerReviewRecordWithCode, getTargetProblemChallengeId } from '../../../../../actions/myClass/peerReview';
-
-const useStyles = makeStyles((theme) => ({
-  textfield: {
-    width: '40vw',
-  },
-  buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
-  textLink: {
-    textDecoration: 'none',
-    color: theme.palette.primary.main,
-    '&:hover': {
-      color: theme.palette.primary.hover,
-    },
-    '&:active': {
-      color: theme.palette.primary.dark,
-    },
-  },
-  newTabIcon: {
-    marginLeft: '10px',
-    transform: 'translateY(2px)',
-    color: theme.palette.black.main,
-  },
-}));
+import { browseAccountReceivedPeerReviewRecord } from '../../../../../actions/api/peerReview';
+import { readPeerReviewRecordWithCode } from '../../../../../actions/myClass/peerReview';
 
 /* This is a level 4 component (page component) */
 // This page is for both normal and manager.
 // Render different component according to role and call correct api.
 // If normal, account id should be himself.
-// Only normal has edit mode.
 export default function ReviewedRecord() {
   const {
-    courseId, classId, challengeId, peerReviewId, accountId, recordId,
+    classId, challengeId, peerReviewId, accountId, recordId,
   } = useParams();
-  const classes = useStyles();
   const dispatch = useDispatch();
   const [role, setRole] = useState('GUEST');
-  const [edit, setEdit] = useState(false);
-  const [peerId, setPeerId] = useState(1);
-  const [score, setScore] = useState('');
-  const [comment, setComment] = useState('');
-  const [hasGetChallengeId, setHasGetChallengeId] = useState(false);
+  const [peerId, setPeerId] = useState(-1);
 
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.api.peerReview);
@@ -78,30 +39,9 @@ export default function ReviewedRecord() {
   const peerReviews = useSelector((state) => state.peerReviews.byId);
   const peerReviewRecords = useSelector((state) => state.peerReviewRecords.byId);
 
-  const onSuccess = () => {
-    dispatch(readPeerReviewRecord(authToken, recordId));
-  };
-
-  const handleSubmit = () => {
-    // dispatch submit review result
-    dispatch(submitPeerReviewRecord(authToken, recordId, score, comment, onSuccess));
-    setEdit(false);
-  };
-
-  useEffect(() => {
-    if (peerReviewRecords[recordId] !== undefined) {
-      if (peerReviewRecords[recordId].score !== null) {
-        setScore(peerReviewRecords[recordId].score);
-      }
-      if (peerReviewRecords[recordId].comment !== null) {
-        setComment(peerReviewRecords[recordId].comment);
-      }
-    }
-  }, [peerReviewRecords, recordId]);
-
   useEffect(() => {
     if (peerReviews[peerReviewId] !== undefined) {
-      const id = peerReviews[peerReviewId].reviewRecordIds.findIndex((element) => element === Number(recordId));
+      const id = peerReviews[peerReviewId].receiveRecordIds.findIndex((element) => element === Number(recordId));
       if (id !== -1) {
         setPeerId(id + 1);
       }
@@ -116,24 +56,11 @@ export default function ReviewedRecord() {
   }, [classId, userClasses]);
 
   useEffect(() => {
-    // dispatch read review ids for this account
-    dispatch(browseAccountReviewedPeerReviewRecord(authToken, peerReviewId, accountId));
+    // dispatch read receive ids for this account
+    dispatch(browseAccountReceivedPeerReviewRecord(authToken, peerReviewId, accountId));
     // dispatch read record with code
     dispatch(readPeerReviewRecordWithCode(authToken, recordId));
   }, [accountId, authToken, dispatch, peerReviewId, recordId]);
-
-  useEffect(() => {
-    if (
-      !hasGetChallengeId
-      && peerReviews[peerReviewId] !== undefined
-      && peerReviews[peerReviewId].target_challenge_id === null
-    ) {
-      if (peerReviews[peerReviewId].target_problem_id !== null) {
-        dispatch(getTargetProblemChallengeId(authToken, peerReviewId, peerReviews[peerReviewId].target_problem_id));
-        setHasGetChallengeId(true);
-      }
-    }
-  }, [authToken, dispatch, hasGetChallengeId, peerReviewId, peerReviews]);
 
   if (
     challenges[challengeId] === undefined
@@ -141,13 +68,13 @@ export default function ReviewedRecord() {
     || peerReviewRecords[recordId] === undefined
   ) {
     // console.log(loading);
-    if (commonLoading.fetchChallenge || loading.readPeerReview || pageLoading.readPeerReviewRecord) {
+    if (commonLoading.fetchChallenge || loading.readPeerReviewWithProblem || pageLoading.readPeerReviewRecord) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
   }
 
-  if (role === 'GUEST') {
+  if (role === 'GUEST' || peerId === -1) {
     return <NoMatch />;
   }
 
@@ -159,7 +86,7 @@ export default function ReviewedRecord() {
         <PageTitle text={`Received Peer Review Detail / Peer ${peerId}`} />
       )}
 
-      <BasicInfo role={role} />
+      <BasicInfo />
 
       {role === 'MANAGER' && (
         <>
