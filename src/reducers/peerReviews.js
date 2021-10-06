@@ -30,7 +30,7 @@ const byId = (state = {}, action) => {
     case peerReviewConstants.READ_PEER_REVIEW_SUCCESS: {
       return {
         ...state,
-        [action.payload.id]: { ...prototype, ...state.[action.payload.id], ...action.payload },
+        [action.payload.id]: { ...prototype, ...state[action.payload.id], ...action.payload },
       };
     }
     // case peerReviewConstants.READ_PEER_REVIEW_RECORD_SUCCESS: {
@@ -48,7 +48,7 @@ const byId = (state = {}, action) => {
       const { peerReviewId, reviewIds } = action.payload;
       return {
         ...state,
-        [peerReviewId]: { ...prototype, ...state.[peerReviewId], reviewRecordIds: reviewIds },
+        [peerReviewId]: { ...prototype, ...state[peerReviewId], reviewRecordIds: reviewIds },
       };
     }
 
@@ -56,7 +56,7 @@ const byId = (state = {}, action) => {
       const { peerReviewId, target_challenge_id } = action.payload;
       return {
         ...state,
-        [peerReviewId]: { ...prototype, ...state.[peerReviewId], target_challenge_id },
+        [peerReviewId]: { ...prototype, ...state[peerReviewId], target_challenge_id },
       };
     }
 
