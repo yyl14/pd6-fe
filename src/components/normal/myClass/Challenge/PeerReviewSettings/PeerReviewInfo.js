@@ -12,8 +12,6 @@ import PeerReviewEdit from './PeerReviewEdit';
 import PageTitle from '../../../../ui/PageTitle';
 import SimpleBar from '../../../../ui/SimpleBar';
 
-import { readProblemInfo } from '../../../../../actions/myClass/problem';
-import { fetchChallenge } from '../../../../../actions/common/common';
 import { readPeerReview, deletePeerReview } from '../../../../../actions/api/peerReview';
 import {
   browseAccountAllPeerReviewRecordWithReading,
@@ -52,8 +50,6 @@ export default function PeerReviewInfo() {
   const peerReviews = useSelector((state) => state.peerReviews.byId);
   const peerReviewRecords = useSelector((state) => state.peerReviewRecords);
   const apiLoading = useSelector((state) => state.loading.api.peerReview);
-  const problemLoading = useSelector((state) => state.loading.myClass.problem);
-  const challengeLoading = useSelector((state) => state.loading.common.common);
 
   const [role, setRole] = useState('Normal');
   const [edit, setEdit] = useState(false);
@@ -122,13 +118,8 @@ export default function PeerReviewInfo() {
   }, [authToken, dispatch, peerReviewId, accountId, apiLoading.assignPeerReviewRecord]);
 
   useEffect(() => {
-    dispatch(getTargetProblemChallengeId(authToken, peerReviewId, peerReviews[peerReviewId].target_problem_id));
-    dispatch(readProblemInfo(authToken, peerReviews[peerReviewId].target_problem_id));
-  }, [authToken, dispatch, peerReviews, peerReviewId]);
-
-  useEffect(() => {
-    if (peerReviews[peerReviewId].target_challenge_id !== null) {
-      dispatch(fetchChallenge(authToken, peerReviews[peerReviewId].target_challenge_id));
+    if (peerReviews[peerReviewId].target_challenge_id === null && peerReviews[peerReviewId]) {
+      dispatch(getTargetProblemChallengeId(authToken, peerReviewId, peerReviews[peerReviewId].target_problem_id));
     }
   }, [authToken, dispatch, peerReviews, peerReviewId]);
 
@@ -136,8 +127,6 @@ export default function PeerReviewInfo() {
     if (
       apiLoading.editPeerReview
       || apiLoading.assignPeerReviewRecord
-      || problemLoading.readProblem
-      || challengeLoading.fetchChallenge
     ) {
       return <GeneralLoading />;
     }
