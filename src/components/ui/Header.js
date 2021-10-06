@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '55px',
     height: '55px',
     background: theme.palette.black.main,
+    minWidth: 'max-content',
   },
   toolbar: {
     minHeight: '55px',
@@ -26,9 +27,11 @@ const useStyles = makeStyles((theme) => ({
   // header left
   item: {
     marginLeft: '50px',
-    // marginRight: '0.8vw',
     '&:hover': {
       cursor: 'pointer',
+    },
+    '@media (max-width: 760px)': {
+      marginLeft: '20px',
     },
   },
 
@@ -162,9 +165,12 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.grey.A100,
     },
   },
+  hide: {
+    display: 'none',
+  },
 }));
 
-export default function Header() {
+export default function Header({ handleSidebarToggle, hideToggle }) {
   const dispatch = useDispatch();
   const classes = useStyles();
   const history = useHistory();
@@ -397,6 +403,7 @@ export default function Header() {
     <div>
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
+          <Icon.Overview className={hideToggle ? classes.hide : classes.item} onClick={handleSidebarToggle} />
           {itemList.map((item) => (
             <Typography
               variant="h6"
@@ -442,7 +449,7 @@ export default function Header() {
                               {`${moment(new Date()).diff(moment(notify.post_time), 'days')} days ago`}
                             </Typography>
                           </div>
-                          <Typography variant="body" className={classes.notificationContent}>
+                          <Typography variant="body1" className={classes.notificationContent}>
                             {notify.content}
                           </Typography>
                         </div>
