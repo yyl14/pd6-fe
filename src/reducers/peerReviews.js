@@ -25,12 +25,16 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data } = action.payload;
+<<<<<<< HEAD
       return data.peer_review.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
+=======
+      return data.peer_review.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...state.[item.id], ...item } }), state);
+>>>>>>> development
     }
     case peerReviewConstants.READ_PEER_REVIEW_SUCCESS: {
       return {
         ...state,
-        [action.payload.id]: { ...prototype, ...state[action.payload.id], ...action.payload },
+        [action.payload.id]: { ...prototype, ...state.[action.payload.id], ...action.payload },
       };
     }
     // case peerReviewConstants.READ_PEER_REVIEW_RECORD_SUCCESS: {
@@ -48,7 +52,7 @@ const byId = (state = {}, action) => {
       const { peerReviewId, reviewIds } = action.payload;
       return {
         ...state,
-        [peerReviewId]: { ...prototype, ...state[peerReviewId], reviewRecordIds: reviewIds },
+        [peerReviewId]: { ...prototype, ...state.[peerReviewId], reviewRecordIds: reviewIds },
       };
     }
 
@@ -56,7 +60,15 @@ const byId = (state = {}, action) => {
       const { peerReviewId, target_challenge_id } = action.payload;
       return {
         ...state,
-        [peerReviewId]: { ...prototype, ...state[peerReviewId], target_challenge_id },
+        [peerReviewId]: { ...prototype, ...state.[peerReviewId], target_challenge_id },
+      };
+    }
+
+    case peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_SUCCESS: {
+      const { peerReview } = action.payload;
+      return {
+        ...state,
+        [peerReview.id]: { ...prototype, ...state.[peerReview.id], ...peerReview },
       };
     }
 
@@ -73,6 +85,10 @@ const allIds = (state = [], action) => {
     }
     case peerReviewConstants.READ_PEER_REVIEW_SUCCESS: {
       return [...new Set([action.payload.id, ...state])];
+    }
+    case peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_SUCCESS: {
+      const { peerReview } = action.payload;
+      return [...new Set([peerReview.id, ...state])];
     }
     default:
       return state;
