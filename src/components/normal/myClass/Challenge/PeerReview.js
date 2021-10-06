@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Switch, Route, useParams } from 'react-router-dom';
 
-import { readPeerReview } from '../../../../actions/api/peerReview';
+// import { readPeerReview } from '../../../../actions/api/peerReview';
+import { readPeerReviewWithProblem } from '../../../../actions/myClass/peerReview';
 
 import GeneralLoading from '../../../GeneralLoading';
 import PeerReviewInfo from './PeerReviewSettings/PeerReviewInfo';
@@ -24,6 +25,7 @@ export default function PeerReview() {
   const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.api.peerReview);
+  const pageLoading = useSelector((state) => state.loading.myClass.peerReview);
   const commonLoading = useSelector((state) => state.loading.common);
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
@@ -32,13 +34,14 @@ export default function PeerReview() {
 
   useEffect(() => {
     if (peerReviewId !== undefined) {
-      dispatch(readPeerReview(authToken, peerReviewId));
+      // dispatch(readPeerReview(authToken, peerReviewId));
+      dispatch(readPeerReviewWithProblem(authToken, peerReviewId));
     }
   }, [authToken, dispatch, peerReviewId]);
 
   // const dispatch = useDispatch();
   if (challenges[challengeId] === undefined || courses[courseId] === undefined || classes[classId] === undefined || peerReviews[peerReviewId] === undefined) {
-    if (commonLoading.fetchCourse || commonLoading.fetchClass || commonLoading.fetchChallenge || loading.readPeerReview) {
+    if (commonLoading.fetchCourse || commonLoading.fetchClass || commonLoading.fetchChallenge || pageLoading.readPeerReviewWithProblem) {
       return <GeneralLoading />;
     }
     return <NoMatch />;

@@ -1,12 +1,27 @@
 import { peerReviewConstants } from '../../../actions/api/constant';
 
 const initialState = {
+  readPeerReviewWithProblem: false,
   readPeerReviewRecord: false,
   getTargetProblemChallengeId: false,
 };
 
 export default function peerReview(state = initialState, action) {
   switch (action.type) {
+    case peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_START: {
+      return {
+        ...state,
+        readPeerReviewWithProblem: true,
+      };
+    }
+    case peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_SUCCESS:
+    case peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_FAIL: {
+      return {
+        ...state,
+        readPeerReviewWithProblem: false,
+      };
+    }
+
     case peerReviewConstants.READ_PEER_REVIEW_RECORD_START: {
       return {
         ...state,

@@ -25,9 +25,11 @@ export default function ReceiverInfo({ accountId }) {
     <SimpleBar title="Grader">
       <>
         <AlignedText text="Username" childrenType="text">
-          <Link to={`/user-profile/${accountId}`} className={classNames.textLink}>
-            {accounts[accountId].username}
-          </Link>
+          <Typography variant="body1">
+            <Link to={`/user-profile/${accountId}`} className={classNames.textLink}>
+              {accounts[accountId].username}
+            </Link>
+          </Typography>
         </AlignedText>
         <AlignedText text="Student ID" childrenType="text">
           <Typography variant="body1">
