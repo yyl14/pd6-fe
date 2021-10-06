@@ -146,3 +146,23 @@ export const getTargetProblemChallengeId = (token, peerReviewId, problemId) => a
     });
   }
 };
+
+export const readPeerReviewWithProblem = (token, peerReviewId) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    dispatch({ type: peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_START });
+    const res = await agent.get(`peer-review/${peerReviewId}`, config);
+    const res2 = await agent.get(`/problem/${res.data.data.target_problem_id}`, config);
+    const res3 = await agent.get(`/challenge/${res2.data.data.challenge_id}`, config);
+
+    dispatch({
+      type: peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_SUCCESS,
+      payload: { peerReview: { ...res.data.data, target_challenge_id: res2.data.data.challenge_id }, problem: res2.data.data, challenge: res3.data.data },
+    });
+  } catch (error) {
+    dispatch({
+      type: peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_FAIL,
+      error,
+    });
+  }
+};
