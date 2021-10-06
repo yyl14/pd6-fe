@@ -1,47 +1,35 @@
 import { peerReviewConstants } from '../../../actions/api/constant';
 
 const initialState = {
-  readPeerReview: null,
-  editPeerReview: null,
-  deletePeerReview: null,
+  readPeerReviewRecord: null,
+  getTargetProblemChallengeId: null,
 };
 
 export default function peerReview(state = initialState, action) {
   switch (action.type) {
-    case peerReviewConstants.READ_PEER_REVIEW_SUCCESS: {
+    case peerReviewConstants.READ_PEER_REVIEW_RECORD_START: {
       return {
         ...state,
-        readPeerReview: null,
+        readPeerReviewRecord: null,
       };
     }
-    case peerReviewConstants.READ_PEER_REVIEW_FAIL: {
+    case peerReviewConstants.READ_PEER_REVIEW_RECORD_FAIL: {
       return {
         ...state,
-        readPeerReview: action.error,
+        readPeerReviewRecord: action.error,
       };
     }
-    case peerReviewConstants.EDIT_PEER_REVIEW_SUCCESS: {
+
+    case peerReviewConstants.GET_TARGET_PROBLEM_CHALLENGE_ID_START: {
       return {
         ...state,
-        editPeerReview: null,
+        getTargetProblemChallengeId: null,
       };
     }
-    case peerReviewConstants.EDIT_PEER_REVIEW_FAIL: {
+    case peerReviewConstants.GET_TARGET_PROBLEM_CHALLENGE_ID_FAIL: {
       return {
         ...state,
-        editPeerReview: action.error,
-      };
-    }
-    case peerReviewConstants.DELETE_PEER_REVIEW_SUCCESS: {
-      return {
-        ...state,
-        deletePeerReview: null,
-      };
-    }
-    case peerReviewConstants.DELETE_PEER_REVIEW_FAIL: {
-      return {
-        ...state,
-        deletePeerReview: action.error,
+        getTargetProblemChallengeId: action.error,
       };
     }
 

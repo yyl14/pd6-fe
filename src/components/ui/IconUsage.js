@@ -36,6 +36,10 @@ export default function IconList() {
           <p>Info</p>
         </StyledPaper>
         <StyledPaper>
+          <Icon.NewWin />
+          <p>NewWin</p>
+        </StyledPaper>
+        <StyledPaper>
           <Icon.FilterIdle />
           <p>FilterIdle</p>
         </StyledPaper>

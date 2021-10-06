@@ -15,8 +15,8 @@ import {
   Select,
   IconButton,
   Snackbar,
-  // CircularProg,
   LinearProgress,
+  Menu,
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -48,13 +48,14 @@ const useStyles = makeStyles((theme) => ({
   search: {
     marginRight: '5px',
     width: 'auto',
-    flexShrink: 100,
+    minWidth: '89px',
+    flexShrink: 20,
   },
   searchFields: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-start',
-    flexShrink: 1,
+    flexShrink: 27,
   },
   buttons: {
     marginTop: '3px',
@@ -70,8 +71,7 @@ const useStyles = makeStyles((theme) => ({
 
   filterSelect: {
     marginRight: '10px',
-    minWidth: '180px',
-    flexShrink: 0,
+    width: 'auto',
   },
   filterItem: {
     minWidth: '180px',
@@ -86,8 +86,8 @@ const useStyles = makeStyles((theme) => ({
     padding: '0px',
   },
   tableHeadCell: {
-    height: '45px',
-    padding: '0px',
+    height: 'inherit',
+    padding: '7px 0px',
     background: 'white',
     borderBottomWidth: '1px',
     borderBottomColor: theme.palette.grey.A400,
@@ -173,6 +173,48 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     // alignItems: 'center',
+  },
+  sortIcon: {
+    marginLeft: '5px',
+    verticalAlign: 'middle',
+    cursor: 'pointer',
+  },
+  activeSortIcon: {
+    backgroundColor: theme.palette.black.main,
+    color: 'white',
+    borderRadius: '10px',
+    padding: '2px',
+    width: '20px',
+    height: '20px',
+  },
+  sortDropdownContent: {
+    position: 'relative',
+    backgroundColor: theme.palette.primary.contrastText,
+    left: '30px',
+    width: '100px',
+    zIndex: '1',
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
+    borderRadius: '10px',
+    '& span': {
+      color: theme.palette.black.main,
+      padding: '12px',
+      textDecoration: 'none',
+      textAlign: 'center',
+      display: 'block',
+      '&:nth-child(1)': {
+        borderRadius: '10px 10px 0 0',
+      },
+      '&:last-child': {
+        borderRadius: '0 0 10px 10px',
+      },
+    },
+    '& span:hover': {
+      cursor: 'pointer',
+      backgroundColor: theme.palette.grey.A100,
+    },
+  },
+  selectedDirection: {
+    backgroundColor: theme.palette.grey[300],
   },
   default: { color: theme.palette.black.dark },
   error: { color: theme.palette.secondary.main },
@@ -304,14 +346,12 @@ function AutoTable({
     return 100;
   };
 
-  const onSort = (key) => {
-    // console.log('sort :', [[key, order.order.toUpperCase()]]);
-    if (order.order === 'asc') {
-      setOrder({ key, order: 'desc' });
-      setSort([[key, 'DESC'], defaultSort]);
+  const onSort = (key, sortDirection) => {
+    setOrder({ key, order: sortDirection });
+    if (defaultSort) {
+      setSort([[key, sortDirection.toUpperCase()], defaultSort]);
     } else {
-      setOrder({ key, order: 'asc' });
-      setSort([[key, 'ASC'], defaultSort]);
+      setSort([[key, sortDirection.toUpperCase()]]);
     }
     setDataComplete(false);
   };
@@ -441,6 +481,18 @@ function AutoTable({
     }
   }, [refetchErrors, displayedReduxData]);
 
+  const [anchorEls, setAnchorEls] = useState([]);
+
+  const handleSortIconClick = (event, index) => {
+    const temp = columns.map(() => null);
+    temp[index] = event.target;
+    setAnchorEls(temp);
+  };
+
+  const handleClose = () => {
+    setAnchorEls(columns.map(() => null));
+  };
+
   return (
     <>
       <AutoTableHead
@@ -455,7 +507,6 @@ function AutoTable({
       />
       <div className={classes.progressContainer}>
         {dataComplete || isError || <LinearProgress color="primary" className={classes.progress} />}
-        {/* <LinearProgress color="primary" className={classes.progress} /> */}
       </div>
       <Paper className={classes.root} elevation={0}>
         <TableContainer className={classes.container}>
@@ -463,31 +514,73 @@ function AutoTable({
             <TableHead>
               <TableRow>
                 <TableCell className={`${classes.tableHeadCell} ${classes.tableRowContainerLeftSpacing}`} />
-                {columns.map((column) => (
+                {columns.map((column, index) => (
                   <React.Fragment key={column.name}>
                     <TableCell className={`${classes.tableHeadCell} ${classes.tableColumnLeftSpacing}`} />
                     <TableCell
                       align={column.align}
                       className={classes.tableHeadCell}
-                      style={{ minWidth: column.minWidth, width: column.width }}
+                      style={{
+                        minWidth: column.minWidth,
+                        width: column.width,
+                        display: 'flex',
+                        justifyContent: 'center',
+                      }}
                     >
                       <b>{column.name}</b>
                       {column.sortable && (
-                        <TableSortLabel
-                          active={order.key === column.sortable}
-                          direction={order.key === column.sortable ? order.order : 'asc'}
-                          onClick={() => onSort(column.sortable)}
-                        />
+                        <div>
+                          <Icon.Sort
+                            className={
+                              order.key === column.sortable
+                                ? `${classes.sortIcon} ${classes.activeSortIcon}`
+                                : classes.sortIcon
+                            }
+                            id={`sort-icon-${column.name}`}
+                            aria-controls={`sort-menu-${column.name}`}
+                            aria-haspopup="true"
+                            onClick={(e) => handleSortIconClick(e, index)}
+                          />
+                          <Menu
+                            id={`sort-menu-${column.name}`}
+                            aria-labelledby={`sort-icon-${column.name}`}
+                            anchorEl={anchorEls[index]}
+                            open={Boolean(anchorEls[index])}
+                            onClose={handleClose}
+                            anchorOrigin={{
+                              vertical: 'bottom',
+                              horizontal: 'right',
+                            }}
+                            transformOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }}
+                          >
+                            <MenuItem
+                              onClick={() => {
+                                handleClose();
+                                onSort(column.sortable, 'asc');
+                              }}
+                              className={
+                                order.key === column.sortable && order.order === 'asc' ? classes.selectedDirection : ''
+                              }
+                            >
+                              A to Z
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => {
+                                handleClose();
+                                onSort(column.sortable, 'desc');
+                              }}
+                              className={
+                                order.key === column.sortable && order.order === 'desc' ? classes.selectedDirection : ''
+                              }
+                            >
+                              Z to A
+                            </MenuItem>
+                          </Menu>
+                        </div>
                       )}
-
-                      {/* <div className={classes.column}>
-                        <div className={labelMoveLeft(columnComponent, columns, column)}>
-                          <b>{column.label}</b>
-                        </div>
-                        <div className={classes.columnComponent}>
-                          {columnComponent && columnComponent[columns.findIndex((x) => x.id === column.id)]}
-                        </div>
-                      </div> */}
                     </TableCell>
                   </React.Fragment>
                 ))}
@@ -555,7 +648,6 @@ function AutoTable({
         </TableContainer>
         <div className={classes.bottomWrapper}>
           <div />
-          {/* <div>{dataComplete || isError || <CircularProgress color="inherit" size={30} />}</div> */}
           <div className={classes.bottom}>
             <FormControl variant="outlined">
               <Select

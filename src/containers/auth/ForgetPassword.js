@@ -12,13 +12,13 @@ export default function ForgetPassword() {
       <Grid className="auth-page-container" container direction="row" justifyContent="center" alignItems="center">
         <Grid container item xs={6} className="auth-page-col auth-page-col-left" justifyContent="center">
           <Grid item className="auth-title" />
+          <Typography className="auth-title" variant="h3">
+            Lost your puppy? Reset Password
+          </Typography>
         </Grid>
         <Grid container item xs={6} className="auth-page-col auth-page-col-right" justifyContent="center">
           <ForgetPasswordForm />
         </Grid>
-        <Typography className="auth-title" variant="h3">
-          Lost your puppy? Reset Password
-        </Typography>
         <Trademark />
       </Grid>
     </div>

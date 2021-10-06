@@ -9,6 +9,7 @@ const prototype = {
   score: null,
   comment: null,
   submit_time: null,
+  code: null,
 };
 
 const byId = (state = {}, action) => {
