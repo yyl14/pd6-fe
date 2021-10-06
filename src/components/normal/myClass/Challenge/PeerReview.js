@@ -24,7 +24,7 @@ export default function PeerReview() {
   // const problemIDs = useSelector((state) => state.problem.allIds);
   const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
-  const loading = useSelector((state) => state.loading.api.peerReview);
+  // const loading = useSelector((state) => state.loading.api.peerReview);
   const pageLoading = useSelector((state) => state.loading.myClass.peerReview);
   const commonLoading = useSelector((state) => state.loading.common);
   const classes = useSelector((state) => state.classes.byId);

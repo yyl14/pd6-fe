@@ -16,7 +16,6 @@ import { readPeerReview, deletePeerReview } from '../../../../../actions/api/pee
 import {
   browseAccountAllPeerReviewRecordWithReading,
   assignPeerReviewRecordAndPush,
-  getTargetProblemChallengeId,
 } from '../../../../../actions/myClass/peerReview';
 
 const useStyles = makeStyles(() => ({
@@ -29,8 +28,6 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'flex-start',
   },
 }));
-
-// http://localhost:3000/my-class/1/1/challenge/1/peer-review/1
 
 /* This is a level 4 component (page component) */
 // This page is for both normal and manager.
@@ -48,10 +45,9 @@ export default function PeerReviewInfo() {
   const userClasses = useSelector((state) => state.user.classes);
   const challenges = useSelector((state) => state.challenges.byId);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
-  const peerReviewRecords = useSelector((state) => state.peerReviewRecords);
   const apiLoading = useSelector((state) => state.loading.api.peerReview);
 
-  const [role, setRole] = useState('Normal');
+  const [role, setRole] = useState('GUEST');
   const [edit, setEdit] = useState(false);
   const [currentTime, setCurrentTime] = useState(moment());
 
@@ -62,31 +58,22 @@ export default function PeerReviewInfo() {
   };
 
   const clickReceivedPeerReviews = () => {
-    const receivedPeerReviewRecordIds = peerReviewRecords.allIds.filter((id) => {
-      if (peerReviewRecords.byId[id].receiver_id === accountId) {
-        return true;
-      }
-      return false;
-    });
-    const targetRecordId = receivedPeerReviewRecordIds[0];
-    history.push(
-      `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${accountId}/${targetRecordId}`,
-    );
+    if (peerReviews[peerReviewId].receiveRecordIds.length !== 0) {
+      const targetRecordId = peerReviews[peerReviewId].receiveRecordIds.sort((a, b) => a - b)[0];
+      history.push(
+        `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${accountId}/${targetRecordId}`,
+      );
+    }
   };
 
   const clickPeerReview = () => {
-    const reviewPeerReviewRecordIds = peerReviewRecords.allIds.filter((id) => {
-      if (peerReviewRecords.byId[id].grader_id === accountId) {
-        return true;
-      }
-      return false;
-    });
-    if (reviewPeerReviewRecordIds.length === 0) {
+    const reviewPeerReviewRecordIds = peerReviews[peerReviewId].reviewRecordIds;
+    if (reviewPeerReviewRecordIds.length < peerReviews[peerReviewId].max_review_count) {
       dispatch(
-        assignPeerReviewRecordAndPush(authToken, courseId, classId, challengeId, peerReviewId, accountId, history),
+        assignPeerReviewRecordAndPush(authToken, courseId, classId, challengeId, peerReviewId, accountId, peerReviews[peerReviewId].max_review_count - reviewPeerReviewRecordIds.length, history),
       );
     } else {
-      const targetRecordId = reviewPeerReviewRecordIds[0];
+      const targetRecordId = reviewPeerReviewRecordIds.sort((a, b) => a - b)[0];
       history.push(
         `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${targetRecordId}`,
       );
@@ -117,12 +104,6 @@ export default function PeerReviewInfo() {
     }
   }, [authToken, dispatch, peerReviewId, accountId, apiLoading.assignPeerReviewRecord]);
 
-  useEffect(() => {
-    if (peerReviews[peerReviewId].target_challenge_id === null && peerReviews[peerReviewId]) {
-      dispatch(getTargetProblemChallengeId(authToken, peerReviewId, peerReviews[peerReviewId].target_problem_id));
-    }
-  }, [authToken, dispatch, peerReviews, peerReviewId]);
-
   if (peerReviews[peerReviewId] === undefined) {
     if (
       apiLoading.editPeerReview
@@ -130,6 +111,10 @@ export default function PeerReviewInfo() {
     ) {
       return <GeneralLoading />;
     }
+    return <NoMatch />;
+  }
+
+  if (role === 'GUEST') {
     return <NoMatch />;
   }
 
@@ -186,7 +171,7 @@ export default function PeerReviewInfo() {
               <Typography variant="body1">Once you delete a task, there is no going back. Please be certain.</Typography>
             </SimpleBar>
           )}
-          {role !== 'MANAGER' && <Overview />}
+          {role !== 'MANAGER' && <Overview peerReviewId={peerReviewId} />}
         </>
       )}
     </>

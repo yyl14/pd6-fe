@@ -65,7 +65,7 @@ export default function ReviewedRecord() {
   const dispatch = useDispatch();
   const [role, setRole] = useState('GUEST');
   const [edit, setEdit] = useState(false);
-  const [peerId, setPeerId] = useState(1);
+  const [peerId, setPeerId] = useState(-1);
   const [score, setScore] = useState('');
   const [comment, setComment] = useState('');
 
@@ -75,13 +75,13 @@ export default function ReviewedRecord() {
   // const error = useSelector((state) => state.error.api.peerReviews);
   const commonLoading = useSelector((state) => state.loading.common.common);
   const userClasses = useSelector((state) => state.user.classes);
-  const challenges = useSelector((state) => state.challenges.byId);
   const problems = useSelector((state) => state.problem.byId);
+  const challenges = useSelector((state) => state.challenges.byId);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
   const peerReviewRecords = useSelector((state) => state.peerReviewRecords.byId);
 
   const onSuccess = () => {
-    dispatch(readPeerReviewRecord(authToken, recordId));
+    dispatch(readPeerReviewRecordWithCode(authToken, recordId));
   };
 
   const handleSubmit = () => {
@@ -126,13 +126,13 @@ export default function ReviewedRecord() {
 
   if (challenges[challengeId] === undefined || peerReviews[peerReviewId] === undefined || peerReviewRecords[recordId] === undefined) {
     // console.log(loading);
-    if (commonLoading.fetchChallenge || loading.readPeerReview || pageLoading.readPeerReviewRecord) {
+    if (commonLoading.fetchChallenge || loading.readPeerReviewWithProblem || pageLoading.readPeerReviewRecord) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
   }
 
-  if (role === 'GUEST') {
+  if (role === 'GUEST' || peerId === -1) {
     return <NoMatch />;
   }
 
@@ -172,7 +172,7 @@ export default function ReviewedRecord() {
           )}
 
       <SimpleBar title="Code" noIndent>
-        <CodeArea value={peerReviewRecords[recordId].code} />
+        <CodeArea value={peerReviewRecords[recordId].code === null ? '' : peerReviewRecords[recordId].code} />
       </SimpleBar>
       {role === 'MANAGER'
           && (

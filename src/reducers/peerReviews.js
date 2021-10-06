@@ -43,12 +43,29 @@ const byId = (state = {}, action) => {
     //     },
     //   };
     // }
-    case peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_SUCCESS:
+    case peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_SUCCESS: {
+      const { peerReviewId, reviewIds, receiveIds } = action.payload;
+      return {
+        ...state,
+        [peerReviewId]: {
+          ...prototype, ...state.[peerReviewId], reviewRecordIds: reviewIds, receiveRecordIds: receiveIds,
+        },
+      };
+    }
+
     case peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_SUCCESS: {
       const { peerReviewId, reviewIds } = action.payload;
       return {
         ...state,
         [peerReviewId]: { ...prototype, ...state.[peerReviewId], reviewRecordIds: reviewIds },
+      };
+    }
+
+    case peerReviewConstants.BROWSE_ACCOUNT_RECEIVED_PEER_REVIEW_RECORD_SUCCESS: {
+      const { peerReviewId, receiveIds } = action.payload;
+      return {
+        ...state,
+        [peerReviewId]: { ...prototype, ...state.[peerReviewId], receiveRecordIds: receiveIds },
       };
     }
 
@@ -75,7 +92,6 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
-    case peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_SUCCESS:
     case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data } = action.payload;
       return [...new Set([...data.peer_review.map((item) => item.id), ...state])];

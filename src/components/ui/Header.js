@@ -449,7 +449,7 @@ export default function Header({ handleSidebarToggle, hideToggle }) {
                               {`${moment(new Date()).diff(moment(notify.post_time), 'days')} days ago`}
                             </Typography>
                           </div>
-                          <Typography variant="body" className={classes.notificationContent}>
+                          <Typography variant="body1" className={classes.notificationContent}>
                             {notify.content}
                           </Typography>
                         </div>

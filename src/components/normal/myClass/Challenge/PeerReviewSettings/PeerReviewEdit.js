@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import { useParams, Link } from 'react-router-dom';
 import { editPeerReview } from '../../../../../actions/api/peerReview';
+import BasicInfo from './Element/BasicInfo';
 import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
 
@@ -128,39 +129,7 @@ export default function PeerReviewEdit({ setEdit }) {
           className={classNames.textfield2}
         />
       </SimpleBar>
-      <SimpleBar title="Peer Review Information" noIndent>
-        <AlignedText text="Task to be Reviewed" childrenType="text">
-          <Typography variant="body1">
-            <Link
-              to={`/my-class/${courseId}/${classId}/challenge/${peerReviews[peerReviewId].target_challenge_id}/${peerReviews[peerReviewId].target_problem_id}`}
-              className={classNames.textLink}
-            >
-              <Typography variant="body1">
-                {`${
-                  challenges[peerReviews[peerReviewId].target_challenge_id]
-                && challenges[peerReviews[peerReviewId].target_challenge_id].title
-                } / ${
-                  problems[peerReviews[peerReviewId].target_problem_id]
-                && problems[peerReviews[peerReviewId].target_problem_id].challenge_label
-                }`}
-              </Typography>
-            </Link>
-          </Typography>
-        </AlignedText>
-        <AlignedText text="Max Score" childrenType="text">
-          <Typography variant="body1">{peerReviews[peerReviewId].max_score}</Typography>
-        </AlignedText>
-        <AlignedText text="Min Score" childrenType="text">
-          <Typography variant="body1">{peerReviews[peerReviewId].min_score}</Typography>
-        </AlignedText>
-        <AlignedText text="Student is Assigned" childrenType="text">
-          <Typography variant="body1">
-            {`${peerReviews[peerReviewId].max_review_count} ${
-              peerReviews[peerReviewId].max_review_count > 1 ? 'Peers' : 'Peer'
-            } Respectively`}
-          </Typography>
-        </AlignedText>
-      </SimpleBar>
+      <BasicInfo />
       <div className={classNames.buttons}>
         <Button color="default" onClick={handleCancel}>
           Cancel
