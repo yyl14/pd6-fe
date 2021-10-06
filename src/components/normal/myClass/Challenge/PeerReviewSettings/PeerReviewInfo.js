@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Typography, makeStyles } from '@material-ui/core';
 import { useParams, useHistory } from 'react-router-dom';
+import moment from 'moment';
 
 import BasicInfo from './Element/BasicInfo';
 import Overview from './Element/Overview';
@@ -56,6 +57,7 @@ export default function PeerReviewInfo() {
 
   const [role, setRole] = useState('Normal');
   const [edit, setEdit] = useState(false);
+  const [currentTime, setCurrentTime] = useState(moment());
 
   const clickViewPeerReview = () => {
     history.push(
@@ -109,6 +111,7 @@ export default function PeerReviewInfo() {
   useEffect(() => {
     if (!apiLoading.editPeerReview) {
       dispatch(readPeerReview(authToken, peerReviewId));
+      setCurrentTime(moment());
     }
   }, [authToken, dispatch, apiLoading.editPeerReview, peerReviewId]);
 
@@ -125,9 +128,9 @@ export default function PeerReviewInfo() {
 
   useEffect(() => {
     if (peerReviews[peerReviewId].target_challenge_id !== null) {
-      fetchChallenge(fetchChallenge(authToken, peerReviews[peerReviewId].target_challenge_id));
+      dispatch(fetchChallenge(authToken, peerReviews[peerReviewId].target_challenge_id));
     }
-  }, [authToken, peerReviews, peerReviewId]);
+  }, [authToken, dispatch, peerReviews, peerReviewId]);
 
   if (peerReviews[peerReviewId] === undefined) {
     if (
@@ -159,7 +162,11 @@ export default function PeerReviewInfo() {
         </>
       ) : (
         <div className={classNames.generalButtons}>
-          <Button variant="outlined" onClick={clickReceivedPeerReviews}>
+          <Button
+            variant="outlined"
+            onClick={clickReceivedPeerReviews}
+            disabled={currentTime.isBefore(moment(challenges[challengeId].end_time))}
+          >
             Received Peer Reviews
           </Button>
           <Button color="primary" onClick={clickPeerReview}>
