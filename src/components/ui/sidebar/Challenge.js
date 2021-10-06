@@ -102,7 +102,7 @@ export default function Challenge({
               .map((id) => peerReviews.byId[id])
               .map(({ id, challenge_label }) => ({
                 text: challenge_label,
-                icon: <Icon.Paper />,
+                icon: <Icon.Peerreview />,
                 path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${id}`,
               })),
           ),
@@ -145,7 +145,7 @@ export default function Challenge({
                 .map((id) => peerReviews.byId[id])
                 .map(({ id, challenge_label }) => ({
                   text: challenge_label,
-                  icon: <Icon.Paper />,
+                  icon: <Icon.Peerreview />,
                   path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${id}`,
                 })),
             ),

@@ -81,7 +81,7 @@ export default function ReviewedRecord() {
   const peerReviewRecords = useSelector((state) => state.peerReviewRecords.byId);
 
   const onSuccess = () => {
-    dispatch(readPeerReviewRecord(authToken, recordId));
+    dispatch(readPeerReviewRecordWithCode(authToken, recordId));
   };
 
   const handleSubmit = () => {
@@ -172,7 +172,7 @@ export default function ReviewedRecord() {
           )}
 
       <SimpleBar title="Code" noIndent>
-        <CodeArea value={peerReviewRecords[recordId].code} />
+        <CodeArea value={peerReviewRecords[recordId].code === null ? '' : peerReviewRecords[recordId].code} />
       </SimpleBar>
       {role === 'MANAGER'
           && (
