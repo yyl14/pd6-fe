@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, makeStyles } from '@material-ui/core';
+import { Button, Typography, makeStyles } from '@material-ui/core';
 import { useParams, useHistory } from 'react-router-dom';
 
 import BasicInfo from './Element/BasicInfo';
@@ -9,10 +9,11 @@ import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
 import PeerReviewEdit from './PeerReviewEdit';
 import PageTitle from '../../../../ui/PageTitle';
+import SimpleBar from '../../../../ui/SimpleBar';
 
 import { readProblemInfo } from '../../../../../actions/myClass/problem';
 import { fetchChallenge } from '../../../../../actions/common/common';
-import { readPeerReview } from '../../../../../actions/api/peerReview';
+import { readPeerReview, deletePeerReview } from '../../../../../actions/api/peerReview';
 import {
   browseAccountAllPeerReviewRecordWithReading,
   assignPeerReviewRecordAndPush,
@@ -51,7 +52,7 @@ export default function PeerReviewInfo() {
   const peerReviewRecords = useSelector((state) => state.peerReviewRecords);
   const apiLoading = useSelector((state) => state.loading.api.peerReview);
   const problemLoading = useSelector((state) => state.loading.myClass.problem);
-  const challengeLoading = useSelector((state) => state.loading.common);
+  const challengeLoading = useSelector((state) => state.loading.common.common);
 
   const [role, setRole] = useState('Normal');
   const [edit, setEdit] = useState(false);
@@ -92,6 +93,11 @@ export default function PeerReviewInfo() {
         `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${targetRecordId}`,
       );
     }
+  };
+
+  const clickDelete = () => {
+    dispatch(deletePeerReview(authToken, peerReviewId));
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
   };
 
   useEffect(() => {
@@ -165,7 +171,25 @@ export default function PeerReviewInfo() {
         <PeerReviewEdit setEdit={setEdit} />
       ) : (
         <>
+          <SimpleBar title="Title">{peerReviews[peerReviewId].title}</SimpleBar>
+          {role === 'MANAGER' && (
+            <SimpleBar title="Description">{peerReviews[peerReviewId].description}</SimpleBar>
+          )}
           <BasicInfo role={role} />
+          {role === 'MANAGER' && (
+            <SimpleBar
+              title="Delete Task"
+              childrenButtons={(
+                <>
+                  <Button color="secondary" onClick={clickDelete}>
+                    Delete
+                  </Button>
+                </>
+              )}
+            >
+              <Typography variant="body1">Once you delete a task, there is no going back. Please be certain.</Typography>
+            </SimpleBar>
+          )}
           {role !== 'MANAGER' && <Overview />}
         </>
       )}

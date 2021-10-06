@@ -1,16 +1,13 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   Typography,
-  Button,
   makeStyles,
 } from '@material-ui/core';
-import { useHistory, useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 import SimpleBar from '../../../../../ui/SimpleBar';
 import AlignedText from '../../../../../ui/AlignedText';
-
-import { deletePeerReview } from '../../../../../../actions/api/peerReview';
 
 const useStyles = makeStyles((theme) => ({
   textLink: {
@@ -27,30 +24,18 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 // This page is for both normal and manager.
-export default function BasicInfo({ role }) {
+export default function BasicInfo() {
   const {
-    courseId, classId, challengeId, peerReviewId,
+    courseId, classId, peerReviewId,
   } = useParams();
   const classNames = useStyles();
-  const dispatch = useDispatch();
-  const history = useHistory();
 
-  const authToken = useSelector((state) => state.auth.token);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
   const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges.byId);
 
-  const handleClickDelete = () => {
-    dispatch(deletePeerReview(authToken, peerReviewId));
-    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
-  };
-
   return (
     <>
-      <SimpleBar title="Title">{peerReviews[peerReviewId].title}</SimpleBar>
-      {role === 'MANAGER' && (
-        <SimpleBar title="Description">{peerReviews[peerReviewId].description}</SimpleBar>
-      )}
       <SimpleBar title="Peer Review Information">
         <AlignedText text="Task to be Reviewed" childrenType="text">
           <Typography variant="body1">
@@ -69,20 +54,6 @@ export default function BasicInfo({ role }) {
           <Typography variant="body1">{`${peerReviews[peerReviewId].max_review_count} ${peerReviews[peerReviewId].max_review_count > 1 ? 'Peers' : 'Peer'} Respectively`}</Typography>
         </AlignedText>
       </SimpleBar>
-      {role === 'MANAGER' && (
-        <SimpleBar
-          title="Delete Task"
-          childrenButtons={(
-            <>
-              <Button color="secondary" onClick={handleClickDelete}>
-                Delete
-              </Button>
-            </>
-          )}
-        >
-          <Typography variant="body1">Once you delete a task, there is no going back. Please be certain.</Typography>
-        </SimpleBar>
-      )}
     </>
   );
 }
