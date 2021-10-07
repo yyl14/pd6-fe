@@ -151,6 +151,8 @@ const MemberEdit = ({
   useEffect(() => {
     if (error.replaceClassMembers) {
       setSubmitError(error.replaceClassMembers);
+    } else {
+      setSubmitError(false);
     }
   }, [error.replaceClassMembers]);
 
