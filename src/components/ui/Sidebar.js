@@ -11,6 +11,7 @@ import MyProfile from './sidebar/MyProfile';
 import UserProfile from './sidebar/UserProfile';
 import MyClass from './sidebar/MyClass';
 import Challenge from './sidebar/Challenge';
+import PeerReview from './sidebar/PeerReview';
 import Submission from './sidebar/Submission';
 import Grade from './sidebar/Grade';
 import Team from './sidebar/Team';
@@ -316,49 +317,49 @@ export default function Sidebar({ open, onClose }) {
         exact
         path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receiver-summary"
       >
-        <Challenge
+        <PeerReview
           classNames={classes}
           history={history}
           location={location}
           open={open}
           onClose={onClose}
-          mode="challenge"
+          mode="peer-review-summary"
         />
       </Route>
       <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/grader-summary">
-        <Challenge
+        <PeerReview
           classNames={classes}
           history={history}
           location={location}
           open={open}
           onClose={onClose}
-          mode="challenge"
+          mode="peer-review-summary"
         />
       </Route>
       <Route
         exact
         path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receive/:accountId/:recordId"
       >
-        <Challenge
+        <PeerReview
           classNames={classes}
           history={history}
           location={location}
           open={open}
           onClose={onClose}
-          mode="challenge"
+          mode="receive"
         />
       </Route>
       <Route
         exact
         path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/review/:accountId/:recordId"
       >
-        <Challenge
+        <PeerReview
           classNames={classes}
           history={history}
           location={location}
           open={open}
           onClose={onClose}
-          mode="challenge"
+          mode="review"
         />
       </Route>
       {/* {Submission} */}
