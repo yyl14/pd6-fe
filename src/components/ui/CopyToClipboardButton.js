@@ -3,7 +3,9 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { IconButton, Snackbar, Portal } from '@material-ui/core';
 import Icon from './icon/index';
 
-export default function CopyToClipboardButton({ text, onClick = null, className }) {
+export default function CopyToClipboardButton({
+  text, onClick = null, className, format = 'text/plain',
+}) {
   const [showSnackbar, setShowSnackbar] = useState(false);
 
   const handleCopy = () => {
@@ -15,7 +17,7 @@ export default function CopyToClipboardButton({ text, onClick = null, className 
 
   return (
     <>
-      <CopyToClipboard text={text} onCopy={handleCopy}>
+      <CopyToClipboard text={text} onCopy={handleCopy} options={{ format }}>
         <IconButton className={className}>
           <Icon.Copy />
         </IconButton>
