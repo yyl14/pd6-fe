@@ -127,6 +127,7 @@ const replaceClassMembers = (token, classId, replacingList, onSuccess, onError) 
       type: commonConstants.REPLACE_CLASS_MEMBERS_FAIL,
       error,
     });
+    onError();
   }
 };
 
