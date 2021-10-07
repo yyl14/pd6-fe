@@ -122,12 +122,12 @@ export default function MySubmission({ baseUrl, isProblemSet }) {
             type: 'string',
           },
           {
-            name: 'Used Time(ms)',
+            name: 'Used Time (ms)',
             align: 'center',
             type: 'string',
           },
           {
-            name: 'Used Memory(kb)',
+            name: 'Used Memory (kb)',
             align: 'center',
             type: 'string',
           },
@@ -147,11 +147,11 @@ export default function MySubmission({ baseUrl, isProblemSet }) {
             item.latestJudgmentId !== null && judgments.byId[item.latestJudgmentId] !== undefined
               ? judgments.byId[item.latestJudgmentId].score
               : '',
-          'Used Time(ms)':
+          'Used Time (ms)':
             item.latestJudgmentId !== null && judgments.byId[item.latestJudgmentId] !== undefined
               ? judgments.byId[item.latestJudgmentId].total_time
               : '',
-          'Used Memory(kb)':
+          'Used Memory (kb)':
             item.latestJudgmentId !== null && judgments.byId[item.latestJudgmentId] !== undefined
               ? judgments.byId[item.latestJudgmentId].max_memory
               : '',

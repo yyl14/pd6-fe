@@ -91,10 +91,10 @@ export default function SampleUploadCard({
               charset.
             </Typography>
           </div>
-          <AlignedText text="Default Time(ms)" childrenType="field">
+          <AlignedText text="Default Time (ms)" childrenType="field">
             <TextField id="time" value={time} onChange={(e) => setTime(e.target.value)} />
           </AlignedText>
-          <AlignedText text="Default Memory(kb)" childrenType="field">
+          <AlignedText text="Default Memory (kb)" childrenType="field">
             <TextField id="memory" value={memory} onChange={(e) => setMemory(e.target.value)} />
           </AlignedText>
           <IOFileUploadArea
