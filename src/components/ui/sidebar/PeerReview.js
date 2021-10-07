@@ -39,6 +39,14 @@ export default function PeerReview({
       history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}`);
     };
 
+    const goBackToPeerReviewGraderSummary = () => {
+      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/grader-summary`);
+    };
+
+    const goBackToPeerReviewReceiverSummary = () => {
+      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary`);
+    };
+
     if (mode === 'peer-review-summary') {
       setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
       setArrow(
@@ -63,6 +71,80 @@ export default function PeerReview({
           path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/grader-summary`,
         },
       ]);
+    } else if (mode === 'review' && peerReviews[peerReviewId] !== undefined && peerReviews[peerReviewId].reviewRecordIds !== undefined) {
+      if (userClasses.find((x) => x.class_id === Number(classId))?.role === 'MANAGER') {
+        setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
+        setArrow(
+          <IconButton className={classNames.arrow} onClick={goBackToPeerReviewGraderSummary}>
+            <Icon.ArrowBackRoundedIcon />
+          </IconButton>,
+        );
+        setTitle('Peer Review Detail');
+        setItemList(
+          peerReviews[peerReviewId].reviewRecordIds
+            .sort((a, b) => a - b)
+            .map((record, id) => ({
+              text: `Peer ${id + 1}`,
+              icon: <Icon.Peerreview />,
+              path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${record}`,
+            })),
+        );
+      } else {
+        setArrow(
+          <IconButton className={classNames.arrow} onClick={goBackToPeerReviewInfo}>
+            <Icon.ArrowBackRoundedIcon />
+          </IconButton>,
+        );
+        setTitle(
+          `${challenges[challengeId] === undefined ? 'error' : challenges[challengeId].title} / ${
+            peerReviews[peerReviewId] === undefined ? 'error' : peerReviews[peerReviewId].challenge_label
+          }`,
+        );
+        setItemList(
+          peerReviews[peerReviewId].reviewRecordIds
+            .sort((a, b) => a - b)
+            .map((record, id) => ({
+              text: `Peer ${id + 1}`,
+              icon: <Icon.Peerreview />,
+              path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${record}`,
+            })),
+        );
+      }
+    } else if (mode === 'receive' && peerReviews[peerReviewId] !== undefined && peerReviews[peerReviewId].receiveRecordIds !== undefined) {
+      if (userClasses.find((x) => x.class_id === Number(classId))?.role === 'MANAGER') {
+        setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
+        setArrow(
+          <IconButton className={classNames.arrow} onClick={goBackToPeerReviewReceiverSummary}>
+            <Icon.ArrowBackRoundedIcon />
+          </IconButton>,
+        );
+        setTitle('Peer Review Detail');
+        setItemList(
+          peerReviews[peerReviewId].receiveRecordIds
+            .sort((a, b) => a - b)
+            .map((record, id) => ({
+              text: `Peer ${id + 1}`,
+              icon: <Icon.Peerreview />,
+              path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${accountId}/${record}`,
+            })),
+        );
+      } else {
+        setArrow(
+          <IconButton className={classNames.arrow} onClick={goBackToPeerReviewInfo}>
+            <Icon.ArrowBackRoundedIcon />
+          </IconButton>,
+        );
+        setTitle('Received Peer Review');
+        setItemList(
+          peerReviews[peerReviewId].receiveRecordIds
+            .sort((a, b) => a - b)
+            .map((record, id) => ({
+              text: `Peer ${id + 1}`,
+              icon: <Icon.Peerreview />,
+              path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${accountId}/${record}`,
+            })),
+        );
+      }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -18,7 +18,7 @@ export default function Overview({ peerReviewId }) {
         const item = peerReviewRecords.byId[id];
         return ({
           peer: `Peer${i + 1}`,
-          status: item.submit_time === null ? 'Not Yet' : 'Done',
+          status: item && item.submit_time !== null ? 'Done' : 'Not Yet',
         });
       });
       setTableData(newTableData);

@@ -340,26 +340,26 @@ export default function Sidebar({ open, onClose }) {
         exact
         path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receive/:accountId/:recordId"
       >
-        <Challenge
+        <PeerReview
           classNames={classes}
           history={history}
           location={location}
           open={open}
           onClose={onClose}
-          mode="challenge"
+          mode="receive"
         />
       </Route>
       <Route
         exact
         path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/review/:accountId/:recordId"
       >
-        <Challenge
+        <PeerReview
           classNames={classes}
           history={history}
           location={location}
           open={open}
           onClose={onClose}
-          mode="challenge"
+          mode="review"
         />
       </Route>
       {/* {Submission} */}
