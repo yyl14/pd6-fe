@@ -30,6 +30,7 @@ const accountColumn = [
     align: 'center',
     width: 500,
     type: 'link',
+    isExternal: true,
     link_id: 'path',
   },
   {
@@ -116,7 +117,7 @@ export default function Statistics() {
           memberChallengeDetail.username = classMember.username;
           memberChallengeDetail.student_id = classMember.student_id;
           memberChallengeDetail.real_name = classMember.real_name;
-          memberChallengeDetail.path = `/user-profile/${classMember.id}`;
+          memberChallengeDetail.path = `${window.location.origin}/user-profile/${classMember.id}`;
         }
 
         if (member.problem_scores) {
@@ -242,7 +243,7 @@ export default function Statistics() {
       <CustomTable
         buttons={(
           <div className={classes.copyButton}>
-            <CopyToClipboardButton text={scoreboardHTML} />
+            <CopyToClipboardButton text={scoreboardHTML} format="text/html" />
           </div>
         )}
         data={scoreboardData}
