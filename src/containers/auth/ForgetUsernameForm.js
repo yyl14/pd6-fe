@@ -1,19 +1,9 @@
 import { useState, useEffect } from 'react';
 import React, { useSelector, useDispatch } from 'react-redux';
 import {
-  Button,
-  TextField,
-  Card,
-  CardContent,
-  Typography,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  makeStyles,
-  Link,
+  Button, TextField, Card, CardContent, Typography, makeStyles, Link, Snackbar,
 } from '@material-ui/core';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { userForgetUsername } from '../../actions/user/auth';
 
 import '../../styles/auth.css';
@@ -39,78 +29,56 @@ const useStyles = makeStyles((theme) => ({
 export default function ForgetUsernameForm() {
   const classNames = useStyles();
   const dispatch = useDispatch();
-  const error = useSelector((state) => state.error.user.auth.forgetUsername);
+  const history = useHistory();
+  const error = useSelector((state) => state.error.user.auth);
   const loading = useSelector((state) => state.loading.user.auth.forgetUsername);
   const [email, setEmail] = useState('');
   const [showError, setShowError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [disabled, setDisabled] = useState(true);
-  const [popUp, setPopUp] = useState(false);
-  const [submit, setSubmit] = useState(false);
-
-  const handleChange = (event) => {
-    if (event.target.value === '') {
-      setEmail(event.target.value);
-      setErrorText('');
-      setShowError(false);
-      setDisabled(true);
-      return;
-    }
-
-    const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const status = emailRe.test(event.target.value);
-
-    if (!status) {
-      setEmail(event.target.value);
-      setErrorText('Invalid email address');
-      setShowError(true);
-      setDisabled(true);
-    } else {
-      setEmail(event.target.value);
-      setErrorText('');
-      setShowError(false);
-      setDisabled(false);
-    }
-  };
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (showError) {
       return;
     }
-    dispatch(userForgetUsername(email.trim()));
-    setSubmit(true);
-  };
 
-  const handleClosePopUp = () => {
-    setPopUp(false);
+    const onSuccess = () => {
+      setErrorText('');
+      setShowError(false);
+
+      setTimeout(() => {
+        history.push('/login');
+      }, 3000);
+    };
+
+    const onError = () => {
+      setErrorText('Error');
+      setShowError(true);
+    };
+
+    dispatch(userForgetUsername(email.trim(), onSuccess, onError));
+    setShowSnackbar(true);
   };
 
   useEffect(() => {
-    if (loading === false && submit === true) {
-      if (error !== null) {
-        switch (error.toString()) {
-          case 'Error: NotFound': {
-            setErrorText('Unregistered email address.');
-            break;
-          }
-          default: {
-            setErrorText(error.toString());
-            break;
-          }
-        }
-        setSubmit(false);
-        setShowError(true);
-        setDisabled(true);
-      } else {
-        setSubmit(false);
-        setPopUp(true);
-        setErrorText('');
-        setShowError(false);
-        setDisabled(false);
-      }
+    const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const status = emailRe.test(email);
+    if (email === '') {
+      setErrorText('');
+      setShowError(false);
+      setDisabled(true);
+    } else if (!status) {
+      setErrorText('Invalid email address');
+      setShowError(true);
+      setDisabled(true);
+    } else {
+      setErrorText('');
+      setShowError(false);
+      setDisabled(false);
     }
-  }, [error, loading, submit]);
+  }, [email]);
 
   return (
     <>
@@ -124,7 +92,7 @@ export default function ForgetUsernameForm() {
               helperText={errorText}
               label="Registered / Alternative Email"
               value={email}
-              onChange={(e) => handleChange(e)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <Button
               className={classNames.authButtons}
@@ -148,25 +116,14 @@ export default function ForgetUsernameForm() {
         </CardContent>
       </Card>
 
-      <Dialog
-        open={popUp}
-        keepMounted
-        onClose={() => handleClosePopUp()}
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle id="alert-dialog-slide-title">
-          <Typography variant="h4">Username email sent</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body1">Please check your mailbox to the account.</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleClosePopUp()} color="primary">
-            Done
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowSnackbar(false);
+        }}
+        message="Username information will be sent to your mailbox if your email is valid."
+      />
     </>
   );
 }

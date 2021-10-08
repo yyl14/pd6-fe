@@ -1,28 +1,26 @@
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Switch, Route, useHistory, useLocation,
 } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-
-import React, { useEffect } from 'react';
 import { makeStyles, Fab } from '@material-ui/core';
-import FeedbackIcon from '@material-ui/icons/Feedback';
+import { Feedback } from '@material-ui/icons';
 import Normal from './normal';
 import Admin from './admin';
 import Account from './account';
 import User from './user';
 import MySubmission from './mySubmission';
-// import NoMatch from '../components/noMatch';
-
+import Sidebar from '../components/ui/Sidebar';
+import Header from '../components/ui/Header';
 import { getUserInfo } from '../actions/user/auth';
-
 import '../styles/index.css';
 
 const useStyles = makeStyles(() => ({
   bugReport: {
     position: 'fixed',
     right: '3.5vw',
-    bottom: '5vh',
+    top: 'calc(95vh - 55px)',
   },
 }));
 
@@ -33,11 +31,16 @@ function Index() {
   const auth = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  // eslint-disable-next-line no-unused-vars
-  const [cookies, setCookie, removeCookie] = useCookies(['id', 'token']);
+  const [cookies, , removeCookie] = useCookies(['id', 'token']);
+
+  const [showSidebar, setShowSidebar] = useState(true);
+  const [disableSidebar, setDisableSidebar] = useState(false);
+
+  const toggleSidebar = () => {
+    setShowSidebar((state) => !state);
+  };
 
   useEffect(() => {
-    // console.log(auth.isAuthenticated, Boolean(cookies.id && cookies.token));
     if (!auth.isAuthenticated) {
       if (cookies.id && cookies.token) {
         if (auth.tokenExpired) {
@@ -72,23 +75,47 @@ function Index() {
     }
   }, [auth.isAuthenticated, history, location.pathname, user.classes, user.classes.length, user.role]);
 
+  // configure the path names in which sidebars are disabled
+  useEffect(() => {
+    const disableSidebarPaths = ['/my-submission'];
+    if (disableSidebarPaths.reduce((acc, item) => acc || item === location.pathname, false)) {
+      setDisableSidebar(true);
+    } else {
+      setDisableSidebar(false);
+    }
+  }, [location.pathname]);
+
   if (!auth.isAuthenticated) {
     return <></>;
   }
 
   return (
-    <div className="wrapper">
-      <Switch>
-        <Route path="/admin" component={Admin} />
-        <Route path="/my-profile" component={Account} />
-        <Route path="/my-submission" component={MySubmission} />
-        <Route exact path="/user-profile/:accountId" component={User} />
-        <Route path="/" component={Normal} />
-      </Switch>
-      <Fab href="https://forms.gle/KaYJnXwgvsovzqVG7" target="_blank" className={classes.bugReport}>
-        <FeedbackIcon />
-      </Fab>
-    </div>
+    <>
+      <div className="wrapper">
+        <Header handleSidebarToggle={toggleSidebar} hideToggle={disableSidebar} />
+        <Sidebar open={showSidebar && !disableSidebar} onClose={() => setShowSidebar(false)} />
+        <div>
+          <div
+            className={`layout-content-container${
+              showSidebar && !disableSidebar ? '' : ' layout-content-container-no-sidebar'
+            }`}
+          >
+            <div className="layout-content">
+              <Switch>
+                <Route path="/admin" component={Admin} />
+                <Route path="/my-profile" component={Account} />
+                <Route path="/my-submission" component={MySubmission} />
+                <Route exact path="/user-profile/:accountId" component={User} />
+                <Route path="/" component={Normal} />
+              </Switch>
+            </div>
+          </div>
+        </div>
+        <Fab href="https://forms.gle/KaYJnXwgvsovzqVG7" target="_blank" className={classes.bugReport}>
+          <Feedback />
+        </Fab>
+      </div>
+    </>
   );
 }
 

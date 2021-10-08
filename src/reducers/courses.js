@@ -3,6 +3,14 @@ import { courseConstants } from '../actions/admin/constant';
 import { commonConstants } from '../actions/common/constant';
 import { viewConstants } from '../actions/api/constant';
 
+const prototype = {
+  id: null,
+  name: null,
+  type: null,
+  is_deleted: null,
+  classIds: [],
+};
+
 const byId = (state = {}, action) => {
   switch (action.type) {
     case courseConstants.FETCH_COURSES_SUCCESS: {
@@ -50,7 +58,7 @@ const byId = (state = {}, action) => {
     }
     case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
       const { courses } = action.payload.data;
-      return courses.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+      return courses.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
     }
     default:
       return state;

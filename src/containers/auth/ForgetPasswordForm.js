@@ -13,7 +13,7 @@ import {
   makeStyles,
   Link,
 } from '@material-ui/core';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { userForgetPassword } from '../../actions/user/auth';
 
 import '../../styles/auth.css';
@@ -39,7 +39,8 @@ const useStyles = makeStyles((theme) => ({
 export default function ForgetPasswordForm() {
   const classNames = useStyles();
   const dispatch = useDispatch();
-  const error = useSelector((state) => state.error.user.auth.forgetPassword);
+  const history = useHistory();
+  const error = useSelector((state) => state.error.user.auth);
   const loading = useSelector((state) => state.loading.user.auth.forgetPassword);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -47,45 +48,29 @@ export default function ForgetPasswordForm() {
   const [errorText, setErrorText] = useState('');
   const [disabled, setDisabled] = useState(true);
   const [popUp, setPopUp] = useState(false);
-  const [submit, setSubmit] = useState(false);
-
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
-    setDisabled(event.target.value === '' || email === '');
-  };
-
-  const handleEmailChange = (event) => {
-    if (event.target.value === '') {
-      setEmail(event.target.value);
-      setErrorText('');
-      setShowError(false);
-      setDisabled(true);
-      return;
-    }
-
-    const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const status = emailRe.test(event.target.value);
-
-    if (!status) {
-      setEmail(event.target.value);
-      setErrorText('Invalid email address');
-      setShowError(true);
-      setDisabled(true);
-    } else {
-      setEmail(event.target.value);
-      setErrorText('');
-      setShowError(false);
-      setDisabled(username === '');
-    }
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (showError) {
       return;
     }
-    dispatch(userForgetPassword(username, email.trim()));
-    setSubmit(true);
+
+    const onSuccess = () => {
+      setPopUp(true);
+      setErrorText('');
+      setShowError(false);
+
+      setTimeout(() => {
+        history.push('/login');
+      }, 3000);
+    };
+
+    const onError = () => {
+      setErrorText('Error');
+      setShowError(true);
+    };
+
+    dispatch(userForgetPassword(username, email.trim(), onSuccess, onError));
   };
 
   const handleClosePopUp = () => {
@@ -93,30 +78,25 @@ export default function ForgetPasswordForm() {
   };
 
   useEffect(() => {
-    if (loading === false && submit === true) {
-      if (error !== null) {
-        switch (error.toString()) {
-          case 'Error: NotFound': {
-            setErrorText('Unregistered email address.');
-            break;
-          }
-          default: {
-            setErrorText(error.toString());
-            break;
-          }
-        }
-        setSubmit(false);
-        setShowError(true);
-        setDisabled(true);
-      } else {
-        setSubmit(false);
-        setPopUp(true);
-        setErrorText('');
-        setShowError(false);
-        setDisabled(false);
-      }
+    const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const status = emailRe.test(email);
+
+    if (username === '') {
+      setDisabled(true);
+    } else if (email === '') {
+      setErrorText('');
+      setShowError(false);
+      setDisabled(true);
+    } else if (!status) {
+      setErrorText('Invalid email address');
+      setShowError(true);
+      setDisabled(true);
+    } else {
+      setErrorText('');
+      setShowError(false);
+      setDisabled(false);
     }
-  }, [error, loading, submit]);
+  }, [email, username]);
 
   return (
     <>
@@ -128,7 +108,7 @@ export default function ForgetPasswordForm() {
               className={`auth-form-input ${classNames.authTextFields}`}
               label="Username"
               value={username}
-              onChange={(e) => handleUsernameChange(e)}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <TextField
               // required
@@ -137,7 +117,7 @@ export default function ForgetPasswordForm() {
               helperText={errorText}
               label="Registered / Alternative Email"
               value={email}
-              onChange={(e) => handleEmailChange(e)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <Button
               className={classNames.authButtons}

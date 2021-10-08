@@ -58,9 +58,7 @@ export default function MySubmission() {
       />
       <SimpleBar title="Submission Information">
         <AlignedText text="My Best Score" childrenType="text">
-          <Typography variant="body1">
-            {problems.byId[problemId].score?.toString() ? problems.byId[problemId].score.toString() : '-'}
-          </Typography>
+          <Typography variant="body1">{problems.byId[problemId].score?.toString() ?? '0'}</Typography>
         </AlignedText>
       </SimpleBar>
       <AutoTable
@@ -112,12 +110,12 @@ export default function MySubmission() {
             type: 'string',
           },
           {
-            name: 'Used Time(ms)',
+            name: 'Used Time (ms)',
             align: 'center',
             type: 'string',
           },
           {
-            name: 'Used Memory(kb)',
+            name: 'Used Memory (kb)',
             align: 'center',
             type: 'string',
           },
@@ -136,15 +134,15 @@ export default function MySubmission() {
           Score:
             item.latestJudgmentId !== null && judgments.byId[item.latestJudgmentId] !== undefined
               ? judgments.byId[item.latestJudgmentId].score
-              : '-',
-          'Used Time(ms)':
+              : '',
+          'Used Time (ms)':
             item.latestJudgmentId !== null && judgments.byId[item.latestJudgmentId] !== undefined
               ? judgments.byId[item.latestJudgmentId].total_time
-              : '-',
-          'Used Memory(kb)':
+              : '',
+          'Used Memory (kb)':
             item.latestJudgmentId !== null && judgments.byId[item.latestJudgmentId] !== undefined
               ? judgments.byId[item.latestJudgmentId].max_memory
-              : '-',
+              : '',
           'Submit Time': moment(item.submit_time).format('YYYY-MM-DD, HH:mm'),
           link: `/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${item.id}`,
         })}

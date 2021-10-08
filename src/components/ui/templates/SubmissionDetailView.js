@@ -11,11 +11,7 @@ import AlignedText from '../AlignedText';
 import SimpleTable from '../SimpleTable';
 import PageTitle from '../PageTitle';
 import GeneralLoading from '../../GeneralLoading';
-import {
-  browseJudgeCases,
-  browseTestcases,
-  rejudgeSubmission,
-} from '../../../actions/myClass/problem';
+import { browseJudgeCases, browseTestcases, rejudgeSubmission } from '../../../actions/myClass/problem';
 import { readSubmissionDetail, fetchSubmission } from '../../../actions/myClass/submission';
 import NoMatch from '../../noMatch';
 import CodeArea from '../CodeArea';
@@ -302,7 +298,7 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
             },
             {
               id: 'time',
-              label: 'Time(ms)',
+              label: 'Time (ms)',
               minWidth: 50,
               align: 'center',
               width: 600,
@@ -310,7 +306,7 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
             },
             {
               id: 'memory',
-              label: 'Memory(kb)',
+              label: 'Memory (kb)',
               minWidth: 50,
               align: 'center',
               width: 600,

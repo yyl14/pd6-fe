@@ -479,7 +479,6 @@ const overrides = {
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
-
     },
   },
   MuiSwitch: {

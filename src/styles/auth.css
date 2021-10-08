@@ -9,10 +9,17 @@
 .auth-page-col {
   flex-direction: column;
   min-height: 100vh;
+  align-items: center;
 }
 
-.auth-page-col-right {
-  align-items: center;
+@media screen and (max-width: 1200px){
+  .auth-page-col-left {
+    display: none !important;
+  }
+
+  .auth-page-col-right {
+    min-width: 100% !important;
+  }
 }
 
 .auth-title {
@@ -32,6 +39,7 @@
 
 .auth-form {
   width: 78%;
+  min-width: 600px;
 }
 
 /* different paddings for different forms */
