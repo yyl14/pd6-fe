@@ -403,7 +403,7 @@ export default function Header({ handleSidebarToggle, hideToggle }) {
     <div>
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
-          <Icon.Overview className={hideToggle ? classes.hide : classes.item} onClick={handleSidebarToggle} />
+          <Icon.Menu className={hideToggle ? classes.hide : classes.item} onClick={handleSidebarToggle} />
           {itemList.map((item) => (
             <Typography
               variant="h6"
