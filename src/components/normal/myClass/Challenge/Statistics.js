@@ -83,7 +83,7 @@ export default function Statistics() {
       && challenges[challengeId].statistics.summary
       && challenges[challengeId].statistics.memberSubmission
     ) {
-      setStatisticsData(challenges[challengeId].statistics.summary);
+      setStatisticsData(challenges[challengeId].statistics.summary.map((item, i) => ({ ...item, id: i })));
 
       const problemList = challenges[challengeId].problemIds.map((id) => ({
         id: `problem-${id}`,
