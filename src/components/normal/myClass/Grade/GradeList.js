@@ -238,31 +238,37 @@ export default function GradeList() {
         columns={[
           {
             name: 'Username',
+            minWidth: 139,
             align: 'center',
             type: 'link',
           },
           {
             name: 'Student ID',
+            minWidth: 155,
             align: 'center',
             type: 'string',
           },
           {
             name: 'Real Name',
+            minWidth: 144,
             align: 'center',
             type: 'string',
           },
           {
             name: 'Title',
+            minWidth: 125,
             align: 'center',
             type: 'string',
           },
           {
             name: 'Score',
+            minWidth: 124,
             align: 'center',
             type: 'string',
           },
           {
             name: 'Time',
+            minWidth: 200,
             align: 'center',
             type: 'string',
           },
