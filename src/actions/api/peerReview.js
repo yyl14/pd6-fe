@@ -57,6 +57,23 @@ export const readPeerReviewRecord = (token, peerReviewRecordId) => async (dispat
   }
 };
 
+export const editPeerReview = (token, peerReviewId, body) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'auth-token': token,
+      },
+    };
+    dispatch({ type: peerReviewConstants.EDIT_PEER_REVIEW_START });
+    await agent.patch(`/peer-review/${peerReviewId}`, body, config);
+    dispatch({ type: peerReviewConstants.EDIT_PEER_REVIEW_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: peerReviewConstants.EDIT_PEER_REVIEW_FAIL,
+    });
+  }
+};
+
 export const browseAccountReviewedPeerReviewRecord = (token, peerReviewId, accountId) => async (dispatch) => {
   try {
     const config = { headers: { 'auth-token': token } };
@@ -108,6 +125,24 @@ export const submitPeerReviewRecord = (token, peerReviewRecordId, score, comment
   } catch (error) {
     dispatch({
       type: peerReviewConstants.SUBMIT_PEER_REVIEW_RECORD_FAIL,
+      error,
+    });
+  }
+};
+
+export const assignPeerReviewRecord = (token, peerReviewId) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    dispatch({ type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_START });
+    const res = await agent.post(`peer-review/${peerReviewId}/record`, {}, config);
+
+    dispatch({
+      type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_SUCCESS,
+      payload: res.data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_FAIL,
       error,
     });
   }

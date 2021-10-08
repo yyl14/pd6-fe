@@ -165,10 +165,10 @@ export default function SampleTestArea({ input, output }) {
               <div className={classes.content} ref={inputRef}>
                 <Typography variant="body1">
                   {input.split('\n').map((string) => (
-                    <>
+                    <React.Fragment key={string}>
                       {string}
                       <br />
-                    </>
+                    </React.Fragment>
                   ))}
                 </Typography>
               </div>
@@ -187,10 +187,10 @@ export default function SampleTestArea({ input, output }) {
               <div className={classes.content} ref={outputRef}>
                 <Typography variant="body1">
                   {output.split('\n').map((string) => (
-                    <>
+                    <React.Fragment key={string}>
                       {string}
                       <br />
-                    </>
+                    </React.Fragment>
                   ))}
                 </Typography>
               </div>

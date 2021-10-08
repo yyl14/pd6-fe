@@ -3,6 +3,7 @@ import { peerReviewConstants } from '../../../actions/api/constant';
 const initialState = {
   readPeerReviewWithProblem: false,
   readPeerReviewRecord: false,
+  browseAccountAllPeerReviewRecord: false,
   getTargetProblemChallengeId: false,
 };
 
@@ -33,6 +34,20 @@ export default function peerReview(state = initialState, action) {
       return {
         ...state,
         readPeerReviewRecord: false,
+      };
+    }
+
+    case peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_START: {
+      return {
+        ...state,
+        browseAccountAllPeerReviewRecord: true,
+      };
+    }
+    case peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_SUCCESS:
+    case peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_FAIL: {
+      return {
+        ...state,
+        browseAccountAllPeerReviewRecord: false,
       };
     }
 

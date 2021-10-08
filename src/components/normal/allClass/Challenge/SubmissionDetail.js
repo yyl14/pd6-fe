@@ -257,7 +257,7 @@ export default function SubmissionDetail() {
             },
             {
               id: 'time',
-              label: 'Time(ms)',
+              label: 'Time (ms)',
               minWidth: 50,
               align: 'center',
               width: 600,
@@ -265,7 +265,7 @@ export default function SubmissionDetail() {
             },
             {
               id: 'memory',
-              label: 'Memory(kb)',
+              label: 'Memory (kb)',
               minWidth: 50,
               align: 'center',
               width: 600,

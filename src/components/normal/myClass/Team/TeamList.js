@@ -214,7 +214,7 @@ export default function TeamList() {
         ]}
         reduxData={teams}
         reduxDataToRows={(item) => ({
-          Label: item.label,
+          id: item.id,
           'Team Name': {
             text: item.name,
             path: `/my-class/${courseId}/${classId}/team/${item.id}`,
