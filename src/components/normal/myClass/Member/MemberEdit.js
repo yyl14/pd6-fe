@@ -411,7 +411,7 @@ const MemberEdit = ({
             </>
           ) : (
             <>
-              <Typography variant="body1">Changes saved, but error detected in the following accounts:</Typography>
+              <Typography variant="body1">Error detected in the following accounts:</Typography>
               <div className={classNames.failedList}>
                 {errorDetectedList.map((accountReferral) => (
                   <Typography variant="body1" key={`errorDetected-${accountReferral}`}>
@@ -423,19 +423,13 @@ const MemberEdit = ({
           )}
         </DialogContent>
         <DialogActions>
-          {submitError ? (
-            <Button
-              color="primary"
-              onClick={() => setShowErrorDetectedDialog(false)}
-              className={classNames.buttonFlexEnd}
-            >
-              Back to Edit
-            </Button>
-          ) : (
-            <Button color="primary" onClick={handleUnsave} className={classNames.buttonFlexEnd}>
-              Back to Member List
-            </Button>
-          )}
+          <Button
+            color="primary"
+            onClick={() => setShowErrorDetectedDialog(false)}
+            className={classNames.buttonFlexEnd}
+          >
+            Back to Edit
+          </Button>
         </DialogActions>
       </Dialog>
     </div>
