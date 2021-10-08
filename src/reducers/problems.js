@@ -171,7 +171,7 @@ const byId = (state = {}, action) => {
       const { problem } = action.payload;
       return {
         ...state,
-        [problem.id]: { ...prototype, ...state.[problem.id], ...problem },
+        [problem.id]: { ...prototype, ...state[problem.id], ...problem },
       };
     }
 
