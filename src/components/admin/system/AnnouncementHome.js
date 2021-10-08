@@ -67,16 +67,19 @@ export default function AnnouncementHome() {
             name: 'Title',
             align: 'center',
             type: 'string',
+            width: 200,
           },
           {
             name: 'Post Time',
             align: 'center',
             type: 'string',
+            width: 200,
           },
           {
             name: 'End Time',
             align: 'center',
             type: 'string',
+            width: 200,
           },
         ]}
         defaultSort={['post_time', 'DESC']}
