@@ -610,7 +610,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             },
             {
               id: 'time_limit',
-              label: 'Max Time(ms)',
+              label: 'Max Time (ms)',
               minWidth: 50,
               align: 'center',
               width: 150,
@@ -619,7 +619,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             },
             {
               id: 'memory_limit',
-              label: 'Max Memory(kb)',
+              label: 'Max Memory (kb)',
               minWidth: 50,
               align: 'center',
               width: 150,
@@ -653,7 +653,17 @@ export default function CodingProblemEdit({ closeEdit }) {
         title="Testing Data"
         buttons={(
           <FormControlLabel
-            control={<Switch checked={status} onChange={() => { setStatus(!status); setHasChange(true); }} name="status" color="primary" />}
+            control={(
+              <Switch
+                checked={status}
+                onChange={() => {
+                  setStatus(!status);
+                  setHasChange(true);
+                }}
+                name="status"
+                color="primary"
+              />
+            )}
             label={status ? 'Enabled' : 'Disabled'}
             className={classNames.statusSwitch}
           />
@@ -684,7 +694,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             },
             {
               id: 'time_limit',
-              label: 'Max Time(ms)',
+              label: 'Max Time (ms)',
               minWidth: 50,
               align: 'center',
               width: 150,
@@ -693,7 +703,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             },
             {
               id: 'memory_limit',
-              label: 'Max Memory(kb)',
+              label: 'Max Memory (kb)',
               minWidth: 50,
               align: 'center',
               width: 150,
