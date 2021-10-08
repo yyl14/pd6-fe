@@ -25,12 +25,12 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data } = action.payload;
-      return data.peer_review.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...state.[item.id], ...item } }), state);
+      return data.peer_review.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...state[item.id], ...item } }), state);
     }
     case peerReviewConstants.READ_PEER_REVIEW_SUCCESS: {
       return {
         ...state,
-        [action.payload.id]: { ...prototype, ...state.[action.payload.id], ...action.payload },
+        [action.payload.id]: { ...prototype, ...state[action.payload.id], ...action.payload },
       };
     }
     // case peerReviewConstants.READ_PEER_REVIEW_RECORD_SUCCESS: {
@@ -48,7 +48,7 @@ const byId = (state = {}, action) => {
       return {
         ...state,
         [peerReviewId]: {
-          ...prototype, ...state.[peerReviewId], reviewRecordIds: reviewIds, receiveRecordIds: receiveIds,
+          ...prototype, ...state[peerReviewId], reviewRecordIds: reviewIds, receiveRecordIds: receiveIds,
         },
       };
     }
@@ -57,7 +57,7 @@ const byId = (state = {}, action) => {
       const { peerReviewId, reviewIds } = action.payload;
       return {
         ...state,
-        [peerReviewId]: { ...prototype, ...state.[peerReviewId], reviewRecordIds: reviewIds },
+        [peerReviewId]: { ...prototype, ...state[peerReviewId], reviewRecordIds: reviewIds },
       };
     }
 
@@ -65,7 +65,7 @@ const byId = (state = {}, action) => {
       const { peerReviewId, receiveIds } = action.payload;
       return {
         ...state,
-        [peerReviewId]: { ...prototype, ...state.[peerReviewId], receiveRecordIds: receiveIds },
+        [peerReviewId]: { ...prototype, ...state[peerReviewId], receiveRecordIds: receiveIds },
       };
     }
 
@@ -73,7 +73,7 @@ const byId = (state = {}, action) => {
       const { peerReviewId, target_challenge_id } = action.payload;
       return {
         ...state,
-        [peerReviewId]: { ...prototype, ...state.[peerReviewId], target_challenge_id },
+        [peerReviewId]: { ...prototype, ...state[peerReviewId], target_challenge_id },
       };
     }
 
@@ -81,7 +81,7 @@ const byId = (state = {}, action) => {
       const { peerReview } = action.payload;
       return {
         ...state,
-        [peerReview.id]: { ...prototype, ...state.[peerReview.id], ...peerReview },
+        [peerReview.id]: { ...prototype, ...state[peerReview.id], ...peerReview },
       };
     }
 
