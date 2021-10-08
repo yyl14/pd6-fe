@@ -13,6 +13,8 @@ import { userBrowseAnnouncement } from '../../actions/user/user';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
+    left: 0,
+    right: 'auto',
     minHeight: '55px',
     height: '55px',
     background: theme.palette.black.main,
@@ -39,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
   right: {
     marginLeft: 'auto',
     marginRight: 0,
+    paddingLeft: 15,
   },
   date: {
     position: 'relative',
