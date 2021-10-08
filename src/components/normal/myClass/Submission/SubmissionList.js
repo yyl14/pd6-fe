@@ -124,36 +124,50 @@ export default function SubmissionList() {
         columns={[
           {
             name: 'ID',
+            // width: 140.5,
+            minWidth: 140.5,
             align: 'center',
             type: 'string',
           },
           {
             name: 'Username',
+            // width: 140.5,
+            minWidth: 140.5,
             align: 'center',
             type: 'link',
           },
           {
             name: 'Student ID',
+            // width: 140.5,
+            minWidth: 140.5,
             align: 'center',
             type: 'string',
           },
           {
             name: 'Real Name',
+            // width: 140.5,
+            minWidth: 140.5,
             align: 'center',
             type: 'string',
           },
           {
             name: 'Challenge',
+            // width: 140.5,
+            minWidth: 140.5,
             align: 'center',
             type: 'link',
           },
           {
             name: 'Problem',
+            // width: 140.5,
+            minWidth: 140.5,
             align: 'center',
             type: 'link',
           },
           {
             name: 'Status',
+            // width: 140.5,
+            minWidth: 140.5,
             align: 'center',
             type: 'string',
             colors: {
@@ -172,6 +186,8 @@ export default function SubmissionList() {
           },
           {
             name: 'Time',
+            width: 140.5,
+            minWidth: 140.5,
             align: 'center',
             type: 'string',
           },
