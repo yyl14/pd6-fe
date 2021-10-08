@@ -26,9 +26,15 @@ import {
   peerReviewFetchChallenges,
 } from '../../../../actions/myClass/challenge';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   selectedIcon: {
     marginRight: '20px',
+  },
+  divider: {
+    height: '1px',
+    margin: '0px',
+    border: `0px solid ${theme.palette.grey[300]}`,
+    backgroundColor: theme.palette.grey[300],
   },
   peerReviewCard_display: {
     display: 'block',
@@ -217,7 +223,7 @@ export default function TaskAddingCard({ open, setOpen }) {
             />
           </AlignedText>
           <div className={type === 'Peer Review' ? classNames.peerReviewCard_display : classNames.peerReviewCard_hide}>
-            <hr />
+            <hr className={classNames.divider} />
             <h3>Peer Review Task</h3>
             <AlignedText text="Challenge" childrenType="field">
               <FormControl variant="outlined">
