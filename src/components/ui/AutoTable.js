@@ -594,7 +594,7 @@ function AutoTable({
                   key={hasLink ? 'link' : 'blank'}
                   align="right"
                   className={classes.tableHeadCell}
-                  style={{ minWidth: 20 }}
+                  style={{ minWidth: 20, width: '100%' }}
                 />
               </TableRow>
             </TableHead>
