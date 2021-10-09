@@ -125,7 +125,7 @@ const byId = (state = {}, action) => {
       const { challenge } = action.payload;
       return {
         ...state,
-        [challenge.id]: { ...prototype, ...state.[challenge.id], ...challenge },
+        [challenge.id]: { ...prototype, ...state[challenge.id], ...challenge },
       };
     }
 
