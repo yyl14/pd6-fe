@@ -128,7 +128,21 @@ export default function TaskAddingCard({ open, setOpen }) {
         break;
       }
       case 'Peer Review': {
-        dispatch(addPeerReview(authToken, challengeId, label, title, taskLabelId, minScore, maxScore, peerNumber, history, courseId, classId));
+        dispatch(
+          addPeerReview(
+            authToken,
+            challengeId,
+            label,
+            title,
+            taskLabelId,
+            minScore,
+            maxScore,
+            peerNumber,
+            history,
+            courseId,
+            classId,
+          ),
+        );
         setPeerReviewChallengeId('');
         setPeerReviewChallengeIds([]);
         setTaskLabelId('');
@@ -191,7 +205,7 @@ export default function TaskAddingCard({ open, setOpen }) {
                 </MenuItem>
                 <MenuItem value="Essay(PDF)">
                   <Icon.Paper className={classNames.selectedIcon} />
-                  Essay(PDF)
+                  Essay (PDF)
                 </MenuItem>
                 <MenuItem value="Peer Review">
                   <Icon.Peerreview className={classNames.selectedIcon} />
@@ -256,7 +270,8 @@ export default function TaskAddingCard({ open, setOpen }) {
                   }}
                   style={{ width: '350px' }}
                 >
-                  {peerReviewChallengeId !== undefined && peerReviewChallengeId !== ''
+                  {peerReviewChallengeId !== undefined
+                    && peerReviewChallengeId !== ''
                     && challenges.byId[peerReviewChallengeId].problemIds.map((id) => (
                       <MenuItem key={id} value={id}>
                         {problems.byId[id].challenge_label}
