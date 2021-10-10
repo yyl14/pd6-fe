@@ -13,6 +13,7 @@ import PageTitle from '../PageTitle';
 import GeneralLoading from '../../GeneralLoading';
 import { browseJudgeCases, browseTestcases, rejudgeSubmission } from '../../../actions/myClass/problem';
 import { readSubmissionDetail, fetchSubmission } from '../../../actions/myClass/submission';
+import { browseSubmitLang } from '../../../actions/common/common';
 import NoMatch from '../../noMatch';
 import CodeArea from '../CodeArea';
 
@@ -56,6 +57,7 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
   const user = useSelector((state) => state.user);
   const judgeCases = useSelector((state) => state.judgeCases);
   const testcases = useSelector((state) => state.testcases);
+  const submitLangs = useSelector((state) => state.submitLangs.byId);
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.problem);
   const [rejudge, setRejudge] = useState(false);
@@ -102,6 +104,10 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
   useEffect(() => {
     dispatch(browseTestcases(authToken, problemId));
   }, [authToken, dispatch, problemId]);
+
+  useEffect(() => {
+    dispatch(browseSubmitLang(authToken));
+  }, [authToken, dispatch]);
 
   const transformSample = useCallback(
     (id) => {
@@ -281,6 +287,10 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
           <Typography variant="body1">
             {moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm')}
           </Typography>
+        </AlignedText>
+        <AlignedText text="Language" childrenType="text">
+          {submitLangs[submissions[submissionId].language_id]
+            && <Typography variant="body1">{`${submitLangs[submissions[submissionId].language_id].name} ${submitLangs[submissions[submissionId].language_id].version}`}</Typography>}
         </AlignedText>
       </SimpleBar>
       <SimpleBar title="Submission Result" noIndent>
