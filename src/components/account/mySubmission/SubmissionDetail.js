@@ -11,7 +11,9 @@ import PageTitle from '../../ui/PageTitle';
 import GeneralLoading from '../../GeneralLoading';
 import { browseJudgeCases, browseTestcases } from '../../../actions/myClass/problem';
 import { readSubmissionDetail, fetchSubmission } from '../../../actions/myClass/submission';
-import { fetchCourse, fetchClass, fetchChallenge } from '../../../actions/common/common';
+import {
+  fetchCourse, fetchClass, fetchChallenge, browseSubmitLang,
+} from '../../../actions/common/common';
 import NoMatch from '../../noMatch';
 import CodeArea from '../../ui/CodeArea';
 // import { browseSubmitLang } from '../../../../actions/common/common';
@@ -55,6 +57,7 @@ export default function SubmissionDetail() {
   const user = useSelector((state) => state.user);
   const judgeCases = useSelector((state) => state.judgeCases);
   const testcases = useSelector((state) => state.testcases);
+  const submitLangs = useSelector((state) => state.submitLangs.byId);
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.problem);
   const userClasses = useSelector((state) => state.user.classes);
@@ -82,6 +85,10 @@ export default function SubmissionDetail() {
   useEffect(() => {
     dispatch(browseTestcases(authToken, problemId));
   }, [authToken, dispatch, problemId]);
+
+  useEffect(() => {
+    dispatch(browseSubmitLang(authToken));
+  }, [authToken, dispatch]);
 
   const transformSample = useCallback(
     (id) => {
@@ -252,10 +259,10 @@ export default function SubmissionDetail() {
             {moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm')}
           </Typography>
         </AlignedText>
-        {/* <AlignedText text="Language" childrenType="text">
+        <AlignedText text="Language" childrenType="text">
           {submitLangs[submissions[submissionId].language_id]
-            && <Typography variant="body1">{submitLangs[submissions[submissionId].language_id].name}</Typography>}
-        </AlignedText> */}
+            && <Typography variant="body1">{`${submitLangs[submissions[submissionId].language_id].name} ${submitLangs[submissions[submissionId].language_id].version}`}</Typography>}
+        </AlignedText>
       </SimpleBar>
       <SimpleBar title="Submission Result" noIndent>
         <SimpleTable

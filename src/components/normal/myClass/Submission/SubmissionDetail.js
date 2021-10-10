@@ -20,7 +20,7 @@ import {
   browseTestcases,
 } from '../../../../actions/myClass/submission';
 import { readProblemInfo } from '../../../../actions/myClass/problem';
-import { getAccountBatch, fetchChallenge } from '../../../../actions/common/common';
+import { getAccountBatch, fetchChallenge, browseSubmitLang } from '../../../../actions/common/common';
 
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
@@ -67,6 +67,7 @@ export default function SubmissionDetail() {
   const accounts = useSelector((state) => state.accounts);
   const judgeCases = useSelector((state) => state.judgeCases);
   const testcases = useSelector((state) => state.testcases);
+  const submitLangs = useSelector((state) => state.submitLangs.byId);
   const authToken = useSelector((state) => state.auth.token);
   // const loading = useSelector((state) => state.loading.myClass.submissions);
   const [rejudge, setRejudge] = useState(false);
@@ -75,6 +76,10 @@ export default function SubmissionDetail() {
     dispatch(readSubmissionDetail(authToken, submissionId));
     dispatch(fetchSubmission(authToken, submissionId));
   }, [authToken, dispatch, submissionId]);
+
+  useEffect(() => {
+    dispatch(browseSubmitLang(authToken));
+  }, [authToken, dispatch]);
 
   useEffect(() => {
     if (submissions[submissionId]) {
@@ -299,10 +304,10 @@ export default function SubmissionDetail() {
             {moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm')}
           </Typography>
         </AlignedText>
-        {/* <AlignedText text="Language" childrenType="text">
+        <AlignedText text="Language" childrenType="text">
           {submitLangs[submissions[submissionId].language_id]
-            && <Typography variant="body1">{submitLangs[submissions[submissionId].language_id].name}</Typography>}
-        </AlignedText> */}
+            && <Typography variant="body1">{`${submitLangs[submissions[submissionId].language_id].name} ${submitLangs[submissions[submissionId].language_id].version}`}</Typography>}
+        </AlignedText>
       </SimpleBar>
       <SimpleBar title="Submission Result" noIndent>
         <SimpleTable
