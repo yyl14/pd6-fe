@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Button, Typography, makeStyles } from '@material-ui/core';
 import { useParams, useHistory } from 'react-router-dom';
 import moment from 'moment';
+import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 
 import BasicInfo from './Element/BasicInfo';
 import Overview from './Element/Overview';
@@ -154,7 +155,11 @@ export default function PeerReviewInfo() {
         <>
           <SimpleBar title="Title">{peerReviews[peerReviewId].title}</SimpleBar>
           {role === 'MANAGER' && (
-            <SimpleBar title="Description">{peerReviews[peerReviewId].description}</SimpleBar>
+            <SimpleBar title="Description">
+              <MathpixLoader>
+                <MathpixMarkdown text={peerReviews[peerReviewId].description} htmlTags />
+              </MathpixLoader>
+            </SimpleBar>
           )}
           <BasicInfo role={role} />
           {role === 'MANAGER' && (
