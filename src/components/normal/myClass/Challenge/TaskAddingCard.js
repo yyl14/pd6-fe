@@ -86,20 +86,26 @@ export default function TaskAddingCard({ open, setOpen }) {
     if (type === 'Coding Problem' || type === 'Essay(PDF)') {
       if (label !== '' && title !== '') {
         setDisabled(false);
+      } else {
+        setDisabled(true);
       }
     } else if (type === 'Peer Review') {
       if (
         label !== ''
         && title !== ''
-        && peerReviewChallengeId !== undefined
-        && taskLabelId !== undefined
+        && peerReviewChallengeId !== ''
+        && taskLabelId !== ''
         && maxScore !== ''
         && minScore !== ''
         && peerNumber !== ''
       ) {
         setDisabled(false);
+      } else {
+        setDisabled(true);
       }
-    } else setDisabled(true);
+    } else {
+      setDisabled(true);
+    }
   }, [label, maxScore, minScore, peerNumber, peerReviewChallengeId, taskLabelId, title, type]);
 
   useEffect(() => {
