@@ -112,26 +112,31 @@ export default function MemberList() {
             columns={[
               {
                 name: 'Username',
+                width: 200,
                 align: 'center',
                 type: 'link',
               },
               {
                 name: 'Student ID',
+                width: 155,
                 align: 'center',
                 type: 'string',
               },
               {
                 name: 'Real Name',
+                width: 144,
                 align: 'center',
                 type: 'string',
               },
               {
                 name: 'Institute',
+                width: 165,
                 align: 'center',
                 type: 'string',
               },
               {
                 name: 'Role',
+                width: 127,
                 align: 'center',
                 type: 'string',
               },

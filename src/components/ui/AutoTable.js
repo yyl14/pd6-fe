@@ -117,6 +117,11 @@ const useStyles = makeStyles((theme) => ({
   row: {
     height: '60px',
   },
+  tableBodyCell: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
   bottomWrapper: {
     display: 'flex',
     alignItems: 'center',
@@ -523,6 +528,7 @@ function AutoTable({
                       style={{
                         minWidth: column.minWidth,
                         width: column.width,
+                        maxWidth: column.width,
                         display: 'flex',
                         justifyContent: 'center',
                       }}
@@ -588,7 +594,7 @@ function AutoTable({
                   key={hasLink ? 'link' : 'blank'}
                   align="right"
                   className={classes.tableHeadCell}
-                  style={{ minWidth: 20 }}
+                  style={{ minWidth: 20, width: '100%' }}
                 />
               </TableRow>
             </TableHead>
@@ -607,7 +613,11 @@ function AutoTable({
                         return (
                           <React.Fragment key={`${row.id}-${column.name}`}>
                             <TableCell className={classes.tableColumnLeftSpacing} />
-                            <TableCell align={column.align}>
+                            <TableCell
+                              className={`${classes.tableBodyCell} ${classes.textLink}`}
+                              style={{ minWidth: column.minWidth, width: column.width, maxWidth: column.width }}
+                              align={column.align}
+                            >
                               <Link to={value.path} className={classes.textLink}>
                                 {column.format && typeof value.text === 'number'
                                   ? column.format(value.text)
@@ -622,7 +632,10 @@ function AutoTable({
                           <TableCell className={classes.tableColumnLeftSpacing} />
                           <TableCell
                             align={column.align}
-                            className={column.colors && column.colors[value] && classes[column.colors[value]]}
+                            className={`${column.colors && column.colors[value] && classes[column.colors[value]]} ${
+                              classes.tableBodyCell
+                            }`}
+                            style={{ minWidth: column.minWidth, width: column.width, maxWidth: column.width }}
                           >
                             {column.format && typeof value === 'number' ? column.format(value) : value}
                           </TableCell>

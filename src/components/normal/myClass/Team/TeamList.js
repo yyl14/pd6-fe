@@ -201,13 +201,15 @@ export default function TeamList() {
           {
             name: 'Label',
             align: 'center',
-            minWidth: 50,
+            minWidth: 125,
+            width: 125,
             type: 'string',
           },
           {
             name: 'Team Name',
             align: 'center',
-            minWidth: 150,
+            minWidth: 153,
+            width: 153,
             type: 'link',
           },
         ]}
@@ -218,7 +220,6 @@ export default function TeamList() {
             text: item.name,
             path: `/my-class/${courseId}/${classId}/team/${item.id}`,
           },
-          Label: item.label,
           link: `/my-class/${courseId}/${classId}/team/${item.id}`,
         })}
         hasLink
