@@ -24,7 +24,7 @@ import CodeArea from '../../../../ui/CodeArea';
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
 
-import { browseAccountReviewedPeerReviewRecord, submitPeerReviewRecord, readPeerReviewRecord } from '../../../../../actions/api/peerReview';
+import { browseAccountReviewedPeerReviewRecord, submitPeerReviewRecord } from '../../../../../actions/api/peerReview';
 import { readPeerReviewRecordWithCode } from '../../../../../actions/myClass/peerReview';
 
 const useStyles = makeStyles((theme) => ({
