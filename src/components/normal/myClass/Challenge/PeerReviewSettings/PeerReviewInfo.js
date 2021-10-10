@@ -82,7 +82,7 @@ export default function PeerReviewInfo() {
   };
 
   const clickDelete = () => {
-    dispatch(deletePeerReview(authToken, peerReviewId));
+    dispatch(deletePeerReview(authToken, peerReviewId, challengeId));
     history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
   };
 
