@@ -11,10 +11,10 @@ export default function SubmissionList() {
   const authToken = useSelector((state) => state.auth.token);
   const accountId = useSelector((state) => state.user.id);
   const viewError = useSelector((state) => state.error.api.view);
-  const problems = useSelector((state) => state.problem.byId);
-  const challenges = useSelector((state) => state.challenges.byId);
-  const courses = useSelector((state) => state.courses.byId);
-  const classes = useSelector((state) => state.classes.byId);
+  const problems = useSelector((state) => state.problem);
+  const challenges = useSelector((state) => state.challenges);
+  const courses = useSelector((state) => state.courses);
+  const classes = useSelector((state) => state.classes);
   const userClasses = useSelector((state) => state.user.classes);
 
   return (
@@ -30,6 +30,59 @@ export default function SubmissionList() {
             label: 'Submission ID',
             type: 'TEXT',
             operation: '=',
+          },
+          {
+            reduxStateId: 'course_id',
+            label: 'Course',
+            type: 'ENUM',
+            operation: 'IN',
+            options: courses.allIds.map((id) => ({
+              value: id,
+              label: courses.byId[id].name,
+            })),
+          },
+          {
+            reduxStateId: 'class_id',
+            label: 'Class',
+            type: 'ENUM',
+            operation: 'IN',
+            options: classes.allIds.map((id) => ({
+              value: id,
+              label: classes.byId[id].name,
+            })),
+          },
+          {
+            reduxStateId: 'challenge_id',
+            label: 'Challenge',
+            type: 'ENUM',
+            operation: 'IN',
+            options: challenges.allIds.map((id) => ({
+              value: id,
+              label: challenges.byId[id].title,
+            })),
+          },
+          // {
+          //   reduxStateId: 'problem_id',
+          //   label: 'Task',
+          //   type: 'TEXT',
+          //   operation: '=',
+          // },
+          {
+            reduxStateId: 'verdict',
+            label: 'Status',
+            type: 'ENUM',
+            operation: 'IN',
+            options: [
+              { value: 'ACCEPTED', label: 'Accepted' },
+              { value: 'WRONG ANSWER', label: 'Wrong Answer' },
+              { value: 'MEMORY LIMIT EXCEED', label: 'Memory Limit Exceed' },
+              { value: 'TIME LIMIT EXCEED', label: 'Time Limit Exceed' },
+              { value: 'RUNTIME ERROR', label: 'Runtime Error' },
+              { value: 'COMPILE ERROR', label: 'Compile Error' },
+              { value: 'CONTACT MANAGER', label: 'Contact Manager' },
+              { value: 'FORBIDDEN ACTION', label: 'Restricted Action' },
+              { value: 'SYSTEM ERROR', label: 'System Error' },
+            ],
           },
         ]}
         refetch={(browseParams, ident) => {
@@ -97,16 +150,16 @@ export default function SubmissionList() {
         reduxDataToRows={(item) => ({
           id: item.id,
           'Submission ID': item.id,
-          Course: courses[item.course_id] ? courses[item.course_id].name : '',
+          Course: courses.byId[item.course_id] ? courses.byId[item.course_id].name : '',
           Class: {
-            text: classes[item.class_id] ? classes[item.class_id].name : '',
+            text: classes.byId[item.class_id] ? classes.byId[item.class_id].name : '',
             path: `/${
               userClasses.filter((c) => c.class_id === item.class_id).length === 0 ? 'all-class' : 'my-class'
             }/${item.course_id}/${item.class_id}/challenge`,
           },
-          Challenge: challenges[item.challenge_id] ? challenges[item.challenge_id].title : '',
+          Challenge: challenges.byId[item.challenge_id] ? challenges.byId[item.challenge_id].title : '',
           Task: {
-            text: problems[item.problem_id] ? problems[item.problem_id].challenge_label : '',
+            text: problems.byId[item.problem_id] ? problems.byId[item.problem_id].challenge_label : '',
             path: `/${
               userClasses.filter((c) => c.class_id === item.class_id).length === 0 ? 'all-class' : 'my-class'
             }/${item.course_id}/${item.class_id}/challenge/${item.challenge_id}/${item.problem_id}`,
