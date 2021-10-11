@@ -145,7 +145,7 @@ export default function PeerReviewInfo() {
             Received Peer Reviews
           </Button>
           <Button color="primary" onClick={clickPeerReview}>
-            Peer Review
+            Start Peer Review
           </Button>
         </div>
       )}
