@@ -131,7 +131,12 @@ export default function RegisterForm() {
 
     setErrors(labelName.reduce((acc, item) => ({ ...acc, [item]: newInputs[item] === '' }), {}));
     setErrorTexts(
-      labelName.reduce((acc, item) => ({ ...acc, [item]: newInputs[item] === '' ? "Can't be empty" : '' }), {}),
+      labelName.reduce((acc, item) => {
+        if (item !== 'password' && item !== 'confirmPassword') {
+          return { ...acc, [item]: newInputs[item].trim() === '' ? "Can't be empty" : '' };
+        }
+        return { ...acc, [item]: newInputs[item] === '' ? "Can't be empty" : '' };
+      }, {}),
     );
 
     // check password
@@ -147,11 +152,11 @@ export default function RegisterForm() {
         userRegister(
           inputs.username.trim(),
           inputs.password,
-          inputs.nickname,
-          inputs.realName,
-          inputs.email,
+          inputs.nickname.trim(),
+          inputs.realName.trim(),
+          inputs.email.trim(),
           transform(inputs.school),
-          inputs.studentId,
+          inputs.studentId.trim(),
         ),
       );
       setHasRequest(true);
