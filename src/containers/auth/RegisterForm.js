@@ -105,7 +105,6 @@ export default function RegisterForm() {
 
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
 
-  const [disabled, setDisabled] = useState(false);
   const [popup, setPopup] = useState(false);
   const [errorPopup, setErrorPopup] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -129,7 +128,15 @@ export default function RegisterForm() {
     const newInputs = labelName.reduce((acc, item) => ({ ...acc, [item]: inputs[item].trim() }), {});
     let hasError = labelName.reduce((acc, item) => acc || newInputs[item] === '', false);
 
-    setErrors(labelName.reduce((acc, item) => ({ ...acc, [item]: newInputs[item] === '' }), {}));
+    setErrors(
+      labelName.reduce((acc, item) => {
+        console.log(item, newInputs[item] === '');
+        if (item !== 'password' && item !== 'confirmPassword') {
+          return { ...acc, [item]: newInputs[item].trim() === '' };
+        }
+        return { ...acc, [item]: newInputs[item] === '' };
+      }, {}),
+    );
     setErrorTexts(
       labelName.reduce((acc, item) => {
         if (item !== 'password' && item !== 'confirmPassword') {
@@ -341,7 +348,7 @@ export default function RegisterForm() {
                 </Typography>
               </div>
               <div className={classNames.authButtons}>
-                <Button disabled={disabled} onClick={onNextPage} color="primary">
+                <Button onClick={onNextPage} color="primary">
                   Next
                 </Button>
               </div>
@@ -429,10 +436,10 @@ export default function RegisterForm() {
                 }}
               />
               <div className={classNames.authButtons}>
-                <Button disabled={disabled} onClick={() => setNextPage(false)}>
+                <Button onClick={() => setNextPage(false)}>
                   Back
                 </Button>
-                <Button disabled={disabled} onClick={() => onSubmit()} color="primary">
+                <Button onClick={() => onSubmit()} color="primary">
                   Register
                 </Button>
               </div>
