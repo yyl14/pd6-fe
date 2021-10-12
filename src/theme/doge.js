@@ -625,7 +625,6 @@ const props = {
     disableRipple: true,
   },
 
-  // Name of the component ⚛️
   MuiButton: {
     variant: 'contained',
     disableElevation: true,
