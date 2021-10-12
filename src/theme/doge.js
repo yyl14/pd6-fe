@@ -26,11 +26,8 @@ const blue = {
   dark: '#1184D1',
 };
 
-const red = {
-  60: '#FF9A9A',
-  80: '#FF8176',
-  100: '#EA3222',
-  dark: '#D51D0D',
+const green = {
+  100: '429044',
 };
 
 const dogeMono = {
@@ -92,6 +89,10 @@ const palette = {
     main: dogeRed[100],
     dark: dogeRed.dark,
     contrastText: 'white',
+  },
+
+  green: {
+    main: green[100],
   },
 
   action: {

@@ -106,7 +106,7 @@ export default function AccountSetting() {
   }, [account, pendingStudentCards]);
 
   function keydownHandler({ key }) {
-    if (String(key) === 'T' || String(key) === 't') {
+    if (String(key) === '/') {
       setShowThemeSelector((state) => !state);
     }
   }
