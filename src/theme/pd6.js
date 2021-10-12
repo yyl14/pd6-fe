@@ -69,6 +69,10 @@ const palette = {
     contrastText: 'white',
   },
 
+  green: {
+    main: blue[100],
+  },
+
   action: {
     disabledBackground: mono.gray,
     disabled: mono.lightGray, // font color

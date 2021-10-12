@@ -94,7 +94,7 @@ export default function MySubmission() {
             colors: {
               'Waiting for judge': 'default',
               'No Status': 'error',
-              Accepted: 'primary',
+              Accepted: 'accepted',
               'Wrong Answer': 'error',
               'Memory Limit Exceed': 'error',
               'Time Limit Exceed': 'error',

@@ -33,6 +33,10 @@ const red = {
   dark: '#D51D0D',
 };
 
+const green = {
+  100: '#429044',
+};
+
 const palette = {
   /*
   Default components applies colors in "grey" sub-object if "color" prop was not specified.
@@ -67,6 +71,10 @@ const palette = {
     main: red[100],
     dark: red.dark,
     contrastText: 'white',
+  },
+
+  green: {
+    main: green[100],
   },
 
   action: {

@@ -222,6 +222,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.grey[300],
   },
   default: { color: theme.palette.black.dark },
+  accepted: { color: theme.palette.green.main },
   error: { color: theme.palette.secondary.main },
   primary: { color: theme.palette.primary.main },
 }));
