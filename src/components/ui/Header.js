@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     right: 'auto',
     minHeight: '55px',
     height: '55px',
-    background: theme.palette.black.main,
+    background: theme.palette.primary.light,
     minWidth: 'max-content',
   },
   toolbar: {
@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
     '@media (max-width: 760px)': {
       marginLeft: '20px',
     },
+    color: theme.palette.primary.dark,
   },
 
   // header right
@@ -44,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 15,
   },
   date: {
+    color: theme.palette.primary.dark,
     position: 'relative',
     float: 'left',
     marginRight: '4px',
@@ -57,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   notificationIcon: {
+    color: theme.palette.primary.dark,
     position: 'relative',
     transform: 'translateY(2px)',
     float: 'left',
@@ -131,8 +134,8 @@ const useStyles = makeStyles((theme) => ({
     bottom: '13px',
   },
   userButton: {
-    backgroundColor: theme.palette.black.main,
-    color: theme.palette.primary.contrastText,
+    backgroundColor: 'transparent',
+    color: theme.palette.primary.dark,
     border: 'none',
     '&:hover': {
       cursor: 'pointer',
@@ -140,7 +143,7 @@ const useStyles = makeStyles((theme) => ({
   },
   active: {
     textDecoration: 'none',
-    color: theme.palette.primary.main,
+    color: theme.palette.primary.main, // temporary
   },
   userDropdownContent: {
     position: 'fixed',

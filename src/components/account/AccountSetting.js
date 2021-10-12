@@ -1,8 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Snackbar } from '@material-ui/core';
+import {
+  DialogContent,
+  MenuItem,
+  Select,
+  Snackbar,
+  Dialog,
+  FormControl,
+  DialogTitle,
+  Typography,
+} from '@material-ui/core';
 import { fetchStudentCards, browsePendingStudentCards } from '../../actions/user/user';
 import { getInstitutes } from '../../actions/common/common';
+import ThemeToggleContext from '../../contexts/themeToggleContext';
 import GeneralLoading from '../GeneralLoading';
 import PageTitle from '../ui/PageTitle';
 import NoMatch from '../noMatch';
@@ -10,14 +20,32 @@ import BasicInfo from './BasicInfo';
 import BasicInfoEdit from './BasicInfoEdit';
 import StudentInfoEdit from './StudentInfoEdit';
 import NewPassword from './NewPassword';
+import useEventListener from '../../hooks/useEventListener';
+
+const activeThemeList = [
+  {
+    label: 'PDOGS 6',
+    value: 'pd6New',
+  },
+  {
+    label: 'PDOGS 6 Classic',
+    value: 'pd6',
+  },
+  {
+    label: 'DOGE',
+    value: 'doge',
+  },
+];
 
 /* This is a level 3 component (page component) */
 
 export default function AccountSetting() {
+  const { value: selectedTheme, setter: setSelectedTheme } = useContext(ThemeToggleContext);
   const [cards, setCards] = useState([]);
   const [pendingCards, setPendingCards] = useState([]);
   const [editBasicInfo, setEditBasicInfo] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
+  const [showThemeSelector, setShowThemeSelector] = useState(false);
   const [message, setMessage] = useState('');
 
   const dispatch = useDispatch();
@@ -77,6 +105,14 @@ export default function AccountSetting() {
     );
   }, [account, pendingStudentCards]);
 
+  function keydownHandler({ key }) {
+    if (String(key) === 'T' || String(key) === 't') {
+      setShowThemeSelector((state) => !state);
+    }
+  }
+
+  useEventListener('keydown', keydownHandler);
+
   if (account === undefined || studentCards === undefined) {
     if (loading.auth.fetchAccount || loading.user.fetchStudentCards || loading.user.browsePendingStudentCards) {
       return <GeneralLoading />;
@@ -97,7 +133,7 @@ export default function AccountSetting() {
   };
 
   return (
-    <div>
+    <>
       <PageTitle text={`${account.username} / Setting`} />
       {editBasicInfo ? (
         <BasicInfoEdit
@@ -119,7 +155,6 @@ export default function AccountSetting() {
       <div>
         <StudentInfoEdit cards={cards} pendingCards={pendingCards} />
       </div>
-
       <NewPassword />
       <Snackbar
         open={showSnackbar}
@@ -130,6 +165,22 @@ export default function AccountSetting() {
         }}
         message={message}
       />
-    </div>
+      <Dialog open={showThemeSelector} onClose={() => setShowThemeSelector(false)}>
+        <DialogTitle>
+          <Typography variant="h4">Wow, super secret option!</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <FormControl variant="outlined">
+            <Select value={selectedTheme} onChange={(e) => setSelectedTheme(e.target.value)}>
+              {activeThemeList.map((item) => (
+                <MenuItem key={item.value} value={item.value}>
+                  {item.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
