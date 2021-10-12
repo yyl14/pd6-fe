@@ -124,7 +124,7 @@ export default function MemberList() {
               },
               {
                 name: 'Real Name',
-                width: 144,
+                width: 155,
                 align: 'center',
                 type: 'string',
               },
