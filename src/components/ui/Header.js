@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     right: 'auto',
     minHeight: '55px',
     height: '55px',
-    background: theme.palette.primary.light,
+    background: theme.headerStyle.background,
     minWidth: 'max-content',
   },
   toolbar: {
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     '@media (max-width: 760px)': {
       marginLeft: '20px',
     },
-    color: theme.palette.primary.dark,
+    color: theme.headerStyle.color,
   },
 
   // header right
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 15,
   },
   date: {
-    color: theme.palette.primary.dark,
+    color: theme.headerStyle.color,
     position: 'relative',
     float: 'left',
     marginRight: '4px',
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   notificationIcon: {
-    color: theme.palette.primary.dark,
+    color: theme.headerStyle.color,
     position: 'relative',
     transform: 'translateY(2px)',
     float: 'left',
@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
   unreadDot: {
     width: '6.75px',
     height: '6.75px',
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.headerStyle.background,
     position: 'absolute',
     left: '30px',
     top: '28px',
@@ -135,7 +135,7 @@ const useStyles = makeStyles((theme) => ({
   },
   userButton: {
     backgroundColor: 'transparent',
-    color: theme.palette.primary.dark,
+    color: theme.headerStyle.color,
     border: 'none',
     '&:hover': {
       cursor: 'pointer',
@@ -143,7 +143,7 @@ const useStyles = makeStyles((theme) => ({
   },
   active: {
     textDecoration: 'none',
-    color: theme.palette.primary.main, // temporary
+    color: theme.headerStyle.activeColor, // temporary
   },
   userDropdownContent: {
     position: 'fixed',

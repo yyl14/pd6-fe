@@ -647,12 +647,19 @@ const props = {
   },
 };
 
+const headerStyle = {
+  background: palette.primary.light,
+  color: palette.primary.dark,
+  activeColor: palette.primary.main,
+};
+
 const theme = createTheme({
   palette,
   typography,
   shape,
   overrides,
   props,
+  headerStyle,
 });
 
 export default responsiveFontSizes(theme);

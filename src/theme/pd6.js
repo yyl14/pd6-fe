@@ -1,8 +1,6 @@
 import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import ErrorText from '../components/ui/ErrorText';
 
-const classicTheme = false;
-
 // UI/UX Standard
 /*
   These objects exists solely for the ease of reference. It is NOT included in the theme object.
@@ -35,127 +33,54 @@ const red = {
   dark: '#D51D0D',
 };
 
-const dogeMono = {
-  white: '#FFFFFF',
-  veryLightGray: '#F8F8F8',
-  lightGray: '#aca4a4',
-  gray: '#D8cec0',
-  semiDarkGray: '#615b4e',
-  darkGray: '#656565',
-  black: '#615b4e',
-};
-
-const doge = {
-  60: '#F2ead5',
-  80: '#FF8176',
-  100: '#d7b388',
-  dark: '#Cd9a5a',
-};
-
-const dogeRed = {
-  60: '#dca4a4',
-  80: '#c68181',
-  100: '#b44c4c',
-  dark: '#a42c04',
-};
-
-const palette = classicTheme
-  ? {
-    /*
+const palette = {
+  /*
   Default components applies colors in "grey" sub-object if "color" prop was not specified.
   See component source code to see which one it applies
   (eg. grey[300] for contained Button backgroundColor).
   */
-    grey: {
-      100: dogeMono.lightGray,
-      300: dogeMono.gray, // root backgroundColor for Contained Buttons, etc.
-      A100: dogeMono.lightGray,
-      A400: dogeMono.darkGray,
-      A700: dogeMono.semiDarkGray,
-    },
+  grey: {
+    100: mono.lightGray,
+    300: mono.gray, // root backgroundColor for Contained Buttons, etc.
+    A100: mono.lightGray,
+    A400: mono.darkGray,
+    A500: mono.emptyGray,
+    A700: mono.semiDarkGray,
+  },
 
-    black: {
-      main: mono.lightBlack,
-      dark: mono.black,
-    },
+  black: {
+    main: mono.lightBlack,
+    dark: mono.black,
+  },
 
-    // primary: blue
-    primary: {
-      light: doge[60],
-      hover: doge[80],
-      main: doge[100],
-      dark: doge.dark,
-      contrastText: 'white',
-    },
+  // primary: blue
+  primary: {
+    light: blue[60],
+    hover: blue[80],
+    main: blue[100],
+    dark: blue.dark,
+    contrastText: 'white',
+  },
+  // secondary: red
+  secondary: {
+    light: red[60],
+    main: red[100],
+    dark: red.dark,
+    contrastText: 'white',
+  },
 
-    // secondary: red
-    secondary: {
-      light: dogeRed[60],
-      main: dogeRed[100],
-      dark: dogeRed.dark,
-      contrastText: 'white',
-    },
+  action: {
+    disabledBackground: mono.gray,
+    disabled: mono.lightGray, // font color
+    disabledOpacity: '100%',
+  },
 
-    action: {
-      disabledBackground: dogeMono.gray,
-      disabled: dogeMono.lightGray, // font color
-      disabledOpacity: '100%',
-    },
-
-    background: {
-      default: dogeMono.veryLightGray, // mono - very light
-      paper: 'white',
-      card: 'white',
-    },
-  }
-  : {
-    /*
-  Default components applies colors in "grey" sub-object if "color" prop was not specified.
-  See component source code to see which one it applies
-  (eg. grey[300] for contained Button backgroundColor).
-  */
-    grey: {
-      100: mono.lightGray,
-      300: mono.gray, // root backgroundColor for Contained Buttons, etc.
-      A100: mono.lightGray,
-      A400: mono.darkGray,
-      A500: mono.emptyGray,
-      A700: mono.semiDarkGray,
-    },
-
-    black: {
-      main: mono.lightBlack,
-      dark: mono.black,
-    },
-
-    // primary: blue
-    primary: {
-      light: blue[60],
-      hover: blue[80],
-      main: blue[100],
-      dark: blue.dark,
-      contrastText: 'white',
-    },
-    // secondary: red
-    secondary: {
-      light: red[60],
-      main: red[100],
-      dark: red.dark,
-      contrastText: 'white',
-    },
-
-    action: {
-      disabledBackground: mono.gray,
-      disabled: mono.lightGray, // font color
-      disabledOpacity: '100%',
-    },
-
-    background: {
-      default: mono.veryLightGray, // mono - very light
-      paper: 'white',
-      card: 'white',
-    },
-  };
+  background: {
+    default: mono.veryLightGray, // mono - very light
+    paper: 'white',
+    card: 'white',
+  },
+};
 
 const typography = {
   /* Note: to change default html font size (basis of 'rem'), go to src/styles/index.css */
@@ -722,12 +647,19 @@ const props = {
   },
 };
 
+const headerStyle = {
+  background: mono.black,
+  color: mono.white,
+  activeColor: palette.primary.main,
+};
+
 const theme = createTheme({
   palette,
   typography,
   shape,
   overrides,
   props,
+  headerStyle,
 });
 
 export default responsiveFontSizes(theme);
