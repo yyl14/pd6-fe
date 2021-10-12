@@ -34,7 +34,7 @@ const red = {
 };
 
 const green = {
-  100: '429044',
+  100: '#429044',
 };
 
 const palette = {

@@ -27,7 +27,7 @@ const blue = {
 };
 
 const green = {
-  100: '429044',
+  100: '#429044',
 };
 
 const dogeMono = {
