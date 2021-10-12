@@ -14,6 +14,7 @@ import MySubmission from './mySubmission';
 import Sidebar from '../components/ui/Sidebar';
 import Header from '../components/ui/Header';
 import { getUserInfo } from '../actions/user/auth';
+import Icon from '../components/ui/icon';
 import '../styles/index.css';
 
 const useStyles = makeStyles(() => ({
@@ -92,7 +93,7 @@ function Index() {
   return (
     <>
       <div className="wrapper">
-        <Header handleSidebarToggle={toggleSidebar} hideToggle={disableSidebar} />
+        <Header />
         <Sidebar open={showSidebar && !disableSidebar} onClose={() => setShowSidebar(false)} />
         <div>
           <div
@@ -100,6 +101,9 @@ function Index() {
               showSidebar && !disableSidebar ? '' : ' layout-content-container-no-sidebar'
             }`}
           >
+            <div className={disableSidebar ? 'hide' : 'sidebar-toggle-pin'}>
+              <Icon.VerticalLine className="sidebar-line" onClick={toggleSidebar} />
+            </div>
             <div className="layout-content">
               <Switch>
                 <Route path="/admin" component={Admin} />
