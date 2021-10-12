@@ -173,7 +173,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header({ handleSidebarToggle, hideToggle }) {
+export default function Header() {
   const dispatch = useDispatch();
   const classes = useStyles();
   const history = useHistory();
@@ -406,7 +406,6 @@ export default function Header({ handleSidebarToggle, hideToggle }) {
     <div>
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
-          <Icon.Menu className={hideToggle ? classes.hide : classes.item} onClick={handleSidebarToggle} />
           {itemList.map((item) => (
             <Typography
               variant="h6"
