@@ -35,6 +35,14 @@ const activeThemeList = [
     label: 'DOGE',
     value: 'doge',
   },
+  {
+    label: 'IM Night 2021',
+    value: 'IMNight2021',
+  },
+  {
+    label: 'IM Camp 2021',
+    value: 'IMCamp2021',
+  },
 ];
 
 /* This is a level 3 component (page component) */
@@ -167,7 +175,7 @@ export default function AccountSetting() {
       />
       <Dialog open={showThemeSelector} onClose={() => setShowThemeSelector(false)}>
         <DialogTitle>
-          <Typography variant="h4">Wow, super secret option!</Typography>
+          <Typography variant="h4">Wow, super secret option! 🐕</Typography>
         </DialogTitle>
         <DialogContent>
           <FormControl variant="outlined">
