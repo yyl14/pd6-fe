@@ -13,6 +13,7 @@ import {
   FormControl,
   Select,
   MenuItem,
+  Snackbar,
 } from '@material-ui/core';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
@@ -61,7 +62,7 @@ export default function TaskAddingCard({ open, setOpen }) {
   const challenges = useSelector((state) => state.challenges);
   const authToken = useSelector((state) => state.auth.token);
   const problems = useSelector((state) => state.problem);
-  // const error = useSelector((state) => state.error);
+  const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
   const commonLoading = useSelector((state) => state.loading.common);
 
@@ -75,6 +76,17 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [maxScore, setMaxScore] = useState(3);
   const [minScore, setMinScore] = useState(1);
   const [peerNumber, setPeerNumber] = useState(2);
+  const [errorSnackbar, setErrorSnackbar] = useState(false);
+
+  useEffect(() => {
+    console.log('error', error);
+  }, [error]);
+
+  useEffect(() => {
+    if (error.myClass.challenge.addPeerReview) {
+      setErrorSnackbar(true);
+    }
+  }, [error.myClass.challenge.addPeerReview]);
 
   useEffect(() => {
     if (!loading.addProblem && !loading.addEssay && !loading.addPeerReview) {
@@ -99,7 +111,16 @@ export default function TaskAddingCard({ open, setOpen }) {
         && minScore !== ''
         && peerNumber !== ''
       ) {
-        setDisabled(false);
+        if (
+          parseInt(maxScore, 10) <= parseInt(minScore, 10)
+          || parseInt(maxScore, 10) < 0
+          || parseInt(minScore, 10) < 0
+          || parseInt(peerNumber, 10) < 0
+        ) {
+          setDisabled(true);
+        } else {
+          setDisabled(false);
+        }
       } else {
         setDisabled(true);
       }
@@ -326,6 +347,15 @@ export default function TaskAddingCard({ open, setOpen }) {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={errorSnackbar}
+        message={
+          error.myClass.challenge.addPeerReview
+            ? `Error: ${error.myClass.challenge.addPeerReview}. Check whether the input numbers are valid.`
+            : 'Error'
+        }
+        onClose={() => setErrorSnackbar(false)}
+      />
     </>
   );
 }
