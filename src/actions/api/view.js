@@ -286,10 +286,120 @@ const browseMySubmission = (token, accountId, browseParams, tableId = null) => a
   }
 };
 
+const browsePeerReviewSummaryReview = (token, peerReviewId, browseParams, tableId = null) => async (dispatch) => {
+  try {
+    const config = {
+      headers: { 'auth-token': token },
+      params: browseParamsTransForm(browseParams),
+    };
+    dispatch({ type: viewConstants.BROWSE_PEER_REVIEW_SUMMARY_REVIEW_START });
+    const res = await agent.get(`/peer-review/${peerReviewId}/view/reviewer-summary`, config);
+    const { data, total_count } = res.data.data;
+
+    dispatch({
+      type: viewConstants.BROWSE_PEER_REVIEW_SUMMARY_REVIEW_SUCCESS,
+      payload: {
+        data: {
+          peerReviewId,
+          peerReviewSummary: data.map(
+            ({
+              account_id,
+              username,
+              real_name,
+              student_id,
+              peer_review_record_ids,
+              peer_review_record_scores,
+              average_score,
+            }) => ({
+              account_id,
+              username,
+              real_name,
+              student_id,
+              record_id: peer_review_record_ids,
+              score: peer_review_record_scores,
+              average_score,
+            }),
+          ),
+        },
+      },
+    });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: data.map((item) => item.account_id),
+        offset: browseParams.offset,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: viewConstants.BROWSE_PEER_REVIEW_SUMMARY_REVIEW_FAIL,
+      error,
+    });
+  }
+};
+
+const browsePeerReviewSummaryReceive = (token, peerReviewId, browseParams, tableId = null) => async (dispatch) => {
+  try {
+    const config = {
+      headers: { 'auth-token': token },
+      params: browseParamsTransForm(browseParams),
+    };
+    dispatch({ type: viewConstants.BROWSE_PEER_REVIEW_SUMMARY_RECEIVE_START });
+    const res = await agent.get(`/peer-review/${peerReviewId}/view/receiver-summary`, config);
+    const { data, total_count } = res.data.data;
+
+    dispatch({
+      type: viewConstants.BROWSE_PEER_REVIEW_SUMMARY_RECEIVE_SUCCESS,
+      payload: {
+        data: {
+          peerReviewId,
+          peerReviewSummary: data.map(
+            ({
+              account_id,
+              username,
+              real_name,
+              student_id,
+              peer_review_record_ids,
+              peer_review_record_scores,
+              average_score,
+            }) => ({
+              account_id,
+              username,
+              real_name,
+              student_id,
+              record_id: peer_review_record_ids,
+              score: peer_review_record_scores,
+              average_score,
+            }),
+          ),
+        },
+      },
+    });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: data.map((item) => item.account_id),
+        offset: browseParams.offset,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: viewConstants.BROWSE_PEER_REVIEW_SUMMARY_RECEIVE_FAIL,
+      error,
+    });
+  }
+};
+
 export {
   browseAccessLog,
   browseAccountWithDefaultStudentId,
   browseClassMember,
   browseSubmissionUnderClass,
   browseMySubmission,
+  browsePeerReviewSummaryReview,
+  browsePeerReviewSummaryReceive,
 };
