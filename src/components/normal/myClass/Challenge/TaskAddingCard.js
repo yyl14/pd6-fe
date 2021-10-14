@@ -79,14 +79,10 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [errorSnackbar, setErrorSnackbar] = useState(false);
 
   useEffect(() => {
-    console.log('error', error);
-  }, [error]);
-
-  useEffect(() => {
     if (error.myClass.challenge.addPeerReview) {
       setErrorSnackbar(true);
     }
-  }, [error.myClass.challenge.addPeerReview]);
+  }, [error.myClass.challenge]);
 
   useEffect(() => {
     if (!loading.addProblem && !loading.addEssay && !loading.addPeerReview) {
@@ -351,8 +347,7 @@ export default function TaskAddingCard({ open, setOpen }) {
         open={errorSnackbar}
         message={
           error.myClass.challenge.addPeerReview
-            ? `Error: ${error.myClass.challenge.addPeerReview}. Check whether the input numbers are valid.`
-            : 'Error'
+          && `Error: ${error.myClass.challenge.addPeerReview}. Check whether the input numbers are valid.`
         }
         onClose={() => setErrorSnackbar(false)}
       />
