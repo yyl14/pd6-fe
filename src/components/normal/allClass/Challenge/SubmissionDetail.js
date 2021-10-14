@@ -11,6 +11,7 @@ import PageTitle from '../../../ui/PageTitle';
 import GeneralLoading from '../../../GeneralLoading';
 import { browseJudgeCases, browseTestcases } from '../../../../actions/myClass/problem';
 import { fetchSubmission, readSubmissionDetail } from '../../../../actions/myClass/submission';
+import { browseSubmitLang } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
 import CodeArea from '../../../ui/CodeArea';
 // import { browseSubmitLang } from '../../../../actions/common/common';
@@ -54,6 +55,7 @@ export default function SubmissionDetail() {
   const user = useSelector((state) => state.user);
   const judgeCases = useSelector((state) => state.judgeCases);
   const testcases = useSelector((state) => state.testcases);
+  const submitLangs = useSelector((state) => state.submitLangs.byId);
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
@@ -74,6 +76,10 @@ export default function SubmissionDetail() {
   useEffect(() => {
     dispatch(browseTestcases(authToken, problemId));
   }, [authToken, dispatch, problemId]);
+
+  useEffect(() => {
+    dispatch(browseSubmitLang(authToken));
+  }, [authToken, dispatch]);
 
   const transformSample = useCallback(
     (id) => {
@@ -237,10 +243,15 @@ export default function SubmissionDetail() {
             {moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm')}
           </Typography>
         </AlignedText>
-        {/* <AlignedText text="Language" childrenType="text">
-          {submitLangs[submissions[submissionId].language_id]
-            && <Typography variant="body1">{submitLangs[submissions[submissionId].language_id].name}</Typography>}
-        </AlignedText> */}
+        <AlignedText text="Language" childrenType="text">
+          {submitLangs[submissions[submissionId].language_id] && (
+            <Typography variant="body1">
+              {`${submitLangs[submissions[submissionId].language_id].name} ${
+                submitLangs[submissions[submissionId].language_id].version
+              }`}
+            </Typography>
+          )}
+        </AlignedText>
       </SimpleBar>
       <SimpleBar title="Submission Result" noIndent>
         <SimpleTable
@@ -257,7 +268,7 @@ export default function SubmissionDetail() {
             },
             {
               id: 'time',
-              label: 'Time(ms)',
+              label: 'Time (ms)',
               minWidth: 50,
               align: 'center',
               width: 600,
@@ -265,7 +276,7 @@ export default function SubmissionDetail() {
             },
             {
               id: 'memory',
-              label: 'Memory(kb)',
+              label: 'Memory (kb)',
               minWidth: 50,
               align: 'center',
               width: 600,
@@ -281,7 +292,7 @@ export default function SubmissionDetail() {
               colors: {
                 'Waiting for judge': 'default',
                 'No Status': 'error',
-                Accepted: 'primary',
+                Accepted: 'accepted',
                 'Wrong Answer': 'error',
                 'Memory Limit Exceed': 'error',
                 'Time Limit Exceed': 'error',

@@ -5,6 +5,10 @@ const initialState = {
   editPeerReview: false,
   deletePeerReview: false,
   readPeerReviewRecord: false,
+  submitPeerReviewRecord: false,
+  browseAccountReviewedPeerReviewRecord: false,
+  assignPeerReviewRecord: false,
+  browseAccountReceivedPeerReviewRecord: false,
 };
 
 export default function view(state = initialState, action) {
@@ -62,6 +66,62 @@ export default function view(state = initialState, action) {
       return {
         ...state,
         readPeerReviewRecord: false,
+      };
+    }
+
+    case peerReviewConstants.SUBMIT_PEER_REVIEW_RECORD_START: {
+      return {
+        ...state,
+        submitPeerReviewRecord: true,
+      };
+    }
+    case peerReviewConstants.SUBMIT_PEER_REVIEW_RECORD_SUCCESS:
+    case peerReviewConstants.SUBMIT_PEER_REVIEW_RECORD_FAIL: {
+      return {
+        ...state,
+        submitPeerReviewRecord: false,
+      };
+    }
+
+    case peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_START: {
+      return {
+        ...state,
+        browseAccountReviewedPeerReviewRecord: true,
+      };
+    }
+    case peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_SUCCESS:
+    case peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_FAIL: {
+      return {
+        ...state,
+        browseAccountReviewedPeerReviewRecord: false,
+      };
+    }
+
+    case peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_START: {
+      return {
+        ...state,
+        assignPeerReviewRecord: true,
+      };
+    }
+    case peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_SUCCESS:
+    case peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_FAIL: {
+      return {
+        ...state,
+        assignPeerReviewRecord: false,
+      };
+    }
+
+    case peerReviewConstants.BROWSE_ACCOUNT_RECEIVED_PEER_REVIEW_RECORD_START: {
+      return {
+        ...state,
+        browseAccountReceivedPeerReviewRecord: true,
+      };
+    }
+    case peerReviewConstants.BROWSE_ACCOUNT_RECEIVED_PEER_REVIEW_RECORD_SUCCESS:
+    case peerReviewConstants.BROWSE_ACCOUNT_RECEIVED_PEER_REVIEW_RECORD_FAIL: {
+      return {
+        ...state,
+        browseAccountReceivedPeerReviewRecord: false,
       };
     }
     default: {

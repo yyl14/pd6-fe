@@ -438,21 +438,7 @@ export default function UIComponentUsage() {
         <Typography variant="h4">Sample Test Data Area</Typography>
         <hr className={classes.divider} />
         <div className={classes.wideComponent}>
-          <SampleTestArea
-            input="Hello"
-            output={(
-              <>
-                <Typography>World!</Typography>
-                <Typography>World!</Typography>
-                <Typography>World!</Typography>
-                <Typography>World!</Typography>
-                <Typography>World!</Typography>
-                <Typography>World!</Typography>
-                <Typography>World!</Typography>
-                <Typography>World!</Typography>
-              </>
-            )}
-          />
+          <SampleTestArea input="Hello" output="World!" />
         </div>
       </div>
       <div className={classes.wrapper}>

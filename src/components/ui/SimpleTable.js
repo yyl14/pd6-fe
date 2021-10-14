@@ -57,6 +57,11 @@ const useStyles = makeStyles((theme) => ({
     borderBottomColor: theme.palette.grey.A400,
     minWidth: '20px',
   },
+  tableBodyCell: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
   editTableCell: {
     paddingTop: '7.5px',
     paddingBottom: '7.5px',
@@ -140,7 +145,12 @@ export default function SimpleTable({
                   <TableCell
                     key={column.id}
                     align={column.align}
-                    style={{ minWidth: column.minWidth, width: column.width, border: 'none' }}
+                    style={{
+                      minWidth: column.minWidth,
+                      width: column.width,
+                      maxWidth: column.width,
+                      border: 'none',
+                    }}
                   >
                     <div className={classes.column}>
                       <b>{column.label}</b>
@@ -204,7 +214,16 @@ export default function SimpleTable({
                     if (column.type === 'link') {
                       const link = row[column.link_id];
                       return (
-                        <TableCell key={column.id} align={column.align}>
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          className={`${classes.tableBodyCell} ${classes.textLink}`}
+                          style={{
+                            minWidth: column.minWidth,
+                            width: column.width,
+                            maxWidth: column.width,
+                          }}
+                        >
                           <Link to={link} className={classes.textLink}>
                             {column.format && typeof value === 'number' ? column.format(value) : value}
                           </Link>
@@ -215,7 +234,14 @@ export default function SimpleTable({
                       <TableCell
                         key={column.id}
                         align={column.align}
-                        className={column.colors && column.colors[value] && classes[column.colors[value]]}
+                        className={`${column.colors && column.colors[value] && classes[column.colors[value]]} ${
+                          classes.tableBodyCell
+                        }`}
+                        style={{
+                          minWidth: column.minWidth,
+                          width: column.width,
+                          maxWidth: column.width,
+                        }}
                       >
                         {column.format && typeof value === 'number' ? column.format(value) : value}
                       </TableCell>

@@ -54,7 +54,7 @@ const byId = (state = {}, action) => {
           ...acc,
           [item.id]: {
             ...prototype,
-            ...state[action.payload.id],
+            ...state[item.id],
             ...item,
           },
         }),

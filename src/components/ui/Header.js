@@ -13,9 +13,12 @@ import { userBrowseAnnouncement } from '../../actions/user/user';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
+    left: 0,
+    right: 'auto',
     minHeight: '55px',
     height: '55px',
-    background: theme.palette.black.main,
+    background: theme.headerStyle.background,
+    minWidth: 'max-content',
   },
   toolbar: {
     minHeight: '55px',
@@ -26,18 +29,23 @@ const useStyles = makeStyles((theme) => ({
   // header left
   item: {
     marginLeft: '50px',
-    // marginRight: '0.8vw',
     '&:hover': {
       cursor: 'pointer',
     },
+    '@media (max-width: 760px)': {
+      marginLeft: '20px',
+    },
+    color: theme.headerStyle.color,
   },
 
   // header right
   right: {
     marginLeft: 'auto',
     marginRight: 0,
+    paddingLeft: 15,
   },
   date: {
+    color: theme.headerStyle.color,
     position: 'relative',
     float: 'left',
     marginRight: '4px',
@@ -51,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   notificationIcon: {
+    color: theme.headerStyle.color,
     position: 'relative',
     transform: 'translateY(2px)',
     float: 'left',
@@ -61,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
   unreadDot: {
     width: '6.75px',
     height: '6.75px',
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.headerStyle.background,
     position: 'absolute',
     left: '30px',
     top: '28px',
@@ -125,8 +134,8 @@ const useStyles = makeStyles((theme) => ({
     bottom: '13px',
   },
   userButton: {
-    backgroundColor: theme.palette.black.main,
-    color: theme.palette.primary.contrastText,
+    backgroundColor: 'transparent',
+    color: theme.headerStyle.color,
     border: 'none',
     '&:hover': {
       cursor: 'pointer',
@@ -134,7 +143,7 @@ const useStyles = makeStyles((theme) => ({
   },
   active: {
     textDecoration: 'none',
-    color: theme.palette.primary.main,
+    color: theme.headerStyle.activeColor, // temporary
   },
   userDropdownContent: {
     position: 'fixed',
@@ -161,6 +170,9 @@ const useStyles = makeStyles((theme) => ({
       cursor: 'pointer',
       backgroundColor: theme.palette.grey.A100,
     },
+  },
+  hide: {
+    display: 'none',
   },
 }));
 
@@ -442,7 +454,7 @@ export default function Header() {
                               {`${moment(new Date()).diff(moment(notify.post_time), 'days')} days ago`}
                             </Typography>
                           </div>
-                          <Typography variant="body" className={classes.notificationContent}>
+                          <Typography variant="body1" className={classes.notificationContent}>
                             {notify.content}
                           </Typography>
                         </div>

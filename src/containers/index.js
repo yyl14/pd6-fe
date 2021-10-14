@@ -4,30 +4,20 @@ import {
   Switch, Route, useHistory, useLocation,
 } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-
 import { makeStyles, Fab } from '@material-ui/core';
-import { Feedback, Menu } from '@material-ui/icons';
-
+import { Feedback } from '@material-ui/icons';
 import Normal from './normal';
 import Admin from './admin';
 import Account from './account';
 import User from './user';
 import MySubmission from './mySubmission';
-
 import Sidebar from '../components/ui/Sidebar';
 import Header from '../components/ui/Header';
-
 import { getUserInfo } from '../actions/user/auth';
-
+import Icon from '../components/ui/icon';
 import '../styles/index.css';
 
 const useStyles = makeStyles(() => ({
-  toggleSidebar: {
-    zIndex: 1250,
-    position: 'fixed',
-    left: '3.5vw',
-    top: 'calc(95vh - 55px)',
-  },
   bugReport: {
     position: 'fixed',
     right: '3.5vw',
@@ -111,6 +101,9 @@ function Index() {
               showSidebar && !disableSidebar ? '' : ' layout-content-container-no-sidebar'
             }`}
           >
+            <div className={disableSidebar ? 'hide' : 'sidebar-toggle-pin'}>
+              <Icon.VerticalLine className="sidebar-line" onClick={toggleSidebar} />
+            </div>
             <div className="layout-content">
               <Switch>
                 <Route path="/admin" component={Admin} />
@@ -122,9 +115,6 @@ function Index() {
             </div>
           </div>
         </div>
-        <Fab onClick={toggleSidebar} className={classes.toggleSidebar} disabled={disableSidebar}>
-          <Menu />
-        </Fab>
         <Fab href="https://forms.gle/KaYJnXwgvsovzqVG7" target="_blank" className={classes.bugReport}>
           <Feedback />
         </Fab>

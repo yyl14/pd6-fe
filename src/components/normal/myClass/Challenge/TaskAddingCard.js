@@ -26,9 +26,15 @@ import {
   peerReviewFetchChallenges,
 } from '../../../../actions/myClass/challenge';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   selectedIcon: {
     marginRight: '20px',
+  },
+  divider: {
+    height: '1px',
+    margin: '0px',
+    border: `0px solid ${theme.palette.grey[300]}`,
+    backgroundColor: theme.palette.grey[300],
   },
   peerReviewCard_display: {
     display: 'block',
@@ -80,20 +86,26 @@ export default function TaskAddingCard({ open, setOpen }) {
     if (type === 'Coding Problem' || type === 'Essay(PDF)') {
       if (label !== '' && title !== '') {
         setDisabled(false);
+      } else {
+        setDisabled(true);
       }
     } else if (type === 'Peer Review') {
       if (
         label !== ''
         && title !== ''
-        && peerReviewChallengeId !== undefined
-        && taskLabelId !== undefined
+        && peerReviewChallengeId !== ''
+        && taskLabelId !== ''
         && maxScore !== ''
         && minScore !== ''
         && peerNumber !== ''
       ) {
         setDisabled(false);
+      } else {
+        setDisabled(true);
       }
-    } else setDisabled(true);
+    } else {
+      setDisabled(true);
+    }
   }, [label, maxScore, minScore, peerNumber, peerReviewChallengeId, taskLabelId, title, type]);
 
   useEffect(() => {
@@ -122,7 +134,21 @@ export default function TaskAddingCard({ open, setOpen }) {
         break;
       }
       case 'Peer Review': {
-        dispatch(addPeerReview(authToken, challengeId, label, title, taskLabelId, minScore, maxScore, peerNumber, history, courseId, classId));
+        dispatch(
+          addPeerReview(
+            authToken,
+            challengeId,
+            label,
+            title,
+            taskLabelId,
+            minScore,
+            maxScore,
+            peerNumber,
+            history,
+            courseId,
+            classId,
+          ),
+        );
         setPeerReviewChallengeId('');
         setPeerReviewChallengeIds([]);
         setTaskLabelId('');
@@ -185,7 +211,7 @@ export default function TaskAddingCard({ open, setOpen }) {
                 </MenuItem>
                 <MenuItem value="Essay(PDF)">
                   <Icon.Paper className={classNames.selectedIcon} />
-                  Essay(PDF)
+                  Essay (PDF)
                 </MenuItem>
                 <MenuItem value="Peer Review">
                   <Icon.Peerreview className={classNames.selectedIcon} />
@@ -217,7 +243,7 @@ export default function TaskAddingCard({ open, setOpen }) {
             />
           </AlignedText>
           <div className={type === 'Peer Review' ? classNames.peerReviewCard_display : classNames.peerReviewCard_hide}>
-            <hr />
+            <hr className={classNames.divider} />
             <h3>Peer Review Task</h3>
             <AlignedText text="Challenge" childrenType="field">
               <FormControl variant="outlined">
@@ -250,7 +276,8 @@ export default function TaskAddingCard({ open, setOpen }) {
                   }}
                   style={{ width: '350px' }}
                 >
-                  {peerReviewChallengeId !== undefined && peerReviewChallengeId !== ''
+                  {peerReviewChallengeId !== undefined
+                    && peerReviewChallengeId !== ''
                     && challenges.byId[peerReviewChallengeId].problemIds.map((id) => (
                       <MenuItem key={id} value={id}>
                         {problems.byId[id].challenge_label}

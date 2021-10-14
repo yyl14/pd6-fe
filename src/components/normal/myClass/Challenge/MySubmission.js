@@ -86,6 +86,7 @@ export default function MySubmission() {
             name: 'Submission ID',
             align: 'center',
             type: 'string',
+            minWidth: 150,
           },
           {
             name: 'Status',
@@ -94,7 +95,7 @@ export default function MySubmission() {
             colors: {
               'Waiting for judge': 'default',
               'No Status': 'error',
-              Accepted: 'primary',
+              Accepted: 'accepted',
               'Wrong Answer': 'error',
               'Memory Limit Exceed': 'error',
               'Time Limit Exceed': 'error',
@@ -104,27 +105,32 @@ export default function MySubmission() {
               'Forbidden Action': 'error',
               'System Error': 'error',
             },
+            minWidth: 170,
           },
           {
             name: 'Score',
             align: 'center',
             type: 'string',
+            minWidth: 100,
           },
           {
-            name: 'Used Time(ms)',
+            name: 'Used Time (ms)',
             align: 'center',
             type: 'string',
+            minWidth: 170,
           },
           {
-            name: 'Used Memory(kb)',
+            name: 'Used Memory (kb)',
             align: 'center',
             type: 'string',
+            minWidth: 170,
           },
           {
             name: 'Submit Time',
             align: 'center',
             type: 'string',
             sortable: 'submit_time',
+            minWidth: 150,
           },
         ]}
         reduxData={submissions}
@@ -136,11 +142,11 @@ export default function MySubmission() {
             item.latestJudgmentId !== null && judgments.byId[item.latestJudgmentId] !== undefined
               ? judgments.byId[item.latestJudgmentId].score
               : '',
-          'Used Time(ms)':
+          'Used Time (ms)':
             item.latestJudgmentId !== null && judgments.byId[item.latestJudgmentId] !== undefined
               ? judgments.byId[item.latestJudgmentId].total_time
               : '',
-          'Used Memory(kb)':
+          'Used Memory (kb)':
             item.latestJudgmentId !== null && judgments.byId[item.latestJudgmentId] !== undefined
               ? judgments.byId[item.latestJudgmentId].max_memory
               : '',

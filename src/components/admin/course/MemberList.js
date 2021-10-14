@@ -87,10 +87,10 @@ export default function MemberList() {
                 operation: 'IN',
                 options: institutes.allIds.map((id) => {
                   const item = institutes.byId[id];
-                  return ({
+                  return {
                     value: item.abbreviated_name,
                     label: item.abbreviated_name,
-                  });
+                  };
                 }),
               },
               {
@@ -112,32 +112,32 @@ export default function MemberList() {
             columns={[
               {
                 name: 'Username',
-                align: 'center',
                 width: 200,
+                align: 'center',
                 type: 'link',
               },
               {
                 name: 'Student ID',
-                align: 'center',
                 width: 155,
+                align: 'center',
                 type: 'string',
               },
               {
                 name: 'Real Name',
+                width: 155,
                 align: 'center',
-                width: 144,
                 type: 'string',
               },
               {
                 name: 'Institute',
-                align: 'center',
                 width: 165,
+                align: 'center',
                 type: 'string',
               },
               {
                 name: 'Role',
-                align: 'center',
                 width: 127,
+                align: 'center',
                 type: 'string',
               },
             ]}

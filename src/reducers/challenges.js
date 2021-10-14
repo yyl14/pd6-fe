@@ -121,14 +121,11 @@ const byId = (state = {}, action) => {
       return challenges.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
     }
 
-    case peerReviewConstants.READ_PEER_REVIEW_SUCCESS: {
+    case peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_SUCCESS: {
+      const { challenge } = action.payload;
       return {
         ...state,
-        [action.payload.challenge_id]: {
-          ...prototype,
-          ...state[action.payload.challenge_id],
-          peerReviewIds: state[action.payload.challenge_id] ? state[action.payload.challenge_id].peerReviewIds.concat([action.payload.id]) : [action.payload.id],
-        },
+        [challenge.id]: { ...prototype, ...state[challenge.id], ...challenge },
       };
     }
 
@@ -153,6 +150,10 @@ const allIds = (state = [], action) => {
     case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
       const { challenges } = action.payload.data;
       return [...new Set([...challenges.map((item) => item.id), ...state])];
+    }
+    case peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_SUCCESS: {
+      const { challenge } = action.payload;
+      return [...new Set([challenge.id, ...state])];
     }
     default:
       return state;

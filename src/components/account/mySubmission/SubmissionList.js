@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { browseMySubmission } from '../../../actions/api/view';
@@ -41,35 +41,41 @@ export default function SubmissionList() {
             name: 'Submission ID',
             align: 'center',
             type: 'string',
+            minWidth: 150,
           },
           {
             name: 'Course',
             align: 'center',
             type: 'string',
+            minWidth: 150,
           },
           {
             name: 'Class',
             align: 'center',
             type: 'link',
+            minWidth: 150,
           },
           {
             name: 'Challenge',
             align: 'center',
             type: 'string',
+            minWidth: 150,
           },
           {
             name: 'Task',
             align: 'center',
             type: 'link',
+            minWidth: 150,
           },
           {
             name: 'Status',
             align: 'center',
             type: 'string',
+            minWidth: 150,
             colors: {
               'Waiting for judge': 'default',
               'No Status': 'error',
-              Accepted: 'primary',
+              Accepted: 'accepted',
               'Wrong Answer': 'error',
               'Memory Limit Exceed': 'error',
               'Time Limit Exceed': 'error',
@@ -84,6 +90,7 @@ export default function SubmissionList() {
             name: 'Submitted Time',
             align: 'center',
             type: 'string',
+            minWidth: 150,
           },
         ]}
         reduxData={submissions}

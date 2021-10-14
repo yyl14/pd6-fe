@@ -97,9 +97,9 @@ export default function System({
       setTitle('System');
       setItemList([
         {
-          text: 'Team',
+          text: 'Develop Team',
           path: '/system/team',
-          icon: <Icon.Info />,
+          icon: <Icon.DevTeam />,
         },
         // {
         //   text: 'Access Log',
