@@ -6,8 +6,9 @@ const prototype = {
   username: null,
   real_name: null,
   student_id: null,
-  peer_review_record_ids: null,
+  peer_review_record_ids: [],
   peer_review_record_scores: null,
+  score: null,
   average_score: null,
 };
 
@@ -28,23 +29,6 @@ const byId = (state = {}, action) => {
         state,
       );
     }
-    // const { peerReviewSummary, peerReviewId } = action.payload.data;
-
-    // return {
-    //   ...state,
-    //   [peerReviewId]: peerReviewSummary.reduce(
-    //     (acc, item) => ({
-    //       ...acc,
-    //       [item.account_id]: {
-    //         ...prototype,
-    //         ...state[item.account_id],
-    //         ...item,
-    //       },
-    //     }),
-    //     state,
-    //   ),
-    // };
-    // }
 
     default:
       return state;

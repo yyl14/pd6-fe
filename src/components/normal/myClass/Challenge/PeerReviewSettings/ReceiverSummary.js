@@ -113,48 +113,43 @@ export default function PeerReviewSummary() {
           {
             name: 'Receiver',
             align: 'center',
-            minWidth: 150,
-            width: 200,
+            minWidth: 139,
             type: 'link',
           },
           {
             name: 'Student ID',
             align: 'center',
-            minWidth: 50,
-            width: 180,
+            minWidth: 155,
             type: 'string',
           },
           {
             name: 'Real Name',
             align: 'center',
-            minWidth: 50,
-            width: 200,
+            minWidth: 144,
             type: 'string',
           },
           {
             name: 'Peer 1',
             align: 'center',
-            minWidth: 50,
-            width: 100,
+            minWidth: 100,
             type: 'link',
           },
           {
             name: 'Peer 2',
             align: 'center',
-            minWidth: 50,
-            width: 100,
+            minWidth: 100,
             type: 'link',
           },
           {
             name: 'Average Score',
             align: 'center',
-            minWidth: 50,
-            width: 180,
+            minWidth: 160,
             type: 'string',
           },
         ]}
         reduxData={PRsummary}
         reduxDataToRows={(item) => ({
+          id: item.account_id,
           Receiver: {
             text: item.username,
             path: `/user-profile/${item.account_id}`,
@@ -174,7 +169,7 @@ export default function PeerReviewSummary() {
               : '',
           },
           'Average Score': item.average_score ? item.average_score : '',
-          link: item.peer_review_record_ids
+          link: item.peer_review_record_ids.length !== 0
             ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${item.account_id}/${item.peer_review_record_ids[0]}`
             : `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary`,
         })}

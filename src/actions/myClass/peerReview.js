@@ -1,4 +1,3 @@
-import { ContactsSharp } from '@material-ui/icons';
 import agent from '../agent';
 import { peerReviewConstants } from '../api/constant';
 import { readPeerReviewRecord } from '../api/peerReview';
