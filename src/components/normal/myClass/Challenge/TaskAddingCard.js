@@ -76,11 +76,11 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [maxScore, setMaxScore] = useState(3);
   const [minScore, setMinScore] = useState(1);
   const [peerNumber, setPeerNumber] = useState(2);
-  const [errorSnackbar, setErrorSnackbar] = useState(false);
+  const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
 
   useEffect(() => {
     if (error.myClass.challenge.addPeerReview) {
-      setErrorSnackbar(true);
+      setShowErrorSnackbar(true);
     }
   }, [error.myClass.challenge]);
 
@@ -108,10 +108,10 @@ export default function TaskAddingCard({ open, setOpen }) {
         && peerNumber !== ''
       ) {
         if (
-          parseInt(maxScore, 10) <= parseInt(minScore, 10)
-          || parseInt(maxScore, 10) < 0
-          || parseInt(minScore, 10) < 0
-          || parseInt(peerNumber, 10) < 0
+          Number(maxScore) <= Number(minScore)
+          || Number(maxScore) < 0
+          || Number(minScore) < 0
+          || Number(peerNumber) < 0
         ) {
           setDisabled(true);
         } else {
@@ -344,12 +344,12 @@ export default function TaskAddingCard({ open, setOpen }) {
         </DialogActions>
       </Dialog>
       <Snackbar
-        open={errorSnackbar}
+        open={showErrorSnackbar}
         message={
           error.myClass.challenge.addPeerReview
           && `Error: ${error.myClass.challenge.addPeerReview}. Check whether the input numbers are valid.`
         }
-        onClose={() => setErrorSnackbar(false)}
+        onClose={() => setShowErrorSnackbar(false)}
       />
     </>
   );
