@@ -65,7 +65,11 @@ export default function NewPassword() {
 
   const handleResetPassword = () => {
     // change system password
-    dispatch(editPassword(authToken, id, oldPassword, newPassword, () => { setEdit(false); }));
+    dispatch(
+      editPassword(authToken, id, oldPassword, newPassword, () => {
+        setEdit(false);
+      }),
+    );
     setOldPassword('');
     setNewPassword('');
     setConfirmPassword('');

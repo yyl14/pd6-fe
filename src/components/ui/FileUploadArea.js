@@ -103,7 +103,7 @@ export default function FileUploadArea({
   };
 
   const handleDelete = (e, deleteFile) => {
-    const filtered = selectedFile.filter((file, index, arr) => file !== deleteFile);
+    const filtered = selectedFile.filter((file) => file !== deleteFile);
     setSelectedFile(filtered);
   };
 

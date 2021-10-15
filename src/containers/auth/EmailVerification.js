@@ -71,7 +71,7 @@ export default function EmailVerification() {
   const query = useQuery();
   const history = useHistory();
   const [message, setMessage] = useState('Email Verifying...');
-  const queryString = useCallback(query.get('code'), []);
+  const queryString = useCallback(query.get('code'), [query]);
 
   useEffect(() => {
     const onSuccess = () => {

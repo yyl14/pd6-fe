@@ -50,13 +50,11 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 // This page is for manager.
 export default function PeerReviewEdit({ setEdit }) {
-  const { courseId, classId, peerReviewId } = useParams();
+  const { peerReviewId } = useParams();
   const classNames = useStyles();
   const dispatch = useDispatch();
 
   const peerReviews = useSelector((state) => state.peerReviews.byId);
-  const problems = useSelector((state) => state.problem.byId);
-  const challenges = useSelector((state) => state.challenges.byId);
   const authToken = useSelector((state) => state.auth.token);
 
   const [label, setLabel] = useState(

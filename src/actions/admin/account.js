@@ -115,7 +115,7 @@ const editAccount = (token, id, realName, nickName, email) => async (dispatch) =
       accountInfo.alternative_email = email;
     }
 
-    const res = await agent.patch(`/account/${id}`, accountInfo, config);
+    await agent.patch(`/account/${id}`, accountInfo, config);
     dispatch({ type: accountConstants.EDIT_ACCOUNT_SUCCESS });
   } catch (error) {
     dispatch({
