@@ -7,8 +7,7 @@ const prototype = {
   real_name: null,
   student_id: null,
   peer_review_record_ids: [],
-  peer_review_record_scores: null,
-  score: null,
+  score: [],
   average_score: null,
 };
 

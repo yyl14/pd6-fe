@@ -74,22 +74,34 @@ export default function PeerReviewSummary() {
       PRsummary.allIds.map((id) => {
         tableHTML += '<tr>';
         const profile = `/user-profile/${PRsummary.byId[id].account_id}`;
-        const reviewRecord1 = PRsummary.byId[id].peer_review_record_ids
-          ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${PRsummary.byId[id].account_id}/${PRsummary.byId[id].peer_review_record_ids[0]}`
-          : '';
-        const reviewRecord2 = PRsummary.byId[id].peer_review_record_ids
-          ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${PRsummary.byId[id].account_id}/${PRsummary.byId[id].peer_review_record_ids[1]}`
-          : '';
+        const peerData = [];
+        Array(peerReviews[peerReviewId].max_review_count)
+          .fill(0)
+          .map((ID, index) => {
+            peerData.push({
+              text: PRsummary.byId[id].score[index] ? PRsummary.byId[id].score[index] : '',
+              path: PRsummary.byId[id].peer_review_record_ids
+                ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${PRsummary.byId[id].account_id}/${PRsummary.byId[id].peer_review_record_ids[index]}`
+                : '',
+            });
+            return id;
+          });
         tableHTML += `<td><a href=${profile}>${PRsummary.byId[id].username}</a></td>`;
         tableHTML += `<td>${PRsummary.byId[id].student_id}</td>`;
         tableHTML += `<td>${PRsummary.byId[id].real_name}</td>`;
-        if (PRsummary.byId[id].score !== []) {
-          tableHTML += `<td><a href=${reviewRecord1}>${PRsummary.byId[id].score[0]}</a></td>`;
-          tableHTML += `<td><a href=${reviewRecord2}>${PRsummary.byId[id].score[1]}</a></td>`;
+        console.log(peerData);
+        peerData.map((data) => {
+          if (data.text !== '') {
+            console.log(data);
+            tableHTML += `<td><a href=${data.path}>${data.text}</a></td>`;
+          } else {
+            tableHTML += '<td></td>';
+          }
+          return data;
+        });
+        if (PRsummary.byId[id].average_score) {
           tableHTML += `<td>${PRsummary.byId[id].average_score}</td>`;
         } else {
-          tableHTML += '<td></td>';
-          tableHTML += '<td></td>';
           tableHTML += '<td></td>';
         }
         tableHTML += '</tr>';
@@ -98,7 +110,7 @@ export default function PeerReviewSummary() {
     }
     tableHTML += '</table>';
     setPRsummaryHTML(tableHTML);
-  }, [PRsummary, challengeId, classId, courseId, peerReviewId]);
+  }, [PRsummary, challengeId, classId, courseId, peerReviewId, peerReviews]);
 
   useEffect(() => {
     if (peerReviews[peerReviewId] && peerReviews[peerReviewId].max_review_count) {

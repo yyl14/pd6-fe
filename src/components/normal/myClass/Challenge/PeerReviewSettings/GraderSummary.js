@@ -19,6 +19,36 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const basicColumns1 = [
+  {
+    name: 'Grader',
+    align: 'center',
+    minWidth: 139,
+    type: 'link',
+  },
+  {
+    name: 'Student ID',
+    align: 'center',
+    minWidth: 155,
+    type: 'string',
+  },
+  {
+    name: 'Real Name',
+    align: 'center',
+    minWidth: 144,
+    type: 'string',
+  },
+];
+
+const basicColumns2 = [
+  {
+    name: 'Average Score',
+    align: 'center',
+    minWidth: 160,
+    type: 'string',
+  },
+];
+
 /* This is a level 4 component (page component) */
 // This page is only for class manager.
 export default function PeerReviewSummary() {
@@ -31,10 +61,12 @@ export default function PeerReviewSummary() {
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.api.view);
   const error = useSelector((state) => state.error.api.view);
-  const PRsummary = useSelector((state) => state.peerReviewSummaryReview);
   const challenges = useSelector((state) => state.challenges.byId);
+  const PRsummary = useSelector((state) => state.peerReviewSummaryReview);
+  const peerReviews = useSelector((state) => state.peerReviews.byId);
 
   const [PRsummaryHTML, setPRsummaryHTML] = useState('');
+  const [peerColumns, setPeerColumns] = useState([]);
 
   useEffect(() => {
     let tableHTML = '<table>';
@@ -42,22 +74,34 @@ export default function PeerReviewSummary() {
       PRsummary.allIds.map((id) => {
         tableHTML += '<tr>';
         const profile = `/user-profile/${PRsummary.byId[id].account_id}`;
-        const reviewRecord1 = PRsummary.byId[id].peer_review_record_ids
-          ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${PRsummary.byId[id].account_id}/${PRsummary.byId[id].peer_review_record_ids[0]}`
-          : '';
-        const reviewRecord2 = PRsummary.byId[id].peer_review_record_ids
-          ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${PRsummary.byId[id].account_id}/${PRsummary.byId[id].peer_review_record_ids[1]}`
-          : '';
+        const peerData = [];
+        Array(peerReviews[peerReviewId].max_review_count)
+          .fill(0)
+          .map((ID, index) => {
+            peerData.push({
+              text: PRsummary.byId[id].score[index] ? PRsummary.byId[id].score[index] : '',
+              path: PRsummary.byId[id].peer_review_record_ids
+                ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${PRsummary.byId[id].account_id}/${PRsummary.byId[id].peer_review_record_ids[index]}`
+                : '',
+            });
+            return id;
+          });
         tableHTML += `<td><a href=${profile}>${PRsummary.byId[id].username}</a></td>`;
         tableHTML += `<td>${PRsummary.byId[id].student_id}</td>`;
         tableHTML += `<td>${PRsummary.byId[id].real_name}</td>`;
-        if (PRsummary.byId[id].score !== []) {
-          tableHTML += `<td><a href=${reviewRecord1}>${PRsummary.byId[id].score[0]}</a></td>`;
-          tableHTML += `<td><a href=${reviewRecord2}>${PRsummary.byId[id].score[1]}</a></td>`;
+        console.log(peerData);
+        peerData.map((data) => {
+          if (data.text !== '') {
+            console.log(data);
+            tableHTML += `<td><a href=${data.path}>${data.text}</a></td>`;
+          } else {
+            tableHTML += '<td></td>';
+          }
+          return data;
+        });
+        if (PRsummary.byId[id].average_score) {
           tableHTML += `<td>${PRsummary.byId[id].average_score}</td>`;
         } else {
-          tableHTML += '<td></td>';
-          tableHTML += '<td></td>';
           tableHTML += '<td></td>';
         }
         tableHTML += '</tr>';
@@ -66,7 +110,22 @@ export default function PeerReviewSummary() {
     }
     tableHTML += '</table>';
     setPRsummaryHTML(tableHTML);
-  }, [PRsummary, challengeId, classId, courseId, peerReviewId]);
+  }, [PRsummary, challengeId, classId, courseId, peerReviewId, peerReviews]);
+
+  useEffect(() => {
+    if (peerReviews[peerReviewId] && peerReviews[peerReviewId].max_review_count) {
+      setPeerColumns(
+        Array(peerReviews[peerReviewId].max_review_count)
+          .fill(0)
+          .map((id, index) => ({
+            name: `Peer ${index + 1}`,
+            align: 'center',
+            minWidth: 100,
+            type: 'link',
+          })),
+      );
+    }
+  }, [peerReviewId, peerReviews]);
 
   if (PRsummary === undefined) {
     if (loading.browsePeerReviewSummaryReview) {
@@ -110,70 +169,37 @@ export default function PeerReviewSummary() {
           dispatch(browsePeerReviewSummaryReview(authToken, peerReviewId, browseParams, ident));
         }}
         refetchErrors={[error.browsePeerReviewSummaryReview]}
-        columns={[
-          {
-            name: 'Grader',
-            align: 'center',
-            minWidth: 139,
-            type: 'link',
-          },
-          {
-            name: 'Student ID',
-            align: 'center',
-            minWidth: 155,
-            type: 'string',
-          },
-          {
-            name: 'Real Name',
-            align: 'center',
-            minWidth: 144,
-            type: 'string',
-          },
-          {
-            name: 'Peer 1',
-            align: 'center',
-            minWidth: 100,
-            type: 'link',
-          },
-          {
-            name: 'Peer 2',
-            align: 'center',
-            minWidth: 100,
-            type: 'link',
-          },
-          {
-            name: 'Average Score',
-            align: 'center',
-            minWidth: 160,
-            type: 'string',
-          },
-        ]}
+        columns={basicColumns1.concat(peerColumns.concat(basicColumns2))}
         reduxData={PRsummary}
-        reduxDataToRows={(item) => ({
-          id: item.account_id,
-          Grader: {
-            text: item.username,
-            path: `/user-profile/${item.account_id}`,
-          },
-          'Student ID': item.student_id,
-          'Real Name': item.real_name,
-          'Peer 1': {
-            text: item.score[0] ? item.score[0] : '',
-            path: item.peer_review_record_ids
-              ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${item.account_id}/${item.peer_review_record_ids[0]}`
-              : '',
-          },
-          'Peer 2': {
-            text: item.score[1] ? item.score[1] : '',
-            path: item.peer_review_record_ids
-              ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${item.account_id}/${item.peer_review_record_ids[1]}`
-              : '',
-          },
-          'Average Score': item.average_score ? item.average_score : '',
-          link: item.peer_review_record_ids.length !== 0
-            ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${item.account_id}/${item.peer_review_record_ids[0]}`
-            : `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/grader-summary`,
-        })}
+        reduxDataToRows={(item) => {
+          const peerData = {};
+          Array(peerReviews[peerReviewId].max_review_count)
+            .fill(0)
+            .map((id, index) => {
+              peerData[`Peer ${index + 1}`] = {
+                text: item.score[index] ? item.score[index] : '',
+                path: item.peer_review_record_ids
+                  ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${item.account_id}/${item.peer_review_record_ids[index]}`
+                  : '',
+              };
+              return id;
+            });
+          return {
+            id: item.account_id,
+            Grader: {
+              text: item.username,
+              path: `/user-profile/${item.account_id}`,
+            },
+            'Student ID': item.student_id,
+            'Real Name': item.real_name,
+            'Average Score': item.average_score ? item.average_score : '',
+            link:
+              item.peer_review_record_ids.length !== 0
+                ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${item.account_id}/${item.peer_review_record_ids[0]}`
+                : `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/grader-summary`,
+            ...peerData,
+          };
+        }}
         hasLink
       />
     </>
