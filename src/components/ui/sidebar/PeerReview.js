@@ -5,7 +5,6 @@ import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
 } from '@material-ui/core';
 import Icon from '../icon/index';
-import TaskAddingCard from '../../normal/myClass/Challenge/TaskAddingCard';
 
 export default function PeerReview({
   classNames, history, location, mode, open, onClose,

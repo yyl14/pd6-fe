@@ -3,7 +3,6 @@ import {
   makeStyles,
   Typography,
   Button,
-  Input,
   Paper,
   Table,
   TableContainer,
@@ -11,9 +10,8 @@ import {
   TableCell,
   TableRow,
 } from '@material-ui/core';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Icon from './icon/index';
-import SimpleTable from './SimpleTable';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {

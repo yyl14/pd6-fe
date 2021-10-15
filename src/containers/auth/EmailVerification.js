@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { makeStyles, Snackbar } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
 import { emailVerification } from '../../actions/user/auth';

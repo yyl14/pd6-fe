@@ -3,14 +3,13 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   FormControl,
   Select,
   MenuItem,
   Button,
 } from '@material-ui/core';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Icon from './icon/index';
 import AlignedText from './AlignedText';
 

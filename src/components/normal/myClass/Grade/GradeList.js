@@ -24,7 +24,6 @@ import Icon from '../../../ui/icon/index';
 import {
   fetchClassGrade, addClassGrade, importClassGrade, downloadGradeFile,
 } from '../../../../actions/myClass/grade';
-import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({

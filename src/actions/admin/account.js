@@ -1,7 +1,5 @@
 import agent from '../agent';
 import { accountConstants } from './constant';
-import { autoTableConstants } from '../component/constant';
-import browseParamsTransForm from '../../function/browseParamsTransform';
 
 const getInstitute = (token, instituteId) => (dispatch) => {
   const config = {

@@ -10,11 +10,10 @@ import {
   DialogContent,
   DialogTitle,
 } from '@material-ui/core';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { editPeerReview } from '../../../../../actions/api/peerReview';
 import BasicInfo from './Element/BasicInfo';
 import SimpleBar from '../../../../ui/SimpleBar';
-import AlignedText from '../../../../ui/AlignedText';
 
 const useStyles = makeStyles((theme) => ({
   textfield: {

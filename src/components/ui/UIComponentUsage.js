@@ -23,7 +23,6 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import Icon from './icon/index';
-import CopyToClipboardButton from './CopyToClipboardButton';
 import SampleTestArea from './SampleTestArea';
 import DateRangePicker from './DateRangePicker';
 import AlignedText from './AlignedText';
@@ -35,7 +34,6 @@ import TableFilterCard from './TableFilterCard';
 import ErrorText from './ErrorText';
 import MultiSelect from './MultiSelect';
 import CustomCheckbox from './CustomCheckbox';
-import AutoTable from './AutoTable';
 
 const useStyles = makeStyles((theme) => ({
   bigTitle: {
