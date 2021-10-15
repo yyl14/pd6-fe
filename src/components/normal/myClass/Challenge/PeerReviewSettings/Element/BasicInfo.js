@@ -40,7 +40,7 @@ export default function BasicInfo() {
         <AlignedText text="Task to be Reviewed" childrenType="text">
           <Typography variant="body1">
             <Link to={`/my-class/${courseId}/${classId}/challenge/${peerReviews[peerReviewId].target_challenge_id}/${peerReviews[peerReviewId].target_problem_id}`} className={classNames.textLink}>
-              {`${challenges[peerReviews[peerReviewId].target_challenge_id] && challenges[peerReviews[peerReviewId].target_challenge_id] !== undefined && challenges[peerReviews[peerReviewId].target_challenge_id].title} / ${problems[peerReviews[peerReviewId].target_problem_id] && problems[peerReviews[peerReviewId].target_problem_id] !== undefined && problems[peerReviews[peerReviewId].target_problem_id].challenge_label}`}
+              {`${peerReviews[peerReviewId].target_challenge_id && challenges[peerReviews[peerReviewId].target_challenge_id] && challenges[peerReviews[peerReviewId].target_challenge_id].title} / ${peerReviews[peerReviewId] && problems[peerReviews[peerReviewId].target_problem_id] && problems[peerReviews[peerReviewId].target_problem_id] !== undefined && problems[peerReviews[peerReviewId].target_problem_id].challenge_label}`}
             </Link>
           </Typography>
         </AlignedText>
