@@ -38,9 +38,9 @@ export default function PeerReviewSummary() {
 
   useEffect(() => {
     let tableHTML = '<table>';
-    tableHTML += '<tr>';
     if (PRsummary.allIds) {
       PRsummary.allIds.map((id) => {
+        tableHTML += '<tr>';
         const profile = `/user-profile/${PRsummary.byId[id].account_id}`;
         const reviewRecord1 = PRsummary.byId[id].peer_review_record_ids
           ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${PRsummary.byId[id].account_id}/${PRsummary.byId[id].peer_review_record_ids[0]}`
@@ -60,10 +60,11 @@ export default function PeerReviewSummary() {
           tableHTML += '<td></td>';
           tableHTML += '<td></td>';
         }
+        tableHTML += '</tr>';
         return PRsummary.byId[id];
       });
     }
-    tableHTML += '</tr></table>';
+    tableHTML += '</table>';
     setPRsummaryHTML(tableHTML);
   }, [PRsummary, challengeId, classId, courseId, peerReviewId]);
 
