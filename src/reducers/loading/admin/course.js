@@ -1,5 +1,4 @@
 import { courseConstants } from '../../../actions/admin/constant';
-import { commonConstants } from '../../../actions/common/constant';
 
 const initialState = {
   fetchCourses: false,

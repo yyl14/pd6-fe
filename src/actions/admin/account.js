@@ -1,7 +1,5 @@
 import agent from '../agent';
 import { accountConstants } from './constant';
-import { autoTableConstants } from '../component/constant';
-import browseParamsTransForm from '../../function/browseParamsTransform';
 
 const getInstitute = (token, instituteId) => (dispatch) => {
   const config = {
@@ -117,7 +115,7 @@ const editAccount = (token, id, realName, nickName, email) => async (dispatch) =
       accountInfo.alternative_email = email;
     }
 
-    const res = await agent.patch(`/account/${id}`, accountInfo, config);
+    await agent.patch(`/account/${id}`, accountInfo, config);
     dispatch({ type: accountConstants.EDIT_ACCOUNT_SUCCESS });
   } catch (error) {
     dispatch({

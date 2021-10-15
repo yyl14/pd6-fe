@@ -14,7 +14,7 @@ export default function Login() {
   const history = useHistory();
   const auth = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
-  const [cookies, setCookie] = useCookies(['id', 'token']);
+  const [, setCookie] = useCookies(['id', 'token']);
 
   useEffect(() => {
     document.title = 'Signin';

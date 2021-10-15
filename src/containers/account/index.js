@@ -1,9 +1,6 @@
 import React from 'react';
 import AccountSetting from '../../components/account/AccountSetting';
 
-import Header from '../../components/ui/Header';
-import Sidebar from '../../components/ui/Sidebar';
-
 function Account() {
   // const history = useHistory();
   // const location = useLocation();
