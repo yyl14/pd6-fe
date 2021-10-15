@@ -333,7 +333,7 @@ export default function CodingProblemEdit({ closeEdit }) {
         },
       };
     }, sampleTableData);
-    console.log(newTableData);
+    // console.log(newTableData);
     setSampleTableData(newTableData);
     setCardSelectedFileS({});
     setHasChange(true);

@@ -56,6 +56,8 @@ export default function SampleUploadCard({
           no: selectedFile[key].id,
           time_limit: time,
           memory_limit: memory,
+          input: '',
+          output: '',
         },
       }),
       {},

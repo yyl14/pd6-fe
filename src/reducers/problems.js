@@ -8,6 +8,7 @@ const prototype = {
   challenge_id: null,
   challenge_label: null,
   title: null,
+  judge_type: null, // NORMAL or CUSTOMIZED
   setter_id: null,
   full_score: null,
   description: null,
@@ -18,6 +19,10 @@ const prototype = {
   testcaseIds: [],
   assistingDataIds: [],
   score: '',
+  judge_source: {
+    code_uuid: null,
+    filename: null,
+  },
 };
 
 const byId = (state = {}, action) => {
