@@ -89,10 +89,8 @@ export default function PeerReviewSummary() {
         tableHTML += `<td><a href=${profile}>${PRsummary.byId[id].username}</a></td>`;
         tableHTML += `<td>${PRsummary.byId[id].student_id}</td>`;
         tableHTML += `<td>${PRsummary.byId[id].real_name}</td>`;
-        console.log(peerData);
         peerData.map((data) => {
           if (data.text !== '') {
-            console.log(data);
             tableHTML += `<td><a href=${data.path}>${data.text}</a></td>`;
           } else {
             tableHTML += '<td></td>';
@@ -194,7 +192,7 @@ export default function PeerReviewSummary() {
             'Real Name': item.real_name,
             'Average Score': item.average_score ? item.average_score : '',
             link:
-              item.peer_review_record_ids.length !== 0
+              item.peer_review_record_ids.length !== 0 && item.peer_review_record_ids[0] !== null
                 ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${item.account_id}/${item.peer_review_record_ids[0]}`
                 : `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary`,
             ...peerData,
