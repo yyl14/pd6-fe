@@ -153,7 +153,6 @@ export default function CodingProblem() {
           </div>
         )
       )}
-      {/* judge whether it is project here */}
       {edit ? <CodingProblemEdit closeEdit={handleCloseEdit} role={role} /> : <CodingProblemInfo role={role} />}
       <Dialog open={rejudgePopUp} onClose={() => setRejudgePopUp(false)} maxWidth="md">
         <DialogTitle>
