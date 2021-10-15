@@ -148,7 +148,7 @@ export default function PeerReview({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [challengeId, challenges, classId, courseId, problems, essays, history, location.pathname, mode]);
+  }, [challengeId, challenges, classId, courseId, problems, essays, peerReviews, history, location.pathname, mode]);
 
   const foldChallenge = () => {
     setDisplay('fold');
