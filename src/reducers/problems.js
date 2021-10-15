@@ -23,6 +23,7 @@ const prototype = {
     code_uuid: null,
     filename: null,
   },
+  judge_code_content: null,
 };
 
 const byId = (state = {}, action) => {
