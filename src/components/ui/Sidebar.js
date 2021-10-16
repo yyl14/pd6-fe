@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     top: '55px',
     height: 'calc(100% - 55px)',
     width: '300px',
+    border: 'none',
   },
 
   topSpace: {
