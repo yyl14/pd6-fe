@@ -174,6 +174,8 @@ export default function AccountList() {
     setShowImportDialog(false);
   };
 
+  console.log(accounts);
+
   return (
     <>
       <PageTitle text="Account" />
@@ -204,7 +206,7 @@ export default function AccountList() {
         refetch={(browseParams, ident) => {
           dispatch(browseAccountWithDefaultStudentId(authToken, browseParams, ident));
         }}
-        refetchErrors={[error.fetchAccounts]}
+        refetchErrors={[viewError]}
         columns={[
           {
             name: 'Username',
@@ -230,6 +232,7 @@ export default function AccountList() {
         ]}
         reduxData={accounts}
         reduxDataToRows={(item) => ({
+          id: item.id,
           Username: item.username,
           'Student ID': item.student_id,
           'Real Name': item.real_name,
