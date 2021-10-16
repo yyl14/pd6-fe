@@ -10,6 +10,7 @@ import CodeSubmission from './CodeSubmission';
 import MySubmission from './MySubmission';
 import SubmissionDetail from './SubmissionDetail';
 import PeerReview from './PeerReview';
+import Scoreboard from './Scoreboard';
 import NoMatch from '../../../noMatch';
 
 /* This is a level 4 component (page component) */
@@ -58,7 +59,15 @@ export default function Task() {
           component={SubmissionDetail}
         />
         <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId" component={CodingProblem} />
-        <Route path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId" component={PeerReview} />
+        <Route
+          path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId"
+          component={PeerReview}
+        />
+        <Route
+          exact
+          path="/my-class/:courseId/:classId/challenge/:challengeId/scoreboard/:scoreboardId"
+          component={Scoreboard}
+        />
         <Route component={NoMatch} />
       </Switch>
     </>
