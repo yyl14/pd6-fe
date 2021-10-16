@@ -321,12 +321,6 @@ const deletePendingStudentCard = (token, emailVerificationId) => async (dispatch
 const addAccount = (token, realName, userName, password, altMail, onSuccess, onError) => async (dispatch) => {
   try {
     const config = { headers: { 'auth-token': token } };
-    // const body = {
-    //   real_name: realName,
-    //   username: userName,
-    //   password,
-    //   alternative_email: altMail,
-    // };
     dispatch({ type: accountConstants.ADD_ACCOUNT_START });
     await agent.post(
       '/account-normal',
@@ -335,6 +329,7 @@ const addAccount = (token, realName, userName, password, altMail, onSuccess, onE
         username: userName,
         password,
         alternative_email: altMail,
+        nickname: '',
       },
       config,
     );
@@ -349,7 +344,7 @@ const addAccount = (token, realName, userName, password, altMail, onSuccess, onE
   }
 };
 
-const importAccount = (token, file, onSuccess, onError) => async (dispatch) => {
+const importAccount = (token, files, onSuccess, onError) => async (dispatch) => {
   try {
     const config = {
       headers: {
@@ -357,11 +352,16 @@ const importAccount = (token, file, onSuccess, onError) => async (dispatch) => {
         'Content-Type': 'multipart/form-data',
       },
     };
-    const formData = new FormData();
-    formData.append('account_file', file);
 
     dispatch({ type: accountConstants.IMPORT_ACCOUNT_START });
-    await agent.post('/account-import', formData, config);
+    await Promise.all(
+      files.map(async (file) => {
+        console.log(file);
+        const formData = new FormData();
+        formData.append('account_file', file);
+        await agent.post('/account-import', formData, config);
+      }),
+    );
     dispatch({ type: accountConstants.IMPORT_ACCOUNT_SUCCESS });
     onSuccess();
   } catch (error) {

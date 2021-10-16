@@ -20,7 +20,7 @@ import PageTitle from '../../ui/PageTitle';
 import AutoTable from '../../ui/AutoTable';
 import FileUploadArea from '../../ui/FileUploadArea';
 import Icon from '../../ui/icon/index';
-import { addAccount, downloadAccountFile } from '../../../actions/admin/account';
+import { addAccount, downloadAccountFile, importAccount } from '../../../actions/admin/account';
 import { browseAccountWithDefaultStudentId } from '../../../actions/api/view';
 
 const useStyles = makeStyles((theme) => ({
@@ -65,10 +65,12 @@ export default function AccountList() {
   const [pwError, setPwError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [showSnackBar, setShowSnackBar] = useState(false);
+  const [showSnackBar1, setShowSnackBar1] = useState(false);
 
   const accounts = useSelector((state) => state.accounts);
   const authToken = useSelector((state) => state.auth.token);
   const error = useSelector((state) => state.error.admin.account);
+  const loading = useSelector((state) => state.loading.admin.account);
   const viewError = useSelector((state) => state.error.api.view.browseAccountWithDefaultStudentId);
 
   useEffect(() => {
@@ -148,7 +150,7 @@ export default function AccountList() {
 
   const handleSubmit = () => {
     if (showImportDialog) {
-      // selectedFile.map((file) => dispatch(importAccount(authToken, file, importAccountSuccess, () => setShowSnackBar(true))));
+      dispatch(importAccount(authToken, selectedFile, importAccountSuccess, () => setShowSnackBar(true)));
     } else if (showAddDialog) {
       if (addInputs.password1 !== addInputs.password2) {
         setPwError(true);
@@ -163,7 +165,7 @@ export default function AccountList() {
           addInputs.password1,
           addInputs.altMail,
           addAccountSuccess,
-          () => setShowSnackBar(true),
+          () => setShowSnackBar1(true),
         ),
       );
     }
@@ -173,8 +175,6 @@ export default function AccountList() {
     dispatch(downloadAccountFile(authToken));
     setShowImportDialog(false);
   };
-
-  console.log(accounts);
 
   return (
     <>
@@ -207,6 +207,7 @@ export default function AccountList() {
           dispatch(browseAccountWithDefaultStudentId(authToken, browseParams, ident));
         }}
         refetchErrors={[viewError]}
+        refreshLoadings={[loading.addAccount, loading.importAccount]}
         columns={[
           {
             name: 'Username',
@@ -316,7 +317,7 @@ export default function AccountList() {
           <TextField
             name="altMail"
             value={addInputs.altMail}
-            placeholder="Alternative Email (Optional)"
+            placeholder="Alternative Email"
             className={classNames.addDialogGap}
             onChange={(e) => handleChange(e)}
           />
@@ -331,10 +332,10 @@ export default function AccountList() {
         </DialogActions>
       </Dialog>
       <Snackbar
-        open={showSnackBar}
+        open={showSnackBar1}
         autoHideDuration={3000}
         onClose={() => {
-          setShowSnackBar(false);
+          setShowSnackBar1(false);
         }}
         message={`Error: ${error.addAccount}`}
       />
@@ -355,7 +356,7 @@ export default function AccountList() {
             Password: String
           </Typography>
           <Typography variant="body2" className={classNames.reminder}>
-            Email: String (Optional)
+            AlternativeEmail: String
           </Typography>
           <Typography variant="body2" className={classNames.reminder}>
             Nickname: String (Optional)
