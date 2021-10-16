@@ -211,7 +211,7 @@ export default function account(state = initialState, action) {
       };
     }
 
-    case accountConstants.ADD_ACCOUNT_SUCCESS: {
+    case accountConstants.ADD_ACCOUNT_START: {
       return {
         ...state,
         addAccount: null,
@@ -224,7 +224,7 @@ export default function account(state = initialState, action) {
       };
     }
 
-    case accountConstants.IMPORT_ACCOUNT_SUCCESS: {
+    case accountConstants.IMPORT_ACCOUNT_START: {
       return {
         ...state,
         importAccount: null,
@@ -237,7 +237,7 @@ export default function account(state = initialState, action) {
       };
     }
 
-    case accountConstants.DOWNLOAD_ACCOUNT_FILE_SUCCESS: {
+    case accountConstants.DOWNLOAD_ACCOUNT_FILE_START: {
       return {
         ...state,
         downloadAccountFile: null,
