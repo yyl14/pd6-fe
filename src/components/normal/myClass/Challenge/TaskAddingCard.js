@@ -129,10 +129,6 @@ export default function TaskAddingCard({ open, setOpen }) {
         dispatch(addProblem(authToken, challengeId, label, title, history, courseId, classId));
         break;
       }
-      case 'Coding Project': {
-        dispatch(addProblem(authToken, challengeId, label, title, history, courseId, classId, 'CUSTOMIZED'));
-        break;
-      }
       case 'Essay(PDF)': {
         dispatch(addEssay(authToken, challengeId, label, title, history, courseId, classId));
         break;
@@ -220,10 +216,6 @@ export default function TaskAddingCard({ open, setOpen }) {
                 <MenuItem value="Peer Review">
                   <Icon.Peerreview className={classNames.selectedIcon} />
                   Peer Review
-                </MenuItem>
-                <MenuItem value="Coding Project">
-                  <Icon.Project className={classNames.selectedIcon} />
-                  Coding Project
                 </MenuItem>
               </Select>
             </FormControl>
