@@ -8,8 +8,6 @@ const initialState = {
   browseMySubmission: false,
   browsePeerReviewSummaryReview: false,
   browsePeerReviewSummaryReceive: false,
-  browseAllPeerReviewReview: false,
-  browseAllPeerReviewReceive: false,
 };
 
 export default function view(state = initialState, action) {
@@ -112,33 +110,6 @@ export default function view(state = initialState, action) {
       };
     }
 
-    case viewConstants.BROWSE_ALL_PEER_REVIEW_REVIEW_START: {
-      return {
-        ...state,
-        browseAllPeerReviewReview: true,
-      };
-    }
-    case viewConstants.BROWSE_ALL_PEER_REVIEW_REVIEW_SUCCESS:
-    case viewConstants.BROWSE_ALL_PEER_REVIEW_REVIEW_FAIL: {
-      return {
-        ...state,
-        browseAllPeerReviewReview: false,
-      };
-    }
-
-    case viewConstants.BROWSE_ALL_PEER_REVIEW_RECEIVE_START: {
-      return {
-        ...state,
-        browseAllPeerReviewReceive: true,
-      };
-    }
-    case viewConstants.BROWSE_ALL_PEER_REVIEW_RECEIVE_SUCCESS:
-    case viewConstants.BROWSE_ALL_PEER_REVIEW_RECEIVE_FAIL: {
-      return {
-        ...state,
-        browseAllPeerReviewReceive: false,
-      };
-    }
     default: {
       return state;
     }
