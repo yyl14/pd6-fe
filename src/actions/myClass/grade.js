@@ -1,5 +1,53 @@
 import agent from '../agent';
 import { gradeConstants } from './constant';
+import { autoTableConstants } from '../component/constant';
+import browseParamsTransForm from '../../function/browseParamsTransform';
+
+export const fetchClassGrade = (token, classId, browseParams, tableId = null) => async (dispatch) => {
+  try {
+    const config1 = {
+      headers: { 'auth-token': token },
+      params: browseParamsTransForm(browseParams),
+    };
+    dispatch({ type: gradeConstants.FETCH_CLASS_GRADE_START });
+    const res1 = await agent.get(`/class/${classId}/grade`, config1);
+    const { data, total_count } = res1.data.data;
+
+    // Batch browse account
+    const accountIds = [].concat(
+      data.map((item) => item.receiver_id),
+      data.map((item) => item.grader_id),
+    );
+    const config2 = {
+      headers: { 'auth-token': token },
+      params: { account_ids: JSON.stringify(accountIds) },
+    };
+    const res2 = await agent.get('/account-summary/batch', config2);
+
+    dispatch({
+      type: gradeConstants.FETCH_CLASS_GRADE_SUCCESS,
+      payload: {
+        classId,
+        data,
+        accounts: res2.data.data,
+      },
+    });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: data.map((item) => item.id),
+        offset: browseParams.offset,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: gradeConstants.FETCH_CLASS_GRADE_FAIL,
+      error,
+    });
+  }
+};
 
 // fetch single grade
 export const fetchGrade = (token, gradeId) => async (dispatch) => {
