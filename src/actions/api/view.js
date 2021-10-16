@@ -394,96 +394,6 @@ const browsePeerReviewSummaryReceive = (token, peerReviewId, browseParams, table
   }
 };
 
-const browseAllPeerReviewReceive = (token, peerReviewId, limit, offset, setTotalCount = null) => async (dispatch) => {
-  try {
-    const config = {
-      headers: { 'auth-token': token },
-      params: { limit, offset },
-    };
-    dispatch({ type: viewConstants.BROWSE_ALL_PEER_REVIEW_RECEIVE_START });
-    const res = await agent.get(`/peer-review/${peerReviewId}/view/receiver-summary`, config);
-    const { data, total_count } = res.data.data;
-    setTotalCount(total_count);
-    dispatch({
-      type: viewConstants.BROWSE_ALL_PEER_REVIEW_RECEIVE_SUCCESS,
-      payload: {
-        data: {
-          peerReviewId,
-          peerReviewSummary: data.map(
-            ({
-              account_id,
-              username,
-              real_name,
-              student_id,
-              peer_review_record_ids,
-              peer_review_record_scores,
-              average_score,
-            }) => ({
-              account_id,
-              username,
-              real_name,
-              student_id,
-              peer_review_record_ids,
-              score: peer_review_record_scores,
-              average_score,
-            }),
-          ),
-        },
-      },
-    });
-  } catch (error) {
-    dispatch({
-      type: viewConstants.BROWSE_ALL_PEER_REVIEW_RECEIVE_FAIL,
-      error,
-    });
-  }
-};
-
-const browseAllPeerReviewReview = (token, peerReviewId, limit, offset, setTotalCount = null) => async (dispatch) => {
-  try {
-    const config = {
-      headers: { 'auth-token': token },
-      params: { limit, offset },
-    };
-    dispatch({ type: viewConstants.BROWSE_ALL_PEER_REVIEW_REVIEW_START });
-    const res = await agent.get(`/peer-review/${peerReviewId}/view/reviewer-summary`, config);
-    const { data, total_count } = res.data.data;
-    setTotalCount(total_count);
-    dispatch({
-      type: viewConstants.BROWSE_ALL_PEER_REVIEW_REVIEW_SUCCESS,
-      payload: {
-        data: {
-          peerReviewId,
-          peerReviewSummary: data.map(
-            ({
-              account_id,
-              username,
-              real_name,
-              student_id,
-              peer_review_record_ids,
-              peer_review_record_scores,
-              average_score,
-            }) => ({
-              account_id,
-              username,
-              real_name,
-              student_id,
-              peer_review_record_ids,
-              score: peer_review_record_scores,
-              average_score,
-            }),
-          ),
-        },
-      },
-    });
-  } catch (error) {
-    dispatch({
-      type: viewConstants.BROWSE_ALL_PEER_REVIEW_REVIEW_FAIL,
-      error,
-    });
-  }
-};
-
 export {
   browseAccessLog,
   browseAccountWithDefaultStudentId,
@@ -492,6 +402,4 @@ export {
   browseMySubmission,
   browsePeerReviewSummaryReview,
   browsePeerReviewSummaryReceive,
-  browseAllPeerReviewReview,
-  browseAllPeerReviewReceive,
 };

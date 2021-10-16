@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { browsePeerReviewSummaryReview, browseAllPeerReviewReview } from '../../../../../actions/api/view';
-
+import { browsePeerReviewSummaryReview } from '../../../../../actions/api/view';
+import { browseAllPeerReviewReview } from '../../../../../actions/api/peerReview';
 import AutoTable from '../../../../ui/AutoTable';
 import PageTitle from '../../../../ui/PageTitle';
 import CopyToClipboardButton from '../../../../ui/CopyToClipboardButton';
