@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { browsePeerReviewSummaryReview } from '../../../../../actions/api/view';
+import { browsePeerReviewSummaryReview, browseAllPeerReviewReview } from '../../../../../actions/api/view';
 
 import AutoTable from '../../../../ui/AutoTable';
 import PageTitle from '../../../../ui/PageTitle';
@@ -67,7 +67,15 @@ export default function PeerReviewSummary() {
 
   const [PRsummaryHTML, setPRsummaryHTML] = useState('');
   const [peerColumns, setPeerColumns] = useState([]);
+  const [totalCount, setTotalCount] = useState('');
 
+  useEffect(() => {
+    dispatch(browseAllPeerReviewReview(authToken, peerReviewId, 100, 0, setTotalCount));
+    for (let i = 1; i < Math.ceil(totalCount / 100); i += 1) {
+      dispatch(browseAllPeerReviewReview(authToken, peerReviewId, 100, i * 100));
+    }
+  }, [dispatch, authToken, peerReviewId, totalCount]);
+  console.log(PRsummary);
   useEffect(() => {
     let tableHTML = '<table>';
     if (PRsummary.allIds) {

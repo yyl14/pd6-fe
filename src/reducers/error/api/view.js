@@ -8,6 +8,8 @@ const initialState = {
   browseMySubmission: null,
   browsePeerReviewSummaryReview: null,
   browsePeerReviewSummaryReceive: null,
+  browseAllPeerReviewReview: null,
+  browseAllPeerReviewReceive: null,
 };
 
 export default function view(state = initialState, action) {
@@ -100,6 +102,32 @@ export default function view(state = initialState, action) {
       return {
         ...state,
         browsePeerReviewSummaryReceive: action.error,
+      };
+    }
+
+    case viewConstants.BROWSE_ALL_PEER_REVIEW_REVIEW_START: {
+      return {
+        ...state,
+        browseAllPeerReviewReview: null,
+      };
+    }
+    case viewConstants.BROWSE_ALL_PEER_REVIEW_REVIEW_FAIL: {
+      return {
+        ...state,
+        browseAllPeerReviewReview: action.error,
+      };
+    }
+
+    case viewConstants.BROWSE_ALL_PEER_REVIEW_RECEIVE_START: {
+      return {
+        ...state,
+        browseAllPeerReviewReceive: null,
+      };
+    }
+    case viewConstants.BROWSE_ALL_PEER_REVIEW_RECEIVE_FAIL: {
+      return {
+        ...state,
+        browseAllPeerReviewReceive: action.error,
       };
     }
     default: {

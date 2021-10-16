@@ -13,6 +13,7 @@ const prototype = {
 
 const byId = (state = {}, action) => {
   switch (action.type) {
+    case viewConstants.BROWSE_ALL_PEER_REVIEW_REVIEW_SUCCESS:
     case viewConstants.BROWSE_PEER_REVIEW_SUMMARY_REVIEW_SUCCESS: {
       const { peerReviewSummary } = action.payload.data;
 
@@ -36,6 +37,7 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
+    case viewConstants.BROWSE_ALL_PEER_REVIEW_REVIEW_SUCCESS:
     case viewConstants.BROWSE_PEER_REVIEW_SUMMARY_REVIEW_SUCCESS: {
       const { peerReviewSummary } = action.payload.data;
       return [...new Set([...peerReviewSummary.map((item) => item.account_id), ...state])];
