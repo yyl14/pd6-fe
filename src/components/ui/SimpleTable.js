@@ -22,9 +22,6 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     overflowX: 'hide',
   },
-  container: {
-    maxHeight: 800,
-  },
   topContent: {
     background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
@@ -60,6 +57,11 @@ const useStyles = makeStyles((theme) => ({
     borderBottomColor: theme.palette.grey.A400,
     minWidth: '20px',
   },
+  tableBodyCell: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
   editTableCell: {
     paddingTop: '7.5px',
     paddingBottom: '7.5px',
@@ -86,6 +88,9 @@ const useStyles = makeStyles((theme) => ({
       background: theme.palette.grey[300],
     },
   },
+  default: { color: theme.palette.black.dark },
+  error: { color: theme.palette.secondary.main },
+  primary: { color: theme.palette.primary.main },
 }));
 
 export default function SimpleTable({
@@ -132,7 +137,7 @@ export default function SimpleTable({
         <div className={classes.buttons}>{buttons}</div>
       </div>
       <Paper className={classes.root} elevation={0}>
-        <TableContainer className={classes.container}>
+        <TableContainer>
           <Table>
             <TableHead className={classes.tableHead}>
               <TableRow>
@@ -140,7 +145,12 @@ export default function SimpleTable({
                   <TableCell
                     key={column.id}
                     align={column.align}
-                    style={{ minWidth: column.minWidth, width: column.width, border: 'none' }}
+                    style={{
+                      minWidth: column.minWidth,
+                      width: column.width,
+                      maxWidth: column.width,
+                      border: 'none',
+                    }}
                   >
                     <div className={classes.column}>
                       <b>{column.label}</b>
@@ -204,7 +214,16 @@ export default function SimpleTable({
                     if (column.type === 'link') {
                       const link = row[column.link_id];
                       return (
-                        <TableCell key={column.id} align={column.align}>
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          className={`${classes.tableBodyCell} ${classes.textLink}`}
+                          style={{
+                            minWidth: column.minWidth,
+                            width: column.width,
+                            maxWidth: column.width,
+                          }}
+                        >
                           <Link to={link} className={classes.textLink}>
                             {column.format && typeof value === 'number' ? column.format(value) : value}
                           </Link>
@@ -212,7 +231,18 @@ export default function SimpleTable({
                       );
                     }
                     return (
-                      <TableCell key={column.id} align={column.align}>
+                      <TableCell
+                        key={column.id}
+                        align={column.align}
+                        className={`${column.colors && column.colors[value] && classes[column.colors[value]]} ${
+                          classes.tableBodyCell
+                        }`}
+                        style={{
+                          minWidth: column.minWidth,
+                          width: column.width,
+                          maxWidth: column.width,
+                        }}
+                      >
                         {column.format && typeof value === 'number' ? column.format(value) : value}
                       </TableCell>
                     );

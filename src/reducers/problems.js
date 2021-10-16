@@ -1,6 +1,31 @@
 import { combineReducers } from 'redux';
 import { problemConstants, challengeConstants, submissionConstants } from '../actions/myClass/constant';
 import { commonConstants } from '../actions/common/constant';
+import { viewConstants, peerReviewConstants } from '../actions/api/constant';
+
+const prototype = {
+  id: null,
+  challenge_id: null,
+  challenge_label: null,
+  title: null,
+  judge_type: null, // NORMAL or CUSTOMIZED
+  setter_id: null,
+  full_score: null,
+  description: null,
+  io_description: null,
+  source: null,
+  hint: null,
+  is_deleted: null,
+  testcaseIds: [],
+  assistingDataIds: [],
+  score: '',
+  judge_source: {
+    judge_language: null,
+    judge_code: null, // code content
+    code_uuid: null,
+    filename: null,
+  },
+};
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -95,6 +120,18 @@ const byId = (state = {}, action) => {
       };
     }
 
+    case problemConstants.READ_PROBLEM_BEST_SCORE_SUCCESS: {
+      const { data, problemId } = action.payload;
+
+      return {
+        ...state,
+        [problemId]: {
+          ...state[problemId],
+          score: data.score,
+        },
+      };
+    }
+
     case commonConstants.FETCH_PROBLEMS_SUCCESS: {
       const data = action.payload;
       return data.reduce(
@@ -132,6 +169,18 @@ const byId = (state = {}, action) => {
         },
       };
     }
+    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+      const { problems } = action.payload.data;
+      return problems.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
+    }
+
+    case peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_SUCCESS: {
+      const { problem } = action.payload;
+      return {
+        ...state,
+        [problem.id]: { ...prototype, ...state[problem.id], ...problem },
+      };
+    }
 
     default:
       return state;
@@ -155,6 +204,15 @@ const allIds = (state = [], action) => {
     case commonConstants.FETCH_PROBLEMS_SUCCESS: {
       const data = action.payload;
       return [...new Set([...data.map((item) => item.problem_id), ...state])];
+    }
+    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+      const { problems } = action.payload.data;
+      return [...new Set([...problems.map((item) => item.id), ...state])];
+    }
+
+    case peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_SUCCESS: {
+      const { problem } = action.payload;
+      return [...new Set([problem.id, ...state])];
     }
 
     default:

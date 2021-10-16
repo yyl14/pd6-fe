@@ -67,13 +67,27 @@ const userLogout = (history) => (dispatch) => {
   history.push('/login');
 };
 
-const userForgetPassword = (email) => async (dispatch) => {
+const userForgetUsername = (email, onSuccess, onError) => async (dispatch) => {
+  try {
+    dispatch({ type: authConstants.FORGET_USERNAME_START });
+    await agent.post('/account/forget-username', { email });
+    dispatch({ type: authConstants.FORGET_USERNAME_SUCCESS });
+    onSuccess();
+  } catch (error) {
+    dispatch({ type: authConstants.FORGET_USERNAME_FAIL, error });
+    onError();
+  }
+};
+
+const userForgetPassword = (username, email, onSuccess, onError) => async (dispatch) => {
   try {
     dispatch({ type: authConstants.FORGET_PASSWORD_START });
-    await agent.post('/account/forget-password', { email });
+    await agent.post('/account/forget-password', { username, email });
     dispatch({ type: authConstants.FORGET_PASSWORD_SUCCESS });
+    onSuccess();
   } catch (error) {
     dispatch({ type: authConstants.FORGET_PASSWORD_FAIL, error });
+    onError();
   }
 };
 
@@ -135,5 +149,12 @@ const userResetPassword = (code, password) => async (dispatch) => {
 };
 
 export {
-  getUserInfo, userSignIn, userLogout, userForgetPassword, userRegister, emailVerification, userResetPassword,
+  getUserInfo,
+  userSignIn,
+  userLogout,
+  userForgetUsername,
+  userForgetPassword,
+  userRegister,
+  emailVerification,
+  userResetPassword,
 };

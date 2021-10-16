@@ -7,7 +7,7 @@ import {
 import Icon from '../icon/index';
 
 export default function Account({
-  menuItems, classes, history, location, mode,
+  classes, history, location, mode, open, onClose,
 }) {
   const { instituteId, accountId } = useParams();
   const instituteList = useSelector((state) => state.institutes);
@@ -90,8 +90,10 @@ export default function Account({
     return (
       <div>
         <Drawer
+          variant="persistent"
+          open={open}
+          onClose={onClose}
           className={classes.drawer}
-          variant="permanent"
           anchor="left"
           PaperProps={{ elevation: 5 }}
           classes={{ paper: classes.drawerPaper }}
@@ -103,8 +105,10 @@ export default function Account({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classes.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classes.drawerPaper }}

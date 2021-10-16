@@ -30,6 +30,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 /* This is a level 4 component (page component) */
+/* TODO: Judge whether it is project type. */
 export default function CodingProblem() {
   const {
     courseId, classId, challengeId, problemId,

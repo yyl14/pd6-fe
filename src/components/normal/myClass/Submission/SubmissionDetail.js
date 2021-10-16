@@ -20,7 +20,7 @@ import {
   browseTestcases,
 } from '../../../../actions/myClass/submission';
 import { readProblemInfo } from '../../../../actions/myClass/problem';
-import { getAccountBatch, fetchChallenge } from '../../../../actions/common/common';
+import { getAccountBatch, fetchChallenge, browseSubmitLang } from '../../../../actions/common/common';
 
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
@@ -61,13 +61,13 @@ export default function SubmissionDetail() {
 
   const submissions = useSelector((state) => state.submissions.byId);
   const judgments = useSelector((state) => state.judgments.byId);
-  const judgmentIds = useSelector((state) => state.judgments.allIds);
   const challenges = useSelector((state) => state.challenges);
   const problems = useSelector((state) => state.problem);
   const user = useSelector((state) => state.user);
   const accounts = useSelector((state) => state.accounts);
   const judgeCases = useSelector((state) => state.judgeCases);
   const testcases = useSelector((state) => state.testcases);
+  const submitLangs = useSelector((state) => state.submitLangs.byId);
   const authToken = useSelector((state) => state.auth.token);
   // const loading = useSelector((state) => state.loading.myClass.submissions);
   const [rejudge, setRejudge] = useState(false);
@@ -78,60 +78,33 @@ export default function SubmissionDetail() {
   }, [authToken, dispatch, submissionId]);
 
   useEffect(() => {
+    dispatch(browseSubmitLang(authToken));
+  }, [authToken, dispatch]);
+
+  useEffect(() => {
     if (submissions[submissionId]) {
-      dispatch(getAccountBatch(authToken, submissions[submissionId].account_id));
-      dispatch(readProblemInfo(authToken, submissions[submissionId].problem_id));
-      setProblemId(submissions[submissionId].problem_id);
-      setAccountId(submissions[submissionId].account_id);
+      if (accountId !== submissions[submissionId].account_id && submissions[submissionId].account_id !== undefined) {
+        dispatch(getAccountBatch(authToken, submissions[submissionId].account_id));
+        setAccountId(submissions[submissionId].account_id);
+      }
+      if (problemId !== submissions[submissionId].problem_id && submissions[submissionId].problem_id !== undefined) {
+        dispatch(readProblemInfo(authToken, submissions[submissionId].problem_id));
+        setProblemId(submissions[submissionId].problem_id);
+      }
     }
-  }, [authToken, dispatch, submissionId, submissions]);
+  }, [accountId, authToken, dispatch, problemId, submissionId, submissions]);
 
   useEffect(() => {
     if (problems.byId[problemId]) {
-      dispatch(fetchChallenge(authToken, problems.byId[problemId].challenge_id));
-      setChallengeId(problems.byId[problemId].challenge_id);
-    }
-  }, [authToken, dispatch, problemId, problems.byId]);
-
-  useEffect(() => {
-    if (rejudge === false) {
-      setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
-      if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
-        dispatch(
-          browseJudgeCases(
-            authToken,
-            judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-          ),
-        );
-      }
-    } else {
-      setJudgmentId(
-        judgmentIds
-          .reduce((acc, b) => [b, ...acc], [])
-          .filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-      );
       if (
-        judgmentIds
-          .reduce((acc, b) => [b, ...acc], [])
-          .filter((id) => judgments[id].submission_id === Number(submissionId))[0]
+        challengeId !== problems.byId[problemId].challenge_id
+        && problems.byId[problemId].challenge_id !== undefined
       ) {
-        dispatch(
-          browseJudgeCases(
-            authToken,
-            judgmentIds
-              .reduce((acc, b) => [b, ...acc], [])
-              .filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-          ),
-        );
+        dispatch(fetchChallenge(authToken, problems.byId[problemId].challenge_id));
+        setChallengeId(problems.byId[problemId].challenge_id);
       }
     }
-  }, [authToken, dispatch, judgmentIds, judgments, rejudge, submissionId]);
-
-  useEffect(() => {
-    if (problemId) {
-      dispatch(browseTestcases(authToken, problemId));
-    }
-  }, [authToken, dispatch, problemId]);
+  }, [authToken, challengeId, challenges, dispatch, problemId, problems.byId]);
 
   const transformSample = useCallback(
     (id) => {
@@ -172,34 +145,36 @@ export default function SubmissionDetail() {
       setSampleDataIds(samplesId);
       setTestcaseDataIds(testcasesId);
     }
-  }, [problemId, problems.byId, testcases.byId, transformSample, transformTestcase]);
+  }, [problems, problemId, transformTestcase, transformSample, testcases]);
+
+  useEffect(() => {
+    if (problemId) {
+      dispatch(browseTestcases(authToken, problemId));
+    }
+  }, [authToken, dispatch, problemId]);
+
+  useEffect(() => {
+    if (submissions[submissionId]?.latestJudgmentId) {
+      if (submissions[submissionId].latestJudgmentId !== judgmentId) {
+        setJudgmentId(submissions[submissionId].latestJudgmentId);
+        dispatch(browseJudgeCases(authToken, submissions[submissionId].latestJudgmentId));
+      }
+    }
+  }, [authToken, dispatch, submissionId, submissions, rejudge, judgmentId]);
 
   useEffect(() => {
     if (sampleDataIds && testcaseDataIds && judgeCases.allIds) {
+      const filteredJudgeCases = judgeCases.allIds.filter((key) => judgeCases.byId[key].judgment_id === judgmentId);
       setTableData(
         sampleDataIds
           .concat(testcaseDataIds)
           .map((id) => ({
             id,
             no: transformTestcase(id),
-            time: judgeCases.allIds
-              .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id ? judgeCases.byId[id].time_lapse : '')),
-            memory: judgeCases.allIds
-              .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id ? judgeCases.byId[id].peak_memory : '')),
-            status: judgeCases.allIds
-              .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id
-                ? judgeCases.byId[id].verdict
-                  .toLowerCase()
-                  .split(' ')
-                  .map((word) => word[0].toUpperCase() + word.substring(1))
-                  .join(' ')
-                : '')),
-            score: judgeCases.allIds
-              .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id ? judgeCases.byId[id].score : '')),
+            time: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].time_lapse : '',
+            memory: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].peak_memory : '',
+            status: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].verdict : '',
+            score: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].score : '',
           }))
           .sort((a, b) => {
             if (!a.no.includes('sample') && b.no.includes('sample')) return 1;
@@ -220,7 +195,6 @@ export default function SubmissionDetail() {
           }),
       );
     }
-    console.log(tableData);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [judgeCases.allIds, judgeCases.byId, judgmentId, sampleDataIds, testcaseDataIds, transformTestcase]);
@@ -252,8 +226,6 @@ export default function SubmissionDetail() {
     dispatch(rejudgeSubmission(authToken, submissionId));
     setPopUp(false);
   };
-
-  console.log(judgments);
 
   return (
     <>
@@ -307,16 +279,12 @@ export default function SubmissionDetail() {
           {judgments[judgmentId] ? (
             <div>
               {judgments[judgmentId].verdict === 'Accepted' ? (
-                <Typography variant="body1">
-                  {judgments[judgmentId].verdict.charAt(0).concat(judgments[judgmentId].verdict.slice(1).toLowerCase())}
+                <Typography variant="body1" color="primary">
+                  {judgments[judgmentId].verdict}
                 </Typography>
               ) : (
                 <Typography variant="body1" color="secondary">
-                  {judgments[judgmentId].verdict
-                    .toLowerCase()
-                    .split(' ')
-                    .map((word) => word[0].toUpperCase() + word.substring(1))
-                    .join(' ')}
+                  {judgments[judgmentId].verdict}
                 </Typography>
               )}
             </div>
@@ -336,10 +304,15 @@ export default function SubmissionDetail() {
             {moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm')}
           </Typography>
         </AlignedText>
-        {/* <AlignedText text="Language" childrenType="text">
-          {submitLangs[submissions[submissionId].language_id]
-            && <Typography variant="body1">{submitLangs[submissions[submissionId].language_id].name}</Typography>}
-        </AlignedText> */}
+        <AlignedText text="Language" childrenType="text">
+          {submitLangs[submissions[submissionId].language_id] && (
+            <Typography variant="body1">
+              {`${submitLangs[submissions[submissionId].language_id].name} ${
+                submitLangs[submissions[submissionId].language_id].version
+              }`}
+            </Typography>
+          )}
+        </AlignedText>
       </SimpleBar>
       <SimpleBar title="Submission Result" noIndent>
         <SimpleTable
@@ -356,7 +329,7 @@ export default function SubmissionDetail() {
             },
             {
               id: 'time',
-              label: 'Time(ms)',
+              label: 'Time (ms)',
               minWidth: 50,
               align: 'center',
               width: 600,
@@ -364,7 +337,7 @@ export default function SubmissionDetail() {
             },
             {
               id: 'memory',
-              label: 'Memory(kb)',
+              label: 'Memory (kb)',
               minWidth: 50,
               align: 'center',
               width: 600,
@@ -377,6 +350,19 @@ export default function SubmissionDetail() {
               align: 'center',
               width: 600,
               type: 'string',
+              colors: {
+                'Waiting for judge': 'default',
+                'No Status': 'error',
+                Accepted: 'accepted',
+                'Wrong Answer': 'error',
+                'Memory Limit Exceed': 'error',
+                'Time Limit Exceed': 'error',
+                'Runtime Error': 'error',
+                'Compile Error': 'error',
+                'Contact Manager': 'error',
+                'Forbidden Action': 'error',
+                'System Error': 'error',
+              },
             },
             {
               id: 'score',

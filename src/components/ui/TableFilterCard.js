@@ -3,18 +3,17 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   FormControl,
   Select,
   MenuItem,
   Button,
 } from '@material-ui/core';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Icon from './icon/index';
 import AlignedText from './AlignedText';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   filterButton: {
     justifyContent: 'space-between',
   },
@@ -35,12 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function TableFilterCard({
-  popUp,
-  setPopUp,
-  filterInput,
-  filterOptions,
-  setFilterInput,
-  doFilter,
+  popUp, setPopUp, filterInput, filterOptions, setFilterInput, doFilter,
 }) {
   const classes = useStyles();
   const [onFilter, setOnFilter] = useState(false);
@@ -86,13 +80,22 @@ export default function TableFilterCard({
 
   return (
     <>
-      {onFilter ? <Icon.FilterSelected className={classes.filterIcon} onClick={() => { openFilter(); }} /> : <Icon.FilterIdle className={classes.filterIcon} onClick={() => { openFilter(); }} /> }
-      <Dialog
-        open={popUp}
-        keepMounted
-        onClose={() => setPopUp(false)}
-        className={classes.popUpLayout}
-      >
+      {onFilter ? (
+        <Icon.FilterSelected
+          className={classes.filterIcon}
+          onClick={() => {
+            openFilter();
+          }}
+        />
+      ) : (
+        <Icon.FilterIdle
+          className={classes.filterIcon}
+          onClick={() => {
+            openFilter();
+          }}
+        />
+      )}
+      <Dialog open={popUp} keepMounted onClose={() => setPopUp(false)} className={classes.popUpLayout}>
         <DialogContent>
           <AlignedText text="Filter by" childrenType="field">
             <FormControl variant="outlined" className={classes.selectField}>
@@ -100,11 +103,17 @@ export default function TableFilterCard({
                 labelId="status"
                 id="status"
                 value={tempInput.filter}
-                onChange={(e) => { onChangeFilterInput(e); }}
+                onChange={(e) => {
+                  onChangeFilterInput(e);
+                }}
                 multiple
               >
                 <MenuItem value="Select all">Select all</MenuItem>
-                {filterOptions.map((option) => <MenuItem key={option} value={option}>{option}</MenuItem>)}
+                {filterOptions.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </AlignedText>
@@ -135,7 +144,12 @@ export default function TableFilterCard({
             <Button onClick={() => setPopUp(false)} color="default">
               Cancel
             </Button>
-            <Button onClick={() => { saveFilter(); }} color="primary">
+            <Button
+              onClick={() => {
+                saveFilter();
+              }}
+              color="primary"
+            >
               Save
             </Button>
           </div>

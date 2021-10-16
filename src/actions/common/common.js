@@ -69,9 +69,24 @@ const fetchClassMemberWithAccountReferral = (token, classId) => async (dispatch)
     };
     dispatch({ type: commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_START });
     const res = await agent.get(`/class/${classId}/member/account-referral`, config);
+    const { data } = res.data;
     dispatch({
       type: commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_SUCCESS,
-      payload: { classId, data: res.data.data },
+      payload: {
+        classId,
+        data: {
+          classMembers: data.map(({ member_id, member_role }) => ({
+            id: `${classId}-${member_id}`,
+            account_id: member_id,
+            class_id: classId,
+            role: member_role,
+          })),
+          accounts: data.map(({ member_id, member_referral }) => ({
+            id: member_id,
+            referral: member_referral,
+          })),
+        },
+      },
     });
   } catch (error) {
     dispatch({
@@ -90,11 +105,23 @@ const replaceClassMembers = (token, classId, replacingList, onSuccess, onError) 
     };
     dispatch({ type: commonConstants.REPLACE_CLASS_MEMBERS_START });
 
-    await agent.put(`/class/${classId}/member`, replacingList, config);
+    const res = await agent.put(`/class/${classId}/member`, replacingList, config);
     dispatch({
       type: commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS,
     });
-    onSuccess();
+
+    const handleResponse = (responseList) => {
+      const failedList = responseList
+        .reduce((acc, cur, index) => (cur === false ? acc.concat(index) : acc), [])
+        .map((index) => replacingList[index].account_referral);
+
+      if (failedList.length === 0) {
+        onSuccess();
+      } else {
+        onError(failedList);
+      }
+    };
+    handleResponse(res.data.data);
   } catch (error) {
     dispatch({
       type: commonConstants.REPLACE_CLASS_MEMBERS_FAIL,

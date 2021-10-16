@@ -31,7 +31,7 @@ import GeneralLoading from '../../components/GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   authForm: {
-    width: '50%',
+    width: '70%',
   },
   authTextFields: {
     width: '100%',
@@ -105,7 +105,6 @@ export default function RegisterForm() {
 
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
 
-  const [disabled, setDisabled] = useState(false);
   const [popup, setPopup] = useState(false);
   const [errorPopup, setErrorPopup] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -127,10 +126,25 @@ export default function RegisterForm() {
 
   const onSubmit = () => {
     const newInputs = labelName.reduce((acc, item) => ({ ...acc, [item]: inputs[item].trim() }), {});
-    let hasError = labelName.reduce((acc, item) => (acc || newInputs[item] === ''), false);
+    let hasError = labelName.reduce((acc, item) => acc || newInputs[item] === '', false);
 
-    setErrors(labelName.reduce((acc, item) => ({ ...acc, [item]: newInputs[item] === '' }), {}));
-    setErrorTexts(labelName.reduce((acc, item) => ({ ...acc, [item]: newInputs[item] === '' ? "Can't be empty" : '' }), {}));
+    setErrors(
+      labelName.reduce((acc, item) => {
+        console.log(item, newInputs[item] === '');
+        if (item !== 'password' && item !== 'confirmPassword') {
+          return { ...acc, [item]: newInputs[item].trim() === '' };
+        }
+        return { ...acc, [item]: newInputs[item] === '' };
+      }, {}),
+    );
+    setErrorTexts(
+      labelName.reduce((acc, item) => {
+        if (item !== 'password' && item !== 'confirmPassword') {
+          return { ...acc, [item]: newInputs[item].trim() === '' ? "Can't be empty" : '' };
+        }
+        return { ...acc, [item]: newInputs[item] === '' ? "Can't be empty" : '' };
+      }, {}),
+    );
 
     // check password
     const statusP = checkPassword(newInputs.password, newInputs.confirmPassword);
@@ -143,13 +157,13 @@ export default function RegisterForm() {
     if (!hasError) {
       dispatch(
         userRegister(
-          inputs.username,
+          inputs.username.trim(),
           inputs.password,
-          inputs.nickname,
-          inputs.realName,
-          inputs.email,
+          inputs.nickname.trim(),
+          inputs.realName.trim(),
+          inputs.email.trim(),
           transform(inputs.school),
-          inputs.studentId,
+          inputs.studentId.trim(),
         ),
       );
       setHasRequest(true);
@@ -228,7 +242,7 @@ export default function RegisterForm() {
 
     setErrors(labelName.reduce((acc, item) => ({ ...acc, [item]: checkError(item) }), {}));
     setErrorTexts(labelName.reduce((acc, item) => ({ ...acc, [item]: checkError(item) ? "Can't be empty" : '' }), {}));
-    const hasError = labelName.reduce((acc, item) => (acc || checkError(item)), false);
+    const hasError = labelName.reduce((acc, item) => acc || checkError(item), false);
 
     if (!hasError) {
       setNextPage(true);
@@ -334,7 +348,7 @@ export default function RegisterForm() {
                 </Typography>
               </div>
               <div className={classNames.authButtons}>
-                <Button disabled={disabled} onClick={onNextPage} color="primary">
+                <Button onClick={onNextPage} color="primary">
                   Next
                 </Button>
               </div>
@@ -422,10 +436,10 @@ export default function RegisterForm() {
                 }}
               />
               <div className={classNames.authButtons}>
-                <Button disabled={disabled} onClick={() => setNextPage(false)}>
+                <Button onClick={() => setNextPage(false)}>
                   Back
                 </Button>
-                <Button disabled={disabled} onClick={() => onSubmit()} color="primary">
+                <Button onClick={() => onSubmit()} color="primary">
                   Register
                 </Button>
               </div>

@@ -49,7 +49,7 @@ const useStyles = makeStyles(() => ({
   dialogContent: {
     padding: '0px 24px 6px 24px',
   },
-  duplicateList: {
+  failedList: {
     marginTop: '16px',
   },
   dialogButtons: {
@@ -71,6 +71,7 @@ const MemberEdit = ({
 }) => {
   const classNames = useStyles();
 
+  const accounts = useSelector((state) => state.accounts);
   const members = useSelector((state) => state.classMembers);
   const error = useSelector((state) => state.error.common.common);
 
@@ -81,7 +82,8 @@ const MemberEdit = ({
   const [studentChanged, setStudentChanged] = useState(false);
   const [guestChanged, setGuestChanged] = useState(false);
   const [duplicateList, setDuplicateList] = useState([]);
-  const [submitError, setSubmitError] = useState('');
+  const [errorDetectedList, setErrorDetectedList] = useState([]);
+  const [submitError, setSubmitError] = useState(false);
   const [showUnsavedChangesDialog, setShowUnsavedChangesDialog] = useState(false);
   const [showDuplicateIdentityDialog, setShowDuplicateIdentityDialog] = useState(false);
   const [showErrorDetectedDialog, setShowErrorDetectedDialog] = useState(false);
@@ -115,24 +117,24 @@ const MemberEdit = ({
     if (classMembers !== undefined) {
       setTA(
         classMembers
-          .filter((item) => item.member_role === 'MANAGER')
-          .map((member) => member.member_referral)
+          .filter((item) => item.role === 'MANAGER')
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
       );
       setStudent(
         classMembers
-          .filter((item) => item.member_role === 'NORMAL')
-          .map((member) => member.member_referral)
+          .filter((item) => item.role === 'NORMAL')
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
       );
       setGuest(
         classMembers
-          .filter((item) => item.member_role === 'GUEST')
-          .map((member) => member.member_referral)
+          .filter((item) => item.role === 'GUEST')
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
       );
     }
-  }, [classId, classes.byId, error.fetchClassMemberWithAccountReferral, members.byId]);
+  }, [accounts.byId, classId, classes.byId, members.byId]);
 
   // block user leaving current page through header and sidebar links (if contents have been changed)
   useEffect(() => {
@@ -149,6 +151,8 @@ const MemberEdit = ({
   useEffect(() => {
     if (error.replaceClassMembers) {
       setSubmitError(error.replaceClassMembers);
+    } else {
+      setSubmitError(false);
     }
   }, [error.replaceClassMembers]);
 
@@ -169,8 +173,8 @@ const MemberEdit = ({
       e.target.value
         !== classes.byId[classId].memberIds
           .map((id) => members.byId[id])
-          .filter((item) => item.member_role === 'MANAGER')
-          .map((member) => member.member_referral)
+          .filter((item) => item.role === 'MANAGER')
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
     );
   };
@@ -180,8 +184,8 @@ const MemberEdit = ({
       e.target.value
         !== classes.byId[classId].memberIds
           .map((id) => members.byId[id])
-          .filter((item) => item.member_role === 'NORMAL')
-          .map((member) => member.member_referral)
+          .filter((item) => item.role === 'NORMAL')
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
     );
   };
@@ -191,8 +195,8 @@ const MemberEdit = ({
       e.target.value
         !== classes.byId[classId].memberIds
           .map((id) => members.byId[id])
-          .filter((item) => item.member_role === 'GUEST')
-          .map((member) => member.member_referral)
+          .filter((item) => item.role === 'GUEST')
+          .map((member) => accounts.byId[member.account_id].referral)
           .join('\n'),
     );
   };
@@ -263,7 +267,10 @@ const MemberEdit = ({
               unblockAndReturn(saveWithDialog);
               dispatch(getUserInfo(cookies.id, authToken));
             },
-            () => setShowErrorDetectedDialog(true),
+            (list) => {
+              setErrorDetectedList(list);
+              setShowErrorDetectedDialog(true);
+            },
           ),
         );
       }
@@ -371,9 +378,9 @@ const MemberEdit = ({
           <Typography variant="body1">
             The following accounts appear in more than one column. Please remove duplicate identities.
           </Typography>
-          <div className={classNames.duplicateList}>
+          <div className={classNames.failedList}>
             {duplicateList.map((accountReferral) => (
-              <Typography variant="body1" key={accountReferral}>
+              <Typography variant="body1" key={`duplicate-${accountReferral}`}>
                 {accountReferral}
               </Typography>
             ))}
@@ -395,19 +402,40 @@ const MemberEdit = ({
           <Typography variant="h4">Error Detected</Typography>
         </DialogTitle>
         <DialogContent className={classNames.dialogContent}>
-          <Typography variant="body1">Save member failed due to the following reasons:</Typography>
-          <Typography variant="body1" className={classNames.duplicateList}>
-            {submitError === 'IllegalInput' ? 'Illegal Input' : submitError}
-          </Typography>
+          {submitError ? (
+            <>
+              <Typography variant="body1">Save member failed due to the following reasons:</Typography>
+              <Typography variant="body1" className={classNames.failedList}>
+                {submitError === 'SystemException' ? 'System Exception' : submitError}
+              </Typography>
+            </>
+          ) : (
+            <>
+              <Typography variant="body1">Changes saved, but error detected in the following accounts:</Typography>
+              <div className={classNames.failedList}>
+                {errorDetectedList.map((accountReferral) => (
+                  <Typography variant="body1" key={`errorDetected-${accountReferral}`}>
+                    {accountReferral}
+                  </Typography>
+                ))}
+              </div>
+            </>
+          )}
         </DialogContent>
         <DialogActions>
-          <Button
-            color="primary"
-            onClick={() => setShowErrorDetectedDialog(false)}
-            className={classNames.buttonFlexEnd}
-          >
-            Back to Edit
-          </Button>
+          {submitError ? (
+            <Button
+              color="primary"
+              onClick={() => setShowErrorDetectedDialog(false)}
+              className={classNames.buttonFlexEnd}
+            >
+              Back to Edit
+            </Button>
+          ) : (
+            <Button color="primary" onClick={handleUnsave} className={classNames.buttonFlexEnd}>
+              Back to Member List
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
     </div>

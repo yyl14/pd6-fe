@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, {
+  useState, useEffect, useCallback, useMemo,
+} from 'react';
 import { Provider } from 'react-redux';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
@@ -7,9 +9,11 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import theme from './theme';
+import { useCookies } from 'react-cookie';
+import theme from './theme/index';
 import Login from './containers/auth/Login';
 import Register from './containers/auth/Register';
+import ForgetUsername from './containers/auth/ForgetUsername';
 import ForgetPassword from './containers/auth/ForgetPassword';
 import ResetPassword from './containers/auth/ResetPassword';
 import EmailVerification from './containers/auth/EmailVerification';
@@ -18,32 +22,50 @@ import NoMatch from './components/noMatch';
 import store from './store';
 import IconUsage from './components/ui/IconUsage';
 import UIComponentUsage from './components/ui/UIComponentUsage';
+import ThemeToggleContext from './contexts/themeToggleContext';
 
 import './App.css';
 import './styles/ui.css';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+function App() {
+  const [cookies, setCookies] = useCookies(['theme']);
+  const [selectedTheme, setSelectedTheme] = useState('pd6New');
+
+  const setTheme = useCallback(
+    (value) => {
+      setCookies('theme', value);
+    },
+    [setCookies],
+  );
+
+  // Initialize theme selection from cookies
+  useEffect(() => {
+    if (cookies.theme !== undefined) {
+      setSelectedTheme(cookies.theme);
+    }
+  }, [cookies.theme]);
+
+  useEffect(() => {
     const url = window.location.origin;
 
     if (!url.includes('localhost') && !url.includes('https')) {
       window.location = `https:${url.split(':')[1]}`;
     }
+  }, []);
 
-    this.state = {};
-  }
+  const themeContextValue = useMemo(() => ({ value: selectedTheme, setter: setTheme }), [selectedTheme, setTheme]);
 
-  render() {
-    return (
-      <Provider store={store}>
-        <MuiThemeProvider theme={theme}>
+  return (
+    <Provider store={store}>
+      <ThemeToggleContext.Provider value={themeContextValue}>
+        <MuiThemeProvider theme={theme[selectedTheme]}>
           <CssBaseline />
           <Router>
             <Switch>
               <Route path="/icon" component={IconUsage} />
               <Route path="/ui-component" component={UIComponentUsage} />
               <Route path="/login" component={Login} />
+              <Route path="/forget-username" component={ForgetUsername} />
               <Route path="/forget-password" component={ForgetPassword} />
               <Route path="/reset-password" component={ResetPassword} />
               <Route path="/register" component={Register} />
@@ -53,9 +75,9 @@ class App extends Component {
             </Switch>
           </Router>
         </MuiThemeProvider>
-      </Provider>
-    );
-  }
+      </ThemeToggleContext.Provider>
+    </Provider>
+  );
 }
 
 export default App;

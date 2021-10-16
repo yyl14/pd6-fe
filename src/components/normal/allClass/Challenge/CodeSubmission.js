@@ -67,7 +67,7 @@ export default function CodeSubmission() {
     if (langId === -1) {
       return;
     }
-    dispatch(submitCode(authToken, problemId, langId, code));
+    dispatch(submitCode(authToken, problemId, langId, code, () => {}));
     const daysToExpire = new Date(2147483647 * 1000);
     setCookie('lang', langId, { path: '/', expires: daysToExpire });
     history.push(`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);

@@ -11,13 +11,9 @@ import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
 import PageTitle from '../../../ui/PageTitle';
 import GeneralLoading from '../../../GeneralLoading';
-import {
-  readSubmissionDetail,
-  browseJudgeCases,
-  browseTestcases,
-  rejudgeSubmission,
-} from '../../../../actions/myClass/problem';
-import { fetchSubmission } from '../../../../actions/myClass/submission';
+import { browseJudgeCases, browseTestcases, rejudgeSubmission } from '../../../../actions/myClass/problem';
+import { readSubmissionDetail, fetchSubmission } from '../../../../actions/myClass/submission';
+import { browseSubmitLang } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
 import CodeArea from '../../../ui/CodeArea';
 // import { browseSubmitLang } from '../../../../actions/common/common';
@@ -58,14 +54,16 @@ export default function SubmissionDetail() {
 
   const submissions = useSelector((state) => state.submissions.byId);
   const judgments = useSelector((state) => state.judgments.byId);
-  const judgmentIds = useSelector((state) => state.judgments.allIds);
   const challenges = useSelector((state) => state.challenges);
   const problems = useSelector((state) => state.problem);
   const user = useSelector((state) => state.user);
   const judgeCases = useSelector((state) => state.judgeCases);
   const testcases = useSelector((state) => state.testcases);
+  const submitLangs = useSelector((state) => state.submitLangs.byId);
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.problem);
+  const submissionLoading = useSelector((state) => state.loading.myClass.problem);
+  const commonLoading = useSelector((state) => state.loading.common.common);
   const [rejudge, setRejudge] = useState(false);
 
   useEffect(() => {
@@ -74,42 +72,21 @@ export default function SubmissionDetail() {
   }, [authToken, challengeId, dispatch, problemId, submissionId]);
 
   useEffect(() => {
-    if (rejudge === false) {
-      setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
-      if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
-        dispatch(
-          browseJudgeCases(
-            authToken,
-            judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-          ),
-        );
-      }
-    } else {
-      setJudgmentId(
-        judgmentIds
-          .reduce((acc, b) => [b, ...acc], [])
-          .filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-      );
-      if (
-        judgmentIds
-          .reduce((acc, b) => [b, ...acc], [])
-          .filter((id) => judgments[id].submission_id === Number(submissionId))[0]
-      ) {
-        dispatch(
-          browseJudgeCases(
-            authToken,
-            judgmentIds
-              .reduce((acc, b) => [b, ...acc], [])
-              .filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-          ),
-        );
+    if (submissions[submissionId]?.latestJudgmentId) {
+      if (submissions[submissionId].latestJudgmentId !== judgmentId) {
+        setJudgmentId(submissions[submissionId].latestJudgmentId);
+        dispatch(browseJudgeCases(authToken, submissions[submissionId].latestJudgmentId));
       }
     }
-  }, [authToken, dispatch, judgmentIds, judgments, rejudge, submissionId]);
+  }, [authToken, dispatch, submissionId, submissions, rejudge, judgmentId]);
 
   useEffect(() => {
     dispatch(browseTestcases(authToken, problemId));
   }, [authToken, dispatch, problemId]);
+
+  useEffect(() => {
+    dispatch(browseSubmitLang(authToken));
+  }, [authToken, dispatch]);
 
   const transformSample = useCallback(
     (id) => {
@@ -151,9 +128,10 @@ export default function SubmissionDetail() {
       setTestcaseDataIds(testcasesId);
     }
   }, [problems, problemId, transformTestcase, transformSample, testcases]);
-  console.log(judgeCases.allIds);
+
   useEffect(() => {
     if (sampleDataIds && testcaseDataIds && judgeCases.allIds) {
+      const filteredJudgeCases = judgeCases.allIds.filter((key) => judgeCases.byId[key].judgment_id === judgmentId);
       setTableData(
         []
           .concat(sampleDataIds)
@@ -161,18 +139,10 @@ export default function SubmissionDetail() {
           .map((id) => ({
             id,
             no: transformTestcase(id),
-            time: judgeCases.allIds
-              .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id ? judgeCases.byId[id].time_lapse : '')),
-            memory: judgeCases.allIds
-              .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id ? judgeCases.byId[id].peak_memory : '')),
-            status: judgeCases.allIds
-              .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id ? judgeCases.byId[id].verdict : '')),
-            score: judgeCases.allIds
-              .filter((key1) => judgeCases.byId[key1].judgment_id === judgmentId)
-              .map((key) => (key === id ? judgeCases.byId[id].score : '')),
+            time: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].time_lapse : '',
+            memory: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].peak_memory : '',
+            status: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].verdict : '',
+            score: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].score : '',
           }))
           .sort((a, b) => {
             if (!a.no.includes('sample') && b.no.includes('sample')) return 1;
@@ -209,7 +179,16 @@ export default function SubmissionDetail() {
     || judgeCases.allIds === undefined
     || testcases.allIds === undefined
   ) {
-    if (loading.readSubmissionDetail || loading.browseJudgeCases || loading.readTestcase || loading.rejudgeSubmission) {
+    if (
+      loading.browseJudgeCases
+      || loading.readTestcase
+      || loading.rejudgeSubmission
+      || submissionLoading.fetchSubmission
+      || submissionLoading.readSubmissionDetail
+      || commonLoading.fetchCourse
+      || commonLoading.fetchClass
+      || commonLoading.fetchChallenge
+    ) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -278,16 +257,12 @@ export default function SubmissionDetail() {
           {judgments[judgmentId] ? (
             <div>
               {judgments[judgmentId].verdict === 'Accepted' ? (
-                <Typography variant="body1">
-                  {judgments[judgmentId].verdict.charAt(0).concat(judgments[judgmentId].verdict.slice(1).toLowerCase())}
+                <Typography variant="body1" color="primary">
+                  {judgments[judgmentId].verdict}
                 </Typography>
               ) : (
                 <Typography variant="body1" color="secondary">
-                  {judgments[judgmentId].verdict
-                    .toLowerCase()
-                    .split(' ')
-                    .map((word) => word[0].toUpperCase() + word.substring(1))
-                    .join(' ')}
+                  {judgments[judgmentId].verdict}
                 </Typography>
               )}
             </div>
@@ -307,10 +282,15 @@ export default function SubmissionDetail() {
             {moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm')}
           </Typography>
         </AlignedText>
-        {/* <AlignedText text="Language" childrenType="text">
-          {submitLangs[submissions[submissionId].language_id]
-            && <Typography variant="body1">{submitLangs[submissions[submissionId].language_id].name}</Typography>}
-        </AlignedText> */}
+        <AlignedText text="Language" childrenType="text">
+          {submitLangs[submissions[submissionId].language_id] && (
+            <Typography variant="body1">
+              {`${submitLangs[submissions[submissionId].language_id].name} ${
+                submitLangs[submissions[submissionId].language_id].version
+              }`}
+            </Typography>
+          )}
+        </AlignedText>
       </SimpleBar>
       <SimpleBar title="Submission Result" noIndent>
         <SimpleTable
@@ -327,7 +307,7 @@ export default function SubmissionDetail() {
             },
             {
               id: 'time',
-              label: 'Time(ms)',
+              label: 'Time (ms)',
               minWidth: 50,
               align: 'center',
               width: 600,
@@ -335,7 +315,7 @@ export default function SubmissionDetail() {
             },
             {
               id: 'memory',
-              label: 'Memory(kb)',
+              label: 'Memory (kb)',
               minWidth: 50,
               align: 'center',
               width: 600,
@@ -348,6 +328,19 @@ export default function SubmissionDetail() {
               align: 'center',
               width: 600,
               type: 'string',
+              colors: {
+                'Waiting for judge': 'default',
+                'No Status': 'error',
+                Accepted: 'accepted',
+                'Wrong Answer': 'error',
+                'Memory Limit Exceed': 'error',
+                'Time Limit Exceed': 'error',
+                'Runtime Error': 'error',
+                'Compile Error': 'error',
+                'Contact Manager': 'error',
+                'Forbidden Action': 'error',
+                'System Error': 'error',
+              },
             },
             {
               id: 'score',

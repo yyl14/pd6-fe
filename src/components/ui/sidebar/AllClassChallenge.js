@@ -6,11 +6,8 @@ import {
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
-import { fetchChallenges } from '../../../actions/myClass/challenge';
-import { fetchClass, fetchCourse } from '../../../actions/common/common';
-
 export default function AllClassChallenge({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const {
     courseId, classId, challengeId, problemId, submissionId,
@@ -28,12 +25,6 @@ export default function AllClassChallenge({
   const problems = useSelector((state) => state.problem);
   const essays = useSelector((state) => state.essays);
 
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-    dispatch(fetchChallenges(authToken, classId));
-  }, [dispatch, authToken, classId, courseId]);
-
   const [display, setDisplay] = useState('unfold');
 
   const [title, setTitle] = useState('');
@@ -45,13 +36,13 @@ export default function AllClassChallenge({
       history.push(`${baseURL}/${courseId}/${classId}/challenge`);
     };
     const goBackToProblem = () => {
-      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}`);
+      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}`);
     };
     const goBackToSubmission = () => {
       history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
     };
     if (mode === 'challenge') {
-      if (challenges[challengeId] !== undefined) {
+      if (challenges[challengeId] !== undefined && challenges[challengeId].problemIds !== undefined) {
         setArrow(
           <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
             <Icon.ArrowBackRoundedIcon />
@@ -143,8 +134,10 @@ export default function AllClassChallenge({
     return (
       <div>
         <Drawer
+          variant="persistent"
+          open={open}
+          onClose={onClose}
           className={classNames.drawer}
-          variant="permanent"
           anchor="left"
           PaperProps={{ elevation: 5 }}
           classes={{ paper: classNames.drawerPaper }}
@@ -156,8 +149,10 @@ export default function AllClassChallenge({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}

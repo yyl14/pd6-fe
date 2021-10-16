@@ -18,10 +18,10 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import PageTitle from '../../ui/PageTitle';
 import AutoTable from '../../ui/AutoTable';
-import AlignedText from '../../ui/AlignedText';
 import FileUploadArea from '../../ui/FileUploadArea';
 import Icon from '../../ui/icon/index';
-import { fetchAccounts, addAccount, downloadAccountFile } from '../../../actions/admin/account';
+import { addAccount, downloadAccountFile } from '../../../actions/admin/account';
+import { browseAccountWithDefaultStudentId } from '../../../actions/api/view';
 
 const useStyles = makeStyles((theme) => ({
   addDialogGap: {
@@ -65,11 +65,11 @@ export default function AccountList() {
   const [pwError, setPwError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [showSnackBar, setShowSnackBar] = useState(false);
-  // const [hasRequest, setHasRequest] = useState(false);
 
   const accounts = useSelector((state) => state.accounts);
   const authToken = useSelector((state) => state.auth.token);
   const error = useSelector((state) => state.error.admin.account);
+  const viewError = useSelector((state) => state.error.api.view.browseAccountWithDefaultStudentId);
 
   useEffect(() => {
     if (showImportDialog) {
@@ -139,13 +139,11 @@ export default function AccountList() {
     setPwError(false);
     setErrorText('');
     setShowPassword({ pw1: false, pw2: false });
-    // setHasRequest(false);
   };
 
   const importAccountSuccess = () => {
     setSelectedFile([]);
     setShowImportDialog(false);
-    // setHasRequest(false);
   };
 
   const handleSubmit = () => {
@@ -169,7 +167,6 @@ export default function AccountList() {
         ),
       );
     }
-    // setHasRequest(true);
   };
 
   const downloadTemplate = () => {
@@ -191,12 +188,12 @@ export default function AccountList() {
             type: 'TEXT',
             operation: 'LIKE',
           },
-          // {
-          //   reduxStateId: 'student_id',
-          //   label: 'Student ID',
-          //   type: 'TEXT',
-          //   operation: 'LIKE',
-          // },
+          {
+            reduxStateId: 'student_id',
+            label: 'Student ID',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
           {
             reduxStateId: 'real_name',
             label: 'Real Name',
@@ -205,24 +202,30 @@ export default function AccountList() {
           },
         ]}
         refetch={(browseParams, ident) => {
-          dispatch(fetchAccounts(authToken, browseParams, ident));
+          dispatch(browseAccountWithDefaultStudentId(authToken, browseParams, ident));
         }}
         refetchErrors={[error.fetchAccounts]}
         columns={[
           {
             name: 'Username',
+            width: 139,
             align: 'center',
             type: 'string',
+            sortable: 'username',
           },
           {
             name: 'Student ID',
+            width: 144,
             align: 'center',
             type: 'string',
+            sortable: 'student_id',
           },
           {
             name: 'Real Name',
+            width: 144,
             align: 'center',
             type: 'string',
+            sortable: 'real_name',
           },
         ]}
         reduxData={accounts}

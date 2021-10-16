@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import React, { useSelector, useDispatch } from 'react-redux';
+import React, { useDispatch } from 'react-redux';
 import {
   Button,
   TextField,
@@ -11,13 +11,15 @@ import {
   DialogContent,
   DialogTitle,
   makeStyles,
+  Link,
 } from '@material-ui/core';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { userForgetPassword } from '../../actions/user/auth';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   authForm: {
     width: '50%',
   },
@@ -26,54 +28,49 @@ const useStyles = makeStyles(() => ({
     marginTop: '55px',
   },
   authButtons: {
-    marginTop: '57px',
+    marginTop: '44px',
+    marginBottom: '30px',
+  },
+  authLink: {
+    color: theme.palette.grey.A400,
   },
 }));
 
 export default function ForgetPasswordForm() {
   const classNames = useStyles();
   const dispatch = useDispatch();
-  const error = useSelector((state) => state.error.user.auth.forgetPassword);
-  const loading = useSelector((state) => state.loading.user.auth.forgetPassword);
+  const history = useHistory();
+  // const error = useSelector((state) => state.error.user.auth);
+  // const loading = useSelector((state) => state.loading.user.auth.forgetPassword);
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [showError, setShowError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [disabled, setDisabled] = useState(true);
   const [popUp, setPopUp] = useState(false);
-  const [submit, setSubmit] = useState(false);
-
-  const handleChange = (event) => {
-    if (event.target.value === '') {
-      setEmail(event.target.value);
-      setErrorText('');
-      setShowError(false);
-      setDisabled(true);
-      return;
-    }
-
-    const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const status = emailRe.test(event.target.value);
-
-    if (!status) {
-      setEmail(event.target.value);
-      setErrorText('Invalid email address');
-      setShowError(true);
-      setDisabled(true);
-    } else {
-      setEmail(event.target.value);
-      setErrorText('');
-      setShowError(false);
-      setDisabled(false);
-    }
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (showError) {
       return;
     }
-    dispatch(userForgetPassword(email.trim()));
-    setSubmit(true);
+
+    const onSuccess = () => {
+      setPopUp(true);
+      setErrorText('');
+      setShowError(false);
+
+      setTimeout(() => {
+        history.push('/login');
+      }, 3000);
+    };
+
+    const onError = () => {
+      setErrorText('Error');
+      setShowError(true);
+    };
+
+    dispatch(userForgetPassword(username, email.trim(), onSuccess, onError));
   };
 
   const handleClosePopUp = () => {
@@ -81,30 +78,25 @@ export default function ForgetPasswordForm() {
   };
 
   useEffect(() => {
-    if (loading === false && submit === true) {
-      if (error !== null) {
-        switch (error.toString()) {
-          case 'Error: NotFound': {
-            setErrorText('Unregistered email address.');
-            break;
-          }
-          default: {
-            setErrorText(error.toString());
-            break;
-          }
-        }
-        setSubmit(false);
-        setShowError(true);
-        setDisabled(true);
-      } else {
-        setSubmit(false);
-        setPopUp(true);
-        setErrorText('');
-        setShowError(false);
-        setDisabled(false);
-      }
+    const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const status = emailRe.test(email);
+
+    if (username === '') {
+      setDisabled(true);
+    } else if (email === '') {
+      setErrorText('');
+      setShowError(false);
+      setDisabled(true);
+    } else if (!status) {
+      setErrorText('Invalid email address');
+      setShowError(true);
+      setDisabled(true);
+    } else {
+      setErrorText('');
+      setShowError(false);
+      setDisabled(false);
     }
-  }, [error, loading, submit]);
+  }, [email, username]);
 
   return (
     <>
@@ -114,11 +106,18 @@ export default function ForgetPasswordForm() {
             <TextField
               // required
               className={`auth-form-input ${classNames.authTextFields}`}
+              label="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <TextField
+              // required
+              className={`auth-form-input ${classNames.authTextFields}`}
               error={showError}
               helperText={errorText}
               label="Registered / Alternative Email"
               value={email}
-              onChange={(e) => handleChange(e)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <Button
               className={classNames.authButtons}
@@ -130,6 +129,15 @@ export default function ForgetPasswordForm() {
               Send
             </Button>
           </form>
+
+          <Typography variant="body2" className={classNames.authLink}>
+            Forgot your username?
+            {' '}
+            <Link component={RouterLink} to="/forget-username">
+              Find username
+            </Link>
+            {' '}
+          </Typography>
         </CardContent>
       </Card>
 

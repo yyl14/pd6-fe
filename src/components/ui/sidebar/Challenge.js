@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
@@ -7,33 +7,21 @@ import {
 import Icon from '../icon/index';
 import TaskAddingCard from '../../normal/myClass/Challenge/TaskAddingCard';
 
-import { fetchChallenges } from '../../../actions/myClass/challenge';
-import { fetchClass, fetchCourse } from '../../../actions/common/common';
-
 export default function Challenge({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const {
     courseId, classId, challengeId, problemId, submissionId,
   } = useParams();
   const baseURL = '/my-class';
-  const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.myClass.challenge);
   const challenges = useSelector((state) => state.challenges.byId);
-  const challengesID = useSelector((state) => state.challenges.allIds);
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
 
   const problems = useSelector((state) => state.problem);
   const essays = useSelector((state) => state.essays);
-
-  // useEffect(() => {
-  //   dispatch(fetchCourse(authToken, courseId));
-  //   dispatch(fetchClass(authToken, classId));
-  //   dispatch(fetchChallenges(authToken, classId));
-  // }, [dispatch, authToken, classId, courseId]);
+  const peerReviews = useSelector((state) => state.peerReviews);
 
   const [display, setDisplay] = useState('unfold');
 
@@ -54,11 +42,15 @@ export default function Challenge({
     const goBackToSubmission = () => {
       history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
     };
+    const goBackToMySubmission = () => {
+      history.push('/my-submission');
+    };
     if (mode === 'challenge' && userClasses.length !== 0 && userClasses.find((x) => x.class_id === Number(classId))) {
       // console.log(userClasses);
       if (
         userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER'
         && challenges[challengeId] !== undefined
+        && challenges[challengeId].problemIds !== undefined
       ) {
         // console.log(problems, essays, userClasses);
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
@@ -102,6 +94,13 @@ export default function Challenge({
                 icon: <Icon.Paper />,
                 path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/essay/${id}`,
               })),
+            challenges[challengeId].peerReviewIds
+              .map((id) => peerReviews.byId[id])
+              .map(({ id, challenge_label }) => ({
+                text: challenge_label,
+                icon: <Icon.Peerreview />,
+                path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${id}`,
+              })),
           ),
         );
       } else if (
@@ -137,6 +136,13 @@ export default function Challenge({
                   text: challenge_label,
                   icon: <Icon.Paper />,
                   path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/essay/${id}`,
+                })),
+              challenges[challengeId].peerReviewIds
+                .map((id) => peerReviews.byId[id])
+                .map(({ id, challenge_label }) => ({
+                  text: challenge_label,
+                  icon: <Icon.Peerreview />,
+                  path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${id}`,
                 })),
             ),
           );
@@ -199,6 +205,23 @@ export default function Challenge({
           path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${submissionId}`,
         },
       ]);
+    } else if (mode === 'my_submission_detail') {
+      if (userClasses.find((x) => x.class_id === Number(classId))?.role === 'MANAGER') {
+        setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
+      }
+      setArrow(
+        <IconButton className={classNames.arrow} onClick={goBackToMySubmission}>
+          <Icon.ArrowBackRoundedIcon />
+        </IconButton>,
+      );
+      setTitle(submissionId);
+      setItemList([
+        {
+          text: 'Submission Detail',
+          icon: <Icon.Code />,
+          path: `/my-submission/${courseId}/${classId}/${challengeId}/${problemId}/${submissionId}`,
+        },
+      ]);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -226,8 +249,10 @@ export default function Challenge({
     return (
       <div>
         <Drawer
+          variant="persistent"
+          open={open}
+          onClose={onClose}
           className={classNames.drawer}
-          variant="permanent"
           anchor="left"
           PaperProps={{ elevation: 5 }}
           classes={{ paper: classNames.drawerPaper }}
@@ -239,8 +264,10 @@ export default function Challenge({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}

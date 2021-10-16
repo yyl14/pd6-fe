@@ -14,7 +14,7 @@ export default function ChallengeList() {
   const dispatch = useDispatch();
 
   const authToken = useSelector((state) => state.auth.token);
-  const error = useSelector((state) => state.loading.myClass.challenge);
+  const error = useSelector((state) => state.error.myClass.challenge);
   const loading = useSelector((state) => state.loading.myClass.challenge);
   const commonLoading = useSelector((state) => state.loading.common.common);
   const challenges = useSelector((state) => state.challenges);
@@ -74,34 +74,35 @@ export default function ChallengeList() {
           {
             name: 'Title',
             align: 'center',
+            width: 300,
             minWidth: 150,
-            width: 200,
             type: 'string',
           },
           {
             name: 'Start Time',
             align: 'center',
+            width: 200,
             minWidth: 50,
-            width: 180,
             type: 'string',
           },
           {
             name: 'End Time',
             align: 'center',
+            width: 200,
             minWidth: 50,
-            width: 180,
             type: 'string',
           },
           {
             name: 'Status',
             align: 'center',
+            width: 132,
             minWidth: 50,
-            width: 100,
             type: 'string',
           },
         ]}
         reduxData={challenges}
         reduxDataToRows={(item) => ({
+          id: item.id,
           Title: item.title,
           'Start Time': moment(item.start_time).format('YYYY-MM-DD, HH:mm'),
           'End Time': moment(item.end_time).format('YYYY-MM-DD, HH:mm'),
