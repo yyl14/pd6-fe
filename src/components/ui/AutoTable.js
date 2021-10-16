@@ -394,13 +394,11 @@ function AutoTable({
 
   // table mount, create dynamic redux state
   useEffect(() => {
-    if (tableState.byId[ident] === undefined) {
-      dispatch(autoTableMount(ident));
-      // set defaultSort
-      if (defaultSort !== undefined) {
-        setSort([defaultSort]);
-        setOrder({ key: defaultSort[0][0], order: defaultSort[0][1].toLowerCase() });
-      }
+    dispatch(autoTableMount(ident));
+    // set defaultSort
+    if (defaultSort !== undefined) {
+      setSort([defaultSort]);
+      setOrder({ key: defaultSort[0][0], order: defaultSort[0][1].toLowerCase() });
     }
   }, [ident]);
 

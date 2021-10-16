@@ -18,10 +18,6 @@ const initialState = {
   browsePendingStudentCards: null,
   resendEmailVerification: null,
   deletePendingStudentCard: null,
-
-  addAccount: null,
-  importAccount: null,
-  downloadAccountFile: null,
 };
 
 export default function account(state = initialState, action) {
@@ -208,45 +204,6 @@ export default function account(state = initialState, action) {
       return {
         ...state,
         deletePendingStudentCard: action.error,
-      };
-    }
-
-    case accountConstants.ADD_ACCOUNT_START: {
-      return {
-        ...state,
-        addAccount: null,
-      };
-    }
-    case accountConstants.ADD_ACCOUNT_FAIL: {
-      return {
-        ...state,
-        addAccount: action.error,
-      };
-    }
-
-    case accountConstants.IMPORT_ACCOUNT_START: {
-      return {
-        ...state,
-        importAccount: null,
-      };
-    }
-    case accountConstants.IMPORT_ACCOUNT_FAIL: {
-      return {
-        ...state,
-        importAccount: action.error,
-      };
-    }
-
-    case accountConstants.DOWNLOAD_ACCOUNT_FILE_START: {
-      return {
-        ...state,
-        downloadAccountFile: null,
-      };
-    }
-    case accountConstants.DOWNLOAD_ACCOUNT_FILE_FAIL: {
-      return {
-        ...state,
-        downloadAccountFile: action.error,
       };
     }
 

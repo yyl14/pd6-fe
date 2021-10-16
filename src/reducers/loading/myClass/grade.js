@@ -1,8 +1,9 @@
 import { gradeConstants } from '../../../actions/myClass/constant';
+import { viewConstants } from '../../../actions/api/constant';
 
 const initialState = {
   fetchGrade: false,
-  fetchClassGrade: false,
+  browseClassGrade: false,
   addClassGrade: false,
   importClassGrade: false,
   fetchAccountGrade: false,
@@ -31,22 +32,22 @@ export default function grade(state = initialState, action) {
         fetchGrade: false,
       };
     }
-    case gradeConstants.FETCH_CLASS_GRADE_START: {
+    case viewConstants.BROWSE_CLASS_GRADE_START: {
       return {
         ...state,
-        fetchClassGrade: true,
+        browseClassGrade: true,
       };
     }
-    case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {
+    case viewConstants.BROWSE_CLASS_GRADE_SUCCESS: {
       return {
         ...state,
-        fetchClassGrade: false,
+        browseClassGrade: false,
       };
     }
-    case gradeConstants.FETCH_CLASS_GRADE_FAIL: {
+    case viewConstants.BROWSE_CLASS_GRADE_FAIL: {
       return {
         ...state,
-        fetchClassGrade: false,
+        browseClassGrade: false,
       };
     }
 

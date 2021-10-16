@@ -318,99 +318,6 @@ const deletePendingStudentCard = (token, emailVerificationId) => async (dispatch
   }
 };
 
-const addAccount = (token, realName, userName, password, altMail, onSuccess, onError) => async (dispatch) => {
-  try {
-    const config = { headers: { 'auth-token': token } };
-    dispatch({ type: accountConstants.ADD_ACCOUNT_START });
-    await agent.post(
-      '/account-normal',
-      {
-        real_name: realName,
-        username: userName,
-        password,
-        alternative_email: altMail,
-        nickname: '',
-      },
-      config,
-    );
-    dispatch({ type: accountConstants.ADD_ACCOUNT_SUCCESS });
-    onSuccess();
-  } catch (error) {
-    dispatch({
-      type: accountConstants.ADD_ACCOUNT_FAIL,
-      error,
-    });
-    onError();
-  }
-};
-
-const importAccount = (token, files, onSuccess, onError) => async (dispatch) => {
-  try {
-    const config = {
-      headers: {
-        'auth-token': token,
-        'Content-Type': 'multipart/form-data',
-      },
-    };
-
-    dispatch({ type: accountConstants.IMPORT_ACCOUNT_START });
-    await Promise.all(
-      files.map(async (file) => {
-        const formData = new FormData();
-        formData.append('account_file', file);
-        await agent.post('/account-import', formData, config);
-      }),
-    );
-    dispatch({ type: accountConstants.IMPORT_ACCOUNT_SUCCESS });
-    onSuccess();
-  } catch (error) {
-    dispatch({
-      type: accountConstants.IMPORT_ACCOUNT_FAIL,
-      error,
-    });
-    onError();
-  }
-};
-
-const downloadAccountFile = (token) => async (dispatch) => {
-  try {
-    const config1 = {
-      headers: {
-        'auth-token': token,
-      },
-    };
-    dispatch({ type: accountConstants.DOWNLOAD_ACCOUNT_FILE_START });
-    const res = await agent.get('/account/template', config1);
-
-    const config2 = {
-      headers: {
-        'auth-token': token,
-      },
-      params: {
-        filename: res.data.data.filename,
-        as_attachment: true,
-      },
-    };
-    const res2 = await agent.get(`/s3-file/${res.data.data.s3_file_uuid}/url`, config2);
-
-    fetch(res2.data.data.url).then((t) => t.blob().then((b) => {
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(b);
-      a.setAttribute('download', res.data.data.filename);
-      a.click();
-    }));
-
-    dispatch({
-      type: accountConstants.DOWNLOAD_ACCOUNT_FILE_SUCCESS,
-    });
-  } catch (error) {
-    dispatch({
-      type: accountConstants.DOWNLOAD_ACCOUNT_FILE_FAIL,
-      error,
-    });
-  }
-};
-
 export {
   getInstitute,
   addInstitute,
@@ -424,7 +331,4 @@ export {
   browsePendingStudentCards,
   resendEmailVerification,
   deletePendingStudentCard,
-  addAccount,
-  importAccount,
-  downloadAccountFile,
 };

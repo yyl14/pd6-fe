@@ -82,7 +82,6 @@ export default function Challenge({
             ],
             challenges[challengeId].problemIds
               .map((id) => problems.byId[id])
-              .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
               .map(({ id, challenge_label }) => ({
                 text: challenge_label,
                 icon: <Icon.Code />,
@@ -90,7 +89,6 @@ export default function Challenge({
               })),
             challenges[challengeId].essayIds
               .map((id) => essays.byId[id])
-              .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
               .map(({ id, challenge_label }) => ({
                 text: challenge_label,
                 icon: <Icon.Paper />,
@@ -98,7 +96,6 @@ export default function Challenge({
               })),
             challenges[challengeId].peerReviewIds
               .map((id) => peerReviews.byId[id])
-              .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
               .map(({ id, challenge_label }) => ({
                 text: challenge_label,
                 icon: <Icon.Peerreview />,
@@ -128,7 +125,6 @@ export default function Challenge({
               ],
               challenges[challengeId].problemIds
                 .map((id) => problems.byId[id])
-                .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
                 .map(({ id, challenge_label }) => ({
                   text: challenge_label,
                   icon: <Icon.Code />,
@@ -136,7 +132,6 @@ export default function Challenge({
                 })),
               challenges[challengeId].essayIds
                 .map((id) => essays.byId[id])
-                .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
                 .map(({ id, challenge_label }) => ({
                   text: challenge_label,
                   icon: <Icon.Paper />,
@@ -144,7 +139,6 @@ export default function Challenge({
                 })),
               challenges[challengeId].peerReviewIds
                 .map((id) => peerReviews.byId[id])
-                .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
                 .map(({ id, challenge_label }) => ({
                   text: challenge_label,
                   icon: <Icon.Peerreview />,
