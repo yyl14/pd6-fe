@@ -12,6 +12,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Snackbar,
 } from '@material-ui/core';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
@@ -34,16 +35,15 @@ export default function NewPassword() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [disabled, setDisabled] = useState(true);
+  const [showSnackbar, setShowSnackbar] = useState(false);
   const [showPassword, setShowPassword] = useState({
     oldPassword: false,
     newPassword: false,
     confirmPassword: false,
   });
-  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const authToken = useSelector((state) => state.auth.token);
   const id = useSelector((state) => state.user.id);
-  const loading = useSelector((state) => state.loading.user.user.editPassword);
   const serverError = useSelector((state) => state.error.user.user.editPassword);
   const dispatch = useDispatch();
 
@@ -66,14 +66,23 @@ export default function NewPassword() {
   const handleResetPassword = () => {
     // change system password
     dispatch(
-      editPassword(authToken, id, oldPassword, newPassword, () => {
-        setEdit(false);
-      }),
+      editPassword(
+        authToken,
+        id,
+        oldPassword,
+        newPassword,
+        () => {
+          setEdit(false);
+          setOldPassword('');
+          setNewPassword('');
+          setConfirmPassword('');
+          setDisabled(true);
+        },
+        () => {
+          setShowSnackbar(true);
+        },
+      ),
     );
-    setOldPassword('');
-    setNewPassword('');
-    setConfirmPassword('');
-    setDisabled(true);
   };
 
   const handleCancel = () => {
@@ -109,12 +118,6 @@ export default function NewPassword() {
       }));
     }
   }, [oldPassword, newPassword, confirmPassword]);
-
-  useEffect(() => {
-    if (serverError && !loading) {
-      setShowSnackbar(true);
-    }
-  }, [serverError, loading]);
 
   useEffect(() => {
     if (
@@ -269,6 +272,14 @@ export default function NewPassword() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowSnackbar(false);
+        }}
+        message={`Error: ${serverError}`}
+      />
     </>
   );
 }

@@ -106,7 +106,7 @@ const addStudentCard = (token, id, instituteId, emailPrefix, studentId, onSucces
     });
 };
 
-const editPassword = (token, id, oldPassword, newPassword, onSuccess) => (dispatch) => {
+const editPassword = (token, id, oldPassword, newPassword, onSuccess, onError) => (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
@@ -132,6 +132,7 @@ const editPassword = (token, id, oldPassword, newPassword, onSuccess) => (dispat
         type: userConstants.EDIT_SELF_PASSWORD_FAIL,
         error,
       });
+      onError();
     });
 };
 
