@@ -356,7 +356,6 @@ const importAccount = (token, files, onSuccess, onError) => async (dispatch) => 
     dispatch({ type: accountConstants.IMPORT_ACCOUNT_START });
     await Promise.all(
       files.map(async (file) => {
-        console.log(file);
         const formData = new FormData();
         formData.append('account_file', file);
         await agent.post('/account-import', formData, config);
