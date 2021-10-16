@@ -225,7 +225,7 @@ const fetchChallengeMemberSubmission = (token, challengeId) => async (dispatch) 
   }
 };
 
-const addProblem = (token, challengeId, label, title, history, courseId, classId, type = 'NORMAL') => async (dispatch) => {
+const addProblem = (token, challengeId, label, title, history, courseId, classId) => async (dispatch) => {
   dispatch({ type: challengeConstants.ADD_PROBLEM_START });
   const config = {
     headers: {
@@ -235,7 +235,6 @@ const addProblem = (token, challengeId, label, title, history, courseId, classId
   const body = {
     challenge_label: label,
     title,
-    judge_type: type,
     full_score: 0,
     description: '',
     io_description: '',
