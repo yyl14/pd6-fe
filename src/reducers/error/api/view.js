@@ -6,6 +6,7 @@ const initialState = {
   browseClassMember: null,
   browseSubmissionUnderClass: null,
   browseMySubmission: null,
+  browseMySubmissionUnderProblem: null,
   browsePeerReviewSummaryReview: null,
   browsePeerReviewSummaryReceive: null,
 };
@@ -76,6 +77,22 @@ export default function view(state = initialState, action) {
         browseMySubmission: action.error,
       };
     }
+
+    case viewConstants.BROWSE_MY_SUBMISSION_UNDER_PROBLEM_START:
+      return {
+        ...state,
+        browseMySubmissionUnderProblem: null,
+      };
+    case viewConstants.BROWSE_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS:
+      return {
+        ...state,
+        browseMySubmissionUnderProblem: null,
+      };
+    case viewConstants.BROWSE_MY_SUBMISSION_UNDER_PROBLEM_FAIL:
+      return {
+        ...state,
+        browseMySubmissionUnderProblem: action.error,
+      };
 
     case viewConstants.BROWSE_PEER_REVIEW_SUMMARY_REVIEW_START: {
       return {
