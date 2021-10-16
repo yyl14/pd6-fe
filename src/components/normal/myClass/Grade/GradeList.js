@@ -204,6 +204,24 @@ export default function GradeList() {
         hasFilter
         filterConfig={[
           {
+            reduxStateId: 'username',
+            label: 'Username',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          {
+            reduxStateId: 'student_id',
+            label: 'Student ID',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          {
+            reduxStateId: 'real_name',
+            label: 'Real Name',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          {
             reduxStateId: 'title',
             label: 'Title',
             type: 'TEXT',
@@ -215,6 +233,12 @@ export default function GradeList() {
             type: 'TEXT',
             operation: 'LIKE',
           },
+          // {
+          //   reduxStateId: 'update_time',
+          //   label: 'Time',
+          //   type: 'TEXT',
+          //   operation: 'LIKE',
+          // },
         ]}
         buttons={(
           <>
