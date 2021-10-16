@@ -257,7 +257,7 @@ export default function SubmissionDetail() {
           {judgments[judgmentId] ? (
             <div>
               {judgments[judgmentId].verdict === 'Accepted' ? (
-                <Typography variant="body1" color="primary">
+                <Typography variant="body1" color="green">
                   {judgments[judgmentId].verdict}
                 </Typography>
               ) : (
