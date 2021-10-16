@@ -75,7 +75,7 @@ export default function PeerReviewSummary() {
       dispatch(browseAllPeerReviewReceive(authToken, peerReviewId, 100, i * 100));
     }
   }, [dispatch, authToken, peerReviewId, totalCount]);
-  console.log(PRsummary);
+
   useEffect(() => {
     let tableHTML = '<table>';
     if (PRsummary.allIds) {
