@@ -88,16 +88,13 @@ export default function CodingProblemEdit({ closeEdit }) {
   const loading = useSelector((state) => state.loading.myClass.problem);
   const [hasChange, setHasChange] = useState(false);
 
-  const [label, setLabel] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label);
-  const [title, setTitle] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].title);
-  const [description, setDescription] = useState(
-    problems[problemId] === undefined ? 'error' : problems[problemId].description,
-  );
-  const [ioDescription, setIoDescription] = useState(
-    problems[problemId] === undefined ? 'error' : problems[problemId].io_description,
-  );
-  const [source, setSource] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].source);
-  const [hint, setHint] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].hint);
+  const [label, setLabel] = useState('');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [ioDescription, setIoDescription] = useState('');
+  const [source, setSource] = useState('');
+  const [hint, setHint] = useState('');
+  const [judgeType, setJudgeType] = useState('');
   const [status, setStatus] = useState(true);
 
   const [handleInfoSuccess, setHandleInfoSuccess] = useState(false);
@@ -155,6 +152,18 @@ export default function CodingProblemEdit({ closeEdit }) {
     }
     return 0;
   };
+
+  useEffect(() => {
+    if (problems[problemId]) {
+      setLabel(problems[problemId].challenge_label);
+      setTitle(problems[problemId].title);
+      setDescription(problems[problemId].description);
+      setIoDescription(problems[problemId].io_description);
+      setSource(problems[problemId].source);
+      setHint(problems[problemId].hint);
+      setJudgeType(problems[problemId].judge_type);
+    }
+  }, [problems, problemId]);
 
   useEffect(() => {
     if (problems[problemId] && problems[problemId].testcaseIds) {
@@ -768,6 +777,22 @@ export default function CodingProblemEdit({ closeEdit }) {
           ]}
           data={assistTableData}
           setData={setAssistTableData}
+        />
+      </SimpleBar>
+      <SimpleBar title="Customized Judge Code (Optional)" noIndent>
+        <Typography variant="body1">Content</Typography>
+        <TextField
+          placeholder="(Text, LaTeX, Markdown and HTML supported)"
+          value={ioDescription}
+          variant="outlined"
+          onChange={(e) => {
+            setIoDescription(e.target.value);
+            setHasChange(true);
+          }}
+          multiline
+          minRows={10}
+          maxRows={10}
+          className={classNames.textfield2}
         />
       </SimpleBar>
       <div className={classNames.buttons}>
