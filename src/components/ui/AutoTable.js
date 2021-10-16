@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
   Typography,
   Paper,
@@ -20,13 +21,14 @@ import {
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { autoTableMount, autoTableFlush } from '../../actions/component/autoTable';
 import Icon from './icon/index';
 import AutoTableHead from './AutoTableHead';
 
 /* eslint react-hooks/exhaustive-deps: 0 */
+
+// debug
 
 const useStyles = makeStyles((theme) => ({
   topContent1: {
@@ -430,7 +432,7 @@ function AutoTable({
 
   // switch page
   useEffect(() => {
-    if (tableState.byId[ident]) {
+    if (tableState.byId[ident] && tableState.byId[ident].totalCount !== Infinity) {
       const newDisplayedReduxData = displayedRange
         .filter((id) => id < tableState.byId[ident].totalCount)
         .map((id) => tableState.byId[ident].displayedDataIds.get(id))
@@ -444,10 +446,9 @@ function AutoTable({
   // table refetch
   useEffect(() => {
     // remove ['something', '=', '']
+    // console.log([dataComplete, curPage, filter, ident, rowsPerPage, sort]);
     const adjustFilter = (oriFilter) => oriFilter.filter((item) => !(item[1] === '=' && item[2] === ''));
-
     if (!dataComplete) {
-      // console.log('refetch');
       refetch(
         {
           limit: rowsPerPage,
