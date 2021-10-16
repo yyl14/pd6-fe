@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Drawer } from '@material-ui/core';
 
-export default function Empty({ classNames, open }) {
+export default function Empty({ classNames }) {
   return (
     <div>
       <Drawer

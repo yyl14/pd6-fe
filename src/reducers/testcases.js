@@ -13,6 +13,7 @@ const prototype = {
   output_filename: null,
   input: null, // input content
   output: null, // output content
+  note: null,
   time_limit: null,
   memory_limit: null,
   is_disabled: true,

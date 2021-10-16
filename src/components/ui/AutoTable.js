@@ -4,7 +4,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableSortLabel,
   TableContainer,
   TableHead,
   TableRow,

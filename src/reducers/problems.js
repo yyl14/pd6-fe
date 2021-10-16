@@ -20,10 +20,11 @@ const prototype = {
   assistingDataIds: [],
   score: '',
   judge_source: {
+    judge_language: null,
+    judge_code: null, //code content
     code_uuid: null,
     filename: null,
   },
-  judge_code_content: null,
 };
 
 const byId = (state = {}, action) => {

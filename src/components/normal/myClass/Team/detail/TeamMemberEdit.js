@@ -11,12 +11,10 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Snackbar,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdAdd } from 'react-icons/md';
-import Icon from '../../../../ui/icon/index';
 import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleTable from '../../../../ui/SimpleTable';

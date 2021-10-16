@@ -9,7 +9,7 @@ import ErrorText from '../components/ui/ErrorText';
 /*  Colors  */
 const mono = {
   white: '#FFFFFF',
-  veryLightGray: '#F8F8F8',
+  veryLightGray: '#F5F5F5',
   lightGray: '#ECECEC',
   emptyGray: '#C4C4C4',
   gray: '#DCDCDC',
@@ -20,7 +20,7 @@ const mono = {
 };
 
 const blue = {
-  60: '#E7C5AC',
+  60: '#F8E2D3',
   80: '#D69B70',
   100: '#C17137',
   dark: '#8B5128',
@@ -84,7 +84,7 @@ const palette = {
   },
 
   background: {
-    default: mono.veryLightGray, // mono - very light
+    default: mono.white, // mono - very light
     paper: 'white',
     card: 'white',
   },
