@@ -91,6 +91,7 @@ const useStyles = makeStyles((theme) => ({
   default: { color: theme.palette.black.dark },
   error: { color: theme.palette.secondary.main },
   primary: { color: theme.palette.primary.main },
+  accepted: { color: theme.palette.green.main },
 }));
 
 export default function SimpleTable({
