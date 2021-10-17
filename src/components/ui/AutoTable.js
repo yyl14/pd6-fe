@@ -265,7 +265,7 @@ function AutoTable({
     }
   ],
   */
-  defaultSort,
+  defaultSort = null,
   refetch, // function to call when table change page / filter / sort / clicked Refresh
   /*
   example value:
@@ -310,7 +310,7 @@ function AutoTable({
   const [displayedReduxData, setDisplayedReduxData] = useState([]);
   const [rowData, setRowData] = useState([]);
 
-  const [dataComplete, setDataComplete] = useState(true);
+  const [dataComplete, setDataComplete] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -327,7 +327,6 @@ function AutoTable({
 
   // refresh
   const onRefresh = () => {
-    dispatch(autoTableFlush(ident));
     dispatch(autoTableFlush(ident));
     setDataComplete(false);
     setCurPage(0);
@@ -355,11 +354,8 @@ function AutoTable({
 
   const onSort = (key, sortDirection) => {
     setOrder({ key, order: sortDirection });
-    if (defaultSort) {
-      setSort([[key, sortDirection.toUpperCase()], defaultSort]);
-    } else {
-      setSort([[key, sortDirection.toUpperCase()]]);
-    }
+    setSort([[key, sortDirection.toUpperCase()]]);
+
     setDataComplete(false);
   };
 
@@ -397,8 +393,7 @@ function AutoTable({
     if (tableState.byId[ident] === undefined) {
       dispatch(autoTableMount(ident));
       // set defaultSort
-      if (defaultSort !== undefined) {
-        setSort([defaultSort]);
+      if (defaultSort) {
         setOrder({ key: defaultSort[0][0], order: defaultSort[0][1].toLowerCase() });
       }
     }
@@ -425,21 +420,19 @@ function AutoTable({
   }, [tableState.byId[ident], curPage, rowsPerPage]);
 
   useEffect(() => {
-    if (tableState.byId[ident]) {
-      setDisplayedRange(
-        Array.from(
-          {
-            length: rowsPerPage,
-          },
-          (_, id) => id + rowsPerPage * curPage,
-        ),
-      );
-    }
-  }, [tableState.byId[ident], rowsPerPage, curPage]);
+    setDisplayedRange(
+      Array.from(
+        {
+          length: rowsPerPage,
+        },
+        (_, id) => id + rowsPerPage * curPage,
+      ),
+    );
+  }, [rowsPerPage, curPage]);
 
   // switch page
   useEffect(() => {
-    if (tableState.byId[ident] && tableState.byId[ident].totalCount !== Infinity) {
+    if (tableState.byId[ident]) {
       const newDisplayedReduxData = displayedRange
         .filter((id) => id < tableState.byId[ident].totalCount)
         .map((id) => tableState.byId[ident].displayedDataIds.get(id))
@@ -449,19 +442,19 @@ function AutoTable({
       setDisplayedReduxData(newDisplayedReduxData);
     }
   }, [curPage, displayedRange, ident, reduxData.byId, tableState.byId]);
-
   // table refetch
   useEffect(() => {
     // remove ['something', '=', '']
     // console.log([dataComplete, curPage, filter, ident, rowsPerPage, sort]);
     const adjustFilter = (oriFilter) => oriFilter.filter((item) => !(item[1] === '=' && item[2] === ''));
+
     if (!dataComplete) {
       refetch(
         {
           limit: rowsPerPage,
           offset: curPage * rowsPerPage,
           filter: adjustFilter(filter),
-          sort,
+          sort: defaultSort ? [...sort, defaultSort] : sort,
         },
         ident,
       );
