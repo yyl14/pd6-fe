@@ -3,12 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { browsePeerReviewSummaryReview } from '../../../../../actions/api/view';
-import { browseAllPeerReviewReview } from '../../../../../actions/api/peerReview';
 import AutoTable from '../../../../ui/AutoTable';
 import PageTitle from '../../../../ui/PageTitle';
 import CopyToClipboardButton from '../../../../ui/CopyToClipboardButton';
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
+import { browseAllPeerReviewReview } from '../../../../../actions/api/peerReview';
 
 const useStyles = makeStyles(() => ({
   copyButton: {
@@ -67,14 +67,10 @@ export default function PeerReviewSummary() {
 
   const [PRsummaryHTML, setPRsummaryHTML] = useState('');
   const [peerColumns, setPeerColumns] = useState([]);
-  const [totalCount, setTotalCount] = useState('');
 
   useEffect(() => {
-    dispatch(browseAllPeerReviewReview(authToken, peerReviewId, 100, 0, setTotalCount));
-    for (let i = 1; i < Math.ceil(totalCount / 100); i += 1) {
-      dispatch(browseAllPeerReviewReview(authToken, peerReviewId, 100, i * 100));
-    }
-  }, [dispatch, authToken, peerReviewId, totalCount]);
+    dispatch(browseAllPeerReviewReview(authToken, peerReviewId));
+  }, [authToken, dispatch, peerReviewId]);
 
   useEffect(() => {
     let tableHTML = '<table>';

@@ -67,55 +67,15 @@ export default function PeerReviewSummary() {
 
   const [PRsummaryHTML, setPRsummaryHTML] = useState('');
   const [peerColumns, setPeerColumns] = useState([]);
-  const [totalCount, setTotalCount] = useState('');
 
   useEffect(() => {
-    dispatch(browseAllPeerReviewReceive(authToken, peerReviewId, 100, 0, setTotalCount));
-    for (let i = 1; i < Math.ceil(totalCount / 100); i += 1) {
-      dispatch(browseAllPeerReviewReceive(authToken, peerReviewId, 100, i * 100));
-    }
-  }, [dispatch, authToken, peerReviewId, totalCount]);
+    dispatch(browseAllPeerReviewReceive(authToken, peerReviewId));
+  }, [authToken, dispatch, peerReviewId]);
 
   useEffect(() => {
     let tableHTML = '<table>';
-    // if (PRsummary.allIds[peerReviewId]) {
-    //   const peers = PRsummary.byId[peerReviewId];
-    //   PRsummary.allIds[peerReviewId].map((id) => {
-    //     tableHTML += '<tr>';
-    //     const profile = `/user-profile/${peers[id].account_id}`;
-    //     const peerData = [];
-    //     Array(peerReviews[peerReviewId].max_review_count)
-    //       .fill(0)
-    //       .map((ID, index) => {
-    //         peerData.push({
-    //           text: peers[id].score[index] ? peers[id].score[index] : '',
-    //           path: peers[id].peer_review_record_ids
-    //             ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${peers[id].account_id}/${peers[id].peer_review_record_ids[index]}`
-    //             : '',
-    //         });
-    //         return id;
-    //       });
-    //     tableHTML += `<td><a href=${profile}>${peers[id].username}</a></td>`;
-    //     tableHTML += `<td>${peers[id].student_id}</td>`;
-    //     tableHTML += `<td>${peers[id].real_name}</td>`;
-    //     peerData.map((data) => {
-    //       if (data.text !== '') {
-    //         tableHTML += `<td><a href=${data.path}>${data.text}</a></td>`;
-    //       } else {
-    //         tableHTML += '<td></td>';
-    //       }
-    //       return data;
-    //     });
-    //     if (peers[id].average_score) {
-    //       tableHTML += `<td>${peers[id].average_score}</td>`;
-    //     } else {
-    //       tableHTML += '<td></td>';
-    //     }
-    //     tableHTML += '</tr>';
-    //     return peers[id];
-    //   });
-    if (PRsummary.allIds[peerReviewId]) {
-      PRsummary.allIds[peerReviewId].map((id) => {
+    if (PRsummary.allIds) {
+      PRsummary.allIds.map((id) => {
         tableHTML += '<tr>';
         const profile = `/user-profile/${PRsummary.byId[id].account_id}`;
         const peerData = [];
