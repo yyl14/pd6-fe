@@ -310,7 +310,7 @@ function AutoTable({
   const [displayedReduxData, setDisplayedReduxData] = useState([]);
   const [rowData, setRowData] = useState([]);
 
-  const [dataComplete, setDataComplete] = useState(false);
+  const [dataComplete, setDataComplete] = useState(true);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -445,10 +445,11 @@ function AutoTable({
   // table refetch
   useEffect(() => {
     // remove ['something', '=', '']
-    // console.log([dataComplete, curPage, filter, ident, rowsPerPage, sort]);
     const adjustFilter = (oriFilter) => oriFilter.filter((item) => !(item[1] === '=' && item[2] === ''));
 
     if (!dataComplete) {
+      // console.log('refetch', ident);
+
       refetch(
         {
           limit: rowsPerPage,
