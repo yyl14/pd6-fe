@@ -81,6 +81,18 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [showAddPeerReviewErrorSnackbar, setShowAddPeerReviewErrorSnackbar] = useState(false);
 
   useEffect(() => {
+    if (error.myClass.challenge.addProblem) {
+      setShowAddProblemErrorSnackbar(true);
+    }
+  }, [error.myClass.challenge]);
+
+  useEffect(() => {
+    if (error.myClass.challenge.addEssay) {
+      setShowAddEssayErrorSnackbar(true);
+    }
+  }, [error.myClass.challenge]);
+
+  useEffect(() => {
     if (error.myClass.challenge.addPeerReview) {
       setShowAddPeerReviewErrorSnackbar(true);
     }
