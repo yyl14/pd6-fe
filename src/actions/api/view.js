@@ -291,7 +291,6 @@ const browseMySubmissionUnderProblem = (token, accountId, problemId, browseParam
   const temp = {
     ...browseParams,
     account_id: accountId,
-    problem_id: problemId,
   };
   const config = {
     headers: {
