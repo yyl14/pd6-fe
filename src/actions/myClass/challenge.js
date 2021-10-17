@@ -225,7 +225,7 @@ const fetchChallengeMemberSubmission = (token, challengeId) => async (dispatch) 
   }
 };
 
-const addProblem = (token, challengeId, label, title, history, courseId, classId) => async (dispatch) => {
+const addProblem = (token, challengeId, label, title, history, courseId, classId, onError) => async (dispatch) => {
   dispatch({ type: challengeConstants.ADD_PROBLEM_START });
   const config = {
     headers: {
@@ -254,10 +254,11 @@ const addProblem = (token, challengeId, label, title, history, courseId, classId
       type: challengeConstants.ADD_PROBLEM_FAIL,
       error,
     });
+    onError();
   }
 };
 
-const addEssay = (token, challengeId, label, title, history, courseId, classId) => async (dispatch) => {
+const addEssay = (token, challengeId, label, title, history, courseId, classId, onError) => async (dispatch) => {
   dispatch({ type: challengeConstants.ADD_ESSAY_START });
   const config = {
     headers: {
@@ -282,10 +283,24 @@ const addEssay = (token, challengeId, label, title, history, courseId, classId) 
       type: challengeConstants.ADD_ESSAY_FAIL,
       error,
     });
+    onError();
   }
 };
 
-const addPeerReview = (token, challengeId, label, title, problemId, minScore, maxScore, maxReviewCount, history, courseId, classId) => async (dispatch) => {
+const addPeerReview = (
+  token,
+  challengeId,
+  label,
+  title,
+  problemId,
+  minScore,
+  maxScore,
+  maxReviewCount,
+  history,
+  courseId,
+  classId,
+  onError,
+) => async (dispatch) => {
   dispatch({ type: challengeConstants.ADD_PEER_REVIEW_START });
   const config = {
     headers: {
@@ -314,6 +329,7 @@ const addPeerReview = (token, challengeId, label, title, problemId, minScore, ma
       type: challengeConstants.ADD_PEER_REVIEW_FAIL,
       error,
     });
+    onError();
   }
 };
 

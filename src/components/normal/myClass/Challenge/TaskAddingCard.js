@@ -76,11 +76,13 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [maxScore, setMaxScore] = useState(3);
   const [minScore, setMinScore] = useState(1);
   const [peerNumber, setPeerNumber] = useState(2);
-  const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
+  const [showAddProblemErrorSnackbar, setShowAddProblemErrorSnackbar] = useState(false);
+  const [showAddEssayErrorSnackbar, setShowAddEssayErrorSnackbar] = useState(false);
+  const [showAddPeerReviewErrorSnackbar, setShowAddPeerReviewErrorSnackbar] = useState(false);
 
   useEffect(() => {
     if (error.myClass.challenge.addPeerReview) {
-      setShowErrorSnackbar(true);
+      setShowAddPeerReviewErrorSnackbar(true);
     }
   }, [error.myClass.challenge]);
 
@@ -141,13 +143,24 @@ export default function TaskAddingCard({ open, setOpen }) {
   }, [authToken, dispatch, peerReviewChallengeId]);
 
   const handleCreate = () => {
+    const onError = () => {
+      if (error.myClass.challenge.addProblem) {
+        setShowAddProblemErrorSnackbar(true);
+      }
+      if (error.myClass.challenge.addEssay) {
+        setShowAddEssayErrorSnackbar(true);
+      }
+      if (error.myClass.challenge.addPeerReview) {
+        setShowAddPeerReviewErrorSnackbar(true);
+      }
+    };
     switch (type) {
       case 'Coding Problem': {
-        dispatch(addProblem(authToken, challengeId, label, title, history, courseId, classId));
+        dispatch(addProblem(authToken, challengeId, label, title, history, courseId, classId, onError));
         break;
       }
       case 'Essay(PDF)': {
-        dispatch(addEssay(authToken, challengeId, label, title, history, courseId, classId));
+        dispatch(addEssay(authToken, challengeId, label, title, history, courseId, classId, onError));
         break;
       }
       case 'Peer Review': {
@@ -164,6 +177,7 @@ export default function TaskAddingCard({ open, setOpen }) {
             history,
             courseId,
             classId,
+            onError,
           ),
         );
         setPeerReviewChallengeId('');
@@ -344,12 +358,22 @@ export default function TaskAddingCard({ open, setOpen }) {
         </DialogActions>
       </Dialog>
       <Snackbar
-        open={showErrorSnackbar}
+        open={showAddProblemErrorSnackbar}
+        message={error.myClass.challenge.addProblem && `Error: ${error.myClass.challenge.addProblem}`}
+        onClose={() => setShowAddProblemErrorSnackbar(false)}
+      />
+      <Snackbar
+        open={showAddEssayErrorSnackbar}
+        message={error.myClass.challenge.addEssay && `Error: ${error.myClass.challenge.addEssay}`}
+        onClose={() => setShowAddEssayErrorSnackbar(false)}
+      />
+      <Snackbar
+        open={showAddPeerReviewErrorSnackbar}
         message={
           error.myClass.challenge.addPeerReview
           && `Error: ${error.myClass.challenge.addPeerReview}. Check whether the input numbers are valid.`
         }
-        onClose={() => setShowErrorSnackbar(false)}
+        onClose={() => setShowAddPeerReviewErrorSnackbar(false)}
       />
     </>
   );
