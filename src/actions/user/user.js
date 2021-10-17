@@ -1,5 +1,7 @@
+import moment from 'moment';
 import agent from '../agent';
 import { userConstants } from './constants';
+import browseParamsTransForm from '../../function/browseParamsTransform';
 
 const editAccount = (token, id, nickName, email) => async (dispatch) => {
   try {
@@ -138,10 +140,16 @@ const editPassword = (token, id, oldPassword, newPassword, onSuccess, onError) =
 
 // browse all active announcement
 const userBrowseAnnouncement = (authToken) => async (dispatch) => {
+  const currentTime = moment().toISOString();
   const config = {
     headers: {
       'auth-token': authToken,
     },
+    params: browseParamsTransForm(
+      {
+        filter: [['expire_time', '>', currentTime]],
+      },
+    ),
   };
 
   try {
