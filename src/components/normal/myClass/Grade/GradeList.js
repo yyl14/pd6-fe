@@ -13,7 +13,6 @@ import {
   Snackbar,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { MdAdd } from 'react-icons/md';
 import moment from 'moment-timezone';
 import AlignedText from '../../../ui/AlignedText';
 // import CustomTable from '../../../ui/CustomTable';
@@ -219,7 +218,7 @@ export default function GradeList() {
             {isManager && (
               <>
                 <Button variant="outlined" color="primary" onClick={() => setShowAddDialog(true)}>
-                  <MdAdd />
+                  <Icon.Add />
                 </Button>
                 <Button color="primary" onClick={() => setShowImportDialog(true)} startIcon={<Icon.Folder />}>
                   Import

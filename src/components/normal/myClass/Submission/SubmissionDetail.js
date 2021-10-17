@@ -42,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
   resultTable: {
     width: '100%',
   },
+  acceptedStatus: {
+    color: theme.palette.green.main,
+  },
 }));
 
 /* This is a level 4 component (page component) */
@@ -279,7 +282,7 @@ export default function SubmissionDetail() {
           {judgments[judgmentId] ? (
             <div>
               {judgments[judgmentId].verdict === 'Accepted' ? (
-                <Typography variant="body1" color="green">
+                <Typography variant="body1" className={classNames.acceptedStatus}>
                   {judgments[judgmentId].verdict}
                 </Typography>
               ) : (
