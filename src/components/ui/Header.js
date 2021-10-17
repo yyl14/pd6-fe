@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
   unreadDot: {
     width: '6.75px',
     height: '6.75px',
-    backgroundColor: theme.headerStyle.background,
+    backgroundColor: theme.palette.secondary.main,
     position: 'absolute',
     left: '30px',
     top: '28px',
