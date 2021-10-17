@@ -8,7 +8,7 @@ import PageTitle from '../../../../ui/PageTitle';
 import CopyToClipboardButton from '../../../../ui/CopyToClipboardButton';
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
-import { browseAllPeerReviewReview } from '../../../../../actions/api/peerReview';
+import { browseAllPeerReviewReview } from '../../../../../actions/myClass/peerReview';
 
 const useStyles = makeStyles(() => ({
   copyButton: {

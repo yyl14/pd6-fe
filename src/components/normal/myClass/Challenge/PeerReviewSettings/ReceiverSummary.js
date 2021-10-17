@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { browsePeerReviewSummaryReceive } from '../../../../../actions/api/view';
-import { browseAllPeerReviewReceive } from '../../../../../actions/api/peerReview';
+import { browseAllPeerReviewReceive } from '../../../../../actions/myClass/peerReview';
 import AutoTable from '../../../../ui/AutoTable';
 import PageTitle from '../../../../ui/PageTitle';
 import CopyToClipboardButton from '../../../../ui/CopyToClipboardButton';
