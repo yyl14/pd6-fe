@@ -73,11 +73,12 @@ export default function PeerReviewSummary() {
   }, [authToken, dispatch, peerReviewId]);
 
   useEffect(() => {
+    const baseUrl = window.location.origin;
     let tableHTML = '<table>';
     if (PRsummary.allIds) {
       PRsummary.allIds.map((id) => {
         tableHTML += '<tr>';
-        const profile = `/user-profile/${PRsummary.byId[id].account_id}`;
+        const profile = `${baseUrl}/user-profile/${PRsummary.byId[id].account_id}`;
         const peerData = [];
         Array(peerReviews[peerReviewId].max_review_count)
           .fill(0)
@@ -85,7 +86,7 @@ export default function PeerReviewSummary() {
             peerData.push({
               text: PRsummary.byId[id].score[index] ? PRsummary.byId[id].score[index] : '',
               path: PRsummary.byId[id].peer_review_record_ids
-                ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${PRsummary.byId[id].account_id}/${PRsummary.byId[id].peer_review_record_ids[index]}`
+                ? `${baseUrl}/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${PRsummary.byId[id].account_id}/${PRsummary.byId[id].peer_review_record_ids[index]}`
                 : '',
             });
             return id;
