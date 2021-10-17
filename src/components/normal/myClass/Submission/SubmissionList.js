@@ -90,8 +90,9 @@ export default function SubmissionList() {
               .flat()
               .map((problemId) => ({
                 value: problemId,
-                label: problems.byId[problemId].challenge_label,
+                label: `${challenges.byId[problems.byId[problemId].challenge_id].title} ${problems.byId[problemId].challenge_label}`,
               })),
+
           },
           {
             reduxStateId: 'verdict',
