@@ -231,7 +231,7 @@ export default function Challenge({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [challengeId, challenges, classId, courseId, problems, essays, history, location.pathname, mode]);
+  }, [challengeId, challenges, classId, courseId, problems, essays, peerReviews, history, location.pathname, mode]);
 
   const addTaskItemColor = (popup) => {
     if (popup) {
