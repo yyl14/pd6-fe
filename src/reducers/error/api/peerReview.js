@@ -1,4 +1,4 @@
-import { peerReviewConstants } from '../../../actions/api/constant';
+import { peerReviewConstants, viewConstants } from '../../../actions/api/constant';
 
 const initialState = {
   readPeerReview: null,
@@ -9,6 +9,8 @@ const initialState = {
   browseAccountReviewedPeerReviewRecord: null,
   assignPeerReviewRecord: null,
   browseAccountReceivedPeerReviewRecord: null,
+  browseAllPeerReviewReview: null,
+  browseAllPeerReviewReceive: null,
 };
 
 export default function view(state = initialState, action) {
@@ -109,6 +111,32 @@ export default function view(state = initialState, action) {
       return {
         ...state,
         browseAccountReceivedPeerReviewRecord: action.error,
+      };
+    }
+
+    case viewConstants.BROWSE_ALL_PEER_REVIEW_REVIEW_START: {
+      return {
+        ...state,
+        browseAllPeerReviewReview: null,
+      };
+    }
+    case viewConstants.BROWSE_ALL_PEER_REVIEW_REVIEW_FAIL: {
+      return {
+        ...state,
+        browseAllPeerReviewReview: action.error,
+      };
+    }
+
+    case viewConstants.BROWSE_ALL_PEER_REVIEW_RECEIVE_START: {
+      return {
+        ...state,
+        browseAllPeerReviewReceive: null,
+      };
+    }
+    case viewConstants.BROWSE_ALL_PEER_REVIEW_RECEIVE_FAIL: {
+      return {
+        ...state,
+        browseAllPeerReviewReceive: action.error,
       };
     }
     default: {
