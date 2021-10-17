@@ -52,21 +52,17 @@ export default function SubmissionList() {
             })),
           },
           {
-            reduxStateId: 'challenge_id',
+            reduxStateId: 'challenge_title',
             label: 'Challenge',
-            type: 'ENUM',
-            operation: 'IN',
-            options: challenges.allIds.map((id) => ({
-              value: id,
-              label: challenges.byId[id].title,
-            })),
+            type: 'TEXT',
+            operation: 'LIKE',
           },
-          // {
-          //   reduxStateId: 'problem_id',
-          //   label: 'Task',
-          //   type: 'TEXT',
-          //   operation: '=',
-          // },
+          {
+            reduxStateId: 'challenge_label',
+            label: 'Task',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
           {
             reduxStateId: 'verdict',
             label: 'Status',
