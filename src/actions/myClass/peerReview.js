@@ -73,20 +73,16 @@ export const browseAccountReviewedPeerReviewRecordWithReading = (token, peerRevi
   }
 };
 
-export const assignPeerReviewRecordAndPush = (token, courseId, classId, challengeId, peerReviewId, accountId, count, history) => async (dispatch) => {
+export const assignPeerReviewRecordAndPush = (token, courseId, classId, challengeId, peerReviewId, accountId, history) => async (dispatch) => {
   try {
     const config = { headers: { 'auth-token': token } };
     dispatch({ type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_START });
-    const ids = Array(count).fill(0);
-    await Promise.all(
-      Array(count).fill(0).map(async (id, index) => {
-        const res = await agent.post(`peer-review/${peerReviewId}/record`, {}, config);
-        ids[index] = res.data.data.id;
-      }),
-    );
+    const res = await agent.post(`peer-review/${peerReviewId}/record`, {}, config);
+    const ids = res.data.data.id;
 
-    if (ids[0] !== 0) {
-      history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${ids[0]}`);
+    if (ids.length !== 0) {
+      const targetRecordId = ids.sort((a, b) => a - b)[0];
+      history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${targetRecordId}`);
     }
 
     dispatch({ type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_SUCCESS });
