@@ -36,19 +36,19 @@ export default function SubmissionList() {
             label: 'Course',
             type: 'ENUM',
             operation: 'IN',
-            options: courses.allIds.map((id) => ({
-              value: id,
-              label: courses.byId[id].name,
-            })),
+            options: [...new Map(userClasses.map((item) => ({
+              value: item.course_id,
+              label: item.course_name,
+            })).map((item) => [item.value, item])).values()],
           },
           {
             reduxStateId: 'class_id',
             label: 'Class',
             type: 'ENUM',
             operation: 'IN',
-            options: classes.allIds.map((id) => ({
-              value: id,
-              label: classes.byId[id].name,
+            options: userClasses.map((item) => ({
+              value: item.class_id,
+              label: item.class_name,
             })),
           },
           {
