@@ -83,7 +83,7 @@ export default function PeerReviewInfo() {
     const reviewPeerReviewRecordIds = peerReviews[peerReviewId].reviewRecordIds;
     if (reviewPeerReviewRecordIds.length < peerReviews[peerReviewId].max_review_count) {
       dispatch(
-        assignPeerReviewRecordAndPush(authToken, courseId, classId, challengeId, peerReviewId, accountId, peerReviews[peerReviewId].max_review_count - reviewPeerReviewRecordIds.length, history),
+        assignPeerReviewRecordAndPush(authToken, courseId, classId, challengeId, peerReviewId, accountId, history),
       );
     } else {
       const targetRecordId = reviewPeerReviewRecordIds.sort((a, b) => a - b)[0];
