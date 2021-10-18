@@ -202,14 +202,14 @@ export default function TeamList() {
             name: 'Label',
             align: 'center',
             minWidth: 125,
-            width: 125,
+            width: 150,
             type: 'string',
           },
           {
             name: 'Team Name',
             align: 'center',
             minWidth: 153,
-            width: 153,
+            width: 400,
             type: 'link',
           },
         ]}
