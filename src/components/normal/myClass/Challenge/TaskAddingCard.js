@@ -81,24 +81,6 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [showAddPeerReviewErrorSnackbar, setShowAddPeerReviewErrorSnackbar] = useState(false);
 
   useEffect(() => {
-    if (error.myClass.challenge.addProblem) {
-      setShowAddProblemErrorSnackbar(true);
-    }
-  }, [error.myClass.challenge]);
-
-  useEffect(() => {
-    if (error.myClass.challenge.addEssay) {
-      setShowAddEssayErrorSnackbar(true);
-    }
-  }, [error.myClass.challenge]);
-
-  useEffect(() => {
-    if (error.myClass.challenge.addPeerReview) {
-      setShowAddPeerReviewErrorSnackbar(true);
-    }
-  }, [error.myClass.challenge]);
-
-  useEffect(() => {
     if (!loading.addProblem && !loading.addEssay && !loading.addPeerReview) {
       dispatch(browseTasksUnderChallenge(authToken, challengeId));
     }
@@ -156,13 +138,13 @@ export default function TaskAddingCard({ open, setOpen }) {
 
   const handleCreate = () => {
     const onError = () => {
-      if (error.myClass.challenge.addProblem) {
+      if (error.myClass.challenge.addProblem !== '') {
         setShowAddProblemErrorSnackbar(true);
       }
-      if (error.myClass.challenge.addEssay) {
+      if (error.myClass.challenge.addEssay !== '') {
         setShowAddEssayErrorSnackbar(true);
       }
-      if (error.myClass.challenge.addPeerReview) {
+      if (error.myClass.challenge.addPeerReview !== '') {
         setShowAddPeerReviewErrorSnackbar(true);
       }
     };
