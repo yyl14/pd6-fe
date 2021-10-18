@@ -137,24 +137,21 @@ export default function TaskAddingCard({ open, setOpen }) {
   }, [authToken, dispatch, peerReviewChallengeId]);
 
   const handleCreate = () => {
-    const onError = () => {
-      if (error.myClass.challenge.addProblem !== '') {
-        setShowAddProblemErrorSnackbar(true);
-      }
-      if (error.myClass.challenge.addEssay !== '') {
-        setShowAddEssayErrorSnackbar(true);
-      }
-      if (error.myClass.challenge.addPeerReview !== '') {
-        setShowAddPeerReviewErrorSnackbar(true);
-      }
-    };
     switch (type) {
       case 'Coding Problem': {
-        dispatch(addProblem(authToken, challengeId, label, title, history, courseId, classId, onError));
+        dispatch(
+          addProblem(authToken, challengeId, label, title, history, courseId, classId, () => {
+            setShowAddProblemErrorSnackbar(true);
+          }),
+        );
         break;
       }
       case 'Essay(PDF)': {
-        dispatch(addEssay(authToken, challengeId, label, title, history, courseId, classId, onError));
+        dispatch(
+          addEssay(authToken, challengeId, label, title, history, courseId, classId, () => {
+            setShowAddEssayErrorSnackbar(true);
+          }),
+        );
         break;
       }
       case 'Peer Review': {
@@ -171,7 +168,9 @@ export default function TaskAddingCard({ open, setOpen }) {
             history,
             courseId,
             classId,
-            onError,
+            () => {
+              setShowAddPeerReviewErrorSnackbar(true);
+            },
           ),
         );
         setPeerReviewChallengeId('');
