@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
+  Snackbar,
 } from '@material-ui/core';
 import { useParams, useHistory } from 'react-router-dom';
 import moment from 'moment';
@@ -63,6 +64,7 @@ export default function PeerReviewInfo() {
   const [edit, setEdit] = useState(false);
   const [currentTime, setCurrentTime] = useState(moment());
   const [deletePopUp, setDeletePopUp] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const clickViewPeerReview = () => {
     history.push(
@@ -76,6 +78,8 @@ export default function PeerReviewInfo() {
       history.push(
         `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${accountId}/${targetRecordId}`,
       );
+    } else {
+      setShowSnackbar(true);
     }
   };
 
@@ -218,6 +222,14 @@ export default function PeerReviewInfo() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowSnackbar(false);
+        }}
+        message={"Your task hasn't been assigned to this peer yet."}
+      />
     </>
   );
 }
