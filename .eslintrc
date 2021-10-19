@@ -1,21 +1,13 @@
 {
   "root": true,
-  "extends": [
-    "airbnb",
-    "airbnb/hooks",
-    "plugin:react/recommended",
-    // "standard",
-    "plugin:react/jsx-runtime",
-    "plugin:testing-library/react",
-    "plugin:jest/all"
-  ],
-  "plugins": ["unused-imports", "@babel"],
+  "extends": ["airbnb", "airbnb/hooks", "plugin:react/recommended"],
+  "plugins": ["unused-imports"],
   "rules": {
     "no-console": "off",
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": ["js", "jsx"]
+        "extensions": ["js", ".jsx"]
       }
     ],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
@@ -45,14 +37,14 @@
       }
     ]
   },
-  "parser": "@babel/eslint-parser",
+  "parser": "babel-eslint",
   "parserOptions": {
-    "sourceType": "module"
+    "sourceType": "module",
+    "allowImportExportEverywhere": "true"
   },
   "env": {
     "browser": true,
     "es6": true,
-    "es2021": true,
     "node": true
   }
 }

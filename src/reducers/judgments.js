@@ -1,16 +1,5 @@
 import { combineReducers } from 'redux';
-import { judgementConstants } from '../actions/api/constant';
 import { submissionConstants, problemConstants } from '../actions/myClass/constant';
-
-const prototype = {
-  id: null,
-  submission_id: null,
-  verdict: null,
-  total_time: null,
-  max_memory: null,
-  score: null,
-  judge_time: null,
-};
 
 const verdictMapping = new Map([
   ['ACCEPTED', 'Accepted'],
@@ -55,18 +44,6 @@ const byId = (state = {}, action) => {
         state,
       );
     }
-
-    case judgementConstants.BROWSE_ALL_JUDGEMENT_JUDGE_CASE_SUCCESS: {
-      const { judgementId, judgement } = action.payload.data;
-      return {
-        ...state,
-        [judgementId]: {
-          ...prototype,
-          ...state[judgementId],
-          ...judgement,
-        },
-      };
-    }
     default:
       return state;
   }
@@ -83,10 +60,6 @@ const allIds = (state = [], action) => {
     }
     case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
       return [...new Set([...action.payload.judgments.map((item) => item.id), ...state])];
-    }
-    case judgementConstants.BROWSE_ALL_JUDGEMENT_JUDGE_CASE_SUCCESS: {
-      const { judgement } = action.payload.data;
-      return [...new Set([judgement.id, ...state])];
     }
     default:
       return state;
