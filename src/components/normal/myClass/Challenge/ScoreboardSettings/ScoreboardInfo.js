@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Typography } from '@material-ui/core';
+import { Typography, Button } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import AlignedText from '../../../../ui/AlignedText';
 import SimpleBar from '../../../../ui/SimpleBar';
 import SimpleTable from '../../../../ui/SimpleTable';
 import { readProblemInfo } from '../../../../../actions/myClass/problem';
+import ScoreboardEdit from './ScoreboardEdit';
 
 const scoreboardBasicTitle = [
   {
@@ -70,6 +72,7 @@ export default function ScoreboardInfo() {
   const [scoreboardTitle, setScoreboardTitle] = useState(scoreboardBasicTitle);
   const [teams, setTeams] = useState([]);
   const [hasReadProblem, setHasReadProblem] = useState(false);
+  const [edit, setEdit] = useState(false);
 
   useEffect(() => {
     if (teams.length > 0 && !hasReadProblem) {
@@ -125,6 +128,38 @@ export default function ScoreboardInfo() {
   return (
     <>
       <Typography variant="h3">Midterm / Scoreboard</Typography>
+      {!edit ? (
+        <SimpleBar
+          title="Ranking Configuration"
+          buttons={(
+            <>
+              <Button onClick={() => setEdit(true)}>Edit</Button>
+            </>
+          )}
+        >
+          <AlignedText text="Scoreboard Type" childrenType="text">
+            <Typography variant="body1">Team Project</Typography>
+          </AlignedText>
+          <AlignedText text="Title" childrenType="text">
+            <Typography variant="body1">Scoreboard</Typography>
+          </AlignedText>
+          <AlignedText text="Target Problems" childrenType="text">
+            <Typography variant="body1">Q1, Q2</Typography>
+          </AlignedText>
+          <AlignedText text="Scoring Formula" childrenType="text">
+            <Typography variant="body1">1.5 + 1.5 * (team_score - class_worst) / (class_best - class_worst)</Typography>
+          </AlignedText>
+          <AlignedText text="Baseline Team" childrenType="text">
+            <Typography variant="body1">-</Typography>
+          </AlignedText>
+          <AlignedText text="Team Label Filter" childrenType="text">
+            <Typography variant="body1">-</Typography>
+          </AlignedText>
+        </SimpleBar>
+      ) : (
+        <ScoreboardEdit setEdit={setEdit} />
+      )}
+
       <SimpleBar title="Scoreboard" noIndent>
         <SimpleTable isEdit={false} hasDelete={false} columns={scoreboardTitle} data={teams} />
       </SimpleBar>
