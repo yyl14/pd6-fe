@@ -70,11 +70,11 @@ const useStyles = makeStyles({
   },
 });
 
-export default function SampleTestArea({ input, output }) {
+export default function SampleTestArea({ input, note }) {
   const classes = useStyles();
   const ref = useRef();
   const inputRef = useRef();
-  const outputRef = useRef();
+  // const outputRef = useRef();
   const noteRef = useRef();
   const [showExpandArrow, setShowExpandArrow] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -89,20 +89,21 @@ export default function SampleTestArea({ input, output }) {
         if (inputRef.current.clientHeight >= 248) {
           setTruncatePosition('inputContent');
         } else if (inputRef.current.clientHeight >= 223) {
-          setTruncatePosition('outputTitle');
-        } else if (inputRef.current.clientHeight + outputRef.current.clientHeight >= 198) {
-          setTruncatePosition('outputContent');
-        } else if (inputRef.current.clientHeight + outputRef.current.clientHeight >= 148) {
+        //   setTruncatePosition('outputTitle');
+        // } else if (inputRef.current.clientHeight + outputRef.current.clientHeight >= 198) {
+        //   setTruncatePosition('outputContent');
+        // } else if (inputRef.current.clientHeight + outputRef.current.clientHeight >= 148) {
           setTruncatePosition('noteTitle');
         } else if (
-          inputRef.current.clientHeight + outputRef.current.clientHeight + noteRef.current.clientHeight
-          >= 124
+          // inputRef.current.clientHeight + outputRef.current.clientHeight + noteRef.current.clientHeight
+          // >= 124
+          inputRef.current.clientHeight + noteRef.current.clientHeight >= 198
         ) {
           setTruncatePosition('noteContent');
         }
       }
     }
-  }, [expanded, inputRef, noteRef, outputRef, ref, showExpandArrow]);
+  }, [expanded, inputRef, noteRef, ref, showExpandArrow]);
 
   const handleExpand = (limited, isExpanded) => {
     if (limited) {
@@ -117,10 +118,10 @@ export default function SampleTestArea({ input, output }) {
     switch (position) {
       case 'inputContent':
         return classes.truncateInputContent;
-      case 'outputTitle':
-        return classes.truncateOutputTitle;
-      case 'outputContent':
-        return classes.truncateOutputContent;
+      // case 'outputTitle':
+      //   return classes.truncateOutputTitle;
+      // case 'outputContent':
+      //   return classes.truncateOutputContent;
       case 'noteTitle':
         return classes.truncateNoteTitle;
       case 'noteContent':
@@ -174,7 +175,7 @@ export default function SampleTestArea({ input, output }) {
               </div>
             </>
           )}
-          {output && (
+          {/* {output && (
             <>
               <div className={classes.title}>
                 <Typography variant="h6" display="inline">
@@ -195,8 +196,8 @@ export default function SampleTestArea({ input, output }) {
                 </Typography>
               </div>
             </>
-          )}
-          {/* <div className={classes.title}>
+          )} */}
+          <div className={classes.title}>
             <Typography variant="h6" display="inline">
               Note
             </Typography>
@@ -208,7 +209,7 @@ export default function SampleTestArea({ input, output }) {
             <div className={classes.content} ref={noteRef}>
               <Typography variant="body1">{note}</Typography>
             </div>
-          )} */}
+          )}
         </CardContent>
 
         {showExpandArrow && (

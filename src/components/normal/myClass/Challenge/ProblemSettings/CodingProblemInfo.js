@@ -250,12 +250,21 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
               width: 200,
               type: 'string',
             },
+            {
+              id: 'input_filename',
+              label: 'Input File',
+              minWidth: 50,
+              align: 'center',
+              width: 150,
+              type: 'string',
+            },
           ]}
           data={sampleDataIds.map((id) => ({
             id,
             no: sampleTransToNumber(id),
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
+            input_filename: testcases[id].input_filename,
           }))}
         />
         <div className={classNames.sampleArea}>
@@ -326,6 +335,14 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             {
               id: 'score',
               label: 'Score',
+              minWidth: 50,
+              align: 'center',
+              width: 100,
+              type: 'string',
+            },
+            {
+              id: 'note',
+              label: 'Note',
               minWidth: 50,
               align: 'center',
               width: 100,
