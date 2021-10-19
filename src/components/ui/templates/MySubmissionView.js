@@ -32,7 +32,6 @@ export default function MySubmission({ baseUrl, isProblemSet }) {
   const judgments = useSelector((state) => state.judgments);
   const loading = useSelector((state) => state.loading.myClass.problem);
   const error = useSelector((state) => state.error.myClass.problem);
-  const viewLoading = useSelector((state) => state.loading.api.view);
   const viewError = useSelector((state) => state.error.api.view);
   const [showSnackbar, setShowSnackbar] = useState(false);
 
@@ -47,7 +46,7 @@ export default function MySubmission({ baseUrl, isProblemSet }) {
   }, [authToken, dispatch, problemId]);
 
   if (challenges.byId[challengeId] === undefined || problems.byId[problemId] === undefined) {
-    if (viewLoading.browseMySubmissionUnderProblem || loading.readProblem || loading.readChallenge) {
+    if (loading.readProblem || loading.readChallenge) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
