@@ -70,7 +70,7 @@ export default function GradeDetail() {
         />
       )}
 
-      <Grader grader={accounts.byId[grades.byId[gradeId].grader_id]} />
+      {grades.byId[gradeId].grader_id && <Grader grader={accounts.byId[grades.byId[gradeId].grader_id]} />}
 
       {isManager && (
         <GradeDelete

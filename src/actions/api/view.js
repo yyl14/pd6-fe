@@ -394,6 +394,64 @@ const browsePeerReviewSummaryReceive = (token, peerReviewId, browseParams, table
   }
 };
 
+const browseClassGrade = (token, classId, browseParams, tableId = null) => async (dispatch) => {
+  try {
+    const config1 = {
+      headers: { 'auth-token': token },
+      params: browseParamsTransForm(browseParams),
+    };
+    dispatch({ type: viewConstants.BROWSE_CLASS_GRADE_START });
+    const res = await agent.get(`/class/${classId}/view/grade`, config1);
+    const { data, total_count } = res.data.data;
+
+    dispatch({
+      type: viewConstants.BROWSE_CLASS_GRADE_SUCCESS,
+      payload: {
+        classId,
+        data: data.map(
+          ({
+            title,
+            score,
+            update_time,
+            grade_id,
+            class_id,
+            account_id,
+          }) => ({
+            id: grade_id,
+            title,
+            score,
+            update_time,
+            class_id,
+            receiver_id: account_id,
+          }),
+        ),
+        accounts: data.map(({
+          account_id, student_id, username, real_name,
+        }) => ({
+          id: account_id,
+          username,
+          student_id,
+          real_name,
+        })),
+      },
+    });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: data.map((item) => item.grade_id),
+        offset: browseParams.offset,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: viewConstants.BROWSE_CLASS_GRADE_FAIL,
+      error,
+    });
+  }
+};
+
 export {
   browseAccessLog,
   browseAccountWithDefaultStudentId,
@@ -402,4 +460,5 @@ export {
   browseMySubmission,
   browsePeerReviewSummaryReview,
   browsePeerReviewSummaryReceive,
+  browseClassGrade,
 };

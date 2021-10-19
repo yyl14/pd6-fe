@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { courseConstants } from '../actions/admin/constant';
 import { commonConstants } from '../actions/common/constant';
 import {
-  gradeConstants, teamConstants, challengeConstants, submissionConstants,
+  teamConstants, challengeConstants, submissionConstants,
 } from '../actions/myClass/constant';
 import { viewConstants } from '../actions/api/constant';
 
@@ -87,7 +87,7 @@ const byId = (state = {}, action) => {
       };
     }
 
-    case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {
+    case viewConstants.BROWSE_CLASS_GRADE_SUCCESS: {
       const { classId, data } = action.payload;
       return {
         ...state,
