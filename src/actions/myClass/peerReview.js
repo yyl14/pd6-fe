@@ -1,5 +1,5 @@
 import agent from '../agent';
-import { peerReviewConstants } from '../api/constant';
+import { peerReviewConstants, viewConstants } from '../api/constant';
 import { readPeerReviewRecord } from '../api/peerReview';
 // import { autoTableConstants } from '../component/constant';
 // import browseParamsTransForm from '../../function/browseParamsTransform';
@@ -73,20 +73,16 @@ export const browseAccountReviewedPeerReviewRecordWithReading = (token, peerRevi
   }
 };
 
-export const assignPeerReviewRecordAndPush = (token, courseId, classId, challengeId, peerReviewId, accountId, count, history) => async (dispatch) => {
+export const assignPeerReviewRecordAndPush = (token, courseId, classId, challengeId, peerReviewId, accountId, history) => async (dispatch) => {
   try {
     const config = { headers: { 'auth-token': token } };
     dispatch({ type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_START });
-    const ids = Array(count).fill(0);
-    await Promise.all(
-      Array(count).fill(0).map(async (id, index) => {
-        const res = await agent.post(`peer-review/${peerReviewId}/record`, {}, config);
-        ids[index] = res.data.data.id;
-      }),
-    );
+    const res = await agent.post(`peer-review/${peerReviewId}/record`, {}, config);
+    const ids = res.data.data.id;
 
-    if (ids[0] !== 0) {
-      history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${ids[0]}`);
+    if (ids.length !== 0) {
+      const targetRecordId = ids.sort((a, b) => a - b)[0];
+      history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${targetRecordId}`);
     }
 
     dispatch({ type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_SUCCESS });
@@ -164,6 +160,134 @@ export const readPeerReviewWithProblem = (token, peerReviewId) => async (dispatc
   } catch (error) {
     dispatch({
       type: peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_FAIL,
+      error,
+    });
+  }
+};
+
+export const browseAllPeerReviewReceive = (token, peerReviewId) => async (dispatch) => {
+  dispatch({ type: viewConstants.BROWSE_ALL_PEER_REVIEW_RECEIVE_START });
+  try {
+    const limit = 100;
+    const config = {
+      headers: { 'auth-token': token },
+      params: { limit },
+    };
+    // fetch first time to get total_count
+    const res = await agent.get(`/peer-review/${peerReviewId}/view/receiver-summary`, config);
+    const { data, total_count } = res.data.data;
+
+    // fetch all data
+    const cnt = Math.ceil(total_count / limit);
+    const offsets = Array(cnt - 1).fill(0).map((id, index) => ((index + 1) * limit));
+    const datas = Array(cnt - 1).fill(0);
+
+    await Promise.all(
+      offsets.map(async (offset, index) => {
+        const config2 = {
+          headers: { 'auth-token': token },
+          params: { limit, offset },
+        };
+        const res2 = await agent.get(`/peer-review/${peerReviewId}/view/receiver-summary`, config2);
+        const data2 = res2.data.data.data;
+        datas[index] = data2;
+      }),
+    );
+
+    dispatch({
+      type: viewConstants.BROWSE_ALL_PEER_REVIEW_RECEIVE_SUCCESS,
+      payload: {
+        data: {
+          peerReviewId,
+          peerReviewSummary: data.concat(datas.flat()).map(
+            ({
+              account_id,
+              username,
+              real_name,
+              student_id,
+              peer_review_record_ids,
+              peer_review_record_scores,
+              average_score,
+            }) => ({
+              account_id,
+              username,
+              real_name,
+              student_id,
+              peer_review_record_ids,
+              score: peer_review_record_scores,
+              average_score,
+            }),
+          ),
+        },
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: viewConstants.BROWSE_ALL_PEER_REVIEW_RECEIVE_FAIL,
+      error,
+    });
+  }
+};
+
+export const browseAllPeerReviewReview = (token, peerReviewId) => async (dispatch) => {
+  dispatch({ type: viewConstants.BROWSE_ALL_PEER_REVIEW_REVIEW_START });
+  try {
+    const limit = 100;
+    const config = {
+      headers: { 'auth-token': token },
+      params: { limit },
+    };
+    // fetch first time to get total_count
+    const res = await agent.get(`/peer-review/${peerReviewId}/view/reviewer-summary`, config);
+    const { data, total_count } = res.data.data;
+
+    // fetch all data
+    const cnt = Math.ceil(total_count / limit);
+    const offsets = Array(cnt - 1).fill(0).map((id, index) => ((index + 1) * limit));
+    const datas = Array(cnt - 1).fill(0);
+
+    await Promise.all(
+      offsets.map(async (offset, index) => {
+        const config2 = {
+          headers: { 'auth-token': token },
+          params: { limit, offset },
+        };
+        const res2 = await agent.get(`/peer-review/${peerReviewId}/view/reviewer-summary`, config2);
+        const data2 = res2.data.data.data;
+        datas[index] = data2;
+      }),
+    );
+
+    dispatch({
+      type: viewConstants.BROWSE_ALL_PEER_REVIEW_REVIEW_SUCCESS,
+      payload: {
+        data: {
+          peerReviewId,
+          peerReviewSummary: data.concat(datas.flat()).map(
+            ({
+              account_id,
+              username,
+              real_name,
+              student_id,
+              peer_review_record_ids,
+              peer_review_record_scores,
+              average_score,
+            }) => ({
+              account_id,
+              username,
+              real_name,
+              student_id,
+              peer_review_record_ids,
+              score: peer_review_record_scores,
+              average_score,
+            }),
+          ),
+        },
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: viewConstants.BROWSE_ALL_PEER_REVIEW_REVIEW_FAIL,
       error,
     });
   }

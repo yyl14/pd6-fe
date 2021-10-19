@@ -102,6 +102,7 @@ export default function view(state = initialState, action) {
         browsePeerReviewSummaryReceive: action.error,
       };
     }
+
     default: {
       return state;
     }

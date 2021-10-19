@@ -109,6 +109,7 @@ export default function view(state = initialState, action) {
         browsePeerReviewSummaryReceive: false,
       };
     }
+
     default: {
       return state;
     }
