@@ -352,20 +352,17 @@ export default function TaskAddingCard({ open, setOpen }) {
       </Dialog>
       <Snackbar
         open={showAddProblemErrorSnackbar}
-        message={error.myClass.challenge.addProblem && `Error: ${error.myClass.challenge.addProblem}`}
+        message={`Error: ${error.myClass.challenge.addProblem}`}
         onClose={() => setShowAddProblemErrorSnackbar(false)}
       />
       <Snackbar
         open={showAddEssayErrorSnackbar}
-        message={error.myClass.challenge.addEssay && `Error: ${error.myClass.challenge.addEssay}`}
+        message={`Error: ${error.myClass.challenge.addEssay}`}
         onClose={() => setShowAddEssayErrorSnackbar(false)}
       />
       <Snackbar
         open={showAddPeerReviewErrorSnackbar}
-        message={
-          error.myClass.challenge.addPeerReview
-          && `Error: ${error.myClass.challenge.addPeerReview}. Check whether the input numbers are valid.`
-        }
+        message={`Error: ${error.myClass.challenge.addPeerReview}. Check whether the input numbers are valid.`}
         onClose={() => setShowAddPeerReviewErrorSnackbar(false)}
       />
     </>
