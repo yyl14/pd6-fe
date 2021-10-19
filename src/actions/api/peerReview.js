@@ -1,8 +1,5 @@
 import agent from '../agent';
 import { peerReviewConstants } from './constant';
-// import { autoTableConstants } from '../component/constant';
-// import browseParamsTransForm from '../../function/browseParamsTransform';
-// import { readAccount } from '../user/user';
 import { browseTasksUnderChallenge } from '../myClass/challenge';
 
 export const readPeerReview = (token, peerReviewId) => async (dispatch) => {

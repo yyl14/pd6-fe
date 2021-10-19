@@ -9,14 +9,12 @@ import AlignedText from '../../ui/AlignedText';
 import SimpleTable from '../../ui/SimpleTable';
 import PageTitle from '../../ui/PageTitle';
 import GeneralLoading from '../../GeneralLoading';
-import { browseJudgeCases, browseTestcases } from '../../../actions/myClass/problem';
+import { browseAllJudgementJudgeCase } from '../../../actions/api/judgement';
+import { browseTestcases } from '../../../actions/myClass/problem';
 import { readSubmissionDetail, fetchSubmission } from '../../../actions/myClass/submission';
-import {
-  fetchCourse, fetchClass, fetchChallenge, browseSubmitLang,
-} from '../../../actions/common/common';
+import { fetchCourse, fetchClass, fetchChallenge, browseSubmitLang } from '../../../actions/common/common';
 import NoMatch from '../../noMatch';
 import CodeArea from '../../ui/CodeArea';
-// import { browseSubmitLang } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
   textLink: {
@@ -43,12 +41,9 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 export default function SubmissionDetail() {
-  const {
-    courseId, classId, challengeId, problemId, submissionId,
-  } = useParams();
+  const { courseId, classId, challengeId, problemId, submissionId } = useParams();
   const classNames = useStyles();
   const [tableData, setTableData] = useState([]);
-  const [judgmentId, setJudgmentId] = useState('');
   const [testcaseDataIds, setTestcaseDataIds] = useState([]);
   const [sampleDataIds, setSampleDataIds] = useState([]);
   const dispatch = useDispatch();
@@ -78,12 +73,9 @@ export default function SubmissionDetail() {
 
   useEffect(() => {
     if (submissions[submissionId]?.latestJudgmentId) {
-      if (submissions[submissionId].latestJudgmentId !== judgmentId) {
-        setJudgmentId(submissions[submissionId].latestJudgmentId);
-        dispatch(browseJudgeCases(authToken, submissions[submissionId].latestJudgmentId));
-      }
+      dispatch(browseAllJudgementJudgeCase(authToken, submissions[submissionId].latestJudgmentId));
     }
-  }, [authToken, dispatch, judgmentId, submissionId, submissions]);
+  }, [authToken, dispatch, submissionId, submissions]);
 
   useEffect(() => {
     dispatch(browseTestcases(authToken, problemId));
@@ -120,7 +112,7 @@ export default function SubmissionDetail() {
   );
 
   useEffect(() => {
-    if (problems.byId[problemId] && problems.byId[problemId].testcaseIds) {
+    if (problems.byId[problemId]?.testcaseIds) {
       const testcasesId = problems.byId[problemId].testcaseIds.filter(
         (id) => !testcases.byId[id].is_sample && !testcases.byId[id].is_deleted,
       );
@@ -136,46 +128,49 @@ export default function SubmissionDetail() {
 
   useEffect(() => {
     if (sampleDataIds && testcaseDataIds && judgeCases.allIds) {
-      const filteredJudgeCases = judgeCases.allIds.filter((key) => judgeCases.byId[key].judgment_id === judgmentId);
       setTableData(
         sampleDataIds
           .concat(testcaseDataIds)
           .map((id) => ({
             id,
             no: transformTestcase(id),
-            time: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].time_lapse : '',
-            memory: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].peak_memory : '',
-            status: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].verdict : '',
-            score: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].score : '',
+            time: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]
+              ? judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`].time_lapse
+              : '',
+            memory: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]?.peak_memory,
+            status: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]?.verdict,
+            score: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]?.score,
           }))
           .sort((a, b) => {
             if (!a.no.includes('sample') && b.no.includes('sample')) return 1;
             if (a.no.includes('sample') && !b.no.includes('sample')) return -1;
             if (
-              a.no.includes('sample')
-              && b.no.includes('sample')
-              && Number(a.no.substring(6)) > Number(b.no.substring(6))
-            ) return 1;
+              a.no.includes('sample') &&
+              b.no.includes('sample') &&
+              Number(a.no.substring(6)) > Number(b.no.substring(6))
+            )
+              return 1;
             if (
-              a.no.includes('sample')
-              && b.no.includes('sample')
-              && Number(a.no.substring(6)) < Number(b.no.substring(6))
-            ) return -1;
+              a.no.includes('sample') &&
+              b.no.includes('sample') &&
+              Number(a.no.substring(6)) < Number(b.no.substring(6))
+            )
+              return -1;
             if (!a.no.includes('sample') && !b.no.includes('sample') && Number(a.no) > Number(b.no)) return 1;
             if (!a.no.includes('sample') && !b.no.includes('sample') && Number(a.no) < Number(b.no)) return -1;
             return 0;
           }),
       );
     }
-  }, [judgeCases.allIds, judgeCases.byId, judgmentId, sampleDataIds, testcaseDataIds, transformTestcase]);
+  }, [judgeCases.allIds, judgeCases.byId, sampleDataIds, testcaseDataIds, transformTestcase]);
 
   if (
-    problems.byId[problemId] === undefined
-    || challenges.byId[challengeId] === undefined
-    || submissions[submissionId] === undefined
-    || judgments === undefined
-    || judgeCases.allIds === undefined
-    || testcases.allIds === undefined
+    problems.byId[problemId] === undefined ||
+    challenges.byId[challengeId] === undefined ||
+    submissions[submissionId] === undefined ||
+    judgments === undefined ||
+    judgeCases.allIds === undefined ||
+    testcases.allIds === undefined
   ) {
     if (loading.readSubmissionDetail || loading.browseJudgeCases || loading.readTestcase) {
       return <GeneralLoading />;
@@ -234,15 +229,15 @@ export default function SubmissionDetail() {
           <Typography variant="body1">{problems.byId[problemId].title}</Typography>
         </AlignedText>
         <AlignedText text="Status" childrenType="text">
-          {judgments[judgmentId] ? (
+          {judgments[submissions[submissionId].latestJudgmentId] ? (
             <div>
-              {judgments[judgmentId].verdict === 'Accepted' ? (
+              {judgments[submissions[submissionId].latestJudgmentId].verdict === 'Accepted' ? (
                 <Typography variant="body1" className={classNames.acceptedStatus}>
-                  {judgments[judgmentId].verdict}
+                  {judgments[submissions[submissionId].latestJudgmentId].verdict}
                 </Typography>
               ) : (
                 <Typography variant="body1" color="secondary">
-                  {judgments[judgmentId].verdict}
+                  {judgments[submissions[submissionId].latestJudgmentId].verdict}
                 </Typography>
               )}
             </div>
@@ -251,9 +246,9 @@ export default function SubmissionDetail() {
           )}
         </AlignedText>
         <AlignedText text="Score" childrenType="text">
-          {judgments[judgmentId] && (
+          {judgments[submissions[submissionId].latestJudgmentId] && (
             <div>
-              <Typography variant="body1">{judgments[judgmentId].score}</Typography>
+              <Typography variant="body1">{judgments[submissions[submissionId].latestJudgmentId].score}</Typography>
             </div>
           )}
         </AlignedText>
