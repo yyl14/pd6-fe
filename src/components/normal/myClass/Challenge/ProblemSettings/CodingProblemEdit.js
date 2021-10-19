@@ -112,9 +112,9 @@ export default function CodingProblemEdit({ closeEdit }) {
       if (testcases[id].input_filename !== null) {
         return Number(testcases[id].input_filename.slice(6, testcases[id].input_filename.indexOf('.')));
       }
-      if (testcases[id].output_filename !== null) {
-        return Number(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')));
-      }
+      // if (testcases[id].output_filename !== null) {
+      //   return Number(testcases[id].output_filename.slice(6, testcases[id].output_filename.indexOf('.')));
+      // }
       return 0;
     },
     [testcases],
@@ -137,9 +137,9 @@ export default function CodingProblemEdit({ closeEdit }) {
     if (sampleTableData[id].input_filename !== null) {
       return Number(sampleTableData[id].input_filename.slice(6, sampleTableData[id].input_filename.indexOf('.')));
     }
-    if (sampleTableData[id].output_filename !== null) {
-      return Number(sampleTableData[id].output_filename.slice(6, sampleTableData[id].output_filename.indexOf('.')));
-    }
+    // if (sampleTableData[id].output_filename !== null) {
+    //   return Number(sampleTableData[id].output_filename.slice(6, sampleTableData[id].output_filename.indexOf('.')));
+    // }
     return 0;
   };
 
@@ -190,7 +190,7 @@ export default function CodingProblemEdit({ closeEdit }) {
               memory_limit: testcases[id].memory_limit,
               score: testcases[id].score,
               input_filename: testcases[id].input_filename,
-              output_filename: testcases[id].output_filename,
+              // output_filename: testcases[id].output_filename,
               in_file: null,
               out_file: null,
               new: false,
@@ -314,9 +314,9 @@ export default function CodingProblemEdit({ closeEdit }) {
             time_limit: newSelectedFiles[item].time_limit,
             memory_limit: newSelectedFiles[item].memory_limit,
             input_filename: newSelectedFiles[item].in === null ? null : newSelectedFiles[item].in.name,
-            output_filename: newSelectedFiles[item].out === null ? null : newSelectedFiles[item].out.name,
+            // output_filename: newSelectedFiles[item].out === null ? null : newSelectedFiles[item].out.name,
             in_file: newSelectedFiles[item].in,
-            out_file: newSelectedFiles[item].out,
+            // out_file: newSelectedFiles[item].out,
             new: true,
             note: newSelectedFiles[item].note,
           },
@@ -334,13 +334,13 @@ export default function CodingProblemEdit({ closeEdit }) {
             newSelectedFiles[item].in === null
               ? sampleTableData[keys[0]].input_filename
               : newSelectedFiles[item].in.name,
-          output_filename:
-            newSelectedFiles[item].out === null
-              ? sampleTableData[keys[0]].output_filename
-              : newSelectedFiles[item].out.name,
+          // output_filename:
+          //   newSelectedFiles[item].out === null
+          //     ? sampleTableData[keys[0]].output_filename
+          //     : newSelectedFiles[item].out.name,
           in_file: newSelectedFiles[item].in === null ? sampleTableData[keys[0]].in_file : newSelectedFiles[item].in,
-          out_file:
-            newSelectedFiles[item].out === null ? sampleTableData[keys[0]].out_file : newSelectedFiles[item].out,
+          // out_file:
+          //   newSelectedFiles[item].out === null ? sampleTableData[keys[0]].out_file : newSelectedFiles[item].out,
           new: sampleTableData[keys[0]].new,
           note: newSelectedFiles[item].note,
         },
