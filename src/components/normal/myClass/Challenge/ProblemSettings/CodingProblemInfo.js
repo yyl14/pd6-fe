@@ -23,6 +23,7 @@ import SimpleTable from '../../../../ui/SimpleTable';
 import SampleTestArea from '../../../../ui/SampleTestArea';
 import AlignedText from '../../../../ui/AlignedText';
 import Icon from '../../../../ui/icon/index';
+import CodeArea from '../../../../ui/CodeArea';
 
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
@@ -82,6 +83,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const problems = useSelector((state) => state.problem.byId);
   const testcases = useSelector((state) => state.testcases.byId);
   const [status, setStatus] = useState(true);
+  const [customizeJudge, setCustomizeJudge] = useState(false);
 
   const assistingData = useSelector((state) => state.assistingData.byId);
 
@@ -374,6 +376,22 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
                 : []
             }
           />
+        </SimpleBar>
+      )}
+      {/* check if choosing customize judge */}
+      {role === 'MANAGER' && (
+        <SimpleBar
+          title="Customize Judge Code (Optional)"
+          noIndent
+          buttons={(
+            <FormControlLabel
+              control={<Switch checked={customizeJudge} name="customizeJudge" color="primary" disabled />}
+              label={customizeJudge ? 'Enabled' : 'Disabled'}
+              className={classNames.statusSwitch}
+            />
+          )}
+        >
+          <CodeArea value="TODO: fetch judge code" />
         </SimpleBar>
       )}
       {role === 'MANAGER' && (
