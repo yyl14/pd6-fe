@@ -93,7 +93,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const [testcaseDataIds, setTestcaseDataIds] = useState([]);
   const [deletePopUp, setDeletePopUp] = useState(false);
   const [emailSentPopup, setEmailSentPopup] = useState(false);
-  // console.log('uploadError: ', uploadError);
 
   const handleDelete = () => {
     dispatch(deleteProblem(authToken, problemId));

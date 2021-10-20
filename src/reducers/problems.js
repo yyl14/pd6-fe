@@ -35,6 +35,7 @@ const byId = (state = {}, action) => {
         (acc, item) => ({
           ...acc,
           [item.id]: {
+            ...prototype,
             ...item,
             testcaseIds: state[item.id] ? state[item.id].testcaseIds : [],
             assistingDataIds: [],
@@ -49,6 +50,7 @@ const byId = (state = {}, action) => {
       return {
         ...state,
         [data.id]: {
+          ...prototype,
           ...data,
           testcaseIds: state[data.id] ? state[data.id].testcaseIds : [],
           assistingDataIds: [],
@@ -100,6 +102,7 @@ const byId = (state = {}, action) => {
         (acc, item) => ({
           ...acc,
           [item.id]: {
+            ...prototype,
             ...item,
             testcaseIds: [],
             assistingDataIds: [],
@@ -138,6 +141,7 @@ const byId = (state = {}, action) => {
         (acc, problem) => ({
           ...acc,
           [problem.problem_id]: {
+            ...prototype,
             ...problem,
             ...state[problem.problem_id],
           },
