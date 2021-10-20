@@ -123,28 +123,6 @@ export const browseAccountAllPeerReviewRecordWithReading = (token, peerReviewId,
   }
 };
 
-export const getTargetProblemChallengeId = (token, peerReviewId, problemId) => async (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
-
-  try {
-    dispatch({ type: peerReviewConstants.GET_TARGET_PROBLEM_CHALLENGE_ID_START });
-    const res = await agent.get(`/problem/${problemId}`, config);
-    dispatch({
-      type: peerReviewConstants.GET_TARGET_PROBLEM_CHALLENGE_ID_SUCCESS,
-      payload: { peerReviewId, target_challenge_id: res.data.data.challenge_id },
-    });
-  } catch (error) {
-    dispatch({
-      type: peerReviewConstants.GET_TARGET_PROBLEM_CHALLENGE_ID_FAIL,
-      error,
-    });
-  }
-};
-
 export const readPeerReviewWithProblem = (token, peerReviewId) => async (dispatch) => {
   try {
     const config = { headers: { 'auth-token': token } };
