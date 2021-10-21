@@ -330,6 +330,12 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
               width: 100,
               type: 'string',
             },
+            {
+              id: 'note',
+              label: 'Note',
+              align: 'center',
+              type: 'string',
+            },
           ]}
           data={testcaseDataIds.map((id) => ({
             id,
