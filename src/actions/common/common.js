@@ -365,6 +365,28 @@ const getAccountBatch = (token, accountId) => async (dispatch) => {
   }
 };
 
+const getAccountBatchByReferral = (token, account_referrals, onSuccess) => async (dispatch) => {
+  try {
+    const config = {
+      headers: { 'auth-token': token },
+      params: { account_referrals: JSON.stringify([account_referrals]) },
+    };
+    dispatch({ type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_START });
+    const res = await agent.get('/account-summary/batch-by-account-referral', config);
+    const accountId = res.data.data[0].id;
+    dispatch({
+      type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_SUCCESS,
+      payload: { data: res.data.data[0], accountId },
+    });
+    onSuccess(accountId);
+  } catch (error) {
+    dispatch({
+      type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_FAIL,
+      error,
+    });
+  }
+};
+
 export {
   getInstitutes,
   fetchClassMembers,
@@ -380,4 +402,5 @@ export {
   fetchAllChallengesProblems,
   fetchProblems,
   getAccountBatch,
+  getAccountBatchByReferral,
 };
