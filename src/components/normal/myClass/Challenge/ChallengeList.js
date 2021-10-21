@@ -199,29 +199,29 @@ export default function ChallengeList() {
           {
             name: 'Title',
             align: 'center',
+            width: 300,
             minWidth: 150,
-            width: 200,
             type: 'string',
           },
           {
             name: 'Start Time',
             align: 'center',
+            width: 200,
             minWidth: 50,
-            width: 180,
             type: 'string',
           },
           {
             name: 'End Time',
             align: 'center',
+            width: 200,
             minWidth: 50,
-            width: 180,
             type: 'string',
           },
           {
             name: 'Status',
             align: 'center',
+            width: 132,
             minWidth: 50,
-            width: 100,
             type: 'string',
           },
         ]}

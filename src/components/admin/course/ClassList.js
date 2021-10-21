@@ -11,7 +11,7 @@ import {
   Snackbar,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
-import { MdAdd } from 'react-icons/md';
+import Icon from '../../ui/icon/index';
 import { fetchClasses, addCourse, addClass } from '../../../actions/admin/course';
 import { fetchClassMemberWithAccountReferral } from '../../../actions/common/common';
 import CustomTable from '../../ui/CustomTable';
@@ -108,7 +108,7 @@ export default function ClassList() {
           <>
             <Button onClick={onClickSetting}>Setting</Button>
             <Button color="primary" onClick={onClickAddClass}>
-              <MdAdd />
+              <Icon.Add />
             </Button>
           </>
         )}

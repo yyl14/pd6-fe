@@ -9,7 +9,6 @@ import Statistics from '../../../components/normal/myClass/Challenge/Statistics'
 import { fetchChallenge } from '../../../actions/common/common';
 import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
 
-import GeneralLoading from '../../../components/GeneralLoading';
 import NoMatch from '../../../components/noMatch';
 // import EssayProblem from '../../../components/normal/myClass/Challenge/EssayProblem';
 
@@ -18,9 +17,7 @@ export default function Challenge() {
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
   const { challengeId } = useParams();
-  const challenges = useSelector((state) => state.challenges.byId);
   const loading = useSelector((state) => state.loading.myClass);
-  const commonLoading = useSelector((state) => state.loading.common.common);
 
   useEffect(() => {
     if (
@@ -50,13 +47,6 @@ export default function Challenge() {
     loading.problem.deleteEssay,
     loading.problem.deleteProblem,
   ]);
-
-  if (challenges[challengeId] === undefined) {
-    if (commonLoading.fetchChallenge) {
-      return <GeneralLoading />;
-    }
-    return <NoMatch />;
-  }
 
   return (
     <>

@@ -2,9 +2,21 @@ import { combineReducers } from 'redux';
 import { courseConstants } from '../actions/admin/constant';
 import { commonConstants } from '../actions/common/constant';
 import {
-  gradeConstants, teamConstants, challengeConstants, submissionConstants,
+  teamConstants, challengeConstants, submissionConstants,
 } from '../actions/myClass/constant';
 import { viewConstants } from '../actions/api/constant';
+
+const prototype = {
+  id: null,
+  name: null,
+  course_id: null,
+  is_deleted: null,
+  memberIds: [],
+  gradeIds: [],
+  teamIds: [],
+  challengeIds: [],
+  submissionIds: [],
+};
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -75,7 +87,7 @@ const byId = (state = {}, action) => {
       };
     }
 
-    case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {
+    case viewConstants.BROWSE_CLASS_GRADE_SUCCESS: {
       const { classId, data } = action.payload;
       return {
         ...state,
@@ -151,7 +163,7 @@ const byId = (state = {}, action) => {
     }
     case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
       const { classes } = action.payload.data;
-      return classes.reduce((acc, item) => ({ ...acc, [item.id]: { ...item } }), state);
+      return classes.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
     }
     default:
       return state;

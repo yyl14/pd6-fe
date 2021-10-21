@@ -7,7 +7,7 @@ import {
 import Icon from '../icon/index';
 
 export default function AllClassChallenge({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const {
     courseId, classId, challengeId, problemId, submissionId,
@@ -60,6 +60,7 @@ export default function AllClassChallenge({
             ].concat(
               challenges[challengeId].problemIds
                 .map((id) => problems.byId[id])
+                .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
                 .map(({ id, challenge_label }) => ({
                   text: challenge_label,
                   icon: <Icon.Code />,
@@ -134,8 +135,10 @@ export default function AllClassChallenge({
     return (
       <div>
         <Drawer
+          variant="persistent"
+          open={open}
+          onClose={onClose}
           className={classNames.drawer}
-          variant="permanent"
           anchor="left"
           PaperProps={{ elevation: 5 }}
           classes={{ paper: classNames.drawerPaper }}
@@ -147,8 +150,10 @@ export default function AllClassChallenge({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}

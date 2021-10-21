@@ -141,7 +141,7 @@ export default function CodingProblemInfo() {
             },
             {
               id: 'time_limit',
-              label: 'Max Time(ms)',
+              label: 'Max Time (ms)',
               minWidth: 50,
               align: 'center',
               width: 200,
@@ -149,7 +149,7 @@ export default function CodingProblemInfo() {
             },
             {
               id: 'memory_limit',
-              label: 'Max Memory(kb)',
+              label: 'Max Memory (kb)',
               minWidth: 50,
               align: 'center',
               width: 200,
@@ -192,7 +192,7 @@ export default function CodingProblemInfo() {
             },
             {
               id: 'time_limit',
-              label: 'Max Time(ms)',
+              label: 'Max Time (ms)',
               minWidth: 50,
               align: 'center',
               width: 200,
@@ -200,7 +200,7 @@ export default function CodingProblemInfo() {
             },
             {
               id: 'memory_limit',
-              label: 'Max Memory(kb)',
+              label: 'Max Memory (kb)',
               minWidth: 50,
               align: 'center',
               width: 200,
@@ -208,7 +208,7 @@ export default function CodingProblemInfo() {
             },
             {
               id: 'score',
-              label: 'score',
+              label: 'Score',
               minWidth: 50,
               align: 'center',
               width: 100,

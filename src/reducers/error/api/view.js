@@ -6,6 +6,8 @@ const initialState = {
   browseClassMember: null,
   browseSubmissionUnderClass: null,
   browseMySubmission: null,
+  browsePeerReviewSummaryReview: null,
+  browsePeerReviewSummaryReceive: null,
 };
 
 export default function view(state = initialState, action) {
@@ -74,6 +76,33 @@ export default function view(state = initialState, action) {
         browseMySubmission: action.error,
       };
     }
+
+    case viewConstants.BROWSE_PEER_REVIEW_SUMMARY_REVIEW_START: {
+      return {
+        ...state,
+        browsePeerReviewSummaryReview: null,
+      };
+    }
+    case viewConstants.BROWSE_PEER_REVIEW_SUMMARY_REVIEW_FAIL: {
+      return {
+        ...state,
+        browsePeerReviewSummaryReview: action.error,
+      };
+    }
+
+    case viewConstants.BROWSE_PEER_REVIEW_SUMMARY_RECEIVE_START: {
+      return {
+        ...state,
+        browsePeerReviewSummaryReceive: null,
+      };
+    }
+    case viewConstants.BROWSE_PEER_REVIEW_SUMMARY_RECEIVE_FAIL: {
+      return {
+        ...state,
+        browsePeerReviewSummaryReceive: action.error,
+      };
+    }
+
     default: {
       return state;
     }

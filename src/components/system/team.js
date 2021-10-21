@@ -3,7 +3,7 @@ import { Button, makeStyles } from '@material-ui/core';
 import SimpleBar from '../ui/SimpleBar';
 import Profile from '../ui/profile';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   PDOGS_Content_Display: {
     display: 'block',
   },
@@ -11,12 +11,12 @@ const useStyles = makeStyles(() => ({
     display: 'none',
   },
   PDOGS_Button_default: {
-    backgroundColor: 'rgba(248, 248, 248, 1)',
-    color: 'rgba(30, 165, 255, 1)',
+    backgroundColor: theme.palette.background.default,
+    color: theme.palette.primary.main,
   },
   PDOGS_Button_Clicked: {
-    backgroundColor: 'rgba(30, 165, 255, 1)',
-    color: 'rgba(255, 255, 255, 1)',
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
   },
   profile: {
     width: '100%',

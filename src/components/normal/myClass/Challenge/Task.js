@@ -9,10 +9,8 @@ import EssayProblem from './EssayProblem';
 import CodeSubmission from './CodeSubmission';
 import MySubmission from './MySubmission';
 import SubmissionDetail from './SubmissionDetail';
-import PeerReviewInfo from './PeerReview/PeerReviewInfo';
-import PeerReviewSummary from './PeerReview/PeerReviewSummary';
-import PeerReviewDetail from './PeerReview/PeerReviewDetail';
-import PeerReviewRecord from './PeerReview/PeerReviewRecord';
+import PeerReview from './PeerReview';
+import Scoreboard from './Scoreboard';
 import NoMatch from '../../../noMatch';
 
 /* This is a level 4 component (page component) */
@@ -61,10 +59,15 @@ export default function Task() {
           component={SubmissionDetail}
         />
         <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId" component={CodingProblem} />
-        <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId" component={PeerReviewInfo} />
-        <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/summary" component={PeerReviewSummary} />
-        <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/detail/:recordId" component={PeerReviewDetail} />
-        <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/review/:recordId" component={PeerReviewRecord} />
+        <Route
+          path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId"
+          component={PeerReview}
+        />
+        <Route
+          exact
+          path="/my-class/:courseId/:classId/challenge/:challengeId/scoreboard/:scoreboardId"
+          component={Scoreboard}
+        />
         <Route component={NoMatch} />
       </Switch>
     </>

@@ -4,7 +4,7 @@ import { autoTableConstants } from '../component/constant';
 import browseParamsTransForm from '../../function/browseParamsTransform';
 import getTextFromUrl from '../../function/getTextFromUrl';
 
-const readProblemInfo = (token, problemId) => async (dispatch) => {
+const readProblemInfo = (token, problemId, onSuccess, onError) => async (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
@@ -18,11 +18,53 @@ const readProblemInfo = (token, problemId) => async (dispatch) => {
       type: problemConstants.READ_PROBLEM_SUCCESS,
       payload: res.data.data,
     });
+    if (typeof onSuccess === 'function') {
+      onSuccess();
+    }
   } catch (error) {
     dispatch({
       type: problemConstants.READ_PROBLEM_FAIL,
       error,
     });
+    if (typeof onError === 'function') {
+      onError();
+    }
+  }
+};
+
+const readProblemWithJudgeCode = (token, problemId, onSuccess, onError) => async (dispatch) => {
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+  };
+
+  try {
+    dispatch({ type: problemConstants.READ_PROBLEM_START });
+    const res = await agent.get(`/problem/${problemId}`, config);
+    if (res.data.data.judge_source && res.data.data.judge_source.code_uuid) {
+      const content = await getTextFromUrl(res.data.data.judge_source.code_uuid);
+      dispatch({
+        type: problemConstants.READ_PROBLEM_SUCCESS,
+        payload: { ...res.data.data, judge_source: { ...res.data.data.judge_source, judge_code: content } },
+      });
+    } else {
+      dispatch({
+        type: problemConstants.READ_PROBLEM_SUCCESS,
+        payload: res.data.data,
+      });
+    }
+    if (typeof onSuccess === 'function') {
+      onSuccess();
+    }
+  } catch (error) {
+    dispatch({
+      type: problemConstants.READ_PROBLEM_FAIL,
+      error,
+    });
+    if (typeof onError === 'function') {
+      onError();
+    }
   }
 };
 
@@ -858,6 +900,7 @@ const viewMySubmissionUnderProblem = (token, accountId, problemId, browseParams,
 
 export {
   readProblemInfo,
+  readProblemWithJudgeCode,
   editProblemInfo,
   deleteProblem,
   readSubmission,

@@ -7,7 +7,7 @@ import {
 import Icon from '../icon/index';
 
 export default function MyClass({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const { courseId, classId } = useParams();
   const baseURL = '/my-class';
@@ -121,8 +121,10 @@ export default function MyClass({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}

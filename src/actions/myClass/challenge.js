@@ -80,6 +80,28 @@ const fetchChallenges = (token, classId, browseParams, tableId = null) => async 
   }
 };
 
+const peerReviewFetchChallenges = (token, classId) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'auth-token': token,
+      },
+    };
+    dispatch({ type: challengeConstants.FETCH_CHALLENGES_START });
+    const res = await agent.get(`/class/${classId}/challenge`, config);
+    const { data: challenges } = res.data.data;
+    dispatch({
+      type: challengeConstants.FETCH_CHALLENGES_SUCCESS,
+      payload: { classId, data: challenges },
+    });
+  } catch (error) {
+    dispatch({
+      type: challengeConstants.FETCH_CHALLENGES_FAIL,
+      error,
+    });
+  }
+};
+
 // add a challenge under class
 const addChallenge = (token, classId, body) => async (dispatch) => {
   try {
@@ -203,7 +225,7 @@ const fetchChallengeMemberSubmission = (token, challengeId) => async (dispatch) 
   }
 };
 
-const addProblem = (token, challengeId, label, title, history, courseId, classId) => async (dispatch) => {
+const addProblem = (token, challengeId, label, title, history, courseId, classId, onError) => async (dispatch) => {
   dispatch({ type: challengeConstants.ADD_PROBLEM_START });
   const config = {
     headers: {
@@ -232,10 +254,11 @@ const addProblem = (token, challengeId, label, title, history, courseId, classId
       type: challengeConstants.ADD_PROBLEM_FAIL,
       error,
     });
+    onError();
   }
 };
 
-const addEssay = (token, challengeId, label, title, history, courseId, classId) => async (dispatch) => {
+const addEssay = (token, challengeId, label, title, history, courseId, classId, onError) => async (dispatch) => {
   dispatch({ type: challengeConstants.ADD_ESSAY_START });
   const config = {
     headers: {
@@ -260,10 +283,24 @@ const addEssay = (token, challengeId, label, title, history, courseId, classId) 
       type: challengeConstants.ADD_ESSAY_FAIL,
       error,
     });
+    onError();
   }
 };
 
-const addPeerReview = (token, challengeId, label, title, history, courseId, classId) => async (dispatch) => {
+const addPeerReview = (
+  token,
+  challengeId,
+  label,
+  title,
+  problemId,
+  minScore,
+  maxScore,
+  maxReviewCount,
+  history,
+  courseId,
+  classId,
+  onError,
+) => async (dispatch) => {
   dispatch({ type: challengeConstants.ADD_PEER_REVIEW_START });
   const config = {
     headers: {
@@ -273,13 +310,11 @@ const addPeerReview = (token, challengeId, label, title, history, courseId, clas
   const body = {
     challenge_label: label,
     title,
-    target_problem_id: 0,
+    target_problem_id: problemId,
     description: '',
-    min_score: 0,
-    max_score: 0,
-    max_review_count: 0,
-    start_time: '2000-01-01T00:00:00.000Z',
-    end_time: '2000-01-01T00:00:00.000Z',
+    min_score: minScore,
+    max_score: maxScore,
+    max_review_count: maxReviewCount,
   };
   try {
     const res = await agent.post(`/challenge/${challengeId}/peer-review`, body, config);
@@ -294,6 +329,7 @@ const addPeerReview = (token, challengeId, label, title, history, courseId, clas
       type: challengeConstants.ADD_PEER_REVIEW_FAIL,
       error,
     });
+    onError();
   }
 };
 
@@ -308,4 +344,5 @@ export {
   addProblem,
   addEssay,
   addPeerReview,
+  peerReviewFetchChallenges,
 };

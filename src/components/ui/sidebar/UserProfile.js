@@ -7,7 +7,7 @@ import {
 import Icon from '../icon/index';
 
 export default function UserProfile({
-  classes, history, location, mode,
+  classes, history, location, mode, open, onClose,
 }) {
   const { accountId } = useParams();
   const accounts = useSelector((state) => state.accounts.byId);
@@ -39,8 +39,10 @@ export default function UserProfile({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classes.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classes.drawerPaper }}

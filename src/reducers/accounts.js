@@ -54,7 +54,7 @@ const byId = (state = {}, action) => {
           ...acc,
           [item.id]: {
             ...prototype,
-            ...state[action.payload.id],
+            ...state[item.id],
             ...item,
           },
         }),
@@ -86,6 +86,21 @@ const byId = (state = {}, action) => {
           ...action.payload,
         },
       };
+    }
+
+    case commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_SUCCESS: {
+      const { accounts } = action.payload.data;
+      return accounts.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item.id]: {
+            ...prototype,
+            ...state[action.payload.id],
+            ...item,
+          },
+        }),
+        state,
+      );
     }
 
     case accountConstants.FETCH_STUDENT_CARDS_SUCCESS: {
@@ -152,7 +167,7 @@ const byId = (state = {}, action) => {
     }
 
     case gradeConstants.FETCH_GRADE_SUCCESS:
-    case gradeConstants.FETCH_CLASS_GRADE_SUCCESS: {
+    case viewConstants.BROWSE_CLASS_GRADE_SUCCESS: {
       const { accounts } = action.payload;
       return accounts.reduce(
         (acc, item) => ({

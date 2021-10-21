@@ -1,5 +1,6 @@
 import React from 'react';
 import { Typography, makeStyles } from '@material-ui/core';
+import Icon from './icon/index';
 
 const useStyles = makeStyles((theme) => ({
   mainContent: {
@@ -46,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
   },
   socialLink: {
     margin: '5px',
+    color: theme.palette.black.main,
+    height: '25px',
+    width: '25px',
   },
   name: {
     fontWeight: 'bold',
@@ -70,18 +74,18 @@ export default function Profile({
         <div className={classes.imageAndLinks}>
           <div className={classes.overlapLinks}>
             {FB_link && (
-              <a href={FB_link} className={classes.socialLink}>
-                <img src="../../../images/Facebook.png" alt="FacebookIcon" />
+              <a href={FB_link} target="_blank" rel="noreferrer">
+                <Icon.Facebook className={classes.socialLink} />
               </a>
             )}
             {Github_link && (
-              <a href={Github_link} className={classes.socialLink}>
-                <img src="../../../images/Github.png" alt="GithubIcon" />
+              <a href={Github_link} target="_blank" rel="noreferrer">
+                <Icon.Github className={classes.socialLink} />
               </a>
             )}
             {Linkedin_link && (
-              <a href={Linkedin_link} className={classes.socialLink}>
-                <img src="../../../images/Linkedin.png" alt="LinkedinIcon" />
+              <a href={Linkedin_link} target="_blank" rel="noreferrer">
+                <Icon.LinkedIn className={classes.socialLink} />
               </a>
             )}
           </div>

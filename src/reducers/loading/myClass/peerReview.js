@@ -1,65 +1,52 @@
-import { peerReviewConstants } from '../../../actions/myClass/constant';
+import { peerReviewConstants } from '../../../actions/api/constant';
 
 const initialState = {
-  readPeerReview: false,
-  editPeerReview: false,
-  deletePeerReview: false,
+  readPeerReviewWithProblem: false,
+  readPeerReviewRecord: false,
+  browseAccountAllPeerReviewRecord: false,
 };
 
 export default function peerReview(state = initialState, action) {
   switch (action.type) {
-    case peerReviewConstants.READ_PEER_REVIEW_START: {
+    case peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_START: {
       return {
         ...state,
-        readPeerReview: true,
+        readPeerReviewWithProblem: true,
       };
     }
-    case peerReviewConstants.READ_PEER_REVIEW_SUCCESS: {
+    case peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_SUCCESS:
+    case peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_FAIL: {
       return {
         ...state,
-        readPeerReview: false,
+        readPeerReviewWithProblem: false,
       };
     }
-    case peerReviewConstants.READ_PEER_REVIEW_FAIL: {
+
+    case peerReviewConstants.READ_PEER_REVIEW_RECORD_START: {
       return {
         ...state,
-        readPeerReview: false,
+        readPeerReviewRecord: true,
       };
     }
-    case peerReviewConstants.EDIT_PEER_REVIEW_START: {
+    case peerReviewConstants.READ_PEER_REVIEW_RECORD_SUCCESS:
+    case peerReviewConstants.READ_PEER_REVIEW_RECORD_FAIL: {
       return {
         ...state,
-        editPeerReview: true,
+        readPeerReviewRecord: false,
       };
     }
-    case peerReviewConstants.EDIT_PEER_REVIEW_SUCCESS: {
+
+    case peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_START: {
       return {
         ...state,
-        editPeerReview: false,
+        browseAccountAllPeerReviewRecord: true,
       };
     }
-    case peerReviewConstants.EDIT_PEER_REVIEW_FAIL: {
+    case peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_SUCCESS:
+    case peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_FAIL: {
       return {
         ...state,
-        editPeerReview: false,
-      };
-    }
-    case peerReviewConstants.DELETE_PEER_REVIEW_START: {
-      return {
-        ...state,
-        deletePeerReview: true,
-      };
-    }
-    case peerReviewConstants.DELETE_PEER_REVIEW_SUCCESS: {
-      return {
-        ...state,
-        deletePeerReview: false,
-      };
-    }
-    case peerReviewConstants.DELETE_PEER_REVIEW_FAIL: {
-      return {
-        ...state,
-        deletePeerReview: false,
+        browseAccountAllPeerReviewRecord: false,
       };
     }
 

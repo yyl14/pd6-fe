@@ -94,6 +94,11 @@ const useStyles = makeStyles((theme) => ({
   row: {
     height: '60px',
   },
+  tableBodyCell: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
   bottom: {
     height: '75px',
     display: 'flex',
@@ -277,7 +282,7 @@ export default function CustomTable({
                     <TableCell
                       align={column.align}
                       className={classes.tableHeadCell}
-                      style={{ minWidth: column.minWidth, width: column.width }}
+                      style={{ minWidth: column.minWidth, width: column.width, maxWidth: column.width }}
                     >
                       <b>{column.label}</b>
                       {/* <div className={classes.column}>
@@ -314,7 +319,11 @@ export default function CustomTable({
                         const value = row[column.id];
                         return (
                           <React.Fragment key={`${column.id}-${column.label}`}>
-                            <TableCell align={column.align}>
+                            <TableCell
+                              className={`${classes.tableBodyCell} ${classes.textLink}`}
+                              style={{ minWidth: column.minWidth, width: column.width, maxWidth: column.width }}
+                              align={column.align}
+                            >
                               {column.isExternal ? (
                                 <a href={link} className={classes.textLink} target="_blank" rel="noreferrer noopener">
                                   {column.format && typeof value === 'number' ? column.format(value) : value}
@@ -331,7 +340,11 @@ export default function CustomTable({
                       const value = row[column.id];
                       return (
                         <React.Fragment key={`${column.id}-${column.label}`}>
-                          <TableCell align={column.align}>
+                          <TableCell
+                            className={classes.tableBodyCell}
+                            style={{ minWidth: column.minWidth, width: column.width, maxWidth: column.width }}
+                            align={column.align}
+                          >
                             {column.format && typeof value === 'number' ? column.format(value) : value}
                           </TableCell>
                         </React.Fragment>

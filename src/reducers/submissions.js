@@ -15,6 +15,18 @@ const verdictMapping = new Map([
   [null, null],
 ]);
 
+const prototype = {
+  id: null,
+  account_id: null,
+  problem_id: null,
+  language_id: null,
+  content_file_uuid: null,
+  content_length: null,
+  filename: null,
+  submit_time: null,
+  latestJudgmentId: null,
+};
+
 const byId = (state = {}, action) => {
   switch (action.type) {
     case viewConstants.BROWSE_SUBMISSION_UNDER_CLASS_SUCCESS: {
@@ -54,7 +66,7 @@ const byId = (state = {}, action) => {
     case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
       const { submissions } = action.payload;
       return submissions.reduce(
-        (acc, item) => ({ ...acc, [item.id]: { ...item, verdict: verdictMapping.get(item.verdict) } }),
+        (acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item, verdict: verdictMapping.get(item.verdict) } }),
         state,
       );
     }

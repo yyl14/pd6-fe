@@ -93,7 +93,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const [testcaseDataIds, setTestcaseDataIds] = useState([]);
   const [deletePopUp, setDeletePopUp] = useState(false);
   const [emailSentPopup, setEmailSentPopup] = useState(false);
-  // console.log('uploadError: ', uploadError);
 
   const handleDelete = () => {
     dispatch(deleteProblem(authToken, problemId));
@@ -236,7 +235,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             },
             {
               id: 'time_limit',
-              label: 'Max Time(ms)',
+              label: 'Max Time (ms)',
               minWidth: 50,
               align: 'center',
               width: 200,
@@ -244,7 +243,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             },
             {
               id: 'memory_limit',
-              label: 'Max Memory(kb)',
+              label: 'Max Memory (kb)',
               minWidth: 50,
               align: 'center',
               width: 200,
@@ -309,7 +308,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             },
             {
               id: 'time_limit',
-              label: 'Max Time(ms)',
+              label: 'Max Time (ms)',
               minWidth: 50,
               align: 'center',
               width: 200,
@@ -317,7 +316,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             },
             {
               id: 'memory_limit',
-              label: 'Max Memory(kb)',
+              label: 'Max Memory (kb)',
               minWidth: 50,
               align: 'center',
               width: 200,
@@ -325,7 +324,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             },
             {
               id: 'score',
-              label: 'score',
+              label: 'Score',
               minWidth: 50,
               align: 'center',
               width: 100,

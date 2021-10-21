@@ -11,7 +11,9 @@ import PageTitle from '../../ui/PageTitle';
 import GeneralLoading from '../../GeneralLoading';
 import { browseJudgeCases, browseTestcases } from '../../../actions/myClass/problem';
 import { readSubmissionDetail, fetchSubmission } from '../../../actions/myClass/submission';
-import { fetchCourse, fetchClass, fetchChallenge } from '../../../actions/common/common';
+import {
+  fetchCourse, fetchClass, fetchChallenge, browseSubmitLang,
+} from '../../../actions/common/common';
 import NoMatch from '../../noMatch';
 import CodeArea from '../../ui/CodeArea';
 // import { browseSubmitLang } from '../../../../actions/common/common';
@@ -34,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
   codeField: {
     width: '50vw',
   },
+  acceptedStatus: {
+    color: theme.palette.green.main,
+  },
 }));
 
 /* This is a level 4 component (page component) */
@@ -50,14 +55,15 @@ export default function SubmissionDetail() {
 
   const submissions = useSelector((state) => state.submissions.byId);
   const judgments = useSelector((state) => state.judgments.byId);
-  const judgmentIds = useSelector((state) => state.judgments.allIds);
   const challenges = useSelector((state) => state.challenges);
   const problems = useSelector((state) => state.problem);
   const user = useSelector((state) => state.user);
   const judgeCases = useSelector((state) => state.judgeCases);
   const testcases = useSelector((state) => state.testcases);
+  const submitLangs = useSelector((state) => state.submitLangs.byId);
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.problem);
+  const userClasses = useSelector((state) => state.user.classes);
 
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
@@ -71,20 +77,21 @@ export default function SubmissionDetail() {
   }, [authToken, dispatch, submissionId]);
 
   useEffect(() => {
-    setJudgmentId(judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]);
-    if (judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0]) {
-      dispatch(
-        browseJudgeCases(
-          authToken,
-          judgmentIds.filter((id) => judgments[id].submission_id === Number(submissionId))[0],
-        ),
-      );
+    if (submissions[submissionId]?.latestJudgmentId) {
+      if (submissions[submissionId].latestJudgmentId !== judgmentId) {
+        setJudgmentId(submissions[submissionId].latestJudgmentId);
+        dispatch(browseJudgeCases(authToken, submissions[submissionId].latestJudgmentId));
+      }
     }
-  }, [authToken, dispatch, judgmentIds, judgments, submissionId]);
+  }, [authToken, dispatch, judgmentId, submissionId, submissions]);
 
   useEffect(() => {
     dispatch(browseTestcases(authToken, problemId));
   }, [authToken, dispatch, problemId]);
+
+  useEffect(() => {
+    dispatch(browseSubmitLang(authToken));
+  }, [authToken, dispatch]);
 
   const transformSample = useCallback(
     (id) => {
@@ -204,13 +211,20 @@ export default function SubmissionDetail() {
           <Typography variant="body1">{user.real_name}</Typography>
         </AlignedText>
         <AlignedText text="Challenge" childrenType="text">
-          <Link to={`/all-class/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
+          <Link
+            to={`/${
+              userClasses.filter((c) => c.class_id === Number(classId)).length === 0 ? 'all-class' : 'my-class'
+            }/${courseId}/${classId}/challenge/${challengeId}`}
+            className={classNames.textLink}
+          >
             <Typography variant="body1">{challenges.byId[challengeId].title}</Typography>
           </Link>
         </AlignedText>
         <AlignedText text="Task Label" childrenType="text">
           <Link
-            to={`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}`}
+            to={`/${
+              userClasses.filter((c) => c.class_id === Number(classId)).length === 0 ? 'all-class' : 'my-class'
+            }/${courseId}/${classId}/challenge/${challengeId}/${problemId}`}
             className={classNames.textLink}
           >
             <Typography variant="body1">{problems.byId[problemId].challenge_label}</Typography>
@@ -223,7 +237,7 @@ export default function SubmissionDetail() {
           {judgments[judgmentId] ? (
             <div>
               {judgments[judgmentId].verdict === 'Accepted' ? (
-                <Typography variant="body1" color="primary">
+                <Typography variant="body1" className={classNames.acceptedStatus}>
                   {judgments[judgmentId].verdict}
                 </Typography>
               ) : (
@@ -248,10 +262,15 @@ export default function SubmissionDetail() {
             {moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm')}
           </Typography>
         </AlignedText>
-        {/* <AlignedText text="Language" childrenType="text">
-          {submitLangs[submissions[submissionId].language_id]
-            && <Typography variant="body1">{submitLangs[submissions[submissionId].language_id].name}</Typography>}
-        </AlignedText> */}
+        <AlignedText text="Language" childrenType="text">
+          {submitLangs[submissions[submissionId].language_id] && (
+            <Typography variant="body1">
+              {`${submitLangs[submissions[submissionId].language_id].name} ${
+                submitLangs[submissions[submissionId].language_id].version
+              }`}
+            </Typography>
+          )}
+        </AlignedText>
       </SimpleBar>
       <SimpleBar title="Submission Result" noIndent>
         <SimpleTable
@@ -268,7 +287,7 @@ export default function SubmissionDetail() {
             },
             {
               id: 'time',
-              label: 'Time(ms)',
+              label: 'Time (ms)',
               minWidth: 50,
               align: 'center',
               width: 600,
@@ -276,7 +295,7 @@ export default function SubmissionDetail() {
             },
             {
               id: 'memory',
-              label: 'Memory(kb)',
+              label: 'Memory (kb)',
               minWidth: 50,
               align: 'center',
               width: 600,
@@ -292,7 +311,7 @@ export default function SubmissionDetail() {
               colors: {
                 'Waiting for judge': 'default',
                 'No Status': 'error',
-                Accepted: 'primary',
+                Accepted: 'accepted',
                 'Wrong Answer': 'error',
                 'Memory Limit Exceed': 'error',
                 'Time Limit Exceed': 'error',
