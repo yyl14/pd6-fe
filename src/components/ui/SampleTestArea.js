@@ -196,18 +196,20 @@ export default function SampleTestArea({ input, output, note = '' }) {
               </div>
             </>
           )}
-          <div className={classes.title}>
-            <Typography variant="h6" display="inline">
-              Note
-            </Typography>
-            <div className={classes.copyIcon}>
-              <CopyToClipboardButton text={note} />
-            </div>
-          </div>
           {note && (
-            <div className={classes.content} ref={noteRef}>
-              <Typography variant="body1">{note}</Typography>
-            </div>
+            <>
+              <div className={classes.title}>
+                <Typography variant="h6" display="inline">
+                  Note
+                </Typography>
+                <div className={classes.copyIcon}>
+                  <CopyToClipboardButton text={note} />
+                </div>
+              </div>
+              <div className={classes.content} ref={noteRef}>
+                <Typography variant="body1">{note}</Typography>
+              </div>
+            </>
           )}
         </CardContent>
 
