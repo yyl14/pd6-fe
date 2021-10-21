@@ -378,7 +378,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           />
         </SimpleBar>
       )}
-      {role === 'MANAGER' && problems[problemId].judge_source.judge_code && (
+      {role === 'MANAGER' && problems[problemId].judge_type === 'CUSTOMIZED' && (
         <SimpleBar
           title="Customize Judge Code (Optional)"
           noIndent
