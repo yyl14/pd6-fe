@@ -136,7 +136,6 @@ const byId = (state = {}, action) => {
       };
     }
 
-    case commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_SUCCESS:
     case commonConstants.GET_ACCOUNT_BATCH_SUCCESS: {
       const { accountId, data } = action.payload;
       return {

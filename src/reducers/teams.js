@@ -1,16 +1,23 @@
 import { combineReducers } from 'redux';
+import { commonConstants } from '../actions/common/constant';
 import { teamConstants } from '../actions/myClass/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
     case teamConstants.FETCH_TEAMS_SUCCESS: {
       const { data } = action.payload;
-      return data.reduce((acc, item) => ({
-        ...acc,
-        [item.id]: {
-          ...item, teamMemberIds: [], template: {}, tempAddMember: [],
-        },
-      }), state);
+      return data.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item.id]: {
+            ...item,
+            teamMemberIds: [],
+            template: {},
+            tempAddMember: [],
+          },
+        }),
+        state,
+      );
     }
 
     case teamConstants.FETCH_TEAM_SUCCESS: {
@@ -35,9 +42,12 @@ const byId = (state = {}, action) => {
       return { ...state, template: action.payload };
     }
 
-    case teamConstants.ADD_TEAM_MEMBER_SUCCESS: {
-      const { teamId, memberId } = action.payload;
-      return { ...state, [teamId]: { ...state[teamId], tempAddMember: [...state[teamId].tempAddMember, memberId] } };
+    case commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_SUCCESS: {
+      const { teamId, memberId, role } = action.payload;
+      return {
+        ...state,
+        [teamId]: { ...state[teamId], tempAddMember: [...state[teamId].tempAddMember, { id: memberId, role }] },
+      };
     }
 
     default:

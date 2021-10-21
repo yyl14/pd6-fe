@@ -19,6 +19,7 @@ import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleTable from '../../../../ui/SimpleTable';
 import { addTeamMember, editTeamMember, deleteTeamMember } from '../../../../../actions/myClass/team';
+import { getAccountBatchByReferral } from '../../../../../actions/common/common';
 import systemRoleTransformation from '../../../../../function/systemRoleTransformation';
 
 const useStyles = makeStyles(() => ({
@@ -71,14 +72,12 @@ export default function TeamMemberEdit({
 
   const handleCancel = () => {
     // delete unsaved added members
-    // tempAddData.map((item) => teamMemberIds.map(
-    //   (id) => (item === teamMembers[id].account.username
-    //         || item === teamMembers[id].account.real_name
-    //         || item === teamMembers[id].account.student_id)
-    //       && dispatch(deleteTeamMember(authToken, teamId, teamMembers[id].member_id)),
-    // ));
     teams[teamId].tempAddMember.map((id) => dispatch(deleteTeamMember(authToken, teamId, id)));
     handleBack();
+  };
+  const addMemberSuccess = () => {
+    setPopUp(false);
+    clearInputs();
   };
 
   const handleSave = () => {
@@ -98,16 +97,12 @@ export default function TeamMemberEdit({
     handleBack();
   };
 
-  const addMemberSuccess = () => {
-    setPopUp(false);
-    clearInputs();
-  };
-
-  console.log(teams[teamId].tempAddMember);
-
   const handleAdd = () => {
     const role = inputs.role === 'Normal' ? 'NORMAL' : 'MANAGER';
     dispatch(addTeamMember(authToken, teamId, inputs.student, role, addMemberSuccess, () => setAddMemberFail(true)));
+    dispatch(getAccountBatchByReferral(authToken, inputs.student, role, teamId));
+    setPopUp(false);
+    clearInputs();
   };
 
   return (

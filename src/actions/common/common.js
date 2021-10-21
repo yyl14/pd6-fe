@@ -365,7 +365,7 @@ const getAccountBatch = (token, accountId) => async (dispatch) => {
   }
 };
 
-const getAccountBatchByReferral = (token, account_referrals, onSuccess) => async (dispatch) => {
+const getAccountBatchByReferral = (token, account_referrals, role, teamId) => async (dispatch) => {
   try {
     const config = {
       headers: { 'auth-token': token },
@@ -373,12 +373,11 @@ const getAccountBatchByReferral = (token, account_referrals, onSuccess) => async
     };
     dispatch({ type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_START });
     const res = await agent.get('/account-summary/batch-by-account-referral', config);
-    const accountId = res.data.data[0].id;
+    const memberId = res.data.data[0].id;
     dispatch({
       type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_SUCCESS,
-      payload: { data: res.data.data[0], accountId },
+      payload: { teamId, memberId, role },
     });
-    onSuccess(accountId);
   } catch (error) {
     dispatch({
       type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_FAIL,

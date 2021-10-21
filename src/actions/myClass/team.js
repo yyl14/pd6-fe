@@ -187,7 +187,7 @@ export const fetchTeamMembers = (token, teamId) => async (dispatch) => {
   }
 };
 
-export const addTeamMember = (token, teamId, student, role, onSuccess, onError) => async (dispatch) => {
+export const addTeamMember = (token, teamId, student, role, onError) => async (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
@@ -196,9 +196,8 @@ export const addTeamMember = (token, teamId, student, role, onSuccess, onError) 
   const body = [{ account_referral: student, role }];
   try {
     dispatch({ type: teamConstants.ADD_TEAM_MEMBER_START });
-    const res = await agent.post(`/team/${teamId}/member`, body, config);
-    dispatch({ type: teamConstants.ADD_TEAM_MEMBER_SUCCESS, payload: { teamId, memberId: res.data.data.id[0] } });
-    onSuccess();
+    await agent.post(`/team/${teamId}/member`, body, config);
+    dispatch({ type: teamConstants.ADD_TEAM_MEMBER_SUCCESS });
   } catch (error) {
     dispatch({
       type: teamConstants.ADD_TEAM_MEMBER_FAIL,
