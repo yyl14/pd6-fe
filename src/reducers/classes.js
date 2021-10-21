@@ -1,9 +1,7 @@
 import { combineReducers } from 'redux';
 import { courseConstants } from '../actions/admin/constant';
 import { commonConstants } from '../actions/common/constant';
-import {
-  teamConstants, challengeConstants, submissionConstants,
-} from '../actions/myClass/constant';
+import { teamConstants, challengeConstants, submissionConstants } from '../actions/myClass/constant';
 import { viewConstants } from '../actions/api/constant';
 
 const prototype = {
