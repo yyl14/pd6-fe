@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   makeStyles,
   Button,
@@ -18,7 +18,7 @@ import Icon from '../../../../ui/icon/index';
 import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleTable from '../../../../ui/SimpleTable';
-import { addTeamMember, editTeamMember, deleteTeamMember } from '../../../../../actions/myClass/team';
+import { editTeamMember, deleteTeamMember, addTeamMember } from '../../../../../actions/myClass/team';
 import { getAccountBatchByReferral } from '../../../../../actions/common/common';
 import systemRoleTransformation from '../../../../../function/systemRoleTransformation';
 
@@ -31,9 +31,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function TeamMemberEdit({
-  setOriginData, isManager, handleBack, setAddMemberFail,
-}) {
+export default function TeamMemberEdit({ isManager, handleBack, setAddMemberFail }) {
   const classNames = useStyles();
   const { teamId } = useParams();
   const dispatch = useDispatch();
@@ -42,16 +40,23 @@ export default function TeamMemberEdit({
   const teams = useSelector((state) => state.teams.byId);
   const teamMembers = useSelector((state) => state.teamMembers.byId);
   const teamMemberIds = useSelector((state) => state.teamMembers.allIds);
+  const [tableData, setTableData] = useState([]);
+  const [tempAddMember, setTempAddMember] = useState([]);
 
-  const [tableData, setTableData] = useState(
-    teamMemberIds.map((id) => ({
-      id: teamMembers[id] ? teamMembers[id].member_id : '',
-      username: teamMembers[id] ? teamMembers[id].account.username : '',
-      student_id: teamMembers[id] ? teamMembers[id].account.student_id : '',
-      real_name: teamMembers[id] ? teamMembers[id].account.real_name : '',
-      role: systemRoleTransformation(teamMembers[id].role),
-    })),
-  );
+  useEffect(() => {
+    if (teams[teamId] && teamMemberIds) {
+      setTableData(
+        teamMemberIds.map((id) => ({
+          id: teamMembers[id].member_id,
+          username: teamMembers[id].account.username,
+          student_id: teamMembers[id].account.student_id,
+          real_name: teamMembers[id].account.real_name,
+          role: systemRoleTransformation(teamMembers[id].role),
+        })),
+      );
+    }
+  }, [teams, teamId, teamMemberIds, teamMembers]);
+
   const [popUp, setPopUp] = useState(false);
   const [inputs, setInputs] = useState({
     student: '',
@@ -62,7 +67,6 @@ export default function TeamMemberEdit({
     const { name, value } = event.target;
     setInputs((input) => ({ ...input, [name]: value }));
   };
-
   const clearInputs = () => {
     setInputs({
       student: '',
@@ -71,13 +75,9 @@ export default function TeamMemberEdit({
   };
 
   const handleCancel = () => {
-    // delete unsaved added members
-    teams[teamId].tempAddMember.map((id) => dispatch(deleteTeamMember(authToken, teamId, id)));
     handleBack();
   };
-  const addMemberSuccess = (role) => {
-    // get account batch after adding success
-    dispatch(getAccountBatchByReferral(authToken, inputs.student, role, teamId));
+  const handleAddSuccess = () => {
     setPopUp(false);
     clearInputs();
   };
@@ -95,15 +95,47 @@ export default function TeamMemberEdit({
         }
       }
     });
-    setOriginData(tableData);
+    // handle add members
+    if (tempAddMember.length !== 0) {
+      const saveAddMember = [];
+      tempAddMember.map((data) => {
+        const member = tableData.filter((item) => item.id === data.id);
+        if (member) {
+          saveAddMember.push({
+            account_referral: data.account_referral,
+            role: member[0].role === 'Normal' ? 'NORMAL' : 'MANAGER',
+          });
+        }
+        return data;
+      });
+      dispatch(addTeamMember(authToken, teamId, saveAddMember, handleAddSuccess, () => setAddMemberFail(true)));
+    }
     handleBack();
   };
 
-  const handleAdd = () => {
-    const role = inputs.role === 'Normal' ? 'NORMAL' : 'MANAGER';
-    dispatch(addTeamMember(authToken, teamId, inputs.student, role, addMemberSuccess, () => setAddMemberFail(true)));
+  const tempAddSuccess = (member, role) => {
+    setTempAddMember(tempAddMember.concat([{ id: member.id, account_referral: inputs.student }]));
+    setTableData(
+      tableData.concat([
+        {
+          id: member.id,
+          username: member.username,
+          student_id: member.student_id,
+          real_name: member.real_name,
+          role: systemRoleTransformation(role),
+        },
+      ]),
+    );
     setPopUp(false);
     clearInputs();
+  };
+  const tempAddFail = () => {
+    setAddMemberFail(true);
+    clearInputs();
+  };
+  const handleAdd = () => {
+    const role = inputs.role === 'Normal' ? 'NORMAL' : 'MANAGER';
+    dispatch(getAccountBatchByReferral(authToken, inputs.student, teamId, role, tempAddSuccess, tempAddFail));
   };
 
   return (
