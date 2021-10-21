@@ -201,7 +201,7 @@ export default function TeamList() {
             name: 'Label',
             align: 'center',
             minWidth: 125,
-            width: 150,
+            width: 250,
             type: 'string',
           },
           {
