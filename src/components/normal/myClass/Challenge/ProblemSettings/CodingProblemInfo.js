@@ -83,7 +83,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const problems = useSelector((state) => state.problem.byId);
   const testcases = useSelector((state) => state.testcases.byId);
   const [status, setStatus] = useState(true);
-  const [customizeJudge, setCustomizeJudge] = useState(false);
 
   const assistingData = useSelector((state) => state.assistingData.byId);
 
@@ -384,8 +383,8 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           noIndent
           buttons={(
             <FormControlLabel
-              control={<Switch checked={customizeJudge} name="customizeJudge" color="primary" disabled />}
-              label={customizeJudge ? 'Enabled' : 'Disabled'}
+              control={<Switch checked name="customizeJudge" color="primary" disabled />}
+              label="Enabled"
               className={classNames.statusSwitch}
             />
           )}
