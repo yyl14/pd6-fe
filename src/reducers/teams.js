@@ -43,10 +43,10 @@ const byId = (state = {}, action) => {
     }
 
     case commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_SUCCESS: {
-      const { teamId, memberId, role } = action.payload;
+      const { teamId, memberId } = action.payload;
       return {
         ...state,
-        [teamId]: { ...state[teamId], tempAddMember: [...state[teamId].tempAddMember, { id: memberId, role }] },
+        [teamId]: { ...state[teamId], tempAddMember: [...state[teamId].tempAddMember, { id: memberId }] },
       };
     }
 
