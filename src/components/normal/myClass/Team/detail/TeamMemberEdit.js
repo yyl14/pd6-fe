@@ -75,7 +75,9 @@ export default function TeamMemberEdit({
     teams[teamId].tempAddMember.map((id) => dispatch(deleteTeamMember(authToken, teamId, id)));
     handleBack();
   };
-  const addMemberSuccess = () => {
+  const addMemberSuccess = (role) => {
+    // get account batch after adding success
+    dispatch(getAccountBatchByReferral(authToken, inputs.student, role, teamId));
     setPopUp(false);
     clearInputs();
   };
@@ -100,7 +102,6 @@ export default function TeamMemberEdit({
   const handleAdd = () => {
     const role = inputs.role === 'Normal' ? 'NORMAL' : 'MANAGER';
     dispatch(addTeamMember(authToken, teamId, inputs.student, role, addMemberSuccess, () => setAddMemberFail(true)));
-    dispatch(getAccountBatchByReferral(authToken, inputs.student, role, teamId));
     setPopUp(false);
     clearInputs();
   };
