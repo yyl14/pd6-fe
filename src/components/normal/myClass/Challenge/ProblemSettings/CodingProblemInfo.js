@@ -378,8 +378,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
           />
         </SimpleBar>
       )}
-      {/* check if choosing customize judge */}
-      {role === 'MANAGER' && (
+      {role === 'MANAGER' && problems[problemId].judge_source.judge_code && (
         <SimpleBar
           title="Customize Judge Code (Optional)"
           noIndent
@@ -391,7 +390,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             />
           )}
         >
-          <CodeArea value="TODO: fetch judge code" />
+          <CodeArea value={problems[problemId].judge_source.judge_code} />
         </SimpleBar>
       )}
       {role === 'MANAGER' && (
