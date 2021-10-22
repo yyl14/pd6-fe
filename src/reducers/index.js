@@ -22,6 +22,8 @@ import submitLangs from './submitLangs';
 import essays from './essays';
 import peerReviews from './peerReviews';
 import peerReviewRecords from './peerReviewRecords';
+import peerReviewSummaryReview from './peerReviewSummaryReview';
+import peerReviewSummaryReceive from './peerReviewSummaryReceive';
 import judgeCases from './judgeCases';
 import downloadLinks from './downloadLinks';
 import loading from './loading/index';
@@ -56,6 +58,8 @@ export default combineReducers({
   essays,
   peerReviews,
   peerReviewRecords,
+  peerReviewSummaryReview,
+  peerReviewSummaryReceive,
   judgeCases,
   downloadLinks,
   essaySubmission,

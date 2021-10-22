@@ -4,7 +4,6 @@ const initialState = {
   readPeerReviewWithProblem: false,
   readPeerReviewRecord: false,
   browseAccountAllPeerReviewRecord: false,
-  getTargetProblemChallengeId: false,
 };
 
 export default function peerReview(state = initialState, action) {
@@ -48,20 +47,6 @@ export default function peerReview(state = initialState, action) {
       return {
         ...state,
         browseAccountAllPeerReviewRecord: false,
-      };
-    }
-
-    case peerReviewConstants.GET_TARGET_PROBLEM_CHALLENGE_ID_START: {
-      return {
-        ...state,
-        getTargetProblemChallengeId: true,
-      };
-    }
-    case peerReviewConstants.GET_TARGET_PROBLEM_CHALLENGE_ID_SUCCESS:
-    case peerReviewConstants.GET_TARGET_PROBLEM_CHALLENGE_ID_FAIL: {
-      return {
-        ...state,
-        getTargetProblemChallengeId: false,
       };
     }
 

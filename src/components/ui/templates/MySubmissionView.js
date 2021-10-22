@@ -105,7 +105,7 @@ export default function MySubmission({ baseUrl, isProblemSet }) {
             colors: {
               'Waiting for judge': 'default',
               'No Status': 'error',
-              Accepted: 'default',
+              Accepted: 'accepted',
               'Wrong Answer': 'error',
               'Memory Limit Exceed': 'error',
               'Time Limit Exceed': 'error',

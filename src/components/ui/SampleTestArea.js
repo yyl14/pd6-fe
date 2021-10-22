@@ -70,7 +70,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function SampleTestArea({ input, output }) {
+export default function SampleTestArea({ input, output, note = '' }) {
   const classes = useStyles();
   const ref = useRef();
   const inputRef = useRef();
@@ -196,19 +196,21 @@ export default function SampleTestArea({ input, output }) {
               </div>
             </>
           )}
-          {/* <div className={classes.title}>
-            <Typography variant="h6" display="inline">
-              Note
-            </Typography>
-            <div className={classes.copyIcon}>
-              <CopyToClipboardButton text={note} />
-            </div>
-          </div>
           {note && (
-            <div className={classes.content} ref={noteRef}>
-              <Typography variant="body1">{note}</Typography>
-            </div>
-          )} */}
+            <>
+              <div className={classes.title}>
+                <Typography variant="h6" display="inline">
+                  Note
+                </Typography>
+                <div className={classes.copyIcon}>
+                  <CopyToClipboardButton text={note} />
+                </div>
+              </div>
+              <div className={classes.content} ref={noteRef}>
+                <Typography variant="body1">{note}</Typography>
+              </div>
+            </>
+          )}
         </CardContent>
 
         {showExpandArrow && (

@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
   codeField: {
     width: '50vw',
   },
+  acceptedStatus: {
+    color: theme.palette.green.main,
+  },
 }));
 
 /* This is a level 4 component (page component) */
@@ -234,7 +237,7 @@ export default function SubmissionDetail() {
           {judgments[judgmentId] ? (
             <div>
               {judgments[judgmentId].verdict === 'Accepted' ? (
-                <Typography variant="body1" color="primary">
+                <Typography variant="body1" className={classNames.acceptedStatus}>
                   {judgments[judgmentId].verdict}
                 </Typography>
               ) : (
@@ -260,8 +263,13 @@ export default function SubmissionDetail() {
           </Typography>
         </AlignedText>
         <AlignedText text="Language" childrenType="text">
-          {submitLangs[submissions[submissionId].language_id]
-            && <Typography variant="body1">{`${submitLangs[submissions[submissionId].language_id].name} ${submitLangs[submissions[submissionId].language_id].version}`}</Typography>}
+          {submitLangs[submissions[submissionId].language_id] && (
+            <Typography variant="body1">
+              {`${submitLangs[submissions[submissionId].language_id].name} ${
+                submitLangs[submissions[submissionId].language_id].version
+              }`}
+            </Typography>
+          )}
         </AlignedText>
       </SimpleBar>
       <SimpleBar title="Submission Result" noIndent>
@@ -303,7 +311,7 @@ export default function SubmissionDetail() {
               colors: {
                 'Waiting for judge': 'default',
                 'No Status': 'error',
-                Accepted: 'primary',
+                Accepted: 'accepted',
                 'Wrong Answer': 'error',
                 'Memory Limit Exceed': 'error',
                 'Time Limit Exceed': 'error',

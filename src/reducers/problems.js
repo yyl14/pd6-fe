@@ -8,6 +8,7 @@ const prototype = {
   challenge_id: null,
   challenge_label: null,
   title: null,
+  judge_type: null, // NORMAL or CUSTOMIZED
   setter_id: null,
   full_score: null,
   description: null,
@@ -18,6 +19,12 @@ const prototype = {
   testcaseIds: [],
   assistingDataIds: [],
   score: '',
+  judge_source: {
+    judge_language: null,
+    judge_code: null, // code content
+    code_uuid: null,
+    filename: null,
+  },
 };
 
 const byId = (state = {}, action) => {
@@ -28,6 +35,7 @@ const byId = (state = {}, action) => {
         (acc, item) => ({
           ...acc,
           [item.id]: {
+            ...prototype,
             ...item,
             testcaseIds: state[item.id] ? state[item.id].testcaseIds : [],
             assistingDataIds: [],
@@ -42,6 +50,7 @@ const byId = (state = {}, action) => {
       return {
         ...state,
         [data.id]: {
+          ...prototype,
           ...data,
           testcaseIds: state[data.id] ? state[data.id].testcaseIds : [],
           assistingDataIds: [],
@@ -93,6 +102,7 @@ const byId = (state = {}, action) => {
         (acc, item) => ({
           ...acc,
           [item.id]: {
+            ...prototype,
             ...item,
             testcaseIds: [],
             assistingDataIds: [],
@@ -131,6 +141,7 @@ const byId = (state = {}, action) => {
         (acc, problem) => ({
           ...acc,
           [problem.problem_id]: {
+            ...prototype,
             ...problem,
             ...state[problem.problem_id],
           },

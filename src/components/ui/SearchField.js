@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  TextField, FormControl, Select, MenuItem, makeStyles,
+  TextField, FormControl, Select, MenuItem,
 } from '@material-ui/core';
 import MultiSelect from './MultiSelect';
 

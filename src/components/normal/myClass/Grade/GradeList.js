@@ -13,7 +13,6 @@ import {
   Snackbar,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { MdAdd } from 'react-icons/md';
 import moment from 'moment-timezone';
 import AlignedText from '../../../ui/AlignedText';
 // import CustomTable from '../../../ui/CustomTable';
@@ -22,9 +21,9 @@ import FileUploadArea from '../../../ui/FileUploadArea';
 import PageTitle from '../../../ui/PageTitle';
 import Icon from '../../../ui/icon/index';
 import {
-  fetchClassGrade, addClassGrade, importClassGrade, downloadGradeFile,
+  addClassGrade, importClassGrade, downloadGradeFile,
 } from '../../../../actions/myClass/grade';
-import NoMatch from '../../../noMatch';
+import { browseClassGrade } from '../../../../actions/api/view';
 import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
@@ -67,6 +66,7 @@ export default function GradeList() {
   const grades = useSelector((state) => state.grades);
   const loading = useSelector((state) => state.loading.myClass.grade);
   const error = useSelector((state) => state.error.myClass.grade);
+  const viewError = useSelector((state) => state.error.api.view);
 
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
@@ -203,6 +203,24 @@ export default function GradeList() {
         hasFilter
         filterConfig={[
           {
+            reduxStateId: 'username',
+            label: 'Username',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          {
+            reduxStateId: 'student_id',
+            label: 'Student ID',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          {
+            reduxStateId: 'real_name',
+            label: 'Real Name',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          {
             reduxStateId: 'title',
             label: 'Title',
             type: 'TEXT',
@@ -214,13 +232,19 @@ export default function GradeList() {
             type: 'TEXT',
             operation: 'LIKE',
           },
+          // {
+          //   reduxStateId: 'update_time',
+          //   label: 'Time',
+          //   type: 'TEXT',
+          //   operation: 'LIKE',
+          // },
         ]}
         buttons={(
           <>
             {isManager && (
               <>
                 <Button variant="outlined" color="primary" onClick={() => setShowAddDialog(true)}>
-                  <MdAdd />
+                  <Icon.Add />
                 </Button>
                 <Button color="primary" onClick={() => setShowImportDialog(true)} startIcon={<Icon.Folder />}>
                   Import
@@ -231,9 +255,9 @@ export default function GradeList() {
         )}
         defaultSort={['update_time', 'DESC']}
         refetch={(browseParams, ident) => {
-          dispatch(fetchClassGrade(authToken, classId, browseParams, ident));
+          dispatch(browseClassGrade(authToken, classId, browseParams, ident));
         }}
-        refetchErrors={[error.fetchClassGrade]}
+        refetchErrors={[viewError.browseClassGrade]}
         refreshLoadings={[loading.addClassGrade, loading.importClassGrade]}
         columns={[
           {

@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     right: 'auto',
     minHeight: '55px',
     height: '55px',
-    background: theme.palette.black.main,
+    background: theme.headerStyle.background,
     minWidth: 'max-content',
   },
   toolbar: {
@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
     '@media (max-width: 760px)': {
       marginLeft: '20px',
     },
+    color: theme.headerStyle.color,
   },
 
   // header right
@@ -44,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 15,
   },
   date: {
+    color: theme.headerStyle.color,
     position: 'relative',
     float: 'left',
     marginRight: '4px',
@@ -57,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   notificationIcon: {
+    color: theme.headerStyle.color,
     position: 'relative',
     transform: 'translateY(2px)',
     float: 'left',
@@ -131,8 +134,8 @@ const useStyles = makeStyles((theme) => ({
     bottom: '13px',
   },
   userButton: {
-    backgroundColor: theme.palette.black.main,
-    color: theme.palette.primary.contrastText,
+    backgroundColor: 'transparent',
+    color: theme.headerStyle.color,
     border: 'none',
     '&:hover': {
       cursor: 'pointer',
@@ -140,7 +143,7 @@ const useStyles = makeStyles((theme) => ({
   },
   active: {
     textDecoration: 'none',
-    color: theme.palette.primary.main,
+    color: theme.headerStyle.activeColor, // temporary
   },
   userDropdownContent: {
     position: 'fixed',
@@ -173,7 +176,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header({ handleSidebarToggle, hideToggle }) {
+export default function Header() {
   const dispatch = useDispatch();
   const classes = useStyles();
   const history = useHistory();
@@ -416,7 +419,6 @@ export default function Header({ handleSidebarToggle, hideToggle }) {
     <div>
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
-          <Icon.Overview className={hideToggle ? classes.hide : classes.item} onClick={handleSidebarToggle} />
           {itemList.map((item) => (
             <Typography
               variant="h6"

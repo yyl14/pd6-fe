@@ -13,7 +13,7 @@ const editAccount = (token, id, nickName, email) => async (dispatch) => {
     if (email) {
       accountInfo.alternative_email = email;
     }
-    const res = await agent.patch(`/account/${id}`, accountInfo, config);
+    await agent.patch(`/account/${id}`, accountInfo, config);
     dispatch({
       type: userConstants.EDIT_SELF_ACCOUNT_SUCCESS,
       payload: {
@@ -108,7 +108,7 @@ const addStudentCard = (token, id, instituteId, emailPrefix, studentId, onSucces
     });
 };
 
-const editPassword = (token, id, oldPassword, newPassword, onSuccess) => (dispatch) => {
+const editPassword = (token, id, oldPassword, newPassword, onSuccess, onError) => (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
@@ -134,6 +134,7 @@ const editPassword = (token, id, oldPassword, newPassword, onSuccess) => (dispat
         type: userConstants.EDIT_SELF_PASSWORD_FAIL,
         error,
       });
+      onError();
     });
 };
 

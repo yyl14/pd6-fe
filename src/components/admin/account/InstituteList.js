@@ -13,7 +13,7 @@ import {
   Switch,
   Snackbar,
 } from '@material-ui/core';
-import { MdAdd } from 'react-icons/md';
+import Icon from '../../ui/icon/index';
 import PageTitle from '../../ui/PageTitle';
 import CustomTable from '../../ui/CustomTable';
 import AlignedText from '../../ui/AlignedText';
@@ -159,7 +159,7 @@ export default function InstituteList() {
         buttons={(
           <>
             <Button color="primary" onClick={() => setPopUp(true)}>
-              <MdAdd />
+              <Icon.Add />
             </Button>
           </>
         )}

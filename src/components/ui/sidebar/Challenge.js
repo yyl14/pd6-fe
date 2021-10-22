@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
@@ -14,11 +14,7 @@ export default function Challenge({
     courseId, classId, challengeId, problemId, submissionId,
   } = useParams();
   const baseURL = '/my-class';
-  const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.myClass.challenge);
   const challenges = useSelector((state) => state.challenges.byId);
-  const challengesID = useSelector((state) => state.challenges.allIds);
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
@@ -86,6 +82,7 @@ export default function Challenge({
             ],
             challenges[challengeId].problemIds
               .map((id) => problems.byId[id])
+              .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
               .map(({ id, challenge_label }) => ({
                 text: challenge_label,
                 icon: <Icon.Code />,
@@ -93,6 +90,7 @@ export default function Challenge({
               })),
             challenges[challengeId].essayIds
               .map((id) => essays.byId[id])
+              .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
               .map(({ id, challenge_label }) => ({
                 text: challenge_label,
                 icon: <Icon.Paper />,
@@ -100,6 +98,7 @@ export default function Challenge({
               })),
             challenges[challengeId].peerReviewIds
               .map((id) => peerReviews.byId[id])
+              .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
               .map(({ id, challenge_label }) => ({
                 text: challenge_label,
                 icon: <Icon.Peerreview />,
@@ -129,6 +128,7 @@ export default function Challenge({
               ],
               challenges[challengeId].problemIds
                 .map((id) => problems.byId[id])
+                .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
                 .map(({ id, challenge_label }) => ({
                   text: challenge_label,
                   icon: <Icon.Code />,
@@ -136,6 +136,7 @@ export default function Challenge({
                 })),
               challenges[challengeId].essayIds
                 .map((id) => essays.byId[id])
+                .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
                 .map(({ id, challenge_label }) => ({
                   text: challenge_label,
                   icon: <Icon.Paper />,
@@ -143,6 +144,7 @@ export default function Challenge({
                 })),
               challenges[challengeId].peerReviewIds
                 .map((id) => peerReviews.byId[id])
+                .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
                 .map(({ id, challenge_label }) => ({
                   text: challenge_label,
                   icon: <Icon.Peerreview />,
@@ -229,7 +231,7 @@ export default function Challenge({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [challengeId, challenges, classId, courseId, problems, essays, history, location.pathname, mode]);
+  }, [challengeId, challenges, classId, courseId, problems, essays, peerReviews, history, location.pathname, mode]);
 
   const addTaskItemColor = (popup) => {
     if (popup) {

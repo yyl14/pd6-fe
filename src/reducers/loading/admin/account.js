@@ -18,6 +18,10 @@ const initialState = {
   browsePendingStudentCards: false,
   resendEmailVerification: false,
   deletePendingStudentCard: false,
+
+  addAccount: false,
+  importAccount: false,
+  downloadAccountFile: false,
 };
 
 export default function account(state = initialState, action) {
@@ -284,6 +288,63 @@ export default function account(state = initialState, action) {
       return {
         ...state,
         deletePendingStudentCard: false,
+      };
+    }
+
+    case accountConstants.ADD_ACCOUNT_START: {
+      return {
+        ...state,
+        addAccount: true,
+      };
+    }
+    case accountConstants.ADD_ACCOUNT_SUCCESS: {
+      return {
+        ...state,
+        addAccount: false,
+      };
+    }
+    case accountConstants.ADD_ACCOUNT_FAIL: {
+      return {
+        ...state,
+        addAccount: false,
+      };
+    }
+
+    case accountConstants.IMPORT_ACCOUNT_START: {
+      return {
+        ...state,
+        importAccount: true,
+      };
+    }
+    case accountConstants.IMPORT_ACCOUNT_SUCCESS: {
+      return {
+        ...state,
+        importAccount: false,
+      };
+    }
+    case accountConstants.IMPORT_ACCOUNT_FAIL: {
+      return {
+        ...state,
+        importAccount: false,
+      };
+    }
+
+    case accountConstants.DOWNLOAD_ACCOUNT_FILE_START: {
+      return {
+        ...state,
+        downloadAccountFile: true,
+      };
+    }
+    case accountConstants.DOWNLOAD_ACCOUNT_FILE_SUCCESS: {
+      return {
+        ...state,
+        downloadAccountFile: false,
+      };
+    }
+    case accountConstants.DOWNLOAD_ACCOUNT_FILE_FAIL: {
+      return {
+        ...state,
+        downloadAccountFile: false,
       };
     }
 

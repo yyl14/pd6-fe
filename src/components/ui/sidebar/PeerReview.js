@@ -1,24 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
 } from '@material-ui/core';
 import Icon from '../icon/index';
-import TaskAddingCard from '../../normal/myClass/Challenge/TaskAddingCard';
 
 export default function PeerReview({
   classNames, history, location, mode, open, onClose,
 }) {
   const {
-    courseId, classId, challengeId, peerReviewId, accountId, recordId,
+    courseId, classId, challengeId, peerReviewId, accountId,
   } = useParams();
   const baseURL = '/my-class';
-  const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.myClass.challenge);
   const challenges = useSelector((state) => state.challenges.byId);
-  const challengesID = useSelector((state) => state.challenges.allIds);
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
@@ -40,11 +35,15 @@ export default function PeerReview({
     };
 
     const goBackToPeerReviewGraderSummary = () => {
-      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/grader-summary`);
+      history.push(
+        `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/grader-summary`,
+      );
     };
 
     const goBackToPeerReviewReceiverSummary = () => {
-      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary`);
+      history.push(
+        `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary`,
+      );
     };
 
     if (mode === 'peer-review-summary') {
@@ -71,7 +70,11 @@ export default function PeerReview({
           path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/grader-summary`,
         },
       ]);
-    } else if (mode === 'review' && peerReviews[peerReviewId] !== undefined && peerReviews[peerReviewId].reviewRecordIds !== undefined) {
+    } else if (
+      mode === 'review'
+      && peerReviews[peerReviewId] !== undefined
+      && peerReviews[peerReviewId].reviewRecordIds !== undefined
+    ) {
       if (userClasses.find((x) => x.class_id === Number(classId))?.role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
         setArrow(
@@ -110,7 +113,11 @@ export default function PeerReview({
             })),
         );
       }
-    } else if (mode === 'receive' && peerReviews[peerReviewId] !== undefined && peerReviews[peerReviewId].receiveRecordIds !== undefined) {
+    } else if (
+      mode === 'receive'
+      && peerReviews[peerReviewId] !== undefined
+      && peerReviews[peerReviewId].receiveRecordIds !== undefined
+    ) {
       if (userClasses.find((x) => x.class_id === Number(classId))?.role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
         setArrow(
@@ -148,7 +155,7 @@ export default function PeerReview({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [challengeId, challenges, classId, courseId, problems, essays, history, location.pathname, mode]);
+  }, [challengeId, challenges, classId, courseId, problems, essays, peerReviews, history, location.pathname, mode]);
 
   const foldChallenge = () => {
     setDisplay('fold');

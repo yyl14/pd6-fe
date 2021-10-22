@@ -1,7 +1,5 @@
 import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
-import ErrorText from './components/ui/ErrorText';
-
-const classicTheme = false;
+import ErrorText from '../components/ui/ErrorText';
 
 // UI/UX Standard
 /*
@@ -11,151 +9,86 @@ const classicTheme = false;
 /*  Colors  */
 const mono = {
   white: '#FFFFFF',
-  veryLightGray: '#F8F8F8',
-  lightGray: '#EAEAEA',
-  emptyGray: '#C4C4C4',
-  gray: '#CACACA',
-  semiDarkGray: '#AAAAAA',
-  darkGray: '#656565',
-  lightBlack: '#090909',
-  black: '#000000',
+  veryLightGray: '#fff9f2',
+  lightGray: '#d9d9d9',
+  emptyGray: '#b5b5b5',
+  gray: '#b5b5b5',
+  semiDarkGray: '#AE9f90',
+  darkGray: '#786c5f',
+  lightBlack: '#786c5f',
+  black: '#090909',
 };
 
 const blue = {
-  60: '#8DD1FF',
-  80: '#6DC5FF',
-  100: '#1EA5FF',
-  dark: '#1184D1',
+  60: '#d0eafa',
+  80: '#bedff3',
+  100: '#58a6d6',
+  dark: '#2690d1',
 };
 
 const red = {
-  60: '#FF9A9A',
-  80: '#FF8176',
-  100: '#EA3222',
-  dark: '#D51D0D',
+  60: '#f5dac4',
+  80: '#e5c4a9',
+  100: '#d5aa88',
+  dark: '#d1884f',
 };
 
-const dogeMono = {
-  white: '#FFFFFF',
-  veryLightGray: '#F8F8F8',
-  lightGray: '#aca4a4',
-  gray: '#D8cec0',
-  semiDarkGray: '#615b4e',
-  darkGray: '#656565',
-  black: '#615b4e',
+const green = {
+  100: '#2690d1',
 };
 
-const doge = {
-  60: '#F2ead5',
-  80: '#FF8176',
-  100: '#d7b388',
-  dark: '#Cd9a5a',
-};
-
-const dogeRed = {
-  60: '#dca4a4',
-  80: '#c68181',
-  100: '#b44c4c',
-  dark: '#a42c04',
-};
-
-const palette = classicTheme
-  ? {
-    /*
+const palette = {
+  /*
   Default components applies colors in "grey" sub-object if "color" prop was not specified.
   See component source code to see which one it applies
   (eg. grey[300] for contained Button backgroundColor).
   */
-    grey: {
-      100: dogeMono.lightGray,
-      300: dogeMono.gray, // root backgroundColor for Contained Buttons, etc.
-      A100: dogeMono.lightGray,
-      A400: dogeMono.darkGray,
-      A700: dogeMono.semiDarkGray,
-    },
+  grey: {
+    100: mono.lightGray,
+    300: mono.gray, // root backgroundColor for Contained Buttons, etc.
+    A100: mono.lightGray,
+    A400: mono.darkGray,
+    A500: mono.emptyGray,
+    A700: mono.semiDarkGray,
+  },
 
-    black: {
-      main: mono.lightBlack,
-      dark: mono.black,
-    },
+  black: {
+    main: mono.lightBlack,
+    dark: mono.black,
+  },
 
-    // primary: blue
-    primary: {
-      light: doge[60],
-      hover: doge[80],
-      main: doge[100],
-      dark: doge.dark,
-      contrastText: 'white',
-    },
+  // primary: brown
+  primary: {
+    light: blue[60],
+    hover: blue[80],
+    main: blue[100],
+    dark: blue.dark,
+    contrastText: 'white',
+  },
+  // secondary: red
+  secondary: {
+    light: red[60],
+    main: red[100],
+    dark: red.dark,
+    contrastText: 'white',
+  },
 
-    // secondary: red
-    secondary: {
-      light: dogeRed[60],
-      main: dogeRed[100],
-      dark: dogeRed.dark,
-      contrastText: 'white',
-    },
+  green: {
+    main: green[100],
+  },
 
-    action: {
-      disabledBackground: dogeMono.gray,
-      disabled: dogeMono.lightGray, // font color
-      disabledOpacity: '100%',
-    },
+  action: {
+    disabledBackground: mono.gray,
+    disabled: mono.lightGray, // font color
+    disabledOpacity: '100%',
+  },
 
-    background: {
-      default: dogeMono.veryLightGray, // mono - very light
-      paper: 'white',
-      card: 'white',
-    },
-  }
-  : {
-    /*
-  Default components applies colors in "grey" sub-object if "color" prop was not specified.
-  See component source code to see which one it applies
-  (eg. grey[300] for contained Button backgroundColor).
-  */
-    grey: {
-      100: mono.lightGray,
-      300: mono.gray, // root backgroundColor for Contained Buttons, etc.
-      A100: mono.lightGray,
-      A400: mono.darkGray,
-      A500: mono.emptyGray,
-      A700: mono.semiDarkGray,
-    },
-
-    black: {
-      main: mono.lightBlack,
-      dark: mono.black,
-    },
-
-    // primary: blue
-    primary: {
-      light: blue[60],
-      hover: blue[80],
-      main: blue[100],
-      dark: blue.dark,
-      contrastText: 'white',
-    },
-    // secondary: red
-    secondary: {
-      light: red[60],
-      main: red[100],
-      dark: red.dark,
-      contrastText: 'white',
-    },
-
-    action: {
-      disabledBackground: mono.gray,
-      disabled: mono.lightGray, // font color
-      disabledOpacity: '100%',
-    },
-
-    background: {
-      default: mono.veryLightGray, // mono - very light
-      paper: 'white',
-      card: 'white',
-    },
-  };
+  background: {
+    default: mono.veryLightGray, // mono - very light
+    paper: 'white',
+    card: 'white',
+  },
+};
 
 const typography = {
   /* Note: to change default html font size (basis of 'rem'), go to src/styles/index.css */
@@ -247,6 +180,21 @@ const shape = {
 };
 
 const overrides = {
+  MuiCssBaseline: {
+    '@global': {
+      a: {
+        textDecoration: 'none',
+        color: blue[100],
+        cursor: 'pointer',
+        '&:hover': {
+          color: blue[80],
+        },
+        '&:active': {
+          color: blue.dark,
+        },
+      },
+    },
+  },
   // "Button"
   MuiButton: {
     root: {
@@ -722,12 +670,22 @@ const props = {
   },
 };
 
+const components = {};
+
+const headerStyle = {
+  background: palette.primary.light,
+  color: palette.primary.dark,
+  activeColor: palette.primary.main,
+};
+
 const theme = createTheme({
   palette,
   typography,
   shape,
   overrides,
   props,
+  components,
+  headerStyle,
 });
 
 export default responsiveFontSizes(theme);
