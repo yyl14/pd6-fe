@@ -116,7 +116,7 @@ const byId = (state = {}, action) => {
         state,
       );
     }
-    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+    case viewConstants.BROWSE_MY_SUBMISSION_SUCCESS: {
       const { challenges } = action.payload.data;
       return challenges.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
     }
@@ -147,7 +147,7 @@ const allIds = (state = [], action) => {
       const { challenges } = action.payload;
       return [...new Set([...challenges.map((item) => item.id), ...state])];
     }
-    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+    case viewConstants.BROWSE_MY_SUBMISSION_SUCCESS: {
       const { challenges } = action.payload.data;
       return [...new Set([...challenges.map((item) => item.id), ...state])];
     }

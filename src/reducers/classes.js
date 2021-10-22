@@ -1,9 +1,7 @@
 import { combineReducers } from 'redux';
 import { courseConstants } from '../actions/admin/constant';
 import { commonConstants } from '../actions/common/constant';
-import {
-  teamConstants, challengeConstants, submissionConstants,
-} from '../actions/myClass/constant';
+import { teamConstants, challengeConstants, submissionConstants } from '../actions/myClass/constant';
 import { viewConstants } from '../actions/api/constant';
 
 const prototype = {
@@ -161,7 +159,7 @@ const byId = (state = {}, action) => {
         },
       };
     }
-    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+    case viewConstants.BROWSE_MY_SUBMISSION_SUCCESS: {
       const { classes } = action.payload.data;
       return classes.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
     }
@@ -182,7 +180,7 @@ const allIds = (state = [], action) => {
       // console.log(id);
       return [...new Set([id, ...state])];
     }
-    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+    case viewConstants.BROWSE_MY_SUBMISSION_SUCCESS: {
       const { classes } = action.payload.data;
       return [...new Set([...classes.map((item) => item.id), ...state])];
     }
