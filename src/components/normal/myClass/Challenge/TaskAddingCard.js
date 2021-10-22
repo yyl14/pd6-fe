@@ -90,7 +90,7 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [showAddEssayErrorSnackbar, setShowAddEssayErrorSnackbar] = useState(false);
   const [showAddPeerReviewErrorSnackbar, setShowAddPeerReviewErrorSnackbar] = useState(false);
   const [showAddScoreboardErrorSnackbar, setShowAddScoreboardErrorSnackbar] = useState(false);
-  const [scoreboardType, setScoreboardType] = useState('Team Project');
+  const [scoreboardType, setScoreboardType] = useState('TEAM_PROJECT');
   const [targetProblems, setTargetProblems] = useState([]);
   const [scoringFormula, setScoringFormula] = useState('');
   const [baselineTeam, setBaselineTeam] = useState('');
@@ -171,6 +171,13 @@ export default function TaskAddingCard({ open, setOpen }) {
     }
   }, [authToken, dispatch, peerReviewChallengeId]);
 
+  const transLabelToId = (labels) => {
+    const ids = labels.map(
+      (key) => challenges.byId[challengeId].problemIds.filter((id) => problems.byId[id].challenge_label === key)[0],
+    );
+    return ids;
+  };
+
   const handleCreate = () => {
     switch (type) {
       case 'Coding Problem': {
@@ -214,13 +221,23 @@ export default function TaskAddingCard({ open, setOpen }) {
         break;
       }
       case 'Scoreboard': {
-        // const body = {}
+        const rankByTotalScore = true;
+        const targetProblemIds = transLabelToId(targetProblems);
+        const body = {
+          label,
+          title,
+          target_problem_ids: targetProblemIds,
+          scoring_formula: scoringFormula,
+          baseline_team_id: baselineTeam,
+          rank_by_total_score: rankByTotalScore,
+          team_label_filter: teamLabelFilter,
+        };
         // dispatch(
         //   addTeamProjectScoreboardUnderChallenge(authToken, challengeId, history, courseId, classId, body, () => {
         //     showAddScoreboardErrorSnackbar(true);
         //   }),
         // );
-        setScoreboardType('Team Project');
+        setScoreboardType('TEAM_PROJECT');
         setTargetProblems([]);
         setScoringFormula('');
         setBaselineTeam('');
@@ -245,7 +262,7 @@ export default function TaskAddingCard({ open, setOpen }) {
     setDisabled(true);
     setOpen(false);
 
-    setScoreboardType('Team Project');
+    setScoreboardType('TEAM_PROJECT');
     setTargetProblems([]);
     setScoringFormula('');
     setBaselineTeam('');
@@ -316,8 +333,8 @@ export default function TaskAddingCard({ open, setOpen }) {
                   }}
                   style={{ width: '350px' }}
                 >
-                  <MenuItem value="Team Project">Team Project</MenuItem>
-                  <MenuItem value="Contest">Contest</MenuItem>
+                  <MenuItem value="TEAM_PROJECT">Team Project</MenuItem>
+                  {/* <MenuItem value="TEAM_CONTEST">Contest</MenuItem> */}
                 </Select>
               </FormControl>
             </AlignedText>
@@ -491,7 +508,11 @@ export default function TaskAddingCard({ open, setOpen }) {
         message={`Error: ${error.myClass.challenge.addPeerReview}. Check whether the input numbers are valid.`}
         onClose={() => setShowAddPeerReviewErrorSnackbar(false)}
       />
-      {/* <Snackbar /> */}
+      {/* <Snackbar
+        open={showAddScoreboardErrorSnackbar}
+        message={`Error: ${error.}`}
+        onClose={() => setShowAddScoreboardErrorSnackbar(false)}
+      /> */}
     </>
   );
 }
