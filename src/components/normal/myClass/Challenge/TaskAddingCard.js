@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     height: '1px',
     margin: '0px',
-    border: `0px solid ${theme.palette.grey[300]}`,
+    border: `0.5px solid ${theme.palette.grey[300]}`,
     backgroundColor: theme.palette.grey[300],
   },
   peerReviewCard_display: {
@@ -439,7 +439,7 @@ export default function TaskAddingCard({ open, setOpen }) {
           </div>
           {type === 'Scoreboard' && (
             <div>
-              <hr className={classNames.divider} />
+              {/* <hr className={classNames.divider} /> */}
               <AlignedText text="Target Problems" childrenType="field">
                 <MultiSelect
                   options={challenges.byId[challengeId].problemIds.map((id) => problems.byId[id].challenge_label)}
@@ -512,11 +512,11 @@ export default function TaskAddingCard({ open, setOpen }) {
         message={`Error: ${error.myClass.challenge.addPeerReview}. Check whether the input numbers are valid.`}
         onClose={() => setShowAddPeerReviewErrorSnackbar(false)}
       />
-      {/* <Snackbar
+      <Snackbar
         open={showAddScoreboardErrorSnackbar}
-        message={`Error: ${error.}`}
+        message={`Error: ${error.api.scoreboard}`}
         onClose={() => setShowAddScoreboardErrorSnackbar(false)}
-      /> */}
+      />
     </>
   );
 }
