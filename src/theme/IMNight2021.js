@@ -180,6 +180,21 @@ const shape = {
 };
 
 const overrides = {
+  MuiCssBaseline: {
+    '@global': {
+      a: {
+        textDecoration: 'none',
+        color: blue[100],
+        cursor: 'pointer',
+        '&:hover': {
+          color: blue[80],
+        },
+        '&:active': {
+          color: blue.dark,
+        },
+      },
+    },
+  },
   // "Button"
   MuiButton: {
     root: {
@@ -655,6 +670,8 @@ const props = {
   },
 };
 
+const components = {};
+
 const headerStyle = {
   background: palette.primary.light,
   color: palette.primary.dark,
@@ -667,6 +684,7 @@ const theme = createTheme({
   shape,
   overrides,
   props,
+  components,
   headerStyle,
 });
 
