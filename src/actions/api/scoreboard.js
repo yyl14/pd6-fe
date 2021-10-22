@@ -2,7 +2,7 @@ import agent from '../agent';
 import { scoreboardConstants } from './constant';
 import { browseTasksUnderChallenge } from '../myClass/challenge';
 
-export const addTeamProjectScoreboardUnderChallenge = (token, challengeId, history, courseId, classId, body) => async (dispatch) => {
+export const addTeamProjectScoreboardUnderChallenge = (token, challengeId, history, courseId, classId, body, onError) => async (dispatch) => {
   try {
     const config = { headers: { 'auth-token': token } };
     dispatch({ type: scoreboardConstants.ADD_TEAM_PROJECT_SCOREBOARD_UNDER_CHALLENGE_START });
@@ -17,6 +17,7 @@ export const addTeamProjectScoreboardUnderChallenge = (token, challengeId, histo
       type: scoreboardConstants.ADD_TEAM_PROJECT_SCOREBOARD_UNDER_CHALLENGE_FAIL,
       error,
     });
+    onError();
   }
 };
 
