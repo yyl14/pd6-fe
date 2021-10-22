@@ -78,13 +78,6 @@ export default function CodingProblem() {
     setEdit(false);
   }, [problemId]);
 
-  if (loading.readProblem || loading.readChallenge) {
-    return <GeneralLoading />;
-  }
-  // if (error.readChallenge != null || error.readProblem != null) {
-  //   return <div>System Exception</div>;
-  // }
-
   if (
     problems[problemId] === undefined
     || challenges[challengeId] === undefined
