@@ -178,6 +178,10 @@ export default function TaskAddingCard({ open, setOpen }) {
     return ids;
   };
 
+  const addScoreboardSuccess = (scoreboardId) => {
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/scoreboard/${scoreboardId}`);
+  };
+
   const handleCreate = () => {
     switch (type) {
       case 'Coding Problem': {
@@ -233,7 +237,7 @@ export default function TaskAddingCard({ open, setOpen }) {
           team_label_filter: teamLabelFilter,
         };
         // dispatch(
-        //   addTeamProjectScoreboardUnderChallenge(authToken, challengeId, history, courseId, classId, body, () => {
+        //   addTeamProjectScoreboardUnderChallenge(authToken, challengeId, history, courseId, classId, body, addScoreboardSuccess, () => {
         //     showAddScoreboardErrorSnackbar(true);
         //   }),
         // );
