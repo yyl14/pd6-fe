@@ -175,7 +175,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     }
   }, [authToken, dispatch, problemId, role]);
 
-  if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
+  if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData || loading.readChallenge) {
     return <GeneralLoading />;
   }
 
