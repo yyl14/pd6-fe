@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { scoreboardConstants } from '../actions/api/constant';
+import { challengeConstants, scoreboardConstants } from '../actions/myClass/constant';
 
 const prototype = {
   id: null,
@@ -11,18 +11,21 @@ const prototype = {
   scoreboard_type: null,
   data: {
     scoring_formula: null,
-    baseline_team_id: null,
+    baseline_team_id: null, // optional
     rank_by_total_score: null,
-    team_label_filter: null,
+    team_label_filter: null, // optional
   },
 };
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    // case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
-    //   const { data } = action.payload;
-    //   return data.scoreboard.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...state[item.id], ...item } }), state);
-    // }
+    case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
+      const { data } = action.payload;
+      return data.scoreboard.reduce(
+        (acc, item) => ({ ...acc, [item.id]: { ...prototype, ...state[item.id], ...item } }),
+        state,
+      );
+    }
     case scoreboardConstants.READ_SCOREBOARD_SUCCESS: {
       return {
         ...state,
@@ -37,10 +40,10 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
-    // case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
-    //   const { data } = action.payload;
-    //   return [...new Set([...data.scoreboard.map((item) => item.id), ...state])];
-    // }
+    case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
+      const { data } = action.payload;
+      return [...new Set([...data.scoreboard.map((item) => item.id), ...state])];
+    }
     case scoreboardConstants.READ_SCOREBOARD_SUCCESS: {
       return [...new Set([action.payload.id, ...state])];
     }

@@ -24,6 +24,7 @@ const prototype = {
   specialJudgeIds: [],
   essayIds: [],
   statistics: emptyStatistics,
+  scoreboardIds: [],
 };
 
 const byId = (state = {}, action) => {
@@ -54,6 +55,7 @@ const byId = (state = {}, action) => {
           problemIds: data.problem.map((item) => item.id),
           peerReviewIds: data.peer_review.map((item) => item.id),
           essayIds: data.essay.map((item) => item.id),
+          scoreboardIds: data.scoreboard.map((item) => item.id),
         },
       };
     }

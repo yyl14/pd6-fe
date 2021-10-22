@@ -1,4 +1,4 @@
-import { scoreboardConstants } from '../../../actions/api/constant';
+import { scoreboardConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
   addTeamProjectScoreboardUnderChallenge: null,
