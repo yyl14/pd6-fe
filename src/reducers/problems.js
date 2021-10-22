@@ -162,7 +162,7 @@ const byId = (state = {}, action) => {
         },
       };
     }
-    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+    case viewConstants.BROWSE_MY_SUBMISSION_SUCCESS: {
       const { problems } = action.payload.data;
       return problems.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
     }
@@ -198,7 +198,7 @@ const allIds = (state = [], action) => {
       const data = action.payload;
       return [...new Set([...data.map((item) => item.problem_id), ...state])];
     }
-    case viewConstants.BROWSE_MYSUBMISSION_SUCCESS: {
+    case viewConstants.BROWSE_MY_SUBMISSION_SUCCESS: {
       const { problems } = action.payload.data;
       return [...new Set([...problems.map((item) => item.id), ...state])];
     }

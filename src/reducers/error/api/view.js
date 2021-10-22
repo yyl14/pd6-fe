@@ -62,13 +62,13 @@ export default function view(state = initialState, action) {
       };
     }
 
-    case viewConstants.BROWSE_MYSUBMISSION_START: {
+    case viewConstants.BROWSE_MY_SUBMISSION_START: {
       return {
         ...state,
         browsemySubmission: null,
       };
     }
-    case viewConstants.BROWSE_MYSUBMISSION_FAIL: {
+    case viewConstants.BROWSE_MY_SUBMISSION_FAIL: {
       return {
         ...state,
         browseMySubmission: action.error,
