@@ -34,12 +34,9 @@ const byId = (state = {}, action) => {
         (acc, item) => ({
           ...acc,
           [item.id]: {
+            ...prototype,
+            ...state[item.id],
             ...item,
-            problemIds: state[item.id] ? state[item.id].problemIds : [],
-            peerReviewIds: state[item.id] ? state[item.id].peerReviewIds : [],
-            specialJudgeIds: state[item.id] ? state[item.id].specialJudgeIds : [],
-            essayIds: state[item.id] ? state[item.id].essayIds : [],
-            statistics: state[item.id] ? state[item.id].statistics : emptyStatistics,
           },
         }),
         state,
@@ -50,6 +47,7 @@ const byId = (state = {}, action) => {
       return {
         ...state,
         [id]: {
+          ...prototype,
           ...state[id],
           problemIds: data.problem.map((item) => item.id),
           peerReviewIds: data.peer_review.map((item) => item.id),
@@ -62,12 +60,9 @@ const byId = (state = {}, action) => {
       return {
         ...state,
         [data.id]: {
+          ...prototype,
+          ...state[data.id],
           ...data,
-          problemIds: state[data.id] ? state[data.id].problemIds : [],
-          peerReviewIds: state[data.id] ? state[data.id].peerReviewIds : [],
-          specialJudgeIds: state[data.id] ? state[data.id].specialJudgeIds : [],
-          essayIds: state[data.id] ? state[data.id].essayIds : [],
-          statistics: state[data.id] ? state[data.id].statistics : emptyStatistics,
         },
       };
     }
@@ -78,6 +73,7 @@ const byId = (state = {}, action) => {
         [challengeId]: {
           ...state[challengeId],
           statistics: {
+            ...prototype,
             ...state[challengeId].statistics,
             summary: data,
           },
@@ -92,6 +88,7 @@ const byId = (state = {}, action) => {
         [challengeId]: {
           ...state[challengeId],
           statistics: {
+            ...prototype,
             ...state[challengeId].statistics,
             memberSubmission: data,
           },
@@ -105,12 +102,9 @@ const byId = (state = {}, action) => {
         (acc, item) => ({
           ...acc,
           [item.id]: {
+            ...prototype,
+            ...state[item.id],
             ...item,
-            problemIds: state[item.id] ? state[item.id].problemIds : [],
-            peerReviewIds: state[item.id] ? state[item.id].peerReviewIds : [],
-            specialJudgeIds: state[item.id] ? state[item.id].specialJudgeIds : [],
-            essayIds: state[item.id] ? state[item.id].essayIds : [],
-            statistics: state[item.id] ? state[item.id].statistics : emptyStatistics,
           },
         }),
         state,
@@ -118,7 +112,10 @@ const byId = (state = {}, action) => {
     }
     case viewConstants.BROWSE_MY_SUBMISSION_SUCCESS: {
       const { challenges } = action.payload.data;
-      return challenges.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
+      return challenges.reduce(
+        (acc, item) => ({ ...acc, [item.id]: { ...prototype, ...state[item.id], ...item } }),
+        state,
+      );
     }
 
     case peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_SUCCESS: {
