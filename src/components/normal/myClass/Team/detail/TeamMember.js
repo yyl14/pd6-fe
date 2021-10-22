@@ -1,16 +1,14 @@
 import React from 'react';
-import {
-  Button,
-} from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import SimpleBar from '../../../../ui/SimpleBar';
 import SimpleTable from '../../../../ui/SimpleTable';
 
-export default function BasicInfo(props) {
+export default function TeamMember(props) {
   return (
     <div>
       <SimpleBar
         title="Team Member"
-        buttons={props.isManager && (<Button onClick={() => props.handleEdit()}>Edit</Button>)}
+        buttons={props.isManager && <Button onClick={() => props.handleEdit()}>Edit</Button>}
         noIndent
       >
         <SimpleTable

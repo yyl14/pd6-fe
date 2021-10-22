@@ -13,6 +13,7 @@ import {
   FormControl,
   Select,
   MenuItem,
+  Snackbar,
 } from '@material-ui/core';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
@@ -61,7 +62,7 @@ export default function TaskAddingCard({ open, setOpen }) {
   const challenges = useSelector((state) => state.challenges);
   const authToken = useSelector((state) => state.auth.token);
   const problems = useSelector((state) => state.problem);
-  // const error = useSelector((state) => state.error);
+  const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
   const commonLoading = useSelector((state) => state.loading.common);
 
@@ -75,6 +76,9 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [maxScore, setMaxScore] = useState(3);
   const [minScore, setMinScore] = useState(1);
   const [peerNumber, setPeerNumber] = useState(2);
+  const [showAddProblemErrorSnackbar, setShowAddProblemErrorSnackbar] = useState(false);
+  const [showAddEssayErrorSnackbar, setShowAddEssayErrorSnackbar] = useState(false);
+  const [showAddPeerReviewErrorSnackbar, setShowAddPeerReviewErrorSnackbar] = useState(false);
 
   useEffect(() => {
     if (!loading.addProblem && !loading.addEssay && !loading.addPeerReview) {
@@ -99,7 +103,16 @@ export default function TaskAddingCard({ open, setOpen }) {
         && minScore !== ''
         && peerNumber !== ''
       ) {
-        setDisabled(false);
+        if (
+          Number(maxScore) <= Number(minScore)
+          || Number(maxScore) < 0
+          || Number(minScore) < 0
+          || Number(peerNumber) < 0
+        ) {
+          setDisabled(true);
+        } else {
+          setDisabled(false);
+        }
       } else {
         setDisabled(true);
       }
@@ -126,11 +139,19 @@ export default function TaskAddingCard({ open, setOpen }) {
   const handleCreate = () => {
     switch (type) {
       case 'Coding Problem': {
-        dispatch(addProblem(authToken, challengeId, label, title, history, courseId, classId));
+        dispatch(
+          addProblem(authToken, challengeId, label, title, history, courseId, classId, () => {
+            setShowAddProblemErrorSnackbar(true);
+          }),
+        );
         break;
       }
       case 'Essay(PDF)': {
-        dispatch(addEssay(authToken, challengeId, label, title, history, courseId, classId));
+        dispatch(
+          addEssay(authToken, challengeId, label, title, history, courseId, classId, () => {
+            setShowAddEssayErrorSnackbar(true);
+          }),
+        );
         break;
       }
       case 'Peer Review': {
@@ -147,6 +168,9 @@ export default function TaskAddingCard({ open, setOpen }) {
             history,
             courseId,
             classId,
+            () => {
+              setShowAddPeerReviewErrorSnackbar(true);
+            },
           ),
         );
         setPeerReviewChallengeId('');
@@ -322,6 +346,21 @@ export default function TaskAddingCard({ open, setOpen }) {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={showAddProblemErrorSnackbar}
+        message={`Error: ${error.myClass.challenge.addProblem}`}
+        onClose={() => setShowAddProblemErrorSnackbar(false)}
+      />
+      <Snackbar
+        open={showAddEssayErrorSnackbar}
+        message={`Error: ${error.myClass.challenge.addEssay}`}
+        onClose={() => setShowAddEssayErrorSnackbar(false)}
+      />
+      <Snackbar
+        open={showAddPeerReviewErrorSnackbar}
+        message={`Error: ${error.myClass.challenge.addPeerReview}. Check whether the input numbers are valid.`}
+        onClose={() => setShowAddPeerReviewErrorSnackbar(false)}
+      />
     </>
   );
 }

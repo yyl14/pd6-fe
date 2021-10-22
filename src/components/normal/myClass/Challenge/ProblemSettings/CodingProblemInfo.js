@@ -23,6 +23,7 @@ import SimpleTable from '../../../../ui/SimpleTable';
 import SampleTestArea from '../../../../ui/SampleTestArea';
 import AlignedText from '../../../../ui/AlignedText';
 import Icon from '../../../../ui/icon/index';
+import CodeArea from '../../../../ui/CodeArea';
 
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
@@ -93,7 +94,6 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   const [testcaseDataIds, setTestcaseDataIds] = useState([]);
   const [deletePopUp, setDeletePopUp] = useState(false);
   const [emailSentPopup, setEmailSentPopup] = useState(false);
-  // console.log('uploadError: ', uploadError);
 
   const handleDelete = () => {
     dispatch(deleteProblem(authToken, problemId));
@@ -374,6 +374,21 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
                 : []
             }
           />
+        </SimpleBar>
+      )}
+      {role === 'MANAGER' && problems[problemId].judge_type === 'CUSTOMIZED' && (
+        <SimpleBar
+          title="Customize Judge Code (Optional)"
+          noIndent
+          buttons={(
+            <FormControlLabel
+              control={<Switch checked name="customizeJudge" color="primary" disabled />}
+              label="Enabled"
+              className={classNames.statusSwitch}
+            />
+          )}
+        >
+          <CodeArea value={problems[problemId].judge_source.judge_code} />
         </SimpleBar>
       )}
       {role === 'MANAGER' && (

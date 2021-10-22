@@ -13,7 +13,7 @@ import CodingProblemEdit from './ProblemSettings/CodingProblemEdit';
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
-import { readProblemInfo, rejudgeProblem } from '../../../../actions/myClass/problem';
+import { readProblemWithJudgeCode, rejudgeProblem } from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles(() => ({
   sampleArea: {
@@ -71,7 +71,7 @@ export default function CodingProblem() {
   }, [classId, userClasses]);
 
   useEffect(() => {
-    dispatch(readProblemInfo(authToken, problemId));
+    dispatch(readProblemWithJudgeCode(authToken, problemId));
   }, [authToken, dispatch, problemId]);
 
   useEffect(() => {
