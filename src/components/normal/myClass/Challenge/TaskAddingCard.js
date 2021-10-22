@@ -237,7 +237,7 @@ export default function TaskAddingCard({ open, setOpen }) {
                   <Icon.Paper className={classNames.selectedIcon} />
                   Essay (PDF)
                 </MenuItem>
-                <MenuItem value="Peer Review">
+                <MenuItem value="Peer Review" disabled>
                   <Icon.Peerreview className={classNames.selectedIcon} />
                   Peer Review
                 </MenuItem>
