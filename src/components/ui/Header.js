@@ -216,6 +216,16 @@ export default function Header({ handleSidebarToggle, hideToggle }) {
   ]);
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      dispatch(userBrowseAnnouncement(authToken));// refresh every 10 mins
+    }, 600000);
+    return () => clearInterval(interval);
+  }, [
+    authToken,
+    dispatch,
+  ]);
+
+  useEffect(() => {
     switch (user.role) {
       case 'MANAGER': {
         setItemList([

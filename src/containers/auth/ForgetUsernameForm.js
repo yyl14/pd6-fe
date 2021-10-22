@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import React, { useSelector, useDispatch } from 'react-redux';
+import React, { useDispatch } from 'react-redux';
 import {
   Button, TextField, Card, CardContent, Typography, makeStyles, Link, Snackbar,
 } from '@material-ui/core';
@@ -30,8 +30,8 @@ export default function ForgetUsernameForm() {
   const classNames = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const error = useSelector((state) => state.error.user.auth);
-  const loading = useSelector((state) => state.loading.user.auth.forgetUsername);
+  // const error = useSelector((state) => state.error.user.auth);
+  // const loading = useSelector((state) => state.loading.user.auth.forgetUsername);
   const [email, setEmail] = useState('');
   const [showError, setShowError] = useState(false);
   const [errorText, setErrorText] = useState('');

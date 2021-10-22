@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import React, { useSelector, useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   Button,
   TextField,
@@ -40,8 +40,8 @@ export default function ForgetPasswordForm() {
   const classNames = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const error = useSelector((state) => state.error.user.auth);
-  const loading = useSelector((state) => state.loading.user.auth.forgetPassword);
+  // const error = useSelector((state) => state.error.user.auth);
+  // const loading = useSelector((state) => state.loading.user.auth.forgetPassword);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [showError, setShowError] = useState(false);

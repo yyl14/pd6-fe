@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
   Typography,
   Paper,
@@ -20,13 +21,14 @@ import {
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { autoTableMount, autoTableFlush } from '../../actions/component/autoTable';
 import Icon from './icon/index';
 import AutoTableHead from './AutoTableHead';
 
 /* eslint react-hooks/exhaustive-deps: 0 */
+
+// debug
 
 const useStyles = makeStyles((theme) => ({
   topContent1: {
@@ -258,7 +260,7 @@ function AutoTable({
     }
   ],
   */
-  defaultSort,
+  defaultSort = null,
   refetch, // function to call when table change page / filter / sort / clicked Refresh
   /*
   example value:
@@ -321,7 +323,6 @@ function AutoTable({
   // refresh
   const onRefresh = () => {
     dispatch(autoTableFlush(ident));
-    dispatch(autoTableFlush(ident));
     setDataComplete(false);
     setCurPage(0);
     setPageInput('1');
@@ -348,11 +349,8 @@ function AutoTable({
 
   const onSort = (key, sortDirection) => {
     setOrder({ key, order: sortDirection });
-    if (defaultSort) {
-      setSort([[key, sortDirection.toUpperCase()], defaultSort]);
-    } else {
-      setSort([[key, sortDirection.toUpperCase()]]);
-    }
+    setSort([[key, sortDirection.toUpperCase()]]);
+
     setDataComplete(false);
   };
 
@@ -387,11 +385,12 @@ function AutoTable({
 
   // table mount, create dynamic redux state
   useEffect(() => {
-    dispatch(autoTableMount(ident));
-    // set defaultSort
-    if (defaultSort !== undefined) {
-      setSort([defaultSort]);
-      setOrder({ key: defaultSort[0][0], order: defaultSort[0][1].toLowerCase() });
+    if (tableState.byId[ident] === undefined) {
+      dispatch(autoTableMount(ident));
+      // set defaultSort
+      if (defaultSort) {
+        setOrder({ key: defaultSort[0][0], order: defaultSort[0][1].toLowerCase() });
+      }
     }
   }, [ident]);
 
@@ -416,17 +415,15 @@ function AutoTable({
   }, [tableState.byId[ident], curPage, rowsPerPage]);
 
   useEffect(() => {
-    if (tableState.byId[ident]) {
-      setDisplayedRange(
-        Array.from(
-          {
-            length: rowsPerPage,
-          },
-          (_, id) => id + rowsPerPage * curPage,
-        ),
-      );
-    }
-  }, [tableState.byId[ident], rowsPerPage, curPage]);
+    setDisplayedRange(
+      Array.from(
+        {
+          length: rowsPerPage,
+        },
+        (_, id) => id + rowsPerPage * curPage,
+      ),
+    );
+  }, [rowsPerPage, curPage]);
 
   // switch page
   useEffect(() => {
@@ -440,20 +437,20 @@ function AutoTable({
       setDisplayedReduxData(newDisplayedReduxData);
     }
   }, [curPage, displayedRange, ident, reduxData.byId, tableState.byId]);
-
   // table refetch
   useEffect(() => {
     // remove ['something', '=', '']
     const adjustFilter = (oriFilter) => oriFilter.filter((item) => !(item[1] === '=' && item[2] === ''));
 
     if (!dataComplete) {
-      // console.log('refetch');
+      // console.log('refetch', ident);
+
       refetch(
         {
           limit: rowsPerPage,
           offset: curPage * rowsPerPage,
           filter: adjustFilter(filter),
-          sort,
+          sort: defaultSort ? [...sort, defaultSort] : sort,
         },
         ident,
       );
