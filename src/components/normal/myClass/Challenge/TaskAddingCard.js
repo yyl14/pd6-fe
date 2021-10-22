@@ -228,7 +228,7 @@ export default function TaskAddingCard({ open, setOpen }) {
         const rankByTotalScore = true;
         const targetProblemIds = transLabelToId(targetProblems);
         const body = {
-          label,
+          challenge_label: label,
           title,
           target_problem_ids: targetProblemIds,
           scoring_formula: scoringFormula,
