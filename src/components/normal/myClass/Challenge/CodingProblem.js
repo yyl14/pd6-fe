@@ -47,7 +47,6 @@ export default function CodingProblem() {
   const challenges = useSelector((state) => state.challenges.byId);
   const authToken = useSelector((state) => state.auth.token);
   //  const error = useSelector((state) => state.error.myClass.problem);
-  const loading = useSelector((state) => state.loading.myClass.problem);
   const commonLoading = useSelector((state) => state.loading.common);
   const [role, setRole] = useState('NORMAL');
 
