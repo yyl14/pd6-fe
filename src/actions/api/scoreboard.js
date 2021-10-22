@@ -1,8 +1,7 @@
 import agent from '../agent';
 import { scoreboardConstants } from './constant';
-import { browseTasksUnderChallenge } from '../myClass/challenge';
 
-export const addTeamProjectScoreboardUnderChallenge = (token, challengeId, history, courseId, classId, body, onError) => async (dispatch) => {
+export const addTeamProjectScoreboardUnderChallenge = (token, challengeId, history, courseId, classId, body, onSuccess, onError) => async (dispatch) => {
   try {
     const config = { headers: { 'auth-token': token } };
     dispatch({ type: scoreboardConstants.ADD_TEAM_PROJECT_SCOREBOARD_UNDER_CHALLENGE_START });
@@ -11,7 +10,7 @@ export const addTeamProjectScoreboardUnderChallenge = (token, challengeId, histo
     dispatch({
       type: scoreboardConstants.ADD_TEAM_PROJECT_SCOREBOARD_UNDER_CHALLENGE_SUCCESS,
     });
-    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/scoreboard/${id}`);
+    onSuccess(id);
   } catch (error) {
     dispatch({
       type: scoreboardConstants.ADD_TEAM_PROJECT_SCOREBOARD_UNDER_CHALLENGE_FAIL,
@@ -56,7 +55,7 @@ export const editTeamProjectScoreboard = (token, scoreboardId, body) => async (d
   }
 };
 
-export const deleteScoreboard = (token, scoreboardId, challengeId) => async (dispatch) => {
+export const deleteScoreboard = (token, scoreboardId) => async (dispatch) => {
   try {
     const config = {
       headers: {
@@ -66,7 +65,6 @@ export const deleteScoreboard = (token, scoreboardId, challengeId) => async (dis
     dispatch({ type: scoreboardConstants.DELETE_SCOREBOARD_START });
     await agent.delete(`scoreboard/${scoreboardId}`, config);
     dispatch({ type: scoreboardConstants.DELETE_SCOREBOARD_SUCCESS });
-    dispatch(browseTasksUnderChallenge(token, challengeId));
   } catch (error) {
     dispatch({
       type: scoreboardConstants.DELETE_SCOREBOARD_FAIL,
