@@ -75,11 +75,14 @@ export default function ScoreboardInfo() {
   const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges);
   // const scoreboards = useSelector((state) => state.scoreboards);
+  const userClasses = useSelector((state) => state.user.classes);
   const teamss = useSelector((state) => state.teams);
+
   const [scoreboardTitle, setScoreboardTitle] = useState(scoreboardBasicTitle);
   const [teams, setTeams] = useState([]);
   const [hasReadProblem, setHasReadProblem] = useState(false);
   const [edit, setEdit] = useState(false);
+  const [role, setRole] = useState('NORMAL');
 
   useEffect(() => {
     dispatch(fetchTeams(authToken, classId, ''));
@@ -88,6 +91,12 @@ export default function ScoreboardInfo() {
   // useEffect(() => {
   //   dispatch(readScoreboard(authToken, scoreboardId));
   // }, [authToken, dispatch, scoreboardId]);
+
+  useEffect(() => {
+    if (userClasses.filter((item) => item.class_id === Number(classId)).length !== 0) {
+      setRole(userClasses.filter((item) => item.class_id === Number(classId))[0].role);
+    }
+  }, [classId, userClasses]);
 
   useEffect(() => {
     if (teams.length > 0 && !hasReadProblem) {
@@ -158,11 +167,7 @@ export default function ScoreboardInfo() {
       {!edit ? (
         <SimpleBar
           title="Ranking Configuration"
-          buttons={(
-            <>
-              <Button onClick={() => setEdit(true)}>Edit</Button>
-            </>
-          )}
+          buttons={<>{role === 'MANAGER' && !edit && <Button onClick={() => setEdit(true)}>Edit</Button>}</>}
         >
           <AlignedText text="Scoreboard Type" childrenType="text">
             <Typography variant="body1">Team Project</Typography>

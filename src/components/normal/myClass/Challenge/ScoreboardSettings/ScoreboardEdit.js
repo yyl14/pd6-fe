@@ -42,17 +42,17 @@ export default function ScoreboardEdit({ setEdit }) {
   const teams = useSelector((state) => state.teams);
   const [targetLabels, setTargetLabels] = useState([48, 74].map((id) => problems.byId[id].challenge_label));
   // const [targetLabels, setTargetLabels] = useState(
-  //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].targetProblemIds.map((id) => problems.byId[id].challenge_label),
+  //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].target_problem_ids.map((id) => problems.byId[id].challenge_label),
   // );
   // const [scoringFormula, setScoringFormula] = useState(
-  //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.scoringFormula,
+  //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.scoring_formula,
   // );
   const [baselineTeam, setBaselineTeam] = useState(46);
   // const [baselineTeam, setBaselineTeam] = useState(
-  //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.baselineTeam,
+  //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.baseline_team_id,
   // );
   // const [teamLabelFilter, setTeamLabelFilter] = useState(
-  //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.teamLabelFilter,
+  //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.team_label_filter,
   // );
 
   const transIdToLabel = (ids) => ids.map((id) => problems.byId[id].challenge_label);
