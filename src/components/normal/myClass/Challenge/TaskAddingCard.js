@@ -137,7 +137,7 @@ export default function TaskAddingCard({ open, setOpen }) {
         setDisabled(true);
       }
     } else if (type === 'Scoreboard') {
-      if (label !== '' && title !== '' && targetProblems !== [] && scoringFormula !== '') {
+      if (label !== '' && title !== '' && targetProblems.length !== 0 && scoringFormula !== '') {
         setDisabled(false);
       } else setDisabled(true);
     }
@@ -225,7 +225,6 @@ export default function TaskAddingCard({ open, setOpen }) {
         break;
       }
       case 'Scoreboard': {
-        const rankByTotalScore = true;
         const targetProblemIds = transLabelToId(targetProblems);
         const body = {
           challenge_label: label,
@@ -233,7 +232,7 @@ export default function TaskAddingCard({ open, setOpen }) {
           target_problem_ids: targetProblemIds,
           scoring_formula: scoringFormula,
           baseline_team_id: baselineTeam,
-          rank_by_total_score: rankByTotalScore,
+          rank_by_total_score: true,
           team_label_filter: teamLabelFilter,
         };
         // dispatch(
@@ -439,7 +438,6 @@ export default function TaskAddingCard({ open, setOpen }) {
           </div>
           {type === 'Scoreboard' && (
             <div>
-              {/* <hr className={classNames.divider} /> */}
               <AlignedText text="Target Problems" childrenType="field">
                 <MultiSelect
                   options={challenges.byId[challengeId].problemIds.map((id) => problems.byId[id].challenge_label)}
