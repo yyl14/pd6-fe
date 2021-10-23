@@ -1,7 +1,9 @@
 import {
-  Typography, Button, makeStyles, TextField, FormControl, Select, MenuItem,
+  Typography, Button, makeStyles, FormControl, Select, MenuItem,
 } from '@material-ui/core';
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleBar from '../../../../ui/SimpleBar';
 import MultiSelect from '../../../../ui/MultiSelect';
@@ -25,48 +27,88 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const problems = ['Q1', 'Q2'];
-
 export default function ScoreboardEdit({ setEdit }) {
+  const {
+    courseId, classId, challengeId, scoreboardId,
+  } = useParams();
+  const dispatch = useDispatch();
   const classNames = useStyles();
-  const [target, setTarget] = useState([]);
-  const [scoringFormula, setScoringFormula] = useState('');
-  const [baselineTeam, setBaselineTeam] = useState('');
-  const [teamLabelFilter, setTeamLabelFilter] = useState('');
+
+  // const scoreboards = useSelector((state) => state.scoreboards);
+  const challenges = useSelector((state) => state.challenges);
+  const authToken = useSelector((state) => state.auth.token);
+  const problems = useSelector((state) => state.problem);
+  const classes = useSelector((state) => state.classes);
+  const teams = useSelector((state) => state.teams);
+  const [targetLabels, setTargetLabels] = useState([48, 74].map((id) => problems.byId[id].challenge_label));
+  // const [targetLabels, setTargetLabels] = useState(
+  //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].targetProblemIds.map((id) => problems.byId[id].challenge_label),
+  // );
+  // const [scoringFormula, setScoringFormula] = useState(
+  //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.scoringFormula,
+  // );
+  const [baselineTeam, setBaselineTeam] = useState(46);
+  // const [baselineTeam, setBaselineTeam] = useState(
+  //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.baselineTeam,
+  // );
+  // const [teamLabelFilter, setTeamLabelFilter] = useState(
+  //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.teamLabelFilter,
+  // );
+
+  const transIdToLabel = (ids) => ids.map((id) => problems.byId[id].challenge_label);
+  const transLabelToId = (labels) => {
+    const ids = labels.map(
+      (key) => challenges.byId[challengeId].problemIds.filter((id) => problems.byId[id].challenge_label === key)[0],
+    );
+    return ids;
+  };
 
   const handleCancel = () => {
     setEdit(false);
   };
 
   const handleSave = () => {
+    const targetIds = transLabelToId(targetLabels);
     // const body = {
-    //   target_problem_ids: target,
+    //   challenge_label: scoreboards.byId[scoreboardId].challenge_label,
+    //   title: scoreboards.byId[scoreboardId].title,
+    //   target_problem_ids: targetIds,
     //   scoring_formula: scoringFormula,
     //   baseline_team_id: baselineTeam,
+    //   rank_by_total_score: true,
     //   team_label_filter: teamLabelFilter,
     // };
+    // dispatch(editTeamProjectScoreboard(authToken, scoreboardId, body));
     setEdit(false);
   };
 
   return (
     <SimpleBar title="Ranking Configuration">
       <AlignedText text="Scoreboard Type" childrenType="text">
-        <Typography variant="body1">Team Project</Typography>
+        <Typography variant="body1">
+          Team Project
+          {/* {scoreboards.byId[scoreboardId].scoreboard_type === 'TEAM_PROJECT' ? 'Team Project' : 'Contest'} */}
+        </Typography>
       </AlignedText>
       <AlignedText text="Title" childrenType="text">
         <Typography variant="body1">Scoreboard</Typography>
+        {/* <Typography variant="body1">{scoreboards.byId[scoreboardId].title}</Typography> */}
       </AlignedText>
       <AlignedText text="Target Problems" childrenType="field">
-        <MultiSelect options={problems} value={target} setValue={setTarget} />
+        <MultiSelect
+          options={transIdToLabel(challenges.byId[challengeId].problemIds)}
+          value={targetLabels}
+          setValue={setTargetLabels}
+        />
       </AlignedText>
       <hr className={classNames.divider} />
       <AlignedText text="Scoring Formula" childrenType="field">
-        <TextField
+        {/* <TextField
           value={scoringFormula}
           onChange={(e) => {
             setScoringFormula(e.target.value);
           }}
-        />
+        /> */}
       </AlignedText>
       <div className={classNames.instructions}>
         <Typography variant="body2">A self-defined pattern; content format/specs</Typography>
@@ -78,20 +120,23 @@ export default function ScoreboardEdit({ setEdit }) {
       <AlignedText text="Baseline Team (Optional)" childrenType="field">
         <FormControl variant="outlined" style={{ width: '350px' }}>
           <Select value={baselineTeam} label="BaselineTeam" onChange={(e) => setBaselineTeam(e.target.value)}>
-            <MenuItem value="Team id 1">Team name 1</MenuItem>
-            <MenuItem value="Team id 2">Team name 2</MenuItem>
-            <MenuItem value="Team id 3">Team name 3</MenuItem>
+            <MenuItem value=""> </MenuItem>
+            {classes.byId[classId].teamIds.map((id) => (
+              <MenuItem key={id} value={id}>
+                {teams.byId[id].name}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </AlignedText>
       <hr className={classNames.divider} />
       <AlignedText text="Team Label Filter (Optional)" childrenType="field">
-        <TextField
+        {/* <TextField
           value={teamLabelFilter}
           onChange={(e) => {
             setTeamLabelFilter(e.target.value);
           }}
-        />
+        /> */}
       </AlignedText>
       <div className={classNames.instructions}>
         <Typography variant="body2">To filter teams with label, support regex</Typography>
