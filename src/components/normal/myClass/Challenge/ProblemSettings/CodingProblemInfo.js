@@ -23,6 +23,7 @@ import SimpleTable from '../../../../ui/SimpleTable';
 import SampleTestArea from '../../../../ui/SampleTestArea';
 import AlignedText from '../../../../ui/AlignedText';
 import Icon from '../../../../ui/icon/index';
+import CodeArea from '../../../../ui/CodeArea';
 
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
@@ -174,7 +175,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     }
   }, [authToken, dispatch, problemId, role]);
 
-  if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
+  if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData || loading.readChallenge) {
     return <GeneralLoading />;
   }
 
@@ -330,6 +331,12 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
               width: 100,
               type: 'string',
             },
+            {
+              id: 'note',
+              label: 'Note',
+              align: 'center',
+              type: 'string',
+            },
           ]}
           data={testcaseDataIds.map((id) => ({
             id,
@@ -373,6 +380,21 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
                 : []
             }
           />
+        </SimpleBar>
+      )}
+      {role === 'MANAGER' && problems[problemId].judge_type === 'CUSTOMIZED' && (
+        <SimpleBar
+          title="Customize Judge Code (Optional)"
+          noIndent
+          buttons={(
+            <FormControlLabel
+              control={<Switch checked name="customizeJudge" color="primary" disabled />}
+              label="Enabled"
+              className={classNames.statusSwitch}
+            />
+          )}
+        >
+          <CodeArea value={problems[problemId].judge_source.judge_code} />
         </SimpleBar>
       )}
       {role === 'MANAGER' && (

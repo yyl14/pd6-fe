@@ -377,6 +377,38 @@ const getAccountBatch = (token, accountId) => async (dispatch) => {
   }
 };
 
+const getAccountBatchByReferral = (token, account_referrals, teamId, role, onSuccess, onError) => async (dispatch) => {
+  try {
+    const config = {
+      headers: { 'auth-token': token },
+      params: { account_referrals: JSON.stringify([account_referrals]) },
+    };
+    dispatch({ type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_START });
+    const res = await agent.get('/account-summary/batch-by-account-referral', config);
+
+    if (res.data.data.length !== 0) {
+      const memberId = res.data.data[0].id;
+      dispatch({
+        type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_SUCCESS,
+        payload: { teamId, memberId },
+      });
+      onSuccess(res.data.data[0], role);
+    } else {
+      dispatch({
+        type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_FAIL,
+        error: 'Member does not exist.',
+      });
+      onError();
+    }
+  } catch (error) {
+    dispatch({
+      type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_FAIL,
+      error,
+    });
+    onError();
+  }
+};
+
 export {
   getInstitutes,
   fetchClassMembers,
@@ -392,4 +424,5 @@ export {
   fetchAllChallengesProblems,
   fetchProblems,
   getAccountBatch,
+  getAccountBatchByReferral,
 };

@@ -651,6 +651,14 @@ export default function CodingProblemEdit({ closeEdit }) {
               width: 150,
               type: 'string',
             },
+            {
+              id: 'note',
+              label: 'Note',
+              align: 'center',
+              width: '100%',
+              type: 'string',
+              editType: 'flexibleInput',
+            },
           ]}
           data={Object.keys(sampleTableData)
             .sort((a, b) => sampleTrans(a) - sampleTrans(b))
@@ -743,6 +751,14 @@ export default function CodingProblemEdit({ closeEdit }) {
               align: 'center',
               width: 150,
               type: 'string',
+            },
+            {
+              id: 'note',
+              label: 'Note',
+              align: 'center',
+              width: '100%',
+              type: 'string',
+              editType: 'flexibleInput',
             },
           ]}
           data={Object.keys(testcaseTableData)

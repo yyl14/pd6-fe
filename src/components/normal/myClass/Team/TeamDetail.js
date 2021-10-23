@@ -95,6 +95,7 @@ export default function TeamDetail() {
   const handleCloseError = () => {
     setAddMemberFail(false);
     error.myClass.team.addTeamMember = null;
+    error.common.common.getAccountBatchByReferral = null;
   };
 
   if (loading.fetchTeam || loading.fetchTeamMember) {
@@ -139,7 +140,11 @@ export default function TeamDetail() {
       <Snackbar
         open={addMemberFail}
         onClose={handleCloseError}
-        message={`Error: ${error.myClass.team.addTeamMember}`}
+        message={`Error: ${
+          error.common.common.getAccountBatchByReferral !== 'null'
+            ? error.common.common.getAccountBatchByReferral
+            : error.myClass.team.addTeamMember
+        }`}
       />
     </>
   );
