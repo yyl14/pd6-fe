@@ -4,7 +4,7 @@ import { Switch, Route, useParams } from 'react-router-dom';
 import ScoreboardInfo from './ScoreboardSettings/ScoreboardInfo';
 import NoMatch from '../../../noMatch';
 
-export default function PeerReview() {
+export default function Scoreboard() {
   const {
     courseId, classId, challengeId, scoreboardId,
   } = useParams();

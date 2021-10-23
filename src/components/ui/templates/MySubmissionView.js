@@ -60,9 +60,13 @@ export default function MySubmission({ baseUrl, isProblemSet }) {
           text={
             isProblemSet
               ? 'My Best Score'
-              : `My ${challenges.byId[challengeId].selection_type[0].concat(
-                challenges.byId[challengeId].selection_type.slice(1).toLowerCase(),
-              )} Score`
+              : `My ${
+                challenges.byId[challengeId].selection_type
+                  ? challenges.byId[challengeId].selection_type[0].concat(
+                    challenges.byId[challengeId].selection_type.slice(1).toLowerCase(),
+                  )
+                  : ''
+              } Score`
           }
           childrenType="text"
         >

@@ -1,11 +1,23 @@
 import { combineReducers } from 'redux';
+import { commonConstants } from '../actions/common/constant';
 import { teamConstants } from '../actions/myClass/constant';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
     case teamConstants.FETCH_TEAMS_SUCCESS: {
       const { data } = action.payload;
-      return data.reduce((acc, item) => ({ ...acc, [item.id]: { ...item, teamMemberIds: [], template: {} } }), state);
+      return data.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item.id]: {
+            ...item,
+            teamMemberIds: [],
+            template: {},
+            tempAddMember: [],
+          },
+        }),
+        state,
+      );
     }
 
     case teamConstants.FETCH_TEAM_SUCCESS: {
@@ -15,7 +27,8 @@ const byId = (state = {}, action) => {
         [teamId]: {
           ...data,
           teamMemberIds: state[teamId] ? state[teamId].teamMemberIds : [],
-          template: state[teamId] ? state[teamId].template : [],
+          template: state[teamId] ? state[teamId].template : {},
+          tempAddMember: [],
         },
       };
     }
@@ -27,6 +40,14 @@ const byId = (state = {}, action) => {
 
     case teamConstants.DOWNLOAD_TEAM_FILE_SUCCESS: {
       return { ...state, template: action.payload };
+    }
+
+    case commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_SUCCESS: {
+      const { teamId, memberId } = action.payload;
+      return {
+        ...state,
+        [teamId]: { ...state[teamId], tempAddMember: [...state[teamId].tempAddMember, { id: memberId }] },
+      };
     }
 
     default:
