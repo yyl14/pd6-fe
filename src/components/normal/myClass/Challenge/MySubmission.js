@@ -54,9 +54,13 @@ export default function MySubmission() {
       />
       <SimpleBar title="Submission Information">
         <AlignedText
-          text={`My ${challenges.byId[challengeId].selection_type[0].concat(
-            challenges.byId[challengeId].selection_type.slice(1).toLowerCase(),
-          )} Score`}
+          text={`My ${
+            challenges.byId[challengeId].selection_type
+              ? challenges.byId[challengeId].selection_type[0].concat(
+                challenges.byId[challengeId].selection_type.slice(1).toLowerCase(),
+              )
+              : ''
+          } Score`}
           childrenType="text"
         >
           <Typography variant="body1">{problems.byId[problemId].score?.toString() ?? '0'}</Typography>

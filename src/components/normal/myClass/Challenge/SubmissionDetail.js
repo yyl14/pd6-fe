@@ -11,12 +11,12 @@ import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
 import PageTitle from '../../../ui/PageTitle';
 import GeneralLoading from '../../../GeneralLoading';
-import { browseJudgeCases, browseTestcases, rejudgeSubmission } from '../../../../actions/myClass/problem';
+import { browseAllJudgementJudgeCase } from '../../../../actions/api/judgement';
+import { browseTestcases, rejudgeSubmission } from '../../../../actions/myClass/problem';
 import { readSubmissionDetail, fetchSubmission } from '../../../../actions/myClass/submission';
 import { browseSubmitLang } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
 import CodeArea from '../../../ui/CodeArea';
-// import { browseSubmitLang } from '../../../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
   textLink: {
@@ -78,7 +78,7 @@ export default function SubmissionDetail() {
     if (submissions[submissionId]?.latestJudgmentId) {
       if (submissions[submissionId].latestJudgmentId !== judgmentId) {
         setJudgmentId(submissions[submissionId].latestJudgmentId);
-        dispatch(browseJudgeCases(authToken, submissions[submissionId].latestJudgmentId));
+        dispatch(browseAllJudgementJudgeCase(authToken, submissions[submissionId].latestJudgmentId));
       }
     }
   }, [authToken, dispatch, submissionId, submissions, rejudge, judgmentId]);
@@ -134,7 +134,6 @@ export default function SubmissionDetail() {
 
   useEffect(() => {
     if (sampleDataIds && testcaseDataIds && judgeCases.allIds) {
-      const filteredJudgeCases = judgeCases.allIds.filter((key) => judgeCases.byId[key].judgment_id === judgmentId);
       setTableData(
         []
           .concat(sampleDataIds)
@@ -142,10 +141,18 @@ export default function SubmissionDetail() {
           .map((id) => ({
             id,
             no: transformTestcase(id),
-            time: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].time_lapse : '',
-            memory: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].peak_memory : '',
-            status: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].verdict : '',
-            score: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].score : '',
+            time: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]
+              ? judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`].time_lapse
+              : '',
+            memory: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]
+              ? judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`].peak_memory
+              : '',
+            status: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]
+              ? judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`].verdict
+              : '',
+            score: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]
+              ? judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`].score
+              : '',
           }))
           .sort((a, b) => {
             if (!a.no.includes('sample') && b.no.includes('sample')) return 1;
@@ -166,7 +173,16 @@ export default function SubmissionDetail() {
           }),
       );
     }
-  }, [judgeCases.allIds, judgeCases.byId, judgmentId, sampleDataIds, testcaseDataIds, transformTestcase]);
+  }, [
+    judgeCases.allIds,
+    judgeCases.byId,
+    judgmentId,
+    sampleDataIds,
+    submissionId,
+    submissions,
+    testcaseDataIds,
+    transformTestcase,
+  ]);
 
   useEffect(() => {
     if (user.classes.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
