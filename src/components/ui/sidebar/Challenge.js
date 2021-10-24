@@ -107,7 +107,7 @@ export default function Challenge({
           ),
         );
       } else if (
-        userClasses.find((x) => x.class_id === Number(classId)).role !== 'MANAGER'
+        userClasses.find((x) => x.class_id === Number(classId)).role === 'NORMAL'
         && challenges[challengeId] !== undefined
       ) {
         setArrow(
@@ -149,6 +149,45 @@ export default function Challenge({
                   text: challenge_label,
                   icon: <Icon.Peerreview />,
                   path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${id}`,
+                })),
+            ),
+          );
+        } else {
+          setItemList([
+            {
+              text: 'Info',
+              icon: <Icon.Info />,
+              path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
+            },
+          ]);
+        }
+      } else if (
+        userClasses.find((x) => x.class_id === Number(classId)).role === 'GUEST'
+        && challenges[challengeId] !== undefined
+      ) {
+        setArrow(
+          <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
+            <Icon.ArrowBackRoundedIcon />
+          </IconButton>,
+        );
+        setTitle(challenges[challengeId].title);
+        if (Object.keys(problems).length !== 0 && Object.keys(essays).length !== 0) {
+          setItemList(
+            [].concat(
+              [
+                {
+                  text: 'Info',
+                  icon: <Icon.Info />,
+                  path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
+                },
+              ],
+              challenges[challengeId].problemIds
+                .map((id) => problems.byId[id])
+                .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+                .map(({ id, challenge_label }) => ({
+                  text: challenge_label,
+                  icon: <Icon.Code />,
+                  path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${id}`,
                 })),
             ),
           );
