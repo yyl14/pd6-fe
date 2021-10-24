@@ -325,7 +325,7 @@ const deleteProblem = (token, problemId) => async (dispatch) => {
   }
 };
 
-const submitCode = (token, problemId, languageId, content, onSubmitSuccess) => async (dispatch) => {
+const submitCode = (token, problemId, languageId, content, onSuccess, onError) => async (dispatch) => {
   dispatch({ type: problemConstants.SUBMIT_PROBLEM_START });
   const config = {
     headers: {
@@ -346,12 +346,13 @@ const submitCode = (token, problemId, languageId, content, onSubmitSuccess) => a
     dispatch({
       type: problemConstants.SUBMIT_PROBLEM_SUCCESS,
     });
-    onSubmitSuccess();
+    onSuccess();
   } catch (error) {
     dispatch({
       type: problemConstants.SUBMIT_PROBLEM_FAIL,
       error,
     });
+    onError();
   }
 };
 
