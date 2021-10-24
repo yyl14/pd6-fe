@@ -59,12 +59,14 @@ export default function PeerReviewInfo() {
   const challenges = useSelector((state) => state.challenges.byId);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
   const apiLoading = useSelector((state) => state.loading.api.peerReview);
+  const errors = useSelector((state) => state.error.api.peerReview);
 
   const [role, setRole] = useState('GUEST');
   const [edit, setEdit] = useState(false);
   const [currentTime, setCurrentTime] = useState(moment());
   const [deletePopUp, setDeletePopUp] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
+  const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
 
   const clickViewPeerReview = () => {
     history.push(
@@ -87,7 +89,7 @@ export default function PeerReviewInfo() {
     const reviewPeerReviewRecordIds = peerReviews[peerReviewId].reviewRecordIds;
     if (reviewPeerReviewRecordIds.length < peerReviews[peerReviewId].max_review_count) {
       dispatch(
-        assignPeerReviewRecordAndPush(authToken, courseId, classId, challengeId, peerReviewId, accountId, history),
+        assignPeerReviewRecordAndPush(authToken, courseId, classId, challengeId, peerReviewId, accountId, history, () => { setShowErrorSnackbar(true); }),
       );
     } else {
       const targetRecordId = reviewPeerReviewRecordIds.sort((a, b) => a - b)[0];
@@ -229,6 +231,14 @@ export default function PeerReviewInfo() {
           setShowSnackbar(false);
         }}
         message={"Your task hasn't been assigned to any peer yet."}
+      />
+      <Snackbar
+        open={showErrorSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowErrorSnackbar(false);
+        }}
+        message={`Error:  ${errors.assignPeerReviewRecord}`}
       />
     </>
   );
