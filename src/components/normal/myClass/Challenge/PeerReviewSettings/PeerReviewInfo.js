@@ -228,7 +228,7 @@ export default function PeerReviewInfo() {
         onClose={() => {
           setShowSnackbar(false);
         }}
-        message={"Your task hasn't been assigned to this peer yet."}
+        message={"Your task hasn't been assigned to any peer yet."}
       />
     </>
   );
