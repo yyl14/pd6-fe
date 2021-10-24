@@ -11,9 +11,6 @@ import PageTitle from '../../../ui/PageTitle';
 import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
 
 const useStyles = makeStyles(() => ({
-  placeholder: {
-    height: '50px',
-  },
   copyButton: {
     marginRight: '10px',
     height: '100%',
@@ -200,55 +197,56 @@ export default function Statistics() {
   return (
     <>
       <PageTitle text={`${challengeTitle} / Statistics`} />
-      <SimpleBar title="Global Statistics" />
-      <SimpleTable
-        data={statisticsData}
-        columns={[
-          {
-            id: 'task_label',
-            label: 'Task',
-            minWidth: 50,
-            align: 'center',
-            width: 120,
-            type: 'string',
-          },
-          {
-            id: 'solved_member_count',
-            label: 'Solved Member',
-            minWidth: 50,
-            align: 'center',
-            width: 200,
-            type: 'string',
-          },
-          {
-            id: 'submission_count',
-            label: 'Submission',
-            minWidth: 50,
-            align: 'center',
-            width: 120,
-            type: 'string',
-          },
-          {
-            id: 'member_count',
-            label: 'User Tried',
-            minWidth: 50,
-            align: 'center',
-            width: 120,
-            type: 'string',
-          },
-        ]}
-      />
-      <div className={classes.placeholder} />
-      <SimpleBar title="Class Scoreboard" />
-      <CustomTable
-        buttons={(
-          <div className={classes.copyButton}>
-            <CopyToClipboardButton text={scoreboardHTML} format="text/html" />
-          </div>
-        )}
-        data={scoreboardData}
-        columns={scoreboardTitle}
-      />
+      <SimpleBar title="Global Statistics" noIndent>
+        <SimpleTable
+          data={statisticsData}
+          columns={[
+            {
+              id: 'task_label',
+              label: 'Task',
+              minWidth: 50,
+              align: 'center',
+              width: 120,
+              type: 'string',
+            },
+            {
+              id: 'solved_member_count',
+              label: 'Solved Member',
+              minWidth: 50,
+              align: 'center',
+              width: 200,
+              type: 'string',
+            },
+            {
+              id: 'submission_count',
+              label: 'Submission',
+              minWidth: 50,
+              align: 'center',
+              width: 120,
+              type: 'string',
+            },
+            {
+              id: 'member_count',
+              label: 'User Tried',
+              minWidth: 50,
+              align: 'center',
+              width: 120,
+              type: 'string',
+            },
+          ]}
+        />
+      </SimpleBar>
+      <SimpleBar title="Class Scoreboard" noIndent>
+        <CustomTable
+          buttons={(
+            <div className={classes.copyButton}>
+              <CopyToClipboardButton text={scoreboardHTML} format="text/html" />
+            </div>
+          )}
+          data={scoreboardData}
+          columns={scoreboardTitle}
+        />
+      </SimpleBar>
     </>
   );
 }
