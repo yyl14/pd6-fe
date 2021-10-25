@@ -9,56 +9,52 @@ const initialState = {
 
 export default function scoreboard(state = initialState, action) {
   switch (action.type) {
-    case scoreboardConstants.ADD_TEAM_PROJECT_SCOREBOARD_UNDER_CHALLENGE_SUCCESS: {
+    case scoreboardConstants.ADD_TEAM_PROJECT_SCOREBOARD_UNDER_CHALLENGE_START: {
       return {
         ...state,
         addTeamProjectScoreboardUnderChallenge: null,
       };
     }
     case scoreboardConstants.ADD_TEAM_PROJECT_SCOREBOARD_UNDER_CHALLENGE_FAIL: {
-      const { error } = action;
       return {
         ...state,
-        addTeamProjectScoreboardUnderChallenge: error,
+        addTeamProjectScoreboardUnderChallenge: action.error,
       };
     }
-    case scoreboardConstants.READ_SCOREBOARD_SUCCESS: {
+    case scoreboardConstants.READ_SCOREBOARD_START: {
       return {
         ...state,
         readScoreboard: null,
       };
     }
     case scoreboardConstants.READ_SCOREBOARD_FAIL: {
-      const { error } = action;
       return {
         ...state,
-        readScoreboard: error,
+        readScoreboard: action.error,
       };
     }
-    case scoreboardConstants.EDIT_TEAM_PROJECT_SCOREBOARD_SUCCESS: {
+    case scoreboardConstants.EDIT_TEAM_PROJECT_SCOREBOARD_START: {
       return {
         ...state,
         editTeamProjectScoreboard: null,
       };
     }
     case scoreboardConstants.EDIT_TEAM_PROJECT_SCOREBOARD_FAIL: {
-      const { error } = action;
       return {
         ...state,
-        editTeamProjectScoreboard: error,
+        editTeamProjectScoreboard: action.error,
       };
     }
-    case scoreboardConstants.DELETE_SCOREBOARD_SUCCESS: {
+    case scoreboardConstants.DELETE_SCOREBOARD_START: {
       return {
         ...state,
         deleteScoreboard: null,
       };
     }
     case scoreboardConstants.DELETE_SCOREBOARD_FAIL: {
-      const { error } = action;
       return {
         ...state,
-        deleteScoreboard: error,
+        deleteScoreboard: action.error,
       };
     }
 

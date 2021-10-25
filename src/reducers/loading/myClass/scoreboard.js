@@ -15,12 +15,7 @@ export default function scoreboard(state = initialState, action) {
         addTeamProjectScoreboardUnderChallenge: true,
       };
     }
-    case scoreboardConstants.ADD_TEAM_PROJECT_SCOREBOARD_UNDER_CHALLENGE_SUCCESS: {
-      return {
-        ...state,
-        addTeamProjectScoreboardUnderChallenge: false,
-      };
-    }
+    case scoreboardConstants.ADD_TEAM_PROJECT_SCOREBOARD_UNDER_CHALLENGE_SUCCESS:
     case scoreboardConstants.ADD_TEAM_PROJECT_SCOREBOARD_UNDER_CHALLENGE_FAIL: {
       return {
         ...state,
@@ -33,12 +28,7 @@ export default function scoreboard(state = initialState, action) {
         readScoreboard: true,
       };
     }
-    case scoreboardConstants.READ_SCOREBOARD_SUCCESS: {
-      return {
-        ...state,
-        readScoreboard: false,
-      };
-    }
+    case scoreboardConstants.READ_SCOREBOARD_SUCCESS:
     case scoreboardConstants.READ_SCOREBOARD_FAIL: {
       return {
         ...state,
@@ -51,12 +41,7 @@ export default function scoreboard(state = initialState, action) {
         editTeamProjectScoreboard: true,
       };
     }
-    case scoreboardConstants.EDIT_TEAM_PROJECT_SCOREBOARD_SUCCESS: {
-      return {
-        ...state,
-        editTeamProjectScoreboard: false,
-      };
-    }
+    case scoreboardConstants.EDIT_TEAM_PROJECT_SCOREBOARD_SUCCESS:
     case scoreboardConstants.EDIT_TEAM_PROJECT_SCOREBOARD_FAIL: {
       return {
         ...state,
@@ -69,12 +54,7 @@ export default function scoreboard(state = initialState, action) {
         deleteScoreboard: true,
       };
     }
-    case scoreboardConstants.DELETE_SCOREBOARD_SUCCESS: {
-      return {
-        ...state,
-        deleteScoreboard: false,
-      };
-    }
+    case scoreboardConstants.DELETE_SCOREBOARD_SUCCESS:
     case scoreboardConstants.DELETE_SCOREBOARD_FAIL: {
       return {
         ...state,

@@ -43,7 +43,7 @@ const byId = (state = {}, action) => {
             specialJudgeIds: state[item.id] ? state[item.id].specialJudgeIds : [],
             essayIds: state[item.id] ? state[item.id].essayIds : [],
             statistics: state[item.id] ? state[item.id].statistics : emptyStatistics,
-            scoreboard: state[item.id] ? state[item.id].scoreboardIds : [],
+            scoreboardIds: state[item.id] ? state[item.id].scoreboardIds : [],
           },
         }),
         state,
