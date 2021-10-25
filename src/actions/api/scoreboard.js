@@ -1,7 +1,7 @@
 import agent from '../agent';
 import { scoreboardConstants } from './constant';
 
-export const addTeamProjectScoreboardUnderChallenge = (token, challengeId, history, courseId, classId, body, onSuccess, onError) => async (dispatch) => {
+export const addTeamProjectScoreboardUnderChallenge = (token, challengeId, body, onSuccess, onError) => async (dispatch) => {
   try {
     const config = { headers: { 'auth-token': token } };
     dispatch({ type: scoreboardConstants.ADD_TEAM_PROJECT_SCOREBOARD_UNDER_CHALLENGE_START });
