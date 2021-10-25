@@ -23,6 +23,13 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexWrap: 'wrap',
   },
+  profileAdjustment: {
+    width: '100%',
+    display: 'flex',
+    flexWrap: 'wrap',
+    marginTop: '-50px',
+    marginBottom: '50px',
+  },
 }));
 
 export default function Team() {
@@ -108,7 +115,7 @@ export default function Team() {
           </div>
         </SimpleBar>
         <SimpleBar title="Frontend" />
-        <div className={classes.profile}>
+        <div className={(classes.profile, classes.profileAdjustment)}>
           <Profile
             img_url="../../../images/timicienio.jpg"
             name="陳以潼 timicienio"
@@ -236,7 +243,7 @@ export default function Team() {
       </div>
       <div className={display[1] === true ? classes.PDOGS_Content_Display : classes.PDOGS_Content_Hide}>
         <SimpleBar title="Core Develop Team" />
-        <div className={classes.profile}>
+        <div className={(classes.profile, classes.profileAdjustment)}>
           <Profile img_url="../../../images/Shouko.png" name="虞翔皓 Shouko" description="System" />
           <Profile img_url="../../../images/bigelephant29.png" name="謝志邦 bigelephant29" description="System" />
           <Profile img_url="../../../images/arbuztw.png" name="江昱熹 arbuztw" description="System" />
@@ -262,7 +269,7 @@ export default function Team() {
           <Profile img_url="../../../images/doge.png" name="涂靖雯 BonnieTu" description="Design" />
         </div>
         <SimpleBar title="Maintainers" />
-        <div className={classes.profile}>
+        <div className={(classes.profile, classes.profileAdjustment)}>
           <Profile
             img_url="../../../images/Duge.jpg"
             name="盧慶原 Duge"
