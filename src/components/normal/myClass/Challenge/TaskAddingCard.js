@@ -236,7 +236,7 @@ export default function TaskAddingCard({ open, setOpen }) {
           team_label_filter: teamLabelFilter,
         };
         // dispatch(
-        //   addTeamProjectScoreboardUnderChallenge(authToken, challengeId, history, courseId, classId, body, addScoreboardSuccess, () => {
+        //   addTeamProjectScoreboardUnderChallenge(authToken, challengeId, body, addScoreboardSuccess, () => {
         //     showAddScoreboardErrorSnackbar(true);
         //   }),
         // );
