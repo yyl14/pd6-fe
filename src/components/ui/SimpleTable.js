@@ -71,8 +71,14 @@ const useStyles = makeStyles((theme) => ({
     height: '45px',
     margin: '0px',
   },
+  flexibleEditField: {
+    margin: '0px',
+    width: '100%',
+    minWidth: '75px',
+  },
   deleteCell: {
     padding: '15px',
+    minWidth: '65.8px',
   },
   deleteIcon: {
     height: '30px',
@@ -151,6 +157,8 @@ export default function SimpleTable({
                       width: column.width,
                       maxWidth: column.width,
                       border: 'none',
+                      paddingTop: 0,
+                      paddingBottom: 0,
                     }}
                   >
                     <div className={classes.column}>
@@ -171,11 +179,12 @@ export default function SimpleTable({
                   {columns.map((column) => {
                     const value = row[column.id];
                     if (isEdit) {
-                      if (column.editType === 'input') {
+                      if (column.editType === 'input' || column.editType === 'flexibleInput') {
                         return (
                           <TableCell key={column.id} className={classes.editTableCell}>
                             <TextField
-                              className={classes.editField}
+                              className={column.editType === 'input' ? classes.editField : classes.flexibleEditField}
+                              multiline={column.editType === 'flexibleInput'}
                               value={value}
                               onChange={(e) => {
                                 const temp = { ...row };

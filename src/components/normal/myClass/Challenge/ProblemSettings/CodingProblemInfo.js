@@ -175,7 +175,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
     }
   }, [authToken, dispatch, problemId, role]);
 
-  if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
+  if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData || loading.readChallenge) {
     return <GeneralLoading />;
   }
 
@@ -329,6 +329,12 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
               minWidth: 50,
               align: 'center',
               width: 100,
+              type: 'string',
+            },
+            {
+              id: 'note',
+              label: 'Note',
+              align: 'center',
               type: 'string',
             },
           ]}

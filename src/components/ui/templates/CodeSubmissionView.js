@@ -47,11 +47,13 @@ export default function CodeSubmission({ baseUrl, isProblemSet }) {
   const submitLang = useSelector((state) => state.submitLangs);
   const [lang, setLang] = useState([]);
   const authToken = useSelector((state) => state.auth.token);
+  const errors = useSelector((state) => state.error.myClass.problem);
 
   const [langId, setLangId] = useState('');
   const [code, setCode] = useState('');
   const [warningPopup, setWarningPopup] = useState(false);
   const [currentTime] = useState(moment());
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   useEffect(() => {
     if (challenges[challengeId] !== undefined) {
@@ -83,7 +85,7 @@ export default function CodeSubmission({ baseUrl, isProblemSet }) {
     if (langId === '') {
       return;
     }
-    dispatch(submitCode(authToken, problemId, langId, code, onSubmitSuccess));
+    dispatch(submitCode(authToken, problemId, langId, code, onSubmitSuccess, () => { setShowSnackbar(true); }));
 
     // remember submit language
     const daysToExpire = new Date(2147483647 * 1000); // until year 2038
@@ -153,6 +155,14 @@ export default function CodeSubmission({ baseUrl, isProblemSet }) {
         }}
         message="Submission over deadline will not be considered in score calculation."
         onClose={() => setWarningPopup(false)}
+      />
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowSnackbar(false);
+        }}
+        message={`Error: ${errors.submitCode}`}
       />
     </>
   );

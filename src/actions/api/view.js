@@ -222,11 +222,11 @@ const browseMySubmission = (token, accountId, browseParams, tableId = null) => a
       },
       params: browseParamsTransForm(temp),
     };
-    dispatch({ type: viewConstants.BROWSE_MYSUBMISSION_START });
+    dispatch({ type: viewConstants.BROWSE_MY_SUBMISSION_START });
     const res = await agent.get('/view/my-submission', config);
     const { data, total_count } = res.data.data;
     dispatch({
-      type: viewConstants.BROWSE_MYSUBMISSION_SUCCESS,
+      type: viewConstants.BROWSE_MY_SUBMISSION_SUCCESS,
       payload: {
         data: {
           submissions: data.map(
@@ -280,7 +280,7 @@ const browseMySubmission = (token, accountId, browseParams, tableId = null) => a
     });
   } catch (error) {
     dispatch({
-      type: viewConstants.BROWSE_MYSUBMISSION_FAIL,
+      type: viewConstants.BROWSE_MY_SUBMISSION_FAIL,
       error,
     });
   }
@@ -408,23 +408,16 @@ const browseClassGrade = (token, classId, browseParams, tableId = null) => async
       type: viewConstants.BROWSE_CLASS_GRADE_SUCCESS,
       payload: {
         classId,
-        data: data.map(
-          ({
-            title,
-            score,
-            update_time,
-            grade_id,
-            class_id,
-            account_id,
-          }) => ({
-            id: grade_id,
-            title,
-            score,
-            update_time,
-            class_id,
-            receiver_id: account_id,
-          }),
-        ),
+        data: data.map(({
+          title, score, update_time, grade_id, class_id, account_id,
+        }) => ({
+          id: grade_id,
+          title,
+          score,
+          update_time,
+          class_id,
+          receiver_id: account_id,
+        })),
         accounts: data.map(({
           account_id, student_id, username, real_name,
         }) => ({
