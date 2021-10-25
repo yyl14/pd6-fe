@@ -73,7 +73,7 @@ export const browseAccountReviewedPeerReviewRecordWithReading = (token, peerRevi
   }
 };
 
-export const assignPeerReviewRecordAndPush = (token, courseId, classId, challengeId, peerReviewId, accountId, history) => async (dispatch) => {
+export const assignPeerReviewRecordAndPush = (token, courseId, classId, challengeId, peerReviewId, accountId, history, onError) => async (dispatch) => {
   try {
     const config = { headers: { 'auth-token': token } };
     dispatch({ type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_START });
@@ -91,6 +91,7 @@ export const assignPeerReviewRecordAndPush = (token, courseId, classId, challeng
       type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_FAIL,
       error,
     });
+    onError();
   }
 };
 

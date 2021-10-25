@@ -7,6 +7,7 @@ import {
   FormControl,
   Select,
   MenuItem,
+  Snackbar,
   makeStyles,
 } from '@material-ui/core';
 import { Link, useParams } from 'react-router-dom';
@@ -68,6 +69,7 @@ export default function ReviewedRecord() {
   const [peerId, setPeerId] = useState(-1);
   const [score, setScore] = useState('');
   const [comment, setComment] = useState('');
+  const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
 
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.api.peerReview);
@@ -79,6 +81,7 @@ export default function ReviewedRecord() {
   const challenges = useSelector((state) => state.challenges.byId);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
   const peerReviewRecords = useSelector((state) => state.peerReviewRecords.byId);
+  const errors = useSelector((state) => state.error.api.peerReview);
 
   const onSuccess = () => {
     dispatch(readPeerReviewRecordWithCode(authToken, recordId));
@@ -86,7 +89,7 @@ export default function ReviewedRecord() {
 
   const handleSubmit = () => {
     // dispatch submit review result
-    dispatch(submitPeerReviewRecord(authToken, recordId, score, comment, onSuccess));
+    dispatch(submitPeerReviewRecord(authToken, recordId, score, comment, onSuccess, () => { setShowErrorSnackbar(true); }));
     setEdit(false);
   };
 
@@ -247,6 +250,14 @@ export default function ReviewedRecord() {
           </>
         ))
       }
+      <Snackbar
+        open={showErrorSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowErrorSnackbar(false);
+        }}
+        message={`Error:  ${errors.submitPeerReviewRecord}`}
+      />
     </>
   );
 }

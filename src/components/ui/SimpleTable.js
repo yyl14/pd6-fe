@@ -157,6 +157,8 @@ export default function SimpleTable({
                       width: column.width,
                       maxWidth: column.width,
                       border: 'none',
+                      paddingTop: 0,
+                      paddingBottom: 0,
                     }}
                   >
                     <div className={classes.column}>
