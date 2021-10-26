@@ -12,11 +12,15 @@ import {
   TextField,
   FormControlLabel,
   Switch,
+  FormControl,
+  Select,
+  MenuItem,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
 import SimpleTable from '../../../../ui/SimpleTable';
 import Icon from '../../../../ui/icon/index';
+import AlignedText from '../../../../ui/AlignedText';
 
 import SampleUploadCard from './SampleUploadCard';
 import AssistingDataUploadCard from './AssistingDataUploadCard';
@@ -61,6 +65,9 @@ const useStyles = makeStyles(() => ({
   dialogButtons: {
     justifyContent: 'space-between',
   },
+  select: {
+    width: '350px',
+  },
 }));
 
 const StyledButton = withStyles({
@@ -95,6 +102,8 @@ export default function CodingProblemEdit({ closeEdit }) {
   const [source, setSource] = useState('');
   const [hint, setHint] = useState('');
   const [judgeType, setJudgeType] = useState('');
+  const [language, setLanguage] = useState('');
+  const [judgeCode, setJudgeCode] = useState('');
   const [status, setStatus] = useState(true);
 
   const [handleInfoSuccess, setHandleInfoSuccess] = useState(false);
@@ -153,6 +162,20 @@ export default function CodingProblemEdit({ closeEdit }) {
     return 0;
   };
 
+  const judgeMethodToType = (method) => {
+    if (method === 'No customized judge') {
+      return 'NORMAL';
+    }
+    return 'CUSTOMIZED';
+  };
+
+  const judgeLanguageTrans = (lang) => {
+    if (lang === 'Python') {
+      return 'python 3.8';
+    }
+    return 0;
+  };
+
   useEffect(() => {
     if (problems[problemId]) {
       setLabel(problems[problemId].challenge_label);
@@ -161,7 +184,12 @@ export default function CodingProblemEdit({ closeEdit }) {
       setIoDescription(problems[problemId].io_description);
       setSource(problems[problemId].source);
       setHint(problems[problemId].hint);
-      setJudgeType(problems[problemId].judge_type);
+      if (problems[problemId].judge_type === 'NORMAL') {
+        setJudgeType('No customized judge');
+      } else if (problems[problemId].judge_type === 'CUSTOMIZED') {
+        setJudgeType('Customized judge');
+        setLanguage(problems[problemId].judge_source.judge_language);
+      }
     }
   }, [problems, problemId]);
 
@@ -435,12 +463,15 @@ export default function CodingProblemEdit({ closeEdit }) {
         problemId,
         label,
         title,
+        judgeMethodToType(judgeType),
         newFullScore,
         !status,
         description,
         ioDescription,
         source,
         hint,
+        judgeLanguageTrans(language),
+        judgeCode,
         () => {
           setHandleInfoSuccess(true);
         },
@@ -796,20 +827,39 @@ export default function CodingProblemEdit({ closeEdit }) {
         />
       </SimpleBar>
       <SimpleBar title="Customized Judge Code (Optional)" noIndent>
-        <Typography variant="body1">Content</Typography>
-        <TextField
-          placeholder="(Text, LaTeX, Markdown and HTML supported)"
-          value={ioDescription}
-          variant="outlined"
-          onChange={(e) => {
-            setIoDescription(e.target.value);
-            setHasChange(true);
-          }}
-          multiline
-          minRows={10}
-          maxRows={10}
-          className={classNames.textfield2}
-        />
+        <AlignedText text="Judge method" childrenType="field">
+          <FormControl variant="outlined" className={classNames.select}>
+            <Select name="judgeMethod" value={judgeType} onChange={(e) => setJudgeType(e.target.value)}>
+              <MenuItem value="No customized judge">No customized judge</MenuItem>
+              <MenuItem value="Customized judge">Customized judge</MenuItem>
+            </Select>
+          </FormControl>
+        </AlignedText>
+        {judgeType !== 'No customized judge' && (
+          <>
+            <AlignedText text="Language" childrenType="field">
+              <FormControl variant="outlined" className={classNames.select}>
+                <Select name="language" value={language} onChange={(e) => setLanguage(e.target.value)}>
+                  <MenuItem value="Python">Python</MenuItem>
+                </Select>
+              </FormControl>
+            </AlignedText>
+            <Typography variant="body1">Content</Typography>
+            <TextField
+              placeholder="(Text, LaTeX, Markdown and HTML supported)"
+              value={judgeCode}
+              variant="outlined"
+              onChange={(e) => {
+                setJudgeCode(e.target.value);
+                setHasChange(true);
+              }}
+              multiline
+              minRows={15}
+              maxRows={15}
+              className={classNames.textfield2}
+            />
+          </>
+        )}
       </SimpleBar>
       <div className={classNames.buttons}>
         <Button color="default" onClick={handleCancel}>
