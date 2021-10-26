@@ -147,7 +147,9 @@ export default function PeerReviewSummary() {
 
   return (
     <>
-      <PageTitle text={`${challenges[challengeId].title} / PR / Grader Mode`} />
+      <PageTitle
+        text={`${challenges[challengeId].title} / ${peerReviews[peerReviewId].challenge_label} / Grader Mode`}
+      />
       <AutoTable
         ident={`${challenges[challengeId].title}-PR-grader`}
         buttons={(
@@ -217,7 +219,9 @@ export default function PeerReviewSummary() {
         open={showSnackbar}
         autoHideDuration={1500}
         onClose={() => {
-          history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/grader-summary`);
+          history.push(
+            `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/grader-summary`,
+          );
           setShowSnackbar(false);
         }}
         message="No code is assigned yet."
