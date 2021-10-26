@@ -8,6 +8,7 @@ import team from './team';
 import judgements from './judgements';
 import essaySubmission from './essaySubmission';
 import peerReview from './peerReview';
+import scoreboard from './scoreboard';
 
 export default combineReducers({
   grade,
@@ -19,4 +20,5 @@ export default combineReducers({
   judgements,
   essaySubmission,
   peerReview,
+  scoreboard,
 });
