@@ -51,6 +51,7 @@ export const editTeamProjectScoreboard = (token, scoreboardId, body) => async (d
   } catch (error) {
     dispatch({
       type: scoreboardConstants.EDIT_TEAM_PROJECT_SCOREBOARD_FAIL,
+      error,
     });
   }
 };
