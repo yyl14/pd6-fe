@@ -1,7 +1,7 @@
 import {
   Typography, Button, makeStyles, FormControl, Select, MenuItem,
 } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import AlignedText from '../../../../ui/AlignedText';
@@ -40,10 +40,7 @@ export default function ScoreboardEdit({ setEdit }) {
   const problems = useSelector((state) => state.problem);
   const classes = useSelector((state) => state.classes);
   const teams = useSelector((state) => state.teams);
-  const [targetLabels, setTargetLabels] = useState([48, 74].map((id) => problems.byId[id].challenge_label));
-  // const [targetLabels, setTargetLabels] = useState(
-  //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].target_problem_ids.map((id) => problems.byId[id].challenge_label),
-  // );
+  const [targetLabels, setTargetLabels] = useState([]);
   // const [scoringFormula, setScoringFormula] = useState(
   //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.scoring_formula,
   // );
@@ -54,6 +51,15 @@ export default function ScoreboardEdit({ setEdit }) {
   // const [teamLabelFilter, setTeamLabelFilter] = useState(
   //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.team_label_filter,
   // );
+
+  useEffect(() => {
+    // if (scoreboards.byId[scoreboardId] && problems.byId) {
+    //   setTargetLabels(scoreboards.byId[scoreboardId].target_problem_ids.map((id) => problems.byId[id].challenge_label));
+    // }
+    if (problems.byId) {
+      setTargetLabels([48, 74].map((id) => problems.byId[id].challenge_label));
+    }
+  }, [problems.byId, scoreboardId]);
 
   const transIdToLabel = (ids) => ids.map((id) => problems.byId[id].challenge_label);
   const transLabelToId = (labels) => {
