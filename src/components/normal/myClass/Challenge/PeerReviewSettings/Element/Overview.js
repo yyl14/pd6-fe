@@ -17,6 +17,7 @@ export default function Overview({ peerReviewId }) {
       const newTableData = peerReviews[peerReviewId].reviewRecordIds.sort((a, b) => a - b).map((id, i) => {
         const item = peerReviewRecords.byId[id];
         return ({
+          id: `Peer${i + 1}`,
           peer: `Peer${i + 1}`,
           status: item && item.submit_time !== null ? 'Done' : 'Not Yet',
         });

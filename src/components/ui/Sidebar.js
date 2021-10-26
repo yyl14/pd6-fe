@@ -315,7 +315,6 @@ export default function Sidebar({ open, onClose }) {
         />
       </Route>
       <Route
-        exact
         path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receiver-summary"
       >
         <PeerReview
@@ -327,7 +326,7 @@ export default function Sidebar({ open, onClose }) {
           mode="peer-review-summary"
         />
       </Route>
-      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/grader-summary">
+      <Route path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/grader-summary">
         <PeerReview
           classNames={classes}
           history={history}

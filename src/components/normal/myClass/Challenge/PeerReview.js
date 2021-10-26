@@ -51,10 +51,10 @@ export default function PeerReview() {
     <>
       <Switch>
         <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId" component={PeerReviewInfo} />
-        <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receiver-summary" component={ReceiverSummary} />
-        <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/grader-summary" component={GraderSummary} />
         <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receive/:accountId/:recordId" component={ReceivedRecord} />
         <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/review/:accountId/:recordId" component={ReviewedRecord} />
+        <Route path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receiver-summary/:is_null?" component={ReceiverSummary} />
+        <Route path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/grader-summary/:is_null?" component={GraderSummary} />
         <Route component={NoMatch} />
       </Switch>
     </>
