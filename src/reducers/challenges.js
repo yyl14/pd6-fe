@@ -23,8 +23,8 @@ const prototype = {
   peerReviewIds: [],
   specialJudgeIds: [],
   essayIds: [],
-  statistics: emptyStatistics,
   scoreboardIds: [],
+  statistics: emptyStatistics,
 };
 
 const byId = (state = {}, action) => {
@@ -38,12 +38,6 @@ const byId = (state = {}, action) => {
             ...prototype,
             ...state[item.id],
             ...item,
-            problemIds: state[item.id] ? state[item.id].problemIds : [],
-            peerReviewIds: state[item.id] ? state[item.id].peerReviewIds : [],
-            specialJudgeIds: state[item.id] ? state[item.id].specialJudgeIds : [],
-            essayIds: state[item.id] ? state[item.id].essayIds : [],
-            statistics: state[item.id] ? state[item.id].statistics : emptyStatistics,
-            scoreboardIds: state[item.id] ? state[item.id].scoreboardIds : [],
           },
         }),
         state,
@@ -71,12 +65,6 @@ const byId = (state = {}, action) => {
           ...prototype,
           ...state[data.id],
           ...data,
-          problemIds: state[data.id] ? state[data.id].problemIds : [],
-          peerReviewIds: state[data.id] ? state[data.id].peerReviewIds : [],
-          specialJudgeIds: state[data.id] ? state[data.id].specialJudgeIds : [],
-          essayIds: state[data.id] ? state[data.id].essayIds : [],
-          statistics: state[data.id] ? state[data.id].statistics : emptyStatistics,
-          scoreboardIds: state[data.id] ? state[data.id].scoreboardIds : [],
         },
       };
     }
@@ -119,12 +107,6 @@ const byId = (state = {}, action) => {
             ...prototype,
             ...state[item.id],
             ...item,
-            problemIds: state[item.id] ? state[item.id].problemIds : [],
-            peerReviewIds: state[item.id] ? state[item.id].peerReviewIds : [],
-            specialJudgeIds: state[item.id] ? state[item.id].specialJudgeIds : [],
-            essayIds: state[item.id] ? state[item.id].essayIds : [],
-            statistics: state[item.id] ? state[item.id].statistics : emptyStatistics,
-            scoreboardIds: state[item.id] ? state[item.id].scoreboardIds : [],
           },
         }),
         state,
@@ -158,7 +140,7 @@ const allIds = (state = [], action) => {
       return [...new Set([...data.map((item) => item.id), ...state])];
     }
     case commonConstants.READ_CHALLENGE_SUCCESS: {
-      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+      return [...new Set([action.payload.id, ...state])];
     }
     case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
       const { challenges } = action.payload;
