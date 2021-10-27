@@ -28,7 +28,7 @@ export const readScoreboard = (token, scoreboardId) => async (dispatch) => {
 
     dispatch({
       type: scoreboardConstants.READ_SCOREBOARD_SUCCESS,
-      payload: res.data.data,
+      payload: { scoreboardId, data: { scoreboard: res.data.data } },
     });
   } catch (error) {
     dispatch({
