@@ -79,7 +79,7 @@ export default function ScoreboardEdit({ setEdit }) {
       title: scoreboards.byId[scoreboardId].title,
       target_problem_ids: targetIds,
       scoring_formula: scoringFormula,
-      baseline_team_id: baselineTeam,
+      baseline_team_id: baselineTeam === '' ? null : baselineTeam,
       rank_by_total_score: true,
       team_label_filter: teamLabelFilter,
     };

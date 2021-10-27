@@ -230,14 +230,12 @@ export default function TaskAddingCard({ open, setOpen }) {
         const body = {
           challenge_label: label,
           title,
-          type: 'TEAM_PROJECT',
           target_problem_ids: targetProblemIds,
           scoring_formula: scoringFormula,
-          baseline_team_id: baselineTeam,
+          baseline_team_id: baselineTeam === '' ? null : baselineTeam,
           rank_by_total_score: true,
           team_label_filter: teamLabelFilter,
         };
-        console.log(baselineTeam);
         dispatch(
           addTeamProjectScoreboardUnderChallenge(authToken, challengeId, body, addScoreboardSuccess, () => {
             setShowAddScoreboardErrorSnackbar(true);
