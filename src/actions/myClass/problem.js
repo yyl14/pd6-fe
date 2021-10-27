@@ -270,30 +270,69 @@ const browseAssistingData = (token, problemId) => async (dispatch) => {
   }
 };
 
-const editProblemInfo = (token, problemId, label, title, score, testcaseDisabled, description, ioDescription, source, hint, onSuccess) => async (dispatch) => {
+const editProblemInfo = (
+  token,
+  problemId,
+  label,
+  title,
+  judgeType,
+  score,
+  testcaseDisabled,
+  description,
+  ioDescription,
+  source,
+  hint,
+  judgeLanguage,
+  judgeCode,
+  onSuccess,
+) => async (dispatch) => {
   dispatch({ type: problemConstants.EDIT_PROBLEM_START });
   const config = {
     headers: {
       'auth-token': token,
     },
   };
-  const body = {
-    challenge_label: label,
-    title,
-    full_score: score,
-    testcase_disabled: testcaseDisabled,
-    description,
-    io_description: ioDescription,
-    source,
-    hint,
-  };
   try {
-    await agent.patch(`/problem/${problemId}`, body, config);
-
-    dispatch({
-      type: problemConstants.EDIT_PROBLEM_SUCCESS,
-      payload: { problemId, content: body },
-    });
+    if (judgeType === 'NORMAL') {
+      const body = {
+        challenge_label: label,
+        title,
+        judge_type: judgeType,
+        full_score: score,
+        testcase_disabled: testcaseDisabled,
+        description,
+        io_description: ioDescription,
+        source,
+        hint,
+      };
+      await agent.patch(`/problem/${problemId}`, body, config);
+      dispatch({
+        type: problemConstants.EDIT_PROBLEM_SUCCESS,
+        payload: { problemId, content: body },
+      });
+    } else {
+      const body = {
+        challenge_label: label,
+        title,
+        judge_type: judgeType,
+        full_score: score,
+        testcase_disabled: testcaseDisabled,
+        description,
+        io_description: ioDescription,
+        source,
+        hint,
+        judge_source: {
+          judge_language: judgeLanguage,
+          judge_code: judgeCode,
+        },
+      };
+      await agent.patch(`/problem/${problemId}`, body, config);
+      dispatch({
+        type: problemConstants.EDIT_PROBLEM_SUCCESS,
+        payload: { problemId, content: body },
+      });
+    }
+    // console.log(judgeType, judgeLanguage, judgeCode);
   } catch (error) {
     dispatch({
       type: problemConstants.EDIT_PROBLEM_FAIL,
