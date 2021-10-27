@@ -179,7 +179,7 @@ export default function CodingProblemEdit({ closeEdit }) {
       setHint(problems[problemId].hint);
       setJudgeType(problems[problemId].judge_type);
       if (problems[problemId].judge_type === 'CUSTOMIZED') {
-        setLanguage(problems[problemId].judge_source.judge_language);
+        setLanguage('Python');
       }
     }
   }, [problems, problemId, judgeType]);
