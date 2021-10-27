@@ -23,13 +23,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexWrap: 'wrap',
   },
-  profileAdjustment: {
-    width: '100%',
-    display: 'flex',
-    flexWrap: 'wrap',
-    marginTop: '-50px',
-    marginBottom: '50px',
-  },
 }));
 
 export default function Team() {
@@ -114,81 +107,82 @@ export default function Team() {
             />
           </div>
         </SimpleBar>
-        <SimpleBar title="Frontend" />
-        <div className={classes.profileAdjustment}>
-          <Profile
-            img_url="../../../images/timicienio.jpg"
-            name="陳以潼 timicienio"
-            description="FE"
-            FB_link="https://www.facebook.com/profile.php?id=100005076990283"
-            Github_link="https://github.com/timicienio"
-            Linkedin_link="http://www.linkedin.com/in/tmcn"
-          />
-          <Profile
-            img_url="../../../images/GaryHu.jpg"
-            name="胡家愷 Gary1030"
-            description="FE"
-            FB_link="https://www.facebook.com/gary.hu.5680"
-            Linkedin_link="http://www.linkedin.com/in/gary-hu-2000"
-          />
-          <Profile
-            img_url="../../../images/HuangFu.jpg"
-            name="皇甫立翔 HuangFu"
-            description="FE"
-            FB_link="https://www.facebook.com/Peter.HaungFu/"
-            Github_link="https://github.com/peterhuangfu"
-            Linkedin_link="https://www.linkedin.com/in/li-hsiang-huang-fu-0b1825184/"
-          />
-          <Profile
-            img_url="../../../images/Ray.jpg"
-            name="李旻叡 Ray"
-            description="FE"
-            FB_link="https://www.facebook.com/profile.php?id=100003519372915"
-            Github_link="https://github.com/raymanlee89"
-          />
-          <Profile
-            img_url="../../../images/pochunwu.jpg"
-            name="吳泊諄 Po-Chun Wu"
-            description="FE"
-            FB_link="https://www.facebook.com/profile.php?id=100027240108806"
-            Linkedin_link="https://www.linkedin.com/in/pochunwu2000/"
-          />
-          <Profile
-            img_url="../../../images/erica.jpg"
-            name="鄭安芸 erica"
-            description="FE"
-            FB_link="https://www.facebook.com/profile.php?id=100006123196027"
-            Linkedin_link="https://www.linkedin.com/in/an-yun-cheng"
-          />
-          <Profile
-            img_url="../../../images/DaphneHou.JPG"
-            name="侯維書 Daphne Hou"
-            description="FE"
-            FB_link="https://www.facebook.com/daphne.hou.9/"
-            Linkedin_link="https://www.linkedin.com/in/daphne-hou-2016ab220/"
-          />
-          <Profile
-            img_url="../../../images/amberliu.JPG"
-            name="劉亞絜 amberliu"
-            description="FE"
-            FB_link="https://www.facebook.com/profile.php?id=100006116703389"
-            Linkedin_link="https://www.linkedin.com/in/amber-liu-2b05651a2/"
-          />
-          <Profile
-            img_url="../../../images/wilson.jpg"
-            name="徐懷山 wilson"
-            description="FE"
-            FB_link="https://www.facebook.com/Hsu.Wilson0915/"
-            Linkedin_link="https://www.linkedin.com/in/wilson-hsu-4976b31b7/"
-          />
-          <Profile
-            img_url="../../../images/Duge.jpg"
-            name="盧慶原 Duge"
-            description="前端打雜94我"
-            FB_link="https://www.facebook.com/DuckChingYuan"
-            Github_link="https://github.com/duge03705022"
-          />
-        </div>
+        <SimpleBar title="Frontend" noIndent>
+          <div className={classes.profile}>
+            <Profile
+              img_url="../../../images/timicienio.jpg"
+              name="陳以潼 timicienio"
+              description="FE"
+              FB_link="https://www.facebook.com/profile.php?id=100005076990283"
+              Github_link="https://github.com/timicienio"
+              Linkedin_link="http://www.linkedin.com/in/tmcn"
+            />
+            <Profile
+              img_url="../../../images/GaryHu.jpg"
+              name="胡家愷 Gary1030"
+              description="FE"
+              FB_link="https://www.facebook.com/gary.hu.5680"
+              Linkedin_link="http://www.linkedin.com/in/gary-hu-2000"
+            />
+            <Profile
+              img_url="../../../images/HuangFu.jpg"
+              name="皇甫立翔 HuangFu"
+              description="FE"
+              FB_link="https://www.facebook.com/Peter.HaungFu/"
+              Github_link="https://github.com/peterhuangfu"
+              Linkedin_link="https://www.linkedin.com/in/li-hsiang-huang-fu-0b1825184/"
+            />
+            <Profile
+              img_url="../../../images/Ray.jpg"
+              name="李旻叡 Ray"
+              description="FE"
+              FB_link="https://www.facebook.com/profile.php?id=100003519372915"
+              Github_link="https://github.com/raymanlee89"
+            />
+            <Profile
+              img_url="../../../images/pochunwu.jpg"
+              name="吳泊諄 Po-Chun Wu"
+              description="FE"
+              FB_link="https://www.facebook.com/profile.php?id=100027240108806"
+              Linkedin_link="https://www.linkedin.com/in/pochunwu2000/"
+            />
+            <Profile
+              img_url="../../../images/erica.jpg"
+              name="鄭安芸 erica"
+              description="FE"
+              FB_link="https://www.facebook.com/profile.php?id=100006123196027"
+              Linkedin_link="https://www.linkedin.com/in/an-yun-cheng"
+            />
+            <Profile
+              img_url="../../../images/DaphneHou.JPG"
+              name="侯維書 Daphne Hou"
+              description="FE"
+              FB_link="https://www.facebook.com/daphne.hou.9/"
+              Linkedin_link="https://www.linkedin.com/in/daphne-hou-2016ab220/"
+            />
+            <Profile
+              img_url="../../../images/amberliu.JPG"
+              name="劉亞絜 amberliu"
+              description="FE"
+              FB_link="https://www.facebook.com/profile.php?id=100006116703389"
+              Linkedin_link="https://www.linkedin.com/in/amber-liu-2b05651a2/"
+            />
+            <Profile
+              img_url="../../../images/wilson.jpg"
+              name="徐懷山 wilson"
+              description="FE"
+              FB_link="https://www.facebook.com/Hsu.Wilson0915/"
+              Linkedin_link="https://www.linkedin.com/in/wilson-hsu-4976b31b7/"
+            />
+            <Profile
+              img_url="../../../images/Duge.jpg"
+              name="盧慶原 Duge"
+              description="前端打雜94我"
+              FB_link="https://www.facebook.com/DuckChingYuan"
+              Github_link="https://github.com/duge03705022"
+            />
+          </div>
+        </SimpleBar>
         <SimpleBar title="Backend" noIndent>
           <div className={classes.profile}>
             <Profile
@@ -242,74 +236,76 @@ export default function Team() {
         </SimpleBar>
       </div>
       <div className={display[1] === true ? classes.PDOGS_Content_Display : classes.PDOGS_Content_Hide}>
-        <SimpleBar title="Core Develop Team" />
-        <div className={classes.profileAdjustment}>
-          <Profile img_url="../../../images/Shouko.png" name="虞翔皓 Shouko" description="System" />
-          <Profile img_url="../../../images/bigelephant29.png" name="謝志邦 bigelephant29" description="System" />
-          <Profile img_url="../../../images/arbuztw.png" name="江昱熹 arbuztw" description="System" />
-          <Profile img_url="../../../images/ViktorLin.png" name="林子期 Viktor Lin" description="System" />
-          <Profile
-            img_url="../../../images/Duge.jpg"
-            name="盧慶原 Duge"
-            description="System"
-            FB_link="https://www.facebook.com/DuckChingYuan"
-            Github_link="https://github.com/duge03705022"
-          />
-          <Profile
-            img_url="../../../images/Seanliao.png"
-            name="廖寬璿 Seanliao"
-            description="System"
-            FB_link="https://www.facebook.com/seankhliao"
-          />
-          <Profile img_url="../../../images/Elantris.png" name="許承佑 Elantris" description="System" />
-          <Profile img_url="../../../images/doge.png" name="胡哲愷 ChouChouHu" description="Design" />
-          <Profile img_url="../../../images/doge.png" name="陳劭恩 seanchen47" description="Design" />
-          <Profile img_url="../../../images/doge.png" name="劉冠宏 kh9543" description="Design" />
-          <Profile img_url="../../../images/doge.png" name="蘇筱晴 CApopsicle" description="Design" />
-          <Profile img_url="../../../images/doge.png" name="涂靖雯 BonnieTu" description="Design" />
-        </div>
-        <SimpleBar title="Maintainers" />
-        <div className={classes.profileAdjustment}>
-          <Profile
-            img_url="../../../images/Duge.jpg"
-            name="盧慶原 Duge"
-            description="[2015-2017]"
-            FB_link="https://www.facebook.com/DuckChingYuan"
-            Github_link="https://github.com/duge03705022"
-          />
-          <Profile img_url="../../../images/doge.png" name="蕭法宣 fts152" description="[2017-2018]" />
-          <Profile
-            img_url="../../../images/secret104278.jpg"
-            name="王予智 secret104278"
-            description="[2018-2019]"
-            FB_link="https://www.facebook.com/secret104278"
-          />
-          <Profile
-            img_url="../../../images/ginoah.jpg"
-            name="朱元均 ginoah"
-            description="[2019-2020]"
-            FB_link="https://www.facebook.com/G1N0CHU"
-          />
-          <Profile
-            img_url="../../../images/eethan1.jpg"
-            name="林俊逸 eethan1"
-            description="[2020-2021]"
-            FB_link="https://www.facebook.com/cjiso1117"
-          />
-          <Profile
-            img_url="../../../images/eKL016.jpg"
-            name="林雨新 eKL016"
-            description="Supportive Developers"
-            FB_link="https://www.facebook.com/ethan4ever"
-          />
-          <Profile
-            img_url="../../../images/Kiyume.jpg"
-            name="鄭允頎 Kiyume"
-            description="Supportive Developers"
-            FB_link="http://fb.com/e9cf87fc"
-            Linkedin_link="http://www.linkedin.com/in/yunchi-cheng"
-          />
-        </div>
+        <SimpleBar title="Core Develop Team" noIndent>
+          <div className={classes.profile}>
+            <Profile img_url="../../../images/Shouko.png" name="虞翔皓 Shouko" description="System" />
+            <Profile img_url="../../../images/bigelephant29.png" name="謝志邦 bigelephant29" description="System" />
+            <Profile img_url="../../../images/arbuztw.png" name="江昱熹 arbuztw" description="System" />
+            <Profile img_url="../../../images/ViktorLin.png" name="林子期 Viktor Lin" description="System" />
+            <Profile
+              img_url="../../../images/Duge.jpg"
+              name="盧慶原 Duge"
+              description="System"
+              FB_link="https://www.facebook.com/DuckChingYuan"
+              Github_link="https://github.com/duge03705022"
+            />
+            <Profile
+              img_url="../../../images/Seanliao.png"
+              name="廖寬璿 Seanliao"
+              description="System"
+              FB_link="https://www.facebook.com/seankhliao"
+            />
+            <Profile img_url="../../../images/Elantris.png" name="許承佑 Elantris" description="System" />
+            <Profile img_url="../../../images/doge.png" name="胡哲愷 ChouChouHu" description="Design" />
+            <Profile img_url="../../../images/doge.png" name="陳劭恩 seanchen47" description="Design" />
+            <Profile img_url="../../../images/doge.png" name="劉冠宏 kh9543" description="Design" />
+            <Profile img_url="../../../images/doge.png" name="蘇筱晴 CApopsicle" description="Design" />
+            <Profile img_url="../../../images/doge.png" name="涂靖雯 BonnieTu" description="Design" />
+          </div>
+        </SimpleBar>
+        <SimpleBar title="Maintainers" noIndent>
+          <div className={classes.profile}>
+            <Profile
+              img_url="../../../images/Duge.jpg"
+              name="盧慶原 Duge"
+              description="[2015-2017]"
+              FB_link="https://www.facebook.com/DuckChingYuan"
+              Github_link="https://github.com/duge03705022"
+            />
+            <Profile img_url="../../../images/doge.png" name="蕭法宣 fts152" description="[2017-2018]" />
+            <Profile
+              img_url="../../../images/secret104278.jpg"
+              name="王予智 secret104278"
+              description="[2018-2019]"
+              FB_link="https://www.facebook.com/secret104278"
+            />
+            <Profile
+              img_url="../../../images/ginoah.jpg"
+              name="朱元均 ginoah"
+              description="[2019-2020]"
+              FB_link="https://www.facebook.com/G1N0CHU"
+            />
+            <Profile
+              img_url="../../../images/eethan1.jpg"
+              name="林俊逸 eethan1"
+              description="[2020-2021]"
+              FB_link="https://www.facebook.com/cjiso1117"
+            />
+            <Profile
+              img_url="../../../images/eKL016.jpg"
+              name="林雨新 eKL016"
+              description="Supportive Developers"
+              FB_link="https://www.facebook.com/ethan4ever"
+            />
+            <Profile
+              img_url="../../../images/Kiyume.jpg"
+              name="鄭允頎 Kiyume"
+              description="Supportive Developers"
+              FB_link="http://fb.com/e9cf87fc"
+              Linkedin_link="http://www.linkedin.com/in/yunchi-cheng"
+            />
+          </div>
+        </SimpleBar>
         <SimpleBar title="2017 Enhancement Project" noIndent>
           <div className={classes.profile}>
             <Profile
