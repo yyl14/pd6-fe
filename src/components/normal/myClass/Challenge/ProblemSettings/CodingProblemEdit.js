@@ -162,13 +162,6 @@ export default function CodingProblemEdit({ closeEdit }) {
     return 0;
   };
 
-  const judgeMethodToType = (method) => {
-    if (method === 'No customized judge') {
-      return 'NORMAL';
-    }
-    return 'CUSTOMIZED';
-  };
-
   const judgeLanguageTrans = (lang) => {
     if (lang === 'Python') {
       return 'python 3.8';
@@ -184,14 +177,12 @@ export default function CodingProblemEdit({ closeEdit }) {
       setIoDescription(problems[problemId].io_description);
       setSource(problems[problemId].source);
       setHint(problems[problemId].hint);
-      if (problems[problemId].judge_type === 'NORMAL') {
-        setJudgeType('No customized judge');
-      } else if (problems[problemId].judge_type === 'CUSTOMIZED') {
-        setJudgeType('Customized judge');
+      setJudgeType(problems[problemId].judge_type);
+      if (problems[problemId].judge_type === 'CUSTOMIZED') {
         setLanguage(problems[problemId].judge_source.judge_language);
       }
     }
-  }, [problems, problemId]);
+  }, [problems, problemId, judgeType]);
 
   useEffect(() => {
     if (problems[problemId] && problems[problemId].testcaseIds) {
@@ -463,7 +454,7 @@ export default function CodingProblemEdit({ closeEdit }) {
         problemId,
         label,
         title,
-        judgeMethodToType(judgeType),
+        judgeType,
         newFullScore,
         !status,
         description,
@@ -830,12 +821,12 @@ export default function CodingProblemEdit({ closeEdit }) {
         <AlignedText text="Judge method" childrenType="field">
           <FormControl variant="outlined" className={classNames.select}>
             <Select name="judgeMethod" value={judgeType} onChange={(e) => setJudgeType(e.target.value)}>
-              <MenuItem value="No customized judge">No customized judge</MenuItem>
-              <MenuItem value="Customized judge">Customized judge</MenuItem>
+              <MenuItem value="NORMAL">No customized judge</MenuItem>
+              <MenuItem value="CUSTOMIZED">Customized judge</MenuItem>
             </Select>
           </FormControl>
         </AlignedText>
-        {judgeType !== 'No customized judge' && (
+        {judgeType !== 'NORMAL' && (
           <>
             <AlignedText text="Language" childrenType="field">
               <FormControl variant="outlined" className={classNames.select}>
