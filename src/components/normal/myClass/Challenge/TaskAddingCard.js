@@ -281,8 +281,6 @@ export default function TaskAddingCard({ open, setOpen }) {
     return <NoMatch />;
   }
 
-  console.log(error.api.scoreboard);
-
   return (
     <>
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="md">
