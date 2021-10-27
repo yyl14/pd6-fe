@@ -102,7 +102,7 @@ export default function CodingProblemEdit({ closeEdit }) {
   const [source, setSource] = useState('');
   const [hint, setHint] = useState('');
   const [judgeType, setJudgeType] = useState('');
-  const [language, setLanguage] = useState('');
+  const [language, setLanguage] = useState('Python');
   const [judgeCode, setJudgeCode] = useState('');
   const [status, setStatus] = useState(true);
 
@@ -182,7 +182,7 @@ export default function CodingProblemEdit({ closeEdit }) {
         setLanguage('Python');
       }
     }
-  }, [problems, problemId, judgeType]);
+  }, [problems, problemId]);
 
   useEffect(() => {
     if (problems[problemId] && problems[problemId].testcaseIds) {

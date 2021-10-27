@@ -292,44 +292,47 @@ const editProblemInfo = (
       'auth-token': token,
     },
   };
-  let body;
-  if (judgeType === 'NORMAL') {
-    body = {
-      challenge_label: label,
-      title,
-      judge_type: judgeType,
-      full_score: score,
-      testcase_disabled: testcaseDisabled,
-      description,
-      io_description: ioDescription,
-      source,
-      hint,
-    };
-  } else {
-    body = {
-      challenge_label: label,
-      title,
-      judge_type: judgeType,
-      full_score: score,
-      testcase_disabled: testcaseDisabled,
-      description,
-      io_description: ioDescription,
-      source,
-      hint,
-      judge_source: {
-        judge_language: judgeLanguage,
-        judge_code: judgeCode,
-      },
-    };
-  }
-  // console.log(judgeType, judgeLanguage, judgeCode);
   try {
-    await agent.patch(`/problem/${problemId}`, body, config);
-
-    dispatch({
-      type: problemConstants.EDIT_PROBLEM_SUCCESS,
-      payload: { problemId, content: body },
-    });
+    if (judgeType === 'NORMAL') {
+      const body = {
+        challenge_label: label,
+        title,
+        judge_type: judgeType,
+        full_score: score,
+        testcase_disabled: testcaseDisabled,
+        description,
+        io_description: ioDescription,
+        source,
+        hint,
+      };
+      await agent.patch(`/problem/${problemId}`, body, config);
+      dispatch({
+        type: problemConstants.EDIT_PROBLEM_SUCCESS,
+        payload: { problemId, content: body },
+      });
+    } else {
+      const body = {
+        challenge_label: label,
+        title,
+        judge_type: judgeType,
+        full_score: score,
+        testcase_disabled: testcaseDisabled,
+        description,
+        io_description: ioDescription,
+        source,
+        hint,
+        judge_source: {
+          judge_language: judgeLanguage,
+          judge_code: judgeCode,
+        },
+      };
+      await agent.patch(`/problem/${problemId}`, body, config);
+      dispatch({
+        type: problemConstants.EDIT_PROBLEM_SUCCESS,
+        payload: { problemId, content: body },
+      });
+    }
+    // console.log(judgeType, judgeLanguage, judgeCode);
   } catch (error) {
     dispatch({
       type: problemConstants.EDIT_PROBLEM_FAIL,
