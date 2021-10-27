@@ -283,6 +283,8 @@ export default function TaskAddingCard({ open, setOpen }) {
     return <NoMatch />;
   }
 
+  console.log(error.api.scoreboard);
+
   return (
     <>
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="md">
@@ -515,7 +517,7 @@ export default function TaskAddingCard({ open, setOpen }) {
       />
       <Snackbar
         open={showAddScoreboardErrorSnackbar}
-        message={`Error: ${error.api.scoreboard}`}
+        message={`Error: ${error.api.scoreboard.addTeamProjectScoreboardUnderChallenge}`}
         onClose={() => setShowAddScoreboardErrorSnackbar(false)}
       />
     </>
