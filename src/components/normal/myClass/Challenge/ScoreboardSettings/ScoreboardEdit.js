@@ -35,7 +35,6 @@ export default function ScoreboardEdit({ setEdit }) {
   const dispatch = useDispatch();
   const classNames = useStyles();
 
-  // const scoreboards = useSelector((state) => state.scoreboards);
   const challenges = useSelector((state) => state.challenges);
   const authToken = useSelector((state) => state.auth.token);
   const problems = useSelector((state) => state.problem);
@@ -46,7 +45,6 @@ export default function ScoreboardEdit({ setEdit }) {
   const [scoringFormula, setScoringFormula] = useState(
     scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.scoring_formula,
   );
-  // const [baselineTeam, setBaselineTeam] = useState(46);
   const [baselineTeam, setBaselineTeam] = useState(
     scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.baseline_team_id,
   );
