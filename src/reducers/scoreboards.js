@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
-import { challengeConstants, scoreboardConstants } from '../actions/myClass/constant';
+import { challengeConstants } from '../actions/myClass/constant';
+import { scoreboardConstants } from '../actions/api/constant';
 
 const prototype = {
   id: null,
@@ -27,9 +28,10 @@ const byId = (state = {}, action) => {
       );
     }
     case scoreboardConstants.READ_SCOREBOARD_SUCCESS: {
+      const { scoreboardId, data } = action.payload;
       return {
         ...state,
-        [action.payload.id]: { ...prototype, ...state[action.payload.id], ...action.payload },
+        [action.payload.id]: { ...prototype, ...state[scoreboardId], ...data.scoreboard },
       };
     }
 
@@ -45,7 +47,8 @@ const allIds = (state = [], action) => {
       return [...new Set([...data.scoreboard.map((item) => item.id), ...state])];
     }
     case scoreboardConstants.READ_SCOREBOARD_SUCCESS: {
-      return [...new Set([action.payload.id, ...state])];
+      const { scoreboardId } = action.payload;
+      return [...new Set([scoreboardId, ...state])];
     }
     default:
       return state;
