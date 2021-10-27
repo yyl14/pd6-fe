@@ -19,6 +19,7 @@ import AlignedText from '../../../ui/AlignedText';
 import MultiSelect from '../../../ui/MultiSelect';
 import Icon from '../../../ui/icon/index';
 import NoMatch from '../../../noMatch';
+import { addTeamProjectScoreboardUnderChallenge } from '../../../../actions/api/scoreboard';
 
 import {
   addProblem,
@@ -229,17 +230,18 @@ export default function TaskAddingCard({ open, setOpen }) {
         const body = {
           challenge_label: label,
           title,
+          type: 'TEAM_PROJECT',
           target_problem_ids: targetProblemIds,
           scoring_formula: scoringFormula,
           baseline_team_id: baselineTeam,
           rank_by_total_score: true,
           team_label_filter: teamLabelFilter,
         };
-        // dispatch(
-        //   addTeamProjectScoreboardUnderChallenge(authToken, challengeId, body, addScoreboardSuccess, () => {
-        //     showAddScoreboardErrorSnackbar(true);
-        //   }),
-        // );
+        dispatch(
+          addTeamProjectScoreboardUnderChallenge(authToken, challengeId, body, addScoreboardSuccess, () => {
+            setShowAddScoreboardErrorSnackbar(true);
+          }),
+        );
         setScoreboardType('TEAM_PROJECT');
         setTargetProblems([]);
         setScoringFormula('');

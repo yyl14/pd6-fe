@@ -9,7 +9,7 @@ const prototype = {
   title: null,
   target_problem_ids: [],
   is_deleted: null,
-  scoreboard_type: null,
+  type: null,
   data: {
     scoring_formula: null,
     baseline_team_id: null, // optional
@@ -31,7 +31,7 @@ const byId = (state = {}, action) => {
       const { scoreboardId, data } = action.payload;
       return {
         ...state,
-        [action.payload.id]: { ...prototype, ...state[scoreboardId], ...data.scoreboard },
+        [scoreboardId]: { ...prototype, ...state[scoreboardId], ...data.scoreboard },
       };
     }
 

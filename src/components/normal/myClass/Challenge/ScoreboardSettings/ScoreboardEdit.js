@@ -1,5 +1,5 @@
 import {
-  Typography, Button, makeStyles, FormControl, Select, MenuItem,
+  Typography, Button, makeStyles, FormControl, Select, MenuItem, TextField,
 } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleBar from '../../../../ui/SimpleBar';
 import MultiSelect from '../../../../ui/MultiSelect';
+import { editTeamProjectScoreboard } from '../../../../../actions/api/scoreboard';
 
 const useStyles = makeStyles((theme) => ({
   buttons: {
@@ -40,26 +41,24 @@ export default function ScoreboardEdit({ setEdit }) {
   const problems = useSelector((state) => state.problem);
   const classes = useSelector((state) => state.classes);
   const teams = useSelector((state) => state.teams);
+  const scoreboards = useSelector((state) => state.scoreboards);
   const [targetLabels, setTargetLabels] = useState([]);
-  // const [scoringFormula, setScoringFormula] = useState(
-  //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.scoring_formula,
-  // );
-  const [baselineTeam, setBaselineTeam] = useState(46);
-  // const [baselineTeam, setBaselineTeam] = useState(
-  //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.baseline_team_id,
-  // );
-  // const [teamLabelFilter, setTeamLabelFilter] = useState(
-  //   scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.team_label_filter,
-  // );
+  const [scoringFormula, setScoringFormula] = useState(
+    scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.scoring_formula,
+  );
+  // const [baselineTeam, setBaselineTeam] = useState(46);
+  const [baselineTeam, setBaselineTeam] = useState(
+    scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.baseline_team_id,
+  );
+  const [teamLabelFilter, setTeamLabelFilter] = useState(
+    scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].data.team_label_filter,
+  );
 
   useEffect(() => {
-    // if (scoreboards.byId[scoreboardId] && problems.byId) {
-    //   setTargetLabels(scoreboards.byId[scoreboardId].target_problem_ids.map((id) => problems.byId[id].challenge_label));
-    // }
-    if (problems.byId) {
-      setTargetLabels([48, 74].map((id) => problems.byId[id].challenge_label));
+    if (scoreboards.byId[scoreboardId] && problems.byId) {
+      setTargetLabels(scoreboards.byId[scoreboardId].target_problem_ids.map((id) => problems.byId[id].challenge_label));
     }
-  }, [problems.byId, scoreboardId]);
+  }, [problems.byId, scoreboardId, scoreboards.byId]);
 
   const transIdToLabel = (ids) => ids.map((id) => problems.byId[id].challenge_label);
   const transLabelToId = (labels) => {
@@ -75,16 +74,16 @@ export default function ScoreboardEdit({ setEdit }) {
 
   const handleSave = () => {
     const targetIds = transLabelToId(targetLabels);
-    // const body = {
-    //   challenge_label: scoreboards.byId[scoreboardId].challenge_label,
-    //   title: scoreboards.byId[scoreboardId].title,
-    //   target_problem_ids: targetIds,
-    //   scoring_formula: scoringFormula,
-    //   baseline_team_id: baselineTeam,
-    //   rank_by_total_score: true,
-    //   team_label_filter: teamLabelFilter,
-    // };
-    // dispatch(editTeamProjectScoreboard(authToken, scoreboardId, body));
+    const body = {
+      challenge_label: scoreboards.byId[scoreboardId].challenge_label,
+      title: scoreboards.byId[scoreboardId].title,
+      target_problem_ids: targetIds,
+      scoring_formula: scoringFormula,
+      baseline_team_id: baselineTeam,
+      rank_by_total_score: true,
+      team_label_filter: teamLabelFilter,
+    };
+    dispatch(editTeamProjectScoreboard(authToken, scoreboardId, body));
     setEdit(false);
   };
 
@@ -92,13 +91,11 @@ export default function ScoreboardEdit({ setEdit }) {
     <SimpleBar title="Ranking Configuration">
       <AlignedText text="Scoreboard Type" childrenType="text">
         <Typography variant="body1">
-          Team Project
-          {/* {scoreboards.byId[scoreboardId].scoreboard_type === 'TEAM_PROJECT' ? 'Team Project' : 'Contest'} */}
+          {scoreboards.byId[scoreboardId].type === 'TEAM_PROJECT' ? 'Team Project' : 'Contest'}
         </Typography>
       </AlignedText>
       <AlignedText text="Title" childrenType="text">
-        <Typography variant="body1">Scoreboard</Typography>
-        {/* <Typography variant="body1">{scoreboards.byId[scoreboardId].title}</Typography> */}
+        <Typography variant="body1">{scoreboards.byId[scoreboardId].title}</Typography>
       </AlignedText>
       <AlignedText text="Target Problems" childrenType="field">
         <MultiSelect
@@ -109,12 +106,12 @@ export default function ScoreboardEdit({ setEdit }) {
       </AlignedText>
       <hr className={classNames.divider} />
       <AlignedText text="Scoring Formula" childrenType="field">
-        {/* <TextField
+        <TextField
           value={scoringFormula}
           onChange={(e) => {
             setScoringFormula(e.target.value);
           }}
-        /> */}
+        />
       </AlignedText>
       <div className={classNames.instructions}>
         <Typography variant="body2">A self-defined pattern; content format/specs</Typography>
@@ -137,12 +134,12 @@ export default function ScoreboardEdit({ setEdit }) {
       </AlignedText>
       <hr className={classNames.divider} />
       <AlignedText text="Team Label Filter (Optional)" childrenType="field">
-        {/* <TextField
+        <TextField
           value={teamLabelFilter}
           onChange={(e) => {
             setTeamLabelFilter(e.target.value);
           }}
-        /> */}
+        />
       </AlignedText>
       <div className={classNames.instructions}>
         <Typography variant="body2">To filter teams with label, support regex</Typography>
