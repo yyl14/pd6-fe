@@ -237,6 +237,7 @@ export default function TaskAddingCard({ open, setOpen }) {
           rank_by_total_score: true,
           team_label_filter: teamLabelFilter,
         };
+        console.log(baselineTeam);
         dispatch(
           addTeamProjectScoreboardUnderChallenge(authToken, challengeId, body, addScoreboardSuccess, () => {
             setShowAddScoreboardErrorSnackbar(true);

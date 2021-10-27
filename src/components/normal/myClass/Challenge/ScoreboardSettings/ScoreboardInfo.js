@@ -78,6 +78,7 @@ export default function ScoreboardInfo() {
   const scoreboards = useSelector((state) => state.scoreboards);
   const userClasses = useSelector((state) => state.user.classes);
   const teams = useSelector((state) => state.teams);
+  const loading = useSelector((state) => state.loading.api.scoreboard);
 
   const [scoreboardTitle, setScoreboardTitle] = useState(scoreboardBasicTitle);
   const [Teams, setTeams] = useState([]);
@@ -90,8 +91,10 @@ export default function ScoreboardInfo() {
   }, [authToken, classId, dispatch]);
 
   useEffect(() => {
-    dispatch(readScoreboard(authToken, scoreboardId));
-  }, [authToken, dispatch, scoreboardId]);
+    if (!loading.editTeamProjectScoreboard) {
+      dispatch(readScoreboard(authToken, scoreboardId));
+    }
+  }, [authToken, dispatch, loading.editTeamProjectScoreboard, scoreboardId]);
 
   useEffect(() => {
     if (userClasses.filter((item) => item.class_id === Number(classId)).length !== 0) {
