@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
-import { challengeConstants, scoreboardConstants } from '../actions/myClass/constant';
+import { challengeConstants } from '../actions/myClass/constant';
+import { scoreboardConstants } from '../actions/api/constant';
 
 const prototype = {
   id: null,
