@@ -549,11 +549,11 @@ const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData
             formData.append('input_file', sampleTableData[id].in_file);
             await agent.put(`/testcase/${testcaseId}/input-data`, formData, fileConfig);
           }
-          // if (sampleTableData[id].out_file != null) {
-          //   const formData = new FormData();
-          //   formData.append('output_file', sampleTableData[id].out_file);
-          //   await agent.put(`/testcase/${testcaseId}/output-data`, formData, fileConfig);
-          // }
+          if (sampleTableData[id].out_file != null) {
+            const formData = new FormData();
+            formData.append('output_file', sampleTableData[id].out_file);
+            await agent.put(`/testcase/${testcaseId}/output-data`, formData, fileConfig);
+          }
           dispatch({ type: problemConstants.ADD_TESTCASE_SUCCESS });
         } catch (error) {
           dispatch({
@@ -563,9 +563,9 @@ const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData
           if (sampleTableData[id].in_file != null) {
             onError(sampleTableData[id].in_file.name);
           }
-          // if (sampleTableData[id].out_file != null) {
-          //   onError(sampleTableData[id].out_file.name);
-          // }
+          if (sampleTableData[id].out_file != null) {
+            onError(sampleTableData[id].out_file.name);
+          }
         }
       } else {
         // check basic info
@@ -573,7 +573,9 @@ const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData
           testcases[id].time_limit !== sampleTableData[id].time_limit
             || testcases[id].memory_limit !== sampleTableData[id].memory_limit
             || testcases[id].is_disabled !== false
+            || testcases[id].note !== sampleTableData[id].note
         ) {
+          console.log('editTestcase', sampleTableData[id]);
           await dispatch(
             editTestcase(token, id, true, 0, sampleTableData[id].time_limit, sampleTableData[id].memory_limit, sampleTableData[id].note, false),
           );
@@ -594,21 +596,21 @@ const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData
             onError(sampleTableData[id].in_file.name);
           }
         }
-        // if (sampleTableData[id].out_file !== null) {
-        //   try {
-        //     dispatch({ type: problemConstants.UPLOAD_TESTCASE_OUTPUT_START });
-        //     const formData = new FormData();
-        //     formData.append('output_file', sampleTableData[id].out_file);
-        //     await agent.put(`/testcase/${id}/output-data`, formData, fileConfig);
-        //     dispatch({ type: problemConstants.UPLOAD_TESTCASE_OUTPUT_SUCCESS });
-        //   } catch (error) {
-        //     dispatch({
-        //       type: problemConstants.UPLOAD_TESTCASE_OUTPUT_FAIL,
-        //       error,
-        //     });
-        //     onError(sampleTableData[id].out_file.name);
-        //   }
-        // }
+        if (sampleTableData[id].out_file !== null) {
+          try {
+            dispatch({ type: problemConstants.UPLOAD_TESTCASE_OUTPUT_START });
+            const formData = new FormData();
+            formData.append('output_file', sampleTableData[id].out_file);
+            await agent.put(`/testcase/${id}/output-data`, formData, fileConfig);
+            dispatch({ type: problemConstants.UPLOAD_TESTCASE_OUTPUT_SUCCESS });
+          } catch (error) {
+            dispatch({
+              type: problemConstants.UPLOAD_TESTCASE_OUTPUT_FAIL,
+              error,
+            });
+            onError(sampleTableData[id].out_file.name);
+          }
+        }
       }
       return id;
     }),
@@ -660,6 +662,7 @@ const saveTestcases = (token, problemId, testcases, testcaseDataIds, testcaseTab
           score: testcaseTableData[id].score,
           time_limit: testcaseTableData[id].time_limit,
           memory_limit: testcaseTableData[id].memory_limit,
+          note: testcaseTableData[id].note,
           is_disabled: !status,
         };
         try {
@@ -695,6 +698,7 @@ const saveTestcases = (token, problemId, testcases, testcaseDataIds, testcaseTab
             || testcases[id].memory_limit !== testcaseTableData[id].memory_limit
             || testcases[id].score !== testcaseTableData[id].score
             || testcases[id].is_disabled !== !status
+            || testcases[id].note !== testcaseTableData[id].note
         ) {
           await dispatch(
             editTestcase(
