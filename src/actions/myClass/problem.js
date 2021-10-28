@@ -43,7 +43,17 @@ const readProblemWithJudgeCode = (token, problemId, onSuccess, onError) => async
     dispatch({ type: problemConstants.READ_PROBLEM_START });
     const res = await agent.get(`/problem/${problemId}`, config);
     if (res.data.data.judge_source && res.data.data.judge_source.code_uuid) {
-      const content = await getTextFromUrl(res.data.data.judge_source.code_uuid);
+      const config2 = {
+        headers: {
+          'auth-token': token,
+        },
+        params: {
+          filename: res.data.data.judge_source.filename,
+          as_attachment: false,
+        },
+      };
+      const res1 = await agent.get(`/s3-file/${res.data.data.judge_source.code_uuid}/url`, config2);
+      const content = await getTextFromUrl(res1.data.data.url);
       dispatch({
         type: problemConstants.READ_PROBLEM_SUCCESS,
         payload: { ...res.data.data, judge_source: { ...res.data.data.judge_source, judge_code: content } },
