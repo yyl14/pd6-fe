@@ -97,12 +97,13 @@ export default function SampleTestArea({ input, output, note = '' }) {
         } else if (
           inputRef.current.clientHeight + outputRef.current.clientHeight + noteRef.current.clientHeight
           >= 124
+          // inputRef.current.clientHeight + noteRef.current.clientHeight >= 198
         ) {
           setTruncatePosition('noteContent');
         }
       }
     }
-  }, [expanded, inputRef, noteRef, outputRef, ref, showExpandArrow]);
+  }, [expanded, inputRef, noteRef, ref, showExpandArrow]);
 
   const handleExpand = (limited, isExpanded) => {
     if (limited) {
@@ -207,7 +208,14 @@ export default function SampleTestArea({ input, output, note = '' }) {
                 </div>
               </div>
               <div className={classes.content} ref={noteRef}>
-                <Typography variant="body1">{note}</Typography>
+                <Typography variant="body1">
+                  {note.split('\n').map((string) => (
+                    <React.Fragment key={string}>
+                      {string}
+                      <br />
+                    </React.Fragment>
+                  ))}
+                </Typography>
               </div>
             </>
           )}

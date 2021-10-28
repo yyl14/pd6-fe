@@ -216,6 +216,7 @@ export default function CodingProblemEdit({ closeEdit }) {
               in_file: null,
               out_file: null,
               new: false,
+              note: testcases[id].note,
             },
           }),
           {},
@@ -236,6 +237,7 @@ export default function CodingProblemEdit({ closeEdit }) {
               in_file: null,
               out_file: null,
               new: false,
+              note: testcases[id].note,
             },
           }),
           {},
@@ -338,6 +340,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             in_file: newSelectedFiles[item].in,
             out_file: newSelectedFiles[item].out,
             new: true,
+            note: newSelectedFiles[item].note,
           },
         };
       }
@@ -361,6 +364,7 @@ export default function CodingProblemEdit({ closeEdit }) {
           out_file:
             newSelectedFiles[item].out === null ? sampleTableData[keys[0]].out_file : newSelectedFiles[item].out,
           new: sampleTableData[keys[0]].new,
+          note: newSelectedFiles[item].note,
         },
       };
     }, sampleTableData);
@@ -391,6 +395,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             in_file: newSelectedFiles[item].in,
             out_file: newSelectedFiles[item].out,
             new: true,
+            note: newSelectedFiles[item].note,
           },
         };
       }
@@ -415,6 +420,7 @@ export default function CodingProblemEdit({ closeEdit }) {
           out_file:
             newSelectedFiles[item].out === null ? testcaseTableData[keys[0]].out_file : newSelectedFiles[item].out,
           new: testcaseTableData[keys[0]].new,
+          note: newSelectedFiles[item].note,
         },
       };
     }, testcaseTableData);
@@ -668,14 +674,14 @@ export default function CodingProblemEdit({ closeEdit }) {
               width: 150,
               type: 'string',
             },
-            {
-              id: 'output_filename',
-              label: 'Output File',
-              minWidth: 50,
-              align: 'center',
-              width: 150,
-              type: 'string',
-            },
+            // {
+            //   id: 'output_filename',
+            //   label: 'Output File',
+            //   minWidth: 50,
+            //   align: 'center',
+            //   width: 150,
+            //   type: 'string',
+            // },
             {
               id: 'note',
               label: 'Note',

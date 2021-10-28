@@ -405,7 +405,7 @@ const submitCode = (token, problemId, languageId, content, onSuccess, onError) =
   }
 };
 
-const editTestcase = (token, testcaseId, isSample, score, timeLimit, memoryLimit, isDisabled) => async (dispatch) => {
+const editTestcase = (token, testcaseId, isSample, score, timeLimit, memoryLimit, note, isDisabled) => async (dispatch) => {
   // just edit basic info
   dispatch({ type: problemConstants.EDIT_TESTCASE_START });
   const config = {
@@ -418,6 +418,7 @@ const editTestcase = (token, testcaseId, isSample, score, timeLimit, memoryLimit
     score,
     time_limit: timeLimit,
     memory_limit: memoryLimit,
+    note,
     is_disabled: isDisabled,
   };
   try {
@@ -587,6 +588,7 @@ const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData
           time_limit: sampleTableData[id].time_limit,
           memory_limit: sampleTableData[id].memory_limit,
           is_disabled: false,
+          note: sampleTableData[id].note,
         };
         try {
           const res = await agent.post(`/problem/${problemId}/testcase`, body, config);
@@ -620,9 +622,11 @@ const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData
           testcases[id].time_limit !== sampleTableData[id].time_limit
             || testcases[id].memory_limit !== sampleTableData[id].memory_limit
             || testcases[id].is_disabled !== false
+            || testcases[id].note !== sampleTableData[id].note
         ) {
+          // console.log('editTestcase', sampleTableData[id]);
           await dispatch(
-            editTestcase(token, id, true, 0, sampleTableData[id].time_limit, sampleTableData[id].memory_limit, false),
+            editTestcase(token, id, true, 0, sampleTableData[id].time_limit, sampleTableData[id].memory_limit, sampleTableData[id].note, false),
           );
         }
         // upload file
@@ -707,6 +711,7 @@ const saveTestcases = (token, problemId, testcases, testcaseDataIds, testcaseTab
           score: testcaseTableData[id].score,
           time_limit: testcaseTableData[id].time_limit,
           memory_limit: testcaseTableData[id].memory_limit,
+          note: testcaseTableData[id].note,
           is_disabled: !status,
         };
         try {
@@ -742,6 +747,7 @@ const saveTestcases = (token, problemId, testcases, testcaseDataIds, testcaseTab
             || testcases[id].memory_limit !== testcaseTableData[id].memory_limit
             || testcases[id].score !== testcaseTableData[id].score
             || testcases[id].is_disabled !== !status
+            || testcases[id].note !== testcaseTableData[id].note
         ) {
           await dispatch(
             editTestcase(
@@ -751,6 +757,7 @@ const saveTestcases = (token, problemId, testcases, testcaseDataIds, testcaseTab
               testcaseTableData[id].score,
               testcaseTableData[id].time_limit,
               testcaseTableData[id].memory_limit,
+              testcaseTableData[id].note,
               !status,
             ),
           );
