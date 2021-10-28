@@ -333,6 +333,7 @@ export default function CodingProblemEdit({ closeEdit }) {
           [-item]: {
             id: -item,
             no: newSelectedFiles[item].no,
+            label: newSelectedFiles[item].no,
             time_limit: newSelectedFiles[item].time_limit,
             memory_limit: newSelectedFiles[item].memory_limit,
             input_filename: newSelectedFiles[item].in === null ? null : newSelectedFiles[item].in.name,
@@ -350,6 +351,7 @@ export default function CodingProblemEdit({ closeEdit }) {
         [keys[0]]: {
           id: Number(keys[0]),
           no: newSelectedFiles[item].no,
+          label: newSelectedFiles[item].no,
           time_limit: newSelectedFiles[item].time_limit,
           memory_limit: newSelectedFiles[item].memory_limit,
           input_filename:
@@ -387,6 +389,7 @@ export default function CodingProblemEdit({ closeEdit }) {
           [-item]: {
             id: -item,
             no: newSelectedFiles[item].no,
+            label: newSelectedFiles[item].no,
             score: newSelectedFiles[item].score,
             time_limit: newSelectedFiles[item].time_limit,
             memory_limit: newSelectedFiles[item].memory_limit,
@@ -405,6 +408,7 @@ export default function CodingProblemEdit({ closeEdit }) {
         [keys[0]]: {
           id: Number(keys[0]),
           no: newSelectedFiles[item].no,
+          label: newSelectedFiles[item].no,
           score: newSelectedFiles[item].score,
           time_limit: newSelectedFiles[item].time_limit,
           memory_limit: newSelectedFiles[item].memory_limit,

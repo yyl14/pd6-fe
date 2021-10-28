@@ -589,6 +589,7 @@ const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData
           memory_limit: sampleTableData[id].memory_limit,
           is_disabled: false,
           note: sampleTableData[id].note,
+          label: sampleTableData[id].label,
         };
         try {
           const res = await agent.post(`/problem/${problemId}/testcase`, body, config);
@@ -713,6 +714,7 @@ const saveTestcases = (token, problemId, testcases, testcaseDataIds, testcaseTab
           memory_limit: testcaseTableData[id].memory_limit,
           note: testcaseTableData[id].note,
           is_disabled: !status,
+          label: testcaseTableData[id].label,
         };
         try {
           const res = await agent.post(`/problem/${problemId}/testcase`, body, config);
