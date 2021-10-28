@@ -575,7 +575,7 @@ const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData
             || testcases[id].is_disabled !== false
             || testcases[id].note !== sampleTableData[id].note
         ) {
-          console.log('editTestcase', sampleTableData[id]);
+          // console.log('editTestcase', sampleTableData[id]);
           await dispatch(
             editTestcase(token, id, true, 0, sampleTableData[id].time_limit, sampleTableData[id].memory_limit, sampleTableData[id].note, false),
           );

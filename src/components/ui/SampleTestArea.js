@@ -208,7 +208,14 @@ export default function SampleTestArea({ input, output, note = '' }) {
                 </div>
               </div>
               <div className={classes.content} ref={noteRef}>
-                <Typography variant="body1">{note}</Typography>
+                <Typography variant="body1">
+                  {note.split('\n').map((string) => (
+                    <React.Fragment key={string}>
+                      {string}
+                      <br />
+                    </React.Fragment>
+                  ))}
+                </Typography>
               </div>
             </>
           )}
