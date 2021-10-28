@@ -46,7 +46,7 @@ export default function CodingProblemInfo() {
   const courses = useSelector((state) => state.courses.byId);
   const problems = useSelector((state) => state.problem.byId);
   const testcases = useSelector((state) => state.testcases.byId);
-  const [status, setStatus] = useState(true);
+  // const [status, setStatus] = useState(true);
 
   const authToken = useSelector((state) => state.auth.token);
   // const error = useSelector((state) => state.error);
@@ -92,11 +92,11 @@ export default function CodingProblemInfo() {
       samplesId.sort((a, b) => sampleTransToNumber(a) - sampleTransToNumber(b));
       setSampleDataIds(samplesId);
       setTestcaseDataIds(testcasesId);
-      if (testcasesId.length === 0) {
-        setStatus(true);
-      } else {
-        setStatus(!testcases[testcasesId[0]].is_disabled);
-      }
+      // if (testcasesId.length === 0) {
+      //   setStatus(true);
+      // } else {
+      //   setStatus(!testcases[testcasesId[0]].is_disabled);
+      // }
     }
   }, [problems, problemId, testcases, sampleTransToNumber, testcaseTransToNumber]);
 
@@ -175,6 +175,7 @@ export default function CodingProblemInfo() {
             no: sampleTransToNumber(id),
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
+            note: testcases[id].note,
           }))}
         />
         <div className={classNames.sampleArea}>
@@ -184,7 +185,7 @@ export default function CodingProblemInfo() {
                 <Typography variant="h6" className={classNames.sampleName}>
                   {`Sample ${sampleTransToNumber(id)}`}
                 </Typography>
-                <SampleTestArea input={testcases[id].input} output={testcases[id].output} />
+                <SampleTestArea input={testcases[id].input} output={testcases[id].output} note={testcases[id].note} />
               </Grid>
             ))}
           </Grid>
@@ -228,6 +229,13 @@ export default function CodingProblemInfo() {
               width: 100,
               type: 'string',
             },
+            {
+              id: 'note',
+              label: 'Note',
+              align: 'center',
+              type: 'string',
+            },
+
           ]}
           data={testcaseDataIds.map((id) => ({
             id,
@@ -235,6 +243,7 @@ export default function CodingProblemInfo() {
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
             score: testcases[id].score,
+            note: testcases[id].note,
           }))}
         />
       </SimpleBar>

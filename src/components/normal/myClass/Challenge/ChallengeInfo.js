@@ -47,6 +47,7 @@ export default function ChallengeInfo() {
   const peerReviews = useSelector((state) => state.peerReviews.byId);
 
   const [hasRequest, setHasRequest] = useState(false);
+  const [hasInit, setHasInit] = useState(false);
 
   useEffect(() => {
     if (hasRequest && !loading.editChallenge) {
@@ -56,10 +57,11 @@ export default function ChallengeInfo() {
   }, [authToken, challengeId, dispatch, hasRequest, loading.editChallenge]);
 
   useEffect(() => {
-    if (challenges[challengeId]) {
+    if (!hasInit && challenges[challengeId]) {
       challenges[challengeId].problemIds.map((id) => dispatch(readProblemScore(authToken, id)));
+      setHasInit(true);
     }
-  }, [authToken, challengeId, challenges, dispatch]);
+  }, [authToken, challengeId, challenges, dispatch, hasInit]);
 
   useEffect(() => {
     if (challenges[challengeId]) {

@@ -256,6 +256,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             no: sampleTransToNumber(id),
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
+            note: testcases[id].note,
           }))}
         />
         <div className={classNames.sampleArea}>
@@ -265,7 +266,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
                 <Typography variant="h6" className={classNames.sampleName}>
                   {`Sample ${sampleTransToNumber(id)}`}
                 </Typography>
-                <SampleTestArea input={testcases[id].input} output={testcases[id].output} />
+                <SampleTestArea input={testcases[id].input} output={testcases[id].output} note={testcases[id].note} />
               </Grid>
             ))}
           </Grid>
@@ -344,6 +345,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
             score: testcases[id].score,
+            note: testcases[id].note,
           }))}
         />
       </SimpleBar>

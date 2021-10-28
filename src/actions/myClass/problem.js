@@ -43,7 +43,17 @@ const readProblemWithJudgeCode = (token, problemId, onSuccess, onError) => async
     dispatch({ type: problemConstants.READ_PROBLEM_START });
     const res = await agent.get(`/problem/${problemId}`, config);
     if (res.data.data.judge_source && res.data.data.judge_source.code_uuid) {
-      const content = await getTextFromUrl(res.data.data.judge_source.code_uuid);
+      const config2 = {
+        headers: {
+          'auth-token': token,
+        },
+        params: {
+          filename: res.data.data.judge_source.filename,
+          as_attachment: false,
+        },
+      };
+      const res1 = await agent.get(`/s3-file/${res.data.data.judge_source.code_uuid}/url`, config2);
+      const content = await getTextFromUrl(res1.data.data.url);
       dispatch({
         type: problemConstants.READ_PROBLEM_SUCCESS,
         payload: { ...res.data.data, judge_source: { ...res.data.data.judge_source, judge_code: content } },
@@ -270,30 +280,69 @@ const browseAssistingData = (token, problemId) => async (dispatch) => {
   }
 };
 
-const editProblemInfo = (token, problemId, label, title, score, testcaseDisabled, description, ioDescription, source, hint, onSuccess) => async (dispatch) => {
+const editProblemInfo = (
+  token,
+  problemId,
+  label,
+  title,
+  judgeType,
+  score,
+  testcaseDisabled,
+  description,
+  ioDescription,
+  source,
+  hint,
+  judgeLanguage,
+  judgeCode,
+  onSuccess,
+) => async (dispatch) => {
   dispatch({ type: problemConstants.EDIT_PROBLEM_START });
   const config = {
     headers: {
       'auth-token': token,
     },
   };
-  const body = {
-    challenge_label: label,
-    title,
-    full_score: score,
-    testcase_disabled: testcaseDisabled,
-    description,
-    io_description: ioDescription,
-    source,
-    hint,
-  };
   try {
-    await agent.patch(`/problem/${problemId}`, body, config);
-
-    dispatch({
-      type: problemConstants.EDIT_PROBLEM_SUCCESS,
-      payload: { problemId, content: body },
-    });
+    if (judgeType === 'NORMAL') {
+      const body = {
+        challenge_label: label,
+        title,
+        judge_type: judgeType,
+        full_score: score,
+        testcase_disabled: testcaseDisabled,
+        description,
+        io_description: ioDescription,
+        source,
+        hint,
+      };
+      await agent.patch(`/problem/${problemId}`, body, config);
+      dispatch({
+        type: problemConstants.EDIT_PROBLEM_SUCCESS,
+        payload: { problemId, content: body },
+      });
+    } else {
+      const body = {
+        challenge_label: label,
+        title,
+        judge_type: judgeType,
+        full_score: score,
+        testcase_disabled: testcaseDisabled,
+        description,
+        io_description: ioDescription,
+        source,
+        hint,
+        judge_source: {
+          judge_language: judgeLanguage,
+          judge_code: judgeCode,
+        },
+      };
+      await agent.patch(`/problem/${problemId}`, body, config);
+      dispatch({
+        type: problemConstants.EDIT_PROBLEM_SUCCESS,
+        payload: { problemId, content: body },
+      });
+    }
+    // console.log(judgeType, judgeLanguage, judgeCode);
   } catch (error) {
     dispatch({
       type: problemConstants.EDIT_PROBLEM_FAIL,
@@ -356,7 +405,7 @@ const submitCode = (token, problemId, languageId, content, onSuccess, onError) =
   }
 };
 
-const editTestcase = (token, testcaseId, isSample, score, timeLimit, memoryLimit, isDisabled) => async (dispatch) => {
+const editTestcase = (token, testcaseId, isSample, score, timeLimit, memoryLimit, note, isDisabled) => async (dispatch) => {
   // just edit basic info
   dispatch({ type: problemConstants.EDIT_TESTCASE_START });
   const config = {
@@ -369,6 +418,7 @@ const editTestcase = (token, testcaseId, isSample, score, timeLimit, memoryLimit
     score,
     time_limit: timeLimit,
     memory_limit: memoryLimit,
+    note,
     is_disabled: isDisabled,
   };
   try {
@@ -538,6 +588,8 @@ const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData
           time_limit: sampleTableData[id].time_limit,
           memory_limit: sampleTableData[id].memory_limit,
           is_disabled: false,
+          note: sampleTableData[id].note,
+          label: sampleTableData[id].label,
         };
         try {
           const res = await agent.post(`/problem/${problemId}/testcase`, body, config);
@@ -571,9 +623,11 @@ const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData
           testcases[id].time_limit !== sampleTableData[id].time_limit
             || testcases[id].memory_limit !== sampleTableData[id].memory_limit
             || testcases[id].is_disabled !== false
+            || testcases[id].note !== sampleTableData[id].note
         ) {
+          // console.log('editTestcase', sampleTableData[id]);
           await dispatch(
-            editTestcase(token, id, true, 0, sampleTableData[id].time_limit, sampleTableData[id].memory_limit, false),
+            editTestcase(token, id, true, 0, sampleTableData[id].time_limit, sampleTableData[id].memory_limit, sampleTableData[id].note, false),
           );
         }
         // upload file
@@ -658,7 +712,9 @@ const saveTestcases = (token, problemId, testcases, testcaseDataIds, testcaseTab
           score: testcaseTableData[id].score,
           time_limit: testcaseTableData[id].time_limit,
           memory_limit: testcaseTableData[id].memory_limit,
+          note: testcaseTableData[id].note,
           is_disabled: !status,
+          label: testcaseTableData[id].label,
         };
         try {
           const res = await agent.post(`/problem/${problemId}/testcase`, body, config);
@@ -693,6 +749,7 @@ const saveTestcases = (token, problemId, testcases, testcaseDataIds, testcaseTab
             || testcases[id].memory_limit !== testcaseTableData[id].memory_limit
             || testcases[id].score !== testcaseTableData[id].score
             || testcases[id].is_disabled !== !status
+            || testcases[id].note !== testcaseTableData[id].note
         ) {
           await dispatch(
             editTestcase(
@@ -702,6 +759,7 @@ const saveTestcases = (token, problemId, testcases, testcaseDataIds, testcaseTab
               testcaseTableData[id].score,
               testcaseTableData[id].time_limit,
               testcaseTableData[id].memory_limit,
+              testcaseTableData[id].note,
               !status,
             ),
           );
