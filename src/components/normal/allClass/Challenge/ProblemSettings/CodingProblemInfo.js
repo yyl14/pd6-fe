@@ -177,6 +177,14 @@ export default function CodingProblemInfo() {
               width: 150,
               type: 'string',
             },
+            {
+              id: 'note',
+              label: 'Note',
+              minWidth: 50,
+              align: 'center',
+              width: 100,
+              type: 'string',
+            },
           ]}
           data={sampleDataIds.map((id) => ({
             id,
@@ -184,6 +192,7 @@ export default function CodingProblemInfo() {
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
             input_filename: testcases[id].input_filename,
+            note: testcases[id].note,
           }))}
         />
         <div className={classNames.sampleArea}>
@@ -252,6 +261,7 @@ export default function CodingProblemInfo() {
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
             score: testcases[id].score,
+            note: testcases[id].note,
           }))}
         />
       </SimpleBar>
