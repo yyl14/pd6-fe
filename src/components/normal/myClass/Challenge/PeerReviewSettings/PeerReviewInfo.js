@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Typography, makeStyles } from '@material-ui/core';
+import {
+  Button,
+  Typography,
+  makeStyles,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  Snackbar,
+} from '@material-ui/core';
 import { useParams, useHistory } from 'react-router-dom';
 import moment from 'moment';
 import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
@@ -12,6 +21,7 @@ import GeneralLoading from '../../../../GeneralLoading';
 import PeerReviewEdit from './PeerReviewEdit';
 import PageTitle from '../../../../ui/PageTitle';
 import SimpleBar from '../../../../ui/SimpleBar';
+import AlignedText from '../../../../ui/AlignedText';
 
 import { readPeerReview, deletePeerReview } from '../../../../../actions/api/peerReview';
 import {
@@ -44,6 +54,8 @@ export default function PeerReviewInfo() {
   const authToken = useSelector((state) => state.auth.token);
   const accountId = useSelector((state) => state.user.id);
   const userClasses = useSelector((state) => state.user.classes);
+  const classes = useSelector((state) => state.classes.byId);
+  const courses = useSelector((state) => state.courses.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
   const apiLoading = useSelector((state) => state.loading.api.peerReview);
@@ -51,6 +63,8 @@ export default function PeerReviewInfo() {
   const [role, setRole] = useState('GUEST');
   const [edit, setEdit] = useState(false);
   const [currentTime, setCurrentTime] = useState(moment());
+  const [deletePopUp, setDeletePopUp] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const clickViewPeerReview = () => {
     history.push(
@@ -64,6 +78,8 @@ export default function PeerReviewInfo() {
       history.push(
         `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${accountId}/${targetRecordId}`,
       );
+    } else {
+      setShowSnackbar(true);
     }
   };
 
@@ -71,7 +87,7 @@ export default function PeerReviewInfo() {
     const reviewPeerReviewRecordIds = peerReviews[peerReviewId].reviewRecordIds;
     if (reviewPeerReviewRecordIds.length < peerReviews[peerReviewId].max_review_count) {
       dispatch(
-        assignPeerReviewRecordAndPush(authToken, courseId, classId, challengeId, peerReviewId, accountId, peerReviews[peerReviewId].max_review_count - reviewPeerReviewRecordIds.length, history),
+        assignPeerReviewRecordAndPush(authToken, courseId, classId, challengeId, peerReviewId, accountId, history),
       );
     } else {
       const targetRecordId = reviewPeerReviewRecordIds.sort((a, b) => a - b)[0];
@@ -167,7 +183,7 @@ export default function PeerReviewInfo() {
               title="Delete Task"
               childrenButtons={(
                 <>
-                  <Button color="secondary" onClick={clickDelete}>
+                  <Button color="secondary" onClick={() => setDeletePopUp(true)}>
                     Delete
                   </Button>
                 </>
@@ -179,6 +195,41 @@ export default function PeerReviewInfo() {
           {role !== 'MANAGER' && <Overview peerReviewId={peerReviewId} />}
         </>
       )}
+      <Dialog open={deletePopUp} onClose={() => setDeletePopUp(false)} maxWidth="md">
+        <DialogTitle>
+          <Typography variant="h4">Delete Problem</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <AlignedText text="Class" childrenType="text" textColor="secondary">
+            <Typography variant="body1">{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
+          </AlignedText>
+          <AlignedText text="Title" childrenType="text" textColor="secondary">
+            <Typography variant="body1">
+              {peerReviews[peerReviewId] === undefined ? 'error' : peerReviews[peerReviewId].title}
+            </Typography>
+          </AlignedText>
+          <AlignedText text="Label" childrenType="text" textColor="secondary">
+            <Typography variant="body1">
+              {peerReviews[peerReviewId] === undefined ? 'error' : peerReviews[peerReviewId].challenge_label}
+            </Typography>
+          </AlignedText>
+          <Typography variant="body2">Once you delete a problem, there is no going back. Please be certain.</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeletePopUp(false)}>Cancel</Button>
+          <Button color="secondary" onClick={clickDelete}>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowSnackbar(false);
+        }}
+        message={"Your task hasn't been assigned to any peer yet."}
+      />
     </>
   );
 }

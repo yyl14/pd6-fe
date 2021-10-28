@@ -14,6 +14,7 @@ const initialState = {
   fetchDownloadFileUrl: false,
   fetchProblems: false,
   getAccountBatch: false,
+  getAccountBatchByReferral: false,
 };
 
 export default function common(state = initialState, action) {
@@ -253,6 +254,25 @@ export default function common(state = initialState, action) {
       return {
         ...state,
         getAccountBatch: false,
+      };
+    }
+
+    case commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_START: {
+      return {
+        ...state,
+        getAccountBatchByReferral: true,
+      };
+    }
+    case commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_SUCCESS: {
+      return {
+        ...state,
+        getAccountBatchByReferral: false,
+      };
+    }
+    case commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_FAIL: {
+      return {
+        ...state,
+        getAccountBatchByReferral: false,
       };
     }
 

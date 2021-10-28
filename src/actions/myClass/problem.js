@@ -32,6 +32,42 @@ const readProblemInfo = (token, problemId, onSuccess, onError) => async (dispatc
   }
 };
 
+const readProblemWithJudgeCode = (token, problemId, onSuccess, onError) => async (dispatch) => {
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+  };
+
+  try {
+    dispatch({ type: problemConstants.READ_PROBLEM_START });
+    const res = await agent.get(`/problem/${problemId}`, config);
+    if (res.data.data.judge_source && res.data.data.judge_source.code_uuid) {
+      const content = await getTextFromUrl(res.data.data.judge_source.code_uuid);
+      dispatch({
+        type: problemConstants.READ_PROBLEM_SUCCESS,
+        payload: { ...res.data.data, judge_source: { ...res.data.data.judge_source, judge_code: content } },
+      });
+    } else {
+      dispatch({
+        type: problemConstants.READ_PROBLEM_SUCCESS,
+        payload: res.data.data,
+      });
+    }
+    if (typeof onSuccess === 'function') {
+      onSuccess();
+    }
+  } catch (error) {
+    dispatch({
+      type: problemConstants.READ_PROBLEM_FAIL,
+      error,
+    });
+    if (typeof onError === 'function') {
+      onError();
+    }
+  }
+};
+
 // WITH BROWSE PARAM
 const readSubmission = (token, accountId, problemId, browseParams, tableId = null) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_SUBMISSION_START });
@@ -70,27 +106,27 @@ const readSubmission = (token, accountId, problemId, browseParams, tableId = nul
   }
 };
 
-const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
-  try {
-    dispatch({ type: problemConstants.BROWSE_JUDGE_CASES_START });
-    const res = await agent.get(`/judgment/${judgmentId}/judge-case`, config);
+// const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
+//   const config = {
+//     headers: {
+//       'auth-token': token,
+//     },
+//   };
+//   try {
+//     dispatch({ type: problemConstants.BROWSE_JUDGE_CASES_START });
+//     const res = await agent.get(`/judgment/${judgmentId}/judge-case`, config);
 
-    dispatch({
-      type: problemConstants.BROWSE_JUDGE_CASES_SUCCESS,
-      payload: { judgmentId, data: res.data.data },
-    });
-  } catch (error) {
-    dispatch({
-      type: problemConstants.BROWSE_JUDGE_CASES_FAIL,
-      error,
-    });
-  }
-};
+//     dispatch({
+//       type: problemConstants.BROWSE_JUDGE_CASES_SUCCESS,
+//       payload: { judgmentId, data: res.data.data },
+//     });
+//   } catch (error) {
+//     dispatch({
+//       type: problemConstants.BROWSE_JUDGE_CASES_FAIL,
+//       error,
+//     });
+//   }
+// };
 
 const browseTestcase = (token, problemId) => async (dispatch) => {
   dispatch({ type: problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_START });
@@ -289,7 +325,7 @@ const deleteProblem = (token, problemId) => async (dispatch) => {
   }
 };
 
-const submitCode = (token, problemId, languageId, content, onSubmitSuccess) => async (dispatch) => {
+const submitCode = (token, problemId, languageId, content, onSuccess, onError) => async (dispatch) => {
   dispatch({ type: problemConstants.SUBMIT_PROBLEM_START });
   const config = {
     headers: {
@@ -310,12 +346,13 @@ const submitCode = (token, problemId, languageId, content, onSubmitSuccess) => a
     dispatch({
       type: problemConstants.SUBMIT_PROBLEM_SUCCESS,
     });
-    onSubmitSuccess();
+    onSuccess();
   } catch (error) {
     dispatch({
       type: problemConstants.SUBMIT_PROBLEM_FAIL,
       error,
     });
+    onError();
   }
 };
 
@@ -867,6 +904,7 @@ const viewMySubmissionUnderProblem = (token, accountId, problemId, browseParams,
 
 export {
   readProblemInfo,
+  readProblemWithJudgeCode,
   editProblemInfo,
   deleteProblem,
   readSubmission,
@@ -874,7 +912,7 @@ export {
   browseAssistingData,
   submitCode,
   editTestcase,
-  browseJudgeCases,
+  // browseJudgeCases,
   browseTestcases,
   readProblemScore,
   readProblemBestScore,

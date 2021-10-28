@@ -26,7 +26,7 @@ import {
   editProblemInfo,
   saveSamples,
   saveTestcases,
-  readProblemInfo,
+  readProblemWithJudgeCode,
   saveAssistingData,
 } from '../../../../../actions/myClass/problem';
 
@@ -252,7 +252,7 @@ export default function CodingProblemEdit({ closeEdit }) {
   useEffect(() => {
     if (handleSamplesSuccess && handleTestcasesSuccess && handleInfoSuccess && handleAssistingDataSuccess) {
       if (uploadFailFilename.length === 0) {
-        dispatch(readProblemInfo(authToken, problemId));
+        dispatch(readProblemWithJudgeCode(authToken, problemId));
         setDisabled(false);
         closeEdit();
       } else {
@@ -660,11 +660,10 @@ export default function CodingProblemEdit({ closeEdit }) {
             {
               id: 'note',
               label: 'Note',
-              minWidth: 50,
               align: 'center',
-              width: 150,
+              width: '100%',
               type: 'string',
-              editType: 'input',
+              editType: 'flexibleInput',
             },
           ]}
           data={Object.keys(sampleTableData)
@@ -762,11 +761,10 @@ export default function CodingProblemEdit({ closeEdit }) {
             {
               id: 'note',
               label: 'Note',
-              minWidth: 50,
               align: 'center',
-              width: 150,
+              width: '100%',
               type: 'string',
-              editType: 'input',
+              editType: 'flexibleInput',
             },
           ]}
           data={Object.keys(testcaseTableData)

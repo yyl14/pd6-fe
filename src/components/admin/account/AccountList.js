@@ -211,21 +211,21 @@ export default function AccountList() {
         columns={[
           {
             name: 'Username',
-            width: 139,
+            width: 200,
             align: 'center',
             type: 'string',
             sortable: 'username',
           },
           {
             name: 'Student ID',
-            width: 144,
+            width: 200,
             align: 'center',
             type: 'string',
             sortable: 'student_id',
           },
           {
             name: 'Real Name',
-            width: 144,
+            width: 200,
             align: 'center',
             type: 'string',
             sortable: 'real_name',
