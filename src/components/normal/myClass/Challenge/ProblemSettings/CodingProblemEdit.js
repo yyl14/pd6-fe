@@ -181,6 +181,9 @@ export default function CodingProblemEdit({ closeEdit }) {
       if (problems[problemId].judge_type === 'CUSTOMIZED') {
         setLanguage('Python');
       }
+      if (problems[problemId].judge_source.judge_code) {
+        setJudgeCode(problems[problemId].judge_source.judge_code);
+      }
     }
   }, [problems, problemId]);
 
