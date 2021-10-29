@@ -335,7 +335,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             {
               id: 'note',
               label: 'Note',
-              align: 'center',
+              align: 'left',
               type: 'string',
             },
           ]}

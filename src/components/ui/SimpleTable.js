@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: '20px',
   },
   tableBodyCell: {
-    whiteSpace: 'nowrap',
+    whiteSpace: 'pre',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
