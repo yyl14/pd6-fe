@@ -655,7 +655,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             {
               id: 'time_limit',
               label: 'Max Time (ms)',
-              minWidth: 50,
+              minWidth: 180,
               align: 'center',
               width: 150,
               type: 'string',
@@ -664,7 +664,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             {
               id: 'memory_limit',
               label: 'Max Memory (kb)',
-              minWidth: 50,
+              minWidth: 180,
               align: 'center',
               width: 150,
               type: 'string',
@@ -673,7 +673,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             {
               id: 'input_filename',
               label: 'Input File',
-              minWidth: 50,
+              minWidth: 150,
               align: 'center',
               width: 150,
               type: 'string',
@@ -747,7 +747,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             {
               id: 'time_limit',
               label: 'Max Time (ms)',
-              minWidth: 50,
+              minWidth: 180,
               align: 'center',
               width: 150,
               type: 'string',
@@ -756,7 +756,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             {
               id: 'memory_limit',
               label: 'Max Memory (kb)',
-              minWidth: 50,
+              minWidth: 180,
               align: 'center',
               width: 150,
               type: 'string',
@@ -774,7 +774,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             {
               id: 'input_filename',
               label: 'Input File',
-              minWidth: 50,
+              minWidth: 150,
               align: 'center',
               width: 150,
               type: 'string',
@@ -782,7 +782,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             {
               id: 'output_filename',
               label: 'Output File',
-              minWidth: 50,
+              minWidth: 150,
               align: 'center',
               width: 150,
               type: 'string',
