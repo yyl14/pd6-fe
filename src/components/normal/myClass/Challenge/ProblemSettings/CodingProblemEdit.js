@@ -764,7 +764,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             },
             {
               id: 'score',
-              label: 'score',
+              label: 'Score',
               minWidth: 50,
               align: 'center',
               width: 80,
