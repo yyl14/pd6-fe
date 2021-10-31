@@ -678,14 +678,14 @@ export default function CodingProblemEdit({ closeEdit }) {
               width: 150,
               type: 'string',
             },
-            // {
-            //   id: 'output_filename',
-            //   label: 'Output File',
-            //   minWidth: 50,
-            //   align: 'center',
-            //   width: 150,
-            //   type: 'string',
-            // },
+            {
+              id: 'output_filename',
+              label: 'Output File',
+              minWidth: 50,
+              align: 'center',
+              width: 150,
+              type: 'string',
+            },
             {
               id: 'note',
               label: 'Note',
