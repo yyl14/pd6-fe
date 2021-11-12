@@ -850,7 +850,6 @@ export default function CodingProblemEdit({ closeEdit }) {
             </AlignedText>
             <Typography variant="body1">Content</Typography>
             <TextField
-              placeholder="(Text, LaTeX, Markdown and HTML supported)"
               value={judgeCode}
               variant="outlined"
               onChange={(e) => {
