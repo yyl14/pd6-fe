@@ -30,6 +30,8 @@ import {
 
 import { fetchTeams } from '../../../../actions/myClass/team';
 
+import { addTeamProjectScoreboardUnderChallenge } from '../../../../actions/api/scoreboard';
+
 const useStyles = makeStyles((theme) => ({
   selectedIcon: {
     marginRight: '20px',
@@ -235,11 +237,11 @@ export default function TaskAddingCard({ open, setOpen }) {
           rank_by_total_score: true,
           team_label_filter: teamLabelFilter,
         };
-        // dispatch(
-        //   addTeamProjectScoreboardUnderChallenge(authToken, challengeId, body, addScoreboardSuccess, () => {
-        //     showAddScoreboardErrorSnackbar(true);
-        //   }),
-        // );
+        dispatch(
+          addTeamProjectScoreboardUnderChallenge(authToken, challengeId, body, addScoreboardSuccess, () => {
+            setShowAddScoreboardErrorSnackbar(true);
+          }),
+        );
         setScoreboardType('TEAM_PROJECT');
         setTargetProblems([]);
         setScoringFormula('');

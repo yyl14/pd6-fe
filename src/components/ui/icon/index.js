@@ -79,6 +79,7 @@ import { ReactComponent as NewWin } from './newwin.svg';
 import { ReactComponent as VerticalLine } from './verticalLine.svg';
 import { ReactComponent as Menu } from './Menu.svg';
 import { ReactComponent as DevTeam } from './devteam.svg';
+import { ReactComponent as Scoreboard } from './scoreboard.svg';
 
 export default {
   HistoryIcon,
@@ -161,4 +162,5 @@ export default {
   Menu,
   DevTeam,
   VerticalLine,
+  Scoreboard,
 };

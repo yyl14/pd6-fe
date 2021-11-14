@@ -9,6 +9,7 @@ import PageTitle from '../../../../ui/PageTitle';
 import { readProblemInfo } from '../../../../../actions/myClass/problem';
 import { fetchTeams } from '../../../../../actions/myClass/team';
 import ScoreboardEdit from './ScoreboardEdit';
+import { readScoreboard } from '../../../../../actions/api/scoreboard';
 
 const scoreboardBasicTitle = [
   {
@@ -74,7 +75,7 @@ export default function ScoreboardInfo() {
   const authToken = useSelector((state) => state.auth.token);
   const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges);
-  // const scoreboards = useSelector((state) => state.scoreboards);
+  const scoreboards = useSelector((state) => state.scoreboards);
   const userClasses = useSelector((state) => state.user.classes);
   const teamss = useSelector((state) => state.teams);
 
@@ -88,9 +89,9 @@ export default function ScoreboardInfo() {
     dispatch(fetchTeams(authToken, classId, ''));
   }, [authToken, classId, dispatch]);
 
-  // useEffect(() => {
-  //   dispatch(readScoreboard(authToken, scoreboardId));
-  // }, [authToken, dispatch, scoreboardId]);
+  useEffect(() => {
+    dispatch(readScoreboard(authToken, scoreboardId));
+  }, [authToken, dispatch, scoreboardId]);
 
   useEffect(() => {
     if (userClasses.filter((item) => item.class_id === Number(classId)).length !== 0) {
