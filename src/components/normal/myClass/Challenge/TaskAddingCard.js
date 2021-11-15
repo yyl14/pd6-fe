@@ -95,7 +95,7 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [scoreboardType, setScoreboardType] = useState('TEAM_PROJECT');
   const [targetProblems, setTargetProblems] = useState([]);
   const [scoringFormula, setScoringFormula] = useState('');
-  const [baselineTeam, setBaselineTeam] = useState('');
+  const [baselineTeam, setBaselineTeam] = useState(null);
   const [teamLabelFilter, setTeamLabelFilter] = useState('');
 
   useEffect(() => {
@@ -245,7 +245,7 @@ export default function TaskAddingCard({ open, setOpen }) {
         setScoreboardType('TEAM_PROJECT');
         setTargetProblems([]);
         setScoringFormula('');
-        setBaselineTeam('');
+        setBaselineTeam(null);
         setTeamLabelFilter('');
         break;
       }
@@ -270,7 +270,7 @@ export default function TaskAddingCard({ open, setOpen }) {
     setScoreboardType('TEAM_PROJECT');
     setTargetProblems([]);
     setScoringFormula('');
-    setBaselineTeam('');
+    setBaselineTeam(null);
     setTeamLabelFilter('');
   };
 
@@ -466,7 +466,6 @@ export default function TaskAddingCard({ open, setOpen }) {
               <AlignedText text="Baseline Team (Optional)" childrenType="field">
                 <FormControl variant="outlined" style={{ width: '350px' }}>
                   <Select value={baselineTeam} label="BaselineTeam" onChange={(e) => setBaselineTeam(e.target.value)}>
-                    <MenuItem value=""> </MenuItem>
                     {classes[classId].teamIds.map((id) => (
                       <MenuItem key={id} value={id}>
                         {teams.byId[id].name}

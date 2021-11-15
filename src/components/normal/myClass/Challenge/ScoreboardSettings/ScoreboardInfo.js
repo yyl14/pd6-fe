@@ -157,13 +157,10 @@ export default function ScoreboardInfo() {
 
   return (
     <>
-      {/* <PageTitle
+      <PageTitle
         text={`${challenges.byId[challengeId] === undefined ? 'error' : challenges.byId[challengeId].title} / ${
           scoreboards.byId[scoreboardId] === undefined ? 'error' : scoreboards.byId[scoreboardId].challenge_label
         }`}
-      /> */}
-      <PageTitle
-        text={`${challenges.byId[challengeId] === undefined ? 'error' : challenges.byId[challengeId].title} / `}
       />
       {!edit ? (
         <SimpleBar
