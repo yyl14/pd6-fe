@@ -46,7 +46,7 @@ export const editTeamProjectScoreboard = (token, scoreboardId, body) => async (d
       },
     };
     dispatch({ type: scoreboardConstants.EDIT_TEAM_PROJECT_SCOREBOARD_START });
-    await agent.patch(`/scoreboard/${scoreboardId}`, body, config);
+    await agent.patch(`/team-project-scoreboard/${scoreboardId}`, body, config);
     dispatch({ type: scoreboardConstants.EDIT_TEAM_PROJECT_SCOREBOARD_SUCCESS });
   } catch (error) {
     dispatch({

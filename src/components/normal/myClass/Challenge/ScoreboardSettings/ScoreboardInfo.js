@@ -77,10 +77,11 @@ export default function ScoreboardInfo() {
   const challenges = useSelector((state) => state.challenges);
   const scoreboards = useSelector((state) => state.scoreboards);
   const userClasses = useSelector((state) => state.user.classes);
-  const teamss = useSelector((state) => state.teams);
+  const teams = useSelector((state) => state.teams);
+  const loading = useSelector((state) => state.loading.api.scoreboard);
 
   const [scoreboardTitle, setScoreboardTitle] = useState(scoreboardBasicTitle);
-  const [teams, setTeams] = useState([]);
+  const [Teams, setTeams] = useState([]);
   const [hasReadProblem, setHasReadProblem] = useState(false);
   const [edit, setEdit] = useState(false);
   const [role, setRole] = useState('NORMAL');
@@ -100,11 +101,11 @@ export default function ScoreboardInfo() {
   }, [classId, userClasses]);
 
   useEffect(() => {
-    if (teams.length > 0 && !hasReadProblem) {
-      teams[0].target_problem_data.map((p) => dispatch(readProblemInfo(authToken, p.problem_id)));
+    if (Teams.length > 0 && !hasReadProblem) {
+      Teams[0].target_problem_data.map((p) => dispatch(readProblemInfo(authToken, p.problem_id)));
       setHasReadProblem(true);
     }
-  }, [authToken, dispatch, hasReadProblem, teams]);
+  }, [authToken, dispatch, hasReadProblem, Teams]);
 
   useEffect(() => {
     // TODO: set tempTeams with view api.
@@ -168,38 +169,37 @@ export default function ScoreboardInfo() {
           buttons={<>{role === 'MANAGER' && !edit && <Button onClick={() => setEdit(true)}>Edit</Button>}</>}
         >
           <AlignedText text="Scoreboard Type" childrenType="text">
-            <Typography variant="body1">Team Project</Typography>
-            {/* <Typography variant="body1">{scoreboards.byId[scoreboardId].scoreboard_type === 'TEAM_PROJECT' ? 'Team Project' : 'Contest'}</Typography> */}
+            <Typography variant="body1">
+              {scoreboards.byId[scoreboardId] && scoreboards.byId[scoreboardId].type === 'TEAM_PROJECT'
+                ? 'Team Project'
+                : 'Contest'}
+            </Typography>
           </AlignedText>
           <AlignedText text="Title" childrenType="text">
-            <Typography variant="body1">Scoreboard</Typography>
-            {/* <Typography variant="body1">{scoreboards.byId[scoreboardId].title}</Typography> */}
+            <Typography variant="body1">
+              {scoreboards.byId[scoreboardId] && scoreboards.byId[scoreboardId].title}
+            </Typography>
           </AlignedText>
           <AlignedText text="Target Problems" childrenType="text">
-            {hasReadProblem && <Typography variant="body1">{transIdToLabel([48, 74])}</Typography>}
-            {/* {hasReadProblem && (
-              <Typography variant="body1">
-                {transIdToLabel(scoreboards.byId[scoreboardId].target_problem_ids)}
-              </Typography>
-            )} */}
+            <Typography variant="body1">
+              {scoreboards.byId[scoreboardId] && transIdToLabel(scoreboards.byId[scoreboardId].target_problem_ids)}
+            </Typography>
           </AlignedText>
           <AlignedText text="Scoring Formula" childrenType="text">
-            <Typography variant="body1">1.5 + 1.5 * (team_score - class_worst) / (class_best - class_worst)</Typography>
-            {/* <Typography variant="body1">{scoreboards.byId[scoreboardId].data.scoring_formula}</Typography> */}
+            <Typography variant="body1">
+              {scoreboards.byId[scoreboardId] && scoreboards.byId[scoreboardId].data.scoring_formula}
+            </Typography>
           </AlignedText>
           <AlignedText text="Baseline Team" childrenType="text">
-            {Object.keys(teamss.byId).length !== 0 && <Typography variant="body1">{teamss.byId[47].name}</Typography>}
-            {/* <Typography variant="body1">
-              {scoreboards.byId[scoreboardId].data.baseline_team_id
-                ? teams.byId[scoreboards.byId[scoreboardId].data.baseline_team_id].name
-                : '-'}
-            </Typography> */}
+            {scoreboards.byId[scoreboardId] && teams.byId[scoreboards.byId[scoreboardId].data.baseline_team_id] && (
+              <Typography variant="body1">
+                {teams.byId[scoreboards.byId[scoreboardId].data.baseline_team_id].name}
+              </Typography>
+            )}
           </AlignedText>
           <AlignedText text="Team Label Filter" childrenType="text">
             <Typography variant="body1">
-              {/* {scoreboards.byId[scoreboardId].data.team_label_filter
-                ? scoreboards.byId[scoreboardId].data.team_label_filter
-                : '-'} */}
+              {scoreboards.byId[scoreboardId] && scoreboards.byId[scoreboardId].data.team_label_filter}
             </Typography>
           </AlignedText>
         </SimpleBar>
@@ -208,7 +208,7 @@ export default function ScoreboardInfo() {
       )}
 
       <SimpleBar title="Scoreboard" noIndent>
-        <SimpleTable isEdit={false} hasDelete={false} columns={scoreboardTitle} data={teams} />
+        <SimpleTable isEdit={false} hasDelete={false} columns={scoreboardTitle} data={Teams} />
       </SimpleBar>
     </>
   );
