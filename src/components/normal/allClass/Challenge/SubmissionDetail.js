@@ -9,7 +9,8 @@ import AlignedText from '../../../ui/AlignedText';
 import SimpleTable from '../../../ui/SimpleTable';
 import PageTitle from '../../../ui/PageTitle';
 import GeneralLoading from '../../../GeneralLoading';
-import { browseJudgeCases, browseTestcases } from '../../../../actions/myClass/problem';
+import { browseTestcases } from '../../../../actions/myClass/problem';
+import { browseAllJudgementJudgeCase } from '../../../../actions/api/judgement';
 import { fetchSubmission, readSubmissionDetail } from '../../../../actions/myClass/submission';
 import { browseSubmitLang } from '../../../../actions/common/common';
 import NoMatch from '../../../noMatch';
@@ -34,6 +35,9 @@ const useStyles = makeStyles((theme) => ({
   codeField: {
     width: '50vw',
   },
+  acceptedStatus: {
+    color: theme.palette.green.main,
+  },
 }));
 
 /* This is a level 4 component (page component) */
@@ -43,9 +47,9 @@ export default function SubmissionDetail() {
   } = useParams();
   const classNames = useStyles();
   const [tableData, setTableData] = useState([]);
-  const [judgmentId, setJudgmentId] = useState('');
   const [testcaseDataIds, setTestcaseDataIds] = useState([]);
   const [sampleDataIds, setSampleDataIds] = useState([]);
+  const [judgmentId, setJudgmentId] = useState(-1);
   const dispatch = useDispatch();
 
   const submissions = useSelector((state) => state.submissions.byId);
@@ -68,7 +72,7 @@ export default function SubmissionDetail() {
     if (submissions[submissionId]?.latestJudgmentId) {
       if (submissions[submissionId].latestJudgmentId !== judgmentId) {
         setJudgmentId(submissions[submissionId].latestJudgmentId);
-        dispatch(browseJudgeCases(authToken, submissions[submissionId].latestJudgmentId));
+        dispatch(browseAllJudgementJudgeCase(authToken, submissions[submissionId].latestJudgmentId));
       }
     }
   }, [authToken, dispatch, judgmentId, submissionId, submissions]);
@@ -108,7 +112,7 @@ export default function SubmissionDetail() {
   );
 
   useEffect(() => {
-    if (problems.byId[problemId] && problems.byId[problemId].testcaseIds) {
+    if (problems.byId[problemId]?.testcaseIds) {
       const testcasesId = problems.byId[problemId].testcaseIds.filter(
         (id) => !testcases.byId[id].is_sample && !testcases.byId[id].is_deleted,
       );
@@ -123,18 +127,25 @@ export default function SubmissionDetail() {
   }, [problems, problemId, transformTestcase, transformSample, testcases]);
 
   useEffect(() => {
-    if (sampleDataIds && testcaseDataIds && judgeCases.allIds) {
-      const filteredJudgeCases = judgeCases.allIds.filter((key) => judgeCases.byId[key].judgment_id === judgmentId);
+    if (sampleDataIds && testcaseDataIds && judgeCases.byId) {
       setTableData(
         sampleDataIds
           .concat(testcaseDataIds)
           .map((id) => ({
             id,
             no: transformTestcase(id),
-            time: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].time_lapse : '',
-            memory: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].peak_memory : '',
-            status: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].verdict : '',
-            score: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].score : '',
+            time: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]
+              ? judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`].time_lapse
+              : '',
+            memory: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]
+              ? judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`].peak_memory
+              : '',
+            status: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]
+              ? judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`].verdict
+              : '',
+            score: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]
+              ? judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`].score
+              : '',
           }))
           .sort((a, b) => {
             if (!a.no.includes('sample') && b.no.includes('sample')) return 1;
@@ -155,7 +166,15 @@ export default function SubmissionDetail() {
           }),
       );
     }
-  }, [judgeCases.allIds, judgeCases.byId, judgmentId, sampleDataIds, testcaseDataIds, transformTestcase]);
+  }, [
+    judgeCases.allIds,
+    judgeCases.byId,
+    sampleDataIds,
+    submissionId,
+    submissions,
+    testcaseDataIds,
+    transformTestcase,
+  ]);
 
   if (
     problems.byId[problemId] === undefined
@@ -218,7 +237,7 @@ export default function SubmissionDetail() {
           {judgments[judgmentId] ? (
             <div>
               {judgments[judgmentId].verdict === 'Accepted' ? (
-                <Typography variant="body1" color="primary">
+                <Typography variant="body1" className={classNames.acceptedStatus}>
                   {judgments[judgmentId].verdict}
                 </Typography>
               ) : (
@@ -240,7 +259,7 @@ export default function SubmissionDetail() {
         </AlignedText>
         <AlignedText text="Submit Time" childrenType="text">
           <Typography variant="body1">
-            {moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm')}
+            {moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm:ss')}
           </Typography>
         </AlignedText>
         <AlignedText text="Language" childrenType="text">

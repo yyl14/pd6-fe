@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
+import { Snackbar, makeStyles } from '@material-ui/core';
+import { useParams, useHistory } from 'react-router-dom';
 import { browsePeerReviewSummaryReceive } from '../../../../../actions/api/view';
-
+import { browseAllPeerReviewReceive } from '../../../../../actions/myClass/peerReview';
 import AutoTable from '../../../../ui/AutoTable';
 import PageTitle from '../../../../ui/PageTitle';
 import CopyToClipboardButton from '../../../../ui/CopyToClipboardButton';
@@ -53,10 +53,11 @@ const basicColumns2 = [
 // This page is only for class manager.
 export default function PeerReviewSummary() {
   const {
-    courseId, classId, challengeId, peerReviewId,
+    courseId, classId, challengeId, peerReviewId, is_null,
   } = useParams();
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.api.view);
@@ -67,13 +68,25 @@ export default function PeerReviewSummary() {
 
   const [PRsummaryHTML, setPRsummaryHTML] = useState('');
   const [peerColumns, setPeerColumns] = useState([]);
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   useEffect(() => {
+    if (is_null !== undefined && Number(is_null) === 1) {
+      setShowSnackbar(true);
+    }
+  }, [is_null]);
+
+  useEffect(() => {
+    dispatch(browseAllPeerReviewReceive(authToken, peerReviewId));
+  }, [authToken, dispatch, peerReviewId]);
+
+  useEffect(() => {
+    const baseUrl = window.location.origin;
     let tableHTML = '<table>';
     if (PRsummary.allIds) {
       PRsummary.allIds.map((id) => {
         tableHTML += '<tr>';
-        const profile = `/user-profile/${PRsummary.byId[id].account_id}`;
+        const profile = `${baseUrl}/user-profile/${PRsummary.byId[id].account_id}`;
         const peerData = [];
         Array(peerReviews[peerReviewId].max_review_count)
           .fill(0)
@@ -81,7 +94,7 @@ export default function PeerReviewSummary() {
             peerData.push({
               text: PRsummary.byId[id].score[index] ? PRsummary.byId[id].score[index] : '',
               path: PRsummary.byId[id].peer_review_record_ids
-                ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${PRsummary.byId[id].account_id}/${PRsummary.byId[id].peer_review_record_ids[index]}`
+                ? `${baseUrl}/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${PRsummary.byId[id].account_id}/${PRsummary.byId[id].peer_review_record_ids[index]}`
                 : '',
             });
             return id;
@@ -134,7 +147,9 @@ export default function PeerReviewSummary() {
 
   return (
     <>
-      <PageTitle text={`${challenges[challengeId].title} / PR / Receiver Mode`} />
+      <PageTitle
+        text={`${challenges[challengeId].title} / ${peerReviews[peerReviewId].challenge_label} / Receiver Mode`}
+      />
       <AutoTable
         ident={`${challenges[challengeId].title}-PR-receiver`}
         buttons={(
@@ -194,11 +209,22 @@ export default function PeerReviewSummary() {
             link:
               item.peer_review_record_ids.length !== 0 && item.peer_review_record_ids[0] !== null
                 ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${item.account_id}/${item.peer_review_record_ids[0]}`
-                : `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary`,
+                : `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary/1`,
             ...peerData,
           };
         }}
         hasLink
+      />
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={1500}
+        onClose={() => {
+          history.push(
+            `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary`,
+          );
+          setShowSnackbar(false);
+        }}
+        message={"Code hasn't been assigned to anyone yet."}
       />
     </>
   );

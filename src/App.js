@@ -28,22 +28,23 @@ import './App.css';
 import './styles/ui.css';
 
 function App() {
-  const [cookies, setCookies] = useCookies(['theme']);
-  const [selectedTheme, setSelectedTheme] = useState('pd6New');
+  const [cookies, setCookies] = useCookies(['themeBeta']);
+  const [selectedTheme, setSelectedTheme] = useState('pd6');
 
   const setTheme = useCallback(
     (value) => {
-      setCookies('theme', value);
+      const daysToExpire = new Date(2147483647 * 1000);
+      setCookies('themeBeta', value, { path: '/', expires: daysToExpire });
     },
     [setCookies],
   );
 
   // Initialize theme selection from cookies
   useEffect(() => {
-    if (cookies.theme !== undefined) {
-      setSelectedTheme(cookies.theme);
+    if (cookies.themeBeta !== undefined) {
+      setSelectedTheme(cookies.themeBeta);
     }
-  }, [cookies.theme]);
+  }, [cookies.themeBeta]);
 
   useEffect(() => {
     const url = window.location.origin;

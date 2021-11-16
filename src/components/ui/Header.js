@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
   unreadDot: {
     width: '6.75px',
     height: '6.75px',
-    backgroundColor: theme.headerStyle.background,
+    backgroundColor: theme.palette.secondary.main,
     position: 'absolute',
     left: '30px',
     top: '28px',
@@ -216,6 +216,16 @@ export default function Header() {
     systemLoading.editAnnouncement,
     systemLoading.addAnnouncement,
     systemLoading.deleteAnnouncement,
+  ]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      dispatch(userBrowseAnnouncement(authToken));// refresh every 10 mins
+    }, 600000);
+    return () => clearInterval(interval);
+  }, [
+    authToken,
+    dispatch,
   ]);
 
   useEffect(() => {

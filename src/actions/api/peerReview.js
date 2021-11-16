@@ -112,7 +112,7 @@ export const browseAccountReceivedPeerReviewRecord = (token, peerReviewId, accou
   }
 };
 
-export const submitPeerReviewRecord = (token, peerReviewRecordId, score, comment, onSuccess) => async (dispatch) => {
+export const submitPeerReviewRecord = (token, peerReviewRecordId, score, comment, onSuccess, onError) => async (dispatch) => {
   try {
     const config = { headers: { 'auth-token': token } };
     const body = {
@@ -129,6 +129,7 @@ export const submitPeerReviewRecord = (token, peerReviewRecordId, score, comment
       type: peerReviewConstants.SUBMIT_PEER_REVIEW_RECORD_FAIL,
       error,
     });
+    onError();
   }
 };
 

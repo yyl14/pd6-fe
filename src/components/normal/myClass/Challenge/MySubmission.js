@@ -57,9 +57,13 @@ export default function MySubmission() {
       />
       <SimpleBar title="Submission Information">
         <AlignedText
-          text={`My ${challenges.byId[challengeId].selection_type[0].concat(
-            challenges.byId[challengeId].selection_type.slice(1).toLowerCase(),
-          )} Score`}
+          text={`My ${
+            challenges.byId[challengeId].selection_type
+              ? challenges.byId[challengeId].selection_type[0].concat(
+                challenges.byId[challengeId].selection_type.slice(1).toLowerCase(),
+              )
+              : ''
+          } Score`}
           childrenType="text"
         >
           <Typography variant="body1">{problems.byId[problemId].score?.toString() ?? '0'}</Typography>
@@ -194,7 +198,7 @@ export default function MySubmission() {
             item.latestJudgmentId !== null && judgments.byId[item.latestJudgmentId] !== undefined
               ? judgments.byId[item.latestJudgmentId].max_memory
               : '',
-          'Submit Time': moment(item.submit_time).format('YYYY-MM-DD, HH:mm'),
+          'Submit Time': moment(item.submit_time).format('YYYY-MM-DD, HH:mm:ss'),
           link: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${item.id}`,
         })}
         hasLink

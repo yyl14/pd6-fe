@@ -155,6 +155,14 @@ export default function CodingProblemInfo() {
               width: 200,
               type: 'string',
             },
+            {
+              id: 'note',
+              label: 'Note',
+              minWidth: 50,
+              align: 'center',
+              width: 100,
+              type: 'string',
+            },
           ]}
           data={sampleDataIds.map((id) => ({
             id,
@@ -209,6 +217,14 @@ export default function CodingProblemInfo() {
             {
               id: 'score',
               label: 'Score',
+              minWidth: 50,
+              align: 'center',
+              width: 100,
+              type: 'string',
+            },
+            {
+              id: 'note',
+              label: 'Note',
               minWidth: 50,
               align: 'center',
               width: 100,
