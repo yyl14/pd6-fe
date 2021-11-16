@@ -455,7 +455,10 @@ export default function TaskAddingCard({ open, setOpen }) {
             <div>
               <AlignedText text="Target Problems" childrenType="field">
                 <MultiSelect
-                  options={challenges.byId[challengeId].problemIds.map((id) => problems.byId[id].challenge_label)}
+                  options={challenges.byId[challengeId].problemIds
+                    .map((id) => problems.byId[id])
+                    .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+                    .map(({ challenge_label }) => challenge_label)}
                   value={targetProblems}
                   setValue={setTargetProblems}
                 />
