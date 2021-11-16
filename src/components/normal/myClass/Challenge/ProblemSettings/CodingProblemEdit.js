@@ -310,6 +310,7 @@ export default function CodingProblemEdit({ closeEdit }) {
         {},
       ),
     );
+    setHasChange(true);
   };
   const handleSetTestcaseTableData = (tableData) => {
     setTestcaseTableData(
@@ -321,6 +322,7 @@ export default function CodingProblemEdit({ closeEdit }) {
         {},
       ),
     );
+    setHasChange(true);
   };
 
   const handleSampleConfirm = (newSelectedFiles) => {
