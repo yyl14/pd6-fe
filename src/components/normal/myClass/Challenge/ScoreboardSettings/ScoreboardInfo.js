@@ -91,10 +91,8 @@ export default function ScoreboardInfo() {
   }, [authToken, classId, dispatch]);
 
   useEffect(() => {
-    if (!loading.editTeamProjectScoreboard) {
-      dispatch(readScoreboard(authToken, scoreboardId));
-    }
-  }, [authToken, dispatch, loading.editTeamProjectScoreboard, scoreboardId]);
+    dispatch(readScoreboard(authToken, scoreboardId));
+  }, [authToken, dispatch, scoreboardId]);
 
   useEffect(() => {
     if (userClasses.filter((item) => item.class_id === Number(classId)).length !== 0) {
