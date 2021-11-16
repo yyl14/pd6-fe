@@ -300,7 +300,7 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
         </AlignedText>
         <AlignedText text="Submit Time" childrenType="text">
           <Typography variant="body1">
-            {moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm')}
+            {moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm:ss')}
           </Typography>
         </AlignedText>
         <AlignedText text="Language" childrenType="text">

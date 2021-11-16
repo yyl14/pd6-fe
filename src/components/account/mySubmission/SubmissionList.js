@@ -161,7 +161,7 @@ export default function SubmissionList() {
             }/${item.course_id}/${item.class_id}/challenge/${item.challenge_id}/${item.problem_id}`,
           },
           Status: item.verdict === null ? 'Waiting For Judge' : item.verdict,
-          'Submitted Time': moment(item.submit_time).format('YYYY-MM-DD, HH:mm'),
+          'Submitted Time': moment(item.submit_time).format('YYYY-MM-DD, HH:mm:ss'),
           link: `/my-submission/${item.course_id}/${item.class_id}/${item.challenge_id}/${item.problem_id}/${item.id}`,
         })}
         hasLink

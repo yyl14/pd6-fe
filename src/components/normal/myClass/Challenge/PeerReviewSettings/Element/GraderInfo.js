@@ -44,7 +44,7 @@ export default function GraderInfo({ accountId, reviewedTime }) {
         </AlignedText>
         <AlignedText text="Reviewed Time" childrenType="text">
           <Typography variant="body1">
-            {reviewedTime && moment(reviewedTime).format('YYYY-MM-DD, HH:mm')}
+            {reviewedTime && moment(reviewedTime).format('YYYY-MM-DD, HH:mm:ss')}
           </Typography>
         </AlignedText>
       </>
