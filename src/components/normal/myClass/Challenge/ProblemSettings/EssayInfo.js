@@ -159,7 +159,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
               {essaySubmission.byId[uploadRecord].filename}
             </Link>
             {' '}
-            {moment(essaySubmission.byId[uploadRecord].submit_time).format('YYYY-MM-DD, HH:mm')}
+            {moment(essaySubmission.byId[uploadRecord].submit_time).format('YYYY-MM-DD, HH:mm:ss')}
           </div>
         )}
       </SimpleBar>

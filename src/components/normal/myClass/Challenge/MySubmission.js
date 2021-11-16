@@ -154,7 +154,7 @@ export default function MySubmission() {
             item.latestJudgmentId !== null && judgments.byId[item.latestJudgmentId] !== undefined
               ? judgments.byId[item.latestJudgmentId].max_memory
               : '',
-          'Submit Time': moment(item.submit_time).format('YYYY-MM-DD, HH:mm'),
+          'Submit Time': moment(item.submit_time).format('YYYY-MM-DD, HH:mm:ss'),
           link: `/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${item.id}`,
         })}
         hasLink
