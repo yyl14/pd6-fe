@@ -77,6 +77,7 @@ export default function TaskAddingCard({ open, setOpen }) {
   const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
   const commonLoading = useSelector((state) => state.loading.common);
+  const scoreboardsLoading = useSelector((state) => state.loading.api.scoreboard);
 
   const [type, setType] = useState('Coding Problem');
   const [label, setLabel] = useState('');
@@ -99,10 +100,23 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [teamLabelFilter, setTeamLabelFilter] = useState('');
 
   useEffect(() => {
-    if (!loading.addProblem && !loading.addEssay && !loading.addPeerReview) {
+    if (
+      !loading.addProblem
+      && !loading.addEssay
+      && !loading.addPeerReview
+      && !scoreboardsLoading.addTeamProjectScoreboardUnderChallenge
+    ) {
       dispatch(browseTasksUnderChallenge(authToken, challengeId));
     }
-  }, [authToken, challengeId, dispatch, loading.addEssay, loading.addPeerReview, loading.addProblem]);
+  }, [
+    authToken,
+    challengeId,
+    dispatch,
+    loading.addEssay,
+    loading.addPeerReview,
+    loading.addProblem,
+    scoreboardsLoading.addTeamProjectScoreboardUnderChallenge,
+  ]);
 
   useEffect(() => {
     dispatch(fetchTeams(authToken, classId, ''));
