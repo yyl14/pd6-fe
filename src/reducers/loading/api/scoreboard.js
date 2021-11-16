@@ -5,6 +5,7 @@ const initialState = {
   readScoreboard: false,
   editTeamProjectScoreboard: false,
   deleteScoreboard: false,
+  viewTeamProjectScoreboard: false,
 };
 
 export default function scoreboard(state = initialState, action) {
@@ -59,6 +60,19 @@ export default function scoreboard(state = initialState, action) {
       return {
         ...state,
         deleteScoreboard: false,
+      };
+    }
+    case scoreboardConstants.VIEW_TEAM_PROJECT_SCOREBOARD_START: {
+      return {
+        ...state,
+        viewTeamProjectScoreboard: true,
+      };
+    }
+    case scoreboardConstants.VIEW_TEAM_PROJECT_SCOREBOARD_SUCCESS:
+    case scoreboardConstants.VIEW_TEAM_PROJECT_SCOREBOARD_FAIL: {
+      return {
+        ...state,
+        viewTeamProjectScoreboard: false,
       };
     }
 

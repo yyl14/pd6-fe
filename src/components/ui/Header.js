@@ -5,13 +5,25 @@ import { useCookies } from 'react-cookie';
 import { format } from 'date-fns';
 import moment from 'moment';
 import {
-  makeStyles, Typography, AppBar, Toolbar,
+  makeStyles, Typography, AppBar, Toolbar, useTheme,
 } from '@material-ui/core';
 import Icon from './icon/index';
 import { userLogout } from '../../actions/user/auth';
 import { userBrowseAnnouncement } from '../../actions/user/user';
 
 const useStyles = makeStyles((theme) => ({
+  logo: {
+    '&:hover': {
+      cursor: 'pointer',
+    },
+    display: 'flex',
+    alignItems: 'center',
+    color: theme.palette.grey[0],
+    margin: '0 40px 0 30px',
+  },
+  noLogo: {
+    marginLeft: '50px',
+  },
   appbar: {
     left: 0,
     right: 'auto',
@@ -28,12 +40,12 @@ const useStyles = makeStyles((theme) => ({
 
   // header left
   item: {
-    marginLeft: '50px',
+    marginRight: '50px',
     '&:hover': {
       cursor: 'pointer',
     },
     '@media (max-width: 760px)': {
-      marginLeft: '20px',
+      marginRight: '20px',
     },
     color: theme.headerStyle.color,
   },
@@ -177,6 +189,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Header() {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const classes = useStyles();
   const history = useHistory();
@@ -220,13 +233,10 @@ export default function Header() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      dispatch(userBrowseAnnouncement(authToken));// refresh every 10 mins
+      dispatch(userBrowseAnnouncement(authToken)); // refresh every 10 mins
     }, 600000);
     return () => clearInterval(interval);
-  }, [
-    authToken,
-    dispatch,
-  ]);
+  }, [authToken, dispatch]);
 
   useEffect(() => {
     switch (user.role) {
@@ -419,6 +429,13 @@ export default function Header() {
     <div>
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
+          {theme.headerStyle.logo ? (
+            <href className={classes.logo} onClick={() => history.push('/')}>
+              {theme.headerStyle.logo}
+            </href>
+          ) : (
+            <div className={classes.noLogo} />
+          )}
           {itemList.map((item) => (
             <Typography
               variant="h6"

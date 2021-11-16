@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Button } from '@material-ui/core';
+import { Typography, Button, Snackbar } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import AlignedText from '../../../../ui/AlignedText';
@@ -8,8 +8,8 @@ import SimpleTable from '../../../../ui/SimpleTable';
 import PageTitle from '../../../../ui/PageTitle';
 import { readProblemInfo } from '../../../../../actions/myClass/problem';
 import { fetchTeams } from '../../../../../actions/myClass/team';
+import { readScoreboard, viewTeamProjectScoreboard } from '../../../../../actions/api/scoreboard';
 import ScoreboardEdit from './ScoreboardEdit';
-import { readScoreboard } from '../../../../../actions/api/scoreboard';
 
 const scoreboardBasicTitle = [
   {
@@ -38,35 +38,6 @@ const scoreboardBasicTitle = [
   },
 ];
 
-// TODO: replace with view api to get real data
-const mockteam1 = {
-  team_id: 4,
-  team_name: 'test_modify_name',
-  total_score: 40.33,
-  target_problem_data: [
-    { problem_id: 48, score: 40.1, submission_id: 571 },
-    { problem_id: 74, score: 40.2, submission_id: 567 },
-  ],
-};
-const mockteam2 = {
-  team_id: 78,
-  team_name: 'Team Apple',
-  total_score: 70.33,
-  target_problem_data: [
-    { problem_id: 48, score: 30.1, submission_id: 571 },
-    { problem_id: 74, score: 40.2, submission_id: 567 },
-  ],
-};
-const mockteam3 = {
-  team_id: 9,
-  team_name: 'edit team',
-  total_score: 66.33,
-  target_problem_data: [
-    { problem_id: 48, score: 33.1, submission_id: 571 },
-    { problem_id: 74, score: 33.2, submission_id: 567 },
-  ],
-};
-
 export default function ScoreboardInfo() {
   const {
     courseId, classId, challengeId, scoreboardId,
@@ -79,20 +50,25 @@ export default function ScoreboardInfo() {
   const userClasses = useSelector((state) => state.user.classes);
   const teams = useSelector((state) => state.teams);
   const loading = useSelector((state) => state.loading.api.scoreboard);
+  const error = useSelector((state) => state.error.api.scoreboard);
 
   const [scoreboardTitle, setScoreboardTitle] = useState(scoreboardBasicTitle);
-  const [Teams, setTeams] = useState([]);
+  const [scoreboardTeams, setScoreboardTeams] = useState([]);
   const [hasReadProblem, setHasReadProblem] = useState(false);
   const [edit, setEdit] = useState(false);
   const [role, setRole] = useState('NORMAL');
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   useEffect(() => {
     dispatch(fetchTeams(authToken, classId, ''));
   }, [authToken, classId, dispatch]);
 
   useEffect(() => {
-    dispatch(readScoreboard(authToken, scoreboardId));
-  }, [authToken, dispatch, scoreboardId]);
+    if (!loading.editTeamProjectScoreboard) {
+      dispatch(readScoreboard(authToken, scoreboardId));
+      dispatch(viewTeamProjectScoreboard(authToken, scoreboardId, () => setShowSnackbar(true)));
+    }
+  }, [authToken, dispatch, loading.editTeamProjectScoreboard, scoreboardId]);
 
   useEffect(() => {
     if (userClasses.filter((item) => item.class_id === Number(classId)).length !== 0) {
@@ -101,31 +77,28 @@ export default function ScoreboardInfo() {
   }, [classId, userClasses]);
 
   useEffect(() => {
-    if (Teams.length > 0 && !hasReadProblem) {
-      Teams[0].target_problem_data.map((p) => dispatch(readProblemInfo(authToken, p.problem_id)));
+    if (scoreboardTeams.length > 0 && !hasReadProblem) {
+      scoreboardTeams[0].target_problem_data.map((p) => dispatch(readProblemInfo(authToken, p.problem_id)));
       setHasReadProblem(true);
     }
-  }, [authToken, dispatch, hasReadProblem, Teams]);
+  }, [authToken, dispatch, hasReadProblem, scoreboardTeams]);
 
   useEffect(() => {
-    // TODO: set tempTeams with view api.
-    let tempTeams = [mockteam1, mockteam2, mockteam3];
+    if (scoreboards.byId[scoreboardId] === undefined) return;
+    let tempTeams = [...scoreboards.byId[scoreboardId].teams];
     tempTeams.sort((a, b) => b.total_score - a.total_score);
 
-    if (tempTeams.length > 0) {
-      const scoreColumns = tempTeams[0].target_problem_data.map((p) => {
+    if (scoreboards.byId[scoreboardId].target_problem_ids) {
+      const scoreColumns = scoreboards.byId[scoreboardId].target_problem_ids.map((p) => {
         const column = {
-          id: `problem-${p.problem_id}-score`,
-          label: `${problems[p.problem_id]?.challenge_label} Score`,
+          id: `problem-${p}-score`,
+          label: `${problems[p]?.challenge_label} Score`,
           minWidth: 100,
           align: 'center',
           width: 200,
-          type: 'string',
+          type: role === 'MANAGER' ? 'link' : 'string',
+          link_id: `problem-${p}-submission`,
         };
-        if (p.submission_id) {
-          column.type = 'link';
-          column.link_id = `problem-${p.problem_id}-submission`;
-        }
         return column;
       });
       setScoreboardTitle([].concat(scoreboardBasicTitle, scoreColumns));
@@ -148,11 +121,11 @@ export default function ScoreboardInfo() {
       }
       return tempTeam;
     });
-    setTeams(tempTeams);
-  }, [classId, courseId, problems]);
+    setScoreboardTeams(tempTeams);
+  }, [classId, courseId, problems, role, scoreboardId, scoreboards.byId]);
 
   const transIdToLabel = (ids) => {
-    const labels = ids.map((id) => problems[id].challenge_label);
+    const labels = ids.map((id) => problems[id]?.challenge_label);
     return labels.join(', ');
   };
 
@@ -208,8 +181,14 @@ export default function ScoreboardInfo() {
       )}
 
       <SimpleBar title="Scoreboard" noIndent>
-        <SimpleTable isEdit={false} hasDelete={false} columns={scoreboardTitle} data={Teams} />
+        <SimpleTable isEdit={false} hasDelete={false} columns={scoreboardTitle} data={scoreboardTeams} />
       </SimpleBar>
+      <Snackbar
+        message={`Error: ${error.viewTeamProjectScoreboard}`}
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setShowSnackbar(false)}
+      />
     </>
   );
 }
