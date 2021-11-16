@@ -62,7 +62,7 @@ export default function MyProfile({
             {itemList.map((item) => (
               <ListItem
                 button
-                key={item.text}
+                key={item.id}
                 onClick={() => history.push(item.path)}
                 className={location.pathname === item.path ? `${classes.active} ${classes.item}` : classes.item}
               >

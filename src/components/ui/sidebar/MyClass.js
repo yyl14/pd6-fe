@@ -154,7 +154,7 @@ export default function MyClass({
                   {itemLists[id].map((item) => (
                     <ListItem
                       button
-                      key={item.text}
+                      key={item.id}
                       onClick={() => history.push(item.path)}
                       className={
                         location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item
