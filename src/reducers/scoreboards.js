@@ -8,6 +8,7 @@ const prototype = {
   challenge_label: null,
   title: null,
   target_problem_ids: [],
+  teams: [],
   is_deleted: null,
   type: null,
   data: {
@@ -34,6 +35,17 @@ const byId = (state = {}, action) => {
         [scoreboardId]: { ...prototype, ...state[scoreboardId], ...data.scoreboard },
       };
     }
+    case scoreboardConstants.VIEW_TEAM_PROJECT_SCOREBOARD_SUCCESS: {
+      const { scoreboardId, data } = action.payload;
+      return {
+        ...state,
+        [scoreboardId]: {
+          ...prototype,
+          ...state[scoreboardId],
+          teams: data,
+        },
+      };
+    }
 
     default:
       return state;
@@ -46,6 +58,7 @@ const allIds = (state = [], action) => {
       const { data } = action.payload;
       return [...new Set([...data.scoreboard.map((item) => item.id), ...state])];
     }
+    case scoreboardConstants.VIEW_TEAM_PROJECT_SCOREBOARD_SUCCESS:
     case scoreboardConstants.READ_SCOREBOARD_SUCCESS: {
       const { scoreboardId } = action.payload;
       return [...new Set([scoreboardId, ...state])];

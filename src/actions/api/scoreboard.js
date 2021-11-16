@@ -73,3 +73,22 @@ export const deleteScoreboard = (token, scoreboardId) => async (dispatch) => {
     });
   }
 };
+
+export const viewTeamProjectScoreboard = (token, scoreboardId, onError) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    dispatch({ type: scoreboardConstants.VIEW_TEAM_PROJECT_SCOREBOARD_START });
+    const res = await agent.get(`team-project-scoreboard/view/${scoreboardId}`, config);
+
+    dispatch({
+      type: scoreboardConstants.VIEW_TEAM_PROJECT_SCOREBOARD_SUCCESS,
+      payload: { scoreboardId, data: res.data.data },
+    });
+  } catch (error) {
+    dispatch({
+      type: scoreboardConstants.VIEW_TEAM_PROJECT_SCOREBOARD_FAIL,
+      error,
+    });
+    onError();
+  }
+};
