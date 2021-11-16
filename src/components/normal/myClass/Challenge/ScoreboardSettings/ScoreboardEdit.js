@@ -58,7 +58,11 @@ export default function ScoreboardEdit({ setEdit }) {
     }
   }, [problems.byId, scoreboardId, scoreboards.byId]);
 
-  const transIdToLabel = (ids) => ids.map((id) => problems.byId[id].challenge_label);
+  const transIdToLabel = (ids) => ids
+    .map((id) => problems.byId[id])
+    .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+    .map(({ challenge_label }) => challenge_label);
+
   const transLabelToId = (labels) => {
     const ids = labels.map(
       (key) => challenges.byId[challengeId].problemIds.filter((id) => problems.byId[id].challenge_label === key)[0],
