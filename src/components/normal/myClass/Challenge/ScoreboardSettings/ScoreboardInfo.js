@@ -107,6 +107,7 @@ export default function ScoreboardInfo() {
     tempTeams = tempTeams.map((team, index) => {
       const tempTeam = {
         ...team,
+        id: team.team_id,
         rank: index + 1,
         team_path: `/my-class/${courseId}/${classId}/team/${team.team_id}`,
       };

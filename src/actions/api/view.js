@@ -306,13 +306,13 @@ const browseMySubmissionUnderProblem = (token, accountId, problemId, browseParam
       payload: {
         submissions: data.map(
           ({
-            submission_id, account_id, problem_id, verdict, submit_time,
+            submission_id, judgment_id, account_id, problem_id, verdict, submit_time,
           }) => ({
             id: submission_id,
             account_id,
             problem_id,
             submit_time,
-            latestJudgmentId: submission_id,
+            latestJudgmentId: judgment_id,
             verdict,
           }),
         ),
