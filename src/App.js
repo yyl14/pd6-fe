@@ -29,7 +29,7 @@ import './styles/ui.css';
 
 function App() {
   const [cookies, setCookies] = useCookies(['themeBeta']);
-  const [selectedTheme, setSelectedTheme] = useState('pd6');
+  const [selectedTheme, setSelectedTheme] = useState('pd6New');
 
   const setTheme = useCallback(
     (value) => {
