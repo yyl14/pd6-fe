@@ -670,6 +670,7 @@ const headerStyle = {
   background: mono.black,
   color: mono.white,
   activeColor: palette.primary.main,
+  hasIndicator: false,
 };
 
 const theme = createTheme({
