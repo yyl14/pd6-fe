@@ -176,7 +176,7 @@ export default function AllClassChallenge({
               {itemList.map((item) => (
                 <ListItem
                   button
-                  key={item.text}
+                  key={item.id}
                   onClick={() => history.push(item.path)}
                   className={
                     location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item

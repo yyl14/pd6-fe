@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import ErrorText from '../components/ui/ErrorText';
 
@@ -673,9 +675,87 @@ const props = {
 const components = {};
 
 const headerStyle = {
+  logo: (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      // xmlns:xlink="http://www.w3.org/1999/xlink"
+      width="50"
+      height="50"
+      viewBox="0 0 646.286 635.02"
+    >
+      <defs>
+        <filter id="Path_7" x="11.266" y="0" width="635.02" height="635.02" filterUnits="userSpaceOnUse">
+          <feOffset dx="10" dy="15" input="SourceAlpha" />
+          <feGaussianBlur stdDeviation="12.5" result="blur" />
+          <feFlood floodOpacity="0.349" />
+          <feComposite operator="in" in2="blur" />
+          <feComposite in="SourceGraphic" />
+        </filter>
+      </defs>
+      <g id="Group_19" data-name="Group 19" transform="translate(-14.234 -30.5)">
+        <g transform="matrix(1, 0, 0, 1, 14.23, 30.5)" filter="url(#Path_7)">
+          <path
+            id="Path_7-2"
+            data-name="Path 7"
+            d="M280.01,0C434.655,0,560.02,125.365,560.02,280.01S434.655,560.02,280.01,560.02,0,434.655,0,280.01,125.365,0,280.01,0Z"
+            transform="translate(38.77 22.5)"
+            fill="#faebd7"
+          />
+        </g>
+        <g id="Group_11" data-name="Group 11" transform="translate(-43 -92)">
+          <g id="Group_1" data-name="Group 1" transform="matrix(0.985, -0.174, 0.174, 0.985, 117.152, 312.881)">
+            <text
+              id="Love"
+              transform="translate(-55.445 -30.614)"
+              fill="#786c5f"
+              fontSize="190"
+              fontFamily="Candice"
+              letterSpacing="0.02em"
+            >
+              <tspan x="68.008" y="164">
+                Love
+              </tspan>
+            </text>
+            <path
+              id="Path_1"
+              data-name="Path 1"
+              d="M0,0"
+              transform="translate(3.788 81.527)"
+              fill="#786c5f"
+              stroke="#707070"
+              strokeWidth="1"
+            />
+          </g>
+          <path
+            id="Path_5"
+            data-name="Path 5"
+            d="M-1.389,7.878,348.611,0"
+            transform="matrix(0.985, -0.174, 0.174, 0.985, 234.731, 600.419)"
+            fill="none"
+            stroke="#ae9f90"
+            strokeWidth="7"
+          />
+          <text
+            id="IM_Night"
+            data-name="IM Night"
+            transform="matrix(0.985, -0.174, 0.174, 0.985, 408, 549)"
+            fill="#58a6d6"
+            fontSize="120"
+            fontFamily="CoveredByYourGrace, Covered By Your Grace"
+            letterSpacing="0.02em"
+          >
+            <tspan x="-184.884" y="0">
+              IM Night
+            </tspan>
+          </text>
+        </g>
+      </g>
+    </svg>
+  ),
   background: palette.primary.light,
   color: palette.primary.dark,
   activeColor: palette.primary.main,
+  hasIndicator: true,
 };
 
 const theme = createTheme({

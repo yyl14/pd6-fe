@@ -43,7 +43,7 @@ export default function peerReview(state = initialState, action) {
     case peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_FAIL: {
       return {
         ...state,
-        browseAccountAllPeerReviewRecord: null,
+        browseAccountAllPeerReviewRecord: action.error,
       };
     }
 

@@ -23,6 +23,7 @@ const prototype = {
   peerReviewIds: [],
   specialJudgeIds: [],
   essayIds: [],
+  scoreboardIds: [],
   statistics: emptyStatistics,
 };
 
@@ -52,6 +53,7 @@ const byId = (state = {}, action) => {
           problemIds: data.problem.map((item) => item.id),
           peerReviewIds: data.peer_review.map((item) => item.id),
           essayIds: data.essay.map((item) => item.id),
+          scoreboardIds: data.scoreboard.map((item) => item.id),
         },
       };
     }
@@ -138,7 +140,7 @@ const allIds = (state = [], action) => {
       return [...new Set([...data.map((item) => item.id), ...state])];
     }
     case commonConstants.READ_CHALLENGE_SUCCESS: {
-      return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
+      return [...new Set([action.payload.id, ...state])];
     }
     case commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_SUCCESS: {
       const { challenges } = action.payload;

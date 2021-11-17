@@ -31,6 +31,7 @@ import error from './error/index';
 import component from './component';
 import essaySubmission from './essaySubmission';
 import pendingStudentCards from './pendingStudentCards';
+import scoreboards from './scoreboards';
 
 export default combineReducers({
   auth,
@@ -65,4 +66,5 @@ export default combineReducers({
   essaySubmission,
   component,
   pendingStudentCards,
+  scoreboards,
 });

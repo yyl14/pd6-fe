@@ -90,7 +90,7 @@ export default function ProblemSet({
                   {courses.byId[courseId].classIds.map((classId) => (
                     <ListItem
                       button
-                      key={classId}
+                      key={classId.id}
                       className={
                         location.pathname === `${baseURL}/${courseId}/${classId}`
                           ? `${classNames.active} ${classNames.item}`
