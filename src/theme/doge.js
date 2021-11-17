@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import ErrorText from '../components/ui/ErrorText';
 
@@ -688,9 +690,10 @@ const props = {
 };
 
 const headerStyle = {
-  background: mono.black,
+  logo: <img alt="doge" width={35} height={35} src="https://img.icons8.com/ios/50/ffffff/doge.png" />,
+  background: palette.primary.main,
   color: mono.white,
-  activeColor: palette.primary.main,
+  activeColor: dogeMono.lightGray,
 };
 
 const theme = createTheme({

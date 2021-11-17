@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import ErrorText from '../components/ui/ErrorText';
 
@@ -671,6 +673,7 @@ const props = {
 };
 
 const headerStyle = {
+  logo: <img width={35} height={35} alt="IM camp" src="https://i.imgur.com/EjbGfkQ.png" />,
   background: palette.primary.light,
   color: palette.primary.dark,
   activeColor: palette.primary.main,

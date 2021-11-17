@@ -22,6 +22,7 @@ export default function Challenge({
   const problems = useSelector((state) => state.problem);
   const essays = useSelector((state) => state.essays);
   const peerReviews = useSelector((state) => state.peerReviews);
+  const scoreboards = useSelector((state) => state.scoreboards);
 
   const [display, setDisplay] = useState('unfold');
 
@@ -104,6 +105,14 @@ export default function Challenge({
                 icon: <Icon.Peerreview />,
                 path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${id}`,
               })),
+            challenges[challengeId].scoreboardIds
+              .map((id) => scoreboards.byId[id])
+              .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+              .map(({ id, challenge_label }) => ({
+                text: challenge_label,
+                icon: <Icon.Scoreboard />,
+                path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/scoreboard/${id}`,
+              })),
           ),
         );
       } else if (
@@ -149,6 +158,14 @@ export default function Challenge({
                   text: challenge_label,
                   icon: <Icon.Peerreview />,
                   path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${id}`,
+                })),
+              challenges[challengeId].scoreboardIds
+                .map((id) => scoreboards.byId[id])
+                .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+                .map(({ id, challenge_label }) => ({
+                  text: challenge_label,
+                  icon: <Icon.Scoreboard />,
+                  path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/scoreboard/${id}`,
                 })),
             ),
           );
@@ -270,7 +287,19 @@ export default function Challenge({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [challengeId, challenges, classId, courseId, problems, essays, peerReviews, history, location.pathname, mode]);
+  }, [
+    challengeId,
+    challenges,
+    classId,
+    courseId,
+    problems,
+    essays,
+    peerReviews,
+    scoreboards,
+    history,
+    location.pathname,
+    mode,
+  ]);
 
   const addTaskItemColor = (popup) => {
     if (popup) {

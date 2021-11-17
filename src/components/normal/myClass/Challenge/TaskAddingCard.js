@@ -16,8 +16,10 @@ import {
   Snackbar,
 } from '@material-ui/core';
 import AlignedText from '../../../ui/AlignedText';
+import MultiSelect from '../../../ui/MultiSelect';
 import Icon from '../../../ui/icon/index';
 import NoMatch from '../../../noMatch';
+import { addTeamProjectScoreboardUnderChallenge } from '../../../../actions/api/scoreboard';
 
 import {
   addProblem,
@@ -27,6 +29,8 @@ import {
   peerReviewFetchChallenges,
 } from '../../../../actions/myClass/challenge';
 
+import { fetchTeams } from '../../../../actions/myClass/team';
+
 const useStyles = makeStyles((theme) => ({
   selectedIcon: {
     marginRight: '20px',
@@ -34,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     height: '1px',
     margin: '0px',
-    border: `0px solid ${theme.palette.grey[300]}`,
+    border: `0.5px solid ${theme.palette.grey[300]}`,
     backgroundColor: theme.palette.grey[300],
   },
   peerReviewCard_display: {
@@ -47,6 +51,13 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '10px',
     marginTop: '18px',
   },
+  reminder: {
+    color: theme.palette.grey.A700,
+  },
+  instructions: {
+    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(2),
+  },
 }));
 
 /* This is a level 4 component (page component) */
@@ -54,17 +65,18 @@ export default function TaskAddingCard({ open, setOpen }) {
   const { courseId, classId, challengeId } = useParams();
   const classNames = useStyles();
   const history = useHistory();
-
   const dispatch = useDispatch();
 
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
   const challenges = useSelector((state) => state.challenges);
+  const teams = useSelector((state) => state.teams);
   const authToken = useSelector((state) => state.auth.token);
   const problems = useSelector((state) => state.problem);
   const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
   const commonLoading = useSelector((state) => state.loading.common);
+  const scoreboardsLoading = useSelector((state) => state.loading.api.scoreboard);
 
   const [type, setType] = useState('Coding Problem');
   const [label, setLabel] = useState('');
@@ -79,12 +91,35 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [showAddProblemErrorSnackbar, setShowAddProblemErrorSnackbar] = useState(false);
   const [showAddEssayErrorSnackbar, setShowAddEssayErrorSnackbar] = useState(false);
   const [showAddPeerReviewErrorSnackbar, setShowAddPeerReviewErrorSnackbar] = useState(false);
+  const [showAddScoreboardErrorSnackbar, setShowAddScoreboardErrorSnackbar] = useState(false);
+  const [scoreboardType, setScoreboardType] = useState('TEAM_PROJECT');
+  const [targetProblems, setTargetProblems] = useState([]);
+  const [scoringFormula, setScoringFormula] = useState('');
+  const [baselineTeam, setBaselineTeam] = useState(null);
+  const [teamLabelFilter, setTeamLabelFilter] = useState('');
 
   useEffect(() => {
-    if (!loading.addProblem && !loading.addEssay && !loading.addPeerReview) {
+    if (
+      !loading.addProblem
+      && !loading.addEssay
+      && !loading.addPeerReview
+      && !scoreboardsLoading.addTeamProjectScoreboardUnderChallenge
+    ) {
       dispatch(browseTasksUnderChallenge(authToken, challengeId));
     }
-  }, [authToken, challengeId, dispatch, loading.addEssay, loading.addPeerReview, loading.addProblem]);
+  }, [
+    authToken,
+    challengeId,
+    dispatch,
+    loading.addEssay,
+    loading.addPeerReview,
+    loading.addProblem,
+    scoreboardsLoading.addTeamProjectScoreboardUnderChallenge,
+  ]);
+
+  useEffect(() => {
+    dispatch(fetchTeams(authToken, classId, ''));
+  }, [authToken, classId, dispatch]);
 
   useEffect(() => {
     if (type === 'Coding Problem' || type === 'Essay(PDF)') {
@@ -116,10 +151,25 @@ export default function TaskAddingCard({ open, setOpen }) {
       } else {
         setDisabled(true);
       }
-    } else {
-      setDisabled(true);
+    } else if (type === 'Scoreboard') {
+      if (label !== '' && title !== '' && targetProblems.length !== 0 && scoringFormula !== '') {
+        setDisabled(false);
+      } else setDisabled(true);
     }
-  }, [label, maxScore, minScore, peerNumber, peerReviewChallengeId, taskLabelId, title, type]);
+  }, [
+    baselineTeam,
+    label,
+    maxScore,
+    minScore,
+    peerNumber,
+    peerReviewChallengeId,
+    scoringFormula,
+    targetProblems,
+    taskLabelId,
+    teamLabelFilter,
+    title,
+    type,
+  ]);
 
   useEffect(() => {
     dispatch(peerReviewFetchChallenges(authToken, classId));
@@ -135,6 +185,17 @@ export default function TaskAddingCard({ open, setOpen }) {
       dispatch(browseTasksUnderChallenge(authToken, peerReviewChallengeId));
     }
   }, [authToken, dispatch, peerReviewChallengeId]);
+
+  const transLabelToId = (labels) => {
+    const ids = labels.map(
+      (key) => challenges.byId[challengeId].problemIds.filter((id) => problems.byId[id].challenge_label === key)[0],
+    );
+    return ids;
+  };
+
+  const addScoreboardSuccess = (scoreboardId) => {
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/scoreboard/${scoreboardId}`);
+  };
 
   const handleCreate = () => {
     switch (type) {
@@ -178,6 +239,29 @@ export default function TaskAddingCard({ open, setOpen }) {
         setTaskLabelId('');
         break;
       }
+      case 'Scoreboard': {
+        const targetProblemIds = transLabelToId(targetProblems);
+        const body = {
+          challenge_label: label,
+          title,
+          target_problem_ids: targetProblemIds,
+          scoring_formula: scoringFormula,
+          baseline_team_id: baselineTeam === '' ? null : baselineTeam,
+          rank_by_total_score: true,
+          team_label_filter: teamLabelFilter,
+        };
+        dispatch(
+          addTeamProjectScoreboardUnderChallenge(authToken, challengeId, body, addScoreboardSuccess, () => {
+            setShowAddScoreboardErrorSnackbar(true);
+          }),
+        );
+        setScoreboardType('TEAM_PROJECT');
+        setTargetProblems([]);
+        setScoringFormula('');
+        setBaselineTeam(null);
+        setTeamLabelFilter('');
+        break;
+      }
       default: {
         break;
       }
@@ -195,6 +279,12 @@ export default function TaskAddingCard({ open, setOpen }) {
     setLabel('');
     setDisabled(true);
     setOpen(false);
+
+    setScoreboardType('TEAM_PROJECT');
+    setTargetProblems([]);
+    setScoringFormula('');
+    setBaselineTeam(null);
+    setTeamLabelFilter('');
   };
 
   if (loading.readChallenge || commonLoading.fetchCourse || commonLoading.fetchClass) {
@@ -241,9 +331,32 @@ export default function TaskAddingCard({ open, setOpen }) {
                   <Icon.Peerreview className={classNames.selectedIcon} />
                   Peer Review
                 </MenuItem>
+                {/* change to scoreboard icon */}
+                <MenuItem value="Scoreboard">
+                  <Icon.Peerreview className={classNames.selectedIcon} />
+                  Scoreboard
+                </MenuItem>
               </Select>
             </FormControl>
           </AlignedText>
+          {type === 'Scoreboard' && (
+            <AlignedText text="Scoreboard Type" childrenType="field">
+              <FormControl variant="outlined">
+                <Select
+                  labelId="sort"
+                  id="sort"
+                  value={scoreboardType}
+                  onChange={(e) => {
+                    setScoreboardType(e.target.value);
+                  }}
+                  style={{ width: '350px' }}
+                >
+                  <MenuItem value="TEAM_PROJECT">Team Project</MenuItem>
+                  {/* <MenuItem value="TEAM_CONTEST">Contest</MenuItem> */}
+                </Select>
+              </FormControl>
+            </AlignedText>
+          )}
           <AlignedText text="Label" childrenType="field">
             <TextField
               id="label"
@@ -338,6 +451,59 @@ export default function TaskAddingCard({ open, setOpen }) {
               <Typography className={classNames.peerBottomText}>Peers Respectively</Typography>
             </AlignedText>
           </div>
+          {type === 'Scoreboard' && (
+            <div>
+              <AlignedText text="Target Problems" childrenType="field">
+                <MultiSelect
+                  options={challenges.byId[challengeId].problemIds
+                    .map((id) => problems.byId[id])
+                    .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+                    .map(({ challenge_label }) => challenge_label)}
+                  value={targetProblems}
+                  setValue={setTargetProblems}
+                />
+              </AlignedText>
+              <hr className={classNames.divider} />
+              <AlignedText text="Scoring Formula" childrenType="field">
+                <TextField
+                  value={scoringFormula}
+                  onChange={(e) => {
+                    setScoringFormula(e.target.value);
+                  }}
+                />
+              </AlignedText>
+              <div className={classNames.instructions}>
+                <Typography variant="body2">A self-defined pattern; content format/specs</Typography>
+                <Typography variant="body2" className={classNames.reminder}>
+                  e.g.1.5 + 1.5 * (team_score - class_worst) / (class_best - class_worst)
+                </Typography>
+              </div>
+              <hr className={classNames.divider} />
+              <AlignedText text="Baseline Team (Optional)" childrenType="field">
+                <FormControl variant="outlined" style={{ width: '350px' }}>
+                  <Select value={baselineTeam} label="BaselineTeam" onChange={(e) => setBaselineTeam(e.target.value)}>
+                    {classes[classId].teamIds.map((id) => (
+                      <MenuItem key={id} value={id}>
+                        {teams.byId[id].name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </AlignedText>
+              <hr className={classNames.divider} />
+              <AlignedText text="Team Label Filter (Optional)" childrenType="field">
+                <TextField
+                  value={teamLabelFilter}
+                  onChange={(e) => {
+                    setTeamLabelFilter(e.target.value);
+                  }}
+                />
+              </AlignedText>
+              <div className={classNames.instructions}>
+                <Typography variant="body2">To filter teams with label, support regex</Typography>
+              </div>
+            </div>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancel}>Cancel</Button>
@@ -360,6 +526,11 @@ export default function TaskAddingCard({ open, setOpen }) {
         open={showAddPeerReviewErrorSnackbar}
         message={`Error: ${error.myClass.challenge.addPeerReview}. Check whether the input numbers are valid.`}
         onClose={() => setShowAddPeerReviewErrorSnackbar(false)}
+      />
+      <Snackbar
+        open={showAddScoreboardErrorSnackbar}
+        message={`Error: ${error.api.scoreboard.addTeamProjectScoreboardUnderChallenge}`}
+        onClose={() => setShowAddScoreboardErrorSnackbar(false)}
       />
     </>
   );
