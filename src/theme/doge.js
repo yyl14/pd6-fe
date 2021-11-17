@@ -694,6 +694,7 @@ const headerStyle = {
   background: palette.primary.main,
   color: mono.white,
   activeColor: dogeMono.lightGray,
+  hasIndicator: true,
 };
 
 const theme = createTheme({

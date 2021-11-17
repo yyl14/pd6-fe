@@ -50,6 +50,16 @@ const useStyles = makeStyles((theme) => ({
     color: theme.headerStyle.color,
   },
 
+  itemActiveIndicator: {
+    position: 'absolute',
+    top: 52,
+    height: 3,
+    borderRadius: '3px 3px 0px 0px',
+    backgroundColor: theme.headerStyle.color,
+    transition: '0.3s',
+    '-webkit-transform': 'translateZ(0)',
+  },
+
   // header right
   right: {
     marginLeft: 'auto',
@@ -211,9 +221,13 @@ export default function Header() {
 
   const [hasClass, setHasClass] = useState(false);
   const [, , removeCookie] = useCookies(['token', 'id']);
+  const [activeHeaderItemIndex, setActiveHeaderItemIndex] = useState(0);
+  const [userButtonActive, setUserButtonActive] = useState(false);
 
+  const headerItemRef = useRef([]);
   const notifyRef = useRef(null);
   const userRef = useRef(null);
+  const userButtonRef = useRef(null);
 
   useEffect(() => {
     setHasClass(user.classes.length !== 0);
@@ -353,6 +367,14 @@ export default function Header() {
     }
   }, [hasClass, user.role]);
 
+  useEffect(() => {
+    setActiveHeaderItemIndex(itemList.findIndex((item) => location.pathname.includes(item.basePath)));
+  }, [itemList, location.pathname]);
+
+  useEffect(() => {
+    setUserButtonActive(location.pathname === '/my-profile' || location.pathname.slice(0, 14) === '/my-submission');
+  }, [location.pathname]);
+
   const handleNotifyClickOutside = (event) => {
     if (notifyRef.current && !notifyRef.current.contains(event.target)) {
       setNotifyAlreadyClose(true);
@@ -436,12 +458,32 @@ export default function Header() {
           ) : (
             <div className={classes.noLogo} />
           )}
-          {itemList.map((item) => (
+          {theme.headerStyle.hasIndicator && (
+            <div
+              className={classes.itemActiveIndicator}
+              style={{
+                left:
+                  activeHeaderItemIndex !== undefined && activeHeaderItemIndex !== -1
+                    ? headerItemRef.current[activeHeaderItemIndex]?.offsetLeft
+                    : userButtonRef.current?.offsetLeft + userButtonRef.current?.offsetParent.offsetLeft,
+                width:
+                  activeHeaderItemIndex !== undefined && activeHeaderItemIndex !== -1
+                    ? headerItemRef.current[activeHeaderItemIndex]?.offsetWidth
+                    : userButtonRef.current?.offsetWidth,
+              }}
+            />
+          )}
+          {itemList.map((item, index) => (
             <Typography
               variant="h6"
               onClick={() => history.push(item.path)}
-              className={`${classes.item} ${location.pathname.includes(item.basePath) && classes.active}`}
+              className={`${classes.item} ${
+                activeHeaderItemIndex === index && !theme.headerStyle.hasIndicator && classes.active
+              }`}
               key={item.text}
+              ref={(element) => {
+                headerItemRef.current[index] = element;
+              }}
             >
               {item.text}
             </Typography>
@@ -497,14 +539,10 @@ export default function Header() {
               role="button"
               tabIndex="-1"
             >
-              <button type="button" className={classes.userButton}>
+              <button type="button" className={classes.userButton} ref={userButtonRef}>
                 <Typography
                   variant="h6"
-                  className={
-                    location.pathname === '/my-profile' || location.pathname.slice(0, 14) === '/my-submission'
-                      ? classes.active
-                      : null
-                  }
+                  className={userButtonActive && !theme.headerStyle.hasIndicator ? classes.active : null}
                 >
                   {user.username}
                 </Typography>

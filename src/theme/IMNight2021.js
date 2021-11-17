@@ -755,6 +755,7 @@ const headerStyle = {
   background: palette.primary.light,
   color: palette.primary.dark,
   activeColor: palette.primary.main,
+  hasIndicator: true,
 };
 
 const theme = createTheme({
