@@ -16,7 +16,7 @@ export const fetchTeams = (token, classId, browseParams, tableId = null) => asyn
 
     dispatch({
       type: teamConstants.FETCH_TEAMS_SUCCESS,
-      payload: { data },
+      payload: { classId, data },
     });
     dispatch({
       type: autoTableConstants.AUTO_TABLE_UPDATE,

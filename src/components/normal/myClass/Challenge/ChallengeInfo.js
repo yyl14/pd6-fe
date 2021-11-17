@@ -45,6 +45,7 @@ export default function ChallengeInfo() {
   const problems = useSelector((state) => state.problem.byId);
   const essays = useSelector((state) => state.essays.byId);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
+  const scoreboards = useSelector((state) => state.scoreboards.byId);
 
   const [hasRequest, setHasRequest] = useState(false);
   const [hasInit, setHasInit] = useState(false);
@@ -102,11 +103,15 @@ export default function ChallengeInfo() {
                 challenge_label: peerReviews[id].challenge_label,
                 id: `peer-${id}`,
               })),
+              challenges[challengeId].scoreboardIds.map((id) => ({
+                challenge_label: scoreboards[id].challenge_label,
+                id: `scoreboard-${id}`,
+              })),
             ),
         );
       }
     }
-  }, [authToken, challengeId, challenges, essays, peerReviews, problems]);
+  }, [authToken, challengeId, challenges, essays, peerReviews, problems, scoreboards]);
 
   if (challenges[challengeId] === undefined) {
     if (commonLoading.fetchChallenge) {
