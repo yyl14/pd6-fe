@@ -286,6 +286,71 @@ const browseMySubmission = (token, accountId, browseParams, tableId = null) => a
   }
 };
 
+const browseMySubmissionUnderProblem = (token, accountId, problemId, browseParams, tableId = null) => async (dispatch) => {
+  dispatch({ type: viewConstants.BROWSE_MY_SUBMISSION_UNDER_PROBLEM_START });
+  const temp = {
+    ...browseParams,
+    account_id: accountId,
+  };
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+    params: browseParamsTransForm(temp),
+  };
+  try {
+    const res = await agent.get(`/problem/${problemId}/view/my-submission`, config);
+    const { data, total_count } = res.data.data;
+    dispatch({
+      type: viewConstants.BROWSE_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS,
+      payload: {
+        submissions: data.map(
+          ({
+            submission_id, judgment_id, account_id, problem_id, verdict, submit_time,
+          }) => ({
+            id: submission_id,
+            account_id,
+            problem_id,
+            submit_time,
+            latestJudgmentId: judgment_id,
+            verdict,
+          }),
+        ),
+        judgments: data.map(
+          ({
+            judgment_id, score, max_memory, total_time,
+          }) => ({
+            id: judgment_id,
+            score,
+            max_memory,
+            total_time,
+          }),
+        ),
+        challenges: data
+          .map(({ challenge_id, challenge_title }) => ({
+            id: challenge_id,
+            title: challenge_title,
+          }))
+          .filter((item) => item.id !== null),
+      },
+    });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: data.map((item) => item.submission_id),
+        offset: browseParams.offset,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: viewConstants.BROWSE_MY_SUBMISSION_UNDER_PROBLEM_FAIL,
+      error,
+    });
+  }
+};
+
 const browsePeerReviewSummaryReview = (token, peerReviewId, browseParams, tableId = null) => async (dispatch) => {
   try {
     const config = {
@@ -451,6 +516,7 @@ export {
   browseClassMember,
   browseSubmissionUnderClass,
   browseMySubmission,
+  browseMySubmissionUnderProblem,
   browsePeerReviewSummaryReview,
   browsePeerReviewSummaryReceive,
   browseClassGrade,

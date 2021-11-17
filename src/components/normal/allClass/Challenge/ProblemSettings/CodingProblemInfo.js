@@ -243,7 +243,7 @@ export default function CodingProblemInfo() {
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
             score: testcases[id].score,
-            note: testcases[id].note,
+            note: testcases[id].note ? testcases[id].note : '',
           }))}
         />
       </SimpleBar>

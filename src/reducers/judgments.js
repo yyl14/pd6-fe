@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import { judgementConstants } from '../actions/api/constant';
-import { submissionConstants, problemConstants } from '../actions/myClass/constant';
+import { submissionConstants } from '../actions/myClass/constant';
+import { viewConstants, judgementConstants } from '../actions/api/constant';
 
 const prototype = {
   id: null,
@@ -48,7 +48,7 @@ const byId = (state = {}, action) => {
         state,
       );
     }
-    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
+    case viewConstants.BROWSE_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
       const { judgments } = action.payload;
       return judgments.reduce(
         (acc, item) => ({ ...acc, [item.id]: { ...item, verdict: verdictMapping.get(item.verdict) } }),
@@ -81,7 +81,7 @@ const allIds = (state = [], action) => {
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       return [...new Set([...action.payload.judgments.map((item) => item.id), ...state])];
     }
-    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
+    case viewConstants.BROWSE_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
       return [...new Set([...action.payload.judgments.map((item) => item.id), ...state])];
     }
     case judgementConstants.BROWSE_ALL_JUDGEMENT_JUDGE_CASE_SUCCESS: {

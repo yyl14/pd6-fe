@@ -29,22 +29,6 @@ const initialState = {
 
 export default function problem(state = initialState, action) {
   switch (action.type) {
-    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_START:
-      return {
-        ...state,
-        viewMySubmissionUnderProblem: null,
-      };
-    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS:
-      return {
-        ...state,
-        viewMySubmissionUnderProblem: null,
-      };
-    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_FAIL:
-      return {
-        ...state,
-        viewMySubmissionUnderProblem: action.error,
-      };
-
     case problemConstants.READ_PROBLEM_FAIL:
       return {
         ...state,
