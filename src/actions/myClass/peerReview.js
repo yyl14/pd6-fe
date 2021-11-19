@@ -95,13 +95,11 @@ export const assignPeerReviewRecordAndPush = (token, courseId, classId, challeng
   }
 };
 
-export const browseAccountAllPeerReviewRecordWithReading = (token, peerReviewId, accountId) => async (dispatch) => {
+export const browseAccountAllReviewedPeerReviewRecordWithReading = (token, peerReviewId, accountId) => async (dispatch) => {
   try {
     const config = { headers: { 'auth-token': token } };
-    dispatch({ type: peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_START });
+    dispatch({ type: peerReviewConstants.BROWSE_ACCOUNT_ALL_REVIEWWD_PEER_REVIEW_RECORD_START });
     const res1 = await agent.get(`peer-review/${peerReviewId}/account/${accountId}/review`, config);
-
-    const res2 = await agent.get(`peer-review/${peerReviewId}/account/${accountId}/receive`, config);
 
     const data = [].concat(res1.data.data);
 
@@ -113,12 +111,12 @@ export const browseAccountAllPeerReviewRecordWithReading = (token, peerReviewId,
     );
 
     dispatch({
-      type: peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_SUCCESS,
-      payload: { peerReviewId, reviewIds: data, receiveIds: res2.data.data },
+      type: peerReviewConstants.BROWSE_ACCOUNT_ALL_REVIEWWD_PEER_REVIEW_RECORD_SUCCESS,
+      payload: { peerReviewId, reviewIds: data },
     });
   } catch (error) {
     dispatch({
-      type: peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_FAIL,
+      type: peerReviewConstants.BROWSE_ACCOUNT_ALL_REVIEWWD_PEER_REVIEW_RECORD_FAIL,
       error,
     });
   }

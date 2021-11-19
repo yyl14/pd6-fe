@@ -34,13 +34,13 @@ export default function peerReview(state = initialState, action) {
       };
     }
 
-    case peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_START: {
+    case peerReviewConstants.BROWSE_ACCOUNT_ALL_REVIEWWD_PEER_REVIEW_RECORD_START: {
       return {
         ...state,
         browseAccountAllPeerReviewRecord: null,
       };
     }
-    case peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_FAIL: {
+    case peerReviewConstants.BROWSE_ACCOUNT_ALL_REVIEWWD_PEER_REVIEW_RECORD_FAIL: {
       return {
         ...state,
         browseAccountAllPeerReviewRecord: action.error,
