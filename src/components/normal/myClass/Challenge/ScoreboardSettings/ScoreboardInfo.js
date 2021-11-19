@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Button, Snackbar } from '@material-ui/core';
+import { useHistory, useParams } from 'react-router-dom';
+import {
+  Typography, Button, Snackbar, Dialog, DialogTitle, DialogContent, DialogActions,
+} from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleBar from '../../../../ui/SimpleBar';
 import SimpleTable from '../../../../ui/SimpleTable';
 import PageTitle from '../../../../ui/PageTitle';
 import { readProblemInfo } from '../../../../../actions/myClass/problem';
 import { fetchTeams } from '../../../../../actions/myClass/team';
-import { readScoreboard, viewTeamProjectScoreboard } from '../../../../../actions/api/scoreboard';
+import { readScoreboard, viewTeamProjectScoreboard, deleteScoreboard } from '../../../../../actions/api/scoreboard';
 import ScoreboardEdit from './ScoreboardEdit';
 
 const scoreboardBasicTitle = [
@@ -43,11 +45,14 @@ export default function ScoreboardInfo() {
     courseId, classId, challengeId, scoreboardId,
   } = useParams();
   const dispatch = useDispatch();
+  const history = useHistory();
   const authToken = useSelector((state) => state.auth.token);
   const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges);
   const scoreboards = useSelector((state) => state.scoreboards);
   const userClasses = useSelector((state) => state.user.classes);
+  const courses = useSelector((state) => state.courses);
+  const classes = useSelector((state) => state.classes);
   const teams = useSelector((state) => state.teams);
   const loading = useSelector((state) => state.loading.api.scoreboard);
   const error = useSelector((state) => state.error.api.scoreboard);
@@ -58,6 +63,7 @@ export default function ScoreboardInfo() {
   const [edit, setEdit] = useState(false);
   const [role, setRole] = useState('NORMAL');
   const [showSnackbar, setShowSnackbar] = useState(false);
+  const [deletePopup, setDeletePopup] = useState(false);
 
   useEffect(() => {
     dispatch(fetchTeams(authToken, classId, ''));
@@ -130,6 +136,12 @@ export default function ScoreboardInfo() {
     return labels.join(', ');
   };
 
+  const clickDelete = () => {
+    dispatch(deleteScoreboard(authToken, scoreboardId));
+    setDeletePopup(false);
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
+  };
+
   return (
     <>
       <PageTitle
@@ -184,6 +196,51 @@ export default function ScoreboardInfo() {
       <SimpleBar title="Scoreboard" noIndent>
         <SimpleTable isEdit={false} hasDelete={false} columns={scoreboardTitle} data={scoreboardTeams} />
       </SimpleBar>
+      {role === 'MANAGER' && (
+        <SimpleBar
+          title="Delete Scoreboard"
+          childrenButtons={(
+            <>
+              <Button color="secondary" onClick={() => setDeletePopup(true)}>
+                Delete
+              </Button>
+            </>
+          )}
+        >
+          <Typography variant="body1">
+            Once you delete a scoreboard, there is no going back. Please be certain.
+          </Typography>
+        </SimpleBar>
+      )}
+      <Dialog open={deletePopup} onClose={() => setDeletePopup(false)} maxWidth="md">
+        <DialogTitle>
+          <Typography variant="h4">Delete Scoreboard</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <AlignedText text="Class" childrenType="text" textColor="secondary">
+            <Typography variant="body1">{`${courses.byId[courseId].name} ${classes.byId[classId].name}`}</Typography>
+          </AlignedText>
+          <AlignedText text="Title" childrenType="text" textColor="secondary">
+            <Typography variant="body1">
+              {scoreboards.byId[scoreboardId] && scoreboards.byId[scoreboardId].title}
+            </Typography>
+          </AlignedText>
+          <AlignedText text="Label" childrenType="text" textColor="secondary">
+            <Typography variant="body1">
+              {scoreboards.byId[scoreboardId] && scoreboards.byId[scoreboardId].challenge_label}
+            </Typography>
+          </AlignedText>
+          <Typography variant="body2">
+            Once you delete a scoreboard, there is no going back. Please be certain.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeletePopup(false)}>Cancel</Button>
+          <Button color="secondary" onClick={clickDelete}>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Snackbar
         message={`Error: ${error.viewTeamProjectScoreboard}`}
         open={showSnackbar}

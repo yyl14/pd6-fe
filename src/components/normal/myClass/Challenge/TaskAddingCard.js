@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
   divider: {
     height: '1px',
-    margin: '0px',
+    marginBottom: '10px',
     border: `0.5px solid ${theme.palette.grey[300]}`,
     backgroundColor: theme.palette.grey[300],
   },
@@ -327,13 +327,12 @@ export default function TaskAddingCard({ open, setOpen }) {
                   <Icon.Paper className={classNames.selectedIcon} />
                   Essay (PDF)
                 </MenuItem>
-                <MenuItem value="Peer Review" disabled>
+                <MenuItem value="Peer Review">
                   <Icon.Peerreview className={classNames.selectedIcon} />
                   Peer Review
                 </MenuItem>
-                {/* change to scoreboard icon */}
                 <MenuItem value="Scoreboard">
-                  <Icon.Peerreview className={classNames.selectedIcon} />
+                  <Icon.Scoreboard className={classNames.selectedIcon} />
                   Scoreboard
                 </MenuItem>
               </Select>
@@ -377,7 +376,7 @@ export default function TaskAddingCard({ open, setOpen }) {
           </AlignedText>
           <div className={type === 'Peer Review' ? classNames.peerReviewCard_display : classNames.peerReviewCard_hide}>
             <hr className={classNames.divider} />
-            <h3>Peer Review Task</h3>
+            <Typography variant="h4">Peer Review Task</Typography>
             <AlignedText text="Challenge" childrenType="field">
               <FormControl variant="outlined">
                 <Select
@@ -453,6 +452,8 @@ export default function TaskAddingCard({ open, setOpen }) {
           </div>
           {type === 'Scoreboard' && (
             <div>
+              <hr className={classNames.divider} />
+              <Typography variant="h4">Scoreboard</Typography>
               <AlignedText text="Target Problems" childrenType="field">
                 <MultiSelect
                   options={challenges.byId[challengeId].problemIds
