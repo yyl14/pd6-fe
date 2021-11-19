@@ -23,9 +23,9 @@ import PageTitle from '../../../../ui/PageTitle';
 import SimpleBar from '../../../../ui/SimpleBar';
 import AlignedText from '../../../../ui/AlignedText';
 
-import { readPeerReview, deletePeerReview } from '../../../../../actions/api/peerReview';
+import { readPeerReview, deletePeerReview, browseAccountReceivedPeerReviewRecord } from '../../../../../actions/api/peerReview';
 import {
-  browseAccountAllPeerReviewRecordWithReading,
+  browseAccountAllReviewedPeerReviewRecordWithReading,
   assignPeerReviewRecordAndPush,
 } from '../../../../../actions/myClass/peerReview';
 
@@ -119,7 +119,8 @@ export default function PeerReviewInfo() {
 
   useEffect(() => {
     if (!apiLoading.assignPeerReviewRecord) {
-      dispatch(browseAccountAllPeerReviewRecordWithReading(authToken, peerReviewId, accountId));
+      dispatch(browseAccountAllReviewedPeerReviewRecordWithReading(authToken, peerReviewId, accountId));
+      dispatch(browseAccountReceivedPeerReviewRecord(authToken, peerReviewId, accountId));
     }
   }, [authToken, dispatch, peerReviewId, accountId, apiLoading.assignPeerReviewRecord]);
 

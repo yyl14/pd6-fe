@@ -36,14 +36,14 @@ export default function peerReview(state = initialState, action) {
       };
     }
 
-    case peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_START: {
+    case peerReviewConstants.BROWSE_ACCOUNT_ALL_REVIEWWD_PEER_REVIEW_RECORD_START: {
       return {
         ...state,
         browseAccountAllPeerReviewRecord: true,
       };
     }
-    case peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_SUCCESS:
-    case peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_FAIL: {
+    case peerReviewConstants.BROWSE_ACCOUNT_ALL_REVIEWWD_PEER_REVIEW_RECORD_SUCCESS:
+    case peerReviewConstants.BROWSE_ACCOUNT_ALL_REVIEWWD_PEER_REVIEW_RECORD_FAIL: {
       return {
         ...state,
         browseAccountAllPeerReviewRecord: false,
