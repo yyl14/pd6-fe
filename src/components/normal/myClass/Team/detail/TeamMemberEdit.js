@@ -44,7 +44,7 @@ export default function TeamMemberEdit({ isManager, handleBack, setAddMemberFail
   const [tempAddMember, setTempAddMember] = useState([]);
 
   useEffect(() => {
-    if (teams[teamId] && teamMemberIds) {
+    if (teams[teamId] && teamMemberIds && tempAddMember.length === 0) {
       setTableData(
         teamMemberIds.map((id) => ({
           id: teamMembers[id].member_id,
@@ -55,7 +55,7 @@ export default function TeamMemberEdit({ isManager, handleBack, setAddMemberFail
         })),
       );
     }
-  }, [teams, teamId, teamMemberIds, teamMembers]);
+  }, [teams, teamId, teamMemberIds, teamMembers, tempAddMember.length]);
 
   const [popUp, setPopUp] = useState(false);
   const [inputs, setInputs] = useState({
@@ -114,6 +114,11 @@ export default function TeamMemberEdit({ isManager, handleBack, setAddMemberFail
   };
 
   const tempAddSuccess = (member, role) => {
+    if (tableData.filter((item) => item.id === member.id)[0]) {
+      clearInputs();
+      setPopUp(false);
+      return;
+    }
     setTempAddMember(tempAddMember.concat([{ id: member.id, account_referral: inputs.student }]));
     setTableData(
       tableData.concat([
