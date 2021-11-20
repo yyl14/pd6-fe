@@ -25,6 +25,7 @@ export default function TeamDetail() {
   const loading = useSelector((state) => state.loading.myClass.team);
   const error = useSelector((state) => state.error);
   const [addMemberFail, setAddMemberFail] = useState(false);
+  const [editTeamFail, setEditTeamFail] = useState(false);
 
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
@@ -114,6 +115,7 @@ export default function TeamDetail() {
           teamName={teams[teamId].name}
           label={teams[teamId].label}
           handleBack={handleInfoBack}
+          setEditTeamFail={setEditTeamFail}
         />
       ) : (
         <TeamInfo
@@ -145,6 +147,11 @@ export default function TeamDetail() {
             ? error.common.common.getAccountBatchByReferral
             : error.myClass.team.addTeamMember
         }`}
+      />
+      <Snackbar
+        open={editTeamFail}
+        onClose={() => setEditTeamFail(false)}
+        message={`Error: ${error.myClass.team.editTeam}`}
       />
     </>
   );
