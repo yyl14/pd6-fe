@@ -77,6 +77,8 @@ export default function NewPassword() {
           setNewPassword('');
           setConfirmPassword('');
           setDisabled(true);
+          setErrors(initErrors);
+          setHelperText(initHelperText);
         },
         () => {
           setShowSnackbar(true);
