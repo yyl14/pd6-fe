@@ -26,9 +26,18 @@ export default function BasicInfoEdit(props) {
 
   const handleSave = () => {
     if (teamName !== '' && label !== '') {
-      dispatch(editTeam(authToken, teamId, teamName, classId, label));
+      dispatch(
+        editTeam(
+          authToken,
+          teamId,
+          teamName,
+          classId,
+          label,
+          () => props.handleBack(),
+          () => props.setEditTeamFail(true),
+        ),
+      );
     }
-    props.handleBack();
   };
 
   return (
