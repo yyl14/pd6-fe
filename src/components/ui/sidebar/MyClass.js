@@ -33,8 +33,16 @@ export default function MyClass({
         && classes[classId] !== undefined
       ) {
         // console.log(userClasses);
-        setDisplay(userClasses.map((item) => item.class_id === Number(classId)));
-        setTitles(userClasses.map((item) => `${item.course_name} ${item.class_name}`));
+        setDisplay(
+          userClasses
+            .sort((a, b) => b.class_name.localeCompare(a.class_name) || b.course_name.localeCompare(a.course_name))
+            .map((item) => item.class_id === Number(classId)),
+        );
+        setTitles(
+          userClasses
+            .sort((a, b) => b.class_name.localeCompare(a.class_name) || b.course_name.localeCompare(a.course_name))
+            .map((item) => `${item.course_name} ${item.class_name}`),
+        );
 
         setItemLists(
           userClasses
