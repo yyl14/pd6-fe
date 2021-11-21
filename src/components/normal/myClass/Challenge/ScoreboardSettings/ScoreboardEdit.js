@@ -118,7 +118,7 @@ export default function ScoreboardEdit({ setEdit }) {
       <div className={classNames.instructions}>
         <Typography variant="body2">A self-defined pattern; content format/specs</Typography>
         <Typography variant="body2" className={classNames.reminder}>
-          e.g.1.5 + 1.5 * (team_score - class_min) / (class_max - class_min)
+          e.g. 3 * (baseline - team_score) / (class_max - class_min)
         </Typography>
       </div>
       <hr className={classNames.divider} />
