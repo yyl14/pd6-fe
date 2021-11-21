@@ -15,8 +15,10 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '-5px',
   },
   divider: {
-    width: '540px',
-    border: `0.5px solid ${theme.palette.grey[300]}`,
+    width: 400,
+    height: 1,
+    border: '0px',
+    marginBottom: 5,
     backgroundColor: theme.palette.grey[300],
   },
   reminder: {
@@ -29,9 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ScoreboardEdit({ setEdit }) {
-  const {
-    courseId, classId, challengeId, scoreboardId,
-  } = useParams();
+  const { classId, challengeId, scoreboardId } = useParams();
   const dispatch = useDispatch();
   const classNames = useStyles();
 
@@ -54,7 +54,9 @@ export default function ScoreboardEdit({ setEdit }) {
 
   useEffect(() => {
     if (scoreboards.byId[scoreboardId] && problems.byId) {
-      setTargetLabels(scoreboards.byId[scoreboardId].target_problem_ids.map((id) => problems.byId[id].challenge_label));
+      setTargetLabels(
+        scoreboards.byId[scoreboardId].target_problem_ids.map((id) => problems.byId[id]?.challenge_label),
+      );
     }
   }, [problems.byId, scoreboardId, scoreboards.byId]);
 
@@ -91,23 +93,23 @@ export default function ScoreboardEdit({ setEdit }) {
 
   return (
     <SimpleBar title="Ranking Configuration">
-      <AlignedText text="Scoreboard Type" childrenType="text">
+      <AlignedText maxWidth="lg" text="Scoreboard Type" childrenType="text">
         <Typography variant="body1">
           {scoreboards.byId[scoreboardId].type === 'TEAM_PROJECT' ? 'Team Project' : 'Contest'}
         </Typography>
       </AlignedText>
-      <AlignedText text="Title" childrenType="text">
+      <AlignedText maxWidth="lg" text="Title" childrenType="text">
         <Typography variant="body1">{scoreboards.byId[scoreboardId].title}</Typography>
       </AlignedText>
-      <AlignedText text="Target Problems" childrenType="field">
+      <AlignedText maxWidth="lg" text="Target Problems" childrenType="field">
         <MultiSelect
           options={transIdToLabel(challenges.byId[challengeId].problemIds)}
           value={targetLabels}
           setValue={setTargetLabels}
         />
       </AlignedText>
-      <hr className={classNames.divider} />
-      <AlignedText text="Scoring Formula" childrenType="field">
+      <div className={classNames.divider} />
+      <AlignedText maxWidth="lg" text="Scoring Formula" childrenType="field">
         <TextField
           value={scoringFormula}
           onChange={(e) => {
@@ -118,11 +120,11 @@ export default function ScoreboardEdit({ setEdit }) {
       <div className={classNames.instructions}>
         <Typography variant="body2">A self-defined pattern; content format/specs</Typography>
         <Typography variant="body2" className={classNames.reminder}>
-          e.g.1.5 + 1.5 * (team_score - class_min) / (class_max - class_min)
+          e.g. 3 * (baseline - team_score) / (class_max - class_min)
         </Typography>
       </div>
-      <hr className={classNames.divider} />
-      <AlignedText text="Baseline Team (Optional)" childrenType="field">
+      <div className={classNames.divider} />
+      <AlignedText maxWidth="lg" text="Baseline Team (Optional)" childrenType="field">
         <FormControl variant="outlined" style={{ width: '350px' }}>
           <Select value={baselineTeam} label="BaselineTeam" onChange={(e) => setBaselineTeam(e.target.value)}>
             <MenuItem value=""> </MenuItem>
@@ -134,8 +136,8 @@ export default function ScoreboardEdit({ setEdit }) {
           </Select>
         </FormControl>
       </AlignedText>
-      <hr className={classNames.divider} />
-      <AlignedText text="Team Label Filter (Optional)" childrenType="field">
+      <div className={classNames.divider} />
+      <AlignedText maxWidth="lg" text="Team Label Filter (Optional)" childrenType="field">
         <TextField
           value={teamLabelFilter}
           onChange={(e) => {
