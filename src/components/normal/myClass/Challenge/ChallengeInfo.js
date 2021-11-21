@@ -32,7 +32,7 @@ export default function ChallengeInfo() {
   const dispatch = useDispatch();
   const [currentTime] = useState(moment());
   const [status, setStatus] = useState('');
-  const [isManager, setIsManager] = useState(false);
+  const [role, setRole] = useState('NORMAL');
   const [editMode, setEditMode] = useState(false);
   const [inputs, setInputs] = useState('');
   const [tableData, setTableData] = useState([]);
@@ -79,7 +79,9 @@ export default function ChallengeInfo() {
 
   useEffect(() => {
     if (userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
-      setIsManager(true);
+      setRole('MANAGER');
+    } else if (userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'GUEST') {
+      setRole('GUEST');
     }
   }, [classId, userClasses]);
 
@@ -87,31 +89,55 @@ export default function ChallengeInfo() {
     if (challenges[challengeId]) {
       if (challenges[challengeId].problemIds.reduce((acc, item) => acc && problems[item] !== undefined, true)) {
         // problems are complete
-        setTableData(
-          challenges[challengeId].problemIds
-            .map((id) => ({
-              challenge_label: problems[id].challenge_label,
-              score: problems[id].score,
-              id: `coding-${id}`,
-            }))
-            .concat(
-              challenges[challengeId].essayIds.map((id) => ({
-                challenge_label: essays[id].challenge_label,
-                id: `essay-${id}`,
+        if (role === 'MANAGER' || role === 'NORMAL') {
+          setTableData(
+            challenges[challengeId].problemIds
+              .map((id) => problems[id])
+              .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+              .map(({ id }) => ({
+                challenge_label: problems[id].challenge_label,
+                score: problems[id].score,
+                id: `coding-${id}`,
+              }))
+              .concat(
+                challenges[challengeId].essayIds
+                  .map((id) => essays[id])
+                  .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+                  .map(({ id }) => ({
+                    challenge_label: essays[id].challenge_label,
+                    id: `essay-${id}`,
+                  })),
+                challenges[challengeId].peerReviewIds
+                  .map((id) => peerReviews[id])
+                  .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+                  .map(({ id }) => ({
+                    challenge_label: peerReviews[id].challenge_label,
+                    id: `peer-${id}`,
+                  })),
+                challenges[challengeId].scoreboardIds
+                  .map((id) => scoreboards[id])
+                  .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+                  .map(({ id }) => ({
+                    challenge_label: scoreboards[id].challenge_label,
+                    id: `scoreboard-${id}`,
+                  })),
+              ),
+          );
+        } else {
+          setTableData(
+            challenges[challengeId].problemIds
+              .map((id) => problems[id])
+              .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+              .map(({ id }) => ({
+                challenge_label: problems[id].challenge_label,
+                score: problems[id].score,
+                id: `coding-${id}`,
               })),
-              challenges[challengeId].peerReviewIds.map((id) => ({
-                challenge_label: peerReviews[id].challenge_label,
-                id: `peer-${id}`,
-              })),
-              challenges[challengeId].scoreboardIds.map((id) => ({
-                challenge_label: scoreboards[id].challenge_label,
-                id: `scoreboard-${id}`,
-              })),
-            ),
-        );
+          );
+        }
       }
     }
-  }, [authToken, challengeId, challenges, essays, peerReviews, problems, scoreboards]);
+  }, [authToken, challengeId, challenges, essays, peerReviews, problems, role, scoreboards]);
 
   if (challenges[challengeId] === undefined) {
     if (commonLoading.fetchChallenge) {
@@ -144,7 +170,7 @@ export default function ChallengeInfo() {
       <PageTitle text={`${challenges[challengeId].title} / Info`} />
       <SimpleBar
         title="Description"
-        buttons={<>{isManager && !editMode && <Button onClick={handleEdit}>Edit</Button>}</>}
+        buttons={<>{role === 'MANAGER' && !editMode && <Button onClick={handleEdit}>Edit</Button>}</>}
       >
         {editMode ? (
           <div>
