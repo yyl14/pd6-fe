@@ -375,15 +375,18 @@ const browsePeerReviewSummaryReview = (token, peerReviewId, browseParams, tableI
               peer_review_record_ids,
               peer_review_record_scores,
               average_score,
-            }) => ({
-              account_id,
-              username,
-              real_name,
-              student_id,
-              peer_review_record_ids,
-              score: peer_review_record_scores,
-              average_score,
-            }),
+            }) => {
+              const score = peer_review_record_scores.sort((a, b) => peer_review_record_ids[peer_review_record_scores.indexOf(a)] - peer_review_record_ids[peer_review_record_scores.indexOf(b)]);
+              return {
+                account_id,
+                username,
+                real_name,
+                student_id,
+                peer_review_record_ids: peer_review_record_ids.sort((a, b) => a - b),
+                score,
+                average_score,
+              };
+            },
           ),
         },
       },
@@ -429,15 +432,18 @@ const browsePeerReviewSummaryReceive = (token, peerReviewId, browseParams, table
               peer_review_record_ids,
               peer_review_record_scores,
               average_score,
-            }) => ({
-              account_id,
-              username,
-              real_name,
-              student_id,
-              peer_review_record_ids,
-              score: peer_review_record_scores,
-              average_score,
-            }),
+            }) => {
+              const score = peer_review_record_scores.sort((a, b) => peer_review_record_ids[peer_review_record_scores.indexOf(a)] - peer_review_record_ids[peer_review_record_scores.indexOf(b)]);
+              return {
+                account_id,
+                username,
+                real_name,
+                student_id,
+                peer_review_record_ids: peer_review_record_ids.sort((a, b) => a - b),
+                score,
+                average_score,
+              };
+            },
           ),
         },
       },

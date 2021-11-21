@@ -84,7 +84,7 @@ export default function PeerReviewSummary() {
     const baseUrl = window.location.origin;
     let tableHTML = '<table>';
     if (PRsummary.allIds) {
-      PRsummary.allIds.map((id) => {
+      PRsummary.allIds.sort((a, b) => a - b).map((id) => {
         tableHTML += '<tr>';
         const profile = `${baseUrl}/user-profile/${PRsummary.byId[id].account_id}`;
         const peerData = [];

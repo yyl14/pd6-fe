@@ -48,7 +48,7 @@ const byId = (state = {}, action) => {
       return {
         ...state,
         [peerReviewId]: {
-          ...prototype, ...state[peerReviewId], reviewRecordIds: reviewIds,
+          ...prototype, ...state[peerReviewId], reviewRecordIds: reviewIds.sort((a, b) => a - b),
         },
       };
     }
@@ -57,7 +57,7 @@ const byId = (state = {}, action) => {
       const { peerReviewId, reviewIds } = action.payload;
       return {
         ...state,
-        [peerReviewId]: { ...prototype, ...state[peerReviewId], reviewRecordIds: reviewIds },
+        [peerReviewId]: { ...prototype, ...state[peerReviewId], reviewRecordIds: reviewIds.sort((a, b) => a - b) },
       };
     }
 
@@ -65,7 +65,7 @@ const byId = (state = {}, action) => {
       const { peerReviewId, receiveIds } = action.payload;
       return {
         ...state,
-        [peerReviewId]: { ...prototype, ...state[peerReviewId], receiveRecordIds: receiveIds },
+        [peerReviewId]: { ...prototype, ...state[peerReviewId], receiveRecordIds: receiveIds.sort((a, b) => a - b) },
       };
     }
 
