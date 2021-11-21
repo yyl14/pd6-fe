@@ -132,30 +132,20 @@ export const downloadTeamFile = (token) => async (dispatch) => {
   }
 };
 
-export const editTeam = (token, teamId, teamName, classId, newLabel) => (dispatch) => {
-  const config = { headers: { 'auth-token': token } };
-  dispatch({ type: teamConstants.EDIT_TEAM_START });
-  agent
-    .patch(
-      `/team/${teamId}`,
-      {
-        name: teamName,
-        class_id: classId,
-        label: newLabel,
-      },
-      config,
-    )
-    .then(() => {
-      dispatch({
-        type: teamConstants.EDIT_TEAM_SUCCESS,
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        type: teamConstants.EDIT_TEAM_FAIL,
-        error,
-      });
+export const editTeam = (token, teamId, teamName, classId, newLabel, onSuccess, onError) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    dispatch({ type: teamConstants.EDIT_TEAM_START });
+    await agent.patch(`/team/${teamId}`, { name: teamName, class_id: classId, label: newLabel }, config);
+    dispatch({ type: teamConstants.EDIT_TEAM_SUCCESS });
+    onSuccess();
+  } catch (error) {
+    dispatch({
+      type: teamConstants.EDIT_TEAM_FAIL,
+      error,
     });
+    onError();
+  }
 };
 
 export const fetchTeamMembers = (token, teamId) => async (dispatch) => {
