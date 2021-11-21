@@ -43,12 +43,12 @@ const byId = (state = {}, action) => {
     //     },
     //   };
     // }
-    case peerReviewConstants.BROWSE_ACCOUNT_ALL_PEER_REVIEW_RECORD_SUCCESS: {
-      const { peerReviewId, reviewIds, receiveIds } = action.payload;
+    case peerReviewConstants.BROWSE_ACCOUNT_ALL_REVIEWWD_PEER_REVIEW_RECORD_SUCCESS: {
+      const { peerReviewId, reviewIds } = action.payload;
       return {
         ...state,
         [peerReviewId]: {
-          ...prototype, ...state[peerReviewId], reviewRecordIds: reviewIds, receiveRecordIds: receiveIds,
+          ...prototype, ...state[peerReviewId], reviewRecordIds: reviewIds.sort((a, b) => a - b),
         },
       };
     }
@@ -57,7 +57,7 @@ const byId = (state = {}, action) => {
       const { peerReviewId, reviewIds } = action.payload;
       return {
         ...state,
-        [peerReviewId]: { ...prototype, ...state[peerReviewId], reviewRecordIds: reviewIds },
+        [peerReviewId]: { ...prototype, ...state[peerReviewId], reviewRecordIds: reviewIds.sort((a, b) => a - b) },
       };
     }
 
@@ -65,7 +65,7 @@ const byId = (state = {}, action) => {
       const { peerReviewId, receiveIds } = action.payload;
       return {
         ...state,
-        [peerReviewId]: { ...prototype, ...state[peerReviewId], receiveRecordIds: receiveIds },
+        [peerReviewId]: { ...prototype, ...state[peerReviewId], receiveRecordIds: receiveIds.sort((a, b) => a - b) },
       };
     }
 

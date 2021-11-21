@@ -11,7 +11,8 @@ import AlignedText from '../AlignedText';
 import SimpleTable from '../SimpleTable';
 import PageTitle from '../PageTitle';
 import GeneralLoading from '../../GeneralLoading';
-import { browseJudgeCases, browseTestcases, rejudgeSubmission } from '../../../actions/myClass/problem';
+import { browseTestcases, rejudgeSubmission } from '../../../actions/myClass/problem';
+import { browseAllJudgementJudgeCase } from '../../../actions/api/judgement';
 import { readSubmissionDetail, fetchSubmission } from '../../../actions/myClass/submission';
 import { browseSubmitLang } from '../../../actions/common/common';
 import NoMatch from '../../noMatch';
@@ -72,7 +73,7 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
       setJudgmentId(judgments.allIds.filter((id) => judgments.byId[id].submission_id === Number(submissionId))[0]);
       if (judgments.allIds.filter((id) => judgments.byId[id].submission_id === Number(submissionId))[0]) {
         dispatch(
-          browseJudgeCases(
+          browseAllJudgementJudgeCase(
             authToken,
             judgments.allIds.filter((id) => judgments.byId[id].submission_id === Number(submissionId))[0],
           ),
@@ -90,11 +91,9 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
           .filter((id) => judgments.byId[id].submission_id === Number(submissionId))[0]
       ) {
         dispatch(
-          browseJudgeCases(
+          browseAllJudgementJudgeCase(
             authToken,
-            judgments.allIds
-              .reduce((acc, b) => [b, ...acc], [])
-              .filter((id) => judgments.byId[id].submission_id === Number(submissionId))[0],
+            judgments.allIds.filter((id) => judgments.byId[id].submission_id === Number(submissionId))[0],
           ),
         );
       }
@@ -152,7 +151,6 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
 
   useEffect(() => {
     if (sampleDataIds && testcaseDataIds && judgeCases.allIds) {
-      const filteredJudgeCases = judgeCases.allIds.filter((key) => judgeCases.byId[key].judgment_id === judgmentId);
       setTableData(
         []
           .concat(sampleDataIds)
@@ -160,10 +158,18 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
           .map((id) => ({
             id,
             no: transformTestcase(id),
-            time: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].time_lapse : '',
-            memory: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].peak_memory : '',
-            status: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].verdict : '',
-            score: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].score : '',
+            time: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]
+              ? judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`].time_lapse
+              : '',
+            memory: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]
+              ? judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`].peak_memory
+              : '',
+            status: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]
+              ? judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`].verdict
+              : '',
+            score: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]
+              ? judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`].score
+              : '',
           }))
           .sort((a, b) => {
             if (!a.no.includes('sample') && b.no.includes('sample')) return 1;
@@ -184,7 +190,16 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
           }),
       );
     }
-  }, [judgeCases.allIds, judgeCases.byId, judgmentId, sampleDataIds, testcaseDataIds, transformTestcase]);
+  }, [
+    judgeCases.allIds,
+    judgeCases.byId,
+    judgmentId,
+    sampleDataIds,
+    submissionId,
+    submissions,
+    testcaseDataIds,
+    transformTestcase,
+  ]);
 
   if (
     problems.byId[problemId] === undefined
@@ -285,12 +300,17 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
         </AlignedText>
         <AlignedText text="Submit Time" childrenType="text">
           <Typography variant="body1">
-            {moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm')}
+            {moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm:ss')}
           </Typography>
         </AlignedText>
         <AlignedText text="Language" childrenType="text">
-          {submitLangs[submissions[submissionId].language_id]
-            && <Typography variant="body1">{`${submitLangs[submissions[submissionId].language_id].name} ${submitLangs[submissions[submissionId].language_id].version}`}</Typography>}
+          {submitLangs[submissions[submissionId].language_id] && (
+            <Typography variant="body1">
+              {`${submitLangs[submissions[submissionId].language_id].name} ${
+                submitLangs[submissions[submissionId].language_id].version
+              }`}
+            </Typography>
+          )}
         </AlignedText>
       </SimpleBar>
       <SimpleBar title="Submission Result" noIndent>
@@ -332,7 +352,7 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
               colors: {
                 'Waiting for judge': 'default',
                 'No Status': 'error',
-                Accepted: 'primary',
+                Accepted: 'accepted',
                 'Wrong Answer': 'error',
                 'Memory Limit Exceed': 'error',
                 'Time Limit Exceed': 'error',

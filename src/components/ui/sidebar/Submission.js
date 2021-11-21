@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
@@ -117,7 +117,7 @@ export default function Submission({
             {itemList.map((item) => (
               <ListItem
                 button
-                key={item.text}
+                key={item.id}
                 className={
                   location.pathname.includes(item.path) ? `${classNames.active} ${classNames.item}` : classNames.item
                 }

@@ -16,7 +16,7 @@ export const fetchTeams = (token, classId, browseParams, tableId = null) => asyn
 
     dispatch({
       type: teamConstants.FETCH_TEAMS_SUCCESS,
-      payload: { data },
+      payload: { classId, data },
     });
     dispatch({
       type: autoTableConstants.AUTO_TABLE_UPDATE,
@@ -132,30 +132,20 @@ export const downloadTeamFile = (token) => async (dispatch) => {
   }
 };
 
-export const editTeam = (token, teamId, teamName, classId, newLabel) => (dispatch) => {
-  const config = { headers: { 'auth-token': token } };
-  dispatch({ type: teamConstants.EDIT_TEAM_START });
-  agent
-    .patch(
-      `/team/${teamId}`,
-      {
-        name: teamName,
-        class_id: classId,
-        label: newLabel,
-      },
-      config,
-    )
-    .then(() => {
-      dispatch({
-        type: teamConstants.EDIT_TEAM_SUCCESS,
-      });
-    })
-    .catch((error) => {
-      dispatch({
-        type: teamConstants.EDIT_TEAM_FAIL,
-        error,
-      });
+export const editTeam = (token, teamId, teamName, classId, newLabel, onSuccess, onError) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    dispatch({ type: teamConstants.EDIT_TEAM_START });
+    await agent.patch(`/team/${teamId}`, { name: teamName, class_id: classId, label: newLabel }, config);
+    dispatch({ type: teamConstants.EDIT_TEAM_SUCCESS });
+    onSuccess();
+  } catch (error) {
+    dispatch({
+      type: teamConstants.EDIT_TEAM_FAIL,
+      error,
     });
+    onError();
+  }
 };
 
 export const fetchTeamMembers = (token, teamId) => async (dispatch) => {
@@ -187,14 +177,34 @@ export const fetchTeamMembers = (token, teamId) => async (dispatch) => {
   }
 };
 
-export const addTeamMember = (token, teamId, student, role, onSuccess, onError) => async (dispatch) => {
+// export const addTeamMember = (token, teamId, student, role, onSuccess, onError) => async (dispatch) => {
+//   const config = {
+//     headers: {
+//       'auth-token': token,
+//     },
+//   };
+//   const body = [{ account_referral: student, role }];
+//   try {
+//     dispatch({ type: teamConstants.ADD_TEAM_MEMBER_START });
+//     await agent.post(`/team/${teamId}/member`, body, config);
+//     dispatch({ type: teamConstants.ADD_TEAM_MEMBER_SUCCESS });
+//     onSuccess(role);
+//   } catch (error) {
+//     dispatch({
+//       type: teamConstants.ADD_TEAM_MEMBER_FAIL,
+//       error,
+//     });
+//     onError();
+//   }
+// };
+
+export const addTeamMember = (token, teamId, members, onSuccess, onError) => async (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
     },
   };
-  const body = [{ account_referral: student, role }];
-  // console.log('body', body);
+  const body = members;
   try {
     dispatch({ type: teamConstants.ADD_TEAM_MEMBER_START });
     await agent.post(`/team/${teamId}/member`, body, config);

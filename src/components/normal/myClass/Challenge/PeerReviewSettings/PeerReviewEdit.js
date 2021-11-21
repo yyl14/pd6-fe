@@ -10,11 +10,10 @@ import {
   DialogContent,
   DialogTitle,
 } from '@material-ui/core';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { editPeerReview } from '../../../../../actions/api/peerReview';
 import BasicInfo from './Element/BasicInfo';
 import SimpleBar from '../../../../ui/SimpleBar';
-import AlignedText from '../../../../ui/AlignedText';
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
@@ -51,13 +50,11 @@ const useStyles = makeStyles((theme) => ({
 /* This is a level 4 component (page component) */
 // This page is for manager.
 export default function PeerReviewEdit({ setEdit }) {
-  const { courseId, classId, peerReviewId } = useParams();
+  const { peerReviewId } = useParams();
   const classNames = useStyles();
   const dispatch = useDispatch();
 
   const peerReviews = useSelector((state) => state.peerReviews.byId);
-  const problems = useSelector((state) => state.problem.byId);
-  const challenges = useSelector((state) => state.challenges.byId);
   const authToken = useSelector((state) => state.auth.token);
 
   const [label, setLabel] = useState(

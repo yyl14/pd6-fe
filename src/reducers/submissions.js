@@ -66,7 +66,7 @@ const byId = (state = {}, action) => {
         [submissionId]: { ...state[submissionId], latestJudgmentId: judgment.id },
       };
     }
-    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
+    case viewConstants.BROWSE_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
       const { submissions } = action.payload;
       return submissions.reduce(
         (acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item, verdict: verdictMapping.get(item.verdict) } }),
@@ -99,7 +99,7 @@ const allIds = (state = [], action) => {
       const { data } = action.payload;
       return [...new Set([...data.map((item) => item.id), ...state])];
     }
-    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
+    case viewConstants.BROWSE_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
       const { submissions } = action.payload;
       return [...new Set([...submissions.map((item) => item.id), ...state])];
     }

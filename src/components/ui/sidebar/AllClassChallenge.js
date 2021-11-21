@@ -60,6 +60,7 @@ export default function AllClassChallenge({
             ].concat(
               challenges[challengeId].problemIds
                 .map((id) => problems.byId[id])
+                .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
                 .map(({ id, challenge_label }) => ({
                   text: challenge_label,
                   icon: <Icon.Code />,
@@ -175,7 +176,7 @@ export default function AllClassChallenge({
               {itemList.map((item) => (
                 <ListItem
                   button
-                  key={item.text}
+                  key={item.id}
                   onClick={() => history.push(item.path)}
                   className={
                     location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item

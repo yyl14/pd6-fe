@@ -3,6 +3,7 @@ import { peerReviewConstants } from './constant';
 // import { autoTableConstants } from '../component/constant';
 // import browseParamsTransForm from '../../function/browseParamsTransform';
 // import { readAccount } from '../user/user';
+import { browseTasksUnderChallenge } from '../myClass/challenge';
 
 export const readPeerReview = (token, peerReviewId) => async (dispatch) => {
   try {
@@ -22,7 +23,7 @@ export const readPeerReview = (token, peerReviewId) => async (dispatch) => {
   }
 };
 
-export const deletePeerReview = (token, peerReviewId) => async (dispatch) => {
+export const deletePeerReview = (token, peerReviewId, challengeId) => async (dispatch) => {
   try {
     const config = {
       headers: {
@@ -32,6 +33,7 @@ export const deletePeerReview = (token, peerReviewId) => async (dispatch) => {
     dispatch({ type: peerReviewConstants.DELETE_PEER_REVIEW_START });
     await agent.delete(`peer-review/${peerReviewId}`, config);
     dispatch({ type: peerReviewConstants.DELETE_PEER_REVIEW_SUCCESS });
+    dispatch(browseTasksUnderChallenge(token, challengeId));
   } catch (error) {
     dispatch({
       type: peerReviewConstants.DELETE_PEER_REVIEW_FAIL,
@@ -110,7 +112,7 @@ export const browseAccountReceivedPeerReviewRecord = (token, peerReviewId, accou
   }
 };
 
-export const submitPeerReviewRecord = (token, peerReviewRecordId, score, comment, onSuccess) => async (dispatch) => {
+export const submitPeerReviewRecord = (token, peerReviewRecordId, score, comment, onSuccess, onError) => async (dispatch) => {
   try {
     const config = { headers: { 'auth-token': token } };
     const body = {
@@ -127,6 +129,7 @@ export const submitPeerReviewRecord = (token, peerReviewRecordId, score, comment
       type: peerReviewConstants.SUBMIT_PEER_REVIEW_RECORD_FAIL,
       error,
     });
+    onError();
   }
 };
 

@@ -22,6 +22,8 @@ import submitLangs from './submitLangs';
 import essays from './essays';
 import peerReviews from './peerReviews';
 import peerReviewRecords from './peerReviewRecords';
+import peerReviewSummaryReview from './peerReviewSummaryReview';
+import peerReviewSummaryReceive from './peerReviewSummaryReceive';
 import judgeCases from './judgeCases';
 import downloadLinks from './downloadLinks';
 import loading from './loading/index';
@@ -29,6 +31,7 @@ import error from './error/index';
 import component from './component';
 import essaySubmission from './essaySubmission';
 import pendingStudentCards from './pendingStudentCards';
+import scoreboards from './scoreboards';
 
 export default combineReducers({
   auth,
@@ -56,9 +59,12 @@ export default combineReducers({
   essays,
   peerReviews,
   peerReviewRecords,
+  peerReviewSummaryReview,
+  peerReviewSummaryReceive,
   judgeCases,
   downloadLinks,
   essaySubmission,
   component,
   pendingStudentCards,
+  scoreboards,
 });

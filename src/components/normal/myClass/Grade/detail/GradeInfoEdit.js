@@ -74,7 +74,7 @@ export default function BasicInfoEdit(props) {
             />
           </AlignedText>
           <AlignedText text="Submitted Time" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">{moment(props.grade.update_time).format('YYYY-MM-DD, HH:mm')}</Typography>
+            <Typography variant="body1">{moment(props.grade.update_time).format('YYYY-MM-DD, HH:mm:ss')}</Typography>
           </AlignedText>
           <div className={classNames.buttons}>
             <Button onClick={() => props.handleBack()}>Cancel</Button>

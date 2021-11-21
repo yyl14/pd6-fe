@@ -75,7 +75,7 @@ export default function Grade({
             {itemList.map((item) => (
               <ListItem
                 button
-                key={item.text}
+                key={item.id}
                 className={
                   location.pathname.includes(item.path) ? `${classNames.active} ${classNames.item}` : classNames.item
                 }

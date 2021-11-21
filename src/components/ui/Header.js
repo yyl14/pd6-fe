@@ -5,19 +5,31 @@ import { useCookies } from 'react-cookie';
 import { format } from 'date-fns';
 import moment from 'moment';
 import {
-  makeStyles, Typography, AppBar, Toolbar,
+  makeStyles, Typography, AppBar, Toolbar, useTheme,
 } from '@material-ui/core';
 import Icon from './icon/index';
 import { userLogout } from '../../actions/user/auth';
 import { userBrowseAnnouncement } from '../../actions/user/user';
 
 const useStyles = makeStyles((theme) => ({
+  logo: {
+    '&:hover': {
+      cursor: 'pointer',
+    },
+    display: 'flex',
+    alignItems: 'center',
+    color: theme.palette.grey[0],
+    margin: '0 40px 0 30px',
+  },
+  noLogo: {
+    marginLeft: '50px',
+  },
   appbar: {
     left: 0,
     right: 'auto',
     minHeight: '55px',
     height: '55px',
-    background: theme.palette.black.main,
+    background: theme.headerStyle.background,
     minWidth: 'max-content',
   },
   toolbar: {
@@ -28,13 +40,24 @@ const useStyles = makeStyles((theme) => ({
 
   // header left
   item: {
-    marginLeft: '50px',
+    marginRight: '50px',
     '&:hover': {
       cursor: 'pointer',
     },
     '@media (max-width: 760px)': {
-      marginLeft: '20px',
+      marginRight: '20px',
     },
+    color: theme.headerStyle.color,
+  },
+
+  itemActiveIndicator: {
+    position: 'absolute',
+    top: 52,
+    height: 3,
+    borderRadius: '3px 3px 0px 0px',
+    backgroundColor: theme.headerStyle.color,
+    transition: '0.3s',
+    '-webkit-transform': 'translateZ(0)',
   },
 
   // header right
@@ -44,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 15,
   },
   date: {
+    color: theme.headerStyle.color,
     position: 'relative',
     float: 'left',
     marginRight: '4px',
@@ -57,6 +81,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   notificationIcon: {
+    color: theme.headerStyle.color,
     position: 'relative',
     transform: 'translateY(2px)',
     float: 'left',
@@ -131,8 +156,8 @@ const useStyles = makeStyles((theme) => ({
     bottom: '13px',
   },
   userButton: {
-    backgroundColor: theme.palette.black.main,
-    color: theme.palette.primary.contrastText,
+    backgroundColor: 'transparent',
+    color: theme.headerStyle.color,
     border: 'none',
     '&:hover': {
       cursor: 'pointer',
@@ -140,7 +165,7 @@ const useStyles = makeStyles((theme) => ({
   },
   active: {
     textDecoration: 'none',
-    color: theme.palette.primary.main,
+    color: theme.headerStyle.activeColor, // temporary
   },
   userDropdownContent: {
     position: 'fixed',
@@ -173,7 +198,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header({ handleSidebarToggle, hideToggle }) {
+export default function Header() {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const classes = useStyles();
   const history = useHistory();
@@ -195,9 +221,13 @@ export default function Header({ handleSidebarToggle, hideToggle }) {
 
   const [hasClass, setHasClass] = useState(false);
   const [, , removeCookie] = useCookies(['token', 'id']);
+  const [activeHeaderItemIndex, setActiveHeaderItemIndex] = useState(0);
+  const [userButtonActive, setUserButtonActive] = useState(false);
 
+  const headerItemRef = useRef([]);
   const notifyRef = useRef(null);
   const userRef = useRef(null);
+  const userButtonRef = useRef(null);
 
   useEffect(() => {
     setHasClass(user.classes.length !== 0);
@@ -217,13 +247,10 @@ export default function Header({ handleSidebarToggle, hideToggle }) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      dispatch(userBrowseAnnouncement(authToken));// refresh every 10 mins
+      dispatch(userBrowseAnnouncement(authToken)); // refresh every 10 mins
     }, 600000);
     return () => clearInterval(interval);
-  }, [
-    authToken,
-    dispatch,
-  ]);
+  }, [authToken, dispatch]);
 
   useEffect(() => {
     switch (user.role) {
@@ -340,6 +367,14 @@ export default function Header({ handleSidebarToggle, hideToggle }) {
     }
   }, [hasClass, user.role]);
 
+  useEffect(() => {
+    setActiveHeaderItemIndex(itemList.findIndex((item) => location.pathname.includes(item.basePath)));
+  }, [itemList, location.pathname]);
+
+  useEffect(() => {
+    setUserButtonActive(location.pathname === '/my-profile' || location.pathname.slice(0, 14) === '/my-submission');
+  }, [location.pathname]);
+
   const handleNotifyClickOutside = (event) => {
     if (notifyRef.current && !notifyRef.current.contains(event.target)) {
       setNotifyAlreadyClose(true);
@@ -416,13 +451,39 @@ export default function Header({ handleSidebarToggle, hideToggle }) {
     <div>
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
-          <Icon.Overview className={hideToggle ? classes.hide : classes.item} onClick={handleSidebarToggle} />
-          {itemList.map((item) => (
+          {theme.headerStyle.logo ? (
+            <href className={classes.logo} onClick={() => history.push('/')}>
+              {theme.headerStyle.logo}
+            </href>
+          ) : (
+            <div className={classes.noLogo} />
+          )}
+          {theme.headerStyle.hasIndicator && (
+            <div
+              className={classes.itemActiveIndicator}
+              style={{
+                left:
+                  activeHeaderItemIndex !== undefined && activeHeaderItemIndex !== -1
+                    ? headerItemRef.current[activeHeaderItemIndex]?.offsetLeft
+                    : userButtonRef.current?.offsetLeft + userButtonRef.current?.offsetParent.offsetLeft,
+                width:
+                  activeHeaderItemIndex !== undefined && activeHeaderItemIndex !== -1
+                    ? headerItemRef.current[activeHeaderItemIndex]?.offsetWidth
+                    : userButtonRef.current?.offsetWidth,
+              }}
+            />
+          )}
+          {itemList.map((item, index) => (
             <Typography
               variant="h6"
               onClick={() => history.push(item.path)}
-              className={`${classes.item} ${location.pathname.includes(item.basePath) && classes.active}`}
+              className={`${classes.item} ${
+                activeHeaderItemIndex === index && !theme.headerStyle.hasIndicator && classes.active
+              }`}
               key={item.text}
+              ref={(element) => {
+                headerItemRef.current[index] = element;
+              }}
             >
               {item.text}
             </Typography>
@@ -478,14 +539,10 @@ export default function Header({ handleSidebarToggle, hideToggle }) {
               role="button"
               tabIndex="-1"
             >
-              <button type="button" className={classes.userButton}>
+              <button type="button" className={classes.userButton} ref={userButtonRef}>
                 <Typography
                   variant="h6"
-                  className={
-                    location.pathname === '/my-profile' || location.pathname.slice(0, 14) === '/my-submission'
-                      ? classes.active
-                      : null
-                  }
+                  className={userButtonActive && !theme.headerStyle.hasIndicator ? classes.active : null}
                 >
                   {user.username}
                 </Typography>

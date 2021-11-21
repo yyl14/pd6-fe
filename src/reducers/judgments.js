@@ -1,5 +1,16 @@
 import { combineReducers } from 'redux';
-import { submissionConstants, problemConstants } from '../actions/myClass/constant';
+import { submissionConstants } from '../actions/myClass/constant';
+import { viewConstants, judgementConstants } from '../actions/api/constant';
+
+const prototype = {
+  id: null,
+  submission_id: null,
+  verdict: null,
+  total_time: null,
+  max_memory: null,
+  score: null,
+  judge_time: null,
+};
 
 const verdictMapping = new Map([
   ['ACCEPTED', 'Accepted'],
@@ -37,12 +48,24 @@ const byId = (state = {}, action) => {
         state,
       );
     }
-    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
+    case viewConstants.BROWSE_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
       const { judgments } = action.payload;
       return judgments.reduce(
         (acc, item) => ({ ...acc, [item.id]: { ...item, verdict: verdictMapping.get(item.verdict) } }),
         state,
       );
+    }
+
+    case judgementConstants.BROWSE_ALL_JUDGEMENT_JUDGE_CASE_SUCCESS: {
+      const { judgementId, judgement } = action.payload.data;
+      return {
+        ...state,
+        [judgementId]: {
+          ...prototype,
+          ...state[judgementId],
+          ...judgement,
+        },
+      };
     }
     default:
       return state;
@@ -58,8 +81,12 @@ const allIds = (state = [], action) => {
     case submissionConstants.FETCH_SUBMISSIONS_SUCCESS: {
       return [...new Set([...action.payload.judgments.map((item) => item.id), ...state])];
     }
-    case problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
+    case viewConstants.BROWSE_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS: {
       return [...new Set([...action.payload.judgments.map((item) => item.id), ...state])];
+    }
+    case judgementConstants.BROWSE_ALL_JUDGEMENT_JUDGE_CASE_SUCCESS: {
+      const { judgement } = action.payload.data;
+      return [...new Set([judgement.id, ...state])];
     }
     default:
       return state;

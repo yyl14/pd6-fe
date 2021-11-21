@@ -32,6 +32,14 @@ export default function IconList() {
           <p>Dots</p>
         </StyledPaper>
         <StyledPaper>
+          <Icon.Menu />
+          <p>Menu</p>
+        </StyledPaper>
+        <StyledPaper>
+          <Icon.DevTeam />
+          <p>DevTeam</p>
+        </StyledPaper>
+        <StyledPaper>
           <Icon.Info />
           <p>Info</p>
         </StyledPaper>

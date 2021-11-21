@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
@@ -13,7 +13,6 @@ export default function AllClass({
   const baseURL = '/all-class';
   const classes = useSelector((state) => state.classes);
   const courses = useSelector((state) => state.courses);
-  const loading = useSelector((state) => state.loading);
 
   const [display, setDisplay] = useState('unfold'); // 0: fold, 1: unfold
   const [arrow, setArrow] = useState(null);
@@ -102,7 +101,7 @@ export default function AllClass({
               {itemList.map((item) => (
                 <ListItem
                   button
-                  key={item.path}
+                  key={item.id}
                   onClick={() => history.push(item.path)}
                   className={
                     location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item

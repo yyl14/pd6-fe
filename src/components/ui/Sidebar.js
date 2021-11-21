@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     top: '55px',
     height: 'calc(100% - 55px)',
     width: '300px',
+    border: 'none',
   },
 
   topSpace: {
@@ -313,10 +314,7 @@ export default function Sidebar({ open, onClose }) {
           mode="challenge"
         />
       </Route>
-      <Route
-        exact
-        path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receiver-summary"
-      >
+      <Route path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receiver-summary">
         <PeerReview
           classNames={classes}
           history={history}
@@ -326,7 +324,7 @@ export default function Sidebar({ open, onClose }) {
           mode="peer-review-summary"
         />
       </Route>
-      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/grader-summary">
+      <Route path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/grader-summary">
         <PeerReview
           classNames={classes}
           history={history}
@@ -360,6 +358,16 @@ export default function Sidebar({ open, onClose }) {
           open={open}
           onClose={onClose}
           mode="review"
+        />
+      </Route>
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/scoreboard/:scoreboardId">
+        <Challenge
+          classNames={classes}
+          history={history}
+          location={location}
+          open={open}
+          onClose={onClose}
+          mode="challenge"
         />
       </Route>
       {/* {Submission} */}

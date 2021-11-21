@@ -13,7 +13,6 @@ import {
   Snackbar,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { MdAdd } from 'react-icons/md';
 import AlignedText from '../../../ui/AlignedText';
 import AutoTable from '../../../ui/AutoTable';
 import FileUploadArea from '../../../ui/FileUploadArea';
@@ -169,7 +168,7 @@ export default function TeamList() {
           isManager && (
             <>
               <Button variant="outlined" color="primary" onClick={() => setShowAddDialog(true)}>
-                <MdAdd />
+                <Icon.Add />
               </Button>
               <Button color="primary" onClick={() => setShowImportDialog(true)} startIcon={<Icon.Folder />}>
                 Import
@@ -201,24 +200,26 @@ export default function TeamList() {
           {
             name: 'Label',
             align: 'center',
-            minWidth: 50,
+            minWidth: 125,
+            width: 250,
             type: 'string',
           },
           {
             name: 'Team Name',
             align: 'center',
-            minWidth: 150,
+            minWidth: 153,
+            width: 400,
             type: 'link',
           },
         ]}
         reduxData={teams}
         reduxDataToRows={(item) => ({
           id: item.id,
+          Label: item.label,
           'Team Name': {
             text: item.name,
             path: `/my-class/${courseId}/${classId}/team/${item.id}`,
           },
-          Label: item.label,
           link: `/my-class/${courseId}/${classId}/team/${item.id}`,
         })}
         hasLink

@@ -12,11 +12,15 @@ import {
   TextField,
   FormControlLabel,
   Switch,
+  FormControl,
+  Select,
+  MenuItem,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import SimpleBar from '../../../../ui/SimpleBar';
 import SimpleTable from '../../../../ui/SimpleTable';
 import Icon from '../../../../ui/icon/index';
+import AlignedText from '../../../../ui/AlignedText';
 
 import SampleUploadCard from './SampleUploadCard';
 import AssistingDataUploadCard from './AssistingDataUploadCard';
@@ -26,7 +30,7 @@ import {
   editProblemInfo,
   saveSamples,
   saveTestcases,
-  readProblemInfo,
+  readProblemWithJudgeCode,
   saveAssistingData,
 } from '../../../../../actions/myClass/problem';
 
@@ -61,6 +65,9 @@ const useStyles = makeStyles(() => ({
   dialogButtons: {
     justifyContent: 'space-between',
   },
+  select: {
+    width: '350px',
+  },
 }));
 
 const StyledButton = withStyles({
@@ -88,16 +95,15 @@ export default function CodingProblemEdit({ closeEdit }) {
   const loading = useSelector((state) => state.loading.myClass.problem);
   const [hasChange, setHasChange] = useState(false);
 
-  const [label, setLabel] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].challenge_label);
-  const [title, setTitle] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].title);
-  const [description, setDescription] = useState(
-    problems[problemId] === undefined ? 'error' : problems[problemId].description,
-  );
-  const [ioDescription, setIoDescription] = useState(
-    problems[problemId] === undefined ? 'error' : problems[problemId].io_description,
-  );
-  const [source, setSource] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].source);
-  const [hint, setHint] = useState(problems[problemId] === undefined ? 'error' : problems[problemId].hint);
+  const [label, setLabel] = useState('');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [ioDescription, setIoDescription] = useState('');
+  const [source, setSource] = useState('');
+  const [hint, setHint] = useState('');
+  const [judgeType, setJudgeType] = useState('');
+  const [language, setLanguage] = useState('Python');
+  const [judgeCode, setJudgeCode] = useState('');
   const [status, setStatus] = useState(true);
 
   const [handleInfoSuccess, setHandleInfoSuccess] = useState(false);
@@ -156,6 +162,31 @@ export default function CodingProblemEdit({ closeEdit }) {
     return 0;
   };
 
+  const judgeLanguageTrans = (lang) => {
+    if (lang === 'Python') {
+      return 'python 3.8';
+    }
+    return 0;
+  };
+
+  useEffect(() => {
+    if (problems[problemId]) {
+      setLabel(problems[problemId].challenge_label);
+      setTitle(problems[problemId].title);
+      setDescription(problems[problemId].description);
+      setIoDescription(problems[problemId].io_description);
+      setSource(problems[problemId].source);
+      setHint(problems[problemId].hint);
+      setJudgeType(problems[problemId].judge_type);
+      if (problems[problemId].judge_type === 'CUSTOMIZED') {
+        setLanguage('Python');
+      }
+      if (problems[problemId].judge_source && problems[problemId].judge_source.judge_code) {
+        setJudgeCode(problems[problemId].judge_source.judge_code);
+      }
+    }
+  }, [problems, problemId]);
+
   useEffect(() => {
     if (problems[problemId] && problems[problemId].testcaseIds) {
       const testcasesId = problems[problemId].testcaseIds.filter((id) => !testcases[id].is_sample);
@@ -185,6 +216,7 @@ export default function CodingProblemEdit({ closeEdit }) {
               in_file: null,
               out_file: null,
               new: false,
+              note: testcases[id].note,
             },
           }),
           {},
@@ -205,6 +237,7 @@ export default function CodingProblemEdit({ closeEdit }) {
               in_file: null,
               out_file: null,
               new: false,
+              note: testcases[id].note,
             },
           }),
           {},
@@ -241,7 +274,7 @@ export default function CodingProblemEdit({ closeEdit }) {
   useEffect(() => {
     if (handleSamplesSuccess && handleTestcasesSuccess && handleInfoSuccess && handleAssistingDataSuccess) {
       if (uploadFailFilename.length === 0) {
-        dispatch(readProblemInfo(authToken, problemId));
+        dispatch(readProblemWithJudgeCode(authToken, problemId));
         setDisabled(false);
         closeEdit();
       } else {
@@ -277,6 +310,7 @@ export default function CodingProblemEdit({ closeEdit }) {
         {},
       ),
     );
+    setHasChange(true);
   };
   const handleSetTestcaseTableData = (tableData) => {
     setTestcaseTableData(
@@ -288,6 +322,7 @@ export default function CodingProblemEdit({ closeEdit }) {
         {},
       ),
     );
+    setHasChange(true);
   };
 
   const handleSampleConfirm = (newSelectedFiles) => {
@@ -300,6 +335,7 @@ export default function CodingProblemEdit({ closeEdit }) {
           [-item]: {
             id: -item,
             no: newSelectedFiles[item].no,
+            label: newSelectedFiles[item].no,
             time_limit: newSelectedFiles[item].time_limit,
             memory_limit: newSelectedFiles[item].memory_limit,
             input_filename: newSelectedFiles[item].in === null ? null : newSelectedFiles[item].in.name,
@@ -307,6 +343,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             in_file: newSelectedFiles[item].in,
             out_file: newSelectedFiles[item].out,
             new: true,
+            note: '',
           },
         };
       }
@@ -316,6 +353,7 @@ export default function CodingProblemEdit({ closeEdit }) {
         [keys[0]]: {
           id: Number(keys[0]),
           no: newSelectedFiles[item].no,
+          label: newSelectedFiles[item].no,
           time_limit: newSelectedFiles[item].time_limit,
           memory_limit: newSelectedFiles[item].memory_limit,
           input_filename:
@@ -330,10 +368,11 @@ export default function CodingProblemEdit({ closeEdit }) {
           out_file:
             newSelectedFiles[item].out === null ? sampleTableData[keys[0]].out_file : newSelectedFiles[item].out,
           new: sampleTableData[keys[0]].new,
+          note: sampleTableData[keys[0]].note,
         },
       };
     }, sampleTableData);
-    console.log(newTableData);
+    // console.log(newTableData);
     setSampleTableData(newTableData);
     setCardSelectedFileS({});
     setHasChange(true);
@@ -352,6 +391,7 @@ export default function CodingProblemEdit({ closeEdit }) {
           [-item]: {
             id: -item,
             no: newSelectedFiles[item].no,
+            label: newSelectedFiles[item].no,
             score: newSelectedFiles[item].score,
             time_limit: newSelectedFiles[item].time_limit,
             memory_limit: newSelectedFiles[item].memory_limit,
@@ -360,6 +400,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             in_file: newSelectedFiles[item].in,
             out_file: newSelectedFiles[item].out,
             new: true,
+            note: '',
           },
         };
       }
@@ -369,6 +410,7 @@ export default function CodingProblemEdit({ closeEdit }) {
         [keys[0]]: {
           id: Number(keys[0]),
           no: newSelectedFiles[item].no,
+          label: newSelectedFiles[item].no,
           score: newSelectedFiles[item].score,
           time_limit: newSelectedFiles[item].time_limit,
           memory_limit: newSelectedFiles[item].memory_limit,
@@ -384,6 +426,7 @@ export default function CodingProblemEdit({ closeEdit }) {
           out_file:
             newSelectedFiles[item].out === null ? testcaseTableData[keys[0]].out_file : newSelectedFiles[item].out,
           new: testcaseTableData[keys[0]].new,
+          note: testcaseTableData[keys[0]].note,
         },
       };
     }, testcaseTableData);
@@ -426,12 +469,15 @@ export default function CodingProblemEdit({ closeEdit }) {
         problemId,
         label,
         title,
+        judgeType,
         newFullScore,
         !status,
         description,
         ioDescription,
         source,
         hint,
+        judgeLanguageTrans(language),
+        judgeCode,
         () => {
           setHandleInfoSuccess(true);
         },
@@ -611,7 +657,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             {
               id: 'time_limit',
               label: 'Max Time (ms)',
-              minWidth: 50,
+              minWidth: 180,
               align: 'center',
               width: 150,
               type: 'string',
@@ -620,7 +666,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             {
               id: 'memory_limit',
               label: 'Max Memory (kb)',
-              minWidth: 50,
+              minWidth: 180,
               align: 'center',
               width: 150,
               type: 'string',
@@ -629,7 +675,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             {
               id: 'input_filename',
               label: 'Input File',
-              minWidth: 50,
+              minWidth: 150,
               align: 'center',
               width: 150,
               type: 'string',
@@ -641,6 +687,14 @@ export default function CodingProblemEdit({ closeEdit }) {
               align: 'center',
               width: 150,
               type: 'string',
+            },
+            {
+              id: 'note',
+              label: 'Note',
+              align: 'center',
+              width: '100%',
+              type: 'string',
+              editType: 'flexibleInput',
             },
           ]}
           data={Object.keys(sampleTableData)
@@ -695,7 +749,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             {
               id: 'time_limit',
               label: 'Max Time (ms)',
-              minWidth: 50,
+              minWidth: 180,
               align: 'center',
               width: 150,
               type: 'string',
@@ -704,7 +758,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             {
               id: 'memory_limit',
               label: 'Max Memory (kb)',
-              minWidth: 50,
+              minWidth: 180,
               align: 'center',
               width: 150,
               type: 'string',
@@ -712,7 +766,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             },
             {
               id: 'score',
-              label: 'score',
+              label: 'Score',
               minWidth: 50,
               align: 'center',
               width: 80,
@@ -722,7 +776,7 @@ export default function CodingProblemEdit({ closeEdit }) {
             {
               id: 'input_filename',
               label: 'Input File',
-              minWidth: 50,
+              minWidth: 150,
               align: 'center',
               width: 150,
               type: 'string',
@@ -730,10 +784,18 @@ export default function CodingProblemEdit({ closeEdit }) {
             {
               id: 'output_filename',
               label: 'Output File',
-              minWidth: 50,
+              minWidth: 150,
               align: 'center',
               width: 150,
               type: 'string',
+            },
+            {
+              id: 'note',
+              label: 'Note',
+              align: 'center',
+              width: '100%',
+              type: 'string',
+              editType: 'flexibleInput',
             },
           ]}
           data={Object.keys(testcaseTableData)
@@ -769,6 +831,40 @@ export default function CodingProblemEdit({ closeEdit }) {
           data={assistTableData}
           setData={setAssistTableData}
         />
+      </SimpleBar>
+      <SimpleBar title="Customized Judge Code (Optional)" noIndent>
+        <AlignedText text="Judge method" childrenType="field">
+          <FormControl variant="outlined" className={classNames.select}>
+            <Select name="judgeMethod" value={judgeType} onChange={(e) => setJudgeType(e.target.value)}>
+              <MenuItem value="NORMAL">No customized judge</MenuItem>
+              <MenuItem value="CUSTOMIZED">Customized judge</MenuItem>
+            </Select>
+          </FormControl>
+        </AlignedText>
+        {judgeType !== 'NORMAL' && (
+          <>
+            <AlignedText text="Language" childrenType="field">
+              <FormControl variant="outlined" className={classNames.select}>
+                <Select name="language" value={language} onChange={(e) => setLanguage(e.target.value)}>
+                  <MenuItem value="Python">Python</MenuItem>
+                </Select>
+              </FormControl>
+            </AlignedText>
+            <Typography variant="body1">Content</Typography>
+            <TextField
+              value={judgeCode}
+              variant="outlined"
+              onChange={(e) => {
+                setJudgeCode(e.target.value);
+                setHasChange(true);
+              }}
+              multiline
+              minRows={15}
+              maxRows={15}
+              className={classNames.textfield2}
+            />
+          </>
+        )}
       </SimpleBar>
       <div className={classNames.buttons}>
         <Button color="default" onClick={handleCancel}>

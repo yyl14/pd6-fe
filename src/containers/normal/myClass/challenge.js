@@ -18,6 +18,7 @@ export default function Challenge() {
   const authToken = useSelector((state) => state.auth.token);
   const { challengeId } = useParams();
   const loading = useSelector((state) => state.loading.myClass);
+  const apiLoading = useSelector((state) => state.loading.api);
 
   useEffect(() => {
     if (
@@ -29,12 +30,14 @@ export default function Challenge() {
       && !loading.challenge.addPeerReview
       && !loading.problem.deleteProblem
       && !loading.problem.deleteEssay
+      && !apiLoading.scoreboard.deleteScoreboard
       // && !loading.problem.deletePeerReview
     ) {
       dispatch(fetchChallenge(authToken, challengeId));
       dispatch(browseTasksUnderChallenge(authToken, challengeId));
     }
   }, [
+    apiLoading.scoreboard.deleteScoreboard,
     authToken,
     challengeId,
     dispatch,

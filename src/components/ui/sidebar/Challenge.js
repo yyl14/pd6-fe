@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
@@ -14,11 +14,7 @@ export default function Challenge({
     courseId, classId, challengeId, problemId, submissionId,
   } = useParams();
   const baseURL = '/my-class';
-  const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.myClass.challenge);
   const challenges = useSelector((state) => state.challenges.byId);
-  const challengesID = useSelector((state) => state.challenges.allIds);
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
   const userClasses = useSelector((state) => state.user.classes);
@@ -26,6 +22,7 @@ export default function Challenge({
   const problems = useSelector((state) => state.problem);
   const essays = useSelector((state) => state.essays);
   const peerReviews = useSelector((state) => state.peerReviews);
+  const scoreboards = useSelector((state) => state.scoreboards);
 
   const [display, setDisplay] = useState('unfold');
 
@@ -86,6 +83,7 @@ export default function Challenge({
             ],
             challenges[challengeId].problemIds
               .map((id) => problems.byId[id])
+              .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
               .map(({ id, challenge_label }) => ({
                 text: challenge_label,
                 icon: <Icon.Code />,
@@ -93,6 +91,7 @@ export default function Challenge({
               })),
             challenges[challengeId].essayIds
               .map((id) => essays.byId[id])
+              .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
               .map(({ id, challenge_label }) => ({
                 text: challenge_label,
                 icon: <Icon.Paper />,
@@ -100,15 +99,24 @@ export default function Challenge({
               })),
             challenges[challengeId].peerReviewIds
               .map((id) => peerReviews.byId[id])
+              .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
               .map(({ id, challenge_label }) => ({
                 text: challenge_label,
                 icon: <Icon.Peerreview />,
                 path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${id}`,
               })),
+            challenges[challengeId].scoreboardIds
+              .map((id) => scoreboards.byId[id])
+              .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+              .map(({ id, challenge_label }) => ({
+                text: challenge_label,
+                icon: <Icon.Scoreboard />,
+                path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/scoreboard/${id}`,
+              })),
           ),
         );
       } else if (
-        userClasses.find((x) => x.class_id === Number(classId)).role !== 'MANAGER'
+        userClasses.find((x) => x.class_id === Number(classId)).role === 'NORMAL'
         && challenges[challengeId] !== undefined
       ) {
         setArrow(
@@ -129,6 +137,7 @@ export default function Challenge({
               ],
               challenges[challengeId].problemIds
                 .map((id) => problems.byId[id])
+                .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
                 .map(({ id, challenge_label }) => ({
                   text: challenge_label,
                   icon: <Icon.Code />,
@@ -136,6 +145,7 @@ export default function Challenge({
                 })),
               challenges[challengeId].essayIds
                 .map((id) => essays.byId[id])
+                .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
                 .map(({ id, challenge_label }) => ({
                   text: challenge_label,
                   icon: <Icon.Paper />,
@@ -143,10 +153,58 @@ export default function Challenge({
                 })),
               challenges[challengeId].peerReviewIds
                 .map((id) => peerReviews.byId[id])
+                .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
                 .map(({ id, challenge_label }) => ({
                   text: challenge_label,
                   icon: <Icon.Peerreview />,
                   path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/peer-review/${id}`,
+                })),
+              challenges[challengeId].scoreboardIds
+                .map((id) => scoreboards.byId[id])
+                .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+                .map(({ id, challenge_label }) => ({
+                  text: challenge_label,
+                  icon: <Icon.Scoreboard />,
+                  path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/scoreboard/${id}`,
+                })),
+            ),
+          );
+        } else {
+          setItemList([
+            {
+              text: 'Info',
+              icon: <Icon.Info />,
+              path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
+            },
+          ]);
+        }
+      } else if (
+        userClasses.find((x) => x.class_id === Number(classId)).role === 'GUEST'
+        && challenges[challengeId] !== undefined
+      ) {
+        setArrow(
+          <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
+            <Icon.ArrowBackRoundedIcon />
+          </IconButton>,
+        );
+        setTitle(challenges[challengeId].title);
+        if (Object.keys(problems).length !== 0 && Object.keys(essays).length !== 0) {
+          setItemList(
+            [].concat(
+              [
+                {
+                  text: 'Info',
+                  icon: <Icon.Info />,
+                  path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
+                },
+              ],
+              challenges[challengeId].problemIds
+                .map((id) => problems.byId[id])
+                .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+                .map(({ id, challenge_label }) => ({
+                  text: challenge_label,
+                  icon: <Icon.Code />,
+                  path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${id}`,
                 })),
             ),
           );
@@ -229,7 +287,19 @@ export default function Challenge({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [challengeId, challenges, classId, courseId, problems, essays, history, location.pathname, mode]);
+  }, [
+    challengeId,
+    challenges,
+    classId,
+    courseId,
+    problems,
+    essays,
+    peerReviews,
+    scoreboards,
+    history,
+    location.pathname,
+    mode,
+  ]);
 
   const addTaskItemColor = (popup) => {
     if (popup) {
@@ -295,7 +365,7 @@ export default function Challenge({
               {itemList.map((item) => (
                 <ListItem
                   button
-                  key={item.text}
+                  key={item.path}
                   onClick={() => history.push(item.path)}
                   className={
                     location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item

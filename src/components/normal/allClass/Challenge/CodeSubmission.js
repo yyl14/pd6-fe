@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Button, makeStyles, TextField, MenuItem, FormControl, Select,
+  Button, makeStyles, TextField, MenuItem, FormControl, Select, Snackbar,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
@@ -47,11 +47,11 @@ export default function CodeSubmission() {
   const submitLang = useSelector((state) => state.submitLangs);
   const [lang, setLang] = useState([]);
   const authToken = useSelector((state) => state.auth.token);
-  // const error = useSelector((state) => state.error);
-  // const loading = useSelector((state) => state.loading.myClass);
+  const errors = useSelector((state) => state.error.myClass.problem);
 
   const [langId, setLangId] = useState(-1);
   const [code, setCode] = useState('');
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   useEffect(() => {
     const enabledIds = submitLang.allIds.filter((id) => !submitLang.byId[id].is_disabled);
@@ -63,14 +63,17 @@ export default function CodeSubmission() {
     }
   }, [cookies.lang, submitLang.allIds, submitLang.byId]);
 
+  const onSubmitSuccess = () => {
+    history.push(`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
+  };
+
   const handleSubmit = () => {
     if (langId === -1) {
       return;
     }
-    dispatch(submitCode(authToken, problemId, langId, code, () => {}));
+    dispatch(submitCode(authToken, problemId, langId, code, onSubmitSuccess, () => { setShowSnackbar(true); }));
     const daysToExpire = new Date(2147483647 * 1000);
     setCookie('lang', langId, { path: '/', expires: daysToExpire });
-    history.push(`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
   };
 
   useEffect(() => {
@@ -132,6 +135,14 @@ export default function CodeSubmission() {
           Submit
         </Button>
       </div>
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowSnackbar(false);
+        }}
+        message={`Error: ${errors.submitCode}`}
+      />
     </>
   );
 }

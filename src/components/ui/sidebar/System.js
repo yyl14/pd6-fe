@@ -97,9 +97,9 @@ export default function System({
       setTitle('System');
       setItemList([
         {
-          text: 'Team',
+          text: 'Develop Team',
           path: '/system/team',
-          icon: <Icon.Info />,
+          icon: <Icon.DevTeam />,
         },
         // {
         //   text: 'Access Log',
@@ -167,7 +167,7 @@ export default function System({
             {itemList.map((item) => (
               <ListItem
                 button
-                key={item.text}
+                key={item.id}
                 onClick={() => history.push(item.path)}
                 className={location.pathname === item.path ? `${classes.active} ${classes.item}` : classes.item}
               >

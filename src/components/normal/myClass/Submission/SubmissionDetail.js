@@ -14,11 +14,12 @@ import PageTitle from '../../../ui/PageTitle';
 import GeneralLoading from '../../../GeneralLoading';
 import {
   readSubmissionDetail,
-  browseJudgeCases,
   fetchSubmission,
   rejudgeSubmission,
   browseTestcases,
 } from '../../../../actions/myClass/submission';
+import { browseAllJudgementJudgeCase } from '../../../../actions/api/judgement';
+
 import { readProblemInfo } from '../../../../actions/myClass/problem';
 import { getAccountBatch, fetchChallenge, browseSubmitLang } from '../../../../actions/common/common';
 
@@ -41,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
   },
   resultTable: {
     width: '100%',
+  },
+  acceptedStatus: {
+    color: theme.palette.green.main,
   },
 }));
 
@@ -157,24 +161,31 @@ export default function SubmissionDetail() {
     if (submissions[submissionId]?.latestJudgmentId) {
       if (submissions[submissionId].latestJudgmentId !== judgmentId) {
         setJudgmentId(submissions[submissionId].latestJudgmentId);
-        dispatch(browseJudgeCases(authToken, submissions[submissionId].latestJudgmentId));
+        dispatch(browseAllJudgementJudgeCase(authToken, submissions[submissionId].latestJudgmentId));
       }
     }
   }, [authToken, dispatch, submissionId, submissions, rejudge, judgmentId]);
 
   useEffect(() => {
     if (sampleDataIds && testcaseDataIds && judgeCases.allIds) {
-      const filteredJudgeCases = judgeCases.allIds.filter((key) => judgeCases.byId[key].judgment_id === judgmentId);
       setTableData(
         sampleDataIds
           .concat(testcaseDataIds)
           .map((id) => ({
             id,
             no: transformTestcase(id),
-            time: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].time_lapse : '',
-            memory: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].peak_memory : '',
-            status: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].verdict : '',
-            score: filteredJudgeCases.filter((key) => key === id)[0] ? judgeCases.byId[id].score : '',
+            time: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]
+              ? judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`].time_lapse
+              : '',
+            memory: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]
+              ? judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`].peak_memory
+              : '',
+            status: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]
+              ? judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`].verdict
+              : '',
+            score: judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`]
+              ? judgeCases.byId[`${submissions[submissionId]?.latestJudgmentId}-${id}`].score
+              : '',
           }))
           .sort((a, b) => {
             if (!a.no.includes('sample') && b.no.includes('sample')) return 1;
@@ -276,15 +287,15 @@ export default function SubmissionDetail() {
           <Typography variant="body1">{problems.byId[problemId].title}</Typography>
         </AlignedText>
         <AlignedText text="Status" childrenType="text">
-          {judgments[judgmentId] ? (
+          {judgments[submissions[submissionId].latestJudgmentId] ? (
             <div>
-              {judgments[judgmentId].verdict === 'Accepted' ? (
-                <Typography variant="body1" color="primary">
-                  {judgments[judgmentId].verdict}
+              {judgments[submissions[submissionId].latestJudgmentId].verdict === 'Accepted' ? (
+                <Typography variant="body1" className={classNames.acceptedStatus}>
+                  {judgments[submissions[submissionId].latestJudgmentId].verdict}
                 </Typography>
               ) : (
                 <Typography variant="body1" color="secondary">
-                  {judgments[judgmentId].verdict}
+                  {judgments[submissions[submissionId].latestJudgmentId].verdict}
                 </Typography>
               )}
             </div>
@@ -293,20 +304,25 @@ export default function SubmissionDetail() {
           )}
         </AlignedText>
         <AlignedText text="Score" childrenType="text">
-          {judgments[judgmentId] && (
+          {judgments[submissions[submissionId].latestJudgmentId] && (
             <div>
-              <Typography variant="body1">{judgments[judgmentId].score}</Typography>
+              <Typography variant="body1">{judgments[submissions[submissionId].latestJudgmentId].score}</Typography>
             </div>
           )}
         </AlignedText>
         <AlignedText text="Submit Time" childrenType="text">
           <Typography variant="body1">
-            {moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm')}
+            {moment(submissions[submissionId].submit_time).format('YYYY-MM-DD, HH:mm:ss')}
           </Typography>
         </AlignedText>
         <AlignedText text="Language" childrenType="text">
-          {submitLangs[submissions[submissionId].language_id]
-            && <Typography variant="body1">{`${submitLangs[submissions[submissionId].language_id].name} ${submitLangs[submissions[submissionId].language_id].version}`}</Typography>}
+          {submitLangs[submissions[submissionId].language_id] && (
+            <Typography variant="body1">
+              {`${submitLangs[submissions[submissionId].language_id].name} ${
+                submitLangs[submissions[submissionId].language_id].version
+              }`}
+            </Typography>
+          )}
         </AlignedText>
       </SimpleBar>
       <SimpleBar title="Submission Result" noIndent>
@@ -348,7 +364,7 @@ export default function SubmissionDetail() {
               colors: {
                 'Waiting for judge': 'default',
                 'No Status': 'error',
-                Accepted: 'primary',
+                Accepted: 'accepted',
                 'Wrong Answer': 'error',
                 'Memory Limit Exceed': 'error',
                 'Time Limit Exceed': 'error',

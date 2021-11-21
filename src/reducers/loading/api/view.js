@@ -6,6 +6,9 @@ const initialState = {
   browseClassMember: false,
   browseSubmissionUnderClass: false,
   browseMySubmission: false,
+  browseMySubmissionUnderProblem: false,
+  browsePeerReviewSummaryReview: false,
+  browsePeerReviewSummaryReceive: false,
 };
 
 export default function view(state = initialState, action) {
@@ -79,6 +82,47 @@ export default function view(state = initialState, action) {
         browseMySubmission: false,
       };
     }
+
+    case viewConstants.BROWSE_MY_SUBMISSION_UNDER_PROBLEM_START:
+      return {
+        ...state,
+        browseMySubmissionUnderProblem: true,
+      };
+    case viewConstants.BROWSE_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS:
+    case viewConstants.BROWSE_MY_SUBMISSION_UNDER_PROBLEM_FAIL:
+      return {
+        ...state,
+        browseMySubmissionUnderProblem: false,
+      };
+
+    case viewConstants.BROWSE_PEER_REVIEW_SUMMARY_REVIEW_START: {
+      return {
+        ...state,
+        browsePeerReviewSummaryReview: true,
+      };
+    }
+    case viewConstants.BROWSE_PEER_REVIEW_SUMMARY_REVIEW_SUCCESS:
+    case viewConstants.BROWSE_PEER_REVIEW_SUMMARY_REVIEW_FAIL: {
+      return {
+        ...state,
+        browsePeerReviewSummaryReview: false,
+      };
+    }
+
+    case viewConstants.BROWSE_PEER_REVIEW_SUMMARY_RECEIVE_START: {
+      return {
+        ...state,
+        browsePeerReviewSummaryReceive: true,
+      };
+    }
+    case viewConstants.BROWSE_PEER_REVIEW_SUMMARY_RECEIVE_SUCCESS:
+    case viewConstants.BROWSE_PEER_REVIEW_SUMMARY_RECEIVE_FAIL: {
+      return {
+        ...state,
+        browsePeerReviewSummaryReceive: false,
+      };
+    }
+
     default: {
       return state;
     }

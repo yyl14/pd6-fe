@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
-  Button,
-  TextField,
-  FormControl,
-  Select,
-  MenuItem,
-  makeStyles,
+  Typography, Button, TextField, FormControl, Select, MenuItem, Snackbar, makeStyles,
 } from '@material-ui/core';
 import { Link, useParams } from 'react-router-dom';
 import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
@@ -24,7 +18,7 @@ import CodeArea from '../../../../ui/CodeArea';
 import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
 
-import { browseAccountReviewedPeerReviewRecord, submitPeerReviewRecord, readPeerReviewRecord } from '../../../../../actions/api/peerReview';
+import { browseAccountReviewedPeerReviewRecord, submitPeerReviewRecord } from '../../../../../actions/api/peerReview';
 import { readPeerReviewRecordWithCode } from '../../../../../actions/myClass/peerReview';
 
 const useStyles = makeStyles((theme) => ({
@@ -68,6 +62,7 @@ export default function ReviewedRecord() {
   const [peerId, setPeerId] = useState(-1);
   const [score, setScore] = useState('');
   const [comment, setComment] = useState('');
+  const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
 
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.api.peerReview);
@@ -79,6 +74,7 @@ export default function ReviewedRecord() {
   const challenges = useSelector((state) => state.challenges.byId);
   const peerReviews = useSelector((state) => state.peerReviews.byId);
   const peerReviewRecords = useSelector((state) => state.peerReviewRecords.byId);
+  const errors = useSelector((state) => state.error.api.peerReview);
 
   const onSuccess = () => {
     dispatch(readPeerReviewRecordWithCode(authToken, recordId));
@@ -86,20 +82,32 @@ export default function ReviewedRecord() {
 
   const handleSubmit = () => {
     // dispatch submit review result
-    dispatch(submitPeerReviewRecord(authToken, recordId, score, comment, onSuccess));
+    dispatch(
+      submitPeerReviewRecord(authToken, recordId, score, comment, onSuccess, () => {
+        setShowErrorSnackbar(true);
+      }),
+    );
     setEdit(false);
   };
 
   useEffect(() => {
+    setEdit(false);
     if (peerReviewRecords[recordId] !== undefined) {
       if (peerReviewRecords[recordId].score !== null) {
         setScore(peerReviewRecords[recordId].score);
+      } else {
+        setScore(peerReviews[peerReviewId].min_score);
       }
       if (peerReviewRecords[recordId].comment !== null) {
         setComment(peerReviewRecords[recordId].comment);
+      } else {
+        setComment('');
       }
+    } else {
+      setScore(null);
+      setComment('');
     }
-  }, [peerReviewRecords, recordId]);
+  }, [peerReviewId, peerReviewRecords, peerReviews, recordId]);
 
   useEffect(() => {
     if (peerReviews[peerReviewId] !== undefined) {
@@ -124,7 +132,11 @@ export default function ReviewedRecord() {
     dispatch(readPeerReviewRecordWithCode(authToken, recordId));
   }, [accountId, authToken, dispatch, peerReviewId, recordId]);
 
-  if (challenges[challengeId] === undefined || peerReviews[peerReviewId] === undefined || peerReviewRecords[recordId] === undefined) {
+  if (
+    challenges[challengeId] === undefined
+    || peerReviews[peerReviewId] === undefined
+    || peerReviewRecords[recordId] === undefined
+  ) {
     // console.log(loading);
     if (commonLoading.fetchChallenge || loading.readPeerReviewWithProblem || pageLoading.readPeerReviewRecord) {
       return <GeneralLoading />;
@@ -138,55 +150,70 @@ export default function ReviewedRecord() {
 
   return (
     <>
-      {role === 'MANAGER'
-        ? <PageTitle text={`Peer Review Detail / Peer ${peerId}`} />
-        : <PageTitle text={`${challenges[challengeId].title} / ${peerReviews[peerReviewId].challenge_label} / Peer ${peerId}`} />}
+      {role === 'MANAGER' ? (
+        <PageTitle text={`Peer Review Detail / Peer ${peerId}`} />
+      ) : (
+        <PageTitle
+          text={`${challenges[challengeId].title} / ${peerReviews[peerReviewId].challenge_label} / Peer ${peerId}`}
+        />
+      )}
 
-      {role === 'NORMAL'
-                && (
-                <SimpleBar title="Original Problem">
-                  {peerReviews[peerReviewId].target_challenge_id !== null
-                  && (
-                  <Link className={classes.textLink} to={`/my-class/${courseId}/${classId}/challenge/${peerReviews[peerReviewId].target_challenge_id}/${peerReviews[peerReviewId].target_problem_id}`} target="_blank" rel="noopener noreferrer">
-                    {`${challenges[peerReviews[peerReviewId].target_challenge_id] && challenges[peerReviews[peerReviewId].target_challenge_id].title} / ${problems[peerReviews[peerReviewId].target_problem_id] && problems[peerReviews[peerReviewId].target_problem_id].challenge_label}`}
-                    <Icon.NewWin className={classes.newTabIcon} />
-                  </Link>
-                  )}
-                </SimpleBar>
-                )}
-
-      {role === 'MANAGER' ? <BasicInfo />
-        : (
-          <SimpleBar title="Description">
-            <MathpixLoader>
-              <MathpixMarkdown text={peerReviews[peerReviewId].description} htmlTags />
-            </MathpixLoader>
-          </SimpleBar>
-        )}
-      {role === 'MANAGER'
-          && (
-          <>
-            <ReceiverInfo accountId={peerReviewRecords[recordId].receiver_id} />
-            <GraderInfo accountId={peerReviewRecords[recordId].grader_id} reviewedTime={peerReviewRecords[recordId].submit_time} />
-          </>
+      {role === 'NORMAL' && (
+        <SimpleBar title="Original Problem">
+          {peerReviews[peerReviewId].target_challenge_id !== null && (
+            <Link
+              className={classes.textLink}
+              to={`/my-class/${courseId}/${classId}/challenge/${peerReviews[peerReviewId].target_challenge_id}/${peerReviews[peerReviewId].target_problem_id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {`${
+                challenges[peerReviews[peerReviewId].target_challenge_id]
+                && challenges[peerReviews[peerReviewId].target_challenge_id].title
+              } / ${
+                problems[peerReviews[peerReviewId].target_problem_id]
+                && problems[peerReviews[peerReviewId].target_problem_id].challenge_label
+              }`}
+              <Icon.NewWin className={classes.newTabIcon} />
+            </Link>
           )}
+        </SimpleBar>
+      )}
+
+      {role === 'MANAGER' ? (
+        <BasicInfo />
+      ) : (
+        <SimpleBar title="Description">
+          <MathpixLoader>
+            <MathpixMarkdown text={peerReviews[peerReviewId].description} htmlTags />
+          </MathpixLoader>
+        </SimpleBar>
+      )}
+      {role === 'MANAGER' && (
+        <>
+          <ReceiverInfo accountId={peerReviewRecords[recordId].receiver_id} />
+          <GraderInfo
+            accountId={peerReviewRecords[recordId].grader_id}
+            reviewedTime={peerReviewRecords[recordId].submit_time}
+          />
+        </>
+      )}
 
       <SimpleBar title="Code" noIndent>
         <CodeArea value={peerReviewRecords[recordId].code === null ? '' : peerReviewRecords[recordId].code} />
       </SimpleBar>
-      {role === 'MANAGER'
-          && (
-          <>
-            <SimpleBar title="Score">
-              { peerReviewRecords[recordId].score === null ? '' : peerReviewRecords[recordId].score}
-            </SimpleBar>
-            <SimpleBar title="Comment">
-              { peerReviewRecords[recordId].comment === null ? '' : peerReviewRecords[recordId].comment}
-            </SimpleBar>
-          </>
-          )}
-      {
-        role === 'NORMAL' && (edit ? (
+      {role === 'MANAGER' && (
+        <>
+          <SimpleBar title="Score">
+            {peerReviewRecords[recordId].score === null ? '' : peerReviewRecords[recordId].score}
+          </SimpleBar>
+          <SimpleBar title="Comment">
+            {peerReviewRecords[recordId].comment === null ? '' : peerReviewRecords[recordId].comment}
+          </SimpleBar>
+        </>
+      )}
+      {role === 'NORMAL'
+        && (edit ? (
           <>
             <SimpleBar title="Review">
               <AlignedText text="Score" childrenType="field">
@@ -199,7 +226,10 @@ export default function ReviewedRecord() {
                       setScore(e.target.value);
                     }}
                   >
-                    {Array.from(new Array(peerReviews[peerReviewId].max_score - peerReviews[peerReviewId].min_score + 1), (x, i) => i + peerReviews[peerReviewId].min_score).map((item) => (
+                    {Array.from(
+                      new Array(peerReviews[peerReviewId].max_score - peerReviews[peerReviewId].min_score + 1),
+                      (x, i) => i + peerReviews[peerReviewId].min_score,
+                    ).map((item) => (
                       <MenuItem key={item} value={item}>
                         {item}
                       </MenuItem>
@@ -222,7 +252,12 @@ export default function ReviewedRecord() {
               </AlignedText>
             </SimpleBar>
             <div className={classes.buttons}>
-              <Button color="default" onClick={() => { setEdit(false); }}>
+              <Button
+                color="default"
+                onClick={() => {
+                  setEdit(false);
+                }}
+              >
                 Cancel
               </Button>
               <Button color="primary" onClick={handleSubmit}>
@@ -235,18 +270,25 @@ export default function ReviewedRecord() {
             <SimpleBar title="Review" buttons={<Button onClick={() => setEdit(true)}>Edit</Button>}>
               <AlignedText text="Score" childrenType="text">
                 <Typography variant="body1">
-                  { peerReviewRecords[recordId].score === null ? '' : peerReviewRecords[recordId].score}
+                  {peerReviewRecords[recordId].score === null ? '' : peerReviewRecords[recordId].score}
                 </Typography>
               </AlignedText>
               <AlignedText text="Comment" childrenType="text">
                 <Typography variant="body1">
-                  { peerReviewRecords[recordId].comment === null ? '' : peerReviewRecords[recordId].comment}
+                  {peerReviewRecords[recordId].comment === null ? '' : peerReviewRecords[recordId].comment}
                 </Typography>
               </AlignedText>
             </SimpleBar>
           </>
-        ))
-      }
+        ))}
+      <Snackbar
+        open={showErrorSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowErrorSnackbar(false);
+        }}
+        message={`Error:  ${errors.submitPeerReviewRecord}`}
+      />
     </>
   );
 }
