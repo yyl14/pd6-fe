@@ -54,7 +54,9 @@ export default function ScoreboardEdit({ setEdit }) {
 
   useEffect(() => {
     if (scoreboards.byId[scoreboardId] && problems.byId) {
-      setTargetLabels(scoreboards.byId[scoreboardId].target_problem_ids.map((id) => problems.byId[id].challenge_label));
+      setTargetLabels(
+        scoreboards.byId[scoreboardId].target_problem_ids.map((id) => problems.byId[id]?.challenge_label),
+      );
     }
   }, [problems.byId, scoreboardId, scoreboards.byId]);
 
