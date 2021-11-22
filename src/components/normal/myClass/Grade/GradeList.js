@@ -15,7 +15,6 @@ import {
 import { useParams } from 'react-router-dom';
 import moment from 'moment-timezone';
 import AlignedText from '../../../ui/AlignedText';
-// import CustomTable from '../../../ui/CustomTable';
 import AutoTable from '../../../ui/AutoTable';
 import FileUploadArea from '../../../ui/FileUploadArea';
 import PageTitle from '../../../ui/PageTitle';
