@@ -148,9 +148,9 @@ export default function CodingProblemInfo() {
             {
               id: 'no',
               label: 'No.',
-              minWidth: 40,
+              minWidth: 60,
               align: 'center',
-              width: 50,
+              width: 60,
               type: 'string',
             },
             {
@@ -200,9 +200,9 @@ export default function CodingProblemInfo() {
             {
               id: 'no',
               label: 'No.',
-              minWidth: 40,
+              minWidth: 60,
               align: 'center',
-              width: 50,
+              width: 60,
               type: 'string',
             },
             {
