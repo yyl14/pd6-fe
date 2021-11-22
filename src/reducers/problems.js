@@ -36,10 +36,8 @@ const byId = (state = {}, action) => {
           ...acc,
           [item.id]: {
             ...prototype,
+            ...state[item.id],
             ...item,
-            testcaseIds: state[item.id] ? state[item.id].testcaseIds : [],
-            assistingDataIds: [],
-            score: state[item.id] ? state[item.id].score : '',
           },
         }),
         state,
@@ -51,10 +49,8 @@ const byId = (state = {}, action) => {
         ...state,
         [data.id]: {
           ...prototype,
+          ...state[data.id],
           ...data,
-          testcaseIds: state[data.id] ? state[data.id].testcaseIds : [],
-          assistingDataIds: [],
-          score: state[data.id] ? state[data.id].score : '',
         },
       };
     }
@@ -103,9 +99,8 @@ const byId = (state = {}, action) => {
           ...acc,
           [item.id]: {
             ...prototype,
+            ...state[item.id],
             ...item,
-            testcaseIds: [],
-            assistingDataIds: [],
           },
         }),
         state,
@@ -142,8 +137,8 @@ const byId = (state = {}, action) => {
           ...acc,
           [problem.problem_id]: {
             ...prototype,
-            ...problem,
             ...state[problem.problem_id],
+            ...problem,
           },
         }),
         state,
