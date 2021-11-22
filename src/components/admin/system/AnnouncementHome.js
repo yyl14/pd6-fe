@@ -10,8 +10,6 @@ import AutoTable from '../../ui/AutoTable';
 import PageTitle from '../../ui/PageTitle';
 import { fetchAnnouncement } from '../../../actions/admin/system';
 
-// TODO: use ui/CustomTable to implement announcement table directly in this component
-
 /* This is a level 4 component (page component) */
 export default function AnnouncementHome() {
   const dispatch = useDispatch();

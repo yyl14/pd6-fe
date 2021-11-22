@@ -92,9 +92,15 @@ const useStyles = makeStyles((theme) => ({
     transform: 'translateX(5px) translateY(2px)',
   },
   row: {
+    '& > :first-child': {
+      paddingLeft: '30px', // 25px (Left space) + 5 px
+    },
+  },
+  tableBodyRow: {
     height: '60px',
   },
   tableBodyCell: {
+    padding: '17.5px 5px 17.5px 5px',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -142,19 +148,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const tableRefetch = (limit, offset, filters, sorts) => dispatch(action(authToken, problemId, limit, offset, filter, sort))
-
-// TODO: new API
-
-// hasSearch,
-// tableRefetch,
-// buttons,
-// columns,
-// data,
-// hasLink,
-// linkName,
-// children,
-
 export default function CustomTable({
   hasSearch,
   // searchWidthOption = 1, // will remove
@@ -180,36 +173,6 @@ export default function CustomTable({
     }
   };
 
-  // const handleChangeRowsPerPage = (event) => {
-  //   setRowsPerPage(+event.target.value);
-  //   setPage(0);
-  // };
-
-  // const searchWidth = (searchWidthOptions) => {
-  //   switch (searchWidthOptions) {
-  //     case 1:
-  //       return classes.search;
-  //     case 2:
-  //       return classes.search2;
-  //     case 3:
-  //       return classes.search3;
-  //     default:
-  //       return classes.search;
-  //   }
-  // };
-
-  // const labelMoveLeft = (icon, cols, col) => {
-  //   if (icon && icon[cols.findIndex((x) => x.id === col.id)]) {
-  //     return classes.columnLabelMoveLeft;
-  //   }
-  //   return classes.columnLabelDefault;
-  // };
-
-  // TODO: table refetch
-  // useEffect(()=>{
-  //   tableRefetch(limit, offset, filter, sort)
-  // }, [limit, offset, filter, sort])
-
   useEffect(() => {
     if (pageInput <= Math.ceil(filterData.length / rowsPerPage) && pageInput >= 1) {
       setPage(pageInput - 1);
@@ -217,39 +180,11 @@ export default function CustomTable({
   }, [filterData.length, pageInput, rowsPerPage]);
 
   useEffect(() => {
-    // if (search !== '') {
-    //   const newData = data.filter((row) => {
-    //     let cnt = 0;
-    //     columns.forEach((column) => {
-    //       if (row[column.id].indexOf(search) >= 0) {
-    //         cnt += 1;
-    //       }
-    //     });
-    //     return cnt > 0;
-    //   });
-    //   setFilterData(newData);
-    // } else {
-    //   setFilterData(data);
-    // }
     setFilterData(data);
   }, [columns, data, search]);
 
   return (
     <>
-      {/*
-      TODO: Table head component
-
-      props:
-
-      filtersConfig: [
-        {column: 'Name', type: 'TextField', options:null, operation: 'LIKE'},
-        {column: 'Role', type: 'Dropdown' options:['a', 'b', 'c'], operation: 'IN'},
-        {column: 'Start Time', type: 'Date', options: null, operation: 'BETWEEN'}],
-      filters: [['Start Time', 'LIKE', 'something'], ['Name', 'IN', ['b', 'c']], ['Start Time', 'BETWEEN', ['2021-08-16T14:21:54Z', '2021-08-16T14:21:54Z']]]
-      setFilters,
-      buttons,
-      */}
-
       <div className={hasSearch ? classes.topContent1 : classes.topContent2}>
         {hasSearch && (
           <TextField
@@ -276,7 +211,7 @@ export default function CustomTable({
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
-              <TableRow>
+              <TableRow className={classes.row}>
                 {columns.map((column) => (
                   <React.Fragment key={`${column.id}-${column.label}`}>
                     <TableCell
@@ -306,64 +241,64 @@ export default function CustomTable({
               </TableRow>
             </TableHead>
             <TableBody>
-              {
-                /* TODO
-              if => switch
-              column.type: 'text', 'number', 'link', 'date'
-              */
-                filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id} className={classes.row}>
-                    {columns.map((column) => {
-                      if (column.type === 'link') {
-                        const link = row[column.link_id];
-                        const value = row[column.id];
-                        return (
-                          <React.Fragment key={`${column.id}-${column.label}`}>
-                            <TableCell
-                              className={`${classes.tableBodyCell} ${classes.textLink}`}
-                              style={{ minWidth: column.minWidth, width: column.width, maxWidth: column.width }}
-                              align={column.align}
-                            >
-                              {column.isExternal ? (
-                                <a href={link} className={classes.textLink} target="_blank" rel="noreferrer noopener">
-                                  {column.format && typeof value === 'number' ? column.format(value) : value}
-                                </a>
-                              ) : (
-                                <Link to={link} className={classes.textLink}>
-                                  {column.format && typeof value === 'number' ? column.format(value) : value}
-                                </Link>
-                              )}
-                            </TableCell>
-                          </React.Fragment>
-                        );
-                      }
+              {filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
+                <TableRow
+                  hover
+                  role="checkbox"
+                  tabIndex={-1}
+                  key={row.id}
+                  className={`${classes.row} ${classes.tableBodyRow}`}
+                >
+                  {columns.map((column) => {
+                    if (column.type === 'link') {
+                      const link = row[column.link_id];
                       const value = row[column.id];
                       return (
                         <React.Fragment key={`${column.id}-${column.label}`}>
                           <TableCell
-                            className={classes.tableBodyCell}
+                            className={`${classes.tableBodyCell} ${classes.textLink}`}
                             style={{ minWidth: column.minWidth, width: column.width, maxWidth: column.width }}
                             align={column.align}
                           >
-                            {column.format && typeof value === 'number' ? column.format(value) : value}
+                            {column.isExternal ? (
+                              <a href={link} className={classes.textLink} target="_blank" rel="noreferrer noopener">
+                                {column.format && typeof value === 'number' ? column.format(value) : value}
+                              </a>
+                            ) : (
+                              <Link to={link} className={classes.textLink}>
+                                {column.format && typeof value === 'number' ? column.format(value) : value}
+                              </Link>
+                            )}
                           </TableCell>
                         </React.Fragment>
                       );
-                    })}
-                    {hasLink ? (
-                      <TableCell key={`${row.id}-show`} align="right">
-                        <Link to={row[linkName]} className={classes.detailLink}>
-                          <IconButton>
-                            <Icon.ArrowForwardRoundedIcon className={classes.toggleButtonIcon} />
-                          </IconButton>
-                        </Link>
-                      </TableCell>
-                    ) : (
-                      <TableCell key={`${row.id}-blank`} align="right" style={{ minWidth: 20 }} />
-                    )}
-                  </TableRow>
-                ))
-              }
+                    }
+                    const value = row[column.id];
+                    return (
+                      <React.Fragment key={`${column.id}-${column.label}`}>
+                        <TableCell
+                          className={classes.tableBodyCell}
+                          style={{ minWidth: column.minWidth, width: column.width, maxWidth: column.width }}
+                          align={column.align}
+                        >
+                          {column.format && typeof value === 'number' ? column.format(value) : value}
+                        </TableCell>
+                      </React.Fragment>
+                    );
+                  })}
+                  {hasLink ? (
+                    <TableCell key={`${row.id}-show`} align="right">
+                      <Link to={row[linkName]} className={classes.detailLink}>
+                        <IconButton>
+                          <Icon.ArrowForwardRoundedIcon className={classes.toggleButtonIcon} />
+                        </IconButton>
+                      </Link>
+                    </TableCell>
+                  ) : (
+                    <TableCell key={`${row.id}-blank`} align="right" style={{ minWidth: 20 }} />
+                  )}
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </TableContainer>

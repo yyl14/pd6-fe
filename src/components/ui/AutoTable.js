@@ -116,9 +116,15 @@ const useStyles = makeStyles((theme) => ({
     transform: 'translateX(5px) translateY(2px)',
   },
   row: {
+    '& > :first-child': {
+      paddingLeft: '25px', // 25px (Left space) + 5 px
+    },
+  },
+  tableBodyRow: {
     height: '60px',
   },
   tableBodyCell: {
+    padding: '17.5px 5px 17.5px 5px',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
