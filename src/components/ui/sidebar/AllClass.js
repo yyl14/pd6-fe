@@ -1,40 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
-import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
-
 export default function AllClass({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const { courseId } = useParams();
   const baseURL = '/all-class';
-  const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.token);
   const classes = useSelector((state) => state.classes);
   const courses = useSelector((state) => state.courses);
-
-  useEffect(() => {
-    dispatch(fetchCourses(authToken));
-  }, [dispatch, authToken, location.pathname]);
-
-  useEffect(() => {
-    dispatch(fetchClasses(authToken, courseId));
-  }, [authToken, courseId, dispatch, location.pathname]);
 
   const [display, setDisplay] = useState('unfold'); // 0: fold, 1: unfold
   const [arrow, setArrow] = useState(null);
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
-
-  useEffect(() => {
-    dispatch(fetchCourses(authToken));
-    dispatch(fetchClasses(authToken, courseId));
-  }, [authToken, courseId, dispatch]);
 
   useEffect(() => {
     // console.log(courses, classes);
@@ -46,14 +29,19 @@ export default function AllClass({
       setItemList(
         courses.allIds
           .map((id) => courses.byId[id])
+          .sort((a, b) => a.name.localeCompare(b.name))
           .map(({ id, type, name }) => ({
             type,
             text: name,
-            icon: <Icon.PeopleIcon />,
+            icon: <Icon.Class />,
             path: `${baseURL}/${id}`,
           })),
       );
-    } else if (mode === 'course' && courses.byId[courseId] !== undefined) {
+    } else if (
+      mode === 'course'
+      && courses.byId[courseId] !== undefined
+      && courses.byId[courseId].classIds !== undefined
+    ) {
       // console.log(courses, classes);
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToMain}>
@@ -63,8 +51,8 @@ export default function AllClass({
       setTitle(courses.byId[courseId].name);
       setItemList(
         courses.byId[courseId].classIds
-          .sort((a, b) => a.name - b.name)
           .map((id) => classes.byId[id])
+          .sort((a, b) => a.name.localeCompare(b.name))
           .map(({ id, name }) => ({
             type: 'Class',
             text: name,
@@ -73,7 +61,7 @@ export default function AllClass({
           })),
       );
     }
-  }, [classNames.arrow, classes, courseId, courses, history, mode]);
+  }, [classNames.arrow, classes.byId, courseId, courses, history, mode]);
 
   const fold = () => {
     setDisplay('fold');
@@ -86,8 +74,10 @@ export default function AllClass({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}
@@ -109,17 +99,16 @@ export default function AllClass({
           {display === 'unfold' && (
             <List>
               {itemList.map((item) => (
-                <ListItem button key={item.path} onClick={() => history.push(item.path)} className={classNames.item}>
-                  <ListItemIcon
-                    className={classNames.itemIcon}
-                    style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.text}
-                    className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
-                  />
+                <ListItem
+                  button
+                  key={item.id}
+                  onClick={() => history.push(item.path)}
+                  className={
+                    location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item
+                  }
+                >
+                  <ListItemIcon className={classNames.itemIcon}>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.text} className={classNames.itemText} />
                 </ListItem>
               ))}
             </List>

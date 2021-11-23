@@ -14,16 +14,11 @@ const initialState = {
   fetchDownloadFileUrl: null,
   fetchProblems: null,
   getAccountBatch: null,
+  getAccountBatchByReferral: null,
 };
 
 export default function common(state = initialState, action) {
   switch (action.type) {
-    case commonConstants.GET_INSTITUTE_START: {
-      return {
-        ...state,
-        fetchInstitutes: null,
-      };
-    }
     case commonConstants.GET_INSTITUTE_SUCCESS: {
       return {
         ...state,
@@ -72,16 +67,16 @@ export default function common(state = initialState, action) {
         replaceClassMembers: action.error,
       };
     }
-    case commonConstants.BROWSE_SUBMISSION_LANG_FAIL: {
-      return {
-        ...state,
-        browseSubmitLang: action.error,
-      };
-    }
     case commonConstants.BROWSE_SUBMISSION_LANG_SUCCESS: {
       return {
         ...state,
         browseSubmitLang: null,
+      };
+    }
+    case commonConstants.BROWSE_SUBMISSION_LANG_FAIL: {
+      return {
+        ...state,
+        browseSubmitLang: action.error,
       };
     }
     case commonConstants.FETCH_COURSE_SUCCESS: {
@@ -185,6 +180,18 @@ export default function common(state = initialState, action) {
       };
     }
 
+    case commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_SUCCESS: {
+      return {
+        ...state,
+        getAccountBatchByReferral: null,
+      };
+    }
+    case commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_FAIL: {
+      return {
+        ...state,
+        getAccountBatchByReferral: action.error,
+      };
+    }
     default: {
       return state;
     }

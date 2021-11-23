@@ -23,9 +23,6 @@ export default function GradeDetail() {
   const user = useSelector((state) => state.user);
   const [isManager, setIsManager] = useState(false);
 
-  const userLink = '/user_profile';
-  const graderLink = '/grader_profile';
-
   const [editGradeInfo, setEditGradeInfo] = useState(false);
 
   useEffect(() => {
@@ -62,7 +59,6 @@ export default function GradeDetail() {
         <GradeInfoEdit
           receiver={accounts.byId[grades.byId[gradeId].receiver_id]}
           grade={grades.byId[gradeId]}
-          link={userLink}
           handleBack={handleBack}
         />
       ) : (
@@ -70,12 +66,11 @@ export default function GradeDetail() {
           isManager={isManager}
           receiver={accounts.byId[grades.byId[gradeId].receiver_id]}
           grade={grades.byId[gradeId]}
-          link={userLink}
           handleEdit={handleEdit}
         />
       )}
 
-      <Grader grader={accounts.byId[grades.byId[gradeId].grader_id]} link={graderLink} />
+      {grades.byId[gradeId].grader_id && <Grader grader={accounts.byId[grades.byId[gradeId].grader_id]} />}
 
       {isManager && (
         <GradeDelete

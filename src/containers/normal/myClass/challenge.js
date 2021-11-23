@@ -9,7 +9,6 @@ import Statistics from '../../../components/normal/myClass/Challenge/Statistics'
 import { fetchChallenge } from '../../../actions/common/common';
 import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
 
-import GeneralLoading from '../../../components/GeneralLoading';
 import NoMatch from '../../../components/noMatch';
 // import EssayProblem from '../../../components/normal/myClass/Challenge/EssayProblem';
 
@@ -18,8 +17,8 @@ export default function Challenge() {
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
   const { challengeId } = useParams();
-  const challenges = useSelector((state) => state.challenges.byId);
   const loading = useSelector((state) => state.loading.myClass);
+  const apiLoading = useSelector((state) => state.loading.api);
 
   useEffect(() => {
     if (
@@ -31,12 +30,14 @@ export default function Challenge() {
       && !loading.challenge.addPeerReview
       && !loading.problem.deleteProblem
       && !loading.problem.deleteEssay
+      && !apiLoading.scoreboard.deleteScoreboard
       // && !loading.problem.deletePeerReview
     ) {
       dispatch(fetchChallenge(authToken, challengeId));
       dispatch(browseTasksUnderChallenge(authToken, challengeId));
     }
   }, [
+    apiLoading.scoreboard.deleteScoreboard,
     authToken,
     challengeId,
     dispatch,
@@ -49,13 +50,6 @@ export default function Challenge() {
     loading.problem.deleteEssay,
     loading.problem.deleteProblem,
   ]);
-
-  if (challenges[challengeId] === undefined) {
-    if (loading.challenge.readChallenge) {
-      return <GeneralLoading />;
-    }
-    return <NoMatch />;
-  }
 
   return (
     <>

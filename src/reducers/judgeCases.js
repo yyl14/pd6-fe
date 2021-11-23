@@ -1,14 +1,34 @@
 import { combineReducers } from 'redux';
-import { problemConstants, submissionConstants } from '../actions/myClass/constant';
+import { judgementConstants } from '../actions/api/constant';
+
+const prototype = {
+  id: null,
+  judgement_id: null,
+  testcase_id: null,
+  verdict: null,
+  time_lapse: null,
+  peak_memory: null,
+  score: null,
+};
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    case problemConstants.BROWSE_JUDGE_CASES_SUCCESS: {
-      return action.payload.reduce((acc, item) => ({ ...acc, [item.testcase_id]: { ...item } }), {});
+    case judgementConstants.BROWSE_ALL_JUDGEMENT_JUDGE_CASE_SUCCESS: {
+      const { judgeCases } = action.payload.data;
+
+      return judgeCases.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item.id]: {
+            ...prototype,
+            ...state[item.id],
+            ...item,
+          },
+        }),
+        state,
+      );
     }
-    case submissionConstants.BROWSE_JUDGE_CASES_SUCCESS: {
-      return action.payload.reduce((acc, item) => ({ ...acc, [item.testcase_id]: { ...item } }), {});
-    }
+
     default:
       return state;
   }
@@ -16,12 +36,11 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
-    case problemConstants.BROWSE_JUDGE_CASES_SUCCESS: {
-      return action.payload.map((item) => item.testcase_id);
+    case judgementConstants.BROWSE_ALL_JUDGEMENT_JUDGE_CASE_SUCCESS: {
+      const { judgeCases } = action.payload.data;
+      return [...new Set([...state, ...judgeCases.map((item) => item.id)])];
     }
-    case submissionConstants.BROWSE_JUDGE_CASES_SUCCESS: {
-      return action.payload.map((item) => item.testcase_id);
-    }
+
     default:
       return state;
   }

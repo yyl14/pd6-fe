@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
+  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider,
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
 import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
 
 export default function ProblemSet({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const { courseId: currentCourseId, classId: currentClassId } = useParams();
   const baseURL = '/problem-set';
@@ -62,8 +62,10 @@ export default function ProblemSet({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}
@@ -88,24 +90,18 @@ export default function ProblemSet({
                   {courses.byId[courseId].classIds.map((classId) => (
                     <ListItem
                       button
-                      key={classId}
-                      className={classNames.item}
+                      key={classId.id}
+                      className={
+                        location.pathname === `${baseURL}/${courseId}/${classId}`
+                          ? `${classNames.active} ${classNames.item}`
+                          : classNames.item
+                      }
                       onClick={() => history.push(`${baseURL}/${courseId}/${classId}`)}
                     >
-                      <ListItemIcon
-                        className={classNames.itemIcon}
-                        style={{ color: location.pathname === `${baseURL}/${courseId}/${classId}` ? '#1EA5FF' : '' }}
-                      >
+                      <ListItemIcon className={classNames.itemIcon}>
                         <Icon.Challenge />
                       </ListItemIcon>
-                      <ListItemText
-                        primary={classes.byId[classId].name}
-                        className={
-                          location.pathname === `${baseURL}/${courseId}/${classId}`
-                            ? classNames.activeItemText
-                            : classNames.itemText
-                        }
-                      />
+                      <ListItemText primary={classes.byId[classId].name} className={classNames.itemText} />
                     </ListItem>
                   ))}
                 </List>

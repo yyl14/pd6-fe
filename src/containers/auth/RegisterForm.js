@@ -31,7 +31,7 @@ import GeneralLoading from '../../components/GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   authForm: {
-    width: '50%',
+    width: '70%',
   },
   authTextFields: {
     width: '100%',
@@ -105,7 +105,6 @@ export default function RegisterForm() {
 
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
 
-  const [disabled, setDisabled] = useState(false);
   const [popup, setPopup] = useState(false);
   const [errorPopup, setErrorPopup] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -126,44 +125,45 @@ export default function RegisterForm() {
   };
 
   const onSubmit = () => {
-    let errorCnt = 0;
-    const newInputs = {};
+    const newInputs = labelName.reduce((acc, item) => ({ ...acc, [item]: inputs[item].trim() }), {});
+    let hasError = labelName.reduce((acc, item) => acc || newInputs[item] === '', false);
 
-    labelName.map((name) => {
-      newInputs[name] = inputs[name].trim();
-      if (newInputs[name] === '') {
-        setErrors((input) => ({ ...input, [name]: true }));
-        setErrorTexts((input) => ({ ...input, [name]: "Can't be empty" }));
-        errorCnt += 1;
-      }
-      return name;
-    });
+    setErrors(
+      labelName.reduce((acc, item) => {
+        console.log(item, newInputs[item] === '');
+        if (item !== 'password' && item !== 'confirmPassword') {
+          return { ...acc, [item]: newInputs[item].trim() === '' };
+        }
+        return { ...acc, [item]: newInputs[item] === '' };
+      }, {}),
+    );
+    setErrorTexts(
+      labelName.reduce((acc, item) => {
+        if (item !== 'password' && item !== 'confirmPassword') {
+          return { ...acc, [item]: newInputs[item].trim() === '' ? "Can't be empty" : '' };
+        }
+        return { ...acc, [item]: newInputs[item] === '' ? "Can't be empty" : '' };
+      }, {}),
+    );
 
     // check password
     const statusP = checkPassword(newInputs.password, newInputs.confirmPassword);
     if (statusP === "Passwords don't match") {
       setErrors((input) => ({ ...input, confirmPassword: true }));
       setErrorTexts((input) => ({ ...input, confirmPassword: statusP }));
-      errorCnt += 1;
+      hasError = true;
     }
 
-    labelName.map((name) => {
-      if (errors[name] === true) {
-        errorCnt += 1;
-      }
-      return name;
-    });
-
-    if (errorCnt === 0) {
+    if (!hasError) {
       dispatch(
         userRegister(
-          inputs.username,
+          inputs.username.trim(),
           inputs.password,
-          inputs.nickname,
-          inputs.realName,
-          inputs.email,
+          inputs.nickname.trim(),
+          inputs.realName.trim(),
+          inputs.email.trim(),
           transform(inputs.school),
-          inputs.studentId,
+          inputs.studentId.trim(),
         ),
       );
       setHasRequest(true);
@@ -231,6 +231,22 @@ export default function RegisterForm() {
 
   const handleClose = () => {
     setErrorPopup(false);
+  };
+
+  const onNextPage = () => {
+    const checkError = (name) => {
+      if (name === 'username' || name === 'password' || name === 'confirmPassword') return false;
+      if (inputs[name].trim() !== '') return false;
+      return true;
+    };
+
+    setErrors(labelName.reduce((acc, item) => ({ ...acc, [item]: checkError(item) }), {}));
+    setErrorTexts(labelName.reduce((acc, item) => ({ ...acc, [item]: checkError(item) ? "Can't be empty" : '' }), {}));
+    const hasError = labelName.reduce((acc, item) => acc || checkError(item), false);
+
+    if (!hasError) {
+      setNextPage(true);
+    }
   };
 
   useEffect(() => {
@@ -332,7 +348,7 @@ export default function RegisterForm() {
                 </Typography>
               </div>
               <div className={classNames.authButtons}>
-                <Button disabled={disabled} onClick={() => setNextPage(true)} color="primary">
+                <Button onClick={onNextPage} color="primary">
                   Next
                 </Button>
               </div>
@@ -420,10 +436,10 @@ export default function RegisterForm() {
                 }}
               />
               <div className={classNames.authButtons}>
-                <Button disabled={disabled} onClick={() => setNextPage(false)}>
+                <Button onClick={() => setNextPage(false)}>
                   Back
                 </Button>
-                <Button disabled={disabled} onClick={() => onSubmit()} color="primary">
+                <Button onClick={() => onSubmit()} color="primary">
                   Register
                 </Button>
               </div>

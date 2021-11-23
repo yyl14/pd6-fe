@@ -69,9 +69,24 @@ const fetchClassMemberWithAccountReferral = (token, classId) => async (dispatch)
     };
     dispatch({ type: commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_START });
     const res = await agent.get(`/class/${classId}/member/account-referral`, config);
+    const { data } = res.data;
     dispatch({
       type: commonConstants.FETCH_CLASS_MEMBER_WITH_ACCOUNT_REFERRAL_SUCCESS,
-      payload: { classId, data: res.data.data },
+      payload: {
+        classId,
+        data: {
+          classMembers: data.map(({ member_id, member_role }) => ({
+            id: `${classId}-${member_id}`,
+            account_id: member_id,
+            class_id: classId,
+            role: member_role,
+          })),
+          accounts: data.map(({ member_id, member_referral }) => ({
+            id: member_id,
+            referral: member_referral,
+          })),
+        },
+      },
     });
   } catch (error) {
     dispatch({
@@ -90,11 +105,23 @@ const replaceClassMembers = (token, classId, replacingList, onSuccess, onError) 
     };
     dispatch({ type: commonConstants.REPLACE_CLASS_MEMBERS_START });
 
-    await agent.put(`/class/${classId}/member`, replacingList, config);
+    const res = await agent.put(`/class/${classId}/member`, replacingList, config);
     dispatch({
       type: commonConstants.REPLACE_CLASS_MEMBERS_SUCCESS,
     });
-    onSuccess();
+
+    const handleResponse = (responseList) => {
+      const failedList = responseList
+        .reduce((acc, cur, index) => (cur === false ? acc.concat(index) : acc), [])
+        .map((index) => replacingList[index].account_referral);
+
+      if (failedList.length === 0) {
+        onSuccess();
+      } else {
+        onError(failedList);
+      }
+    };
+    handleResponse(res.data.data);
   } catch (error) {
     dispatch({
       type: commonConstants.REPLACE_CLASS_MEMBERS_FAIL,
@@ -296,19 +323,30 @@ const fetchAllChallengesProblems = (token, classId) => async (dispatch) => {
   }
 };
 
-const fetchProblems = (token) => async (dispatch) => {
+const fetchProblems = (token, classId, browseParams, tableId = null) => async (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
     },
+    params: browseParamsTransForm(browseParams),
   };
 
   try {
     dispatch({ type: commonConstants.FETCH_PROBLEMS_START });
-    const res = await agent.get('/problem', config);
+    const res = await agent.get(`/class/${classId}/view/problem-set`, config);
+    const { data, total_count } = res.data.data;
     dispatch({
       type: commonConstants.FETCH_PROBLEMS_SUCCESS,
-      payload: res.data.data,
+      payload: data,
+    });
+    dispatch({
+      type: autoTableConstants.AUTO_TABLE_UPDATE,
+      payload: {
+        tableId,
+        totalCount: total_count,
+        dataIds: data.map((item) => item.problem_id),
+        offset: browseParams.offset,
+      },
     });
   } catch (error) {
     dispatch({
@@ -339,6 +377,38 @@ const getAccountBatch = (token, accountId) => async (dispatch) => {
   }
 };
 
+const getAccountBatchByReferral = (token, account_referrals, teamId, role, onSuccess, onError) => async (dispatch) => {
+  try {
+    const config = {
+      headers: { 'auth-token': token },
+      params: { account_referrals: JSON.stringify([account_referrals]) },
+    };
+    dispatch({ type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_START });
+    const res = await agent.get('/account-summary/batch-by-account-referral', config);
+
+    if (res.data.data.length !== 0) {
+      const memberId = res.data.data[0].id;
+      dispatch({
+        type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_SUCCESS,
+        payload: { teamId, memberId },
+      });
+      onSuccess(res.data.data[0], role);
+    } else {
+      dispatch({
+        type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_FAIL,
+        error: 'Member does not exist.',
+      });
+      onError();
+    }
+  } catch (error) {
+    dispatch({
+      type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_FAIL,
+      error,
+    });
+    onError();
+  }
+};
+
 export {
   getInstitutes,
   fetchClassMembers,
@@ -354,4 +424,5 @@ export {
   fetchAllChallengesProblems,
   fetchProblems,
   getAccountBatch,
+  getAccountBatchByReferral,
 };

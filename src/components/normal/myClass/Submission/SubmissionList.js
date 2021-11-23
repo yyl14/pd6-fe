@@ -5,7 +5,7 @@ import moment from 'moment';
 
 // import DateRangePicker from '../../../ui/DateRangePicker';
 import { fetchAllChallengesProblems } from '../../../../actions/common/common';
-import { fetchClassSubmissions } from '../../../../actions/myClass/submission';
+import { browseSubmissionUnderClass } from '../../../../actions/api/view';
 import AutoTable from '../../../ui/AutoTable';
 import PageTitle from '../../../ui/PageTitle';
 
@@ -15,31 +15,24 @@ import GeneralLoading from '../../../GeneralLoading';
 /* This is a level 4 component (page component) */
 export default function SubmissionList() {
   const { courseId, classId } = useParams();
-  const allClass = useSelector((state) => state.classes.byId);
-  const courses = useSelector((state) => state.courses.byId);
-  const loading = useSelector((state) => state.loading.myClass.submissions);
-  const error = useSelector((state) => state.error.myClass.submissions);
-  const accountError = useSelector((state) => state.error.common.common.fetchAccount);
+  const classes = useSelector((state) => state.classes);
+  const courses = useSelector((state) => state.courses);
+  // const loading = useSelector((state) => state.loading);
+  const viewError = useSelector((state) => state.error.api.view);
   const commonLoading = useSelector((state) => state.loading.common.common);
   const submissions = useSelector((state) => state.submissions);
-  const authToken = useSelector((state) => state.auth.token);
   const accounts = useSelector((state) => state.accounts);
   const challenges = useSelector((state) => state.challenges);
   const problems = useSelector((state) => state.problem);
-  const judgments = useSelector((state) => state.judgments);
+  const authToken = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchAllChallengesProblems(authToken, classId));
   }, [authToken, classId, dispatch]);
 
-  if (courses[courseId] === undefined || allClass[classId] === undefined || submissions.allIds === undefined) {
-    if (
-      commonLoading.fetchCourse
-      || commonLoading.fetchClass
-      || commonLoading.fetchAllChallengesProblems
-      || loading.fetchClassSubmissions
-    ) {
+  if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
+    if (commonLoading.fetchCourse || commonLoading.fetchClass) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -47,125 +40,155 @@ export default function SubmissionList() {
 
   return (
     <>
-      <PageTitle text={`${courses[courseId].name} ${allClass[classId].name} / Submission`} />
+      <PageTitle text={`${courses.byId[courseId].name} ${classes.byId[classId].name} / Submission`} />
       <AutoTable
         ident={`Class Submission Table ${classId}`}
         hasFilter
         filterConfig={[
           {
-            reduxStateId: 'id',
+            reduxStateId: 'submission_id',
             label: 'ID',
             type: 'TEXT',
             operation: '=',
           },
-          // {
-          //   reduxStateId: 'username',
-          //   label: 'Username',
-          //   type: 'TEXT',
-          //   operation: 'LIKE',
-          // },
-          // {
-          //   reduxStateId: 'student_id',
-          //   label: 'Student ID',
-          //   type: 'TEXT',
-          //   operation: 'LIKE',
-          // },
-          // {
-          //   reduxStateId: 'real_name',
-          //   label: 'Real Name',
-          //   type: 'TEXT',
-          //   operation: 'LIKE',
-          // },
-          // {
-          //   reduxStateId: 'status',
-          //   label: 'Status',
-          //   type: 'ENUM',
-          //   operation: 'IN',
-          //   options: [
-          //     { value: 'Accepted', label: 'Accepted' },
-          //     { value: 'Wrong Answer', label: 'Wrong Answer' },
-          //     { value: 'Memory Limit Exceed', label: 'Memory Limit Exceed' },
-          //     { value: 'Time Limit Exceed', label: 'Time Limit Exceed' },
-          //     { value: 'Runtime Error', label: 'Runtime Error' },
-          //     { value: 'Compile Error', label: 'Compile Error' },
-          //     { value: 'Other - Contact Staff', label: 'Other - Contact Staff' },
-          //     { value: 'Restricted function', label: 'Restricted function' },
-          //     { value: 'System Error', label: 'System Error' },
-          //     { value: 'Waiting for Judge', label: 'Waiting for Judge' },
-          //   ],
-          // },
-          // {
-          //   reduxStateId: 'challenge_id',
-          //   label: 'Challenge',
-          //   type: 'ENUM',
-          //   operation: 'IN',
-          //   options: allClass[classId].challengeIds.map((id) => ({
-          //     value: id,
-          //     label: challenges.byId[id].title,
-          //   })),
-          // },
+          {
+            reduxStateId: 'username',
+            label: 'Username',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          {
+            reduxStateId: 'student_id',
+            label: 'Student ID',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+          {
+            reduxStateId: 'real_name',
+            label: 'Real Name',
+            type: 'TEXT',
+            operation: 'LIKE',
+          },
+
+          {
+            reduxStateId: 'challenge_id',
+            label: 'Challenge',
+            type: 'ENUM',
+            operation: 'IN',
+            options: classes.byId[classId].challengeIds.map((id) => ({
+              value: id,
+              label: challenges.byId[id].title,
+            })),
+          },
           {
             reduxStateId: 'problem_id',
             label: 'Problem',
             type: 'ENUM',
             operation: 'IN',
-            options: allClass[classId].challengeIds
+            options: classes.byId[classId].challengeIds
               .map((id) => problems.allIds.filter((problemId) => problems.byId[problemId].challenge_id === id))
               .flat()
               .map((problemId) => ({
                 value: problemId,
-                label: problems.byId[problemId].challenge_label,
+                label: `${challenges.byId[problems.byId[problemId].challenge_id].title} ${problems.byId[problemId].challenge_label}`,
               })),
+
           },
           {
-            reduxStateId: 'submit_time',
-            label: 'Time',
-            type: 'DATE',
-            operation: 'LIKE',
+            reduxStateId: 'verdict',
+            label: 'Status',
+            type: 'ENUM',
+            operation: 'IN',
+            options: [
+              { value: 'ACCEPTED', label: 'Accepted' },
+              { value: 'WRONG ANSWER', label: 'Wrong Answer' },
+              { value: 'MEMORY LIMIT EXCEED', label: 'Memory Limit Exceed' },
+              { value: 'TIME LIMIT EXCEED', label: 'Time Limit Exceed' },
+              { value: 'RUNTIME ERROR', label: 'Runtime Error' },
+              { value: 'COMPILE ERROR', label: 'Compile Error' },
+              { value: 'CONTACT MANAGER', label: 'Contact Manager' },
+              { value: 'FORBIDDEN ACTION', label: 'Restricted Action' },
+              { value: 'SYSTEM ERROR', label: 'System Error' },
+            ],
           },
+          // {
+          //   reduxStateId: 'submit_time',
+          //   label: 'Time',
+          //   type: 'DATE',
+          //   operation: 'LIKE',
+          // },
         ]}
         refetch={(browseParams, ident) => {
-          dispatch(fetchClassSubmissions(authToken, browseParams, ident, classId));
+          dispatch(browseSubmissionUnderClass(authToken, classId, browseParams, ident));
         }}
-        refetchErrors={[error.fetchClassSubmissions, accountError]}
+        refetchErrors={[viewError.browseSubmissionUnderClass]}
         columns={[
           {
             name: 'ID',
+            width: 140.5,
+            minWidth: 140.5,
             align: 'center',
             type: 'string',
           },
           {
             name: 'Username',
+            width: 140.5,
+            minWidth: 140.5,
             align: 'center',
-            type: 'string',
+            type: 'link',
           },
           {
             name: 'Student ID',
+            width: 140.5,
+            minWidth: 140.5,
             align: 'center',
             type: 'string',
           },
           {
             name: 'Real Name',
+            width: 140.5,
+            minWidth: 140.5,
             align: 'center',
             type: 'string',
           },
           {
             name: 'Challenge',
+            width: 140.5,
+            minWidth: 140.5,
             align: 'center',
             type: 'link',
           },
           {
             name: 'Problem',
+            width: 140.5,
+            minWidth: 140.5,
             align: 'center',
             type: 'link',
           },
           {
             name: 'Status',
+            width: 140.5,
+            minWidth: 140.5,
             align: 'center',
             type: 'string',
+            colors: {
+              'Waiting for judge': 'default',
+              'No Status': 'error',
+              Accepted: 'accepted',
+              'Wrong Answer': 'error',
+              'Memory Limit Exceed': 'error',
+              'Time Limit Exceed': 'error',
+              'Runtime Error': 'error',
+              'Compile Error': 'error',
+              'Contact Manager': 'error',
+              'Forbidden Action': 'error',
+              'System Error': 'error',
+            },
           },
           {
             name: 'Time',
+            width: 140.5,
+            minWidth: 140.5,
             align: 'center',
             type: 'string',
           },
@@ -174,7 +197,10 @@ export default function SubmissionList() {
         reduxDataToRows={(item) => ({
           id: item.id,
           ID: item.id,
-          Username: accounts.byId[item.account_id] ? accounts.byId[item.account_id].username : '',
+          Username: {
+            text: accounts.byId[item.account_id] ? accounts.byId[item.account_id].username : '',
+            path: accounts.byId[item.account_id] ? `/user-profile/${accounts.byId[item.account_id].id}` : '',
+          },
           'Student ID': accounts.byId[item.account_id] ? accounts.byId[item.account_id].student_id : '',
           'Real Name': accounts.byId[item.account_id] ? accounts.byId[item.account_id].real_name : '',
           Challenge: {
@@ -194,9 +220,7 @@ export default function SubmissionList() {
               }`
               : '',
           },
-          Status: judgments.allIds.filter((key) => judgments.byId[key].submission_id === item.id)[0]
-            ? judgments.byId[judgments.allIds.filter((key) => judgments.byId[key].submission_id === item.id)[0]].verdict
-            : 'No Status',
+          Status: item.verdict !== null ? item.verdict : 'Waiting for judge',
           Time: moment(item.submit_time).format('YYYY-MM-DD, HH:mm:ss'),
           link: `/my-class/${courseId}/${classId}/submission/${item.id}`,
         })}

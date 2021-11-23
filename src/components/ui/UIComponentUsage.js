@@ -20,10 +20,8 @@ import {
   FormControlLabel,
   Switch,
 } from '@material-ui/core';
-import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import Icon from './icon/index';
-import CopyToClipboardButton from './CopyToClipboardButton';
 import SampleTestArea from './SampleTestArea';
 import DateRangePicker from './DateRangePicker';
 import AlignedText from './AlignedText';
@@ -35,8 +33,6 @@ import TableFilterCard from './TableFilterCard';
 import ErrorText from './ErrorText';
 import MultiSelect from './MultiSelect';
 import CustomCheckbox from './CustomCheckbox';
-import AutoTable from './AutoTable';
-import { fetchAccessLog } from '../../actions/admin/system';
 
 const useStyles = makeStyles((theme) => ({
   bigTitle: {
@@ -98,13 +94,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UIComponentUsage() {
   const classes = useStyles();
-  const authToken = useSelector((state) => state.auth.token);
-  const logs = useSelector((state) => state.accessLogs);
-  const accounts = useSelector((state) => state.accounts);
-  const error = useSelector((state) => state.error.admin.system.fetchAccessLog);
-  const accountError = useSelector((state) => state.error.common.common.fetchAccount);
-
-  const dispatch = useDispatch();
 
   const [value, setValue] = useState('');
   const [selected, setSelected] = useState('C++');
@@ -439,21 +428,7 @@ export default function UIComponentUsage() {
         <Typography variant="h4">Sample Test Data Area</Typography>
         <hr className={classes.divider} />
         <div className={classes.wideComponent}>
-          <SampleTestArea
-            input="Hello"
-            output={(
-              <>
-                <Typography>World!</Typography>
-                <Typography>World!</Typography>
-                <Typography>World!</Typography>
-                <Typography>World!</Typography>
-                <Typography>World!</Typography>
-                <Typography>World!</Typography>
-                <Typography>World!</Typography>
-                <Typography>World!</Typography>
-              </>
-            )}
-          />
+          <SampleTestArea input="Hello" output="World!" />
         </div>
       </div>
       <div className={classes.wrapper}>
@@ -526,7 +501,7 @@ export default function UIComponentUsage() {
         <Typography variant="h4">Auto Table</Typography>
         <hr className={classes.divider} style={{ width: '460px' }} />
         <div className={classes.wideComponent}>
-          <AutoTable
+          {/* <AutoTable
             ident="Access Log Table"
             hasFilter
             filterConfig={[
@@ -618,7 +593,7 @@ export default function UIComponentUsage() {
               'Request Method': item.request_method,
               'Access Time': moment(item.access_time).format('YYYY-MM-DD, HH:mm:ss'),
             })}
-          />
+          /> */}
         </div>
       </div>
       <div className={classes.wrapper}>

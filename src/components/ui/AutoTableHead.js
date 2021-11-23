@@ -43,7 +43,7 @@ const AutoTableHead = ({
       {hasFilter && (
         <div className={classes.filterWrapper}>
           <div className={classes.searchFields}>
-            <FormControl variant="outlined">
+            <FormControl variant="outlined" style={{ flexShrink: 7 }}>
               <Select
                 autoWidth
                 className={classes.filterSelect}

@@ -1,40 +1,22 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Profile from '../../components/userProfile/Profile';
 import { readAccount } from '../../actions/user/user';
-
-import Header from '../../components/ui/Header';
-import Sidebar from '../../components/ui/Sidebar';
 
 function User() {
   const { accountId } = useParams();
   // const history = useHistory();
   // const location = useLocation();
   const authToken = useSelector((state) => state.user.token);
-  const accounts = useSelector((state) => state.accounts.byId);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (accounts[accountId] === undefined) {
-      dispatch(readAccount(authToken, accountId));
-    }
-  }, [accountId, accounts, authToken, dispatch]);
+    dispatch(readAccount(authToken, accountId));
+  }, [accountId, authToken, dispatch]);
 
-  return (
-    <div>
-      <Header />
-      <Sidebar />
-      <Router>
-        <div className="layout-content-container">
-          <div className="layout-content">
-            <Profile accountId={accountId} />
-          </div>
-        </div>
-      </Router>
-    </div>
-  );
+  return <Profile accountId={accountId} />;
 }
 
 export default User;

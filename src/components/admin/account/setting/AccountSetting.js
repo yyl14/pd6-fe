@@ -52,7 +52,7 @@ export default function AccountSetting() {
   useEffect(() => {
     if (accounts.byId[accountId]) {
       setCards(
-        accounts.byId[accountId].studentCard.reduce((acc, key) => {
+        accounts.byId[accountId].studentCardIds.reduce((acc, key) => {
           if (studentCards.byId[key]) {
             return [...acc, studentCards.byId[key]];
           }
@@ -65,7 +65,7 @@ export default function AccountSetting() {
   useEffect(() => {
     if (accounts.byId[accountId]) {
       setPendingCards(
-        accounts.byId[accountId].pendingStudentCard.reduce((acc, key) => {
+        accounts.byId[accountId].pendingStudentCardIds.reduce((acc, key) => {
           if (pendingStudentCards.byId[key]) {
             if (pendingStudentCards.byId[key].institute_id !== null) {
               return [...acc, pendingStudentCards.byId[key]];

@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
   children: {
     margin: '16px 0px 50px 50px',
+    width: 'calc(100% - 50px)',
   },
   childrenNoIndent: {
     margin: '16px 0px 50px 50px',

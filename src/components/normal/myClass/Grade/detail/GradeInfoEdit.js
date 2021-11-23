@@ -47,7 +47,7 @@ export default function BasicInfoEdit(props) {
         <>
           <AlignedText text="Username" maxWidth="lg" childrenType="text">
             <Typography variant="body1">
-              <Link to={props.link} className={classNames.textLink}>
+              <Link to={`/user-profile/${props.receiver.id}`} className={classNames.textLink}>
                 {props.receiver.username}
               </Link>
             </Typography>
@@ -74,7 +74,7 @@ export default function BasicInfoEdit(props) {
             />
           </AlignedText>
           <AlignedText text="Submitted Time" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">{moment(props.grade.update_time).format('YYYY-MM-DD, HH:mm')}</Typography>
+            <Typography variant="body1">{moment(props.grade.update_time).format('YYYY-MM-DD, HH:mm:ss')}</Typography>
           </AlignedText>
           <div className={classNames.buttons}>
             <Button onClick={() => props.handleBack()}>Cancel</Button>

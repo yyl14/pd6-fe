@@ -70,7 +70,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function SampleTestArea({ input, output }) {
+export default function SampleTestArea({ input, output, note = '' }) {
   const classes = useStyles();
   const ref = useRef();
   const inputRef = useRef();
@@ -97,12 +97,13 @@ export default function SampleTestArea({ input, output }) {
         } else if (
           inputRef.current.clientHeight + outputRef.current.clientHeight + noteRef.current.clientHeight
           >= 124
+          // inputRef.current.clientHeight + noteRef.current.clientHeight >= 198
         ) {
           setTruncatePosition('noteContent');
         }
       }
     }
-  }, [expanded, inputRef, noteRef, outputRef, ref, showExpandArrow]);
+  }, [expanded, inputRef, noteRef, ref, showExpandArrow]);
 
   const handleExpand = (limited, isExpanded) => {
     if (limited) {
@@ -165,10 +166,10 @@ export default function SampleTestArea({ input, output }) {
               <div className={classes.content} ref={inputRef}>
                 <Typography variant="body1">
                   {input.split('\n').map((string) => (
-                    <>
+                    <React.Fragment key={string}>
                       {string}
                       <br />
-                    </>
+                    </React.Fragment>
                   ))}
                 </Typography>
               </div>
@@ -187,28 +188,37 @@ export default function SampleTestArea({ input, output }) {
               <div className={classes.content} ref={outputRef}>
                 <Typography variant="body1">
                   {output.split('\n').map((string) => (
-                    <>
+                    <React.Fragment key={string}>
                       {string}
                       <br />
-                    </>
+                    </React.Fragment>
                   ))}
                 </Typography>
               </div>
             </>
           )}
-          {/* <div className={classes.title}>
-            <Typography variant="h6" display="inline">
-              Note
-            </Typography>
-            <div className={classes.copyIcon}>
-              <CopyToClipboardButton text={note} />
-            </div>
-          </div>
           {note && (
-            <div className={classes.content} ref={noteRef}>
-              <Typography variant="body1">{note}</Typography>
-            </div>
-          )} */}
+            <>
+              <div className={classes.title}>
+                <Typography variant="h6" display="inline">
+                  Note
+                </Typography>
+                <div className={classes.copyIcon}>
+                  <CopyToClipboardButton text={note} />
+                </div>
+              </div>
+              <div className={classes.content} ref={noteRef}>
+                <Typography variant="body1">
+                  {note.split('\n').map((string) => (
+                    <React.Fragment key={string}>
+                      {string}
+                      <br />
+                    </React.Fragment>
+                  ))}
+                </Typography>
+              </div>
+            </>
+          )}
         </CardContent>
 
         {showExpandArrow && (

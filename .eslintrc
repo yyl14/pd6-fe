@@ -1,6 +1,7 @@
 {
   "root": true,
   "extends": ["airbnb", "airbnb/hooks", "plugin:react/recommended"],
+  "plugins": ["unused-imports"],
   "rules": {
     "no-console": "off",
     "react/jsx-filename-extension": [
@@ -24,7 +25,17 @@
     "import/named": "off",
     "react/prop-types": "off",
     "max-len": "off",
-    "camelcase": "off"
+    "camelcase": "off",
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "varsIgnorePattern": "^_",
+        "args": "after-used",
+        "argsIgnorePattern": "^_"
+      }
+    ]
   },
   "parser": "babel-eslint",
   "parserOptions": {

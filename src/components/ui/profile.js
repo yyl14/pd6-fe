@@ -1,5 +1,6 @@
 import React from 'react';
 import { Typography, makeStyles } from '@material-ui/core';
+import Icon from './icon/index';
 
 const useStyles = makeStyles((theme) => ({
   mainContent: {
@@ -44,14 +45,11 @@ const useStyles = makeStyles((theme) => ({
     transition: ['transform 0.25s', 'opacity 0.25s'],
     transform: 'translateY(80px)',
   },
-  Facebook_link: {
+  socialLink: {
     margin: '5px',
-  },
-  Github_link: {
-    margin: '5px',
-  },
-  Linkedin_link: {
-    margin: '5px',
+    color: theme.palette.black.main,
+    height: '25px',
+    width: '25px',
   },
   name: {
     fontWeight: 'bold',
@@ -75,15 +73,21 @@ export default function Profile({
       <div className={classes.mainContent}>
         <div className={classes.imageAndLinks}>
           <div className={classes.overlapLinks}>
-            <a href={FB_link} className={classes.Facebook_link}>
-              <img src="../../../images/Facebook.png" alt="FacebookIcon" />
-            </a>
-            <a href={Github_link} className={classes.Github_link}>
-              <img src="../../../images/Github.png" alt="GithubIcon" />
-            </a>
-            <a href={Linkedin_link} className={classes.Linkedin_link}>
-              <img src="../../../images/Linkedin.png" alt="LinkedinIcon" />
-            </a>
+            {FB_link && (
+              <a href={FB_link} target="_blank" rel="noreferrer">
+                <Icon.Facebook className={classes.socialLink} />
+              </a>
+            )}
+            {Github_link && (
+              <a href={Github_link} target="_blank" rel="noreferrer">
+                <Icon.Github className={classes.socialLink} />
+              </a>
+            )}
+            {Linkedin_link && (
+              <a href={Linkedin_link} target="_blank" rel="noreferrer">
+                <Icon.LinkedIn className={classes.socialLink} />
+              </a>
+            )}
           </div>
           <div className={classes.image} style={{ backgroundImage: `url(${img_url})` }} />
         </div>

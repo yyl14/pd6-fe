@@ -7,7 +7,7 @@ import {
 import Icon from '../icon/index';
 
 export default function UserProfile({
-  classes, history, location, mode,
+  classes, history, location, mode, open, onClose,
 }) {
   const { accountId } = useParams();
   const accounts = useSelector((state) => state.accounts.byId);
@@ -22,9 +22,7 @@ export default function UserProfile({
         {
           text: 'Profile',
           path: `/user-profile/${accountId}`,
-          icon: (
-            <Icon.PersonIcon />
-          ),
+          icon: <Icon.Profile />,
         },
       ]);
     }
@@ -41,8 +39,10 @@ export default function UserProfile({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classes.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classes.drawerPaper }}
@@ -62,18 +62,14 @@ export default function UserProfile({
         {display === 'unfold' && (
           <List>
             {itemList.map((item) => (
-              <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classes.item}>
-                <ListItemIcon
-                  className={classes.itemIcon}
-                  style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                >
-                  {item.icon}
-
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  className={location.pathname === item.path ? classes.activeItemText : classes.itemText}
-                />
+              <ListItem
+                button
+                key={item.id}
+                onClick={() => history.push(item.path)}
+                className={location.pathname === item.path ? `${classes.active} ${classes.item}` : classes.item}
+              >
+                <ListItemIcon className={classes.itemIcon}>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} className={classes.itemText} />
               </ListItem>
             ))}
           </List>

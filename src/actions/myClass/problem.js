@@ -4,7 +4,7 @@ import { autoTableConstants } from '../component/constant';
 import browseParamsTransForm from '../../function/browseParamsTransform';
 import getTextFromUrl from '../../function/getTextFromUrl';
 
-const readProblemInfo = (token, problemId) => async (dispatch) => {
+const readProblemInfo = (token, problemId, onSuccess, onError) => async (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
@@ -18,14 +18,67 @@ const readProblemInfo = (token, problemId) => async (dispatch) => {
       type: problemConstants.READ_PROBLEM_SUCCESS,
       payload: res.data.data,
     });
+    if (typeof onSuccess === 'function') {
+      onSuccess();
+    }
   } catch (error) {
     dispatch({
       type: problemConstants.READ_PROBLEM_FAIL,
       error,
     });
+    if (typeof onError === 'function') {
+      onError();
+    }
   }
 };
 
+const readProblemWithJudgeCode = (token, problemId, onSuccess, onError) => async (dispatch) => {
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+  };
+
+  try {
+    dispatch({ type: problemConstants.READ_PROBLEM_START });
+    const res = await agent.get(`/problem/${problemId}`, config);
+    if (res.data.data.judge_source && res.data.data.judge_source.code_uuid) {
+      const config2 = {
+        headers: {
+          'auth-token': token,
+        },
+        params: {
+          filename: res.data.data.judge_source.filename,
+          as_attachment: false,
+        },
+      };
+      const res1 = await agent.get(`/s3-file/${res.data.data.judge_source.code_uuid}/url`, config2);
+      const content = await getTextFromUrl(res1.data.data.url);
+      dispatch({
+        type: problemConstants.READ_PROBLEM_SUCCESS,
+        payload: { ...res.data.data, judge_source: { ...res.data.data.judge_source, judge_code: content } },
+      });
+    } else {
+      dispatch({
+        type: problemConstants.READ_PROBLEM_SUCCESS,
+        payload: res.data.data,
+      });
+    }
+    if (typeof onSuccess === 'function') {
+      onSuccess();
+    }
+  } catch (error) {
+    dispatch({
+      type: problemConstants.READ_PROBLEM_FAIL,
+      error,
+    });
+    if (typeof onError === 'function') {
+      onError();
+    }
+  }
+};
+
+// WITH BROWSE PARAM
 const readSubmission = (token, accountId, problemId, browseParams, tableId = null) => async (dispatch) => {
   dispatch({ type: problemConstants.READ_SUBMISSION_START });
   const temp = {
@@ -63,50 +116,27 @@ const readSubmission = (token, accountId, problemId, browseParams, tableId = nul
   }
 };
 
-const readSubmissionDetail = (token, submissionId) => async (dispatch) => {
-  dispatch({ type: problemConstants.READ_SUBMISSION_JUDGE_START });
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
+// const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
+//   const config = {
+//     headers: {
+//       'auth-token': token,
+//     },
+//   };
+//   try {
+//     dispatch({ type: problemConstants.BROWSE_JUDGE_CASES_START });
+//     const res = await agent.get(`/judgment/${judgmentId}/judge-case`, config);
 
-  try {
-    const res = await agent.get(`/submission/${submissionId}/latest-judgment`, config);
-
-    dispatch({
-      type: problemConstants.READ_SUBMISSION_JUDGE_SUCCESS,
-      payload: res.data.data,
-    });
-  } catch (error) {
-    dispatch({
-      type: problemConstants.READ_SUBMISSION_JUDGE_FAIL,
-      error,
-    });
-  }
-};
-
-const browseJudgeCases = (token, judgmentId) => async (dispatch) => {
-  dispatch({ type: problemConstants.BROWSE_JUDGE_CASES_START });
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
-  try {
-    const res = await agent.get(`/judgment/${judgmentId}/judge-case`, config);
-
-    dispatch({
-      type: problemConstants.BROWSE_JUDGE_CASES_SUCCESS,
-      payload: res.data.data,
-    });
-  } catch (error) {
-    dispatch({
-      type: problemConstants.BROWSE_JUDGE_CASES_FAIL,
-      error,
-    });
-  }
-};
+//     dispatch({
+//       type: problemConstants.BROWSE_JUDGE_CASES_SUCCESS,
+//       payload: { judgmentId, data: res.data.data },
+//     });
+//   } catch (error) {
+//     dispatch({
+//       type: problemConstants.BROWSE_JUDGE_CASES_FAIL,
+//       error,
+//     });
+//   }
+// };
 
 const browseTestcase = (token, problemId) => async (dispatch) => {
   dispatch({ type: problemConstants.FETCH_TESTCASE_UNDER_PROBLEM_START });
@@ -250,30 +280,69 @@ const browseAssistingData = (token, problemId) => async (dispatch) => {
   }
 };
 
-const editProblemInfo = (token, problemId, label, title, score, testcaseDisabled, description, ioDescription, source, hint, onSuccess) => async (dispatch) => {
+const editProblemInfo = (
+  token,
+  problemId,
+  label,
+  title,
+  judgeType,
+  score,
+  testcaseDisabled,
+  description,
+  ioDescription,
+  source,
+  hint,
+  judgeLanguage,
+  judgeCode,
+  onSuccess,
+) => async (dispatch) => {
   dispatch({ type: problemConstants.EDIT_PROBLEM_START });
   const config = {
     headers: {
       'auth-token': token,
     },
   };
-  const body = {
-    challenge_label: label,
-    title,
-    full_score: score,
-    testcase_disabled: testcaseDisabled,
-    description,
-    io_description: ioDescription,
-    source,
-    hint,
-  };
   try {
-    await agent.patch(`/problem/${problemId}`, body, config);
-
-    dispatch({
-      type: problemConstants.EDIT_PROBLEM_SUCCESS,
-      payload: { problemId, content: body },
-    });
+    if (judgeType === 'NORMAL') {
+      const body = {
+        challenge_label: label,
+        title,
+        judge_type: judgeType,
+        full_score: score,
+        testcase_disabled: testcaseDisabled,
+        description,
+        io_description: ioDescription,
+        source,
+        hint,
+      };
+      await agent.patch(`/problem/${problemId}`, body, config);
+      dispatch({
+        type: problemConstants.EDIT_PROBLEM_SUCCESS,
+        payload: { problemId, content: body },
+      });
+    } else {
+      const body = {
+        challenge_label: label,
+        title,
+        judge_type: judgeType,
+        full_score: score,
+        testcase_disabled: testcaseDisabled,
+        description,
+        io_description: ioDescription,
+        source,
+        hint,
+        judge_source: {
+          judge_language: judgeLanguage,
+          judge_code: judgeCode,
+        },
+      };
+      await agent.patch(`/problem/${problemId}`, body, config);
+      dispatch({
+        type: problemConstants.EDIT_PROBLEM_SUCCESS,
+        payload: { problemId, content: body },
+      });
+    }
+    // console.log(judgeType, judgeLanguage, judgeCode);
   } catch (error) {
     dispatch({
       type: problemConstants.EDIT_PROBLEM_FAIL,
@@ -305,7 +374,7 @@ const deleteProblem = (token, problemId) => async (dispatch) => {
   }
 };
 
-const submitCode = (token, problemId, languageId, content, onSubmitSuccess) => async (dispatch) => {
+const submitCode = (token, problemId, languageId, content, onSuccess, onError) => async (dispatch) => {
   dispatch({ type: problemConstants.SUBMIT_PROBLEM_START });
   const config = {
     headers: {
@@ -326,16 +395,17 @@ const submitCode = (token, problemId, languageId, content, onSubmitSuccess) => a
     dispatch({
       type: problemConstants.SUBMIT_PROBLEM_SUCCESS,
     });
-    onSubmitSuccess();
+    onSuccess();
   } catch (error) {
     dispatch({
       type: problemConstants.SUBMIT_PROBLEM_FAIL,
       error,
     });
+    onError();
   }
 };
 
-const editTestcase = (token, testcaseId, isSample, score, timeLimit, memoryLimit, isDisabled) => async (dispatch) => {
+const editTestcase = (token, testcaseId, isSample, score, timeLimit, memoryLimit, note, isDisabled) => async (dispatch) => {
   // just edit basic info
   dispatch({ type: problemConstants.EDIT_TESTCASE_START });
   const config = {
@@ -348,6 +418,7 @@ const editTestcase = (token, testcaseId, isSample, score, timeLimit, memoryLimit
     score,
     time_limit: timeLimit,
     memory_limit: memoryLimit,
+    note,
     is_disabled: isDisabled,
   };
   try {
@@ -376,7 +447,7 @@ const browseTestcases = (token, problemId) => async (dispatch) => {
     const res = await agent.get(`/problem/${problemId}/testcase`, config);
     dispatch({
       type: problemConstants.BROWSE_TESTCASES_SUCCESS,
-      payload: res.data.data,
+      payload: { problemId, testcases: res.data.data },
     });
   } catch (error) {
     dispatch({
@@ -403,6 +474,28 @@ const readProblemScore = (token, problemId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: problemConstants.READ_PROBLEM_SCORE_FAIL,
+      error,
+    });
+  }
+};
+
+const readProblemBestScore = (token, problemId) => async (dispatch) => {
+  dispatch({ type: problemConstants.READ_PROBLEM_BEST_SCORE_START });
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+  };
+  try {
+    const res = await agent.get(`/problem/${problemId}/best-score`, config);
+
+    dispatch({
+      type: problemConstants.READ_PROBLEM_BEST_SCORE_SUCCESS,
+      payload: { data: res.data.data, problemId },
+    });
+  } catch (error) {
+    dispatch({
+      type: problemConstants.READ_PROBLEM_BEST_SCORE_FAIL,
       error,
     });
   }
@@ -495,6 +588,8 @@ const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData
           time_limit: sampleTableData[id].time_limit,
           memory_limit: sampleTableData[id].memory_limit,
           is_disabled: false,
+          note: sampleTableData[id].note,
+          label: sampleTableData[id].label,
         };
         try {
           const res = await agent.post(`/problem/${problemId}/testcase`, body, config);
@@ -528,9 +623,11 @@ const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData
           testcases[id].time_limit !== sampleTableData[id].time_limit
             || testcases[id].memory_limit !== sampleTableData[id].memory_limit
             || testcases[id].is_disabled !== false
+            || testcases[id].note !== sampleTableData[id].note
         ) {
+          // console.log('editTestcase', sampleTableData[id]);
           await dispatch(
-            editTestcase(token, id, true, 0, sampleTableData[id].time_limit, sampleTableData[id].memory_limit, false),
+            editTestcase(token, id, true, 0, sampleTableData[id].time_limit, sampleTableData[id].memory_limit, sampleTableData[id].note, false),
           );
         }
         // upload file
@@ -615,7 +712,9 @@ const saveTestcases = (token, problemId, testcases, testcaseDataIds, testcaseTab
           score: testcaseTableData[id].score,
           time_limit: testcaseTableData[id].time_limit,
           memory_limit: testcaseTableData[id].memory_limit,
+          note: testcaseTableData[id].note,
           is_disabled: !status,
+          label: testcaseTableData[id].label,
         };
         try {
           const res = await agent.post(`/problem/${problemId}/testcase`, body, config);
@@ -650,6 +749,7 @@ const saveTestcases = (token, problemId, testcases, testcaseDataIds, testcaseTab
             || testcases[id].memory_limit !== testcaseTableData[id].memory_limit
             || testcases[id].score !== testcaseTableData[id].score
             || testcases[id].is_disabled !== !status
+            || testcases[id].note !== testcaseTableData[id].note
         ) {
           await dispatch(
             editTestcase(
@@ -659,6 +759,7 @@ const saveTestcases = (token, problemId, testcases, testcaseDataIds, testcaseTab
               testcaseTableData[id].score,
               testcaseTableData[id].time_limit,
               testcaseTableData[id].memory_limit,
+              testcaseTableData[id].note,
               !status,
             ),
           );
@@ -802,19 +903,74 @@ const rejudgeProblem = (token, problemId) => async (dispatch) => {
   }
 };
 
+// // WITH BROWSE PARAM
+// const viewMySubmissionUnderProblem = (token, accountId, problemId, browseParams, tableId = null) => async (dispatch) => {
+//   dispatch({ type: problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_START });
+//   const temp = {
+//     ...browseParams,
+//     filter: [['problem_id', '=', problemId]].concat(browseParams.filter),
+//     account_id: accountId,
+//   };
+//   const config = {
+//     headers: {
+//       'auth-token': token,
+//     },
+//     params: browseParamsTransForm(temp),
+//   };
+//   try {
+//     const res = await agent.get('/view/my-submission', config);
+//     const { data, total_count } = res.data.data;
+//     const config2 = {
+//       headers: { 'auth-token': token },
+//       params: { submission_ids: JSON.stringify(data.map((item) => item.submission_id)) },
+//     };
+//     const res2 = await agent.get('/submission/judgment/batch', config2);
+//     const judgments = res2.data.data;
+//     const submissions = data.map((item) => {
+//       const latestJudgment = judgments.filter((judgment) => judgment.submission_id === item.submission_id);
+//       return {
+//         id: item.submission_id,
+//         verdict: item.verdict,
+//         submit_time: item.submit_time,
+//         latestJudgmentId: latestJudgment.length === 0 ? null : latestJudgment[0].id,
+//       };
+//     });
+
+//     dispatch({
+//       type: problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_SUCCESS,
+//       payload: { problemId, submissions, judgments },
+//     });
+//     dispatch({
+//       type: autoTableConstants.AUTO_TABLE_UPDATE,
+//       payload: {
+//         tableId,
+//         totalCount: total_count,
+//         dataIds: submissions.map((item) => item.id),
+//         offset: browseParams.offset,
+//       },
+//     });
+//   } catch (error) {
+//     dispatch({
+//       type: problemConstants.VIEW_MY_SUBMISSION_UNDER_PROBLEM_FAIL,
+//       error,
+//     });
+//   }
+// };
+
 export {
   readProblemInfo,
+  readProblemWithJudgeCode,
   editProblemInfo,
   deleteProblem,
-  readSubmissionDetail,
   readSubmission,
   browseTestcase,
   browseAssistingData,
   submitCode,
   editTestcase,
-  browseJudgeCases,
+  // browseJudgeCases,
   browseTestcases,
   readProblemScore,
+  readProblemBestScore,
   downloadAllSamples,
   downloadAllTestcases,
   rejudgeSubmission,
@@ -822,4 +978,5 @@ export {
   saveSamples,
   saveTestcases,
   saveAssistingData,
+  // viewMySubmissionUnderProblem,
 };

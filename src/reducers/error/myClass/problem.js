@@ -3,7 +3,6 @@ import { problemConstants } from '../../../actions/myClass/constant';
 const initialState = {
   readProblem: null,
   readSubmission: null,
-  readJudgment: null,
   browseTestcase: null,
   browseAssistingData: null,
   editProblem: null,
@@ -19,11 +18,13 @@ const initialState = {
   addTestcase: null,
   browseJudgeCases: null,
   readProblemScore: null,
+  readProblemBestScore: null,
   downloadSamples: null,
   downloadTestcases: null,
   rejudgeSubmission: null,
   browseTestcases: null,
   rejudgeProblem: null,
+  viewMySubmissionUnderProblem: null,
 };
 
 export default function problem(state = initialState, action) {
@@ -39,11 +40,6 @@ export default function problem(state = initialState, action) {
         readSubmission: action.error,
       };
 
-    case problemConstants.READ_SUBMISSION_JUDGE_FAIL:
-      return {
-        ...state,
-        readJudgment: action.error,
-      };
     case problemConstants.BROWSE_JUDGE_CASES_FAIL:
       return {
         ...state,
@@ -89,6 +85,11 @@ export default function problem(state = initialState, action) {
         ...state,
         addAssistingData: action.error,
       };
+    case problemConstants.SUBMIT_PROBLEM_START:
+      return {
+        ...state,
+        submitCode: null,
+      };
     case problemConstants.SUBMIT_PROBLEM_FAIL:
       return {
         ...state,
@@ -118,6 +119,17 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         readProblemScore: action.error,
+      };
+
+    case problemConstants.READ_PROBLEM_BEST_SCORE_SUCCESS:
+      return {
+        ...state,
+        readProblemBestScore: null,
+      };
+    case problemConstants.READ_PROBLEM_BEST_SCORE_FAIL:
+      return {
+        ...state,
+        readProblemBestScore: action.error,
       };
 
     case problemConstants.DOWNLOAD_ALL_SAMPLE_TESTCASE_SUCCESS:

@@ -1,6 +1,15 @@
 import { combineReducers } from 'redux';
 import { courseConstants } from '../actions/admin/constant';
 import { commonConstants } from '../actions/common/constant';
+import { viewConstants } from '../actions/api/constant';
+
+const prototype = {
+  id: null,
+  name: null,
+  type: null,
+  is_deleted: null,
+  classIds: [],
+};
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -47,6 +56,10 @@ const byId = (state = {}, action) => {
         state,
       );
     }
+    case viewConstants.BROWSE_MY_SUBMISSION_SUCCESS: {
+      const { courses } = action.payload.data;
+      return courses.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...item } }), state);
+    }
     default:
       return state;
   }
@@ -61,6 +74,10 @@ const allIds = (state = [], action) => {
     case commonConstants.FETCH_COURSE_SUCCESS: {
       const { id } = action.payload;
       return [...new Set([...state, id])];
+    }
+    case viewConstants.BROWSE_MY_SUBMISSION_SUCCESS: {
+      const { courses } = action.payload.data;
+      return [...new Set([...courses.map((item) => item.id), ...state])];
     }
     default:
       return state;

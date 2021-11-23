@@ -10,8 +10,6 @@ import AutoTable from '../../ui/AutoTable';
 import PageTitle from '../../ui/PageTitle';
 import { fetchAnnouncement } from '../../../actions/admin/system';
 
-// TODO: use ui/CustomTable to implement announcement table directly in this component
-
 /* This is a level 4 component (page component) */
 export default function AnnouncementHome() {
   const dispatch = useDispatch();
@@ -67,18 +65,22 @@ export default function AnnouncementHome() {
             name: 'Title',
             align: 'center',
             type: 'string',
+            width: 200,
           },
           {
             name: 'Post Time',
             align: 'center',
             type: 'string',
+            width: 200,
           },
           {
             name: 'End Time',
             align: 'center',
             type: 'string',
+            width: 200,
           },
         ]}
+        defaultSort={['post_time', 'DESC']}
         reduxData={announcements}
         reduxDataToRows={(item) => ({
           id: item.id,

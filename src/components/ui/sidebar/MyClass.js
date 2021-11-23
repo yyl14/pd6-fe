@@ -7,7 +7,7 @@ import {
 import Icon from '../icon/index';
 
 export default function MyClass({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const { courseId, classId } = useParams();
   const baseURL = '/my-class';
@@ -33,12 +33,20 @@ export default function MyClass({
         && classes[classId] !== undefined
       ) {
         // console.log(userClasses);
-        setDisplay(userClasses.map((item) => item.class_id === Number(classId)));
-        setTitles(userClasses.map((item) => `${item.course_name} ${item.class_name}`));
+        setDisplay(
+          userClasses
+            .sort((a, b) => b.class_name.localeCompare(a.class_name) || b.course_name.localeCompare(a.course_name))
+            .map((item) => item.class_id === Number(classId)),
+        );
+        setTitles(
+          userClasses
+            .sort((a, b) => b.class_name.localeCompare(a.class_name) || b.course_name.localeCompare(a.course_name))
+            .map((item) => `${item.course_name} ${item.class_name}`),
+        );
 
         setItemLists(
           userClasses
-            .sort((a, b) => a.name - b.name)
+            .sort((a, b) => b.class_name.localeCompare(a.class_name) || b.course_name.localeCompare(a.course_name))
             .map((item) => {
               switch (item.role) {
                 case 'MANAGER': {
@@ -121,8 +129,10 @@ export default function MyClass({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}
@@ -141,7 +151,7 @@ export default function MyClass({
                   {titles[id]}
                 </Typography>
                 {userClass.role === 'MANAGER' && (
-                  <div className={classNames.titleRightIcon}>
+                  <div className={classNames.titleRightIcon} style={{ marginRight: '0px' }}>
                     <Icon.TA />
                   </div>
                 )}
@@ -152,20 +162,14 @@ export default function MyClass({
                   {itemLists[id].map((item) => (
                     <ListItem
                       button
-                      key={item.text}
+                      key={item.path}
                       onClick={() => history.push(item.path)}
-                      className={classNames.item}
+                      className={
+                        location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item
+                      }
                     >
-                      <ListItemIcon
-                        className={classNames.itemIcon}
-                        style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                      >
-                        {item.icon}
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={item.text}
-                        className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
-                      />
+                      <ListItemIcon className={classNames.itemIcon}>{item.icon}</ListItemIcon>
+                      <ListItemText primary={item.text} className={classNames.itemText} />
                     </ListItem>
                   ))}
                 </List>

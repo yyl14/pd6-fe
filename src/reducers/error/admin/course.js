@@ -3,7 +3,7 @@ import { courseConstants } from '../../../actions/admin/constant';
 const initialState = {
   fetchCourses: null,
   addCourse: null,
-  editCourse: null,
+  renameCourse: null,
   deleteCourse: null,
 
   fetchClasses: null,

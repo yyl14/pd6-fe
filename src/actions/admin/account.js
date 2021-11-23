@@ -1,7 +1,5 @@
 import agent from '../agent';
 import { accountConstants } from './constant';
-import { autoTableConstants } from '../component/constant';
-import browseParamsTransForm from '../../function/browseParamsTransform';
 
 const getInstitute = (token, instituteId) => (dispatch) => {
   const config = {
@@ -27,7 +25,7 @@ const getInstitute = (token, instituteId) => (dispatch) => {
     });
 };
 
-const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled) => (dispatch) => {
+const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled, onSuccess, onError) => (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
@@ -57,12 +55,14 @@ const addInstitute = (token, abbreviatedName, fullName, emailDomain, isDisabled)
           is_disabled: isDisabled,
         },
       });
+      onSuccess();
     })
     .catch((error) => {
       dispatch({
         type: accountConstants.ADD_INSTITUTE_FAIL,
         error,
       });
+      onError();
     });
 };
 
@@ -115,7 +115,7 @@ const editAccount = (token, id, realName, nickName, email) => async (dispatch) =
       accountInfo.alternative_email = email;
     }
 
-    const res = await agent.patch(`/account/${id}`, accountInfo, config);
+    await agent.patch(`/account/${id}`, accountInfo, config);
     dispatch({ type: accountConstants.EDIT_ACCOUNT_SUCCESS });
   } catch (error) {
     dispatch({
@@ -200,7 +200,7 @@ const fetchStudentCards = (token, id) => (dispatch) => {
 };
 
 // SM: edit any account
-const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (dispatch) => {
+const addStudentCard = (token, id, instituteId, emailPrefix, studentId, onSuccess, onError) => (dispatch) => {
   const config = {
     headers: {
       'auth-token': token,
@@ -219,12 +219,14 @@ const addStudentCard = (token, id, instituteId, emailPrefix, studentId) => (disp
     )
     .then(() => {
       dispatch({ type: accountConstants.ADD_STUDENT_CARD_SUCCESS });
+      onSuccess();
     })
     .catch((error) => {
       dispatch({
         type: accountConstants.ADD_STUDENT_CARD_FAIL,
         error,
       });
+      onError();
     });
 };
 
@@ -253,38 +255,6 @@ const editPassword = (token, id, newPassword) => (dispatch) => {
         error,
       });
     });
-};
-
-// SM: fetch all accounts
-const fetchAccounts = (token, browseParams, tableId = null) => async (dispatch) => {
-  try {
-    dispatch({ type: accountConstants.FETCH_ACCOUNTS_START });
-    const config = {
-      headers: { 'auth-token': token },
-      params: browseParamsTransForm(browseParams),
-    };
-    const res = await agent.get('/account', config);
-    const { data, total_count } = res.data.data;
-
-    dispatch({
-      type: accountConstants.FETCH_ACCOUNTS_SUCCESS,
-      payload: data,
-    });
-    dispatch({
-      type: autoTableConstants.AUTO_TABLE_UPDATE,
-      payload: {
-        tableId,
-        totalCount: total_count,
-        dataIds: data.map((item) => item.id),
-        offset: browseParams.offset,
-      },
-    });
-  } catch (error) {
-    dispatch({
-      type: accountConstants.FETCH_ACCOUNTS_FAIL,
-      error,
-    });
-  }
 };
 
 const browsePendingStudentCards = (token, accountId) => async (dispatch) => {
@@ -348,6 +318,99 @@ const deletePendingStudentCard = (token, emailVerificationId) => async (dispatch
   }
 };
 
+const addAccount = (token, realName, userName, password, altMail, onSuccess, onError) => async (dispatch) => {
+  try {
+    const config = { headers: { 'auth-token': token } };
+    dispatch({ type: accountConstants.ADD_ACCOUNT_START });
+    await agent.post(
+      '/account-normal',
+      {
+        real_name: realName,
+        username: userName,
+        password,
+        alternative_email: altMail,
+        nickname: '',
+      },
+      config,
+    );
+    dispatch({ type: accountConstants.ADD_ACCOUNT_SUCCESS });
+    onSuccess();
+  } catch (error) {
+    dispatch({
+      type: accountConstants.ADD_ACCOUNT_FAIL,
+      error,
+    });
+    onError();
+  }
+};
+
+const importAccount = (token, files, onSuccess, onError) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'auth-token': token,
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+
+    dispatch({ type: accountConstants.IMPORT_ACCOUNT_START });
+    await Promise.all(
+      files.map(async (file) => {
+        const formData = new FormData();
+        formData.append('account_file', file);
+        await agent.post('/account-import', formData, config);
+      }),
+    );
+    dispatch({ type: accountConstants.IMPORT_ACCOUNT_SUCCESS });
+    onSuccess();
+  } catch (error) {
+    dispatch({
+      type: accountConstants.IMPORT_ACCOUNT_FAIL,
+      error,
+    });
+    onError();
+  }
+};
+
+const downloadAccountFile = (token) => async (dispatch) => {
+  try {
+    const config1 = {
+      headers: {
+        'auth-token': token,
+      },
+    };
+    dispatch({ type: accountConstants.DOWNLOAD_ACCOUNT_FILE_START });
+    const res = await agent.get('/account/template', config1);
+
+    const config2 = {
+      headers: {
+        'auth-token': token,
+      },
+      params: {
+        filename: res.data.data.filename,
+        as_attachment: true,
+      },
+    };
+    const res2 = await agent.get(`/s3-file/${res.data.data.s3_file_uuid}/url`, config2);
+
+    fetch(res2.data.data.url).then((t) => t.blob().then((b) => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(b);
+      a.setAttribute('download', res.data.data.filename);
+      a.click();
+    }));
+
+    dispatch({
+      type: accountConstants.DOWNLOAD_ACCOUNT_FILE_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: accountConstants.DOWNLOAD_ACCOUNT_FILE_FAIL,
+      error,
+    });
+  }
+};
+
 export {
   getInstitute,
   addInstitute,
@@ -358,8 +421,10 @@ export {
   fetchStudentCards,
   addStudentCard,
   editPassword,
-  fetchAccounts,
   browsePendingStudentCards,
   resendEmailVerification,
   deletePendingStudentCard,
+  addAccount,
+  importAccount,
+  downloadAccountFile,
 };

@@ -30,7 +30,7 @@ export default function GradeInfo(props) {
         <>
           <AlignedText text="Username" maxWidth="lg" childrenType="text">
             <Typography variant="body1">
-              <Link to={props.link} className={classNames.textLink}>
+              <Link to={`/user-profile/${props.receiver.id}`} className={classNames.textLink}>
                 {props.receiver.username}
               </Link>
             </Typography>
@@ -51,7 +51,7 @@ export default function GradeInfo(props) {
             <Typography variant="body1">{props.grade.comment}</Typography>
           </AlignedText>
           <AlignedText text="Submitted Time" maxWidth="lg" childrenType="text">
-            <Typography variant="body1">{moment(props.grade.update_time).format('YYYY-MM-DD, HH:mm')}</Typography>
+            <Typography variant="body1">{moment(props.grade.update_time).format('YYYY-MM-DD, HH:mm:ss')}</Typography>
           </AlignedText>
         </>
       </SimpleBar>

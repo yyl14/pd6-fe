@@ -6,11 +6,8 @@ import {
 } from '@material-ui/core';
 import Icon from '../icon/index';
 
-import { fetchChallenges } from '../../../actions/myClass/challenge';
-import { fetchClass, fetchCourse } from '../../../actions/common/common';
-
 export default function AllClassChallenge({
-  classNames, history, location, mode,
+  classNames, history, location, mode, open, onClose,
 }) {
   const {
     courseId, classId, challengeId, problemId, submissionId,
@@ -28,31 +25,24 @@ export default function AllClassChallenge({
   const problems = useSelector((state) => state.problem);
   const essays = useSelector((state) => state.essays);
 
-  useEffect(() => {
-    dispatch(fetchCourse(authToken, courseId));
-    dispatch(fetchClass(authToken, classId));
-    dispatch(fetchChallenges(authToken, classId));
-  }, [dispatch, authToken, classId, courseId]);
-
   const [display, setDisplay] = useState('unfold');
 
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
   const [arrow, setArrow] = useState(null);
-  const [TAicon, setTAicon] = useState();
 
   useEffect(() => {
     const goBackToChallenge = () => {
       history.push(`${baseURL}/${courseId}/${classId}/challenge`);
     };
     const goBackToProblem = () => {
-      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}`);
+      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}`);
     };
     const goBackToSubmission = () => {
       history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
     };
     if (mode === 'challenge') {
-      if (challenges[challengeId] !== undefined) {
+      if (challenges[challengeId] !== undefined && challenges[challengeId].problemIds !== undefined) {
         setArrow(
           <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
             <Icon.ArrowBackRoundedIcon />
@@ -70,21 +60,13 @@ export default function AllClassChallenge({
             ].concat(
               challenges[challengeId].problemIds
                 .map((id) => problems.byId[id])
+                .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
                 .map(({ id, challenge_label }) => ({
                   text: challenge_label,
                   icon: <Icon.Code />,
                   path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${id}`,
                 })),
-            ) /*
-              .concat(
-                essays.allIds
-                  .map((id) => essays.byId[id])
-                  .map(({ id, challenge_label }) => ({
-                    text: challenge_label,
-                    icon: <Icon.Paper />,
-                    path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/essay/${id}`,
-                  })),
-              ), */,
+            ),
           );
         } else {
           setItemList([
@@ -101,9 +83,6 @@ export default function AllClassChallenge({
       && challenges[challengeId] !== undefined
       && problems.byId[problemId] !== undefined
     ) {
-      // if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
-      //   setTAicon(<Icon.TA className={classNames.titleTA} />);
-      // }
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToProblem}>
           <Icon.ArrowBackRoundedIcon />
@@ -123,9 +102,6 @@ export default function AllClassChallenge({
         },
       ]);
     } else if (mode === 'submission_detail') {
-      // if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
-      //   setTAicon(<Icon.TA className={classNames.titleTA} />);
-      // }
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToSubmission}>
           <Icon.ArrowBackRoundedIcon />
@@ -159,8 +135,10 @@ export default function AllClassChallenge({
     return (
       <div>
         <Drawer
+          variant="persistent"
+          open={open}
+          onClose={onClose}
           className={classNames.drawer}
-          variant="permanent"
           anchor="left"
           PaperProps={{ elevation: 5 }}
           classes={{ paper: classNames.drawerPaper }}
@@ -172,8 +150,10 @@ export default function AllClassChallenge({
   return (
     <div>
       <Drawer
+        variant="persistent"
+        open={open}
+        onClose={onClose}
         className={classNames.drawer}
-        variant="permanent"
         anchor="left"
         PaperProps={{ elevation: 5 }}
         classes={{ paper: classNames.drawerPaper }}
@@ -189,23 +169,21 @@ export default function AllClassChallenge({
             <Typography variant="h4" className={classNames.titleText}>
               {title}
             </Typography>
-            {TAicon}
           </div>
           <Divider variant="middle" className={classNames.divider} />
           {display === 'unfold' && (
             <List>
               {itemList.map((item) => (
-                <ListItem button key={item.text} onClick={() => history.push(item.path)} className={classNames.item}>
-                  <ListItemIcon
-                    className={classNames.itemIcon}
-                    style={{ color: location.pathname === item.path ? '#1EA5FF' : '' }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.text}
-                    className={location.pathname === item.path ? classNames.activeItemText : classNames.itemText}
-                  />
+                <ListItem
+                  button
+                  key={item.id}
+                  onClick={() => history.push(item.path)}
+                  className={
+                    location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item
+                  }
+                >
+                  <ListItemIcon className={classNames.itemIcon}>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.text} className={classNames.itemText} />
                 </ListItem>
               ))}
             </List>

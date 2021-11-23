@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Snackbar, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { fetchChallengeSummary, fetchChallengeMemberSubmission } from '../../../../actions/myClass/challenge';
 import { fetchDownloadFileUrl } from '../../../../actions/common/common';
-import { fetchSubmission } from '../../../../actions/myClass/submission';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
 import CustomTable from '../../../ui/CustomTable';
 import PageTitle from '../../../ui/PageTitle';
-import Icon from '../../../ui/icon/index';
+import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
 
 const useStyles = makeStyles(() => ({
-  placeholder: {
-    height: '50px',
+  copyButton: {
+    marginRight: '10px',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
   },
 }));
 
@@ -25,7 +26,9 @@ const accountColumn = [
     minWidth: 150,
     align: 'center',
     width: 500,
-    type: 'string',
+    type: 'link',
+    isExternal: true,
+    link_id: 'path',
   },
   {
     id: 'student_id',
@@ -59,7 +62,6 @@ export default function Statistics() {
   const downloadLinks = useSelector((state) => state.downloadLinks.byId);
   const accounts = useSelector((state) => state.accounts);
 
-  const [showSnackbar, setShowSnackbar] = useState(false);
   const [statisticsData, setStatisticsData] = useState([]);
   const [scoreboardTitle, setScoreboardTitle] = useState(accountColumn);
   const [scoreboardData, setScoreboardData] = useState([]);
@@ -78,7 +80,7 @@ export default function Statistics() {
       && challenges[challengeId].statistics.summary
       && challenges[challengeId].statistics.memberSubmission
     ) {
-      setStatisticsData(challenges[challengeId].statistics.summary);
+      setStatisticsData(challenges[challengeId].statistics.summary.map((item, i) => ({ ...item, id: i })));
 
       const problemList = challenges[challengeId].problemIds.map((id) => ({
         id: `problem-${id}`,
@@ -112,6 +114,7 @@ export default function Statistics() {
           memberChallengeDetail.username = classMember.username;
           memberChallengeDetail.student_id = classMember.student_id;
           memberChallengeDetail.real_name = classMember.real_name;
+          memberChallengeDetail.path = `${window.location.origin}/user-profile/${classMember.id}`;
         }
 
         if (member.problem_scores) {
@@ -194,63 +197,56 @@ export default function Statistics() {
   return (
     <>
       <PageTitle text={`${challengeTitle} / Statistics`} />
-      <SimpleBar title="Statistics" />
-      <SimpleTable
-        data={statisticsData}
-        columns={[
-          {
-            id: 'task_label',
-            label: 'Task',
-            minWidth: 50,
-            align: 'center',
-            width: 120,
-            type: 'string',
-          },
-          {
-            id: 'solved_member_count',
-            label: 'Solved Member',
-            minWidth: 50,
-            align: 'center',
-            width: 200,
-            type: 'string',
-          },
-          {
-            id: 'submission_count',
-            label: 'Submission',
-            minWidth: 50,
-            align: 'center',
-            width: 120,
-            type: 'string',
-          },
-          {
-            id: 'member_count',
-            label: 'User Tried',
-            minWidth: 50,
-            align: 'center',
-            width: 120,
-            type: 'string',
-          },
-        ]}
-      />
-      <div className={classes.placeholder} />
-      <SimpleBar title="Scoreboard" />
-      <CustomTable
-        buttons={(
-          <CopyToClipboard options={{ format: 'text/html' }} text={scoreboardHTML} onCopy={() => setShowSnackbar(true)}>
-            <Button>
-              <Icon.Copy />
-            </Button>
-          </CopyToClipboard>
-        )}
-        data={scoreboardData}
-        columns={scoreboardTitle}
-      />
-      <Snackbar
-        open={showSnackbar}
-        autoHideDuration={2000}
-        message="Entire table is copied to clipboard."
-        onClose={() => setShowSnackbar(false)}
-      />
+      <SimpleBar title="Global Statistics" noIndent>
+        <SimpleTable
+          data={statisticsData}
+          columns={[
+            {
+              id: 'task_label',
+              label: 'Task',
+              minWidth: 50,
+              align: 'center',
+              width: 120,
+              type: 'string',
+            },
+            {
+              id: 'solved_member_count',
+              label: 'Solved Member',
+              minWidth: 50,
+              align: 'center',
+              width: 200,
+              type: 'string',
+            },
+            {
+              id: 'submission_count',
+              label: 'Submission',
+              minWidth: 50,
+              align: 'center',
+              width: 120,
+              type: 'string',
+            },
+            {
+              id: 'member_count',
+              label: 'User Tried',
+              minWidth: 50,
+              align: 'center',
+              width: 120,
+              type: 'string',
+            },
+          ]}
+        />
+      </SimpleBar>
+      <SimpleBar title="Class Scoreboard" noIndent>
+        <CustomTable
+          buttons={(
+            <div className={classes.copyButton}>
+              <CopyToClipboardButton text={scoreboardHTML} format="text/html" />
+            </div>
+          )}
+          data={scoreboardData}
+          columns={scoreboardTitle}
+        />
+      </SimpleBar>
     </>
   );
 }

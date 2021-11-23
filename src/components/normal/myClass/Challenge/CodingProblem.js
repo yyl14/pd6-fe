@@ -13,7 +13,7 @@ import CodingProblemEdit from './ProblemSettings/CodingProblemEdit';
 import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
 
-import { readProblemInfo, rejudgeProblem } from '../../../../actions/myClass/problem';
+import { readProblemWithJudgeCode, rejudgeProblem } from '../../../../actions/myClass/problem';
 
 const useStyles = makeStyles(() => ({
   sampleArea: {
@@ -30,6 +30,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 /* This is a level 4 component (page component) */
+/* TODO: Judge whether it is project type. */
 export default function CodingProblem() {
   const {
     courseId, classId, challengeId, problemId,
@@ -46,7 +47,6 @@ export default function CodingProblem() {
   const challenges = useSelector((state) => state.challenges.byId);
   const authToken = useSelector((state) => state.auth.token);
   //  const error = useSelector((state) => state.error.myClass.problem);
-  const loading = useSelector((state) => state.loading.myClass.problem);
   const commonLoading = useSelector((state) => state.loading.common);
   const [role, setRole] = useState('NORMAL');
 
@@ -70,19 +70,12 @@ export default function CodingProblem() {
   }, [classId, userClasses]);
 
   useEffect(() => {
-    dispatch(readProblemInfo(authToken, problemId));
+    dispatch(readProblemWithJudgeCode(authToken, problemId));
   }, [authToken, dispatch, problemId]);
 
   useEffect(() => {
     setEdit(false);
   }, [problemId]);
-
-  if (loading.readProblem || loading.readChallenge) {
-    return <GeneralLoading />;
-  }
-  // if (error.readChallenge != null || error.readProblem != null) {
-  //   return <div>System Exception</div>;
-  // }
 
   if (
     problems[problemId] === undefined
