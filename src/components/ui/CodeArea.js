@@ -1,9 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { InputBase, withStyles } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import CopyToClipboardButton from './CopyToClipboardButton';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   codeContent: {
     display: 'flex',
     flexDirection: 'column',
@@ -15,25 +15,16 @@ const useStyles = makeStyles((theme) => ({
   },
   codeField: {
     width: '100%',
-    borderRadius: '10px',
-    background: theme.palette.grey[100],
-    border: '1px solid',
-    borderColor: theme.palette.grey[300],
+  },
+  codeFieldInputRoot: {
+    fontFamily: 'Cascadia',
+    fontWeight: 300,
   },
   copyIcon: {
     transform: 'translate(-50px, 20px)',
     zIndex: '1000',
   },
 }));
-
-const StyledTextField = withStyles({
-  root: {
-    fontFamily: 'Cascadia',
-  },
-  input: {
-    margin: '15px',
-  },
-})(InputBase);
 
 export default function CodeArea({ value }) {
   const classNames = useStyles();
@@ -42,7 +33,14 @@ export default function CodeArea({ value }) {
       <div className={classNames.buttonWrapper}>
         <CopyToClipboardButton className={classNames.copyIcon} text={value} />
       </div>
-      <StyledTextField className={classNames.codeField} value={value} disabled multiline minRows={10} />
+      <TextField
+        value={value}
+        multiline
+        minRows={15}
+        disabled
+        className={classNames.codeField}
+        InputProps={{ className: classNames.codeFieldInputRoot }}
+      />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Button, makeStyles, TextField, MenuItem, FormControl, Select, withStyles, InputBase,
+  Button, makeStyles, MenuItem, FormControl, Select, Snackbar,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
@@ -13,6 +13,7 @@ import { readProblemInfo, submitCode } from '../../../../actions/myClass/problem
 import { browseSubmitLang } from '../../../../actions/common/common';
 
 import NoMatch from '../../../noMatch';
+import CodeField from '../../../ui/CodeField';
 
 const useStyles = makeStyles(() => ({
   selectField: {
@@ -26,27 +27,6 @@ const useStyles = makeStyles(() => ({
     marginRight: '-5px',
   },
 }));
-
-const StyledTextField = withStyles((theme) => ({
-  root: {
-    marginTop: '23px',
-    width: '100%',
-    height: 'auto',
-    borderRadius: '10px',
-    border: '2px solid',
-    borderColor: theme.palette.grey[300],
-  },
-  formControl: {
-    flexGrow: 1,
-    width: 'auto',
-  },
-  input: {
-    margin: '15px',
-  },
-  focused: {
-    borderColor: theme.palette.primary.main,
-  },
-}))(InputBase);
 
 /* This is a level 4 component (page component) */
 export default function CodeSubmission() {
@@ -88,7 +68,11 @@ export default function CodeSubmission() {
     if (langId === -1) {
       return;
     }
-    dispatch(submitCode(authToken, problemId, langId, code, onSubmitSuccess, () => { setShowSnackbar(true); }));
+    dispatch(
+      submitCode(authToken, problemId, langId, code, onSubmitSuccess, () => {
+        setShowSnackbar(true);
+      }),
+    );
     const daysToExpire = new Date(2147483647 * 1000);
     setCookie('lang', langId, { path: '/', expires: daysToExpire });
   };
@@ -130,15 +114,11 @@ export default function CodeSubmission() {
         </FormControl>
       </AlignedText>
       <AlignedText text="Content" maxWidth="lg" childrenType="field">
-        <StyledTextField
-          style={{ fontFamily: 'Cascadia' }}
+        <CodeField
           value={code}
           onChange={(e) => {
             setCode(e.target.value);
           }}
-          multiline
-          minRows={10}
-          maxRows={20}
         />
       </AlignedText>
       <div className={classNames.bottomButton}>
