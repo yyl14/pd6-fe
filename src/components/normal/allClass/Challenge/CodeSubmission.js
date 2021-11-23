@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Button, makeStyles, TextField, MenuItem, FormControl, Select, Snackbar,
+  Button, makeStyles, MenuItem, FormControl, Select, Snackbar,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
@@ -13,14 +13,11 @@ import { readProblemInfo, submitCode } from '../../../../actions/myClass/problem
 import { browseSubmitLang } from '../../../../actions/common/common';
 
 import NoMatch from '../../../noMatch';
+import CodeField from '../../../ui/CodeField';
 
 const useStyles = makeStyles(() => ({
   selectField: {
     width: '300px',
-  },
-  codingField: {
-    flexGrow: 1,
-    width: 'auto',
   },
   bottomButton: {
     display: 'flex',
@@ -71,7 +68,11 @@ export default function CodeSubmission() {
     if (langId === -1) {
       return;
     }
-    dispatch(submitCode(authToken, problemId, langId, code, onSubmitSuccess, () => { setShowSnackbar(true); }));
+    dispatch(
+      submitCode(authToken, problemId, langId, code, onSubmitSuccess, () => {
+        setShowSnackbar(true);
+      }),
+    );
     const daysToExpire = new Date(2147483647 * 1000);
     setCookie('lang', langId, { path: '/', expires: daysToExpire });
   };
@@ -113,15 +114,11 @@ export default function CodeSubmission() {
         </FormControl>
       </AlignedText>
       <AlignedText text="Content" maxWidth="lg" childrenType="field">
-        <TextField
-          className={classNames.codingField}
+        <CodeField
           value={code}
           onChange={(e) => {
             setCode(e.target.value);
           }}
-          multiline
-          minRows={10}
-          maxRows={20}
         />
       </AlignedText>
       <div className={classNames.bottomButton}>
