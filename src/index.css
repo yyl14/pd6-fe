@@ -45,6 +45,12 @@
   src: local('Azonix'), url(./fonts/Azonix/Azonix.otf) format('opentype');
 }
 
+/** Cascadia **/
+@font-face {
+  font-family: 'Cascadia';
+  src: local('Cascadia'), url(./fonts/Cascadia/Cascadia.otf) format('opentype');
+}
+
 body {
   width: 100%;
   height: 100vh;
