@@ -111,20 +111,18 @@ export default function EssayProblem() {
           <Typography variant="h4">Download All Files</Typography>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText variant="body1" color="textPrimary">
-            <AlignedText text="Class" childrenType="text">
-              <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
-            </AlignedText>
-            <AlignedText text="Challenge" childrenType="text">
-              <Typography>{challenges[challengeId].title}</Typography>
-            </AlignedText>
-            <AlignedText text="Task Label" childrenType="text">
-              <Typography>{essays[essayId].challenge_label}</Typography>
-            </AlignedText>
-            <AlignedText text="Download Options" childrenType="text">
-              <Typography>All users&apos; last submissioin</Typography>
-            </AlignedText>
-          </DialogContentText>
+          <AlignedText text="Class" childrenType="text">
+            <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
+          </AlignedText>
+          <AlignedText text="Challenge" childrenType="text">
+            <Typography>{challenges[challengeId].title}</Typography>
+          </AlignedText>
+          <AlignedText text="Task Label" childrenType="text">
+            <Typography>{essays[essayId].challenge_label}</Typography>
+          </AlignedText>
+          <AlignedText text="Download Options" childrenType="text">
+            <Typography>All users&apos; last submissioin</Typography>
+          </AlignedText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => handleClosePopUp()}>Cancel</Button>
