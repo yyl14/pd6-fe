@@ -37,6 +37,11 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  buttonFlexEnd: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
 }));
 
 const StyledButton = withStyles({
@@ -67,8 +72,9 @@ export default function TeamList() {
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showImpTeamSnackBar, setShowImpTeamSnackBar] = useState(false);
-  const [showAddMemSnackBar, setShowAddMemSnackBar] = useState(false);
+  const [showAddMemberError, setShowAddMemberError] = useState(false);
   const [showAddTeamSnackBar, setShowAddTeamSnackBar] = useState(false);
+  const [errorMemberList, setErrorMemberList] = useState([]);
 
   const [selectedFile, setSelectedFile] = useState([]);
   const [selectedMember, setSelectedMember] = useState([]);
@@ -135,7 +141,11 @@ export default function TeamList() {
           selectedMember,
           addTeamSuccess,
           () => setShowAddTeamSnackBar(true),
-          () => setShowAddMemSnackBar(true),
+          (list) => {
+            console.log('fail');
+            setErrorMemberList(list);
+            setShowAddMemberError(true);
+          },
         ),
       );
     }
@@ -149,7 +159,8 @@ export default function TeamList() {
   const handleCloseError = () => {
     setShowImpTeamSnackBar(false);
     setShowAddTeamSnackBar(false);
-    setShowAddMemSnackBar(false);
+    setShowAddMemberError(false);
+    setErrorMemberList([]);
   };
 
   if (courses[courseId] === undefined || classes[classId] === undefined) {
@@ -334,15 +345,33 @@ export default function TeamList() {
           </Button>
         </DialogActions>
       </Dialog>
+      {showAddMemberError && errorMemberList !== [] && (
+        <Dialog open={showAddMemberError && errorMemberList !== []} maxWidth="md">
+          <DialogTitle>
+            <Typography variant="h4">Import Failed</Typography>
+          </DialogTitle>
+          <DialogContent>
+            <Typography variant="body1">Data below were failed to be imported:</Typography>
+            {errorMemberList.map((accountReferral) => (
+              <Typography variant="body1" key={`errorDetected-${accountReferral}`}>
+                {accountReferral}
+              </Typography>
+            ))}
+            <div className={classNames.buttonFlexEnd}>
+              <Button onClick={handleCloseError}>Done</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+      <Snackbar
+        open={showAddMemberError && errorMemberList === []}
+        onClose={handleCloseError}
+        message={`Add team members fail: ${error.myClass.team.addTeamMember}`}
+      />
       <Snackbar
         open={showAddTeamSnackBar}
         onClose={handleCloseError}
         message={`Create team fail: ${error.myClass.team.addTeam}`}
-      />
-      <Snackbar
-        open={showAddMemSnackBar}
-        onClose={handleCloseError}
-        message={`Add team members fail: ${error.myClass.team.addTeamMember}`}
       />
     </>
   );

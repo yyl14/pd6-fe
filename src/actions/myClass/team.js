@@ -289,9 +289,24 @@ export const createTeamWithMember = (token, classId, name, label, members, onSuc
 
     try {
       dispatch({ type: teamConstants.ADD_TEAM_MEMBER_START });
-      await agent.post(`/team/${teamId}/member`, body, config2);
+      const res2 = await agent.post(`/team/${teamId}/member`, body, config2);
       dispatch({ type: teamConstants.ADD_TEAM_MEMBER_SUCCESS });
+
+      const handleResponse = (responseList) => {
+        console.log(responseList);
+        const failedMemberList = responseList
+          .reduce((acc, cur, index) => (cur === false ? acc.concat(index) : acc), [])
+          .map((index) => members[index].name);
+        console.log(failedMemberList);
+        if (failedMemberList.length === 0) {
+          onSuccess();
+        } else {
+          onMemberErr(failedMemberList);
+        }
+      };
+      handleResponse(res2.data.data);
     } catch (error) {
+      console.log(error);
       onMemberErr();
       dispatch({
         type: teamConstants.ADD_TEAM_MEMBER_FAIL,
