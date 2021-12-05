@@ -34,9 +34,10 @@ import {
   deleteProblem,
   downloadAllSamples,
   downloadAllTestcases,
+  downloadAllAssistingData,
 } from '../../../../../actions/myClass/problem';
 
-import { downloadFile } from '../../../../../actions/common/common';
+// import { downloadFile } from '../../../../../actions/common/common';
 
 const useStyles = makeStyles(() => ({
   sampleArea: {
@@ -103,12 +104,14 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
   };
 
   const downloadAllAssistingFile = () => {
-    const files = problems[problemId].assistingDataIds.map((id) => ({
-      uuid: assistingData[id].s3_file_uuid,
-      filename: assistingData[id].filename,
-      as_attachment: false,
-    }));
-    files.map((file) => dispatch(downloadFile(authToken, file)));
+    // const files = problems[problemId].assistingDataIds.map((id) => ({
+    //   uuid: assistingData[id].s3_file_uuid,
+    //   filename: assistingData[id].filename,
+    //   as_attachment: false,
+    // }));
+    // files.map((file) => dispatch(downloadFile(authToken, file)));
+    dispatch(downloadAllAssistingData(authToken, problemId, true));
+    setEmailSentPopup(true);
   };
 
   const downloadAllSampleFile = () => {
