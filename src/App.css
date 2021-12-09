@@ -1,10 +1,11 @@
+/* Code sections of Problem description etc. */
 #setText > div > code {
-  font-family: 'Cascadia';
+  font-family: 'Noto Sans Mono';
   background-color: transparent;
 }
 
 #setText > pre > code {
-  font-family: 'Cascadia';
+  font-family: 'Noto Sans Mono';
   background-color: transparent;
 }
 
