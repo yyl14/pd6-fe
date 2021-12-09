@@ -116,7 +116,7 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
       if (testcases.byId[id].output_filename !== null) {
         return testcases.byId[id].output_filename.slice(6, testcases.byId[id].output_filename.indexOf('.'));
       }
-      return 0;
+      return '';
     },
     [testcases],
   );
@@ -129,7 +129,7 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
       if (testcases.byId[id].output_filename !== null) {
         return testcases.byId[id].output_filename.slice(0, testcases.byId[id].output_filename.indexOf('.'));
       }
-      return 0;
+      return '';
     },
     [testcases],
   );
