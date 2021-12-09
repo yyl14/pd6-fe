@@ -293,11 +293,9 @@ export const createTeamWithMember = (token, classId, name, label, members, onSuc
       dispatch({ type: teamConstants.ADD_TEAM_MEMBER_SUCCESS });
 
       const handleResponse = (responseList) => {
-        console.log(responseList);
         const failedMemberList = responseList
           .reduce((acc, cur, index) => (cur === false ? acc.concat(index) : acc), [])
           .map((index) => members[index].name);
-        console.log(failedMemberList);
         if (failedMemberList.length === 0) {
           onSuccess();
         } else {
@@ -306,7 +304,6 @@ export const createTeamWithMember = (token, classId, name, label, members, onSuc
       };
       handleResponse(res2.data.data);
     } catch (error) {
-      console.log(error);
       onMemberErr();
       dispatch({
         type: teamConstants.ADD_TEAM_MEMBER_FAIL,
