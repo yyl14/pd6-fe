@@ -39,6 +39,11 @@
   src: local('Noto Sans'), url(./fonts/NotoSans/NotoSans-Black.ttf) format('truetype');
 }
 
+@font-face {
+  font-family: 'Noto Sans Mono';
+  src: url(./fonts//NotoSansMono/NotoSansMono_SemiCondensed-Regular.ttf) format('truetype');
+}
+
 /** Azonix **/
 @font-face {
   font-family: 'Azonix';

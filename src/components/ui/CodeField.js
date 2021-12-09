@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
     height: 'auto',
   },
   codeFieldInputRoot: {
-    fontFamily: 'Cascadia',
+    fontFamily: 'Noto Sans Mono',
   },
 }));
 
