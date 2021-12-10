@@ -13,6 +13,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
+import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 import SimpleBar from '../../../../ui/SimpleBar';
 import Icon from '../../../../ui/icon/index';
 import AlignedText from '../../../../ui/AlignedText';
@@ -147,7 +148,11 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   return (
     <>
       <SimpleBar title="Title">{essay[essayId] === undefined ? 'error' : essay[essayId].title}</SimpleBar>
-      <SimpleBar title="Description">{essay[essayId] === undefined ? 'error' : essay[essayId].description}</SimpleBar>
+      <SimpleBar title="Description">
+        <MathpixLoader>
+          <MathpixMarkdown text={essay[essayId] === undefined ? '' : essay[essayId].description} htmlTags />
+        </MathpixLoader>
+      </SimpleBar>
       <SimpleBar title="File" noIndent>
         <StyledButton variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>
           Upload
