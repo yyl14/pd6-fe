@@ -65,6 +65,7 @@ export default function EssayEdit({ closeEdit }) {
       </SimpleBar>
       <SimpleBar title="Description" noIndent>
         <TextField
+          placeholder="(Text, LaTeX, Markdown and HTML supported)"
           value={description}
           variant="outlined"
           onChange={(e) => {
