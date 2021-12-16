@@ -283,8 +283,8 @@ export const createTeamWithMember = (token, classId, name, label, members, onSuc
 
   try {
     dispatch({ type: teamConstants.ADD_TEAM_START });
-    const res = await agent.post(`/class/${classId}/team`, { name, label }, config1);
-    const teamId = res.data.data.id;
+    const res1 = await agent.post(`/class/${classId}/team`, { name, label }, config1);
+    const teamId = res1.data.data.id;
     dispatch({ type: teamConstants.ADD_TEAM_SUCCESS });
 
     try {
