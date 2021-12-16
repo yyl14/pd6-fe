@@ -81,10 +81,9 @@ export default function Statistics() {
       && challenges[challengeId].statistics.memberSubmission
     ) {
       setStatisticsData(
-        challenges[challengeId].statistics.summary
-          .map((item) => item)
+        [...challenges[challengeId].statistics.summary]
           .sort((a, b) => a.task_label.localeCompare(b.task_label))
-          .map((item, i) => ({ ...item, id: i })),
+          .map((item) => ({ ...item, id: item.task_label })),
       );
 
       const problemList = challenges[challengeId].problemIds.map((id) => ({
