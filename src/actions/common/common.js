@@ -402,7 +402,6 @@ const getAccountBatchByReferral = (token, account_referrals, onSuccess, onError,
       onError();
     }
   } catch (error) {
-    console.log(error);
     dispatch({
       type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_FAIL,
       error,
