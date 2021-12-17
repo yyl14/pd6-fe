@@ -74,6 +74,7 @@ export default function TeamList() {
   const [showImpTeamSnackBar, setShowImpTeamSnackBar] = useState(false);
   const [showAddMemberError, setShowAddMemberError] = useState(false);
   const [showAddTeamSnackBar, setShowAddTeamSnackBar] = useState(false);
+  const [showMemberNotExist, setShowMemberNotExist] = useState(false);
   const [errorMemberList, setErrorMemberList] = useState([]);
 
   const [selectedFile, setSelectedFile] = useState([]);
@@ -159,6 +160,7 @@ export default function TeamList() {
     setShowImpTeamSnackBar(false);
     setShowAddTeamSnackBar(false);
     setShowAddMemberError(false);
+    setShowMemberNotExist(false);
     setErrorMemberList([]);
   };
 
@@ -321,7 +323,12 @@ export default function TeamList() {
           <AlignedText text="Team Name" maxWidth="md" childrenType="field">
             <TextField name="teamName" value={addInputs.teamName} onChange={(e) => handleAddChange(e)} />
           </AlignedText>
-          <AddTeamMemberArea text="Member List" selectedMember={selectedMember} setSelectedMember={setSelectedMember} />
+          <AddTeamMemberArea
+            text="Member List"
+            selectedMember={selectedMember}
+            setSelectedMember={setSelectedMember}
+            setShowMemberNotExist={setShowMemberNotExist}
+          />
         </DialogContent>
         <DialogActions>
           <Button
@@ -344,6 +351,12 @@ export default function TeamList() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={showMemberNotExist}
+        onClose={() => setShowMemberNotExist(false)}
+        message="Member does not exist."
+      />
+
       {showAddMemberError && errorMemberList !== undefined && (
         <Dialog open={showAddMemberError && errorMemberList !== undefined} maxWidth="md">
           <DialogTitle>
