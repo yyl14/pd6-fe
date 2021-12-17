@@ -142,7 +142,6 @@ export default function TeamList() {
           addTeamSuccess,
           () => setShowAddTeamSnackBar(true),
           (list) => {
-            console.log('fail');
             setErrorMemberList(list);
             setShowAddMemberError(true);
           },
@@ -345,8 +344,8 @@ export default function TeamList() {
           </Button>
         </DialogActions>
       </Dialog>
-      {showAddMemberError && errorMemberList !== [] && (
-        <Dialog open={showAddMemberError && errorMemberList !== []} maxWidth="md">
+      {showAddMemberError && errorMemberList !== undefined && (
+        <Dialog open={showAddMemberError && errorMemberList !== undefined} maxWidth="md">
           <DialogTitle>
             <Typography variant="h4">Import Failed</Typography>
           </DialogTitle>
@@ -364,7 +363,7 @@ export default function TeamList() {
         </Dialog>
       )}
       <Snackbar
-        open={showAddMemberError && errorMemberList === []}
+        open={showAddMemberError && errorMemberList === undefined}
         onClose={handleCloseError}
         message={`Add team members fail: ${error.myClass.team.addTeamMember}`}
       />
