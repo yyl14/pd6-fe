@@ -97,12 +97,8 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [scoringFormula, setScoringFormula] = useState('');
   const [baselineTeam, setBaselineTeam] = useState(null);
   const [teamLabelFilter, setTeamLabelFilter] = useState('');
-  const [showScoreErrorSnackbar, setShowScoreErrorSnackbar] = useState(false);
-  const [showNegativeErrorSnackbar, setShowNegativeErrorSnackbar] = useState(false);
-  const [showFloatErrorSnackbar, setShowFloatErrorSnackbar] = useState(false);
-  const [showStringErrorSnackbar, setShowStringErrorSnackbar] = useState(false);
-  const [showMaxScoreErrorSnackbar, setShowMaxScoreErrorSnackbar] = useState(false);
-  const [showMinPeerNumberErrorSnackbar, setShowMinPeerNumberErrorSnackbar] = useState(false);
+  const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
+  const [snackbarErrorMessage, setSnackbarErrorMessage] = useState('');
 
   useEffect(() => {
     if (
@@ -149,46 +145,62 @@ export default function TaskAddingCard({ open, setOpen }) {
           || Number.isNaN(Number(minScore)) === true
           || Number.isNaN(Number(peerNumber)) === true
         ) {
-          setShowStringErrorSnackbar(true);
+          // string
+          setSnackbarErrorMessage('Error: Max/Min/Assignee is a String.');
+          setShowErrorSnackbar(true);
           setDisabled(true);
         } else if (
           Number.isNaN(Number(maxScore)) === false
           && Number.isNaN(Number(minScore)) === false
           && Number.isNaN(Number(peerNumber)) === false
         ) {
-          setShowStringErrorSnackbar(false);
+          setShowErrorSnackbar(false);
+          setSnackbarErrorMessage('');
           if (
             Number.isInteger(Number(maxScore)) === false
             || Number.isInteger(Number(minScore)) === false
             || Number.isInteger(Number(peerNumber)) === false
           ) {
-            setShowFloatErrorSnackbar(true);
+            // float
+            setSnackbarErrorMessage('Error: Max/Min/Assignee is a Float number.');
+            setShowErrorSnackbar(true);
             setDisabled(true);
           } else if (
             Number.isInteger(Number(maxScore)) === true
             || Number.isInteger(Number(minScore)) === true
             || Number.isInteger(Number(peerNumber)) === true
           ) {
-            setShowFloatErrorSnackbar(false);
+            setShowErrorSnackbar(false);
+            setSnackbarErrorMessage('');
             if (Number(maxScore) < 0 || Number(minScore) < 0 || Number(peerNumber) < 0) {
-              setShowNegativeErrorSnackbar(true);
+              // negative
+              setSnackbarErrorMessage('Error: Max/Min/Assignee is a Negative number.');
+              setShowErrorSnackbar(true);
               setDisabled(true);
             } else if (Number(maxScore) >= 0 || Number(minScore) >= 0 || Number(peerNumber) >= 0) {
-              setShowNegativeErrorSnackbar(false);
+              setShowErrorSnackbar(false);
+              setSnackbarErrorMessage('');
               if (Number(maxScore) === 0) {
-                setShowMaxScoreErrorSnackbar(true);
+                // max score = 0
+                setSnackbarErrorMessage("Error: Max Score can't be 0.");
+                setShowErrorSnackbar(true);
                 setDisabled(true);
               } else if (Number(peerNumber) === 0) {
-                setShowMinPeerNumberErrorSnackbar(true);
+                // peer number = 0
+                setSnackbarErrorMessage("Error: Assignee can't be 0.");
+                setShowErrorSnackbar(true);
                 setDisabled(true);
               } else {
-                setShowMaxScoreErrorSnackbar(false);
-                setShowMinPeerNumberErrorSnackbar(false);
+                setShowErrorSnackbar(false);
+                setSnackbarErrorMessage('');
                 if (Number(maxScore) <= Number(minScore)) {
-                  setShowScoreErrorSnackbar(true);
+                  // max score <= min score
+                  setSnackbarErrorMessage('Error: Max Score <= Min Score.');
+                  setShowErrorSnackbar(true);
                   setDisabled(true);
                 } else {
-                  setShowScoreErrorSnackbar(false);
+                  setShowErrorSnackbar(false);
+                  setSnackbarErrorMessage('');
                   setDisabled(false);
                 }
               }
@@ -578,36 +590,7 @@ export default function TaskAddingCard({ open, setOpen }) {
         message={`Error: ${error.api.scoreboard.addTeamProjectScoreboardUnderChallenge}`}
         onClose={() => setShowAddScoreboardErrorSnackbar(false)}
       />
-      <Snackbar
-        open={showScoreErrorSnackbar}
-        message="Error: Max Score <= Min Score."
-        onClose={() => setShowScoreErrorSnackbar(false)}
-      />
-      <Snackbar
-        open={showNegativeErrorSnackbar}
-        message="Error: Max/Min/Assignee is a Negative number."
-        onClose={() => setShowNegativeErrorSnackbar(false)}
-      />
-      <Snackbar
-        open={showFloatErrorSnackbar}
-        message="Error: Max/Min/Assignee is a Float number."
-        onClose={() => setShowFloatErrorSnackbar(false)}
-      />
-      <Snackbar
-        open={showStringErrorSnackbar}
-        message="Error: Max/Min/Assignee is a String."
-        onClose={() => setShowStringErrorSnackbar(false)}
-      />
-      <Snackbar
-        open={showMaxScoreErrorSnackbar}
-        message="Error: Max Score can't be 0."
-        onClose={() => setShowMaxScoreErrorSnackbar(false)}
-      />
-      <Snackbar
-        open={showMinPeerNumberErrorSnackbar}
-        message="Error: Assignee can't be 0."
-        onClose={() => setShowMinPeerNumberErrorSnackbar(false)}
-      />
+      <Snackbar open={showErrorSnackbar} message={snackbarErrorMessage} onClose={() => setShowErrorSnackbar(false)} />
     </>
   );
 }
