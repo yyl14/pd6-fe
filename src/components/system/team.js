@@ -177,7 +177,7 @@ export default function Team() {
             <Profile
               img_url="../../../images/Duge.jpg"
               name="盧慶原 Duge"
-              description="前端打雜94我"
+              description="FE"
               FB_link="https://www.facebook.com/DuckChingYuan"
               Github_link="https://github.com/duge03705022"
             />
