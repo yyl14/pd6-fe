@@ -58,9 +58,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: '20px',
   },
   tableBodyCell: {
-    whiteSpace: 'pre',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
+    overflowWrap: 'break-word',
   },
   editTableCell: {
     paddingTop: '7.5px',

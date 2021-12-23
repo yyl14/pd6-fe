@@ -125,9 +125,7 @@ const useStyles = makeStyles((theme) => ({
   },
   tableBodyCell: {
     padding: '17.5px 5px 17.5px 5px',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
+    overflowWrap: 'break-word',
   },
   bottomWrapper: {
     display: 'flex',
