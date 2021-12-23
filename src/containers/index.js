@@ -4,8 +4,9 @@ import {
   Switch, Route, useHistory, useLocation,
 } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import { makeStyles, Fab } from '@material-ui/core';
-import { Feedback } from '@material-ui/icons';
+// import { makeStyles } from '@material-ui/core';
+// import { makeStyles, Fab } from '@material-ui/core';
+// import { Feedback } from '@material-ui/icons';
 import Normal from './normal';
 import Admin from './admin';
 import Account from './account';
@@ -17,16 +18,16 @@ import { getUserInfo } from '../actions/user/auth';
 import Icon from '../components/ui/icon';
 import '../styles/index.css';
 
-const useStyles = makeStyles(() => ({
-  bugReport: {
-    position: 'fixed',
-    right: '3.5vw',
-    top: 'calc(95vh - 55px)',
-  },
-}));
+// const useStyles = makeStyles(() => ({
+//   bugReport: {
+//     position: 'fixed',
+//     right: '3.5vw',
+//     top: 'calc(95vh - 55px)',
+//   },
+// }));
 
 function Index() {
-  const classes = useStyles();
+  // const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
   const auth = useSelector((state) => state.auth);
@@ -115,9 +116,9 @@ function Index() {
             </div>
           </div>
         </div>
-        <Fab href="https://forms.gle/KaYJnXwgvsovzqVG7" target="_blank" className={classes.bugReport}>
+        {/* <Fab href="https://forms.gle/KaYJnXwgvsovzqVG7" target="_blank" className={classes.bugReport}>
           <Feedback />
-        </Fab>
+        </Fab> */}
       </div>
     </>
   );
