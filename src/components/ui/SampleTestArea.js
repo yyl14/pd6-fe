@@ -11,6 +11,9 @@ const useStyles = makeStyles({
     width: '90%',
     height: 'auto',
   },
+  code: {
+    fontFamily: 'Noto Sans Mono',
+  },
   defaultCardContent: {
     padding: '4px 30px 20px 30px',
     wordBreak: 'break-word',
@@ -164,7 +167,7 @@ export default function SampleTestArea({ input, output, note = '' }) {
                 </div>
               </div>
               <div className={classes.content} ref={inputRef}>
-                <Typography variant="body1">
+                <Typography variant="body1" className={classes.code}>
                   {input.split('\n').map((string) => (
                     <React.Fragment key={string}>
                       {string}
@@ -186,7 +189,7 @@ export default function SampleTestArea({ input, output, note = '' }) {
                 </div>
               </div>
               <div className={classes.content} ref={outputRef}>
-                <Typography variant="body1">
+                <Typography variant="body1" className={classes.code}>
                   {output.split('\n').map((string) => (
                     <React.Fragment key={string}>
                       {string}
