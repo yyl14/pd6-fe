@@ -12,18 +12,6 @@ import { userLogout } from '../../actions/user/auth';
 import { userBrowseAnnouncement } from '../../actions/user/user';
 
 const useStyles = makeStyles((theme) => ({
-  image: {
-    width: '40px',
-    height: '40px',
-    display: 'block',
-    borderRadius: '50%',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    opacity: '1',
-    zIndex: '-1',
-  },
   logo: {
     '&:hover': {
       cursor: 'pointer',
@@ -468,9 +456,7 @@ export default function Header() {
               {theme.headerStyle.logo}
             </href>
           ) : (
-            <href className={classes.logo} onClick={() => history.push('/')}>
-              <div className={classes.image} style={{ backgroundImage: 'url(../../../images/doge.png)' }} />
-            </href>
+            <div className={classes.noLogo} />
           )}
           {theme.headerStyle.hasIndicator && (
             <div
