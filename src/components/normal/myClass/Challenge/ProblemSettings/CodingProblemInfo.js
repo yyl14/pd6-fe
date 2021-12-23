@@ -399,7 +399,9 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             />
           )}
         >
-          <CodeArea value={problems[problemId].judge_source.judge_code ? problems[problemId].judge_source.judge_code : ''} />
+          <CodeArea
+            value={problems[problemId].judge_source.judge_code ? problems[problemId].judge_source.judge_code : ''}
+          />
         </SimpleBar>
       )}
       {role === 'MANAGER' && (

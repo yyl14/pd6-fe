@@ -21,9 +21,7 @@ const useStyles = makeStyles(() => ({
 
 /* This is a level 4 component (page component) */
 export default function EssayEdit({ closeEdit }) {
-  const {
-    essayId,
-  } = useParams();
+  const { essayId } = useParams();
   const classNames = useStyles();
 
   const dispatch = useDispatch();

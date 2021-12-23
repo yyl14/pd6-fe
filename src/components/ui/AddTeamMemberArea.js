@@ -16,8 +16,10 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Icon from './icon/index';
 import AlignedText from './AlignedText';
+import { getAccountBatchByReferral } from '../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -98,8 +100,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AddTeamMemberArea({ text, selectedMember, setSelectedMember }) {
+export default function AddTeamMemberArea({
+  text, selectedMember, setSelectedMember, setShowMemberNotExist,
+}) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const authToken = useSelector((state) => state.auth.token);
 
   const [inputs, setInputs] = useState({
     name: '',
@@ -115,28 +121,30 @@ export default function AddTeamMemberArea({ text, selectedMember, setSelectedMem
     setInputs((input) => ({ ...input, [name]: value }));
   };
 
-  const handleAddMember = () => {
-    if (inputs.name !== '') {
-      const newSelectedMembers = [inputs].reduce(
-        (acc, member) => ({
-          ...acc,
-          [index]: {
-            id: index,
-            name: member.name,
-            role: member.role,
-          },
-        }),
-        selectedMember,
-      );
+  const handleAddSuccess = () => {
+    const newSelectedMembers = [inputs].reduce(
+      (acc, member) => ({
+        ...acc,
+        [index]: {
+          id: index,
+          name: member.name,
+          role: member.role,
+        },
+      }),
+      selectedMember,
+    );
 
-      // object to array
-      setSelectedMember(newSelectedMembers);
-      setIndex(index + 1);
-      setInputs({
-        name: '',
-        role: 'Normal',
-      });
-    }
+    // object to array
+    setSelectedMember(newSelectedMembers);
+    setIndex(index + 1);
+    setInputs({
+      name: '',
+      role: 'Normal',
+    });
+  };
+
+  const handleAddMember = () => {
+    dispatch(getAccountBatchByReferral(authToken, inputs.name, handleAddSuccess, () => setShowMemberNotExist(true)));
   };
 
   const handleDelete = (e, deleteRow) => {

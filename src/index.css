@@ -39,10 +39,21 @@
   src: local('Noto Sans'), url(./fonts/NotoSans/NotoSans-Black.ttf) format('truetype');
 }
 
+@font-face {
+  font-family: 'Noto Sans Mono';
+  src: url(./fonts//NotoSansMono/NotoSansMono_SemiCondensed-Regular.ttf) format('truetype');
+}
+
 /** Azonix **/
 @font-face {
   font-family: 'Azonix';
   src: local('Azonix'), url(./fonts/Azonix/Azonix.otf) format('opentype');
+}
+
+/** Cascadia **/
+@font-face {
+  font-family: 'Cascadia';
+  src: local('Cascadia'), url(./fonts/Cascadia/Cascadia.otf) format('opentype');
 }
 
 body {

@@ -62,7 +62,6 @@ export default function CodingProblem() {
     setRejudgePopUp(false);
   };
 
-  // console.log(userClasses);
   useEffect(() => {
     if (userClasses.filter((item) => item.class_id === Number(classId)).length !== 0) {
       setRole(userClasses.filter((item) => item.class_id === Number(classId))[0].role);

@@ -260,7 +260,7 @@ export default function ReviewedRecord() {
               >
                 Cancel
               </Button>
-              <Button color="primary" onClick={handleSubmit}>
+              <Button disabled={!comment} color="primary" onClick={handleSubmit}>
                 Submit
               </Button>
             </div>

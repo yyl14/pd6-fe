@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { TextField } from '@material-ui/core';
 import CopyToClipboardButton from './CopyToClipboardButton';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(() => ({
   codeContent: {
     display: 'flex',
     flexDirection: 'column',
@@ -16,11 +16,15 @@ const useStyles = makeStyles({
   codeField: {
     width: '100%',
   },
+  codeFieldInputRoot: {
+    fontFamily: 'Noto Sans Mono',
+    fontWeight: 300,
+  },
   copyIcon: {
     transform: 'translate(-50px, 20px)',
     zIndex: '1000',
   },
-});
+}));
 
 export default function CodeArea({ value }) {
   const classNames = useStyles();
@@ -29,7 +33,14 @@ export default function CodeArea({ value }) {
       <div className={classNames.buttonWrapper}>
         <CopyToClipboardButton className={classNames.copyIcon} text={value} />
       </div>
-      <TextField className={classNames.codeField} value={value} disabled multiline minRows={10} />
+      <TextField
+        value={value}
+        multiline
+        minRows={15}
+        disabled
+        className={classNames.codeField}
+        InputProps={{ className: classNames.codeFieldInputRoot }}
+      />
     </div>
   );
 }

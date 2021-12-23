@@ -1,3 +1,14 @@
+/* Code sections of Problem description etc. */
+#setText > div > code {
+  font-family: 'Noto Sans Mono';
+  background-color: transparent;
+}
+
+#setText > pre > code {
+  font-family: 'Noto Sans Mono';
+  background-color: transparent;
+}
+
 .wrapper {
   width: 100%;
   height: 100%;

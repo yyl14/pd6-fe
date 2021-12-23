@@ -8,7 +8,6 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  DialogContentText,
   Link,
   withStyles,
   makeStyles,
@@ -236,20 +235,18 @@ export default function EssayInfo({ role = 'NORMAL' }) {
           <Typography variant="h4">Delete Essay</Typography>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText variant="body1" color="secondary">
-            <AlignedText text="Class" childrenType="text">
-              <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
-            </AlignedText>
-            <AlignedText text="Title" childrenType="text">
-              <Typography>{challenges[challengeId].title}</Typography>
-            </AlignedText>
-            <AlignedText text="Label" childrenType="text">
-              <Typography>{essay[essayId].challenge_label}</Typography>
-            </AlignedText>
-            <Typography variant="body2" color="textPrimary">
-              Once you delete a essay, there is no going back. Please be certain.
-            </Typography>
-          </DialogContentText>
+          <AlignedText text="Class" childrenType="text">
+            <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
+          </AlignedText>
+          <AlignedText text="Title" childrenType="text">
+            <Typography>{challenges[challengeId].title}</Typography>
+          </AlignedText>
+          <AlignedText text="Label" childrenType="text">
+            <Typography>{essay[essayId].challenge_label}</Typography>
+          </AlignedText>
+          <Typography variant="body2" color="textPrimary">
+            Once you delete a essay, there is no going back. Please be certain.
+          </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDelete}>Cancel</Button>
