@@ -12,7 +12,7 @@
   align-items: center;
 }
 
-@media screen and (max-width: 1200px){
+@media screen and (max-width: 1200px) {
   .auth-page-col-left {
     display: none !important;
   }
@@ -32,9 +32,17 @@
 }
 
 .auth-trademark {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   position: fixed;
   left: 6vw;
   bottom: 10vh;
+}
+
+.auth-logo {
+  margin-right: 35px;
+  transform: translate(0, 5px);
 }
 
 .auth-form {
