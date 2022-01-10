@@ -42,6 +42,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '0px',
     marginBottom: '16px',
   },
+  addMemberButtonWrapper: {
+    display: 'flex',
+    flexDirection: ' row',
+  },
   addMemberButton: {
     marginLeft: '270px',
   },
@@ -186,16 +190,11 @@ export default function AddTeamMemberArea({
           </Select>
         </FormControl>
       </AlignedText>
-      <Button
-        className={classes.addMemberButton}
-        variant="outlined"
-        color="primary"
-        startIcon={<Icon.AddBoxIcon />}
-        onClick={handleAddMember}
-      >
-        Add Team member
-      </Button>
-
+      <div className={classes.addMemberButtonWrapper}>
+        <Button variant="outlined" color="primary" startIcon={<Icon.AddBoxIcon />} onClick={handleAddMember}>
+          Add Team member
+        </Button>
+      </div>
       {memberNum !== 0 && (
         <Paper className={classes.root} elevation={0}>
           <TableContainer className={classes.container}>
