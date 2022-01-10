@@ -188,8 +188,8 @@ export default function EssayInfo({ role = 'NORMAL' }) {
         </DialogTitle>
         <DialogContent>
           <FileUploadArea
-            text="PDF File"
-            fileAcceptFormat=".pdf"
+            text="PDF or ZIP File"
+            fileAcceptFormat=".pdf,.zip"
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
             multipleFiles={false}
