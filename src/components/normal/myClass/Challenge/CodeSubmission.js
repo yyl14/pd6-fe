@@ -67,7 +67,6 @@ export default function CodeSubmission() {
   useEffect(() => {
     const enabledIds = submitLang.allIds.filter((id) => !submitLang.byId[id].is_disabled);
     setLang(enabledIds);
-    console.log(localStorage.getItem('langId'));
     if (localStorage.getItem('langId')) {
       if (enabledIds.includes(Number(localStorage.getItem('langId')))) {
         setLangId(Number(localStorage.getItem('langId')));
