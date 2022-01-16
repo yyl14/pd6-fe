@@ -463,15 +463,9 @@ export default function Header() {
     <div>
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
-          {theme.headerStyle.logo ? (
-            <href className={classes.logo} onClick={() => history.push('/')}>
-              {theme.headerStyle.logo}
-            </href>
-          ) : (
-            <href className={classes.logo} onClick={() => history.push('/')}>
-              <div className={classes.image} style={{ backgroundImage: 'url(../../../images/doge.png)' }} />
-            </href>
-          )}
+          <href className={classes.logo} onClick={() => history.push('/')}>
+            {theme.headerStyle.logo}
+          </href>
           {theme.headerStyle.hasIndicator && (
             <div
               className={classes.itemActiveIndicator}

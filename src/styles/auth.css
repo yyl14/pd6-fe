@@ -30,7 +30,7 @@
   transform: translate(0, 50%);
   width: 42vw;
 }
-
+/*
 .auth-trademark {
   display: flex;
   flex-direction: row;
@@ -41,9 +41,11 @@
 }
 
 .auth-logo {
+  height: 120px;
+  width: 120px;
   margin-right: 35px;
-  transform: translate(0, 5px);
-}
+  transform: translate(0, 6px);
+} */
 
 .auth-form {
   width: 78%;

@@ -1,5 +1,5 @@
 import React from 'react';
-import placeholderImg from './ui/icon/doge.png';
+import Icon from './ui/icon';
 
 function NoMatch() {
   return (
@@ -8,15 +8,14 @@ function NoMatch() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        marginTop: '20vh',
-        marginRight: 'calc(12.5% + 220px)',
+        justifyContent: 'center',
         textAlign: 'center',
+        height: 'calc(100vh - 195px)',
       }}
     >
-      <img src={placeholderImg} style={{ width: '18vw', transform: 'translateX(-20px)' }} alt="404dog" />
+      <Icon.Logo fill="#000" stroke="#000" style={{ width: '18vw' }} />
       <h1 style={{ width: 'fit-content' }}>
         404 not found.
-        {' '}
         <br />
         Wow, much emptiness.
       </h1>
