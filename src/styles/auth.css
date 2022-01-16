@@ -30,22 +30,6 @@
   transform: translate(0, 50%);
   width: 42vw;
 }
-/*
-.auth-trademark {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  position: fixed;
-  left: 6vw;
-  bottom: 10vh;
-}
-
-.auth-logo {
-  height: 120px;
-  width: 120px;
-  margin-right: 35px;
-  transform: translate(0, 6px);
-} */
 
 .auth-form {
   width: 78%;
