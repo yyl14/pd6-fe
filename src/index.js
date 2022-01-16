@@ -1,20 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { CookiesProvider } from 'react-cookie';
-
-import { ClearBrowserCacheBoundary } from 'react-clear-browser-cache';
-
+import { ClearCacheProvider } from 'react-clear-cache';
 import reportWebVitals from './reportWebVitals';
 import App from './App';
 
 import './index.css';
 
 ReactDOM.render(
-  <ClearBrowserCacheBoundary auto fallback="Loading" duration={60000}>
+  <ClearCacheProvider duration={5000}>
     <CookiesProvider>
       <App />
     </CookiesProvider>
-  </ClearBrowserCacheBoundary>,
+  </ClearCacheProvider>,
   document.getElementById('root'),
 );
 
