@@ -80,6 +80,8 @@ import { ReactComponent as VerticalLine } from './verticalLine.svg';
 import { ReactComponent as Menu } from './Menu.svg';
 import { ReactComponent as DevTeam } from './devteam.svg';
 import { ReactComponent as Scoreboard } from './scoreboard.svg';
+import { ReactComponent as Logo } from './logo.svg';
+import { ReactComponent as IMNight2021Logo } from './im_night.svg';
 
 export default {
   HistoryIcon,
@@ -163,4 +165,6 @@ export default {
   DevTeam,
   VerticalLine,
   Scoreboard,
+  Logo,
+  IMNight2021Logo,
 };

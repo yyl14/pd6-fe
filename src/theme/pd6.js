@@ -1,5 +1,8 @@
+import React from 'react';
+
 import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import ErrorText from '../components/ui/ErrorText';
+import icon from '../components/ui/icon';
 
 // UI/UX Standard
 /*
@@ -667,6 +670,17 @@ const props = {
 };
 
 const headerStyle = {
+  logo: (
+    <icon.Logo
+      fill={mono.white}
+      stroke={mono.white}
+      style={{
+        width: 38,
+        height: 38,
+      }}
+    />
+  ),
+
   background: mono.black,
   color: mono.white,
   activeColor: palette.primary.main,
