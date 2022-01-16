@@ -4,7 +4,6 @@ import React, {
 import { Provider } from 'react-redux';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
-import { useClearBrowserCache } from 'react-clear-browser-cache';
 
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
@@ -40,15 +39,6 @@ function App() {
     [setCookies],
   );
 
-  const themeContextValue = useMemo(() => ({ value: selectedTheme, setter: setTheme }), [selectedTheme, setTheme]);
-  const { isLatestVersion, clearCacheAndReload } = useClearBrowserCache();
-
-  useEffect(() => {
-    if (!isLatestVersion) {
-      clearCacheAndReload();
-    }
-  }, [clearCacheAndReload, isLatestVersion]);
-
   // Initialize theme selection from cookies
   useEffect(() => {
     if (cookies.themeBeta !== undefined) {
@@ -63,6 +53,8 @@ function App() {
       window.location = `https:${url.split(':')[1]}`;
     }
   }, []);
+
+  const themeContextValue = useMemo(() => ({ value: selectedTheme, setter: setTheme }), [selectedTheme, setTheme]);
 
   return (
     <Provider store={store}>
