@@ -12,6 +12,18 @@ import { userLogout } from '../../actions/user/auth';
 import { userBrowseAnnouncement } from '../../actions/user/user';
 
 const useStyles = makeStyles((theme) => ({
+  image: {
+    width: '40px',
+    height: '40px',
+    display: 'block',
+    borderRadius: '50%',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    opacity: '1',
+    zIndex: '-1',
+  },
   logo: {
     '&:hover': {
       cursor: 'pointer',
@@ -451,13 +463,9 @@ export default function Header() {
     <div>
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
-          {theme.headerStyle.logo ? (
-            <href className={classes.logo} onClick={() => history.push('/')}>
-              {theme.headerStyle.logo}
-            </href>
-          ) : (
-            <div className={classes.noLogo} />
-          )}
+          <href className={classes.logo} onClick={() => history.push('/')}>
+            {theme.headerStyle.logo}
+          </href>
           {theme.headerStyle.hasIndicator && (
             <div
               className={classes.itemActiveIndicator}
