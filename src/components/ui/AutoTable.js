@@ -662,7 +662,6 @@ function AutoTable({
                     })}
                     {hasLink ? (
                       <TableCell
-                        id="hi"
                         key={`${row.id}-show`}
                         align="right"
                         className={`${classes.stickyArrowCell} ${classes.tableCellHover}`}
