@@ -120,14 +120,14 @@ const useStyles = makeStyles((theme) => ({
       paddingLeft: '25px', // 25px (Left space) + 5 px
     },
   },
-  tableBodyRow: {
-    height: '60px',
-  },
   tableBodyCell: {
     padding: '17.5px 5px 17.5px 5px',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+    '&:hover~$stickyArrowCell': {
+      backgroundImage: 'inherit',
+    },
   },
   bottomWrapper: {
     display: 'flex',
@@ -180,6 +180,18 @@ const useStyles = makeStyles((theme) => ({
   arrowIcon: {
     height: '35px',
     margin: 'auto',
+  },
+  stickyArrowCell: {
+    position: 'sticky',
+    right: 0,
+    zIndex: 100,
+  },
+  tableCellHover: {
+    backgroundColor: 'inherit',
+    backgroundImage: 'linear-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 1))',
+    '&:hover': {
+      backgroundImage: 'inherit',
+    },
   },
   filterWrapper: {
     display: 'flex',
@@ -596,8 +608,11 @@ function AutoTable({
                 <TableCell
                   key={hasLink ? 'link' : 'blank'}
                   align="right"
-                  className={classes.tableHeadCell}
-                  style={{ minWidth: 20, width: '100%' }}
+                  className={`${classes.tableHeadCell} ${classes.stickyArrowCell}`}
+                  style={{
+                    minWidth: 20,
+                    width: '100%',
+                  }}
                 />
               </TableRow>
             </TableHead>
@@ -646,7 +661,12 @@ function AutoTable({
                       );
                     })}
                     {hasLink ? (
-                      <TableCell key={`${row.id}-show`} align="right">
+                      <TableCell
+                        id="hi"
+                        key={`${row.id}-show`}
+                        align="right"
+                        className={`${classes.stickyArrowCell} ${classes.tableCellHover}`}
+                      >
                         <Link to={row.link} className={classes.detailLink}>
                           <IconButton>
                             <Icon.ArrowForwardRoundedIcon className={classes.toggleButtonIcon} />
