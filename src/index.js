@@ -1,18 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { CookiesProvider } from 'react-cookie';
-import { ClearCacheProvider } from 'react-clear-cache';
+
 import reportWebVitals from './reportWebVitals';
 import App from './App';
 
 import './index.css';
 
 ReactDOM.render(
-  <ClearCacheProvider duration={5000}>
-    <CookiesProvider>
-      <App />
-    </CookiesProvider>
-  </ClearCacheProvider>,
+  <CookiesProvider>
+    <App />
+  </CookiesProvider>,
   document.getElementById('root'),
 );
 
