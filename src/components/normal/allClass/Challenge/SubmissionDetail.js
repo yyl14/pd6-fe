@@ -183,6 +183,7 @@ export default function SubmissionDetail() {
     || judgments === undefined
     || judgeCases.allIds === undefined
     || testcases.allIds === undefined
+    || user.id !== submissions[submissionId].account_id
   ) {
     if (loading.readSubmissionDetail || loading.browseJudgeCases || loading.readTestcase) {
       return <GeneralLoading />;
