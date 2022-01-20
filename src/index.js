@@ -8,7 +8,7 @@ import App from './App';
 import './index.css';
 
 ReactDOM.render(
-  <ClearCacheProvider duration={5000}>
+  <ClearCacheProvider duration={60000}>
     <CookiesProvider>
       <App />
     </CookiesProvider>
