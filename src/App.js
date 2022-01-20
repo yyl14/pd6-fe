@@ -10,7 +10,6 @@ import 'react-date-range/dist/theme/default.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import { useClearCacheCtx } from 'react-clear-cache';
-import { useCookies } from 'react-cookie';
 import theme from './theme/index';
 import Login from './containers/auth/Login';
 import Register from './containers/auth/Register';
@@ -29,26 +28,25 @@ import './App.css';
 import './styles/ui.css';
 
 function App() {
-  const [cookies, setCookies] = useCookies(['themeBeta']);
   const [selectedTheme, setSelectedTheme] = useState('pd6New');
   const { isLatestVersion, emptyCacheStorage } = useClearCacheCtx();
 
-  const setTheme = useCallback(
-    (value) => {
-      const daysToExpire = new Date(2147483647 * 1000);
-      setCookies('themeBeta', value, { path: '/', expires: daysToExpire });
-    },
-    [setCookies],
-  );
+  const setTheme = useCallback((value) => {
+    setSelectedTheme(value);
+    localStorage.setItem('theme', value);
+  }, []);
 
   const themeContextValue = useMemo(() => ({ value: selectedTheme, setter: setTheme }), [selectedTheme, setTheme]);
 
   // Initialize theme selection from cookies
   useEffect(() => {
-    if (cookies.themeBeta !== undefined) {
-      setSelectedTheme(cookies.themeBeta);
+    const themeData = localStorage.getItem('theme');
+    if (themeData) {
+      setSelectedTheme(themeData);
+    } else {
+      localStorage.setItem('theme', 'pd6New');
     }
-  }, [cookies.themeBeta]);
+  }, []);
 
   useEffect(() => {
     const url = window.location.origin;
