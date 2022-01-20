@@ -56,7 +56,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prebuild": "npm run generate-build-meta",
+    "generate-build-meta": "./node_modules/react-clear-cache/bin/cli.js"
   },
   "eslintConfig": {
     "extends": [
@@ -90,7 +92,5 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^1.7.0"
-  },
-  "prebuild": "npm run generate-build-meta",
-  "generate-build-meta": "./node_modules/react-clear-cache/bin/cli.js"
+  }
 }
