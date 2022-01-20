@@ -70,7 +70,7 @@ export default function SubmissionDetail() {
   const [rejudge, setRejudge] = useState(false);
 
   useEffect(() => {
-    // dispatch(readSubmissionDetail(authToken, submissionId));
+    dispatch(readSubmissionDetail(authToken, submissionId));
     dispatch(fetchSubmission(authToken, submissionId));
   }, [authToken, challengeId, dispatch, problemId, submissionId]);
 
