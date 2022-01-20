@@ -44,10 +44,11 @@
   src: url(./fonts//NotoSansMono/NotoSansMono_SemiCondensed-Regular.ttf) format('truetype');
 }
 
-/** Azonix **/
+/** Moon **/
 @font-face {
-  font-family: 'Azonix';
-  src: local('Azonix'), url(./fonts/Azonix/Azonix.otf) format('opentype');
+  font-family: 'Moon';
+  font-weight: 700;
+  src: local('Moon 2.0'), url(./fonts/Moon/Moon2.0-Bold.otf) format('opentype');
 }
 
 /** Cascadia **/

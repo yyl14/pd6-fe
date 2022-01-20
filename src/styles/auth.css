@@ -12,7 +12,7 @@
   align-items: center;
 }
 
-@media screen and (max-width: 1200px){
+@media screen and (max-width: 1200px) {
   .auth-page-col-left {
     display: none !important;
   }
@@ -29,12 +29,6 @@
   bottom: 50vh;
   transform: translate(0, 50%);
   width: 42vw;
-}
-
-.auth-trademark {
-  position: fixed;
-  left: 6vw;
-  bottom: 10vh;
 }
 
 .auth-form {
