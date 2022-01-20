@@ -9,6 +9,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
+import { useClearCacheCtx } from 'react-clear-cache';
 import { useCookies } from 'react-cookie';
 import theme from './theme/index';
 import Login from './containers/auth/Login';
@@ -30,6 +31,7 @@ import './styles/ui.css';
 function App() {
   const [cookies, setCookies] = useCookies(['themeBeta']);
   const [selectedTheme, setSelectedTheme] = useState('pd6New');
+  const { isLatestVersion, emptyCacheStorage } = useClearCacheCtx();
 
   const setTheme = useCallback(
     (value) => {
@@ -38,6 +40,8 @@ function App() {
     },
     [setCookies],
   );
+
+  const themeContextValue = useMemo(() => ({ value: selectedTheme, setter: setTheme }), [selectedTheme, setTheme]);
 
   // Initialize theme selection from cookies
   useEffect(() => {
@@ -54,7 +58,22 @@ function App() {
     }
   }, []);
 
-  const themeContextValue = useMemo(() => ({ value: selectedTheme, setter: setTheme }), [selectedTheme, setTheme]);
+  if (!isLatestVersion) {
+    return (
+      <p>
+        <button
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            emptyCacheStorage();
+          }}
+          type="button"
+        >
+          Update version
+        </button>
+      </p>
+    );
+  }
 
   return (
     <Provider store={store}>
