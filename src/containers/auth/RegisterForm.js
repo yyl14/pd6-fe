@@ -130,7 +130,6 @@ export default function RegisterForm() {
 
     setErrors(
       labelName.reduce((acc, item) => {
-        console.log(item, newInputs[item] === '');
         if (item !== 'password' && item !== 'confirmPassword') {
           return { ...acc, [item]: newInputs[item].trim() === '' };
         }

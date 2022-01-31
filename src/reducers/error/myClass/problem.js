@@ -21,6 +21,7 @@ const initialState = {
   readProblemBestScore: null,
   downloadSamples: null,
   downloadTestcases: null,
+  downloadAssistingData: null,
   rejudgeSubmission: null,
   browseTestcases: null,
   rejudgeProblem: null,
@@ -152,6 +153,17 @@ export default function problem(state = initialState, action) {
       return {
         ...state,
         downloadTestcases: action.error,
+      };
+
+    case problemConstants.DOWNLOAD_ALL_ASSISTING_DATA_START:
+      return {
+        ...state,
+        downloadAssistingData: null,
+      };
+    case problemConstants.DOWNLOAD_ALL_ASSISTING_DATA_FAIL:
+      return {
+        ...state,
+        downloadAssistingData: action.error,
       };
 
     case problemConstants.REJUDGE_SUBMISSION_SUCCESS:

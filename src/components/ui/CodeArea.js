@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
     width: '100%',
   },
   codeFieldInputRoot: {
-    fontFamily: 'Cascadia',
+    fontFamily: 'Noto Sans Mono',
     fontWeight: 300,
   },
   copyIcon: {

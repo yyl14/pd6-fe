@@ -140,7 +140,7 @@ export default function TeamMemberEdit({ isManager, handleBack, setAddMemberFail
   };
   const handleAdd = () => {
     const role = inputs.role === 'Normal' ? 'NORMAL' : 'MANAGER';
-    dispatch(getAccountBatchByReferral(authToken, inputs.student, teamId, role, tempAddSuccess, tempAddFail));
+    dispatch(getAccountBatchByReferral(authToken, inputs.student, tempAddSuccess, tempAddFail, teamId, role));
   };
 
   return (

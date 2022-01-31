@@ -544,6 +544,28 @@ const downloadAllTestcases = (token, problemId, as_attachment) => async (dispatc
   }
 };
 
+const downloadAllAssistingData = (token, problemId, as_attachment) => async (dispatch) => {
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+    params: {
+      as_attachment,
+    },
+  };
+  dispatch({ type: problemConstants.DOWNLOAD_ALL_ASSISTING_DATA_START });
+  try {
+    await agent.post(`/problem/${problemId}/all-assisting-data`, {}, config);
+
+    dispatch({ type: problemConstants.DOWNLOAD_ALL_ASSISTING_DATA_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: problemConstants.DOWNLOAD_ALL_ASSISTING_DATA_FAIL,
+      error,
+    });
+  }
+};
+
 const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData, onSuccess, onError) => async (dispatch) => {
   const config = {
     headers: {
@@ -973,6 +995,7 @@ export {
   readProblemBestScore,
   downloadAllSamples,
   downloadAllTestcases,
+  downloadAllAssistingData,
   rejudgeSubmission,
   rejudgeProblem,
   saveSamples,
