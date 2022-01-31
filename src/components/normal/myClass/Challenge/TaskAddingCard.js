@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import {
@@ -100,6 +100,43 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
   const [snackbarErrorMessage, setSnackbarErrorMessage] = useState('');
 
+  const validateInput = useCallback((maxTemp, minTemp, peerNumberTemp) => {
+    // string
+    if (
+      Number.isNaN(Number(maxTemp)) === true
+      || Number.isNaN(Number(minTemp)) === true
+      || Number.isNaN(Number(peerNumberTemp)) === true
+    ) {
+      return 'Error: Max/Min/Assignee is NOT a Number.';
+    }
+
+    // float
+    if (
+      Number.isInteger(Number(maxTemp)) === false
+      || Number.isInteger(Number(minTemp)) === false
+      || Number.isInteger(Number(peerNumberTemp)) === false
+    ) {
+      return 'Error: Max/Min/Assignee is a Float number.';
+    }
+
+    // negative
+    if (Number(maxTemp) < 0 || Number(minTemp) < 0 || Number(peerNumberTemp) < 0) {
+      return 'Error: Max/Min/Assignee is a Negative number.';
+    }
+
+    // max score or peer number = 0
+    if (Number(maxTemp) === 0 || Number(peerNumberTemp) === 0) {
+      return "Error: Max Score/Assignee can't be 0.";
+    }
+
+    // max score <= min score
+    if (Number(maxTemp) <= Number(minTemp)) {
+      return 'Error: Max Score <= Min Score.';
+    }
+
+    return '';
+  }, []);
+
   useEffect(() => {
     if (
       !loading.addProblem
@@ -140,72 +177,17 @@ export default function TaskAddingCard({ open, setOpen }) {
         && minScore !== ''
         && peerNumber !== ''
       ) {
-        if (
-          Number.isNaN(Number(maxScore)) === true
-          || Number.isNaN(Number(minScore)) === true
-          || Number.isNaN(Number(peerNumber)) === true
-        ) {
-          // string
-          setSnackbarErrorMessage('Error: Max/Min/Assignee is a String.');
-          setShowErrorSnackbar(true);
-          setDisabled(true);
-        } else if (
-          Number.isNaN(Number(maxScore)) === false
-          && Number.isNaN(Number(minScore)) === false
-          && Number.isNaN(Number(peerNumber)) === false
-        ) {
+        // input is correct.
+        const errorMessage = validateInput(maxScore, minScore, peerNumber);
+        if (errorMessage === '') {
           setShowErrorSnackbar(false);
           setSnackbarErrorMessage('');
-          if (
-            Number.isInteger(Number(maxScore)) === false
-            || Number.isInteger(Number(minScore)) === false
-            || Number.isInteger(Number(peerNumber)) === false
-          ) {
-            // float
-            setSnackbarErrorMessage('Error: Max/Min/Assignee is a Float number.');
-            setShowErrorSnackbar(true);
-            setDisabled(true);
-          } else if (
-            Number.isInteger(Number(maxScore)) === true
-            || Number.isInteger(Number(minScore)) === true
-            || Number.isInteger(Number(peerNumber)) === true
-          ) {
-            setShowErrorSnackbar(false);
-            setSnackbarErrorMessage('');
-            if (Number(maxScore) < 0 || Number(minScore) < 0 || Number(peerNumber) < 0) {
-              // negative
-              setSnackbarErrorMessage('Error: Max/Min/Assignee is a Negative number.');
-              setShowErrorSnackbar(true);
-              setDisabled(true);
-            } else if (Number(maxScore) >= 0 || Number(minScore) >= 0 || Number(peerNumber) >= 0) {
-              setShowErrorSnackbar(false);
-              setSnackbarErrorMessage('');
-              if (Number(maxScore) === 0) {
-                // max score = 0
-                setSnackbarErrorMessage("Error: Max Score can't be 0.");
-                setShowErrorSnackbar(true);
-                setDisabled(true);
-              } else if (Number(peerNumber) === 0) {
-                // peer number = 0
-                setSnackbarErrorMessage("Error: Assignee can't be 0.");
-                setShowErrorSnackbar(true);
-                setDisabled(true);
-              } else {
-                setShowErrorSnackbar(false);
-                setSnackbarErrorMessage('');
-                if (Number(maxScore) <= Number(minScore)) {
-                  // max score <= min score
-                  setSnackbarErrorMessage('Error: Max Score <= Min Score.');
-                  setShowErrorSnackbar(true);
-                  setDisabled(true);
-                } else {
-                  setShowErrorSnackbar(false);
-                  setSnackbarErrorMessage('');
-                  setDisabled(false);
-                }
-              }
-            }
-          }
+          setDisabled(false);
+        } else {
+          // input is wrong.
+          setShowErrorSnackbar(true);
+          setSnackbarErrorMessage(errorMessage);
+          setDisabled(true);
         }
       }
     } else if (type === 'Scoreboard') {
@@ -226,6 +208,7 @@ export default function TaskAddingCard({ open, setOpen }) {
     teamLabelFilter,
     title,
     type,
+    validateInput,
   ]);
 
   useEffect(() => {
