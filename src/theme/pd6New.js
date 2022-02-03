@@ -18,6 +18,7 @@ const mono = {
   gray: '#DCDCDC',
   semiDarkGray: '#AEAEAE',
   darkGray: '#7C7C7C',
+  backgroundGray: '#F8F8F8',
   lightBlack: '#090909',
   black: '#090909',
 };
@@ -87,7 +88,7 @@ const palette = {
   },
 
   background: {
-    default: mono.white, // mono - very light
+    default: mono.backgroundGray,
     paper: 'white',
     card: 'white',
   },
