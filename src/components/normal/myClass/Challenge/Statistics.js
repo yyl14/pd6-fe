@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
@@ -9,6 +9,8 @@ import SimpleTable from '../../../ui/SimpleTable';
 import CustomTable from '../../../ui/CustomTable';
 import PageTitle from '../../../ui/PageTitle';
 import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
+
+/* eslint indent: 0 */
 
 const useStyles = makeStyles(() => ({
   copyButton: {
@@ -66,7 +68,6 @@ export default function Statistics() {
   const [scoreboardTitle, setScoreboardTitle] = useState(accountColumn);
   const [scoreboardData, setScoreboardData] = useState([]);
   const [challengeTitle, setChallengeTitle] = useState('');
-  const [scoreboardHTML, setScoreboardHTML] = useState('');
 
   useEffect(() => {
     dispatch(fetchChallengeSummary(authToken, challengeId));
@@ -156,47 +157,49 @@ export default function Statistics() {
       challenges[challengeId].statistics.memberSubmission.map((member) => {
         if (member.essay_submissions) {
           member.essay_submissions.map((record) => dispatch(
-            fetchDownloadFileUrl(authToken, {
-              filename: record.filename,
-              uuid: record.content_file_uuid,
-              as_attachment: false,
-            }),
-          ));
+              fetchDownloadFileUrl(authToken, {
+                filename: record.filename,
+                uuid: record.content_file_uuid,
+                as_attachment: false,
+              }),
+            ));
         }
         return member;
       });
     }
   }, [authToken, challengeId, challenges, dispatch]);
 
-  useEffect(() => {
-    // assemble html data to copy
-    let tableHTML = '<table>';
-    tableHTML += '<tr>';
-    scoreboardTitle.map((title) => {
-      tableHTML += `<td><b>${title.label}</b></td>`;
-      return title;
-    });
-    tableHTML += '</tr>';
+  // assemble html data to copy
+  const scoreboardHTML = useMemo(
+    () => `
+    <table>
+      <tr>
+      ${scoreboardTitle
+        .map(
+          (title) => `
+          <td>
+            <b>${title.label}</b>
+          </td>`,
+        )
+        .join('')}
+      </tr>
+    ${scoreboardData
+      .map(
+        (row) => `
+        <tr>
+          ${scoreboardTitle
+            .map((column) => (column.type === 'link'
+                ? `<td><a href='${row[column.link_id] ?? ''}'>${row[column.id] ?? ''}</a></td>`
+                : `<td>${row[column.id] ?? ''}</td>`))
+            .join('')}
+        </tr>`,
+      )
+      .join('')}
+    </table>
+    `,
 
-    scoreboardData.map((row) => {
-      tableHTML += '<tr>';
-      scoreboardTitle.map((column) => {
-        const value = row[column.id] !== undefined ? row[column.id] : '';
-        if (column.type === 'link') {
-          const link = row[column.link_id] ? row[column.link_id] : '';
-          tableHTML += `<td><a href='${link}'>${value}</a></td>`;
-        } else {
-          tableHTML += `<td>${value}</td>`;
-        }
-        return column;
-      });
-      tableHTML += '</tr>';
-      return row;
-    });
-
-    tableHTML += '</table>';
-    setScoreboardHTML(tableHTML);
-  }, [scoreboardData, scoreboardTitle]);
+    [scoreboardData, scoreboardTitle],
+  );
 
   return (
     <>
