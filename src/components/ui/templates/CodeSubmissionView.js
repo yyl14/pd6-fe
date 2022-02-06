@@ -83,7 +83,11 @@ export default function CodeSubmission({ baseUrl, isProblemSet }) {
     if (langId === '') {
       return;
     }
-    dispatch(submitCode(authToken, problemId, langId, code, onSubmitSuccess, () => { setShowSnackbar(true); }));
+    dispatch(
+      submitCode(authToken, problemId, langId, code, onSubmitSuccess, () => {
+        setShowSnackbar(true);
+      }),
+    );
 
     localStorage.setItem('langId', langId);
   };
