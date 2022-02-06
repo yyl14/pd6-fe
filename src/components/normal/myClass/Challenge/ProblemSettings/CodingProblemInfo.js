@@ -210,7 +210,9 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       )}
       {problems[problemId].hint !== '' && (
         <SimpleBar title="Hint">
-          <Typography variant="body2">{problems[problemId].hint}</Typography>
+          <MathpixLoader>
+            <MathpixMarkdown text={problems[problemId].hint} htmlTags />
+          </MathpixLoader>
         </SimpleBar>
       )}
       <SimpleBar title="Sample Data" noIndent>

@@ -136,7 +136,9 @@ export default function CodingProblemInfo() {
       )}
       {problems[problemId].hint !== '' && (
         <SimpleBar title="Hint">
-          <Typography variant="body2">{problems[problemId].hint}</Typography>
+          <MathpixLoader>
+            <MathpixMarkdown text={problems[problemId].hint} htmlTags />
+          </MathpixLoader>
         </SimpleBar>
       )}
       <SimpleBar title="Sample Data" noIndent>
@@ -235,7 +237,6 @@ export default function CodingProblemInfo() {
               align: 'center',
               type: 'string',
             },
-
           ]}
           data={testcaseDataIds.map((id) => ({
             id,
