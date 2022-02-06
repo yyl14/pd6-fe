@@ -27,6 +27,7 @@ export default function CodeField({
   const classNames = useStyles();
   return (
     <TextField
+      style={{ whiteSpace: 'nowrap' }}
       value={value}
       onChange={onChange}
       multiline

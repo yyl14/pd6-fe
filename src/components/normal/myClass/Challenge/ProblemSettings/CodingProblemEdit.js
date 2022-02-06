@@ -903,7 +903,16 @@ export default function CodingProblemEdit({ closeEdit }) {
                   setReviserCode(e.target.value);
                   setHasChange(true);
                 }}
-                placeholder="# Student's submission code file path will be given via stdin&#13;&#10;with open(input(), 'r') as file:&#13;&#10;&#9;content = file.read()&#13;&#10;if 'import' in content:&#13;&#10;&#9;# PDOGS will determine that student's code did not pass reviser&#13;&#10;&#9;#   if exit with any non-zero exit code&#13;&#10;&#9;exit(1)&#13;&#10;"
+                placeholder={`# Student's submission code file path
+#${'\u00A0\u00A0\u00A0'}will be given via stdin
+with open(input(), 'r') as file:
+${'\u00A0\u00A0\u00A0\u00A0'}content = file.read()
+
+if 'import' in content:
+${'\u00A0\u00A0\u00A0\u00A0'}# Exiting with any non-zero exit code
+${'\u00A0\u00A0\u00A0\u00A0'}#${'\u00A0\u00A0\u00A0'}means that code did not pass reviser
+${'\u00A0\u00A0\u00A0\u00A0'}exit(1)
+`}
               />
             </AlignedText>
           </>
@@ -913,7 +922,13 @@ export default function CodingProblemEdit({ closeEdit }) {
         <Button color="default" onClick={handleCancel}>
           Cancel
         </Button>
-        <Button disabled={disabled} color="primary" onClick={handleSave}>
+        <Button
+          disabled={
+            disabled || (judgeType === 'CUSTOMIZED' && judgeCode === '') || (reviserIsEnabled && reviserCode === '')
+          }
+          color="primary"
+          onClick={handleSave}
+        >
           Save
         </Button>
       </div>
