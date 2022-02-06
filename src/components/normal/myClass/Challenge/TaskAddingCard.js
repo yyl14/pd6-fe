@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import {
@@ -97,6 +97,45 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [scoringFormula, setScoringFormula] = useState('');
   const [baselineTeam, setBaselineTeam] = useState(null);
   const [teamLabelFilter, setTeamLabelFilter] = useState('');
+  const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
+  const [snackbarErrorMessage, setSnackbarErrorMessage] = useState('');
+
+  const validateInput = useCallback((maxTemp, minTemp, peerNumberTemp) => {
+    // string
+    if (
+      Number.isNaN(Number(maxTemp)) === true
+      || Number.isNaN(Number(minTemp)) === true
+      || Number.isNaN(Number(peerNumberTemp)) === true
+    ) {
+      return 'Error: Max/Min/Assignee is NOT a Number.';
+    }
+
+    // float
+    if (
+      Number.isInteger(Number(maxTemp)) === false
+      || Number.isInteger(Number(minTemp)) === false
+      || Number.isInteger(Number(peerNumberTemp)) === false
+    ) {
+      return 'Error: Max/Min/Assignee is a Float number.';
+    }
+
+    // negative
+    if (Number(maxTemp) < 0 || Number(minTemp) < 0 || Number(peerNumberTemp) < 0) {
+      return 'Error: Max/Min/Assignee is a Negative number.';
+    }
+
+    // max score or peer number = 0
+    if (Number(maxTemp) === 0 || Number(peerNumberTemp) === 0) {
+      return "Error: Max Score/Assignee can't be 0.";
+    }
+
+    // max score <= min score
+    if (Number(maxTemp) <= Number(minTemp)) {
+      return 'Error: Max Score <= Min Score.';
+    }
+
+    return null;
+  }, []);
 
   useEffect(() => {
     if (
@@ -138,18 +177,18 @@ export default function TaskAddingCard({ open, setOpen }) {
         && minScore !== ''
         && peerNumber !== ''
       ) {
-        if (
-          Number(maxScore) <= Number(minScore)
-          || Number(maxScore) < 0
-          || Number(minScore) < 0
-          || Number(peerNumber) < 0
-        ) {
-          setDisabled(true);
-        } else {
+        const errorMessage = validateInput(maxScore, minScore, peerNumber);
+        if (!errorMessage) {
+          // input is correct.
+          setShowErrorSnackbar(false);
+          setSnackbarErrorMessage('');
           setDisabled(false);
+        } else {
+          // input is wrong.
+          setShowErrorSnackbar(true);
+          setSnackbarErrorMessage(errorMessage);
+          setDisabled(true);
         }
-      } else {
-        setDisabled(true);
       }
     } else if (type === 'Scoreboard') {
       if (label !== '' && title !== '' && targetProblems.length !== 0 && scoringFormula !== '') {
@@ -169,6 +208,7 @@ export default function TaskAddingCard({ open, setOpen }) {
     teamLabelFilter,
     title,
     type,
+    validateInput,
   ]);
 
   useEffect(() => {
@@ -533,6 +573,7 @@ export default function TaskAddingCard({ open, setOpen }) {
         message={`Error: ${error.api.scoreboard.addTeamProjectScoreboardUnderChallenge}`}
         onClose={() => setShowAddScoreboardErrorSnackbar(false)}
       />
+      <Snackbar open={showErrorSnackbar} message={snackbarErrorMessage} onClose={() => setShowErrorSnackbar(false)} />
     </>
   );
 }
