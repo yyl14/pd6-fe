@@ -134,7 +134,7 @@ export default function TaskAddingCard({ open, setOpen }) {
       return 'Error: Max Score <= Min Score.';
     }
 
-    return '';
+    return null;
   }, []);
 
   useEffect(() => {
@@ -177,9 +177,9 @@ export default function TaskAddingCard({ open, setOpen }) {
         && minScore !== ''
         && peerNumber !== ''
       ) {
-        // input is correct.
         const errorMessage = validateInput(maxScore, minScore, peerNumber);
-        if (errorMessage === '') {
+        if (!errorMessage) {
+          // input is correct.
           setShowErrorSnackbar(false);
           setSnackbarErrorMessage('');
           setDisabled(false);
