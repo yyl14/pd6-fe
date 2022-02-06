@@ -879,13 +879,14 @@ export default function CodingProblemEdit({ closeEdit }) {
         )}
       </SimpleBar>
       <SimpleBar title="Reviser Code (Optional)" noIndent>
-        <AlignedText text="Enable Reviser" childrenType="text">
-          <Switch
-            checked={reviserIsEnabled}
-            name="reviser"
-            color="primary"
-            onChange={(e) => setReviserIsEnabled(e.target.checked)}
-          />
+        <AlignedText text="Reviser Type" childrenType="field">
+          <FormControl variant="outlined" className={classNames.select}>
+            <Select name="reviser" value={reviserIsEnabled} onChange={(e) => setReviserIsEnabled(e.target.value)}>
+              <MenuItem value={false}>No customized reviser</MenuItem>
+              {/* eslint-disable-next-line react/jsx-boolean-value */}
+              <MenuItem value={true}>Customized reviser</MenuItem>
+            </Select>
+          </FormControl>
         </AlignedText>
         {reviserIsEnabled && (
           <>
