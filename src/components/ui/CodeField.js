@@ -21,7 +21,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function CodeField({ value, onChange, disabled = false }) {
+export default function CodeField({
+  value, onChange, disabled = false, placeholder,
+}) {
   const classNames = useStyles();
   return (
     <TextField
@@ -32,6 +34,7 @@ export default function CodeField({ value, onChange, disabled = false }) {
       disabled={disabled}
       className={classNames.codeField}
       InputProps={{ className: classNames.codeFieldInputRoot }}
+      placeholder={placeholder}
     />
   );
 }

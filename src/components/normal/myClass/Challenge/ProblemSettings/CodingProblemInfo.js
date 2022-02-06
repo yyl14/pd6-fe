@@ -389,7 +389,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       )}
       {role === 'MANAGER' && problems[problemId].judge_type === 'CUSTOMIZED' && (
         <SimpleBar
-          title="Customize Judge Code (Optional)"
+          title="Customized Judge Code (Optional)"
           noIndent
           buttons={(
             <FormControlLabel
@@ -399,9 +399,22 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             />
           )}
         >
-          <CodeArea
-            value={problems[problemId].judge_source.judge_code ? problems[problemId].judge_source.judge_code : ''}
-          />
+          <CodeArea value={problems[problemId].judge_source.judge_code ?? ''} />
+        </SimpleBar>
+      )}
+      {role === 'MANAGER' && problems[problemId].reviser_is_enabled && (
+        <SimpleBar
+          title="Reviser Code (Optional)"
+          noIndent
+          buttons={(
+            <FormControlLabel
+              control={<Switch checked name="customizeJudge" color="primary" disabled />}
+              label="Enabled"
+              className={classNames.statusSwitch}
+            />
+          )}
+        >
+          <CodeArea value={problems[problemId].reviser.judge_code ?? ''} />
         </SimpleBar>
       )}
       {role === 'MANAGER' && (
