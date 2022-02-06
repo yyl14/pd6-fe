@@ -24,13 +24,14 @@ import AlignedText from '../../../../ui/AlignedText';
 
 import SampleUploadCard from './SampleUploadCard';
 import AssistingDataUploadCard from './AssistingDataUploadCard';
+import CodeField from '../../../../ui/CodeField';
 import TestingDataUploadCard from './TestingDataUploadCard';
 
 import {
   editProblemInfo,
   saveSamples,
   saveTestcases,
-  readProblemWithJudgeCode,
+  readProblemWithCodeContent,
   saveAssistingData,
 } from '../../../../../actions/myClass/problem';
 
@@ -102,8 +103,11 @@ export default function CodingProblemEdit({ closeEdit }) {
   const [source, setSource] = useState('');
   const [hint, setHint] = useState('');
   const [judgeType, setJudgeType] = useState('');
-  const [language, setLanguage] = useState('Python');
+  const [reviserIsEnabled, setReviserIsEnabled] = useState(false);
+  const [judgeLanguage, setJudgeLanguage] = useState('Python 3.8');
+  const [reviserLanguage, setReviserLanguage] = useState('Python 3.8');
   const [judgeCode, setJudgeCode] = useState('');
+  const [reviserCode, setReviserCode] = useState('');
   const [status, setStatus] = useState(true);
 
   const [handleInfoSuccess, setHandleInfoSuccess] = useState(false);
@@ -162,11 +166,11 @@ export default function CodingProblemEdit({ closeEdit }) {
     return 0;
   };
 
-  const judgeLanguageTrans = (lang) => {
-    if (lang === 'Python') {
+  const languageTrans = (lang) => {
+    if (lang === 'Python 3.8') {
       return 'python 3.8';
     }
-    return 0;
+    return null;
   };
 
   useEffect(() => {
@@ -178,11 +182,18 @@ export default function CodingProblemEdit({ closeEdit }) {
       setSource(problems[problemId].source);
       setHint(problems[problemId].hint);
       setJudgeType(problems[problemId].judge_type);
+      setReviserIsEnabled(problems[problemId].reviser_is_enabled);
       if (problems[problemId].judge_type === 'CUSTOMIZED') {
-        setLanguage('Python');
+        setJudgeLanguage('Python 3.8');
       }
-      if (problems[problemId].judge_source && problems[problemId].judge_source.judge_code) {
+      if (problems[problemId].judge_source?.judge_code) {
         setJudgeCode(problems[problemId].judge_source.judge_code);
+      }
+      if (problems[problemId].reviser_is_enabled) {
+        setReviserLanguage('Python 3.8');
+      }
+      if (problems[problemId].reviser?.judge_code) {
+        setReviserCode(problems[problemId].reviser?.judge_code);
       }
     }
   }, [problems, problemId]);
@@ -274,7 +285,7 @@ export default function CodingProblemEdit({ closeEdit }) {
   useEffect(() => {
     if (handleSamplesSuccess && handleTestcasesSuccess && handleInfoSuccess && handleAssistingDataSuccess) {
       if (uploadFailFilename.length === 0) {
-        dispatch(readProblemWithJudgeCode(authToken, problemId));
+        dispatch(readProblemWithCodeContent(authToken, problemId));
         setDisabled(false);
         closeEdit();
       } else {
@@ -476,8 +487,13 @@ export default function CodingProblemEdit({ closeEdit }) {
         ioDescription,
         source,
         hint,
-        judgeLanguageTrans(language),
+        reviserIsEnabled,
+
+        languageTrans(judgeLanguage),
         judgeCode,
+        languageTrans(reviserLanguage),
+        reviserCode,
+
         () => {
           setHandleInfoSuccess(true);
         },
@@ -833,7 +849,7 @@ export default function CodingProblemEdit({ closeEdit }) {
         />
       </SimpleBar>
       <SimpleBar title="Customized Judge Code (Optional)" noIndent>
-        <AlignedText text="Judge method" childrenType="field">
+        <AlignedText text="Judge Method" childrenType="field">
           <FormControl variant="outlined" className={classNames.select}>
             <Select name="judgeMethod" value={judgeType} onChange={(e) => setJudgeType(e.target.value)}>
               <MenuItem value="NORMAL">No customized judge</MenuItem>
@@ -845,24 +861,61 @@ export default function CodingProblemEdit({ closeEdit }) {
           <>
             <AlignedText text="Language" childrenType="field">
               <FormControl variant="outlined" className={classNames.select}>
-                <Select name="language" value={language} onChange={(e) => setLanguage(e.target.value)}>
-                  <MenuItem value="Python">Python</MenuItem>
+                <Select name="language" value={judgeLanguage} onChange={(e) => setJudgeLanguage(e.target.value)}>
+                  <MenuItem value="Python 3.8">Python 3.8</MenuItem>
                 </Select>
               </FormControl>
             </AlignedText>
-            <Typography variant="body1">Content</Typography>
-            <TextField
-              value={judgeCode}
-              variant="outlined"
-              onChange={(e) => {
-                setJudgeCode(e.target.value);
-                setHasChange(true);
-              }}
-              multiline
-              minRows={15}
-              maxRows={15}
-              className={classNames.textfield2}
-            />
+            <AlignedText text="Content" childrenType="field" noIndent>
+              <CodeField
+                value={judgeCode}
+                onChange={(e) => {
+                  setJudgeCode(e.target.value);
+                  setHasChange(true);
+                }}
+              />
+            </AlignedText>
+          </>
+        )}
+      </SimpleBar>
+      <SimpleBar title="Reviser Code (Optional)" noIndent>
+        <AlignedText text="Reviser Type" childrenType="field">
+          <FormControl variant="outlined" className={classNames.select}>
+            <Select name="reviser" value={reviserIsEnabled} onChange={(e) => setReviserIsEnabled(e.target.value)}>
+              <MenuItem value={false}>No customized reviser</MenuItem>
+              {/* eslint-disable-next-line react/jsx-boolean-value */}
+              <MenuItem value={true}>Customized reviser</MenuItem>
+            </Select>
+          </FormControl>
+        </AlignedText>
+        {reviserIsEnabled && (
+          <>
+            <AlignedText text="Language" childrenType="field">
+              <FormControl variant="outlined" className={classNames.select}>
+                <Select name="language" value={reviserLanguage} onChange={(e) => setReviserLanguage(e.target.value)}>
+                  <MenuItem value="Python 3.8">Python 3.8</MenuItem>
+                </Select>
+              </FormControl>
+            </AlignedText>
+            <AlignedText text="Content" childrenType="field" noIndent>
+              <CodeField
+                value={reviserCode}
+                onChange={(e) => {
+                  setReviserCode(e.target.value);
+                  setHasChange(true);
+                }}
+                placeholder={`# Student's submission code file path
+#${'\u00A0\u00A0\u00A0'}will be given via stdin
+with open(input(), 'r') as file:
+${'\u00A0\u00A0\u00A0\u00A0'}content = file.read()
+
+if 'import' in content:
+${'\u00A0\u00A0\u00A0\u00A0'}# Exiting with any non-zero exit code
+${'\u00A0\u00A0\u00A0\u00A0'}#${'\u00A0\u00A0\u00A0'}means that code did not pass reviser
+${'\u00A0\u00A0\u00A0\u00A0'}exit(1)
+`}
+              />
+            </AlignedText>
           </>
         )}
       </SimpleBar>
@@ -870,7 +923,13 @@ export default function CodingProblemEdit({ closeEdit }) {
         <Button color="default" onClick={handleCancel}>
           Cancel
         </Button>
-        <Button disabled={disabled} color="primary" onClick={handleSave}>
+        <Button
+          disabled={
+            disabled || (judgeType === 'CUSTOMIZED' && judgeCode === '') || (reviserIsEnabled && reviserCode === '')
+          }
+          color="primary"
+          onClick={handleSave}
+        >
           Save
         </Button>
       </div>

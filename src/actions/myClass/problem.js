@@ -32,38 +32,54 @@ const readProblemInfo = (token, problemId, onSuccess, onError) => async (dispatc
   }
 };
 
-const readProblemWithJudgeCode = (token, problemId, onSuccess, onError) => async (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
+const readProblemWithCodeContent = (token, problemId, onSuccess, onError) => async (dispatch) => {
+  const getCodeSource = async (filename, code_uuid) => {
+    const config = {
+      headers: {
+        'auth-token': token,
+      },
+      params: {
+        filename,
+        as_attachment: false,
+      },
+    };
+    const res = await agent.get(`/s3-file/${code_uuid}/url`, config);
+    const { data } = res.data;
+    const code = await getTextFromUrl(data.url);
+    return code;
   };
 
   try {
+    const config = {
+      headers: {
+        'auth-token': token,
+      },
+    };
+
     dispatch({ type: problemConstants.READ_PROBLEM_START });
+
     const res = await agent.get(`/problem/${problemId}`, config);
-    if (res.data.data.judge_source && res.data.data.judge_source.code_uuid) {
-      const config2 = {
-        headers: {
-          'auth-token': token,
-        },
-        params: {
-          filename: res.data.data.judge_source.filename,
-          as_attachment: false,
-        },
-      };
-      const res1 = await agent.get(`/s3-file/${res.data.data.judge_source.code_uuid}/url`, config2);
-      const content = await getTextFromUrl(res1.data.data.url);
-      dispatch({
-        type: problemConstants.READ_PROBLEM_SUCCESS,
-        payload: { ...res.data.data, judge_source: { ...res.data.data.judge_source, judge_code: content } },
-      });
-    } else {
-      dispatch({
-        type: problemConstants.READ_PROBLEM_SUCCESS,
-        payload: res.data.data,
-      });
-    }
+    const { data } = res.data;
+
+    const judge_source = data.judge_type === 'CUSTOMIZED' && data.judge_source?.filename && data.judge_source?.code_uuid
+      ? {
+        ...data.judge_source,
+        judge_code: await getCodeSource(data.judge_source.filename, data.judge_source.code_uuid),
+      }
+      : null;
+
+    const reviser = data.reviser_is_enabled && data.reviser?.filename && data.reviser?.code_uuid
+      ? {
+        ...data.reviser,
+        judge_code: await getCodeSource(data.reviser.filename, data.reviser.code_uuid),
+      }
+      : null;
+
+    dispatch({
+      type: problemConstants.READ_PROBLEM_SUCCESS,
+      payload: { ...data, judge_source, reviser },
+    });
+
     if (typeof onSuccess === 'function') {
       onSuccess();
     }
@@ -292,8 +308,13 @@ const editProblemInfo = (
   ioDescription,
   source,
   hint,
-  judgeLanguage,
-  judgeCode,
+  reviserIsEnabled,
+
+  customizedJudgeLanguage,
+  customizedJudgeCode,
+  reviserJudgeLanguage,
+  reviserJudgeCode,
+
   onSuccess,
 ) => async (dispatch) => {
   dispatch({ type: problemConstants.EDIT_PROBLEM_START });
@@ -303,46 +324,36 @@ const editProblemInfo = (
     },
   };
   try {
-    if (judgeType === 'NORMAL') {
-      const body = {
-        challenge_label: label,
-        title,
-        judge_type: judgeType,
-        full_score: score,
-        testcase_disabled: testcaseDisabled,
-        description,
-        io_description: ioDescription,
-        source,
-        hint,
-      };
-      await agent.patch(`/problem/${problemId}`, body, config);
-      dispatch({
-        type: problemConstants.EDIT_PROBLEM_SUCCESS,
-        payload: { problemId, content: body },
-      });
-    } else {
-      const body = {
-        challenge_label: label,
-        title,
-        judge_type: judgeType,
-        full_score: score,
-        testcase_disabled: testcaseDisabled,
-        description,
-        io_description: ioDescription,
-        source,
-        hint,
-        judge_source: {
-          judge_language: judgeLanguage,
-          judge_code: judgeCode,
-        },
-      };
-      await agent.patch(`/problem/${problemId}`, body, config);
-      dispatch({
-        type: problemConstants.EDIT_PROBLEM_SUCCESS,
-        payload: { problemId, content: body },
-      });
-    }
-    // console.log(judgeType, judgeLanguage, judgeCode);
+    const body = {
+      challenge_label: label,
+      title,
+      judge_type: judgeType,
+      full_score: score,
+      testcase_disabled: testcaseDisabled,
+      description,
+      io_description: ioDescription,
+      source,
+      hint,
+      reviser_is_enabled: reviserIsEnabled,
+      judge_source:
+          judgeType === 'CUSTOMIZED'
+            ? {
+              judge_language: customizedJudgeLanguage,
+              judge_code: customizedJudgeCode,
+            }
+            : null,
+      reviser: reviserIsEnabled
+        ? {
+          judge_language: reviserJudgeLanguage,
+          judge_code: reviserJudgeCode,
+        }
+        : null,
+    };
+    await agent.patch(`/problem/${problemId}`, body, config);
+    dispatch({
+      type: problemConstants.EDIT_PROBLEM_SUCCESS,
+      payload: { problemId, content: body },
+    });
   } catch (error) {
     dispatch({
       type: problemConstants.EDIT_PROBLEM_FAIL,
@@ -649,7 +660,16 @@ const saveSamples = (token, problemId, testcases, sampleDataIds, sampleTableData
         ) {
           // console.log('editTestcase', sampleTableData[id]);
           await dispatch(
-            editTestcase(token, id, true, 0, sampleTableData[id].time_limit, sampleTableData[id].memory_limit, sampleTableData[id].note, false),
+            editTestcase(
+              token,
+              id,
+              true,
+              0,
+              sampleTableData[id].time_limit,
+              sampleTableData[id].memory_limit,
+              sampleTableData[id].note,
+              false,
+            ),
           );
         }
         // upload file
@@ -981,7 +1001,7 @@ const rejudgeProblem = (token, problemId) => async (dispatch) => {
 
 export {
   readProblemInfo,
-  readProblemWithJudgeCode,
+  readProblemWithCodeContent,
   editProblemInfo,
   deleteProblem,
   readSubmission,
