@@ -635,6 +635,7 @@ export default function CodingProblemEdit({ closeEdit }) {
       </SimpleBar>
       <SimpleBar title="Hint" noIndent>
         <TextField
+          placeholder="(Text, LaTeX, Markdown and HTML supported)"
           value={hint}
           variant="outlined"
           onChange={(e) => {
