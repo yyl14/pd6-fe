@@ -86,7 +86,6 @@ const MemberEdit = ({
   const [showUnsavedChangesDialog, setShowUnsavedChangesDialog] = useState(false);
   const [showDuplicateIdentityDialog, setShowDuplicateIdentityDialog] = useState(false);
   const [showErrorDetectedDialog, setShowErrorDetectedDialog] = useState(false);
-  // const [cookies] = useCookies(['id']);
   const unblockHandle = useRef();
   const targetLocation = useRef();
   const history = useHistory();

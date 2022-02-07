@@ -38,22 +38,7 @@ function App() {
 
   const themeContextValue = useMemo(() => ({ value: selectedTheme, setter: setTheme }), [selectedTheme, setTheme]);
 
-  // TODO: This is for transitioning cookie values to localStorage, remove this section after transition period.
-  // const [cookies, , removeCookie] = useCookies(['lang', 'themeBeta']);
-
-  // useEffect(() => {
-  //   if (cookies.lang) {
-  //     localStorage.setItem('langId', cookies.lang);
-  //     // removeCookie('lang');
-  //   }
-  //   if (cookies.themeBeta) {
-  //     localStorage.setItem('theme', cookies.themeBeta);
-  //     // removeCookie('themeBeta');
-  //   }
-  // }, [cookies.lang, cookies.themeBeta, removeCookie]);
-  // -----------------------------------------------------------------------------------------------------------
-
-  // Initialize theme selection from cookies
+  // Initialize theme selection from local storage
   useEffect(() => {
     const themeData = localStorage.getItem('theme');
     if (themeData) {
