@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ClearCacheProvider } from 'react-clear-cache';
+import { CookiesProvider } from 'react-cookie';
 import reportWebVitals from './reportWebVitals';
 import App from './App';
 
@@ -8,7 +9,9 @@ import './index.css';
 
 ReactDOM.render(
   <ClearCacheProvider duration={60000}>
-    <App />
+    <CookiesProvider>
+      <App />
+    </CookiesProvider>
   </ClearCacheProvider>,
   document.getElementById('root'),
 );
