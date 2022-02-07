@@ -76,7 +76,7 @@ export default function AccountDelete(props) {
           <DialogContent>
             <DialogContentText variant="body1" color="secondary">
               <AlignedText text="Username" childrenType="text">
-                <Typography>{props.userName}</Typography>
+                <Typography>{props.username}</Typography>
               </AlignedText>
               <AlignedText text="Student ID" childrenType="text">
                 {card.length > 0 && <Typography>{card[0].student_id}</Typography>}

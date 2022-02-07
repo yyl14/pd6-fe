@@ -17,13 +17,13 @@ export default function BasicInfo(props) {
       >
         <>
           <AlignedText text="Username" childrenType="text">
-            <Typography variant="body1">{props.userName}</Typography>
+            <Typography variant="body1">{props.username}</Typography>
           </AlignedText>
           <AlignedText text="Real name" childrenType="text">
             <Typography variant="body1">{props.realName}</Typography>
           </AlignedText>
           <AlignedText text="Nickname" childrenType="text">
-            <Typography variant="body1">{props.nickName}</Typography>
+            <Typography variant="body1">{props.nickname}</Typography>
           </AlignedText>
           <AlignedText text="Alternative Email" childrenType="text">
             <Typography variant="body1">{props.altMail}</Typography>

@@ -27,6 +27,7 @@ const user = (state = initialState, action) => {
     case userConstants.EDIT_SELF_ACCOUNT_SUCCESS: {
       return {
         ...state,
+        username: action.payload.username,
         nickname: action.payload.nickname,
         alternative_email:
           action.payload.alternative_email === '' ? action.payload.alternative_email : state.alternative_email,

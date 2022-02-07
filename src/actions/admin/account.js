@@ -103,14 +103,14 @@ const editInstitute = (token, id, abbreviatedName, fullName, emailDomain, isDisa
 };
 
 // SM: edit any account
-const editAccount = (token, id, realName, nickName, email) => async (dispatch) => {
+const editAccount = (token, id, realName, nickname, email) => async (dispatch) => {
   try {
     const config = {
       headers: { 'auth-token': token },
     };
     dispatch({ type: accountConstants.EDIT_ACCOUNT_START });
 
-    const accountInfo = { real_name: realName, nickname: nickName };
+    const accountInfo = { real_name: realName, nickname };
     if (email) {
       accountInfo.alternative_email = email;
     }
@@ -318,7 +318,7 @@ const deletePendingStudentCard = (token, emailVerificationId) => async (dispatch
   }
 };
 
-const addAccount = (token, realName, userName, password, altMail, onSuccess, onError) => async (dispatch) => {
+const addAccount = (token, realName, username, password, altMail, onSuccess, onError) => async (dispatch) => {
   try {
     const config = { headers: { 'auth-token': token } };
     dispatch({ type: accountConstants.ADD_ACCOUNT_START });
@@ -326,7 +326,7 @@ const addAccount = (token, realName, userName, password, altMail, onSuccess, onE
       '/account-normal',
       {
         real_name: realName,
-        username: userName,
+        username,
         password,
         alternative_email: altMail,
         nickname: '',
