@@ -4,6 +4,7 @@ import React, {
 import { Provider } from 'react-redux';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
+import { useCookies } from 'react-cookie';
 
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
@@ -38,7 +39,22 @@ function App() {
 
   const themeContextValue = useMemo(() => ({ value: selectedTheme, setter: setTheme }), [selectedTheme, setTheme]);
 
-  // Initialize theme selection from local storage
+  // TODO: This is for transitioning cookie values to localStorage, remove this section after transition period.
+  const [cookies, , removeCookie] = useCookies(['lang', 'themeBeta']);
+
+  useEffect(() => {
+    if (cookies.lang) {
+      localStorage.setItem('langId', cookies.lang);
+      removeCookie('lang');
+    }
+    if (cookies.themeBeta) {
+      localStorage.setItem('theme', cookies.themeBeta);
+      removeCookie('themeBeta');
+    }
+  }, [cookies.lang, cookies.themeBeta, removeCookie]);
+  // -----------------------------------------------------------------------------------------------------------
+
+  // Initialize theme selection from cookies
   useEffect(() => {
     const themeData = localStorage.getItem('theme');
     if (themeData) {
