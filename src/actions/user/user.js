@@ -3,13 +3,16 @@ import agent from '../agent';
 import { userConstants } from './constants';
 import browseParamsTransForm from '../../function/browseParamsTransform';
 
-const editAccount = (token, id, nickName, email) => async (dispatch) => {
+const editAccount = (token, id, userName, nickName, email) => async (dispatch) => {
   try {
     const config = {
       headers: { 'auth-token': token },
     };
     dispatch({ type: userConstants.EDIT_SELF_ACCOUNT_START });
-    const accountInfo = { nickname: nickName };
+    const accountInfo = {
+      username: userName,
+      nickname: nickName,
+    };
     if (email) {
       accountInfo.alternative_email = email;
     }
@@ -18,6 +21,7 @@ const editAccount = (token, id, nickName, email) => async (dispatch) => {
       type: userConstants.EDIT_SELF_ACCOUNT_SUCCESS,
       payload: {
         id,
+        username: userName,
         nickname: nickName,
         alternative_email: email,
       },

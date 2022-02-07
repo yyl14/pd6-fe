@@ -16,7 +16,7 @@ const useStyles = makeStyles(() => ({
 
 export default function BasicInfoEdit(props) {
   const [realName] = useState(props.realName);
-  const [userName] = useState(props.userName);
+  const [userName, setUserName] = useState(props.userName);
   const [nickName, setNickName] = useState(props.nickName);
   const [altMail, setAltMail] = useState(props.altMail);
   const classes = useStyles();
@@ -29,7 +29,7 @@ export default function BasicInfoEdit(props) {
 
   const handleSave = () => {
     const altMailChanged = altMail !== props.altMail && altMail !== '';
-    dispatch(editAccount(authToken, accountId, nickName, altMailChanged ? altMail : null));
+    dispatch(editAccount(authToken, accountId, userName, nickName, altMailChanged ? altMail : null));
     props.handleBack(altMailChanged ? 'Alternative email will be updated once it’s verified.' : '');
   };
 
@@ -44,7 +44,14 @@ export default function BasicInfoEdit(props) {
       <SimpleBar title="Basic Information">
         <>
           <AlignedText text="Username" childrenType="text" maxWidth="lg">
-            <Typography variant="body1">{userName}</Typography>
+            <TextField
+              value={userName}
+              onChange={(e) => {
+                setUserName(e.target.value);
+              }}
+              error={error}
+              helperText={errorText}
+            />
           </AlignedText>
           <AlignedText text="Real name" childrenType="text" maxWidth="lg">
             <Typography variant="body1">{realName}</Typography>
