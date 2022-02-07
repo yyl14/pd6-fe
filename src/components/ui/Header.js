@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
 import { format } from 'date-fns';
 import moment from 'moment';
 import {
@@ -232,7 +231,6 @@ export default function Header() {
   const [unreadNotifyExist, setUnreadNotifyExist] = useState(false);
 
   const [hasClass, setHasClass] = useState(false);
-  const [, , removeCookie] = useCookies(['token', 'id']);
   const [activeHeaderItemIndex, setActiveHeaderItemIndex] = useState(0);
   const [userButtonActive, setUserButtonActive] = useState(false);
 
@@ -451,8 +449,10 @@ export default function Header() {
 
   const goto = (link) => {
     if (link === '/logout') {
-      removeCookie('token', { path: '/' });
-      removeCookie('id', { path: '/' });
+      localStorage.removeItem('token');
+      localStorage.removeItem('id');
+      // removeCookie('token', { path: '/' });
+      // removeCookie('id', { path: '/' });
       dispatch(userLogout(history));
     } else {
       history.push(link);
