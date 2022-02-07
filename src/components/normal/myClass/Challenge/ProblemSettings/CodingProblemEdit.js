@@ -911,9 +911,9 @@ with open(input(), 'r') as file:
 ${'\u00A0\u00A0\u00A0\u00A0'}content = file.read()
 
 if 'import' in content:
-${'\u00A0\u00A0\u00A0\u00A0'}# Exiting with any non-zero exit code
-${'\u00A0\u00A0\u00A0\u00A0'}#${'\u00A0\u00A0\u00A0'}means that code did not pass reviser
-${'\u00A0\u00A0\u00A0\u00A0'}exit(1)
+${'\u00A0\u00A0\u00A0\u00A0'}# Print anything to indicate that
+${'\u00A0\u00A0\u00A0\u00A0'}# ${'\u00A0\u00A0'}the code did not pass reviser
+${'\u00A0\u00A0\u00A0\u00A0'}print('Cannot import!')
 `}
               />
             </AlignedText>
