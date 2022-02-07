@@ -46,8 +46,6 @@ function Index() {
         if (auth.tokenExpired) {
           localStorage.removeItem('token');
           localStorage.removeItem('id');
-          // removeCookie('token', { path: '/' });
-          // removeCookie('id', { path: '/' });
           history.push('/login');
         } else {
           dispatch(getUserInfo(localStorage.getItem('id'), localStorage.getItem('token')));

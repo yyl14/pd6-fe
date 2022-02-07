@@ -469,8 +469,6 @@ export default function Header() {
     if (link === '/logout') {
       localStorage.removeItem('token');
       localStorage.removeItem('id');
-      // removeCookie('token', { path: '/' });
-      // removeCookie('id', { path: '/' });
       dispatch(userLogout(history));
     } else {
       history.push(link);
