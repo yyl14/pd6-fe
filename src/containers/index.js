@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   Switch, Route, useHistory, useLocation,
 } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
 // import { makeStyles } from '@material-ui/core';
 // import { makeStyles, Fab } from '@material-ui/core';
 // import { Feedback } from '@material-ui/icons';
@@ -33,7 +32,6 @@ function Index() {
   const auth = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const [cookies, , removeCookie] = useCookies(['id', 'token']);
 
   const [showSidebar, setShowSidebar] = useState(true);
   const [disableSidebar, setDisableSidebar] = useState(false);
@@ -44,19 +42,21 @@ function Index() {
 
   useEffect(() => {
     if (!auth.isAuthenticated) {
-      if (cookies.id && cookies.token) {
+      if (localStorage.getItem('id') && localStorage.getItem('token')) {
         if (auth.tokenExpired) {
-          removeCookie('token', { path: '/' });
-          removeCookie('id', { path: '/' });
+          localStorage.removeItem('token');
+          localStorage.removeItem('id');
+          // removeCookie('token', { path: '/' });
+          // removeCookie('id', { path: '/' });
           history.push('/login');
         } else {
-          dispatch(getUserInfo(cookies.id, cookies.token));
+          dispatch(getUserInfo(localStorage.getItem('id'), localStorage.getItem('token')));
         }
       } else {
         history.push('/login');
       }
     }
-  }, [auth.isAuthenticated, auth.tokenExpired, cookies, cookies.id, cookies.token, dispatch, history, removeCookie]);
+  }, [auth.isAuthenticated, auth.tokenExpired, dispatch, history]);
 
   useEffect(() => {
     if (auth.isAuthenticated && location.pathname === '/') {
