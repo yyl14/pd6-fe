@@ -91,7 +91,7 @@ export default function AccountSetting() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (error.user.editAccount) {
+    if (!loading.user.editAccount && error.user.editAccount) {
       if (error.user.editAccount === 'UniqueViolationError') {
         setMessage('Edit account error: Username already taken.');
       } else {
@@ -99,7 +99,7 @@ export default function AccountSetting() {
       }
       setShowSnackbar(true);
     }
-  }, [error.user.editAccount]);
+  }, [error.user.editAccount, loading.user.editAccount]);
 
   useEffect(() => {
     setCards(
