@@ -4,11 +4,11 @@ import React, {
 import { Provider } from 'react-redux';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
-import { useCookies } from 'react-cookie';
 
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 import { useClearCacheCtx } from 'react-clear-cache';
 import theme from './theme/index';
@@ -54,7 +54,7 @@ function App() {
   }, [cookies.lang, cookies.themeBeta, removeCookie]);
   // -----------------------------------------------------------------------------------------------------------
 
-  // Initialize theme selection from cookies
+  // Initialize theme selection from local storage
   useEffect(() => {
     const themeData = localStorage.getItem('theme');
     if (themeData) {

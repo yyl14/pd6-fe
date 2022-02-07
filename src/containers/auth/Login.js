@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
 import { Grid, Typography } from '@material-ui/core';
 
 import LoginForm from './LoginForm';
@@ -14,7 +13,6 @@ export default function Login() {
   const history = useHistory();
   const auth = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
-  const [, setCookie] = useCookies(['id', 'token']);
 
   useEffect(() => {
     document.title = 'Signin';
@@ -25,11 +23,11 @@ export default function Login() {
 
   useEffect(() => {
     if (auth.isAuthenticated) {
-      setCookie('id', user.id, { path: '/', maxAge: 86400 });
-      setCookie('token', auth.token, { path: '/', maxAge: 86400 });
+      localStorage.setItem('id', user.id);
+      localStorage.setItem('token', auth.token);
       history.push('/');
     }
-  }, [auth.isAuthenticated, auth.token, history, setCookie, user.id]);
+  }, [auth.isAuthenticated, auth.token, history, user.id]);
 
   return (
     <div className="page auth-page">

@@ -32,7 +32,7 @@ const userSignIn = (username, password) => async (dispatch) => {
   }
 };
 
-// resume logged in status from cookies
+// resume logged in status from local storage
 const getUserInfo = (id, token) => async (dispatch) => {
   try {
     const config = {
