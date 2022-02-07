@@ -43,7 +43,7 @@ export default function BasicInfoEdit(props) {
     <div>
       <SimpleBar title="Basic Information">
         <>
-          <AlignedText text="Username" childrenType="text" maxWidth="lg">
+          <AlignedText text="Username" childrenType="field" maxWidth="lg">
             <TextField
               value={userName}
               onChange={(e) => {
