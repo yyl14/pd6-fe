@@ -107,16 +107,16 @@ export default function AccountSetting() {
         <BasicInfoEdit
           handleBack={handleBasicBack}
           realName={accounts.byId[accountId].real_name}
-          userName={accounts.byId[accountId].username}
-          nickName={accounts.byId[accountId].nickname}
+          username={accounts.byId[accountId].username}
+          nickname={accounts.byId[accountId].nickname}
           altMail={accounts.byId[accountId].alternative_email}
         />
       ) : (
         <BasicInfo
           handleEdit={handleBasicEdit}
           realName={accounts.byId[accountId].real_name}
-          userName={accounts.byId[accountId].username}
-          nickName={accounts.byId[accountId].nickname}
+          username={accounts.byId[accountId].username}
+          nickname={accounts.byId[accountId].nickname}
           altMail={accounts.byId[accountId].alternative_email}
         />
       )}
@@ -127,7 +127,7 @@ export default function AccountSetting() {
 
       <NewPassword />
       <AccountDelete
-        userName={accounts.byId[accountId].username}
+        username={accounts.byId[accountId].username}
         cards={cards}
         realName={accounts.byId[accountId].real_name}
       />

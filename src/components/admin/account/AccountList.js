@@ -54,7 +54,7 @@ export default function AccountList() {
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [addInputs, setAddInputs] = useState({
     realName: '',
-    userName: '',
+    username: '',
     password1: '',
     password2: '',
     altMail: '',
@@ -79,7 +79,7 @@ export default function AccountList() {
     } else if (showAddDialog) {
       setIsDisabled(
         addInputs.realName === ''
-          || addInputs.userName === ''
+          || addInputs.username === ''
           || addInputs.password1 === ''
           || addInputs.password2 === '',
       );
@@ -88,7 +88,7 @@ export default function AccountList() {
     addInputs.password1,
     addInputs.password2,
     addInputs.realName,
-    addInputs.userName,
+    addInputs.username,
     selectedFile.length,
     showAddDialog,
     showImportDialog,
@@ -118,7 +118,7 @@ export default function AccountList() {
     setShowImportDialog(false);
     setAddInputs({
       realName: '',
-      userName: '',
+      username: '',
       password1: '',
       password2: '',
       altMail: '',
@@ -133,7 +133,7 @@ export default function AccountList() {
     setShowAddDialog(false);
     setAddInputs({
       realName: '',
-      userName: '',
+      username: '',
       password1: '',
       password2: '',
       altMail: '',
@@ -161,7 +161,7 @@ export default function AccountList() {
         addAccount(
           authToken,
           addInputs.realName,
-          addInputs.userName,
+          addInputs.username,
           addInputs.password1,
           addInputs.altMail,
           addAccountSuccess,
@@ -262,8 +262,8 @@ export default function AccountList() {
             onChange={(e) => handleChange(e)}
           />
           <TextField
-            name="userName"
-            value={addInputs.userName}
+            name="username"
+            value={addInputs.username}
             placeholder="Username"
             className={classNames.addDialogGap}
             onChange={(e) => handleChange(e)}

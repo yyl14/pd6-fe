@@ -3,15 +3,15 @@ import agent from '../agent';
 import { userConstants } from './constants';
 import browseParamsTransForm from '../../function/browseParamsTransform';
 
-const editAccount = (token, id, userName, nickName, email) => async (dispatch) => {
+const editAccount = (token, id, username, nickname, email) => async (dispatch) => {
   try {
     const config = {
       headers: { 'auth-token': token },
     };
     dispatch({ type: userConstants.EDIT_SELF_ACCOUNT_START });
     const accountInfo = {
-      username: userName,
-      nickname: nickName,
+      username,
+      nickname,
     };
     if (email) {
       accountInfo.alternative_email = email;
@@ -21,8 +21,8 @@ const editAccount = (token, id, userName, nickName, email) => async (dispatch) =
       type: userConstants.EDIT_SELF_ACCOUNT_SUCCESS,
       payload: {
         id,
-        username: userName,
-        nickname: nickName,
+        username,
+        nickname,
         alternative_email: email,
       },
     });
@@ -149,11 +149,9 @@ const userBrowseAnnouncement = (authToken) => async (dispatch) => {
     headers: {
       'auth-token': authToken,
     },
-    params: browseParamsTransForm(
-      {
-        filter: [['expire_time', '>', currentTime]],
-      },
-    ),
+    params: browseParamsTransForm({
+      filter: [['expire_time', '>', currentTime]],
+    }),
   };
 
   try {

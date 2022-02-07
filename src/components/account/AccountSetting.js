@@ -147,16 +147,16 @@ export default function AccountSetting() {
         <BasicInfoEdit
           handleBack={handleBasicBack}
           realName={account.real_name}
-          userName={account.username}
-          nickName={account.nickname}
+          username={account.username}
+          nickname={account.nickname}
           altMail={account.alternative_email}
         />
       ) : (
         <BasicInfo
           handleEdit={handleBasicEdit}
           realName={account.real_name}
-          userName={account.username}
-          nickName={account.nickname}
+          username={account.username}
+          nickname={account.nickname}
           altMail={account.alternative_email}
         />
       )}

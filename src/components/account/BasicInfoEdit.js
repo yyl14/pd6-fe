@@ -16,8 +16,8 @@ const useStyles = makeStyles(() => ({
 
 export default function BasicInfoEdit(props) {
   const [realName] = useState(props.realName);
-  const [userName, setUserName] = useState(props.userName);
-  const [nickName, setNickName] = useState(props.nickName);
+  const [username, setUsername] = useState(props.username);
+  const [nickname, setNickname] = useState(props.nickname);
   const [altMail, setAltMail] = useState(props.altMail);
   const classes = useStyles();
   const [error, setError] = useState(false);
@@ -29,7 +29,7 @@ export default function BasicInfoEdit(props) {
 
   const handleSave = () => {
     const altMailChanged = altMail !== props.altMail && altMail !== '';
-    dispatch(editAccount(authToken, accountId, userName, nickName, altMailChanged ? altMail : null));
+    dispatch(editAccount(authToken, accountId, username, nickname, altMailChanged ? altMail : null));
     props.handleBack(altMailChanged ? 'Alternative email will be updated once it’s verified.' : '');
   };
 
@@ -45,9 +45,9 @@ export default function BasicInfoEdit(props) {
         <>
           <AlignedText text="Username" childrenType="field" maxWidth="lg">
             <TextField
-              value={userName}
+              value={username}
               onChange={(e) => {
-                setUserName(e.target.value);
+                setUsername(e.target.value);
               }}
               error={error}
               helperText={errorText}
@@ -58,9 +58,9 @@ export default function BasicInfoEdit(props) {
           </AlignedText>
           <AlignedText text="Nickname" childrenType="field" maxWidth="lg">
             <TextField
-              value={nickName}
+              value={nickname}
               onChange={(e) => {
-                setNickName(e.target.value);
+                setNickname(e.target.value);
               }}
               error={error}
               helperText={errorText}
