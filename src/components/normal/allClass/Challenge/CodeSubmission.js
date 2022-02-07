@@ -4,7 +4,6 @@ import {
   Button, makeStyles, MenuItem, FormControl, Select, Snackbar,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
 
 import AlignedText from '../../../ui/AlignedText';
 import PageTitle from '../../../ui/PageTitle';
@@ -35,7 +34,6 @@ export default function CodeSubmission() {
   } = useParams();
   const history = useHistory();
   const classNames = useStyles();
-  const [cookies, setCookie] = useCookies(['lang']);
 
   const dispatch = useDispatch();
 
@@ -53,12 +51,12 @@ export default function CodeSubmission() {
   useEffect(() => {
     const enabledIds = submitLang.allIds.filter((id) => !submitLang.byId[id].is_disabled);
     setLang(enabledIds);
-    if (cookies.lang) {
-      if (enabledIds.includes(Number(cookies.lang))) {
-        setLangId(Number(cookies.lang));
+    if (localStorage.getItem('langId')) {
+      if (enabledIds.includes(Number(localStorage.getItem('langId')))) {
+        setLangId(Number(localStorage.getItem('langId')));
       }
     }
-  }, [cookies.lang, submitLang.allIds, submitLang.byId]);
+  }, [submitLang.allIds, submitLang.byId]);
 
   const onSubmitSuccess = () => {
     history.push(`/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
@@ -73,8 +71,7 @@ export default function CodeSubmission() {
         setShowSnackbar(true);
       }),
     );
-    const daysToExpire = new Date(2147483647 * 1000);
-    setCookie('lang', langId, { path: '/', expires: daysToExpire });
+    localStorage.setItem('langId', langId);
   };
 
   useEffect(() => {

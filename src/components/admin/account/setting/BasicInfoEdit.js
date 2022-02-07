@@ -16,10 +16,10 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function BasicInfoEdit(props) {
-  const [userName] = useState(props.userName);
+  const [username] = useState(props.username);
   const [inputs, setInputs] = useState({
     realName: props.realName,
-    nickName: props.nickName,
+    nickname: props.nickname,
     altMail: props.altMail,
   });
   const [errors, setErrors] = useState({
@@ -42,7 +42,7 @@ export default function BasicInfoEdit(props) {
     }
     const altMailChanged = inputs.altMail !== props.altMail && inputs.altMail !== '';
     dispatch(
-      editAccount(authToken, accountId, inputs.realName, inputs.nickName, altMailChanged ? inputs.altMail : null),
+      editAccount(authToken, accountId, inputs.realName, inputs.nickname, altMailChanged ? inputs.altMail : null),
     );
     props.handleBack(altMailChanged ? 'Alternative email will be updated once it’s verified.' : '');
   };
@@ -68,7 +68,7 @@ export default function BasicInfoEdit(props) {
       <SimpleBar title="Basic Information">
         <>
           <AlignedText text="Username" childrenType="text" maxWidth="lg">
-            <Typography variant="body1">{userName}</Typography>
+            <Typography variant="body1">{username}</Typography>
           </AlignedText>
           <AlignedText text="Real name" childrenType="field" maxWidth="lg">
             <TextField
@@ -81,7 +81,7 @@ export default function BasicInfoEdit(props) {
             />
           </AlignedText>
           <AlignedText text="Nickname" childrenType="field" maxWidth="lg">
-            <TextField name="nickName" value={inputs.nickName} onChange={(e) => handleChange(e)} />
+            <TextField name="nickname" value={inputs.nickname} onChange={(e) => handleChange(e)} />
           </AlignedText>
           <AlignedText text="Alternative Email" childrenType="field" maxWidth="lg">
             <TextField value={inputs.altMail} name="altMail" onChange={(e) => handleChange(e)} />

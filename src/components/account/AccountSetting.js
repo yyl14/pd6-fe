@@ -63,6 +63,7 @@ export default function AccountSetting() {
   const studentCards = useSelector((state) => state.studentCards);
   const pendingStudentCards = useSelector((state) => state.pendingStudentCards);
   const loading = useSelector((state) => state.loading.user);
+  const error = useSelector((state) => state.error.user);
 
   useEffect(() => {
     if (account.role === 'GUEST') {
@@ -88,6 +89,17 @@ export default function AccountSetting() {
   useEffect(() => {
     dispatch(getInstitutes());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!loading.user.editAccount && error.user.editAccount) {
+      if (error.user.editAccount === 'UniqueViolationError') {
+        setMessage('Edit account error: Username already taken.');
+      } else {
+        setMessage(`Edit account error: ${error.user.editAccount}`);
+      }
+      setShowSnackbar(true);
+    }
+  }, [error.user.editAccount, loading.user.editAccount]);
 
   useEffect(() => {
     setCards(
@@ -147,16 +159,16 @@ export default function AccountSetting() {
         <BasicInfoEdit
           handleBack={handleBasicBack}
           realName={account.real_name}
-          userName={account.username}
-          nickName={account.nickname}
+          username={account.username}
+          nickname={account.nickname}
           altMail={account.alternative_email}
         />
       ) : (
         <BasicInfo
           handleEdit={handleBasicEdit}
           realName={account.real_name}
-          userName={account.username}
-          nickName={account.nickname}
+          username={account.username}
+          nickname={account.nickname}
           altMail={account.alternative_email}
         />
       )}

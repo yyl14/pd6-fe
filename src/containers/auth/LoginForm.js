@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 export default function LoginForm() {
   const dispatch = useDispatch();
   const classNames = useStyles();
-  const [username, setUserName] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({
     username: false,
@@ -91,7 +91,7 @@ export default function LoginForm() {
         setErrorTexts((ori) => ({ ...ori, username: '' }));
       }
     }
-    setUserName(e.target.value);
+    setUsername(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
