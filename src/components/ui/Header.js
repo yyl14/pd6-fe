@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {
+  useState, useEffect, useRef, useMemo,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
@@ -7,6 +9,7 @@ import moment from 'moment';
 import {
   makeStyles, Typography, AppBar, Toolbar, useTheme,
 } from '@material-ui/core';
+import ResizeObserver from 'react-resize-observer';
 import Icon from './icon/index';
 import { userLogout } from '../../actions/user/auth';
 import { userBrowseAnnouncement } from '../../actions/user/user';
@@ -240,6 +243,21 @@ export default function Header() {
   const notifyRef = useRef(null);
   const userRef = useRef(null);
   const userButtonRef = useRef(null);
+  const [userButtonRect, setUserButtonRect] = useState({ left: 0, width: 0 });
+
+  const indicatorStyles = useMemo(
+    () => ({
+      left:
+        activeHeaderItemIndex !== undefined && activeHeaderItemIndex !== -1
+          ? headerItemRef.current[activeHeaderItemIndex]?.offsetLeft
+          : userButtonRect.left,
+      width:
+        activeHeaderItemIndex !== undefined && activeHeaderItemIndex !== -1
+          ? headerItemRef.current[activeHeaderItemIndex]?.offsetWidth
+          : userButtonRect.width,
+    }),
+    [activeHeaderItemIndex, userButtonRect.left, userButtonRect.width],
+  );
 
   useEffect(() => {
     setHasClass(user.classes.length !== 0);
@@ -466,21 +484,7 @@ export default function Header() {
           <href className={classes.logo} onClick={() => history.push('/')}>
             {theme.headerStyle.logo}
           </href>
-          {theme.headerStyle.hasIndicator && (
-            <div
-              className={classes.itemActiveIndicator}
-              style={{
-                left:
-                  activeHeaderItemIndex !== undefined && activeHeaderItemIndex !== -1
-                    ? headerItemRef.current[activeHeaderItemIndex]?.offsetLeft
-                    : userButtonRef.current?.offsetLeft + userButtonRef.current?.offsetParent.offsetLeft,
-                width:
-                  activeHeaderItemIndex !== undefined && activeHeaderItemIndex !== -1
-                    ? headerItemRef.current[activeHeaderItemIndex]?.offsetWidth
-                    : userButtonRef.current?.offsetWidth,
-              }}
-            />
-          )}
+          {theme.headerStyle.hasIndicator && <div className={classes.itemActiveIndicator} style={indicatorStyles} />}
           {itemList.map((item, index) => (
             <Typography
               variant="h6"
@@ -552,6 +556,7 @@ export default function Header() {
                   variant="h6"
                   className={userButtonActive && !theme.headerStyle.hasIndicator ? classes.active : null}
                 >
+                  <ResizeObserver onReflow={(rect) => setUserButtonRect(rect)} />
                   {user.username}
                 </Typography>
               </button>
