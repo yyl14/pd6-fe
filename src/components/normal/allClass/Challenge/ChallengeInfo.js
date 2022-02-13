@@ -23,9 +23,8 @@ export default function ChallengeInfo() {
   const { challengeId } = useParams();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [currentTime, setCurrentTime] = useState(moment());
+  const [currentTime] = useState(moment());
   const [status, setStatus] = useState('');
-  const [inputs, setInputs] = useState('');
   const [tableData, setTableData] = useState([]);
 
   const authToken = useSelector((state) => state.auth.token);
@@ -50,7 +49,6 @@ export default function ChallengeInfo() {
       } else {
         setStatus('Closed');
       }
-      setInputs(challenges[challengeId].description);
     }
   }, [challengeId, challenges, currentTime]);
 

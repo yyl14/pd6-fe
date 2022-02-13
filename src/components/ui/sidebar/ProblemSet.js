@@ -9,7 +9,7 @@ import Icon from '../icon/index';
 import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
 
 export default function ProblemSet({
-  classNames, history, location, mode, open, onClose,
+  classNames, history, location, open, onClose,
 }) {
   const { courseId: currentCourseId, classId: currentClassId } = useParams();
   const baseURL = '/problem-set';

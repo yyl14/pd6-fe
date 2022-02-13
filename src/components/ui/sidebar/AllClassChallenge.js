@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
@@ -13,14 +13,9 @@ export default function AllClassChallenge({
     courseId, classId, challengeId, problemId, submissionId,
   } = useParams();
   const baseURL = '/all-class';
-  const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.token);
-  const loading = useSelector((state) => state.loading.myClass.challenge);
   const challenges = useSelector((state) => state.challenges.byId);
-  const challengesID = useSelector((state) => state.challenges.allIds);
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);
-  const userClasses = useSelector((state) => state.user.classes);
 
   const problems = useSelector((state) => state.problem);
   const essays = useSelector((state) => state.essays);
