@@ -108,7 +108,7 @@ export default function UIComponentUsage() {
       key: 'selection',
     },
   ]);
-  const [tableData, setTableData] = useState([
+  const [tableData] = useState([
     {
       full_name: 'National Taiwan University',
       email_domain: 'ntu.edu.tw',

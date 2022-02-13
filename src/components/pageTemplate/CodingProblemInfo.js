@@ -39,7 +39,7 @@ export default function CodingProblemInfo() {
 
   const problems = useSelector((state) => state.problem.byId);
   const testcases = useSelector((state) => state.testcases.byId);
-  const [status, setStatus] = useState(false);
+  // const [status, setStatus] = useState(false);
 
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.problem);
@@ -83,11 +83,11 @@ export default function CodingProblemInfo() {
       samplesId.sort((a, b) => sampleTransToNumber(a) - sampleTransToNumber(b));
       setSampleDataIds(samplesId);
       setTestcaseDataIds(testcasesId);
-      if (testcasesId.length === 0) {
-        setStatus(false);
-      } else {
-        setStatus(!testcases[testcasesId[0]].is_disabled);
-      }
+      // if (testcasesId.length === 0) {
+      //   setStatus(false);
+      // } else {
+      //   setStatus(!testcases[testcasesId[0]].is_disabled);
+      // }
     }
   }, [problems, problemId, testcases, sampleTransToNumber, testcaseTransToNumber]);
 

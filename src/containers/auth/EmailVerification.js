@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+  useState, useEffect, useMemo,
+} from 'react';
 import { makeStyles } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
@@ -71,7 +73,7 @@ export default function EmailVerification() {
   const query = useQuery();
   const history = useHistory();
   const [message, setMessage] = useState('Email Verifying...');
-  const queryString = useCallback(query.get('code'), [query]);
+  const queryString = useMemo(() => () => query.get('code'), [query]);
 
   useEffect(() => {
     const onSuccess = () => {

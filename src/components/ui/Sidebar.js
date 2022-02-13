@@ -496,7 +496,6 @@ export default function Sidebar({ open, onClose }) {
           location={location}
           open={open}
           onClose={onClose}
-          mode="main"
         />
       </Route>
       <Route exact path="/problem-set/:courseId/:classId">
@@ -506,7 +505,6 @@ export default function Sidebar({ open, onClose }) {
           location={location}
           open={open}
           onClose={onClose}
-          mode="main"
         />
       </Route>
       <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId">
