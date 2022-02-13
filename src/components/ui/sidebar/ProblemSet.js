@@ -31,19 +31,19 @@ export default function ProblemSet({
 
   useEffect(() => {
     if (currentCourseId !== undefined && currentClassId !== undefined) return;
-    const defaultCourseId = courses.allIds[0];
+    const defaultCourseId = courses.allIds.map((courseId) => courses.byId[courseId]).sort((a, b) => a.name.localeCompare(b.name))[0].id;
     if (courses.byId[defaultCourseId]) {
       const relatedClassIds = courses.byId[defaultCourseId].classIds;
       if (relatedClassIds && relatedClassIds.length > 0) {
-        const defaultClassId = relatedClassIds[0];
+        const defaultClassId = relatedClassIds.map((classId) => classes.byId[classId]).sort((a, b) => a.name.localeCompare(b.name))[0].id;
         history.push(`${baseURL}/${defaultCourseId}/${defaultClassId}`);
       }
     }
-  }, [courses, currentClassId, currentCourseId, history]);
+  }, [classes.byId, courses, currentClassId, currentCourseId, history]);
 
   // has course and class id in url
   useEffect(() => {
-    const foldIndex = courses.allIds.indexOf(Number(currentCourseId));
+    const foldIndex = courses.allIds.map((courseId) => courses.byId[courseId]).sort((a, b) => a.name.localeCompare(b.name)).map((item) => item.id).indexOf(Number(currentCourseId));
     if (foldIndex !== -1) {
       const newList = display.length > 0 ? [...display] : courses.allIds.map(() => 0);
       if (newList[foldIndex] !== 1) {
@@ -51,18 +51,13 @@ export default function ProblemSet({
         setDisplay(newList);
       }
     }
-  }, [courses.allIds, currentCourseId, display]);
+  }, [courses.allIds, courses.byId, currentCourseId, display]);
 
   const changeFoldCourse = (id) => {
     const newList = [...display];
     newList[id] = !newList[id];
     setDisplay(newList);
   };
-
-  courses.allIds.map((courseId) => courses.byId[courseId].classIds
-    .map((classId) => classes.byId[classId])
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .map((classItem) => { console.log(classItem); return classItem; }));
 
   return (
     <div>
