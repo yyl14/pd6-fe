@@ -2,6 +2,7 @@ import agent from '../agent';
 import { commonConstants } from './constant';
 import { autoTableConstants } from '../component/constant';
 import browseParamsTransForm from '../../function/browseParamsTransform';
+import { readProblemBestScore } from '../myClass/problem';
 
 const getInstitutes = () => (dispatch) => {
   dispatch({ type: commonConstants.GET_INSTITUTE_START });
@@ -335,6 +336,7 @@ const fetchProblems = (token, classId, browseParams, tableId = null) => async (d
     dispatch({ type: commonConstants.FETCH_PROBLEMS_START });
     const res = await agent.get(`/class/${classId}/view/problem-set`, config);
     const { data, total_count } = res.data.data;
+    data.map((item) => dispatch(readProblemBestScore(token, item.problem_id)));
     dispatch({
       type: commonConstants.FETCH_PROBLEMS_SUCCESS,
       payload: data,
