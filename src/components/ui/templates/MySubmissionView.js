@@ -144,6 +144,7 @@ export default function MySubmission({ baseUrl, isProblemSet }) {
             name: 'Submission ID',
             align: 'center',
             type: 'string',
+            minWidth: 150,
           },
           {
             name: 'Status',
@@ -162,27 +163,32 @@ export default function MySubmission({ baseUrl, isProblemSet }) {
               'Forbidden Action': 'error',
               'System Error': 'error',
             },
+            minWidth: 170,
           },
           {
             name: 'Score',
             align: 'center',
             type: 'string',
+            minWidth: 100,
           },
           {
             name: 'Used Time (ms)',
             align: 'center',
             type: 'string',
+            minWidth: 170,
           },
           {
             name: 'Used Memory (kb)',
             align: 'center',
             type: 'string',
+            minWidth: 170,
           },
           {
             name: 'Submit Time',
             align: 'center',
             type: 'string',
             sortable: 'submit_time',
+            minWidth: 150,
           },
         ]}
         reduxData={submissions}

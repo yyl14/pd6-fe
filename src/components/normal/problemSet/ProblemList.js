@@ -20,7 +20,6 @@ export default function ProblemList() {
   const classes = useSelector((state) => state.classes);
   const courses = useSelector((state) => state.courses);
   const problems = useSelector((state) => state.problem);
-  const error = useSelector((state) => state.error.common.common);
 
   return (
     <>
@@ -56,33 +55,39 @@ export default function ProblemList() {
         refetch={(browseParams, ident) => {
           dispatch(fetchProblems(authToken, classId, browseParams, ident));
         }}
-        refetchErrors={[error.fetchProblems]}
         columns={[
           {
             name: 'Score',
             align: 'center',
             type: 'string',
+            width: 100,
+            minWidth: 50,
           },
           {
             name: 'Challenge Title',
             align: 'center',
             type: 'link',
+            width: 200,
+            minWidth: 100,
           },
           {
             name: 'Task Label',
             align: 'center',
             type: 'string',
+            width: 200,
+            minWidth: 100,
           },
           {
             name: 'Task Title',
             align: 'center',
-            width: 'auto',
+            width: 300,
             type: 'string',
+            minWidth: 150,
           },
         ]}
         reduxData={problems}
         reduxDataToRows={(item) => ({
-          Score: '', // TODO: get score
+          Score: problems.byId[item.problem_id].score,
           'Challenge Title': {
             text: item.challenge_title,
             path: `/problem-set/${courseId}/${classId}/challenge/${item.challenge_id}`,
