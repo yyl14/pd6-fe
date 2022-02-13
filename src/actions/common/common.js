@@ -230,7 +230,7 @@ const fetchAccount = (token, accountId) => async (dispatch) => {
 };
 
 // get file URL and download
-const downloadFile = (token, file) => async (dispatch) => {
+const downloadFile = (token, file, onSuccess = null, onError = null) => async (dispatch) => {
   // in 'file' parameter, you should include uuid, filename, and as_attachment as attributes
   const config = {
     headers: {
@@ -255,11 +255,13 @@ const downloadFile = (token, file) => async (dispatch) => {
     dispatch({
       type: commonConstants.DOWNLOAD_FILE_SUCCESS,
     });
+    if (onSuccess) onSuccess();
   } catch (error) {
     dispatch({
       type: commonConstants.DOWNLOAD_FILE_FAIL,
       error,
     });
+    if (onError) onError();
   }
 };
 

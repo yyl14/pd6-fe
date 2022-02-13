@@ -11,6 +11,7 @@ import Admin from './admin';
 import Account from './account';
 import User from './user';
 import MySubmission from './mySubmission';
+import FileDownloading from '../components/file/fileDownloading';
 import Sidebar from '../components/ui/Sidebar';
 import Header from '../components/ui/Header';
 import { getUserInfo } from '../actions/user/auth';
@@ -109,6 +110,7 @@ function Index() {
                 <Route path="/my-profile" component={Account} />
                 <Route path="/my-submission" component={MySubmission} />
                 <Route exact path="/user-profile/:accountId" component={User} />
+                <Route path="/file" component={FileDownloading} />
                 <Route path="/" component={Normal} />
               </Switch>
             </div>

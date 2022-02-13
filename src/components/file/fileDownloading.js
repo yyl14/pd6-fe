@@ -1,10 +1,10 @@
 import React, {
-  useState, useEffect, useMemo,
+  useState, useMemo,
 } from 'react';
 import { makeStyles } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
-import { emailVerification } from '../../actions/user/auth';
+import { downloadFile } from '../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
   subwrapper: {
     width: '100%',
     height: 'calc(100% - 55px)',
-    padding: '50px 170px',
     // display: 'flex',
     // justifyContent: 'center',
     // alignItems: 'center',
@@ -27,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   picContainer: {
     width: '350px',
-    height: '350px',
+    height: '200px',
     borderRadius: '50%',
     position: 'relative',
     top: '50px',
@@ -67,47 +66,49 @@ function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-export default function EmailVerification() {
+export default function FileDownloading() {
   const dispatch = useDispatch();
   const classes = useStyles();
   const query = useQuery();
   const history = useHistory();
-  const [message, setMessage] = useState('Email Verifying...');
-  const queryString = useMemo(() => () => query.get('code'), [query]);
+  const authToken = useSelector((state) => state.auth.token);
+  const [message, setMessage] = useState('File Downloading...');
+  const filename = useMemo(() => query.get('filename'), [query]);
+  const uuid = useMemo(() => query.get('uuid'), [query]);
+  const [downloading, setDownloading] = useState(false);
 
-  useEffect(() => {
-    const onSuccess = () => {
-      setMessage('Email Verify Succeed.');
-      setTimeout(() => {
-        history.push('/login');
-      }, 3000);
-    };
+  const onSuccess = () => {
+    setMessage('File Download Succeed.');
+    setTimeout(() => {
+      history.push('/');
+    }, 3000);
+  };
 
-    const onError = () => {
-      setMessage('Fail to verify Email.');
-      setTimeout(() => {
-        history.push('/login');
-      }, 3000);
-    };
-    console.log(queryString);
-    dispatch(emailVerification(queryString, onSuccess, onError));
-  }, [dispatch, history, queryString]);
+  const onError = () => {
+    setMessage('Fail to Download File.');
+    setTimeout(() => {
+      history.push('/');
+    }, 3000);
+  };
+
+  if (filename === null || uuid === null || authToken === '') {
+    history.push('/');
+  }
+
+  if (!downloading) {
+    dispatch(downloadFile(authToken, { filename, as_attachment: true, uuid }, onSuccess, onError));
+    setDownloading(true);
+  }
 
   return (
-    <div className={classes.wrapper}>
-      <div className={classes.topbar} />
-      <div className={classes.subwrapper}>
-        {/* <div className={classes.picContainer}>
-          <img src={} className={classes.pic} />
-        </div> */}
-        <div className={classes.picContainer} />
-        <div className={classes.messageContainer}>
-          <span>{message}</span>
-        </div>
-        <div className={classes.tipsContainer}>
-          <span>Turning to login page in a few seconds.</span>
-        </div>
+    <>
+      <div className={classes.picContainer} />
+      <div className={classes.messageContainer}>
+        <span>{message}</span>
       </div>
-    </div>
+      <div className={classes.tipsContainer}>
+        <span>Turning to main page in a few seconds.</span>
+      </div>
+    </>
   );
 }
