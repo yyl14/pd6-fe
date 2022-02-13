@@ -3,19 +3,19 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Snackbar } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import AlignedText from '../AlignedText';
-import AutoTable from '../AutoTable';
-import SimpleBar from '../SimpleBar';
-import PageTitle from '../PageTitle';
+import AlignedText from '../ui/AlignedText';
+import AutoTable from '../ui/AutoTable';
+import SimpleBar from '../ui/SimpleBar';
+import PageTitle from '../ui/PageTitle';
 import {
   // viewMySubmissionUnderProblem,
   readProblemInfo,
   readProblemScore,
   readProblemBestScore,
-} from '../../../actions/myClass/problem';
-import { browseMySubmissionUnderProblem } from '../../../actions/api/view';
-import GeneralLoading from '../../GeneralLoading';
-import NoMatch from '../../noMatch';
+} from '../../actions/myClass/problem';
+import { browseMySubmissionUnderProblem } from '../../actions/api/view';
+import GeneralLoading from '../GeneralLoading';
+import NoMatch from '../noMatch';
 
 /* This is a level 4 component (page component) */
 export default function MySubmission({ baseUrl, isProblemSet }) {

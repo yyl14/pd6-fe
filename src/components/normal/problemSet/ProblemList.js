@@ -87,6 +87,7 @@ export default function ProblemList() {
         ]}
         reduxData={problems}
         reduxDataToRows={(item) => ({
+          id: item.problem_id,
           Score: problems.byId[item.problem_id].score,
           'Challenge Title': {
             text: item.challenge_title,

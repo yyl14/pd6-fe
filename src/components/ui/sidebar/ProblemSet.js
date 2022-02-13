@@ -31,19 +31,19 @@ export default function ProblemSet({
 
   useEffect(() => {
     if (currentCourseId !== undefined && currentClassId !== undefined) return;
-    const defaultCourseId = courses.allIds[0];
+    const defaultCourseId = courses.allIds.map((courseId) => courses.byId[courseId]).sort((a, b) => a.name.localeCompare(b.name))[0].id;
     if (courses.byId[defaultCourseId]) {
       const relatedClassIds = courses.byId[defaultCourseId].classIds;
       if (relatedClassIds && relatedClassIds.length > 0) {
-        const defaultClassId = relatedClassIds[0];
+        const defaultClassId = relatedClassIds.map((classId) => classes.byId[classId]).sort((a, b) => a.name.localeCompare(b.name))[0].id;
         history.push(`${baseURL}/${defaultCourseId}/${defaultClassId}`);
       }
     }
-  }, [courses, currentClassId, currentCourseId, history]);
+  }, [classes.byId, courses, currentClassId, currentCourseId, history]);
 
   // has course and class id in url
   useEffect(() => {
-    const foldIndex = courses.allIds.indexOf(Number(currentCourseId));
+    const foldIndex = courses.allIds.map((courseId) => courses.byId[courseId]).sort((a, b) => a.name.localeCompare(b.name)).map((item) => item.id).indexOf(Number(currentCourseId));
     if (foldIndex !== -1) {
       const newList = display.length > 0 ? [...display] : courses.allIds.map(() => 0);
       if (newList[foldIndex] !== 1) {
@@ -51,7 +51,7 @@ export default function ProblemSet({
         setDisplay(newList);
       }
     }
-  }, [courses.allIds, currentCourseId, display]);
+  }, [courses.allIds, courses.byId, currentCourseId, display]);
 
   const changeFoldCourse = (id) => {
     const newList = [...display];
@@ -72,42 +72,47 @@ export default function ProblemSet({
       >
         <div className={classNames.topSpace} />
         <div>
-          {courses.allIds.map((courseId, id) => (
-            <div key={courseId}>
-              <div className={classNames.title}>
-                {display[id] ? (
-                  <Icon.TriangleDown className={classNames.titleIcon} onClick={() => changeFoldCourse(id)} />
-                ) : (
-                  <Icon.TriangleRight className={classNames.titleIcon} onClick={() => changeFoldCourse(id)} />
-                )}
-                <Typography noWrap variant="h4" className={classNames.titleText}>
-                  {courses.byId[courseId].name}
-                </Typography>
-              </div>
-              <Divider variant="middle" className={classNames.divider} />
-              {Boolean(display[id]) && (
+          {courses.allIds.map((courseId) => courses.byId[courseId])
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map(({ id, name }, orderId) => (
+              <div key={id}>
+                <div className={classNames.title}>
+                  {display[id] ? (
+                    <Icon.TriangleDown className={classNames.titleIcon} onClick={() => changeFoldCourse(orderId)} />
+                  ) : (
+                    <Icon.TriangleRight className={classNames.titleIcon} onClick={() => changeFoldCourse(orderId)} />
+                  )}
+                  <Typography noWrap variant="h4" className={classNames.titleText}>
+                    {name}
+                  </Typography>
+                </div>
+                <Divider variant="middle" className={classNames.divider} />
+                {Boolean(display[orderId]) && (
                 <List>
-                  {courses.byId[courseId].classIds.map((classId) => (
-                    <ListItem
-                      button
-                      key={classId.id}
-                      className={
-                        location.pathname === `${baseURL}/${courseId}/${classId}`
+                  {courses.byId[id].classIds
+                    .map((classId) => classes.byId[classId])
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((classItem) => (
+                      <ListItem
+                        button
+                        key={classItem.id}
+                        className={
+                        location.pathname === `${baseURL}/${id}/${classItem.id}`
                           ? `${classNames.active} ${classNames.item}`
                           : classNames.item
                       }
-                      onClick={() => history.push(`${baseURL}/${courseId}/${classId}`)}
-                    >
-                      <ListItemIcon className={classNames.itemIcon}>
-                        <Icon.Challenge />
-                      </ListItemIcon>
-                      <ListItemText primary={classes.byId[classId].name} className={classNames.itemText} />
-                    </ListItem>
-                  ))}
+                        onClick={() => history.push(`${baseURL}/${id}/${classItem.id}`)}
+                      >
+                        <ListItemIcon className={classNames.itemIcon}>
+                          <Icon.Challenge />
+                        </ListItemIcon>
+                        <ListItemText primary={classItem.name} className={classNames.itemText} />
+                      </ListItem>
+                    ))}
                 </List>
-              )}
-            </div>
-          ))}
+                )}
+              </div>
+            ))}
         </div>
       </Drawer>
     </div>

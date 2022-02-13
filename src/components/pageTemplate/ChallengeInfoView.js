@@ -6,15 +6,15 @@ import {
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
-import NoMatch from '../../noMatch';
-import AlignedText from '../AlignedText';
-import SimpleBar from '../SimpleBar';
-import SimpleTable from '../SimpleTable';
-import PageTitle from '../PageTitle';
-import { readProblemScore, readProblemBestScore } from '../../../actions/myClass/problem';
-import { editChallenge } from '../../../actions/myClass/challenge';
-import { fetchChallenge } from '../../../actions/common/common';
-import GeneralLoading from '../../GeneralLoading';
+import NoMatch from '../noMatch';
+import AlignedText from '../ui/AlignedText';
+import SimpleBar from '../ui/SimpleBar';
+import SimpleTable from '../ui/SimpleTable';
+import PageTitle from '../ui/PageTitle';
+import { readProblemScore, readProblemBestScore } from '../../actions/myClass/problem';
+import { editChallenge } from '../../actions/myClass/challenge';
+import { fetchChallenge } from '../../actions/common/common';
+import GeneralLoading from '../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
   descriptionField: {
