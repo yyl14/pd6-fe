@@ -5,18 +5,18 @@ import {
 } from '@material-ui/core';
 import { useParams, Link } from 'react-router-dom';
 import moment from 'moment';
-import Icon from '../icon/index';
-import SimpleBar from '../SimpleBar';
-import AlignedText from '../AlignedText';
-import SimpleTable from '../SimpleTable';
-import PageTitle from '../PageTitle';
-import GeneralLoading from '../../GeneralLoading';
-import { browseTestcases, rejudgeSubmission } from '../../../actions/myClass/problem';
-import { browseAllJudgementJudgeCase } from '../../../actions/api/judgement';
-import { readSubmissionDetail, fetchSubmission } from '../../../actions/myClass/submission';
-import { browseSubmitLang } from '../../../actions/common/common';
-import NoMatch from '../../noMatch';
-import CodeArea from '../CodeArea';
+import Icon from '../ui/icon/index';
+import SimpleBar from '../ui/SimpleBar';
+import AlignedText from '../ui/AlignedText';
+import SimpleTable from '../ui/SimpleTable';
+import PageTitle from '../ui/PageTitle';
+import CodeArea from '../ui/CodeArea';
+import GeneralLoading from '../GeneralLoading';
+import { browseTestcases, rejudgeSubmission } from '../../actions/myClass/problem';
+import { browseAllJudgementJudgeCase } from '../../actions/api/judgement';
+import { readSubmissionDetail, fetchSubmission } from '../../actions/myClass/submission';
+import { browseSubmitLang } from '../../actions/common/common';
+import NoMatch from '../noMatch';
 
 const useStyles = makeStyles((theme) => ({
   textLink: {

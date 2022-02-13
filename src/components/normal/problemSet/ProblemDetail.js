@@ -7,7 +7,7 @@ import GeneralLoading from '../../GeneralLoading';
 import NoMatch from '../../noMatch';
 import Icon from '../../ui/icon';
 import PageTitle from '../../ui/PageTitle';
-import CodingProblemInfo from '../../ui/templates/CodingProblemInfo';
+import CodingProblemInfo from '../../pageTemplate/CodingProblemInfo';
 
 const useStyles = makeStyles(() => ({
   generalButtons: {

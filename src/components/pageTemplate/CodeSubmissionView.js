@@ -5,11 +5,11 @@ import {
   Button, makeStyles, TextField, MenuItem, FormControl, Select, Snackbar,
 } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
-import { readProblemInfo, submitCode } from '../../../actions/myClass/problem';
-import { browseSubmitLang } from '../../../actions/common/common';
-import AlignedText from '../AlignedText';
-import PageTitle from '../PageTitle';
-import NoMatch from '../../noMatch';
+import { readProblemInfo, submitCode } from '../../actions/myClass/problem';
+import { browseSubmitLang } from '../../actions/common/common';
+import AlignedText from '../ui/AlignedText';
+import PageTitle from '../ui/PageTitle';
+import NoMatch from '../noMatch';
 
 const useStyles = makeStyles(() => ({
   selectField: {

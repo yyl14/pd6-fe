@@ -3,11 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 import { Typography, makeStyles, Grid } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import SimpleBar from '../SimpleBar';
-import SimpleTable from '../SimpleTable';
-import SampleTestArea from '../SampleTestArea';
-import GeneralLoading from '../../GeneralLoading';
-import { browseTestcase, browseAssistingData } from '../../../actions/myClass/problem';
+import SimpleBar from '../ui/SimpleBar';
+import SimpleTable from '../ui/SimpleTable';
+import SampleTestArea from '../ui/SampleTestArea';
+import GeneralLoading from '../GeneralLoading';
+import { browseTestcase, browseAssistingData } from '../../actions/myClass/problem';
 
 const useStyles = makeStyles(() => ({
   sampleArea: {

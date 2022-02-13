@@ -1,5 +1,5 @@
 import React from 'react';
-import CodeSubmissionView from '../../ui/templates/CodeSubmissionView';
+import CodeSubmissionView from '../../pageTemplate/CodeSubmissionView';
 
 /* This is a level 4 component (page component) */
 export default function CodeSubmission() {

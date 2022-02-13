@@ -1,5 +1,5 @@
 import React from 'react';
-import SubmissionDetailView from '../../ui/templates/SubmissionDetailView';
+import SubmissionDetailView from '../../pageTemplate/SubmissionDetailView';
 
 /* This is a level 4 component (page component) */
 export default function SubmissionDetail() {
