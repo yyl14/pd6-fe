@@ -77,7 +77,7 @@ export default function ProblemSet({
             .map(({ id, name }, orderId) => (
               <div key={id}>
                 <div className={classNames.title}>
-                  {display[id] ? (
+                  {display[orderId] ? (
                     <Icon.TriangleDown className={classNames.titleIcon} onClick={() => changeFoldCourse(orderId)} />
                   ) : (
                     <Icon.TriangleRight className={classNames.titleIcon} onClick={() => changeFoldCourse(orderId)} />
