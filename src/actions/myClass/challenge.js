@@ -333,6 +333,48 @@ const addPeerReview = (
   }
 };
 
+const downloadAllSubmissions = (token, challengeId, as_attachment) => async (dispatch) => {
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+    params: {
+      as_attachment,
+    },
+  };
+  dispatch({ type: challengeConstants.DOWNLOAD_ALL_SUBMISSIONS_START });
+  try {
+    await agent.post(`/challenge/${challengeId}/all-submission`, {}, config);
+    dispatch({ type: challengeConstants.DOWNLOAD_ALL_SUBMISSIONS_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: challengeConstants.DOWNLOAD_ALL_SUBMISSIONS_FAIL,
+      error,
+    });
+  }
+};
+
+const downloadAllPlagiarismReports = (token, challengeId, as_attachment) => async (dispatch) => {
+  const config = {
+    headers: {
+      'auth-token': token,
+    },
+    params: {
+      as_attachment,
+    },
+  };
+  dispatch({ type: challengeConstants.DOWNLOAD_ALL_PLAGIARISM_REPORT_START });
+  try {
+    await agent.post(`/challenge/${challengeId}/all-submission`, {}, config);
+    dispatch({ type: challengeConstants.DOWNLOAD_ALL_PLAGIARISM_REPORT_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: challengeConstants.DOWNLOAD_ALL_PLAGIARISM_REPORT_FAIL,
+      error,
+    });
+  }
+};
+
 export {
   browseTasksUnderChallenge,
   fetchChallenges,
@@ -345,4 +387,6 @@ export {
   addEssay,
   addPeerReview,
   peerReviewFetchChallenges,
+  downloadAllSubmissions,
+  downloadAllPlagiarismReports,
 };
