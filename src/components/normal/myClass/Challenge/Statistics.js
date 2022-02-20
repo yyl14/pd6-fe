@@ -1,8 +1,22 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/core';
+import {
+  makeStyles,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  DialogTitle,
+  Typography,
+} from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { fetchChallengeSummary, fetchChallengeMemberSubmission } from '../../../../actions/myClass/challenge';
+import {
+  fetchChallengeSummary,
+  fetchChallengeMemberSubmission,
+  downloadAllSubmissions,
+  downloadAllPlagiarismReports,
+} from '../../../../actions/myClass/challenge';
 import { fetchDownloadFileUrl } from '../../../../actions/common/common';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
@@ -13,6 +27,10 @@ import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
 /* eslint indent: 0 */
 
 const useStyles = makeStyles(() => ({
+  managerButtons: {
+    display: 'flex',
+    justifyContent: 'end',
+  },
   copyButton: {
     marginRight: '10px',
     height: '100%',
@@ -63,11 +81,22 @@ export default function Statistics() {
   const essays = useSelector((state) => state.essays.byId);
   const downloadLinks = useSelector((state) => state.downloadLinks.byId);
   const accounts = useSelector((state) => state.accounts);
+  const userClasses = useSelector((state) => state.user.classes);
 
   const [statisticsData, setStatisticsData] = useState([]);
   const [scoreboardTitle, setScoreboardTitle] = useState(accountColumn);
   const [scoreboardData, setScoreboardData] = useState([]);
   const [challengeTitle, setChallengeTitle] = useState('');
+
+  const [showEmailSentPopup, setShowEmailSentPopup] = useState(false);
+  const [emailSentPopupMessage, setEmailSentPopupMessage] = useState(
+    'All submissions for the challenge will be sent to your email. Please check your mailbox for the file(s).',
+  );
+
+  const role = useMemo(
+    () => userClasses.filter((item) => item.class_id === Number(classId))[0].role,
+    [classId, userClasses],
+  );
 
   useEffect(() => {
     dispatch(fetchChallengeSummary(authToken, challengeId));
@@ -201,9 +230,32 @@ export default function Statistics() {
     [scoreboardData, scoreboardTitle],
   );
 
+  const handleClickDownloadAllSubmission = () => {
+    dispatch(downloadAllSubmissions(authToken, challengeId, true));
+    setEmailSentPopupMessage(
+      'All submissions for the challenge will be sent to your email. Please check your mailbox for the file(s).',
+    );
+    setShowEmailSentPopup(true);
+  };
+
+  const handleClickDownloadAllPlagiarismReport = () => {
+    dispatch(downloadAllPlagiarismReports(authToken, challengeId, true));
+    setEmailSentPopupMessage(
+      'All plagiarism reports for the challenge will be sent to your email. Please check your mailbox for the report(s). Due to system limitation, this might sometimes fail; please retry if you did not get (all) the files within 10 minutes.',
+    );
+    setShowEmailSentPopup(true);
+  };
+
   return (
     <>
       <PageTitle text={`${challengeTitle} / Statistics`} />
+      {role === 'MANAGER' && (
+        <div className={classes.managerButtons}>
+          <Button onClick={handleClickDownloadAllSubmission}>Download All Submissions</Button>
+          <Button onClick={handleClickDownloadAllPlagiarismReport}>Get All Plagiarism Reports</Button>
+        </div>
+      )}
+
       <SimpleBar title="Global Statistics" noIndent>
         <SimpleTable
           data={statisticsData}
@@ -254,6 +306,19 @@ export default function Statistics() {
           columns={scoreboardTitle}
         />
       </SimpleBar>
+      <Dialog open={showEmailSentPopup} keepMounted onClose={() => setShowEmailSentPopup(false)}>
+        <DialogTitle id="alert-dialog-slide-title">
+          <Typography variant="h4">Preparing Data</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">{emailSentPopupMessage}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowEmailSentPopup(false)} color="primary">
+            Done
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

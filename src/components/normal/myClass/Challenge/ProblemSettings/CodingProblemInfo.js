@@ -460,7 +460,7 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       </Dialog>
       <Dialog open={emailSentPopup} keepMounted onClose={() => setEmailSentPopup(false)}>
         <DialogTitle id="alert-dialog-slide-title">
-          <Typography variant="h4">All Testcases sent</Typography>
+          <Typography variant="h4">All Testcases Sent</Typography>
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">Please check your mailbox.</DialogContentText>
