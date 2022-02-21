@@ -365,7 +365,7 @@ const downloadAllPlagiarismReports = (token, challengeId, as_attachment) => asyn
   };
   dispatch({ type: challengeConstants.DOWNLOAD_ALL_PLAGIARISM_REPORT_START });
   try {
-    await agent.post(`/challenge/${challengeId}/all-submission`, {}, config);
+    await agent.post(`/challenge/${challengeId}/all-plagiarism-report`, {}, config);
     dispatch({ type: challengeConstants.DOWNLOAD_ALL_PLAGIARISM_REPORT_SUCCESS });
   } catch (error) {
     dispatch({
