@@ -96,32 +96,30 @@ export default function CodingProblem() {
         }`}
       />
       {!edit && role === 'MANAGER' ? (
-        <div>
-          <div className={classNames.managerButtons}>
-            <div>
-              <Button color="default" onClick={() => setEdit(true)}>
-                Edit
-              </Button>
-              <Button color="default" onClick={() => setRejudgePopUp(true)}>
-                Rejudge
-              </Button>
-            </div>
-            <div>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)}
-                startIcon={<Icon.HistoryIcon />}
-              >
-                My Submission
-              </Button>
-              <Button
-                color="primary"
-                onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}
-              >
-                Submit
-              </Button>
-            </div>
+        <div className={classNames.managerButtons}>
+          <div>
+            <Button color="default" onClick={() => setEdit(true)}>
+              Edit
+            </Button>
+            <Button color="default" onClick={() => setRejudgePopUp(true)}>
+              Rejudge
+            </Button>
+          </div>
+          <div>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)}
+              startIcon={<Icon.HistoryIcon />}
+            >
+              My Submission
+            </Button>
+            <Button
+              color="primary"
+              onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}
+            >
+              Submit
+            </Button>
           </div>
         </div>
       ) : (
