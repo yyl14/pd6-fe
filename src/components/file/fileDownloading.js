@@ -7,23 +7,6 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { downloadFile } from '../../actions/common/common';
 
 const useStyles = makeStyles((theme) => ({
-  wrapper: {
-    width: '100%',
-    height: '100vh',
-  },
-  topbar: {
-    width: '100%',
-    height: '55px',
-    backgroundColor: theme.palette.black.main,
-  },
-  subwrapper: {
-    width: '100%',
-    height: 'calc(100% - 55px)',
-    // display: 'flex',
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // flexWrap: 'wrap',
-  },
   picContainer: {
     width: '350px',
     height: '200px',
@@ -32,11 +15,6 @@ const useStyles = makeStyles((theme) => ({
     top: '50px',
     left: 'calc(50% - 175px)',
     backgroundColor: theme.palette.grey.A500,
-  },
-  pic: {
-    width: '350px',
-    height: '350px',
-    borderRadius: '50%',
   },
   messageContainer: {
     width: '100%',
