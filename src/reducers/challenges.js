@@ -43,6 +43,7 @@ const byId = (state = {}, action) => {
         state,
       );
     }
+    // FIXME: scoreboard type currently accept team project only
     case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data, id } = action.payload;
       return {
@@ -53,7 +54,12 @@ const byId = (state = {}, action) => {
           problemIds: data.problem.map((item) => item.id),
           peerReviewIds: data.peer_review.map((item) => item.id),
           essayIds: data.essay.map((item) => item.id),
-          scoreboardIds: data.scoreboard.map((item) => item.id),
+          scoreboardIds: data.scoreboard.reduce((acc, item) => {
+            if (item.type !== 'TEAM_PROJECT') {
+              return acc;
+            }
+            return [...acc, item.id];
+          }, []),
         },
       };
     }
