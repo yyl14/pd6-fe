@@ -150,6 +150,7 @@ const typography = {
     lineHeight: 25 / 18,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
+    whiteSpace: 'pre-line',
   },
 
   // Sub-body
