@@ -63,6 +63,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@iconify/icons-bx": "^1.1.2",
     "@iconify/react": "^3.0.0",
     "@testing-library/jest-dom": "^5.11.4",
