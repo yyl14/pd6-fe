@@ -7,6 +7,7 @@ import {
   makeStudentCardDefault,
   resendEmailVerification,
 } from '../../../../actions/admin/account';
+import useInstitute from '../../../../lib/institute/useInstitute';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
 
@@ -54,8 +55,9 @@ export default function StudentInfoCard(props) {
   const classes = useStyles();
   const disabled = props.isDefault;
   const authToken = useSelector((state) => state.auth.token);
-  const institutes = useSelector((state) => state.institutes.byId);
-  const institutesId = useSelector((state) => state.institutes.allIds);
+
+  const { institute } = useInstitute(props.instituteId);
+
   const [snackbar, setSnackbar] = useState(false);
   const dispatch = useDispatch();
   const { accountId } = useParams();
@@ -73,20 +75,12 @@ export default function StudentInfoCard(props) {
     dispatch(deletePendingStudentCard(authToken, emailVerificationId));
   };
 
-  const transform = (instituteId) => {
-    const institute = institutesId.filter((id) => id === instituteId);
-    if (institute.length !== 0) {
-      return institutes[institute[0]].full_name;
-    }
-    return 'Unknown Institute';
-  };
-
   return (
     <div className={classes.root}>
       <div className={classes.defaultHeader}>
         {props.isDefault && <Icon.StarIcon style={{ color: 'ffe81e' }} className={classes.starIcon} />}
         {props.pending && <Icon.Warning style={{ color: '656565' }} className={classes.pendingIcon} />}
-        <Typography variant="body1">{transform(props.instituteId)}</Typography>
+        <Typography variant="body1">{institute?.full_name ?? 'Unknown Institute'}</Typography>
       </div>
       <Card variant="outlined">
         {!props.pending ? (

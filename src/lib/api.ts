@@ -10,14 +10,14 @@ const logger: Middleware = async (url, init, next) => {
   return res;
 };
 
-// const authTokenInjector: Middleware = async (url, init, next) => {
-//   const session = await getSession();
-//   if (session?.token) {
-//     init.headers.set('auth-token', session.token);
-//   }
-//   const res = await next(url, init);
-//   return res;
-// };
+const authTokenInjector: Middleware = async (url, init, next) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    init.headers.set('auth-token', token);
+  }
+  const res = await next(url, init);
+  return res;
+};
 
 // const tokenExpirationHandler: Middleware = async (url, init, next) => {
 //   const res = await next(url, init);
@@ -30,9 +30,9 @@ const logger: Middleware = async (url, init, next) => {
 const api = Fetcher.for<paths>();
 
 api.configure({
-  baseUrl: process.env.NEXT_PUBLIC_API_ROOT,
+  baseUrl: process.env.REACT_APP_API_ROOT,
   // use: [logger, authTokenInjector, tokenExpirationHandler],
-  use: [logger],
+  use: [logger, authTokenInjector],
 });
 
 export default api;

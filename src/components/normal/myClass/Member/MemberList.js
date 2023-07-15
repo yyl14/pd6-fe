@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { browseClassMember } from '../../../../actions/api/view';
-import { getInstitutes } from '../../../../actions/common/common';
 import systemRoleTransformation from '../../../../function/systemRoleTransformation';
+import useInstitutes from '../../../../lib/institute/useInstitutes';
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
 import AutoTable from '../../../ui/AutoTable';
@@ -23,9 +23,11 @@ export default function MemberList() {
   const classes = useSelector((state) => state.classes);
   const members = useSelector((state) => state.classMembers);
   const userClasses = useSelector((state) => state.user.classes);
-  const institutes = useSelector((state) => state.institutes);
+
   const loading = useSelector((state) => state.loading.common.common);
   const error = useSelector((state) => state.error.api.view.browseClassMember);
+
+  const { institutes } = useInstitutes();
 
   const [edit, setEdit] = useState(false);
   const [isManager, setIsManager] = useState(false);
@@ -33,10 +35,6 @@ export default function MemberList() {
   useEffect(() => {
     setIsManager(userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER');
   }, [classId, userClasses]);
-
-  useEffect(() => {
-    dispatch(getInstitutes());
-  }, [authToken, dispatch]);
 
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
     if (
@@ -101,13 +99,10 @@ export default function MemberList() {
                 label: 'Institute',
                 type: 'ENUM',
                 operation: 'IN',
-                options: institutes.allIds.map((id) => {
-                  const item = institutes.byId[id];
-                  return {
-                    value: item.abbreviated_name,
-                    label: item.abbreviated_name,
-                  };
-                }),
+                options: institutes.map((item) => ({
+                  value: item.abbreviated_name,
+                  label: item.abbreviated_name,
+                })),
               },
               {
                 reduxStateId: 'role',

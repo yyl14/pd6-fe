@@ -1,10 +1,10 @@
 import { Button } from '@material-ui/core';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { browseClassMember } from '../../../actions/api/view';
-import { getInstitutes } from '../../../actions/common/common';
 import systemRoleTransformation from '../../../function/systemRoleTransformation';
+import useInstitutes from '../../../lib/institute/useInstitutes';
 import NoMatch from '../../noMatch';
 import AutoTable from '../../ui/AutoTable';
 import PageTitle from '../../ui/PageTitle';
@@ -21,15 +21,12 @@ export default function MemberList() {
   const courses = useSelector((state) => state.courses);
   const classes = useSelector((state) => state.classes);
   const members = useSelector((state) => state.classMembers);
-  const institutes = useSelector((state) => state.institutes);
   const loading = useSelector((state) => state.loading.admin.course);
   const error = useSelector((state) => state.error.common.common.fetchClassMembers);
 
-  const [edit, setEdit] = useState(false);
+  const { institutes } = useInstitutes();
 
-  useEffect(() => {
-    dispatch(getInstitutes());
-  }, [authToken, dispatch]);
+  const [edit, setEdit] = useState(false);
 
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
     if (loading.fetchCourses || loading.fetchClasses) {
@@ -85,13 +82,10 @@ export default function MemberList() {
                 label: 'Institute',
                 type: 'ENUM',
                 operation: 'IN',
-                options: institutes.allIds.map((id) => {
-                  const item = institutes.byId[id];
-                  return {
-                    value: item.abbreviated_name,
-                    label: item.abbreviated_name,
-                  };
-                }),
+                options: institutes.map((item) => ({
+                  value: item.abbreviated_name,
+                  label: item.abbreviated_name,
+                })),
               },
               {
                 reduxStateId: 'role',
