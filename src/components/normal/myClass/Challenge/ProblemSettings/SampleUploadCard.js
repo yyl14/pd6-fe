@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
 import {
-  Typography,
   Button,
-  makeStyles,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
+  DialogTitle,
   TextField,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
+import { useState } from 'react';
 import AlignedText from '../../../../ui/AlignedText';
 import IOFileUploadArea from '../../../../ui/IOFileUploadArea';
 
@@ -84,11 +84,7 @@ export default function SampleUploadCard({
               sample1.out （範例測資 1 的 output）
             </Typography>
             <Typography variant="body2">
-              Notice that PDOGS only accept files encoded in
-              {' '}
-              <b>ASCII / UTF-8</b>
-              {' '}
-              charset.
+              Notice that PDOGS only accept files encoded in <b>ASCII / UTF-8</b> charset.
             </Typography>
           </div>
           <AlignedText text="Default Time (ms)" childrenType="field">

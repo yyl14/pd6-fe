@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
   Button,
-  makeStyles,
   Dialog,
-  DialogTitle,
   DialogActions,
-  DialogContentText,
   DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Typography,
+  makeStyles,
   withStyles,
 } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import Icon from '../../../ui/icon/index';
 import AlignedText from '../../../ui/AlignedText';
 import PageTitle from '../../../ui/PageTitle';
+import Icon from '../../../ui/icon/index';
 
-import EssayInfo from './ProblemSettings/EssayInfo';
-import EssayEdit from './ProblemSettings/EssayEdit';
 import { readEssay } from '../../../../actions/myClass/essay';
 import { downloadAllEssaySubmission } from '../../../../actions/myClass/essaySubmission';
+import EssayEdit from './ProblemSettings/EssayEdit';
+import EssayInfo from './ProblemSettings/EssayInfo';
 
 import NoMatch from '../../../noMatch';
 
@@ -39,9 +39,7 @@ const StyledButton = withStyles({
 })(Button);
 
 export default function EssayProblem() {
-  const {
-    courseId, classId, challengeId, essayId,
-  } = useParams();
+  const { courseId, classId, challengeId, essayId } = useParams();
   const classNames = useStyles();
 
   const dispatch = useDispatch();

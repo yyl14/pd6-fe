@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider,
-} from '@material-ui/core';
 import Icon from '../icon/index';
 
-export default function UserProfile({
-  classes, history, location, mode, open, onClose,
-}) {
+export default function UserProfile({ classes, history, location, mode, open, onClose }) {
   const { accountId } = useParams();
   const accounts = useSelector((state) => state.accounts.byId);
   const [display, setDisplay] = useState('unfold');

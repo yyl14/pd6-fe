@@ -1,50 +1,83 @@
 {
   "root": true,
-  "extends": ["airbnb", "airbnb/hooks", "plugin:react/recommended"],
-  "plugins": ["unused-imports"],
-  "rules": {
-    "no-console": "off",
-    "react/jsx-filename-extension": [
-      1,
-      {
-        "extensions": ["js", ".jsx"]
+  "extends": [
+    "eslint:recommended",
+    "airbnb",
+    "airbnb/hooks",
+    "airbnb-typescript",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "plugins": ["@typescript-eslint", "import", "unused-imports"],
+  "overrides": [
+    {
+      "files": ["**/*.js"],
+      "rules": {
+        "no-console": "off",
+        "react/jsx-filename-extension": [
+          1,
+          {
+            "extensions": ["js", ".jsx"]
+          }
+        ],
+        "import/no-extraneous-dependencies": [
+          "error",
+          {
+            "devDependencies": true
+          }
+        ],
+        "react-hooks/exhaustive-deps": "warn",
+        "import/no-named-as-default": 0,
+        "import/no-named-as-default-member": 0,
+        "import/named": "off",
+        "react/destructuring-assignment": [0, "never"],
+        "eqeqeq": ["error", "smart"],
+        "no-unused-vars": "warn",
+        "react/no-unused-state": "warn",
+        "no-extra-boolean-cast": "off",
+        "react/static-property-placement": "off",
+        "react/prop-types": "off",
+        "react/jsx-uses-react": 0,
+        "react/react-in-jsx-scope": 0,
+        "unused-imports/no-unused-imports": "error",
+        "unused-imports/no-unused-vars": [
+          "warn",
+          {
+            "vars": "all",
+            "varsIgnorePattern": "^_",
+            "args": "after-used",
+            "argsIgnorePattern": "^_"
+          }
+        ],
+        "@typescript-eslint/default-param-last": "off",
+        "@typescript-eslint/naming-convention": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off"
       }
-    ],
-    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
-    "react-hooks/exhaustive-deps": "warn",
-    "import/no-named-as-default": 0,
-    "import/no-named-as-default-member": 0,
-    "react/destructuring-assignment": [0, "never"],
-    "eqeqeq": ["error", "smart"],
-    "no-unused-vars": "warn",
-    "react/no-unused-state": "warn",
-    "no-extra-boolean-cast": "off",
-    "react/static-property-placement": "off",
-    "comma-dangle": [2, "always-multiline"],
-    "linebreak-style": 0,
-    "import/named": "off",
-    "react/prop-types": "off",
-    "max-len": "off",
-    "camelcase": "off",
-    "unused-imports/no-unused-imports": "error",
-    "unused-imports/no-unused-vars": [
-      "warn",
-      {
-        "vars": "all",
-        "varsIgnorePattern": "^_",
-        "args": "after-used",
-        "argsIgnorePattern": "^_"
-      }
-    ]
-  },
-  "parser": "babel-eslint",
+    }
+  ],
+  "rules": {},
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "sourceType": "module",
-    "allowImportExportEverywhere": "true"
+    "allowImportExportEverywhere": "true",
+    "project": "./tsconfig.json"
   },
   "env": {
     "browser": true,
     "es6": true,
     "node": true
-  }
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true,
+        "project": "./tsconfig.json"
+      }
+    }
+  },
+  "ignorePatterns": ["/types/schema.d.ts"]
 }

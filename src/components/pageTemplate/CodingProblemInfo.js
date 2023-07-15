@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
-import { Typography, makeStyles, Grid } from '@material-ui/core';
+import { Grid, Typography, makeStyles } from '@material-ui/core';
+import { MathpixLoader, MathpixMarkdown } from 'mathpix-markdown-it';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { browseAssistingData, browseTestcase } from '../../actions/myClass/problem';
+import GeneralLoading from '../GeneralLoading';
+import SampleTestArea from '../ui/SampleTestArea';
 import SimpleBar from '../ui/SimpleBar';
 import SimpleTable from '../ui/SimpleTable';
-import SampleTestArea from '../ui/SampleTestArea';
-import GeneralLoading from '../GeneralLoading';
-import { browseTestcase, browseAssistingData } from '../../actions/myClass/problem';
 
 const useStyles = makeStyles(() => ({
   sampleArea: {

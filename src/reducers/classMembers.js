@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import { commonConstants } from '../actions/common/constant';
 import { viewConstants } from '../actions/api/constant';
+import { commonConstants } from '../actions/common/constant';
 
 const prototype = {
   id: null,

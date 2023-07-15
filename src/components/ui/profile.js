@@ -1,4 +1,3 @@
-import React from 'react';
 import { Typography, makeStyles } from '@material-ui/core';
 import Icon from './icon/index';
 
@@ -63,9 +62,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Profile({
-  name, img_url, description, Github_link, FB_link, Linkedin_link,
-}) {
+export default function Profile({ name, img_url, description, Github_link, FB_link, Linkedin_link }) {
   const classes = useStyles();
 
   return (

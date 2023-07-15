@@ -1,22 +1,20 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  Typography, Button, makeStyles, Dialog, DialogTitle, DialogActions, DialogContent,
-} from '@material-ui/core';
-import { useParams, Link } from 'react-router-dom';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, makeStyles } from '@material-ui/core';
 import moment from 'moment';
-import Icon from '../ui/icon/index';
-import SimpleBar from '../ui/SimpleBar';
-import AlignedText from '../ui/AlignedText';
-import SimpleTable from '../ui/SimpleTable';
-import PageTitle from '../ui/PageTitle';
-import CodeArea from '../ui/CodeArea';
-import GeneralLoading from '../GeneralLoading';
-import { browseTestcases, rejudgeSubmission } from '../../actions/myClass/problem';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
 import { browseAllJudgementJudgeCase } from '../../actions/api/judgement';
-import { readSubmissionDetail, fetchSubmission } from '../../actions/myClass/submission';
 import { browseSubmitLang } from '../../actions/common/common';
+import { browseTestcases, rejudgeSubmission } from '../../actions/myClass/problem';
+import { fetchSubmission, readSubmissionDetail } from '../../actions/myClass/submission';
+import GeneralLoading from '../GeneralLoading';
 import NoMatch from '../noMatch';
+import AlignedText from '../ui/AlignedText';
+import CodeArea from '../ui/CodeArea';
+import PageTitle from '../ui/PageTitle';
+import SimpleBar from '../ui/SimpleBar';
+import SimpleTable from '../ui/SimpleTable';
+import Icon from '../ui/icon/index';
 
 const useStyles = makeStyles((theme) => ({
   textLink: {
@@ -40,9 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
-  const {
-    courseId, classId, challengeId, problemId, submissionId,
-  } = useParams();
+  const { courseId, classId, challengeId, problemId, submissionId } = useParams();
   const classNames = useStyles();
   const [popUp, setPopUp] = useState(false);
   const [tableData, setTableData] = useState([]);
@@ -175,15 +171,17 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
             if (!a.no.includes('sample') && b.no.includes('sample')) return 1;
             if (a.no.includes('sample') && !b.no.includes('sample')) return -1;
             if (
-              a.no.includes('sample')
-              && b.no.includes('sample')
-              && Number(a.no.substring(6)) > Number(b.no.substring(6))
-            ) return 1;
+              a.no.includes('sample') &&
+              b.no.includes('sample') &&
+              Number(a.no.substring(6)) > Number(b.no.substring(6))
+            )
+              return 1;
             if (
-              a.no.includes('sample')
-              && b.no.includes('sample')
-              && Number(a.no.substring(6)) < Number(b.no.substring(6))
-            ) return -1;
+              a.no.includes('sample') &&
+              b.no.includes('sample') &&
+              Number(a.no.substring(6)) < Number(b.no.substring(6))
+            )
+              return -1;
             if (!a.no.includes('sample') && !b.no.includes('sample') && Number(a.no) > Number(b.no)) return 1;
             if (!a.no.includes('sample') && !b.no.includes('sample') && Number(a.no) < Number(b.no)) return -1;
             return 0;
@@ -202,12 +200,12 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
   ]);
 
   if (
-    problems.byId[problemId] === undefined
-    || challenges.byId[challengeId] === undefined
-    || submissions[submissionId] === undefined
-    || judgments === undefined
-    || judgeCases.allIds === undefined
-    || testcases.allIds === undefined
+    problems.byId[problemId] === undefined ||
+    challenges.byId[challengeId] === undefined ||
+    submissions[submissionId] === undefined ||
+    judgments === undefined ||
+    judgeCases.allIds === undefined ||
+    testcases.allIds === undefined
   ) {
     if (loading.readSubmissionDetail || loading.browseJudgeCases || loading.readTestcase || loading.rejudgeSubmission) {
       return <GeneralLoading />;

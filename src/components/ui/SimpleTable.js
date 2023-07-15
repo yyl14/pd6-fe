@@ -1,19 +1,19 @@
 import {
+  FormControl,
+  MenuItem,
   Paper,
+  Select,
   Table,
   TableBody,
   TableCell,
-  TextField,
   TableContainer,
   TableHead,
   TableRow,
-  MenuItem,
-  FormControl,
-  Select,
+  TextField,
 } from '@material-ui/core';
 
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Icon from './icon/index';
 
@@ -98,9 +98,7 @@ const useStyles = makeStyles((theme) => ({
   accepted: { color: theme.palette.green.main },
 }));
 
-export default function SimpleTable({
-  isEdit, hasDelete, buttons, columns, data, setData,
-}) {
+export default function SimpleTable({ isEdit, hasDelete, buttons, columns, data, setData }) {
   const classes = useStyles();
   const [filterData, setFilterData] = useState(data);
 

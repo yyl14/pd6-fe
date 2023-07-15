@@ -1,13 +1,11 @@
-import {
-  Typography, Button, makeStyles, FormControl, Select, MenuItem, TextField,
-} from '@material-ui/core';
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { Button, FormControl, MenuItem, Select, TextField, Typography, makeStyles } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import AlignedText from '../../../../ui/AlignedText';
-import SimpleBar from '../../../../ui/SimpleBar';
-import MultiSelect from '../../../../ui/MultiSelect';
 import { editTeamProjectScoreboard } from '../../../../../actions/api/scoreboard';
+import AlignedText from '../../../../ui/AlignedText';
+import MultiSelect from '../../../../ui/MultiSelect';
+import SimpleBar from '../../../../ui/SimpleBar';
 
 const useStyles = makeStyles((theme) => ({
   buttons: {
@@ -60,10 +58,11 @@ export default function ScoreboardEdit({ setEdit }) {
     }
   }, [problems.byId, scoreboardId, scoreboards.byId]);
 
-  const transIdToLabel = (ids) => ids
-    .map((id) => problems.byId[id])
-    .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
-    .map(({ challenge_label }) => challenge_label);
+  const transIdToLabel = (ids) =>
+    ids
+      .map((id) => problems.byId[id])
+      .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+      .map(({ challenge_label }) => challenge_label);
 
   const transLabelToId = (labels) => {
     const ids = labels.map(

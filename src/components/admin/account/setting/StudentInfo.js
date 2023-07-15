@@ -1,7 +1,6 @@
-import React from 'react';
 import { Button } from '@material-ui/core';
-import StudentInfoCard from './StudentInfoCard';
 import SimpleBar from '../../../ui/SimpleBar';
+import StudentInfoCard from './StudentInfoCard';
 
 export default function StudentInfo(props) {
   const defaultCard = props.cards.filter((p) => p.is_default);
@@ -10,11 +9,11 @@ export default function StudentInfo(props) {
     <div>
       <SimpleBar
         title="Student Information"
-        buttons={(
+        buttons={
           <>
             <Button onClick={() => props.handleEdit()}>Edit</Button>
           </>
-        )}
+        }
       >
         {props.cards && (
           <div>

@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  Switch, Route, useHistory, useLocation,
-} from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 // import { makeStyles } from '@material-ui/core';
 // import { makeStyles, Fab } from '@material-ui/core';
 // import { Feedback } from '@material-ui/icons';
-import Normal from './normal';
-import Admin from './admin';
-import Account from './account';
-import User from './user';
-import MySubmission from './mySubmission';
-import FileDownloading from '../components/file/fileDownloading';
-import Sidebar from '../components/ui/Sidebar';
-import Header from '../components/ui/Header';
 import { getUserInfo } from '../actions/user/auth';
+import FileDownloading from '../components/file/fileDownloading';
+import Header from '../components/ui/Header';
+import Sidebar from '../components/ui/Sidebar';
 import Icon from '../components/ui/icon';
 import '../styles/index.css';
+import Account from './account';
+import Admin from './admin';
+import MySubmission from './mySubmission';
+import Normal from './normal';
+import User from './user';
 
 // const useStyles = makeStyles(() => ({
 //   bugReport: {

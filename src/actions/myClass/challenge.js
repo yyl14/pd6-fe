@@ -1,9 +1,9 @@
 import moment from 'moment';
 
-import agent from '../agent';
-import { challengeConstants } from './constant';
-import { autoTableConstants } from '../component/constant';
 import browseParamsTransForm from '../../function/browseParamsTransform';
+import agent from '../agent';
+import { autoTableConstants } from '../component/constant';
+import { challengeConstants } from './constant';
 
 const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
   try {
@@ -26,59 +26,61 @@ const browseTasksUnderChallenge = (token, challengeId) => async (dispatch) => {
   }
 };
 
-const fetchChallenges = (token, classId, browseParams, tableId = null) => async (dispatch) => {
-  try {
-    // transform status to time comparison
-    const adjustedBrowseParams = {
-      ...browseParams,
-      filter: browseParams.filter.reduce((acc, item) => {
-        if (item[0] === 'status') {
-          const currentTime = moment().toISOString();
+const fetchChallenges =
+  (token, classId, browseParams, tableId = null) =>
+  async (dispatch) => {
+    try {
+      // transform status to time comparison
+      const adjustedBrowseParams = {
+        ...browseParams,
+        filter: browseParams.filter.reduce((acc, item) => {
+          if (item[0] === 'status') {
+            const currentTime = moment().toISOString();
 
-          if (item[2][0] === 'Not Yet') {
-            return [...acc, ['start_time', '>', currentTime]];
+            if (item[2][0] === 'Not Yet') {
+              return [...acc, ['start_time', '>', currentTime]];
+            }
+            if (item[2][0] === 'Closed') {
+              return [...acc, ['end_time', '<', currentTime]];
+            }
+            if (item[2][0] === 'Opened') {
+              return [...acc, ['start_time', '<', currentTime], ['end_time', '>', currentTime]];
+            }
           }
-          if (item[2][0] === 'Closed') {
-            return [...acc, ['end_time', '<', currentTime]];
-          }
-          if (item[2][0] === 'Opened') {
-            return [...acc, ['start_time', '<', currentTime], ['end_time', '>', currentTime]];
-          }
-        }
-        return [...acc, item];
-      }, []),
-    };
+          return [...acc, item];
+        }, []),
+      };
 
-    const config = {
-      headers: {
-        'auth-token': token,
-      },
-      params: browseParamsTransForm(adjustedBrowseParams),
-    };
-    dispatch({ type: challengeConstants.FETCH_CHALLENGES_START });
-    const res = await agent.get(`/class/${classId}/challenge`, config);
-    const { data: challenges, total_count } = res.data.data;
-    dispatch({
-      type: challengeConstants.FETCH_CHALLENGES_SUCCESS,
-      payload: { classId, data: challenges },
-    });
+      const config = {
+        headers: {
+          'auth-token': token,
+        },
+        params: browseParamsTransForm(adjustedBrowseParams),
+      };
+      dispatch({ type: challengeConstants.FETCH_CHALLENGES_START });
+      const res = await agent.get(`/class/${classId}/challenge`, config);
+      const { data: challenges, total_count } = res.data.data;
+      dispatch({
+        type: challengeConstants.FETCH_CHALLENGES_SUCCESS,
+        payload: { classId, data: challenges },
+      });
 
-    dispatch({
-      type: autoTableConstants.AUTO_TABLE_UPDATE,
-      payload: {
-        tableId,
-        totalCount: total_count,
-        dataIds: challenges.map((item) => item.id),
-        offset: browseParams.offset,
-      },
-    });
-  } catch (error) {
-    dispatch({
-      type: challengeConstants.FETCH_CHALLENGES_FAIL,
-      error,
-    });
-  }
-};
+      dispatch({
+        type: autoTableConstants.AUTO_TABLE_UPDATE,
+        payload: {
+          tableId,
+          totalCount: total_count,
+          dataIds: challenges.map((item) => item.id),
+          offset: browseParams.offset,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: challengeConstants.FETCH_CHALLENGES_FAIL,
+        error,
+      });
+    }
+  };
 
 const peerReviewFetchChallenges = (token, classId) => async (dispatch) => {
   try {
@@ -287,51 +289,53 @@ const addEssay = (token, challengeId, label, title, history, courseId, classId, 
   }
 };
 
-const addPeerReview = (
-  token,
-  challengeId,
-  label,
-  title,
-  problemId,
-  minScore,
-  maxScore,
-  maxReviewCount,
-  history,
-  courseId,
-  classId,
-  onError,
-) => async (dispatch) => {
-  dispatch({ type: challengeConstants.ADD_PEER_REVIEW_START });
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-  };
-  const body = {
-    challenge_label: label,
+const addPeerReview =
+  (
+    token,
+    challengeId,
+    label,
     title,
-    target_problem_id: problemId,
-    description: '',
-    min_score: minScore,
-    max_score: maxScore,
-    max_review_count: maxReviewCount,
+    problemId,
+    minScore,
+    maxScore,
+    maxReviewCount,
+    history,
+    courseId,
+    classId,
+    onError,
+  ) =>
+  async (dispatch) => {
+    dispatch({ type: challengeConstants.ADD_PEER_REVIEW_START });
+    const config = {
+      headers: {
+        'auth-token': token,
+      },
+    };
+    const body = {
+      challenge_label: label,
+      title,
+      target_problem_id: problemId,
+      description: '',
+      min_score: minScore,
+      max_score: maxScore,
+      max_review_count: maxReviewCount,
+    };
+    try {
+      const res = await agent.post(`/challenge/${challengeId}/peer-review`, body, config);
+      const { data } = res.data;
+      const { id } = data;
+      dispatch({
+        type: challengeConstants.ADD_PEER_REVIEW_SUCCESS,
+      });
+      history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${id}`);
+    } catch (error) {
+      dispatch({
+        type: challengeConstants.ADD_PEER_REVIEW_FAIL,
+        error,
+      });
+      onError();
+    }
   };
-  try {
-    const res = await agent.post(`/challenge/${challengeId}/peer-review`, body, config);
-    const { data } = res.data;
-    const { id } = data;
-    dispatch({
-      type: challengeConstants.ADD_PEER_REVIEW_SUCCESS,
-    });
-    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${id}`);
-  } catch (error) {
-    dispatch({
-      type: challengeConstants.ADD_PEER_REVIEW_FAIL,
-      error,
-    });
-    onError();
-  }
-};
 
 const downloadAllSubmissions = (token, challengeId, as_attachment) => async (dispatch) => {
   const config = {
@@ -376,17 +380,17 @@ const downloadAllPlagiarismReports = (token, challengeId, as_attachment) => asyn
 };
 
 export {
-  browseTasksUnderChallenge,
-  fetchChallenges,
   addChallenge,
-  editChallenge,
-  deleteChallenge,
-  fetchChallengeSummary,
-  fetchChallengeMemberSubmission,
-  addProblem,
   addEssay,
   addPeerReview,
-  peerReviewFetchChallenges,
-  downloadAllSubmissions,
+  addProblem,
+  browseTasksUnderChallenge,
+  deleteChallenge,
   downloadAllPlagiarismReports,
+  downloadAllSubmissions,
+  editChallenge,
+  fetchChallengeMemberSubmission,
+  fetchChallengeSummary,
+  fetchChallenges,
+  peerReviewFetchChallenges,
 };

@@ -1,6 +1,5 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { TextField } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
   codeContent: {
@@ -21,9 +20,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function CodeField({
-  value, onChange, disabled = false, placeholder,
-}) {
+export default function CodeField({ value, onChange, disabled = false, placeholder }) {
   const classNames = useStyles();
   return (
     <TextField

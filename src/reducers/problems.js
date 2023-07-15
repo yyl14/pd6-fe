@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
-import { problemConstants, challengeConstants, submissionConstants } from '../actions/myClass/constant';
+import { peerReviewConstants, viewConstants } from '../actions/api/constant';
 import { commonConstants } from '../actions/common/constant';
-import { viewConstants, peerReviewConstants } from '../actions/api/constant';
+import { challengeConstants, problemConstants, submissionConstants } from '../actions/myClass/constant';
 
 const prototype = {
   id: null,

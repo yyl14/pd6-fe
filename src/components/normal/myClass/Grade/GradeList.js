@@ -1,29 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
-  makeStyles,
-  withStyles,
   Button,
-  Typography,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
   Snackbar,
+  TextField,
+  Typography,
+  makeStyles,
+  withStyles,
 } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
 import moment from 'moment-timezone';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { browseClassGrade } from '../../../../actions/api/view';
+import { addClassGrade, downloadGradeFile, importClassGrade } from '../../../../actions/myClass/grade';
+import GeneralLoading from '../../../GeneralLoading';
 import AlignedText from '../../../ui/AlignedText';
 import AutoTable from '../../../ui/AutoTable';
 import FileUploadArea from '../../../ui/FileUploadArea';
 import PageTitle from '../../../ui/PageTitle';
 import Icon from '../../../ui/icon/index';
-import {
-  addClassGrade, importClassGrade, downloadGradeFile,
-} from '../../../../actions/myClass/grade';
-import { browseClassGrade } from '../../../../actions/api/view';
-import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
   reminder: {
@@ -238,7 +236,7 @@ export default function GradeList() {
           //   operation: 'LIKE',
           // },
         ]}
-        buttons={(
+        buttons={
           <>
             {isManager && (
               <>
@@ -251,7 +249,7 @@ export default function GradeList() {
               </>
             )}
           </>
-        )}
+        }
         defaultSort={['update_time', 'DESC']}
         refetch={(browseParams, ident) => {
           dispatch(browseClassGrade(authToken, classId, browseParams, ident));
@@ -384,11 +382,7 @@ export default function GradeList() {
             Grader: same as receiver
           </Typography>
           <Typography variant="body2">
-            Notice that PDOGS only accept files encoded in
-            {' '}
-            <b>ASCII / UTF-8</b>
-            {' '}
-            charset.
+            Notice that PDOGS only accept files encoded in <b>ASCII / UTF-8</b> charset.
           </Typography>
         </DialogContent>
         <DialogContent>

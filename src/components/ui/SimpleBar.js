@@ -1,7 +1,5 @@
 import { Typography, makeStyles } from '@material-ui/core';
 
-import React from 'react';
-
 const useStyles = makeStyles((theme) => ({
   topContent: {
     // width: '80%',
@@ -48,9 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SimpleBar({
-  title, buttons, childrenButtons, children, noIndent,
-}) {
+export default function SimpleBar({ title, buttons, childrenButtons, children, noIndent }) {
   const classes = useStyles();
   return (
     <>

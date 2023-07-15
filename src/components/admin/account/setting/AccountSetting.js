@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import { Snackbar } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Snackbar } from '@material-ui/core';
-import { fetchStudentCards, browsePendingStudentCards } from '../../../../actions/admin/account';
+import { browsePendingStudentCards, fetchStudentCards } from '../../../../actions/admin/account';
 import { fetchAccount, getInstitutes } from '../../../../actions/common/common';
-import PageTitle from '../../../ui/PageTitle';
+import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
+import PageTitle from '../../../ui/PageTitle';
+import AccountDelete from './AccountDelete';
 import BasicInfo from './BasicInfo';
 import BasicInfoEdit from './BasicInfoEdit';
-import StudentInfoEdit from './StudentInfoEdit';
-import AccountDelete from './AccountDelete';
 import NewPassword from './NewPassword';
-import GeneralLoading from '../../../GeneralLoading';
+import StudentInfoEdit from './StudentInfoEdit';
 
 /* This is a level 4 component (page component) */
 

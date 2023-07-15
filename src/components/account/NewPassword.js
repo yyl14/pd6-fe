@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
   Button,
-  TextField,
-  Typography,
-  makeStyles,
-  InputAdornment,
-  IconButton,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  IconButton,
+  InputAdornment,
   Snackbar,
+  TextField,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import SimpleBar from '../ui/SimpleBar';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AlignedText from '../ui/AlignedText';
+import SimpleBar from '../ui/SimpleBar';
 
 import { editPassword } from '../../actions/user/user';
 
@@ -123,12 +123,12 @@ export default function NewPassword() {
 
   useEffect(() => {
     if (
-      oldPassword !== ''
-      && newPassword !== ''
-      && confirmPassword !== ''
-      && !errors.oldPassword
-      && !errors.newPassword
-      && !errors.confirmPassword
+      oldPassword !== '' &&
+      newPassword !== '' &&
+      confirmPassword !== '' &&
+      !errors.oldPassword &&
+      !errors.newPassword &&
+      !errors.confirmPassword
     ) {
       setDisabled(false);
       return;
@@ -231,11 +231,11 @@ export default function NewPassword() {
       ) : (
         <SimpleBar
           title="Password"
-          buttons={(
+          buttons={
             <>
               <Button onClick={() => setEdit(true)}>Edit</Button>
             </>
-          )}
+          }
         />
       )}
       <Dialog

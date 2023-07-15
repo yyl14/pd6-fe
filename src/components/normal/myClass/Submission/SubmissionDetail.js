@@ -1,27 +1,25 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  Typography, Button, makeStyles, Dialog, DialogTitle, DialogActions, DialogContent,
-} from '@material-ui/core';
-import { useParams, Link } from 'react-router-dom';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, makeStyles } from '@material-ui/core';
 import moment from 'moment';
-import CodeArea from '../../../ui/CodeArea';
-import Icon from '../../../ui/icon/index';
-import SimpleBar from '../../../ui/SimpleBar';
-import AlignedText from '../../../ui/AlignedText';
-import SimpleTable from '../../../ui/SimpleTable';
-import PageTitle from '../../../ui/PageTitle';
-import GeneralLoading from '../../../GeneralLoading';
-import {
-  readSubmissionDetail,
-  fetchSubmission,
-  rejudgeSubmission,
-  browseTestcases,
-} from '../../../../actions/myClass/submission';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
 import { browseAllJudgementJudgeCase } from '../../../../actions/api/judgement';
+import {
+  browseTestcases,
+  fetchSubmission,
+  readSubmissionDetail,
+  rejudgeSubmission,
+} from '../../../../actions/myClass/submission';
+import GeneralLoading from '../../../GeneralLoading';
+import AlignedText from '../../../ui/AlignedText';
+import CodeArea from '../../../ui/CodeArea';
+import PageTitle from '../../../ui/PageTitle';
+import SimpleBar from '../../../ui/SimpleBar';
+import SimpleTable from '../../../ui/SimpleTable';
+import Icon from '../../../ui/icon/index';
 
+import { browseSubmitLang, fetchChallenge, getAccountBatch } from '../../../../actions/common/common';
 import { readProblemInfo } from '../../../../actions/myClass/problem';
-import { getAccountBatch, fetchChallenge, browseSubmitLang } from '../../../../actions/common/common';
 
 // import { browseSubmitLang } from '../../../../actions/common/common';
 
@@ -101,8 +99,8 @@ export default function SubmissionDetail() {
   useEffect(() => {
     if (problems.byId[problemId]) {
       if (
-        challengeId !== problems.byId[problemId].challenge_id
-        && problems.byId[problemId].challenge_id !== undefined
+        challengeId !== problems.byId[problemId].challenge_id &&
+        problems.byId[problemId].challenge_id !== undefined
       ) {
         dispatch(fetchChallenge(authToken, problems.byId[problemId].challenge_id));
         setChallengeId(problems.byId[problemId].challenge_id);
@@ -191,15 +189,17 @@ export default function SubmissionDetail() {
             if (!a.no.includes('sample') && b.no.includes('sample')) return 1;
             if (a.no.includes('sample') && !b.no.includes('sample')) return -1;
             if (
-              a.no.includes('sample')
-              && b.no.includes('sample')
-              && Number(a.no.substring(6)) > Number(b.no.substring(6))
-            ) return 1;
+              a.no.includes('sample') &&
+              b.no.includes('sample') &&
+              Number(a.no.substring(6)) > Number(b.no.substring(6))
+            )
+              return 1;
             if (
-              a.no.includes('sample')
-              && b.no.includes('sample')
-              && Number(a.no.substring(6)) < Number(b.no.substring(6))
-            ) return -1;
+              a.no.includes('sample') &&
+              b.no.includes('sample') &&
+              Number(a.no.substring(6)) < Number(b.no.substring(6))
+            )
+              return -1;
             if (!a.no.includes('sample') && !b.no.includes('sample') && Number(a.no) > Number(b.no)) return 1;
             if (!a.no.includes('sample') && !b.no.includes('sample') && Number(a.no) < Number(b.no)) return -1;
             return 0;
@@ -217,13 +217,13 @@ export default function SubmissionDetail() {
   }, [user.classes, classId]);
 
   if (
-    challenges.byId[challengeId] === undefined
-    || problems.byId[problemId] === undefined
-    || submissions[submissionId] === undefined
-    || judgments === undefined
-    || judgeCases.allIds === undefined
-    || testcases.allIds === undefined
-    || accounts.byId[accountId] === undefined
+    challenges.byId[challengeId] === undefined ||
+    problems.byId[problemId] === undefined ||
+    submissions[submissionId] === undefined ||
+    judgments === undefined ||
+    judgeCases.allIds === undefined ||
+    testcases.allIds === undefined ||
+    accounts.byId[accountId] === undefined
   ) {
     return <GeneralLoading />;
   }

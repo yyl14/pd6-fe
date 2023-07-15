@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
-} from '@material-ui/core';
 import Icon from '../icon/index';
 
-export default function Course({
-  classes, history, location, mode, open, onClose,
-}) {
+export default function Course({ classes, history, location, mode, open, onClose }) {
   const { courseId, classId } = useParams();
   const courseList = useSelector((state) => state.courses);
   const classList = useSelector((state) => state.classes);
@@ -175,28 +171,29 @@ export default function Course({
           {display === 'unfold' && (
             <List>
               {itemList.map(
-                (item) => (item.type === 'LESSON' || mode !== 'class-list') && (
-                <ListItem
-                  button
-                  key={item.id}
-                  onClick={() => history.push(item.path)}
-                  className={item.text !== 'Lesson' ? classes.item : classes.addItem}
-                >
-                  <ListItemIcon
-                    className={
+                (item) =>
+                  (item.type === 'LESSON' || mode !== 'class-list') && (
+                    <ListItem
+                      button
+                      key={item.id}
+                      onClick={() => history.push(item.path)}
+                      className={item.text !== 'Lesson' ? classes.item : classes.addItem}
+                    >
+                      <ListItemIcon
+                        className={
                           location.pathname === item.path ? `${classes.active} ${classes.itemIcon}` : classes.itemIcon
                         }
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.text}
-                    className={
+                      >
+                        {item.icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={item.text}
+                        className={
                           location.pathname === item.path ? `${classes.active} ${classes.itemText}` : classes.itemText
                         }
-                  />
-                </ListItem>
-                ),
+                      />
+                    </ListItem>
+                  ),
               )}
             </List>
           )}
@@ -217,32 +214,33 @@ export default function Course({
               {display1 === 'unfold' && (
                 <List>
                   {itemList.map(
-                    (item) => item.type === 'CONTEST' && (
-                    <ListItem
-                      button
-                      key={item.id}
-                      onClick={() => history.push(item.path)}
-                      className={item.text !== 'Contest' ? classes.item : classes.addItem}
-                    >
-                      <ListItemIcon
-                        className={
+                    (item) =>
+                      item.type === 'CONTEST' && (
+                        <ListItem
+                          button
+                          key={item.id}
+                          onClick={() => history.push(item.path)}
+                          className={item.text !== 'Contest' ? classes.item : classes.addItem}
+                        >
+                          <ListItemIcon
+                            className={
                               location.pathname === item.path
                                 ? `${classes.active} ${classes.itemIcon}`
                                 : classes.itemIcon
                             }
-                      >
-                        {item.icon}
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={item.text}
-                        className={
+                          >
+                            {item.icon}
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={item.text}
+                            className={
                               location.pathname === item.path
                                 ? `${classes.active} ${classes.itemText}`
                                 : classes.itemText
                             }
-                      />
-                    </ListItem>
-                    ),
+                          />
+                        </ListItem>
+                      ),
                   )}
                 </List>
               )}

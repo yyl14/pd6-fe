@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import { Grid, Typography } from '@material-ui/core';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Grid, Typography } from '@material-ui/core';
 
-import LoginForm from './LoginForm';
 import Trademark from '../../components/auth/Trademark';
+import LoginForm from './LoginForm';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';

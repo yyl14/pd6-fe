@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from 'react';
 import {
-  Typography,
   Button,
-  Grid,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  Grid,
+  Typography,
   makeStyles,
 } from '@material-ui/core';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
 import moment from 'moment-timezone';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import { deleteAnnouncement, readAnnouncement } from '../../../actions/admin/system';
+import GeneralLoading from '../../GeneralLoading';
 import NoMatch from '../../noMatch';
-import SimpleBar from '../../ui/SimpleBar';
 import AlignedText from '../../ui/AlignedText';
 import PageTitle from '../../ui/PageTitle';
-import { readAnnouncement, deleteAnnouncement } from '../../../actions/admin/system';
+import SimpleBar from '../../ui/SimpleBar';
 import AnnouncementEdit from './AnnouncementEdit';
-import GeneralLoading from '../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
   duration: {
@@ -99,11 +99,11 @@ export default function AnnouncementSetting() {
         <>
           <SimpleBar
             title="Announcement"
-            buttons={(
+            buttons={
               <>
                 <Button onClick={() => setEdit(true)}>Edit</Button>
               </>
-            )}
+            }
           >
             <AlignedText text="Title" childrenType="text">
               <Typography variant="body1">{announcement.title}</Typography>
@@ -121,13 +121,13 @@ export default function AnnouncementSetting() {
           </SimpleBar>
           <SimpleBar
             title="Delete Announcement"
-            childrenButtons={(
+            childrenButtons={
               <>
                 <Button color="secondary" onClick={handleClickDelete}>
                   Delete
                 </Button>
               </>
-            )}
+            }
           >
             <Typography className="delete-announcement-body" variant="body1">
               Once you delete this announcement, there is no going back. Please be certain.

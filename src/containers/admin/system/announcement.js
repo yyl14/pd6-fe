@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { Switch, Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import AnnouncementAdd from '../../../components/admin/system/AnnouncementAdd';
 import AnnouncementHome from '../../../components/admin/system/AnnouncementHome';
 import AnnouncementSetting from '../../../components/admin/system/AnnouncementSetting';

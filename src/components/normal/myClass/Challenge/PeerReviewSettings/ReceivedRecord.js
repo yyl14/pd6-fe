@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import AlignedText from '../../../../ui/AlignedText';
-import SimpleBar from '../../../../ui/SimpleBar';
 import PageTitle from '../../../../ui/PageTitle';
+import SimpleBar from '../../../../ui/SimpleBar';
 
-import BasicInfo from './Element/BasicInfo';
-import ReceiverInfo from './Element/ReceiverInfo';
-import GraderInfo from './Element/GraderInfo';
-import CodeArea from '../../../../ui/CodeArea';
-import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
+import NoMatch from '../../../../noMatch';
+import CodeArea from '../../../../ui/CodeArea';
+import BasicInfo from './Element/BasicInfo';
+import GraderInfo from './Element/GraderInfo';
+import ReceiverInfo from './Element/ReceiverInfo';
 
 import { browseAccountReceivedPeerReviewRecord } from '../../../../../actions/api/peerReview';
 import { readPeerReviewRecordWithCode } from '../../../../../actions/myClass/peerReview';
@@ -22,9 +22,7 @@ import { readPeerReviewRecordWithCode } from '../../../../../actions/myClass/pee
 // Render different component according to role and call correct api.
 // If normal, account id should be himself.
 export default function ReviewedRecord() {
-  const {
-    classId, challengeId, peerReviewId, accountId, recordId,
-  } = useParams();
+  const { classId, challengeId, peerReviewId, accountId, recordId } = useParams();
   const dispatch = useDispatch();
   const [role, setRole] = useState('GUEST');
   const [peerId, setPeerId] = useState(-1);
@@ -63,9 +61,9 @@ export default function ReviewedRecord() {
   }, [accountId, authToken, dispatch, peerReviewId, recordId]);
 
   if (
-    challenges[challengeId] === undefined
-    || peerReviews[peerReviewId] === undefined
-    || peerReviewRecords[recordId] === undefined
+    challenges[challengeId] === undefined ||
+    peerReviews[peerReviewId] === undefined ||
+    peerReviewRecords[recordId] === undefined
   ) {
     // console.log(loading);
     if (commonLoading.fetchChallenge || loading.readPeerReviewWithProblem || pageLoading.readPeerReviewRecord) {

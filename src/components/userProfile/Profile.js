@@ -1,12 +1,11 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
 import { Typography } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 
-import PageTitle from '../ui/PageTitle';
-import SimpleBar from '../ui/SimpleBar';
-import AlignedText from '../ui/AlignedText';
 import GeneralLoading from '../GeneralLoading';
 import NoMatch from '../noMatch';
+import AlignedText from '../ui/AlignedText';
+import PageTitle from '../ui/PageTitle';
+import SimpleBar from '../ui/SimpleBar';
 
 /* This is a level 3 component (page component) */
 
@@ -24,9 +23,7 @@ export default function Profile({ accountId }) {
   return (
     <>
       <PageTitle text={`${accounts[accountId].username} / Profile`} />
-      <SimpleBar
-        title="Basic Information"
-      >
+      <SimpleBar title="Basic Information">
         <>
           <AlignedText text="Username" childrenType="text">
             <Typography variant="body1">{accounts[accountId].username}</Typography>

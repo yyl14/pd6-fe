@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Snackbar, makeStyles } from '@material-ui/core';
-import { useParams, useHistory } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 import { browsePeerReviewSummaryReview } from '../../../../../actions/api/view';
-import AutoTable from '../../../../ui/AutoTable';
-import PageTitle from '../../../../ui/PageTitle';
-import CopyToClipboardButton from '../../../../ui/CopyToClipboardButton';
-import NoMatch from '../../../../noMatch';
-import GeneralLoading from '../../../../GeneralLoading';
 import { browseAllPeerReviewReview } from '../../../../../actions/myClass/peerReview';
+import GeneralLoading from '../../../../GeneralLoading';
+import NoMatch from '../../../../noMatch';
+import AutoTable from '../../../../ui/AutoTable';
+import CopyToClipboardButton from '../../../../ui/CopyToClipboardButton';
+import PageTitle from '../../../../ui/PageTitle';
 
 const useStyles = makeStyles(() => ({
   copyButton: {
@@ -52,9 +52,7 @@ const basicColumns2 = [
 /* This is a level 4 component (page component) */
 // This page is only for class manager.
 export default function PeerReviewSummary() {
-  const {
-    courseId, classId, challengeId, peerReviewId, is_null,
-  } = useParams();
+  const { courseId, classId, challengeId, peerReviewId, is_null } = useParams();
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -152,11 +150,11 @@ export default function PeerReviewSummary() {
       />
       <AutoTable
         ident={`${challenges[challengeId].title}-PR-grader`}
-        buttons={(
+        buttons={
           <div className={classes.copyButton}>
             <CopyToClipboardButton text={PRsummaryHTML} />
           </div>
-        )}
+        }
         hasFilter
         filterConfig={[
           {

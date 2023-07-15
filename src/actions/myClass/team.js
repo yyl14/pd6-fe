@@ -1,39 +1,41 @@
-import agent from '../agent';
-import { teamConstants } from './constant';
-import { autoTableConstants } from '../component/constant';
 import browseParamsTransForm from '../../function/browseParamsTransform';
+import agent from '../agent';
+import { autoTableConstants } from '../component/constant';
+import { teamConstants } from './constant';
 
 // WITH BROWSE PARAMS
-export const fetchTeams = (token, classId, browseParams, tableId = null) => async (dispatch) => {
-  try {
-    const config = {
-      headers: { 'auth-token': token },
-      params: browseParamsTransForm(browseParams),
-    };
-    dispatch({ type: teamConstants.FETCH_TEAMS_START });
-    const res = await agent.get(`/class/${classId}/team`, config);
-    const { data, total_count } = res.data.data;
+export const fetchTeams =
+  (token, classId, browseParams, tableId = null) =>
+  async (dispatch) => {
+    try {
+      const config = {
+        headers: { 'auth-token': token },
+        params: browseParamsTransForm(browseParams),
+      };
+      dispatch({ type: teamConstants.FETCH_TEAMS_START });
+      const res = await agent.get(`/class/${classId}/team`, config);
+      const { data, total_count } = res.data.data;
 
-    dispatch({
-      type: teamConstants.FETCH_TEAMS_SUCCESS,
-      payload: { classId, data },
-    });
-    dispatch({
-      type: autoTableConstants.AUTO_TABLE_UPDATE,
-      payload: {
-        tableId,
-        totalCount: total_count,
-        dataIds: data.map((item) => item.id),
-        offset: browseParams.offset,
-      },
-    });
-  } catch (error) {
-    dispatch({
-      type: teamConstants.FETCH_TEAMS_FAIL,
-      error,
-    });
-  }
-};
+      dispatch({
+        type: teamConstants.FETCH_TEAMS_SUCCESS,
+        payload: { classId, data },
+      });
+      dispatch({
+        type: autoTableConstants.AUTO_TABLE_UPDATE,
+        payload: {
+          tableId,
+          totalCount: total_count,
+          dataIds: data.map((item) => item.id),
+          offset: browseParams.offset,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: teamConstants.FETCH_TEAMS_FAIL,
+        error,
+      });
+    }
+  };
 
 export const fetchTeam = (token, teamId) => async (dispatch) => {
   try {
@@ -115,12 +117,14 @@ export const downloadTeamFile = (token) => async (dispatch) => {
     };
     const res2 = await agent.get(`/s3-file/${res.data.data.s3_file_uuid}/url`, config2);
 
-    fetch(res2.data.data.url).then((t) => t.blob().then((b) => {
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(b);
-      a.setAttribute('download', res.data.data.filename);
-      a.click();
-    }));
+    fetch(res2.data.data.url).then((t) =>
+      t.blob().then((b) => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(b);
+        a.setAttribute('download', res.data.data.filename);
+        a.click();
+      }),
+    );
     dispatch({
       type: teamConstants.DOWNLOAD_TEAM_FILE_SUCCESS,
     });
@@ -273,49 +277,50 @@ export const deleteTeam = (token, teamId, onSuccess, onError) => async (dispatch
   }
 };
 
-export const createTeamWithMember = (token, classId, name, label, members, onSuccess, onTeamErr, onMemberErr) => async (dispatch) => {
-  const config1 = { headers: { 'auth-token': token } };
-  const config2 = { headers: { 'auth-token': token } };
-  const body = Object.values(members).map((member) => ({
-    account_referral: member.name,
-    role: member.role === 'Normal' ? 'NORMAL' : 'MANAGER',
-  }));
-
-  try {
-    dispatch({ type: teamConstants.ADD_TEAM_START });
-    const res1 = await agent.post(`/class/${classId}/team`, { name, label }, config1);
-    const teamId = res1.data.data.id;
-    dispatch({ type: teamConstants.ADD_TEAM_SUCCESS });
+export const createTeamWithMember =
+  (token, classId, name, label, members, onSuccess, onTeamErr, onMemberErr) => async (dispatch) => {
+    const config1 = { headers: { 'auth-token': token } };
+    const config2 = { headers: { 'auth-token': token } };
+    const body = Object.values(members).map((member) => ({
+      account_referral: member.name,
+      role: member.role === 'Normal' ? 'NORMAL' : 'MANAGER',
+    }));
 
     try {
-      dispatch({ type: teamConstants.ADD_TEAM_MEMBER_START });
-      const res2 = await agent.post(`/team/${teamId}/member`, body, config2);
-      dispatch({ type: teamConstants.ADD_TEAM_MEMBER_SUCCESS });
+      dispatch({ type: teamConstants.ADD_TEAM_START });
+      const res1 = await agent.post(`/class/${classId}/team`, { name, label }, config1);
+      const teamId = res1.data.data.id;
+      dispatch({ type: teamConstants.ADD_TEAM_SUCCESS });
 
-      const handleResponse = (responseList) => {
-        const failedMemberList = responseList
-          .reduce((acc, cur, index) => (cur === false ? acc.concat(index) : acc), [])
-          .map((index) => members[index].name);
-        if (failedMemberList.length === 0) {
-          onSuccess();
-        } else {
-          onMemberErr(failedMemberList);
-        }
-      };
-      handleResponse(res2.data.data);
+      try {
+        dispatch({ type: teamConstants.ADD_TEAM_MEMBER_START });
+        const res2 = await agent.post(`/team/${teamId}/member`, body, config2);
+        dispatch({ type: teamConstants.ADD_TEAM_MEMBER_SUCCESS });
+
+        const handleResponse = (responseList) => {
+          const failedMemberList = responseList
+            .reduce((acc, cur, index) => (cur === false ? acc.concat(index) : acc), [])
+            .map((index) => members[index].name);
+          if (failedMemberList.length === 0) {
+            onSuccess();
+          } else {
+            onMemberErr(failedMemberList);
+          }
+        };
+        handleResponse(res2.data.data);
+      } catch (error) {
+        onMemberErr();
+        dispatch({
+          type: teamConstants.ADD_TEAM_MEMBER_FAIL,
+          error,
+        });
+      }
     } catch (error) {
-      onMemberErr();
+      onTeamErr();
       dispatch({
-        type: teamConstants.ADD_TEAM_MEMBER_FAIL,
+        type: teamConstants.ADD_TEAM_FAIL,
         error,
       });
     }
-  } catch (error) {
-    onTeamErr();
-    dispatch({
-      type: teamConstants.ADD_TEAM_FAIL,
-      error,
-    });
-  }
-  onSuccess();
-};
+    onSuccess();
+  };

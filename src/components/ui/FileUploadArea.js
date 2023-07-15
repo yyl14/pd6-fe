@@ -1,16 +1,16 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import {
-  makeStyles,
-  Typography,
   Button,
   Paper,
   Table,
-  TableContainer,
   TableBody,
   TableCell,
+  TableContainer,
   TableRow,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import Icon from './icon/index';
 
 const useStyles = makeStyles((theme) => ({
@@ -137,9 +137,7 @@ export default function FileUploadArea({
         </label>
         {selectedFile.length !== 0 && (
           <Typography variant="body2" className={classes.fieldAlignedText}>
-            {selectedFile.length}
-            {' '}
-            files selected
+            {selectedFile.length} files selected
           </Typography>
         )}
       </div>

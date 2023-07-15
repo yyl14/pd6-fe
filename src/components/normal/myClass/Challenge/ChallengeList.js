@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
   Button,
-  makeStyles,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
-  TextField,
+  DialogTitle,
   FormControl,
-  Select,
   MenuItem,
+  Select,
+  TextField,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import AlignedText from '../../../ui/AlignedText';
-import Icon from '../../../ui/icon/index';
-import AutoTable from '../../../ui/AutoTable';
-import PageTitle from '../../../ui/PageTitle';
-import DateRangePicker from '../../../ui/DateRangePicker';
-import { fetchChallenges, addChallenge } from '../../../../actions/myClass/challenge';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { addChallenge, fetchChallenges } from '../../../../actions/myClass/challenge';
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
+import AlignedText from '../../../ui/AlignedText';
+import AutoTable from '../../../ui/AutoTable';
+import DateRangePicker from '../../../ui/DateRangePicker';
+import PageTitle from '../../../ui/PageTitle';
+import Icon from '../../../ui/icon/index';
 
 const useStyles = makeStyles((theme) => ({
   textField: {

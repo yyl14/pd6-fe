@@ -1,8 +1,6 @@
-import React from 'react';
-
-import { Switch, Route } from 'react-router-dom';
-import AccountSetting from '../../../components/admin/account/setting/AccountSetting';
+import { Route, Switch } from 'react-router-dom';
 import AccountList from '../../../components/admin/account/AccountList';
+import AccountSetting from '../../../components/admin/account/setting/AccountSetting';
 import NoMatch from '../../../components/noMatch';
 
 /* This is a level 3 container (main page container) */

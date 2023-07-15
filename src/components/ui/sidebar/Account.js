@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
-} from '@material-ui/core';
 import Icon from '../icon/index';
 
-export default function Account({
-  classes, history, location, mode, open, onClose,
-}) {
+export default function Account({ classes, history, location, mode, open, onClose }) {
   const { instituteId, accountId } = useParams();
   const instituteList = useSelector((state) => state.institutes);
   const accountList = useSelector((state) => state.accounts);
@@ -84,8 +80,8 @@ export default function Account({
   };
 
   if (
-    (instituteId !== undefined && instituteList.byId[instituteId] === undefined)
-    || (accountId !== undefined && accountList.byId[accountId] === undefined)
+    (instituteId !== undefined && instituteList.byId[instituteId] === undefined) ||
+    (accountId !== undefined && accountList.byId[accountId] === undefined)
   ) {
     return (
       <div>

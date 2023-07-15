@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 import { accountConstants } from '../actions/admin/constant';
-import { gradeConstants, challengeConstants } from '../actions/myClass/constant';
-import { userConstants } from '../actions/user/constants';
-import { commonConstants } from '../actions/common/constant';
 import { viewConstants } from '../actions/api/constant';
+import { commonConstants } from '../actions/common/constant';
+import { challengeConstants, gradeConstants } from '../actions/myClass/constant';
+import { userConstants } from '../actions/user/constants';
 
 const prototype = {
   id: null,

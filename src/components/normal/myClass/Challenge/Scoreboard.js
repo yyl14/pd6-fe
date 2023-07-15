@@ -1,7 +1,6 @@
-import React from 'react';
-import { Switch, Route } from 'react-router-dom';
-import ScoreboardInfo from './ScoreboardSettings/ScoreboardInfo';
+import { Route, Switch } from 'react-router-dom';
 import NoMatch from '../../../noMatch';
+import ScoreboardInfo from './ScoreboardSettings/ScoreboardInfo';
 
 export default function Scoreboard() {
   // const {

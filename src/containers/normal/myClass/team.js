@@ -1,8 +1,7 @@
-import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import NoMatch from '../../../components/noMatch';
-import TeamList from '../../../components/normal/myClass/Team/TeamList';
 import TeamDetail from '../../../components/normal/myClass/Team/TeamDetail';
+import TeamList from '../../../components/normal/myClass/Team/TeamList';
 
 /* This is a level 3 container (main page container) */
 export default function Team() {

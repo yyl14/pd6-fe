@@ -1,38 +1,38 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
   Button,
-  makeStyles,
-  withStyles,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
-  TextField,
-  FormControlLabel,
-  Switch,
+  DialogTitle,
   FormControl,
-  Select,
+  FormControlLabel,
   MenuItem,
+  Select,
+  Switch,
+  TextField,
+  Typography,
+  makeStyles,
+  withStyles,
 } from '@material-ui/core';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import AlignedText from '../../../../ui/AlignedText';
 import SimpleBar from '../../../../ui/SimpleBar';
 import SimpleTable from '../../../../ui/SimpleTable';
 import Icon from '../../../../ui/icon/index';
-import AlignedText from '../../../../ui/AlignedText';
 
-import SampleUploadCard from './SampleUploadCard';
-import AssistingDataUploadCard from './AssistingDataUploadCard';
 import CodeField from '../../../../ui/CodeField';
+import AssistingDataUploadCard from './AssistingDataUploadCard';
+import SampleUploadCard from './SampleUploadCard';
 import TestingDataUploadCard from './TestingDataUploadCard';
 
 import {
   editProblemInfo,
-  saveSamples,
-  saveTestcases,
   readProblemWithCodeContent,
   saveAssistingData,
+  saveSamples,
+  saveTestcases,
 } from '../../../../../actions/myClass/problem';
 
 import GeneralLoading from '../../../../GeneralLoading';
@@ -553,17 +553,17 @@ export default function CodingProblemEdit({ closeEdit }) {
   };
 
   if (
-    loading.editProblem
-    || loading.deleteProblem
-    || loading.deleteTestcase
-    || loading.deleteAssistingData
-    || loading.editAssistingData
-    || loading.addAssistingData
-    || loading.editTestcase
-    || loading.uploadTestcaseInput
-    || loading.uploadTestcaseOutput
-    || loading.addTestcase
-    || disabled
+    loading.editProblem ||
+    loading.deleteProblem ||
+    loading.deleteTestcase ||
+    loading.deleteAssistingData ||
+    loading.editAssistingData ||
+    loading.addAssistingData ||
+    loading.editTestcase ||
+    loading.uploadTestcaseInput ||
+    loading.uploadTestcaseOutput ||
+    loading.addTestcase ||
+    disabled
   ) {
     return <GeneralLoading />;
   }
@@ -722,9 +722,9 @@ export default function CodingProblemEdit({ closeEdit }) {
       </SimpleBar>
       <SimpleBar
         title="Testing Data"
-        buttons={(
+        buttons={
           <FormControlLabel
-            control={(
+            control={
               <Switch
                 checked={status}
                 onChange={() => {
@@ -734,11 +734,11 @@ export default function CodingProblemEdit({ closeEdit }) {
                 name="status"
                 color="primary"
               />
-            )}
+            }
             label={status ? 'Enabled' : 'Disabled'}
             className={classNames.statusSwitch}
           />
-        )}
+        }
         noIndent
       >
         <div className={classNames.loadButtons}>

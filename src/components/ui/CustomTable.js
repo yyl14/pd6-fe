@@ -1,6 +1,11 @@
 import {
-  Typography,
+  Button,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  MenuItem,
   Paper,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -8,16 +13,11 @@ import {
   TableHead,
   TableRow,
   TextField,
-  Button,
-  MenuItem,
-  FormControl,
-  Select,
-  InputAdornment,
-  IconButton,
+  Typography,
 } from '@material-ui/core';
 
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Icon from './icon/index';
 
@@ -353,9 +353,7 @@ export default function CustomTable({
             }}
           />
           <Typography className={classes.pageText} variant="body1">
-            of
-            {' '}
-            {Math.ceil(filterData.length / rowsPerPage)}
+            of {Math.ceil(filterData.length / rowsPerPage)}
           </Typography>
           <Button
             className={classes.pageChangeButtons}

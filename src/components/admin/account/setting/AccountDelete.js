@@ -1,20 +1,20 @@
 import {
   Button,
   Dialog,
-  DialogTitle,
-  DialogContent,
-  Typography,
-  DialogContentText,
   DialogActions,
-  makeStyles,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Snackbar,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { deleteAccount } from '../../../../actions/admin/account';
-import SimpleBar from '../../../ui/SimpleBar';
 import AlignedText from '../../../ui/AlignedText';
+import SimpleBar from '../../../ui/SimpleBar';
 
 const useStyles = makeStyles(() => ({}));
 
@@ -53,7 +53,7 @@ export default function AccountDelete(props) {
     <div>
       <SimpleBar
         title="Delete Account"
-        childrenButtons={(
+        childrenButtons={
           <>
             <Button
               color="secondary"
@@ -64,7 +64,7 @@ export default function AccountDelete(props) {
               Delete
             </Button>
           </>
-        )}
+        }
       >
         <Typography>Once you delete this account, there is no going back. Please be certain.</Typography>
       </SimpleBar>

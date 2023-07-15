@@ -1,4 +1,3 @@
-import React from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import Trademark from '../../components/auth/Trademark';
 import ForgetUsernameForm from './ForgetUsernameForm';

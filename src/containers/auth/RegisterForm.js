@@ -1,32 +1,32 @@
-import { useState, useEffect } from 'react';
-import React, { useSelector, useDispatch } from 'react-redux';
 import {
   Button,
-  TextField,
-  Typography,
   Card,
   CardContent,
-  InputAdornment,
-  IconButton,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  FormHelperText,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormControl,
+  FormHelperText,
+  IconButton,
+  InputAdornment,
+  InputLabel,
   Link,
-  makeStyles,
+  MenuItem,
+  Select,
   Snackbar,
+  TextField,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { userRegister } from '../../actions/user/auth';
 import { getInstitutes } from '../../actions/common/common';
+import { userRegister } from '../../actions/user/auth';
 import GeneralLoading from '../../components/GeneralLoading';
 
 const useStyles = makeStyles((theme) => ({
@@ -179,8 +179,8 @@ export default function RegisterForm() {
 
     if (name === 'confirmPassword' || name === 'password') {
       if (
-        checkPassword(inputs.password, value) === "Passwords don't match"
-        && checkPassword(inputs.confirmPassword, value) === "Passwords don't match"
+        checkPassword(inputs.password, value) === "Passwords don't match" &&
+        checkPassword(inputs.confirmPassword, value) === "Passwords don't match"
       ) {
         setErrors((input) => ({ ...input, confirmPassword: true }));
         setErrorTexts((input) => ({ ...input, confirmPassword: "Passwords don't match" }));
@@ -353,8 +353,7 @@ export default function RegisterForm() {
               </div>
             </form>
             <Typography variant="body2" className={classNames.authLink}>
-              Already have a puppy?
-              {' '}
+              Already have a puppy?{' '}
               <Link component={RouterLink} to="/login">
                 Log in
               </Link>
@@ -435,17 +434,14 @@ export default function RegisterForm() {
                 }}
               />
               <div className={classNames.authButtons}>
-                <Button onClick={() => setNextPage(false)}>
-                  Back
-                </Button>
+                <Button onClick={() => setNextPage(false)}>Back</Button>
                 <Button onClick={() => onSubmit()} color="primary">
                   Register
                 </Button>
               </div>
             </form>
             <Typography variant="body2" className={classNames.authLink}>
-              Already have a puppy?
-              {' '}
+              Already have a puppy?{' '}
               <Link component={RouterLink} to="/login">
                 Log in
               </Link>

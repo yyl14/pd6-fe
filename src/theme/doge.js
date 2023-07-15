@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import ErrorText from '../components/ui/ErrorText';
 

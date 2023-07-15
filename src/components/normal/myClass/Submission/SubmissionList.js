@@ -1,16 +1,16 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import moment from 'moment';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 // import DateRangePicker from '../../../ui/DateRangePicker';
-import { fetchAllChallengesProblems } from '../../../../actions/common/common';
 import { browseSubmissionUnderClass } from '../../../../actions/api/view';
+import { fetchAllChallengesProblems } from '../../../../actions/common/common';
 import AutoTable from '../../../ui/AutoTable';
 import PageTitle from '../../../ui/PageTitle';
 
-import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
+import NoMatch from '../../../noMatch';
 
 /* This is a level 4 component (page component) */
 export default function SubmissionList() {
@@ -90,9 +90,10 @@ export default function SubmissionList() {
               .flat()
               .map((problemId) => ({
                 value: problemId,
-                label: `${challenges.byId[problems.byId[problemId].challenge_id].title} ${problems.byId[problemId].challenge_label}`,
+                label: `${challenges.byId[problems.byId[problemId].challenge_id].title} ${
+                  problems.byId[problemId].challenge_label
+                }`,
               })),
-
           },
           {
             reduxStateId: 'verdict',
@@ -216,8 +217,8 @@ export default function SubmissionList() {
             text: problems.byId[item.problem_id] ? problems.byId[item.problem_id].challenge_label : '',
             path: problems.byId[item.problem_id]
               ? `/my-class/${courseId}/${classId}/challenge/${problems.byId[item.problem_id].challenge_id}/${
-                item.problem_id
-              }`
+                  item.problem_id
+                }`
               : '',
           },
           Status: item.verdict !== null ? item.verdict : 'Waiting for judge',

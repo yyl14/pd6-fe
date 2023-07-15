@@ -1,8 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import {
-  Typography,
   Button,
   Dialog,
   DialogActions,
@@ -10,13 +6,17 @@ import {
   DialogTitle,
   FormControlLabel,
   Switch,
+  Typography,
 } from '@material-ui/core';
-import SimpleBar from '../../ui/SimpleBar';
-import AlignedText from '../../ui/AlignedText';
-import PageTitle from '../../ui/PageTitle';
-import NoMatch from '../../noMatch';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { editSubmitLanguage, fetchSubmitLanguage } from '../../../actions/admin/system';
 import GeneralLoading from '../../GeneralLoading';
+import NoMatch from '../../noMatch';
+import AlignedText from '../../ui/AlignedText';
+import PageTitle from '../../ui/PageTitle';
+import SimpleBar from '../../ui/SimpleBar';
 
 /* This is a level 4 component (page component) */
 export default function LangSetting() {
@@ -82,13 +82,13 @@ export default function LangSetting() {
 
       <SimpleBar
         title="Change Institute Status"
-        childrenButtons={(
+        childrenButtons={
           <>
             <Button onClick={() => setPopUp(true)} color="secondary">
               Change Status
             </Button>
           </>
-        )}
+        }
       >
         <Typography variant="body1">
           Once you change the status, future submission will be affected. Please be certain.
@@ -101,7 +101,7 @@ export default function LangSetting() {
         </DialogTitle>
         <DialogContent>
           <FormControlLabel
-            control={(
+            control={
               <Switch
                 checked={!languageStatus} // true = Disable
                 onChange={() => {
@@ -110,7 +110,7 @@ export default function LangSetting() {
                 }}
                 color="primary"
               />
-            )}
+            }
             label={languageStatus ? 'Disabled' : 'Enabled'}
           />
         </DialogContent>

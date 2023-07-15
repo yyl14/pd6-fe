@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Snackbar, makeStyles } from '@material-ui/core';
-import { useParams, useHistory } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 import { browsePeerReviewSummaryReceive } from '../../../../../actions/api/view';
 import { browseAllPeerReviewReceive } from '../../../../../actions/myClass/peerReview';
-import AutoTable from '../../../../ui/AutoTable';
-import PageTitle from '../../../../ui/PageTitle';
-import CopyToClipboardButton from '../../../../ui/CopyToClipboardButton';
-import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
+import NoMatch from '../../../../noMatch';
+import AutoTable from '../../../../ui/AutoTable';
+import CopyToClipboardButton from '../../../../ui/CopyToClipboardButton';
+import PageTitle from '../../../../ui/PageTitle';
 
 const useStyles = makeStyles(() => ({
   copyButton: {
@@ -52,9 +52,7 @@ const basicColumns2 = [
 /* This is a level 4 component (page component) */
 // This page is only for class manager.
 export default function PeerReviewSummary() {
-  const {
-    courseId, classId, challengeId, peerReviewId, is_null,
-  } = useParams();
+  const { courseId, classId, challengeId, peerReviewId, is_null } = useParams();
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -84,40 +82,42 @@ export default function PeerReviewSummary() {
     const baseUrl = window.location.origin;
     let tableHTML = '<table>';
     if (PRsummary.allIds) {
-      PRsummary.allIds.sort((a, b) => a - b).map((id) => {
-        tableHTML += '<tr>';
-        const profile = `${baseUrl}/user-profile/${PRsummary.byId[id].account_id}`;
-        const peerData = [];
-        Array(peerReviews[peerReviewId].max_review_count)
-          .fill(0)
-          .map((ID, index) => {
-            peerData.push({
-              text: PRsummary.byId[id].score[index] ? PRsummary.byId[id].score[index] : '',
-              path: PRsummary.byId[id].peer_review_record_ids
-                ? `${baseUrl}/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${PRsummary.byId[id].account_id}/${PRsummary.byId[id].peer_review_record_ids[index]}`
-                : '',
+      PRsummary.allIds
+        .sort((a, b) => a - b)
+        .map((id) => {
+          tableHTML += '<tr>';
+          const profile = `${baseUrl}/user-profile/${PRsummary.byId[id].account_id}`;
+          const peerData = [];
+          Array(peerReviews[peerReviewId].max_review_count)
+            .fill(0)
+            .map((ID, index) => {
+              peerData.push({
+                text: PRsummary.byId[id].score[index] ? PRsummary.byId[id].score[index] : '',
+                path: PRsummary.byId[id].peer_review_record_ids
+                  ? `${baseUrl}/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${PRsummary.byId[id].account_id}/${PRsummary.byId[id].peer_review_record_ids[index]}`
+                  : '',
+              });
+              return id;
             });
-            return id;
+          tableHTML += `<td><a href=${profile}>${PRsummary.byId[id].username}</a></td>`;
+          tableHTML += `<td>${PRsummary.byId[id].student_id}</td>`;
+          tableHTML += `<td>${PRsummary.byId[id].real_name}</td>`;
+          peerData.map((data) => {
+            if (data.text !== '') {
+              tableHTML += `<td><a href=${data.path}>${data.text}</a></td>`;
+            } else {
+              tableHTML += '<td></td>';
+            }
+            return data;
           });
-        tableHTML += `<td><a href=${profile}>${PRsummary.byId[id].username}</a></td>`;
-        tableHTML += `<td>${PRsummary.byId[id].student_id}</td>`;
-        tableHTML += `<td>${PRsummary.byId[id].real_name}</td>`;
-        peerData.map((data) => {
-          if (data.text !== '') {
-            tableHTML += `<td><a href=${data.path}>${data.text}</a></td>`;
+          if (PRsummary.byId[id].average_score) {
+            tableHTML += `<td>${PRsummary.byId[id].average_score}</td>`;
           } else {
             tableHTML += '<td></td>';
           }
-          return data;
+          tableHTML += '</tr>';
+          return PRsummary.byId[id];
         });
-        if (PRsummary.byId[id].average_score) {
-          tableHTML += `<td>${PRsummary.byId[id].average_score}</td>`;
-        } else {
-          tableHTML += '<td></td>';
-        }
-        tableHTML += '</tr>';
-        return PRsummary.byId[id];
-      });
     }
     tableHTML += '</table>';
     setPRsummaryHTML(tableHTML);
@@ -152,11 +152,11 @@ export default function PeerReviewSummary() {
       />
       <AutoTable
         ident={`${challenges[challengeId].title}-PR-receiver`}
-        buttons={(
+        buttons={
           <div className={classes.copyButton}>
             <CopyToClipboardButton text={PRsummaryHTML} />
           </div>
-        )}
+        }
         hasFilter
         filterConfig={[
           {

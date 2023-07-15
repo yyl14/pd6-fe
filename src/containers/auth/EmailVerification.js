@@ -1,9 +1,7 @@
-import React, {
-  useState, useEffect, useMemo,
-} from 'react';
 import { makeStyles } from '@material-ui/core';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { emailVerification } from '../../actions/user/auth';
 
 const useStyles = makeStyles((theme) => ({

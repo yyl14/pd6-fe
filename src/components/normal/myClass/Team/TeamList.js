@@ -1,30 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
-  makeStyles,
-  withStyles,
   Button,
-  Typography,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
   Snackbar,
+  TextField,
+  Typography,
+  makeStyles,
+  withStyles,
 } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { createTeamWithMember, downloadTeamFile, fetchTeams, importTeam } from '../../../../actions/myClass/team';
+import AddTeamMemberArea from '../../../ui/AddTeamMemberArea';
 import AlignedText from '../../../ui/AlignedText';
 import AutoTable from '../../../ui/AutoTable';
 import FileUploadArea from '../../../ui/FileUploadArea';
-import AddTeamMemberArea from '../../../ui/AddTeamMemberArea';
 import PageTitle from '../../../ui/PageTitle';
 import Icon from '../../../ui/icon/index';
-import {
-  fetchTeams, importTeam, createTeamWithMember, downloadTeamFile,
-} from '../../../../actions/myClass/team';
 
-import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
+import NoMatch from '../../../noMatch';
 
 const useStyles = makeStyles((theme) => ({
   reminder: {
@@ -125,9 +123,11 @@ export default function TeamList() {
 
   const submitImport = () => {
     if (importInput !== '' && selectedFile !== []) {
-      selectedFile.map((file) => dispatch(
-        importTeam(authToken, classId, importInput, file, importTeamSuccess, () => setShowImpTeamSnackBar(true)),
-      ));
+      selectedFile.map((file) =>
+        dispatch(
+          importTeam(authToken, classId, importInput, file, importTeamSuccess, () => setShowImpTeamSnackBar(true)),
+        ),
+      );
     }
   };
 
@@ -252,11 +252,7 @@ export default function TeamList() {
             Member N (N=2~10): Same as Team Manager
           </Typography>
           <Typography variant="body2">
-            Notice that PDOGS only accept files encoded in
-            {' '}
-            <b>ASCII / UTF-8</b>
-            {' '}
-            charset.
+            Notice that PDOGS only accept files encoded in <b>ASCII / UTF-8</b> charset.
           </Typography>
         </DialogContent>
         <DialogContent>

@@ -1,6 +1,5 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { browseAccessLog } from '../../../actions/api/view';
 import AutoTable from '../../ui/AutoTable';

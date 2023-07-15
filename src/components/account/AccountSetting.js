@@ -1,26 +1,26 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import {
+  Dialog,
   DialogContent,
+  DialogTitle,
+  FormControl,
   MenuItem,
   Select,
   Snackbar,
-  Dialog,
-  FormControl,
-  DialogTitle,
   Typography,
 } from '@material-ui/core';
-import { fetchStudentCards, browsePendingStudentCards } from '../../actions/user/user';
+import { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { getInstitutes } from '../../actions/common/common';
+import { browsePendingStudentCards, fetchStudentCards } from '../../actions/user/user';
 import ThemeToggleContext from '../../contexts/themeToggleContext';
+import useEventListener from '../../hooks/useEventListener';
 import GeneralLoading from '../GeneralLoading';
-import PageTitle from '../ui/PageTitle';
 import NoMatch from '../noMatch';
+import PageTitle from '../ui/PageTitle';
 import BasicInfo from './BasicInfo';
 import BasicInfoEdit from './BasicInfoEdit';
-import StudentInfoEdit from './StudentInfoEdit';
 import NewPassword from './NewPassword';
-import useEventListener from '../../hooks/useEventListener';
+import StudentInfoEdit from './StudentInfoEdit';
 
 const activeThemeList = [
   {

@@ -1,18 +1,18 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Switch, Route, useParams } from 'react-router-dom';
-import ChallengeList from '../../../components/normal/allClass/Challenge/ChallengeList';
+import { Route, Switch, useParams } from 'react-router-dom';
 import ChallengeInfo from '../../../components/normal/allClass/Challenge/ChallengeInfo';
-import Problem from '../../../components/normal/allClass/Challenge/Problem';
+import ChallengeList from '../../../components/normal/allClass/Challenge/ChallengeList';
 import CodeSubmission from '../../../components/normal/allClass/Challenge/CodeSubmission';
 import MySubmission from '../../../components/normal/allClass/Challenge/MySubmission';
+import Problem from '../../../components/normal/allClass/Challenge/Problem';
 import SubmissionDetail from '../../../components/normal/allClass/Challenge/SubmissionDetail';
 
 import NoMatch from '../../../components/noMatch';
 
-import { fetchCourse, fetchClass, fetchChallenge } from '../../../actions/common/common';
-import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
 import { fetchClasses } from '../../../actions/admin/course';
+import { fetchChallenge, fetchClass, fetchCourse } from '../../../actions/common/common';
+import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
 
 /* This is a level 3 container (main page container) */
 function Challenge() {

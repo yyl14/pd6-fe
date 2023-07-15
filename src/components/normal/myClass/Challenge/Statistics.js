@@ -1,28 +1,28 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
-  makeStyles,
   Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
   DialogTitle,
   Typography,
+  makeStyles,
 } from '@material-ui/core';
+import { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  fetchChallengeSummary,
-  fetchChallengeMemberSubmission,
-  downloadAllSubmissions,
-  downloadAllPlagiarismReports,
-} from '../../../../actions/myClass/challenge';
 import { fetchDownloadFileUrl } from '../../../../actions/common/common';
-import SimpleBar from '../../../ui/SimpleBar';
-import SimpleTable from '../../../ui/SimpleTable';
+import {
+  downloadAllPlagiarismReports,
+  downloadAllSubmissions,
+  fetchChallengeMemberSubmission,
+  fetchChallengeSummary,
+} from '../../../../actions/myClass/challenge';
+import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
 import CustomTable from '../../../ui/CustomTable';
 import PageTitle from '../../../ui/PageTitle';
-import CopyToClipboardButton from '../../../ui/CopyToClipboardButton';
+import SimpleBar from '../../../ui/SimpleBar';
+import SimpleTable from '../../../ui/SimpleTable';
 
 /* eslint indent: 0 */
 
@@ -105,10 +105,10 @@ export default function Statistics() {
 
   useEffect(() => {
     if (
-      challenges[challengeId]
-      && challenges[challengeId].statistics
-      && challenges[challengeId].statistics.summary
-      && challenges[challengeId].statistics.memberSubmission
+      challenges[challengeId] &&
+      challenges[challengeId].statistics &&
+      challenges[challengeId].statistics.summary &&
+      challenges[challengeId].statistics.memberSubmission
     ) {
       setStatisticsData(
         [...challenges[challengeId].statistics.summary]
@@ -178,20 +178,22 @@ export default function Statistics() {
 
   useEffect(() => {
     if (
-      challenges[challengeId]
-      && challenges[challengeId].statistics
-      && challenges[challengeId].statistics.memberSubmission
+      challenges[challengeId] &&
+      challenges[challengeId].statistics &&
+      challenges[challengeId].statistics.memberSubmission
     ) {
       setChallengeTitle(challenges[challengeId].title);
       challenges[challengeId].statistics.memberSubmission.map((member) => {
         if (member.essay_submissions) {
-          member.essay_submissions.map((record) => dispatch(
+          member.essay_submissions.map((record) =>
+            dispatch(
               fetchDownloadFileUrl(authToken, {
                 filename: record.filename,
                 uuid: record.content_file_uuid,
                 as_attachment: false,
               }),
-            ));
+            ),
+          );
         }
         return member;
       });
@@ -217,9 +219,11 @@ export default function Statistics() {
         (row) => `
         <tr>
           ${scoreboardTitle
-            .map((column) => (column.type === 'link'
+            .map((column) =>
+              column.type === 'link'
                 ? `<td><a href='${row[column.link_id] ?? ''}'>${row[column.id] ?? ''}</a></td>`
-                : `<td>${row[column.id] ?? ''}</td>`))
+                : `<td>${row[column.id] ?? ''}</td>`,
+            )
             .join('')}
         </tr>`,
       )
@@ -297,11 +301,11 @@ export default function Statistics() {
       </SimpleBar>
       <SimpleBar title="Class Scoreboard" noIndent>
         <CustomTable
-          buttons={(
+          buttons={
             <div className={classes.copyButton}>
               <CopyToClipboardButton text={scoreboardHTML} format="text/html" />
             </div>
-          )}
+          }
           data={scoreboardData}
           columns={scoreboardTitle}
         />

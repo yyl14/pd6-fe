@@ -1,7 +1,7 @@
 import moment from 'moment';
+import browseParamsTransForm from '../../function/browseParamsTransform';
 import agent from '../agent';
 import { userConstants } from './constants';
-import browseParamsTransForm from '../../function/browseParamsTransform';
 
 const editAccount = (token, id, username, nickname, email) => async (dispatch) => {
   try {
@@ -273,15 +273,15 @@ const readAccount = (token, accountId) => async (dispatch) => {
 };
 
 export {
-  editAccount,
-  makeStudentCardDefault,
-  fetchStudentCards,
   addStudentCard,
-  editPassword,
-  userBrowseAnnouncement,
   browsePendingStudentCards,
-  resendEmailVerification,
   deletePendingStudentCard,
+  editAccount,
+  editPassword,
+  fetchStudentCards,
+  makeStudentCardDefault,
   // userReadAnnouncement,
   readAccount,
+  resendEmailVerification,
+  userBrowseAnnouncement,
 };

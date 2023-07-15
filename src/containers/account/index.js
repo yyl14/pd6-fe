@@ -1,4 +1,3 @@
-import React from 'react';
 import AccountSetting from '../../components/account/AccountSetting';
 
 function Account() {

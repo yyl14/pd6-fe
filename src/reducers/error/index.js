@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 import admin from './admin';
-import myClass from './myClass';
-import common from './common';
-import user from './user';
 import api from './api';
+import common from './common';
+import myClass from './myClass';
+import user from './user';
 
 export default combineReducers({
   admin,
