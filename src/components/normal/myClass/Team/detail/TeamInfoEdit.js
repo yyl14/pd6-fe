@@ -1,12 +1,10 @@
+import { Button, TextField, Typography, makeStyles } from '@material-ui/core';
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  Button, TextField, Typography, makeStyles,
-} from '@material-ui/core';
-import SimpleBar from '../../../../ui/SimpleBar';
-import AlignedText from '../../../../ui/AlignedText';
 import { editTeam } from '../../../../../actions/myClass/team';
+import AlignedText from '../../../../ui/AlignedText';
+import SimpleBar from '../../../../ui/SimpleBar';
 
 const useStyles = makeStyles(() => ({
   buttons: {

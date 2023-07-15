@@ -186,12 +186,12 @@ export default function Statistics() {
       challenges[challengeId].statistics.memberSubmission.map((member) => {
         if (member.essay_submissions) {
           member.essay_submissions.map((record) => dispatch(
-              fetchDownloadFileUrl(authToken, {
-                filename: record.filename,
-                uuid: record.content_file_uuid,
-                as_attachment: false,
-              }),
-            ));
+            fetchDownloadFileUrl(authToken, {
+              filename: record.filename,
+              uuid: record.content_file_uuid,
+              as_attachment: false,
+            }),
+          ));
         }
         return member;
       });
@@ -204,26 +204,26 @@ export default function Statistics() {
     <table>
       <tr>
       ${scoreboardTitle
-        .map(
-          (title) => `
+    .map(
+      (title) => `
           <td>
             <b>${title.label}</b>
           </td>`,
-        )
-        .join('')}
+    )
+    .join('')}
       </tr>
     ${scoreboardData
-      .map(
-        (row) => `
+    .map(
+      (row) => `
         <tr>
           ${scoreboardTitle
-            .map((column) => (column.type === 'link'
-                ? `<td><a href='${row[column.link_id] ?? ''}'>${row[column.id] ?? ''}</a></td>`
-                : `<td>${row[column.id] ?? ''}</td>`))
-            .join('')}
+    .map((column) => (column.type === 'link'
+      ? `<td><a href='${row[column.link_id] ?? ''}'>${row[column.id] ?? ''}</a></td>`
+      : `<td>${row[column.id] ?? ''}</td>`))
+    .join('')}
         </tr>`,
-      )
-      .join('')}
+    )
+    .join('')}
     </table>
     `,
 

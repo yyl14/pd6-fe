@@ -1,5 +1,5 @@
 import {
-  getLCP, getFID, getCLS, getFCP, getTTFB,
+  getCLS, getFCP, getFID, getLCP, getTTFB,
 } from 'web-vitals';
 
 const reportWebVitals = (onPerfEntry) => {
