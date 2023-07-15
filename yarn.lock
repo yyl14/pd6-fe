@@ -12855,6 +12855,13 @@ svgo@^1.0.0, svgo@^1.2.2:
     unquote "~1.1.1"
     util.promisify "~1.0.0"
 
+swr@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/swr/-/swr-2.2.0.tgz#575c6ac1bec087847f4c86a39ccbc0043c834d6a"
+  integrity sha512-AjqHOv2lAhkuUdIiBu9xbuettzAzWXmCEcLONNKJRba87WAefz8Ca9d6ds/SzrPc235n1IxWYdhJ2zF3MNUaoQ==
+  dependencies:
+    use-sync-external-store "^1.2.0"
+
 symbol-tree@^3.2.4:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
@@ -13464,6 +13471,11 @@ use-persisted-state@^0.3.0:
   integrity sha512-pCNlvYC8+XjRxwnIut4teGC9f2p9aD88R8OGseQGZa2dvqG/h1vEGk1vRE1IZG0Vf161UDpn+NlW4+UGubQflQ==
   dependencies:
     "@use-it/event-listener" "^0.1.2"
+
+use-sync-external-store@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.2.0.tgz#7dbefd6ef3fe4e767a0cf5d7287aacfb5846928a"
+  integrity sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==
 
 use@^3.1.0:
   version "3.1.1"
