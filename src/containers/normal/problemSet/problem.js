@@ -1,12 +1,11 @@
-import React from 'react';
-import { Switch, Route } from 'react-router-dom';
-import ProblemList from '../../../components/normal/problemSet/ProblemList';
-import ProblemDetail from '../../../components/normal/problemSet/ProblemDetail';
+import { Route, Switch } from 'react-router-dom';
+import NoMatch from '../../../components/noMatch';
 import ChallengeInfo from '../../../components/normal/problemSet/ChallengeInfo';
 import CodeSubmission from '../../../components/normal/problemSet/CodeSubmission';
 import MySubmission from '../../../components/normal/problemSet/MySubmission';
+import ProblemDetail from '../../../components/normal/problemSet/ProblemDetail';
+import ProblemList from '../../../components/normal/problemSet/ProblemList';
 import SubmissionDetail from '../../../components/normal/problemSet/SubmissionDetail';
-import NoMatch from '../../../components/noMatch';
 
 /* This is a level 3 container (main page container) */
 function Problem() {

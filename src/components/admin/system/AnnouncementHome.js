@@ -1,14 +1,13 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
-import NoMatch from '../../noMatch';
+import { fetchAnnouncement } from '../../../actions/admin/system';
 import GeneralLoading from '../../GeneralLoading';
+import NoMatch from '../../noMatch';
 import AutoTable from '../../ui/AutoTable';
 import PageTitle from '../../ui/PageTitle';
-import { fetchAnnouncement } from '../../../actions/admin/system';
 
 /* This is a level 4 component (page component) */
 export default function AnnouncementHome() {
@@ -90,11 +89,11 @@ export default function AnnouncementHome() {
           link: `announcement/${item.id}/setting`,
         })}
         hasLink
-        buttons={(
+        buttons={
           <Button variant="contained" color="primary" onClick={handleClickAdd}>
             +
           </Button>
-        )}
+        }
       />
     </>
   );

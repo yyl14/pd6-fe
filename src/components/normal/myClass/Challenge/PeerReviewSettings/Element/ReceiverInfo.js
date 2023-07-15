@@ -1,7 +1,6 @@
-import React from 'react';
+import { makeStyles, Typography } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { makeStyles, Typography } from '@material-ui/core';
 
 import AlignedText from '../../../../../ui/AlignedText';
 import SimpleBar from '../../../../../ui/SimpleBar';
@@ -32,14 +31,10 @@ export default function ReceiverInfo({ accountId }) {
           </Typography>
         </AlignedText>
         <AlignedText text="Student ID" childrenType="text">
-          <Typography variant="body1">
-            {accounts[accountId].student_id}
-          </Typography>
+          <Typography variant="body1">{accounts[accountId].student_id}</Typography>
         </AlignedText>
         <AlignedText text="Real Name" childrenType="text">
-          <Typography variant="body1">
-            {accounts[accountId].real_name}
-          </Typography>
+          <Typography variant="body1">{accounts[accountId].real_name}</Typography>
         </AlignedText>
       </>
     </SimpleBar>

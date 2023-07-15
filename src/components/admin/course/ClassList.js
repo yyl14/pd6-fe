@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
   Button,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
-  TextField,
+  DialogTitle,
   Snackbar,
+  TextField,
+  Typography,
 } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import Icon from '../../ui/icon/index';
-import { fetchClasses, addCourse, addClass } from '../../../actions/admin/course';
+import { addClass, addCourse, fetchClasses } from '../../../actions/admin/course';
 import { fetchClassMemberWithAccountReferral } from '../../../actions/common/common';
-import CustomTable from '../../ui/CustomTable';
-import AlignedText from '../../ui/AlignedText';
-import PageTitle from '../../ui/PageTitle';
-import NoMatch from '../../noMatch';
 import GeneralLoading from '../../GeneralLoading';
+import NoMatch from '../../noMatch';
+import AlignedText from '../../ui/AlignedText';
+import CustomTable from '../../ui/CustomTable';
+import PageTitle from '../../ui/PageTitle';
+import Icon from '../../ui/icon/index';
 
 /* This is a level 4 component (page component) */
 export default function ClassList() {
@@ -104,21 +104,21 @@ export default function ClassList() {
       <PageTitle text={`${courses.byId[courseId].name}`} />
       <CustomTable
         searchPlaceholder="Class"
-        buttons={(
+        buttons={
           <>
             <Button onClick={onClickSetting}>Setting</Button>
             <Button color="primary" onClick={onClickAddClass}>
               <Icon.Add />
             </Button>
           </>
-        )}
+        }
         data={
           courses.byId[courseId] !== undefined
             ? courses.byId[courseId].classIds.map((classId) => ({
-              name: classes.byId[classId].name,
-              memberCount: classes.byId[classId].memberIds.length,
-              path: `/admin/course/class/${courseId}/${classId}/member`,
-            }))
+                name: classes.byId[classId].name,
+                memberCount: classes.byId[classId].memberIds.length,
+                path: `/admin/course/class/${courseId}/${classId}/member`,
+              }))
             : {}
         }
         columns={[

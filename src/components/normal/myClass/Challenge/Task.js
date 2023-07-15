@@ -1,17 +1,16 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
-import { Switch, Route, useParams } from 'react-router-dom';
+import { Route, Switch, useParams } from 'react-router-dom';
 
 import CodingProblem from './CodingProblem';
 
 import GeneralLoading from '../../../GeneralLoading';
-import EssayProblem from './EssayProblem';
+import NoMatch from '../../../noMatch';
 import CodeSubmission from './CodeSubmission';
+import EssayProblem from './EssayProblem';
 import MySubmission from './MySubmission';
-import SubmissionDetail from './SubmissionDetail';
 import PeerReview from './PeerReview';
 import Scoreboard from './Scoreboard';
-import NoMatch from '../../../noMatch';
+import SubmissionDetail from './SubmissionDetail';
 
 /* This is a level 4 component (page component) */
 /* judge the problem type on this level */

@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
-} from '@material-ui/core';
 import Icon from '../icon/index';
 
-export default function AllClass({
-  classNames, history, location, mode, open, onClose,
-}) {
+export default function AllClass({ classNames, history, location, mode, open, onClose }) {
   const { courseId } = useParams();
   const baseURL = '/all-class';
   const classes = useSelector((state) => state.classes);
@@ -38,9 +34,9 @@ export default function AllClass({
           })),
       );
     } else if (
-      mode === 'course'
-      && courses.byId[courseId] !== undefined
-      && courses.byId[courseId].classIds !== undefined
+      mode === 'course' &&
+      courses.byId[courseId] !== undefined &&
+      courses.byId[courseId].classIds !== undefined
     ) {
       // console.log(courses, classes);
       setArrow(

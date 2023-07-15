@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
-  TextField,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Snackbar,
+  TextField,
+  Typography,
 } from '@material-ui/core';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { renameCourse, deleteCourse } from '../../../actions/admin/course';
-import SimpleBar from '../../ui/SimpleBar';
+import { deleteCourse, renameCourse } from '../../../actions/admin/course';
+import NoMatch from '../../noMatch';
 import AlignedText from '../../ui/AlignedText';
 import PageTitle from '../../ui/PageTitle';
-import NoMatch from '../../noMatch';
+import SimpleBar from '../../ui/SimpleBar';
 
 /* This is a level 4 component (page component) */
 export default function CourseSetting() {
@@ -90,13 +90,13 @@ export default function CourseSetting() {
 
       <SimpleBar
         title="Change Course Name"
-        childrenButtons={(
+        childrenButtons={
           <>
             <Button color="secondary" onClick={onClickRename}>
               Rename
             </Button>
           </>
-        )}
+        }
       >
         <Typography variant="body1">
           Once you change the course name, all related classes will be change their names. Please be certain.
@@ -104,13 +104,13 @@ export default function CourseSetting() {
       </SimpleBar>
       <SimpleBar
         title="Delete Course"
-        childrenButtons={(
+        childrenButtons={
           <>
             <Button color="secondary" onClick={onClickDelete}>
               Delete
             </Button>
           </>
-        )}
+        }
       >
         <Typography variant="body1">Once you delete a course, there is no going back. Please be certain.</Typography>
       </SimpleBar>
@@ -150,7 +150,11 @@ export default function CourseSetting() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Snackbar open={showRenameDialog && showSnackBar} onClose={closeSnackbar} message={`Error: ${error.renameCourse}`} />
+      <Snackbar
+        open={showRenameDialog && showSnackBar}
+        onClose={closeSnackbar}
+        message={`Error: ${error.renameCourse}`}
+      />
 
       <Dialog open={showDeleteDialog || loading.deleteCourse} maxWidth="md">
         <DialogTitle>

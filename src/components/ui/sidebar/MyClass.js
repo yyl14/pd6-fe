@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider,
-} from '@material-ui/core';
 import Icon from '../icon/index';
 
-export default function MyClass({
-  classNames, history, location, mode, open, onClose,
-}) {
+export default function MyClass({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId } = useParams();
   const baseURL = '/my-class';
   const classes = useSelector((state) => state.classes.byId);
@@ -26,11 +22,11 @@ export default function MyClass({
   useEffect(() => {
     if (userClasses.length !== 0) {
       if (
-        mode === 'main'
-        && userClasses[0].course_id !== undefined
-        && userClasses[0].class_id !== undefined
-        && courses[courseId] !== undefined
-        && classes[classId] !== undefined
+        mode === 'main' &&
+        userClasses[0].course_id !== undefined &&
+        userClasses[0].class_id !== undefined &&
+        courses[courseId] !== undefined &&
+        classes[classId] !== undefined
       ) {
         // console.log(userClasses);
         setDisplay(

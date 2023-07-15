@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
-import { Switch, Route, useHistory } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { Route, Switch, useHistory } from 'react-router-dom';
 
 import Account from './account/account';
 import Institute from './account/institute';
 import Class from './course/class';
 import Course from './course/course';
 import AccessLog from './system/accessLog';
-import SubmitLang from './system/submitLang';
 import Announcement from './system/announcement';
+import SubmitLang from './system/submitLang';
 
 import NoMatch from '../../components/noMatch';
 

@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
 import {
-  Typography,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
   Snackbar,
+  TextField,
+  Typography,
 } from '@material-ui/core';
-import { renameClass, deleteClass } from '../../../actions/admin/course';
-import SimpleBar from '../../ui/SimpleBar';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
+import { deleteClass, renameClass } from '../../../actions/admin/course';
+import NoMatch from '../../noMatch';
 import AlignedText from '../../ui/AlignedText';
 import PageTitle from '../../ui/PageTitle';
-import NoMatch from '../../noMatch';
+import SimpleBar from '../../ui/SimpleBar';
 
 /* This is a level 4 component (page component) */
 const ClassSetting = () => {
@@ -88,13 +88,13 @@ const ClassSetting = () => {
 
       <SimpleBar
         title="Rename Class"
-        childrenButtons={(
+        childrenButtons={
           <>
             <Button onClick={() => setShowRenameDialog(true)} color="secondary">
               Rename
             </Button>
           </>
-        )}
+        }
       >
         <Typography variant="body1">
           Once you change the class name, all related information will be affected. Please be certain.
@@ -103,13 +103,13 @@ const ClassSetting = () => {
 
       <SimpleBar
         title="Delete Class"
-        childrenButtons={(
+        childrenButtons={
           <>
             <Button onClick={() => setShowDeleteDialog(true)} color="secondary">
               Delete
             </Button>
           </>
-        )}
+        }
       >
         <Typography variant="body1">Once you delete a class, there is no going back. Please be certain.</Typography>
       </SimpleBar>

@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  Typography, Button, makeStyles, Dialog, DialogTitle, DialogActions, DialogContent,
-} from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, makeStyles } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import Icon from '../../../ui/icon/index';
 import AlignedText from '../../../ui/AlignedText';
 import PageTitle from '../../../ui/PageTitle';
+import Icon from '../../../ui/icon/index';
 
-import CodingProblemInfo from './ProblemSettings/CodingProblemInfo';
-import CodingProblemEdit from './ProblemSettings/CodingProblemEdit';
-import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
+import NoMatch from '../../../noMatch';
+import CodingProblemEdit from './ProblemSettings/CodingProblemEdit';
+import CodingProblemInfo from './ProblemSettings/CodingProblemInfo';
 
 import { readProblemWithCodeContent, rejudgeProblem } from '../../../../actions/myClass/problem';
 
@@ -32,9 +30,7 @@ const useStyles = makeStyles(() => ({
 /* This is a level 4 component (page component) */
 /* TODO: Judge whether it is project type. */
 export default function CodingProblem() {
-  const {
-    courseId, classId, challengeId, problemId,
-  } = useParams();
+  const { courseId, classId, challengeId, problemId } = useParams();
   const history = useHistory();
   const classNames = useStyles();
 
@@ -77,10 +73,10 @@ export default function CodingProblem() {
   }, [problemId]);
 
   if (
-    problems[problemId] === undefined
-    || challenges[challengeId] === undefined
-    || courses[courseId] === undefined
-    || classes[classId] === undefined
+    problems[problemId] === undefined ||
+    challenges[challengeId] === undefined ||
+    courses[courseId] === undefined ||
+    classes[classId] === undefined
   ) {
     if (commonLoading.fetchCourse || commonLoading.fetchClass) {
       return <GeneralLoading />;
@@ -109,14 +105,18 @@ export default function CodingProblem() {
             <Button
               variant="outlined"
               color="primary"
-              onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)}
+              onClick={() =>
+                history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)
+              }
               startIcon={<Icon.HistoryIcon />}
             >
               My Submission
             </Button>
             <Button
               color="primary"
-              onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}
+              onClick={() =>
+                history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)
+              }
             >
               Submit
             </Button>
@@ -128,14 +128,18 @@ export default function CodingProblem() {
             <Button
               variant="outlined"
               color="primary"
-              onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)}
+              onClick={() =>
+                history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)
+              }
               startIcon={<Icon.HistoryIcon />}
             >
               My Submission
             </Button>
             <Button
               color="primary"
-              onClick={() => history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}
+              onClick={() =>
+                history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)
+              }
             >
               Submit
             </Button>

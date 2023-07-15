@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Button, makeStyles } from '@material-ui/core';
-import { useParams, useHistory } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 import { readProblemInfo } from '../../../actions/myClass/problem';
 import GeneralLoading from '../../GeneralLoading';
 import NoMatch from '../../noMatch';
-import Icon from '../../ui/icon';
-import PageTitle from '../../ui/PageTitle';
 import CodingProblemInfo from '../../pageTemplate/CodingProblemInfo';
+import PageTitle from '../../ui/PageTitle';
+import Icon from '../../ui/icon';
 
 const useStyles = makeStyles(() => ({
   generalButtons: {
@@ -18,9 +18,7 @@ const useStyles = makeStyles(() => ({
 
 /* This is a level 4 component (page component) */
 export default function ProblemDetail() {
-  const {
-    courseId, classId, challengeId, problemId,
-  } = useParams();
+  const { courseId, classId, challengeId, problemId } = useParams();
   const classNames = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -58,14 +56,18 @@ export default function ProblemDetail() {
         <Button
           variant="outlined"
           color="primary"
-          onClick={() => history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)}
+          onClick={() =>
+            history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)
+          }
           startIcon={<Icon.HistoryIcon />}
         >
           My Submission
         </Button>
         <Button
           color="primary"
-          onClick={() => history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)}
+          onClick={() =>
+            history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)
+          }
         >
           Submit
         </Button>

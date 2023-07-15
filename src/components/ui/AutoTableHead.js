@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import {
-  Button, FormControl, Select, MenuItem,
-} from '@material-ui/core';
-import Icon from './icon/index';
+import { Button, FormControl, MenuItem, Select } from '@material-ui/core';
+import { useState } from 'react';
 import SearchField from './SearchField';
+import Icon from './icon/index';
 
 const AutoTableHead = ({
   hasFilter,

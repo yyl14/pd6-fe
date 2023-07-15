@@ -1,17 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
-} from '@material-ui/core';
 import Icon from '../icon/index';
 
-export default function AllClassChallenge({
-  classNames, history, location, mode, open, onClose,
-}) {
-  const {
-    courseId, classId, challengeId, problemId, submissionId,
-  } = useParams();
+export default function AllClassChallenge({ classNames, history, location, mode, open, onClose }) {
+  const { courseId, classId, challengeId, problemId, submissionId } = useParams();
   const baseURL = '/all-class';
   const challenges = useSelector((state) => state.challenges.byId);
   const classes = useSelector((state) => state.classes.byId);
@@ -74,9 +68,9 @@ export default function AllClassChallenge({
         }
       }
     } else if (
-      mode === 'submission'
-      && challenges[challengeId] !== undefined
-      && problems.byId[problemId] !== undefined
+      mode === 'submission' &&
+      challenges[challengeId] !== undefined &&
+      problems.byId[problemId] !== undefined
     ) {
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToProblem}>
@@ -124,8 +118,8 @@ export default function AllClassChallenge({
   };
 
   if (
-    (courseId !== undefined && courses[courseId] === undefined)
-    || (classId !== undefined && classes[classId] === undefined)
+    (courseId !== undefined && courses[courseId] === undefined) ||
+    (classId !== undefined && classes[classId] === undefined)
   ) {
     return (
       <div>

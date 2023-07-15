@@ -1,30 +1,30 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
 import {
-  Typography,
   Button,
-  makeStyles,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
-  TextField,
+  DialogTitle,
   FormControl,
-  Select,
   MenuItem,
+  Select,
   Snackbar,
+  TextField,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
+import { addTeamProjectScoreboardUnderChallenge } from '../../../../actions/api/scoreboard';
+import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import MultiSelect from '../../../ui/MultiSelect';
 import Icon from '../../../ui/icon/index';
-import NoMatch from '../../../noMatch';
-import { addTeamProjectScoreboardUnderChallenge } from '../../../../actions/api/scoreboard';
 
 import {
-  addProblem,
   addEssay,
   addPeerReview,
+  addProblem,
   browseTasksUnderChallenge,
   peerReviewFetchChallenges,
 } from '../../../../actions/myClass/challenge';
@@ -103,18 +103,18 @@ export default function TaskAddingCard({ open, setOpen }) {
   const validateInput = useCallback((maxTemp, minTemp, peerNumberTemp) => {
     // string
     if (
-      Number.isNaN(Number(maxTemp)) === true
-      || Number.isNaN(Number(minTemp)) === true
-      || Number.isNaN(Number(peerNumberTemp)) === true
+      Number.isNaN(Number(maxTemp)) === true ||
+      Number.isNaN(Number(minTemp)) === true ||
+      Number.isNaN(Number(peerNumberTemp)) === true
     ) {
       return 'Error: Max/Min/Assignee is NOT a Number.';
     }
 
     // float
     if (
-      Number.isInteger(Number(maxTemp)) === false
-      || Number.isInteger(Number(minTemp)) === false
-      || Number.isInteger(Number(peerNumberTemp)) === false
+      Number.isInteger(Number(maxTemp)) === false ||
+      Number.isInteger(Number(minTemp)) === false ||
+      Number.isInteger(Number(peerNumberTemp)) === false
     ) {
       return 'Error: Max/Min/Assignee is a Float number.';
     }
@@ -139,10 +139,10 @@ export default function TaskAddingCard({ open, setOpen }) {
 
   useEffect(() => {
     if (
-      !loading.addProblem
-      && !loading.addEssay
-      && !loading.addPeerReview
-      && !scoreboardsLoading.addTeamProjectScoreboardUnderChallenge
+      !loading.addProblem &&
+      !loading.addEssay &&
+      !loading.addPeerReview &&
+      !scoreboardsLoading.addTeamProjectScoreboardUnderChallenge
     ) {
       dispatch(browseTasksUnderChallenge(authToken, challengeId));
     }
@@ -169,13 +169,13 @@ export default function TaskAddingCard({ open, setOpen }) {
       }
     } else if (type === 'Peer Review') {
       if (
-        label !== ''
-        && title !== ''
-        && peerReviewChallengeId !== ''
-        && taskLabelId !== ''
-        && maxScore !== ''
-        && minScore !== ''
-        && peerNumber !== ''
+        label !== '' &&
+        title !== '' &&
+        peerReviewChallengeId !== '' &&
+        taskLabelId !== '' &&
+        maxScore !== '' &&
+        minScore !== '' &&
+        peerNumber !== ''
       ) {
         const errorMessage = validateInput(maxScore, minScore, peerNumber);
         if (!errorMessage) {
@@ -448,9 +448,9 @@ export default function TaskAddingCard({ open, setOpen }) {
                   }}
                   style={{ width: '350px' }}
                 >
-                  {peerReviewChallengeId !== undefined
-                    && peerReviewChallengeId !== ''
-                    && challenges.byId[peerReviewChallengeId].problemIds.map((id) => (
+                  {peerReviewChallengeId !== undefined &&
+                    peerReviewChallengeId !== '' &&
+                    challenges.byId[peerReviewChallengeId].problemIds.map((id) => (
                       <MenuItem key={id} value={id}>
                         {problems.byId[id].challenge_label}
                       </MenuItem>

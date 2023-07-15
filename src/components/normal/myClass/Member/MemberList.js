@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { browseClassMember } from '../../../../actions/api/view';
+import { getInstitutes } from '../../../../actions/common/common';
+import systemRoleTransformation from '../../../../function/systemRoleTransformation';
+import GeneralLoading from '../../../GeneralLoading';
+import NoMatch from '../../../noMatch';
 import AutoTable from '../../../ui/AutoTable';
 import PageTitle from '../../../ui/PageTitle';
 import MemberEdit from './MemberEdit';
-import NoMatch from '../../../noMatch';
-import systemRoleTransformation from '../../../../function/systemRoleTransformation';
-import GeneralLoading from '../../../GeneralLoading';
-import { getInstitutes } from '../../../../actions/common/common';
 
 /* This is a level 4 component (page component) */
 export default function MemberList() {
@@ -40,10 +40,10 @@ export default function MemberList() {
 
   if (courses.byId[courseId] === undefined || classes.byId[classId] === undefined) {
     if (
-      loading.fetchCourse
-      || loading.fetchClass
+      loading.fetchCourse ||
+      loading.fetchClass ||
       // || loading.fetchClassMembers
-      || loading.fetchClassMemberWithAccountReferral
+      loading.fetchClassMemberWithAccountReferral
     ) {
       // still loading
       return <GeneralLoading />;

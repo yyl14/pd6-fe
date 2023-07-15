@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchGrade } from '../../../../actions/myClass/grade';
 import PageTitle from '../../../ui/PageTitle';
 
-import GradeInfo from './detail/GradeInfo';
-import Grader from './detail/Grader';
-import GradeInfoEdit from './detail/GradeInfoEdit';
-import GradeDelete from './detail/GradeDelete';
-import NoMatch from '../../../noMatch';
 import GeneralLoading from '../../../GeneralLoading';
+import NoMatch from '../../../noMatch';
+import GradeDelete from './detail/GradeDelete';
+import GradeInfo from './detail/GradeInfo';
+import GradeInfoEdit from './detail/GradeInfoEdit';
+import Grader from './detail/Grader';
 
 /* This is a level 4 component (page component) */
 export default function GradeDetail() {

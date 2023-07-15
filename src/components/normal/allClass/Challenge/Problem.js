@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Snackbar } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import CodingProblem from './CodingProblem';
 import { readProblemInfo } from '../../../../actions/myClass/problem';
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
+import CodingProblem from './CodingProblem';
 
 // const useStyles = makeStyles(() => ({}));
 

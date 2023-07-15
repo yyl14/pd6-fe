@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
   Button,
-  Typography,
   Card,
   CardContent,
-  makeStyles,
-  TextField,
-  FormControl,
-  Select,
-  MenuItem,
-  Snackbar,
   CircularProgress,
+  FormControl,
+  MenuItem,
+  Select,
+  Snackbar,
+  TextField,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { addStudentCard } from '../../actions/user/user';
-import StudentInfoCard from './StudentInfoCard';
-import SimpleBar from '../ui/SimpleBar';
 import AlignedText from '../ui/AlignedText';
+import SimpleBar from '../ui/SimpleBar';
+import StudentInfoCard from './StudentInfoCard';
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -142,7 +142,9 @@ export default function StudentInfoEdit(props) {
     const inputInstituteId = institutesId.filter((id) => institutes[id].full_name === addInputs.institute);
     if (inputInstituteId.length !== 0) {
       dispatch(
-        addStudentCard(authToken, accountId, inputInstituteId[0], addInputs.email, addInputs.studentId, () => setSnackbar(true)),
+        addStudentCard(authToken, accountId, inputInstituteId[0], addInputs.email, addInputs.studentId, () =>
+          setSnackbar(true),
+        ),
       );
     }
     setAdd(false);

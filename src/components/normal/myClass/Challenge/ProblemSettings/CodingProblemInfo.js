@@ -1,40 +1,40 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 // https://mathpix.com/docs/mathpix-markdown/overview
 // https://github.com/Mathpix/mathpix-markdown-it
-import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
 import {
-  Typography,
   Button,
-  makeStyles,
-  withStyles,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
   DialogContentText,
-  Grid,
+  DialogTitle,
   FormControlLabel,
+  Grid,
   Switch,
+  Typography,
+  makeStyles,
+  withStyles,
 } from '@material-ui/core';
+import { MathpixLoader, MathpixMarkdown } from 'mathpix-markdown-it';
 import { useHistory, useParams } from 'react-router-dom';
+import AlignedText from '../../../../ui/AlignedText';
+import CodeArea from '../../../../ui/CodeArea';
+import SampleTestArea from '../../../../ui/SampleTestArea';
 import SimpleBar from '../../../../ui/SimpleBar';
 import SimpleTable from '../../../../ui/SimpleTable';
-import SampleTestArea from '../../../../ui/SampleTestArea';
-import AlignedText from '../../../../ui/AlignedText';
 import Icon from '../../../../ui/icon/index';
-import CodeArea from '../../../../ui/CodeArea';
 
-import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
+import NoMatch from '../../../../noMatch';
 
 import {
-  browseTestcase,
   browseAssistingData,
+  browseTestcase,
   deleteProblem,
+  downloadAllAssistingData,
   downloadAllSamples,
   downloadAllTestcases,
-  downloadAllAssistingData,
 } from '../../../../../actions/myClass/problem';
 
 // import { downloadFile } from '../../../../../actions/common/common';
@@ -71,9 +71,7 @@ const StyledButton = withStyles({
 
 /* This is a level 4 component (page component) */
 export default function CodingProblemInfo({ role = 'NORMAL' }) {
-  const {
-    courseId, classId, challengeId, problemId,
-  } = useParams();
+  const { courseId, classId, challengeId, problemId } = useParams();
   const history = useHistory();
   const classNames = useStyles();
 
@@ -381,9 +379,9 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
             data={
               problems[problemId] !== undefined
                 ? problems[problemId].assistingDataIds.map((id) => ({
-                  id,
-                  filename: assistingData[id].filename,
-                }))
+                    id,
+                    filename: assistingData[id].filename,
+                  }))
                 : []
             }
           />
@@ -393,13 +391,13 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         <SimpleBar
           title="Customized Judge Code (Optional)"
           noIndent
-          buttons={(
+          buttons={
             <FormControlLabel
               control={<Switch checked name="customizeJudge" color="primary" disabled />}
               label="Enabled"
               className={classNames.statusSwitch}
             />
-          )}
+          }
         >
           <CodeArea value={problems[problemId].judge_source.judge_code ?? ''} />
         </SimpleBar>
@@ -408,13 +406,13 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
         <SimpleBar
           title="Reviser Code (Optional)"
           noIndent
-          buttons={(
+          buttons={
             <FormControlLabel
               control={<Switch checked name="customizeJudge" color="primary" disabled />}
               label="Enabled"
               className={classNames.statusSwitch}
             />
-          )}
+          }
         >
           <CodeArea value={problems[problemId].reviser.judge_code ?? ''} />
         </SimpleBar>
@@ -422,11 +420,11 @@ export default function CodingProblemInfo({ role = 'NORMAL' }) {
       {role === 'MANAGER' && (
         <SimpleBar
           title="Delete Task"
-          childrenButtons={(
+          childrenButtons={
             <Button color="secondary" onClick={() => setDeletePopUp(true)}>
               Delete
             </Button>
-          )}
+          }
         >
           <Typography variant="body1">Once you delete a task, there is no going back. Please be certain.</Typography>
         </SimpleBar>

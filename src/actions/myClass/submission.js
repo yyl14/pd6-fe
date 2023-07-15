@@ -1,6 +1,6 @@
+import getTextFromUrl from '../../function/getTextFromUrl';
 import agent from '../agent';
 import { submissionConstants } from './constant';
-import getTextFromUrl from '../../function/getTextFromUrl';
 
 const fetchSubmission = (token, submissionId) => (dispatch) => {
   const config1 = {
@@ -133,11 +133,9 @@ const rejudgeSubmission = (token, submissionId) => async (dispatch) => {
 };
 
 export {
-  // fetchClassSubmissions,
+  browseTestcases,
   fetchSubmission,
   // fetchJudgement,
   readSubmissionDetail,
-  // browseJudgeCases,
-  browseTestcases,
   rejudgeSubmission,
 };

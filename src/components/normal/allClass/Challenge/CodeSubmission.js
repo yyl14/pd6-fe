@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  Button, makeStyles, MenuItem, FormControl, Select, Snackbar,
-} from '@material-ui/core';
+import { Button, FormControl, MenuItem, Select, Snackbar, makeStyles } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 
 import AlignedText from '../../../ui/AlignedText';
 import PageTitle from '../../../ui/PageTitle';
 
-import { readProblemInfo, submitCode } from '../../../../actions/myClass/problem';
 import { browseSubmitLang } from '../../../../actions/common/common';
+import { readProblemInfo, submitCode } from '../../../../actions/myClass/problem';
 
 import NoMatch from '../../../noMatch';
 import CodeField from '../../../ui/CodeField';
@@ -29,9 +27,7 @@ const useStyles = makeStyles(() => ({
 
 /* This is a level 4 component (page component) */
 export default function CodeSubmission() {
-  const {
-    courseId, classId, challengeId, problemId,
-  } = useParams();
+  const { courseId, classId, challengeId, problemId } = useParams();
   const history = useHistory();
   const classNames = useStyles();
 

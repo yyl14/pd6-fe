@@ -1,12 +1,11 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import AutoTable from '../../../ui/AutoTable';
-import PageTitle from '../../../ui/PageTitle';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { fetchChallenges } from '../../../../actions/myClass/challenge';
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
+import AutoTable from '../../../ui/AutoTable';
+import PageTitle from '../../../ui/PageTitle';
 
 /* This is a level 4 component (page component) */
 export default function ChallengeList() {

@@ -1,27 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Typography, Snackbar } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
+import { Snackbar, Typography } from '@material-ui/core';
 import moment from 'moment';
-import AlignedText from '../ui/AlignedText';
-import AutoTable from '../ui/AutoTable';
-import SimpleBar from '../ui/SimpleBar';
-import PageTitle from '../ui/PageTitle';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { browseMySubmissionUnderProblem } from '../../actions/api/view';
 import {
+  readProblemBestScore,
   // viewMySubmissionUnderProblem,
   readProblemInfo,
   readProblemScore,
-  readProblemBestScore,
 } from '../../actions/myClass/problem';
-import { browseMySubmissionUnderProblem } from '../../actions/api/view';
 import GeneralLoading from '../GeneralLoading';
 import NoMatch from '../noMatch';
+import AlignedText from '../ui/AlignedText';
+import AutoTable from '../ui/AutoTable';
+import PageTitle from '../ui/PageTitle';
+import SimpleBar from '../ui/SimpleBar';
 
 /* This is a level 4 component (page component) */
 export default function MySubmission({ baseUrl, isProblemSet }) {
-  const {
-    courseId, classId, challengeId, problemId,
-  } = useParams();
+  const { courseId, classId, challengeId, problemId } = useParams();
 
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
@@ -63,12 +61,12 @@ export default function MySubmission({ baseUrl, isProblemSet }) {
             isProblemSet
               ? 'My Best Score'
               : `My ${
-                challenges.byId[challengeId].selection_type
-                  ? challenges.byId[challengeId].selection_type[0].concat(
-                    challenges.byId[challengeId].selection_type.slice(1).toLowerCase(),
-                  )
-                  : ''
-              } Score`
+                  challenges.byId[challengeId].selection_type
+                    ? challenges.byId[challengeId].selection_type[0].concat(
+                        challenges.byId[challengeId].selection_type.slice(1).toLowerCase(),
+                      )
+                    : ''
+                } Score`
           }
           childrenType="text"
         >

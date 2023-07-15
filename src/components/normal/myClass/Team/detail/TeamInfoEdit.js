@@ -1,5 +1,5 @@
 import { Button, TextField, Typography, makeStyles } from '@material-ui/core';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { editTeam } from '../../../../../actions/myClass/team';

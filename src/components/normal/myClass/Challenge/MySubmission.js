@@ -1,24 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Typography, Snackbar } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
+import { Snackbar, Typography } from '@material-ui/core';
 import moment from 'moment';
-import AlignedText from '../../../ui/AlignedText';
-import AutoTable from '../../../ui/AutoTable';
-import SimpleBar from '../../../ui/SimpleBar';
-import PageTitle from '../../../ui/PageTitle';
-import { readProblemInfo, readProblemScore } from '../../../../actions/myClass/problem';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { browseMySubmissionUnderProblem } from '../../../../actions/api/view';
+import { readProblemInfo, readProblemScore } from '../../../../actions/myClass/problem';
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
+import AlignedText from '../../../ui/AlignedText';
+import AutoTable from '../../../ui/AutoTable';
+import PageTitle from '../../../ui/PageTitle';
+import SimpleBar from '../../../ui/SimpleBar';
 
 const TableIdent = 'My Submission Table';
 
 /* This is a level 4 component (page component) */
 export default function MySubmission() {
-  const {
-    courseId, classId, challengeId, problemId,
-  } = useParams();
+  const { courseId, classId, challengeId, problemId } = useParams();
 
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
@@ -60,8 +58,8 @@ export default function MySubmission() {
           text={`My ${
             challenges.byId[challengeId].selection_type
               ? challenges.byId[challengeId].selection_type[0].concat(
-                challenges.byId[challengeId].selection_type.slice(1).toLowerCase(),
-              )
+                  challenges.byId[challengeId].selection_type.slice(1).toLowerCase(),
+                )
               : ''
           } Score`}
           childrenType="text"

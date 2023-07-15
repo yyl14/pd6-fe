@@ -9,9 +9,7 @@ const byId = (state = {}, action) => {
       return { ...state, [tableId]: { id: tableId, totalCount: Infinity, displayedDataIds: new Map([]) } };
     }
     case autoTableConstants.AUTO_TABLE_UPDATE: {
-      const {
-        tableId, offset, dataIds, totalCount,
-      } = action.payload;
+      const { tableId, offset, dataIds, totalCount } = action.payload;
       if (state[tableId]) {
         // exists table
         return {

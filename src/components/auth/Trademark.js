@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { Typography, makeStyles } from '@material-ui/core';
+import { useState } from 'react';
 import '../../styles/auth.css';
 import Icon from '../ui/icon';
 

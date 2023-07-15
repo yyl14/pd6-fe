@@ -1,13 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider,
-} from '@material-ui/core';
 import Icon from '../icon/index';
 
-export default function MyProfile({
-  classes, history, location, mode, open, onClose,
-}) {
+export default function MyProfile({ classes, history, location, mode, open, onClose }) {
   const account = useSelector((state) => state.user);
   const [display, setDisplay] = useState('unfold');
   const [title, setTitle] = useState('');

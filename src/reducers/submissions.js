@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import { submissionConstants, problemConstants } from '../actions/myClass/constant';
 import { viewConstants } from '../actions/api/constant';
+import { problemConstants, submissionConstants } from '../actions/myClass/constant';
 
 const verdictMapping = new Map([
   ['ACCEPTED', 'Accepted'],

@@ -1,4 +1,3 @@
-import React from 'react';
 import SubmissionDetailView from '../../pageTemplate/SubmissionDetailView';
 
 /* This is a level 4 component (page component) */

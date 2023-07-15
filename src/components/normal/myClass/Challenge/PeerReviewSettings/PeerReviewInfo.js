@@ -1,32 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
   Button,
-  Typography,
-  makeStyles,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
+  DialogTitle,
   Snackbar,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
-import { useParams, useHistory } from 'react-router-dom';
+import { MathpixLoader, MathpixMarkdown } from 'mathpix-markdown-it';
 import moment from 'moment';
-import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 
-import BasicInfo from './Element/BasicInfo';
-import Overview from './Element/Overview';
-import NoMatch from '../../../../noMatch';
 import GeneralLoading from '../../../../GeneralLoading';
-import PeerReviewEdit from './PeerReviewEdit';
+import NoMatch from '../../../../noMatch';
+import AlignedText from '../../../../ui/AlignedText';
 import PageTitle from '../../../../ui/PageTitle';
 import SimpleBar from '../../../../ui/SimpleBar';
-import AlignedText from '../../../../ui/AlignedText';
+import BasicInfo from './Element/BasicInfo';
+import Overview from './Element/Overview';
+import PeerReviewEdit from './PeerReviewEdit';
 
-import { readPeerReview, deletePeerReview, browseAccountReceivedPeerReviewRecord } from '../../../../../actions/api/peerReview';
 import {
-  browseAccountAllReviewedPeerReviewRecordWithReading,
+  browseAccountReceivedPeerReviewRecord,
+  deletePeerReview,
+  readPeerReview,
+} from '../../../../../actions/api/peerReview';
+import {
   assignPeerReviewRecordAndPush,
+  browseAccountAllReviewedPeerReviewRecordWithReading,
 } from '../../../../../actions/myClass/peerReview';
 
 const useStyles = makeStyles(() => ({
@@ -44,9 +48,7 @@ const useStyles = makeStyles(() => ({
 // This page is for both normal and manager.
 // Render different component according to role and call correct api (PeerReviewEdit, BasicInfo, Overview)
 export default function PeerReviewInfo() {
-  const {
-    courseId, classId, challengeId, peerReviewId,
-  } = useParams();
+  const { courseId, classId, challengeId, peerReviewId } = useParams();
   const classNames = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -89,7 +91,18 @@ export default function PeerReviewInfo() {
     const reviewPeerReviewRecordIds = peerReviews[peerReviewId].reviewRecordIds;
     if (reviewPeerReviewRecordIds.length < peerReviews[peerReviewId].max_review_count) {
       dispatch(
-        assignPeerReviewRecordAndPush(authToken, courseId, classId, challengeId, peerReviewId, accountId, history, () => { setShowErrorSnackbar(true); }),
+        assignPeerReviewRecordAndPush(
+          authToken,
+          courseId,
+          classId,
+          challengeId,
+          peerReviewId,
+          accountId,
+          history,
+          () => {
+            setShowErrorSnackbar(true);
+          },
+        ),
       );
     } else {
       const targetRecordId = reviewPeerReviewRecordIds.sort((a, b) => a - b)[0];
@@ -125,10 +138,7 @@ export default function PeerReviewInfo() {
   }, [authToken, dispatch, peerReviewId, accountId, apiLoading.assignPeerReviewRecord]);
 
   if (peerReviews[peerReviewId] === undefined) {
-    if (
-      apiLoading.editPeerReview
-      || apiLoading.assignPeerReviewRecord
-    ) {
+    if (apiLoading.editPeerReview || apiLoading.assignPeerReviewRecord) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -184,15 +194,17 @@ export default function PeerReviewInfo() {
           {role === 'MANAGER' && (
             <SimpleBar
               title="Delete Task"
-              childrenButtons={(
+              childrenButtons={
                 <>
                   <Button color="secondary" onClick={() => setDeletePopUp(true)}>
                     Delete
                   </Button>
                 </>
-              )}
+              }
             >
-              <Typography variant="body1">Once you delete a task, there is no going back. Please be certain.</Typography>
+              <Typography variant="body1">
+                Once you delete a task, there is no going back. Please be certain.
+              </Typography>
             </SimpleBar>
           )}
           {role !== 'MANAGER' && <Overview peerReviewId={peerReviewId} />}

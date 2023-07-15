@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  Button, Card, CardContent, Typography, makeStyles, Snackbar,
-} from '@material-ui/core';
-import Icon from '../ui/icon/index';
-import AlignedText from '../ui/AlignedText';
+import { Button, Card, CardContent, Snackbar, Typography, makeStyles } from '@material-ui/core';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { deletePendingStudentCard, makeStudentCardDefault, resendEmailVerification } from '../../actions/user/user';
+import AlignedText from '../ui/AlignedText';
+import Icon from '../ui/icon/index';
 
 const useStyles = makeStyles(() => ({
   root: {

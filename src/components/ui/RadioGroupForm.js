@@ -1,7 +1,4 @@
-import {
-  makeStyles, Typography, FormControl, FormControlLabel, RadioGroup, Radio,
-} from '@material-ui/core';
-import React from 'react';
+import { FormControl, FormControlLabel, Radio, RadioGroup, Typography, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -49,9 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function RadioGroupForm({
-  options, selectedValue, setSelectedValue, flexDirection,
-}) {
+export default function RadioGroupForm({ options, selectedValue, setSelectedValue, flexDirection }) {
   const classes = useStyles();
   const directionSelect = (dir) => {
     if (dir === 'row') {
@@ -81,18 +76,18 @@ export default function RadioGroupForm({
             className={marginDirectionSelect(flexDirection)}
             key={option.value}
             value={option.value}
-            control={(
+            control={
               <Radio
                 checkedIcon={<span className={`${classes.radio} ${classes.checkedIcon}`} />}
                 icon={<span className={`${classes.radio} ${classes.icon}`} />}
                 onClick={handleClick}
               />
-            )}
-            label={(
+            }
+            label={
               <Typography variant="body1" className={classes.optionText}>
                 {option.label}
               </Typography>
-            )}
+            }
           />
         ))}
       </RadioGroup>

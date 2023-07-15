@@ -91,28 +91,29 @@ const userForgetPassword = (username, email, onSuccess, onError) => async (dispa
   }
 };
 
-const userRegister = (username, password, nickname, realName, emailPrefix, instituteId, studentId) => async (dispatch) => {
-  const body = {
-    username,
-    password,
-    nickname,
-    real_name: realName,
-    alternative_email: null,
-    institute_id: instituteId,
-    student_id: studentId,
-    institute_email_prefix: emailPrefix,
+const userRegister =
+  (username, password, nickname, realName, emailPrefix, instituteId, studentId) => async (dispatch) => {
+    const body = {
+      username,
+      password,
+      nickname,
+      real_name: realName,
+      alternative_email: null,
+      institute_id: instituteId,
+      student_id: studentId,
+      institute_email_prefix: emailPrefix,
+    };
+    try {
+      dispatch({ type: authConstants.SIGNUP_START });
+      await agent.post('account', body);
+      dispatch({ type: authConstants.SIGNUP_SUCCESS });
+    } catch (error) {
+      dispatch({
+        type: authConstants.SIGNUP_FAIL,
+        error,
+      });
+    }
   };
-  try {
-    dispatch({ type: authConstants.SIGNUP_START });
-    await agent.post('account', body);
-    dispatch({ type: authConstants.SIGNUP_SUCCESS });
-  } catch (error) {
-    dispatch({
-      type: authConstants.SIGNUP_FAIL,
-      error,
-    });
-  }
-};
 
 const emailVerification = (code, onSuccess, onError) => async (dispatch) => {
   const config = {
@@ -149,12 +150,12 @@ const userResetPassword = (code, password) => async (dispatch) => {
 };
 
 export {
-  getUserInfo,
-  userSignIn,
-  userLogout,
-  userForgetUsername,
-  userForgetPassword,
-  userRegister,
   emailVerification,
+  getUserInfo,
+  userForgetPassword,
+  userForgetUsername,
+  userLogout,
+  userRegister,
   userResetPassword,
+  userSignIn,
 };

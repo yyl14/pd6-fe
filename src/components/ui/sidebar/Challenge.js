@@ -1,18 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
-} from '@material-ui/core';
-import Icon from '../icon/index';
 import TaskAddingCard from '../../normal/myClass/Challenge/TaskAddingCard';
+import Icon from '../icon/index';
 
-export default function Challenge({
-  classNames, history, location, mode, open, onClose,
-}) {
-  const {
-    courseId, classId, challengeId, problemId, submissionId,
-  } = useParams();
+export default function Challenge({ classNames, history, location, mode, open, onClose }) {
+  const { courseId, classId, challengeId, problemId, submissionId } = useParams();
   const baseURL = '/my-class';
   const challenges = useSelector((state) => state.challenges.byId);
   const classes = useSelector((state) => state.classes.byId);
@@ -49,9 +43,9 @@ export default function Challenge({
     if (mode === 'challenge' && userClasses.length !== 0 && userClasses.find((x) => x.class_id === Number(classId))) {
       // console.log(userClasses);
       if (
-        userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER'
-        && challenges[challengeId] !== undefined
-        && challenges[challengeId].problemIds !== undefined
+        userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER' &&
+        challenges[challengeId] !== undefined &&
+        challenges[challengeId].problemIds !== undefined
       ) {
         // console.log(problems, essays, userClasses);
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
@@ -116,8 +110,8 @@ export default function Challenge({
           ),
         );
       } else if (
-        userClasses.find((x) => x.class_id === Number(classId)).role === 'NORMAL'
-        && challenges[challengeId] !== undefined
+        userClasses.find((x) => x.class_id === Number(classId)).role === 'NORMAL' &&
+        challenges[challengeId] !== undefined
       ) {
         setArrow(
           <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
@@ -179,8 +173,8 @@ export default function Challenge({
           ]);
         }
       } else if (
-        userClasses.find((x) => x.class_id === Number(classId)).role === 'GUEST'
-        && challenges[challengeId] !== undefined
+        userClasses.find((x) => x.class_id === Number(classId)).role === 'GUEST' &&
+        challenges[challengeId] !== undefined
       ) {
         setArrow(
           <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
@@ -219,11 +213,11 @@ export default function Challenge({
         }
       }
     } else if (
-      mode === 'submission'
-      && userClasses.length !== 0
-      && userClasses.find((x) => x.class_id === Number(classId))
-      && challenges[challengeId] !== undefined
-      && problems.byId[problemId] !== undefined
+      mode === 'submission' &&
+      userClasses.length !== 0 &&
+      userClasses.find((x) => x.class_id === Number(classId)) &&
+      challenges[challengeId] !== undefined &&
+      problems.byId[problemId] !== undefined
     ) {
       if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
@@ -247,9 +241,9 @@ export default function Challenge({
         },
       ]);
     } else if (
-      mode === 'submission_detail'
-      && userClasses.length !== 0
-      && userClasses.find((x) => x.class_id === Number(classId))
+      mode === 'submission_detail' &&
+      userClasses.length !== 0 &&
+      userClasses.find((x) => x.class_id === Number(classId))
     ) {
       if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
@@ -317,8 +311,8 @@ export default function Challenge({
   };
 
   if (
-    (courseId !== undefined && courses[courseId] === undefined)
-    || (classId !== undefined && classes[classId] === undefined)
+    (courseId !== undefined && courses[courseId] === undefined) ||
+    (classId !== undefined && classes[classId] === undefined)
   ) {
     return (
       <div>
@@ -375,10 +369,10 @@ export default function Challenge({
                   <ListItemText primary={item.text} className={classNames.itemText} />
                 </ListItem>
               ))}
-              {mode === 'challenge'
-                && userClasses.length !== 0
-                && userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER'
-                && challenges[challengeId] !== undefined && (
+              {mode === 'challenge' &&
+                userClasses.length !== 0 &&
+                userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER' &&
+                challenges[challengeId] !== undefined && (
                   <ListItem button key="Task" onClick={() => setAddTaskPopUp(true)} className={classNames.item}>
                     <ListItemIcon className={`${classNames.itemIcon} ${addTaskItemColor(addTaskPopUp)}`}>
                       <Icon.AddBox />
@@ -388,7 +382,7 @@ export default function Challenge({
                       className={`${classNames.itemText} ${addTaskItemColor(addTaskPopUp)}`}
                     />
                   </ListItem>
-              )}
+                )}
             </List>
           )}
         </div>

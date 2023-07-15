@@ -1,13 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
-} from '@material-ui/core';
 import Icon from '../icon/index';
 
-export default function Grade({
-  classNames, history, location, mode, open, onClose,
-}) {
+export default function Grade({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId } = useParams();
   const baseURL = '/my-class';
 

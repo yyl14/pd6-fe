@@ -3,8 +3,8 @@ import { peerReviewConstants, viewConstants } from '../api/constant';
 import { readPeerReviewRecord } from '../api/peerReview';
 // import { autoTableConstants } from '../component/constant';
 // import browseParamsTransForm from '../../function/browseParamsTransform';
-import { readAccount } from '../user/user';
 import getTextFromUrl from '../../function/getTextFromUrl';
+import { readAccount } from '../user/user';
 
 export const readPeerReviewRecordWithCode = (token, peerReviewRecordId) => async (dispatch) => {
   try {
@@ -48,79 +48,84 @@ export const readPeerReviewRecordWithCode = (token, peerReviewRecordId) => async
   }
 };
 
-export const browseAccountReviewedPeerReviewRecordWithReading = (token, peerReviewId, accountId) => async (dispatch) => {
-  try {
-    const config = { headers: { 'auth-token': token } };
-    dispatch({ type: peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_START });
-    const res = await agent.get(`peer-review/${peerReviewId}/account/${accountId}/review`, config);
+export const browseAccountReviewedPeerReviewRecordWithReading =
+  (token, peerReviewId, accountId) => async (dispatch) => {
+    try {
+      const config = { headers: { 'auth-token': token } };
+      dispatch({ type: peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_START });
+      const res = await agent.get(`peer-review/${peerReviewId}/account/${accountId}/review`, config);
 
-    await Promise.all(
-      res.data.data.map(async (id) => {
-        dispatch(readPeerReviewRecord(token, id));
-        return id;
-      }),
-    );
+      await Promise.all(
+        res.data.data.map(async (id) => {
+          dispatch(readPeerReviewRecord(token, id));
+          return id;
+        }),
+      );
 
-    dispatch({
-      type: peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_SUCCESS,
-      payload: { peerReviewId, reviewIds: res.data.data },
-    });
-  } catch (error) {
-    dispatch({
-      type: peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_FAIL,
-      error,
-    });
-  }
-};
-
-export const assignPeerReviewRecordAndPush = (token, courseId, classId, challengeId, peerReviewId, accountId, history, onError) => async (dispatch) => {
-  try {
-    const config = { headers: { 'auth-token': token } };
-    dispatch({ type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_START });
-    const res = await agent.post(`peer-review/${peerReviewId}/record`, {}, config);
-    const ids = res.data.data.id;
-
-    if (ids.length !== 0) {
-      const targetRecordId = ids.sort((a, b) => a - b)[0];
-      history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${targetRecordId}`);
+      dispatch({
+        type: peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_SUCCESS,
+        payload: { peerReviewId, reviewIds: res.data.data },
+      });
+    } catch (error) {
+      dispatch({
+        type: peerReviewConstants.BROWSE_ACCOUNT_REVIEWED_PEER_REVIEW_RECORD_FAIL,
+        error,
+      });
     }
+  };
 
-    dispatch({ type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_SUCCESS });
-  } catch (error) {
-    dispatch({
-      type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_FAIL,
-      error,
-    });
-    onError();
-  }
-};
+export const assignPeerReviewRecordAndPush =
+  (token, courseId, classId, challengeId, peerReviewId, accountId, history, onError) => async (dispatch) => {
+    try {
+      const config = { headers: { 'auth-token': token } };
+      dispatch({ type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_START });
+      const res = await agent.post(`peer-review/${peerReviewId}/record`, {}, config);
+      const ids = res.data.data.id;
 
-export const browseAccountAllReviewedPeerReviewRecordWithReading = (token, peerReviewId, accountId) => async (dispatch) => {
-  try {
-    const config = { headers: { 'auth-token': token } };
-    dispatch({ type: peerReviewConstants.BROWSE_ACCOUNT_ALL_REVIEWWD_PEER_REVIEW_RECORD_START });
-    const res1 = await agent.get(`peer-review/${peerReviewId}/account/${accountId}/review`, config);
+      if (ids.length !== 0) {
+        const targetRecordId = ids.sort((a, b) => a - b)[0];
+        history.push(
+          `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${accountId}/${targetRecordId}`,
+        );
+      }
 
-    const data = [].concat(res1.data.data);
+      dispatch({ type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_SUCCESS });
+    } catch (error) {
+      dispatch({
+        type: peerReviewConstants.ASSIGN_PEER_REVIEW_RECORD_FAIL,
+        error,
+      });
+      onError();
+    }
+  };
 
-    await Promise.all(
-      data.map(async (id) => {
-        dispatch(readPeerReviewRecord(token, id));
-        return id;
-      }),
-    );
+export const browseAccountAllReviewedPeerReviewRecordWithReading =
+  (token, peerReviewId, accountId) => async (dispatch) => {
+    try {
+      const config = { headers: { 'auth-token': token } };
+      dispatch({ type: peerReviewConstants.BROWSE_ACCOUNT_ALL_REVIEWWD_PEER_REVIEW_RECORD_START });
+      const res1 = await agent.get(`peer-review/${peerReviewId}/account/${accountId}/review`, config);
 
-    dispatch({
-      type: peerReviewConstants.BROWSE_ACCOUNT_ALL_REVIEWWD_PEER_REVIEW_RECORD_SUCCESS,
-      payload: { peerReviewId, reviewIds: data },
-    });
-  } catch (error) {
-    dispatch({
-      type: peerReviewConstants.BROWSE_ACCOUNT_ALL_REVIEWWD_PEER_REVIEW_RECORD_FAIL,
-      error,
-    });
-  }
-};
+      const data = [].concat(res1.data.data);
+
+      await Promise.all(
+        data.map(async (id) => {
+          dispatch(readPeerReviewRecord(token, id));
+          return id;
+        }),
+      );
+
+      dispatch({
+        type: peerReviewConstants.BROWSE_ACCOUNT_ALL_REVIEWWD_PEER_REVIEW_RECORD_SUCCESS,
+        payload: { peerReviewId, reviewIds: data },
+      });
+    } catch (error) {
+      dispatch({
+        type: peerReviewConstants.BROWSE_ACCOUNT_ALL_REVIEWWD_PEER_REVIEW_RECORD_FAIL,
+        error,
+      });
+    }
+  };
 
 export const readPeerReviewWithProblem = (token, peerReviewId) => async (dispatch) => {
   try {
@@ -132,7 +137,11 @@ export const readPeerReviewWithProblem = (token, peerReviewId) => async (dispatc
 
     dispatch({
       type: peerReviewConstants.READ_PEER_REVIEW_WITH_PROBLEM_SUCCESS,
-      payload: { peerReview: { ...res.data.data, target_challenge_id: res2.data.data.challenge_id }, problem: res2.data.data, challenge: res3.data.data },
+      payload: {
+        peerReview: { ...res.data.data, target_challenge_id: res2.data.data.challenge_id },
+        problem: res2.data.data,
+        challenge: res3.data.data,
+      },
     });
   } catch (error) {
     dispatch({
@@ -156,7 +165,9 @@ export const browseAllPeerReviewReceive = (token, peerReviewId) => async (dispat
 
     // fetch all data
     const cnt = Math.ceil(total_count / limit);
-    const offsets = Array(cnt - 1).fill(0).map((id, index) => ((index + 1) * limit));
+    const offsets = Array(cnt - 1)
+      .fill(0)
+      .map((id, index) => (index + 1) * limit);
     const datas = Array(cnt - 1).fill(0);
 
     await Promise.all(
@@ -176,25 +187,27 @@ export const browseAllPeerReviewReceive = (token, peerReviewId) => async (dispat
       payload: {
         data: {
           peerReviewId,
-          peerReviewSummary: data.concat(datas.flat()).map(
-            ({
-              account_id,
-              username,
-              real_name,
-              student_id,
-              peer_review_record_ids,
-              peer_review_record_scores,
-              average_score,
-            }) => ({
-              account_id,
-              username,
-              real_name,
-              student_id,
-              peer_review_record_ids,
-              score: peer_review_record_scores,
-              average_score,
-            }),
-          ),
+          peerReviewSummary: data
+            .concat(datas.flat())
+            .map(
+              ({
+                account_id,
+                username,
+                real_name,
+                student_id,
+                peer_review_record_ids,
+                peer_review_record_scores,
+                average_score,
+              }) => ({
+                account_id,
+                username,
+                real_name,
+                student_id,
+                peer_review_record_ids,
+                score: peer_review_record_scores,
+                average_score,
+              }),
+            ),
         },
       },
     });
@@ -220,7 +233,9 @@ export const browseAllPeerReviewReview = (token, peerReviewId) => async (dispatc
 
     // fetch all data
     const cnt = Math.ceil(total_count / limit);
-    const offsets = Array(cnt - 1).fill(0).map((id, index) => ((index + 1) * limit));
+    const offsets = Array(cnt - 1)
+      .fill(0)
+      .map((id, index) => (index + 1) * limit);
     const datas = Array(cnt - 1).fill(0);
 
     await Promise.all(
@@ -240,25 +255,27 @@ export const browseAllPeerReviewReview = (token, peerReviewId) => async (dispatc
       payload: {
         data: {
           peerReviewId,
-          peerReviewSummary: data.concat(datas.flat()).map(
-            ({
-              account_id,
-              username,
-              real_name,
-              student_id,
-              peer_review_record_ids,
-              peer_review_record_scores,
-              average_score,
-            }) => ({
-              account_id,
-              username,
-              real_name,
-              student_id,
-              peer_review_record_ids,
-              score: peer_review_record_scores,
-              average_score,
-            }),
-          ),
+          peerReviewSummary: data
+            .concat(datas.flat())
+            .map(
+              ({
+                account_id,
+                username,
+                real_name,
+                student_id,
+                peer_review_record_ids,
+                peer_review_record_scores,
+                average_score,
+              }) => ({
+                account_id,
+                username,
+                real_name,
+                student_id,
+                peer_review_record_ids,
+                score: peer_review_record_scores,
+                average_score,
+              }),
+            ),
         },
       },
     });

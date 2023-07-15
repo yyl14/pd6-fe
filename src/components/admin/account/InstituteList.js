@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
-  makeStyles,
   Button,
-  Typography,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
   FormControlLabel,
-  Switch,
   Snackbar,
+  Switch,
+  TextField,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
-import Icon from '../../ui/icon/index';
-import PageTitle from '../../ui/PageTitle';
-import CustomTable from '../../ui/CustomTable';
-import AlignedText from '../../ui/AlignedText';
-import TableFilterCard from '../../ui/TableFilterCard';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { addInstitute } from '../../../actions/admin/account';
 import { getInstitutes } from '../../../actions/common/common';
 import filterData from '../../../function/filter';
 import sortData from '../../../function/sort';
 import GeneralLoading from '../../GeneralLoading';
+import AlignedText from '../../ui/AlignedText';
+import CustomTable from '../../ui/CustomTable';
+import PageTitle from '../../ui/PageTitle';
+import TableFilterCard from '../../ui/TableFilterCard';
+import Icon from '../../ui/icon/index';
 
 const useStyles = makeStyles(() => ({
   dialogTitle: {
@@ -156,13 +156,13 @@ export default function InstituteList() {
       <PageTitle text="Institute" />
       <CustomTable
         hasSearch={false}
-        buttons={(
+        buttons={
           <>
             <Button color="primary" onClick={() => setPopUp(true)}>
               <Icon.Add />
             </Button>
           </>
-        )}
+        }
         data={tableData}
         columns={[
           {

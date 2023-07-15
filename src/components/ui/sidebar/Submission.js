@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
-} from '@material-ui/core';
 import Icon from '../icon/index';
 
-export default function Submission({
-  classNames, history, location, mode, open, onClose,
-}) {
+export default function Submission({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, submissionId } = useParams();
   const baseURL = '/my-class';
   const classes = useSelector((state) => state.classes.byId);
@@ -71,8 +67,8 @@ export default function Submission({
   };
 
   if (
-    (courseId !== undefined && courses[courseId] === undefined)
-    || (classId !== undefined && classes[classId] === undefined)
+    (courseId !== undefined && courses[courseId] === undefined) ||
+    (classId !== undefined && classes[classId] === undefined)
   ) {
     return (
       <div>

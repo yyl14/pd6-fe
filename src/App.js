@@ -1,29 +1,27 @@
-import React, {
-  useState, useEffect, useCallback, useMemo,
-} from 'react';
-import { Provider } from 'react-redux';
-import { MuiThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Provider } from 'react-redux';
 
+import { useCookies } from 'react-cookie';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 
 import { useClearCacheCtx } from 'react-clear-cache';
-import theme from './theme/index';
-import Login from './containers/auth/Login';
-import Register from './containers/auth/Register';
-import ForgetUsername from './containers/auth/ForgetUsername';
-import ForgetPassword from './containers/auth/ForgetPassword';
-import ResetPassword from './containers/auth/ResetPassword';
-import EmailVerification from './containers/auth/EmailVerification';
-import Index from './containers';
 import NoMatch from './components/noMatch';
-import store from './store';
 import IconUsage from './components/ui/IconUsage';
 import UIComponentUsage from './components/ui/UIComponentUsage';
+import Index from './containers';
+import EmailVerification from './containers/auth/EmailVerification';
+import ForgetPassword from './containers/auth/ForgetPassword';
+import ForgetUsername from './containers/auth/ForgetUsername';
+import Login from './containers/auth/Login';
+import Register from './containers/auth/Register';
+import ResetPassword from './containers/auth/ResetPassword';
 import ThemeToggleContext from './contexts/themeToggleContext';
+import store from './store';
+import theme from './theme/index';
 
 import './App.css';
 import './styles/ui.css';

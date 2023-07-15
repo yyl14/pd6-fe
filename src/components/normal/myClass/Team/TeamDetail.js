@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Snackbar } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchTeam, fetchTeamMembers } from '../../../../actions/myClass/team';
+import systemRoleTransformation from '../../../../function/systemRoleTransformation';
+import GeneralLoading from '../../../GeneralLoading';
+import NoMatch from '../../../noMatch';
+import PageTitle from '../../../ui/PageTitle';
+import TeamDelete from './detail/TeamDelete';
 import TeamInfo from './detail/TeamInfo';
 import TeamInfoEdit from './detail/TeamInfoEdit';
 import TeamMember from './detail/TeamMember';
 import TeamMemberEdit from './detail/TeamMemberEdit';
-import TeamDelete from './detail/TeamDelete';
-import NoMatch from '../../../noMatch';
-import systemRoleTransformation from '../../../../function/systemRoleTransformation';
-import GeneralLoading from '../../../GeneralLoading';
-import PageTitle from '../../../ui/PageTitle';
 
 /* This is a level 4 component (page component) */
 export default function TeamDetail() {
@@ -42,9 +42,9 @@ export default function TeamDetail() {
         if (item.role === 'MANAGER') {
           setIsManager(true);
         } else if (
-          teamMembers[user.id] !== undefined
-          && item.role === 'NORMAL'
-          && teamMembers[user.id].role === 'MANAGER'
+          teamMembers[user.id] !== undefined &&
+          item.role === 'NORMAL' &&
+          teamMembers[user.id].role === 'MANAGER'
         ) {
           setIsTeamManager(true);
         }

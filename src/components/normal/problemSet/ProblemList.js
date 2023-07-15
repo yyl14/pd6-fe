@@ -1,9 +1,8 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Typography, makeStyles } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import AutoTable from '../../ui/AutoTable';
 import { fetchProblems } from '../../../actions/common/common';
+import AutoTable from '../../ui/AutoTable';
 
 const useStyles = makeStyles(() => ({
   pageHeader: {

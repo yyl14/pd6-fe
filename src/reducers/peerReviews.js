@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import { challengeConstants } from '../actions/myClass/constant';
 import { peerReviewConstants } from '../actions/api/constant';
+import { challengeConstants } from '../actions/myClass/constant';
 
 const prototype = {
   id: null,
@@ -25,7 +25,10 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case challengeConstants.BROWSE_TASKS_UNDER_CHALLENGE_SUCCESS: {
       const { data } = action.payload;
-      return data.peer_review.reduce((acc, item) => ({ ...acc, [item.id]: { ...prototype, ...state[item.id], ...item } }), state);
+      return data.peer_review.reduce(
+        (acc, item) => ({ ...acc, [item.id]: { ...prototype, ...state[item.id], ...item } }),
+        state,
+      );
     }
     case peerReviewConstants.READ_PEER_REVIEW_SUCCESS: {
       return {
@@ -48,7 +51,9 @@ const byId = (state = {}, action) => {
       return {
         ...state,
         [peerReviewId]: {
-          ...prototype, ...state[peerReviewId], reviewRecordIds: reviewIds.sort((a, b) => a - b),
+          ...prototype,
+          ...state[peerReviewId],
+          reviewRecordIds: reviewIds.sort((a, b) => a - b),
         },
       };
     }

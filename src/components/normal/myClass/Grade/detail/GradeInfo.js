@@ -1,9 +1,8 @@
-import React from 'react';
-import { makeStyles, Button, Typography } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Button, Typography, makeStyles } from '@material-ui/core';
 import moment from 'moment-timezone';
-import SimpleBar from '../../../../ui/SimpleBar';
+import { Link } from 'react-router-dom';
 import AlignedText from '../../../../ui/AlignedText';
+import SimpleBar from '../../../../ui/SimpleBar';
 
 const useStyles = makeStyles((theme) => ({
   textLink: {

@@ -158,12 +158,14 @@ export const downloadGradeFile = (token) => async (dispatch) => {
     };
     const res2 = await agent.get(`/s3-file/${res.data.data.s3_file_uuid}/url`, config2);
 
-    fetch(res2.data.data.url).then((t) => t.blob().then((b) => {
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(b);
-      a.setAttribute('download', res.data.data.filename);
-      a.click();
-    }));
+    fetch(res2.data.data.url).then((t) =>
+      t.blob().then((b) => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(b);
+        a.setAttribute('download', res.data.data.filename);
+        a.click();
+      }),
+    );
 
     dispatch({
       type: gradeConstants.DOWNLOAD_GRADE_FILE_SUCCESS,

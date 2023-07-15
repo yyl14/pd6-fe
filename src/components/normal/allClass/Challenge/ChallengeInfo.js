@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import moment from 'moment';
 import { Typography, makeStyles } from '@material-ui/core';
+import { MathpixLoader, MathpixMarkdown } from 'mathpix-markdown-it';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
-import NoMatch from '../../../noMatch';
-import AlignedText from '../../../ui/AlignedText';
-import SimpleBar from '../../../ui/SimpleBar';
-import SimpleTable from '../../../ui/SimpleTable';
-import PageTitle from '../../../ui/PageTitle';
 import { readProblemBestScore } from '../../../../actions/myClass/problem';
 import GeneralLoading from '../../../GeneralLoading';
+import NoMatch from '../../../noMatch';
+import AlignedText from '../../../ui/AlignedText';
+import PageTitle from '../../../ui/PageTitle';
+import SimpleBar from '../../../ui/SimpleBar';
+import SimpleTable from '../../../ui/SimpleTable';
 
 const useStyles = makeStyles(() => ({
   table: {

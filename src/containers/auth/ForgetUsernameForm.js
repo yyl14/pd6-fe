@@ -1,8 +1,6 @@
-import { useState, useEffect } from 'react';
-import React, { useDispatch } from 'react-redux';
-import {
-  Button, TextField, Card, CardContent, Typography, makeStyles, Link, Snackbar,
-} from '@material-ui/core';
+import { Button, Card, CardContent, Link, Snackbar, TextField, Typography, makeStyles } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { userForgetUsername } from '../../actions/user/auth';
 
@@ -63,7 +61,8 @@ export default function ForgetUsernameForm() {
   };
 
   useEffect(() => {
-    const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const emailRe =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const status = emailRe.test(email);
     if (email === '') {
       setErrorText('');
@@ -106,12 +105,10 @@ export default function ForgetUsernameForm() {
           </form>
 
           <Typography variant="body2" className={classNames.authLink}>
-            Lost your puppy?
-            {' '}
+            Lost your puppy?{' '}
             <Link component={RouterLink} to="/forget-password">
               Reset password
-            </Link>
-            {' '}
+            </Link>{' '}
           </Typography>
         </CardContent>
       </Card>

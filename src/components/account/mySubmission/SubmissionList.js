@@ -1,6 +1,5 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
 import { browseMySubmission } from '../../../actions/api/view';
 import AutoTable from '../../ui/AutoTable';
 import PageTitle from '../../ui/PageTitle';
@@ -36,10 +35,16 @@ export default function SubmissionList() {
             label: 'Course',
             type: 'ENUM',
             operation: 'IN',
-            options: [...new Map(userClasses.map((item) => ({
-              value: item.course_id,
-              label: item.course_name,
-            })).map((item) => [item.value, item])).values()],
+            options: [
+              ...new Map(
+                userClasses
+                  .map((item) => ({
+                    value: item.course_id,
+                    label: item.course_name,
+                  }))
+                  .map((item) => [item.value, item]),
+              ).values(),
+            ],
           },
           {
             reduxStateId: 'class_id',

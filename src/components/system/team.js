@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { Button, makeStyles } from '@material-ui/core';
+import { useState } from 'react';
 import SimpleBar from '../ui/SimpleBar';
 import Profile from '../ui/profile';
 

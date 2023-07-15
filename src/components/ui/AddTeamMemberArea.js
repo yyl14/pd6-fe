@@ -1,25 +1,25 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import {
-  makeStyles,
-  Typography,
   Button,
+  FormControl,
+  MenuItem,
   Paper,
+  Select,
   Table,
-  TableContainer,
-  TableHead,
   TableBody,
   TableCell,
+  TableContainer,
+  TableHead,
   TableRow,
   TextField,
-  FormControl,
-  Select,
-  MenuItem,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Icon from './icon/index';
-import AlignedText from './AlignedText';
 import { getAccountBatchByReferral } from '../../actions/common/common';
+import AlignedText from './AlignedText';
+import Icon from './icon/index';
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -104,9 +104,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AddTeamMemberArea({
-  text, selectedMember, setSelectedMember, setShowMemberNotExist,
-}) {
+export default function AddTeamMemberArea({ text, selectedMember, setSelectedMember, setShowMemberNotExist }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button } from '@material-ui/core';
 import SimpleBar from '../../../../ui/SimpleBar';
 import SimpleTable from '../../../../ui/SimpleTable';

@@ -1,45 +1,47 @@
-import agent from '../agent';
-import { systemConstants } from './constant';
-import { autoTableConstants } from '../component/constant';
 import browseParamsTransForm from '../../function/browseParamsTransform';
+import agent from '../agent';
+import { autoTableConstants } from '../component/constant';
+import { systemConstants } from './constant';
 
 // Announcement
-const fetchAnnouncement = (token, browseParams, tableId = null) => async (dispatch) => {
-  try {
-    dispatch({
-      type: systemConstants.FETCH_ANNOUNCEMENT_START,
-    });
+const fetchAnnouncement =
+  (token, browseParams, tableId = null) =>
+  async (dispatch) => {
+    try {
+      dispatch({
+        type: systemConstants.FETCH_ANNOUNCEMENT_START,
+      });
 
-    const config = {
-      headers: { 'auth-token': token },
-      params: browseParamsTransForm(browseParams),
-    };
-    const res = await agent.get('/announcement', config);
-    const { data: announcements, total_count } = res.data.data;
-    // console.log('fetchAnnouncement :', announcements);
-    dispatch({
-      type: systemConstants.FETCH_ANNOUNCEMENT_SUCCESS,
-      payload: {
-        data: announcements,
-      },
-    });
+      const config = {
+        headers: { 'auth-token': token },
+        params: browseParamsTransForm(browseParams),
+      };
+      const res = await agent.get('/announcement', config);
+      const { data: announcements, total_count } = res.data.data;
+      // console.log('fetchAnnouncement :', announcements);
+      dispatch({
+        type: systemConstants.FETCH_ANNOUNCEMENT_SUCCESS,
+        payload: {
+          data: announcements,
+        },
+      });
 
-    dispatch({
-      type: autoTableConstants.AUTO_TABLE_UPDATE,
-      payload: {
-        tableId,
-        totalCount: total_count,
-        dataIds: announcements.map((item) => item.id),
-        offset: browseParams.offset,
-      },
-    });
-  } catch (error) {
-    dispatch({
-      type: systemConstants.FETCH_ANNOUNCEMENT_FAIL,
-      error,
-    });
-  }
-};
+      dispatch({
+        type: autoTableConstants.AUTO_TABLE_UPDATE,
+        payload: {
+          tableId,
+          totalCount: total_count,
+          dataIds: announcements.map((item) => item.id),
+          offset: browseParams.offset,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: systemConstants.FETCH_ANNOUNCEMENT_FAIL,
+        error,
+      });
+    }
+  };
 
 // read only one announcement by its id
 const readAnnouncement = (token, announcementId) => async (dispatch) => {
@@ -186,11 +188,11 @@ const editSubmitLanguage = (token, id, name, version, isDisabled) => (dispatch) 
 };
 
 export {
-  fetchAnnouncement,
-  readAnnouncement,
-  editAnnouncement,
   addAnnouncement,
   deleteAnnouncement,
-  fetchSubmitLanguage,
+  editAnnouncement,
   editSubmitLanguage,
+  fetchAnnouncement,
+  fetchSubmitLanguage,
+  readAnnouncement,
 };

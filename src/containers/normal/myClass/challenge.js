@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
-import { Switch, Route, useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Switch, useParams } from 'react-router-dom';
 
-import ChallengeInfo from '../../../components/normal/myClass/Challenge/ChallengeInfo';
-import Task from '../../../components/normal/myClass/Challenge/Task';
-import Setting from '../../../components/normal/myClass/Challenge/Setting';
-import Statistics from '../../../components/normal/myClass/Challenge/Statistics';
 import { fetchChallenge } from '../../../actions/common/common';
 import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
+import ChallengeInfo from '../../../components/normal/myClass/Challenge/ChallengeInfo';
+import Setting from '../../../components/normal/myClass/Challenge/Setting';
+import Statistics from '../../../components/normal/myClass/Challenge/Statistics';
+import Task from '../../../components/normal/myClass/Challenge/Task';
 
 import NoMatch from '../../../components/noMatch';
 // import EssayProblem from '../../../components/normal/myClass/Challenge/EssayProblem';
@@ -22,15 +22,15 @@ export default function Challenge() {
 
   useEffect(() => {
     if (
-      !loading.challenge.addChallenge
-      && !loading.challenge.editChallenge
-      && !loading.challenge.deleteChallenge
-      && !loading.challenge.addProblem
-      && !loading.challenge.addEssay
-      && !loading.challenge.addPeerReview
-      && !loading.problem.deleteProblem
-      && !loading.problem.deleteEssay
-      && !apiLoading.scoreboard.deleteScoreboard
+      !loading.challenge.addChallenge &&
+      !loading.challenge.editChallenge &&
+      !loading.challenge.deleteChallenge &&
+      !loading.challenge.addProblem &&
+      !loading.challenge.addEssay &&
+      !loading.challenge.addPeerReview &&
+      !loading.problem.deleteProblem &&
+      !loading.problem.deleteEssay &&
+      !apiLoading.scoreboard.deleteScoreboard
       // && !loading.problem.deletePeerReview
     ) {
       dispatch(fetchChallenge(authToken, challengeId));

@@ -1,17 +1,17 @@
 import {
-  makeStyles,
+  Button,
   Dialog,
   DialogActions,
   DialogContent,
   FormControl,
-  Select,
   MenuItem,
-  Button,
+  Select,
+  makeStyles,
 } from '@material-ui/core';
 
-import React, { useState } from 'react';
-import Icon from './icon/index';
+import { useState } from 'react';
 import AlignedText from './AlignedText';
+import Icon from './icon/index';
 
 const useStyles = makeStyles(() => ({
   filterButton: {
@@ -33,9 +33,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function TableFilterCard({
-  popUp, setPopUp, filterInput, filterOptions, setFilterInput, doFilter,
-}) {
+export default function TableFilterCard({ popUp, setPopUp, filterInput, filterOptions, setFilterInput, doFilter }) {
   const classes = useStyles();
   const [onFilter, setOnFilter] = useState(false);
   const [tempInput, setTempInput] = useState({

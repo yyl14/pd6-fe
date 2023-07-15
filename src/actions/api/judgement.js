@@ -33,9 +33,7 @@ export const browseAllJudgementJudgeCase = (token, judgmentId) => async (dispatc
           judgement: {
             judge_case_ids: data.map(({ judgment_id, testcase_id }) => `${judgment_id}-${testcase_id}`),
           },
-          judgeCases: data.map(({
-            judgment_id, testcase_id, verdict, time_lapse, peak_memory, score,
-          }) => ({
+          judgeCases: data.map(({ judgment_id, testcase_id, verdict, time_lapse, peak_memory, score }) => ({
             id: `${judgment_id}-${testcase_id}`,
             testcase_id,
             judgment_id,

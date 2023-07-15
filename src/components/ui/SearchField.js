@@ -1,12 +1,7 @@
-import React from 'react';
-import {
-  TextField, FormControl, Select, MenuItem,
-} from '@material-ui/core';
+import { FormControl, MenuItem, Select, TextField } from '@material-ui/core';
 import MultiSelect from './MultiSelect';
 
-const SearchField = ({
-  classes, tempFilterValue, setTempFilterValue, filterConfig, filteringIndex, onSearch,
-}) => {
+const SearchField = ({ classes, tempFilterValue, setTempFilterValue, filterConfig, filteringIndex, onSearch }) => {
   // console.log(filterConfig[filteringIndex]);
   switch (filterConfig[filteringIndex].type) {
     case 'TEXT': {

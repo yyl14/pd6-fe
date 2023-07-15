@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider,
-} from '@material-ui/core';
 import Icon from '../icon/index';
 
-import { fetchCourses, fetchClasses } from '../../../actions/admin/course';
+import { fetchClasses, fetchCourses } from '../../../actions/admin/course';
 
-export default function ProblemSet({
-  classNames, history, location, open, onClose,
-}) {
+export default function ProblemSet({ classNames, history, location, open, onClose }) {
   const { courseId: currentCourseId, classId: currentClassId } = useParams();
   const baseURL = '/problem-set';
   const dispatch = useDispatch();
@@ -31,11 +27,15 @@ export default function ProblemSet({
 
   useEffect(() => {
     if (currentCourseId !== undefined && currentClassId !== undefined) return;
-    const defaultCourseId = courses.allIds.map((courseId) => courses.byId[courseId]).sort((a, b) => a.name.localeCompare(b.name))[0].id;
+    const defaultCourseId = courses.allIds
+      .map((courseId) => courses.byId[courseId])
+      .sort((a, b) => a.name.localeCompare(b.name))[0].id;
     if (courses.byId[defaultCourseId]) {
       const relatedClassIds = courses.byId[defaultCourseId].classIds;
       if (relatedClassIds && relatedClassIds.length > 0) {
-        const defaultClassId = relatedClassIds.map((classId) => classes.byId[classId]).sort((a, b) => a.name.localeCompare(b.name))[0].id;
+        const defaultClassId = relatedClassIds
+          .map((classId) => classes.byId[classId])
+          .sort((a, b) => a.name.localeCompare(b.name))[0].id;
         history.push(`${baseURL}/${defaultCourseId}/${defaultClassId}`);
       }
     }
@@ -43,7 +43,11 @@ export default function ProblemSet({
 
   // has course and class id in url
   useEffect(() => {
-    const foldIndex = courses.allIds.map((courseId) => courses.byId[courseId]).sort((a, b) => a.name.localeCompare(b.name)).map((item) => item.id).indexOf(Number(currentCourseId));
+    const foldIndex = courses.allIds
+      .map((courseId) => courses.byId[courseId])
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((item) => item.id)
+      .indexOf(Number(currentCourseId));
     if (foldIndex !== -1) {
       const newList = display.length > 0 ? [...display] : courses.allIds.map(() => 0);
       if (newList[foldIndex] !== 1) {
@@ -72,7 +76,8 @@ export default function ProblemSet({
       >
         <div className={classNames.topSpace} />
         <div>
-          {courses.allIds.map((courseId) => courses.byId[courseId])
+          {courses.allIds
+            .map((courseId) => courses.byId[courseId])
             .sort((a, b) => a.name.localeCompare(b.name))
             .map(({ id, name }, orderId) => (
               <div key={id}>
@@ -88,28 +93,28 @@ export default function ProblemSet({
                 </div>
                 <Divider variant="middle" className={classNames.divider} />
                 {Boolean(display[orderId]) && (
-                <List>
-                  {courses.byId[id].classIds
-                    .map((classId) => classes.byId[classId])
-                    .sort((a, b) => a.name.localeCompare(b.name))
-                    .map((classItem) => (
-                      <ListItem
-                        button
-                        key={classItem.id}
-                        className={
-                        location.pathname === `${baseURL}/${id}/${classItem.id}`
-                          ? `${classNames.active} ${classNames.item}`
-                          : classNames.item
-                      }
-                        onClick={() => history.push(`${baseURL}/${id}/${classItem.id}`)}
-                      >
-                        <ListItemIcon className={classNames.itemIcon}>
-                          <Icon.Challenge />
-                        </ListItemIcon>
-                        <ListItemText primary={classItem.name} className={classNames.itemText} />
-                      </ListItem>
-                    ))}
-                </List>
+                  <List>
+                    {courses.byId[id].classIds
+                      .map((classId) => classes.byId[classId])
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .map((classItem) => (
+                        <ListItem
+                          button
+                          key={classItem.id}
+                          className={
+                            location.pathname === `${baseURL}/${id}/${classItem.id}`
+                              ? `${classNames.active} ${classNames.item}`
+                              : classNames.item
+                          }
+                          onClick={() => history.push(`${baseURL}/${id}/${classItem.id}`)}
+                        >
+                          <ListItemIcon className={classNames.itemIcon}>
+                            <Icon.Challenge />
+                          </ListItemIcon>
+                          <ListItemText primary={classItem.name} className={classNames.itemText} />
+                        </ListItem>
+                      ))}
+                  </List>
                 )}
               </div>
             ))}

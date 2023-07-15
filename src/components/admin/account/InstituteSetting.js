@@ -1,9 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
-  makeStyles,
   Button,
-  Typography,
   Dialog,
   DialogActions,
   DialogContent,
@@ -11,14 +7,18 @@ import {
   FormControlLabel,
   Switch,
   TextField,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import SimpleBar from '../../ui/SimpleBar';
+import { editInstitute, getInstitute } from '../../../actions/admin/account';
+import GeneralLoading from '../../GeneralLoading';
+import NoMatch from '../../noMatch';
 import AlignedText from '../../ui/AlignedText';
 import PageTitle from '../../ui/PageTitle';
-import { getInstitute, editInstitute } from '../../../actions/admin/account';
-import NoMatch from '../../noMatch';
-import GeneralLoading from '../../GeneralLoading';
+import SimpleBar from '../../ui/SimpleBar';
 
 const useStyles = makeStyles(() => ({
   warningText: {
@@ -185,7 +185,7 @@ export default function InstituteSetting() {
       </SimpleBar>
       <SimpleBar
         title="Change Institute Full Name"
-        childrenButtons={(
+        childrenButtons={
           <>
             <Button
               color="secondary"
@@ -196,7 +196,7 @@ export default function InstituteSetting() {
               Rename
             </Button>
           </>
-        )}
+        }
       >
         <Typography variant="body1">
           Once you change the institute’s name, all related members will be affected. Please be certain.
@@ -204,7 +204,7 @@ export default function InstituteSetting() {
       </SimpleBar>
       <SimpleBar
         title="Change Institute Initialism"
-        childrenButtons={(
+        childrenButtons={
           <>
             <Button
               color="secondary"
@@ -215,7 +215,7 @@ export default function InstituteSetting() {
               Rename
             </Button>
           </>
-        )}
+        }
       >
         <Typography variant="body1">
           Once you change the institute’s initialism, all related members will be affected. Please be certain.
@@ -223,7 +223,7 @@ export default function InstituteSetting() {
       </SimpleBar>
       <SimpleBar
         title="Change Institute Email"
-        childrenButtons={(
+        childrenButtons={
           <>
             <Button
               color="secondary"
@@ -234,7 +234,7 @@ export default function InstituteSetting() {
               Change Email
             </Button>
           </>
-        )}
+        }
       >
         <Typography variant="body1">
           Once you change the institute’s email, future members may not be able to register with certain email. Please
@@ -243,7 +243,7 @@ export default function InstituteSetting() {
       </SimpleBar>
       <SimpleBar
         title="Change Institute Status"
-        childrenButtons={(
+        childrenButtons={
           <>
             <Button
               color="secondary"
@@ -255,7 +255,7 @@ export default function InstituteSetting() {
               Change Status
             </Button>
           </>
-        )}
+        }
       >
         <Typography variant="body1">
           Once you change the institute’s status, future members from this institute may not be able to register. Please

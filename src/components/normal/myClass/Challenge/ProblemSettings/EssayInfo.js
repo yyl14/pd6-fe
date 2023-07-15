@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import moment from 'moment';
 import {
-  Typography,
   Button,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
+  DialogTitle,
   Link,
-  withStyles,
+  Typography,
   makeStyles,
+  withStyles,
 } from '@material-ui/core';
+import { MathpixLoader, MathpixMarkdown } from 'mathpix-markdown-it';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
-import SimpleBar from '../../../../ui/SimpleBar';
-import Icon from '../../../../ui/icon/index';
-import AlignedText from '../../../../ui/AlignedText';
-import NoMatch from '../../../../noMatch';
-import FileUploadArea from '../../../../ui/FileUploadArea';
-import { deleteEssay } from '../../../../../actions/myClass/essay';
-import { uploadEssay, reUploadEssay } from '../../../../../actions/myClass/essaySubmission';
 import { downloadFile } from '../../../../../actions/common/common';
 import { browseTasksUnderChallenge } from '../../../../../actions/myClass/challenge';
+import { deleteEssay } from '../../../../../actions/myClass/essay';
+import { reUploadEssay, uploadEssay } from '../../../../../actions/myClass/essaySubmission';
+import NoMatch from '../../../../noMatch';
+import AlignedText from '../../../../ui/AlignedText';
+import FileUploadArea from '../../../../ui/FileUploadArea';
+import SimpleBar from '../../../../ui/SimpleBar';
+import Icon from '../../../../ui/icon/index';
 
 const StyledButton = withStyles({
   outlined: {
@@ -40,9 +40,7 @@ const useStyles = makeStyles(() => ({
 
 /* This is a level 4 component (page component) */
 export default function EssayInfo({ role = 'NORMAL' }) {
-  const {
-    courseId, classId, challengeId, essayId,
-  } = useParams();
+  const { courseId, classId, challengeId, essayId } = useParams();
   const history = useHistory();
   const classNames = useStyles();
   const dispatch = useDispatch();
@@ -129,8 +127,8 @@ export default function EssayInfo({ role = 'NORMAL' }) {
 
   const handleClickLink = () => {
     if (
-      essaySubmission.byId[uploadRecord].account_id === userId
-      && essaySubmission.byId[uploadRecord].essay_id === Number(essayId)
+      essaySubmission.byId[uploadRecord].account_id === userId &&
+      essaySubmission.byId[uploadRecord].essay_id === Number(essayId)
     ) {
       const fileToDownload = {
         uuid: essaySubmission.byId[uploadRecord].content_file_uuid,
@@ -161,8 +159,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
           <div className={classNames.uploadedFile}>
             <Link href onClick={handleClickLink}>
               {essaySubmission.byId[uploadRecord].filename}
-            </Link>
-            {' '}
+            </Link>{' '}
             {moment(essaySubmission.byId[uploadRecord].submit_time).format('YYYY-MM-DD, HH:mm:ss')}
           </div>
         )}
@@ -170,13 +167,13 @@ export default function EssayInfo({ role = 'NORMAL' }) {
       {role === 'MANAGER' && (
         <SimpleBar
           title="Delete Task"
-          childrenButtons={(
+          childrenButtons={
             <>
               <Button color="secondary" onClick={handleClickDelete}>
                 Delete
               </Button>
             </>
-          )}
+          }
         >
           <Typography variant="body1">Once you delete a task, there is no going back. Please be certain.</Typography>
         </SimpleBar>

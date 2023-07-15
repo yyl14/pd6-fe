@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, makeStyles,
-} from '@material-ui/core';
-import moment from 'moment';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, makeStyles } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 
-import AlignedText from '../../../ui/AlignedText';
-import SimpleBar from '../../../ui/SimpleBar';
-import PageTitle from '../../../ui/PageTitle';
 import { deleteChallenge } from '../../../../actions/myClass/challenge';
-import NoMatch from '../../../noMatch';
-import SettingEdit from './SettingEdit';
 import GeneralLoading from '../../../GeneralLoading';
+import NoMatch from '../../../noMatch';
+import AlignedText from '../../../ui/AlignedText';
+import PageTitle from '../../../ui/PageTitle';
+import SimpleBar from '../../../ui/SimpleBar';
+import SettingEdit from './SettingEdit';
 
 const useStyles = makeStyles(() => ({
   duration: {
@@ -97,13 +95,13 @@ export default function Setting() {
 
           <SimpleBar
             title="Delete Challenge"
-            childrenButtons={(
+            childrenButtons={
               <>
                 <Button color="secondary" onClick={() => setWarningPopUp(true)}>
                   Delete
                 </Button>
               </>
-            )}
+            }
           >
             <Typography variant="body1">
               Once you delete a challenge, there is no going back. Please be certain.

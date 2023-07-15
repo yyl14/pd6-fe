@@ -1,7 +1,6 @@
-import React from 'react';
 import { Grid, Typography } from '@material-ui/core';
-import RegisterForm from './RegisterForm';
 import Trademark from '../../components/auth/Trademark';
+import RegisterForm from './RegisterForm';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
