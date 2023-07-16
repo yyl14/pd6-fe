@@ -19,6 +19,16 @@ const authTokenInjector: Middleware = async (url, init, next) => {
   return res;
 };
 
+const interceptUndefinedParams: Middleware = async (url, init, next) => {
+  if (url.includes('undefined')) {
+    // eslint-disable-next-line no-console
+    console.log('Requesting url contains "undefined".');
+    throw new Error('Requesting url contains "undefined".');
+  }
+  const res = await next(url, init);
+  return res;
+};
+
 // const tokenExpirationHandler: Middleware = async (url, init, next) => {
 //   const res = await next(url, init);
 //   if (!res.ok && res.data.error.toString() === 'LoginExpired') {
@@ -32,7 +42,7 @@ const api = Fetcher.for<paths>();
 api.configure({
   baseUrl: process.env.REACT_APP_API_ROOT,
   // use: [logger, authTokenInjector, tokenExpirationHandler],
-  use: [logger, authTokenInjector],
+  use: [interceptUndefinedParams, logger, authTokenInjector],
 });
 
 export default api;

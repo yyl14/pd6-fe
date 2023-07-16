@@ -81,5 +81,5 @@
       }
     }
   },
-  "ignorePatterns": ["/types/schema.d.ts"]
+  "ignorePatterns": ["/types/schema.d.ts", "/scripts"]
 }
