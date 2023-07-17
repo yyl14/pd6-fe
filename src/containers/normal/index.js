@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 
 import { Route, Switch, useHistory } from 'react-router-dom';
 
-import AllClass from './allClass';
 import MyClass from './myClass';
 import ProblemSet from './problemSet';
 
@@ -31,8 +30,6 @@ export default function Normal() {
       {/* For redirection */}
       <Route exact path="/my-class" component={MyClass} />
       <Route path="/my-class/:courseId/:classId" component={MyClass} />
-      {/* Remove all-class link after transition period */}
-      <Route path="/all-class" component={AllClass} />
       <Route exact path="/problem-set" component={ProblemSet} />
       <Route path="/problem-set/:courseId/:classId" component={ProblemSet} />
       <Route exact path="/" component={GeneralLoading} />
