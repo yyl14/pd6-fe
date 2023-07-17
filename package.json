@@ -1,7 +1,16 @@
 {
-  "name": "ideas",
+  "name": "pd6-fe",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "react-scripts --openssl-legacy-provider start",
+    "dev": "react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "prebuild": "npm run generate-build-meta",
+    "generate-build-meta": "./node_modules/react-clear-cache/bin/cli.js"
+  },
   "dependencies": {
     "@babel/core": "^7.22.9",
     "@ckeditor/ckeditor5-build-classic": "^27.1.0",
@@ -42,14 +51,6 @@
     "serve": "^11.3.2",
     "swr": "^2.2.0",
     "web-vitals": "^1.0.1"
-  },
-  "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "prebuild": "npm run generate-build-meta",
-    "generate-build-meta": "./node_modules/react-clear-cache/bin/cli.js"
   },
   "browserslist": {
     "production": [
