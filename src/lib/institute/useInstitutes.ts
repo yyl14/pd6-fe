@@ -1,8 +1,7 @@
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 import toSWRMutationFetcher from '../../function/toSWRMutationFetcher';
-import addInstitute from './addInstitute';
-import browseAllInstitute from './browseAllInsitute';
+import { addInstitute, browseAllInstitute } from './fetchers';
 
 const useInstitutes = () => {
   const browseAllInstituteSWR = useSWR('/institute', () => browseAllInstitute({}));

@@ -1,8 +1,7 @@
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 import toSWRFetcher from '../../function/toSWRMutationFetcher';
-import editInstitute from './editInstitute';
-import readInstitute from './readInstitute';
+import { editInstitute, readInstitute } from './fetchers';
 
 const useInstitute = (instituteId: number) => {
   const readInstituteSWR = useSWR(`/institute/${instituteId}`, () => readInstitute({ institute_id: instituteId }));
