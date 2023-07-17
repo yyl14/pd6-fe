@@ -56,7 +56,9 @@
       }
     }
   ],
-  "rules": {},
+  "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": "off"
+  },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "sourceType": "module",
@@ -79,5 +81,5 @@
       }
     }
   },
-  "ignorePatterns": ["/types/schema.d.ts"]
+  "ignorePatterns": ["/types/schema.d.ts", "/scripts"]
 }

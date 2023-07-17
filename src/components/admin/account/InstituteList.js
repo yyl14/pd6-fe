@@ -12,11 +12,11 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addInstitute } from '../../../actions/admin/account';
-import { getInstitutes } from '../../../actions/common/common';
+
 import filterData from '../../../function/filter';
 import sortData from '../../../function/sort';
+import useReduxStateShape from '../../../hooks/useReduxStateShape';
+import useInstitutes from '../../../lib/institute/useInstitutes';
 import GeneralLoading from '../../GeneralLoading';
 import AlignedText from '../../ui/AlignedText';
 import CustomTable from '../../ui/CustomTable';
@@ -38,13 +38,9 @@ const useStyles = makeStyles(() => ({
 
 export default function InstituteList() {
   const classes = useStyles();
-  const dispatch = useDispatch();
 
-  const institutes = useSelector((state) => state.institutes.byId);
-  const institutesID = useSelector((state) => state.institutes.allIds);
-  const authToken = useSelector((state) => state.auth.token);
-  const error = useSelector((state) => state.error.admin.account);
-  const loading = useSelector((state) => state.loading.admin.account);
+  const { institutes, addInstitute, isLoading, error } = useInstitutes();
+  const [institutesById, institutesIds] = useReduxStateShape(institutes);
 
   const [transformedData, setTransformedData] = useState([]);
   const [tableData, setTableData] = useState([]);
@@ -66,12 +62,6 @@ export default function InstituteList() {
   const [showSnackbar, setShowSnackbar] = useState(false);
 
   useEffect(() => {
-    if (!loading.addInstitute) {
-      dispatch(getInstitutes());
-    }
-  }, [dispatch, loading.addInstitute]);
-
-  useEffect(() => {
     if (inputs.fullName !== '' && inputs.initialism !== '' && inputs.email !== '') {
       setDisabled(false);
     } else setDisabled(true);
@@ -86,22 +76,14 @@ export default function InstituteList() {
     setInputs((input) => ({ ...input, [event.target.name]: event.target.checked }));
   };
 
-  const add = () => {
-    dispatch(
-      addInstitute(
-        authToken,
-        inputs.initialism,
-        inputs.fullName,
-        inputs.email,
-        !inputs.status,
-        () => {
-          setShowSnackbar(false);
-        },
-        () => {
-          setShowSnackbar(true);
-        },
-      ),
-    );
+  const add = async () => {
+    const res = addInstitute({
+      abbreviated_name: inputs.initialism,
+      full_name: inputs.fullName,
+      email_domain: inputs.email,
+      is_disabled: !inputs.status,
+    });
+
     setPopUp(false);
     setInputs({
       fullName: '',
@@ -109,6 +91,11 @@ export default function InstituteList() {
       email: '',
       status: false,
     });
+
+    if (!(await res).ok) {
+      setShowSnackbar(true);
+    }
+    setShowSnackbar(false);
   };
 
   const cancel = () => {
@@ -130,9 +117,9 @@ export default function InstituteList() {
 
   useEffect(() => {
     const newData = [];
-    if (institutesID !== undefined) {
-      institutesID.forEach((key) => {
-        const item = institutes[key];
+    if (institutesIds !== undefined) {
+      institutesIds.forEach((key) => {
+        const item = institutesById[key];
         const temp = { ...item };
         if (item.is_disabled === true || item.is_disabled === 'Disabled') {
           temp.is_disabled = 'Disabled';
@@ -145,9 +132,9 @@ export default function InstituteList() {
     }
     setTransformedData(newData);
     setTableData(newData);
-  }, [institutes, institutesID]);
+  }, [institutesById, institutesIds]);
 
-  if (loading.fetchInstitutes) {
+  if (isLoading.browseAll) {
     return <GeneralLoading />;
   }
 

@@ -1,5 +1,3 @@
-/* eslint-disable import/no-unresolved */
-/* eslint-disable no-undef */
 import 'zx/globals';
 
 const apiSchemaEndpoint =

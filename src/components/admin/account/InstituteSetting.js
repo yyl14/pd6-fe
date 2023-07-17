@@ -10,10 +10,9 @@ import {
   Typography,
   makeStyles,
 } from '@material-ui/core';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { editInstitute, getInstitute } from '../../../actions/admin/account';
+import useInstitute from '../../../lib/institute/useInstitute';
 import GeneralLoading from '../../GeneralLoading';
 import NoMatch from '../../noMatch';
 import AlignedText from '../../ui/AlignedText';
@@ -30,12 +29,7 @@ export default function InstituteSetting() {
   const classes = useStyles();
 
   const { instituteId } = useParams();
-  const institutes = useSelector((state) => state.institutes.byId);
-  const authToken = useSelector((state) => state.auth.token);
-  // const pageError = useSelector((state) => state.error.admin.account);
-  const loading = useSelector((state) => state.loading.admin.account);
-
-  const dispatch = useDispatch();
+  const { institute, editInstitute, isLoading } = useInstitute(instituteId);
 
   const [settingStatus, setSettingStatus] = useState({
     changeName: false,
@@ -54,14 +48,8 @@ export default function InstituteSetting() {
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState('');
 
-  useEffect(() => {
-    if (!loading.editInstitute) {
-      dispatch(getInstitute(authToken, instituteId));
-    }
-  }, [authToken, dispatch, instituteId, loading.editInstitute]);
-
-  if (institutes[instituteId] === undefined) {
-    if (loading.fetchInstitute) {
+  if (institute === undefined) {
+    if (isLoading.read) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -102,85 +90,41 @@ export default function InstituteSetting() {
     }
     switch (prop) {
       case 'newName':
-        dispatch(
-          editInstitute(
-            authToken,
-            instituteId,
-            institutes[instituteId].abbreviated_name,
-            newSetting.newName,
-            institutes[instituteId].email_domain,
-            institutes[instituteId].is_disabled === true,
-          ),
-        );
+        editInstitute({ institute_id: instituteId, full_name: newSetting.newName });
         break;
+
       case 'newInitialism':
-        dispatch(
-          editInstitute(
-            authToken,
-            instituteId,
-            newSetting.newInitialism,
-            institutes[instituteId].full_name,
-            institutes[instituteId].email_domain,
-            institutes[instituteId].is_disabled === true,
-          ),
-        );
+        editInstitute({ institute_id: instituteId, abbreviated_name: newSetting.newInitialism });
         break;
+
       case 'newEmail':
-        dispatch(
-          editInstitute(
-            authToken,
-            instituteId,
-            institutes[instituteId].abbreviated_name,
-            institutes[instituteId].full_name,
-            newSetting.newEmail,
-            institutes[instituteId].is_disabled === true,
-          ),
-        );
+        editInstitute({ institute_id: instituteId, email_domain: newSetting.newEmail });
+
         break;
       case 'newStatus':
-        dispatch(
-          editInstitute(
-            authToken,
-            instituteId,
-            institutes[instituteId].abbreviated_name,
-            institutes[instituteId].full_name,
-            institutes[instituteId].email_domain,
-            newSetting.newStatus,
-          ),
-        );
+        editInstitute({ institute_id: instituteId, is_disabled: newSetting.newStatus });
         break;
       default:
-        dispatch(
-          editInstitute(
-            authToken,
-            instituteId,
-            institutes[instituteId].abbreviated_name,
-            institutes[instituteId].full_name,
-            institutes[instituteId].email_domain,
-            institutes[instituteId].is_disabled === true,
-          ),
-        );
+        break;
     }
     handleClosePopUp();
   };
 
   return (
     <>
-      <PageTitle text={`${institutes[instituteId].abbreviated_name} / Setting`} />
+      <PageTitle text={`${institute.abbreviated_name} / Setting`} />
       <SimpleBar title="Institute Information">
         <AlignedText text="Full Name" maxWidth="lg" childrenType="text">
-          <Typography variant="body1">{institutes[instituteId].full_name}</Typography>
+          <Typography variant="body1">{institute.full_name}</Typography>
         </AlignedText>
         <AlignedText text="Initialism" maxWidth="lg" childrenType="text">
-          <Typography variant="body1">{institutes[instituteId].abbreviated_name}</Typography>
+          <Typography variant="body1">{institute.abbreviated_name}</Typography>
         </AlignedText>
         <AlignedText text="Email" maxWidth="lg" childrenType="text">
-          <Typography variant="body1">{institutes[instituteId].email_domain}</Typography>
+          <Typography variant="body1">{institute.email_domain}</Typography>
         </AlignedText>
         <AlignedText text="Status" maxWidth="lg" childrenType="text">
-          <Typography variant="body1">
-            {institutes[instituteId].is_disabled === true ? 'Disabled' : 'Enabled'}
-          </Typography>
+          <Typography variant="body1">{institute.is_disabled === true ? 'Disabled' : 'Enabled'}</Typography>
         </AlignedText>
       </SimpleBar>
       <SimpleBar
@@ -249,7 +193,7 @@ export default function InstituteSetting() {
               color="secondary"
               onClick={() => {
                 setSettingStatus((input) => ({ ...input, changeStatus: true }));
-                setNewSetting((input) => ({ ...input, newStatus: institutes[instituteId].is_disabled }));
+                setNewSetting((input) => ({ ...input, newStatus: institute.is_disabled }));
               }}
             >
               Change Status
@@ -269,7 +213,7 @@ export default function InstituteSetting() {
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Full Name" childrenType="text" textColor="secondary">
-            <Typography variant="body1">{institutes[instituteId].full_name}</Typography>
+            <Typography variant="body1">{institute.full_name}</Typography>
           </AlignedText>
           <AlignedText text="New Name" childrenType="field">
             <TextField id="newName" name="newName" value={newSetting.newName} onChange={handleChange('newName')} />
@@ -305,7 +249,7 @@ export default function InstituteSetting() {
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Current Initialism" childrenType="text" textColor="secondary">
-            <Typography variant="body1">{institutes[instituteId].abbreviated_name}</Typography>
+            <Typography variant="body1">{institute.abbreviated_name}</Typography>
           </AlignedText>
           <AlignedText text="New Initialism" childrenType="field">
             <TextField
@@ -340,7 +284,7 @@ export default function InstituteSetting() {
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Current Email" childrenType="text" textColor="secondary">
-            <Typography variant="body1">{institutes[instituteId].email_domain}</Typography>
+            <Typography variant="body1">{institute.email_domain}</Typography>
           </AlignedText>
           <AlignedText text="New Email" childrenType="field">
             <TextField
@@ -393,7 +337,7 @@ export default function InstituteSetting() {
             Cancel
           </Button>
           <Button
-            disabled={institutes[instituteId].is_disabled === newSetting.newStatus}
+            disabled={institute.is_disabled === newSetting.newStatus}
             onClick={() => handleEditInstitute('newStatus')}
             color="secondary"
           >
