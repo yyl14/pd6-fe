@@ -1,8 +1,9 @@
 import { makeStyles } from '@material-ui/core';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { downloadFile } from '../../actions/common/common';
+import useQuery from '../../hooks/useQuery';
 
 const useStyles = makeStyles((theme) => ({
   picContainer: {
@@ -37,10 +38,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
 
 export default function FileDownloading() {
   const dispatch = useDispatch();

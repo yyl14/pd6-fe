@@ -45,15 +45,21 @@ function Index() {
         if (auth.tokenExpired) {
           localStorage.removeItem('token');
           localStorage.removeItem('id');
-          history.push('/login');
+          if (location.pathname !== '/') {
+            history.push(`/login?redirect_url=${location.pathname}`);
+          } else {
+            history.push('/login');
+          }
         } else {
           dispatch(getUserInfo(localStorage.getItem('id'), localStorage.getItem('token')));
         }
+      } else if (location.pathname !== '/') {
+        history.push(`/login?redirect_url=${location.pathname}`);
       } else {
         history.push('/login');
       }
     }
-  }, [auth.isAuthenticated, auth.tokenExpired, dispatch, history]);
+  }, [auth.isAuthenticated, auth.tokenExpired, dispatch, history, location.pathname]);
 
   useEffect(() => {
     if (auth.isAuthenticated && location.pathname === '/') {
