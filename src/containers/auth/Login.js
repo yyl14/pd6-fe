@@ -1,9 +1,9 @@
 import { Grid, Typography } from '@material-ui/core';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-
 import Trademark from '../../components/auth/Trademark';
+import useQuery from '../../hooks/useQuery';
 import LoginForm from './LoginForm';
 
 import '../../styles/auth.css';
@@ -11,6 +11,8 @@ import '../../styles/index.css';
 
 export default function Login() {
   const history = useHistory();
+  const query = useQuery();
+  const redirect_url = useMemo(() => query.get('redirect_url'), [query]);
   const auth = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
 
@@ -25,9 +27,13 @@ export default function Login() {
     if (auth.isAuthenticated) {
       localStorage.setItem('id', user.id);
       localStorage.setItem('token', auth.token);
-      history.push('/');
+      if (redirect_url) {
+        history.push(redirect_url);
+      } else {
+        history.push('/');
+      }
     }
-  }, [auth.isAuthenticated, auth.token, history, user.id]);
+  }, [auth.isAuthenticated, auth.token, history, redirect_url, user.id]);
 
   return (
     <div className="page auth-page">

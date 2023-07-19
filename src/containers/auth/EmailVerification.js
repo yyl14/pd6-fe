@@ -1,8 +1,9 @@
 import { makeStyles } from '@material-ui/core';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { emailVerification } from '../../actions/user/auth';
+import useQuery from '../../hooks/useQuery';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -60,10 +61,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
 
 export default function EmailVerification() {
   const dispatch = useDispatch();
