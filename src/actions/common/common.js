@@ -271,32 +271,6 @@ const downloadFile =
     }
   };
 
-// get file URL only
-const fetchDownloadFileUrl = (token, file) => async (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-    params: {
-      filename: file.filename,
-      as_attachment: file.as_attachment,
-    },
-  };
-  try {
-    dispatch({ type: commonConstants.FETCH_DOWNLOAD_FILE_URL_START });
-    const res = await agent.get(`/s3-file/${file.uuid}/url`, config);
-    dispatch({
-      type: commonConstants.FETCH_DOWNLOAD_FILE_URL_SUCCESS,
-      payload: { uuid: file.uuid, url: res.data.data.url },
-    });
-  } catch (error) {
-    dispatch({
-      type: commonConstants.FETCH_DOWNLOAD_FILE_URL_FAIL,
-      error,
-    });
-  }
-};
-
 // fetch all challenges and coding problems (no essay/peer review) under class
 const fetchAllChallengesProblems = (token, classId) => async (dispatch) => {
   dispatch({ type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_START });
@@ -436,10 +410,10 @@ export {
   fetchClassMemberWithAccountReferral,
   fetchClassMembers,
   fetchCourse,
-  fetchDownloadFileUrl,
   fetchProblems,
   getAccountBatch,
   getAccountBatchByReferral,
   getInstitutes,
-  replaceClassMembers,
+  replaceClassMembers
 };
+

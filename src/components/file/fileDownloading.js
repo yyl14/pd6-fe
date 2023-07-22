@@ -4,16 +4,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { downloadFile } from '../../actions/common/common';
 import useQuery from '../../hooks/useQuery';
+import Icon from '../ui/icon';
 
 const useStyles = makeStyles((theme) => ({
+  wrapper: {
+    width: '100%',
+    padding: '50px 170px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
   picContainer: {
-    width: '350px',
-    height: '200px',
-    borderRadius: '50%',
+    height: '350px',
     position: 'relative',
     top: '50px',
-    left: 'calc(50% - 175px)',
-    backgroundColor: theme.palette.grey.A500,
   },
   messageContainer: {
     width: '100%',
@@ -46,19 +51,22 @@ export default function FileDownloading() {
   const history = useHistory();
   const authToken = useSelector((state) => state.auth.token);
   const [message, setMessage] = useState('File Downloading...');
+  const [tip, setTip] = useState('');
   const filename = useMemo(() => query.get('filename'), [query]);
   const uuid = useMemo(() => query.get('uuid'), [query]);
   const [downloading, setDownloading] = useState(false);
 
   const onSuccess = () => {
     setMessage('File Download Succeed.');
+    setTip('Closing this page in a few seconds.')
     setTimeout(() => {
-      history.push('/');
+      window.close();
     }, 3000);
   };
 
   const onError = () => {
     setMessage('Fail to Download File.');
+    setTip('Turning to main page in a few seconds.')
     setTimeout(() => {
       history.push('/');
     }, 3000);
@@ -74,14 +82,14 @@ export default function FileDownloading() {
   }
 
   return (
-    <>
-      <div className={classes.picContainer} />
+    <div className={classes.wrapper}>
+      <Icon.Logo fill="#000" stroke="#000" style={{ width: '18vw' }} className={classes.picContainer} />
       <div className={classes.messageContainer}>
         <span>{message}</span>
       </div>
       <div className={classes.tipsContainer}>
-        <span>Turning to main page in a few seconds.</span>
+        <span>{tip}</span>
       </div>
-    </>
+    </div>
   );
 }
