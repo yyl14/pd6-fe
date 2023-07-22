@@ -9,7 +9,6 @@ import classMembers from './classMembers';
 import classes from './classes';
 import component from './component';
 import courses from './courses';
-import downloadLinks from './downloadLinks';
 import error from './error/index';
 import essaySubmission from './essaySubmission';
 import essays from './essays';
@@ -62,7 +61,6 @@ export default combineReducers({
   peerReviewSummaryReview,
   peerReviewSummaryReceive,
   judgeCases,
-  downloadLinks,
   essaySubmission,
   component,
   pendingStudentCards,

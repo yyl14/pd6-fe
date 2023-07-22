@@ -11,7 +11,6 @@ const initialState = {
   fetchAccount: false,
   fetchChallenge: false,
   fetchAllChallengesProblems: false,
-  fetchDownloadFileUrl: false,
   fetchProblems: false,
   getAccountBatch: false,
   getAccountBatchByReferral: false,
@@ -200,25 +199,6 @@ export default function common(state = initialState, action) {
       return {
         ...state,
         fetchAllChallengesProblems: false,
-      };
-    }
-
-    case commonConstants.FETCH_DOWNLOAD_FILE_URL_START: {
-      return {
-        ...state,
-        fetchDownloadFileUrl: true,
-      };
-    }
-    case commonConstants.FETCH_DOWNLOAD_FILE_URL_SUCCESS: {
-      return {
-        ...state,
-        fetchDownloadFileUrl: false,
-      };
-    }
-    case commonConstants.FETCH_DOWNLOAD_FILE_URL_FAIL: {
-      return {
-        ...state,
-        fetchDownloadFileUrl: false,
       };
     }
 

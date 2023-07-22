@@ -11,7 +11,6 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchDownloadFileUrl } from '../../../../actions/common/common';
 import {
   downloadAllPlagiarismReports,
   downloadAllSubmissions,
@@ -79,7 +78,6 @@ export default function Statistics() {
   const challenges = useSelector((state) => state.challenges.byId);
   const problems = useSelector((state) => state.problem.byId);
   const essays = useSelector((state) => state.essays.byId);
-  const downloadLinks = useSelector((state) => state.downloadLinks.byId);
   const accounts = useSelector((state) => state.accounts);
   const userClasses = useSelector((state) => state.user.classes);
 
@@ -164,9 +162,8 @@ export default function Statistics() {
         if (member.essay_submissions) {
           member.essay_submissions.map((record) => {
             memberChallengeDetail[`essay-${record.essay_id}`] = 'pdf';
-            if (downloadLinks[record.content_file_uuid]) {
-              memberChallengeDetail[`essay-${record.essay_id}-link`] = downloadLinks[record.content_file_uuid].url;
-            }
+            const downloadLink = `${window.location.origin}/file?uuid=${record.content_file_uuid}&filename=${record.filename}`;
+            memberChallengeDetail[`essay-${record.essay_id}-link`] = downloadLink;
             return record;
           });
         }
@@ -174,7 +171,7 @@ export default function Statistics() {
       });
       setScoreboardData(memberSubmissionList);
     }
-  }, [accounts.byId, challengeId, challenges, classId, courseId, downloadLinks, essays, problems]);
+  }, [accounts.byId, challengeId, challenges, classId, courseId, essays, problems]);
 
   useEffect(() => {
     if (
@@ -183,20 +180,6 @@ export default function Statistics() {
       challenges[challengeId].statistics.memberSubmission
     ) {
       setChallengeTitle(challenges[challengeId].title);
-      challenges[challengeId].statistics.memberSubmission.map((member) => {
-        if (member.essay_submissions) {
-          member.essay_submissions.map((record) =>
-            dispatch(
-              fetchDownloadFileUrl(authToken, {
-                filename: record.filename,
-                uuid: record.content_file_uuid,
-                as_attachment: false,
-              }),
-            ),
-          );
-        }
-        return member;
-      });
     }
   }, [authToken, challengeId, challenges, dispatch]);
 

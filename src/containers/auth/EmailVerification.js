@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { emailVerification } from '../../actions/user/auth';
+import Icon from '../../components/ui/icon';
 import useQuery from '../../hooks/useQuery';
 
 const useStyles = makeStyles((theme) => ({
@@ -17,26 +18,16 @@ const useStyles = makeStyles((theme) => ({
   },
   subwrapper: {
     width: '100%',
-    height: 'calc(100% - 55px)',
     padding: '50px 170px',
-    // display: 'flex',
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // flexWrap: 'wrap',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
   },
   picContainer: {
-    width: '350px',
     height: '350px',
-    borderRadius: '50%',
     position: 'relative',
     top: '50px',
-    left: 'calc(50% - 175px)',
-    backgroundColor: theme.palette.grey.A500,
-  },
-  pic: {
-    width: '350px',
-    height: '350px',
-    borderRadius: '50%',
   },
   messageContainer: {
     width: '100%',
@@ -92,10 +83,7 @@ export default function EmailVerification() {
     <div className={classes.wrapper}>
       <div className={classes.topbar} />
       <div className={classes.subwrapper}>
-        {/* <div className={classes.picContainer}>
-          <img src={} className={classes.pic} />
-        </div> */}
-        <div className={classes.picContainer} />
+        <Icon.Logo fill="#000" stroke="#000" style={{ width: '18vw' }} className={classes.picContainer} />
         <div className={classes.messageContainer}>
           <span>{message}</span>
         </div>
