@@ -22,12 +22,12 @@ import {
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { userRegister } from '../../actions/user/auth';
 import GeneralLoading from '../../components/GeneralLoading';
 import useReduxStateShape from '../../hooks/useReduxStateShape';
+import useRegister from '../../lib/account/useRegister';
 import useInstitutes from '../../lib/institute/useInstitutes';
 
 const useStyles = makeStyles((theme) => ({
@@ -64,10 +64,13 @@ function checkPassword(password1, password2) {
 export default function RegisterForm() {
   const classNames = useStyles();
   const history = useHistory();
-  const dispatch = useDispatch();
   const loadingInstitute = useSelector((state) => state.loading.common.fetchInstitutes);
-  const registerLoading = useSelector((state) => state.loading.user.auth.signup);
-  const registerError = useSelector((state) => state.error.user.auth.signup);
+
+  const {
+    register,
+    isLoading: { register: registerLoading },
+    error: { register: registerError },
+  } = useRegister();
 
   const { institutes } = useInstitutes();
   const [institutesById, institutesId] = useReduxStateShape(institutes);
@@ -153,17 +156,15 @@ export default function RegisterForm() {
     }
 
     if (!hasError) {
-      dispatch(
-        userRegister(
-          inputs.username.trim(),
-          inputs.password,
-          inputs.nickname.trim(),
-          inputs.realName.trim(),
-          inputs.email.trim(),
-          transform(inputs.school),
-          inputs.studentId.trim(),
-        ),
-      );
+      register({
+        username: inputs.username.trim(),
+        password: inputs.password,
+        nickname: inputs.nickname.trim(),
+        real_name: inputs.realName.trim(),
+        institute_id: transform(inputs.school),
+        student_id: inputs.studentId.trim(),
+        institute_email_prefix: inputs.email.trim(),
+      });
       setHasRequest(true);
     }
   };
