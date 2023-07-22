@@ -1,8 +1,7 @@
 import { Button, Card, CardContent, Link, Snackbar, TextField, Typography, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { userForgetUsername } from '../../actions/user/auth';
+import useForgetUsername from '../../lib/account/useForgetUsername';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
@@ -26,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ForgetUsernameForm() {
   const classNames = useStyles();
-  const dispatch = useDispatch();
   const history = useHistory();
   // const error = useSelector((state) => state.error.user.auth);
   // const loading = useSelector((state) => state.loading.user.auth.forgetUsername);
@@ -36,7 +34,9 @@ export default function ForgetUsernameForm() {
   const [disabled, setDisabled] = useState(true);
   const [showSnackbar, setShowSnackbar] = useState(false);
 
-  const handleSubmit = (event) => {
+  const { forgetUsername } = useForgetUsername();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (showError) {
       return;
@@ -56,7 +56,12 @@ export default function ForgetUsernameForm() {
       setShowError(true);
     };
 
-    dispatch(userForgetUsername(email.trim(), onSuccess, onError));
+    const {
+      data: { success },
+    } = await forgetUsername({ email: email.trim() });
+    if (success) onSuccess();
+    else onError();
+
     setShowSnackbar(true);
   };
 
