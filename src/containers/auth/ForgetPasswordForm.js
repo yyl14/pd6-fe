@@ -12,9 +12,8 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { userForgetPassword } from '../../actions/user/auth';
+import useForgetPassword from '../../lib/account/useForgetPassword';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
@@ -38,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ForgetPasswordForm() {
   const classNames = useStyles();
-  const dispatch = useDispatch();
   const history = useHistory();
   // const error = useSelector((state) => state.error.user.auth);
   // const loading = useSelector((state) => state.loading.user.auth.forgetPassword);
@@ -49,7 +47,9 @@ export default function ForgetPasswordForm() {
   const [disabled, setDisabled] = useState(true);
   const [popUp, setPopUp] = useState(false);
 
-  const handleSubmit = (event) => {
+  const { forgetPassword } = useForgetPassword();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (showError) {
       return;
@@ -70,7 +70,11 @@ export default function ForgetPasswordForm() {
       setShowError(true);
     };
 
-    dispatch(userForgetPassword(username, email.trim(), onSuccess, onError));
+    const {
+      data: { success },
+    } = await forgetPassword({ username, email: email.trim() });
+    if (success) onSuccess();
+    else onError();
   };
 
   const handleClosePopUp = () => {
