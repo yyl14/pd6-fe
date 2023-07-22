@@ -1,10 +1,9 @@
 import { makeStyles } from '@material-ui/core';
 import { useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { emailVerification } from '../../actions/user/auth';
 import Icon from '../../components/ui/icon';
 import useQuery from '../../hooks/useQuery';
+import useVerifyEmail from '../../lib/email/useVerifyEmail';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -54,30 +53,36 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function EmailVerification() {
-  const dispatch = useDispatch();
   const classes = useStyles();
   const query = useQuery();
   const history = useHistory();
   const [message, setMessage] = useState('Email Verifying...');
   const queryString = useMemo(() => query.get('code'), [query]);
+  const {
+    emailVerification,
+    // isLoading: { emailVerification: emailVerificationLoading },
+    // error: { emailVerification: emailVerificationError },
+  } = useVerifyEmail(queryString);
 
   useEffect(() => {
-    const onSuccess = () => {
-      setMessage('Email Verify Succeed.');
-      setTimeout(() => {
-        history.push('/login');
-      }, 3000);
-    };
-
-    const onError = () => {
-      setMessage('Fail to verify Email.');
-      setTimeout(() => {
-        history.push('/login');
-      }, 3000);
-    };
-
-    dispatch(emailVerification(queryString, onSuccess, onError));
-  }, [dispatch, history, queryString]);
+    (async () => {
+      const {
+        data: { success },
+      } = await emailVerification();
+      if (success) {
+        setMessage('Email Verify Succeed.');
+        setTimeout(() => {
+          history.push('/login');
+        }, 3000);
+      } else {
+        setMessage('Fail to verify Email.');
+        setTimeout(() => {
+          history.push('/login');
+        }, 3000);
+      }
+    })();
+    // TODO: no setMessage after email verification success
+  }, [history, queryString, emailVerification]);
 
   return (
     <div className={classes.wrapper}>
