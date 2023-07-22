@@ -27,7 +27,7 @@ export default function MemberList() {
   const loading = useSelector((state) => state.loading.common.common);
   const error = useSelector((state) => state.error.api.view.browseClassMember);
 
-  const { institutes } = useInstitutes();
+  const { institutes, isLoading } = useInstitutes();
 
   const [edit, setEdit] = useState(false);
   const [isManager, setIsManager] = useState(false);
@@ -40,7 +40,7 @@ export default function MemberList() {
     if (
       loading.fetchCourse ||
       loading.fetchClass ||
-      // || loading.fetchClassMembers
+      isLoading.browseAll ||
       loading.fetchClassMemberWithAccountReferral
     ) {
       // still loading
@@ -99,7 +99,7 @@ export default function MemberList() {
                 label: 'Institute',
                 type: 'ENUM',
                 operation: 'IN',
-                options: institutes.map((item) => ({
+                options: institutes && institutes.map((item) => ({
                   value: item.abbreviated_name,
                   label: item.abbreviated_name,
                 })),
