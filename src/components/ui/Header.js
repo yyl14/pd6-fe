@@ -7,6 +7,7 @@ import ResizeObserver from 'react-resize-observer';
 import { useHistory, useLocation } from 'react-router-dom';
 import { userLogout } from '../../actions/user/auth';
 import { userBrowseAnnouncement } from '../../actions/user/user';
+import useLogOut from '../../lib/account/useLogOut';
 import Icon from './icon/index';
 
 const useStyles = makeStyles((theme) => ({
@@ -462,10 +463,13 @@ export default function Header() {
   //   // dispatch(userBrowseAnnouncement(authToken)); // this line needs to be de-marked when BE complete read announcement
   // };
 
+  const logOut = useLogOut();
   const goto = (link) => {
     if (link === '/logout') {
-      localStorage.removeItem('token');
-      localStorage.removeItem('id');
+      // console.log('logout');
+      logOut(history);
+      // localStorage.removeItem('token');
+      // localStorage.removeItem('id');
       dispatch(userLogout(history));
     } else {
       history.push(link);
