@@ -66,9 +66,7 @@ export default function AccountSetting() {
   const loading = useSelector((state) => state.loading.user);
   const error = useSelector((state) => state.error.user);
 
-  const {
-    isLoading: { deletePendingEmailVerification: deletePendingEmailVerificationLoading },
-  } = useEmailVerification();
+  const { isLoading: emailVerificationIsLoading } = useEmailVerification();
 
   useEffect(() => {
     if (account.role === 'GUEST') {
@@ -86,10 +84,16 @@ export default function AccountSetting() {
   }, [authToken, accountId, dispatch, loading.user.makeStudentCardDefault]);
 
   useEffect(() => {
-    if (!deletePendingEmailVerificationLoading && !loading.user.addStudentCard) {
+    if (!emailVerificationIsLoading.deletePendingEmailVerification && !loading.user.addStudentCard) {
       dispatch(browsePendingStudentCards(authToken, accountId));
     }
-  }, [accountId, authToken, dispatch, loading.user.addStudentCard, deletePendingEmailVerificationLoading]);
+  }, [
+    accountId,
+    authToken,
+    dispatch,
+    loading.user.addStudentCard,
+    emailVerificationIsLoading.deletePendingEmailVerification,
+  ]);
 
   useEffect(() => {
     dispatch(getInstitutes());

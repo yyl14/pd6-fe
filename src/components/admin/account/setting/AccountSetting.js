@@ -22,9 +22,7 @@ export default function AccountSetting() {
   const [editBasicInfo, setEditBasicInfo] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [message, setMessage] = useState('');
-  const {
-    isLoading: { deletePendingEmailVerification: deletePendingEmailVerificationLoading },
-  } = useEmailVerification();
+  const { isLoading: emailVerificationIsLoading } = useEmailVerification();
 
   const dispatch = useDispatch();
   const { accountId } = useParams();
@@ -48,10 +46,16 @@ export default function AccountSetting() {
   }, [accountId, authToken, dispatch, loading.makeStudentCardDefault]);
 
   useEffect(() => {
-    if (!deletePendingEmailVerificationLoading && !loading.addStudentCard) {
+    if (!emailVerificationIsLoading.deletePendingEmailVerification && !loading.addStudentCard) {
       dispatch(browsePendingStudentCards(authToken, accountId));
     }
-  }, [accountId, authToken, dispatch, loading.addStudentCard, deletePendingEmailVerificationLoading]);
+  }, [
+    accountId,
+    authToken,
+    dispatch,
+    loading.addStudentCard,
+    emailVerificationIsLoading.deletePendingEmailVerification,
+  ]);
 
   useEffect(() => {
     if (accounts.byId[accountId]) {

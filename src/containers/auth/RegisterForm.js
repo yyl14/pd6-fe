@@ -66,11 +66,7 @@ export default function RegisterForm() {
   const history = useHistory();
   const loadingInstitute = useSelector((state) => state.loading.common.fetchInstitutes);
 
-  const {
-    register,
-    isLoading: { register: registerLoading },
-    error: { register: registerError },
-  } = useRegister();
+  const { register, isLoading: registerIsLoading, error: registerIsError } = useRegister();
 
   const { institutes } = useInstitutes();
   const [institutesById, institutesId] = useReduxStateShape(institutes);
@@ -249,11 +245,11 @@ export default function RegisterForm() {
   };
 
   useEffect(() => {
-    if (!registerLoading && hasRequest) {
+    if (!registerIsLoading.register && hasRequest) {
       // IllegalCharacter, InvalidInstitute, SystemException
       // StudentCardExists, UsernameExists, StudentIdNotMatchEmail
-      if (registerError !== null) {
-        switch (registerError) {
+      if (registerIsError.register !== null) {
+        switch (registerIsError.register) {
           case 'UsernameExists': {
             setErrors((input) => ({ ...input, username: true }));
             setErrorTexts((input) => ({ ...input, username: 'Username Exists' }));
@@ -276,7 +272,7 @@ export default function RegisterForm() {
             break;
           }
           default: {
-            setErrorMsg(registerError);
+            setErrorMsg(registerIsError.register);
             setErrorPopup(true);
           }
         }
@@ -284,7 +280,7 @@ export default function RegisterForm() {
         setPopup(true);
       }
     }
-  }, [hasRequest, registerError, registerLoading]);
+  }, [hasRequest, registerIsError.register, registerIsLoading.register]);
 
   if (loadingInstitute) {
     return <GeneralLoading />;

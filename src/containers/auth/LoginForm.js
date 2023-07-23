@@ -43,22 +43,18 @@ export default function LoginForm() {
     username: '',
     password: '',
   });
-  const {
-    logIn,
-    isLoading: { logIn: loginLoading },
-    error: { logIn: loginError },
-  } = useLogin();
+  const { logIn, isLoading: logInIsLoading, error: logInIsError } = useLogin();
 
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    if (!loginLoading) {
-      if (loginError != null) {
+    if (!logInIsLoading.logIn) {
+      if (logInIsError.logIn != null) {
         setErrors({ username: true, password: true });
         setErrorTexts((ori) => ({ ...ori, password: 'Incorrect username or password' }));
       }
     }
-  }, [loginError, loginLoading]);
+  }, [logInIsError.logIn, logInIsLoading.logIn]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
