@@ -14,6 +14,7 @@ import { getInstitutes } from '../../actions/common/common';
 import { browsePendingStudentCards, fetchStudentCards } from '../../actions/user/user';
 import ThemeToggleContext from '../../contexts/themeToggleContext';
 import useEventListener from '../../hooks/useEventListener';
+import useEmailVerification from '../../lib/email/useEmailVerification';
 import GeneralLoading from '../GeneralLoading';
 import NoMatch from '../noMatch';
 import PageTitle from '../ui/PageTitle';
@@ -65,6 +66,10 @@ export default function AccountSetting() {
   const loading = useSelector((state) => state.loading.user);
   const error = useSelector((state) => state.error.user);
 
+  const {
+    isLoading: { deletePendingEmailVerification: deletePendingEmailVerificationLoading },
+  } = useEmailVerification();
+
   useEffect(() => {
     if (account.role === 'GUEST') {
       setMessage('Please verify your institute email to activate your PDOGS account.');
@@ -81,10 +86,10 @@ export default function AccountSetting() {
   }, [authToken, accountId, dispatch, loading.user.makeStudentCardDefault]);
 
   useEffect(() => {
-    if (!loading.user.deletePendingStudentCard && !loading.user.addStudentCard) {
+    if (!deletePendingEmailVerificationLoading && !loading.user.addStudentCard) {
       dispatch(browsePendingStudentCards(authToken, accountId));
     }
-  }, [accountId, authToken, dispatch, loading.user.addStudentCard, loading.user.deletePendingStudentCard]);
+  }, [accountId, authToken, dispatch, loading.user.addStudentCard, deletePendingEmailVerificationLoading]);
 
   useEffect(() => {
     dispatch(getInstitutes());
