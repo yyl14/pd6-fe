@@ -16,8 +16,8 @@ import AlignedText from '../../../ui/AlignedText';
 import PageTitle from '../../../ui/PageTitle';
 import Icon from '../../../ui/icon/index';
 
-import { readEssay } from '../../../../actions/myClass/essay';
 import { downloadAllEssaySubmission } from '../../../../actions/myClass/essaySubmission';
+import { readEssay } from '../../../../lib/essay/useEssay';
 import EssayEdit from './ProblemSettings/EssayEdit';
 import EssayInfo from './ProblemSettings/EssayInfo';
 
