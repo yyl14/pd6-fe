@@ -11,7 +11,7 @@ const useForgetPassword = () => {
       forgetPassword: forgetPasswordSWR.isMutating,
     },
     error: {
-      forgetPassword: forgetPasswordSWR.error ?? forgetPasswordSWR.data?.data.error,
+      forgetPassword: forgetPasswordSWR.error,
     },
   };
 };

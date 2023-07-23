@@ -11,7 +11,7 @@ const useForgetUsername = () => {
       forgetUsername: forgetUsernameSWR.isMutating,
     },
     error: {
-      forgetUsername: forgetUsernameSWR.error ?? forgetUsernameSWR.data?.data.error,
+      forgetUsername: forgetUsernameSWR.error,
     },
   };
 };
