@@ -10,9 +10,11 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import useLogin from '../../lib/account/useLogin';
+
+import useQuery from '../../hooks/useQuery';
 
 const useStyles = makeStyles((theme) => ({
   authForm: {
@@ -32,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function LoginForm() {
+  const history = useHistory();
+  const query = useQuery();
+  const redirect_url = useMemo(() => query.get('redirect_url'), [query]);
   const classNames = useStyles();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -76,6 +81,11 @@ export default function LoginForm() {
         localStorage.setItem('id', data.account_id);
         localStorage.setItem('token', data.token);
         // TODO: not direct to mainpage after login success
+        if (redirect_url) {
+          history.push(redirect_url);
+        } else {
+          history.push('/');
+        }
       }
     }
   };
