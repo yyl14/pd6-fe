@@ -14,7 +14,7 @@ const useVerifyEmail = (code: string) => {
       emailVerification: emailVerificationSWR.isMutating,
     },
     error: {
-      emailVerification: emailVerificationSWR.error ?? emailVerificationSWR.data?.data.error,
+      emailVerification: emailVerificationSWR.error,
     },
   };
 };

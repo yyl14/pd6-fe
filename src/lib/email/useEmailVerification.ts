@@ -20,9 +20,8 @@ const useEmailVerification = (emailVerificationId: number) => {
       deletePendingEmailVerification: deletePendingEmailVerificationSWR.isMutating,
     },
     error: {
-      resendEmailVerification: resendEmailVerificationSWR.error ?? resendEmailVerificationSWR.data?.data.error,
-      deletePendingEmailVerification:
-        deletePendingEmailVerificationSWR.error ?? deletePendingEmailVerificationSWR.data?.data.error,
+      resendEmailVerification: resendEmailVerificationSWR.error,
+      deletePendingEmailVerification: deletePendingEmailVerificationSWR.error,
     },
   };
 };
