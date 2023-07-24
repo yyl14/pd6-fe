@@ -8,9 +8,11 @@ import PageTitle from '../../ui/PageTitle';
 export default function SubmissionLanguageHome() {
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
+  // const {data, error, isLoading} = useSWR(state, fetcher)
+  // const {data: submitLang, error} = useSWR('submitLangs', fetchSubmitLanguage);
   const submitLang = useSelector((state) => state.submitLangs.byId);
   const submitLangId = useSelector((state) => state.submitLangs.allIds);
-
+  
   const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
@@ -20,7 +22,6 @@ export default function SubmissionLanguageHome() {
   useEffect(() => {
     if (submitLangId !== null) {
       const newData = [];
-
       submitLangId.forEach((key) => {
         const item = submitLang[key];
         const temp = { ...item };
