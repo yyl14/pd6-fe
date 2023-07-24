@@ -49,7 +49,7 @@ export default function LoginForm() {
 
   useEffect(() => {
     if (!logInIsLoading.logIn) {
-      if (logInIsError.logIn != null) {
+      if (!logInIsError.logIn) {
         setErrors({ username: true, password: true });
         setErrorTexts((ori) => ({ ...ori, password: 'Incorrect username or password' }));
       }
@@ -72,7 +72,6 @@ export default function LoginForm() {
       const {
         data: { success, data },
       } = await logIn({ username, password });
-      console.log(success, data);
       if (success) {
         localStorage.setItem('id', data.account_id);
         localStorage.setItem('token', data.token);

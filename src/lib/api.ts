@@ -29,6 +29,13 @@ const interceptUndefinedParams: Middleware = async (url, init, next) => {
   return res;
 };
 
+const fetchError: Middleware = async (url, init, next) => {
+  const res = await next(url, init);
+  if (!res.data.success) throw new Error(res.data.error);
+  // eslint-disable-next-line no-console
+  return res;
+};
+
 // const tokenExpirationHandler: Middleware = async (url, init, next) => {
 //   const res = await next(url, init);
 //   if (!res.ok && res.data.error.toString() === 'LoginExpired') {
@@ -42,7 +49,7 @@ const api = Fetcher.for<paths>();
 api.configure({
   baseUrl: process.env.REACT_APP_API_ROOT,
   // use: [logger, authTokenInjector, tokenExpirationHandler],
-  use: [interceptUndefinedParams, logger, authTokenInjector],
+  use: [interceptUndefinedParams, logger, authTokenInjector, fetchError],
 });
 
 export default api;

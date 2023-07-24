@@ -248,8 +248,8 @@ export default function RegisterForm() {
     if (!registerIsLoading.register && hasRequest) {
       // IllegalCharacter, InvalidInstitute, SystemException
       // StudentCardExists, UsernameExists, StudentIdNotMatchEmail
-      if (registerIsError.register !== null) {
-        switch (registerIsError.register) {
+      if (!registerIsError.register) {
+        switch (registerIsError.register.message) {
           case 'UsernameExists': {
             setErrors((input) => ({ ...input, username: true }));
             setErrorTexts((input) => ({ ...input, username: 'Username Exists' }));
@@ -272,7 +272,7 @@ export default function RegisterForm() {
             break;
           }
           default: {
-            setErrorMsg(registerIsError.register);
+            setErrorMsg(registerIsError.register.message);
             setErrorPopup(true);
           }
         }

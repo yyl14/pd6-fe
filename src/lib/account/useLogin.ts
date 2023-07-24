@@ -11,7 +11,7 @@ const useLogin = () => {
       logIn: logInSWR.isMutating,
     },
     error: {
-      logIn: logInSWR.error,
+      logIn: logInSWR.error as Error,
     },
   };
 };
