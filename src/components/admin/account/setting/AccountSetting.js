@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { browsePendingStudentCards, fetchStudentCards } from '../../../../actions/admin/account';
 import { fetchAccount, getInstitutes } from '../../../../actions/common/common';
+import useEmailVerification from '../../../../lib/email/useEmailVerification';
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
 import PageTitle from '../../../ui/PageTitle';
@@ -21,6 +22,7 @@ export default function AccountSetting() {
   const [editBasicInfo, setEditBasicInfo] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [message, setMessage] = useState('');
+  const { isLoading: emailVerificationIsLoading } = useEmailVerification();
 
   const dispatch = useDispatch();
   const { accountId } = useParams();
@@ -44,10 +46,16 @@ export default function AccountSetting() {
   }, [accountId, authToken, dispatch, loading.makeStudentCardDefault]);
 
   useEffect(() => {
-    if (!loading.deletePendingStudentCard && !loading.addStudentCard) {
+    if (!emailVerificationIsLoading.deletePendingEmailVerification && !loading.addStudentCard) {
       dispatch(browsePendingStudentCards(authToken, accountId));
     }
-  }, [accountId, authToken, dispatch, loading.addStudentCard, loading.deletePendingStudentCard]);
+  }, [
+    accountId,
+    authToken,
+    dispatch,
+    loading.addStudentCard,
+    emailVerificationIsLoading.deletePendingEmailVerification,
+  ]);
 
   useEffect(() => {
     if (accounts.byId[accountId]) {

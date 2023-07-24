@@ -1,7 +1,8 @@
 import { Button, Card, CardContent, Snackbar, Typography, makeStyles } from '@material-ui/core';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deletePendingStudentCard, makeStudentCardDefault, resendEmailVerification } from '../../actions/user/user';
+import { makeStudentCardDefault } from '../../actions/user/user';
+import useEmailVerification from '../../lib/email/useEmailVerification';
 import useInstitute from '../../lib/institute/useInstitute';
 import AlignedText from '../ui/AlignedText';
 import Icon from '../ui/icon/index';
@@ -51,6 +52,7 @@ export default function StudentInfoCard(props) {
   const disabled = props.isDefault;
 
   const { institute } = useInstitute(props.instituteId);
+  const { resendEmailVerification, deletePendingEmailVerification } = useEmailVerification(props.id);
 
   const authToken = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
@@ -61,13 +63,13 @@ export default function StudentInfoCard(props) {
     dispatch(makeStudentCardDefault(authToken, accountId, cardId));
   };
 
-  const handleResend = (emailVerificationId) => {
-    dispatch(resendEmailVerification(authToken, emailVerificationId));
+  const handleResend = () => {
+    resendEmailVerification();
     setSnackbar(true);
   };
 
-  const handleDelete = (emailVerificationId) => {
-    dispatch(deletePendingStudentCard(authToken, emailVerificationId));
+  const handleDelete = () => {
+    deletePendingEmailVerification();
   };
 
   return (
@@ -114,19 +116,8 @@ export default function StudentInfoCard(props) {
               </AlignedText>
             </div>
             <div className={classes.defaultButton}>
-              <Button
-                onClick={() => {
-                  handleDelete(props.id);
-                }}
-              >
-                Delete
-              </Button>
-              <Button
-                onClick={() => {
-                  handleResend(props.id);
-                }}
-                color="primary"
-              >
+              <Button onClick={handleDelete}>Delete</Button>
+              <Button onClick={handleResend} color="primary">
                 Resend
               </Button>
             </div>

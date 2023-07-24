@@ -2,11 +2,8 @@ import { Button, Card, CardContent, Snackbar, Typography, makeStyles } from '@ma
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  deletePendingStudentCard,
-  makeStudentCardDefault,
-  resendEmailVerification,
-} from '../../../../actions/admin/account';
+import { makeStudentCardDefault } from '../../../../actions/admin/account';
+import useEmailVerification from '../../../../lib/email/useEmailVerification';
 import useInstitute from '../../../../lib/institute/useInstitute';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
@@ -57,6 +54,7 @@ export default function StudentInfoCard(props) {
   const authToken = useSelector((state) => state.auth.token);
 
   const { institute } = useInstitute(props.instituteId);
+  const { deletePendingEmailVerification, resendEmailVerification } = useEmailVerification(props.id);
 
   const [snackbar, setSnackbar] = useState(false);
   const dispatch = useDispatch();
@@ -66,13 +64,13 @@ export default function StudentInfoCard(props) {
     dispatch(makeStudentCardDefault(authToken, accountId, cardId));
   };
 
-  const handleResend = (emailVerificationId) => {
-    dispatch(resendEmailVerification(authToken, emailVerificationId));
+  const handleResend = () => {
+    resendEmailVerification();
     setSnackbar(true);
   };
 
-  const handleDelete = (emailVerificationId) => {
-    dispatch(deletePendingStudentCard(authToken, emailVerificationId));
+  const handleDelete = () => {
+    deletePendingEmailVerification();
   };
 
   return (
