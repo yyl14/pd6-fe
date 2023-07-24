@@ -62,26 +62,14 @@ export default function AccountSetting() {
 
   useEffect(() => {
     if (accounts.byId[accountId]) {
-      const newData = [];
-      if (studentCardsIds !== undefined) {
-        studentCardsIds.forEach((key) => {
-          const item = studentCardsById[key];
-          newData.push(item);
-        });
-      }
+      const newData = studentCardsIds?.map(id => studentCardsById[id]) ?? [];
       setCards(newData);
     }
   }, [accountId, accounts, studentCardsById, studentCardsIds]);
 
   useEffect(() => {
     if (accounts.byId[accountId]) {
-      const newData = [];
-      if (pendingStudentCardsIds !== undefined) {
-        pendingStudentCardsIds.forEach((key) => {
-          const item = pendingStudentCardsById[key];
-          newData.push(item);
-        });
-      }
+      const newData = pendingStudentCardsIds?.map(id => pendingStudentCardsById[id]) ?? [];
       setPendingCards(newData);
     }
   }, [accountId, accounts, pendingStudentCardsById, pendingStudentCardsIds]);

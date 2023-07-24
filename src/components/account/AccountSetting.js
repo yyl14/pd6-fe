@@ -115,24 +115,12 @@ export default function AccountSetting() {
   }, [error.user.editAccount, loading.user.editAccount]);
 
   useEffect(() => {
-    const newData = [];
-    if (studentCardsIds !== undefined) {
-      studentCardsIds.forEach((key) => {
-        const item = studentCardsById[key];
-        newData.push(item);
-      });
-    }
+    const newData = studentCardsIds?.map(id => studentCardsById[id]) ?? [];
     setCards(newData);
   }, [studentCardsById, studentCardsIds]);
 
   useEffect(() => {
-    const newData = [];
-    if (pendingStudentCardsIds !== undefined) {
-      pendingStudentCardsIds.forEach((key) => {
-        const item = pendingStudentCardsById[key];
-        newData.push(item);
-      });
-    }
+    const newData = pendingStudentCardsIds?.map(id => pendingStudentCardsById[id]) ?? [];
     setPendingCards(newData);
   }, [pendingStudentCardsById, pendingStudentCardsIds]);
 
