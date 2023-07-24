@@ -14,7 +14,9 @@ import { getInstitutes } from '../../actions/common/common';
 import { browsePendingStudentCards, fetchStudentCards } from '../../actions/user/user';
 import ThemeToggleContext from '../../contexts/themeToggleContext';
 import useEventListener from '../../hooks/useEventListener';
+import useReduxStateShape from '../../hooks/useReduxStateShape';
 import useEmailVerification from '../../lib/email/useEmailVerification';
+import useAccountStudentCards from '../../lib/studentCard/useAccountStudentCards';
 import GeneralLoading from '../GeneralLoading';
 import NoMatch from '../noMatch';
 import PageTitle from '../ui/PageTitle';
@@ -61,8 +63,9 @@ export default function AccountSetting() {
   const accountId = useSelector((state) => state.user.id);
   const authToken = useSelector((state) => state.user.token);
   const account = useSelector((state) => state.user);
-  const studentCards = useSelector((state) => state.studentCards);
-  const pendingStudentCards = useSelector((state) => state.pendingStudentCards);
+  const { studentCards, pendingStudentCards, isLoading } = useAccountStudentCards(accountId);
+  const [studentCardsById, studentCardsIds] = useReduxStateShape(studentCards);
+  const [pendingStudentCardsById, pendingStudentCardsIds] = useReduxStateShape(pendingStudentCards);
   const loading = useSelector((state) => state.loading.user);
   const error = useSelector((state) => state.error.user);
 
@@ -78,22 +81,23 @@ export default function AccountSetting() {
   }, [account.role]);
 
   useEffect(() => {
-    if (!loading.user.makeStudentCardDefault) {
+    if (!isLoading.makeDefault) {
       dispatch(fetchStudentCards(authToken, accountId));
     }
-  }, [authToken, accountId, dispatch, loading.user.makeStudentCardDefault]);
+  }, [authToken, accountId, dispatch, isLoading.makeDefault]);
 
   useEffect(() => {
-    if (!emailVerificationIsLoading.deletePendingEmailVerification && !loading.user.addStudentCard) {
+    if (!emailVerificationIsLoading.deletePendingEmailVerification && !isLoading.add) {
       dispatch(browsePendingStudentCards(authToken, accountId));
     }
   }, [
     accountId,
     authToken,
     dispatch,
-    loading.user.addStudentCard,
+    isLoading.add,
     emailVerificationIsLoading.deletePendingEmailVerification,
   ]);
+
 
   useEffect(() => {
     dispatch(getInstitutes());
@@ -111,28 +115,26 @@ export default function AccountSetting() {
   }, [error.user.editAccount, loading.user.editAccount]);
 
   useEffect(() => {
-    setCards(
-      account.studentCards.reduce((acc, key) => {
-        if (studentCards.byId[key]) {
-          return [...acc, studentCards.byId[key]];
-        }
-        return [...acc];
-      }, []),
-    );
-  }, [account, studentCards]);
+    const newData = [];
+    if (studentCardsIds !== undefined) {
+      studentCardsIds.forEach((key) => {
+        const item = studentCardsById[key];
+        newData.push(item);
+      });
+    }
+    setCards(newData);
+  }, [studentCardsById, studentCardsIds]);
 
   useEffect(() => {
-    setPendingCards(
-      account.pendingStudentCards.reduce((acc, key) => {
-        if (pendingStudentCards.byId[key]) {
-          if (pendingStudentCards.byId[key].institute_id !== null) {
-            return [...acc, pendingStudentCards.byId[key]];
-          }
-        }
-        return [...acc];
-      }, []),
-    );
-  }, [account, pendingStudentCards]);
+    const newData = [];
+    if (pendingStudentCardsIds !== undefined) {
+      pendingStudentCardsIds.forEach((key) => {
+        const item = pendingStudentCardsById[key];
+        newData.push(item);
+      });
+    }
+    setPendingCards(newData);
+  }, [pendingStudentCardsById, pendingStudentCardsIds]);
 
   function keydownHandler({ key }) {
     if (String(key) === '/') {
@@ -143,7 +145,7 @@ export default function AccountSetting() {
   useEventListener('keydown', keydownHandler);
 
   if (account === undefined || studentCards === undefined) {
-    if (loading.auth.fetchAccount || loading.user.fetchStudentCards || loading.user.browsePendingStudentCards) {
+    if (loading.auth.fetchAccount || isLoading.browseAll || isLoading.browsePending) {
       return <GeneralLoading />;
     }
     return <NoMatch />;

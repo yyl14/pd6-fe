@@ -26,14 +26,14 @@ const useAccountStudentCards = (accountId: number) => {
       browseAll: browseAllStudentCardsSWR.isLoading,
       browsePending: browsePendingStudentCardsSWR.isLoading,
       add: addStudentCardSWR.isMutating,
-      default: makeStudentCardDefaultSWR.isMutating,
+      makeDefault: makeStudentCardDefaultSWR.isMutating,
     },
 
     error: {
       browseAll: browseAllStudentCardsSWR.error,
       browsePending: browsePendingStudentCardsSWR.error,
       add: addStudentCardSWR.error,
-      default: makeStudentCardDefaultSWR.error,
+      makeDefault: makeStudentCardDefaultSWR.error,
     },
   };
 };
