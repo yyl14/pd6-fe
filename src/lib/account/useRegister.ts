@@ -11,7 +11,7 @@ const useRegister = () => {
       register: addAccountSWR.isMutating,
     },
     error: {
-      register: addAccountSWR.error as Error,
+      register: addAccountSWR.error,
     },
   };
 };
