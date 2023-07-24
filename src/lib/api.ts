@@ -32,7 +32,6 @@ const interceptUndefinedParams: Middleware = async (url, init, next) => {
 const fetchError: Middleware = async (url, init, next) => {
   const res = await next(url, init);
   if (!res.data.success) throw new Error(res.data.error);
-  // eslint-disable-next-line no-console
   return res;
 };
 
