@@ -12,10 +12,10 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addStudentCard } from '../../actions/user/user';
+import { useSelector } from 'react-redux';
 import useReduxStateShape from '../../hooks/useReduxStateShape';
 import useInstitutes from '../../lib/institute/useInstitutes';
+import useAccountStudentCards from '../../lib/studentCard/useAccountStudentCards';
 import AlignedText from '../ui/AlignedText';
 import SimpleBar from '../ui/SimpleBar';
 import StudentInfoCard from './StudentInfoCard';
@@ -72,6 +72,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function StudentInfoEdit(props) {
   const classes = useStyles();
+  const accountId = useSelector((state) => state.user.id);
+
   const [cards, setCards] = useState(props.cards);
   const [pendingCards, setPendingCards] = useState(props.pendingCards);
   const [add, setAdd] = useState(false); // addCard block
@@ -94,16 +96,9 @@ export default function StudentInfoEdit(props) {
 
   const { institutes } = useInstitutes();
   const [institutesById, institutesId] = useReduxStateShape(institutes);
+  const { addStudentCard, mutatePendingStudentCards, isLoading, error } = useAccountStudentCards(accountId);
 
   const enableInstitutesId = institutesId.filter((item) => !institutesById[item].is_disabled);
-
-  const accountId = useSelector((state) => state.user.id);
-  const authToken = useSelector((state) => state.auth.token);
-
-  const loading = useSelector((state) => state.loading);
-  const error = useSelector((state) => state.error);
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (props.cards) {
@@ -117,12 +112,6 @@ export default function StudentInfoEdit(props) {
     }
   }, [props.pendingCards]);
 
-  useEffect(() => {
-    if (error.user.user.addStudentCard) {
-      setErrorSnackbar(true);
-    }
-  }, [error.user.user.addStudentCard]);
-
   const handleAddCancel = () => {
     setAdd(false);
     setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
@@ -131,7 +120,7 @@ export default function StudentInfoEdit(props) {
     setErrorTexts({ studentId: '', email: '' });
   };
 
-  const handleAddSave = () => {
+  const handleAddSave = async () => {
     if (addInputs.studentId === '' || addInputs.email === '') {
       if (addInputs.studentId === '') {
         setErrors((ori) => ({ ...ori, studentId: true }));
@@ -145,11 +134,21 @@ export default function StudentInfoEdit(props) {
     }
     const inputInstituteId = institutesId.filter((id) => institutesById[id].full_name === addInputs.institute);
     if (inputInstituteId.length !== 0) {
-      dispatch(
-        addStudentCard(authToken, accountId, inputInstituteId[0], addInputs.email, addInputs.studentId, () =>
-          setSnackbar(true),
-        ),
-      );
+      try {
+        const res = addStudentCard({
+          account_id: accountId,
+          institute_id: inputInstituteId[0],
+          institute_email_prefix: addInputs.email,
+          student_id: addInputs.studentId,
+        })
+
+        if ((await res).ok) {
+          setSnackbar(true)
+          mutatePendingStudentCards()
+        }
+      } catch (e) {
+        setErrorSnackbar(true)
+      }
     }
     setAdd(false);
     setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
@@ -290,14 +289,14 @@ export default function StudentInfoEdit(props) {
             </Card>
           </div>
         )}
-        {!add && !pendingCards.length && !loading.user.user.addStudentCard && (
+        {!add && !pendingCards.length && !isLoading.add && (
           <div className={classes.buttonContainer}>
             <div className={classes.addButton}>
               <Button onClick={() => setAdd(true)}>+</Button>
             </div>
           </div>
         )}
-        {loading.user.user.addStudentCard && (
+        {isLoading.add && (
           <div className={classes.buttonContainer}>
             <div className={classes.addButton}>
               <CircularProgress />
@@ -314,7 +313,7 @@ export default function StudentInfoEdit(props) {
       <Snackbar
         open={errorSnackbar}
         autoHideDuration={3000}
-        message={error.user.user.addStudentCard ? `Error: ${error.user.user.addStudentCard.toString()}` : 'Error'}
+        message={`Error: ${error.add?.message}`}
         onClose={() => setErrorSnackbar(false)}
       />
     </div>

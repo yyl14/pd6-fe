@@ -1,9 +1,9 @@
 import { Button, Card, CardContent, Snackbar, Typography, makeStyles } from '@material-ui/core';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { makeStudentCardDefault } from '../../actions/user/user';
+import { useSelector } from 'react-redux';
 import useEmailVerification from '../../lib/email/useEmailVerification';
 import useInstitute from '../../lib/institute/useInstitute';
+import useAccountStudentCards from '../../lib/studentCard/useAccountStudentCards';
 import AlignedText from '../ui/AlignedText';
 import Icon from '../ui/icon/index';
 
@@ -50,26 +50,36 @@ const useStyles = makeStyles(() => ({
 export default function StudentInfoCard(props) {
   const classes = useStyles();
   const disabled = props.isDefault;
-
+  
+  const accountId = useSelector((state) => state.user.id);
   const { institute } = useInstitute(props.instituteId);
   const { resendEmailVerification, deletePendingEmailVerification } = useEmailVerification(props.id);
-
-  const authToken = useSelector((state) => state.auth.token);
-  const dispatch = useDispatch();
-  const accountId = useSelector((state) => state.user.id);
+  const { makeStudentCardDefault, mutateStudentCards, mutatePendingStudentCards } = useAccountStudentCards(accountId);
+  
   const [snackbar, setSnackbar] = useState(false);
 
-  const handleSetDefault = (cardId) => {
-    dispatch(makeStudentCardDefault(authToken, accountId, cardId));
+  const handleSetDefault = async (cardId) => {
+    const res = makeStudentCardDefault({
+      account_id: accountId,
+      student_card_id: cardId
+    });
+    if ((await res).ok) {
+      mutateStudentCards();
+    }
   };
 
-  const handleResend = () => {
-    resendEmailVerification();
-    setSnackbar(true);
+  const handleResend = async () => {
+    const res = resendEmailVerification();
+    if ((await res).ok) {
+      setSnackbar(true);
+    }
   };
 
-  const handleDelete = () => {
-    deletePendingEmailVerification();
+  const handleDelete = async () => {
+    const res = deletePendingEmailVerification();
+    if ((await res).ok) {
+      mutatePendingStudentCards();
+    }
   };
 
   return (
