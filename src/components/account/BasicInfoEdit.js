@@ -2,6 +2,7 @@ import { Button, TextField, Typography, makeStyles } from '@material-ui/core';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { editAccount } from '../../actions/user/user';
+import useAccountStudentCards from '../../lib/studentCard/useAccountStudentCards';
 import AlignedText from '../ui/AlignedText';
 import SimpleBar from '../ui/SimpleBar';
 
@@ -24,10 +25,12 @@ export default function BasicInfoEdit(props) {
   const accountId = useSelector((state) => state.user.id);
   const authToken = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
+  const { mutatePendingStudentCards } = useAccountStudentCards(accountId);
 
   const handleSave = () => {
     const altMailChanged = altMail !== props.altMail && altMail !== '';
     dispatch(editAccount(authToken, accountId, username, nickname, altMailChanged ? altMail : null));
+    mutatePendingStudentCards();
     props.handleBack(altMailChanged ? 'Alternative email will be updated once it’s verified.' : '');
   };
 
