@@ -21,10 +21,10 @@ const useChallengeTasks = (challengeId: number) => {
   
     return {
         task: readTaskSWR.data?.data.data,
-        addTaskProblem: addTaskProblemSWR.trigger,
-        addTaskEssay: addTaskEssaySWR.trigger,
-        addTaskPeerReview: addTaskPeerReviewSWR.trigger,
-        addTaskTeamProjectScoreboard: addTaskTeamProjectScoreboardSWR.trigger,
+        addProblem: addTaskProblemSWR.trigger,
+        addEssay: addTaskEssaySWR.trigger,
+        addPeerReview: addTaskPeerReviewSWR.trigger,
+        addTeamProjectScoreboard: addTaskTeamProjectScoreboardSWR.trigger,
   
         isLoading: {
             read: readTaskSWR.isLoading,
