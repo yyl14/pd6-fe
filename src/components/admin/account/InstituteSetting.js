@@ -92,14 +92,11 @@ export default function InstituteSetting() {
       case 'newName':
         editInstitute({ institute_id: instituteId, full_name: newSetting.newName });
         break;
-
       case 'newInitialism':
         editInstitute({ institute_id: instituteId, abbreviated_name: newSetting.newInitialism });
         break;
-
       case 'newEmail':
         editInstitute({ institute_id: instituteId, email_domain: newSetting.newEmail });
-
         break;
       case 'newStatus':
         editInstitute({ institute_id: instituteId, is_disabled: newSetting.newStatus });
