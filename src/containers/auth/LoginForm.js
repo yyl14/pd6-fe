@@ -10,7 +10,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import useLogin from '../../lib/account/useLogin';
 
@@ -48,18 +48,9 @@ export default function LoginForm() {
     username: '',
     password: '',
   });
-  const { logIn, isLoading: logInIsLoading, error: logInIsError } = useLogin();
+  const { logIn } = useLogin();
 
   const [showPassword, setShowPassword] = useState(false);
-
-  useEffect(() => {
-    if (!logInIsLoading.logIn) {
-      if (!logInIsError.logIn) {
-        setErrors({ username: true, password: true });
-        setErrorTexts((ori) => ({ ...ori, password: 'Incorrect username or password' }));
-      }
-    }
-  }, [logInIsError.logIn, logInIsLoading.logIn]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -74,18 +65,24 @@ export default function LoginForm() {
     }
 
     if (errors.username === false && errors.password === false && username !== '' && password !== '') {
-      const {
-        data: { success, data },
-      } = await logIn({ username, password });
-      if (success) {
-        localStorage.setItem('id', data.account_id);
-        localStorage.setItem('token', data.token);
-        // TODO: not direct to mainpage after login success
-        if (redirect_url) {
-          history.push(redirect_url);
-        } else {
-          history.push('/');
+      try {
+        const {
+          data: { success, data },
+        } = await logIn({ username, password });
+
+        if (success) {
+          localStorage.setItem('id', data.account_id);
+          localStorage.setItem('token', data.token);
+          
+          if (redirect_url) {
+            history.push(redirect_url);
+          } else {
+            history.push('/');
+          }
         }
+      } catch (err) {
+        setErrors({ username: true, password: true });
+        setErrorTexts((ori) => ({ ...ori, password: 'Incorrect username or password' }));
       }
     }
   };

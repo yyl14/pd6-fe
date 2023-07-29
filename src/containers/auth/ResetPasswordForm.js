@@ -13,10 +13,10 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
-import { userResetPassword } from '../../actions/user/auth';
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import useQuery from '../../hooks/useQuery';
+import useResetPassword from '../../lib/account/useResetPassword';
 
 const useStyles = makeStyles(() => ({
   authForm: {
@@ -38,15 +38,12 @@ function checkPassword(password1, password2) {
   return "Passwords don't match";
 }
 
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
-
 export default function ResetPassword() {
   const classNames = useStyles();
-  const dispatch = useDispatch();
   const query = useQuery();
   const history = useHistory();
+
+  const { resetPassword } = useResetPassword();
 
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
@@ -58,13 +55,10 @@ export default function ResetPassword() {
   const [showPassword1, setShowPassword1] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
 
-  const [hasRequest, setHasRequest] = useState(false);
-  const resetLoading = useSelector((state) => state.loading.user.auth.resetPassword);
-  const resetError = useSelector((state) => state.error.user.auth.resetPassword);
   const [errorPopup, setErrorPopup] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const newPassword = password1.trim();
     const confirmPassword = password2.trim();
@@ -77,8 +71,19 @@ export default function ResetPassword() {
     }
     setError(false);
     setErrorText('');
-    dispatch(userResetPassword(query.get('code'), confirmPassword));
-    setHasRequest(true);
+
+    try {
+      const res = resetPassword({
+        code: query.get('code'),
+        password: confirmPassword,
+      });
+      if ((await res).ok) {
+        setPopUp(true);
+      }
+    } catch (err) {
+      setErrorPopup(true);
+      setErrorMsg(err.message);
+    }
   };
 
   const handleChange = (event) => {
@@ -119,17 +124,6 @@ export default function ResetPassword() {
   const handleClickShowPassword2 = () => {
     setShowPassword2(!showPassword2);
   };
-
-  useEffect(() => {
-    if (!resetLoading && hasRequest) {
-      if (resetError !== null) {
-        setErrorPopup(true);
-        setErrorMsg(resetError);
-      } else {
-        setPopUp(true);
-      }
-    }
-  }, [hasRequest, resetError, resetLoading]);
 
   return (
     <>

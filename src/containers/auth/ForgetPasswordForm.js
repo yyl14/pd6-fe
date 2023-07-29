@@ -38,8 +38,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ForgetPasswordForm() {
   const classNames = useStyles();
   const history = useHistory();
-  // const error = useSelector((state) => state.error.user.auth);
-  // const loading = useSelector((state) => state.loading.user.auth.forgetPassword);
+
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [showError, setShowError] = useState(false);
@@ -70,11 +69,14 @@ export default function ForgetPasswordForm() {
       setShowError(true);
     };
 
-    const {
-      data: { success },
-    } = await forgetPassword({ username, email: email.trim() });
-    if (success) onSuccess();
-    else onError();
+    try {
+      const {
+        data: { success },
+      } = await forgetPassword({ username, email: email.trim() });
+      if (success) onSuccess();
+    } catch (err) {
+      onError();
+    }
   };
 
   const handleClosePopUp = () => {
