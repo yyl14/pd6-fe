@@ -9,9 +9,11 @@ import {
   Typography,
 } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { editSubmitLanguage, fetchSubmitLanguage } from '../../../actions/admin/system';
+import useReduxStateShape from '../../../hooks/useReduxStateShape';
+import useSubmitLang from '../../../lib/submitLang/useSubmitLang';
+import useSubmitLangEdit from '../../../lib/submitLang/useSubmitLangEdit';
 import GeneralLoading from '../../GeneralLoading';
 import NoMatch from '../../noMatch';
 import AlignedText from '../../ui/AlignedText';
@@ -20,63 +22,66 @@ import SimpleBar from '../../ui/SimpleBar';
 
 /* This is a level 4 component (page component) */
 export default function LangSetting() {
-  const dispatch = useDispatch();
   const { languageId } = useParams();
-  const authToken = useSelector((state) => state.auth.token);
-  const submitLang = useSelector((state) => state.submitLangs.byId);
-  const submitLangId = useSelector((state) => state.submitLangs.allIds);
+  const { submitLang, mutateSubmitLangs } = useSubmitLang();
+  const [submitLangById, submitLangIds] = useReduxStateShape(submitLang);
+  const { editSubmitLang, isLoading } = useSubmitLangEdit(submitLangIds);
   const loading = useSelector((state) => state.loading.admin.system.fetchAnnouncement);
-
   const [popUp, setPopUp] = useState(false);
   const [languageStatus, setLanguageStatus] = useState(false);
   const [changeLanguageStatus, setChangeLanguageStatus] = useState(false);
   const [submit, setSubmit] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchSubmitLanguage(authToken));
     setSubmit(false);
     setPopUp(false);
-  }, [authToken, dispatch, submit]);
+  }, [submit]);
 
   useEffect(() => {
-    if (submitLangId.length !== 0) {
-      setLanguageStatus(submitLang[languageId].is_disabled);
+    if (submitLangIds.length !== 0) {
+      setLanguageStatus(submitLangById[languageId].is_disabled);
     }
-  }, [languageId, submitLang, submitLangId]);
+  }, [languageId, submitLangById, submitLangIds]);
 
-  if (submitLang[languageId] === undefined) {
+  if (submitLangById[languageId] === undefined) {
     if (loading.fetchSubmitLanguage) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
   }
 
-  const handleEditSubmitLanguage = () => {
-    dispatch(
-      editSubmitLanguage(
-        authToken,
-        languageId,
-        submitLang[languageId].name,
-        submitLang[languageId].version,
-        languageStatus,
-      ),
-    );
-    setChangeLanguageStatus(false);
-    setSubmit(true);
+  const handleEditSubmitLanguage = async () => {
+    if (!isLoading.edit) {
+      try {
+        const res = editSubmitLang({
+          language_id: languageId,
+          name: submitLangById[languageId].name,
+          version: submitLangById[languageId].version,
+          is_disabled: languageStatus,
+        });
+        if ((await res).ok) {
+          setChangeLanguageStatus(false);
+          setSubmit(true);
+          mutateSubmitLangs();
+        }
+      } catch (error) {
+        console.log(error?.message);
+      }
+    }
   };
 
   return (
     <>
-      <PageTitle text={`${submitLang[languageId].name} ${submitLang[languageId].version} / Setting`} />
+      <PageTitle text={`${submitLangById[languageId].name} ${submitLangById[languageId].version} / Setting`} />
       <SimpleBar title="Submission Language Information">
         <AlignedText text="Language" childrenType="text">
-          <Typography variant="body1">{submitLang[languageId].name}</Typography>
+          <Typography variant="body1">{submitLangById[languageId].name}</Typography>
         </AlignedText>
         <AlignedText text="Version" childrenType="text">
-          <Typography variant="body1">{submitLang[languageId].version}</Typography>
+          <Typography variant="body1">{submitLangById[languageId].version}</Typography>
         </AlignedText>
         <AlignedText text="Status" childrenType="text">
-          <Typography variant="body1">{submitLang[languageId].is_disabled ? 'Disabled' : 'Enabled'}</Typography>
+          <Typography variant="body1">{submitLangById[languageId].is_disabled ? 'Disabled' : 'Enabled'}</Typography>
         </AlignedText>
       </SimpleBar>
 
@@ -106,7 +111,7 @@ export default function LangSetting() {
                 checked={!languageStatus} // true = Disable
                 onChange={() => {
                   setLanguageStatus(!languageStatus);
-                  setChangeLanguageStatus(languageStatus === submitLang[languageId].is_disabled);
+                  setChangeLanguageStatus(languageStatus === submitLangById[languageId].is_disabled);
                 }}
                 color="primary"
               />
