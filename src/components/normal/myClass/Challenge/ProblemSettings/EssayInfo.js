@@ -104,9 +104,11 @@ export default function EssayInfo({ role = 'NORMAL' }) {
     setSelectedFile([]);
   };
 
-  const handleDeleteSuccess = () => {
-    readTask({ challenge_id: challengeId });
-    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
+  const handleDeleteSuccess = async () => {
+    const res = readTask({ challenge_id: challengeId });
+    if((await res).ok){
+      history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
+    }
   };
 
   const handleSubmitDelete = () => {

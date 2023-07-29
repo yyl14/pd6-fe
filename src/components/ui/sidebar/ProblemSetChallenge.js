@@ -16,12 +16,15 @@ export default function ProblemSetChallenge({ classNames, history, location, mod
   const { readTask } = useChallengeTasks(challengeId);
 
   useEffect(() => {
+    const browseTasksUnderChallenge = async () => {
+      readTask({ challenge_id: challengeId });
+    };
+
     dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchClass(authToken, classId));
     dispatch(fetchChallenge(authToken, challengeId));
-    readTask({ challenge_id: challengeId });
-    
-  }, [dispatch, authToken, classId, courseId, challengeId, readTask]);
+    browseTasksUnderChallenge(); 
+  });
 
   const [display, setDisplay] = useState(true);
   const [title, setTitle] = useState('');

@@ -137,8 +137,12 @@ export default function TaskAddingCard({ open, setOpen }) {
     return null;
   }, []);
 
+  const browseTasksUnderChallenge = async (Id) => {
+    readTask({ challenge_id: Id });
+  };
+
   useEffect(() => {
-    readTask({ challenge_id: challengeId });
+    browseTasksUnderChallenge(challengeId); 
   });
 
   useEffect(() => {
@@ -207,7 +211,7 @@ export default function TaskAddingCard({ open, setOpen }) {
 
   useEffect(() => {
     if (peerReviewChallengeId !== undefined && peerReviewChallengeId !== '') {
-      readTask({ challenge_id: peerReviewChallengeId });
+      browseTasksUnderChallenge(peerReviewChallengeId);
     }
   });
 
