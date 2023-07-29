@@ -20,7 +20,7 @@ const useChallengeTasks = (challengeId: number) => {
           toSWRMutationFetcher(addTaskTeamProjectScoreboard));
   
     return {
-        tasks: readTaskSWR.data?.data.data,
+        readTask: readTaskSWR.data?.data.data,
         addProblem: addTaskProblemSWR.trigger,
         addEssay: addTaskEssaySWR.trigger,
         addPeerReview: addTaskPeerReviewSWR.trigger,
