@@ -40,8 +40,8 @@ export default function CodeSubmission({ baseUrl, isProblemSet }) {
   const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   // const submitLang = useSelector((state) => state.submitLangs);
-  const submitLang = useSubmitLang();
-  const [submitLangById, submitLangIds] = useReduxStateShape(submitLang);
+  const { submitLangs } = useSubmitLang();
+  const [submitLangById, submitLangIds] = useReduxStateShape(submitLangs);
   const [lang, setLang] = useState([]);
   const authToken = useSelector((state) => state.auth.token);
   const errors = useSelector((state) => state.error.myClass.problem);

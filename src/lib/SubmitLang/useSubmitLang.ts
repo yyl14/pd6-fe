@@ -5,7 +5,7 @@ const useSubmitLang = () => {
   const browseAllSubmitLangSWR = useSWR('/submission/language', () => browseAllSubmitLang({}));
 
   return {
-    submitLang: browseAllSubmitLangSWR.data?.data.data,
+    submitLangs: browseAllSubmitLangSWR.data?.data.data,
     mutateSubmitLangs: () => browseAllSubmitLangSWR.mutate(),
     isLoading: {
       browseAll: browseAllSubmitLangSWR.isLoading,

@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import useReduxStateShape from '../../../hooks/useReduxStateShape';
 import useSubmitLang from '../../../lib/submitLang/useSubmitLang';
-import useSubmitLangEdit from '../../../lib/submitLang/useSubmitLangEdit';
+import useSubmitLangs from '../../../lib/submitLang/useSubmitLangs';
 import GeneralLoading from '../../GeneralLoading';
 import NoMatch from '../../noMatch';
 import AlignedText from '../../ui/AlignedText';
@@ -23,9 +23,9 @@ import SimpleBar from '../../ui/SimpleBar';
 /* This is a level 4 component (page component) */
 export default function LangSetting() {
   const { languageId } = useParams();
-  const { submitLang, mutateSubmitLangs } = useSubmitLang();
-  const [submitLangById, submitLangIds] = useReduxStateShape(submitLang);
-  const { editSubmitLang, isLoading } = useSubmitLangEdit(submitLangIds);
+  const { submitLangs, mutateSubmitLangs } = useSubmitLang();
+  const [submitLangById, submitLangIds] = useReduxStateShape(submitLangs);
+  const { editSubmitLang } = useSubmitLangs(submitLangIds);
   const loading = useSelector((state) => state.loading.admin.system.fetchAnnouncement);
   const [popUp, setPopUp] = useState(false);
   const [languageStatus, setLanguageStatus] = useState(false);
@@ -51,22 +51,20 @@ export default function LangSetting() {
   }
 
   const handleEditSubmitLanguage = async () => {
-    if (!isLoading.edit) {
-      try {
-        const res = editSubmitLang({
-          language_id: languageId,
-          name: submitLangById[languageId].name,
-          version: submitLangById[languageId].version,
-          is_disabled: languageStatus,
-        });
-        if ((await res).ok) {
-          setChangeLanguageStatus(false);
-          setSubmit(true);
-          mutateSubmitLangs();
-        }
-      } catch (error) {
-        console.log(error?.message);
+    try {
+      const res = editSubmitLang({
+        language_id: languageId,
+        name: submitLangById[languageId].name,
+        version: submitLangById[languageId].version,
+        is_disabled: languageStatus,
+      });
+      if ((await res).ok) {
+        setChangeLanguageStatus(false);
+        setSubmit(true);
+        mutateSubmitLangs();
       }
+    } catch (error) {
+      console.log(error?.message);
     }
   };
 

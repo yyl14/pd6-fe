@@ -2,7 +2,7 @@ import useSWRMutation from 'swr/mutation';
 import toSWRFetcher from '../../function/toSWRMutationFetcher';
 import { editSubmitLang } from './fetchers';
 
-const useSubmitLangEdit = (submitLangId: number) => {
+const useSubmitLangs = (submitLangId: number) => {
   const editSubmitLangSWR = useSWRMutation(`/submission/language/${submitLangId}`, toSWRFetcher(editSubmitLang));
 
   return {
@@ -16,4 +16,4 @@ const useSubmitLangEdit = (submitLangId: number) => {
   };
 };
 
-export default useSubmitLangEdit;
+export default useSubmitLangs;

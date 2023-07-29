@@ -41,8 +41,8 @@ export default function CodeSubmission() {
   const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   // const submitLang = useSelector((state) => state.submitLangs);
-  const submitLang = useSubmitLang();
-  const [submitLangById, submitLangId] = useReduxStateShape(submitLang);
+  const { submitLangs } = useSubmitLang();
+  const [submitLangById, submitLangId] = useReduxStateShape(submitLangs);
   const [lang, setLang] = useState([]);
   const authToken = useSelector((state) => state.auth.token);
   const errors = useSelector((state) => state.error.myClass.problem);
@@ -64,7 +64,7 @@ export default function CodeSubmission() {
   }, [challengeId, challenges, currentTime]);
 
   useEffect(() => {
-    const enabledIds = submitLangId.filter((id) => !submitLangId[id].is_disabled);
+    const enabledIds = submitLangId.filter((id) => !submitLangById[id].is_disabled);
     setLang(enabledIds);
     if (localStorage.getItem('langId')) {
       if (enabledIds.includes(Number(localStorage.getItem('langId')))) {

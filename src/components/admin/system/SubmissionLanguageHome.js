@@ -1,4 +1,3 @@
-// add and brouse the submitLangs
 import useReduxStateShape from '../../../hooks/useReduxStateShape';
 import useSubmitLang from '../../../lib/submitLang/useSubmitLang';
 import CustomTable from '../../ui/CustomTable';
@@ -6,8 +5,8 @@ import PageTitle from '../../ui/PageTitle';
 
 /* This is a level 4 component (page component) */
 export default function SubmissionLanguageHome() {
-  const { submitLang } = useSubmitLang();
-  const [submitLangById, submitLangIds] = useReduxStateShape(submitLang);
+  const { submitLangs } = useSubmitLang();
+  const [submitLangById, submitLangIds] = useReduxStateShape(submitLangs);
 
   return (
     <>
