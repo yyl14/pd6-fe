@@ -12,10 +12,13 @@ const useAccountStudentCards = (accountId: number) => {
     browsePendingStudentCards({ account_id: accountId }),
   );
 
-  const addStudentCardSWR = useSWRMutation(`/account/${accountId}/student-card`, toSWRMutationFetcher(addStudentCard));
+  const addStudentCardSWR = useSWRMutation(
+    `/account/${accountId}/email-verification`,
+    toSWRMutationFetcher(addStudentCard),
+  );
 
   const makeStudentCardDefaultSWR = useSWRMutation(
-    `/account/${accountId}/default-student-card`,
+    `/account/${accountId}/student-card`,
     toSWRMutationFetcher(makeStudentCardDefault),
   );
 
