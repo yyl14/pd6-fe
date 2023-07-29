@@ -7,20 +7,20 @@ const useChallengeTasks = (challengeId: number) => {
     const readTaskSWR = useSWR(`/challenge/${challengeId}/task`, 
         () => readTask({ challenge_id: challengeId }));
   
-    const addTaskProblemSWR = useSWRMutation(`/challenge/${challengeId}/problem`, 
+    const addTaskProblemSWR = useSWRMutation(`/challenge/${challengeId}/task`, 
           toSWRMutationFetcher(addTaskProblem));
 
-    const addTaskEssaySWR = useSWRMutation(`/challenge/${challengeId}/problem`, 
+    const addTaskEssaySWR = useSWRMutation(`/challenge/${challengeId}/task`, 
           toSWRMutationFetcher(addTaskEssay));
     
-    const addTaskPeerReviewSWR = useSWRMutation(`/challenge/${challengeId}/problem`, 
+    const addTaskPeerReviewSWR = useSWRMutation(`/challenge/${challengeId}/task`, 
           toSWRMutationFetcher(addTaskPeerReview));
 
-    const addTaskTeamProjectScoreboardSWR = useSWRMutation(`/challenge/${challengeId}/problem`, 
+    const addTaskTeamProjectScoreboardSWR = useSWRMutation(`/challenge/${challengeId}/task`, 
           toSWRMutationFetcher(addTaskTeamProjectScoreboard));
   
     return {
-        task: readTaskSWR.data?.data.data,
+        tasks: readTaskSWR.data?.data.data,
         addProblem: addTaskProblemSWR.trigger,
         addEssay: addTaskEssaySWR.trigger,
         addPeerReview: addTaskPeerReviewSWR.trigger,
