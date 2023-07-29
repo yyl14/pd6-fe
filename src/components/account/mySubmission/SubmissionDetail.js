@@ -58,8 +58,7 @@ export default function SubmissionDetail() {
   const user = useSelector((state) => state.user);
   const judgeCases = useSelector((state) => state.judgeCases);
   const testcases = useSelector((state) => state.testcases);
-  // const submitLangs = useSelector((state) => state.submitLangs.byId);
-  const { submitLangs } = useSubmitLang();
+  const { submitLangs, isLoading: submitLangIsLoading } = useSubmitLang();
   const [submitLangById] = useReduxStateShape(submitLangs);
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.problem);
@@ -190,7 +189,7 @@ export default function SubmissionDetail() {
     judgeCases.allIds === undefined ||
     testcases.allIds === undefined
   ) {
-    if (loading.readSubmissionDetail || loading.readTestcase) {
+    if (loading.readSubmissionDetail || loading.readTestcase || submitLangIsLoading) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
