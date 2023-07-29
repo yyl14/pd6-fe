@@ -26,7 +26,6 @@ import {
   addEssay,
   addPeerReview,
   addProblem,
-  browseTasksUnderChallenge,
   peerReviewFetchChallenges,
 } from '../../../../actions/myClass/challenge';
 
@@ -99,7 +98,7 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [teamLabelFilter, setTeamLabelFilter] = useState('');
   const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
   const [snackbarErrorMessage, setSnackbarErrorMessage] = useState('');
-  const { isLoading } = useChallengeTasks(challengeId);
+  const { readTask } = useChallengeTasks(challengeId);
 
   const validateInput = useCallback((maxTemp, minTemp, peerNumberTemp) => {
     // string
@@ -139,23 +138,8 @@ export default function TaskAddingCard({ open, setOpen }) {
   }, []);
 
   useEffect(() => {
-    if (
-      !isLoading.addProblem &&
-      !isLoading.addEssay &&
-      !isLoading.addPeerReview &&
-      !isLoading.addTeamProjectScoreboard
-    ) {
-      dispatch(browseTasksUnderChallenge(authToken, challengeId));
-    }
-  }, [
-    authToken,
-    challengeId,
-    dispatch,
-    isLoading.addProblem,
-    isLoading.addEssay,
-    isLoading.addPeerReview,
-    isLoading.addTeamProjectScoreboard,
-  ]);
+    readTask({ challenge_id: challengeId });
+  });
 
   useEffect(() => {
     dispatch(fetchTeams(authToken, classId, ''));
@@ -223,9 +207,9 @@ export default function TaskAddingCard({ open, setOpen }) {
 
   useEffect(() => {
     if (peerReviewChallengeId !== undefined && peerReviewChallengeId !== '') {
-      dispatch(browseTasksUnderChallenge(authToken, peerReviewChallengeId));
+      readTask({ challenge_id: peerReviewChallengeId });
     }
-  }, [authToken, dispatch, peerReviewChallengeId]);
+  });
 
   const transLabelToId = (labels) => {
     const ids = labels.map(

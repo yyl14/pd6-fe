@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchChallenge, fetchClass, fetchCourse } from '../../../actions/common/common';
-import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
+import useChallengeTasks from '../../../lib/task/useChallengeTasks';
 import Icon from '../icon/index';
 
 export default function ProblemSetChallenge({ classNames, history, location, mode, open, onClose }) {
@@ -13,13 +13,15 @@ export default function ProblemSetChallenge({ classNames, history, location, mod
   const authToken = useSelector((state) => state.auth.token);
   const challenges = useSelector((state) => state.challenges.byId);
   const problems = useSelector((state) => state.problem);
+  const { readTask } = useChallengeTasks(challengeId);
 
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchClass(authToken, classId));
     dispatch(fetchChallenge(authToken, challengeId));
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
-  }, [dispatch, authToken, classId, courseId, challengeId]);
+    readTask({ challenge_id: challengeId });
+    
+  }, [dispatch, authToken, classId, courseId, challengeId, readTask]);
 
   const [display, setDisplay] = useState(true);
   const [title, setTitle] = useState('');
