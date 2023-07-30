@@ -4,7 +4,7 @@ import toSWRMutationFetcher from '../../function/toSWRMutationFetcher';
 import { readEssaySubmission, reuploadEssay } from './fetchers';
 
 const useEssaySubmission = (essaySubmissionId: number) => {
-  const readEssaySubmissionSWR = useSWR(`/essay/{essay_id}/essay-submission`, () =>
+  const readEssaySubmissionSWR = useSWR(`/essay-submission/{essay_submission_id}`, () =>
     readEssaySubmission({ essay_submission_id: essaySubmissionId }),
   );
 
@@ -29,4 +29,4 @@ const useEssaySubmission = (essaySubmissionId: number) => {
   };
 };
 
-export default useEssayEssaySubmissions;
+export default useEssaySubmission;
