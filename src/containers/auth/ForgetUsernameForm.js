@@ -26,8 +26,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ForgetUsernameForm() {
   const classNames = useStyles();
   const history = useHistory();
-  // const error = useSelector((state) => state.error.user.auth);
-  // const loading = useSelector((state) => state.loading.user.auth.forgetUsername);
+
   const [email, setEmail] = useState('');
   const [showError, setShowError] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -56,13 +55,15 @@ export default function ForgetUsernameForm() {
       setShowError(true);
     };
 
-    const {
-      data: { success },
-    } = await forgetUsername({ email: email.trim() });
-    if (success) onSuccess();
-    else onError();
-
-    setShowSnackbar(true);
+    try {
+      const {
+        data: { success },
+      } = await forgetUsername({ email: email.trim() });
+      if (success) onSuccess();
+      setShowSnackbar(true);
+    } catch (err) {
+      onError();
+    }
   };
 
   useEffect(() => {

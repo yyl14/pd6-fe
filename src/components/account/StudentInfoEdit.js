@@ -96,7 +96,7 @@ export default function StudentInfoEdit(props) {
 
   const { institutes } = useInstitutes();
   const [institutesById, institutesId] = useReduxStateShape(institutes);
-  const { addStudentCard, mutatePendingStudentCards, isLoading, error } = useAccountStudentCards(accountId);
+  const { addStudentCard, isLoading, error } = useAccountStudentCards(accountId);
 
   const enableInstitutesId = institutesId.filter((item) => !institutesById[item].is_disabled);
 
@@ -140,14 +140,13 @@ export default function StudentInfoEdit(props) {
           institute_id: inputInstituteId[0],
           institute_email_prefix: addInputs.email,
           student_id: addInputs.studentId,
-        })
+        });
 
         if ((await res).ok) {
-          setSnackbar(true)
-          mutatePendingStudentCards()
+          setSnackbar(true);
         }
       } catch (e) {
-        setErrorSnackbar(true)
+        setErrorSnackbar(true);
       }
     }
     setAdd(false);

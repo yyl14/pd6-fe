@@ -9,13 +9,10 @@ import {
   Typography,
 } from '@material-ui/core';
 import { useContext, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getInstitutes } from '../../actions/common/common';
-import { browsePendingStudentCards, fetchStudentCards } from '../../actions/user/user';
+import { useSelector } from 'react-redux';
 import ThemeToggleContext from '../../contexts/themeToggleContext';
 import useEventListener from '../../hooks/useEventListener';
 import useReduxStateShape from '../../hooks/useReduxStateShape';
-import useEmailVerification from '../../lib/email/useEmailVerification';
 import useAccountStudentCards from '../../lib/studentCard/useAccountStudentCards';
 import GeneralLoading from '../GeneralLoading';
 import NoMatch from '../noMatch';
@@ -59,17 +56,13 @@ export default function AccountSetting() {
   const [showThemeSelector, setShowThemeSelector] = useState(false);
   const [message, setMessage] = useState('');
 
-  const dispatch = useDispatch();
   const accountId = useSelector((state) => state.user.id);
-  const authToken = useSelector((state) => state.user.token);
   const account = useSelector((state) => state.user);
   const { studentCards, pendingStudentCards, isLoading } = useAccountStudentCards(accountId);
   const [studentCardsById, studentCardsIds] = useReduxStateShape(studentCards);
   const [pendingStudentCardsById, pendingStudentCardsIds] = useReduxStateShape(pendingStudentCards);
   const loading = useSelector((state) => state.loading.user);
   const error = useSelector((state) => state.error.user);
-
-  const { isLoading: emailVerificationIsLoading } = useEmailVerification();
 
   useEffect(() => {
     if (account.role === 'GUEST') {
@@ -79,29 +72,6 @@ export default function AccountSetting() {
       setShowSnackbar(false);
     }
   }, [account.role]);
-
-  useEffect(() => {
-    if (!isLoading.makeDefault) {
-      dispatch(fetchStudentCards(authToken, accountId));
-    }
-  }, [authToken, accountId, dispatch, isLoading.makeDefault]);
-
-  useEffect(() => {
-    if (!emailVerificationIsLoading.deletePendingEmailVerification && !isLoading.add) {
-      dispatch(browsePendingStudentCards(authToken, accountId));
-    }
-  }, [
-    accountId,
-    authToken,
-    dispatch,
-    isLoading.add,
-    emailVerificationIsLoading.deletePendingEmailVerification,
-  ]);
-
-
-  useEffect(() => {
-    dispatch(getInstitutes());
-  }, [dispatch]);
 
   useEffect(() => {
     if (!loading.user.editAccount && error.user.editAccount) {
@@ -115,12 +85,12 @@ export default function AccountSetting() {
   }, [error.user.editAccount, loading.user.editAccount]);
 
   useEffect(() => {
-    const newData = studentCardsIds?.map(id => studentCardsById[id]) ?? [];
+    const newData = studentCardsIds?.map((id) => studentCardsById[id]) ?? [];
     setCards(newData);
   }, [studentCardsById, studentCardsIds]);
 
   useEffect(() => {
-    const newData = pendingStudentCardsIds?.map(id => pendingStudentCardsById[id]) ?? [];
+    const newData = pendingStudentCardsIds?.map((id) => pendingStudentCardsById[id]) ?? [];
     setPendingCards(newData);
   }, [pendingStudentCardsById, pendingStudentCardsIds]);
 

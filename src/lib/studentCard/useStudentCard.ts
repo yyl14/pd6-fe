@@ -2,9 +2,10 @@ import useSWR from 'swr';
 
 import { readStudentCard } from './fetchers';
 
-const useStudentCard = (studentcardId: number) => {
-  const readStudentCardSWR = useSWR(`/student-card/${studentcardId}`, 
-        () => readStudentCard({ student_card_id: studentcardId }));
+const useStudentCard = (studentCardId: number) => {
+  const readStudentCardSWR = useSWR(`/student-card/${studentCardId}`, () =>
+    readStudentCard({ student_card_id: studentCardId }),
+  );
 
   return {
     studentCard: readStudentCardSWR.data?.data.data,

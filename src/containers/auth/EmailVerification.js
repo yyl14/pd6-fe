@@ -62,22 +62,21 @@ export default function EmailVerification() {
 
   useEffect(() => {
     (async () => {
-      const {
-        data: { success },
-      } = await emailVerification();
-      if (success) {
-        setMessage('Email Verify Succeed.');
-        setTimeout(() => {
-          history.push('/login');
-        }, 3000);
-      } else {
+      try {
+        const {
+          data: { success },
+        } = await emailVerification();
+        if (success) {
+          setMessage('Email Verify Succeed.');
+        }
+      } catch (err) {
         setMessage('Fail to verify Email.');
+      } finally {
         setTimeout(() => {
           history.push('/login');
-        }, 3000);
+        }, 2000);
       }
     })();
-    // TODO: no setMessage after email verification success
   }, [history, queryString, emailVerification]);
 
   return (

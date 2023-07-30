@@ -77,25 +77,27 @@ export default function InstituteList() {
   };
 
   const add = async () => {
-    const res = addInstitute({
-      abbreviated_name: inputs.initialism,
-      full_name: inputs.fullName,
-      email_domain: inputs.email,
-      is_disabled: !inputs.status,
-    });
+    try {
+      const res = addInstitute({
+        abbreviated_name: inputs.initialism,
+        full_name: inputs.fullName,
+        email_domain: inputs.email,
+        is_disabled: !inputs.status,
+      });
 
-    setPopUp(false);
-    setInputs({
-      fullName: '',
-      initialism: '',
-      email: '',
-      status: false,
-    });
-
-    if (!(await res).ok) {
-      setShowSnackbar(true);
+      if (!(await res).ok) {
+        setPopUp(false);
+        setInputs({
+          fullName: '',
+          initialism: '',
+          email: '',
+          status: false,
+        });
+        setShowSnackbar(true);
+      }
+    } catch {
+      setShowSnackbar(false);
     }
-    setShowSnackbar(false);
   };
 
   const cancel = () => {

@@ -21,8 +21,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useState } from 'react';
 
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import GeneralLoading from '../../components/GeneralLoading';
@@ -64,13 +63,11 @@ function checkPassword(password1, password2) {
 export default function RegisterForm() {
   const classNames = useStyles();
   const history = useHistory();
-  const loadingInstitute = useSelector((state) => state.loading.common.fetchInstitutes);
 
-  const { register, isLoading: registerIsLoading, error: registerIsError } = useRegister();
+  const { register } = useRegister();
 
-  const { institutes } = useInstitutes();
+  const { institutes, isLoading: institutesIsLoading } = useInstitutes();
   const [institutesById, institutesId] = useReduxStateShape(institutes);
-
   const enableInstitutesId = institutesId.filter((item) => !institutesById[item].is_disabled);
 
   const [nextPage, setNextPage] = useState(false);
@@ -113,7 +110,7 @@ export default function RegisterForm() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [hasRequest, setHasRequest] = useState(false);
+  // const [hasRequest, setHasRequest] = useState(false);
 
   const labelName = ['realName', 'school', 'username', 'studentId', 'email', 'password', 'confirmPassword'];
 
@@ -122,7 +119,7 @@ export default function RegisterForm() {
     return ids.length === 0 ? 1 : ids[0];
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const newInputs = labelName.reduce((acc, item) => ({ ...acc, [item]: inputs[item].trim() }), {});
     let hasError = labelName.reduce((acc, item) => acc || newInputs[item] === '', false);
 
@@ -152,16 +149,48 @@ export default function RegisterForm() {
     }
 
     if (!hasError) {
-      register({
-        username: inputs.username.trim(),
-        password: inputs.password,
-        nickname: inputs.nickname.trim(),
-        real_name: inputs.realName.trim(),
-        institute_id: transform(inputs.school),
-        student_id: inputs.studentId.trim(),
-        institute_email_prefix: inputs.email.trim(),
-      });
-      setHasRequest(true);
+      try {
+        const res = register({
+          username: inputs.username.trim(),
+          password: inputs.password,
+          nickname: inputs.nickname.trim(),
+          real_name: inputs.realName.trim(),
+          institute_id: transform(inputs.school),
+          student_id: inputs.studentId.trim(),
+          institute_email_prefix: inputs.email.trim(),
+        });
+        if ((await res).ok) {
+          setPopup(true);
+        }
+      } catch (err) {
+        switch (err.message) {
+          case 'UsernameExists': {
+            setErrors((input) => ({ ...input, username: true }));
+            setErrorTexts((input) => ({ ...input, username: 'Username Exists' }));
+            break;
+          }
+          case 'StudentCardExists': {
+            setErrors((input) => ({ ...input, studentId: true }));
+            setErrorTexts((input) => ({ ...input, studentId: 'Student ID Exists' }));
+            setNextPage(false);
+            break;
+          }
+          case 'StudentIdNotMatchEmail': {
+            setErrors((input) => ({ ...input, studentId: true, email: true }));
+            setErrorTexts((input) => ({
+              ...input,
+              studentId: 'StudentIdNotMatchEmail',
+              email: 'StudentIdNotMatchEmail',
+            }));
+            setNextPage(false);
+            break;
+          }
+          default: {
+            setErrorMsg(err.message);
+            setErrorPopup(true);
+          }
+        }
+      }
     }
   };
 
@@ -215,8 +244,6 @@ export default function RegisterForm() {
         setErrorTexts((input) => ({ ...input, studentId: '', email: '' }));
       }
     }
-
-    setHasRequest(false);
   };
 
   const onClosePopup = () => {
@@ -244,45 +271,7 @@ export default function RegisterForm() {
     }
   };
 
-  useEffect(() => {
-    if (!registerIsLoading.register && hasRequest) {
-      // IllegalCharacter, InvalidInstitute, SystemException
-      // StudentCardExists, UsernameExists, StudentIdNotMatchEmail
-      if (!registerIsError.register) {
-        switch (registerIsError.register.message) {
-          case 'UsernameExists': {
-            setErrors((input) => ({ ...input, username: true }));
-            setErrorTexts((input) => ({ ...input, username: 'Username Exists' }));
-            break;
-          }
-          case 'StudentCardExists': {
-            setErrors((input) => ({ ...input, studentId: true }));
-            setErrorTexts((input) => ({ ...input, studentId: 'Student ID Exists' }));
-            setNextPage(false);
-            break;
-          }
-          case 'StudentIdNotMatchEmail': {
-            setErrors((input) => ({ ...input, studentId: true, email: true }));
-            setErrorTexts((input) => ({
-              ...input,
-              studentId: 'StudentIdNotMatchEmail',
-              email: 'StudentIdNotMatchEmail',
-            }));
-            setNextPage(false);
-            break;
-          }
-          default: {
-            setErrorMsg(registerIsError.register.message);
-            setErrorPopup(true);
-          }
-        }
-      } else {
-        setPopup(true);
-      }
-    }
-  }, [hasRequest, registerIsError.register, registerIsLoading.register]);
-
-  if (loadingInstitute) {
+  if (institutesIsLoading.browseAll) {
     return <GeneralLoading />;
   }
   return (
