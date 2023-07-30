@@ -7,9 +7,10 @@ import { useHistory, useParams } from 'react-router-dom';
 import AlignedText from '../../../ui/AlignedText';
 import PageTitle from '../../../ui/PageTitle';
 
-import { browseSubmitLang } from '../../../../actions/common/common';
 import { readProblemInfo, submitCode } from '../../../../actions/myClass/problem';
+import useSubmitLangs from '../../../../lib/submitLang/useSubmitLangs';
 
+import useReduxStateShape from '../../../../hooks/useReduxStateShape';
 import NoMatch from '../../../noMatch';
 import CodeField from '../../../ui/CodeField';
 
@@ -39,7 +40,9 @@ export default function CodeSubmission() {
 
   const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges.byId);
-  const submitLang = useSelector((state) => state.submitLangs);
+  // const submitLang = useSelector((state) => state.submitLangs);
+  const { submitLangs } = useSubmitLangs();
+  const [submitLangById, submitLangId] = useReduxStateShape(submitLangs);
   const [lang, setLang] = useState([]);
   const authToken = useSelector((state) => state.auth.token);
   const errors = useSelector((state) => state.error.myClass.problem);
@@ -61,7 +64,7 @@ export default function CodeSubmission() {
   }, [challengeId, challenges, currentTime]);
 
   useEffect(() => {
-    const enabledIds = submitLang.allIds.filter((id) => !submitLang.byId[id].is_disabled);
+    const enabledIds = submitLangId.filter((id) => !submitLangById[id].is_disabled);
     setLang(enabledIds);
     if (localStorage.getItem('langId')) {
       if (enabledIds.includes(Number(localStorage.getItem('langId')))) {
@@ -72,7 +75,7 @@ export default function CodeSubmission() {
     } else if (enabledIds.length !== 0) {
       setLangId(enabledIds[0]);
     }
-  }, [submitLang.allIds, submitLang.byId]);
+  }, [submitLangId, submitLangById]);
 
   const onSubmitSuccess = () => {
     history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
@@ -95,10 +98,6 @@ export default function CodeSubmission() {
     dispatch(readProblemInfo(authToken, problemId));
   }, [authToken, dispatch, problemId]);
 
-  useEffect(() => {
-    dispatch(browseSubmitLang(authToken));
-  }, [authToken, dispatch]);
-
   if (problems[problemId] === undefined || challenges[challengeId] === undefined) {
     return <NoMatch />;
   }
@@ -117,8 +116,8 @@ export default function CodeSubmission() {
             }}
           >
             {lang.map((key) => (
-              <MenuItem key={submitLang.byId[key].id} value={submitLang.byId[key].id}>
-                {`${submitLang.byId[key].name} ${submitLang.byId[key].version}`}
+              <MenuItem key={submitLangById[key].id} value={submitLangById[key].id}>
+                {`${submitLangById[key].name} ${submitLangById[key].version}`}
               </MenuItem>
             ))}
           </Select>

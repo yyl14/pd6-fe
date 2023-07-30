@@ -4,9 +4,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { browseAllJudgementJudgeCase } from '../../../../actions/api/judgement';
-import { browseSubmitLang } from '../../../../actions/common/common';
 import { browseTestcases, rejudgeSubmission } from '../../../../actions/myClass/problem';
 import { fetchSubmission, readSubmissionDetail } from '../../../../actions/myClass/submission';
+import useReduxStateShape from '../../../../hooks/useReduxStateShape';
+import useSubmitLangs from '../../../../lib/submitLang/useSubmitLangs';
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
@@ -58,7 +59,8 @@ export default function SubmissionDetail() {
   const user = useSelector((state) => state.user);
   const judgeCases = useSelector((state) => state.judgeCases);
   const testcases = useSelector((state) => state.testcases);
-  const submitLangs = useSelector((state) => state.submitLangs.byId);
+  const { submitLangs } = useSubmitLangs();
+  const [submitLangById] = useReduxStateShape(submitLangs);
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.problem);
   const submissionLoading = useSelector((state) => state.loading.myClass.problem);
@@ -82,10 +84,6 @@ export default function SubmissionDetail() {
   useEffect(() => {
     dispatch(browseTestcases(authToken, problemId));
   }, [authToken, dispatch, problemId]);
-
-  useEffect(() => {
-    dispatch(browseSubmitLang(authToken));
-  }, [authToken, dispatch]);
 
   const transformSample = useCallback(
     (id) => {
@@ -301,10 +299,10 @@ export default function SubmissionDetail() {
           </Typography>
         </AlignedText>
         <AlignedText text="Language" childrenType="text">
-          {submitLangs[submissions[submissionId].language_id] && (
+          {submitLangById[submissions[submissionId].language_id] && (
             <Typography variant="body1">
-              {`${submitLangs[submissions[submissionId].language_id].name} ${
-                submitLangs[submissions[submissionId].language_id].version
+              {`${submitLangById[submissions[submissionId].language_id].name} ${
+                submitLangById[submissions[submissionId].language_id].version
               }`}
             </Typography>
           )}

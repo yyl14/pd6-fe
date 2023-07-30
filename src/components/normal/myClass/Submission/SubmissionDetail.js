@@ -18,10 +18,10 @@ import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
 import Icon from '../../../ui/icon/index';
 
-import { browseSubmitLang, fetchChallenge, getAccountBatch } from '../../../../actions/common/common';
+import { fetchChallenge, getAccountBatch } from '../../../../actions/common/common';
 import { readProblemInfo } from '../../../../actions/myClass/problem';
-
-// import { browseSubmitLang } from '../../../../actions/common/common';
+import useReduxStateShape from '../../../../hooks/useReduxStateShape';
+import useSubmitLangs from '../../../../lib/submitLang/useSubmitLangs';
 
 const useStyles = makeStyles((theme) => ({
   textLink: {
@@ -69,7 +69,8 @@ export default function SubmissionDetail() {
   const accounts = useSelector((state) => state.accounts);
   const judgeCases = useSelector((state) => state.judgeCases);
   const testcases = useSelector((state) => state.testcases);
-  const submitLangs = useSelector((state) => state.submitLangs.byId);
+  const { submitLangs } = useSubmitLangs();
+  const [submitLangById] = useReduxStateShape(submitLangs);
   const authToken = useSelector((state) => state.auth.token);
   // const loading = useSelector((state) => state.loading.myClass.submissions);
   const [rejudge, setRejudge] = useState(false);
@@ -78,10 +79,6 @@ export default function SubmissionDetail() {
     dispatch(readSubmissionDetail(authToken, submissionId));
     dispatch(fetchSubmission(authToken, submissionId));
   }, [authToken, dispatch, submissionId]);
-
-  useEffect(() => {
-    dispatch(browseSubmitLang(authToken));
-  }, [authToken, dispatch]);
 
   useEffect(() => {
     if (submissions[submissionId]) {
@@ -316,10 +313,10 @@ export default function SubmissionDetail() {
           </Typography>
         </AlignedText>
         <AlignedText text="Language" childrenType="text">
-          {submitLangs[submissions[submissionId].language_id] && (
+          {submitLangById[submissions[submissionId].language_id] && (
             <Typography variant="body1">
-              {`${submitLangs[submissions[submissionId].language_id].name} ${
-                submitLangs[submissions[submissionId].language_id].version
+              {`${submitLangById[submissions[submissionId].language_id].name} ${
+                submitLangById[submissions[submissionId].language_id].version
               }`}
             </Typography>
           )}
