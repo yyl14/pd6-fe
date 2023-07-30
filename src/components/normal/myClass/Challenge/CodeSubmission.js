@@ -8,7 +8,7 @@ import AlignedText from '../../../ui/AlignedText';
 import PageTitle from '../../../ui/PageTitle';
 
 import { readProblemInfo, submitCode } from '../../../../actions/myClass/problem';
-import useSubmitLang from '../../../../lib/submitLang/useSubmitLang';
+import useSubmitLangs from '../../../../lib/submitLang/useSubmitLangs';
 
 import useReduxStateShape from '../../../../hooks/useReduxStateShape';
 import NoMatch from '../../../noMatch';
@@ -41,7 +41,7 @@ export default function CodeSubmission() {
   const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   // const submitLang = useSelector((state) => state.submitLangs);
-  const { submitLangs } = useSubmitLang();
+  const { submitLangs } = useSubmitLangs();
   const [submitLangById, submitLangId] = useReduxStateShape(submitLangs);
   const [lang, setLang] = useState([]);
   const authToken = useSelector((state) => state.auth.token);

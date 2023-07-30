@@ -21,7 +21,7 @@ import Icon from '../../../ui/icon/index';
 import { fetchChallenge, getAccountBatch } from '../../../../actions/common/common';
 import { readProblemInfo } from '../../../../actions/myClass/problem';
 import useReduxStateShape from '../../../../hooks/useReduxStateShape';
-import useSubmitLang from '../../../../lib/submitLang/useSubmitLang';
+import useSubmitLangs from '../../../../lib/submitLang/useSubmitLangs';
 
 const useStyles = makeStyles((theme) => ({
   textLink: {
@@ -69,7 +69,7 @@ export default function SubmissionDetail() {
   const accounts = useSelector((state) => state.accounts);
   const judgeCases = useSelector((state) => state.judgeCases);
   const testcases = useSelector((state) => state.testcases);
-  const submitLangs = useSubmitLang();
+  const submitLangs = useSubmitLangs();
   const [submitLangById] = useReduxStateShape(submitLangs);
   const authToken = useSelector((state) => state.auth.token);
   // const loading = useSelector((state) => state.loading.myClass.submissions);

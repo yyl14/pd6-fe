@@ -23,9 +23,9 @@ import SimpleBar from '../../ui/SimpleBar';
 /* This is a level 4 component (page component) */
 export default function LangSetting() {
   const { languageId } = useParams();
-  const { submitLangs, mutateSubmitLangs } = useSubmitLang();
+  const { submitLangs, mutateSubmitLangs } = useSubmitLangs();
   const [submitLangById, submitLangIds] = useReduxStateShape(submitLangs);
-  const { editSubmitLang } = useSubmitLangs(submitLangIds);
+  const { editSubmitLang } = useSubmitLang(submitLangIds);
   const loading = useSelector((state) => state.loading.admin.system.fetchAnnouncement);
   const [popUp, setPopUp] = useState(false);
   const [languageStatus, setLanguageStatus] = useState(false);

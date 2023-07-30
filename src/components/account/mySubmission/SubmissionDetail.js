@@ -8,7 +8,7 @@ import { fetchChallenge, fetchClass, fetchCourse } from '../../../actions/common
 import { browseTestcases } from '../../../actions/myClass/problem';
 import { fetchSubmission, readSubmissionDetail } from '../../../actions/myClass/submission';
 import useReduxStateShape from '../../../hooks/useReduxStateShape';
-import useSubmitLang from '../../../lib/submitLang/useSubmitLang';
+import useSubmitLangs from '../../../lib/submitLang/useSubmitLangs';
 import GeneralLoading from '../../GeneralLoading';
 import NoMatch from '../../noMatch';
 import AlignedText from '../../ui/AlignedText';
@@ -58,7 +58,7 @@ export default function SubmissionDetail() {
   const user = useSelector((state) => state.user);
   const judgeCases = useSelector((state) => state.judgeCases);
   const testcases = useSelector((state) => state.testcases);
-  const { submitLangs, isLoading: submitLangIsLoading } = useSubmitLang();
+  const { submitLangs, isLoading: submitLangIsLoading } = useSubmitLangs();
   const [submitLangById] = useReduxStateShape(submitLangs);
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.problem);
@@ -189,7 +189,7 @@ export default function SubmissionDetail() {
     judgeCases.allIds === undefined ||
     testcases.allIds === undefined
   ) {
-    if (loading.readSubmissionDetail || loading.readTestcase || submitLangIsLoading) {
+    if (loading.readSubmissionDetail || loading.readTestcase || submitLangIsLoading.browseAll) {
       return <GeneralLoading />;
     }
     return <NoMatch />;

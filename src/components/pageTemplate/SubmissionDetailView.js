@@ -7,7 +7,7 @@ import { browseAllJudgementJudgeCase } from '../../actions/api/judgement';
 import { browseTestcases, rejudgeSubmission } from '../../actions/myClass/problem';
 import { fetchSubmission, readSubmissionDetail } from '../../actions/myClass/submission';
 import useReduxStateShape from '../../hooks/useReduxStateShape';
-import useSubmitLang from '../../lib/submitLang/useSubmitLang';
+import useSubmitLangs from '../../lib/submitLang/useSubmitLangs';
 import GeneralLoading from '../GeneralLoading';
 import NoMatch from '../noMatch';
 import AlignedText from '../ui/AlignedText';
@@ -55,7 +55,7 @@ export default function SubmissionDetail({ baseUrl, isManager, isProblemSet }) {
   const user = useSelector((state) => state.user);
   const judgeCases = useSelector((state) => state.judgeCases);
   const testcases = useSelector((state) => state.testcases);
-  const { submitLangs } = useSubmitLang();
+  const { submitLangs } = useSubmitLangs();
   const [submitLangById] = useReduxStateShape(submitLangs);
   const authToken = useSelector((state) => state.auth.token);
   const loading = useSelector((state) => state.loading.myClass.problem);

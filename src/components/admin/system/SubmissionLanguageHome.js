@@ -1,11 +1,11 @@
 import useReduxStateShape from '../../../hooks/useReduxStateShape';
-import useSubmitLang from '../../../lib/submitLang/useSubmitLang';
+import useSubmitLangs from '../../../lib/submitLang/useSubmitLangs';
 import CustomTable from '../../ui/CustomTable';
 import PageTitle from '../../ui/PageTitle';
 
 /* This is a level 4 component (page component) */
 export default function SubmissionLanguageHome() {
-  const { submitLangs } = useSubmitLang();
+  const { submitLangs } = useSubmitLangs();
   const [submitLangById, submitLangIds] = useReduxStateShape(submitLangs);
 
   return (

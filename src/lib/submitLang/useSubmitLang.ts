@@ -1,17 +1,17 @@
-import useSWR from 'swr';
-import { browseAllSubmitLang } from './fetchers';
+import useSWRMutation from 'swr/mutation';
+import toSWRFetcher from '../../function/toSWRMutationFetcher';
+import { editSubmitLang } from './fetchers';
 
-const useSubmitLang = () => {
-  const browseAllSubmitLangSWR = useSWR('/submission/language', () => browseAllSubmitLang({}));
+const useSubmitLang = (submitLangId: number) => {
+  const editSubmitLangSWR = useSWRMutation(`/submission/language/${submitLangId}`, toSWRFetcher(editSubmitLang));
 
   return {
-    submitLangs: browseAllSubmitLangSWR.data?.data.data,
-    mutateSubmitLangs: () => browseAllSubmitLangSWR.mutate(),
+    editSubmitLang: editSubmitLangSWR.trigger,
     isLoading: {
-      browseAll: browseAllSubmitLangSWR.isLoading,
+      edit: editSubmitLangSWR.isMutating,
     },
     error: {
-      browseAll: browseAllSubmitLangSWR.error,
+      edit: editSubmitLangSWR.error,
     },
   };
 };

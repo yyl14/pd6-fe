@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { readProblemInfo, submitCode } from '../../actions/myClass/problem';
 import useReduxStateShape from '../../hooks/useReduxStateShape';
-import useSubmitLang from '../../lib/submitLang/useSubmitLang';
+import useSubmitLangs from '../../lib/submitLang/useSubmitLangs';
 import NoMatch from '../noMatch';
 import AlignedText from '../ui/AlignedText';
 import PageTitle from '../ui/PageTitle';
@@ -40,7 +40,7 @@ export default function CodeSubmission({ baseUrl, isProblemSet }) {
   const problems = useSelector((state) => state.problem.byId);
   const challenges = useSelector((state) => state.challenges.byId);
   // const submitLang = useSelector((state) => state.submitLangs);
-  const { submitLangs } = useSubmitLang();
+  const { submitLangs } = useSubmitLangs();
   const [submitLangById, submitLangIds] = useReduxStateShape(submitLangs);
   const [lang, setLang] = useState([]);
   const authToken = useSelector((state) => state.auth.token);
