@@ -69,7 +69,7 @@ export default function SubmissionDetail() {
   const accounts = useSelector((state) => state.accounts);
   const judgeCases = useSelector((state) => state.judgeCases);
   const testcases = useSelector((state) => state.testcases);
-  const submitLangs = useSubmitLangs();
+  const { submitLangs } = useSubmitLangs();
   const [submitLangById] = useReduxStateShape(submitLangs);
   const authToken = useSelector((state) => state.auth.token);
   // const loading = useSelector((state) => state.loading.myClass.submissions);
