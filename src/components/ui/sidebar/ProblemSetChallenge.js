@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import { fetchChallenge, fetchClass, fetchCourse } from '../../../actions/common/common';
 import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
 import Icon from '../icon/index';
-// import useChallengeTasks from '../../../lib/task/useChallengeTasks';
 
 export default function ProblemSetChallenge({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, challengeId, problemId, submissionId } = useParams();
@@ -15,14 +14,12 @@ export default function ProblemSetChallenge({ classNames, history, location, mod
   const challenges = useSelector((state) => state.challenges.byId);
   const problems = useSelector((state) => state.problem);
 
-
   useEffect(() => {
     dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchClass(authToken, classId));
     dispatch(fetchChallenge(authToken, challengeId));
     dispatch(browseTasksUnderChallenge(authToken, challengeId));
   }, [dispatch, authToken, classId, courseId, challengeId]);
-
 
   const [display, setDisplay] = useState(true);
   const [title, setTitle] = useState('');

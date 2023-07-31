@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useParams } from 'react-router-dom';
 
 import { fetchChallenge } from '../../../actions/common/common';
+import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge'; 
 import ChallengeInfo from '../../../components/normal/myClass/Challenge/ChallengeInfo';
 import Setting from '../../../components/normal/myClass/Challenge/Setting';
 import Statistics from '../../../components/normal/myClass/Challenge/Statistics';
 import Task from '../../../components/normal/myClass/Challenge/Task';
 import NoMatch from '../../../components/noMatch';
 import useChallengeTasks from '../../../lib/task/useChallengeTasks';
-import useReduxStateShape from '../../../hooks/useReduxStateShape';
 // import EssayProblem from '../../../components/normal/myClass/Challenge/EssayProblem';
 
 /* This is a level 3 container (main page container) */
@@ -19,12 +19,7 @@ export default function Challenge() {
   const { challengeId } = useParams();
   const loading = useSelector((state) => state.loading.myClass);
   const apiLoading = useSelector((state) => state.loading.api);
-  const { tasks, isLoading: ChallengeTasksLoading } = useChallengeTasks(challengeId);
-  const problems = tasks?.problem;
-
-  const [problemById, problemIds] = useReduxStateShape(problems);
-
-  console.log(problemById);
+  const { isLoading: ChallengeTasksLoading } = useChallengeTasks(challengeId);
   
   useEffect(() => {
     if (
@@ -39,7 +34,8 @@ export default function Challenge() {
       !apiLoading.scoreboard.deleteScoreboard
       // && !loading.problem.deletePeerReview
     ) {
-      dispatch(fetchChallenge(authToken, challengeId));  
+      dispatch(fetchChallenge(authToken, challengeId)); 
+      dispatch(browseTasksUnderChallenge(authToken, challengeId)); 
     }
   }, [
     apiLoading.scoreboard.deleteScoreboard,
@@ -62,9 +58,7 @@ export default function Challenge() {
         <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId" component={ChallengeInfo} />
         <Route path="/my-class/:courseId/:classId/challenge/:challengeId/setting" component={Setting} />
         <Route path="/my-class/:courseId/:classId/challenge/:challengeId/statistics" component={Statistics} />
-        {problemIds?.map(problemId =>
-        <Route key={problemId.id} path={`/my-class/:courseId/:classId/challenge/:challengeId/${problemId}`} component={Task} />
-        )}
+        <Route path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId" component={Task} />
         <Route component={NoMatch} />
       </Switch>
     </>

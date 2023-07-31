@@ -23,7 +23,6 @@ import AlignedText from '../../../../ui/AlignedText';
 import FileUploadArea from '../../../../ui/FileUploadArea';
 import SimpleBar from '../../../../ui/SimpleBar';
 import Icon from '../../../../ui/icon/index';
-// import useChallengeTasks from '../../../../../lib/task/useChallengeTasks';
 
 const StyledButton = withStyles({
   outlined: {
@@ -66,7 +65,6 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   const [popUpFail, setPopUpFail] = useState(false);
   const [popUpDelete, setPopUpDelete] = useState(false);
 
-
   const handleClickUpload = () => {
     setPopUpUpload(true);
   };
@@ -104,7 +102,7 @@ export default function EssayInfo({ role = 'NORMAL' }) {
     setSelectedFile([]);
   };
 
-  const handleDeleteSuccess = async () => {
+  const handleDeleteSuccess = () => {
     dispatch(browseTasksUnderChallenge(authToken, challengeId));
     history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
   };

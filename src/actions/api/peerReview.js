@@ -24,7 +24,6 @@ export const readPeerReview = (token, peerReviewId) => async (dispatch) => {
 };
 
 export const deletePeerReview = (token, peerReviewId, challengeId) => async (dispatch) => {
-
   try {
     const config = {
       headers: {
