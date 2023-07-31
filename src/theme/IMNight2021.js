@@ -117,7 +117,7 @@ const typography = {
   h3: {
     fontSize: '2.67rem',
     fontWeight: 700,
-    lineHeight: 65 / 48,
+    lineHeight: 40 / 32,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
@@ -126,7 +126,7 @@ const typography = {
   h4: {
     fontSize: '1.33rem',
     fontWeight: 700,
-    lineHeight: 33 / 24,
+    lineHeight: 28 / 22,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
@@ -135,7 +135,7 @@ const typography = {
   h6: {
     fontSize: '1rem',
     fontWeight: 600,
-    lineHeight: 25 / 18,
+    lineHeight: 24 / 18,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
@@ -144,7 +144,7 @@ const typography = {
   body1: {
     fontSize: '1rem',
     fontWeight: 500,
-    lineHeight: 25 / 18,
+    lineHeight: 24 / 18,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
     whiteSpace: 'pre-line',
@@ -154,7 +154,7 @@ const typography = {
   body2: {
     fontSize: '0.89rem',
     fontWeight: 400,
-    lineHeight: 22 / 16,
+    lineHeight: 24 / 16,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
@@ -163,7 +163,7 @@ const typography = {
   caption: {
     fontSize: '0.78rem',
     fontWeight: 300,
-    lineHeight: 19 / 14,
+    lineHeight: 20 / 14,
     // letterSpacing: '-0.02rem',
     fontFamily: 'Noto Sans',
   },

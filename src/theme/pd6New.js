@@ -98,36 +98,36 @@ const typography = {
   // UI/UX style name
   // H1
   h1: {
-    fontSize: '5.33rem',
+    fontSize: '3.56rem',
     fontWeight: 500,
     letterSpacing: '-1%',
-    lineHeight: 131 / 96,
+    lineHeight: 80 / 64,
     fontFamily: 'Noto Sans',
   },
 
   // H2
   h2: {
-    fontSize: '3.33rem',
+    fontSize: '2.67rem',
     fontWeight: 500,
     letterSpacing: '-1%',
-    lineHeight: 82 / 60,
+    lineHeight: 60 / 48,
     fontFamily: 'Noto Sans',
   },
 
   // Big Title
   h3: {
-    fontSize: '2.67rem',
+    fontSize: '1.78rem',
     fontWeight: 700,
-    lineHeight: 65 / 48,
+    lineHeight: 40 / 32,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
 
   // Title
   h4: {
-    fontSize: '1.33rem',
+    fontSize: '1.22rem',
     fontWeight: 700,
-    lineHeight: 33 / 24,
+    lineHeight: 28 / 22,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
@@ -136,7 +136,7 @@ const typography = {
   h6: {
     fontSize: '1rem',
     fontWeight: 600,
-    lineHeight: 25 / 18,
+    lineHeight: 24 / 18,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
@@ -145,7 +145,7 @@ const typography = {
   body1: {
     fontSize: '1rem',
     fontWeight: 500,
-    lineHeight: 25 / 18,
+    lineHeight: 24 / 18,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
     whiteSpace: 'pre-line',
@@ -155,7 +155,7 @@ const typography = {
   body2: {
     fontSize: '0.89rem',
     fontWeight: 400,
-    lineHeight: 22 / 16,
+    lineHeight: 24 / 16,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
@@ -164,15 +164,15 @@ const typography = {
   caption: {
     fontSize: '0.78rem',
     fontWeight: 300,
-    lineHeight: 19 / 14,
+    lineHeight: 20 / 14,
     // letterSpacing: '-0.02rem',
     fontFamily: 'Noto Sans',
   },
 
   button: {
     textTransform: 'none',
-    fontSize: '1rem',
-    lineHeight: 24 / 20,
+    fontSize: '0.89rem',
+    lineHeight: 24 / 16,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
@@ -496,13 +496,13 @@ const overrides = {
       '& input': {
         padding: '10px 0px 10px 15px',
         fontWeight: 500,
-        fontSize: '1rem',
+        fontSize: '0.89rem',
       },
     },
     multiline: {
       padding: '10px 0px 10px 15px',
       fontWeight: 500,
-      fontSize: '1rem',
+      fontSize: '0.89rem',
     },
   },
   MuiFormHelperText: {
@@ -594,9 +594,9 @@ const overrides = {
       backgroundColor: mono.black,
 
       // message : body1
-      fontSize: '1rem',
+      fontSize: '0.89rem',
       fontWeight: 500,
-      lineHeight: 25 / 18,
+      lineHeight: 24 / 18,
       // letterSpacing: '-0.01rem',
       color: mono.white,
     },
