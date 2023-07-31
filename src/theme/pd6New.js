@@ -114,7 +114,7 @@ const typography = {
     fontFamily: 'Noto Sans',
   },
 
-  // Big Title
+  // Heading4
   h3: {
     fontSize: '1.78rem',
     fontWeight: 700,
@@ -123,7 +123,7 @@ const typography = {
     fontFamily: 'Noto Sans',
   },
 
-  // Title
+  // Heading5
   h4: {
     fontSize: '1.22rem',
     fontWeight: 700,
@@ -132,7 +132,7 @@ const typography = {
     fontFamily: 'Noto Sans',
   },
 
-  // Bold-Body
+  // Title
   h6: {
     fontSize: '1rem',
     fontWeight: 600,
@@ -141,17 +141,17 @@ const typography = {
     fontFamily: 'Noto Sans',
   },
 
-  // Body
+  // Body-bold
   body1: {
-    fontSize: '1rem',
+    fontSize: '0.89rem',
     fontWeight: 500,
-    lineHeight: 24 / 18,
+    lineHeight: 24 / 16,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
     whiteSpace: 'pre-line',
   },
 
-  // Sub-body
+  // Body-regular
   body2: {
     fontSize: '0.89rem',
     fontWeight: 400,
@@ -160,7 +160,7 @@ const typography = {
     fontFamily: 'Noto Sans',
   },
 
-  // Caption
+  // Body-small
   caption: {
     fontSize: '0.78rem',
     fontWeight: 300,
