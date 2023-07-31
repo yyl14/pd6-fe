@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useParams } from 'react-router-dom';
 
 import { fetchChallenge } from '../../../actions/common/common';
-import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
 import ChallengeInfo from '../../../components/normal/myClass/Challenge/ChallengeInfo';
 import Setting from '../../../components/normal/myClass/Challenge/Setting';
 import Statistics from '../../../components/normal/myClass/Challenge/Statistics';
 import Task from '../../../components/normal/myClass/Challenge/Task';
-
 import NoMatch from '../../../components/noMatch';
+import useChallengeTasks from '../../../lib/task/useChallengeTasks';
+import useReduxStateShape from '../../../hooks/useReduxStateShape';
 // import EssayProblem from '../../../components/normal/myClass/Challenge/EssayProblem';
 
 /* This is a level 3 container (main page container) */
@@ -19,22 +19,27 @@ export default function Challenge() {
   const { challengeId } = useParams();
   const loading = useSelector((state) => state.loading.myClass);
   const apiLoading = useSelector((state) => state.loading.api);
+  const { tasks, isLoading: ChallengeTasksLoading } = useChallengeTasks(challengeId);
+  const problems = tasks?.problem;
 
+  const [problemById, problemIds] = useReduxStateShape(problems);
+
+  console.log(problemById);
+  
   useEffect(() => {
     if (
       !loading.challenge.addChallenge &&
       !loading.challenge.editChallenge &&
       !loading.challenge.deleteChallenge &&
-      !loading.challenge.addProblem &&
-      !loading.challenge.addEssay &&
-      !loading.challenge.addPeerReview &&
+      !ChallengeTasksLoading.addProblem &&
+      !ChallengeTasksLoading.addEssay &&
+      !ChallengeTasksLoading.addPeerReview &&
       !loading.problem.deleteProblem &&
       !loading.problem.deleteEssay &&
       !apiLoading.scoreboard.deleteScoreboard
       // && !loading.problem.deletePeerReview
     ) {
-      dispatch(fetchChallenge(authToken, challengeId));
-      dispatch(browseTasksUnderChallenge(authToken, challengeId));
+      dispatch(fetchChallenge(authToken, challengeId));  
     }
   }, [
     apiLoading.scoreboard.deleteScoreboard,
@@ -42,22 +47,24 @@ export default function Challenge() {
     challengeId,
     dispatch,
     loading.challenge.addChallenge,
-    loading.challenge.addEssay,
-    loading.challenge.addPeerReview,
-    loading.challenge.addProblem,
+    ChallengeTasksLoading.addEssay,
+    ChallengeTasksLoading.addPeerReview,
+    ChallengeTasksLoading.addProblem,
     loading.challenge.deleteChallenge,
     loading.challenge.editChallenge,
     loading.problem.deleteEssay,
     loading.problem.deleteProblem,
   ]);
-
+  
   return (
     <>
       <Switch>
         <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId" component={ChallengeInfo} />
         <Route path="/my-class/:courseId/:classId/challenge/:challengeId/setting" component={Setting} />
         <Route path="/my-class/:courseId/:classId/challenge/:challengeId/statistics" component={Statistics} />
-        <Route path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId" component={Task} />
+        {problemIds?.map(problemId =>
+        <Route key={problemId.id} path={`/my-class/:courseId/:classId/challenge/:challengeId/${problemId}`} component={Task} />
+        )}
         <Route component={NoMatch} />
       </Switch>
     </>

@@ -3,7 +3,7 @@ import { peerReviewConstants } from './constant';
 // import { autoTableConstants } from '../component/constant';
 // import browseParamsTransForm from '../../function/browseParamsTransform';
 // import { readAccount } from '../user/user';
-import useChallengeTasks from '../../lib/task/useChallengeTasks';
+import { browseTasksUnderChallenge } from '../myClass/challenge';
 
 export const readPeerReview = (token, peerReviewId) => async (dispatch) => {
   try {
@@ -24,7 +24,7 @@ export const readPeerReview = (token, peerReviewId) => async (dispatch) => {
 };
 
 export const deletePeerReview = (token, peerReviewId, challengeId) => async (dispatch) => {
-  const { readTask } = useChallengeTasks(challengeId);
+
   try {
     const config = {
       headers: {
@@ -34,7 +34,7 @@ export const deletePeerReview = (token, peerReviewId, challengeId) => async (dis
     dispatch({ type: peerReviewConstants.DELETE_PEER_REVIEW_START });
     await agent.delete(`peer-review/${peerReviewId}`, config);
     dispatch({ type: peerReviewConstants.DELETE_PEER_REVIEW_SUCCESS });
-    readTask({ challenge_id: challengeId });
+    dispatch(browseTasksUnderChallenge(token, challengeId));
   } catch (error) {
     dispatch({
       type: peerReviewConstants.DELETE_PEER_REVIEW_FAIL,

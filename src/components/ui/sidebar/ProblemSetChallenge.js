@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchChallenge, fetchClass, fetchCourse } from '../../../actions/common/common';
-import useChallengeTasks from '../../../lib/task/useChallengeTasks';
+import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
 import Icon from '../icon/index';
+// import useChallengeTasks from '../../../lib/task/useChallengeTasks';
 
 export default function ProblemSetChallenge({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, challengeId, problemId, submissionId } = useParams();
@@ -13,18 +14,15 @@ export default function ProblemSetChallenge({ classNames, history, location, mod
   const authToken = useSelector((state) => state.auth.token);
   const challenges = useSelector((state) => state.challenges.byId);
   const problems = useSelector((state) => state.problem);
-  const { readTask } = useChallengeTasks(challengeId);
+
 
   useEffect(() => {
-    const browseTasksUnderChallenge = async () => {
-      readTask({ challenge_id: challengeId });
-    };
-
     dispatch(fetchCourse(authToken, courseId));
     dispatch(fetchClass(authToken, classId));
     dispatch(fetchChallenge(authToken, challengeId));
-    browseTasksUnderChallenge(); 
-  });
+    dispatch(browseTasksUnderChallenge(authToken, challengeId));
+  }, [dispatch, authToken, classId, courseId, challengeId]);
+
 
   const [display, setDisplay] = useState(true);
   const [title, setTitle] = useState('');
