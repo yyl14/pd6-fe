@@ -20,6 +20,7 @@ import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
 import MultiSelect from '../../../ui/MultiSelect';
 import Icon from '../../../ui/icon/index';
+import useChallengeTasks from '../../../../lib/task/useChallengeTasks';
 
 import {
   addEssay,
@@ -76,7 +77,6 @@ export default function TaskAddingCard({ open, setOpen }) {
   const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
   const commonLoading = useSelector((state) => state.loading.common);
-  const scoreboardsLoading = useSelector((state) => state.loading.api.scoreboard);
 
   const [type, setType] = useState('Coding Problem');
   const [label, setLabel] = useState('');
@@ -99,6 +99,7 @@ export default function TaskAddingCard({ open, setOpen }) {
   const [teamLabelFilter, setTeamLabelFilter] = useState('');
   const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
   const [snackbarErrorMessage, setSnackbarErrorMessage] = useState('');
+  const { isLoading: ChallengeTasksLoading } = useChallengeTasks(challengeId);
 
   const validateInput = useCallback((maxTemp, minTemp, peerNumberTemp) => {
     // string
@@ -139,10 +140,10 @@ export default function TaskAddingCard({ open, setOpen }) {
 
   useEffect(() => {
     if (
-      !loading.addProblem &&
-      !loading.addEssay &&
-      !loading.addPeerReview &&
-      !scoreboardsLoading.addTeamProjectScoreboardUnderChallenge
+      !ChallengeTasksLoading.addProblem &&
+      !ChallengeTasksLoading.addEssay &&
+      !ChallengeTasksLoading.addPeerReview &&
+      !ChallengeTasksLoading.addTeamProjectScoreboard
     ) {
       dispatch(browseTasksUnderChallenge(authToken, challengeId));
     }
@@ -150,11 +151,12 @@ export default function TaskAddingCard({ open, setOpen }) {
     authToken,
     challengeId,
     dispatch,
-    loading.addEssay,
-    loading.addPeerReview,
-    loading.addProblem,
-    scoreboardsLoading.addTeamProjectScoreboardUnderChallenge,
+    ChallengeTasksLoading.addEssay,
+    ChallengeTasksLoading.addPeerReview,
+    ChallengeTasksLoading.addProblem,
+    ChallengeTasksLoading.addTeamProjectScoreboard,
   ]);
+     
 
   useEffect(() => {
     dispatch(fetchTeams(authToken, classId, ''));
@@ -225,6 +227,7 @@ export default function TaskAddingCard({ open, setOpen }) {
       dispatch(browseTasksUnderChallenge(authToken, peerReviewChallengeId));
     }
   }, [authToken, dispatch, peerReviewChallengeId]);
+
 
   const transLabelToId = (labels) => {
     const ids = labels.map(
