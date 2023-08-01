@@ -12,14 +12,16 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { addChallenge, fetchChallenges } from '../../../../actions/myClass/challenge';
+import useChallengesUnderClass, { ChallengeDataSchema } from '../../../../lib/challenge/useChallengesUnderClass';
+import useClass from '../../../../lib/class/useClass';
+import useCourse from '../../../../lib/course/useCourse';
+import useUserClasses from '../../../../lib/user/useUserClasses';
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
+import BrowsingTable from '../../../ui/6a/BrowsingTable';
 import AlignedText from '../../../ui/AlignedText';
-import AutoTable from '../../../ui/AutoTable';
 import DateRangePicker from '../../../ui/DateRangePicker';
 import PageTitle from '../../../ui/PageTitle';
 import Icon from '../../../ui/icon/index';
@@ -50,9 +52,21 @@ const useStyles = makeStyles((theme) => ({
 
 /* This is a level 4 component (page component) */
 export default function ChallengeList() {
-  const { courseId, classId } = useParams();
   const className = useStyles();
-  const dispatch = useDispatch();
+
+  const { courseId, classId } = useParams<{ courseId: string; classId: string }>();
+
+  const { course, isLoading: courseIsLoading } = useCourse(Number(courseId));
+  const { class: classData, isLoading: classIsLoading } = useClass(Number(classId));
+
+  const { accountClasses } = useUserClasses();
+
+  const {
+    browseChallengeUnderClass,
+    addChallengeUnderClass,
+    isLoading: challengeUnderClassIsLoading,
+    error: challengeUnderClassError,
+  } = useChallengesUnderClass(Number(classId));
 
   const [dateRangePicker, setDateRangePicker] = useState([
     {
@@ -69,44 +83,34 @@ export default function ChallengeList() {
     showTime: 'On End Time',
   });
   const [disabled, setDisabled] = useState(true);
-  const [isManager, setIsManager] = useState(false);
+  const isManager = accountClasses?.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER';
 
-  const authToken = useSelector((state) => state.auth.token);
-  const error = useSelector((state) => state.error.myClass.challenge);
-  const loading = useSelector((state) => state.loading.myClass.challenge);
-  const commonLoading = useSelector((state) => state.loading.common.common);
-  const challenges = useSelector((state) => state.challenges);
-  const classes = useSelector((state) => state.classes.byId);
-  const courses = useSelector((state) => state.courses.byId);
-  const userClasses = useSelector((state) => state.user.classes);
-
-  const getStatus = (id) => {
+  const getStatus = (startTime: string, endTime: string) => {
     const currentTime = moment();
-    if (currentTime.isBefore(moment(challenges.byId[id].start_time))) {
+    if (currentTime.isBefore(moment(startTime))) {
       return 'Not Yet';
     }
-    if (currentTime.isBefore(moment(challenges.byId[id].end_time))) {
+    if (currentTime.isBefore(moment(endTime))) {
       return 'Opened';
     }
     return 'Closed';
   };
 
-  useEffect(() => {
-    if (userClasses.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
-      setIsManager(true);
-    } else setIsManager(false);
-  }, [classId, userClasses]);
-
-  if (courses[courseId] === undefined || classes[classId] === undefined) {
-    if (commonLoading.fetchClass || commonLoading.fetchCourse) {
+  if (course === undefined || classData === undefined) {
+    if (courseIsLoading.read || classIsLoading.read) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
   }
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+      | React.ChangeEvent<{ name?: string | undefined; value: unknown }>,
+  ) => {
     const { name, value } = e.target;
-    setInputs((input) => ({ ...input, [name]: value }));
+
+    if (name) setInputs((input) => ({ ...input, [name]: value }));
 
     if (name === 'title' && value === '') {
       setDisabled(true);
@@ -114,14 +118,21 @@ export default function ChallengeList() {
   };
 
   const handleAdd = () => {
-    const body = {
-      title: inputs.title,
-      scoredBy: inputs.scoredBy === 'Last Score' ? 'LAST' : 'BEST',
-      showTime: inputs.showTime === 'On End Time' ? 'END_TIME' : 'START_TIME',
-      startTime: dateRangePicker[0].startDate.toISOString(),
-      endTime: dateRangePicker[0].endDate.toISOString(),
-    };
-    dispatch(addChallenge(authToken, classId, body));
+    const { title } = inputs;
+    const scoredBy = inputs.scoredBy === 'Last Score' ? 'LAST' : 'BEST';
+    const showTime = inputs.showTime === 'On End Time' ? 'END_TIME' : 'START_TIME';
+    const startTime = dateRangePicker[0].startDate.toISOString();
+    const endTime = dateRangePicker[0].endDate.toISOString();
+
+    addChallengeUnderClass({
+      class_id: Number(classId),
+      title,
+      publicize_type: showTime,
+      selection_type: scoredBy,
+      start_time: startTime,
+      end_time: endTime,
+    });
+
     setDisabled(true);
     setPopUp(false);
     setInputs({
@@ -157,45 +168,18 @@ export default function ChallengeList() {
 
   return (
     <>
-      <PageTitle text={`${courses[courseId].name} ${classes[classId].name} / Challenge`} />
-      <AutoTable
-        ident={`Challenge list ${classId}`}
-        buttons={
-          isManager && (
-            <>
-              <Button color="primary" onClick={() => setPopUp(true)}>
-                <Icon.Add style={{ color: 'white' }} />
-              </Button>
-            </>
-          )
+      <PageTitle text={`${course.name} ${classData.name} / Challenge`} />
+      <BrowsingTable<
+        ChallengeDataSchema,
+        {
+          id: string;
+          Title: string;
+          'Start Time': string;
+          'End Time': string;
+          Status: string;
         }
-        hasFilter
-        filterConfig={[
-          {
-            reduxStateId: 'title',
-            label: 'Title',
-            type: 'TEXT',
-            operation: 'LIKE',
-          },
-          {
-            reduxStateId: 'status',
-            label: 'Status',
-            type: 'ENUM_SINGLE',
-            operation: 'IN',
-            options: [
-              { value: 'Not Yet', label: 'Not Yet' },
-              { value: 'Opened', label: 'Opened' },
-              { value: 'Closed', label: 'Closed' },
-            ],
-          },
-        ]}
-        defaultSort={['start_time', 'DESC']}
-        refetch={(browseParams, ident) => {
-          dispatch(fetchChallenges(authToken, classId, browseParams, ident));
-        }}
-        refetchErrors={[error.fetchChallenges]}
-        refreshLoadings={[loading.addChallenge]}
-        columns={[
+      >
+        columnsConfig={[
           {
             name: 'Title',
             align: 'center',
@@ -225,24 +209,43 @@ export default function ChallengeList() {
             type: 'string',
           },
         ]}
-        reduxData={challenges}
-        reduxDataToRows={(item) => ({
-          id: item.id,
-          Title: item.title,
-          'Start Time': moment(item.start_time).format('YYYY-MM-DD, HH:mm'),
-          'End Time': moment(item.end_time).format('YYYY-MM-DD, HH:mm'),
-          Status: getStatus(item.id),
-          link: `/my-class/${courseId}/${classId}/challenge/${item.id}`,
+        filterConfig={[
+          { dataColumn: 'title', label: 'Title', type: 'TEXT', operator: 'LIKE' },
+          // TODO: status filter
+        ]}
+        data={browseChallengeUnderClass.data?.data}
+        dataToRow={({ id, title, start_time, end_time }) => ({
+          id: String(id),
+          Title: title,
+          'Start Time': moment(start_time).format('YYYY-MM-DD, HH:mm'),
+          'End Time': moment(end_time).format('YYYY-MM-DD, HH:mm'),
+          Status: getStatus(start_time, end_time),
+          link: `/my-class/${courseId}/${classId}/challenge/${id}`,
         })}
+        isLoading={challengeUnderClassIsLoading.browse}
+        error={challengeUnderClassError.browse}
+        pagination={browseChallengeUnderClass.pagination}
+        filter={browseChallengeUnderClass.filter}
+        sort={browseChallengeUnderClass.sort}
+        buttons={
+          isManager && (
+            <>
+              <Button color="primary" onClick={() => setPopUp(true)}>
+                <Icon.Add style={{ color: 'white' }} />
+              </Button>
+            </>
+          )
+        }
         hasLink
       />
+
       <Dialog open={popUp} keepMounted onClose={() => setPopUp(false)} maxWidth="md">
         <DialogTitle>
           <Typography variant="h4">Create New Challenge</Typography>
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Class" childrenType="text" maxWidth="md">
-            <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
+            <Typography>{`${course.name} ${classData.name}`}</Typography>
           </AlignedText>
           <AlignedText text="Title" childrenType="field" maxWidth="md">
             <TextField
