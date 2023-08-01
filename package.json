@@ -11,7 +11,9 @@
     "prebuild": "npm run generate-build-meta",
     "generate-build-meta": "./node_modules/react-clear-cache/bin/cli.js",
     "analyze": "source-map-explorer 'build/static/js/*.js' --html bundle-size.html",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx src"
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
+    "update-schema": "node ./scripts/updateSchema.mjs",
+    "update-schema:dev": "BE_ENV=dev node ./scripts/updateSchema.mjs"
   },
   "dependencies": {
     "@babel/core": "^7.22.9",
@@ -87,7 +89,7 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-markdown": "^2.2.0",
     "eslint-plugin-react": "^7.21.5",
-    "eslint-plugin-react-hooks": "^1.7.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-unused-imports": "^1.1.5",
     "openapi-typescript": "^6.3.4",
     "source-map-explorer": "^2.5.3",

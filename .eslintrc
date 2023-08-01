@@ -3,9 +3,9 @@
   "extends": [
     "eslint:recommended",
     "airbnb",
-    "airbnb/hooks",
     "airbnb-typescript",
     "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
@@ -57,7 +57,8 @@
     }
   ],
   "rules": {
-    "@typescript-eslint/explicit-module-boundary-types": "off"
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "react/react-in-jsx-scope": "off"
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
