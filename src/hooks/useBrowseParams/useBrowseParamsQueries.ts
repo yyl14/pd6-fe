@@ -1,24 +1,24 @@
 import { useHistory } from 'react-router-dom';
 
+import { useMemo } from 'react';
 import useQuery from '../useQuery';
 
 const useBrowseParamsQueries = () => {
   const query = useQuery();
   const history = useHistory();
 
-  const queryStrings = {
-    rowsPerPage: query.get('rows'),
-    page: query.get('page'),
-    filter: query.get('filter'),
-    sort: query.get('sort'),
-  };
+  const rowsPerPageQueryString = query.get('rows');
+  const pageQueryString = query.get('page');
+  const filterQueryString = query.get('filter');
+  const sortQueryString = query.get('sort');
 
-  const queryData = {
-    rowsPerPage: queryStrings.rowsPerPage ? Number(queryStrings.rowsPerPage) : null,
-    page: queryStrings.page ? Number(queryStrings.page) : null,
-    filter: queryStrings.filter ? JSON.parse(queryStrings.filter) : null,
-    sort: queryStrings.sort ? JSON.parse(queryStrings.sort) : null,
-  };
+  const rowsPerPageQuery = useMemo(
+    () => (rowsPerPageQueryString ? Number(rowsPerPageQueryString) : null),
+    [rowsPerPageQueryString],
+  );
+  const pageQuery = useMemo(() => (pageQueryString ? Number(pageQueryString) : null), [pageQueryString]);
+  const filterQuery = useMemo(() => (filterQueryString ? JSON.parse(filterQueryString) : null), [filterQueryString]);
+  const sortQuery = useMemo(() => (sortQueryString ? JSON.parse(sortQueryString) : null), [sortQueryString]);
 
   const setQuery = (name: string, newValue: string) => {
     if (query.get(name) !== newValue) {
@@ -44,7 +44,16 @@ const useBrowseParamsQueries = () => {
     setQuery('sort', newValue);
   };
 
-  return { ...queryData, setRowsPerPageQuery, setPageQuery, setFilterQuery, setSortQuery };
+  return {
+    rowsPerPageQuery,
+    pageQuery,
+    filterQuery,
+    sortQuery,
+    setRowsPerPageQuery,
+    setPageQuery,
+    setFilterQuery,
+    setSortQuery,
+  };
 };
 
 export default useBrowseParamsQueries;

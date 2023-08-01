@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { transformSort } from '../../function/serializeBrowseParams';
 import { SortItem, SortOrder } from './types';
@@ -11,21 +12,29 @@ const useSort = <
 >(
   baseSort?: SortItem<DataSchema, BaseSortKey>,
 ) => {
-  const { sort: sortQuery, setSortQuery } = useBrowseParamsQueries();
+  const { sortQuery, setSortQuery } = useBrowseParamsQueries();
+  const history = useHistory();
 
-  const createSort = <K extends keyof DataSchema>(column: K, order: SortOrder): SortItem<DataSchema, K> => ({
-    column,
-    order,
-  });
+  const createSort = useCallback(
+    <K extends keyof DataSchema>(column: K, order: SortOrder): SortItem<DataSchema, K> => ({
+      column,
+      order,
+    }),
+    [],
+  );
 
-  const [sort, setSort] = useState<SortItem<DataSchema, keyof DataSchema>[]>([
-    ...(sortQuery && Array.isArray(sortQuery)
-      ? sortQuery.map(
-          ([column, order]) => createSort(column as keyof DataSchema, order as SortOrder), // TODO: Validate sort query value
-        )
-      : []),
-    ...(baseSort ? [baseSort] : []),
-  ]);
+  const defaultValue = useMemo(
+    () => [
+      ...(sortQuery && Array.isArray(sortQuery)
+        ? sortQuery.map(
+            ([column, order]) => createSort(column as keyof DataSchema, order as SortOrder), // TODO: Validate sort query value
+          )
+        : []),
+    ],
+    [createSort, sortQuery],
+  );
+
+  const [sort, setSort] = useState<SortItem<DataSchema, keyof DataSchema>[]>(defaultValue);
 
   const setSortWithQuery = (
     reducer: (state: SortItem<DataSchema, keyof DataSchema>[]) => SortItem<DataSchema, keyof DataSchema>[],
@@ -34,8 +43,12 @@ const useSort = <
     setSortQuery(transformSort(reducer(sort)));
   };
 
+  useEffect(() => {
+    setSort(defaultValue);
+  }, [defaultValue, history.location.pathname]);
+
   return {
-    sort,
+    sort: [...sort, ...(baseSort ? [baseSort] : [])],
     setSort: setSortWithQuery,
     createSort,
   };

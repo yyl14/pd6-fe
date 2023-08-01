@@ -13,12 +13,7 @@ const isValidRowsPerPage = (value: number | null): value is RowsPerPageOption =>
 const isValidPage = (value: number | null): value is number => value !== null && value > 0;
 
 const usePagination = () => {
-  const {
-    rowsPerPage: rowsPerPageQuery,
-    page: pageQuery,
-    setRowsPerPageQuery,
-    setPageQuery,
-  } = useBrowseParamsQueries();
+  const { rowsPerPageQuery, pageQuery, setRowsPerPageQuery, setPageQuery } = useBrowseParamsQueries();
 
   const [rowsPerPage, setRowsPerPage] = useState<RowsPerPageOption>(
     isValidRowsPerPage(rowsPerPageQuery) ? rowsPerPageQuery : DEFAULT_ROWS_PER_PAGE,

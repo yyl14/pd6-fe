@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
 import { transformFilter } from '../../function/serializeBrowseParams';
 import { FilterItem, FilterOperand, FilterOperator } from './types';
 import useBrowseParamsQueries from './useBrowseParamsQueries';
@@ -12,7 +13,7 @@ const useFilter = <
 >(
   baseFilter?: FilterItem<DataSchema, BaseFilterKey, BaseFilterOperator>,
 ) => {
-  const { filter: filterQuery, setFilterQuery } = useBrowseParamsQueries();
+  const { filterQuery, setFilterQuery } = useBrowseParamsQueries();
   const history = useHistory();
 
   const createFilter = useCallback(
@@ -52,7 +53,7 @@ const useFilter = <
   };
 
   useEffect(() => {
-    // setFilter(defaultValue);
+    setFilter(defaultValue);
   }, [defaultValue, history.location.pathname]);
 
   return {
