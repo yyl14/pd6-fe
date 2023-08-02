@@ -11,3 +11,5 @@ export const editAccount = api.path('/account/{account_id}').method('patch').cre
 export const makeStudentCardDefault = api.path('/account/{account_id}/default-student-card').method('put').create();
 
 export const addNormalAccount = api.path('/account-normal').method('post').create();
+
+export const importAccount = api.path('/account-import').method('post').create();
