@@ -6,12 +6,12 @@ const useAccountTemplate = () => {
   const getAccountTemplateFileSWR = useSWRMutation(`/account/template`, toSWRFetcher(getAccountTemplateFile));
 
   return {
-    accountTemplate: getAccountTemplateFileSWR.trigger,
+    getAccountTemplateFile: getAccountTemplateFileSWR.trigger,
     isLoading: {
-      accountTemplate: getAccountTemplateFileSWR.isMutating,
+      getAccountTemplateFile: getAccountTemplateFileSWR.isMutating,
     },
     error: {
-      accountTemplate: getAccountTemplateFileSWR.error,
+      getAccountTemplateFile: getAccountTemplateFileSWR.error,
     },
   };
 };
