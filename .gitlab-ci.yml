@@ -26,7 +26,8 @@ Build:
   script:
     - yarn build
   stage: build
-  tags: build
+  tags:
+    - build
 
 Lint-test:
   stage: test
@@ -37,8 +38,8 @@ Lint-test:
   script:
     - yarn lint
   allow_failure: false
-  tags: test
-  needs: []
+  tags:
+    - test
 
 Sonarqube:
   tags:
@@ -59,20 +60,28 @@ Sonarqube:
     # quality gate is an indicator of code quality that can be configured to give a go/no-go signal of the code
     # In order for the quality gate to fail on the GitLab side when it fails on the SonarQube side, the scanner needs to wait for the SonarQube quality gate status
   allow_failure: true
-  tags: test
-  needs: [Lint-test]
+  tags:
+    - test
+  needs:
+    - Lint-test
 
 Lighthouse:
   allow_failure: false
   script:
     - yarn run lhci autorun #if frontend provide the yarn lighthouse to run
   stage: test
-  tags: test
-  needs: [Lint-test]
+  tags:
+    - test
+  needs:
+   - Lint-test
 
 Uint-test:
   stage: test
   script:
     - yarn test
-    tags: test
-  needs: [Lint-test, Sonarqube, Lighthouse]
+  tags: 
+    - test
+  needs:
+    - Lint-test
+    - Sonarqube
+    - Lighthouse
