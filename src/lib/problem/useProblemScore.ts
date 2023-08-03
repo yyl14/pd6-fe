@@ -1,19 +1,19 @@
 import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
+import toSWRMutationFetcher from '../../function/toSWRMutationFetcher';
 import { readProblemScore, readProblemBestScore } from './fetchers';
 
-const useProblemScore = (problemId: number) => {
-  const readProblemScoreSWR = useSWR(`/Problem/${problemId}/score`, () => readProblemScore({ problem_id: problemId }));
-  const readProblemBestScoreSWR = useSWR(`/Problem/${problemId}/best-score`, () =>
-    readProblemBestScore({ problem_id: problemId }),
-  );
+const useProblemScore = () => {
+  const readProblemScoreSWR = useSWRMutation(`/Problem/score`, toSWRMutationFetcher(readProblemScore));
+  const readProblemBestScoreSWR = useSWRMutation(`/Problem/best-score`, toSWRMutationFetcher(readProblemBestScore));
 
   return {
     score: readProblemScoreSWR.data?.data.data,
     bestScore: readProblemBestScoreSWR.data?.data.data,
 
     isLoading: {
-      score: readProblemScoreSWR.isLoading,
-      bestScore: readProblemBestScoreSWR.isLoading,
+      score: readProblemScoreSWR.isMutating,
+      bestScore: readProblemBestScoreSWR.isMutating,
     },
     error: {
       score: readProblemScoreSWR.error,

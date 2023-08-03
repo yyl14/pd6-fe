@@ -10,7 +10,7 @@ export const deleteProblem = api.path('/problem/{problem_id}').method('delete').
 
 export const editProblem = api.path('/problem/{problem_id}').method('patch').create();
 
-// useProblemScore(problemId)
+// useProblemScore()
 export const readProblemScore = api.path('/problem/{problem_id}/score').method('get').create();
 
 export const readProblemBestScore = api.path('/problem/{problem_id}/best-score').method('get').create();
