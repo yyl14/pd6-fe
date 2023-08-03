@@ -38,6 +38,7 @@ Lint-test:
     - yarn lint
   allow_failure: false
   tags: test
+  needs: []
 
 Sonarqube:
   tags:
@@ -59,6 +60,7 @@ Sonarqube:
     # In order for the quality gate to fail on the GitLab side when it fails on the SonarQube side, the scanner needs to wait for the SonarQube quality gate status
   allow_failure: true
   tags: test
+  needs: [Lint-test]
 
 Lighthouse:
   allow_failure: false
@@ -66,22 +68,11 @@ Lighthouse:
     - yarn run lhci autorun #if frontend provide the yarn lighthouse to run
   stage: test
   tags: test
+  needs: [Lint-test]
 
 Uint-test:
   stage: test
   script:
     - yarn test
     tags: test
-
-# Define dependencies between jobs
-Lint-test:
-  needs: []
-
-Sonarqube:
-  needs: [lint-test]
-
-Lighthouse:
-  needs: [lint-test]
-
-Unit-test:
-  needs: [lint-test, sonarqube, lighthouse]
+  needs: [Lint-test, Sonarqube, Lighthouse]
