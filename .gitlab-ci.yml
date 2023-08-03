@@ -1,0 +1,69 @@
+image: cypress/browsers:node14.15.0-chrome86-ff82
+
+# Define variables for the job
+variables:
+  CI_JOB_TRACE: 'true' # Trace the job status in CI
+  FF_USE_FASTZIP: 'true' # Use Fast ZIP to speed up cache operations
+  CACHE_COMPRESSION_LEVEL: 'fast'
+
+before_script:
+  - yarn install --frozen-lockfile
+workflow:
+  rules:
+    # Rules for all merge requests to development branch
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "development"'
+      when: always
+    # Rules for all pushes to development branch
+    - if: '$CI_COMMIT_BRANCH == "development"'
+      when: always
+
+# Define the stages for the pipeline
+stages:
+  - build
+  - test
+
+Build:
+  script:
+    - yarn build
+  stage: build
+
+Lint-test:
+  stage: test
+  cache:
+    key: $CI_COMMIT_REF_NAME_Lint
+    paths:
+      - .eslint
+  script:
+    - yarn lint
+  allow_failure: false
+
+Sonarqube:
+  tags:
+    - cloud
+  stage: test
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: ['']
+  variables:
+    SONAR_USER_HOME: '${CI_PROJECT_DIR}/.sonar' # Defines the location of the analysis task cache
+    GIT_DEPTH: '0' # Tells git to fetch all the branches of the project, required by the analysis task
+  cache:
+    key: $CI_COMMIT_REF_NAME_Sonarqube
+    paths:
+      - .sonar/cache
+  script:
+    - sonar-scanner -Dsonar.qualitygate.wait=true -Dsonar.login=$SONAR_TOKEN
+    # quality gate is an indicator of code quality that can be configured to give a go/no-go signal of the code
+    # In order for the quality gate to fail on the GitLab side when it fails on the SonarQube side, the scanner needs to wait for the SonarQube quality gate status
+  allow_failure: true
+
+lighthouse:
+  allow_failure: false
+  script:
+    - yarn run lhci autorun #if frontend provide the yarn lighthouse to run
+  stage: test
+
+Uint-test:
+  stage: test
+  script:
+    - yarn test
