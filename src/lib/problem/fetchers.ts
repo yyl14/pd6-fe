@@ -19,4 +19,4 @@ export const readProblemBestScore = api.path('/problem/{problem_id}/best-score')
 export const readProblemStatistics = api.path('/problem/{problem_id}/statistics').method('get').create();
 
 // useProblemRejudge
-export const addProblemRejudge = api.path('/problem/{problem_id}/rejudge').method('post').create();
+export const rejudgeProblem = api.path('/problem/{problem_id}/rejudge').method('post').create();

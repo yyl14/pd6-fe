@@ -1,19 +1,19 @@
 import useSWRMutation from 'swr/mutation';
 import toSWRMutationFetcher from '../../function/toSWRMutationFetcher';
-import { addProblemRejudge } from './fetchers';
+import { rejudgeProblem } from './fetchers';
 
 const useProblemRejudge = (problemId: number) => {
-  const addProblemRejudgeSWR = useSWRMutation(`/problem/${problemId}/rejudge`, toSWRMutationFetcher(addProblemRejudge));
+  const rejudgeProblemSWR = useSWRMutation(`/problem/${problemId}/rejudge`, toSWRMutationFetcher(rejudgeProblem));
 
   return {
-    addProblemRejudge: addProblemRejudgeSWR.trigger,
+    rejudgeProblem: rejudgeProblemSWR.trigger,
 
     isLoading: {
-      addProblemRejudge: addProblemRejudgeSWR.isMutating,
+      rejudgeProblem: rejudgeProblemSWR.isMutating,
     },
 
     error: {
-      addProblemRejudge: addProblemRejudgeSWR.error,
+      rejudgeProblem: rejudgeProblemSWR.error,
     },
   };
 };
