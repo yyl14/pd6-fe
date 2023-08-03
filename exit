@@ -1,0 +1,159 @@
+[33mcommit 25949dfafd4b56d0f883f8c847424d069a957100[m[33m ([m[1;36mHEAD -> [m[1;32m837-data-hooks-grade[m[33m)[m
+Author: b11705057 <b11705057@ntu.im>
+Date:   Thu Aug 3 15:47:40 2023 +0800
+
+    refactor: add grade hooks
+
+[1mdiff --git a/src/lib/grade/fetchers.tsx b/src/lib/grade/fetchers.tsx[m
+[1mnew file mode 100644[m
+[1mindex 00000000..e0a4ba22[m
+[1m--- /dev/null[m
+[1m+++ b/src/lib/grade/fetchers.tsx[m
+[36m@@ -0,0 +1,21 @@[m
+[32m+[m[32mimport api from '../api';[m
+[32m+[m
+[32m+[m[32m// useGrade()[m
+[32m+[m[32mexport const importClassGrade = api.path('/class/{class_id}/grade-import').method('post').create({ title: true });[m
+[32m+[m
+[32m+[m[32mexport const browseClassGrade = api.path('/class/{class_id}/grade').method('get').create();[m
+[32m+[m
+[32m+[m[32mexport const addClassGrade = api.path('/class/{class_id}/grade').method('post').create();[m
+[32m+[m
+[32m+[m[32m// useAccountGrade()[m
+[32m+[m[32mexport const browseAccountGrade = api.path('/account/{account_id}/grade').method('get').create();[m
+[32m+[m
+[32m+[m[32m// useGradeTemplate()[m
+[32m+[m[32mexport const getGradeTemplateFile = api.path('/grade/template').method('get').create();[m
+[32m+[m
+[32m+[m[32m// useGrade()[m
+[32m+[m[32mexport const getGrade = api.path('/grade/{grade_id}').method('get').create();[m
+[32m+[m
+[32m+[m[32mexport const deleteGrade = api.path('/grade/{grade_id}').method('delete').create();[m
+[32m+[m
+[32m+[m[32mexport const editGrade = api.path('/grade/{grade_id}').method('patch').create();[m
+[1mdiff --git a/src/lib/grade/useAccountGrade.tsx b/src/lib/grade/useAccountGrade.tsx[m
+[1mnew file mode 100644[m
+[1mindex 00000000..094cfcaa[m
+[1m--- /dev/null[m
+[1m+++ b/src/lib/grade/useAccountGrade.tsx[m
+[36m@@ -0,0 +1,22 @@[m
+[32m+[m[32mimport useSWR from 'swr';[m
+[32m+[m[32mimport { browseAccountGrade } from './fetchers';[m
+[32m+[m
+[32m+[m[32mconst useAccountGrade = (accGrade_id: number) => {[m
+[32m+[m[32m  const browseAccountGradeSWR = useSWR(`/account/${accGrade_id}/grade`, () =>[m
+[32m+[m[32m    browseAccountGrade({ account_id: accGrade_id }),[m
+[32m+[m[32m  );[m
+[32m+[m
+[32m+[m[32m  return {[m
+[32m+[m[32m    accountGrade: browseAccountGradeSWR.data?.data.data,[m
+[32m+[m
+[32m+[m[32m    isLoading: {[m
+[32m+[m[32m      browseAccountGrade: browseAccountGradeSWR.isLoading,[m
+[32m+[m[32m    },[m
+[32m+[m
+[32m+[m[32m    error: {[m
+[32m+[m[32m      browseAccountGrade: browseAccountGradeSWR.error,[m
+[32m+[m[32m    },[m
+[32m+[m[32m  };[m
+[32m+[m[32m};[m
+[32m+[m
+[32m+[m[32mexport default useAccountGrade;[m
+[1mdiff --git a/src/lib/grade/useClassGrade.ts b/src/lib/grade/useClassGrade.ts[m
+[1mnew file mode 100644[m
+[1mindex 00000000..95c1dd67[m
+[1m--- /dev/null[m
+[1m+++ b/src/lib/grade/useClassGrade.ts[m
+[36m@@ -0,0 +1,31 @@[m
+[32m+[m[32mimport useSWR from 'swr';[m
+[32m+[m[32mimport useSWRMutation from 'swr/mutation';[m
+[32m+[m[32mimport toSWRMutationFetcher from '../../function/toSWRMutationFetcher';[m
+[32m+[m[32mimport { addClassGrade, browseClassGrade, importClassGrade } from './fetchers';[m
+[32m+[m
+[32m+[m[32mconst useClassGrade = (classId: number) => {[m
+[32m+[m[32m  const addClassGradeSWR = useSWRMutation(`/class/${classId}/grade`, toSWRMutationFetcher(addClassGrade));[m
+[32m+[m[32m  const browseClassGradeSWR = useSWR(`/class/${classId}/grade`, () => browseClassGrade({ class_id: classId }));[m
+[32m+[m[32m  const importClassGradeSWR = useSWRMutation(`/class/${classId}/grade-import`, toSWRMutationFetcher(importClassGrade));[m
+[32m+[m
+[32m+[m[32m  return {[m
+[32m+[m[32m    classGrade: browseClassGradeSWR.data?.data.data,[m
+[32m+[m[32m    addClassGrade: addClassGradeSWR.trigger,[m
+[32m+[m[32m    mutateClassGrade: browseClassGradeSWR.mutate(),[m
+[32m+[m[32m    importClassGrade: importClassGradeSWR.trigger,[m
+[32m+[m
+[32m+[m[32m    isLoading: {[m
+[32m+[m[32m      browse: browseClassGradeSWR.isLoading,[m
+[32m+[m[32m      add: addClassGradeSWR.isMutating,[m
+[32m+[m[32m      import: importClassGradeSWR.isMutating,[m
+[32m+[m[32m    },[m
+[32m+[m
+[32m+[m[32m    error: {[m
+[32m+[m[32m      browse: browseClassGradeSWR.error,[m
+[32m+[m[32m      add: addClassGradeSWR.error,[m
+[32m+[m[32m      import: importClassGradeSWR.error,[m
+[32m+[m[32m    },[m
+[32m+[m[32m  };[m
+[32m+[m[32m};[m
+[32m+[m
+[32m+[m[32mexport default useClassGrade;[m
+[1mdiff --git a/src/lib/grade/useGrade.tsx b/src/lib/grade/useGrade.tsx[m
+[1mnew file mode 100644[m
+[1mindex 00000000..6dddbd53[m
+[1m--- /dev/null[m
+[1m+++ b/src/lib/grade/useGrade.tsx[m
+[36m@@ -0,0 +1,29 @@[m
+[32m+[m[32mimport useSWR from 'swr';[m
+[32m+[m[32mimport useSWRMutation from 'swr/mutation';[m
+[32m+[m[32mimport toSWRFetcher from '../../function/toSWRMutationFetcher';[m
+[32m+[m[32mimport { deleteGrade, editGrade, getGrade } from './fetchers';[m
+[32m+[m
+[32m+[m[32mconst useGrade = (gradeId: number) => {[m
+[32m+[m[32m  const editGradeSWR = useSWRMutation(`/grade/${gradeId}`, toSWRFetcher(editGrade));[m
+[32m+[m[32m  const getGradeSWR = useSWR(`/grade/${gradeId}`, () => getGrade({ grade_id: gradeId }));[m
+[32m+[m[32m  const deleteGradeSWR = useSWRMutation(`/grade/${gradeId}`, toSWRFetcher(deleteGrade));[m
+[32m+[m
+[32m+[m[32m  return {[m
+[32m+[m[32m    editGrade: editGradeSWR.trigger,[m
+[32m+[m[32m    getGrade: getGradeSWR.data?.data.data,[m
+[32m+[m[32m    deleteGrade: deleteGradeSWR.trigger,[m
+[32m+[m
+[32m+[m[32m    isLoading: {[m
+[32m+[m[32m      edit: editGradeSWR.isMutating,[m
+[32m+[m[32m      get: getGradeSWR.isLoading,[m
+[32m+[m[32m      delete: deleteGradeSWR.isMutating,[m
+[32m+[m[32m    },[m
+[32m+[m[32m    error: {[m
+[32m+[m[32m      edit: editGradeSWR.error,[m
+[32m+[m[32m      get: getGradeSWR.error,[m
+[32m+[m[32m      delete: deleteGradeSWR.error,[m
+[32m+[m[32m    },[m
+[32m+[m[32m  };[m
+[32m+[m[32m};[m
+[32m+[m
+[32m+[m[32mexport default useGrade;[m
+[1mdiff --git a/src/lib/grade/useGradeTemplate.tsx b/src/lib/grade/useGradeTemplate.tsx[m
+[1mnew file mode 100644[m
+[1mindex 00000000..771c9943[m
+[1m--- /dev/null[m
+[1m+++ b/src/lib/grade/useGradeTemplate.tsx[m
+[36m@@ -0,0 +1,20 @@[m
+[32m+[m[32mimport useSWR from 'swr';[m
+[32m+[m[32mimport { getGradeTemplateFile } from './fetchers';[m
+[32m+[m
+[32m+[m[32mconst useGradeTemplate = () => {[m
+[32m+[m[32m  const gradeTemplateSWR = useSWR(`/grade/template`, () => getGradeTemplateFile({}));[m
+[32m+[m
+[32m+[m[32m  return {[m
+[32m+[m[32m    gradeTemplate: gradeTemplateSWR.data?.data.data,[m
+[32m+[m
+[32m+[m[32m    isLoading: {[m
+[32m+[m[32m      gradeTemplate: gradeTemplateSWR.isLoading,[m
+[32m+[m[32m    },[m
+[32m+[m
+[32m+[m[32m    error: {[m
+[32m+[m[32m      gradeTemplate: gradeTemplateSWR.error,[m
+[32m+[m[32m    },[m
+[32m+[m[32m  };[m
+[32m+[m[32m};[m
+[32m+[m
+[32m+[m[32mexport default useGradeTemplate;[m
