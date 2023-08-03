@@ -23,7 +23,7 @@ stages:
   - test
 
 Build:
-  befor_script: 
+  before_script: 
     - export NODE_OPTIONS=--openssl-legacy-provider
   script:
     - yarn build
