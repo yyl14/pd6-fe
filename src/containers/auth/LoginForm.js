@@ -12,7 +12,7 @@ import {
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useMemo, useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import useLogin from '../../lib/account/useLogin';
+import useLogin from '../../lib/auth/useLogin';
 
 import useQuery from '../../hooks/useQuery';
 
@@ -73,7 +73,7 @@ export default function LoginForm() {
         if (success) {
           localStorage.setItem('id', data.account_id);
           localStorage.setItem('token', data.token);
-          
+
           if (redirect_url) {
             history.push(redirect_url);
           } else {

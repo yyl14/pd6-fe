@@ -7,7 +7,7 @@ import ResizeObserver from 'react-resize-observer';
 import { useHistory, useLocation } from 'react-router-dom';
 import { userLogout } from '../../actions/user/auth';
 import { userBrowseAnnouncement } from '../../actions/user/user';
-import useLogOut from '../../lib/account/useLogOut';
+import useLogOut from '../../lib/auth/useLogOut';
 import Icon from './icon/index';
 
 const useStyles = makeStyles((theme) => ({

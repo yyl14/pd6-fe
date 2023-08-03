@@ -16,7 +16,7 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import useQuery from '../../hooks/useQuery';
-import useResetPassword from '../../lib/account/useResetPassword';
+import useResetPassword from '../../lib/auth/useResetPassword';
 
 const useStyles = makeStyles(() => ({
   authForm: {
