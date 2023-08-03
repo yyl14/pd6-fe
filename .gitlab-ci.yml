@@ -26,7 +26,6 @@ Build:
   before_script: 
     - export NODE_OPTIONS=--openssl-legacy-provider
   script:
-    - ls -la
     - yarn build
   stage: build
   tags:
