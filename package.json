@@ -8,8 +8,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prebuild": "npm run generate-build-meta",
-    "generate-build-meta": "./node_modules/react-clear-cache/bin/cli.js",
     "analyze": "source-map-explorer 'build/static/js/*.js' --html bundle-size.html",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
     "update-schema": "node ./scripts/updateSchema.mjs",
