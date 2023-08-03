@@ -7,14 +7,8 @@ const useAccount = (accountId: number) => {
   const readAccountWithDefaultStudentIdSWR = useSWR(`/account/${accountId}`, () =>
     readAccountWithDefaultStudentId({ account_id: accountId }),
   );
-  const deleteAccountSWR = useSWRMutation(
-    `/account/${accountId}`,
-    toSWRFetcher(() => deleteAccount({ account_id: accountId })),
-  );
-  const editAccountSWR = useSWRMutation(
-    `/account/${accountId}`,
-    toSWRFetcher(() => editAccount({ account_id: accountId })),
-  );
+  const deleteAccountSWR = useSWRMutation(`/account/${accountId}`, toSWRFetcher(deleteAccount));
+  const editAccountSWR = useSWRMutation(`/account/${accountId}`, toSWRFetcher(editAccount));
 
   return {
     account: readAccountWithDefaultStudentIdSWR.data?.data.data,
