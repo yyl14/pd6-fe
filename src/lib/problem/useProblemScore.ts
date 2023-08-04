@@ -8,8 +8,8 @@ const useProblemScore = () => {
   const readProblemBestScoreSWR = useSWRMutation(`/Problem/best-score`, toSWRMutationFetcher(readProblemBestScore));
 
   return {
-    score: readProblemScoreSWR.data?.data.data,
-    bestScore: readProblemBestScoreSWR.data?.data.data,
+    score: readProblemScoreSWR.trigger,
+    bestScore: readProblemBestScoreSWR.trigger,
 
     isLoading: {
       score: readProblemScoreSWR.isMutating,
