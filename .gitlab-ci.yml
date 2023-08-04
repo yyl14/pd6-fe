@@ -17,25 +17,8 @@ workflow:
 
 # Define the stages for the pipeline
 stages:
-  - build
   - test
-
-Build:
-  cache:
-    key: $CI_COMMIT_REF_NAME_MODULE
-    paths:
-      - node_modules/
-      - .yarn
-  before_script:
-    - export NODE_OPTIONS=--openssl-legacy-provider
-    - yarn install --frozen-lockfile --cache-folder .yarn
-  script:
-    - yarn build
-  stage: build
-  tags:
-    - build
-  needs:
-    - Lint-test
+  - build
 
 Lint-test:
   stage: test
@@ -116,3 +99,20 @@ Uint-test:
     - Lint-test
     - Sonarqube
     - Lighthouse
+
+Build:
+  cache:
+    key: $CI_COMMIT_REF_NAME_MODULE
+    paths:
+      - node_modules/
+      - .yarn
+  before_script:
+    - export NODE_OPTIONS=--openssl-legacy-provider
+    - yarn install --frozen-lockfile --cache-folder .yarn
+  script:
+    - yarn build
+  stage: build
+  tags:
+    - build
+  needs:
+    - Lint-test
