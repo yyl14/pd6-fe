@@ -9,7 +9,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "analyze": "source-map-explorer 'build/static/js/*.js' --html bundle-size.html",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx src --cache-location .eslint",
     "update-schema": "node ./scripts/updateSchema.mjs",
     "update-schema:dev": "BE_ENV=dev node ./scripts/updateSchema.mjs"
   },
