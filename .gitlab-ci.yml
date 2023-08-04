@@ -17,12 +17,12 @@ workflow:
 
 # Define the stages for the pipeline
 stages:
-  - Lint-test
-  - Build&Unit-test
-  - Quality-test
+  - Test
+  - Build
+  - Quality-Analysis
 
 Lint-test:
-  stage: Lint-test
+  stage: Test
   cache:
     key: $CI_COMMIT_REF_NAME_Lint
     paths:
@@ -41,23 +41,8 @@ Lint-test:
   tags:
     - test
 
-Build:
-  cache:
-    key: $CI_COMMIT_REF_NAME_MODULE
-    paths:
-      - node_modules/
-      - .yarn
-  before_script:
-    - export NODE_OPTIONS=--openssl-legacy-provider
-    - yarn install --frozen-lockfile --cache-folder .yarn
-  script:
-    - yarn build
-  stage: Build&Unit-test
-  tags:
-    - build
-
 Unit-test:
-  stage: Build&Unit-test
+  stage: Test
   cache:
     key: $CI_COMMIT_REF_NAME_MODULE
     paths:
@@ -69,11 +54,24 @@ Unit-test:
     - yarn test --passWithNoTests
   tags: 
     - test
-  needs:
-    - Lint-test
+
+Build:
+  cache:
+    key: $CI_COMMIT_REF_NAME_MODULE
+    paths:
+      - node_modules/
+      - .yarn
+  before_script:
+    - export NODE_OPTIONS=--openssl-legacy-provider
+    - yarn install --frozen-lockfile --cache-folder .yarn
+  script:
+    - yarn build
+  stage: Build
+  tags:
+    - build
 
 Sonarqube:
-  stage: Quality-test
+  stage: Quality-Analysis
   image:
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: ['']
@@ -103,6 +101,6 @@ Lighthouse:
     - yarn install --frozen-lockfile --cache-folder .yarn
   script:
     - yarn run lhci autorun #if frontend provide the yarn lighthouse to run
-  stage: Quality-test
+  stage: Quality-Analysis
   tags:
     - test
