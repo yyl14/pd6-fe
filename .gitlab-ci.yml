@@ -17,11 +17,12 @@ workflow:
 
 # Define the stages for the pipeline
 stages:
-  - test
-  - build
+  - Lint-test
+  - Build&Unit-test
+  - Quality-test
 
 Lint-test:
-  stage: test
+  stage: Lint-test
   cache:
     key: $CI_COMMIT_REF_NAME_Lint
     paths:
@@ -39,12 +40,40 @@ Lint-test:
   allow_failure: false
   tags:
     - test
-  needs: []
+
+Build:
+  cache:
+    key: $CI_COMMIT_REF_NAME_MODULE
+    paths:
+      - node_modules/
+      - .yarn
+  before_script:
+    - export NODE_OPTIONS=--openssl-legacy-provider
+    - yarn install --frozen-lockfile --cache-folder .yarn
+  script:
+    - yarn build
+  stage: Build&Unit-test
+  tags:
+    - build
+
+Unit-test:
+  stage: Build&Unit-test
+  cache:
+    key: $CI_COMMIT_REF_NAME_MODULE
+    paths:
+      - node_modules/
+      - .yarn
+  before_script:
+    - yarn install --frozen-lockfile --cache-folder .yarn
+  script:
+    - yarn test --passWithNoTests
+  tags: 
+    - test
+  needs:
+    - Lint-test
 
 Sonarqube:
-  tags:
-    - cloud
-  stage: test
+  stage: Quality-test
   image:
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: ['']
@@ -62,9 +91,6 @@ Sonarqube:
   allow_failure: true
   tags:
     - test
-  needs:
-    - Unit-test
-    - Build
 
 Lighthouse:
   allow_failure: false
@@ -77,42 +103,6 @@ Lighthouse:
     - yarn install --frozen-lockfile --cache-folder .yarn
   script:
     - yarn run lhci autorun #if frontend provide the yarn lighthouse to run
-  stage: test
+  stage: Quality-test
   tags:
     - test
-  needs:
-    - Unit-test
-    - Build
-
-Unit-test:
-  stage: test
-  cache:
-    key: $CI_COMMIT_REF_NAME_MODULE
-    paths:
-      - node_modules/
-      - .yarn
-  before_script:
-    - yarn install --frozen-lockfile --cache-folder .yarn
-  script:
-    - yarn test --passWithNoTests
-  tags: 
-    - test
-  needs:
-    - Lint-test
-
-Build:
-  cache:
-    key: $CI_COMMIT_REF_NAME_MODULE
-    paths:
-      - node_modules/
-      - .yarn
-  before_script:
-    - export NODE_OPTIONS=--openssl-legacy-provider
-    - yarn install --frozen-lockfile --cache-folder .yarn
-  script:
-    - yarn build
-  stage: build
-  tags:
-    - build
-  needs:
-    - Lint-test
