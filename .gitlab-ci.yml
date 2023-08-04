@@ -7,6 +7,7 @@ variables:
   CACHE_COMPRESSION_LEVEL: 'fast'
 
 before_script:
+  - export NODE_OPTIONS=--openssl-legacy-provider
   - yarn install --frozen-lockfile
 workflow:
   rules:
@@ -23,8 +24,6 @@ stages:
   - test
 
 Build:
-  before_script: 
-    - export NODE_OPTIONS=--openssl-legacy-provider
   script:
     - yarn build
   stage: build
