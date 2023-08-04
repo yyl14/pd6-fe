@@ -54,6 +54,8 @@ Unit-test:
     - yarn test --passWithNoTests
   tags: 
     - test
+  needs:
+    - Lint-test
 
 Build:
   cache:
@@ -69,6 +71,8 @@ Build:
   stage: Build
   tags:
     - build
+  needs:
+    - Unit-test
 
 Sonarqube:
   stage: Quality-Analysis
@@ -89,6 +93,8 @@ Sonarqube:
   allow_failure: true
   tags:
     - test
+  needs:
+    - Unit-test
 
 Lighthouse:
   allow_failure: false
@@ -104,3 +110,5 @@ Lighthouse:
   stage: Quality-Analysis
   tags:
     - test
+  needs:
+    - Unit-test
