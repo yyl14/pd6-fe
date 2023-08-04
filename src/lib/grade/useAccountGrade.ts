@@ -1,13 +1,19 @@
-import useSWR from 'swr';
+import useSWRWithBrowseParams from '../../hooks/useSWRWithBrowseParams';
 import { browseAccountGrade } from './fetchers';
 
 const useAccountGrade = (accGrade_id: number) => {
-  const browseAccountGradeSWR = useSWR(`/account/${accGrade_id}/grade`, () =>
-    browseAccountGrade({ account_id: accGrade_id }),
-  );
+  const browseAccountGradeSWR = useSWRWithBrowseParams(`/account/${accGrade_id}/grade`, browseAccountGrade, {
+    account_id: accGrade_id,
+  });
 
   return {
-    accountGrade: browseAccountGradeSWR.data?.data.data,
+    browseAccountGradeSWR: {
+      data: browseAccountGradeSWR.data?.data.data,
+      refresh: browseAccountGradeSWR.mutate,
+      pagination: browseAccountGradeSWR.pagination,
+      filter: browseAccountGradeSWR.filter,
+      sort: browseAccountGradeSWR.sort,
+    },
 
     isLoading: {
       browseAccountGrade: browseAccountGradeSWR.isLoading,
