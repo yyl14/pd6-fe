@@ -63,7 +63,8 @@ Sonarqube:
   tags:
     - test
   needs:
-    - Lint-test
+    - Unit-test
+    - Build
 
 Lighthouse:
   allow_failure: false
@@ -80,9 +81,10 @@ Lighthouse:
   tags:
     - test
   needs:
-   - Lint-test
+    - Unit-test
+    - Build
 
-Uint-test:
+Unit-test:
   stage: test
   cache:
     key: $CI_COMMIT_REF_NAME_MODULE
@@ -97,8 +99,6 @@ Uint-test:
     - test
   needs:
     - Lint-test
-    - Sonarqube
-    - Lighthouse
 
 Build:
   cache:
