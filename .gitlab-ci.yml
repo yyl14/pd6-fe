@@ -34,6 +34,8 @@ Build:
   stage: build
   tags:
     - build
+  needs:
+    - Lint-test
 
 Lint-test:
   stage: test
