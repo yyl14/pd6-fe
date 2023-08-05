@@ -13,3 +13,13 @@ export const assignPeerReviewRecord = api.path('/peer-review/{peer_review_id}/re
 export const readPeerReviewRecord = api.path('/peer-review-record/{peer_review_record_id}').method('get').create();
 
 export const submitPeerReviewRecord = api.path('/peer-review-record/{peer_review_record_id}').method('patch').create();
+
+export const browseAccountReceivedPeerReviewRecord = api
+  .path('/peer-review/{peer_review_id}/account/{account_id}/receive')
+  .method('get')
+  .create();
+
+export const browseAccountReviewedPeerReviewRecord = api
+  .path('/peer-review/{peer_review_id}/account/{account_id}/review')
+  .method('get')
+  .create();
