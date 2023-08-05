@@ -1,9 +1,14 @@
-import useSWRWithBrowseParams from '../../hooks/useSWRWithBrowseParams';
+import { components } from '../../../types/schema';
+import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
 import { browseAccountGrade } from './fetchers';
 
-const useAccountGrade = (accGrade_id: number) => {
-  const browseAccountGradeSWR = useSWRWithBrowseParams(`/account/${accGrade_id}/grade`, browseAccountGrade, {
-    account_id: accGrade_id,
+export type AccountGradeSchema = components['schemas']['pydantic__dataclasses__Grade'];
+
+const useAccountGrade = (accountId: number) => {
+  const useSWRWithBrowseParams = withDataSchema<AccountGradeSchema>();
+
+  const browseAccountGradeSWR = useSWRWithBrowseParams(`/account/${accountId}/grade`, browseAccountGrade, {
+    account_id: accountId,
   });
 
   return {
