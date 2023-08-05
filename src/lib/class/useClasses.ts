@@ -7,17 +7,7 @@ export type ClassDataSchema = components['schemas']['pydantic__dataclasses__Clas
 const useClasses = () => {
   const useSWRWithBrowseParams = withDataSchema<ClassDataSchema>();
 
-  const browseClassSWR = useSWRWithBrowseParams(
-    `/class`,
-    browseClass,
-    {},
-    {
-      //   baseSort: {
-      //     column: 'start_time',
-      //     order: 'DESC',
-      //   },
-    },
-  );
+  const browseClassSWR = useSWRWithBrowseParams(`/class`, browseClass, {}, {});
 
   return {
     browseClass: {
