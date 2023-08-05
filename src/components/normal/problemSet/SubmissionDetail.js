@@ -1,4 +1,4 @@
-import SubmissionDetailView from '../../pageTemplate/SubmissionDetailView';
+import SubmissionDetailView from '../pageTemplate/SubmissionDetailView';
 
 /* This is a level 4 component (page component) */
 export default function SubmissionDetail() {

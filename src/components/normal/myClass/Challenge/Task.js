@@ -5,12 +5,12 @@ import CodingProblem from './CodingProblem';
 
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
-import CodeSubmission from './CodeSubmission';
-import EssayProblem from './EssayProblem';
-import MySubmission from './MySubmission';
+import Essay from './Essay';
 import PeerReview from './PeerReview';
+import CodeSubmission from './Problem/CodeSubmission';
+import MySubmission from './Problem/MySubmission';
+import SubmissionDetail from './Problem/SubmissionDetail';
 import Scoreboard from './Scoreboard';
-import SubmissionDetail from './SubmissionDetail';
 
 /* This is a level 4 component (page component) */
 /* judge the problem type on this level */
@@ -37,11 +37,7 @@ export default function Task() {
   return (
     <>
       <Switch>
-        <Route
-          exact
-          path="/my-class/:courseId/:classId/challenge/:challengeId/essay/:essayId"
-          component={EssayProblem}
-        />
+        <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/essay/:essayId" component={Essay} />
         <Route
           exact
           path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId/code-submission"

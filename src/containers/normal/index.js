@@ -8,8 +8,7 @@ import ProblemSet from './problemSet';
 
 import GeneralLoading from '../../components/GeneralLoading';
 import NoMatch from '../../components/noMatch';
-import AccessLog from '../../components/system/accessLog';
-import Team from '../../components/system/team';
+import Team from '../../components/normal/about/team';
 
 export default function Normal() {
   const history = useHistory();
@@ -33,9 +32,8 @@ export default function Normal() {
       <Route exact path="/problem-set" component={ProblemSet} />
       <Route path="/problem-set/:courseId/:classId" component={ProblemSet} />
       <Route exact path="/" component={GeneralLoading} />
-      <Route exact path="/system" component={Team} />
-      <Route exact path="/system/team" component={Team} />
-      <Route exact path="/system/accesslog" component={AccessLog} />
+      <Route exact path="/about" component={Team} />
+      <Route exact path="/about/team" component={Team} />
       <Route component={NoMatch} />
     </Switch>
   );

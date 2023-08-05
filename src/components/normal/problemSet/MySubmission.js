@@ -1,4 +1,4 @@
-import MySubmissionView from '../../pageTemplate/MySubmissionView';
+import MySubmissionView from '../pageTemplate/MySubmissionView';
 
 /* This is a level 4 component (page component) */
 export default function MySubmission() {

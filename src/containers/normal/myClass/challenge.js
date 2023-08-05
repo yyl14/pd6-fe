@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useParams } from 'react-router-dom';
 
 import { fetchChallenge } from '../../../actions/common/common';
-import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge'; 
+import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
+import NoMatch from '../../../components/noMatch';
 import ChallengeInfo from '../../../components/normal/myClass/Challenge/ChallengeInfo';
-import Setting from '../../../components/normal/myClass/Challenge/Setting';
+import ChallengeSetting from '../../../components/normal/myClass/Challenge/ChallengeSetting';
 import Statistics from '../../../components/normal/myClass/Challenge/Statistics';
 import Task from '../../../components/normal/myClass/Challenge/Task';
-import NoMatch from '../../../components/noMatch';
 import useChallengeTasks from '../../../lib/task/useChallengeTasks';
 // import EssayProblem from '../../../components/normal/myClass/Challenge/EssayProblem';
 
@@ -20,7 +20,7 @@ export default function Challenge() {
   const loading = useSelector((state) => state.loading.myClass);
   const apiLoading = useSelector((state) => state.loading.api);
   const { isLoading: ChallengeTasksLoading } = useChallengeTasks(challengeId);
-  
+
   useEffect(() => {
     if (
       !loading.challenge.addChallenge &&
@@ -34,8 +34,8 @@ export default function Challenge() {
       !apiLoading.scoreboard.deleteScoreboard
       // && !loading.problem.deletePeerReview
     ) {
-      dispatch(fetchChallenge(authToken, challengeId)); 
-      dispatch(browseTasksUnderChallenge(authToken, challengeId)); 
+      dispatch(fetchChallenge(authToken, challengeId));
+      dispatch(browseTasksUnderChallenge(authToken, challengeId));
     }
   }, [
     apiLoading.scoreboard.deleteScoreboard,
@@ -51,12 +51,12 @@ export default function Challenge() {
     loading.problem.deleteEssay,
     loading.problem.deleteProblem,
   ]);
-  
+
   return (
     <>
       <Switch>
         <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId" component={ChallengeInfo} />
-        <Route path="/my-class/:courseId/:classId/challenge/:challengeId/setting" component={Setting} />
+        <Route path="/my-class/:courseId/:classId/challenge/:challengeId/setting" component={ChallengeSetting} />
         <Route path="/my-class/:courseId/:classId/challenge/:challengeId/statistics" component={Statistics} />
         <Route path="/my-class/:courseId/:classId/challenge/:challengeId/:problemId" component={Task} />
         <Route component={NoMatch} />

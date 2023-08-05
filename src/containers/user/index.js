@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import { readAccount } from '../../actions/user/user';
-import Profile from '../../components/userProfile/Profile';
+import Profile from '../../components/common/userProfile/Profile';
 
 function User() {
   const { accountId } = useParams();

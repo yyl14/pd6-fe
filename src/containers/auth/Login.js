@@ -2,7 +2,7 @@ import { Grid, Typography } from '@material-ui/core';
 import { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import Trademark from '../../components/auth/Trademark';
+import Trademark from '../../components/ui/Trademark';
 import useQuery from '../../hooks/useQuery';
 import LoginForm from './LoginForm';
 
