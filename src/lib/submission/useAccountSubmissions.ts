@@ -4,7 +4,7 @@ import { browseSubmission } from './fetchers';
 
 export type SubmissionDataSchema = components['schemas']['pydantic__dataclasses__Submission'];
 
-const useSubmissions = (accountId: number) => {
+const useAccountSubmissions = (accountId: number) => {
   const useSWRWithBrowseParams = withDataSchema<SubmissionDataSchema>();
 
   const browseSubmissionSWR = useSWRWithBrowseParams(
@@ -33,4 +33,4 @@ const useSubmissions = (accountId: number) => {
   };
 };
 
-export default useSubmissions;
+export default useAccountSubmissions;
