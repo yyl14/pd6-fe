@@ -1,7 +1,6 @@
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 import toSWRFetcher from '../../function/toSWRMutationFetcher';
-
 import { readPeerReviewRecord, submitPeerReviewRecord } from './fetchers';
 
 const usePeerReviewRecord = (peerReviewRecordId: number) => {
