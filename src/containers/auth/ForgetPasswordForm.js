@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import useForgetPassword from '../../lib/account/useForgetPassword';
+import useForgetPassword from '../../lib/auth/useForgetPassword';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
