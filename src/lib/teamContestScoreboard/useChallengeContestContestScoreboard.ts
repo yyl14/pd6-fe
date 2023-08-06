@@ -2,7 +2,7 @@ import useSWRMutation from 'swr/mutation';
 import toSWRMutationFetcher from '../../function/toSWRMutationFetcher';
 import { addTeamContestScoreboard } from './fetchers';
 
-const useChallengeContestContestScoreboard = (challengeId: number) => {
+const useChallengeContestContestScoreboard = () => {
   const addTeamContestScoreboardSWR = useSWRMutation(
     `/challenge/{challenge_id}/team-contest-scoreboard`,
     toSWRMutationFetcher(addTeamContestScoreboard),
