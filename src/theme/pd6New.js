@@ -116,25 +116,25 @@ const typography = {
 
   // Heading4
   h3: {
-    fontSize: '1.78rem',
+    fontSize: '2.25rem',
     fontWeight: 700,
-    lineHeight: 40 / 32,
+    lineHeight: 40 / 36,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
 
   // Heading5
   h4: {
-    fontSize: '1.22rem',
-    fontWeight: 700,
-    lineHeight: 28 / 22,
+    fontSize: '1.125rem',
+    fontWeight: 600,
+    lineHeight: 24 / 18,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
 
   // Title
   h6: {
-    fontSize: '1rem',
+    fontSize: '1.125rem',
     fontWeight: 600,
     lineHeight: 24 / 18,
     // letterSpacing: '-0.01rem',
@@ -143,9 +143,9 @@ const typography = {
 
   // Body-bold
   body1: {
-    fontSize: '0.89rem',
+    fontSize: '1rem',
     fontWeight: 500,
-    lineHeight: 24 / 16,
+    lineHeight: 20 / 16,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
     whiteSpace: 'pre-line',
@@ -153,26 +153,26 @@ const typography = {
 
   // Body-regular
   body2: {
-    fontSize: '0.89rem',
+    fontSize: '1rem',
     fontWeight: 400,
-    lineHeight: 24 / 16,
+    lineHeight: 20 / 16,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
 
   // Body-small
   caption: {
-    fontSize: '0.78rem',
+    fontSize: '0.875rem',
     fontWeight: 300,
-    lineHeight: 20 / 14,
+    lineHeight: 18 / 14,
     // letterSpacing: '-0.02rem',
     fontFamily: 'Noto Sans',
   },
 
   button: {
     textTransform: 'none',
-    fontSize: '0.89rem',
-    lineHeight: 24 / 16,
+    fontSize: '1rem',
+    lineHeight: 20 / 16,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
@@ -496,13 +496,13 @@ const overrides = {
       '& input': {
         padding: '10px 0px 10px 15px',
         fontWeight: 500,
-        fontSize: '0.89rem',
+        fontSize: '1rem',
       },
     },
     multiline: {
       padding: '10px 0px 10px 15px',
       fontWeight: 500,
-      fontSize: '0.89rem',
+      fontSize: '1rem',
     },
   },
   MuiFormHelperText: {
@@ -594,7 +594,7 @@ const overrides = {
       backgroundColor: mono.black,
 
       // message : body1
-      fontSize: '0.89rem',
+      fontSize: '1rem',
       fontWeight: 500,
       lineHeight: 24 / 18,
       // letterSpacing: '-0.01rem',

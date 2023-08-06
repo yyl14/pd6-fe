@@ -26,7 +26,7 @@
   width: 29px;
   height: 50px;
   top: 55px;
-  left: 298px;
+  left: 258px;
   background: #ffffff;
   box-shadow: 12px 3px 12px -5px rgb(0 0 0 / 20%);
   border-radius: 0px 10px 10px 0px;
@@ -46,10 +46,10 @@
 
 .layout-content-container {
   position: absolute;
-  left: 300px;
-  top: 55px;
-  width: calc(100% - 300px);
-  height: calc(100vh - 55px);
+  left: 260px;
+  top: 40px;
+  width: calc(100% - 260px);
+  height: calc(100vh - 40px);
   justify-items: center;
   overflow-y: scroll;
   min-width: 844px;
@@ -67,13 +67,13 @@
 }
 
 .layout-content {
-  width: 80%;
-  max-width: 1280px;
+  width: calc(100% - 96px);
+  max-width: 1400px;
   margin: 70px auto;
 }
 
 .layout-content-title {
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 
 #preview {
