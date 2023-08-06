@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { fetchClassMemberWithAccountReferral, replaceClassMembers } from '../../../actions/common/common';
 import { getUserInfo } from '../../../actions/user/auth';
+import useUserId from '../../../lib/user/useUserId';
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -71,6 +72,8 @@ const MemberEdit = ({ dispatch, authToken, classes, classId, backToMemberList })
   const accounts = useSelector((state) => state.accounts);
   const members = useSelector((state) => state.classMembers);
   const error = useSelector((state) => state.error.common.common);
+
+  const userId = useUserId();
 
   const [TA, setTA] = useState([]);
   const [student, setStudent] = useState([]);
@@ -264,7 +267,7 @@ const MemberEdit = ({ dispatch, authToken, classes, classId, backToMemberList })
             replacingList,
             () => {
               unblockAndReturn(saveWithDialog);
-              dispatch(getUserInfo(localStorage.getItem('id'), authToken));
+              dispatch(getUserInfo(userId, authToken));
             },
             (list) => {
               setErrorDetectedList(list);

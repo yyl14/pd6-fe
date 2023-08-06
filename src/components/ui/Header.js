@@ -451,11 +451,8 @@ export default function Header() {
   const logOut = useLogOut();
   const goto = (link) => {
     if (link === '/logout') {
-      // console.log('logout');
-      logOut(history);
-      // localStorage.removeItem('token');
-      // localStorage.removeItem('id');
-      dispatch(userLogout(history));
+      dispatch(userLogout());
+      logOut('/');
     } else {
       history.push(link);
     }

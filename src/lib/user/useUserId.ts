@@ -1,7 +1,7 @@
-const useUserId = () => {
-  const userId = localStorage.getItem('id');
+import useAuthStore from '../../stores/authStore';
 
-  if (!userId) throw Error('No user id in localStorage.');
+const useUserId = () => {
+  const { userId } = useAuthStore();
 
   return Number(userId);
 };

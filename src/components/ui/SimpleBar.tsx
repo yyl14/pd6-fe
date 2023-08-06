@@ -46,7 +46,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SimpleBar({ title, buttons, childrenButtons, children, noIndent }) {
+interface SimpleBarProps {
+  title: string;
+  buttons?: JSX.Element | null;
+  childrenButtons?: JSX.Element | null;
+  children?: JSX.Element | null;
+  noIndent?: boolean;
+}
+
+export default function SimpleBar({
+  title,
+  buttons = null,
+  childrenButtons = null,
+  children = null,
+  noIndent = false,
+}: SimpleBarProps) {
   const classes = useStyles();
   return (
     <>

@@ -11,3 +11,5 @@ export default {
   IMNight2021,
   IMCamp2021,
 };
+
+export type ThemeType = 'pd6' | 'pd6New' | 'doge' | 'IMNight2021' | 'IMCamp2021';

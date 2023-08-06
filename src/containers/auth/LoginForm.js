@@ -12,9 +12,10 @@ import {
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useMemo, useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import useLogin from '../../lib/auth/useLogin';
 
 import useQuery from '../../hooks/useQuery';
+import useLogin from '../../lib/auth/useLogin';
+import useAuthStore from '../../stores/authStore';
 
 const useStyles = makeStyles((theme) => ({
   authForm: {
@@ -38,6 +39,9 @@ export default function LoginForm() {
   const query = useQuery();
   const redirect_url = useMemo(() => query.get('redirect_url'), [query]);
   const classNames = useStyles();
+
+  const setAuth = useAuthStore((state) => state.set);
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({
@@ -71,8 +75,7 @@ export default function LoginForm() {
         } = await logIn({ username, password });
 
         if (success) {
-          localStorage.setItem('id', data.account_id);
-          localStorage.setItem('token', data.token);
+          setAuth(data.token, data.account_id);
 
           if (redirect_url) {
             history.push(redirect_url);

@@ -10,7 +10,8 @@ import {
 } from '@material-ui/core';
 import { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import ThemeToggleContext from '../../../contexts/themeToggleContext';
+
+import ThemeToggleContext from '../../../contexts/ThemeContext';
 import useEventListener from '../../../hooks/useEventListener';
 import useReduxStateShape from '../../../hooks/useReduxStateShape';
 import useAccountStudentCards from '../../../lib/studentCard/useAccountStudentCards';

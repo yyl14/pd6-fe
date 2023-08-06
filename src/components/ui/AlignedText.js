@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AlignedText({ text, children, maxWidth, textColor = 'default', childrenType }) {
+export default function AlignedText({ text, children, maxWidth = 'md', textColor = 'default', childrenType }) {
   const classes = useStyles();
   const ref = useRef();
   const [textHeight, setTextHeight] = useState();
