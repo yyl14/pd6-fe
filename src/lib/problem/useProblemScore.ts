@@ -1,7 +1,6 @@
-import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 import toSWRMutationFetcher from '../../function/toSWRMutationFetcher';
-import { readProblemScore, readProblemBestScore } from './fetchers';
+import { readProblemBestScore, readProblemScore } from './fetchers';
 
 const useProblemScore = () => {
   const readProblemScoreSWR = useSWRMutation(`/Problem/score`, toSWRMutationFetcher(readProblemScore));

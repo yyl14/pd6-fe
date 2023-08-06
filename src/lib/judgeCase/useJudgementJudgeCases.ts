@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { browseAllJudgmentJudgeCase } from './fetchers';
+import browseAllJudgmentJudgeCase from './fetchers';
 
 const useJudgementJudgeCases = (judgementId: number) => {
   const browseAllJudgmentJudgeCaseSWR = useSWR(`/judgment/${judgementId}/judge-case`, () =>
