@@ -241,15 +241,16 @@ export default function TeamList() {
           <Typography variant="h4">Import Team</Typography>
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body2">Team file format:</Typography>
+          <Typography variant="body2">File column format:</Typography>
           <Typography variant="body2" className={classNames.reminder}>
-            Name: String
+            - Name: String (The name of the team)
           </Typography>
           <Typography variant="body2" className={classNames.reminder}>
-            Manager: student id (NTU only) &gt;= institute email &gt; #username
+            - Manager: Student ID (for NTU students), Institute Email, or #Username (Leave this field empty if there is
+            no manager)
           </Typography>
           <Typography variant="body2" className={classNames.reminder}>
-            Member N (N=2~10): Same as Team Manager
+            - Member N (N=2~10): Same format as the Manager field
           </Typography>
           <Typography variant="body2">
             Notice that PDOGS only accept files encoded in <b>ASCII / UTF-8</b> charset.
