@@ -114,19 +114,19 @@ const typography = {
   // UI/UX style name
   // H1
   h1: {
-    fontSize: '5.33rem',
+    fontSize: '3.56rem',
     fontWeight: 500,
     letterSpacing: '-1%',
-    lineHeight: 131 / 96,
+    lineHeight: 80 / 64,
     fontFamily: 'Noto Sans',
   },
 
   // H2
   h2: {
-    fontSize: '3.33rem',
+    fontSize: '2.67rem',
     fontWeight: 500,
     letterSpacing: '-1%',
-    lineHeight: 82 / 60,
+    lineHeight: 60 / 48,
     fontFamily: 'Noto Sans',
   },
 
@@ -142,7 +142,7 @@ const typography = {
   // Heading5
   h4: {
     fontSize: '1.125rem',
-    fontWeight: 700,
+    fontWeight: 600,
     lineHeight: 24 / 18,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
