@@ -24,6 +24,7 @@ stages:
 
 Lint-test:
   stage: Test
+  image: cypress/browsers:node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
   cache:
     key: $CI_COMMIT_REF_NAME_LINT
     paths:
@@ -44,6 +45,7 @@ Lint-test:
 
 Unit-test:
   stage: Test
+  image: cypress/browsers:node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
   cache:
     key: $CI_COMMIT_REF_NAME_MODULE
     paths:
@@ -59,6 +61,7 @@ Unit-test:
     - Lint-test
 
 Build:
+  image: cypress/browsers:node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
   cache:
     key: $CI_COMMIT_REF_NAME_MODULE
     paths:
@@ -99,6 +102,7 @@ Sonarqube:
 
 Lighthouse:
   allow_failure: false
+  image: cypress/browsers:node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
   cache:
     key: $CI_COMMIT_REF_NAME_MODULE
     paths:
