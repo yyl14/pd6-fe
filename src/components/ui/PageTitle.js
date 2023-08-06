@@ -2,7 +2,7 @@ import { makeStyles, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
   title: {
-    marginBottom: '50px',
+    marginBottom: '32px',
     wordBreak: 'break-word',
   },
 }));

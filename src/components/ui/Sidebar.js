@@ -22,17 +22,17 @@ const useStyles = makeStyles((theme) => ({
   drawer: {
     top: '55px',
     height: 'calc(100% - 55px)',
-    width: '300px',
+    width: '260px',
   },
   drawerPaper: {
     top: '55px',
     height: 'calc(100% - 55px)',
-    width: '300px',
+    width: '260px',
     border: 'none',
   },
 
   topSpace: {
-    marginTop: '110px',
+    marginTop: '40px',
   },
   bottomSpace: {
     marginBottom: '40px',
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   titleIcon: {
-    margin: 'auto 11px auto 24px',
+    margin: 'auto 11px auto 16px',
     flexShrink: 0,
     color: theme.palette.black.main,
     '&:hover': {
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
   titleText: {
     flex: '5',
-    marginRight: '15px',
+    marginRight: '16px',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',

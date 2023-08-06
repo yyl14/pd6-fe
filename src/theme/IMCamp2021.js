@@ -96,73 +96,73 @@ const typography = {
   // UI/UX style name
   // H1
   h1: {
-    fontSize: '5.33rem',
+    fontSize: '3.56rem',
     fontWeight: 500,
     letterSpacing: '-1%',
-    lineHeight: 131 / 96,
+    lineHeight: 80 / 64,
     fontFamily: 'Noto Sans',
   },
 
   // H2
   h2: {
-    fontSize: '3.33rem',
+    fontSize: '2.67rem',
     fontWeight: 500,
     letterSpacing: '-1%',
-    lineHeight: 82 / 60,
+    lineHeight: 60 / 48,
     fontFamily: 'Noto Sans',
   },
 
-  // Big Title
+  // Heading4
   h3: {
-    fontSize: '2.67rem',
+    fontSize: '2.25rem',
     fontWeight: 700,
-    lineHeight: 65 / 48,
+    lineHeight: 40 / 36,
+    // letterSpacing: '-0.01rem',
+    fontFamily: 'Noto Sans',
+  },
+
+  // Heading5
+  h4: {
+    fontSize: '1.125rem',
+    fontWeight: 600,
+    lineHeight: 24 / 18,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
 
   // Title
-  h4: {
-    fontSize: '1.33rem',
-    fontWeight: 700,
-    lineHeight: 33 / 24,
-    // letterSpacing: '-0.01rem',
-    fontFamily: 'Noto Sans',
-  },
-
-  // Bold-Body
   h6: {
-    fontSize: '1rem',
+    fontSize: '1.125rem',
     fontWeight: 600,
-    lineHeight: 25 / 18,
+    lineHeight: 24 / 18,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
 
-  // Body
+  // Body-bold
   body1: {
     fontSize: '1rem',
     fontWeight: 500,
-    lineHeight: 25 / 18,
+    lineHeight: 20 / 16,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
     whiteSpace: 'pre-line',
   },
 
-  // Sub-body
+  // Body-regular
   body2: {
-    fontSize: '0.89rem',
+    fontSize: '1rem',
     fontWeight: 400,
-    lineHeight: 22 / 16,
+    lineHeight: 20 / 16,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
 
-  // Caption
+  // Body-small
   caption: {
-    fontSize: '0.78rem',
+    fontSize: '0.875rem',
     fontWeight: 300,
-    lineHeight: 19 / 14,
+    lineHeight: 18 / 14,
     // letterSpacing: '-0.02rem',
     fontFamily: 'Noto Sans',
   },
@@ -170,7 +170,7 @@ const typography = {
   button: {
     textTransform: 'none',
     fontSize: '1rem',
-    lineHeight: 24 / 20,
+    lineHeight: 20 / 16,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
@@ -594,7 +594,7 @@ const overrides = {
       // message : body1
       fontSize: '1rem',
       fontWeight: 500,
-      lineHeight: 25 / 18,
+      lineHeight: 20 / 16,
       // letterSpacing: '-0.01rem',
       color: mono.white,
     },
