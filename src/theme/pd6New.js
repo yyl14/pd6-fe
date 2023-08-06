@@ -596,7 +596,7 @@ const overrides = {
       // message : body1
       fontSize: '1rem',
       fontWeight: 500,
-      lineHeight: 24 / 18,
+      lineHeight: 20 / 16,
       // letterSpacing: '-0.01rem',
       color: mono.white,
     },

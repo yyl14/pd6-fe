@@ -130,57 +130,57 @@ const typography = {
     fontFamily: 'Noto Sans',
   },
 
-  // Big Title
+  // Heading4
   h3: {
-    fontSize: '2.67rem',
+    fontSize: '2.25rem',
     fontWeight: 700,
-    lineHeight: 40 / 32,
+    lineHeight: 40 / 36,
+    // letterSpacing: '-0.01rem',
+    fontFamily: 'Noto Sans',
+  },
+
+  // Heading5
+  h4: {
+    fontSize: '1.125rem',
+    fontWeight: 700,
+    lineHeight: 24 / 18,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
 
   // Title
-  h4: {
-    fontSize: '1.33rem',
-    fontWeight: 700,
-    lineHeight: 28 / 22,
-    // letterSpacing: '-0.01rem',
-    fontFamily: 'Noto Sans',
-  },
-
-  // Bold-Body
   h6: {
-    fontSize: '1rem',
+    fontSize: '1.125rem',
     fontWeight: 600,
     lineHeight: 24 / 18,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
 
-  // Body
+  // Body-bold
   body1: {
     fontSize: '1rem',
     fontWeight: 500,
-    lineHeight: 24 / 18,
+    lineHeight: 20 / 16,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
     whiteSpace: 'pre-line',
   },
 
-  // Sub-body
+  // Body-regular
   body2: {
-    fontSize: '0.89rem',
+    fontSize: '1rem',
     fontWeight: 400,
-    lineHeight: 24 / 16,
+    lineHeight: 20 / 16,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
 
-  // Caption
+  // Body-small
   caption: {
-    fontSize: '0.78rem',
+    fontSize: '0.875rem',
     fontWeight: 300,
-    lineHeight: 20 / 14,
+    lineHeight: 18 / 14,
     // letterSpacing: '-0.02rem',
     fontFamily: 'Noto Sans',
   },
@@ -188,7 +188,7 @@ const typography = {
   button: {
     textTransform: 'none',
     fontSize: '1rem',
-    lineHeight: 24 / 20,
+    lineHeight: 20 / 16,
     // letterSpacing: '-0.01rem',
     fontFamily: 'Noto Sans',
   },
@@ -612,7 +612,7 @@ const overrides = {
       // message : body1
       fontSize: '1rem',
       fontWeight: 500,
-      lineHeight: 25 / 18,
+      lineHeight: 20 / 16,
       // letterSpacing: '-0.01rem',
       color: mono.white,
     },
