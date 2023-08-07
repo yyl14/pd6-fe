@@ -1,26 +1,26 @@
 import useSWRMutation from 'swr/mutation';
+import getTextFromUrl from '../../function/getTextFromUrl';
 import toSWRMutationFetcher from '../../function/toSWRMutationFetcher';
 import getFileLink from './fetchers';
-import getTextFromUrl from '../../function/getTextFromUrl';
 
 type OnErrorType = () => void;
 
-const useS3File = (uuid: string) => {
-  const getFileLinkSWR = useSWRMutation(`/s3-file/${uuid}/url`, toSWRMutationFetcher(getFileLink));
+const useS3File = () => {
+  const getFileLinkSWR = useSWRMutation(`/s3-file/{uuid}/url`, toSWRMutationFetcher(getFileLink));
 
   const downloadFile = async (
     fileName: string,
     file_uuid: string,
-    asAttachment: boolean,
+    asAttachment: boolean = true,
     onError: OnErrorType | null = null,
   ) => {
     try {
-      const res = getFileLink({
+      const { data } = await getFileLinkSWR.trigger({
         s3_file_uuid: file_uuid,
         filename: fileName,
         as_attachment: asAttachment,
       });
-      fetch((await res).data.data.url).then((t) =>
+      fetch(data.data.url).then((t) =>
         t.blob().then((b) => {
           const a = document.createElement('a');
           a.href = URL.createObjectURL(b);
@@ -35,15 +35,15 @@ const useS3File = (uuid: string) => {
     }
   };
 
-  const getFileContent = async (fileName: string, file_uuid: string, asAttachment: boolean) => {
+  const getFileContent = async (fileName: string, file_uuid: string, asAttachment: boolean = true) => {
     try {
-      const res = getFileLink({
+      const { data } = await getFileLinkSWR.trigger({
         s3_file_uuid: file_uuid,
         filename: fileName,
         as_attachment: asAttachment,
       });
-      const { data } = (await res).data;
-      const code = await getTextFromUrl(data.url);
+
+      const code = await getTextFromUrl(data.data.url);
       return code;
     } catch (err) {
       return null;
