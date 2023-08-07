@@ -1,9 +1,10 @@
-import useSWR from 'swr';
+import useSWRWithBrowseParams from 'swr';
 import { browsePeerReviewSummaryReview } from './fetchers';
 
 const useViewPeerReviewReviewerSummary = (peerReviewId: number) => {
-  const browsePeerReviewSummaryReviewSWR = useSWR(`/peer-review/{peer_review_id}/view/reviewer-summary`, () =>
-    browsePeerReviewSummaryReview({ peer_review_id: peerReviewId }),
+  const browsePeerReviewSummaryReviewSWR = useSWRWithBrowseParams(
+    `/peer-review/{peer_review_id}/view/reviewer-summary`,
+    () => browsePeerReviewSummaryReview({ peer_review_id: peerReviewId }),
   );
 
   return {

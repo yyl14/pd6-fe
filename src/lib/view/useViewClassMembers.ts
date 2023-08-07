@@ -1,8 +1,10 @@
-import useSWR from 'swr';
+import useSWRWithBrowseParams from 'swr';
 import { browseClassMember } from './fetchers';
 
 const useViewClassMembers = (classId: number) => {
-  const browseClassMemberSWR = useSWR(`/class/{class_id}/view/member`, () => browseClassMember({ class_id: classId }));
+  const browseClassMemberSWR = useSWRWithBrowseParams(`/class/{class_id}/view/member`, () =>
+    browseClassMember({ class_id: classId }),
+  );
 
   return {
     members: browseClassMemberSWR.data?.data.data,

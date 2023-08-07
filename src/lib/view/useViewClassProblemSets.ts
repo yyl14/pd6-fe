@@ -1,8 +1,8 @@
-import useSWR from 'swr';
+import useSWRWithBrowseParams from 'swr';
 import { browseProblemSetUnderClass } from './fetchers';
 
 const useViewClassProblemSets = (classId: number) => {
-  const browseProblemSetUnderClassSWR = useSWR(`/class/{class_id}/view/problem-set`, () =>
+  const browseProblemSetUnderClassSWR = useSWRWithBrowseParams(`/class/{class_id}/view/problem-set`, () =>
     browseProblemSetUnderClass({ class_id: classId }),
   );
 
