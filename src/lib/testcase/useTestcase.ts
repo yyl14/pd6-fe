@@ -9,7 +9,7 @@ import {
   uploadTestcaseOutputData,
 } from './fetchers';
 
-const useProblemTestcase = (problemId: number) => {
+const useTestcase = () => {
   const deleteTestcaseSWR = useSWRMutation(`/testcase/{testcase_id}`, toSWRMutationFetcher(deleteTestcase));
   const editTestcaseSWR = useSWRMutation(`/testcase/{testcase_id}`, toSWRMutationFetcher(editTestcase));
 
