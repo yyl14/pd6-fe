@@ -1,8 +1,9 @@
 module.exports = {
     ci: {
         collect: {
-            startServerCommand: "yarn start",
-            url: ["http://localhost:3000/"],
+            // startServerCommand: "yarn start",
+            // url: ["http://localhost:3000/"],
+            "staticDistDir": "./build",
             settings: {
                 onlyCategories: [
                     'performance',
@@ -12,7 +13,7 @@ module.exports = {
                   ],
                 chromeFlags: "--no-sandbox",
             },
-            numberOfRuns: 5
+            numberOfRuns: 3
         },
         assert: {
             // assert options here
