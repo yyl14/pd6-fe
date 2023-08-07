@@ -1,10 +1,16 @@
-import useSWRWithBrowseParams from 'swr';
+import { components } from '../../../types/schema';
+import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
 import { browseAccountWithDefaultStudentId } from './fetchers';
 
+export type AccountsWithDefaultStudentIdSchema = components['schemas']['BrowseAccountOutput'];
+
 const useViewAccountsWithDefaultStudentId = () => {
+  const useSWRWithBrowseParams = withDataSchema<AccountsWithDefaultStudentIdSchema>();
+
   const browseAccountWithDefaultStudentIdSWR = useSWRWithBrowseParams(
     `/view/account`,
     browseAccountWithDefaultStudentId,
+    { limit: 50, offset: 0 },
   );
 
   return {

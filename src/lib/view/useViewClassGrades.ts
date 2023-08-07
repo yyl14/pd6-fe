@@ -1,10 +1,15 @@
-import useSWRWithBrowseParams from 'swr';
+import { components } from '../../../types/schema';
+import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
 import { browseClassGrade } from './fetchers';
 
+export type ClassGradesSchema = components['schemas']['pydantic__dataclasses__Grade'];
+
 const useViewClassGrades = (classId: number) => {
-  const browseClassGradeSWR = useSWRWithBrowseParams(`/class/{class_id}/view/grade`, () =>
-    browseClassGrade({ class_id: classId }),
-  );
+  const useSWRWithBrowseParams = withDataSchema<ClassGradesSchema>();
+
+  const browseClassGradeSWR = useSWRWithBrowseParams(`/class/{class_id}/view/grade`, browseClassGrade, {
+    class_id: classId,
+  });
 
   return {
     grades: browseClassGradeSWR.data?.data.data,

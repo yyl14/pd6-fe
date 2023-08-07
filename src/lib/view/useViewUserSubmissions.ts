@@ -1,8 +1,15 @@
-import useSWRWithBrowseParams from 'swr';
+import { components } from '../../../types/schema';
+import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
 import { browseMySubmission } from './fetchers';
 
-const useViewUserSubmissions = () => {
-  const browseMySubmissionSWR = useSWRWithBrowseParams(`/view/my-submission`, browseMySubmission);
+export type PeerReviewSummaryReviewSchema = components['schemas']['view_peer_review_summary_review_return'];
+
+const useViewUserSubmissions = (accountId: number) => {
+  const useSWRWithBrowseParams = withDataSchema<PeerReviewSummaryReviewSchema>();
+
+  const browseMySubmissionSWR = useSWRWithBrowseParams(`/view/my-submission`, browseMySubmission, {
+    account_id: accountId,
+  });
 
   return {
     submissions: browseMySubmissionSWR.data?.data.data,

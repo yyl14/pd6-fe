@@ -1,8 +1,13 @@
-import useSWRWithBrowseParams from 'swr';
+import { components } from '../../../types/schema';
+import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
 import { browseAccessLog } from './fetchers';
 
+export type AccessLogOutputSchema = components['schemas']['AccessLog'];
+
 const useViewAccessLogs = () => {
-  const browseAccessLogSWR = useSWRWithBrowseParams(`/view/access-log`, browseAccessLog);
+  const useSWRWithBrowseParams = withDataSchema<AccessLogOutputSchema>();
+
+  const browseAccessLogSWR = useSWRWithBrowseParams(`/view/access-log`, browseAccessLog, { limit: 50, offset: 0 });
 
   return {
     accessLog: browseAccessLogSWR.data?.data.data,

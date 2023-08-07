@@ -1,9 +1,16 @@
-import useSWRWithBrowseParams from 'swr';
+import { components } from '../../../types/schema';
+import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
 import { browseProblemSetUnderClass } from './fetchers';
 
+export type ProblemSetSchema = components['schemas']['ViewProblemSet'];
+
 const useViewClassProblemSets = (classId: number) => {
-  const browseProblemSetUnderClassSWR = useSWRWithBrowseParams(`/class/{class_id}/view/problem-set`, () =>
-    browseProblemSetUnderClass({ class_id: classId }),
+  const useSWRWithBrowseParams = withDataSchema<ProblemSetSchema>();
+
+  const browseProblemSetUnderClassSWR = useSWRWithBrowseParams(
+    `/class/{class_id}/view/problem-set`,
+    browseProblemSetUnderClass,
+    { class_id: classId },
   );
 
   return {

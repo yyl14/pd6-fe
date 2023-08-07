@@ -1,10 +1,16 @@
-import useSWRWithBrowseParams from 'swr';
+import { components } from '../../../types/schema';
+import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
 import { browseMySubmissionUnderProblem } from './fetchers';
 
-const useViewProblemUserSubmissions = () => {
+export type MySubmissionUnderProblemSchema = components['schemas']['view_browse_my_submission_under_problem_return'];
+
+const useViewProblemUserSubmissions = (accountId: number, problemId: number) => {
+  const useSWRWithBrowseParams = withDataSchema<MySubmissionUnderProblemSchema>();
+
   const browseMySubmissionUnderProblemSWR = useSWRWithBrowseParams(
     `/problem/{problem_id}/view/my-submission`,
     browseMySubmissionUnderProblem,
+    { account_id: accountId, problem_id: problemId },
   );
 
   return {
