@@ -11,7 +11,7 @@
     "prebuild": "npm run generate-build-meta",
     "generate-build-meta": "./node_modules/react-clear-cache/bin/cli.js",
     "analyze": "source-map-explorer 'build/static/js/*.js' --html bundle-size.html",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx src --cache-location .eslint",
     "update-schema": "node ./scripts/updateSchema.mjs",
     "update-schema:dev": "BE_ENV=dev node ./scripts/updateSchema.mjs"
   },
@@ -72,6 +72,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@iconify/icons-bx": "^1.1.2",
     "@iconify/react": "^3.0.0",
+    "@lhci/cli": "0.7.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
