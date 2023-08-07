@@ -24,7 +24,7 @@ stages:
 
 Lint-test:
   stage: Test
-  image: node:lts-bullseye-slim
+  image: timbru31/node-alpine-git
   cache:
     key: $CI_COMMIT_REF_NAME_LINT
     paths:
@@ -45,7 +45,7 @@ Lint-test:
 
 Unit-test:
   stage: Test
-  image: node:lts-bullseye-slim
+  image: timbru31/node-alpine-git
   cache:
     key: $CI_COMMIT_REF_NAME_MODULE
     paths:
@@ -62,7 +62,7 @@ Unit-test:
     - Lint-test
 
 Build:
-  image: node:lts-bullseye-slim
+  image: timbru31/node-alpine-git
   cache:
     key: $CI_COMMIT_REF_NAME_MODULE
     paths:
