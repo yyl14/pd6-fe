@@ -1,8 +1,11 @@
-import useSWR from 'swr';
+import useSWRWithBrowseParams from 'swr';
 import { browseAccountWithDefaultStudentId } from './fetchers';
 
 const useViewAccountsWithDefaultStudentId = () => {
-  const browseAccountWithDefaultStudentIdSWR = useSWR(`/view/account`, browseAccountWithDefaultStudentId);
+  const browseAccountWithDefaultStudentIdSWR = useSWRWithBrowseParams(
+    `/view/account`,
+    browseAccountWithDefaultStudentId,
+  );
 
   return {
     account: browseAccountWithDefaultStudentIdSWR.data?.data.data,

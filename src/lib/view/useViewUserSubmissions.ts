@@ -1,8 +1,8 @@
-import useSWR from 'swr';
+import useSWRWithBrowseParams from 'swr';
 import { browseMySubmission } from './fetchers';
 
 const useViewUserSubmissions = () => {
-  const browseMySubmissionSWR = useSWR(`/view/my-submission`, browseMySubmission);
+  const browseMySubmissionSWR = useSWRWithBrowseParams(`/view/my-submission`, browseMySubmission);
 
   return {
     submissions: browseMySubmissionSWR.data?.data.data,

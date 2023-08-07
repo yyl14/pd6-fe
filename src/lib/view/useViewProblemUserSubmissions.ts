@@ -1,8 +1,8 @@
-import useSWR from 'swr';
+import useSWRWithBrowseParams from 'swr';
 import { browseMySubmissionUnderProblem } from './fetchers';
 
 const useViewProblemUserSubmissions = () => {
-  const browseMySubmissionUnderProblemSWR = useSWR(
+  const browseMySubmissionUnderProblemSWR = useSWRWithBrowseParams(
     `/problem/{problem_id}/view/my-submission`,
     browseMySubmissionUnderProblem,
   );

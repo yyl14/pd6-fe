@@ -1,8 +1,8 @@
-import useSWR from 'swr';
+import useSWRWithBrowseParams from 'swr';
 import { browseAccessLog } from './fetchers';
 
 const useViewAccessLogs = () => {
-  const browseAccessLogSWR = useSWR(`/view/access-log`, browseAccessLog);
+  const browseAccessLogSWR = useSWRWithBrowseParams(`/view/access-log`, browseAccessLog);
 
   return {
     accessLog: browseAccessLogSWR.data?.data.data,

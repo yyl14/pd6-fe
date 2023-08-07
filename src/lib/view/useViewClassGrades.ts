@@ -1,8 +1,10 @@
-import useSWR from 'swr';
+import useSWRWithBrowseParams from 'swr';
 import { browseClassGrade } from './fetchers';
 
 const useViewClassGrades = (classId: number) => {
-  const browseClassGradeSWR = useSWR(`/class/{class_id}/view/grade`, () => browseClassGrade({ class_id: classId }));
+  const browseClassGradeSWR = useSWRWithBrowseParams(`/class/{class_id}/view/grade`, () =>
+    browseClassGrade({ class_id: classId }),
+  );
 
   return {
     grades: browseClassGradeSWR.data?.data.data,
