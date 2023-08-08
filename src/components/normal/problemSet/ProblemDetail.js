@@ -5,9 +5,9 @@ import { useHistory, useParams } from 'react-router-dom';
 import { readProblemInfo } from '../../../actions/myClass/problem';
 import GeneralLoading from '../../GeneralLoading';
 import NoMatch from '../../noMatch';
-import CodingProblemInfo from '../../pageTemplate/CodingProblemInfo';
 import PageTitle from '../../ui/PageTitle';
 import Icon from '../../ui/icon';
+import CodingProblemInfo from '../pageTemplate/CodingProblemInfo';
 
 const useStyles = makeStyles(() => ({
   generalButtons: {

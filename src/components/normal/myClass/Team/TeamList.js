@@ -14,12 +14,12 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { createTeamWithMember, downloadTeamFile, fetchTeams, importTeam } from '../../../../actions/myClass/team';
-import AddTeamMemberArea from '../../../ui/AddTeamMemberArea';
 import AlignedText from '../../../ui/AlignedText';
 import AutoTable from '../../../ui/AutoTable';
 import FileUploadArea from '../../../ui/FileUploadArea';
 import PageTitle from '../../../ui/PageTitle';
 import Icon from '../../../ui/icon/index';
+import AddTeamMemberArea from './detail/AddTeamMemberArea';
 
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';

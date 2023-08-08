@@ -8,8 +8,8 @@ import Icon from '../../../ui/icon/index';
 
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
-import CodingProblemEdit from './ProblemSettings/CodingProblemEdit';
-import CodingProblemInfo from './ProblemSettings/CodingProblemInfo';
+import CodingProblemEdit from './Problem/CodingProblemEdit';
+import CodingProblemInfo from './Problem/CodingProblemInfo';
 
 import { readProblemWithCodeContent, rejudgeProblem } from '../../../../actions/myClass/problem';
 

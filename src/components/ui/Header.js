@@ -311,11 +311,6 @@ export default function Header() {
               basePath: '/my-class',
               path: '/my-class',
             },
-            // {
-            //   text: 'All Class',
-            //   basePath: '/all-class',
-            //   path: '/all-class',
-            // },
             {
               text: 'Problem Set',
               basePath: '/problem-set',
@@ -332,18 +327,13 @@ export default function Header() {
             //   path: '/ranklist',
             // },
             {
-              text: 'System',
-              basePath: '/system',
-              path: '/system',
+              text: 'About',
+              basePath: '/about',
+              path: '/about',
             },
           ]);
         } else {
           setItemList([
-            // {
-            //   text: 'All Class',
-            //   basePath: '/all-class',
-            //   path: '/all-class',
-            // },
             {
               text: 'Problem Set',
               basePath: '/problem-set',
@@ -360,9 +350,9 @@ export default function Header() {
             //   path: '/ranklist',
             // },
             {
-              text: 'System',
-              basePath: '/system',
-              path: '/system',
+              text: 'About',
+              basePath: '/about',
+              path: '/about',
             },
           ]);
         }
@@ -458,19 +448,11 @@ export default function Header() {
     setUserAlreadyClose(false);
   };
 
-  // const readNotification = (notifyId) => {
-  //   dispatch(userReadAnnouncement(authToken, notifyId));
-  //   // dispatch(userBrowseAnnouncement(authToken)); // this line needs to be de-marked when BE complete read announcement
-  // };
-
   const logOut = useLogOut();
   const goto = (link) => {
     if (link === '/logout') {
-      // console.log('logout');
-      logOut(history);
-      // localStorage.removeItem('token');
-      // localStorage.removeItem('id');
-      dispatch(userLogout(history));
+      dispatch(userLogout());
+      logOut('/');
     } else {
       history.push(link);
     }

@@ -1,20 +1,17 @@
 import { Grid, Typography } from '@material-ui/core';
-import { useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import Trademark from '../../components/auth/Trademark';
-import useQuery from '../../hooks/useQuery';
+import { useEffect } from 'react';
+import Trademark from '../../components/ui/Trademark';
 import LoginForm from './LoginForm';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
 
 export default function Login() {
-  const history = useHistory();
-  const query = useQuery();
-  const redirect_url = useMemo(() => query.get('redirect_url'), [query]);
-  const auth = useSelector((state) => state.auth);
-  const user = useSelector((state) => state.user);
+  // const history = useHistory();
+  // const query = useQuery();
+  // const redirect_url = useMemo(() => query.get('redirect_url'), [query]);
+  // const auth = useSelector((state) => state.auth);
+  // const user = useSelector((state) => state.user);
 
   useEffect(() => {
     document.title = 'Signin';
@@ -23,17 +20,17 @@ export default function Login() {
     };
   }, []);
 
-  useEffect(() => {
-    if (auth.isAuthenticated) {
-      localStorage.setItem('id', user.id);
-      localStorage.setItem('token', auth.token);
-      if (redirect_url) {
-        history.push(redirect_url);
-      } else {
-        history.push('/');
-      }
-    }
-  }, [auth.isAuthenticated, auth.token, history, redirect_url, user.id]);
+  // useEffect(() => {
+  //   if (auth.isAuthenticated) {
+  //     localStorage.setItem('id', user.id);
+  //     localStorage.setItem('token', auth.token);
+  //     if (redirect_url) {
+  //       history.push(redirect_url);
+  //     } else {
+  //       history.push('/');
+  //     }
+  //   }
+  // }, [auth.isAuthenticated, auth.token, history, redirect_url, user.id]);
 
   return (
     <div className="page auth-page">

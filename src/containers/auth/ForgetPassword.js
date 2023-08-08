@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@material-ui/core';
-import Trademark from '../../components/auth/Trademark';
+import Trademark from '../../components/ui/Trademark';
 import ForgetPasswordForm from './ForgetPasswordForm';
 
 import '../../styles/auth.css';

@@ -7,11 +7,11 @@ import { readPeerReviewWithProblem } from '../../../../actions/myClass/peerRevie
 
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
-import GraderSummary from './PeerReviewSettings/GraderSummary';
-import PeerReviewInfo from './PeerReviewSettings/PeerReviewInfo';
-import ReceivedRecord from './PeerReviewSettings/ReceivedRecord';
-import ReceiverSummary from './PeerReviewSettings/ReceiverSummary';
-import ReviewedRecord from './PeerReviewSettings/ReviewedRecord';
+import GraderSummary from './PeerReview/GraderSummary';
+import PeerReviewInfo from './PeerReview/PeerReviewInfo';
+import ReceivedRecord from './PeerReview/ReceivedRecord';
+import ReceiverSummary from './PeerReview/ReceiverSummary';
+import ReviewedRecord from './PeerReview/ReviewedRecord';
 
 /* This is a level 4 component (page component) */
 /* judge the problem type on this level */

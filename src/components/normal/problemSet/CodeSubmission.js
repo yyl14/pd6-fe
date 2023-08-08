@@ -1,4 +1,4 @@
-import CodeSubmissionView from '../../pageTemplate/CodeSubmissionView';
+import CodeSubmissionView from '../pageTemplate/CodeSubmissionView';
 
 /* This is a level 4 component (page component) */
 export default function CodeSubmission() {

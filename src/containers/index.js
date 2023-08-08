@@ -5,10 +5,11 @@ import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 // import { makeStyles, Fab } from '@material-ui/core';
 // import { Feedback } from '@material-ui/icons';
 import { getUserInfo } from '../actions/user/auth';
-import FileDownloading from '../components/file/fileDownloading';
+import FileDownloading from '../components/common/file/fileDownloading';
+import Sidebar from '../components/sidebar/Sidebar';
 import Header from '../components/ui/Header';
-import Sidebar from '../components/ui/Sidebar';
 import Icon from '../components/ui/icon';
+import useAuthStore from '../stores/authStore';
 import '../styles/index.css';
 import Account from './account';
 import Admin from './admin';
@@ -32,6 +33,8 @@ function Index() {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
+  const authStore = useAuthStore();
+
   const [showSidebar, setShowSidebar] = useState(true);
   const [disableSidebar, setDisableSidebar] = useState(false);
 
@@ -41,17 +44,17 @@ function Index() {
 
   useEffect(() => {
     if (!auth.isAuthenticated) {
-      if (localStorage.getItem('id') && localStorage.getItem('token')) {
+      if (authStore.authToken) {
+        console.log(authStore);
         if (auth.tokenExpired) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('id');
+          authStore.clear();
           if (location.pathname !== '/') {
             history.push(`/login?redirect_url=${location.pathname}`);
           } else {
             history.push('/login');
           }
         } else {
-          dispatch(getUserInfo(localStorage.getItem('id'), localStorage.getItem('token')));
+          dispatch(getUserInfo(authStore.userId, authStore.authToken));
         }
       } else if (location.pathname !== '/') {
         history.push(`/login?redirect_url=${location.pathname}`);
@@ -59,7 +62,7 @@ function Index() {
         history.push('/login');
       }
     }
-  }, [auth.isAuthenticated, auth.tokenExpired, dispatch, history, location.pathname]);
+  }, [auth.isAuthenticated, auth.tokenExpired, dispatch, history, location.pathname, authStore]);
 
   useEffect(() => {
     if (auth.isAuthenticated && location.pathname === '/') {

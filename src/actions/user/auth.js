@@ -62,9 +62,9 @@ const getUserInfo = (id, token) => async (dispatch) => {
   }
 };
 
-const userLogout = (history) => (dispatch) => {
+const userLogout = () => (dispatch) => {
   dispatch({ type: authConstants.AUTH_LOGOUT });
-  history.push('/login');
+  // history.push('/login');
 };
 
 const userForgetUsername = (email, onSuccess, onError) => async (dispatch) => {
