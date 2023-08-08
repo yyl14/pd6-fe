@@ -1,10 +1,11 @@
 import { Grid, Typography } from '@material-ui/core';
 import { useEffect } from 'react';
-import Trademark from '../../components/ui/Trademark';
-import LoginForm from './LoginForm';
+
+import Trademark from '@/components/ui/Trademark';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
+import LoginForm from './LoginForm';
 
 export default function Login() {
   // const history = useHistory();

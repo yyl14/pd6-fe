@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useParams } from 'react-router-dom';
+
+import ClassSetting from '@/components/admin/course/ClassSetting';
+import MemberList from '@/components/admin/course/MemberList';
+import NoMatch from '@/components/noMatch';
+
 import { fetchClass, fetchCourse } from '../../../actions/common/common';
-import ClassSetting from '../../../components/admin/course/ClassSetting';
-import MemberList from '../../../components/admin/course/MemberList';
-import NoMatch from '../../../components/noMatch';
 
 /* This is a level 3 container (main page container) */
 export default function Class() {

@@ -2,16 +2,15 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useHistory, useParams } from 'react-router-dom';
 
-import ChallengeList from '../../../components/normal/myClass/Challenge/ChallengeList';
+import NoMatch from '@/components/noMatch';
+import ChallengeList from '@/components/normal/myClass/Challenge/ChallengeList';
+
+import { fetchClass, fetchCourse } from '../../../actions/common/common';
 import Challenge from './challenge';
 import Grade from './grade';
 import Member from './member';
 import Submission from './submission';
 import Team from './team';
-
-import { fetchClass, fetchCourse } from '../../../actions/common/common';
-
-import NoMatch from '../../../components/noMatch';
 
 /* This is a level 2 container (role container) */
 export default function MyClass() {

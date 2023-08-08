@@ -1,4 +1,4 @@
-import AccountSetting from '../../components/account/myProfile/AccountSetting';
+import AccountSetting from '@/components/account/myProfile/AccountSetting';
 
 function Account() {
   // const history = useHistory();

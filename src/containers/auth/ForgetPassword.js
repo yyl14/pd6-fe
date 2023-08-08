@@ -1,9 +1,10 @@
 import { Grid, Typography } from '@material-ui/core';
-import Trademark from '../../components/ui/Trademark';
-import ForgetPasswordForm from './ForgetPasswordForm';
+
+import Trademark from '@/components/ui/Trademark';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
+import ForgetPasswordForm from './ForgetPasswordForm';
 
 export default function ForgetPassword() {
   return (

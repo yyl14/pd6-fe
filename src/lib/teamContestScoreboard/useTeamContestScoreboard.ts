@@ -1,6 +1,8 @@
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
-import toSWRFetcher from '../../function/toSWRMutationFetcher';
+
+import toSWRFetcher from '@/function/toSWRMutationFetcher';
+
 import { editTeamContestScoreboard, viewTeamContestScoreboard } from './fetchers';
 
 const useTeamContestScoreboard = (scoreboardId: number) => {

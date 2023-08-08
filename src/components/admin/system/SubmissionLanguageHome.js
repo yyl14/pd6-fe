@@ -1,5 +1,6 @@
-import useReduxStateShape from '../../../hooks/useReduxStateShape';
-import useSubmitLangs from '../../../lib/submitLang/useSubmitLangs';
+import useReduxStateShape from '@/hooks/useReduxStateShape';
+import useSubmitLangs from '@/lib/submitLang/useSubmitLangs';
+
 import CustomTable from '../../ui/CustomTable';
 import PageTitle from '../../ui/PageTitle';
 

@@ -1,9 +1,10 @@
 import { makeStyles } from '@material-ui/core';
 import { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import Icon from '../../components/ui/icon';
-import useQuery from '../../hooks/useQuery';
-import useVerifyEmail from '../../lib/email/useVerifyEmail';
+
+import Icon from '@/components/ui/icon';
+import useQuery from '@/hooks/useQuery';
+import useVerifyEmail from '@/lib/email/useVerifyEmail';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {

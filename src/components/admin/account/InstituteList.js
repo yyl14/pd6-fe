@@ -13,10 +13,11 @@ import {
 } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 
-import filterData from '../../../function/filter';
-import sortData from '../../../function/sort';
-import useReduxStateShape from '../../../hooks/useReduxStateShape';
-import useInstitutes from '../../../lib/institute/useInstitutes';
+import filterData from '@/function/filter';
+import sortData from '@/function/sort';
+import useReduxStateShape from '@/hooks/useReduxStateShape';
+import useInstitutes from '@/lib/institute/useInstitutes';
+
 import GeneralLoading from '../../GeneralLoading';
 import AlignedText from '../../ui/AlignedText';
 import CustomTable from '../../ui/CustomTable';

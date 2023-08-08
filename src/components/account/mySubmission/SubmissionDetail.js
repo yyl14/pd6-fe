@@ -3,12 +3,14 @@ import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
+
+import useReduxStateShape from '@/hooks/useReduxStateShape';
+import useSubmitLangs from '@/lib/submitLang/useSubmitLangs';
+
 import { browseAllJudgementJudgeCase } from '../../../actions/api/judgement';
 import { fetchChallenge, fetchClass, fetchCourse } from '../../../actions/common/common';
 import { browseTestcases } from '../../../actions/myClass/problem';
 import { fetchSubmission, readSubmissionDetail } from '../../../actions/myClass/submission';
-import useReduxStateShape from '../../../hooks/useReduxStateShape';
-import useSubmitLangs from '../../../lib/submitLang/useSubmitLangs';
 import GeneralLoading from '../../GeneralLoading';
 import NoMatch from '../../noMatch';
 import AlignedText from '../../ui/AlignedText';

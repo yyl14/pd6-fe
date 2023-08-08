@@ -1,7 +1,8 @@
 import { Route, Switch } from 'react-router-dom';
-import NoMatch from '../../../components/noMatch';
-import GradeDetail from '../../../components/normal/myClass/Grade/GradeDetail';
-import GradeList from '../../../components/normal/myClass/Grade/GradeList';
+
+import NoMatch from '@/components/noMatch';
+import GradeDetail from '@/components/normal/myClass/Grade/GradeDetail';
+import GradeList from '@/components/normal/myClass/Grade/GradeList';
 
 /* This is a level 3 container (main page container) */
 export default function Grade() {

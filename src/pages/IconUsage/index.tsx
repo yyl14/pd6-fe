@@ -1,7 +1,8 @@
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import Icon from '../../components/ui/icon/index';
+
+import Icon from '@/components/ui/icon/index';
 
 const StyledPaper = withStyles({
   root: {

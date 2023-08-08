@@ -1,8 +1,10 @@
 import { Button, TextField, Typography, makeStyles } from '@material-ui/core';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
+import useAccountStudentCards from '@/lib/studentCard/useAccountStudentCards';
+
 import { editAccount } from '../../../../actions/user/user';
-import useAccountStudentCards from '../../../../lib/studentCard/useAccountStudentCards';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 

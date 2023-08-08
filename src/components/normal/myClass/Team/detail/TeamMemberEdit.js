@@ -14,9 +14,11 @@ import {
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+
+import systemRoleTransformation from '@/function/systemRoleTransformation';
+
 import { getAccountBatchByReferral } from '../../../../../actions/common/common';
 import { addTeamMember, deleteTeamMember, editTeamMember } from '../../../../../actions/myClass/team';
-import systemRoleTransformation from '../../../../../function/systemRoleTransformation';
 import AlignedText from '../../../../ui/AlignedText';
 import SimpleBar from '../../../../ui/SimpleBar';
 import SimpleTable from '../../../../ui/SimpleTable';

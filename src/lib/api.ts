@@ -1,7 +1,8 @@
 import { Fetcher, Middleware } from 'openapi-typescript-fetch';
 
+import useAuthStore from '@/stores/authStore';
+
 import { paths } from '../../types/schema';
-import useAuthStore from '../stores/authStore';
 
 const logger: Middleware = async (url, init, next) => {
   // eslint-disable-next-line no-console

@@ -1,6 +1,7 @@
 import { Route, Switch } from 'react-router-dom';
-import NoMatch from '../../../components/noMatch';
-import MemberList from '../../../components/normal/myClass/Member/MemberList';
+
+import NoMatch from '@/components/noMatch';
+import MemberList from '@/components/normal/myClass/Member/MemberList';
 
 /* This is a level 3 container (main page container) */
 export default function Member() {

@@ -1,5 +1,7 @@
 import useSWRMutation from 'swr/mutation';
-import toSWRFetcher from '../../function/toSWRMutationFetcher';
+
+import toSWRFetcher from '@/function/toSWRMutationFetcher';
+
 import { editPassword } from './fetchers';
 
 const useEditPassword = (account_id: number) => {

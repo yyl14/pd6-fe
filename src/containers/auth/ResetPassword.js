@@ -1,9 +1,10 @@
 import { Grid, Typography } from '@material-ui/core';
-import Trademark from '../../components/ui/Trademark';
-import ResetPasswordForm from './ResetPasswordForm';
+
+import Trademark from '@/components/ui/Trademark';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
+import ResetPasswordForm from './ResetPasswordForm';
 
 export default function ResetPassword() {
   return (

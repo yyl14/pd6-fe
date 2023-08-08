@@ -1,15 +1,15 @@
 import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-// import TaskAddingCard from '../../components/normal/myClass/Challenge/TaskAddingCard';
-import Icon from '../../components/ui/icon/index';
 
-import useChallenge from '../../lib/challenge/useChallenge';
-import useClass from '../../lib/class/useClass';
-import useCourse from '../../lib/course/useCourse';
-import useProblem from '../../lib/problem/useProblem';
-import useChallengeTasks from '../../lib/task/useChallengeTasks';
-import useUserClasses from '../../lib/user/useUserClasses';
+// import TaskAddingCard from '@/components/normal/myClass/Challenge/TaskAddingCard';
+import Icon from '@/components/ui/icon/index';
+import useChallenge from '@/lib/challenge/useChallenge';
+import useClass from '@/lib/class/useClass';
+import useCourse from '@/lib/course/useCourse';
+import useProblem from '@/lib/problem/useProblem';
+import useChallengeTasks from '@/lib/task/useChallengeTasks';
+import useUserClasses from '@/lib/user/useUserClasses';
 
 export default function Challenge({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, challengeId, problemId, submissionId } = useParams();

@@ -1,8 +1,9 @@
-import { lazy, Suspense } from 'react';
-import GeneralLoading from '../../../components/GeneralLoading';
+import { Suspense, lazy } from 'react';
+
+import GeneralLoading from '@/components/GeneralLoading';
 
 const UIComponentUsage = lazy(
-  () => import(/* webpackChunkName: "UIComponentUsage" */ '../../../components/ui/UIComponentUsage'),
+  () => import(/* webpackChunkName: "UIComponentUsage" */ '@/components/ui/UIComponentUsage'),
 );
 
 export default function UIComponentRoute() {

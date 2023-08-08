@@ -13,9 +13,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useBeforeunload } from 'react-beforeunload';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+
+import useUserId from '@/lib/user/useUserId';
+
 import { fetchClassMemberWithAccountReferral, replaceClassMembers } from '../../../../actions/common/common';
 import { getUserInfo } from '../../../../actions/user/auth';
-import useUserId from '../../../../lib/user/useUserId';
 
 const useStyles = makeStyles(() => ({
   card: {

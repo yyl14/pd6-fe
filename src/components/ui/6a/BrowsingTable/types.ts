@@ -1,4 +1,4 @@
-import { FilterOperator } from '../../../../hooks/useBrowseParams/types';
+import { FilterOperator } from '@/hooks/useBrowseParams/types';
 
 export interface DataSchemaBase {
   id: number;

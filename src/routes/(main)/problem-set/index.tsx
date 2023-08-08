@@ -1,5 +1,6 @@
 import { Route, Switch } from 'react-router-dom';
-import useProblemSetMiddleware from '../../../middleware/useProblemSetMiddleware';
+
+import useProblemSetMiddleware from '@/middleware/useProblemSetMiddleware';
 
 export default function ProblemSetRoutes() {
   useProblemSetMiddleware();

@@ -1,9 +1,10 @@
+// import { autoTableConstants } from '../component/constant';
+// import browseParamsTransForm from '@/function/browseParamsTransform';
+import getTextFromUrl from '@/function/getTextFromUrl';
+
 import agent from '../agent';
 import { peerReviewConstants, viewConstants } from '../api/constant';
 import { readPeerReviewRecord } from '../api/peerReview';
-// import { autoTableConstants } from '../component/constant';
-// import browseParamsTransForm from '../../function/browseParamsTransform';
-import getTextFromUrl from '../../function/getTextFromUrl';
 import { readAccount } from '../user/user';
 
 export const readPeerReviewRecordWithCode = (token, peerReviewRecordId) => async (dispatch) => {

@@ -2,8 +2,9 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
+import Profile from '@/components/common/userProfile/Profile';
+
 import { readAccount } from '../../actions/user/user';
-import Profile from '../../components/common/userProfile/Profile';
 
 function User() {
   const { accountId } = useParams();

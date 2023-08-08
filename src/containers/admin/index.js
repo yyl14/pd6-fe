@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Route, Switch, useHistory } from 'react-router-dom';
 
+import NoMatch from '@/components/noMatch';
+
 import Account from './account/account';
 import Institute from './account/institute';
 import Class from './course/class';
@@ -9,8 +11,6 @@ import Course from './course/course';
 import AccessLog from './system/accessLog';
 import Announcement from './system/announcement';
 import SubmitLang from './system/submitLang';
-
-import NoMatch from '../../components/noMatch';
 
 /* This is a level 2 container (role container) */
 export default function Admin() {

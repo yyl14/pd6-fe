@@ -1,7 +1,9 @@
 import useSWRMutation from 'swr/mutation';
+
+import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
+import { withDataSchema } from '@/hooks/useSWRWithBrowseParams';
+
 import { components } from '../../../types/schema';
-import toSWRMutationFetcher from '../../function/toSWRMutationFetcher';
-import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
 import { addClassGrade, browseClassGrade, importClassGrade } from './fetchers';
 
 export type ClassGradeSchema = components['schemas']['pydantic__dataclasses__Grade'];

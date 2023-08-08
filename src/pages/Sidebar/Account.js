@@ -1,9 +1,10 @@
 import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Icon from '../../components/ui/icon/index';
-import useAccount from '../../lib/account/useAccount';
-import useInstitute from '../../lib/institute/useInstitute';
+
+import Icon from '@/components/ui/icon/index';
+import useAccount from '@/lib/account/useAccount';
+import useInstitute from '@/lib/institute/useInstitute';
 
 export default function Account({ classes, history, location, mode, open, onClose }) {
   const { instituteId, accountId } = useParams();

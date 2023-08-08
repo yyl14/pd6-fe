@@ -1,5 +1,6 @@
+import { withDataSchema } from '@/hooks/useSWRWithBrowseParams';
+
 import { components } from '../../../types/schema';
-import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
 import { browseAccountGrade } from './fetchers';
 
 export type AccountGradeSchema = components['schemas']['pydantic__dataclasses__Grade'];

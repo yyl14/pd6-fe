@@ -1,5 +1,6 @@
+import { withDataSchema } from '@/hooks/useSWRWithBrowseParams';
+
 import { components } from '../../../types/schema';
-import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
 import { browseSubmissionUnderClass } from './fetchers';
 
 export type SubmissionDataSchema = components['schemas']['pydantic__dataclasses__Submission'];

@@ -22,12 +22,12 @@ import {
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useState } from 'react';
-
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import GeneralLoading from '../../components/GeneralLoading';
-import useReduxStateShape from '../../hooks/useReduxStateShape';
-import useRegister from '../../lib/auth/useRegister';
-import useInstitutes from '../../lib/institute/useInstitutes';
+
+import GeneralLoading from '@/components/GeneralLoading';
+import useReduxStateShape from '@/hooks/useReduxStateShape';
+import useRegister from '@/lib/auth/useRegister';
+import useInstitutes from '@/lib/institute/useInstitutes';
 
 const useStyles = makeStyles((theme) => ({
   authForm: {

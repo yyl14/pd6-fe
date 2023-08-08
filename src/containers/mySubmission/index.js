@@ -1,7 +1,8 @@
 import { Route, Switch } from 'react-router-dom';
-import SubmissionDetail from '../../components/account/mySubmission/SubmissionDetail';
-import SubmissionList from '../../components/account/mySubmission/SubmissionList';
-import NoMatch from '../../components/noMatch';
+
+import SubmissionDetail from '@/components/account/mySubmission/SubmissionDetail';
+import SubmissionList from '@/components/account/mySubmission/SubmissionList';
+import NoMatch from '@/components/noMatch';
 
 export default function MySubmission() {
   return (

@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { transformFilter } from '../../function/serializeBrowseParams';
+import { transformFilter } from '@/function/serializeBrowseParams';
+
 import { FilterItem, FilterOperand, FilterOperator } from './types';
 import useBrowseParamsQueries from './useBrowseParamsQueries';
 

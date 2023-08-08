@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
-import useAuthStore from '../stores/authStore';
+import useAuthStore from '@/stores/authStore';
 
 const useAuthMiddleware = () => {
   const history = useHistory();

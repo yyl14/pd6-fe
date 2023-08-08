@@ -1,21 +1,21 @@
 import { makeStyles } from '@material-ui/core';
 import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 
-import About from '../../pages/Sidebar/About';
-import Account from '../../pages/Sidebar/Account';
-import Challenge from '../../pages/Sidebar/Challenge';
-import Course from '../../pages/Sidebar/Course';
-import Empty from '../../pages/Sidebar/Empty';
-import Grade from '../../pages/Sidebar/Grade';
-import MyClass from '../../pages/Sidebar/MyClass';
-import MyProfile from '../../pages/Sidebar/MyProfile';
-import PeerReview from '../../pages/Sidebar/PeerReview';
-import ProblemSet from '../../pages/Sidebar/ProblemSet';
-import ProblemSetChallenge from '../../pages/Sidebar/ProblemSetChallenge';
-import Submission from '../../pages/Sidebar/Submission';
-import System from '../../pages/Sidebar/System';
-import Team from '../../pages/Sidebar/Team';
-import UserProfile from '../../pages/Sidebar/UserProfile';
+import About from '@/pages/Sidebar/About';
+import Account from '@/pages/Sidebar/Account';
+import Challenge from '@/pages/Sidebar/Challenge';
+import Course from '@/pages/Sidebar/Course';
+import Empty from '@/pages/Sidebar/Empty';
+import Grade from '@/pages/Sidebar/Grade';
+import MyClass from '@/pages/Sidebar/MyClass';
+import MyProfile from '@/pages/Sidebar/MyProfile';
+import PeerReview from '@/pages/Sidebar/PeerReview';
+import ProblemSet from '@/pages/Sidebar/ProblemSet';
+import ProblemSetChallenge from '@/pages/Sidebar/ProblemSetChallenge';
+import Submission from '@/pages/Sidebar/Submission';
+import System from '@/pages/Sidebar/System';
+import Team from '@/pages/Sidebar/Team';
+import UserProfile from '@/pages/Sidebar/UserProfile';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {

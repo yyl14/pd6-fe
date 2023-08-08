@@ -2,9 +2,11 @@ import { Button, Card, CardContent, Snackbar, Typography, makeStyles } from '@ma
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+
+import useEmailVerification from '@/lib/email/useEmailVerification';
+import useInstitute from '@/lib/institute/useInstitute';
+
 import { makeStudentCardDefault } from '../../../../actions/admin/account';
-import useEmailVerification from '../../../../lib/email/useEmailVerification';
-import useInstitute from '../../../../lib/institute/useInstitute';
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
 

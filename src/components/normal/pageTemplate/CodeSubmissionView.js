@@ -3,9 +3,11 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
+
+import useReduxStateShape from '@/hooks/useReduxStateShape';
+import useSubmitLangs from '@/lib/submitLang/useSubmitLangs';
+
 import { readProblemInfo, submitCode } from '../../../actions/myClass/problem';
-import useReduxStateShape from '../../../hooks/useReduxStateShape';
-import useSubmitLangs from '../../../lib/submitLang/useSubmitLangs';
 import NoMatch from '../../noMatch';
 import AlignedText from '../../ui/AlignedText';
 import PageTitle from '../../ui/PageTitle';

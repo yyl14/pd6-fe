@@ -13,9 +13,11 @@ import {
 } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import useReduxStateShape from '../../../../hooks/useReduxStateShape';
-import useInstitutes from '../../../../lib/institute/useInstitutes';
-import useAccountStudentCards from '../../../../lib/studentCard/useAccountStudentCards';
+
+import useReduxStateShape from '@/hooks/useReduxStateShape';
+import useInstitutes from '@/lib/institute/useInstitutes';
+import useAccountStudentCards from '@/lib/studentCard/useAccountStudentCards';
+
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import StudentInfoCard from './StudentInfoCard';

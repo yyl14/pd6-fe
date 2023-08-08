@@ -5,10 +5,10 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import ResizeObserver from 'react-resize-observer';
 import { useHistory, useLocation } from 'react-router-dom';
 
-import Icon from '../../components/ui/icon/index';
-import useLogOut from '../../lib/auth/useLogOut';
-import useUser from '../../lib/user/useUser';
-import useUserClasses from '../../lib/user/useUserClasses';
+import Icon from '@/components/ui/icon/index';
+import useLogOut from '@/lib/auth/useLogOut';
+import useUser from '@/lib/user/useUser';
+import useUserClasses from '@/lib/user/useUserClasses';
 
 const useStyles = makeStyles((theme) => ({
   image: {

@@ -12,7 +12,9 @@ import {
 } from '@material-ui/core';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import useInstitute from '../../../lib/institute/useInstitute';
+
+import useInstitute from '@/lib/institute/useInstitute';
+
 import GeneralLoading from '../../GeneralLoading';
 import NoMatch from '../../noMatch';
 import AlignedText from '../../ui/AlignedText';

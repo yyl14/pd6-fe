@@ -1,5 +1,7 @@
 import moment from 'moment';
-import browseParamsTransForm from '../../function/browseParamsTransform';
+
+import browseParamsTransForm from '@/function/browseParamsTransform';
+
 import agent from '../agent';
 import { userConstants } from './constants';
 

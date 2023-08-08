@@ -1,5 +1,7 @@
 import useSWRMutation from 'swr/mutation';
-import toSWRFetcher from '../../function/toSWRMutationFetcher';
+
+import toSWRFetcher from '@/function/toSWRMutationFetcher';
+
 import { emailVerification } from './fetchers';
 
 const useVerifyEmail = (code: string) => {

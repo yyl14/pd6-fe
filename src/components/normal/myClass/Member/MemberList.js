@@ -2,9 +2,11 @@ import { Button } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+
+import systemRoleTransformation from '@/function/systemRoleTransformation';
+import useInstitutes from '@/lib/institute/useInstitutes';
+
 import { browseClassMember } from '../../../../actions/api/view';
-import systemRoleTransformation from '../../../../function/systemRoleTransformation';
-import useInstitutes from '../../../../lib/institute/useInstitutes';
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
 import AutoTable from '../../../ui/AutoTable';
@@ -99,10 +101,12 @@ export default function MemberList() {
                 label: 'Institute',
                 type: 'ENUM',
                 operation: 'IN',
-                options: institutes && institutes.map((item) => ({
-                  value: item.abbreviated_name,
-                  label: item.abbreviated_name,
-                })),
+                options:
+                  institutes &&
+                  institutes.map((item) => ({
+                    value: item.abbreviated_name,
+                    label: item.abbreviated_name,
+                  })),
               },
               {
                 reduxStateId: 'role',

@@ -1,5 +1,7 @@
 import useSWRMutation from 'swr/mutation';
-import toSWRMutationFetcher from '../../function/toSWRMutationFetcher';
+
+import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
+
 import { deleteAssistingData, editAssistingData } from './fetchers';
 
 const useAssistingData = () => {

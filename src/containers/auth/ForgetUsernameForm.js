@@ -1,7 +1,8 @@
 import { Button, Card, CardContent, Link, Snackbar, TextField, Typography, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import useForgetUsername from '../../lib/auth/useForgetUsername';
+
+import useForgetUsername from '@/lib/auth/useForgetUsername';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';

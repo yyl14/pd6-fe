@@ -2,15 +2,17 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useParams } from 'react-router-dom';
 
+import NoMatch from '@/components/noMatch';
+import ChallengeInfo from '@/components/normal/myClass/Challenge/ChallengeInfo';
+import ChallengeSetting from '@/components/normal/myClass/Challenge/ChallengeSetting';
+import Statistics from '@/components/normal/myClass/Challenge/Statistics';
+import Task from '@/components/normal/myClass/Challenge/Task';
+import useChallengeTasks from '@/lib/task/useChallengeTasks';
+
 import { fetchChallenge } from '../../../actions/common/common';
 import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
-import NoMatch from '../../../components/noMatch';
-import ChallengeInfo from '../../../components/normal/myClass/Challenge/ChallengeInfo';
-import ChallengeSetting from '../../../components/normal/myClass/Challenge/ChallengeSetting';
-import Statistics from '../../../components/normal/myClass/Challenge/Statistics';
-import Task from '../../../components/normal/myClass/Challenge/Task';
-import useChallengeTasks from '../../../lib/task/useChallengeTasks';
-// import EssayProblem from '../../../components/normal/myClass/Challenge/EssayProblem';
+
+// import EssayProblem from '@/components/normal/myClass/Challenge/EssayProblem';
 
 /* This is a level 3 container (main page container) */
 export default function Challenge() {

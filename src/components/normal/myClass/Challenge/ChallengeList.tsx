@@ -14,10 +14,12 @@ import {
 import moment from 'moment';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import useChallengesUnderClass, { ChallengeDataSchema } from '../../../../lib/challenge/useChallengesUnderClass';
-import useClass from '../../../../lib/class/useClass';
-import useCourse from '../../../../lib/course/useCourse';
-import useUserClasses from '../../../../lib/user/useUserClasses';
+
+import useChallengesUnderClass, { ChallengeDataSchema } from '@/lib/challenge/useChallengesUnderClass';
+import useClass from '@/lib/class/useClass';
+import useCourse from '@/lib/course/useCourse';
+import useUserClasses from '@/lib/user/useUserClasses';
+
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
 import BrowsingTable from '../../../ui/6a/BrowsingTable';

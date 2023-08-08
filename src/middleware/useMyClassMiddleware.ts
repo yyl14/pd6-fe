@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
-import useUser from '../lib/user/useUser';
-import useUserClasses from '../lib/user/useUserClasses';
+import useUser from '@/lib/user/useUser';
+import useUserClasses from '@/lib/user/useUserClasses';
 
 const useMyClassMiddleware = () => {
   const history = useHistory();
