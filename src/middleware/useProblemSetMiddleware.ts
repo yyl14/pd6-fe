@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
-import useCoursesClasses from '../lib/class/useCoursesClasses';
-import useCourses from '../lib/course/useCourses';
+import useCoursesClasses from '@/lib/class/useCoursesClasses';
+import useCourses from '@/lib/course/useCourses';
 
 const useProblemSetMiddleware = () => {
   const history = useHistory();

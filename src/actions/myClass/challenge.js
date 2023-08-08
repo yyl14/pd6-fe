@@ -1,6 +1,7 @@
 import moment from 'moment';
 
-import browseParamsTransForm from '../../function/browseParamsTransform';
+import browseParamsTransForm from '@/function/browseParamsTransform';
+
 import agent from '../agent';
 import { autoTableConstants } from '../component/constant';
 import { challengeConstants } from './constant';

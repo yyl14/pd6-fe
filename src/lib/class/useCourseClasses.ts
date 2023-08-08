@@ -1,6 +1,8 @@
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
-import toSWRMutationFetcher from '../../function/toSWRMutationFetcher';
+
+import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
+
 import { addClassUnderCourse, browseAllClassUnderCourse } from './fetchers';
 
 const useCourseClasses = (courseId: number) => {

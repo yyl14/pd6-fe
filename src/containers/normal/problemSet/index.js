@@ -1,5 +1,7 @@
 import { Route, Switch } from 'react-router-dom';
-import NoMatch from '../../../components/noMatch';
+
+import NoMatch from '@/components/noMatch';
+
 import Problem from './problem';
 
 /* This is a level 2 container (role container) */

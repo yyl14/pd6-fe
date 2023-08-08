@@ -11,10 +11,11 @@ import {
 import { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
+import useEventListener from '@/hooks/useEventListener';
+import useReduxStateShape from '@/hooks/useReduxStateShape';
+import useAccountStudentCards from '@/lib/studentCard/useAccountStudentCards';
+
 import ThemeToggleContext from '../../../contexts/ThemeContext';
-import useEventListener from '../../../hooks/useEventListener';
-import useReduxStateShape from '../../../hooks/useReduxStateShape';
-import useAccountStudentCards from '../../../lib/studentCard/useAccountStudentCards';
 import GeneralLoading from '../../GeneralLoading';
 import NoMatch from '../../noMatch';
 import PageTitle from '../../ui/PageTitle';

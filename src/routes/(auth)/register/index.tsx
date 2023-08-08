@@ -1,4 +1,4 @@
-import Register from '../../../containers/auth/Register';
+import Register from '@/containers/auth/Register';
 
 export default function RegisterRoute() {
   return <Register />;

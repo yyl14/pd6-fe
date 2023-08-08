@@ -1,4 +1,5 @@
-import { FilterItem, FilterOperand, FilterOperator } from '../../../../hooks/useBrowseParams/types';
+import { FilterItem, FilterOperand, FilterOperator } from '@/hooks/useBrowseParams/types';
+
 import MultiSelectSearchField from './MultiSelectSearchField';
 import SelectSearchField from './SelectSearchField';
 import TextSearchField from './TextSearchField';

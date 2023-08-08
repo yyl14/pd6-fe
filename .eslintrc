@@ -83,5 +83,5 @@
       }
     }
   },
-  "ignorePatterns": ["/types/schema.d.ts", "/scripts"]
+  "ignorePatterns": ["/types/schema.d.ts", "/scripts", "craco.config.js"]
 }

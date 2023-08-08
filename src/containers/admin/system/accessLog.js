@@ -1,7 +1,7 @@
 import { Route, Switch } from 'react-router-dom';
 
-import AccessLogComponent from '../../../components/admin/system/AccessLog';
-import NoMatch from '../../../components/noMatch';
+import AccessLogComponent from '@/components/admin/system/AccessLog';
+import NoMatch from '@/components/noMatch';
 
 /* This is a level 3 container (main page container) */
 export default function AccessLog() {

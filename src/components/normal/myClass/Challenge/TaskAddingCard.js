@@ -15,13 +15,10 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import { addTeamProjectScoreboardUnderChallenge } from '../../../../actions/api/scoreboard';
-import NoMatch from '../../../noMatch';
-import AlignedText from '../../../ui/AlignedText';
-import MultiSelect from '../../../ui/MultiSelect';
-import Icon from '../../../ui/icon/index';
-import useChallengeTasks from '../../../../lib/task/useChallengeTasks';
 
+import useChallengeTasks from '@/lib/task/useChallengeTasks';
+
+import { addTeamProjectScoreboardUnderChallenge } from '../../../../actions/api/scoreboard';
 import {
   addEssay,
   addPeerReview,
@@ -29,8 +26,11 @@ import {
   browseTasksUnderChallenge,
   peerReviewFetchChallenges,
 } from '../../../../actions/myClass/challenge';
-
 import { fetchTeams } from '../../../../actions/myClass/team';
+import NoMatch from '../../../noMatch';
+import AlignedText from '../../../ui/AlignedText';
+import MultiSelect from '../../../ui/MultiSelect';
+import Icon from '../../../ui/icon/index';
 
 const useStyles = makeStyles((theme) => ({
   selectedIcon: {
@@ -156,7 +156,6 @@ export default function TaskAddingCard({ open, setOpen }) {
     ChallengeTasksLoading.addProblem,
     ChallengeTasksLoading.addTeamProjectScoreboard,
   ]);
-     
 
   useEffect(() => {
     dispatch(fetchTeams(authToken, classId, ''));
@@ -227,7 +226,6 @@ export default function TaskAddingCard({ open, setOpen }) {
       dispatch(browseTasksUnderChallenge(authToken, peerReviewChallengeId));
     }
   }, [authToken, dispatch, peerReviewChallengeId]);
-
 
   const transLabelToId = (labels) => {
     const ids = labels.map(

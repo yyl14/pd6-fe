@@ -1,6 +1,7 @@
 import { createTheme, responsiveFontSizes } from '@material-ui/core/styles';
-import ErrorText from '../components/ui/ErrorText';
-import Icon from '../components/ui/icon';
+
+import ErrorText from '@/components/ui/ErrorText';
+import Icon from '@/components/ui/icon';
 
 // UI/UX Standard
 /*

@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { transformSort } from '../../function/serializeBrowseParams';
+import { transformSort } from '@/function/serializeBrowseParams';
+
 import { SortItem, SortOrder } from './types';
 import useBrowseParamsQueries from './useBrowseParamsQueries';
 

@@ -1,14 +1,14 @@
 import { Suspense, lazy } from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
 
-import GeneralLoading from '../../../../components/GeneralLoading';
-import withConditionalRender from '../../../../components/hoc/withConditionalRender';
-import useChallenge from '../../../../lib/challenge/useChallenge';
-import useClass from '../../../../lib/class/useClass';
-import useCourse from '../../../../lib/course/useCourse';
+import GeneralLoading from '@/components/GeneralLoading';
+import withConditionalRender from '@/components/hoc/withConditionalRender';
+import useChallenge from '@/lib/challenge/useChallenge';
+import useClass from '@/lib/class/useClass';
+import useCourse from '@/lib/course/useCourse';
 
-const ChallengeList = lazy(() => import('../../../../pages/ChallengeList'));
-const ChallengeInfo = lazy(() => import('../../../../pages/ChallengeInfo'));
+const ChallengeList = lazy(() => import('@/pages/ChallengeList'));
+const ChallengeInfo = lazy(() => import('@/pages/ChallengeInfo'));
 
 function ChallengeListRoute() {
   const { courseId, classId } = useParams<{ courseId: string; classId: string }>();

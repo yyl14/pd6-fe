@@ -13,9 +13,9 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useMemo, useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 
-import useQuery from '../../hooks/useQuery';
-import useLogin from '../../lib/auth/useLogin';
-import useAuthStore from '../../stores/authStore';
+import useQuery from '@/hooks/useQuery';
+import useLogin from '@/lib/auth/useLogin';
+import useAuthStore from '@/stores/authStore';
 
 const useStyles = makeStyles((theme) => ({
   authForm: {

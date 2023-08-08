@@ -1,5 +1,7 @@
 import { Route, Switch } from 'react-router-dom';
-import useMyClassMiddleware from '../../../middleware/useMyClassMiddleware';
+
+import useMyClassMiddleware from '@/middleware/useMyClassMiddleware';
+
 import ChallengeRoutes from './challenge';
 
 export default function MyClassRoutes() {

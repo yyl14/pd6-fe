@@ -2,8 +2,10 @@ import { makeStyles } from '@material-ui/core';
 import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+
+import useQuery from '@/hooks/useQuery';
+
 import { downloadFile } from '../../../actions/common/common';
-import useQuery from '../../../hooks/useQuery';
 import Icon from '../../ui/icon';
 
 const useStyles = makeStyles((theme) => ({

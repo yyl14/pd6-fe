@@ -1,4 +1,5 @@
-import browseParamsTransForm from '../../function/browseParamsTransform';
+import browseParamsTransForm from '@/function/browseParamsTransform';
+
 import agent from '../agent';
 import { autoTableConstants } from '../component/constant';
 import { systemConstants } from './constant';
@@ -137,7 +138,7 @@ const fetchSubmitLanguage = (token) => (dispatch) => {
   dispatch({
     type: systemConstants.FETCH_SUBMIT_LANGUAGE_START,
   });
-  
+
   agent
     .get('submission/language', config)
     .then((res) => {
@@ -194,6 +195,5 @@ export {
   editSubmitLanguage,
   fetchAnnouncement,
   fetchSubmitLanguage,
-  readAnnouncement
+  readAnnouncement,
 };
-

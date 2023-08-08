@@ -4,15 +4,14 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 
-import AlignedText from '../../../../ui/AlignedText';
-import PageTitle from '../../../../ui/PageTitle';
+import useReduxStateShape from '@/hooks/useReduxStateShape';
+import useSubmitLangs from '@/lib/submitLang/useSubmitLangs';
 
 import { readProblemInfo, submitCode } from '../../../../../actions/myClass/problem';
-import useSubmitLangs from '../../../../../lib/submitLang/useSubmitLangs';
-
-import useReduxStateShape from '../../../../../hooks/useReduxStateShape';
 import NoMatch from '../../../../noMatch';
+import AlignedText from '../../../../ui/AlignedText';
 import CodeField from '../../../../ui/CodeField';
+import PageTitle from '../../../../ui/PageTitle';
 
 const useStyles = makeStyles(() => ({
   selectField: {

@@ -2,7 +2,8 @@ import { Button, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useState } from 'react';
 
-import { FilterItem, FilterOperator } from '../../../../hooks/useBrowseParams/types';
+import { FilterItem, FilterOperator } from '@/hooks/useBrowseParams/types';
+
 import Icon from '../../icon/index';
 import { DataSchemaBase } from './types';
 

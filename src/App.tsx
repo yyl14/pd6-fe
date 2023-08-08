@@ -1,32 +1,30 @@
 import { CssBaseline } from '@material-ui/core';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
-import { Provider } from 'react-redux';
-
+import { useClearCacheCtx } from 'react-clear-cache';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import { Provider } from 'react-redux';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 
-import { useClearCacheCtx } from 'react-clear-cache';
-import NoMatch from './components/noMatch';
-
-import ThemeContext from './contexts/ThemeContext';
-import RootRoute from './routes';
-import store from './store';
-import theme, { ThemeType } from './theme/index';
+import NoMatch from '@/components/noMatch';
+import ThemeContext from '@/contexts/ThemeContext';
+import RootRoute from '@/routes';
+import '@/styles/ui.css';
+import theme, { ThemeType } from '@/theme/index';
 
 import './App.css';
-import './styles/ui.css';
+import store from './store';
 
-const Index = lazy(() => import('./containers/index'));
-const Login = lazy(() => import('./containers/auth/Login'));
+const Index = lazy(() => import('@/containers/index'));
+const Login = lazy(() => import('@/containers/auth/Login'));
 const IconUsage = lazy(() => import('./components/ui/IconUsage'));
 const UIComponentUsage = lazy(() => import('./components/ui/UIComponentUsage'));
-const ForgetUsername = lazy(() => import('./containers/auth/ForgetUsername'));
-const ForgetPassword = lazy(() => import('./containers/auth/ForgetPassword'));
-const ResetPassword = lazy(() => import('./containers/auth/ResetPassword'));
-const EmailVerification = lazy(() => import('./containers/auth/EmailVerification'));
-const Register = lazy(() => import('./containers/auth/Register'));
+const ForgetUsername = lazy(() => import('@/containers/auth/ForgetUsername'));
+const ForgetPassword = lazy(() => import('@/containers/auth/ForgetPassword'));
+const ResetPassword = lazy(() => import('@/containers/auth/ResetPassword'));
+const EmailVerification = lazy(() => import('@/containers/auth/EmailVerification'));
+const Register = lazy(() => import('@/containers/auth/Register'));
 
 function App() {
   const [selectedTheme, setSelectedTheme] = useState<ThemeType>('pd6New');

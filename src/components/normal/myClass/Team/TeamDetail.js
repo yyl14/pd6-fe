@@ -2,8 +2,10 @@ import { Snackbar } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+
+import systemRoleTransformation from '@/function/systemRoleTransformation';
+
 import { fetchTeam, fetchTeamMembers } from '../../../../actions/myClass/team';
-import systemRoleTransformation from '../../../../function/systemRoleTransformation';
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
 import PageTitle from '../../../ui/PageTitle';

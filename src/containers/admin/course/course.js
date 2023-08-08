@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
-import { fetchCourses } from '../../../actions/admin/course';
-import ClassList from '../../../components/admin/course/ClassList';
-import CourseSetting from '../../../components/admin/course/CourseSetting';
 
-import GeneralLoading from '../../../components/GeneralLoading';
-import NoMatch from '../../../components/noMatch';
+import GeneralLoading from '@/components/GeneralLoading';
+import ClassList from '@/components/admin/course/ClassList';
+import CourseSetting from '@/components/admin/course/CourseSetting';
+import NoMatch from '@/components/noMatch';
+
+import { fetchCourses } from '../../../actions/admin/course';
 
 /* This is a level 3 container (main page container) */
 export default function Course() {

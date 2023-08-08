@@ -1,10 +1,11 @@
 import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Icon from '../../components/ui/icon/index';
-import useClass from '../../lib/class/useClass';
-import useCourse from '../../lib/course/useCourse';
-import useUserClasses from '../../lib/user/useUserClasses?';
+
+import Icon from '@/components/ui/icon/index';
+import useClass from '@/lib/class/useClass';
+import useCourse from '@/lib/course/useCourse';
+import useUserClasses from '@/lib/user/useUserClasses?';
 
 export default function MyClass({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId } = useParams();

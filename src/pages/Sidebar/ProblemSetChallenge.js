@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import Icon from '../../components/ui/icon/index';
+import Icon from '@/components/ui/icon/index';
 
 export default function ProblemSetChallenge({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, challengeId, problemId, submissionId } = useParams();

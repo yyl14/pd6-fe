@@ -1,12 +1,13 @@
 import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Icon from '../../components/ui/icon/index';
-import useChallenge from '../../lib/challenge/useChallenge';
-import useAccountPeerReviewRecords from '../../lib/peerReview/useAccountPeerReviewRecords';
-import usePeerReview from '../../lib/peerReview/usePeerReview';
-import useUserClasses from '../../lib/user/useUserClasses';
-import useUserId from '../../lib/user/useUserId';
+
+import Icon from '@/components/ui/icon/index';
+import useChallenge from '@/lib/challenge/useChallenge';
+import useAccountPeerReviewRecords from '@/lib/peerReview/useAccountPeerReviewRecords';
+import usePeerReview from '@/lib/peerReview/usePeerReview';
+import useUserClasses from '@/lib/user/useUserClasses';
+import useUserId from '@/lib/user/useUserId';
 
 export default function PeerReview({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, challengeId, peerReviewId, accountId } = useParams();

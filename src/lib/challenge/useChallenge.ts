@@ -1,6 +1,8 @@
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
-import toSWRMutationFetcher from '../../function/toSWRMutationFetcher';
+
+import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
+
 import { deleteChallenge, editChallenge, readChallenge } from './fetchers';
 
 const useChallenge = (challengeId: number) => {

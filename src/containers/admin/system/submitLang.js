@@ -1,8 +1,8 @@
 import { Route, Switch } from 'react-router-dom';
 
-import SubmissionLanguageHome from '../../../components/admin/system/SubmissionLanguageHome';
-import LangSetting from '../../../components/admin/system/SubmissionLanguageSetting';
-import NoMatch from '../../../components/noMatch';
+import SubmissionLanguageHome from '@/components/admin/system/SubmissionLanguageHome';
+import LangSetting from '@/components/admin/system/SubmissionLanguageSetting';
+import NoMatch from '@/components/noMatch';
 
 /* This is a level 3 container (main page container) */
 export default function SubmitLang() {

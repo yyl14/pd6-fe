@@ -1,6 +1,8 @@
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
-import toSWRMutationFetcher from '../../function/toSWRMutationFetcher';
+
+import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
+
 import { deleteClass, editClass, readClass } from './fetchers';
 
 const useClass = (classId: number) => {

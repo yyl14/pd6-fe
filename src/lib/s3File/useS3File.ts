@@ -1,6 +1,8 @@
 import useSWRMutation from 'swr/mutation';
-import getTextFromUrl from '../../function/getTextFromUrl';
-import toSWRMutationFetcher from '../../function/toSWRMutationFetcher';
+
+import getTextFromUrl from '@/function/getTextFromUrl';
+import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
+
 import getFileLink from './fetchers';
 
 const useS3File = () => {

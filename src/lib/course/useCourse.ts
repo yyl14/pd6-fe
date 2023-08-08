@@ -1,6 +1,8 @@
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
-import toSWRMutationFetcher from '../../function/toSWRMutationFetcher';
+
+import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
+
 import { deleteCourse, editCourse, readCourse } from './fetchers';
 
 const useCourse = (courseId: number) => {

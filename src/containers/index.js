@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
+
+import FileDownloading from '@/components/common/file/fileDownloading';
+import Sidebar from '@/components/sidebar/Sidebar';
+import Header from '@/components/ui/Header';
+import Icon from '@/components/ui/icon';
 // import { makeStyles } from '@material-ui/core';
 // import { makeStyles, Fab } from '@material-ui/core';
 // import { Feedback } from '@material-ui/icons';
+import useAuthStore from '@/stores/authStore';
+
 import { getUserInfo } from '../actions/user/auth';
-import FileDownloading from '../components/common/file/fileDownloading';
-import Sidebar from '../components/sidebar/Sidebar';
-import Header from '../components/ui/Header';
-import Icon from '../components/ui/icon';
-import useAuthStore from '../stores/authStore';
 import '../styles/index.css';
 import Account from './account';
 import Admin from './admin';

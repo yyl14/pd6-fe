@@ -2,7 +2,9 @@ import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import useInstitute from '../../../lib/institute/useInstitute';
+
+import useInstitute from '@/lib/institute/useInstitute';
+
 import Icon from '../../ui/icon/index';
 
 export default function Account({ classes, history, location, mode, open, onClose }) {

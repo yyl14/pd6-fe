@@ -2,11 +2,13 @@ import { Snackbar } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+
+import useReduxStateShape from '@/hooks/useReduxStateShape';
+import useEmailVerification from '@/lib/email/useEmailVerification';
+import useAccountStudentCards from '@/lib/studentCard/useAccountStudentCards';
+
 import { browsePendingStudentCards, fetchStudentCards } from '../../../../actions/admin/account';
 import { fetchAccount, getInstitutes } from '../../../../actions/common/common';
-import useReduxStateShape from '../../../../hooks/useReduxStateShape';
-import useEmailVerification from '../../../../lib/email/useEmailVerification';
-import useAccountStudentCards from '../../../../lib/studentCard/useAccountStudentCards';
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
 import PageTitle from '../../../ui/PageTitle';
@@ -52,24 +54,18 @@ export default function AccountSetting() {
     if (!emailVerificationIsLoading.deletePendingEmailVerification && !isLoading.add) {
       dispatch(browsePendingStudentCards(authToken, accountId));
     }
-  }, [
-    accountId,
-    authToken,
-    dispatch,
-    isLoading.add,
-    emailVerificationIsLoading.deletePendingEmailVerification,
-  ]);
+  }, [accountId, authToken, dispatch, isLoading.add, emailVerificationIsLoading.deletePendingEmailVerification]);
 
   useEffect(() => {
     if (accounts.byId[accountId]) {
-      const newData = studentCardsIds?.map(id => studentCardsById[id]) ?? [];
+      const newData = studentCardsIds?.map((id) => studentCardsById[id]) ?? [];
       setCards(newData);
     }
   }, [accountId, accounts, studentCardsById, studentCardsIds]);
 
   useEffect(() => {
     if (accounts.byId[accountId]) {
-      const newData = pendingStudentCardsIds?.map(id => pendingStudentCardsById[id]) ?? [];
+      const newData = pendingStudentCardsIds?.map((id) => pendingStudentCardsById[id]) ?? [];
       setPendingCards(newData);
     }
   }, [accountId, accounts, pendingStudentCardsById, pendingStudentCardsIds]);

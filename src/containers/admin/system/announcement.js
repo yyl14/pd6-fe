@@ -1,10 +1,11 @@
 import { Route, Switch } from 'react-router-dom';
-import AnnouncementAdd from '../../../components/admin/system/AnnouncementAdd';
-import AnnouncementHome from '../../../components/admin/system/AnnouncementHome';
-import AnnouncementSetting from '../../../components/admin/system/AnnouncementSetting';
-import NoMatch from '../../../components/noMatch';
 
-// import AnnouncementAdd from '../../../components/admin/system/AnnouncementAdd';
+import AnnouncementAdd from '@/components/admin/system/AnnouncementAdd';
+import AnnouncementHome from '@/components/admin/system/AnnouncementHome';
+import AnnouncementSetting from '@/components/admin/system/AnnouncementSetting';
+import NoMatch from '@/components/noMatch';
+
+// import AnnouncementAdd from '@/components/admin/system/AnnouncementAdd';
 
 /* This is a level 3 container (main page container) */
 export default function AnnouncementInfo() {

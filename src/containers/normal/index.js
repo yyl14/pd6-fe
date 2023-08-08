@@ -1,14 +1,13 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-
 import { Route, Switch, useHistory } from 'react-router-dom';
+
+import GeneralLoading from '@/components/GeneralLoading';
+import NoMatch from '@/components/noMatch';
+import Team from '@/components/normal/about/team';
 
 import MyClass from './myClass';
 import ProblemSet from './problemSet';
-
-import GeneralLoading from '../../components/GeneralLoading';
-import NoMatch from '../../components/noMatch';
-import Team from '../../components/normal/about/team';
 
 export default function Normal() {
   const history = useHistory();

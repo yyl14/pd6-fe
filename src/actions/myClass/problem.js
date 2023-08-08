@@ -1,5 +1,6 @@
-import browseParamsTransForm from '../../function/browseParamsTransform';
-import getTextFromUrl from '../../function/getTextFromUrl';
+import browseParamsTransForm from '@/function/browseParamsTransform';
+import getTextFromUrl from '@/function/getTextFromUrl';
+
 import agent from '../agent';
 import { autoTableConstants } from '../component/constant';
 import { problemConstants } from './constant';

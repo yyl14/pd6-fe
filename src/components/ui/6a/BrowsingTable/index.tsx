@@ -20,12 +20,8 @@ import {
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import {
-  FilterInterface,
-  PaginationInterface,
-  RowsPerPageOption,
-  SortInterface,
-} from '../../../../hooks/useBrowseParams/types';
+import { FilterInterface, PaginationInterface, RowsPerPageOption, SortInterface } from '@/hooks/useBrowseParams/types';
+
 import Icon from '../../icon/index';
 import SearchField from './SearchField';
 import { ColumnConfigItem, DataSchemaBase, FilterConfigItem, RowSchemaBase } from './types';

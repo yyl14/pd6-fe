@@ -1,9 +1,11 @@
 import { Button, Card, CardContent, Snackbar, Typography, makeStyles } from '@material-ui/core';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import useEmailVerification from '../../../../lib/email/useEmailVerification';
-import useInstitute from '../../../../lib/institute/useInstitute';
-import useAccountStudentCards from '../../../../lib/studentCard/useAccountStudentCards';
+
+import useEmailVerification from '@/lib/email/useEmailVerification';
+import useInstitute from '@/lib/institute/useInstitute';
+import useAccountStudentCards from '@/lib/studentCard/useAccountStudentCards';
+
 import AlignedText from '../../../ui/AlignedText';
 import Icon from '../../../ui/icon/index';
 

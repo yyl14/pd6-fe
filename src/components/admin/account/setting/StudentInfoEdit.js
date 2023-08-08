@@ -14,9 +14,11 @@ import {
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+
+import useReduxStateShape from '@/hooks/useReduxStateShape';
+import useInstitutes from '@/lib/institute/useInstitutes';
+
 import { addStudentCard } from '../../../../actions/admin/account';
-import useReduxStateShape from '../../../../hooks/useReduxStateShape';
-import useInstitutes from '../../../../lib/institute/useInstitutes';
 import AlignedText from '../../../ui/AlignedText';
 import SimpleBar from '../../../ui/SimpleBar';
 import StudentInfoCard from './StudentInfoCard';

@@ -1,6 +1,6 @@
-import { lazy, Suspense } from 'react';
+import { Suspense, lazy } from 'react';
 
-const Login = lazy(() => import(/* webpackChunkName: "Login" */ '../../../pages/Login'));
+const Login = lazy(() => import(/* webpackChunkName: "Login" */ '@/pages/Login'));
 
 export default function LoginRoute() {
   return (

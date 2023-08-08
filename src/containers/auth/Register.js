@@ -1,9 +1,10 @@
 import { Grid, Typography } from '@material-ui/core';
-import Trademark from '../../components/ui/Trademark';
-import RegisterForm from './RegisterForm';
+
+import Trademark from '@/components/ui/Trademark';
 
 import '../../styles/auth.css';
 import '../../styles/index.css';
+import RegisterForm from './RegisterForm';
 
 export default function Register() {
   return (

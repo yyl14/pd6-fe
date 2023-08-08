@@ -1,4 +1,5 @@
-import getTextFromUrl from '../../function/getTextFromUrl';
+import getTextFromUrl from '@/function/getTextFromUrl';
+
 import agent from '../agent';
 import { submissionConstants } from './constant';
 

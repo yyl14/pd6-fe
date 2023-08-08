@@ -1,14 +1,14 @@
 import { Suspense, lazy } from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
 
-import GeneralLoading from '../../../../../components/GeneralLoading';
-import withConditionalRender from '../../../../../components/hoc/withConditionalRender';
-import useChallenge from '../../../../../lib/challenge/useChallenge';
-import useClass from '../../../../../lib/class/useClass';
-import useCourse from '../../../../../lib/course/useCourse';
-import useProblem from '../../../../../lib/problem/useProblem';
+import GeneralLoading from '@/components/GeneralLoading';
+import withConditionalRender from '@/components/hoc/withConditionalRender';
+import useChallenge from '@/lib/challenge/useChallenge';
+import useClass from '@/lib/class/useClass';
+import useCourse from '@/lib/course/useCourse';
+import useProblem from '@/lib/problem/useProblem';
 
-const ProblemInfo = lazy(() => import('../../../../../pages/ProblemInfo'));
+const ProblemInfo = lazy(() => import('@/pages/ProblemInfo'));
 
 function ProblemInfoRoute() {
   const { courseId, classId, challengeId, problemId } = useParams<{

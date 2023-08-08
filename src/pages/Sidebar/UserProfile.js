@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import Icon from '../../components/ui/icon/index';
+import Icon from '@/components/ui/icon/index';
 
 export default function UserProfile({ classes, history, location, mode, open, onClose }) {
   const { accountId } = useParams();

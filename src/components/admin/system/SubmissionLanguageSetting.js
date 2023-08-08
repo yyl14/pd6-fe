@@ -11,9 +11,11 @@ import {
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import useReduxStateShape from '../../../hooks/useReduxStateShape';
-import useSubmitLang from '../../../lib/submitLang/useSubmitLang';
-import useSubmitLangs from '../../../lib/submitLang/useSubmitLangs';
+
+import useReduxStateShape from '@/hooks/useReduxStateShape';
+import useSubmitLang from '@/lib/submitLang/useSubmitLang';
+import useSubmitLangs from '@/lib/submitLang/useSubmitLangs';
+
 import GeneralLoading from '../../GeneralLoading';
 import NoMatch from '../../noMatch';
 import AlignedText from '../../ui/AlignedText';

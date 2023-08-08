@@ -3,7 +3,13 @@ import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
+
+import useReduxStateShape from '@/hooks/useReduxStateShape';
+import useSubmitLangs from '@/lib/submitLang/useSubmitLangs';
+
 import { browseAllJudgementJudgeCase } from '../../../../actions/api/judgement';
+import { fetchChallenge, getAccountBatch } from '../../../../actions/common/common';
+import { readProblemInfo } from '../../../../actions/myClass/problem';
 import {
   browseTestcases,
   fetchSubmission,
@@ -17,11 +23,6 @@ import PageTitle from '../../../ui/PageTitle';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
 import Icon from '../../../ui/icon/index';
-
-import { fetchChallenge, getAccountBatch } from '../../../../actions/common/common';
-import { readProblemInfo } from '../../../../actions/myClass/problem';
-import useReduxStateShape from '../../../../hooks/useReduxStateShape';
-import useSubmitLangs from '../../../../lib/submitLang/useSubmitLangs';
 
 const useStyles = makeStyles((theme) => ({
   textLink: {

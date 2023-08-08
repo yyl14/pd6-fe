@@ -2,9 +2,9 @@ import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Typography
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Icon from '../../components/ui/icon/index';
-import useCoursesClasses from '../../lib/class/useCoursesClasses';
-import useCourses from '../../lib/course/useCourses';
+import Icon from '@/components/ui/icon/index';
+import useCoursesClasses from '@/lib/class/useCoursesClasses';
+import useCourses from '@/lib/course/useCourses';
 
 export default function ProblemSet({ classNames, history, location, open, onClose }) {
   const { courseId } = useParams();

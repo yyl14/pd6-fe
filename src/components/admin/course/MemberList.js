@@ -2,9 +2,11 @@ import { Button } from '@material-ui/core';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+
+import systemRoleTransformation from '@/function/systemRoleTransformation';
+import useInstitutes from '@/lib/institute/useInstitutes';
+
 import { browseClassMember } from '../../../actions/api/view';
-import systemRoleTransformation from '../../../function/systemRoleTransformation';
-import useInstitutes from '../../../lib/institute/useInstitutes';
 import NoMatch from '../../noMatch';
 import AutoTable from '../../ui/AutoTable';
 import PageTitle from '../../ui/PageTitle';

@@ -1,7 +1,8 @@
 import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Icon from '../../components/ui/icon/index';
+
+import Icon from '@/components/ui/icon/index';
 
 export default function MyProfile({ classes, history, location, mode, open, onClose }) {
   const account = useSelector((state) => state.user);
