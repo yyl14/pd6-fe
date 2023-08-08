@@ -26,6 +26,16 @@ const ResetPassword = lazy(() => import('@/containers/auth/ResetPassword'));
 const EmailVerification = lazy(() => import('@/containers/auth/EmailVerification'));
 const Register = lazy(() => import('@/containers/auth/Register'));
 
+function withSuspense(Component: React.FC) {
+  return function WithSuspense() {
+    return (
+      <Suspense fallback={<></>}>
+        <Component />
+      </Suspense>
+    );
+  };
+}
+
 function App() {
   const [selectedTheme, setSelectedTheme] = useState<ThemeType>('pd6New');
 
@@ -80,78 +90,15 @@ function App() {
           <Router>
             <Switch>
               <Route path="/6a" component={RootRoute} />
-              <Route
-                path="/icon"
-                component={() => (
-                  <Suspense fallback={<></>}>
-                    <IconUsage />
-                  </Suspense>
-                )}
-              />
-              <Route
-                path="/ui-component"
-                component={() => (
-                  <Suspense fallback={<></>}>
-                    <UIComponentUsage />{' '}
-                  </Suspense>
-                )}
-              />
-              <Route
-                path="/login"
-                component={() => (
-                  <Suspense fallback={<></>}>
-                    <Login />
-                  </Suspense>
-                )}
-              />
-              <Route
-                path="/forget-username"
-                component={() => (
-                  <Suspense fallback={<></>}>
-                    <ForgetUsername />
-                  </Suspense>
-                )}
-              />
-              <Route
-                path="/forget-password"
-                component={() => (
-                  <Suspense fallback={<></>}>
-                    <ForgetPassword />
-                  </Suspense>
-                )}
-              />
-              <Route
-                path="/reset-password"
-                component={() => (
-                  <Suspense fallback={<></>}>
-                    <ResetPassword />{' '}
-                  </Suspense>
-                )}
-              />
-              <Route
-                path="/register"
-                component={() => (
-                  <Suspense fallback={<></>}>
-                    <Register />
-                  </Suspense>
-                )}
-              />
-              <Route
-                path="/email-verification"
-                component={() => (
-                  <Suspense fallback={<></>}>
-                    <EmailVerification />
-                  </Suspense>
-                )}
-              />
-              <Route
-                path="/"
-                component={() => (
-                  <Suspense fallback={<></>}>
-                    <Index />
-                  </Suspense>
-                )}
-              />
+              <Route path="/icon" component={withSuspense(IconUsage)} />
+              <Route path="/ui-component" component={withSuspense(UIComponentUsage)} />
+              <Route path="/login" component={withSuspense(Login)} />
+              <Route path="/forget-username" component={withSuspense(ForgetUsername)} />
+              <Route path="/forget-password" component={withSuspense(ForgetPassword)} />
+              <Route path="/reset-password" component={withSuspense(ResetPassword)} />
+              <Route path="/register" component={withSuspense(Register)} />
+              <Route path="/email-verification" component={withSuspense(EmailVerification)} />
+              <Route path="/" component={withSuspense(Index)} />
               <Route component={NoMatch} />
             </Switch>
           </Router>
