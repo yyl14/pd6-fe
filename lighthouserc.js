@@ -38,10 +38,7 @@ module.exports = {
               },
         },
         upload: {
-            target: "lhci",
-            serverBaseUrl: "http://140.112.106.16:25012/",
-            token: "1519c832-7712-4c93-b88a-bb85680cbc50",
-            basicAuth: {username: "admin", password: "wsa2002"},
+        
         },
         server: {
             // server options here

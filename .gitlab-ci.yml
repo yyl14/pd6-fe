@@ -119,6 +119,13 @@ Lighthouse:
     - yarn install --frozen-lockfile --cache-folder .yarn
   script:
     - yarn run lhci autorun #if frontend not provide the yarn lighthouse to run
+  after_script:
+    - yarn run lhci upload --target=lhci 
+                           --serverBaseUrl=$LHCI_SERVER_BASE_URL 
+                           --token=$LHCI_TOKEN 
+                           --basicAuth.username $LHCI_AUTH_USERNAME 
+                           --basicAuth.password=$LHCI_AUTH_PASSWORD
+                           
   stage: Quality-Analysis
   tags:
     - test
