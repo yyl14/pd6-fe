@@ -37,9 +37,6 @@ module.exports = {
                 ],
               },
         },
-        upload: {
-        
-        },
         server: {
             // server options here
         },
