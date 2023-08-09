@@ -38,8 +38,10 @@ module.exports = {
               },
         },
         upload: {
-            // upload options here
-            target: "temporary-public-storage",
+            target: "lhci",
+            serverBaseUrl: "http://140.112.106.16:25012/",
+            token: "1519c832-7712-4c93-b88a-bb85680cbc50",
+            ignoreDuplicateBuildFailure: true
         },
         server: {
             // server options here
