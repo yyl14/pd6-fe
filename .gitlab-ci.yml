@@ -22,20 +22,49 @@ stages:
   - Build
   - Quality-Analysis
 
+install:
+  image: timbru31/node-alpine-git
+  stage: .pre   # always first, no matter if it is listed in stages
+  cache:
+    # store npm cache for all branches (stores download pkg.tar.gz's)
+    # will not be necessary for any other job
+    - key: $CI_COMMIT_REF_NAME_MODULE
+       # must be inside $CI_PROJECT_DIR for gitlab-runner caching (#3)
+       paths:
+         - .yarn/
+       when: on_success
+       policy: pull-push
+
+    # Mimic &global_cache_node_mods config but override policy
+    # to allow this job to update the cache at the end of the job
+    # and only update if it was a successful job
+    # NOTE: I would use yaml anchors here but overriding the policy
+    # in a yaml list is not as easy as a dictionary entry (#5)
+    - key:
+       files:
+         - package-lock.json
+       paths:
+         - node_modules/
+       when: on_success
+       policy: pull-push
+
 Lint-test:
   stage: Test
   image: timbru31/node-alpine-git
   cache:
     key: $CI_COMMIT_REF_NAME_LINT
+      files:
+              - package-lock.json
     paths:
       - .eslint
     key: $CI_COMMIT_REF_NAME_MODULE
     paths:
       - node_modules/
       - .yarn
+    policy: pull
   before_script:
     - sed -i 's/workspaces/workspaces-disabled/g' package.json
-    - yarn install --frozen-lockfile --cache-folder .yarn
+    - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
     - sed -i 's/workspaces-disabled/workspaces/g' package.json
   script:
     - yarn lint
@@ -48,11 +77,14 @@ Unit-test:
   image: timbru31/node-alpine-git
   cache:
     key: $CI_COMMIT_REF_NAME_MODULE
+      files:
+              - package-lock.json
     paths:
       - node_modules/
       - .yarn
+    policy: pull
   before_script:
-    - yarn install --frozen-lockfile --cache-folder .yarn
+    - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
   script:
     - yarn test --passWithNoTests
   allow_failure: false
@@ -65,15 +97,18 @@ Build:
   image: timbru31/node-alpine-git
   cache:
     key: $CI_COMMIT_REF_NAME_MODULE
+      files:
+              - package-lock.json
     paths:
       - node_modules/
       - .yarn
+    policy: pull
   artifacts:
     paths:
       - ./build
   before_script:
     - export NODE_OPTIONS=--openssl-legacy-provider
-    - yarn install --frozen-lockfile --cache-folder .yarn
+    - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
   script:
     - yarn build
   stage: Build
@@ -109,25 +144,30 @@ Lighthouse:
   image: cypress/browsers:node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
   cache:
     key: $CI_COMMIT_REF_NAME_MODULE
+      files:
+              - package-lock.json
     paths:
       - node_modules/
       - .yarn
-  artifacts:
-    paths:
-      - build/
+    policy: pull
   before_script:
-    - yarn install --frozen-lockfile --cache-folder .yarn
+    - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
   script:
     - yarn run lhci autorun #if frontend not provide the yarn lighthouse to run
   after_script:
     - yarn run lhci upload --target=lhci 
                            --serverBaseUrl=$LHCI_SERVER_BASE_URL 
                            --token=$LHCI_TOKEN 
-                           --basicAuth.username $LHCI_AUTH_USERNAME 
+                           --basicAuth.username=$LHCI_AUTH_USERNAME 
                            --basicAuth.password=$LHCI_AUTH_PASSWORD
                            
   stage: Quality-Analysis
   tags:
     - test
-  dependencies:
-    - Build
+  needs:
+    # install job is not "needed" unless it creates artifacts
+    # install job also occurs in the previous stage `.pre` so it
+    # is implicitly required since `when: on_success` is the default
+    # for subsequent jobs in subsequent stages
+    - job: build
+      artifacts: true  
