@@ -67,9 +67,9 @@ Lint-test:
         - .eslint
     - *global_cache
   before_script: 
-    - - yarn install --frozen-lockfile --cache-folder .yarn
-  script:
     - ls -la
+    - yarn install --frozen-lockfile --cache-folder .yarn
+  script:
     - yarn lint
   allow_failure: false
   tags:
@@ -80,6 +80,8 @@ Unit-test:
   image: timbru31/node-alpine-git
   cache:
     - *global_cache
+  before_script: 
+    - - yarn install --frozen-lockfile --cache-folder .yarn
   script:
     - yarn test --passWithNoTests
   allow_failure: false
@@ -95,8 +97,9 @@ Build:
   artifacts:
     paths:
       - ./build
-  before_script: 
-    - - yarn install --frozen-lockfile --cache-folder .yarn
+  before_script:
+    - ls -la 
+    - yarn install --frozen-lockfile --cache-folder .yarn
   script:
     - yarn build
   stage: Build
@@ -133,7 +136,8 @@ Lighthouse:
   cache:
     - *global_cache
   before_script: 
-    - - yarn install --frozen-lockfile --cache-folder .yarn
+    - ls -la
+    - yarn install --frozen-lockfile --cache-folder .yarn
   script:
     - yarn run lhci autorun #if frontend not provide the yarn lighthouse to run
   after_script:
