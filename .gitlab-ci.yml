@@ -22,6 +22,13 @@ stages:
   - Build
   - Quality-Analysis
 
+cache: &global_cache
+  - key: $CI_COMMIT_REF_NAME_MODULE
+    paths:
+      - node_modules/
+      - .yarn
+    policy: pull
+
 Install:
   image: timbru31/node-alpine-git
   stage: .pre   # always first, no matter if it is listed in stages
@@ -57,13 +64,9 @@ Lint-test:
     - key: $CI_COMMIT_REF_NAME_LINT
       paths:
         - .eslint
-    - key: $CI_COMMIT_REF_NAME_MODULE
-      paths:
-        - node_modules/
-        - .yarn
-      policy: pull
+    - *global_cache
   script:
-    - yarn install --frozen-lockfile --cache-folder .yarn
+    # - yarn install --frozen-lockfile --cache-folder .yarn
     - yarn lint
   allow_failure: false
   tags:
@@ -73,11 +76,7 @@ Unit-test:
   stage: Test
   image: timbru31/node-alpine-git
   cache:
-    key: $CI_COMMIT_REF_NAME_MODULE
-    paths:
-      - node_modules/
-      - .yarn
-    policy: pull
+    - *global_cache
   script:
     - yarn test --passWithNoTests
   allow_failure: false
@@ -89,11 +88,7 @@ Unit-test:
 Build:
   image: timbru31/node-alpine-git
   cache:
-    key: $CI_COMMIT_REF_NAME_MODULE
-    paths:
-      - node_modules/
-      - .yarn
-    policy: pull
+    - *global_cache
   artifacts:
     paths:
       - ./build
@@ -131,11 +126,7 @@ Lighthouse:
   allow_failure: true
   image: cypress/browsers:node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
   cache:
-    key: $CI_COMMIT_REF_NAME_MODULE
-    paths:
-      - node_modules/
-      - .yarn
-    policy: pull
+    - *global_cache
   script:
     - yarn run lhci autorun #if frontend not provide the yarn lighthouse to run
   after_script:
