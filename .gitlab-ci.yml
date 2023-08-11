@@ -104,6 +104,8 @@ Sonarqube:
     - test
   needs:
     - Unit-test
+  only:
+    - development
 
 Lighthouse:
   allow_failure: true
@@ -124,4 +126,8 @@ Lighthouse:
     - test
   needs:
     - job: Build
-      artifacts: true  
+      artifacts: true
+  only:
+    - development
+    
+      
