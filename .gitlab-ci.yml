@@ -81,7 +81,8 @@ Unit-test:
   cache:
     - *global_cache
   before_script: 
-    - - yarn install --frozen-lockfile --cache-folder .yarn
+    - ls -la 
+    - yarn install --frozen-lockfile --cache-folder .yarn
   script:
     - yarn test --passWithNoTests
   allow_failure: false
@@ -99,6 +100,7 @@ Build:
       - ./build
   before_script:
     - ls -la 
+    - export NODE_OPTIONS=--openssl-legacy-provider
     - yarn install --frozen-lockfile --cache-folder .yarn
   script:
     - yarn build
