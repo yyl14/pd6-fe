@@ -22,7 +22,7 @@ stages:
   - Build
   - Quality-Analysis
 
-install:
+Install:
   image: timbru31/node-alpine-git
   stage: .pre   # always first, no matter if it is listed in stages
   cache:
@@ -169,5 +169,5 @@ Lighthouse:
     # install job also occurs in the previous stage `.pre` so it
     # is implicitly required since `when: on_success` is the default
     # for subsequent jobs in subsequent stages
-    - job: build
+    - job: Build
       artifacts: true  
