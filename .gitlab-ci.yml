@@ -56,6 +56,7 @@ Install:
 
   script:
     # define cache dir & use it
+    - ls -la
     - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
 
 Lint-test:
