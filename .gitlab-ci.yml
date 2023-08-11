@@ -56,7 +56,6 @@ Install:
 
   script:
     # define cache dir & use it
-    - ls -la
     - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
 
 Lint-test:
@@ -67,9 +66,6 @@ Lint-test:
       paths:
         - .eslint
     - *global_cache
-  before_script: 
-    - ls -la
-    # - yarn install --frozen-lockfile --cache-folder .yarn
   script:
     - yarn lint
   allow_failure: false
@@ -81,9 +77,6 @@ Unit-test:
   image: timbru31/node-alpine-git
   cache:
     - *global_cache
-  before_script: 
-    - ls -la 
-    # - yarn install --frozen-lockfile --cache-folder .yarn
   script:
     - yarn test --passWithNoTests
   allow_failure: false
@@ -100,9 +93,7 @@ Build:
     paths:
       - ./build
   before_script:
-    - ls -la 
     - export NODE_OPTIONS=--openssl-legacy-provider
-    # - yarn install --frozen-lockfile --cache-folder .yarn
   script:
     - yarn build
   stage: Build
@@ -138,9 +129,6 @@ Lighthouse:
   image: cypress/browsers:node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
   cache:
     - *global_cache
-  before_script: 
-    - ls -la
-    # - yarn install --frozen-lockfile --cache-folder .yarn
   script:
     - yarn run lhci autorun #if frontend not provide the yarn lighthouse to run
   after_script:
