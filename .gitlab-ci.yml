@@ -26,7 +26,6 @@ cache: &global_cache
   - key: $CI_COMMIT_REF_NAME_MODULE
     paths:
       - node_modules/
-      - .yarn
     when: on_success
     policy: pull
     untracked: true
