@@ -67,6 +67,7 @@ Lint-test:
     - *global_cache
   script:
     # - yarn install --frozen-lockfile --cache-folder .yarn
+    - ls -la
     - yarn lint
   allow_failure: false
   tags:
