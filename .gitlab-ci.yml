@@ -63,6 +63,7 @@ Lint-test:
         - .yarn
       policy: pull
   script:
+    - yarn install --frozen-lockfile --cache-folder .yarn
     - yarn lint
   allow_failure: false
   tags:
