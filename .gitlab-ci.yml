@@ -30,10 +30,10 @@ Install:
     # will not be necessary for any other job
     - key: $CI_COMMIT_REF_NAME_MODULE
        # must be inside $CI_PROJECT_DIR for gitlab-runner caching (#3)
-       paths:
-         - .yarn/
-       when: on_success
-       policy: pull-push
+      paths:
+        - .yarn/
+      when: on_success
+      policy: pull-push
 
     # Mimic &global_cache_node_mods config but override policy
     # to allow this job to update the cache at the end of the job
@@ -41,31 +41,27 @@ Install:
     # NOTE: I would use yaml anchors here but overriding the policy
     # in a yaml list is not as easy as a dictionary entry (#5)
     - key:
-       files:
-         - package-lock.json
-       paths:
-         - node_modules/
-       when: on_success
-       policy: pull-push
+      paths:
+        - node_modules/
+      when: on_success
+      policy: pull-push
+
+  script:
+    # define cache dir & use it
+    - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
 
 Lint-test:
   stage: Test
   image: timbru31/node-alpine-git
   cache:
-    key: $CI_COMMIT_REF_NAME_LINT
-      files:
-              - package-lock.json
-    paths:
-      - .eslint
-    key: $CI_COMMIT_REF_NAME_MODULE
-    paths:
-      - node_modules/
-      - .yarn
-    policy: pull
-  before_script:
-    - sed -i 's/workspaces/workspaces-disabled/g' package.json
-    - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
-    - sed -i 's/workspaces-disabled/workspaces/g' package.json
+    - key: $CI_COMMIT_REF_NAME_LINT
+      paths:
+        - .eslint
+    - key: $CI_COMMIT_REF_NAME_MODULE
+      paths:
+        - node_modules/
+        - .yarn
+      policy: pull
   script:
     - yarn lint
   allow_failure: false
@@ -77,14 +73,10 @@ Unit-test:
   image: timbru31/node-alpine-git
   cache:
     key: $CI_COMMIT_REF_NAME_MODULE
-      files:
-              - package-lock.json
     paths:
       - node_modules/
       - .yarn
     policy: pull
-  before_script:
-    - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
   script:
     - yarn test --passWithNoTests
   allow_failure: false
@@ -97,8 +89,6 @@ Build:
   image: timbru31/node-alpine-git
   cache:
     key: $CI_COMMIT_REF_NAME_MODULE
-      files:
-              - package-lock.json
     paths:
       - node_modules/
       - .yarn
@@ -106,9 +96,6 @@ Build:
   artifacts:
     paths:
       - ./build
-  before_script:
-    - export NODE_OPTIONS=--openssl-legacy-provider
-    - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
   script:
     - yarn build
   stage: Build
@@ -144,14 +131,10 @@ Lighthouse:
   image: cypress/browsers:node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
   cache:
     key: $CI_COMMIT_REF_NAME_MODULE
-      files:
-              - package-lock.json
     paths:
       - node_modules/
       - .yarn
     policy: pull
-  before_script:
-    - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
   script:
     - yarn run lhci autorun #if frontend not provide the yarn lighthouse to run
   after_script:
