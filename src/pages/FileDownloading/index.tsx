@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
@@ -47,14 +47,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface FileDownloadingProps {}
-
-const FileDownloading: React.FC<FileDownloadingProps> = () => {
+const FileDownloading = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const query = useQuery();
   const history = useHistory();
   const authToken = useAuthToken();
+  const S3FileData = useS3File();
   const [message, setMessage] = useState<string>('File Downloading...');
   const [tip, setTip] = useState<string>('');
   const filename = useMemo(() => query.get('filename'), [query]);
@@ -62,32 +61,30 @@ const FileDownloading: React.FC<FileDownloadingProps> = () => {
   const [downloading, setDownloading] = useState<boolean>(false);
 
   useEffect(() => {
-    {
-      setMessage('File Download Succeed.');
-      setTip('Closing this page in a few seconds.');
-      setTimeout(() => {
-        window.close();
-      }, 3000);
-    }
-
-    {
-      setMessage('Fail to Download File.');
-      setTip('Turning to the main page in a few seconds.');
-      setTimeout(() => {
-        history.push('/');
-      }, 3000);
-    }
-
     if (filename === null || uuid === null || authToken === '') {
       history.push('/');
       return;
     }
 
     if (!downloading) {
-      useS3File();
+      S3FileData.downloadFile(filename, uuid);
       setDownloading(true);
     }
-  }, [authToken, dispatch, downloading, filename, history, uuid]);
+
+    if (downloading) {
+      setMessage('File Download Succeed.');
+      setTip('Closing this page in a few seconds.');
+      setTimeout(() => {
+        window.close();
+      }, 3000);
+    } else {
+      setMessage('Fail to Download File.');
+      setTip('Turning to the main page in a few seconds.');
+      setTimeout(() => {
+        history.push('/');
+      }, 3000);
+    }
+  }, [authToken, dispatch, downloading, filename, history, uuid, S3FileData]);
 
   return (
     <div className={classes.wrapper}>
