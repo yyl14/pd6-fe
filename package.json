@@ -55,7 +55,7 @@
     "serve": "^11.3.2",
     "swr": "^2.2.0",
     "web-vitals": "^1.0.1",
-    "zustand": "^4.4.0"
+    "zustand": "^4.4.1"
   },
   "browserslist": {
     "production": [

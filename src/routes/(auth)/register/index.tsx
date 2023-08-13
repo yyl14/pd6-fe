@@ -1,5 +1,11 @@
-import Register from '@/containers/auth/Register';
+import { Suspense, lazy } from 'react';
+
+const Register = lazy(() => import('@/pages/Register'));
 
 export default function RegisterRoute() {
-  return <Register />;
+  return (
+    <Suspense fallback={<></>}>
+      <Register />
+    </Suspense>
+  );
 }
