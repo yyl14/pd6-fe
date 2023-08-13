@@ -11,7 +11,7 @@ const useCourses = () => {
 
   return {
     courses: browseAllCourseSWR.data?.data.data,
-    addInstitute: addCourseSWR.trigger,
+    addCourse: addCourseSWR.trigger,
     isLoading: {
       browseAll: browseAllCourseSWR.isLoading,
       add: addCourseSWR.isMutating,
