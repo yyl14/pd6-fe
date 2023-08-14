@@ -9,15 +9,16 @@ import AlignedText from '@/components/ui/AlignedText';
 import PageTitle from '@/components/ui/PageTitle';
 import SimpleBar from '@/components/ui/SimpleBar';
 import SimpleTable from '@/components/ui/SimpleTable';
-import useUserClasses from '@/lib/user/useUserClasses';
-import useChallengeTasks from '@/lib/task/useChallengeTasks';
+import useReduxStateShape from '@/hooks/useReduxStateShape';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useProblemScore from '@/lib/problem/useProblemScore';
+import useChallengeTasks from '@/lib/task/useChallengeTasks';
+import useUserClasses from '@/lib/user/useUserClasses';
 
-interface TableProp{
-    challenge_label?: string;
-    score?: Promise<number>;
-    id?: string;
+interface TableProp {
+  challenge_label?: string;
+  score?: Promise<number>;
+  id?: string;
 }
 
 const useStyles = makeStyles(() => ({
@@ -30,7 +31,15 @@ const useStyles = makeStyles(() => ({
 }));
 
 /* This is a level 4 component (page component) */
-export default function ChallengeInfo({ courseId, classId, challengeId }: { courseId: string; classId: string; challengeId: string }) {
+export default function ChallengeInfo({
+  courseId,
+  classId,
+  challengeId,
+}: {
+  courseId: string;
+  classId: string;
+  challengeId: string;
+}) {
   const className = useStyles();
   const { challenge, isLoading: challengeLoading, editChallenge, mutateChallenge } = useChallenge(Number(challengeId));
   const { accountClasses } = useUserClasses();
@@ -38,9 +47,6 @@ export default function ChallengeInfo({ courseId, classId, challengeId }: { cour
 
   const { tasks } = useChallengeTasks(Number(challengeId));
   const problems = tasks?.problem;
-  const essays = tasks?.essay;
-  const peerReviews = tasks?.peer_review;
-  const scoreboards = tasks?.scoreboard;
 
   const [currentTime] = useState(moment());
   const [status, setStatus] = useState('');
@@ -48,6 +54,10 @@ export default function ChallengeInfo({ courseId, classId, challengeId }: { cour
   const [editMode, setEditMode] = useState(false);
   const [inputs, setInputs] = useState('');
   const [tableData, setTableData] = useState<TableProp[]>([]);
+  const [problemsById, problemIds] = useReduxStateShape(problems);
+  const [essaysById, essayIds] = useReduxStateShape(problems);
+  const [peerReviewsById, peerReviewIds] = useReduxStateShape(problems);
+  const [scoreboardsById, scoreboardIds] = useReduxStateShape(problems);
 
   useEffect(() => {
     if (challenge) {
@@ -70,52 +80,50 @@ export default function ChallengeInfo({ courseId, classId, challengeId }: { cour
     }
   }, [classId, accountClasses]);
 
-  
   useEffect(() => {
     const getScore = async (id: number) => {
-      const data = await readScore({problem_id: id});
+      const data = await readScore({ problem_id: id });
       return data.data.data.score;
-    }
+    };
 
     if (challenge) {
       if (problems?.reduce((acc, item) => acc && item !== undefined, true)) {
-        const problemData: TableProp[] | undefined =
-          problems?.sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
-          .map(({ id }) => ({  
-            challenge_label: problems[id]?.challenge_label,
-            score: getScore(id), 
+        const problemData: TableProp[] | undefined = problemIds
+          ?.map((id) => problemsById[id])
+          .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+          .map(({ id }) => ({
+            challenge_label: problemsById[id]?.challenge_label,
+            // score: getScore(id),
             id: `coding-${id}`,
-          }))
+          }));
         // problems are complete
         if (role === 'MANAGER' || role === 'NORMAL') {
-          const essayData: TableProp[] | undefined = 
-            essays?.sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+          const essayData: TableProp[] | undefined = essayIds
+            ?.map((id) => essaysById[id])
+            .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
             .map(({ id }) => ({
-              challenge_label: essays[id]?.challenge_label,
+              challenge_label: essaysById[id]?.challenge_label,
               id: `essay-${id}`,
-            }))
-  
-          const peerReviewData: TableProp[] | undefined =
-            peerReviews?.sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+            }));
+
+          const peerReviewData: TableProp[] | undefined = peerReviewIds
+            ?.map((id) => peerReviewsById[id])
+            .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
             .map(({ id }) => ({
-              challenge_label: peerReviews[id]?.challenge_label,
+              challenge_label: peerReviewsById[id]?.challenge_label,
               id: `peer-${id}`,
-            }))
+            }));
 
-           const scoreboardData: TableProp[] | undefined =
-            scoreboards?.sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+          const scoreboardData: TableProp[] | undefined = scoreboardIds
+            ?.map((id) => scoreboardsById[id])
+            .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
             .map(({ id }) => ({
-              challenge_label: scoreboards[id]?.challenge_label,
+              challenge_label: scoreboardsById[id]?.challenge_label,
               id: `scoreboard-${id}`,
-            }))
+            }));
 
-          if(problemData && essayData && peerReviewData && scoreboardData){
-            const newData: TableProp[] = 
-              peerReviewData.concat(
-                essayData,
-                peerReviewData,
-                scoreboardData
-              )
+          if (problemData && essayData && peerReviewData && scoreboardData) {
+            const newData: TableProp[] = peerReviewData.concat(essayData, peerReviewData, scoreboardData);
             setTableData(newData);
           }
         } else {
@@ -123,7 +131,19 @@ export default function ChallengeInfo({ courseId, classId, challengeId }: { cour
         }
       }
     }
-  }, [challenge, problems, essays, peerReviews, scoreboards, role, readScore]);
+  }, [
+    challenge,
+    role,
+    readScore,
+    problemsById,
+    problemIds,
+    essaysById,
+    essayIds,
+    peerReviewsById,
+    peerReviewIds,
+    scoreboardsById,
+    scoreboardIds,
+  ]);
 
   if (challenge === undefined) {
     if (challengeLoading.read) {
@@ -145,7 +165,7 @@ export default function ChallengeInfo({ courseId, classId, challengeId }: { cour
     const res = editChallenge({
       challenge_id: Number(challengeId),
     });
-    if((await res).ok){
+    if ((await res).ok) {
       mutateChallenge();
     }
     setEditMode(false);
@@ -185,22 +205,16 @@ export default function ChallengeInfo({ courseId, classId, challengeId }: { cour
       <SimpleBar title="Challenge Information">
         <>
           <AlignedText text="Scored by" childrenType="text">
-            <Typography variant="body1">
-              {challenge.selection_type === 'LAST' ? 'Last Score' : 'Best Score'}
-            </Typography>
+            <Typography variant="body1">{challenge.selection_type === 'LAST' ? 'Last Score' : 'Best Score'}</Typography>
           </AlignedText>
           <AlignedText text="Status" childrenType="text">
             <Typography variant="body1">{status}</Typography>
           </AlignedText>
           <AlignedText text="Start time" childrenType="text">
-            <Typography variant="body1">
-              {moment(challenge.start_time).format('YYYY-MM-DD, HH:mm')}
-            </Typography>
+            <Typography variant="body1">{moment(challenge.start_time).format('YYYY-MM-DD, HH:mm')}</Typography>
           </AlignedText>
           <AlignedText text="End time" childrenType="text">
-            <Typography variant="body1">
-              {moment(challenge.end_time).format('YYYY-MM-DD, HH:mm')}
-            </Typography>
+            <Typography variant="body1">{moment(challenge.end_time).format('YYYY-MM-DD, HH:mm')}</Typography>
           </AlignedText>
         </>
       </SimpleBar>
