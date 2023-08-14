@@ -39,7 +39,6 @@ function ChallengeInfoRoute() {
   return (
     <Suspense fallback={<GeneralLoading />}>
       {withConditionalRender(ChallengeInfo)({
-        courseId,
         classId,
         challengeId,
         isLoading: courseIsLoading.read || classIsLoading.read || challengeIsLoading.read,
