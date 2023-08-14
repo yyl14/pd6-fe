@@ -118,7 +118,6 @@ export default function ChallengeInfo({ classId, challengeId }: { classId: strin
               id: `scoreboard-${id}`,
             }));
             const newData: TableProp[] = problemData.concat(essayData, peerReviewData, scoreboardData);
-            console.log(newData);
             setTableData(newData);
         } else {
           setTableData(problemData);
