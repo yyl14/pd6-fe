@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 export default function LoginForm() {
   const history = useHistory();
   const query = useQuery();
-  const redirectUrl = useMemo(() => query.get('redirectUrl'), [query]);
+  const redirectUrl = useMemo(() => query.get('redirect_url'), [query]);
   const classNames = useStyles();
 
   const setAuth = useAuthStore((state) => state.set);

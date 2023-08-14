@@ -8,6 +8,7 @@ import useSystemRoleMiddleware from '@/middleware/useSystemRoleMiddleware';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import AboutRoute from './about';
+import FileDownloading from './file';
 import MyClassRoutes from './my-class';
 import ProblemSetRoutes from './problem-set';
 import UserProfileRoute from './user-profile';
@@ -62,7 +63,7 @@ export default function MainRoutes() {
         {/* <Route path="/6a/my-profile" component={MyProfileRoute} /> */}
         {/* <Route path="/6a/my-submission" component={MySubmission} /> */}
         <Route exact path="/6a/user-profile/:accountId" component={UserProfileRoute} />
-        {/* <Route path="/6a/file" component={FileDownloading} /> */}
+        <Route path="/6a/file" component={FileDownloading} />
         <Route path="/6a/about" component={AboutRoute} />
         <Route path="/6a/my-class" component={MyClassRoutes} />
         <Route path="/6a/problem-set" component={ProblemSetRoutes} />
