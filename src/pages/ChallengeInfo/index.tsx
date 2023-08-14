@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Button, TextField, Typography, makeStyles } from '@material-ui/core';
 import { MathpixLoader, MathpixMarkdown } from 'mathpix-markdown-it';
 import moment from 'moment';
@@ -31,15 +32,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 /* This is a level 4 component (page component) */
-export default function ChallengeInfo({
-  courseId,
-  classId,
-  challengeId,
-}: {
-  courseId: string;
-  classId: string;
-  challengeId: string;
-}) {
+export default function ChallengeInfo({ classId, challengeId }: { classId: string; challengeId: string }) {
   const className = useStyles();
   const { challenge, isLoading: challengeLoading, editChallenge, mutateChallenge } = useChallenge(Number(challengeId));
   const { accountClasses } = useUserClasses();
@@ -82,10 +75,10 @@ export default function ChallengeInfo({
 
   useEffect(() => {
     const getScore = async (id: number) => {
-      try{
+      try {
         const { data } = await readScore({ problem_id: id });
         return data?.data?.score;
-      } catch(err){
+      } catch (err) {
         return 0;
       }
     };
@@ -201,8 +194,12 @@ export default function ChallengeInfo({
             </Button>
           </div>
         ) : (
+          // @ts-ignore
           <MathpixLoader>
-            <MathpixMarkdown text={challenge.description} htmlTags />
+            {
+              // @ts-ignore
+              <MathpixMarkdown text={challenge.description} htmlTags />
+            }
           </MathpixLoader>
         )}
       </SimpleBar>
