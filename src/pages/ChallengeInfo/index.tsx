@@ -18,7 +18,7 @@ import useUserClasses from '@/lib/user/useUserClasses';
 
 interface TableProp {
   challenge_label?: string;
-  score?: Promise<number>;
+  score?: number;
   id?: string;
 }
 
@@ -39,7 +39,6 @@ export default function ChallengeInfo({ classId, challengeId }: { classId: strin
   const { readScore } = useProblemScore();
 
   const { tasks } = useChallengeTasks(Number(challengeId));
-  const problems = tasks?.problem;
 
   const [currentTime] = useState(moment());
   const [status, setStatus] = useState('');
@@ -47,10 +46,10 @@ export default function ChallengeInfo({ classId, challengeId }: { classId: strin
   const [editMode, setEditMode] = useState(false);
   const [inputs, setInputs] = useState('');
   const [tableData, setTableData] = useState<TableProp[]>([]);
-  const [problemsById, problemIds] = useReduxStateShape(problems);
-  const [essaysById, essayIds] = useReduxStateShape(problems);
-  const [peerReviewsById, peerReviewIds] = useReduxStateShape(problems);
-  const [scoreboardsById, scoreboardIds] = useReduxStateShape(problems);
+  const [problemsById, problemIds] = useReduxStateShape(tasks?.problem);
+  const [essaysById, essayIds] = useReduxStateShape(tasks?.essay);
+  const [peerReviewsById, peerReviewIds] = useReduxStateShape(tasks?.peer_review);
+  const [scoreboardsById, scoreboardIds] = useReduxStateShape(tasks?.scoreboard);
 
   useEffect(() => {
     if (challenge) {
@@ -74,7 +73,7 @@ export default function ChallengeInfo({ classId, challengeId }: { classId: strin
   }, [classId, accountClasses]);
 
   useEffect(() => {
-    const getScore = async (id: number) => {
+    async function getScore(id: number) {
       try {
         const { data } = await readScore({ problem_id: id });
         return data?.data?.score;
@@ -90,7 +89,7 @@ export default function ChallengeInfo({ classId, challengeId }: { classId: strin
           .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
           .map(({ id }) => ({
             challenge_label: problemsById[id]?.challenge_label,
-            score: getScore(id),
+            score: Number(getScore(id)),
             id: `coding-${id}`,
           }));
         // problems are complete
@@ -118,11 +117,9 @@ export default function ChallengeInfo({ classId, challengeId }: { classId: strin
               challenge_label: scoreboardsById[id]?.challenge_label,
               id: `scoreboard-${id}`,
             }));
-
-          if (problemData && essayData && peerReviewData && scoreboardData) {
-            const newData: TableProp[] = peerReviewData.concat(essayData, peerReviewData, scoreboardData);
+            const newData: TableProp[] = problemData.concat(essayData, peerReviewData, scoreboardData);
+            console.log(newData);
             setTableData(newData);
-          }
         } else {
           setTableData(problemData);
         }
