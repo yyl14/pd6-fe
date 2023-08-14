@@ -1,13 +1,9 @@
 import { makeStyles } from '@material-ui/core';
-import { useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-
-import useQuery from '@/hooks/useQuery';
 
 import Icon from '@/components/ui/icon';
 import useS3File from '@/lib/s3File/useS3File';
-import useAuthToken from '@/lib/user/useAuthToken';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -47,44 +43,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FileDownloading = () => {
-  const dispatch = useDispatch();
+interface FileDownloadingProps {
+  filename: string;
+  uuid: string;
+}
+
+const FileDownloading = ({ filename, uuid }: FileDownloadingProps) => {
   const classes = useStyles();
-  const query = useQuery();
   const history = useHistory();
-  const authToken = useAuthToken();
-  const S3FileData = useS3File();
+
+  const { downloadFile } = useS3File();
   const [message, setMessage] = useState<string>('File Downloading...');
   const [tip, setTip] = useState<string>('');
-  const filename = useMemo(() => query.get('filename'), [query]);
-  const uuid = useMemo(() => query.get('uuid'), [query]);
-  const [downloading, setDownloading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (filename === null || uuid === null || authToken === '') {
-      history.push('/');
-      return;
-    }
-
-    if (!downloading) {
-      S3FileData.downloadFile(filename, uuid);
-      setDownloading(true);
-    }
-
-    if (downloading) {
-      setMessage('File Download Succeed.');
-      setTip('Closing this page in a few seconds.');
-      setTimeout(() => {
-        window.close();
-      }, 3000);
-    } else {
-      setMessage('Fail to Download File.');
-      setTip('Turning to the main page in a few seconds.');
-      setTimeout(() => {
-        history.push('/');
-      }, 3000);
-    }
-  }, [authToken, dispatch, downloading, filename, history, uuid, S3FileData]);
+    const handleDownloadFile = async () => {
+      try {
+        await downloadFile(filename, uuid);
+        setMessage('File Download Succeed.');
+      } catch (e) {
+        setMessage('Fail to Download File.');
+      } finally {
+        setTip('Turning to the main page in a few seconds.');
+        setTimeout(() => {
+          history.push('/');
+        }, 3000);
+      }
+    };
+    handleDownloadFile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filename, uuid, history]);
 
   return (
     <div className={classes.wrapper}>
