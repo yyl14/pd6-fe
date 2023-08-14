@@ -82,18 +82,22 @@ export default function ChallengeInfo({
 
   useEffect(() => {
     const getScore = async (id: number) => {
-      const data = await readScore({ problem_id: id });
-      return data.data.data.score;
+      try{
+        const { data } = await readScore({ problem_id: id });
+        return data?.data?.score;
+      } catch(err){
+        return 0;
+      }
     };
 
     if (challenge) {
-      if (problems?.reduce((acc, item) => acc && item !== undefined, true)) {
+      if (problemIds?.reduce((acc, item) => acc && item !== undefined, true)) {
         const problemData: TableProp[] | undefined = problemIds
           ?.map((id) => problemsById[id])
           .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
           .map(({ id }) => ({
             challenge_label: problemsById[id]?.challenge_label,
-            // score: getScore(id),
+            score: getScore(id),
             id: `coding-${id}`,
           }));
         // problems are complete
