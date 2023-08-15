@@ -36,9 +36,7 @@ Install:
   script:
     - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test"'
-      when: always
-    - if: '$CI_COMMIT_BRANCH == "pipeline-test"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE != "merged"'
       when: always
 
 Lint-test:
@@ -55,9 +53,7 @@ Lint-test:
   tags:
     - test
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test"'
-      when: always
-    - if: '$CI_COMMIT_BRANCH == "pipeline-test"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE != "merged"'
       when: always
 
 Unit-test:
@@ -71,9 +67,7 @@ Unit-test:
   tags: 
     - test
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test"'
-      when: always
-    - if: '$CI_COMMIT_BRANCH == "pipeline-test"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE != "merged"'
       when: always
 
 Build:
@@ -91,9 +85,7 @@ Build:
   tags:
     - build
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test"'
-      when: always
-    - if: '$CI_COMMIT_BRANCH == "pipeline-test"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE != "merged"'
       when: always
 
 Sonarqube:
@@ -118,8 +110,6 @@ Sonarqube:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE == "merged"'
       when: always
-    - if: '$CI_COMMIT_BRANCH == "pipeline-test"'
-      when: always
 
 Lighthouse:
   allow_failure: true
@@ -143,8 +133,6 @@ Lighthouse:
       artifacts: true
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE == "merged"'
-      when: always
-    - if: '$CI_COMMIT_BRANCH == "pipeline-test"'
       when: always
     
       
