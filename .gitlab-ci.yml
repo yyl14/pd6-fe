@@ -4,15 +4,6 @@ variables:
   CACHE_COMPRESSION_LEVEL: default
   TRANSFER_METER_FREQUENCY: 5s
 
-workflow:
-  rules:
-    # Rules for all merge requests to development branch
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test"'
-      when: always
-    # Rules for all pushes to development branch
-    - if: '$CI_COMMIT_BRANCH == "pipeline-test"'
-      when: always
-
 stages:
   - Test
   - Build
@@ -44,6 +35,11 @@ Install:
     - build
   script:
     - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test"'
+      when: always
+    - if: '$CI_COMMIT_BRANCH == "pipeline-test"'
+      when: always
 
 Lint-test:
   stage: Test
@@ -58,6 +54,11 @@ Lint-test:
   allow_failure: false
   tags:
     - test
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test"'
+      when: always
+    - if: '$CI_COMMIT_BRANCH == "pipeline-test"'
+      when: always
 
 Unit-test:
   stage: Test
@@ -69,6 +70,11 @@ Unit-test:
   allow_failure: false
   tags: 
     - test
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test"'
+      when: always
+    - if: '$CI_COMMIT_BRANCH == "pipeline-test"'
+      when: always
 
 Build:
   image: timbru31/node-alpine-git
@@ -84,6 +90,9 @@ Build:
   stage: Build
   tags:
     - build
+  rule:
+    - if: '$CI_COMMIT_BRANCH == "pipeline-test"'
+      when: always
 
 Sonarqube:
   stage: Quality-Analysis
@@ -104,8 +113,11 @@ Sonarqube:
     - test
   needs:
     - Unit-test
-  only:
-    - pipeline-test
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE == "merged"'
+      when: always
+    - if: '$CI_COMMIT_BRANCH == "pipeline-test"'
+      when: always
 
 Lighthouse:
   allow_failure: true
@@ -127,7 +139,10 @@ Lighthouse:
   needs:
     - job: Build
       artifacts: true
-  only:
-    - pipeline-test
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE == "merged"'
+      when: always
+    - if: '$CI_COMMIT_BRANCH == "pipeline-test"'
+      when: always
     
       
