@@ -54,7 +54,7 @@ Lint-test:
     - test
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE != "merged"'
-      when: always
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE != "merged"'
 
 Unit-test:
   stage: Test
@@ -67,8 +67,8 @@ Unit-test:
   tags: 
     - test
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE != "merged"'
-      when: always
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE != "merged"' 
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE != "merged"'
 
 Build:
   image: timbru31/node-alpine-git
@@ -107,7 +107,6 @@ Sonarqube:
     - test
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "pipeline-test"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test"'
 
 Lighthouse:
   allow_failure: true
@@ -131,6 +130,5 @@ Lighthouse:
       artifacts: true
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "pipeline-test"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test"'
     
       
