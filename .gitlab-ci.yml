@@ -85,8 +85,7 @@ Build:
   tags:
     - build
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE != "merged"'
-      when: always
+    - exist
 
 Sonarqube:
   stage: Quality-Analysis
@@ -105,8 +104,6 @@ Sonarqube:
   allow_failure: true
   tags:
     - test
-  needs:
-    - Unit-test
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE == "merged"'
       when: always
