@@ -1,10 +1,9 @@
 import { makeStyles } from '@material-ui/core';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import PageTitle from '@/components/ui/PageTitle';
 import Icon from '@/components/ui/icon';
-import useQuery from '@/hooks/useQuery';
 import useVerifyEmail from '@/lib/email/useVerifyEmail';
 
 const useStyles = makeStyles((theme) => ({
@@ -54,23 +53,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EmailVerification() {
+export default function EmailVerification({ verificationCode }: { verificationCode: string }) {
   const classes = useStyles();
-  const query = useQuery();
   const history = useHistory();
   const [message, setMessage] = useState('Email Verifying...');
-  const queryString = useMemo(() => query.get('code'), [query]);
-  const { emailVerification } = useVerifyEmail(queryString as string);
+  const { emailVerification } = useVerifyEmail(verificationCode);
 
   useEffect(() => {
     (async () => {
       try {
+<<<<<<< HEAD
         const {
           data: { success },
         } = await emailVerification();
         if (success) {
           setMessage('Email Verify Succeed.');
         }
+=======
+        await emailVerification();
+        setMessage('Email Verify Succeed.');
+>>>>>>> 1f025412 (Resolve "Pages - Auth")
       } catch (err) {
         setMessage('Fail to verify Email.');
       } finally {
@@ -79,7 +81,11 @@ export default function EmailVerification() {
         }, 2000);
       }
     })();
+<<<<<<< HEAD
   }, [history, queryString, emailVerification]);
+=======
+  }, [history, emailVerification]);
+>>>>>>> 1f025412 (Resolve "Pages - Auth")
 
   return (
     <div className={classes.wrapper}>

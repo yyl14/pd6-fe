@@ -24,10 +24,11 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 
-import GeneralLoading from '@/components/GeneralLoading';
 import useReduxStateShape from '@/hooks/useReduxStateShape';
 import useRegister from '@/lib/auth/useRegister';
 import useInstitutes from '@/lib/institute/useInstitutes';
+
+import { ErrorState, ErrorTextState, Institute, RegisterFormInputs } from './types';
 
 const useStyles = makeStyles((theme) => ({
   authForm: {
@@ -60,20 +61,35 @@ function checkPassword(password1: string, password2: string) {
   return "Passwords don't match";
 }
 
+const initialErrorState = {
+  realName: false,
+  school: false,
+  username: false,
+  studentId: false,
+  email: false,
+  password: false,
+  confirmPassword: false,
+};
+
+const initialErrorTextState = {
+  realName: '',
+  school: '',
+  username: '',
+  studentId: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+};
+
 export default function RegisterForm() {
   const classNames = useStyles();
   const history = useHistory();
-
   const { register } = useRegister();
-
-  const { institutes, isLoading: institutesIsLoading } = useInstitutes();
-  const [institutesById, institutesIds] = useReduxStateShape(institutes);
-  type InstitutesType = keyof typeof institutes;
-  const enableInstitutesId = institutesIds.filter((item: InstitutesType) => !institutesById[item].is_disabled);
-
+  const { institutes } = useInstitutes();
+  const [institutesById, institutesIds] = useReduxStateShape<Institute>(institutes);
+  const enableInstitutesId = (institutesIds as number[]).filter((id) => !institutesById[id].is_disabled);
   const [nextPage, setNextPage] = useState(false);
-
-  const [inputs, setInputs] = useState({
+  const [inputs, setInputs] = useState<RegisterFormInputs>({
     realName: '',
     school: 'National Taiwan University',
     username: '',
@@ -83,78 +99,59 @@ export default function RegisterForm() {
     password: '',
     confirmPassword: '',
   });
-
-  const [errors, setErrors] = useState({
-    realName: false,
-    school: false,
-    username: false,
-    studentId: false,
-    email: false,
-    password: false,
-    confirmPassword: false,
-  });
-  const [errorTexts, setErrorTexts] = useState({
-    realName: '',
-    school: '',
-    username: '',
-    studentId: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  });
+  const [errors, setErrors] = useState<ErrorState>(initialErrorState);
+  const [errorTexts, setErrorTexts] = useState<ErrorTextState>(initialErrorTextState);
 
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
-
   const [popup, setPopup] = useState(false);
   const [errorPopup, setErrorPopup] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  type T = keyof typeof inputs;
-  // const [hasRequest, setHasRequest] = useState(false);
 
   const labelName = ['realName', 'school', 'username', 'studentId', 'email', 'password', 'confirmPassword'];
-
   const transform = (school: string): number => {
-    const ids: number[] = enableInstitutesId.filter((item: T) => institutesById[item].full_name === school);
+    const ids: number[] = enableInstitutesId.filter((id) => institutesById[id].full_name === school);
     return ids.length === 0 ? 1 : ids[0];
   };
-
   const onSubmit = async () => {
-    const newInputs = labelName.reduce((acc, item) => ({ ...acc, [item]: inputs[item as T].trim() }), {});
-    let hasError = labelName.reduce((acc, item) => acc || newInputs[item as T] === '', false);
+    const newInputs = labelName.reduce(
+      (acc, item) => ({ ...acc, [item]: inputs[item as keyof typeof inputs].trim() }),
+      {},
+    ) as RegisterFormInputs;
 
+    let hasError = labelName.reduce(
+      (acc, item) => acc || newInputs[item as keyof typeof newInputs].trim() === '',
+      false,
+    );
     setErrors(
-      labelName.reduce((acc, item) => {
-        if (item !== 'password' && item !== 'confirmPassword') {
-          return { ...acc, [item]: newInputs[item as T].trim() === '' };
-        }
-        return { ...acc, [item]: newInputs[item as T] === '' };
-      }),
+      labelName.reduce(
+        (acc, item) => ({ ...acc, [item]: newInputs[item as keyof typeof newInputs].trim() === '' }),
+        initialErrorState,
+      ),
     );
     setErrorTexts(
-      labelName.reduce((acc, item) => {
-        if (item !== 'password' && item !== 'confirmPassword') {
-          return { ...acc, [item]: newInputs[item].trim() === '' ? "Can't be empty" : '' };
-        }
-        return { ...acc, [item]: newInputs[item] === '' ? "Can't be empty" : '' };
-      }),
+      labelName.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item]: newInputs[item as keyof typeof newInputs].trim() === '' && "Can't be empty",
+        }),
+        initialErrorTextState,
+      ),
     );
 
     // check password
-    const statusP = checkPassword(newInputs.password, newInputs.confirmPassword);
+    const statusP = checkPassword(newInputs.password.trim(), newInputs.confirmPassword.trim());
     if (statusP === "Passwords don't match") {
       setErrors((input) => ({ ...input, confirmPassword: true }));
       setErrorTexts((input) => ({ ...input, confirmPassword: statusP }));
       hasError = true;
     }
-
     if (!hasError) {
       try {
         const res = register({
           username: inputs.username.trim(),
-          password: inputs.password,
+          password: inputs.password.trim(),
           nickname: inputs.nickname.trim(),
           real_name: inputs.realName.trim(),
           institute_id: transform(inputs.school),
@@ -196,19 +193,23 @@ export default function RegisterForm() {
       }
     }
   };
-
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  const handleChange = (
+    event:
+      | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+      | React.ChangeEvent<{ name?: string; value: unknown }>,
+  ) => {
     const { name, value } = event.target;
-    setInputs((input) => ({ ...input, [name]: value }));
-    if (value !== '' && errorTexts[name] === "Can't be empty") {
-      setErrors((input) => ({ ...input, [name]: false }));
-      setErrorTexts((input) => ({ ...input, [name]: '' }));
+    const key = name as keyof typeof errorTexts;
+    const valueString = (value as string).trim();
+    setInputs((input) => ({ ...input, [key]: valueString }));
+    if (valueString !== '' && errorTexts[key] === "Can't be empty") {
+      setErrors((input) => ({ ...input, [key]: false }));
+      setErrorTexts((input) => ({ ...input, [key]: '' }));
     }
-
     if (name === 'confirmPassword' || name === 'password') {
       if (
-        checkPassword(inputs.password, value) === "Passwords don't match" &&
-        checkPassword(inputs.confirmPassword, value) === "Passwords don't match"
+        checkPassword(inputs.password, valueString) === "Passwords don't match" &&
+        checkPassword(inputs.confirmPassword, valueString) === "Passwords don't match"
       ) {
         setErrors((input) => ({ ...input, confirmPassword: true }));
         setErrorTexts((input) => ({ ...input, confirmPassword: "Passwords don't match" }));
@@ -220,14 +221,12 @@ export default function RegisterForm() {
 
     // change email tail
     if (name === 'school') {
-      setEmailTail(`@${institutesById[transform(value)].email_domain}`);
+      setEmailTail(`@${institutesById[transform(valueString)].email_domain}`);
     }
-
     if (name === 'username' && errorTexts[name] === 'Username Exists') {
       setErrors((input) => ({ ...input, username: false }));
       setErrorTexts((input) => ({ ...input, username: '' }));
     }
-
     if (name === 'studentId') {
       if (errorTexts[name] === 'Student ID Exists') {
         setErrors((input) => ({ ...input, studentId: false }));
@@ -237,7 +236,6 @@ export default function RegisterForm() {
         setErrorTexts((input) => ({ ...input, studentId: '', email: '' }));
       }
     }
-
     if (name === 'email') {
       if (errorTexts[name] === 'Email Exists') {
         setErrors((input) => ({ ...input, email: false }));
@@ -248,35 +246,32 @@ export default function RegisterForm() {
       }
     }
   };
-
   const onClosePopup = () => {
     setPopup(false);
     history.push('/login');
   };
-
   const handleClose = () => {
     setErrorPopup(false);
   };
-
   const onNextPage = () => {
     const checkError = (name: string) => {
       if (name === 'username' || name === 'password' || name === 'confirmPassword') return false;
-      if (inputs[name].trim() !== '') return false;
+      if (inputs[name as keyof typeof inputs].trim() !== '') return false;
       return true;
     };
-
-    setErrors(labelName.reduce((acc, item) => ({ ...acc, [item]: checkError(item) }), {}));
-    setErrorTexts(labelName.reduce((acc, item) => ({ ...acc, [item]: checkError(item) ? "Can't be empty" : '' }), {}));
+    setErrors(labelName.reduce((acc, item) => ({ ...acc, [item]: checkError(item) }), initialErrorState));
+    setErrorTexts(
+      labelName.reduce(
+        (acc, item) => ({ ...acc, [item]: checkError(item) ? "Can't be empty" : '' }),
+        initialErrorTextState,
+      ),
+    );
     const hasError = labelName.reduce((acc, item) => acc || checkError(item), false);
-
     if (!hasError) {
       setNextPage(true);
     }
   };
 
-  if (institutesIsLoading.browseAll) {
-    return <GeneralLoading />;
-  }
   return (
     <>
       {!nextPage ? (
@@ -369,8 +364,6 @@ export default function RegisterForm() {
                 label="Nickname"
                 value={inputs.nickname}
                 onChange={(e) => handleChange(e)}
-                error={errors.nickname}
-                helperText={errorTexts.nickname}
               />
               <TextField
                 // required

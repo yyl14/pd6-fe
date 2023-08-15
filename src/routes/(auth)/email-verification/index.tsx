@@ -1,19 +1,15 @@
-import { Suspense, lazy } from 'react';
-import { useParams } from 'react-router-dom';
+import { Suspense, lazy, useMemo } from 'react';
 
-import useVerifyEmail from '@/lib/email/useVerifyEmail';
+import useQuery from '@/hooks/useQuery';
 
 const EmailVerification = lazy(() => import('@/pages/EmailVerification'));
 
 export default function EmailVerificationRoute() {
-  const { verificationCode } = useParams<{ verificationCode: string }>();
-  const { isLoading: verifyIsLoading } = useVerifyEmail(verificationCode);
+  const query = useQuery();
+  const verificationCode = useMemo(() => query.get('code') as string, [query]);
   return (
     <Suspense fallback={<></>}>
-      {EmailVerification({
-        verificationCode,
-        isLoading: verifyIsLoading,
-      })}
+      <EmailVerification verificationCode={verificationCode} />
     </Suspense>
   );
 }

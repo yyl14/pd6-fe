@@ -4,7 +4,7 @@ const ForgetUsername = lazy(() => import('@/pages/ForgetUsername'));
 
 export default function ForgetUsernameRoute() {
   return (
-    <Suspense>
+    <Suspense fallback={<></>}>
       <ForgetUsername />
     </Suspense>
   );
