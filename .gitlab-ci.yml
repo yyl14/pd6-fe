@@ -17,6 +17,14 @@ cache: &global_cache
     policy: pull
     untracked: true
 
+workflow:
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "development"'
+      when: always
+    - if: '$CI_COMMIT_BRANCH == "development"'
+      when: always
+
+
 Install:
   image: timbru31/node-alpine-git
   stage: .pre
@@ -35,9 +43,7 @@ Install:
     - build
   script:
     - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "pipeline-test"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test"'
+
 
 Lint-test:
   stage: Test
@@ -52,9 +58,8 @@ Lint-test:
   allow_failure: false
   tags:
     - test
-  rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE != "merged"'
-    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE != "merged"'
+  except:
+    - pipeline-test
 
 Unit-test:
   stage: Test
@@ -66,9 +71,8 @@ Unit-test:
   allow_failure: false
   tags: 
     - test
-  rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE != "merged"' 
-    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE != "merged"'
+  except:
+    - pipeline-test
 
 Build:
   image: timbru31/node-alpine-git
@@ -84,9 +88,6 @@ Build:
   stage: Build
   tags:
     - build
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "pipeline-test"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test"'
 
 Sonarqube:
   stage: Quality-Analysis
@@ -105,8 +106,8 @@ Sonarqube:
   allow_failure: true
   tags:
     - test
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "pipeline-test"'
+  only:
+    - pipeline-test
 
 Lighthouse:
   allow_failure: true
@@ -128,7 +129,7 @@ Lighthouse:
   needs:
     - job: Build
       artifacts: true
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "pipeline-test"'
+  only:
+    - pipeline-test
     
       
