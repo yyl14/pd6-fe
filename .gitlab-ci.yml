@@ -19,9 +19,9 @@ cache: &global_cache
 
 workflow:
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "development"'
       when: always
-    - if: '$CI_COMMIT_BRANCH == "pipeline-test"'
+    - if: '$CI_COMMIT_BRANCH == "development"'
       when: always
 
 
@@ -59,7 +59,7 @@ Lint-test:
   tags:
     - test
   except:
-    - pipeline-test
+    - development
 
 Unit-test:
   stage: Test
@@ -72,7 +72,7 @@ Unit-test:
   tags: 
     - test
   except:
-    - pipeline-test
+    - development
 
 Build:
   image: timbru31/node-alpine-git
@@ -107,7 +107,7 @@ Sonarqube:
   tags:
     - test
   only:
-    - pipeline-test
+    - development
 
 Lighthouse:
   allow_failure: true
@@ -130,6 +130,6 @@ Lighthouse:
     - job: Build
       artifacts: true
   only:
-    - pipeline-test
+    - development
     
       
