@@ -85,7 +85,7 @@ Build:
   tags:
     - build
   rules:
-    - exist
+    - exists
 
 Sonarqube:
   stage: Quality-Analysis
