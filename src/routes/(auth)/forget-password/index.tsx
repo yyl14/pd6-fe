@@ -1,5 +1,11 @@
-import ForgetPassword from '@/containers/auth/ForgetPassword';
+import { Suspense, lazy } from 'react';
+
+const ForgetPassword = lazy(() => import('@/pages/ForgetPassword'));
 
 export default function ForgetPasswordRoute() {
-  return <ForgetPassword />;
+  return (
+    <Suspense fallback={<></>}>
+      <ForgetPassword />
+    </Suspense>
+  );
 }
