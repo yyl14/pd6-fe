@@ -36,8 +36,8 @@ Install:
   script:
     - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE != "merged"'
-      when: always
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "pipeline-test"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test"'
 
 Lint-test:
   stage: Test
@@ -85,8 +85,8 @@ Build:
   tags:
     - build
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE != "merged"'
-      when: always
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "pipeline-test"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test"'
 
 Sonarqube:
   stage: Quality-Analysis
@@ -105,8 +105,6 @@ Sonarqube:
   allow_failure: true
   tags:
     - test
-  needs:
-    - Unit-test
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test" && $CI_MERGE_REQUEST_STATE == "merged"'
       when: always
