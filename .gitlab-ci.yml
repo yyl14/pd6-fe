@@ -7,10 +7,10 @@ variables:
 workflow:
   rules:
     # Rules for all merge requests to development branch
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "development"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "pipeline-test"'
       when: always
     # Rules for all pushes to development branch
-    - if: '$CI_COMMIT_BRANCH == "development"'
+    - if: '$CI_COMMIT_BRANCH == "pipeline-test"'
       when: always
 
 stages:
@@ -105,7 +105,7 @@ Sonarqube:
   needs:
     - Unit-test
   only:
-    - development
+    - pipeline-test
 
 Lighthouse:
   allow_failure: true
@@ -128,6 +128,6 @@ Lighthouse:
     - job: Build
       artifacts: true
   only:
-    - development
+    - pipeline-test
     
       
