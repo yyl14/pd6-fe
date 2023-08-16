@@ -11,14 +11,9 @@ export interface AccessLogSchema extends ViewAccessLogSchema {
 const useViewAccessLogs = () => {
   const useSWRWithBrowseParams = withDataSchema<AccessLogSchema>();
 
-  const browseAccessLogSWR = useSWRWithBrowseParams(
-    `/view/access-log`,
-    browseAccessLog,
-    {},
-    { baseSort: { column: 'access_time', order: 'DESC' } },
-  );
+  const browseAccessLogSWR = useSWRWithBrowseParams(`/view/access-log`, browseAccessLog, {}, {});
 
-  const accessLog = browseAccessLogSWR.data?.data.data.data as AccessLogSchema[];
+  const accessLog = browseAccessLogSWR.data?.data.data.data.map((item) => ({ ...item, id: item.access_log_id }));
 
   return {
     browseAccessLog: {

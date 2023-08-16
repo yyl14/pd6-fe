@@ -4,10 +4,10 @@ const useStyles = makeStyles((theme) => ({
   topContent1: {
     background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
-    padding: '5px 15px 15px 15px',
+    padding: '5px 15px 10px 15px',
     display: 'flex',
     justifyContent: 'space-between',
-    height: '75px',
+    height: '70px',
   },
   topContent2: {
     background: theme.palette.grey.A100,
@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
     flexShrink: 27,
   },
   buttons: {
-    marginTop: '3px',
     height: '60px',
     flexShrink: 0,
   },
