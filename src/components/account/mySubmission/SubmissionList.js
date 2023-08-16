@@ -155,14 +155,14 @@ export default function SubmissionList() {
           Class: {
             text: classes.byId[item.class_id] ? classes.byId[item.class_id].name : '',
             path: `/${
-              userClasses.filter((c) => c.class_id === item.class_id).length === 0 ? 'all-class' : 'my-class'
+              userClasses.filter((c) => c.class_id === item.class_id).length === 0 ? 'problem-set' : 'my-class'
             }/${item.course_id}/${item.class_id}/challenge`,
           },
           Challenge: challenges.byId[item.challenge_id] ? challenges.byId[item.challenge_id].title : '',
           Task: {
             text: problems.byId[item.problem_id] ? problems.byId[item.problem_id].challenge_label : '',
             path: `/${
-              userClasses.filter((c) => c.class_id === item.class_id).length === 0 ? 'all-class' : 'my-class'
+              userClasses.filter((c) => c.class_id === item.class_id).length === 0 ? 'problem-set' : 'my-class'
             }/${item.course_id}/${item.class_id}/challenge/${item.challenge_id}/${item.problem_id}`,
           },
           Status: item.verdict === null ? 'Waiting For Judge' : item.verdict,

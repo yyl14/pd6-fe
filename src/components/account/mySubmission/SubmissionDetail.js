@@ -226,7 +226,7 @@ export default function SubmissionDetail() {
         <AlignedText text="Challenge" childrenType="text">
           <Link
             to={`/${
-              userClasses.filter((c) => c.class_id === Number(classId)).length === 0 ? 'all-class' : 'my-class'
+              userClasses.filter((c) => c.class_id === Number(classId)).length === 0 ? 'problem-set' : 'my-class'
             }/${courseId}/${classId}/challenge/${challengeId}`}
             className={classNames.textLink}
           >
@@ -236,7 +236,7 @@ export default function SubmissionDetail() {
         <AlignedText text="Task Label" childrenType="text">
           <Link
             to={`/${
-              userClasses.filter((c) => c.class_id === Number(classId)).length === 0 ? 'all-class' : 'my-class'
+              userClasses.filter((c) => c.class_id === Number(classId)).length === 0 ? 'problem-set' : 'my-class'
             }/${courseId}/${classId}/challenge/${challengeId}/${problemId}`}
             className={classNames.textLink}
           >
