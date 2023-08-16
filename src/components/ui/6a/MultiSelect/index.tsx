@@ -67,7 +67,7 @@ export default function MultiSelect<T extends string | number>({ options, value,
           {options.map((option) => (
             <MenuItem key={option.value} value={option.value} className={classes.selectList}>
               <CustomCheckbox isChecked={value.indexOf(option.value) > -1} />
-              <ListItemText className={classes.listItem} primary />
+              <ListItemText className={classes.listItem} primary={option.label} />
             </MenuItem>
           ))}
         </Select>

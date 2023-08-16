@@ -6,18 +6,18 @@ export interface DataSchemaBase {
 
 export interface RowSchemaBase {
   id: string;
-  [K: string]: string;
+  [K: string]: string | LinkType;
 }
 
 export type FilterType = 'TEXT' | 'ENUM_SINGLE' | 'ENUM_MULTI' | 'DATE';
 
-export type FilterOptions<DataSchema extends DataSchemaBase> = { value: keyof DataSchema; label: string }[];
+export type FilterOptions = { value: string; label: string }[];
 
 export type FilterConfigItem<DataSchema extends DataSchemaBase> = {
   dataColumn: keyof DataSchema;
   label: string;
   operator: FilterOperator;
-} & ({ type: 'TEXT' | 'DATE' } | { type: 'ENUM_SINGLE' | 'ENUM_MULTI'; options: FilterOptions<DataSchema> });
+} & ({ type: 'TEXT' | 'DATE' } | { type: 'ENUM_SINGLE' | 'ENUM_MULTI'; options: FilterOptions });
 
 type ColumnAlign = 'center' | 'left' | 'right';
 type ColumnType = 'string' | 'link';
@@ -33,4 +33,9 @@ export type ColumnConfigItem<DataSchema extends DataSchemaBase, RowSchema extend
   minWidth?: number;
   width?: number;
   colors?: Record<string, ColumnColorsValue>;
+};
+
+export type LinkType = {
+  text: string;
+  path: string;
 };

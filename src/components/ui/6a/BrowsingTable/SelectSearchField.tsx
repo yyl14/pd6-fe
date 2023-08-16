@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useState } from 'react';
 
 import Icon from '../../icon/index';
-import { DataSchemaBase, FilterOptions } from './types';
+import { FilterOptions } from './types';
 
 const useStyles = makeStyles(() => ({
   search: {
@@ -14,15 +14,12 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface SelectSearchFieldProps<DataSchema extends DataSchemaBase> {
+interface SelectSearchFieldProps {
   handleSearch: (searchValue: string) => void;
-  options: FilterOptions<DataSchema>;
+  options: FilterOptions;
 }
 
-const SelectSearchField = <DataSchema extends DataSchemaBase>({
-  handleSearch,
-  options,
-}: SelectSearchFieldProps<DataSchema>) => {
+const SelectSearchField = ({ handleSearch, options }: SelectSearchFieldProps) => {
   const classes = useStyles();
 
   const [inputValue, setInputValue] = useState('');

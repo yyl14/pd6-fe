@@ -24,7 +24,7 @@ import { FilterInterface, PaginationInterface, RowsPerPageOption, SortInterface 
 
 import Icon from '../../icon/index';
 import SearchField from './SearchField';
-import { ColumnConfigItem, DataSchemaBase, FilterConfigItem, RowSchemaBase } from './types';
+import { ColumnConfigItem, DataSchemaBase, FilterConfigItem, LinkType, RowSchemaBase } from './types';
 import useStyles from './useStyles';
 
 const ROWS_PER_PAGE_OPTIONS: RowsPerPageOption[] = [10, 25, 50, 100];
@@ -266,6 +266,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
                     {columnsConfig.map((column) => {
                       const value = row[column.name];
                       if (column.type === 'link') {
+                        const linkValue = value as LinkType;
                         return (
                           <React.Fragment key={`${row.id}-${String(column.name)}`}>
                             <TableCell className={classes.tableColumnLeftSpacing} />
@@ -274,24 +275,25 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
                               style={{ minWidth: column.minWidth, width: column.width, maxWidth: column.width }}
                               align={column.align}
                             >
-                              <Link to={value} className={classes.textLink}>
-                                {value}
+                              <Link to={linkValue.path} className={classes.textLink}>
+                                {linkValue.text}
                               </Link>
                             </TableCell>
                           </React.Fragment>
                         );
                       }
+                      const stringValue = value as string;
                       return (
                         <React.Fragment key={`${row.id}-${String(column.name)}`}>
                           <TableCell className={classes.tableColumnLeftSpacing} />
                           <TableCell
                             align={column.align}
-                            className={`${column.colors && column.colors[value] && classes[column.colors[value]]} ${
-                              classes.tableBodyCell
-                            }`}
+                            className={`${
+                              column.colors && column.colors[stringValue] && classes[column.colors[stringValue]]
+                            } ${classes.tableBodyCell}`}
                             style={{ minWidth: column.minWidth, width: column.width, maxWidth: column.width }}
                           >
-                            {value}
+                            {stringValue}
                           </TableCell>
                         </React.Fragment>
                       );
@@ -302,7 +304,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
                         align="right"
                         className={`${classes.stickyArrowCell} ${classes.tableCellHover}`}
                       >
-                        <Link to={row.link} className={classes.detailLink}>
+                        <Link to={row.link as string} className={classes.detailLink}>
                           <IconButton>
                             <Icon.ArrowForwardRoundedIcon className={classes.toggleButtonIcon} />
                           </IconButton>

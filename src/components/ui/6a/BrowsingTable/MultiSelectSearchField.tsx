@@ -3,17 +3,14 @@ import { useState } from 'react';
 
 import Icon from '../../icon/index';
 import MultiSelect from '../MultiSelect';
-import { DataSchemaBase, FilterOptions } from './types';
+import { FilterOptions } from './types';
 
-interface MultiSelectSearchFieldProps<DataSchema extends DataSchemaBase> {
+interface MultiSelectSearchFieldProps {
   handleSearch: (searchValue: string[]) => void;
-  options: FilterOptions<DataSchema>;
+  options: FilterOptions;
 }
 
-const MultiSelectSearchField = <DataSchema extends DataSchemaBase>({
-  handleSearch,
-  options,
-}: MultiSelectSearchFieldProps<DataSchema>) => {
+const MultiSelectSearchField = ({ handleSearch, options }: MultiSelectSearchFieldProps) => {
   const [inputValue, setInputValue] = useState([] as string[]);
 
   return (
