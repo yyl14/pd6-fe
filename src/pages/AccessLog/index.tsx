@@ -136,9 +136,9 @@ export default function AccessLog() {
           resource_path,
           request_method,
           access_time,
-          access_log_id,
+          id,
         }) => ({
-          id: String(access_log_id),
+          id: String(id),
           Username: {
             text: username ?? '',
             path: `/admin/account/account/${account_id}/setting`,
