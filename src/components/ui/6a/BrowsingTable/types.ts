@@ -1,8 +1,7 @@
-import { FilterOperator } from '@/hooks/useBrowseParams/types';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { FilterItem, FilterOperator } from '@/hooks/useBrowseParams/types';
 
-export interface DataSchemaBase {
-  id: number;
-}
+export type DataSchemaBase = Record<string, any>;
 
 export interface RowSchemaBase {
   id: string;
@@ -11,26 +10,57 @@ export interface RowSchemaBase {
 
 export type FilterType = 'TEXT' | 'ENUM_SINGLE' | 'ENUM_MULTI' | 'DATE';
 
-export type FilterOptions<DataSchema extends DataSchemaBase> = { value: keyof DataSchema; label: string }[];
+export type SimpleFilterConfigOption<DataSchema extends DataSchemaBase, K extends keyof DataSchema> = {
+  value: DataSchema[K];
+  label: string;
+};
 
-export type FilterConfigItem<DataSchema extends DataSchemaBase> = {
-  dataColumn: keyof DataSchema;
+export type SimpleFilterConfigItem<DataSchema extends DataSchemaBase, K extends keyof DataSchema> = {
+  dataColumn: K;
   label: string;
   operator: FilterOperator;
-} & ({ type: 'TEXT' | 'DATE' } | { type: 'ENUM_SINGLE' | 'ENUM_MULTI'; options: FilterOptions<DataSchema> });
+} & (
+  | { type: 'TEXT' | 'DATE' }
+  | { type: 'ENUM_SINGLE' | 'ENUM_MULTI'; options: SimpleFilterConfigOption<DataSchema, K>[] }
+);
+
+export type MultiFilterConfigOption<DataSchema extends DataSchemaBase> = {
+  value: FilterItem<DataSchema, keyof DataSchema, FilterOperator>[];
+  label: string;
+};
+
+export type MultiFilterConfigItem<DataSchema extends DataSchemaBase> = {
+  label: string;
+} & { type: 'ENUM_SINGLE' | 'ENUM_MULTI'; options: MultiFilterConfigOption<DataSchema>[] };
+
+export type FilterConfigOption<DataSchema extends DataSchemaBase, K extends keyof DataSchema> =
+  | SimpleFilterConfigOption<DataSchema, K>
+  | MultiFilterConfigOption<DataSchema>;
+
+export type FilterConfigItem<DataSchema extends DataSchemaBase> =
+  | ({
+      multi?: false | undefined;
+    } & SimpleFilterConfigItem<DataSchema, keyof DataSchema>)
+  | ({ multi: true } & MultiFilterConfigItem<DataSchema>);
 
 type ColumnAlign = 'center' | 'left' | 'right';
-type ColumnType = 'string' | 'link';
 type ColumnColorsValue = 'default' | 'accepted' | 'error';
 
 export type ColumnConfigItem<DataSchema extends DataSchemaBase, RowSchema extends RowSchemaBase> = (
   | { sortable?: false }
   | { sortable?: true; dataColumn: keyof DataSchema }
-) & {
-  name: Exclude<keyof RowSchema, 'link'>;
-  align: ColumnAlign;
-  type: ColumnType;
-  minWidth?: number;
-  width?: number;
-  colors?: Record<string, ColumnColorsValue>;
-};
+) &
+  (
+    | { type: 'string' }
+    | {
+        type: 'link';
+        formatLink: (datum: DataSchema) => string;
+      }
+  ) & {
+    name: Exclude<keyof RowSchema, 'link'>;
+    align: ColumnAlign;
+
+    minWidth?: number;
+    width?: number;
+    colors?: Record<string, ColumnColorsValue>;
+  };
