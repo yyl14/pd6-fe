@@ -2,22 +2,16 @@ import { components } from '../../../types/schema';
 import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
 import { browseAccessLog } from './fetchers';
 
-type ViewAccessLogSchema = components['schemas']['ViewAccessLog'];
-
-export interface AccessLogSchema extends ViewAccessLogSchema {
-  id: number;
-}
+export type ViewAccessLogSchema = components['schemas']['ViewAccessLog'];
 
 const useViewAccessLogs = () => {
-  const useSWRWithBrowseParams = withDataSchema<AccessLogSchema>();
+  const useSWRWithBrowseParams = withDataSchema<ViewAccessLogSchema>();
 
   const browseAccessLogSWR = useSWRWithBrowseParams(`/view/access-log`, browseAccessLog, {}, {});
 
-  const accessLog = browseAccessLogSWR.data?.data.data.data.map((item) => ({ ...item, id: item.access_log_id }));
-
   return {
     browseAccessLog: {
-      data: accessLog,
+      data: browseAccessLogSWR.data?.data.data.data,
       refresh: browseAccessLogSWR.mutate,
       pagination: browseAccessLogSWR.pagination,
       filter: browseAccessLogSWR.filter,

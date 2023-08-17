@@ -2,7 +2,7 @@ import moment from 'moment';
 
 import BrowsingTable from '@/components/ui/6a/BrowsingTable';
 import PageTitle from '@/components/ui/PageTitle';
-import useViewAccessLogs, { AccessLogSchema } from '@/lib/view/useViewAccessLogs';
+import useViewAccessLogs, { ViewAccessLogSchema } from '@/lib/view/useViewAccessLogs';
 
 export default function AccessLog() {
   const { browseAccessLog, isLoading: accessLogIsLoading, error: accessLogError } = useViewAccessLogs();
@@ -11,10 +11,10 @@ export default function AccessLog() {
     <>
       <PageTitle text="Access Log" />
       <BrowsingTable<
-        AccessLogSchema,
+        ViewAccessLogSchema,
         {
           id: string;
-          Username: { text: string; path: string };
+          Username: string;
           'Student ID': string;
           'Real Name': string;
           IP: string;
@@ -31,6 +31,7 @@ export default function AccessLog() {
             sortable: true,
             width: 150,
             dataColumn: 'username',
+            formatLink: (datum) => `/admin/account/account/${datum.account_id}/setting`,
           },
           {
             name: 'Student ID',
@@ -128,7 +129,7 @@ export default function AccessLog() {
         ]}
         data={browseAccessLog.data}
         dataToRow={({
-          account_id,
+          access_log_id,
           username,
           student_id,
           real_name,
@@ -136,13 +137,9 @@ export default function AccessLog() {
           resource_path,
           request_method,
           access_time,
-          id,
         }) => ({
-          id: String(id),
-          Username: {
-            text: username ?? '',
-            path: `/admin/account/account/${account_id}/setting`,
-          },
+          id: String(access_log_id),
+          Username: username ?? '',
           'Student ID': student_id ?? '',
           'Real Name': real_name ?? '',
           IP: ip,
