@@ -23,18 +23,22 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface Option<T extends string | number> {
+interface Option<T extends string | number | readonly string[]> {
   label: string;
   value: T;
 }
 
-interface MultiSelectProps<T extends string | number> {
+interface MultiSelectProps<T extends string | number | readonly string[]> {
   options: Option<T>[];
   value: T[];
   setValue: (newValue: T[]) => void;
 }
 
-export default function MultiSelect<T extends string | number>({ options, value, setValue }: MultiSelectProps<T>) {
+export default function MultiSelect<T extends string | number | readonly string[]>({
+  options,
+  value,
+  setValue,
+}: MultiSelectProps<T>) {
   const classes = useStyles();
 
   return (
@@ -65,9 +69,9 @@ export default function MultiSelect<T extends string | number>({ options, value,
             Select all
           </MenuItem>
           {options.map((option) => (
-            <MenuItem key={option.value} value={option.value} className={classes.selectList}>
+            <MenuItem key={String(option.value)} value={option.value} className={classes.selectList}>
               <CustomCheckbox isChecked={value.indexOf(option.value) > -1} />
-              <ListItemText className={classes.listItem} primary />
+              <ListItemText className={classes.listItem} primary={option.label} />
             </MenuItem>
           ))}
         </Select>

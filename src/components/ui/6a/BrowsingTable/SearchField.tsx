@@ -1,51 +1,89 @@
-import { FilterItem, FilterOperand, FilterOperator } from '@/hooks/useBrowseParams/types';
+import { FilterItem, FilterOperator } from '@/hooks/useBrowseParams/types';
 
 import MultiSelectSearchField from './MultiSelectSearchField';
 import SelectSearchField from './SelectSearchField';
 import TextSearchField from './TextSearchField';
 import { DataSchemaBase, FilterConfigItem } from './types';
 
-const SearchField = <DataSchema extends DataSchemaBase>({
-  filterConfigItem,
-  filter,
-  setFilter,
-  createFilter,
-}: {
-  filterConfigItem: FilterConfigItem<DataSchema>;
-  filter: FilterItem<DataSchema, keyof DataSchema, FilterOperator>[];
+interface SearchFieldProps<DataSchema extends DataSchemaBase> {
+  filterConfig: FilterConfigItem<DataSchema>;
+  filterValue: FilterItem<DataSchema, keyof DataSchema, FilterOperator>[];
   setFilter: (
     reducer: (
       state: FilterItem<DataSchema, keyof DataSchema, FilterOperator>[],
     ) => FilterItem<DataSchema, keyof DataSchema, FilterOperator>[],
   ) => void;
-  createFilter: <K extends keyof DataSchema, T extends FilterOperator>(
-    column: K,
-    operator: T,
-    operand: FilterOperand<T, DataSchema[K]> | string | string[] | [string, string],
-  ) => FilterItem<DataSchema, K, T>;
-}) => {
-  const { type, dataColumn, operator } = filterConfigItem;
+}
+
+const SearchField = <DataSchema extends DataSchemaBase>({
+  filterConfig,
+  filterValue,
+  setFilter,
+}: SearchFieldProps<DataSchema>) => {
+  const { type } = filterConfig;
 
   switch (type) {
     case 'TEXT':
       return (
         <TextSearchField
-          filter={filter[0]}
-          handleSearch={(newValue: string) => setFilter(() => [createFilter(dataColumn, operator, newValue)])}
+          filter={filterValue[0]}
+          handleSearch={(newValue: string) =>
+            setFilter(() =>
+              newValue === '' // Clear filter if input is empty
+                ? []
+                : [
+                    {
+                      column: filterConfig.dataColumn,
+                      operator: filterConfig.operator,
+                      operand: newValue,
+                    },
+                  ],
+            )
+          }
         />
       );
     case 'ENUM_SINGLE':
-      return (
+      return filterConfig.multi ? (
         <SelectSearchField
-          options={filterConfigItem.options}
-          handleSearch={(newValue: string) => setFilter(() => [createFilter(dataColumn, operator, newValue)])}
+          multi
+          options={filterConfig.options}
+          handleSearch={(newValue) => setFilter(() => newValue)}
+        />
+      ) : (
+        <SelectSearchField
+          multi={false}
+          options={filterConfig.options}
+          handleSearch={(newValue) =>
+            setFilter(() => [
+              {
+                column: filterConfig.dataColumn,
+                operator: filterConfig.operator,
+                operand: newValue,
+              },
+            ])
+          }
         />
       );
     case 'ENUM_MULTI':
-      return (
+      return filterConfig.multi ? (
         <MultiSelectSearchField
-          options={filterConfigItem.options}
-          handleSearch={(newValue: string[]) => setFilter(() => [createFilter(dataColumn, operator, newValue)])}
+          multi
+          options={filterConfig.options}
+          handleSearch={(newValue) => setFilter(() => newValue.flat())}
+        />
+      ) : (
+        <MultiSelectSearchField
+          multi={false}
+          options={filterConfig.options}
+          handleSearch={(newValue) =>
+            setFilter(() => [
+              {
+                column: filterConfig.dataColumn,
+                operator: filterConfig.operator,
+                operand: newValue as DataSchema[keyof DataSchema][],
+              },
+            ])
+          }
         />
       );
     default:
