@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import { getMemberSubmissionStatistics } from './fetchers';
 
 const useMemberSubmissionStatistics = (challengeId: number) => {
-  const getMemberSubmissionStatisticsSWR = useSWR(`/challenge/${challengeId}/statistics/summary`, () =>
+  const getMemberSubmissionStatisticsSWR = useSWR(`/challenge/${challengeId}/statistics/member-submission`, () =>
     getMemberSubmissionStatistics({ challenge_id: challengeId }),
   );
 
