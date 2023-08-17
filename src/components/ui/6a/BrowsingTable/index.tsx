@@ -111,7 +111,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
         {hasFilter && (
           <div className={classes.filterWrapper}>
             <div className={classes.searchFields}>
-              <FormControl variant="outlined" style={{ flexShrink: 7 }}>
+              <FormControl variant="outlined" style={{ flexShrink: 7, height: '40px' }}>
                 <Select
                   autoWidth
                   className={classes.filterSelect}
