@@ -20,8 +20,8 @@ import useChallenge from '@/lib/challenge/useChallenge';
 import useChallengeStatistics from '@/lib/challenge/useChallengeStatistics';
 import useMemberSubmissionStatistics from '@/lib/challenge/useMemberSubmissionStatistics';
 import useChallengeTasks from '@/lib/task/useChallengeTasks';
-import useUser from '@/lib/user/useUser';
 import useUserClasses from '@/lib/user/useUserClasses';
+import useAccountSummaries from '@/lib/accountSummary/useAccountSummaries';
 
 /* eslint indent: 0 */
 
@@ -103,7 +103,7 @@ export default function ChallengeStatistics({
   const { challengeStatistics, downloadAllSubmissions, downloadAllPlagiarismReports } = useChallengeStatistics(Number(challengeId));
   const { tasks } = useChallengeTasks(Number(challengeId));
   const { accountClasses } = useUserClasses();
-  const { account } = useUser();
+  
 
   const [statisticsData, setStatisticsData] = useState<StatisticsProp[]>([]);
   const [scoreboardTitle, setScoreboardTitle] = useState(accountColumn);
@@ -119,6 +119,9 @@ export default function ChallengeStatistics({
   const [memberSubmissionStatisticsById, memberSubmissionStatisticIds] = useReduxStateShape(
     memberSubmissionStatistics?.data?.member
   );
+  const accountIds = memberSubmissionStatisticIds.map((item) => String(item));
+  const { accountSummaries } = useAccountSummaries(accountIds);
+  const [accountSummariesById, accountSummaryIds] = useReduxStateShape(accountSummaries);
 
   const role = useMemo(
     () => accountClasses?.filter((item) => item.class_id === Number(classId))[0].role,
@@ -155,15 +158,16 @@ export default function ChallengeStatistics({
       setScoreboardTitle(accountColumn.concat(problemList, essayList));
 
       // set table content
-      const memberSubmissionList = memberSubmissionStatisticIds?.map((member) => {
+      const memberSubmissionList = accountSummaryIds?.map((member) => {
+
         const memberChallengeDetail = {} as MemberChallengeDetailProp;
         memberChallengeDetail.id = memberSubmissionStatisticsById[member].id;
-      
-        if (account) {
-          memberChallengeDetail.username = account.username;
-          memberChallengeDetail.student_id = account.student_id;
-          memberChallengeDetail.real_name = account.real_name;
-          memberChallengeDetail.path = `${window.location.origin}/user-profile/${account.id}`;
+        const classMember = accountSummariesById[member];
+        if (classMember) {
+          memberChallengeDetail.username = classMember.username;
+          memberChallengeDetail.student_id = classMember.student_id;
+          memberChallengeDetail.real_name = classMember.real_name;
+          memberChallengeDetail.path = `${window.location.origin}/user-profile/${classMember.id}`;
         }
         const problemScores = memberSubmissionStatisticsById[member].problem_scores;       
         if (problemScores) {
@@ -191,7 +195,8 @@ export default function ChallengeStatistics({
   }, [
     courseId,
     classId,
-    account,
+    accountSummariesById,
+    accountSummaryIds,
     challenge,
     challengeStatistics,
     memberSubmissionStatistics,
