@@ -250,6 +250,26 @@ export default function Sidebar({ open, onClose }) {
           mode="challenge"
         />
       </Route>
+      <Route exact path="/6a/my-class/:courseId/:classId/challenge/:challengeId/statistics">
+        <Challenge
+          classNames={classes}
+          history={history}
+          location={location}
+          open={open}
+          onClose={onClose}
+          mode="challenge"
+        />
+      </Route>
+      <Route exact path="/6a/my-class/:courseId/:classId/challenge/:challengeId/setting">
+        <Challenge
+          classNames={classes}
+          history={history}
+          location={location}
+          open={open}
+          onClose={onClose}
+          mode="challenge"
+        />
+      </Route>
       <Route exact path="/6a/my-class/:courseId/:classId/challenge/:challengeId/problem/:problemId">
         <Challenge
           classNames={classes}

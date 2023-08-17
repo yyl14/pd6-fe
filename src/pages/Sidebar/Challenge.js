@@ -335,7 +335,7 @@ export default function Challenge({ classNames, history, location, mode, open, o
               {itemList.map((item) => (
                 <ListItem
                   button
-                  key={item.path}
+                  key={item?.path}
                   onClick={() => history.push(item.path)}
                   className={
                     location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item
