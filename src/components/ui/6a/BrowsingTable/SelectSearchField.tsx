@@ -39,7 +39,7 @@ const SelectSearchField = <DataSchema extends DataSchemaBase>({
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
 
   const handleSearchClick = () => {
-    const selectedOptionValue = options.at(selectedOptionIndex)!.value;
+    const selectedOptionValue = options.at(selectedOptionIndex)?.value;
     if (multi) {
       handleSearch(selectedOptionValue as FilterItem<DataSchema, keyof DataSchema, FilterOperator>[]);
     } else {
