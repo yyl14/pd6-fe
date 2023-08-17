@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
   Button,
-  Typography,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
+  IconButton,
+  InputAdornment,
   Snackbar,
+  TextField,
+  Typography,
   makeStyles,
   withStyles,
-  InputAdornment,
-  IconButton,
 } from '@material-ui/core';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import PageTitle from '../../ui/PageTitle';
-import AutoTable from '../../ui/AutoTable';
-import FileUploadArea from '../../ui/FileUploadArea';
-import Icon from '../../ui/icon/index';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { addAccount, downloadAccountFile, importAccount } from '../../../actions/admin/account';
 import { browseAccountWithDefaultStudentId } from '../../../actions/api/view';
+import AutoTable from '../../ui/AutoTable';
+import FileUploadArea from '../../ui/FileUploadArea';
+import PageTitle from '../../ui/PageTitle';
+import Icon from '../../ui/icon/index';
 
 const useStyles = makeStyles((theme) => ({
   addDialogGap: {
@@ -78,10 +78,10 @@ export default function AccountList() {
       setIsDisabled(selectedFile.length === 0);
     } else if (showAddDialog) {
       setIsDisabled(
-        addInputs.realName === ''
-          || addInputs.username === ''
-          || addInputs.password1 === ''
-          || addInputs.password2 === '',
+        addInputs.realName === '' ||
+          addInputs.username === '' ||
+          addInputs.password1 === '' ||
+          addInputs.password2 === '',
       );
     }
   }, [
@@ -239,7 +239,7 @@ export default function AccountList() {
           'Real Name': item.real_name,
           link: `/admin/account/account/${item.id}/setting`,
         })}
-        buttons={(
+        buttons={
           <>
             <Button variant="outlined" color="primary" onClick={() => setShowAddDialog(true)}>
               <Icon.Add />
@@ -248,7 +248,7 @@ export default function AccountList() {
               Import
             </Button>
           </>
-        )}
+        }
       />
       <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} maxWidth="sm">
         <DialogTitle id="dialog-slide-title">
@@ -362,11 +362,7 @@ export default function AccountList() {
             Nickname: String (Optional)
           </Typography>
           <Typography variant="body2">
-            Notice that PDOGS only accept files encoded in
-            {' '}
-            <b>ASCII / UTF-8</b>
-            {' '}
-            charset.
+            Notice that PDOGS only accept files encoded in <b>ASCII / UTF-8</b> charset.
           </Typography>
         </DialogContent>
         <DialogContent>

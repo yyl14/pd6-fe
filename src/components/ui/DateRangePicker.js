@@ -1,6 +1,6 @@
 import { FormControl, makeStyles, TextField } from '@material-ui/core';
 import moment from 'moment';
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { DateRange } from 'react-date-range';
 
 const useStyles = makeStyles((theme) => ({
@@ -90,9 +90,7 @@ const dateFormatExamples = [
 ];
 const timeFormatExamples = ['9:10', '13:15', '1530', '150', '930', '900'];
 
-export default function DateRangePicker({
-  className = '', value, setValue, vertical,
-}) {
+export default function DateRangePicker({ className = '', value, setValue, vertical }) {
   const classes = useStyles();
 
   const [startDate, setStartDate] = useState('');

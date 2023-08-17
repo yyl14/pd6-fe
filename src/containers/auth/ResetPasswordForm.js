@@ -1,21 +1,21 @@
-import { useEffect, useState } from 'react';
-import React, { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useHistory } from 'react-router-dom';
 import {
   Button,
-  TextField,
-  Typography,
   Card,
   CardContent,
-  InputAdornment,
-  IconButton,
   Dialog,
   DialogActions,
   DialogTitle,
-  makeStyles,
+  IconButton,
+  InputAdornment,
   Snackbar,
+  TextField,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import { userResetPassword } from '../../actions/user/auth';
 
 const useStyles = makeStyles(() => ({

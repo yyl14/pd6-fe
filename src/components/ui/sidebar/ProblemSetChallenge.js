@@ -1,19 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
-} from '@material-ui/core';
-import Icon from '../icon/index';
+import { fetchChallenge, fetchClass, fetchCourse } from '../../../actions/common/common';
 import { browseTasksUnderChallenge } from '../../../actions/myClass/challenge';
-import { fetchClass, fetchCourse, fetchChallenge } from '../../../actions/common/common';
+import Icon from '../icon/index';
 
-export default function ProblemSetChallenge({
-  classNames, history, location, mode, open, onClose,
-}) {
-  const {
-    courseId, classId, challengeId, problemId, submissionId,
-  } = useParams();
+export default function ProblemSetChallenge({ classNames, history, location, mode, open, onClose }) {
+  const { courseId, classId, challengeId, problemId, submissionId } = useParams();
   const baseURL = '/problem-set';
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
@@ -163,7 +157,7 @@ export default function ProblemSetChallenge({
               {itemList.map((item) => (
                 <ListItem
                   button
-                  key={item.id}
+                  key={item.text}
                   onClick={() => history.push(item.path)}
                   className={
                     location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item

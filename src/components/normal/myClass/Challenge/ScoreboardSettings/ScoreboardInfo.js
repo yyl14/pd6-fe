@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import {
-  Typography, Button, Snackbar, Dialog, DialogTitle, DialogContent, DialogActions,
-} from '@material-ui/core';
-import { useSelector, useDispatch } from 'react-redux';
-import AlignedText from '../../../../ui/AlignedText';
-import SimpleBar from '../../../../ui/SimpleBar';
-import SimpleTable from '../../../../ui/SimpleTable';
-import PageTitle from '../../../../ui/PageTitle';
+import { deleteScoreboard, readScoreboard, viewTeamProjectScoreboard } from '../../../../../actions/api/scoreboard';
 import { readProblemInfo } from '../../../../../actions/myClass/problem';
 import { fetchTeams } from '../../../../../actions/myClass/team';
-import { readScoreboard, viewTeamProjectScoreboard, deleteScoreboard } from '../../../../../actions/api/scoreboard';
+import AlignedText from '../../../../ui/AlignedText';
+import PageTitle from '../../../../ui/PageTitle';
+import SimpleBar from '../../../../ui/SimpleBar';
+import SimpleTable from '../../../../ui/SimpleTable';
 import ScoreboardEdit from './ScoreboardEdit';
 
 const scoreboardBasicTitle = [
@@ -41,9 +39,7 @@ const scoreboardBasicTitle = [
 ];
 
 export default function ScoreboardInfo() {
-  const {
-    courseId, classId, challengeId, scoreboardId,
-  } = useParams();
+  const { courseId, classId, challengeId, scoreboardId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
   const authToken = useSelector((state) => state.auth.token);
@@ -199,13 +195,13 @@ export default function ScoreboardInfo() {
       {role === 'MANAGER' && (
         <SimpleBar
           title="Delete Scoreboard"
-          childrenButtons={(
+          childrenButtons={
             <>
               <Button color="secondary" onClick={() => setDeletePopup(true)}>
                 Delete
               </Button>
             </>
-          )}
+          }
         >
           <Typography variant="body1">
             Once you delete a scoreboard, there is no going back. Please be certain.

@@ -1,9 +1,8 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Typography, makeStyles } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import AutoTable from '../../ui/AutoTable';
 import { fetchProblems } from '../../../actions/common/common';
+import AutoTable from '../../ui/AutoTable';
 
 const useStyles = makeStyles(() => ({
   pageHeader: {
@@ -20,7 +19,6 @@ export default function ProblemList() {
   const classes = useSelector((state) => state.classes);
   const courses = useSelector((state) => state.courses);
   const problems = useSelector((state) => state.problem);
-  const error = useSelector((state) => state.error.common.common);
 
   return (
     <>
@@ -56,33 +54,40 @@ export default function ProblemList() {
         refetch={(browseParams, ident) => {
           dispatch(fetchProblems(authToken, classId, browseParams, ident));
         }}
-        refetchErrors={[error.fetchProblems]}
         columns={[
           {
             name: 'Score',
             align: 'center',
             type: 'string',
+            width: 100,
+            minWidth: 80,
           },
           {
             name: 'Challenge Title',
             align: 'center',
             type: 'link',
+            width: 200,
+            minWidth: 140,
           },
           {
             name: 'Task Label',
             align: 'center',
             type: 'string',
+            width: 150,
+            minWidth: 120,
           },
           {
             name: 'Task Title',
             align: 'center',
-            width: 'auto',
+            width: 300,
             type: 'string',
+            minWidth: 150,
           },
         ]}
         reduxData={problems}
         reduxDataToRows={(item) => ({
-          Score: '', // TODO: get score
+          id: item.problem_id,
+          Score: problems.byId[item.problem_id].score,
           'Challenge Title': {
             text: item.challenge_title,
             path: `/problem-set/${courseId}/${classId}/challenge/${item.challenge_id}`,

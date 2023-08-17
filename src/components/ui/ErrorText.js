@@ -1,6 +1,4 @@
-import React from 'react';
 import { Typography } from '@material-ui/core';
-// import { MdError } from 'react-icons/md';
 import Icon from './icon/index';
 
 export default function ErrorText({ children, className }) {

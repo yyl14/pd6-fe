@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
+import { judgementConstants, viewConstants } from '../actions/api/constant';
 import { submissionConstants } from '../actions/myClass/constant';
-import { viewConstants, judgementConstants } from '../actions/api/constant';
 
 const prototype = {
   id: null,

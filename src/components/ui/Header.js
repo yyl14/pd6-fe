@@ -1,17 +1,13 @@
-import React, {
-  useState, useEffect, useRef, useMemo,
-} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, makeStyles, useTheme } from '@material-ui/core';
 import { format } from 'date-fns';
 import moment from 'moment';
-import {
-  makeStyles, Typography, AppBar, Toolbar, useTheme,
-} from '@material-ui/core';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ResizeObserver from 'react-resize-observer';
-import Icon from './icon/index';
+import { useHistory, useLocation } from 'react-router-dom';
 import { userLogout } from '../../actions/user/auth';
 import { userBrowseAnnouncement } from '../../actions/user/user';
+import Icon from './icon/index';
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -314,16 +310,16 @@ export default function Header() {
               basePath: '/my-class',
               path: '/my-class',
             },
-            {
-              text: 'All Class',
-              basePath: '/all-class',
-              path: '/all-class',
-            },
             // {
-            //   text: 'Problem Set',
-            //   basePath: '/problem-set',
-            //   path: '/problem-set',
+            //   text: 'All Class',
+            //   basePath: '/all-class',
+            //   path: '/all-class',
             // },
+            {
+              text: 'Problem Set',
+              basePath: '/problem-set',
+              path: '/problem-set',
+            },
             // {
             //   text: 'PDAO',
             //   basePath: '/pdao',
@@ -342,16 +338,16 @@ export default function Header() {
           ]);
         } else {
           setItemList([
-            {
-              text: 'All Class',
-              basePath: '/all-class',
-              path: '/all-class',
-            },
             // {
-            //   text: 'Problem Set',
-            //   basePath: '/problem-set',
-            //   path: '/problem-set',
+            //   text: 'All Class',
+            //   basePath: '/all-class',
+            //   path: '/all-class',
             // },
+            {
+              text: 'Problem Set',
+              basePath: '/problem-set',
+              path: '/problem-set',
+            },
             // {
             //   text: 'PDAO',
             //   basePath: '/pdao',
@@ -440,8 +436,9 @@ export default function Header() {
     setNotifyList(ns);
     setUnreadNotifyExist(
       ns.filter(
-        (notify) => moment(new Date()).diff(moment(notify.post_time), 'days') >= 0
-          && moment(notify.expire_time).diff(moment(new Date()), 'days') >= 0,
+        (notify) =>
+          moment(new Date()).diff(moment(notify.post_time), 'days') >= 0 &&
+          moment(notify.expire_time).diff(moment(new Date()), 'days') >= 0,
       ).length !== 0,
     );
   }, [user.notifications]);
@@ -513,8 +510,9 @@ export default function Header() {
                 <div className={classes.notificationDropdownContent} ref={notifyRef}>
                   {notifyList.map(
                     // between post time and expire time
-                    (notify) => moment().diff(moment(notify.post_time), 'days') >= 0
-                      && moment(notify.expire_time).diff(moment(new Date()), 'days') >= 0 && (
+                    (notify) =>
+                      moment().diff(moment(notify.post_time), 'days') >= 0 &&
+                      moment(notify.expire_time).diff(moment(new Date()), 'days') >= 0 && (
                         <div
                           key={notify.title}
                           className={
@@ -537,7 +535,7 @@ export default function Header() {
                             {notify.content}
                           </Typography>
                         </div>
-                    ),
+                      ),
                   )}
                 </div>
               )}

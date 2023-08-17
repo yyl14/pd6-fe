@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useBeforeunload } from 'react-beforeunload';
 import {
-  Typography,
   Button,
   Card,
-  TextField,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  TextField,
+  Typography,
   makeStyles,
 } from '@material-ui/core';
+import { useEffect, useRef, useState } from 'react';
+import { useBeforeunload } from 'react-beforeunload';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { fetchClassMemberWithAccountReferral, replaceClassMembers } from '../../../../actions/common/common';
 import { getUserInfo } from '../../../../actions/user/auth';
 
@@ -65,9 +65,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 /* This is a level 4 component (page component) */
-const MemberEdit = ({
-  dispatch, authToken, classes, classId, backToMemberList,
-}) => {
+const MemberEdit = ({ dispatch, authToken, classes, classId, backToMemberList }) => {
   const classNames = useStyles();
 
   const accounts = useSelector((state) => state.accounts);
@@ -168,8 +166,8 @@ const MemberEdit = ({
   const handleChangeTA = (e) => {
     setTA(e.target.value);
     setTAChanged(
-      e.target.value
-        !== classes.byId[classId].memberIds
+      e.target.value !==
+        classes.byId[classId].memberIds
           .map((id) => members.byId[id])
           .filter((item) => item.role === 'MANAGER')
           .map((member) => accounts.byId[member.account_id].referral)
@@ -179,8 +177,8 @@ const MemberEdit = ({
   const handleChangeStudent = (e) => {
     setStudent(e.target.value);
     setStudentChanged(
-      e.target.value
-        !== classes.byId[classId].memberIds
+      e.target.value !==
+        classes.byId[classId].memberIds
           .map((id) => members.byId[id])
           .filter((item) => item.role === 'NORMAL')
           .map((member) => accounts.byId[member.account_id].referral)
@@ -190,8 +188,8 @@ const MemberEdit = ({
   const handleChangeGuest = (e) => {
     setGuest(e.target.value);
     setGuestChanged(
-      e.target.value
-        !== classes.byId[classId].memberIds
+      e.target.value !==
+        classes.byId[classId].memberIds
           .map((id) => members.byId[id])
           .filter((item) => item.role === 'GUEST')
           .map((member) => accounts.byId[member.account_id].referral)
@@ -215,21 +213,24 @@ const MemberEdit = ({
 
     if (TAChanged || studentChanged || guestChanged) {
       const TAStudentDuplicateList = TA.split('\n').filter(
-        (id) => student
-          .split('\n')
-          .map((accountReferral) => accountReferral)
-          .indexOf(id) !== -1,
+        (id) =>
+          student
+            .split('\n')
+            .map((accountReferral) => accountReferral)
+            .indexOf(id) !== -1,
       );
       const guestStudentDuplicateList = guest.split('\n').filter(
-        (id) => student
-          .split('\n')
-          .map((accountReferral) => accountReferral)
-          .indexOf(id) !== -1,
+        (id) =>
+          student
+            .split('\n')
+            .map((accountReferral) => accountReferral)
+            .indexOf(id) !== -1,
       );
       const guestTADuplicateList = guest.split('\n').filter(
-        (id) => TA.split('\n')
-          .map((accountReferral) => accountReferral)
-          .indexOf(id) !== -1,
+        (id) =>
+          TA.split('\n')
+            .map((accountReferral) => accountReferral)
+            .indexOf(id) !== -1,
       );
 
       const combinedDuplicateList = handleBlankList(

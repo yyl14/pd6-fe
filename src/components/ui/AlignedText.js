@@ -1,5 +1,5 @@
 import { makeStyles, Typography } from '@material-ui/core';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -53,9 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AlignedText({
-  text, children, maxWidth, textColor, childrenType,
-}) {
+export default function AlignedText({ text, children, maxWidth, textColor, childrenType }) {
   const classes = useStyles();
   const ref = useRef();
   const [textHeight, setTextHeight] = useState();

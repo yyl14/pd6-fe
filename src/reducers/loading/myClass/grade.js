@@ -1,5 +1,5 @@
-import { gradeConstants } from '../../../actions/myClass/constant';
 import { viewConstants } from '../../../actions/api/constant';
+import { gradeConstants } from '../../../actions/myClass/constant';
 
 const initialState = {
   fetchGrade: false,

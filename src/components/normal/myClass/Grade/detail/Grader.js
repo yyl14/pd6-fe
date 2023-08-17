@@ -1,8 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
 import { makeStyles, Typography } from '@material-ui/core';
-import SimpleBar from '../../../../ui/SimpleBar';
+import { Link } from 'react-router-dom';
 import AlignedText from '../../../../ui/AlignedText';
+import SimpleBar from '../../../../ui/SimpleBar';
 
 const useStyles = makeStyles((theme) => ({
   textLink: {

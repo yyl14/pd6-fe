@@ -1,17 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-// https://mathpix.com/docs/mathpix-markdown/overview
-import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
-import { Typography, makeStyles, Grid } from '@material-ui/core';
+import { Grid, Typography, makeStyles } from '@material-ui/core';
+import { MathpixLoader, MathpixMarkdown } from 'mathpix-markdown-it';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import SimpleBar from '../../../../ui/SimpleBar';
-import SimpleTable from '../../../../ui/SimpleTable';
-import SampleTestArea from '../../../../ui/SampleTestArea';
-
-import NoMatch from '../../../../noMatch';
-import GeneralLoading from '../../../../GeneralLoading';
-
-import { browseTestcase } from '../../../../../actions/myClass/problem';
+import { browseAssistingData, browseTestcase } from '../../actions/myClass/problem';
+import GeneralLoading from '../GeneralLoading';
+import SampleTestArea from '../ui/SampleTestArea';
+import SimpleBar from '../ui/SimpleBar';
+import SimpleTable from '../ui/SimpleTable';
 
 const useStyles = makeStyles(() => ({
   sampleArea: {
@@ -35,26 +31,21 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-/* This is a level 4 component (page component) */
 export default function CodingProblemInfo() {
-  const { courseId, classId, problemId } = useParams();
+  const { problemId } = useParams();
   const classNames = useStyles();
 
   const dispatch = useDispatch();
 
-  const classes = useSelector((state) => state.classes.byId);
-  const courses = useSelector((state) => state.courses.byId);
   const problems = useSelector((state) => state.problem.byId);
   const testcases = useSelector((state) => state.testcases.byId);
-  // const [status, setStatus] = useState(true);
+  // const [status, setStatus] = useState(false);
 
   const authToken = useSelector((state) => state.auth.token);
-  // const error = useSelector((state) => state.error);
   const loading = useSelector((state) => state.loading.myClass.problem);
 
   const [sampleDataIds, setSampleDataIds] = useState([]);
   const [testcaseDataIds, setTestcaseDataIds] = useState([]);
-  // console.log('uploadError: ', uploadError);
 
   // parse filename to get sample number
   const sampleTransToNumber = useCallback(
@@ -93,7 +84,7 @@ export default function CodingProblemInfo() {
       setSampleDataIds(samplesId);
       setTestcaseDataIds(testcasesId);
       // if (testcasesId.length === 0) {
-      //   setStatus(true);
+      //   setStatus(false);
       // } else {
       //   setStatus(!testcases[testcasesId[0]].is_disabled);
       // }
@@ -102,26 +93,21 @@ export default function CodingProblemInfo() {
 
   useEffect(() => {
     dispatch(browseTestcase(authToken, problemId));
+    dispatch(browseAssistingData(authToken, problemId));
   }, [authToken, dispatch, problemId]);
 
   if (loading.readProblem || loading.browseTestcase || loading.browseAssistingData) {
     return <GeneralLoading />;
   }
 
-  if (problems[problemId] === undefined || classes[classId] === undefined || courses[courseId] === undefined) {
-    return <NoMatch />;
-  }
-
   return (
     <>
       <SimpleBar title="Title">
-        <Typography variant="body2">
-          {problems[problemId] === undefined ? 'error' : problems[problemId].title}
-        </Typography>
+        <Typography variant="body2">{problems[problemId] === undefined ? '' : problems[problemId].title}</Typography>
       </SimpleBar>
       <SimpleBar title="Description">
         <MathpixLoader>
-          <MathpixMarkdown text={problems[problemId].description} htmlTags />
+          <MathpixMarkdown text={problems[problemId].description} />
         </MathpixLoader>
       </SimpleBar>
       <SimpleBar title="About Input and Output">
@@ -171,13 +157,20 @@ export default function CodingProblemInfo() {
               width: 200,
               type: 'string',
             },
+            {
+              id: 'note',
+              label: 'Note',
+              minWidth: 50,
+              align: 'center',
+              width: 100,
+              type: 'string',
+            },
           ]}
           data={sampleDataIds.map((id) => ({
             id,
             no: sampleTransToNumber(id),
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
-            note: testcases[id].note,
           }))}
         />
         <div className={classNames.sampleArea}>
@@ -187,7 +180,7 @@ export default function CodingProblemInfo() {
                 <Typography variant="h6" className={classNames.sampleName}>
                   {`Sample ${sampleTransToNumber(id)}`}
                 </Typography>
-                <SampleTestArea input={testcases[id].input} output={testcases[id].output} note={testcases[id].note} />
+                <SampleTestArea input={testcases[id].input} output={testcases[id].output} />
               </Grid>
             ))}
           </Grid>
@@ -234,7 +227,9 @@ export default function CodingProblemInfo() {
             {
               id: 'note',
               label: 'Note',
+              minWidth: 50,
               align: 'center',
+              width: 100,
               type: 'string',
             },
           ]}
@@ -244,7 +239,6 @@ export default function CodingProblemInfo() {
             time_limit: testcases[id].time_limit,
             memory_limit: testcases[id].memory_limit,
             score: testcases[id].score,
-            note: testcases[id].note ? testcases[id].note : '',
           }))}
         />
       </SimpleBar>

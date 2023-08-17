@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
 import {
   Button,
-  TextField,
   Card,
   CardContent,
-  Link,
-  InputAdornment,
   IconButton,
+  InputAdornment,
+  Link,
+  TextField,
   Typography,
   makeStyles,
 } from '@material-ui/core';
-import { useSelector, useDispatch } from 'react-redux';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import { userSignIn } from '../../actions/user/auth';
 
@@ -157,16 +157,13 @@ export default function LoginForm() {
         </form>
 
         <Typography variant="body2" className={classNames.authLink}>
-          Need a new puppy?
-          {' '}
+          Need a new puppy?{' '}
           <Link component={RouterLink} to="/register">
             Register
-          </Link>
-          {' '}
+          </Link>{' '}
         </Typography>
         <Typography variant="body2" className={classNames.authLink}>
-          Lost your puppy?
-          {' '}
+          Lost your puppy?{' '}
           <Link component={RouterLink} to="/forget-username">
             Find username
           </Link>

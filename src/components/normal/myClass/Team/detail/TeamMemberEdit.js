@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from 'react';
 import {
-  makeStyles,
   Button,
-  Typography,
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Icon from '../../../../ui/icon/index';
-import SimpleBar from '../../../../ui/SimpleBar';
-import AlignedText from '../../../../ui/AlignedText';
-import SimpleTable from '../../../../ui/SimpleTable';
-import { editTeamMember, deleteTeamMember, addTeamMember } from '../../../../../actions/myClass/team';
+import { useParams } from 'react-router-dom';
 import { getAccountBatchByReferral } from '../../../../../actions/common/common';
+import { addTeamMember, deleteTeamMember, editTeamMember } from '../../../../../actions/myClass/team';
 import systemRoleTransformation from '../../../../../function/systemRoleTransformation';
+import AlignedText from '../../../../ui/AlignedText';
+import SimpleBar from '../../../../ui/SimpleBar';
+import SimpleTable from '../../../../ui/SimpleTable';
+import Icon from '../../../../ui/icon/index';
 
 const useStyles = makeStyles(() => ({
   select: {

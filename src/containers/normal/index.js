@@ -1,16 +1,15 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import { Switch, Route, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 
 import MyClass from './myClass';
-import AllClass from './allClass';
 import ProblemSet from './problemSet';
 
 import GeneralLoading from '../../components/GeneralLoading';
 import NoMatch from '../../components/noMatch';
-import Team from '../../components/system/team';
 import AccessLog from '../../components/system/accessLog';
+import Team from '../../components/system/team';
 
 export default function Normal() {
   const history = useHistory();
@@ -31,7 +30,6 @@ export default function Normal() {
       {/* For redirection */}
       <Route exact path="/my-class" component={MyClass} />
       <Route path="/my-class/:courseId/:classId" component={MyClass} />
-      <Route path="/all-class" component={AllClass} />
       <Route exact path="/problem-set" component={ProblemSet} />
       <Route path="/problem-set/:courseId/:classId" component={ProblemSet} />
       <Route exact path="/" component={GeneralLoading} />

@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
-  Typography,
   Button,
-  makeStyles,
-  TextField,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  TextField,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { editPeerReview } from '../../../../../actions/api/peerReview';
-import BasicInfo from './Element/BasicInfo';
 import SimpleBar from '../../../../ui/SimpleBar';
+import BasicInfo from './Element/BasicInfo';
 
 const useStyles = makeStyles((theme) => ({
   textfield: {

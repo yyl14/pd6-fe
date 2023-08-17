@@ -1,9 +1,6 @@
-import React from 'react';
-import {
-  Button, Typography,
-} from '@material-ui/core';
-import SimpleBar from '../../../../ui/SimpleBar';
+import { Button, Typography } from '@material-ui/core';
 import AlignedText from '../../../../ui/AlignedText';
+import SimpleBar from '../../../../ui/SimpleBar';
 
 export default function BasicInfo(props) {
   return (
@@ -12,9 +9,9 @@ export default function BasicInfo(props) {
         title="Team Information"
         buttons={
           props.isManager && (
-          <>
-            <Button onClick={() => props.handleEdit()}>Edit</Button>
-          </>
+            <>
+              <Button onClick={() => props.handleEdit()}>Edit</Button>
+            </>
           )
         }
       >

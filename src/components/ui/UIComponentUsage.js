@@ -1,38 +1,38 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import {
-  Typography,
   Button,
-  IconButton,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Card,
   CardContent,
-  Snackbar,
-  Link,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
   FormControlLabel,
+  IconButton,
+  InputLabel,
+  Link,
+  MenuItem,
+  Select,
+  Snackbar,
   Switch,
+  TextField,
+  Typography,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
-import Icon from './icon/index';
-import SampleTestArea from './SampleTestArea';
-import DateRangePicker from './DateRangePicker';
+import { useState } from 'react';
 import AlignedText from './AlignedText';
-import SimpleBar from './SimpleBar';
-import RadioGroupForm from './RadioGroupForm';
+import CustomCheckbox from './CustomCheckbox';
 import CustomTable from './CustomTable';
-import SimpleTable from './SimpleTable';
-import TableFilterCard from './TableFilterCard';
+import DateRangePicker from './DateRangePicker';
 import ErrorText from './ErrorText';
 import MultiSelect from './MultiSelect';
-import CustomCheckbox from './CustomCheckbox';
+import RadioGroupForm from './RadioGroupForm';
+import SampleTestArea from './SampleTestArea';
+import SimpleBar from './SimpleBar';
+import SimpleTable from './SimpleTable';
+import TableFilterCard from './TableFilterCard';
+import Icon from './icon/index';
 
 const useStyles = makeStyles((theme) => ({
   bigTitle: {
@@ -108,7 +108,7 @@ export default function UIComponentUsage() {
       key: 'selection',
     },
   ]);
-  const [tableData, setTableData] = useState([
+  const [tableData] = useState([
     {
       full_name: 'National Taiwan University',
       email_domain: 'ntu.edu.tw',
@@ -256,14 +256,14 @@ export default function UIComponentUsage() {
           <hr className={classes.divider} />
           <div className={classes.component}>
             <FormControlLabel
-              control={(
+              control={
                 <Switch
                   checked={switchStatus}
                   onChange={(e) => setSwitchStatus(e.target.checked)}
                   name="status"
                   color="primary"
                 />
-              )}
+              }
               label={switchStatus ? 'Enabled' : 'Disabled'}
             />
           </div>
@@ -361,11 +361,11 @@ export default function UIComponentUsage() {
               autoHideDuration={3000}
               message="This is a snackbar with button"
               onClose={() => setShowSnackbarWithButton(false)}
-              action={(
+              action={
                 <Link href onClick={() => setShowSnackbarWithButton(false)}>
                   <Typography variant="h6">Undo</Typography>
                 </Link>
-              )}
+              }
             />
           </div>
         </div>
@@ -450,11 +450,11 @@ export default function UIComponentUsage() {
           <CustomTable
             hasSearch
             searchPlaceholder="Institute / Email"
-            buttons={(
+            buttons={
               <>
                 <Button color="primary">Add institute</Button>
               </>
-            )}
+            }
             data={tableData}
             columns={[
               {
@@ -674,11 +674,11 @@ export default function UIComponentUsage() {
         <div className={classes.wideComponent}>
           <SimpleBar
             title="Basic Information"
-            buttons={(
+            buttons={
               <>
                 <Button>Edit</Button>
               </>
-            )}
+            }
           >
             <AlignedText text="Username" maxWidth="lg" childrenType="text">
               <Typography variant="body1">admin</Typography>
@@ -686,11 +686,11 @@ export default function UIComponentUsage() {
           </SimpleBar>
           <SimpleBar
             title="Rename Class"
-            childrenButtons={(
+            childrenButtons={
               <>
                 <Button color="secondary">Rename</Button>
               </>
-            )}
+            }
           >
             <Typography variant="body1">
               Once you change the class name, all related information will be affected. Please be certain.

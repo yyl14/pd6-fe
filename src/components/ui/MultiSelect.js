@@ -1,8 +1,5 @@
-import {
-  makeStyles, FormControl, Select, MenuItem, ListItemText,
-} from '@material-ui/core';
+import { FormControl, ListItemText, MenuItem, Select, makeStyles } from '@material-ui/core';
 
-import React from 'react';
 import CustomCheckbox from './CustomCheckbox';
 
 const useStyles = makeStyles(() => ({

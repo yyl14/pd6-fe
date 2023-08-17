@@ -1,7 +1,13 @@
-import React, { useState, useEffect } from 'react';
 import {
-  Typography,
+  Button,
+  FormControl,
+  IconButton,
+  LinearProgress,
+  Menu,
+  MenuItem,
   Paper,
+  Select,
+  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -9,21 +15,15 @@ import {
   TableHead,
   TableRow,
   TextField,
-  Button,
-  MenuItem,
-  FormControl,
-  Select,
-  IconButton,
-  Snackbar,
-  LinearProgress,
-  Menu,
+  Typography,
 } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { autoTableMount, autoTableFlush } from '../../actions/component/autoTable';
-import Icon from './icon/index';
+import { autoTableFlush, autoTableMount } from '../../actions/component/autoTable';
 import AutoTableHead from './AutoTableHead';
+import Icon from './icon/index';
 
 /* eslint react-hooks/exhaustive-deps: 0 */
 
@@ -378,9 +378,9 @@ function AutoTable({
   // page change from input
   useEffect(() => {
     if (
-      tableState.byId[ident]
-      && Number(pageInput) <= Math.ceil(tableState.byId[ident].totalCount / rowsPerPage)
-      && pageInput >= 1
+      tableState.byId[ident] &&
+      Number(pageInput) <= Math.ceil(tableState.byId[ident].totalCount / rowsPerPage) &&
+      pageInput >= 1
     ) {
       setCurPage(Number(pageInput) - 1);
     } else if (tableState.byId[ident]) {
@@ -494,7 +494,9 @@ function AutoTable({
   useEffect(() => {
     if (isError) {
       setRowData(
-        displayedReduxData.map((item) => (item ? reduxDataToRows(item) : columns.reduce((acc, col) => ({ ...acc, [col.name]: '' }), {}))),
+        displayedReduxData.map((item) =>
+          item ? reduxDataToRows(item) : columns.reduce((acc, col) => ({ ...acc, [col.name]: '' }), {}),
+        ),
       );
     }
   }, [refetchErrors, displayedReduxData]);

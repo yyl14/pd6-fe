@@ -1,25 +1,22 @@
-import React from 'react';
 import { makeStyles } from '@material-ui/core';
-import {
-  Switch, Route, useHistory, useLocation,
-} from 'react-router-dom';
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 
 import Account from './sidebar/Account';
-import Course from './sidebar/Course';
-import System from './sidebar/System';
-import MyProfile from './sidebar/MyProfile';
-import UserProfile from './sidebar/UserProfile';
-import MyClass from './sidebar/MyClass';
-import Challenge from './sidebar/Challenge';
-import PeerReview from './sidebar/PeerReview';
-import Submission from './sidebar/Submission';
-import Grade from './sidebar/Grade';
-import Team from './sidebar/Team';
 import AllClass from './sidebar/AllClass';
 import AllClassChallenge from './sidebar/AllClassChallenge';
+import Challenge from './sidebar/Challenge';
+import Course from './sidebar/Course';
+import Empty from './sidebar/Empty';
+import Grade from './sidebar/Grade';
+import MyClass from './sidebar/MyClass';
+import MyProfile from './sidebar/MyProfile';
+import PeerReview from './sidebar/PeerReview';
 import ProblemSet from './sidebar/ProblemSet';
 import ProblemSetChallenge from './sidebar/ProblemSetChallenge';
-import Empty from './sidebar/Empty';
+import Submission from './sidebar/Submission';
+import System from './sidebar/System';
+import Team from './sidebar/Team';
+import UserProfile from './sidebar/UserProfile';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -490,24 +487,10 @@ export default function Sidebar({ open, onClose }) {
 
       {/* {Problem Set} */}
       <Route exact path="/problem-set">
-        <ProblemSet
-          classNames={classes}
-          history={history}
-          location={location}
-          open={open}
-          onClose={onClose}
-          mode="main"
-        />
+        <ProblemSet classNames={classes} history={history} location={location} open={open} onClose={onClose} />
       </Route>
       <Route exact path="/problem-set/:courseId/:classId">
-        <ProblemSet
-          classNames={classes}
-          history={history}
-          location={location}
-          open={open}
-          onClose={onClose}
-          mode="main"
-        />
+        <ProblemSet classNames={classes} history={history} location={location} open={open} onClose={onClose} />
       </Route>
       <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId">
         <ProblemSetChallenge

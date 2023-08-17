@@ -1,15 +1,13 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  Switch, Route, useParams, useHistory,
-} from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Switch, useHistory, useParams } from 'react-router-dom';
 
-import Challenge from './challenge';
 import ChallengeList from '../../../components/normal/myClass/Challenge/ChallengeList';
-import Submission from './submission';
+import Challenge from './challenge';
 import Grade from './grade';
-import Team from './team';
 import Member from './member';
+import Submission from './submission';
+import Team from './team';
 
 import { fetchClass, fetchCourse } from '../../../actions/common/common';
 

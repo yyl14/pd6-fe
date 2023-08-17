@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
-} from '@material-ui/core';
 import Icon from '../icon/index';
 
-export default function System({
-  classes, history, location, mode, open, onClose,
-}) {
+export default function System({ classes, history, location, mode, open, onClose }) {
   const { announcementId, languageId } = useParams();
   const announcementList = useSelector((state) => state.announcements);
   const languageList = useSelector((state) => state.submitLangs);
@@ -120,8 +116,8 @@ export default function System({
   };
 
   if (
-    (announcementId !== undefined && announcementList.byId[announcementId] === undefined)
-    || (languageId !== undefined && languageList.byId[languageId] === undefined)
+    (announcementId !== undefined && announcementList.byId[announcementId] === undefined) ||
+    (languageId !== undefined && languageList.byId[languageId] === undefined)
   ) {
     return (
       <div>

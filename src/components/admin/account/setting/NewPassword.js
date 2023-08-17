@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import {
   Button,
-  TextField,
-  makeStyles,
-  InputAdornment,
-  IconButton,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  InputAdornment,
+  TextField,
   Typography,
+  makeStyles,
 } from '@material-ui/core';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import SimpleBar from '../../../ui/SimpleBar';
-import AlignedText from '../../../ui/AlignedText';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { editPassword } from '../../../../actions/admin/account';
+import AlignedText from '../../../ui/AlignedText';
+import SimpleBar from '../../../ui/SimpleBar';
 
 const useStyles = makeStyles(() => ({
   buttons: {
@@ -102,11 +102,11 @@ export default function NewPassword() {
       ) : (
         <SimpleBar
           title="Password"
-          buttons={(
+          buttons={
             <>
               <Button onClick={() => setEdit(true)}>Edit</Button>
             </>
-          )}
+          }
         />
       )}
       <Dialog open={dialog} maxWidth="md">

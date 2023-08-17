@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import SimpleBar from '../../../../../ui/SimpleBar';
@@ -14,14 +14,16 @@ export default function Overview({ peerReviewId }) {
 
   useEffect(() => {
     if (peerReviews[peerReviewId]) {
-      const newTableData = peerReviews[peerReviewId].reviewRecordIds.sort((a, b) => a - b).map((id, i) => {
-        const item = peerReviewRecords.byId[id];
-        return ({
-          id: `Peer${i + 1}`,
-          peer: `Peer${i + 1}`,
-          status: item && item.submit_time !== null ? 'Done' : 'Not Yet',
+      const newTableData = peerReviews[peerReviewId].reviewRecordIds
+        .sort((a, b) => a - b)
+        .map((id, i) => {
+          const item = peerReviewRecords.byId[id];
+          return {
+            id: `Peer${i + 1}`,
+            peer: `Peer${i + 1}`,
+            status: item && item.submit_time !== null ? 'Done' : 'Not Yet',
+          };
         });
-      });
       setTableData(newTableData);
     }
   }, [peerReviewId, peerReviewRecords.byId, peerReviews]);

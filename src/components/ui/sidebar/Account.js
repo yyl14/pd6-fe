@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
-} from '@material-ui/core';
+import useInstitute from '../../../lib/institute/useInstitute';
 import Icon from '../icon/index';
 
-export default function Account({
-  classes, history, location, mode, open, onClose,
-}) {
+export default function Account({ classes, history, location, mode, open, onClose }) {
   const { instituteId, accountId } = useParams();
-  const instituteList = useSelector((state) => state.institutes);
+
+  const { institute } = useInstitute(instituteId);
+
   const accountList = useSelector((state) => state.accounts);
   const baseURL = '/admin/account';
   const [display, setDisplay] = useState('unfold');
@@ -43,13 +42,13 @@ export default function Account({
           path: `${baseURL}/account`,
         },
       ]);
-    } else if (mode === 'institute' && instituteList.byId[instituteId]) {
+    } else if (mode === 'institute' && institute) {
       setArrow(
         <IconButton className={classes.arrow} onClick={goBackToInstitute}>
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
-      setTitle(instituteList.byId[instituteId].abbreviated_name);
+      setTitle(institute.abbreviated_name);
       setItemList([
         {
           text: 'Setting',
@@ -72,8 +71,7 @@ export default function Account({
         },
       ]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, history, mode, accountList, instituteList, accountId, instituteId]);
+  }, [location.pathname, history, mode, accountList, accountId, instituteId, institute, classes.arrow]);
 
   const foldAccount = () => {
     setDisplay('fold');
@@ -84,8 +82,8 @@ export default function Account({
   };
 
   if (
-    (instituteId !== undefined && instituteList.byId[instituteId] === undefined)
-    || (accountId !== undefined && accountList.byId[accountId] === undefined)
+    (instituteId !== undefined && institute === undefined) ||
+    (accountId !== undefined && accountList.byId[accountId] === undefined)
   ) {
     return (
       <div>

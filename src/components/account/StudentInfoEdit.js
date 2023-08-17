@@ -1,22 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
   Button,
-  Typography,
   Card,
   CardContent,
-  makeStyles,
-  TextField,
-  FormControl,
-  Select,
-  MenuItem,
-  Snackbar,
   CircularProgress,
+  FormControl,
+  MenuItem,
+  Select,
+  Snackbar,
+  TextField,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { addStudentCard } from '../../actions/user/user';
-import StudentInfoCard from './StudentInfoCard';
-import SimpleBar from '../ui/SimpleBar';
+import useReduxStateShape from '../../hooks/useReduxStateShape';
+import useInstitutes from '../../lib/institute/useInstitutes';
 import AlignedText from '../ui/AlignedText';
+import SimpleBar from '../ui/SimpleBar';
+import StudentInfoCard from './StudentInfoCard';
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -89,9 +91,11 @@ export default function StudentInfoEdit(props) {
     studentId: '',
     email: '',
   });
-  const institutes = useSelector((state) => state.institutes.byId);
-  const institutesId = useSelector((state) => state.institutes.allIds);
-  const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
+
+  const { institutes } = useInstitutes();
+  const [institutesById, institutesId] = useReduxStateShape(institutes);
+
+  const enableInstitutesId = institutesId.filter((item) => !institutesById[item].is_disabled);
 
   const accountId = useSelector((state) => state.user.id);
   const authToken = useSelector((state) => state.auth.token);
@@ -139,10 +143,12 @@ export default function StudentInfoEdit(props) {
       }
       return;
     }
-    const inputInstituteId = institutesId.filter((id) => institutes[id].full_name === addInputs.institute);
+    const inputInstituteId = institutesId.filter((id) => institutesById[id].full_name === addInputs.institute);
     if (inputInstituteId.length !== 0) {
       dispatch(
-        addStudentCard(authToken, accountId, inputInstituteId[0], addInputs.email, addInputs.studentId, () => setSnackbar(true)),
+        addStudentCard(authToken, accountId, inputInstituteId[0], addInputs.email, addInputs.studentId, () =>
+          setSnackbar(true),
+        ),
       );
     }
     setAdd(false);
@@ -154,9 +160,9 @@ export default function StudentInfoEdit(props) {
     setAddInputs((input) => ({ ...input, [name]: value }));
 
     if (name === 'institute') {
-      const inputInstituteId = institutesId.filter((id) => institutes[id].full_name === value);
+      const inputInstituteId = institutesId.filter((id) => institutesById[id].full_name === value);
       if (inputInstituteId.length !== 0) {
-        setEmailTail(`@${institutes[inputInstituteId[0]].email_domain}`);
+        setEmailTail(`@${institutesById[inputInstituteId[0]].email_domain}`);
       } else {
         setEmailTail('@ntu.edu.tw');
       }
@@ -242,8 +248,8 @@ export default function StudentInfoEdit(props) {
                   <FormControl variant="outlined" className={classes.selectList}>
                     <Select value={addInputs.institute} name="institute" onChange={(e) => handleChange(e)}>
                       {enableInstitutesId.map((item) => (
-                        <MenuItem key={item} value={institutes[item].full_name}>
-                          {institutes[item].full_name}
+                        <MenuItem key={item} value={institutesById[item].full_name}>
+                          {institutesById[item].full_name}
                         </MenuItem>
                       ))}
                     </Select>

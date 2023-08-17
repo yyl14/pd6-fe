@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { Route, Switch, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import MemberList from '../../../components/admin/course/MemberList';
+import { Route, Switch, useParams } from 'react-router-dom';
+import { fetchClass, fetchCourse } from '../../../actions/common/common';
 import ClassSetting from '../../../components/admin/course/ClassSetting';
+import MemberList from '../../../components/admin/course/MemberList';
 import NoMatch from '../../../components/noMatch';
-import { fetchCourse, fetchClass } from '../../../actions/common/common';
 
 /* This is a level 3 container (main page container) */
 export default function Class() {
@@ -31,10 +31,10 @@ export default function Class() {
 
   useEffect(() => {
     if (
-      !loading.admin.course.addClass
-      && !loading.admin.course.renameClass
-      && !loading.admin.course.deleteClass
-      && !loading.admin.course.editMembers
+      !loading.admin.course.addClass &&
+      !loading.admin.course.renameClass &&
+      !loading.admin.course.deleteClass &&
+      !loading.admin.course.editMembers
     ) {
       dispatch(fetchClass(authToken, classId));
     }

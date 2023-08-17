@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  Button, TextField, Typography, makeStyles,
-} from '@material-ui/core';
-import SimpleBar from '../ui/SimpleBar';
-import AlignedText from '../ui/AlignedText';
+import { Button, TextField, Typography, makeStyles } from '@material-ui/core';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { editAccount } from '../../actions/user/user';
+import AlignedText from '../ui/AlignedText';
+import SimpleBar from '../ui/SimpleBar';
 
 const useStyles = makeStyles(() => ({
   buttons: {

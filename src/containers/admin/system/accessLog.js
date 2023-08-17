@@ -1,5 +1,4 @@
-import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import AccessLogComponent from '../../../components/admin/system/AccessLog';
 import NoMatch from '../../../components/noMatch';

@@ -1,8 +1,7 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import moment from 'moment';
-import { Link } from 'react-router-dom';
 import { makeStyles, Typography } from '@material-ui/core';
+import moment from 'moment';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import AlignedText from '../../../../../ui/AlignedText';
 import SimpleBar from '../../../../../ui/SimpleBar';
@@ -33,19 +32,13 @@ export default function GraderInfo({ accountId, reviewedTime }) {
           </Typography>
         </AlignedText>
         <AlignedText text="Student ID" childrenType="text">
-          <Typography variant="body1">
-            {accounts[accountId].student_id}
-          </Typography>
+          <Typography variant="body1">{accounts[accountId].student_id}</Typography>
         </AlignedText>
         <AlignedText text="Real Name" childrenType="text">
-          <Typography variant="body1">
-            {accounts[accountId].real_name}
-          </Typography>
+          <Typography variant="body1">{accounts[accountId].real_name}</Typography>
         </AlignedText>
         <AlignedText text="Reviewed Time" childrenType="text">
-          <Typography variant="body1">
-            {reviewedTime && moment(reviewedTime).format('YYYY-MM-DD, HH:mm:ss')}
-          </Typography>
+          <Typography variant="body1">{reviewedTime && moment(reviewedTime).format('YYYY-MM-DD, HH:mm:ss')}</Typography>
         </AlignedText>
       </>
     </SimpleBar>

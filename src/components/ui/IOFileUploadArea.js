@@ -1,18 +1,18 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import {
-  makeStyles,
-  Typography,
   Button,
   Paper,
+  Snackbar,
   Table,
-  TableContainer,
-  TableHead,
   TableBody,
   TableCell,
+  TableContainer,
+  TableHead,
   TableRow,
-  Snackbar,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Icon from './icon/index';
 
 const useStyles = makeStyles((theme) => ({
@@ -90,9 +90,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function IOFileUploadArea({
-  text, uploadCase, selectedFile, setSelectedFile,
-}) {
+export default function IOFileUploadArea({ text, uploadCase, selectedFile, setSelectedFile }) {
   const classes = useStyles();
 
   const [tableData, setTableData] = useState([]);
@@ -218,9 +216,7 @@ export default function IOFileUploadArea({
         </label>
         {fileNum !== 0 && (
           <Typography variant="body2" className={classes.fieldAlignedText}>
-            {fileNum}
-            {' '}
-            files selected
+            {fileNum} files selected
           </Typography>
         )}
       </div>

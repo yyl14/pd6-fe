@@ -1,11 +1,9 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  Switch, Route, useHistory, useLocation,
-} from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
+import { fetchCourses } from '../../../actions/admin/course';
 import ClassList from '../../../components/admin/course/ClassList';
 import CourseSetting from '../../../components/admin/course/CourseSetting';
-import { fetchCourses } from '../../../actions/admin/course';
 
 import GeneralLoading from '../../../components/GeneralLoading';
 import NoMatch from '../../../components/noMatch';

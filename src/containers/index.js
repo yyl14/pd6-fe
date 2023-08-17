@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  Switch, Route, useHistory, useLocation,
-} from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 // import { makeStyles } from '@material-ui/core';
 // import { makeStyles, Fab } from '@material-ui/core';
 // import { Feedback } from '@material-ui/icons';
-import Normal from './normal';
-import Admin from './admin';
-import Account from './account';
-import User from './user';
-import MySubmission from './mySubmission';
-import Sidebar from '../components/ui/Sidebar';
-import Header from '../components/ui/Header';
 import { getUserInfo } from '../actions/user/auth';
+import FileDownloading from '../components/file/fileDownloading';
+import Header from '../components/ui/Header';
+import Sidebar from '../components/ui/Sidebar';
 import Icon from '../components/ui/icon';
 import '../styles/index.css';
+import Account from './account';
+import Admin from './admin';
+import MySubmission from './mySubmission';
+import Normal from './normal';
+import User from './user';
 
 // const useStyles = makeStyles(() => ({
 //   bugReport: {
@@ -46,15 +45,21 @@ function Index() {
         if (auth.tokenExpired) {
           localStorage.removeItem('token');
           localStorage.removeItem('id');
-          history.push('/login');
+          if (location.pathname !== '/') {
+            history.push(`/login?redirect_url=${location.pathname}`);
+          } else {
+            history.push('/login');
+          }
         } else {
           dispatch(getUserInfo(localStorage.getItem('id'), localStorage.getItem('token')));
         }
+      } else if (location.pathname !== '/') {
+        history.push(`/login?redirect_url=${location.pathname}`);
       } else {
         history.push('/login');
       }
     }
-  }, [auth.isAuthenticated, auth.tokenExpired, dispatch, history]);
+  }, [auth.isAuthenticated, auth.tokenExpired, dispatch, history, location.pathname]);
 
   useEffect(() => {
     if (auth.isAuthenticated && location.pathname === '/') {
@@ -67,7 +72,7 @@ function Index() {
           );
           history.push(`/my-class/${sortedClasses[0].course_id}/${sortedClasses[0].class_id}/challenge`);
         } else {
-          history.push('/all-class');
+          history.push('/problem-set');
         }
       } else {
         history.push('/my-profile');
@@ -109,6 +114,7 @@ function Index() {
                 <Route path="/my-profile" component={Account} />
                 <Route path="/my-submission" component={MySubmission} />
                 <Route exact path="/user-profile/:accountId" component={User} />
+                <Route path="/file" component={FileDownloading} />
                 <Route path="/" component={Normal} />
               </Switch>
             </div>

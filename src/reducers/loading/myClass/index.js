@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux';
-import grade from './grade';
+import submissions from '../../submissions';
 import challenge from './challenge';
+import essay from './essay';
+import essaySubmission from './essaySubmission';
+import grade from './grade';
+import judgements from './judgements';
 import member from './member';
+import peerReview from './peerReview';
 import problem from './problem';
 import team from './team';
-import submissions from '../../submissions';
-import judgements from './judgements';
-import essaySubmission from './essaySubmission';
-import essay from './essay';
-import peerReview from './peerReview';
 
 export default combineReducers({
   grade,

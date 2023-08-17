@@ -72,4 +72,4 @@ const deleteEssay = (token, essayId, onSuccess) => async (dispatch) => {
   }
 };
 
-export { readEssay, editEssay, deleteEssay };
+export { deleteEssay, editEssay, readEssay };

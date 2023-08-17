@@ -1,20 +1,20 @@
 import {
   Button,
   Dialog,
-  DialogTitle,
-  DialogContent,
-  Typography,
-  DialogContentText,
   DialogActions,
-  makeStyles,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Snackbar,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import SimpleBar from '../../../../ui/SimpleBar';
-import AlignedText from '../../../../ui/AlignedText';
 import { deleteTeam } from '../../../../../actions/myClass/team';
+import AlignedText from '../../../../ui/AlignedText';
+import SimpleBar from '../../../../ui/SimpleBar';
 
 const useStyles = makeStyles(() => ({}));
 
@@ -29,7 +29,19 @@ export default function TeamDelete(props) {
   const [deleteError, setDeleteError] = useState('');
 
   const handleDelete = () => {
-    dispatch(deleteTeam(authToken, teamId, () => { history.push(`/my-class/${courseId}/${classId}/team`); }, (error) => { setDeleteError(error); setErrorPopup(true); }));
+    dispatch(
+      deleteTeam(
+        authToken,
+        teamId,
+        () => {
+          history.push(`/my-class/${courseId}/${classId}/team`);
+        },
+        (error) => {
+          setDeleteError(error);
+          setErrorPopup(true);
+        },
+      ),
+    );
     setPopUp(false);
   };
 
@@ -37,7 +49,7 @@ export default function TeamDelete(props) {
     <div>
       <SimpleBar
         title="Delete Team"
-        childrenButtons={(
+        childrenButtons={
           <>
             <Button
               color="secondary"
@@ -48,7 +60,7 @@ export default function TeamDelete(props) {
               Delete
             </Button>
           </>
-        )}
+        }
       >
         <Typography>Once you delete a team, there is no going back. Please be certain.</Typography>
       </SimpleBar>

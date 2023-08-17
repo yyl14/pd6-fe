@@ -1,7 +1,8 @@
-import agent from '../agent';
-import { commonConstants } from './constant';
-import { autoTableConstants } from '../component/constant';
 import browseParamsTransForm from '../../function/browseParamsTransform';
+import agent from '../agent';
+import { autoTableConstants } from '../component/constant';
+import { readProblemBestScore } from '../myClass/problem';
+import { commonConstants } from './constant';
 
 const getInstitutes = () => (dispatch) => {
   dispatch({ type: commonConstants.GET_INSTITUTE_START });
@@ -23,41 +24,43 @@ const getInstitutes = () => (dispatch) => {
 };
 
 // WITH BROWSE API
-const fetchClassMembers = (token, classId, browseParams, tableId = null) => async (dispatch) => {
-  try {
-    const config = {
-      headers: {
-        'auth-token': token,
-      },
-      params: browseParamsTransForm(browseParams),
-    };
-    dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_START });
-    const res = await agent.get(`/class/${classId}/member`, config);
-    const { data, total_count } = res.data.data;
+const fetchClassMembers =
+  (token, classId, browseParams, tableId = null) =>
+  async (dispatch) => {
+    try {
+      const config = {
+        headers: {
+          'auth-token': token,
+        },
+        params: browseParamsTransForm(browseParams),
+      };
+      dispatch({ type: commonConstants.FETCH_CLASS_MEMBERS_START });
+      const res = await agent.get(`/class/${classId}/member`, config);
+      const { data, total_count } = res.data.data;
 
-    dispatch({
-      type: commonConstants.FETCH_CLASS_MEMBERS_SUCCESS,
-      payload: {
-        classId,
-        data,
-      },
-    });
-    dispatch({
-      type: autoTableConstants.AUTO_TABLE_UPDATE,
-      payload: {
-        tableId,
-        totalCount: total_count,
-        dataIds: data.map((item) => item.member_id),
-        offset: browseParams.offset,
-      },
-    });
-  } catch (error) {
-    dispatch({
-      type: commonConstants.FETCH_CLASS_MEMBERS_FAIL,
-      error,
-    });
-  }
-};
+      dispatch({
+        type: commonConstants.FETCH_CLASS_MEMBERS_SUCCESS,
+        payload: {
+          classId,
+          data,
+        },
+      });
+      dispatch({
+        type: autoTableConstants.AUTO_TABLE_UPDATE,
+        payload: {
+          tableId,
+          totalCount: total_count,
+          dataIds: data.map((item) => item.member_id),
+          offset: browseParams.offset,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: commonConstants.FETCH_CLASS_MEMBERS_FAIL,
+        error,
+      });
+    }
+  };
 
 // Used ONLY in class member edit
 const fetchClassMemberWithAccountReferral = (token, classId) => async (dispatch) => {
@@ -229,64 +232,44 @@ const fetchAccount = (token, accountId) => async (dispatch) => {
 };
 
 // get file URL and download
-const downloadFile = (token, file) => async (dispatch) => {
-  // in 'file' parameter, you should include uuid, filename, and as_attachment as attributes
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-    params: {
-      filename: file.filename,
-      as_attachment: file.as_attachment,
-    },
+const downloadFile =
+  (token, file, onSuccess = null, onError = null) =>
+  async (dispatch) => {
+    // in 'file' parameter, you should include uuid, filename, and as_attachment as attributes
+    const config = {
+      headers: {
+        'auth-token': token,
+      },
+      params: {
+        filename: file.filename,
+        as_attachment: file.as_attachment,
+      },
+    };
+    try {
+      dispatch({ type: commonConstants.DOWNLOAD_FILE_START });
+      const res = await agent.get(`/s3-file/${file.uuid}/url`, config);
+
+      fetch(res.data.data.url).then((t) =>
+        t.blob().then((b) => {
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(b);
+          a.setAttribute('download', file.filename);
+          a.click();
+        }),
+      );
+
+      dispatch({
+        type: commonConstants.DOWNLOAD_FILE_SUCCESS,
+      });
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      dispatch({
+        type: commonConstants.DOWNLOAD_FILE_FAIL,
+        error,
+      });
+      if (onError) onError();
+    }
   };
-  try {
-    dispatch({ type: commonConstants.DOWNLOAD_FILE_START });
-    const res = await agent.get(`/s3-file/${file.uuid}/url`, config);
-
-    fetch(res.data.data.url).then((t) => t.blob().then((b) => {
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(b);
-      a.setAttribute('download', file.filename);
-      a.click();
-    }));
-
-    dispatch({
-      type: commonConstants.DOWNLOAD_FILE_SUCCESS,
-    });
-  } catch (error) {
-    dispatch({
-      type: commonConstants.DOWNLOAD_FILE_FAIL,
-      error,
-    });
-  }
-};
-
-// get file URL only
-const fetchDownloadFileUrl = (token, file) => async (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-    params: {
-      filename: file.filename,
-      as_attachment: file.as_attachment,
-    },
-  };
-  try {
-    dispatch({ type: commonConstants.FETCH_DOWNLOAD_FILE_URL_START });
-    const res = await agent.get(`/s3-file/${file.uuid}/url`, config);
-    dispatch({
-      type: commonConstants.FETCH_DOWNLOAD_FILE_URL_SUCCESS,
-      payload: { uuid: file.uuid, url: res.data.data.url },
-    });
-  } catch (error) {
-    dispatch({
-      type: commonConstants.FETCH_DOWNLOAD_FILE_URL_FAIL,
-      error,
-    });
-  }
-};
 
 // fetch all challenges and coding problems (no essay/peer review) under class
 const fetchAllChallengesProblems = (token, classId) => async (dispatch) => {
@@ -300,15 +283,17 @@ const fetchAllChallengesProblems = (token, classId) => async (dispatch) => {
   try {
     const res = await agent.get(`/class/${classId}/challenge`, config);
     const problems = await Promise.all(
-      res.data.data.data.map(async ({ id }) => agent
-        .get(`/challenge/${id}/task`, config)
-        .then((res2) => res2.data.data.problem)
-        .catch((error) => {
-          dispatch({
-            type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_FAIL,
-            error,
-          });
-        })),
+      res.data.data.data.map(async ({ id }) =>
+        agent
+          .get(`/challenge/${id}/task`, config)
+          .then((res2) => res2.data.data.problem)
+          .catch((error) => {
+            dispatch({
+              type: commonConstants.FETCH_ALL_CHALLENGES_PROBLEMS_FAIL,
+              error,
+            });
+          }),
+      ),
     );
     const newProblems = problems.flat();
     dispatch({
@@ -323,38 +308,41 @@ const fetchAllChallengesProblems = (token, classId) => async (dispatch) => {
   }
 };
 
-const fetchProblems = (token, classId, browseParams, tableId = null) => async (dispatch) => {
-  const config = {
-    headers: {
-      'auth-token': token,
-    },
-    params: browseParamsTransForm(browseParams),
-  };
-
-  try {
-    dispatch({ type: commonConstants.FETCH_PROBLEMS_START });
-    const res = await agent.get(`/class/${classId}/view/problem-set`, config);
-    const { data, total_count } = res.data.data;
-    dispatch({
-      type: commonConstants.FETCH_PROBLEMS_SUCCESS,
-      payload: data,
-    });
-    dispatch({
-      type: autoTableConstants.AUTO_TABLE_UPDATE,
-      payload: {
-        tableId,
-        totalCount: total_count,
-        dataIds: data.map((item) => item.problem_id),
-        offset: browseParams.offset,
+const fetchProblems =
+  (token, classId, browseParams, tableId = null) =>
+  async (dispatch) => {
+    const config = {
+      headers: {
+        'auth-token': token,
       },
-    });
-  } catch (error) {
-    dispatch({
-      type: commonConstants.FETCH_PROBLEMS_FAIL,
-      error,
-    });
-  }
-};
+      params: browseParamsTransForm(browseParams),
+    };
+
+    try {
+      dispatch({ type: commonConstants.FETCH_PROBLEMS_START });
+      const res = await agent.get(`/class/${classId}/view/problem-set`, config);
+      const { data, total_count } = res.data.data;
+      data.map((item) => dispatch(readProblemBestScore(token, item.problem_id)));
+      dispatch({
+        type: commonConstants.FETCH_PROBLEMS_SUCCESS,
+        payload: data,
+      });
+      dispatch({
+        type: autoTableConstants.AUTO_TABLE_UPDATE,
+        payload: {
+          tableId,
+          totalCount: total_count,
+          dataIds: data.map((item) => item.problem_id),
+          offset: browseParams.offset,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: commonConstants.FETCH_PROBLEMS_FAIL,
+        error,
+      });
+    }
+  };
 
 const getAccountBatch = (token, accountId) => async (dispatch) => {
   dispatch({ type: commonConstants.GET_ACCOUNT_BATCH_START });
@@ -377,53 +365,55 @@ const getAccountBatch = (token, accountId) => async (dispatch) => {
   }
 };
 
-const getAccountBatchByReferral = (token, account_referrals, onSuccess, onError, teamId = null, role = null) => async (dispatch) => {
-  try {
-    const config = {
-      headers: { 'auth-token': token },
-      params: { account_referrals: JSON.stringify([account_referrals]) },
-    };
-    dispatch({ type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_START });
-    const res = await agent.get('/account-summary/batch-by-account-referral', config);
-    if (res.data.data.length !== 0) {
-      const memberId = res.data.data[0].id;
-      if (teamId) {
+const getAccountBatchByReferral =
+  (token, account_referrals, onSuccess, onError, teamId = null, role = null) =>
+  async (dispatch) => {
+    try {
+      const config = {
+        headers: { 'auth-token': token },
+        params: { account_referrals: JSON.stringify([account_referrals]) },
+      };
+      dispatch({ type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_START });
+      const res = await agent.get('/account-summary/batch-by-account-referral', config);
+      if (res.data.data.length !== 0) {
+        const memberId = res.data.data[0].id;
+        if (teamId) {
+          dispatch({
+            type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_SUCCESS,
+            payload: { teamId, memberId },
+          });
+        }
+        onSuccess(res.data.data[0], role);
+      } else {
         dispatch({
-          type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_SUCCESS,
-          payload: { teamId, memberId },
+          type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_FAIL,
+          error: 'Member does not exist.',
         });
+        onError();
       }
-      onSuccess(res.data.data[0], role);
-    } else {
+    } catch (error) {
       dispatch({
         type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_FAIL,
-        error: 'Member does not exist.',
+        error,
       });
       onError();
     }
-  } catch (error) {
-    dispatch({
-      type: commonConstants.GET_ACCOUNT_BATCH_BY_REFERRAL_FAIL,
-      error,
-    });
-    onError();
-  }
-};
+  };
 
 export {
-  getInstitutes,
-  fetchClassMembers,
-  fetchClassMemberWithAccountReferral,
-  replaceClassMembers,
-  fetchCourse,
-  fetchClass,
-  fetchChallenge,
-  fetchAccount,
   browseSubmitLang,
   downloadFile,
-  fetchDownloadFileUrl,
+  fetchAccount,
   fetchAllChallengesProblems,
+  fetchChallenge,
+  fetchClass,
+  fetchClassMemberWithAccountReferral,
+  fetchClassMembers,
+  fetchCourse,
   fetchProblems,
   getAccountBatch,
   getAccountBatchByReferral,
+  getInstitutes,
+  replaceClassMembers
 };
+

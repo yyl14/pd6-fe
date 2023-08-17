@@ -1,8 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { Card, CardActions, CardContent, IconButton, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Typography, Card, CardContent, CardActions, IconButton,
-} from '@material-ui/core';
+import React, { useEffect, useRef, useState } from 'react';
 import CopyToClipboardButton from './CopyToClipboardButton';
 import Icon from './icon/index';
 
@@ -98,8 +96,8 @@ export default function SampleTestArea({ input, output, note = '' }) {
         } else if (inputRef.current.clientHeight + outputRef.current.clientHeight >= 148) {
           setTruncatePosition('noteTitle');
         } else if (
-          inputRef.current.clientHeight + outputRef.current.clientHeight + noteRef.current.clientHeight
-          >= 124
+          inputRef.current.clientHeight + outputRef.current.clientHeight + noteRef.current.clientHeight >=
+          124
           // inputRef.current.clientHeight + noteRef.current.clientHeight >= 198
         ) {
           setTruncatePosition('noteContent');

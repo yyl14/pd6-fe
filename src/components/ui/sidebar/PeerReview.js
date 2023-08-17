@@ -1,17 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton,
-} from '@material-ui/core';
 import Icon from '../icon/index';
 
-export default function PeerReview({
-  classNames, history, location, mode, open, onClose,
-}) {
-  const {
-    courseId, classId, challengeId, peerReviewId, accountId,
-  } = useParams();
+export default function PeerReview({ classNames, history, location, mode, open, onClose }) {
+  const { courseId, classId, challengeId, peerReviewId, accountId } = useParams();
   const baseURL = '/my-class';
   const challenges = useSelector((state) => state.challenges.byId);
   const classes = useSelector((state) => state.classes.byId);
@@ -71,9 +65,9 @@ export default function PeerReview({
         },
       ]);
     } else if (
-      mode === 'review'
-      && peerReviews[peerReviewId] !== undefined
-      && peerReviews[peerReviewId].reviewRecordIds !== undefined
+      mode === 'review' &&
+      peerReviews[peerReviewId] !== undefined &&
+      peerReviews[peerReviewId].reviewRecordIds !== undefined
     ) {
       if (userClasses.find((x) => x.class_id === Number(classId))?.role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
@@ -114,9 +108,9 @@ export default function PeerReview({
         );
       }
     } else if (
-      mode === 'receive'
-      && peerReviews[peerReviewId] !== undefined
-      && peerReviews[peerReviewId].receiveRecordIds !== undefined
+      mode === 'receive' &&
+      peerReviews[peerReviewId] !== undefined &&
+      peerReviews[peerReviewId].receiveRecordIds !== undefined
     ) {
       if (userClasses.find((x) => x.class_id === Number(classId))?.role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
@@ -166,8 +160,8 @@ export default function PeerReview({
   };
 
   if (
-    (courseId !== undefined && courses[courseId] === undefined)
-    || (classId !== undefined && classes[classId] === undefined)
+    (courseId !== undefined && courses[courseId] === undefined) ||
+    (classId !== undefined && classes[classId] === undefined)
   ) {
     return (
       <div>

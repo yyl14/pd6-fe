@@ -22,10 +22,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-yarn.lock
-
-*.lock
-
 /.vscode/c_cpp_properties.json
 
 .idea

@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useParams, useHistory } from 'react-router-dom';
-import {
-  Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions,
-} from '@material-ui/core';
-import SimpleBar from '../../../../ui/SimpleBar';
-import AlignedText from '../../../../ui/AlignedText';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 import { deleteGrade } from '../../../../../actions/myClass/grade';
+import AlignedText from '../../../../ui/AlignedText';
+import SimpleBar from '../../../../ui/SimpleBar';
 
 export default function GradeDelete(props) {
   const { courseId, classId, gradeId } = useParams();
@@ -34,7 +32,7 @@ export default function GradeDelete(props) {
     <>
       <SimpleBar
         title="Delete Grade"
-        childrenButtons={(
+        childrenButtons={
           <>
             <Button
               color="secondary"
@@ -45,7 +43,7 @@ export default function GradeDelete(props) {
               Delete
             </Button>
           </>
-        )}
+        }
       >
         <Typography variant="body1">Once you delete a grade, there is no going back. Please be certain.</Typography>
       </SimpleBar>

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Button, TextField, makeStyles } from '@material-ui/core';
 import moment from 'moment-timezone';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { editChallenge } from '../../../../actions/myClass/challenge';
 import { fetchChallenge } from '../../../../actions/common/common';
-import RadioGroupForm from '../../../ui/RadioGroupForm';
-import DateRangePicker from '../../../ui/DateRangePicker';
+import { editChallenge } from '../../../../actions/myClass/challenge';
 import AlignedText from '../../../ui/AlignedText';
+import DateRangePicker from '../../../ui/DateRangePicker';
+import RadioGroupForm from '../../../ui/RadioGroupForm';
 import SimpleBar from '../../../ui/SimpleBar';
 
 const useStyles = makeStyles(() => ({

@@ -1,33 +1,34 @@
-import { useState, useEffect } from 'react';
-import React, { useSelector, useDispatch } from 'react-redux';
 import {
   Button,
-  TextField,
-  Typography,
   Card,
   CardContent,
-  InputAdornment,
-  IconButton,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  FormHelperText,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormControl,
+  FormHelperText,
+  IconButton,
+  InputAdornment,
+  InputLabel,
   Link,
-  makeStyles,
+  MenuItem,
+  Select,
   Snackbar,
+  TextField,
+  Typography,
+  makeStyles,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { userRegister } from '../../actions/user/auth';
-import { getInstitutes } from '../../actions/common/common';
 import GeneralLoading from '../../components/GeneralLoading';
+import useReduxStateShape from '../../hooks/useReduxStateShape';
+import useInstitutes from '../../lib/institute/useInstitutes';
 
 const useStyles = makeStyles((theme) => ({
   authForm: {
@@ -67,9 +68,11 @@ export default function RegisterForm() {
   const loadingInstitute = useSelector((state) => state.loading.common.fetchInstitutes);
   const registerLoading = useSelector((state) => state.loading.user.auth.signup);
   const registerError = useSelector((state) => state.error.user.auth.signup);
-  const institutes = useSelector((state) => state.institutes.byId);
-  const institutesId = useSelector((state) => state.institutes.allIds);
-  const enableInstitutesId = institutesId.filter((item) => !institutes[item].is_disabled);
+
+  const { institutes } = useInstitutes();
+  const [institutesById, institutesId] = useReduxStateShape(institutes);
+
+  const enableInstitutesId = institutesId.filter((item) => !institutesById[item].is_disabled);
 
   const [nextPage, setNextPage] = useState(false);
 
@@ -115,12 +118,8 @@ export default function RegisterForm() {
 
   const labelName = ['realName', 'school', 'username', 'studentId', 'email', 'password', 'confirmPassword'];
 
-  useEffect(() => {
-    dispatch(getInstitutes());
-  }, [dispatch]);
-
   const transform = (school) => {
-    const ids = enableInstitutesId.filter((item) => institutes[item].full_name === school);
+    const ids = enableInstitutesId.filter((item) => institutesById[item].full_name === school);
     return ids.length === 0 ? 1 : ids[0];
   };
 
@@ -179,8 +178,8 @@ export default function RegisterForm() {
 
     if (name === 'confirmPassword' || name === 'password') {
       if (
-        checkPassword(inputs.password, value) === "Passwords don't match"
-        && checkPassword(inputs.confirmPassword, value) === "Passwords don't match"
+        checkPassword(inputs.password, value) === "Passwords don't match" &&
+        checkPassword(inputs.confirmPassword, value) === "Passwords don't match"
       ) {
         setErrors((input) => ({ ...input, confirmPassword: true }));
         setErrorTexts((input) => ({ ...input, confirmPassword: "Passwords don't match" }));
@@ -192,7 +191,7 @@ export default function RegisterForm() {
 
     // change email tail
     if (name === 'school') {
-      setEmailTail(`@${institutes[transform(value)].email_domain}`);
+      setEmailTail(`@${institutesById[transform(value)].email_domain}`);
     }
 
     if (name === 'username' && errorTexts[name] === 'Username Exists') {
@@ -313,8 +312,8 @@ export default function RegisterForm() {
                 <InputLabel id="demo-simple-select-outlined-label">School</InputLabel>
                 <Select id="school" name="school" value={inputs.school} onChange={handleChange} label="School">
                   {enableInstitutesId.map((item) => (
-                    <MenuItem key={item} value={institutes[item].full_name}>
-                      {institutes[item].full_name}
+                    <MenuItem key={item} value={institutesById[item].full_name}>
+                      {institutesById[item].full_name}
                     </MenuItem>
                   ))}
                 </Select>
@@ -353,8 +352,7 @@ export default function RegisterForm() {
               </div>
             </form>
             <Typography variant="body2" className={classNames.authLink}>
-              Already have a puppy?
-              {' '}
+              Already have a puppy?{' '}
               <Link component={RouterLink} to="/login">
                 Log in
               </Link>
@@ -435,17 +433,14 @@ export default function RegisterForm() {
                 }}
               />
               <div className={classNames.authButtons}>
-                <Button onClick={() => setNextPage(false)}>
-                  Back
-                </Button>
+                <Button onClick={() => setNextPage(false)}>Back</Button>
                 <Button onClick={() => onSubmit()} color="primary">
                   Register
                 </Button>
               </div>
             </form>
             <Typography variant="body2" className={classNames.authLink}>
-              Already have a puppy?
-              {' '}
+              Already have a puppy?{' '}
               <Link component={RouterLink} to="/login">
                 Log in
               </Link>

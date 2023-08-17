@@ -1,20 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { Button, TextField, Typography, makeStyles } from '@material-ui/core';
+import { MathpixLoader, MathpixMarkdown } from 'mathpix-markdown-it';
 import moment from 'moment';
-import {
-  Typography, Button, makeStyles, TextField,
-} from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { MathpixMarkdown, MathpixLoader } from 'mathpix-markdown-it';
+import { fetchChallenge } from '../../../../actions/common/common';
+import { editChallenge } from '../../../../actions/myClass/challenge';
+import { readProblemScore } from '../../../../actions/myClass/problem';
+import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
 import AlignedText from '../../../ui/AlignedText';
+import PageTitle from '../../../ui/PageTitle';
 import SimpleBar from '../../../ui/SimpleBar';
 import SimpleTable from '../../../ui/SimpleTable';
-import PageTitle from '../../../ui/PageTitle';
-import { readProblemScore } from '../../../../actions/myClass/problem';
-import { editChallenge } from '../../../../actions/myClass/challenge';
-import { fetchChallenge } from '../../../../actions/common/common';
-import GeneralLoading from '../../../GeneralLoading';
 
 const useStyles = makeStyles(() => ({
   descriptionField: {

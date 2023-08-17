@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
-import Profile from '../../components/userProfile/Profile';
 import { readAccount } from '../../actions/user/user';
+import Profile from '../../components/userProfile/Profile';
 
 function User() {
   const { accountId } = useParams();

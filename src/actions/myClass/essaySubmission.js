@@ -120,6 +120,4 @@ const browseEssaySubmission = (token, essayId) => async (dispatch) => {
   }
 };
 
-export {
-  uploadEssay, readEssaySubmission, reUploadEssay, downloadAllEssaySubmission, browseEssaySubmission,
-};
+export { browseEssaySubmission, downloadAllEssaySubmission, reUploadEssay, readEssaySubmission, uploadEssay };

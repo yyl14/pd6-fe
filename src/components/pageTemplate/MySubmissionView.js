@@ -1,28 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Typography, Snackbar } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
+import { Snackbar, Typography } from '@material-ui/core';
 import moment from 'moment';
-import AlignedText from '../../../ui/AlignedText';
-import AutoTable from '../../../ui/AutoTable';
-import SimpleBar from '../../../ui/SimpleBar';
-import PageTitle from '../../../ui/PageTitle';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { browseMySubmissionUnderProblem } from '../../actions/api/view';
 import {
+  readProblemBestScore,
   // viewMySubmissionUnderProblem,
   readProblemInfo,
-  readProblemBestScore,
-} from '../../../../actions/myClass/problem';
-import { browseMySubmissionUnderProblem } from '../../../../actions/api/view';
-import GeneralLoading from '../../../GeneralLoading';
-import NoMatch from '../../../noMatch';
-
-const TableIdent = 'My Submission Table';
+  readProblemScore,
+} from '../../actions/myClass/problem';
+import GeneralLoading from '../GeneralLoading';
+import NoMatch from '../noMatch';
+import AlignedText from '../ui/AlignedText';
+import AutoTable from '../ui/AutoTable';
+import PageTitle from '../ui/PageTitle';
+import SimpleBar from '../ui/SimpleBar';
 
 /* This is a level 4 component (page component) */
-export default function MySubmission() {
-  const {
-    courseId, classId, challengeId, problemId,
-  } = useParams();
+export default function MySubmission({ baseUrl, isProblemSet }) {
+  const { courseId, classId, challengeId, problemId } = useParams();
 
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.auth.token);
@@ -33,7 +30,6 @@ export default function MySubmission() {
   const judgments = useSelector((state) => state.judgments);
   const loading = useSelector((state) => state.loading.myClass.problem);
   const error = useSelector((state) => state.error.myClass.problem);
-  const viewLoading = useSelector((state) => state.loading.api.view);
   const viewError = useSelector((state) => state.error.api.view);
   const [showSnackbar, setShowSnackbar] = useState(false);
 
@@ -48,7 +44,7 @@ export default function MySubmission() {
   }, [authToken, dispatch, problemId]);
 
   if (challenges.byId[challengeId] === undefined || problems.byId[problemId] === undefined) {
-    if (viewLoading.browseMySubmissionUnderProblem || loading.readProblem || loading.readChallenge) {
+    if (loading.readProblem || loading.readChallenge) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -60,14 +56,27 @@ export default function MySubmission() {
         text={`${challenges.byId[challengeId].title} / ${problems.byId[problemId].challenge_label} / My Submission`}
       />
       <SimpleBar title="Submission Information">
-        <AlignedText text="My Best Score" childrenType="text">
-          <Typography variant="body1">{problems.byId[problemId].score?.toString() ?? '0'}</Typography>
+        <AlignedText
+          text={
+            isProblemSet
+              ? 'My Best Score'
+              : `My ${
+                  challenges.byId[challengeId].selection_type
+                    ? challenges.byId[challengeId].selection_type[0].concat(
+                        challenges.byId[challengeId].selection_type.slice(1).toLowerCase(),
+                      )
+                    : ''
+                } Score`
+          }
+          childrenType="text"
+        >
+          <Typography variant="body1">{problems.byId[problemId].score?.toString() ?? 0}</Typography>
         </AlignedText>
       </SimpleBar>
       <AutoTable
-        ident={TableIdent + problemId}
+        ident={`${baseUrl} submission table ${problemId}`}
         hasRefreshButton
-        refreshLoadings={[loading.submitCode]}
+        refreshLoadings={[loading.submitCode, loading.rejudgeSubmission]}
         hasFilter
         filterConfig={[
           {
@@ -121,7 +130,11 @@ export default function MySubmission() {
         defaultSort={['submit_time', 'DESC']}
         refetch={(browseParams, ident) => {
           dispatch(browseMySubmissionUnderProblem(authToken, accountId, problemId, browseParams, ident));
-          dispatch(readProblemBestScore(authToken, problemId));
+          if (isProblemSet) {
+            dispatch(readProblemBestScore(authToken, problemId));
+          } else {
+            dispatch(readProblemScore(authToken, problemId));
+          }
         }}
         refetchErrors={[viewError.browseMySubmissionUnderProblem]}
         columns={[
@@ -194,7 +207,7 @@ export default function MySubmission() {
               ? judgments.byId[item.latestJudgmentId].max_memory
               : '',
           'Submit Time': moment(item.submit_time).format('YYYY-MM-DD, HH:mm:ss'),
-          link: `/all-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${item.id}`,
+          link: `${baseUrl}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${item.id}`,
         })}
         hasLink
       />

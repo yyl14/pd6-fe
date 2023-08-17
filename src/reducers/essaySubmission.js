@@ -48,8 +48,8 @@ const allIds = (state = [], action) => {
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
     case essayConstants.UPLOAD_ESSAY_SUBMISSION_SUCCESS:
       return state.includes(action.payload.id) ? state : state.concat([action.payload.id]);
-      // case essayConstants.BROWSE_ESSAY_SUBMISSION_SUCCESS:
-      //   return action.payload.map((item) => item.id);
+    // case essayConstants.BROWSE_ESSAY_SUBMISSION_SUCCESS:
+    //   return action.payload.map((item) => item.id);
     case essayConstants.READ_ESSAY_SUCCESS: {
       const { submission } = action.payload;
       if (submission.length === 0) {
