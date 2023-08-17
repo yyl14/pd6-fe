@@ -27,9 +27,11 @@ export default function ProblemSet({ classNames, history, location, open, onClos
 
   useEffect(() => {
     if (currentCourseId !== undefined && currentClassId !== undefined) return;
-    const defaultCourseId = courses.allIds
+    const defaultCourse = courses.allIds
       .map((courseId) => courses.byId[courseId])
-      .sort((a, b) => a.name.localeCompare(b.name))[0].id;
+      .sort((a, b) => a.name.localeCompare(b.name))[0];
+    const defaultCourseId = defaultCourse && defaultCourse.id;
+    if (!defaultCourseId) return;
     if (courses.byId[defaultCourseId]) {
       const relatedClassIds = courses.byId[defaultCourseId].classIds;
       if (relatedClassIds && relatedClassIds.length > 0) {
