@@ -24,16 +24,10 @@ import { FilterInterface, PaginationInterface, RowsPerPageOption, SortInterface 
 
 import Icon from '../../icon/index';
 import SearchField from './SearchField';
-import { ColumnConfigItem, DataSchemaBase, FilterConfigItem, LinkType, RowSchemaBase } from './types';
+import { ColumnConfigItem, DataSchemaBase, FilterConfigItem, RowSchemaBase } from './types';
 import useStyles from './useStyles';
 
-const ROWS_PER_PAGE_OPTIONS: RowsPerPageOption[] = [10, 25, 50, 100];
-
-type BrowsingTableProps<DataSchema extends DataSchemaBase, RowSchema extends RowSchemaBase> = (
-  | { hasLink?: true; dataToRow: (data: DataSchema) => RowSchema & { link: string } }
-  | { hasLink?: false; dataToRow: (data: DataSchema) => RowSchema }
-) &
-  BrowsingTablePropsBase<DataSchema, RowSchema>;
+const ROWS_PER_PAGE_OPTIONS: readonly RowsPerPageOption[] = [10, 25, 50, 100];
 
 interface BrowsingTablePropsBase<DataSchema extends DataSchemaBase, RowSchema extends RowSchemaBase> {
   columnsConfig: ColumnConfigItem<DataSchema, RowSchema>[];
@@ -48,9 +42,15 @@ interface BrowsingTablePropsBase<DataSchema extends DataSchemaBase, RowSchema ex
   filter: FilterInterface<DataSchema>;
   sort: SortInterface<DataSchema>;
 
-  buttons: JSX.Element | false;
+  buttons?: JSX.Element | false;
   hasRefreshButton?: boolean; // eslint-disable-line react/require-default-props
 }
+
+type BrowsingTableProps<DataSchema extends DataSchemaBase, RowSchema extends RowSchemaBase> = (
+  | { hasLink?: true; dataToRow: (data: DataSchema) => RowSchema & { link: string } }
+  | { hasLink?: false; dataToRow: (data: DataSchema) => RowSchema }
+) &
+  BrowsingTablePropsBase<DataSchema, RowSchema>;
 
 function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowSchemaBase>({
   filterConfig,
@@ -63,7 +63,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
   pagination,
   filter,
   sort,
-  buttons,
+  buttons = false,
   hasRefreshButton = false,
   hasLink = false,
 }: BrowsingTableProps<DataSchema, RowSchema>) {
@@ -80,7 +80,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
     rowsPerPage,
     setRowsPerPage,
   } = pagination;
-  const { setFilter, createFilter, filter: filterValue } = filter;
+  const { setFilter, filter: filterValue } = filter;
   const { sort: sortValue, setSort, createSort } = sort;
 
   const [filteringIndex, setFilteringIndex] = useState(0);
@@ -128,12 +128,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
                 </Select>
               </FormControl>
             </div>
-            <SearchField
-              filter={filterValue}
-              filterConfigItem={filteringItem}
-              setFilter={setFilter}
-              createFilter={createFilter}
-            />
+            <SearchField filterValue={filterValue} filterConfig={filteringItem} setFilter={setFilter} />
             <div className={classes.buttons}>
               <Button disabled>
                 {/* TODO: Advanced search */}
@@ -259,14 +254,13 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
             </TableHead>
             <TableBody>
               {data
-                ?.map((datum) => dataToRow(datum))
-                .map((row) => (
+                ?.map((datum) => [dataToRow(datum), datum] as const)
+                .map(([row, datum]) => (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.id} className={classes.row}>
                     <TableCell key={`${row.id}-left`} className={classes.tableRowContainerLeftSpacing} />
                     {columnsConfig.map((column) => {
                       const value = row[column.name];
                       if (column.type === 'link') {
-                        const linkValue = value as LinkType;
                         return (
                           <React.Fragment key={`${row.id}-${String(column.name)}`}>
                             <TableCell className={classes.tableColumnLeftSpacing} />
@@ -275,25 +269,24 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
                               style={{ minWidth: column.minWidth, width: column.width, maxWidth: column.width }}
                               align={column.align}
                             >
-                              <Link to={linkValue.path} className={classes.textLink}>
-                                {linkValue.text}
+                              <Link to={column.formatLink(datum)} className={classes.textLink}>
+                                {value}
                               </Link>
                             </TableCell>
                           </React.Fragment>
                         );
                       }
-                      const stringValue = value as string;
                       return (
                         <React.Fragment key={`${row.id}-${String(column.name)}`}>
                           <TableCell className={classes.tableColumnLeftSpacing} />
                           <TableCell
                             align={column.align}
-                            className={`${
-                              column.colors && column.colors[stringValue] && classes[column.colors[stringValue]]
-                            } ${classes.tableBodyCell}`}
+                            className={`${column.colors && column.colors[value] && classes[column.colors[value]]} ${
+                              classes.tableBodyCell
+                            }`}
                             style={{ minWidth: column.minWidth, width: column.width, maxWidth: column.width }}
                           >
-                            {stringValue}
+                            {value}
                           </TableCell>
                         </React.Fragment>
                       );
@@ -304,7 +297,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
                         align="right"
                         className={`${classes.stickyArrowCell} ${classes.tableCellHover}`}
                       >
-                        <Link to={row.link as string} className={classes.detailLink}>
+                        <Link to={row.link} className={classes.detailLink}>
                           <IconButton>
                             <Icon.ArrowForwardRoundedIcon className={classes.toggleButtonIcon} />
                           </IconButton>

@@ -2,11 +2,12 @@ import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+
 import Icon from '../../ui/icon/index';
 
 export default function AllClassChallenge({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, challengeId, problemId, submissionId } = useParams();
-  const baseURL = '/all-class';
+  const baseURL = '/problem-set';
   const challenges = useSelector((state) => state.challenges.byId);
   const classes = useSelector((state) => state.classes.byId);
   const courses = useSelector((state) => state.courses.byId);

@@ -77,7 +77,7 @@ function Index() {
           );
           history.push(`/my-class/${sortedClasses[0].course_id}/${sortedClasses[0].class_id}/challenge`);
         } else {
-          history.push('/all-class');
+          history.push('/problem-set');
         }
       } else {
         history.push('/my-profile');
