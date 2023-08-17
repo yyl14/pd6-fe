@@ -158,7 +158,7 @@ export default function ChallengeStatistics({
       setScoreboardTitle(accountColumn.concat(problemList, essayList));
 
       // set table content
-      const memberSubmissionList = accountSummaryIds?.map((member) => {
+      const memberSubmissionList = memberSubmissionStatisticIds?.map((member) => {
 
         const memberChallengeDetail = {} as MemberChallengeDetailProp;
         memberChallengeDetail.id = memberSubmissionStatisticsById[member].id;
