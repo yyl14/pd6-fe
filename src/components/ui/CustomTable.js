@@ -15,28 +15,30 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+
 import Icon from './icon/index';
 
 const useStyles = makeStyles((theme) => ({
   topContent1: {
     background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
-    padding: '5px 15px 15px 15px',
+    padding: '5px 15px 10px 15px',
     display: 'flex',
     justifyContent: 'space-between',
-    height: '75px',
+    height: '70px',
+    alignItems: 'center',
   },
   topContent2: {
     background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
-    padding: '5px 15px 15px 15px',
+    padding: '5px 15px 10px 15px',
     display: 'flex',
     justifyContent: 'flex-end',
-    height: '75px',
+    height: '70px',
+    alignItems: 'center',
   },
   search: {
     height: '60px',
@@ -69,8 +71,11 @@ const useStyles = makeStyles((theme) => ({
     width: '10px',
     padding: '0px',
   },
+  tableHead: {
+    height: '48px',
+  },
   tableHeadCell: {
-    height: '45px',
+    height: '48px',
     padding: '0px',
     background: 'white',
     borderBottomWidth: '1px',
@@ -95,9 +100,9 @@ const useStyles = makeStyles((theme) => ({
     '& > :first-child': {
       paddingLeft: '30px', // 25px (Left space) + 5 px
     },
+    height: '51px',
   },
   tableBodyCell: {
-    padding: '17.5px 5px 17.5px 5px',
     overflowWrap: 'break-word',
     '&:hover~$stickyArrowCell': {
       backgroundImage: 'inherit',
@@ -220,7 +225,7 @@ export default function CustomTable({
       <Paper className={classes.root} elevation={0}>
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">
-            <TableHead>
+            <TableHead className={`${classes.tableHead}`}>
               <TableRow className={classes.row}>
                 {columns.map((column) => (
                   <React.Fragment key={`${column.id}-${column.label}`}>
@@ -252,13 +257,7 @@ export default function CustomTable({
             </TableHead>
             <TableBody>
               {filterData.slice(curPage * rowsPerPage, curPage * rowsPerPage + rowsPerPage).map((row) => (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  tabIndex={-1}
-                  key={row.id}
-                  className={`${classes.row} ${classes.tableBodyRow}`}
-                >
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.id} className={`${classes.row}`}>
                   {columns.map((column) => {
                     if (column.type === 'link') {
                       const link = row[column.link_id];

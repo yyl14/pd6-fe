@@ -152,7 +152,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
       <Paper className={classes.root} elevation={0}>
         <TableContainer>
           <Table stickyHeader aria-label="sticky table">
-            <TableHead>
+            <TableHead className={`${classes.tableHead}`}>
               <TableRow>
                 <TableCell className={`${classes.tableHeadCell} ${classes.tableRowContainerLeftSpacing}`} />
                 {columnsConfig.map((column, index) => (
