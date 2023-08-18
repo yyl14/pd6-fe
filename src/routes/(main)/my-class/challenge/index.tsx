@@ -6,6 +6,7 @@ import withConditionalRender from '@/components/hoc/withConditionalRender';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
+import useMyClassManagerMiddleware from '@/middleware/useMyClassManagerMiddleware';
 
 const ChallengeList = lazy(() => import('@/pages/ChallengeList'));
 const ChallengeInfo = lazy(() => import('@/pages/ChallengeInfo'));
@@ -41,6 +42,7 @@ function ChallengeInfoRoute() {
       {withConditionalRender(ChallengeInfo)({
         classId,
         challengeId,
+        isProblemSet: false,
         isLoading: courseIsLoading.read || classIsLoading.read || challengeIsLoading.read,
       })}
     </Suspense>
@@ -49,6 +51,7 @@ function ChallengeInfoRoute() {
 
 function ChallengeStatisticsRoute() {
   const { courseId, classId, challengeId } = useParams<{ courseId: string; classId: string; challengeId: string }>();
+  useMyClassManagerMiddleware(courseId, classId);
 
   const { isLoading: courseIsLoading } = useCourse(Number(courseId));
   const { isLoading: classIsLoading } = useClass(Number(classId));
@@ -68,6 +71,7 @@ function ChallengeStatisticsRoute() {
 
 function ChallengeSettingRoute() {
   const { courseId, classId, challengeId } = useParams<{ courseId: string; classId: string; challengeId: string }>();
+  useMyClassManagerMiddleware(courseId, classId);
 
   const { isLoading: courseIsLoading } = useCourse(Number(courseId));
   const { isLoading: classIsLoading } = useClass(Number(classId));
@@ -88,7 +92,10 @@ function ChallengeSettingRoute() {
 export default function ChallengeRoutes() {
   return (
     <Switch>
-      <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/statistics" component={ChallengeStatisticsRoute} />
+      <Route
+        path="/6a/my-class/:courseId/:classId/challenge/:challengeId/statistics"
+        component={ChallengeStatisticsRoute}
+      />
       <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/setting" component={ChallengeSettingRoute} />
       <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId" component={ChallengeInfoRoute} />
       <Route path="/6a/my-class/:courseId/:classId/challenge" component={ChallengeListRoute} />

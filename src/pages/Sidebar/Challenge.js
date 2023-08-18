@@ -21,7 +21,7 @@ export default function Challenge({ classNames, history, location, mode, open, o
   const { class: classData } = useClass(classId);
   const { course } = useCourse(courseId);
   const { accountClasses: userClasses } = useUserClasses();
-  const { problem } = useProblem();
+  const { problem } = useProblem(Number(problemId));
 
   const [display, setDisplay] = useState('unfold');
 
@@ -49,10 +49,10 @@ export default function Challenge({ classNames, history, location, mode, open, o
     if (
       mode === 'challenge' &&
       tasks &&
+      userClasses &&
       userClasses.length !== 0 &&
       userClasses.find((x) => x.class_id === Number(classId))
     ) {
-      // console.log(userClasses);
       if (
         userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER' &&
         challenge !== undefined &&
@@ -346,6 +346,7 @@ export default function Challenge({ classNames, history, location, mode, open, o
                 </ListItem>
               ))}
               {mode === 'challenge' &&
+                userClasses &&
                 userClasses.length !== 0 &&
                 userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER' &&
                 challenge !== undefined && (

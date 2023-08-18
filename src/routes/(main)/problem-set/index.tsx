@@ -22,6 +22,7 @@ function ChallengeInfoRoute() {
       {withConditionalRender(ChallengeInfo)({
         classId,
         challengeId,
+        isProblemSet: true,
         isLoading: courseIsLoading.read || classIsLoading.read || challengeIsLoading.read,
       })}
     </Suspense>
@@ -33,8 +34,8 @@ export default function ProblemSetRoutes() {
 
   return (
     <Switch>
-      <Route path="/6a/problem-set/:courseId/:classId" />
       <Route path="/6a/problem-set/:courseId/:classId/challenge/:challengeId" component={ChallengeInfoRoute} />
+      <Route path="/6a/problem-set/:courseId/:classId" />
     </Switch>
   );
 }

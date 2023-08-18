@@ -1,4 +1,13 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, makeStyles } from '@material-ui/core';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Snackbar,
+  Typography,
+  makeStyles,
+} from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -35,7 +44,8 @@ export default function ChallengeSetting({
 
   const { accountClasses } = useUserClasses();
   const { courses } = useCourses();
-  const { challenge, isLoading: challengeLoading, deleteChallenge } = useChallenge(Number(challengeId));
+  const { challenge, isLoading: challengeLoading, deleteChallenge, error } = useChallenge(Number(challengeId));
+  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
 
   const [classTitle, setClassTitle] = useState('');
 
@@ -54,9 +64,13 @@ export default function ChallengeSetting({
   const [warningPopUp, setWarningPopUp] = useState(false);
 
   const handleDelete = async () => {
-    const res = deleteChallenge();
-    if ((await res).ok) {
-      history.push(`/my-class/${courseId}/${classId}/challenge`);
+    try {
+      const res = deleteChallenge();
+      if ((await res).ok) {
+        history.push(`/my-class/${courseId}/${classId}/challenge`);
+      }
+    } catch {
+      setShowSnackbar(true);
     }
   };
 
@@ -139,6 +153,14 @@ export default function ChallengeSetting({
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowSnackbar(false);
+        }}
+        message={`Error: ${error.read?.message}`}
+      />
     </>
   );
 }

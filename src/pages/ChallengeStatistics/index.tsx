@@ -16,12 +16,12 @@ import PageTitle from '@/components/ui/PageTitle';
 import SimpleBar from '@/components/ui/SimpleBar';
 import SimpleTable from '@/components/ui/SimpleTable';
 import useReduxStateShape from '@/hooks/useReduxStateShape';
+import useAccountSummaries, { AccountSummarySchema } from '@/lib/accountSummary/useAccountSummaries';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useChallengeStatistics from '@/lib/challenge/useChallengeStatistics';
 import useMemberSubmissionStatistics from '@/lib/challenge/useMemberSubmissionStatistics';
 import useChallengeTasks from '@/lib/task/useChallengeTasks';
 import useUserClasses from '@/lib/user/useUserClasses';
-import useAccountSummaries from '@/lib/accountSummary/useAccountSummaries';
 
 /* eslint indent: 0 */
 
@@ -100,15 +100,15 @@ export default function ChallengeStatistics({
 
   const { challenge } = useChallenge(Number(challengeId));
   const { memberSubmissionStatistics } = useMemberSubmissionStatistics(Number(challengeId));
-  const { challengeStatistics, downloadAllSubmissions, downloadAllPlagiarismReports } = useChallengeStatistics(Number(challengeId));
+  const { challengeStatistics, downloadAllSubmissions, downloadAllPlagiarismReports } = useChallengeStatistics(
+    Number(challengeId),
+  );
   const { tasks } = useChallengeTasks(Number(challengeId));
   const { accountClasses } = useUserClasses();
-  
 
   const [statisticsData, setStatisticsData] = useState<StatisticsProp[]>([]);
   const [scoreboardTitle, setScoreboardTitle] = useState(accountColumn);
   const [scoreboardData, setScoreboardData] = useState<MemberChallengeDetailProp[]>([]);
-  const [challengeTitle, setChallengeTitle] = useState('');
 
   const [showEmailSentPopup, setShowEmailSentPopup] = useState(false);
   const [emailSentPopupMessage, setEmailSentPopupMessage] = useState(
@@ -117,11 +117,9 @@ export default function ChallengeStatistics({
   const [problemsById, problemIds] = useReduxStateShape(tasks?.problem);
   const [essaysById, essayIds] = useReduxStateShape(tasks?.essay);
   const [memberSubmissionStatisticsById, memberSubmissionStatisticIds] = useReduxStateShape(
-    memberSubmissionStatistics?.data?.member
+    memberSubmissionStatistics?.data?.member,
   );
-  const accountIds = memberSubmissionStatisticIds.map((item) => String(item));
-  const { accountSummaries } = useAccountSummaries(accountIds);
-  const [accountSummariesById, accountSummaryIds] = useReduxStateShape(accountSummaries);
+  const { getAccountSummaries } = useAccountSummaries();
 
   const role = useMemo(
     () => accountClasses?.filter((item) => item.class_id === Number(classId))[0].role,
@@ -129,12 +127,7 @@ export default function ChallengeStatistics({
   );
 
   useEffect(() => {
-    if (challenge && challengeStatistics && memberSubmissionStatistics) {
-      setStatisticsData(
-        [...challengeStatistics?.tasks].sort((a, b) => a.task_label.localeCompare(b.task_label))
-          .map((item) => ({ ...item, id: item.task_label })),
-      );
-
+    async function setScoreboard() {
       const problemList = problemIds?.map((id) => ({
         id: `problem-${id}`,
         label: problemsById[id]?.challenge_label,
@@ -157,19 +150,27 @@ export default function ChallengeStatistics({
       }));
       setScoreboardTitle(accountColumn.concat(problemList, essayList));
 
-      // set table content
-      const memberSubmissionList = memberSubmissionStatisticIds?.map((member) => {
+      const accountSummaries = await getAccountSummaries({
+        account_ids: JSON.stringify(memberSubmissionStatisticIds),
+      });
 
+      const accountSummariesById = accountSummaries?.data?.data.reduce((acc, cur) => {
+        acc[cur.id] = cur;
+        return acc;
+      }, {} as Record<string | number, AccountSummarySchema>);
+
+      // set table content
+      const memberSubmissionList = memberSubmissionStatisticIds?.map((member_id) => {
         const memberChallengeDetail = {} as MemberChallengeDetailProp;
-        memberChallengeDetail.id = memberSubmissionStatisticsById[member].id;
-        const classMember = accountSummariesById[member];
+        memberChallengeDetail.id = memberSubmissionStatisticsById[member_id].id;
+        const classMember = accountSummariesById[member_id];
         if (classMember) {
           memberChallengeDetail.username = classMember.username;
           memberChallengeDetail.student_id = classMember.student_id;
           memberChallengeDetail.real_name = classMember.real_name;
           memberChallengeDetail.path = `${window.location.origin}/user-profile/${classMember.id}`;
         }
-        const problemScores = memberSubmissionStatisticsById[member].problem_scores;       
+        const problemScores = memberSubmissionStatisticsById[member_id].problem_scores;
         if (problemScores) {
           problemScores?.map((p) => {
             memberChallengeDetail[`problem-${p.problem_id}`] = p.judgment.score;
@@ -179,7 +180,7 @@ export default function ChallengeStatistics({
             return p;
           });
         }
-        const essaySubmissions = memberSubmissionStatisticsById[member].essay_submissions;
+        const essaySubmissions = memberSubmissionStatisticsById[member_id].essay_submissions;
         if (essaySubmissions) {
           essaySubmissions?.map((record) => {
             memberChallengeDetail[`essay-${record.essay_id}`] = 'pdf';
@@ -192,27 +193,35 @@ export default function ChallengeStatistics({
       });
       setScoreboardData(memberSubmissionList);
     }
+
+    if (challenge && memberSubmissionStatistics) {
+      if (memberSubmissionStatisticIds.length > 0) {
+        setScoreboard();
+      }
+    }
   }, [
     courseId,
     classId,
-    accountSummariesById,
-    accountSummaryIds,
     challenge,
-    challengeStatistics,
     memberSubmissionStatistics,
     memberSubmissionStatisticsById,
     memberSubmissionStatisticIds,
     problemsById,
     problemIds,
     essaysById,
-    essayIds
+    essayIds,
+    getAccountSummaries,
   ]);
 
   useEffect(() => {
-    if (challenge && challengeStatistics && memberSubmissionStatistics) {
-      setChallengeTitle(challenge.title);
+    if (challenge && challengeStatistics) {
+      setStatisticsData(
+        (challengeStatistics?.tasks || [])
+          .sort((a, b) => a.task_label.localeCompare(b.task_label))
+          .map((item) => ({ ...item, id: item.task_label })),
+      );
     }
-  }, [challenge, challengeStatistics, memberSubmissionStatistics]);
+  }, [challenge, challengeStatistics]);
 
   // assemble html data to copy
   const scoreboardHTML = useMemo(
@@ -234,7 +243,7 @@ export default function ChallengeStatistics({
         <tr>
           ${scoreboardTitle
             .map((column) =>
-              (column.type === 'link' && column.link_id)
+              column.type === 'link' && column.link_id
                 ? `<td><a href='${row[column.link_id] ?? ''}'>${row[column.id] ?? ''}</a></td>`
                 : `<td>${row[column.id] ?? ''}</td>`,
             )
@@ -249,8 +258,8 @@ export default function ChallengeStatistics({
   );
 
   const handleClickDownloadAllSubmission = async () => {
-    const res = downloadAllSubmissions({challenge_id: Number(challengeId), as_attachment: true});
-    if((await res).ok){
+    const res = downloadAllSubmissions({ challenge_id: Number(challengeId), as_attachment: true });
+    if ((await res).ok) {
       setEmailSentPopupMessage(
         'All submissions for the challenge will be sent to your email. Please check your mailbox for the file(s).',
       );
@@ -259,8 +268,8 @@ export default function ChallengeStatistics({
   };
 
   const handleClickDownloadAllPlagiarismReport = async () => {
-    const res = downloadAllPlagiarismReports({challenge_id: Number(challengeId), as_attachment: true});
-    if((await res).ok){
+    const res = downloadAllPlagiarismReports({ challenge_id: Number(challengeId), as_attachment: true });
+    if ((await res).ok) {
       setEmailSentPopupMessage(
         'All plagiarism reports for the challenge will be sent to your email. Please check your mailbox for the report(s). Due to system limitation, this might sometimes fail; please retry if you did not get (all) the files within 10 minutes.',
       );
@@ -270,7 +279,7 @@ export default function ChallengeStatistics({
 
   return (
     <>
-      <PageTitle text={`${challengeTitle} / Statistics`} />
+      <PageTitle text={`${challenge && challenge.title} / Statistics`} />
       {role === 'MANAGER' && (
         <div className={className.managerButtons}>
           <Button onClick={handleClickDownloadAllSubmission}>Download All Submissions</Button>
@@ -325,7 +334,7 @@ export default function ChallengeStatistics({
         <CustomTable
           buttons={
             <div className={className.copyButton}>
-              <CopyToClipboardButton text={scoreboardHTML} format="text/html" className={false} />
+              <CopyToClipboardButton text={scoreboardHTML} format="text/html" className={null} />
             </div>
           }
           data={scoreboardData}
@@ -333,9 +342,9 @@ export default function ChallengeStatistics({
           hasSearch={false}
           hasLink={false}
           linkName={false}
-          >
-            <></>
-          </CustomTable>
+        >
+          <></>
+        </CustomTable>
       </SimpleBar>
       <Dialog open={showEmailSentPopup} keepMounted onClose={() => setShowEmailSentPopup(false)}>
         <DialogTitle id="alert-dialog-slide-title">

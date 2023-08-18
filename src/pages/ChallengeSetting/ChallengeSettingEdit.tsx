@@ -1,6 +1,6 @@
-import { Button, TextField, makeStyles } from '@material-ui/core';
+import { Button, Snackbar, TextField, makeStyles } from '@material-ui/core';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import AlignedText from '@/components/ui/AlignedText';
 import DateRangePicker from '@/components/ui/DateRangePicker';
@@ -31,7 +31,8 @@ export default function ChallengeSettingEdit({
 }) {
   const className = useStyles();
 
-  const { challenge, editChallenge, isLoading: challengeLoading } = useChallenge(Number(challengeId));
+  const { challenge, editChallenge, error } = useChallenge(Number(challengeId));
+  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
 
   const [editTitle, setEditTitle] = useState(challenge?.title);
   const [duration, setDuration] = useState([
@@ -43,29 +44,23 @@ export default function ChallengeSettingEdit({
   ]);
   const [selectionType, setSelectionType] = useState(challenge?.selection_type);
   const [publicizeType, setPublicizeType] = useState(challenge?.publicize_type);
-  const [hasRequest, setHasRequest] = useState(false);
 
   const handleClickSave = async () => {
-    const res = editChallenge({
-      challenge_id: Number(challengeId),
-      title: editTitle,
-      start_time: duration[0].startDate.toISOString(),
-      end_time: duration[0].endDate.toISOString(),
-      publicize_type: publicizeType,
-      selection_type: selectionType,
-    });
+    try {
+      await editChallenge({
+        challenge_id: Number(challengeId),
+        title: editTitle,
+        start_time: duration[0].startDate.toISOString(),
+        end_time: duration[0].endDate.toISOString(),
+        publicize_type: publicizeType,
+        selection_type: selectionType,
+      });
 
-    if ((await res).ok) {
-      setHasRequest(true);
+      setEdit(false);
+    } catch {
+      setShowSnackbar(true);
     }
   };
-
-  useEffect(() => {
-    if (hasRequest && !challengeLoading.edit) {
-      setHasRequest(false);
-      setEdit(false);
-    }
-  }, [challengeLoading, hasRequest, setEdit]);
 
   return (
     <>
@@ -128,6 +123,14 @@ export default function ChallengeSettingEdit({
           Save
         </Button>
       </div>
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowSnackbar(false);
+        }}
+        message={`Error: ${error.read?.message}`}
+      />
     </>
   );
 }

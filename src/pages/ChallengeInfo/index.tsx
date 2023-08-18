@@ -31,10 +31,17 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-/* This is a level 4 component (page component) */
-export default function ChallengeInfo({ classId, challengeId }: { classId: string; challengeId: string }) {
+export default function ChallengeInfo({
+  classId,
+  challengeId,
+  isProblemSet,
+}: {
+  classId: string;
+  challengeId: string;
+  isProblemSet: boolean;
+}) {
   const className = useStyles();
-  const { challenge, isLoading: challengeLoading, editChallenge, mutateChallenge } = useChallenge(Number(challengeId));
+  const { challenge, isLoading: challengeLoading, editChallenge } = useChallenge(Number(challengeId));
   const { accountClasses } = useUserClasses();
   const { readScore } = useProblemScore();
 
@@ -74,14 +81,12 @@ export default function ChallengeInfo({ classId, challengeId }: { classId: strin
   }, [classId, accountClasses]);
 
   useEffect(() => {
-    if (challenge && role !== 'MANAGER') {
-      if (challenge.description === '') {
-        setShowDescription(false);
-      }
+    if (challenge?.description === '' && (isProblemSet || role !== 'MANAGER')) {
+      setShowDescription(false);
     } else {
       setShowDescription(true);
     }
-  }, [challenge, role]);
+  }, [challenge, role, isProblemSet]);
 
   useEffect(() => {
     async function getScore(id: number) {
@@ -93,47 +98,51 @@ export default function ChallengeInfo({ classId, challengeId }: { classId: strin
       }
     }
 
-    if (challenge) {
-      if (problemIds?.reduce((acc, item) => acc && item !== undefined, true)) {
-        const problemData: TableProp[] | undefined = problemIds
-          ?.map((id) => problemsById[id])
+    async function settingTableData() {
+      const problemDataPromises = (problemIds || [])
+        .map((id) => problemsById[id])
+        .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+        .map(async ({ id }) => ({
+          challenge_label: problemsById[id]?.challenge_label,
+          score: await getScore(id),
+          id: `coding-${id}`,
+        }));
+
+      const problemData: TableProp[] = await Promise.all(problemDataPromises);
+
+      if ((role === 'MANAGER' || role === 'NORMAL') && !isProblemSet) {
+        const essayData: TableProp[] | undefined = essayIds
+          ?.map((id) => essaysById[id])
           .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
           .map(({ id }) => ({
-            challenge_label: problemsById[id]?.challenge_label,
-            score: Number(getScore(id)),
-            id: `coding-${id}`,
+            challenge_label: essaysById[id]?.challenge_label,
+            id: `essay-${id}`,
           }));
-        // problems are complete
-        if (role === 'MANAGER' || role === 'NORMAL') {
-          const essayData: TableProp[] | undefined = essayIds
-            ?.map((id) => essaysById[id])
-            .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
-            .map(({ id }) => ({
-              challenge_label: essaysById[id]?.challenge_label,
-              id: `essay-${id}`,
-            }));
 
-          const peerReviewData: TableProp[] | undefined = peerReviewIds
-            ?.map((id) => peerReviewsById[id])
-            .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
-            .map(({ id }) => ({
-              challenge_label: peerReviewsById[id]?.challenge_label,
-              id: `peer-${id}`,
-            }));
+        const peerReviewData: TableProp[] | undefined = peerReviewIds
+          ?.map((id) => peerReviewsById[id])
+          .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+          .map(({ id }) => ({
+            challenge_label: peerReviewsById[id]?.challenge_label,
+            id: `peer-${id}`,
+          }));
 
-          const scoreboardData: TableProp[] | undefined = scoreboardIds
-            ?.map((id) => scoreboardsById[id])
-            .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
-            .map(({ id }) => ({
-              challenge_label: scoreboardsById[id]?.challenge_label,
-              id: `scoreboard-${id}`,
-            }));
-          const newData: TableProp[] = problemData.concat(essayData, peerReviewData, scoreboardData);
-          setTableData(newData);
-        } else {
-          setTableData(problemData);
-        }
+        const scoreboardData: TableProp[] | undefined = scoreboardIds
+          ?.map((id) => scoreboardsById[id])
+          .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
+          .map(({ id }) => ({
+            challenge_label: scoreboardsById[id]?.challenge_label,
+            id: `scoreboard-${id}`,
+          }));
+        const newData: TableProp[] = problemData.concat(essayData, peerReviewData, scoreboardData);
+        setTableData(newData);
+      } else {
+        setTableData(problemData);
       }
+    }
+
+    if (challenge) {
+      settingTableData();
     }
   }, [
     challenge,
@@ -147,6 +156,7 @@ export default function ChallengeInfo({ classId, challengeId }: { classId: strin
     peerReviewIds,
     scoreboardsById,
     scoreboardIds,
+    isProblemSet,
   ]);
 
   if (challenge === undefined) {
@@ -166,14 +176,15 @@ export default function ChallengeInfo({ classId, challengeId }: { classId: strin
   };
 
   const handleSave = async () => {
-    const res = editChallenge({
-      challenge_id: Number(challengeId),
-    });
-    if ((await res).ok) {
-      mutateChallenge();
+    try {
+      await editChallenge({
+        challenge_id: Number(challengeId),
+        description: inputs,
+      });
+      setEditMode(false);
+    } catch {
+      setInputs(challenge.description);
     }
-    setEditMode(false);
-    setInputs(challenge.description);
   };
 
   return (
@@ -182,7 +193,9 @@ export default function ChallengeInfo({ classId, challengeId }: { classId: strin
       {showDescription && (
         <SimpleBar
           title="Description"
-          buttons={<>{role === 'MANAGER' && !editMode && <Button onClick={handleEdit}>Edit</Button>}</>}
+          buttons={
+            <>{role === 'MANAGER' && !isProblemSet && !editMode && <Button onClick={handleEdit}>Edit</Button>}</>
+          }
         >
           {editMode ? (
             <div>
