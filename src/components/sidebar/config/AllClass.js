@@ -2,11 +2,12 @@ import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+
 import Icon from '../../ui/icon/index';
 
 export default function AllClass({ classNames, history, location, mode, open, onClose }) {
   const { courseId } = useParams();
-  const baseURL = '/all-class';
+  const baseURL = '/problem-set';
   const classes = useSelector((state) => state.classes);
   const courses = useSelector((state) => state.courses);
 
@@ -18,7 +19,7 @@ export default function AllClass({ classNames, history, location, mode, open, on
   useEffect(() => {
     // console.log(courses, classes);
     const goBackToMain = () => {
-      history.push('/all-class');
+      history.push('/problem-set');
     };
     if (mode === 'main') {
       setTitle('All Courses');
