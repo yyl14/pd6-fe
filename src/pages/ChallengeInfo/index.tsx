@@ -45,6 +45,7 @@ export default function ChallengeInfo({ classId, challengeId }: { classId: strin
   const [role, setRole] = useState('NORMAL');
   const [editMode, setEditMode] = useState(false);
   const [inputs, setInputs] = useState('');
+  const [showDescription, setShowDescription] = useState<boolean>(true);
   const [tableData, setTableData] = useState<TableProp[]>([]);
   const [problemsById, problemIds] = useReduxStateShape(tasks?.problem);
   const [essaysById, essayIds] = useReduxStateShape(tasks?.essay);
@@ -73,6 +74,16 @@ export default function ChallengeInfo({ classId, challengeId }: { classId: strin
   }, [classId, accountClasses]);
 
   useEffect(() => {
+    if (challenge && role !== 'MANAGER') {
+      if (challenge.description === '') {
+        setShowDescription(false);
+      }
+    } else {
+      setShowDescription(true);
+    }
+  }, [challenge, role]);
+
+  useEffect(() => {
     async function getScore(id: number) {
       try {
         const { data } = await readScore({ problem_id: id });
@@ -80,7 +91,7 @@ export default function ChallengeInfo({ classId, challengeId }: { classId: strin
       } catch (err) {
         return 0;
       }
-    };
+    }
 
     if (challenge) {
       if (problemIds?.reduce((acc, item) => acc && item !== undefined, true)) {
@@ -117,8 +128,8 @@ export default function ChallengeInfo({ classId, challengeId }: { classId: strin
               challenge_label: scoreboardsById[id]?.challenge_label,
               id: `scoreboard-${id}`,
             }));
-            const newData: TableProp[] = problemData.concat(essayData, peerReviewData, scoreboardData);
-            setTableData(newData);
+          const newData: TableProp[] = problemData.concat(essayData, peerReviewData, scoreboardData);
+          setTableData(newData);
         } else {
           setTableData(problemData);
         }
@@ -168,37 +179,39 @@ export default function ChallengeInfo({ classId, challengeId }: { classId: strin
   return (
     <>
       <PageTitle text={`${challenge.title} / Info`} />
-      <SimpleBar
-        title="Description"
-        buttons={<>{role === 'MANAGER' && !editMode && <Button onClick={handleEdit}>Edit</Button>}</>}
-      >
-        {editMode ? (
-          <div>
-            <TextField
-              placeholder="(Text, LaTeX, Markdown and HTML supported)"
-              className={className.descriptionField}
-              value={inputs}
-              onChange={(e) => setInputs(e.target.value)}
-              multiline
-              minRows={10}
-              maxRows={10}
-              variant="outlined"
-            />
-            <Button onClick={handleCancel}>Cancel</Button>
-            <Button onClick={handleSave} color="primary">
-              Save
-            </Button>
-          </div>
-        ) : (
-          // @ts-ignore
-          <MathpixLoader>
-            {
-              // @ts-ignore
-              <MathpixMarkdown text={challenge.description} htmlTags />
-            }
-          </MathpixLoader>
-        )}
-      </SimpleBar>
+      {showDescription && (
+        <SimpleBar
+          title="Description"
+          buttons={<>{role === 'MANAGER' && !editMode && <Button onClick={handleEdit}>Edit</Button>}</>}
+        >
+          {editMode ? (
+            <div>
+              <TextField
+                placeholder="(Text, LaTeX, Markdown and HTML supported)"
+                className={className.descriptionField}
+                value={inputs}
+                onChange={(e) => setInputs(e.target.value)}
+                multiline
+                minRows={10}
+                maxRows={10}
+                variant="outlined"
+              />
+              <Button onClick={handleCancel}>Cancel</Button>
+              <Button onClick={handleSave} color="primary">
+                Save
+              </Button>
+            </div>
+          ) : (
+            // @ts-ignore
+            <MathpixLoader>
+              {
+                // @ts-ignore
+                <MathpixMarkdown text={challenge.description} htmlTags />
+              }
+            </MathpixLoader>
+          )}
+        </SimpleBar>
+      )}
       <SimpleBar title="Challenge Information">
         <>
           <AlignedText text="Scored by" childrenType="text">
