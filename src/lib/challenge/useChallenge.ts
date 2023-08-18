@@ -16,6 +16,7 @@ const useChallenge = (challengeId: number) => {
     challenge: readChallengeSWR.data?.data.data,
     editChallenge: editChallengeSWR.trigger,
     deleteChallenge: deleteChallengeSWR.trigger,
+    mutateChallenge: () => readChallengeSWR.mutate(),
 
     isLoading: {
       read: readChallengeSWR.isLoading,

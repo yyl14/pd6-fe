@@ -6,11 +6,10 @@ import { useParams } from 'react-router-dom';
 // import DateRangePicker from '../../../ui/DateRangePicker';
 import { browseSubmissionUnderClass } from '../../../../actions/api/view';
 import { fetchAllChallengesProblems } from '../../../../actions/common/common';
-import AutoTable from '../../../ui/AutoTable';
-import PageTitle from '../../../ui/PageTitle';
-
 import GeneralLoading from '../../../GeneralLoading';
 import NoMatch from '../../../noMatch';
+import AutoTable from '../../../ui/AutoTable';
+import PageTitle from '../../../ui/PageTitle';
 
 /* This is a level 4 component (page component) */
 export default function SubmissionList() {

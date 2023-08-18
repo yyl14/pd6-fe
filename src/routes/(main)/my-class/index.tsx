@@ -10,8 +10,8 @@ export default function MyClassRoutes() {
 
   return (
     <Switch>
-      <Route path="/6a/my-class/:courseId/:problemId/challenge" component={ChallengeRoutes} />
-      <Route path="/6a/my-class/:courseId/:problemId/submission" component={SubmissionRoutes} />
+      <Route path="/6a/my-class/:courseId/:classId/challenge" component={ChallengeRoutes} />
+      <Route path="/6a/my-class/:courseId/:classId/submission" component={SubmissionRoutes} />
       {/* TODO: submission, grade, team, member routes */}
     </Switch>
   );

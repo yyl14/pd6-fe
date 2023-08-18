@@ -25,7 +25,7 @@ const authTokenInjector: Middleware = async (url, init, next) => {
 const interceptUndefinedParams: Middleware = async (url, init, next) => {
   if (url.includes('undefined')) {
     // eslint-disable-next-line no-console
-    console.log('Requesting url contains "undefined".');
+    console.log('Requesting url contains "undefined".', url);
     throw new Error('Requesting url contains "undefined".');
   }
   const res = await next(url, init);
