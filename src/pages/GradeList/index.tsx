@@ -109,7 +109,7 @@ export default function GradeList({ courseId, classId }: { courseId: string; cla
     if (showImportDialog) {
       if (inputTitle !== '' && selectedFile.length !== 0) {
         try {
-          Promise.all(selectedFile.map((file) => importClassGrade(inputTitle, file)));
+          await Promise.all(selectedFile.map((file) => importClassGrade(inputTitle, file)));
           setShowImportDialog(false);
           setIsDisabled(true);
           setInputTitle('');
