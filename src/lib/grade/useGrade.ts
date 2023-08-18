@@ -7,23 +7,23 @@ import { deleteGrade, editGrade, getGrade } from './fetchers';
 
 const useGrade = (gradeId: number) => {
   const editGradeSWR = useSWRMutation(`/grade/${gradeId}`, toSWRFetcher(editGrade));
-  const getGradeSWR = useSWR(`/grade/${gradeId}`, () => getGrade({ grade_id: gradeId }));
+  const readGradeSWR = useSWR(`/grade/${gradeId}`, () => getGrade({ grade_id: gradeId }));
   const deleteGradeSWR = useSWRMutation(`/grade/${gradeId}`, toSWRFetcher(deleteGrade));
 
   return {
     editGrade: editGradeSWR.trigger,
-    getGrade: getGradeSWR.data?.data.data,
+    grade: readGradeSWR.data?.data.data,
     deleteGrade: deleteGradeSWR.trigger,
 
     isLoading: {
       edit: editGradeSWR.isMutating,
-      get: getGradeSWR.isLoading,
+      read: readGradeSWR.isLoading,
       delete: deleteGradeSWR.isMutating,
     },
 
     error: {
       edit: editGradeSWR.error,
-      get: getGradeSWR.error,
+      read: readGradeSWR.error,
       delete: deleteGradeSWR.error,
     },
   };

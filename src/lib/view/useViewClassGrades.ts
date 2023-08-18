@@ -2,17 +2,28 @@ import { components } from '../../../types/schema';
 import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
 import { browseClassGrade } from './fetchers';
 
-export type ClassGradesSchema = components['schemas']['pydantic__dataclasses__Grade'];
+export type ClassGradesSchema = components['schemas']['ViewGrade'];
 
 const useViewClassGrades = (classId: number) => {
   const useSWRWithBrowseParams = withDataSchema<ClassGradesSchema>();
 
-  const browseClassGradeSWR = useSWRWithBrowseParams(`/class/{class_id}/view/grade`, browseClassGrade, {
-    class_id: classId,
-  });
+  const browseClassGradeSWR = useSWRWithBrowseParams(
+    `/class/{class_id}/view/grade`,
+    browseClassGrade,
+    {
+      class_id: classId,
+    },
+    { baseSort: { column: 'update_time', order: 'DESC' } },
+  );
 
   return {
-    grades: browseClassGradeSWR.data?.data.data,
+    browseClassGrade: {
+      data: browseClassGradeSWR.data?.data.data,
+      refresh: browseClassGradeSWR.mutate,
+      pagination: browseClassGradeSWR.pagination,
+      filter: browseClassGradeSWR.filter,
+      sort: browseClassGradeSWR.sort,
+    },
 
     isLoading: {
       browse: browseClassGradeSWR.isLoading,

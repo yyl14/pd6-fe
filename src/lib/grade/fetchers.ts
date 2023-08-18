@@ -1,7 +1,7 @@
 import api from '../api';
 
 // useClassGrade()
-export const importClassGrade = api.path('/class/{class_id}/grade-import').method('post').create({ title: true });
+export const importClassGrade = api.path('/class/{class_id}/grade-import').method('post').create({ title: 1 });
 
 export const browseClassGrade = api.path('/class/{class_id}/grade').method('get').create();
 
