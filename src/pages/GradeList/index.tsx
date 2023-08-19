@@ -394,7 +394,7 @@ export default function GradeList({ courseId, classId }: { courseId: string; cla
       <Snackbar
         open={showImportDialog && showSnackBar}
         onClose={handleCloseError}
-        message={`Error: ${classGradeError.import?.message}`}
+        message={`Error: ${classGradeError.import}`}
       />
     </>
   );

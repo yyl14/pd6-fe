@@ -1,29 +1,36 @@
+import { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 
 import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
+import { fetchAPI } from '@/lib/api';
 
 import { components } from '../../../types/schema';
-import { addClassGrade, importClassGrade } from './fetchers';
+import { addClassGrade } from './fetchers';
 
 export type ClassGradeSchema = components['schemas']['pydantic__dataclasses__Grade'];
 
 const useClassGrade = (classId: number) => {
   const addClassGradeSWR = useSWRMutation(`/class/${classId}/grade`, toSWRMutationFetcher(addClassGrade));
-  const importClassGradeSWR = useSWRMutation(`/class/${classId}/grade-import`, toSWRMutationFetcher(importClassGrade));
+  const [importError, setImportError] = useState<string | null>(null);
 
   async function importGrade(title: string, file: Blob) {
     const formData = new FormData();
     formData.append('grade_file', file);
 
-    await importClassGradeSWR.trigger({
-      title: title as never,
-      class_id: classId as never,
-      content: {
-        'multipart/form-data': {
-          grade_file: formData,
-        },
-      } as never,
-    });
+    const options = {
+      params: {
+        title,
+      },
+      method: 'POST',
+      body: formData,
+    };
+
+    try {
+      await fetchAPI(`/class/${classId}/grade-import`, options);
+    } catch (e) {
+      setImportError(String(e));
+      throw e;
+    }
   }
 
   return {
@@ -32,33 +39,13 @@ const useClassGrade = (classId: number) => {
 
     isLoading: {
       add: addClassGradeSWR.isMutating,
-      import: importClassGradeSWR.isMutating,
     },
 
     error: {
       add: addClassGradeSWR.error,
-      import: importClassGradeSWR.error,
+      import: importError,
     },
   };
 };
 
 export default useClassGrade;
-
-// parameters: {
-//   query: {
-//       title: string;
-//   };
-//   header?: {
-//       "auth-token"?: string | undefined;
-//   } | undefined;
-//   path: {
-//       class_id: number;
-//   };
-// };
-// requestBody: {
-//   content: {
-//       "multipart/form-data": {
-//           grade_file: string;
-//       };
-//   };
-// };
