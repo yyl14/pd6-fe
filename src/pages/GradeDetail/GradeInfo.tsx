@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import AlignedText from '@/components/ui/AlignedText';
 import SimpleBar from '@/components/ui/SimpleBar';
 
-import { User } from './types';
+import { GradeAccountInfo } from './types';
 
 const useStyles = makeStyles((theme) => ({
   textLink: {
@@ -22,7 +22,7 @@ interface GradeInfoProps {
     update_time: string;
     title: string;
   };
-  receiver: User;
+  receiver: GradeAccountInfo;
   isManager: boolean;
   handleEdit: () => void;
 }

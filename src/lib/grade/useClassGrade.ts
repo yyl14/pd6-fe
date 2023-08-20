@@ -2,7 +2,7 @@ import { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 
 import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
-import { fetchAPI } from '@/lib/api';
+import fetchAPI from '@/lib/fetchAPI';
 
 import { components } from '../../../types/schema';
 import { addClassGrade } from './fetchers';

@@ -11,7 +11,7 @@ import GradeDelete from './GradeDelete';
 import GradeInfo from './GradeInfo';
 import GradeInfoEdit from './GradeInfoEdit';
 import Grader from './Grader';
-import { User } from './types';
+import { GradeAccountInfo } from './types';
 
 export default function GradeDetail({
   courseId,
@@ -26,8 +26,8 @@ export default function GradeDetail({
   const { accountClasses } = useUserClasses();
   const { getAccountSummaries, isLoading } = useAccountSummaries();
 
-  const [receiver, setReceiver] = useState<User | null>(null);
-  const [grader, setGrader] = useState<User | null>(null);
+  const [receiver, setReceiver] = useState<GradeAccountInfo | null>(null);
+  const [grader, setGrader] = useState<GradeAccountInfo | null>(null);
   const [isManager, setIsManager] = useState(false);
   const [editGradeInfo, setEditGradeInfo] = useState(false);
 

@@ -1,4 +1,4 @@
-export interface User {
+export interface GradeAccountInfo {
   id: number | null;
   username: string;
   student_id: string;

@@ -7,7 +7,7 @@ import AlignedText from '@/components/ui/AlignedText';
 import SimpleBar from '@/components/ui/SimpleBar';
 import useGrade from '@/lib/grade/useGrade';
 
-import { User } from './types';
+import { GradeAccountInfo } from './types';
 
 const useStyles = makeStyles((theme) => ({
   textFieldComment: {
@@ -31,7 +31,7 @@ interface GradeInfoEditProps {
     update_time: string;
     title: string;
   };
-  receiver: User;
+  receiver: GradeAccountInfo;
   handleBack: () => void;
 }
 

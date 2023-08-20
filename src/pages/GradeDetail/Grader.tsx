@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import AlignedText from '@/components/ui/AlignedText';
 import SimpleBar from '@/components/ui/SimpleBar';
 
-import { User } from './types';
+import { GradeAccountInfo } from './types';
 
 const useStyles = makeStyles((theme) => ({
   textLink: {
@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Grader({ id, username, student_id, real_name }: User) {
+export default function Grader({ id, username, student_id, real_name }: GradeAccountInfo) {
   const classNames = useStyles();
 
   return (
