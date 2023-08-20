@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import Icon from '@/components/ui/icon/index';
+import useCourse from '@/lib/course/useCourse';
 
 export default function Course({ classes, history, location, mode, open, onClose }) {
   const { courseId, classId } = useParams();
@@ -17,6 +18,8 @@ export default function Course({ classes, history, location, mode, open, onClose
   const [title2, setTitle2] = useState('');
   const [itemList, setItemList] = useState([]);
   const [arrow, setArrow] = useState(null);
+
+  const { course } = useCourse(Number(courseId));
 
   useEffect(() => {
     // console.log(mode, courseId, classId);
@@ -70,13 +73,13 @@ export default function Course({ classes, history, location, mode, open, onClose
             },
           ]),
       );
-    } else if (mode === 'course-setting' && courseList.byId[courseId]) {
+    } else if (mode === 'course-setting' && course) {
       setArrow(
         <IconButton className={classes.arrow} onClick={() => goBack(courseId)}>
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
-      setTitle1(courseList.byId[courseId].name);
+      setTitle1(course?.name);
       setItemList([
         {
           text: 'Setting',
@@ -105,7 +108,7 @@ export default function Course({ classes, history, location, mode, open, onClose
       ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, history, courseList, courseId, classList, classId, mode]);
+  }, [location.pathname, history, courseList, courseId, classList, classId, mode, course]);
 
   const foldLesson = () => {
     setDisplay('fold');
@@ -123,7 +126,7 @@ export default function Course({ classes, history, location, mode, open, onClose
     setDisplay1('unfold');
   };
 
-  if (courseList.byId[courseId] === undefined || (classId && classList.byId[classId] === undefined)) {
+  if (!course || (classId && classList.byId[classId] === undefined)) {
     return (
       <div>
         <Drawer
