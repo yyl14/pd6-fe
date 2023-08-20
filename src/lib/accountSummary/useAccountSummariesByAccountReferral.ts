@@ -4,10 +4,10 @@ import toSWRFetcher from '@/function/toSWRMutationFetcher';
 
 import { batchGetAccountByAccountReferrals } from './fetchers';
 
-const useAccountSummariesByAccountReferral = (accountReferrals: string[]) => {
+const useAccountSummariesByAccountReferral = () => {
   const batchGetAccountByAccountReferralsSWR = useSWRMutation(
     `/account-summary/batch-by-account-referral`,
-    toSWRFetcher(() => batchGetAccountByAccountReferrals({ account_referrals: JSON.stringify(accountReferrals) })),
+    toSWRFetcher(batchGetAccountByAccountReferrals),
   );
 
   return {
