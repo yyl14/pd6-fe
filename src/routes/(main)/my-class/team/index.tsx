@@ -41,7 +41,7 @@ function TeamDetailRoute() {
         classId,
         teamId,
         isLoading: classIsLoading.read || teamIsLoading.read,
-        noMatch: !courseId || !classId || !teamId || classError.read || teamError.read,
+        noMatch: !classId || !teamId || classError.read || teamError.read,
       })}
     </Suspense>
   );
