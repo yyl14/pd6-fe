@@ -12,16 +12,17 @@ import {
   makeStyles,
   withStyles,
 } from '@material-ui/core';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-import { readEssay } from '@/components/../actions/myClass/essay';
-import { downloadAllEssaySubmission } from '@/components/../actions/myClass/essaySubmission';
-import EssayEdit from '../EssayEdit';
-import EssayInfo from '../EssayInfo';
+import useEssayEssaySubmissions from '@/lib/essaySubmission/useEssayEssaySubmissions';
+import EssayEdit from '../EssayEdit/EssayEdit';
+import EssayInfo from './EssayInfo';
 
-import NoMatch from '@/components/noMatch';
+import useChallenge from '@/lib/challenge/useChallenge';
+import useClass from '@/lib/class/useClass';
+import useCourse from '@/lib/course/useCourse';
+import useEssay from '@/lib/essay/useEssay';
 
 const useStyles = makeStyles(() => ({
   generalButtons: {
@@ -38,26 +39,31 @@ const StyledButton = withStyles({
   },
 })(Button);
 
-export default function Essay() {
-  const { courseId, classId, challengeId, essayId } = useParams<{
-    courseId: string;
-    classId: string;
-    challengeId: string;
-    essayId: string;
-  }>();
+export default function Essay({
+  courseId,
+  classId,
+  challengeId,
+  essayId,
+}: {
+  courseId: string;
+  classId: string;
+  challengeId: string;
+  essayId: string;
+}) {
   const classNames = useStyles();
 
   const dispatch = useDispatch();
 
-  const userClasses = useSelector((state) => state.user.classes);
-  const courses = useSelector((state) => state.courses.byId);
-  const classes = useSelector((state) => state.classes.byId);
-  const essays = useSelector((state) => state.essays.byId);
-  const challenges = useSelector((state) => state.challenges.byId);
-  const authToken = useSelector((state) => state.auth.token);
   const [role, setRole] = useState('Normal');
   const [edit, setEdit] = useState(false);
   const [emailSentPopup, setEmailSentPopup] = useState(false);
+
+  const { course: courseInfo } = useCourse(Number(courseId));
+  const { class: classInfo } = useClass(Number(classId));
+  const { challenge: challengeInfo } = useChallenge(Number(challengeId));
+  const { essay: essayInfo } = useEssay(Number(essayId));
+
+  const { downloadAllSubmissions } = useEssayEssaySubmissions(Number(essayId));
 
   const handleCloseEdit = () => {
     setEdit(false);
@@ -73,32 +79,13 @@ export default function Essay() {
   };
 
   const handleDownload = () => {
-    dispatch(downloadAllEssaySubmission(authToken, essayId, true));
+    downloadAllSubmissions();
     setEmailSentPopup(true);
   };
 
-  useEffect(() => {
-    if (userClasses.filter((item) => item.class_id === Number(classId)).length !== 0) {
-      setRole(userClasses.filter((item) => item.class_id === Number(classId))[0].role);
-    }
-  }, [classId, userClasses]);
-
-  useEffect(() => {
-    dispatch(readEssay(authToken, essayId));
-    // dispatch(browseEssaySubmission(authToken, essayId));
-  }, [authToken, dispatch, essayId]);
-
-  if (essays[essayId] === undefined) {
-    return <NoMatch />;
-  }
-
   return (
     <>
-      <PageTitle
-        text={`${challenges[challengeId] === undefined ? 'error' : challenges[challengeId].title} / ${
-          essays[essayId] === undefined ? 'error' : essays[essayId].challenge_label
-        }`}
-      />
+      <PageTitle text={`${challengeInfo?.title} / ${essayInfo?.challenge_label}`} />
       {!edit && role === 'MANAGER' && (
         <div className={classNames.managerButtons}>
           <Button onClick={() => setEdit(true)}>Edit</Button>
@@ -107,7 +94,17 @@ export default function Essay() {
           </StyledButton>
         </div>
       )}
-      {edit ? <EssayEdit closeEdit={handleCloseEdit} /> : <EssayInfo role={role} />}
+      {edit ? (
+        <EssayEdit
+          courseId={courseId}
+          classId={classId}
+          challengeId={challengeId}
+          essayId={essayId}
+          closeEdit={handleCloseEdit}
+        />
+      ) : (
+        <EssayInfo courseId={courseId} classId={classId} challengeId={challengeId} essayId={essayId} role={role} />
+      )}
       {/* Upload dialog */}
       <Dialog open={popup} keepMounted onClose={handleClosePopUp} maxWidth="md">
         <DialogTitle>
@@ -115,13 +112,13 @@ export default function Essay() {
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Class" childrenType="text">
-            <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
+            <Typography>{`${courseInfo?.name} ${classInfo?.name}`}</Typography>
           </AlignedText>
           <AlignedText text="Challenge" childrenType="text">
-            <Typography>{challenges[challengeId].title}</Typography>
+            <Typography>{challengeInfo?.title}</Typography>
           </AlignedText>
           <AlignedText text="Task Label" childrenType="text">
-            <Typography>{essays[essayId].challenge_label}</Typography>
+            <Typography>{essayInfo?.challenge_label}</Typography>
           </AlignedText>
           <AlignedText text="Download Options" childrenType="text">
             <Typography>All users&apos; last submissioin</Typography>

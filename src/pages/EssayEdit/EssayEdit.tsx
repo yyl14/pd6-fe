@@ -2,8 +2,8 @@ import { editEssay } from '@/actions/myClass/essay';
 import SimpleBar from '@/components/ui/SimpleBar';
 import { Button, TextField, makeStyles } from '@material-ui/core';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+
+import useEssay from '@/lib/essay/useEssay';
 
 const useStyles = makeStyles(() => ({
   buttons: {
@@ -19,25 +19,23 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+interface EssayEditProps {
+  courseId: string;
+  classId: string;
+  challengeId: string;
+  essayId: string;
+  closeEdit: () => void;
+}
+
 /* This is a level 4 component (page component) */
-export default function EssayEdit(closeEdit: () => void) {
-  const { essayId } = useParams<{
-    courseId: string;
-    classId: string;
-    challengeId: string;
-    essayId: string;
-  }>();
+export default function EssayEdit({ courseId, classId, challengeId, essayId, closeEdit }: EssayEditProps) {
   const classNames = useStyles();
 
-  const dispatch = useDispatch();
+  const { essay } = useEssay(Number(essayId));
 
-  const essays = useSelector((state) => state.essays.byId);
-  const authToken = useSelector((state) => state.auth.token);
-  // const loading = useSelector((state) => state.loading.myClass.essay);
-
-  const [label, setLabel] = useState(essays[essayId] === undefined ? 'error' : essays[essayId].challenge_label);
-  const [title, setTitle] = useState(essays[essayId] === undefined ? 'error' : essays[essayId].title);
-  const [description, setDescription] = useState(essays[essayId] === undefined ? 'error' : essays[essayId].description);
+  const [label, setLabel] = useState(!essay ? 'error' : essay.challenge_label);
+  const [title, setTitle] = useState(!essay ? 'error' : essay.title);
+  const [description, setDescription] = useState(!essay ? 'error' : essay.description);
 
   const handleClickSave = () => {
     dispatch(editEssay(authToken, essayId, label, title, description));

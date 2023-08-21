@@ -7,6 +7,7 @@ import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useMyClassManagerMiddleware from '@/middleware/useMyClassManagerMiddleware';
+import EssayRoutes from './essay';
 
 const ChallengeList = lazy(() => import('@/pages/ChallengeList'));
 const ChallengeInfo = lazy(() => import('@/pages/ChallengeInfo'));
@@ -97,6 +98,7 @@ export default function ChallengeRoutes() {
         component={ChallengeStatisticsRoute}
       />
       <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/setting" component={ChallengeSettingRoute} />
+      <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/essay" component={EssayRoutes} />
       <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId" component={ChallengeInfoRoute} />
       <Route path="/6a/my-class/:courseId/:classId/challenge" component={ChallengeListRoute} />
       {/* TODO: add task, problem, essay, peer review, scoreboard routes */}

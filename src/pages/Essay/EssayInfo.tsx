@@ -1,12 +1,17 @@
-import { downloadFile } from '@/actions/common/common';
-import { browseTasksUnderChallenge } from '@/actions/myClass/challenge';
-import { deleteEssay } from '@/actions/myClass/essay';
-import { reUploadEssay, uploadEssay } from '@/actions/myClass/essaySubmission';
 import NoMatch from '@/components/noMatch';
 import AlignedText from '@/components/ui/AlignedText';
 import FileUploadArea from '@/components/ui/FileUploadArea';
 import SimpleBar from '@/components/ui/SimpleBar';
 import Icon from '@/components/ui/icon/index';
+import useChallenge from '@/lib/challenge/useChallenge';
+import useClass from '@/lib/class/useClass';
+import useCourse from '@/lib/course/useCourse';
+import useEssay from '@/lib/essay/useEssay';
+import useEssayEssaySubmissions from '@/lib/essaySubmission/useEssayEssaySubmissions';
+import useEssaySubmission from '@/lib/essaySubmission/useEssaySubmission';
+import useS3File from '@/lib/s3File/useS3File';
+import useChallengeTasks from '@/lib/task/useChallengeTasks';
+import useUserId from '@/lib/user/useUserId';
 import {
   Button,
   Dialog,
@@ -21,9 +26,7 @@ import {
 import { MathpixLoader, MathpixMarkdown } from 'mathpix-markdown-it';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
-
+import { useHistory } from 'react-router-dom';
 const StyledButton = withStyles({
   outlined: {
     '& path': {
@@ -38,34 +41,37 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+interface EssayInfoProps {
+  courseId: string;
+  classId: string;
+  challengeId: string;
+  essayId: string;
+  role: string;
+}
+
 /* This is a level 4 component (page component) */
-export default function EssayInfo({ role = 'NORMAL' }) {
-  const { courseId, classId, challengeId, essayId } = useParams<{
-    courseId: string;
-    classId: string;
-    challengeId: string;
-    essayId: string;
-  }>();
+export default function EssayInfo({ courseId, classId, challengeId, essayId, role = 'NORMAL' }: EssayInfoProps) {
   const history = useHistory();
   const classNames = useStyles();
-  const dispatch = useDispatch();
 
-  // const loading = useSelector((state) => state.loading.myClass.essay);
-  const classes = useSelector((state) => state.classes.byId);
-  const courses = useSelector((state) => state.courses.byId);
-  const essay = useSelector((state) => state.essays.byId);
-  const authToken = useSelector((state) => state.auth.token);
-  const challenges = useSelector((state) => state.challenges.byId);
-  const essaySubmission = useSelector((state) => state.essaySubmission);
-  const userId = useSelector((state) => state.user.id);
-  const error = useSelector((state) => state.error.myClass.essaySubmission);
+  const { course: courseInfo } = useCourse(Number(courseId));
+  const { class: classInfo } = useClass(Number(classId));
+  const { challenge: challengeInfo } = useChallenge(Number(challengeId));
+  const { essay, deleteEssay } = useEssay(Number(essayId));
 
+  const { mutateTasksUnderChallenge } = useChallengeTasks(Number(challengeId));
+  const { reuploadEssay, error: essaySubmissionError } = useEssaySubmission();
+  const {
+    uploadEssay,
+    error: essayEssaySubmissionError,
+    essaySubmission,
+    mutateEssaySubmission,
+  } = useEssayEssaySubmissions(Number(essayId));
   const [disabledUpload, setDisabledUpload] = useState(true);
-
-  const [uploadRecord, setUploadRecord] = useState(0);
+  const userId = useUserId();
   const [selectedFile, setSelectedFile] = useState([]);
   const [fileName, setFileName] = useState();
-
+  const { downloadFile } = useS3File();
   const [popUpUpload, setPopUpUpload] = useState(false);
   const [popUpFail, setPopUpFail] = useState(false);
   const [popUpDelete, setPopUpDelete] = useState(false);
@@ -90,82 +96,70 @@ export default function EssayInfo({ role = 'NORMAL' }) {
   };
 
   const handleUpload = () => {
-    if (uploadRecord !== 0) {
-      dispatch(
-        reUploadEssay(authToken, uploadRecord, selectedFile[0], () => {
-          setPopUpFail(true);
-        }),
-      );
+    if (essaySubmission?.data[0]) {
+      try {
+        reuploadEssay(selectedFile[0], String(essaySubmission?.data[0].id));
+        mutateEssaySubmission();
+      } catch {
+        setPopUpFail(true);
+      }
     } else {
-      dispatch(
-        uploadEssay(authToken, essayId, selectedFile[0], () => {
-          setPopUpFail(true);
-        }),
-      );
+      try {
+        uploadEssay(selectedFile[0]);
+        mutateEssaySubmission();
+      } catch {
+        setPopUpFail(true);
+      }
     }
-    setFileName(selectedFile[0].name);
+    setFileName(selectedFile[0]);
     setSelectedFile([]);
   };
 
   const handleDeleteSuccess = () => {
-    dispatch(browseTasksUnderChallenge(authToken, challengeId));
+    mutateTasksUnderChallenge();
     history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
   };
 
   const handleSubmitDelete = () => {
-    dispatch(deleteEssay(authToken, essayId, handleDeleteSuccess));
+    deleteEssay();
   };
-
-  // useEffect(() => {
-  //   dispatch(browseEssaySubmission(essayId, authToken));
-  // }, [authToken, dispatch, essayId]);
-
-  useEffect(() => {
-    if (essay[essayId] !== undefined) {
-      setUploadRecord(essay[essayId].essaySubmissionId ? essay[essayId].essaySubmissionId : 0);
-    }
-  }, [essay, essayId]);
 
   useEffect(() => {
     setDisabledUpload(selectedFile.length === 0);
   }, [selectedFile]);
 
   const handleClickLink = () => {
-    if (
-      essaySubmission.byId[uploadRecord].account_id === userId &&
-      essaySubmission.byId[uploadRecord].essay_id === Number(essayId)
-    ) {
-      const fileToDownload = {
-        uuid: essaySubmission.byId[uploadRecord].content_file_uuid,
-        filename: essaySubmission.byId[uploadRecord].filename,
-        as_attachment: false,
-      };
-      dispatch(downloadFile(authToken, fileToDownload));
+    if (essaySubmission?.data[0].account_id === userId && essaySubmission?.data[0].essay_id === Number(essayId)) {
+      downloadFile(essaySubmission?.data[0].filename, essaySubmission?.data[0].content_file_uuid);
     }
   };
 
-  if (essay[essayId] === undefined) {
+  if (!essay) {
     return <NoMatch />;
   }
 
   return (
     <>
-      <SimpleBar title="Title">{essay[essayId] === undefined ? 'error' : essay[essayId].title}</SimpleBar>
+      <SimpleBar title="Title">{essay?.title}</SimpleBar>
       <SimpleBar title="Description">
-        <MathpixLoader>
-          <MathpixMarkdown text={essay[essayId] === undefined ? '' : essay[essayId].description} htmlTags />
-        </MathpixLoader>
+        {
+          // @ts-ignore
+          <MathpixLoader>
+            {
+              // @ts-ignore
+              <MathpixMarkdown text={essay?.description} htmlTags />
+            }
+          </MathpixLoader>
+        }
       </SimpleBar>
       <SimpleBar title="File" noIndent>
         <StyledButton variant="outlined" color="primary" startIcon={<Icon.Upload />} onClick={handleClickUpload}>
           Upload
         </StyledButton>
-        {essaySubmission.byId[uploadRecord] && (
+        {essaySubmission?.data[0] && (
           <div className={classNames.uploadedFile}>
-            <Link href onClick={handleClickLink}>
-              {essaySubmission.byId[uploadRecord].filename}
-            </Link>{' '}
-            {moment(essaySubmission.byId[uploadRecord].submit_time).format('YYYY-MM-DD, HH:mm:ss')}
+            <Link onClick={handleClickLink}>{essaySubmission?.data[0]?.filename}</Link>{' '}
+            {moment(essaySubmission?.data[0]?.submit_time).format('YYYY-MM-DD, HH:mm:ss')}
           </div>
         )}
       </SimpleBar>
@@ -224,7 +218,9 @@ export default function EssayInfo({ role = 'NORMAL' }) {
             {fileName}
             <br />
             <br />
-            {`Failed Reason: ${uploadRecord === 0 ? error.uploadEssay : error.reUploadEssay}`}
+            {`Failed Reason: ${
+              essaySubmission?.data[0] ? essayEssaySubmissionError.upload : essaySubmissionError.upload
+            }`}
           </Typography>
         </DialogContent>
         <DialogActions>
@@ -238,13 +234,13 @@ export default function EssayInfo({ role = 'NORMAL' }) {
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Class" childrenType="text">
-            <Typography>{`${courses[courseId].name} ${classes[classId].name}`}</Typography>
+            <Typography>{`${courseInfo?.name} ${classInfo?.name}`}</Typography>
           </AlignedText>
           <AlignedText text="Title" childrenType="text">
-            <Typography>{challenges[challengeId].title}</Typography>
+            <Typography>{challengeInfo?.title}</Typography>
           </AlignedText>
           <AlignedText text="Label" childrenType="text">
-            <Typography>{essay[essayId].challenge_label}</Typography>
+            <Typography>{essay.challenge_label}</Typography>
           </AlignedText>
           <Typography variant="body2" color="textPrimary">
             Once you delete a essay, there is no going back. Please be certain.

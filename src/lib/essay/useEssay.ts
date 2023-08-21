@@ -6,11 +6,11 @@ import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
 import { deleteEssay, editEssay, readEssay } from './fetchers';
 
 const useEssay = (essayId: number) => {
-  const readEssaySWR = useSWR(`/essay/{essay_id}`, () => readEssay({ essay_id: essayId }));
+  const readEssaySWR = useSWR(`/essay/${essayId}`, () => readEssay({ essay_id: essayId }));
 
-  const deleteEssaySWR = useSWRMutation(`/essay/{essay_id}`, toSWRMutationFetcher(deleteEssay));
+  const deleteEssaySWR = useSWRMutation(`/essay/${essayId}`, toSWRMutationFetcher(deleteEssay));
 
-  const editEssaySWR = useSWRMutation(`/essay/{essay_id}`, toSWRMutationFetcher(editEssay));
+  const editEssaySWR = useSWRMutation(`/essay/${essayId}`, toSWRMutationFetcher(editEssay));
 
   return {
     essay: readEssaySWR.data?.data.data,

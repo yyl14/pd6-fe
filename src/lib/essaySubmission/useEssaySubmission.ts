@@ -1,32 +1,31 @@
-import useSWR from 'swr';
-import useSWRMutation from 'swr/mutation';
+import { useState } from 'react';
+import fetchAPI from '../fetchAPI';
 
-import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
+const useEssaySubmission = () => {
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
-import { readEssaySubmission, reuploadEssay } from './fetchers';
+  async function reuploadEssay(file: Blob, essaySubmissionId: string) {
+    const formData = new FormData();
+    formData.append('essay_file', file);
 
-const useEssaySubmission = (essaySubmissionId: number) => {
-  const readEssaySubmissionSWR = useSWR(`/essay-submission/{essay_submission_id}`, () =>
-    readEssaySubmission({ essay_submission_id: essaySubmissionId }),
-  );
+    const options = {
+      method: 'POST',
+      body: formData,
+    };
 
-  const reuploadEssaySWR = useSWRMutation(
-    `/essay-submission/{essay_submission_id}`,
-    toSWRMutationFetcher(reuploadEssay),
-  );
+    try {
+      await fetchAPI(`/essay-submission/${essaySubmissionId}`, options);
+    } catch (e) {
+      setUploadError(String(e));
+      throw e;
+    }
+  }
 
   return {
-    essaySubmission: readEssaySubmissionSWR.data?.data.data,
-    reuploadEssay: reuploadEssaySWR.trigger,
-
-    isLoading: {
-      read: readEssaySubmissionSWR.isLoading,
-      reupload: reuploadEssaySWR.isMutating,
-    },
+    reuploadEssay: reuploadEssay,
 
     error: {
-      read: readEssaySubmissionSWR.error,
-      reupload: reuploadEssaySWR.error,
+      upload: uploadError,
     },
   };
 };
