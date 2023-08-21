@@ -1,4 +1,4 @@
-import { makeStyles, Typography } from '@material-ui/core';
+import { Typography, makeStyles } from '@material-ui/core';
 import { useEffect, useRef, useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '16px',
   },
   fieldAlignedText: {
-    marginTop: '18px',
+    marginTop: '23px',
   },
   radioAlignedText: {
     marginBottom: '16px',
