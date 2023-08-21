@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-
 import {
   Button,
   Dialog,
@@ -82,8 +81,8 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
   } = useEssayEssaySubmissions(Number(essayId));
   const [disabledUpload, setDisabledUpload] = useState(true);
   const userId = useUserId();
-  const [selectedFile, setSelectedFile] = useState([]);
-  const [fileName, setFileName] = useState();
+  const [selectedFile, setSelectedFile] = useState<File[]>([]);
+  const [fileName, setFileName] = useState('');
   const { downloadFile } = useS3File();
   const [popUpUpload, setPopUpUpload] = useState(false);
   const [popUpFail, setPopUpFail] = useState(false);
@@ -109,6 +108,7 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
   };
 
   const handleUpload = async () => {
+    setDisabledUpload(true);
     if (essaySubmission?.data[0]) {
       try {
         await reuploadEssay({ essaySubmissionId: String(essaySubmission?.data[0].id), file: selectedFile[0] });
@@ -126,6 +126,8 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
     }
     setFileName(selectedFile[0].name);
     setSelectedFile([]);
+    setDisabledUpload(false);
+    setPopUpUpload(false);
   };
 
   const handleSubmitDelete = () => {
@@ -209,8 +211,6 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
             disabled={disabledUpload}
             onClick={() => {
               handleUpload();
-              setSelectedFile([]);
-              setPopUpUpload(false);
             }}
             color="primary"
           >
