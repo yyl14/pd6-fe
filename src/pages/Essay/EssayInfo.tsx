@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import NoMatch from '@/components/noMatch';
 import AlignedText from '@/components/ui/AlignedText';
 import FileUploadArea from '@/components/ui/FileUploadArea';
