@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
-import SimpleBar from '@/components/ui/SimpleBar';
 import { Button, TextField, makeStyles } from '@material-ui/core';
+
+import SimpleBar from '@/components/ui/SimpleBar';
 
 import useEssay from '@/lib/essay/useEssay';
 
