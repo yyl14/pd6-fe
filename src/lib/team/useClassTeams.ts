@@ -1,18 +1,15 @@
-import { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 
 import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
 import { withDataSchema } from '@/hooks/useSWRWithBrowseParams';
-import fetchAPI from '@/lib/fetchAPI';
 
 import { components } from '../../../types/schema';
-import { addTeamUnderClass, browseTeamUnderClass } from './fetchers';
+import { addTeamUnderClass, browseTeamUnderClass, importTeam } from './fetchers';
 
 export type TeamDataSchema = components['schemas']['pydantic__dataclasses__Team'];
 
 const useClassTeams = (classId: number) => {
   const useSWRWithBrowseParams = withDataSchema<TeamDataSchema>();
-  const [importError, setImportError] = useState<string | null>(null);
 
   const browseTeamUnderClassSWR = useSWRWithBrowseParams(
     `/class/${classId}/team`,
@@ -22,26 +19,7 @@ const useClassTeams = (classId: number) => {
   );
 
   const addTeamUnderClassSWR = useSWRMutation(`/class/${classId}/team`, toSWRMutationFetcher(addTeamUnderClass));
-
-  async function importTeam(label: string, file: Blob) {
-    const formData = new FormData();
-    formData.append('team_file', file);
-
-    const options = {
-      params: {
-        label,
-      },
-      method: 'POST',
-      body: formData,
-    };
-
-    try {
-      await fetchAPI(`/class/${classId}/team-import`, options);
-    } catch (e) {
-      setImportError(String(e));
-      throw e;
-    }
-  }
+  const importTeamSWR = useSWRMutation(`/class/${classId}/team-import`, importTeam);
 
   return {
     browseTeamUnderClass: {
@@ -52,16 +30,18 @@ const useClassTeams = (classId: number) => {
       sort: browseTeamUnderClassSWR.sort,
     },
     addTeamUnderClass: addTeamUnderClassSWR.trigger,
-    importTeamUnderClass: importTeam,
+    importTeamUnderClass: importTeamSWR.trigger,
 
     isLoading: {
       browse: browseTeamUnderClassSWR.isLoading,
       add: addTeamUnderClassSWR.isMutating,
+      import: importTeamSWR.isMutating,
     },
+
     error: {
       browse: browseTeamUnderClassSWR.error,
       add: addTeamUnderClassSWR.error,
-      import: importError,
+      import: importTeamSWR.error,
     },
   };
 };

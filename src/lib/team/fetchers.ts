@@ -56,3 +56,28 @@ export const editTeamMember = async (
   const res = await fetchAPI(`/team/${arg.team_id}/member`, options);
   return res;
 };
+
+export const importTeam = async (
+  url: string,
+  {
+    arg,
+  }: {
+    arg: {
+      label: string;
+      file: Blob;
+    };
+  },
+) => {
+  const formData = new FormData();
+  formData.append('grade_file', arg.file);
+
+  const options = {
+    params: {
+      label: arg.label,
+    },
+    method: 'POST',
+    body: formData,
+  };
+
+  await fetchAPI(url, options);
+};

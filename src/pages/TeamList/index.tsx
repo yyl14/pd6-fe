@@ -140,7 +140,14 @@ export default function TeamList({ courseId, classId }: { courseId: string; clas
   const submitImport = async () => {
     if (importInput !== '' && selectedFile.length !== 0) {
       try {
-        await Promise.all(selectedFile.map((file) => importTeamUnderClass(importInput, file)));
+        await Promise.all(
+          selectedFile.map((file) =>
+            importTeamUnderClass({
+              label: importInput,
+              file,
+            }),
+          ),
+        );
         importTeamSuccess();
       } catch {
         setShowImpTeamSnackBar(true);
@@ -340,7 +347,11 @@ export default function TeamList({ courseId, classId }: { courseId: string; clas
           </div>
         </DialogActions>
       </Dialog>
-      <Snackbar open={showImpTeamSnackBar} onClose={handleCloseError} message={`Error: ${classTeamError.import}`} />
+      <Snackbar
+        open={showImpTeamSnackBar}
+        onClose={handleCloseError}
+        message={`Error: ${classTeamError.import?.message}`}
+      />
 
       <Dialog open={showAddDialog} onClose={() => setShowAddDialog(false)} maxWidth="md">
         <DialogTitle id="dialog-slide-title">
