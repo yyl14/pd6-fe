@@ -1,49 +1,28 @@
-import { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 
 import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
-import fetchAPI from '@/lib/fetchAPI';
 
 import { components } from '../../../types/schema';
-import { addClassGrade } from './fetchers';
+import { addClassGrade, importClassGrade } from './fetchers';
 
 export type ClassGradeSchema = components['schemas']['pydantic__dataclasses__Grade'];
 
 const useClassGrade = (classId: number) => {
   const addClassGradeSWR = useSWRMutation(`/class/${classId}/grade`, toSWRMutationFetcher(addClassGrade));
-  const [importError, setImportError] = useState<string | null>(null);
-
-  async function importGrade(title: string, file: Blob) {
-    const formData = new FormData();
-    formData.append('grade_file', file);
-
-    const options = {
-      params: {
-        title,
-      },
-      method: 'POST',
-      body: formData,
-    };
-
-    try {
-      await fetchAPI(`/class/${classId}/grade-import`, options);
-    } catch (e) {
-      setImportError(String(e));
-      throw e;
-    }
-  }
+  const importClassGradeSWR = useSWRMutation(`/class/${classId}/grade-import`, importClassGrade);
 
   return {
     addClassGrade: addClassGradeSWR.trigger,
-    importClassGrade: importGrade,
+    importClassGrade: importClassGradeSWR.trigger,
 
     isLoading: {
       add: addClassGradeSWR.isMutating,
+      import: importClassGradeSWR.isMutating,
     },
 
     error: {
       add: addClassGradeSWR.error,
-      import: importError,
+      import: importClassGradeSWR.error,
     },
   };
 };

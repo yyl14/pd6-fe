@@ -109,7 +109,14 @@ export default function GradeList({ courseId, classId }: { courseId: string; cla
     if (showImportDialog) {
       if (inputTitle !== '' && selectedFile.length !== 0) {
         try {
-          await Promise.all(selectedFile.map((file) => importClassGrade(inputTitle, file)));
+          await Promise.all(
+            selectedFile.map((file) =>
+              importClassGrade({
+                title: inputTitle,
+                file,
+              }),
+            ),
+          );
           setShowImportDialog(false);
           setIsDisabled(true);
           setInputTitle('');
@@ -394,7 +401,7 @@ export default function GradeList({ courseId, classId }: { courseId: string; cla
       <Snackbar
         open={showImportDialog && showSnackBar}
         onClose={handleCloseError}
-        message={`Error: ${classGradeError.import}`}
+        message={`Error: ${classGradeError.import?.message}`}
       />
     </>
   );
