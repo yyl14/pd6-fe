@@ -98,7 +98,7 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
   const handleUpload = () => {
     if (essaySubmission?.data[0]) {
       try {
-        reuploadEssay(selectedFile[0], String(essaySubmission?.data[0].id));
+        reuploadEssay({ essaySubmissionId: String(essaySubmission?.data[0].id), file: selectedFile[0] });
         mutateEssaySubmission();
       } catch {
         setPopUpFail(true);
@@ -115,13 +115,10 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
     setSelectedFile([]);
   };
 
-  const handleDeleteSuccess = () => {
-    mutateTasksUnderChallenge();
-    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
-  };
-
   const handleSubmitDelete = () => {
     deleteEssay({ essay_id: Number(essayId) });
+    mutateTasksUnderChallenge();
+    history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
   };
 
   useEffect(() => {
@@ -219,7 +216,7 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
             <br />
             <br />
             {`Failed Reason: ${
-              essaySubmission?.data[0] ? essayEssaySubmissionError.upload : essaySubmissionError.upload
+              essaySubmission?.data[0] ? essayEssaySubmissionError.upload : essaySubmissionError.reupload
             }`}
           </Typography>
         </DialogContent>

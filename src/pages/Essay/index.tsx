@@ -13,7 +13,6 @@ import {
   withStyles,
 } from '@material-ui/core';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import useEssayEssaySubmissions from '@/lib/essaySubmission/useEssayEssaySubmissions';
 import EssayEdit from './EssayEdit';
@@ -55,8 +54,6 @@ export default function Essay({
   essayId: string;
 }) {
   const classNames = useStyles();
-
-  const dispatch = useDispatch();
 
   const [role, setRole] = useState('Normal');
   const [edit, setEdit] = useState(false);
