@@ -3,12 +3,16 @@ import { Route, Switch, useParams } from 'react-router-dom';
 
 import GeneralLoading from '@/components/GeneralLoading';
 import withConditionalRender from '@/components/hoc/withConditionalRender';
-import type { RouteParamsType } from '@/pages/Scoreboard';
 
 const Scoreboard = lazy(() => import('@/pages/Scoreboard'));
 
 function ScoreboardRoute() {
-  const { courseId, classId, challengeId, scoreboardId } = useParams<RouteParamsType>();
+  const { courseId, classId, challengeId, scoreboardId } = useParams<{
+    courseId: string;
+    classId: string;
+    challengeId: string;
+    scoreboardId: string;
+  }>();
 
   return (
     <Suspense fallback={<GeneralLoading />}>
