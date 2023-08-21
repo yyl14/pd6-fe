@@ -69,7 +69,7 @@ export const importTeam = async (
   },
 ) => {
   const formData = new FormData();
-  formData.append('grade_file', arg.file);
+  formData.append('team_file', arg.file);
 
   const options = {
     params: {
