@@ -73,7 +73,6 @@ export default function ScoreboardEdit({
       await mutateScoreboard();
       setEdit(false);
     } catch {
-      // the version 6 lacks error handling
       setShowSnackbar(true);
     }
   };
@@ -118,12 +117,6 @@ export default function ScoreboardEdit({
                 {team_name}
               </MenuItem>
             ))}
-            {/* the origin is
-             {classes.byId[classId].teamIds.map((id) => (
-              <MenuItem key={id} value={id}>
-                {teams.byId[id].name}
-              </MenuItem>
-            ))} */}
           </Select>
         </FormControl>
       </AlignedText>
