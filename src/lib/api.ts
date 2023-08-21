@@ -4,14 +4,14 @@ import useAuthStore from '@/stores/authStore';
 
 import { paths } from '../../types/schema';
 
-// const logger: Middleware = async (url, init, next) => {
-//   // eslint-disable-next-line no-console
-//   console.log(`fetching ${url}`);
-//   const res = await next(url, init);
-//   // eslint-disable-next-line no-console
-//   console.log(`fetched ${url}`);
-//   return res;
-// };
+const logger: Middleware = async (url, init, next) => {
+  // eslint-disable-next-line no-console
+  console.log(`fetching ${url}`);
+  const res = await next(url, init);
+  // eslint-disable-next-line no-console
+  console.log(`fetched ${url}`);
+  return res;
+};
 
 const authTokenInjector: Middleware = async (url, init, next) => {
   const token = useAuthStore.getState().authToken;
@@ -50,7 +50,7 @@ const api = Fetcher.for<paths>();
 
 api.configure({
   baseUrl: process.env.REACT_APP_API_ROOT,
-  use: [interceptUndefinedParams, authTokenInjector, fetchError, tokenExpirationHandler],
+  use: [interceptUndefinedParams, logger, authTokenInjector, fetchError, tokenExpirationHandler],
 });
 
 export default api;

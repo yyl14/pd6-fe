@@ -20,8 +20,8 @@ import PageTitle from '@/components/ui/PageTitle';
 import Icon from '@/components/ui/icon/index';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
-import useAddTeamMember from '@/lib/team/useAddTeamMember';
 import useClassTeams, { TeamDataSchema } from '@/lib/team/useClassTeams';
+import useTeam from '@/lib/team/useTeam';
 import useTeamTemplate from '@/lib/team/useTeamTemplate';
 import useUserClasses from '@/lib/user/useUserClasses';
 
@@ -67,7 +67,7 @@ export default function TeamList({ courseId, classId }: { courseId: string; clas
     error: classTeamError,
   } = useClassTeams(Number(classId));
   const { downloadTeamTemplate } = useTeamTemplate();
-  const { addTeamMember, error: addTeamMemberError } = useAddTeamMember();
+  const { addTeamMember, error: teamError } = useTeam(null);
 
   const [isManager, setIsManager] = useState(false);
 
@@ -166,7 +166,10 @@ export default function TeamList({ courseId, classId }: { courseId: string; clas
             account_referral: member.username,
             role: member.role,
           }));
-          const { data: memberRes } = await addTeamMember(teamId, JSON.stringify(body));
+          const { data: memberRes } = await addTeamMember({
+            team_id: teamId,
+            body: JSON.stringify(body),
+          });
           const resList = selectedMember.map((member, i) => ({
             ...member,
             success: (memberRes as AddTeamResponse)[i],
@@ -407,12 +410,12 @@ export default function TeamList({ courseId, classId }: { courseId: string; clas
       <Snackbar
         open={showAddMemberError && errorMemberList === undefined}
         onClose={handleCloseError}
-        message={`Add team members fail: ${addTeamMemberError.add}`}
+        message={`Add team members fail: ${teamError.add?.message}`}
       />
       <Snackbar
         open={showAddTeamSnackBar}
         onClose={handleCloseError}
-        message={`Create team fail: ${classTeamError.add}`}
+        message={`Create team fail: ${classTeamError.add?.message}`}
       />
     </>
   );

@@ -152,7 +152,10 @@ export default function TeamMemberEdit({ teamId, isManager, handleBack }: TeamMe
                 role,
               },
             ]);
-            await editTeamMember(Number(teamId), body);
+            await editTeamMember({
+              team_id: Number(teamId),
+              body,
+            });
             // eslint-disable-next-line no-empty
           } catch {}
         }
@@ -173,7 +176,7 @@ export default function TeamMemberEdit({ teamId, isManager, handleBack }: TeamMe
       });
       const body = JSON.stringify(saveAddMember);
       try {
-        await addTeamMember(Number(teamId), body);
+        await addTeamMember({ team_id: Number(teamId), body });
         handleAddSuccess();
       } catch {
         setAddMemberFail(true);
