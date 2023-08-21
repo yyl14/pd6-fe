@@ -37,7 +37,7 @@ export default async function fetchAPI(endpoint: string, options: RequestOption)
   const res = await fetch(url, fetchOptions);
   const data = await res.json();
 
-  if (!res.ok) {
+  if (!res.ok || !data.success) {
     if (data.error?.toString() === 'LoginExpired') {
       useAuthStore.getState().clear();
     }

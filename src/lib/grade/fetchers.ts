@@ -3,7 +3,7 @@ import fetchAPI from '@/lib/fetchAPI';
 import api from '../api';
 
 // useClassGrade()
-export const importClassGrade = (
+export const importClassGrade = async (
   url: string,
   {
     arg,
@@ -25,7 +25,7 @@ export const importClassGrade = (
     body: formData,
   };
 
-  fetchAPI(url, options);
+  await fetchAPI(url, options);
 };
 
 export const browseClassGrade = api.path('/class/{class_id}/grade').method('get').create();
