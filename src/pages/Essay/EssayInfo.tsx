@@ -18,7 +18,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Link,
   Typography,
   makeStyles,
   withStyles,
@@ -27,6 +26,7 @@ import { MathpixLoader, MathpixMarkdown } from 'mathpix-markdown-it';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
 const StyledButton = withStyles({
   outlined: {
     '& path': {
@@ -155,7 +155,7 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
         </StyledButton>
         {essaySubmission?.data[0] && (
           <div className={classNames.uploadedFile}>
-            <Link onClick={handleClickLink}>{essaySubmission?.data[0]?.filename}</Link>{' '}
+            <Button onClick={handleClickLink}>{essaySubmission?.data[0]?.filename}</Button>{' '}
             {moment(essaySubmission?.data[0]?.submit_time).format('YYYY-MM-DD, HH:mm:ss')}
           </div>
         )}

@@ -14,14 +14,14 @@ import {
 } from '@material-ui/core';
 import { useState } from 'react';
 
-import useEssayEssaySubmissions from '@/lib/essaySubmission/useEssayEssaySubmissions';
-import EssayEdit from './EssayEdit';
-import EssayInfo from './EssayInfo';
-
 import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useEssay from '@/lib/essay/useEssay';
+import useEssayEssaySubmissions from '@/lib/essaySubmission/useEssayEssaySubmissions';
+
+import EssayEdit from './EssayEdit';
+import EssayInfo from './EssayInfo';
 
 const useStyles = makeStyles(() => ({
   generalButtons: {
@@ -55,7 +55,7 @@ export default function Essay({
 }) {
   const classNames = useStyles();
 
-  const [role, setRole] = useState('Normal');
+  const [role] = useState('Normal');
   const [edit, setEdit] = useState(false);
   const [emailSentPopup, setEmailSentPopup] = useState(false);
 
@@ -96,13 +96,7 @@ export default function Essay({
         </div>
       )}
       {edit ? (
-        <EssayEdit
-          courseId={courseId}
-          classId={classId}
-          challengeId={challengeId}
-          essayId={essayId}
-          closeEdit={handleCloseEdit}
-        />
+        <EssayEdit essayId={essayId} closeEdit={handleCloseEdit} />
       ) : (
         <EssayInfo courseId={courseId} classId={classId} challengeId={challengeId} essayId={essayId} role={role} />
       )}

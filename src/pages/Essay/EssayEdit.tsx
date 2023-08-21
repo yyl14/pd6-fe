@@ -19,15 +19,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface EssayEditProps {
-  courseId: string;
-  classId: string;
-  challengeId: string;
   essayId: string;
   closeEdit: () => void;
 }
 
 /* This is a level 4 component (page component) */
-export default function EssayEdit({ courseId, classId, challengeId, essayId, closeEdit }: EssayEditProps) {
+export default function EssayEdit({ essayId, closeEdit }: EssayEditProps) {
   const classNames = useStyles();
 
   const { essay, editEssay } = useEssay(Number(essayId));
@@ -37,7 +34,7 @@ export default function EssayEdit({ courseId, classId, challengeId, essayId, clo
   const [description, setDescription] = useState(!essay ? 'error' : essay.description);
 
   const handleClickSave = async () => {
-    await editEssay({ essay_id: Number(essayId), challenge_label: label, title: title, description: description });
+    await editEssay({ essay_id: Number(essayId), challenge_label: label, title, description });
     closeEdit();
   };
 
