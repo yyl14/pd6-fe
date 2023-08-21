@@ -3,7 +3,7 @@ import fetchAPI from '../fetchAPI';
 
 export const browseEssaySubmissionByEssayId = api.path('/essay/{essay_id}/essay-submission').method('get').create();
 
-export const uploadEssay = (
+export const uploadEssay = async (
   url: string,
   {
     arg,
@@ -21,7 +21,7 @@ export const uploadEssay = (
     body: formData,
   };
 
-  fetchAPI(url, options);
+  await fetchAPI(url, options);
 };
 
 export const downloadAllEssaySubmissions = api
@@ -31,7 +31,7 @@ export const downloadAllEssaySubmissions = api
 
 export const readEssaySubmission = api.path('/essay-submission/{essay_submission_id}').method('get').create();
 
-export const reuploadEssay = (
+export const reuploadEssay = async (
   url: string,
   {
     arg,
@@ -50,5 +50,5 @@ export const reuploadEssay = (
     body: formData,
   };
 
-  fetchAPI(`/essay-submission/${arg.essaySubmissionId}`, options);
+  await fetchAPI(`/essay-submission/${arg.essaySubmissionId}`, options);
 };

@@ -52,7 +52,6 @@ interface EssayInfoProps {
   role: string;
 }
 
-/* This is a level 4 component (page component) */
 export default function EssayInfo({ courseId, classId, challengeId, essayId, role = 'NORMAL' }: EssayInfoProps) {
   const history = useHistory();
   const classNames = useStyles();

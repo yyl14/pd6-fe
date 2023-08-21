@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   Button,
@@ -21,6 +21,7 @@ import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useEssay from '@/lib/essay/useEssay';
 import useEssayEssaySubmissions from '@/lib/essaySubmission/useEssayEssaySubmissions';
+import useUserClasses from '@/lib/user/useUserClasses';
 
 import EssayEdit from './EssayEdit';
 import EssayInfo from './EssayInfo';
@@ -57,7 +58,8 @@ export default function Essay({
 }) {
   const classNames = useStyles();
 
-  const [role] = useState('Normal');
+  const { accountClasses: userClasses } = useUserClasses();
+  const [role, setRole] = useState('Normal');
   const [edit, setEdit] = useState(false);
   const [emailSentPopup, setEmailSentPopup] = useState(false);
 
@@ -67,6 +69,12 @@ export default function Essay({
   const { essay: essayInfo } = useEssay(Number(essayId));
 
   const { downloadAllSubmissions } = useEssayEssaySubmissions(Number(essayId));
+
+  useEffect(() => {
+    if (userClasses?.filter((item) => item.class_id === Number(classId))?.[0]?.role) {
+      setRole(userClasses?.filter((item) => item.class_id === Number(classId))[0].role);
+    }
+  }, [classId, userClasses]);
 
   const handleCloseEdit = () => {
     setEdit(false);

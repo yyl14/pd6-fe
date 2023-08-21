@@ -25,7 +25,6 @@ interface EssayEditProps {
   closeEdit: () => void;
 }
 
-/* This is a level 4 component (page component) */
 export default function EssayEdit({ essayId, closeEdit }: EssayEditProps) {
   const classNames = useStyles();
 
