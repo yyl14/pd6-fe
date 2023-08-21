@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import {
   Button,
   Dialog,
@@ -11,11 +9,11 @@ import {
   makeStyles,
   withStyles,
 } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 
 import AlignedText from '@/components/ui/AlignedText';
 import PageTitle from '@/components/ui/PageTitle';
 import Icon from '@/components/ui/icon/index';
-
 import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
@@ -144,7 +142,13 @@ export default function Essay({
           <DialogContentText id="alert-dialog-slide-description">Please check your mailbox.</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setEmailSentPopup(false)} color="primary">
+          <Button
+            onClick={() => {
+              setEmailSentPopup(false);
+              setPopup(false);
+            }}
+            color="primary"
+          >
             Done
           </Button>
         </DialogActions>
