@@ -1,26 +1,18 @@
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
+import type { components } from '../../../types/schema';
 import { deleteScoreboard, readScoreboard } from './fetchers';
 
-type Temp =
-  | {
-      id: number;
-      challenge_id: number;
-      challenge_label: string;
-      title: string;
-      target_problem_ids: number[];
-      is_deleted: boolean;
-      type: 'TEAM_PROJECT' | 'TEAM_CONTEST';
-      data: {
-        id: number;
-        scoring_formula: string;
-        baseline_team_id: null | number;
-        rank_by_total_score: boolean;
-        team_label_filter: string;
-      };
-    }
-  | undefined;
+type Scoreboard = Omit<components['schemas']['Scoreboard'], 'data'> & {
+  data: {
+    id: number;
+    scoring_formula: string;
+    baseline_team_id: null | number;
+    rank_by_total_score: boolean;
+    team_label_filter: string;
+  };
+};
 
 const useScoreboard = (scoreboardId: number) => {
   const readScoreboardSWR = useSWR(`/scoreboard/${scoreboardId}`, () =>
@@ -31,7 +23,7 @@ const useScoreboard = (scoreboardId: number) => {
   );
 
   return {
-    scoreboard: readScoreboardSWR.data?.data.data as Temp, // TODO: type assertion?
+    scoreboard: readScoreboardSWR.data?.data.data as Scoreboard, // TODO: type assertion?
     deleteScoreboard: deleteScoreboardSWR.trigger,
     mutateScoreboard: readScoreboardSWR.mutate,
 

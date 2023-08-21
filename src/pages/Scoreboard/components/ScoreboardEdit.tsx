@@ -51,7 +51,7 @@ export default function ScoreboardEdit({
   const { tasks } = useChallengeTasks(Number(challengeId));
 
   const [targetLabels, setTargetLabels] = useState(
-    scoreboard?.target_problem_ids.map((id) => tasks?.problem.find((p) => p.id === id)?.challenge_label),
+    scoreboard?.target_problem_ids.map((id) => tasks?.problem.find((problem) => problem.id === id)?.challenge_label),
   );
   const [scoringFormula, setScoringFormula] = useState(scoreboard?.data.scoring_formula ?? 'error');
   const [baselineTeam, setBaselineTeam] = useState(scoreboard?.data.baseline_team_id ?? '');
@@ -59,7 +59,9 @@ export default function ScoreboardEdit({
 
   const handleSave = async () => {
     try {
-      const targetIds = targetLabels?.map((l) => tasks?.problem.find((p) => p.challenge_label === l)?.id) as number[];
+      const targetIds = targetLabels?.map(
+        (label) => tasks?.problem.find((problem) => problem.challenge_label === label)?.id,
+      ) as number[];
       await editTeamProjectScoreboard({
         scoreboard_id: Number(scoreboardId),
         challenge_label: scoreboard?.challenge_label,
@@ -87,7 +89,7 @@ export default function ScoreboardEdit({
       </AlignedText>
       <AlignedText maxWidth="lg" text="Target Problems" childrenType="field">
         <MultiSelect
-          options={tasks?.problem.map((p) => p.challenge_label).sort((a, b) => a.localeCompare(b))}
+          options={tasks?.problem.map((problem) => problem.challenge_label).sort((a, b) => a.localeCompare(b))}
           value={targetLabels}
           setValue={setTargetLabels}
         />

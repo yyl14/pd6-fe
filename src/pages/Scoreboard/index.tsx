@@ -85,7 +85,8 @@ export default function ScoreboardInfo({ courseId, classId, challengeId, scorebo
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [deletePopup, setDeletePopup] = useState(false);
   const labels = useMemo(
-    () => scoreboard?.target_problem_ids.map((id) => tasks?.problem.find((p) => p.id === id)?.challenge_label),
+    () =>
+      scoreboard?.target_problem_ids.map((id) => tasks?.problem.find((problem) => problem.id === id)?.challenge_label),
     [scoreboard?.target_problem_ids, tasks?.problem],
   );
 
@@ -95,8 +96,8 @@ export default function ScoreboardInfo({ courseId, classId, challengeId, scorebo
         setScoreboardTeams(
           teamProjectScoreboard
             .sort((a, b) => b.total_score - a.total_score)
-            .map((t, index) =>
-              t.target_problem_data.reduce(
+            .map((teamInfo, index) =>
+              teamInfo.target_problem_data.reduce(
                 (acc, curr) => ({
                   ...acc,
                   [`problem-${curr.problem_id}-score`]: curr.score,
@@ -105,10 +106,10 @@ export default function ScoreboardInfo({ courseId, classId, challengeId, scorebo
                   }),
                 }),
                 {
-                  ...t,
-                  id: t.team_id,
+                  ...teamInfo,
+                  id: teamInfo.team_id,
                   rank: index + 1,
-                  team_path: `/6a/my-class/${courseId}/${classId}/team/${t.team_id}`,
+                  team_path: `/6a/my-class/${courseId}/${classId}/team/${teamInfo.team_id}`,
                 },
               ),
             ),
@@ -117,14 +118,14 @@ export default function ScoreboardInfo({ courseId, classId, challengeId, scorebo
       // set scoreboard column
       setScoreboardTitle([
         ...scoreboardBasicTitle,
-        ...scoreboard.target_problem_ids.map((p, index) => ({
-          id: `problem-${p}-score`,
+        ...scoreboard.target_problem_ids.map((problem, index) => ({
+          id: `problem-${problem}-score`,
           label: `${labels?.[index]} Score`,
           minWidth: 100,
           align: 'center',
           width: 200,
           type: role === 'MANAGER' ? 'link' : 'string',
-          link_id: `problem-${p}-submission`,
+          link_id: `problem-${problem}-submission`,
         })),
       ]);
     }
