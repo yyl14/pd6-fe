@@ -1,6 +1,5 @@
-import AlignedText from '@/components/ui/AlignedText';
-import PageTitle from '@/components/ui/PageTitle';
-import Icon from '@/components/ui/icon/index';
+import { useState } from 'react';
+
 import {
   Button,
   Dialog,
@@ -12,7 +11,10 @@ import {
   makeStyles,
   withStyles,
 } from '@material-ui/core';
-import { useState } from 'react';
+
+import AlignedText from '@/components/ui/AlignedText';
+import PageTitle from '@/components/ui/PageTitle';
+import Icon from '@/components/ui/icon/index';
 
 import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';

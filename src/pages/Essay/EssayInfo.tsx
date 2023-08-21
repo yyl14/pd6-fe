@@ -1,19 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import NoMatch from '@/components/noMatch';
-import AlignedText from '@/components/ui/AlignedText';
-import FileUploadArea from '@/components/ui/FileUploadArea';
-import SimpleBar from '@/components/ui/SimpleBar';
-import Icon from '@/components/ui/icon/index';
-import useChallenge from '@/lib/challenge/useChallenge';
-import useClass from '@/lib/class/useClass';
-import useCourse from '@/lib/course/useCourse';
-import useEssay from '@/lib/essay/useEssay';
-import useEssayEssaySubmissions from '@/lib/essaySubmission/useEssayEssaySubmissions';
-import useEssaySubmission from '@/lib/essaySubmission/useEssaySubmission';
-import useS3File from '@/lib/s3File/useS3File';
-import useChallengeTasks from '@/lib/task/useChallengeTasks';
-import useUserId from '@/lib/user/useUserId';
 import {
   Button,
   Dialog,
@@ -28,6 +14,21 @@ import { MathpixLoader, MathpixMarkdown } from 'mathpix-markdown-it';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
+import NoMatch from '@/components/noMatch';
+import AlignedText from '@/components/ui/AlignedText';
+import FileUploadArea from '@/components/ui/FileUploadArea';
+import SimpleBar from '@/components/ui/SimpleBar';
+import Icon from '@/components/ui/icon/index';
+import useChallenge from '@/lib/challenge/useChallenge';
+import useClass from '@/lib/class/useClass';
+import useCourse from '@/lib/course/useCourse';
+import useEssay from '@/lib/essay/useEssay';
+import useEssayEssaySubmissions from '@/lib/essaySubmission/useEssayEssaySubmissions';
+import useEssaySubmission from '@/lib/essaySubmission/useEssaySubmission';
+import useS3File from '@/lib/s3File/useS3File';
+import useChallengeTasks from '@/lib/task/useChallengeTasks';
+import useUserId from '@/lib/user/useUserId';
 
 const StyledButton = withStyles({
   outlined: {
