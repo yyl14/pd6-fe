@@ -10,32 +10,13 @@ import SimpleTable from '@/components/ui/SimpleTable';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
+import type { ColumnType, DataType } from '@/lib/scoreboard/useScoreboard';
 import useScoreboard from '@/lib/scoreboard/useScoreboard';
 import useChallengeTasks from '@/lib/task/useChallengeTasks';
 import useTeam from '@/lib/team/useTeam';
 import useUserClasses from '@/lib/user/useUserClasses';
 import useViewTeamProjectScoreboard from '@/lib/view/useViewTeamProjectScoreboard';
 import ScoreboardEdit from '@/pages/Scoreboard/components/ScoreboardEdit';
-
-type ColumnType = {
-  id: string;
-  label: string;
-  align: string;
-  width: number;
-  type: string;
-  minWidth?: number;
-  link_id?: string;
-};
-
-type DataType = {
-  id: number;
-  rank: number;
-  team_path: string;
-  team_id: number;
-  team_name: string;
-  total_score: number;
-  target_problem_data: { problem_id: number; score: number; submission_id: number }[];
-};
 
 const scoreboardBasicTitle: ColumnType[] = [
   {

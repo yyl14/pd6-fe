@@ -14,6 +14,26 @@ type Scoreboard = Omit<components['schemas']['Scoreboard'], 'data'> & {
   };
 };
 
+export type ColumnType = {
+  id: string;
+  label: string;
+  align: string;
+  width: number;
+  type: string;
+  minWidth?: number;
+  link_id?: string;
+};
+
+export type DataType = {
+  id: number;
+  rank: number;
+  team_path: string;
+  team_id: number;
+  team_name: string;
+  total_score: number;
+  target_problem_data: { problem_id: number; score: number; submission_id: number }[];
+};
+
 const useScoreboard = (scoreboardId: number) => {
   const readScoreboardSWR = useSWR(`/scoreboard/${scoreboardId}`, () =>
     readScoreboard({ scoreboard_id: scoreboardId }),
