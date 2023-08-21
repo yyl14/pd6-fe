@@ -6,6 +6,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Link,
   Typography,
   makeStyles,
   withStyles,
@@ -41,6 +42,16 @@ const StyledButton = withStyles({
 const useStyles = makeStyles(() => ({
   uploadedFile: {
     marginLeft: 50,
+  },
+  noBackground: {
+    position: 'static',
+    verticalAlign: 'baseline',
+    height: 'min-content',
+    padding: 0,
+    background: 'none !important',
+    '&.Mui-hovered': {
+      background: 'none !important',
+    },
   },
 }));
 
@@ -97,23 +108,23 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
     setPopUpDelete(false);
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (essaySubmission?.data[0]) {
       try {
-        reuploadEssay({ essaySubmissionId: String(essaySubmission?.data[0].id), file: selectedFile[0] });
+        await reuploadEssay({ essaySubmissionId: String(essaySubmission?.data[0].id), file: selectedFile[0] });
         mutateEssaySubmission();
       } catch {
         setPopUpFail(true);
       }
     } else {
       try {
-        uploadEssay(selectedFile[0]);
+        await uploadEssay({ file: selectedFile[0] });
         mutateEssaySubmission();
       } catch {
         setPopUpFail(true);
       }
     }
-    setFileName(selectedFile[0]);
+    setFileName(selectedFile[0].name);
     setSelectedFile([]);
   };
 
@@ -157,7 +168,9 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
         </StyledButton>
         {essaySubmission?.data[0] && (
           <div className={classNames.uploadedFile}>
-            <Button onClick={handleClickLink}>{essaySubmission?.data[0]?.filename}</Button>{' '}
+            <Button component={Link} className={classNames.noBackground} onClick={handleClickLink}>
+              {essaySubmission?.data[0]?.filename}
+            </Button>{' '}
             {moment(essaySubmission?.data[0]?.submit_time).format('YYYY-MM-DD, HH:mm:ss')}
           </div>
         )}
@@ -239,7 +252,7 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
             <Typography>{challengeInfo?.title}</Typography>
           </AlignedText>
           <AlignedText text="Label" childrenType="text">
-            <Typography>{essay.challenge_label}</Typography>
+            <Typography>{essay?.challenge_label}</Typography>
           </AlignedText>
           <Typography variant="body2" color="textPrimary">
             Once you delete a essay, there is no going back. Please be certain.
