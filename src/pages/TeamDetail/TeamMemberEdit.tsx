@@ -118,7 +118,7 @@ export default function TeamMemberEdit({ teamId, isManager, handleBack }: TeamMe
   const clearInputs = () => {
     setInputs({
       student: '',
-      role: 'Normal',
+      role: 'NORMAL',
     });
   };
 
