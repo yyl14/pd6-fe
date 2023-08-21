@@ -34,18 +34,18 @@ const useStyles = makeStyles((theme) => ({
   topContent1: {
     background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
-    padding: '5px 15px 15px 15px',
+    padding: '5px 15px 10px 15px',
     display: 'flex',
     justifyContent: 'space-between',
-    height: '75px',
+    height: '70px',
   },
   topContent2: {
     background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
-    padding: '5px 15px 15px 15px',
+    padding: '5px 15px 10px 15px',
     display: 'flex',
     justifyContent: 'flex-end',
-    height: '75px',
+    height: '70px',
   },
   search: {
     marginRight: '5px',
@@ -58,9 +58,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     alignItems: 'flex-start',
     flexShrink: 27,
+    marginTop: '-3px',
   },
   buttons: {
-    marginTop: '3px',
     height: '60px',
     flexShrink: 0,
   },
@@ -124,6 +124,7 @@ const useStyles = makeStyles((theme) => ({
     '& > :first-child': {
       paddingLeft: '25px', // 25px (Left space) + 5 px
     },
+    height: '51px',
   },
   tableBodyCell: {
     overflowWrap: 'break-word',

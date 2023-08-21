@@ -12,10 +12,10 @@ const useStyles = makeStyles((theme) => ({
   topContent2: {
     background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
-    padding: '5px 15px 15px 15px',
+    padding: '5px 15px 10px 15px',
     display: 'flex',
     justifyContent: 'flex-end',
-    height: '75px',
+    height: '70px',
   },
   searchFields: {
     display: 'flex',
@@ -86,6 +86,7 @@ const useStyles = makeStyles((theme) => ({
     '& > :first-child': {
       paddingLeft: '25px', // 25px (Left space) + 5 px
     },
+    height: '51px',
   },
   tableBodyCell: {
     overflowWrap: 'break-word',
