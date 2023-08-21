@@ -50,7 +50,8 @@ const activeThemeList = [
 /* This is a level 3 component (page component) */
 
 export default function AccountSetting({ accountId }: { accountId: string }) {
-  const { value: selectedTheme, setter: setSelectedTheme } = useContext(ThemeToggleContext);
+  const { value: selectedTheme } = useContext(ThemeToggleContext);
+  // setter: setSelectedTheme
   const [cards, setCards] = useState([]);
   const [pendingCards, setPendingCards] = useState([]);
   const [editBasicInfo, setEditBasicInfo] = useState(false);
@@ -64,8 +65,6 @@ export default function AccountSetting({ accountId }: { accountId: string }) {
   const { studentCards, pendingStudentCards, isLoading } = useAccountStudentCards(Number(accountId));
   const [studentCardsById, studentCardsIds] = useReduxStateShape(studentCards);
   const [pendingStudentCardsById, pendingStudentCardsIds] = useReduxStateShape(pendingStudentCards);
-  // const loading = useSelector((state) => state.loading.user);
-  // const error = useSelector((state) => state.error.user);
 
   useEffect(() => {
     if (account.role === 'GUEST') {
