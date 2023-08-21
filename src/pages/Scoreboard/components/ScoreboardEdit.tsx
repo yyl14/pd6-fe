@@ -9,9 +9,6 @@ import useChallengeTasks from '@/lib/task/useChallengeTasks';
 import useTeamProjectScoreboard from '@/lib/teamProjectScoreboard/useTeamProjectScoreboard';
 import useViewTeamProjectScoreboard from '@/lib/view/useViewTeamProjectScoreboard';
 
-type RouteParams = ['challengeId', 'scoreboardId'];
-type RouteParamsType = { [K in RouteParams[number]]: string };
-
 const useStyles = makeStyles((theme) => ({
   buttons: {
     marginTop: '6px',
@@ -39,7 +36,9 @@ export default function ScoreboardEdit({
   getScoreboardType,
   setEdit,
   setShowSnackbar,
-}: RouteParamsType & {
+}: {
+  challengeId: string;
+  scoreboardId: string;
   getScoreboardType: (scoreboardType: string | undefined) => string;
   setEdit: React.Dispatch<React.SetStateAction<boolean>>;
   setShowSnackbar: React.Dispatch<React.SetStateAction<boolean>>;

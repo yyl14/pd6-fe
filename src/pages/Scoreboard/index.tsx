@@ -17,9 +17,6 @@ import useUserClasses from '@/lib/user/useUserClasses';
 import useViewTeamProjectScoreboard from '@/lib/view/useViewTeamProjectScoreboard';
 import ScoreboardEdit from '@/pages/Scoreboard/components/ScoreboardEdit';
 
-type RouteParams = ['courseId', 'classId', 'challengeId', 'scoreboardId'];
-export type RouteParamsType = { [K in RouteParams[number]]: string };
-
 type ColumnType = {
   id: string;
   label: string;
@@ -67,7 +64,17 @@ const scoreboardBasicTitle: ColumnType[] = [
   },
 ];
 
-export default function ScoreboardInfo({ courseId, classId, challengeId, scoreboardId }: RouteParamsType) {
+export default function ScoreboardInfo({
+  courseId,
+  classId,
+  challengeId,
+  scoreboardId,
+}: {
+  courseId: string;
+  classId: string;
+  challengeId: string;
+  scoreboardId: string;
+}) {
   const { challenge } = useChallenge(Number(challengeId));
   const history = useHistory();
   const { scoreboard, deleteScoreboard } = useScoreboard(Number(scoreboardId));
