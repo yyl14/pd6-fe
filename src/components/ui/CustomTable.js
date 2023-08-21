@@ -173,7 +173,6 @@ export default function CustomTable({
   data,
   hasLink,
   linkName,
-  children,
 }) {
   const classes = useStyles();
   const [curPage, setPage] = useState(0);
@@ -364,7 +363,7 @@ export default function CustomTable({
           </Button>
         </div>
       </Paper>
-      <div className={classes.children}>{children}</div>
+  
     </>
   );
 }
