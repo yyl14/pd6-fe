@@ -16,7 +16,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import useEssayEssaySubmissions from '@/lib/essaySubmission/useEssayEssaySubmissions';
-import EssayEdit from '../EssayEdit/EssayEdit';
+import EssayEdit from './EssayEdit';
 import EssayInfo from './EssayInfo';
 
 import useChallenge from '@/lib/challenge/useChallenge';
@@ -28,6 +28,10 @@ const useStyles = makeStyles(() => ({
   generalButtons: {
     display: 'flex',
     justifyContent: 'flex-end',
+  },
+  managerButtons: {
+    display: 'flex',
+    justifyContent: 'flex-start',
   },
 }));
 
@@ -89,7 +93,7 @@ export default function Essay({
       {!edit && role === 'MANAGER' && (
         <div className={classNames.managerButtons}>
           <Button onClick={() => setEdit(true)}>Edit</Button>
-          <StyledButton variant="outlined" component="span" startIcon={<Icon.Download />} onClick={handleClickDownload}>
+          <StyledButton variant="outlined" startIcon={<Icon.Download />} onClick={handleClickDownload}>
             Download
           </StyledButton>
         </div>

@@ -121,7 +121,7 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
   };
 
   const handleSubmitDelete = () => {
-    deleteEssay();
+    deleteEssay({ essay_id: Number(essayId) });
   };
 
   useEffect(() => {

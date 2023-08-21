@@ -1,4 +1,3 @@
-import { editEssay } from '@/actions/myClass/essay';
 import SimpleBar from '@/components/ui/SimpleBar';
 import { Button, TextField, makeStyles } from '@material-ui/core';
 import { useState } from 'react';
@@ -31,14 +30,14 @@ interface EssayEditProps {
 export default function EssayEdit({ courseId, classId, challengeId, essayId, closeEdit }: EssayEditProps) {
   const classNames = useStyles();
 
-  const { essay } = useEssay(Number(essayId));
+  const { essay, editEssay } = useEssay(Number(essayId));
 
   const [label, setLabel] = useState(!essay ? 'error' : essay.challenge_label);
   const [title, setTitle] = useState(!essay ? 'error' : essay.title);
   const [description, setDescription] = useState(!essay ? 'error' : essay.description);
 
-  const handleClickSave = () => {
-    dispatch(editEssay(authToken, essayId, label, title, description));
+  const handleClickSave = async () => {
+    await editEssay({ essay_id: Number(essayId), challenge_label: label, title: title, description: description });
     closeEdit();
   };
 
