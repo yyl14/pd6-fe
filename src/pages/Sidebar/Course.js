@@ -1,9 +1,11 @@
+import Icon from '@/components/ui/icon/index';
+import useClass from '@/lib/class/useClass';
+import useCourse from '@/lib/course/useCourse';
+import useCourses from '@/lib/course/useCourses';
 import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-
-import Icon from '@/components/ui/icon/index';
 
 export default function Course({ classes, history, location, mode, open, onClose }) {
   const { courseId, classId } = useParams();
@@ -18,6 +20,10 @@ export default function Course({ classes, history, location, mode, open, onClose
   const [itemList, setItemList] = useState([]);
   const [arrow, setArrow] = useState(null);
 
+  const { courses } = useCourses();
+  const { course } = useCourse(Number(courseId));
+  const { class: classData } = useClass(Number(classId));
+
   useEffect(() => {
     // console.log(mode, courseId, classId);
     const goBack = (courseid) => {
@@ -28,8 +34,8 @@ export default function Course({ classes, history, location, mode, open, onClose
       setTitle1('Lesson');
       setTitle2('Contest');
       setItemList(
-        courseList.allIds
-          .map((id) => courseList.byId[id])
+        courses &&
+        courses
           .map(({ id, type, name }) => {
             switch (type) {
               case 'LESSON':
@@ -70,13 +76,13 @@ export default function Course({ classes, history, location, mode, open, onClose
             },
           ]),
       );
-    } else if (mode === 'course-setting' && courseList.byId[courseId]) {
+    } else if (mode === 'course-setting' && course) {
       setArrow(
         <IconButton className={classes.arrow} onClick={() => goBack(courseId)}>
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
-      setTitle1(courseList.byId[courseId].name);
+      setTitle1(course.name);
       setItemList([
         {
           text: 'Setting',
@@ -84,13 +90,13 @@ export default function Course({ classes, history, location, mode, open, onClose
           icon: <Icon.Setting />,
         },
       ]);
-    } else if (mode === 'class' && courseList.byId[courseId] && classList.byId[classId]) {
+    } else if (mode === 'class' && course && classData) {
       setArrow(
         <IconButton className={classes.arrow} onClick={() => goBack(courseId)}>
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
-      setTitle1(`${courseList.byId[courseId].name} / ${classList.byId[classId].name}`);
+      setTitle1(`${course.name} / ${classData.name}`);
       setItemList([
         {
           text: 'Member',
@@ -105,7 +111,7 @@ export default function Course({ classes, history, location, mode, open, onClose
       ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, history, courseList, courseId, classList, classId, mode]);
+  }, [location.pathname, history, courseList, courseId, classList, classId, mode, courses, course, classData]);
 
   const foldLesson = () => {
     setDisplay('fold');
@@ -123,7 +129,7 @@ export default function Course({ classes, history, location, mode, open, onClose
     setDisplay1('unfold');
   };
 
-  if (courseList.byId[courseId] === undefined || (classId && classList.byId[classId] === undefined)) {
+  if (course === undefined || (classId && classData === undefined)) {
     return (
       <div>
         <Drawer
