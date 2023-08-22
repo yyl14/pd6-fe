@@ -73,10 +73,8 @@ export default function ChallengeInfo({
   }, [challenge, currentTime]);
 
   useEffect(() => {
-    if (accountClasses?.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
-      setRole('MANAGER');
-    } else if (accountClasses?.filter((item) => item.class_id === Number(classId))[0].role === 'GUEST') {
-      setRole('GUEST');
+    if (accountClasses?.filter((item) => item.class_id === Number(classId))?.[0]?.role) {
+      setRole(accountClasses?.filter((item) => item.class_id === Number(classId))[0].role);
     }
   }, [classId, accountClasses]);
 
