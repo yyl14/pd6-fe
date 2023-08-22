@@ -87,6 +87,8 @@ export default function BasicInfoEdit({ grade, receiver, handleBack }: GradeInfo
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               multiline
+              minRows={5}
+              maxRows={10}
             />
           </AlignedText>
           <AlignedText text="Submitted Time" maxWidth="lg" childrenType="text">
