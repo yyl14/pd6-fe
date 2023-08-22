@@ -9,7 +9,6 @@ import {
   Typography,
 } from '@material-ui/core';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import NoMatch from '@/components/noMatch';
@@ -32,9 +31,6 @@ const ClassSetting = ({ courseId, classId }: { courseId: string; classId: string
     error: classError,
   } = useClass(Number(classId));
 
-  const dispatch = useDispatch();
-  // const thisState = useSelector((state) => state);
-
   const [showRenameDialog, setShowRenameDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [newClassName, setNewClassName] = useState('');
@@ -51,21 +47,15 @@ const ClassSetting = ({ courseId, classId }: { courseId: string; classId: string
     }
   };
 
-  const renameClassSuccess = () => {
-    setNewClassName('');
-    setShowRenameDialog(false);
-  };
   const closeSnackbar = () => {
     setShowSnackBar(false);
   };
 
   const onRename = () => {
-    // dispatch(renameClass(authToken, classId, newClassName, renameClassSuccess, () => setShowSnackBar(true)));
     editClass({ class_id: Number(classId), name: newClassName, course_id: Number(courseId) });
   };
   const onDelete = () => {
     setShowDeleteDialog(false);
-    // dispatch(deleteClass(authToken, courseId, classId));
     deleteClass();
     history.push(`/6a/admin/course/course/${courseId}/class-list/`);
   };
