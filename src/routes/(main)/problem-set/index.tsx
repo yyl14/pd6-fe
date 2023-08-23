@@ -32,8 +32,8 @@ function ChallengeInfoRoute() {
 
 function ProblemListRoute() {
   const { courseId, classId } = useParams<{ courseId: string; classId: string }>();
-  const { isLoading: courseLoading } = useCourse(Number(courseId));
-  const { isLoading: classLoading } = useClass(Number(classId));
+  const { isLoading: courseLoading, error: courseError } = useCourse(Number(courseId));
+  const { isLoading: classLoading, error: classError } = useClass(Number(classId));
 
   return (
     <Suspense fallback={<GeneralLoading />}>
@@ -41,6 +41,7 @@ function ProblemListRoute() {
         courseId,
         classId,
         isLoading: courseLoading.read || classLoading.read,
+        noMatch: courseError.read || classError.read,
       })}
     </Suspense>
   );
@@ -53,7 +54,7 @@ export default function ProblemSetRoutes() {
     <Switch>
       <Route path="/6a/problem-set/:courseId/:classId/challenge/:challengeId" component={ChallengeInfoRoute} />
       <Route path="/6a/problem-set/:courseId/:classId" component={ProblemListRoute} />
-      <Route exact path="/6a/problem-set" component={ProblemListRoute} />
+      <Route path="/6a/problem-set" component={ProblemListRoute} />
     </Switch>
   );
 }
