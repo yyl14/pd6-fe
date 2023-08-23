@@ -1,43 +1,22 @@
-import { Typography, makeStyles } from '@material-ui/core';
-import { useEffect, useState } from 'react';
-
 import BrowsingTable from '@/components/ui/6a/BrowsingTable';
+import PageTitle from '@/components/ui/PageTitle';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useProblemScores from '@/lib/problem/useProblemScores';
 import type { ProblemSetSchema } from '@/lib/view/useViewClassProblemSets';
 import useViewClassProblemSets from '@/lib/view/useViewClassProblemSets';
 
-const useStyles = makeStyles(() => ({
-  pageHeader: {
-    marginBottom: '50px',
-  },
-}));
-
 export default function ProblemList({ courseId, classId }: { courseId: string; classId: string }) {
-  const classNames = useStyles();
   const { course } = useCourse(Number(courseId));
   const { class: classes } = useClass(Number(classId));
   const { browseProblemSetUnderClass, isLoading, error } = useViewClassProblemSets(Number(classId));
-  const { readProblemScoreByIds } = useProblemScores();
-  const [problems, setProblems] = useState<{ id?: number; score?: number | null }[]>([]);
-
-  useEffect(() => {
-    (async () => {
-      if (browseProblemSetUnderClass.data?.data) {
-        const scores = await readProblemScoreByIds(
-          browseProblemSetUnderClass.data?.data.map((problem) => problem.problem_id),
-        );
-        setProblems(scores);
-      }
-    })();
-  }, [browseProblemSetUnderClass.data?.data, readProblemScoreByIds]);
+  const { problemScores } = useProblemScores(
+    browseProblemSetUnderClass.data?.data.map((problem) => problem.problem_id) ?? [],
+  );
 
   return (
     <>
-      <Typography className={classNames.pageHeader} variant="h3">
-        {`${course?.name ?? ''} / ${classes?.name ?? ''}`}
-      </Typography>
+      <PageTitle text={`${course?.name ?? ''} / ${classes?.name ?? ''}`} />
       <BrowsingTable<
         ProblemSetSchema,
         { id: string; Score: string; 'Challenge Title': string; 'Task Label': string; 'Task Title': string }
@@ -97,7 +76,7 @@ export default function ProblemList({ courseId, classId }: { courseId: string; c
         data={browseProblemSetUnderClass.data?.data}
         dataToRow={(item) => ({
           id: String(item.problem_id),
-          Score: String(problems.find((problem) => problem.id === item.problem_id)?.score ?? ''),
+          Score: String(problemScores?.find((problem) => problem.id === item.problem_id)?.score ?? ''),
           'Challenge Title': item.challenge_title,
           'Task Label': item.challenge_label,
           'Task Title': item.problem_title,
