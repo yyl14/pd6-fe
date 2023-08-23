@@ -45,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   item: {
+    marginTop: '3px',
     width: '190px',
   },
   selectList: {

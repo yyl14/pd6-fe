@@ -21,6 +21,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+
 import { autoTableFlush, autoTableMount } from '../../actions/component/autoTable';
 import AutoTableHead from './AutoTableHead';
 import Icon from './icon/index';
@@ -33,18 +34,18 @@ const useStyles = makeStyles((theme) => ({
   topContent1: {
     background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
-    padding: '5px 15px 15px 15px',
+    padding: '5px 15px 10px 15px',
     display: 'flex',
     justifyContent: 'space-between',
-    height: '75px',
+    height: '70px',
   },
   topContent2: {
     background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
-    padding: '5px 15px 15px 15px',
+    padding: '5px 15px 10px 15px',
     display: 'flex',
     justifyContent: 'flex-end',
-    height: '75px',
+    height: '70px',
   },
   search: {
     marginRight: '5px',
@@ -57,9 +58,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     alignItems: 'flex-start',
     flexShrink: 27,
+    marginTop: '-3px',
   },
   buttons: {
-    marginTop: '3px',
     height: '60px',
     flexShrink: 0,
   },
@@ -86,12 +87,16 @@ const useStyles = makeStyles((theme) => ({
     width: '10px',
     padding: '0px',
   },
+  tableHead: {
+    height: '48px',
+  },
   tableHeadCell: {
-    height: 'inherit',
+    height: '48px',
     padding: '7px 0px',
     background: 'white',
     borderBottomWidth: '1px',
     borderBottomColor: theme.palette.grey.A400,
+    alignItems: 'center',
   },
   progressContainer: {
     height: 0,
@@ -119,9 +124,9 @@ const useStyles = makeStyles((theme) => ({
     '& > :first-child': {
       paddingLeft: '25px', // 25px (Left space) + 5 px
     },
+    height: '51px',
   },
   tableBodyCell: {
-    padding: '17.5px 5px 17.5px 5px',
     overflowWrap: 'break-word',
     '&:hover~$stickyArrowCell': {
       backgroundImage: 'inherit',
@@ -531,7 +536,7 @@ function AutoTable({
       <Paper className={classes.root} elevation={0}>
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">
-            <TableHead>
+            <TableHead className={`${classes.tableHead}`}>
               <TableRow>
                 <TableCell className={`${classes.tableHeadCell} ${classes.tableRowContainerLeftSpacing}`} />
                 {columns.map((column, index) => (
