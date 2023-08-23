@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { getAccountBatchByReferral } from '../../../../../actions/common/common';
 import AlignedText from '../../../../ui/AlignedText';
 import Icon from '../../../../ui/icon/index';

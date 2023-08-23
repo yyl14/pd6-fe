@@ -1,14 +1,14 @@
 import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import Icon from '@/components/ui/icon/index';
+import useTeam from '@/lib/team/useTeam';
 
 export default function Team({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, teamId } = useParams();
   const baseURL = '/6a/my-class';
-  const teams = useSelector((state) => state.teams);
+  const { team } = useTeam(teamId);
 
   const [display, setDisplay] = useState('unfold');
 
@@ -21,13 +21,13 @@ export default function Team({ classNames, history, location, mode, open, onClos
       history.push(`${baseURL}/${courseId}/${classId}/team`);
     };
 
-    if (mode === 'detail' && teams.byId[teamId] !== undefined) {
+    if (mode === 'detail' && team !== undefined) {
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToTeam}>
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
-      setTitle(teams.byId[teamId].name);
+      setTitle(team.name);
       setItemList([
         {
           text: 'Detail',
@@ -36,7 +36,7 @@ export default function Team({ classNames, history, location, mode, open, onClos
         },
       ]);
     }
-  }, [classId, classNames.arrow, courseId, history, mode, teamId, teams]);
+  }, [classId, classNames.arrow, courseId, history, mode, teamId, team]);
 
   const foldTeam = () => {
     setDisplay('fold');
@@ -74,7 +74,7 @@ export default function Team({ classNames, history, location, mode, open, onClos
             {itemList.map((item) => (
               <ListItem
                 button
-                key={item.id}
+                key={item.text}
                 className={
                   location.pathname.includes(item.path) ? `${classNames.active} ${classNames.item}` : classNames.item
                 }
