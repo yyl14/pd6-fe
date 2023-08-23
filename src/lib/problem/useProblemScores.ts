@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import { readProblemScore } from './fetchers';
 
 const useProblemScores = (problemIds: number[]) => {
-  const readProblemScoreByIdsSWR = useSWR(`${problemIds.join(', ')}`, () =>
+  const readProblemScoreByIdsSWR = useSWR(['problemScores', ...problemIds], () =>
     Promise.all(
       problemIds.map(async (problem_id) => {
         try {
