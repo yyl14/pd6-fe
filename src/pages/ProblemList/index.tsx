@@ -9,8 +9,12 @@ import useViewClassProblemSets from '@/lib/view/useViewClassProblemSets';
 export default function ProblemList({ courseId, classId }: { courseId: string; classId: string }) {
   const { course } = useCourse(Number(courseId));
   const { class: classes } = useClass(Number(classId));
-  const { browseProblemSetUnderClass, isLoading, error } = useViewClassProblemSets(Number(classId));
-  const { problemScores } = useProblemScores(
+  const {
+    browseProblemSetUnderClass,
+    isLoading: classProblemLoading,
+    error,
+  } = useViewClassProblemSets(Number(classId));
+  const { problemScores, isLoading: problemScoresLoading } = useProblemScores(
     browseProblemSetUnderClass.data?.data.map((problem) => problem.problem_id) ?? [],
   );
 
@@ -82,7 +86,7 @@ export default function ProblemList({ courseId, classId }: { courseId: string; c
           'Task Title': item.problem_title,
           link: `/6a/problem-set/${courseId}/${classId}/challenge/${item.challenge_id}/${item.problem_id}`,
         })}
-        isLoading={isLoading.browse}
+        isLoading={classProblemLoading.browse || problemScoresLoading.browse}
         error={error.browse}
         pagination={browseProblemSetUnderClass.pagination}
         filter={browseProblemSetUnderClass.filter}
