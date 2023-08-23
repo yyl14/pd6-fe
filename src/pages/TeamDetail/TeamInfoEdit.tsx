@@ -58,18 +58,16 @@ export default function BasicInfoEdit({
       <SimpleBar title="Team Information">
         <>
           <AlignedText text="Team Name" maxWidth="lg" childrenType="field">
-            <TextField value={teamName} onChange={(e) => setInputTeamName(e.target.value)} />
+            <TextField value={inputTeamName} onChange={(e) => setInputTeamName(e.target.value)} />
           </AlignedText>
           {isManager ? (
             <AlignedText text="Label" maxWidth="lg" childrenType="field">
-              <TextField value={label} onChange={(e) => setInputLabel(e.target.value)} />
+              <TextField value={inputLabel} onChange={(e) => setInputLabel(e.target.value)} />
             </AlignedText>
           ) : (
-            <div>
-              <AlignedText text="Label" maxWidth="lg" childrenType="text">
-                <Typography variant="body1">{label}</Typography>
-              </AlignedText>
-            </div>
+            <AlignedText text="Label" maxWidth="lg" childrenType="text">
+              <Typography variant="body1">{label}</Typography>
+            </AlignedText>
           )}
           <div className={classNames.buttons}>
             <Button onClick={() => handleBack()}>Cancel</Button>
