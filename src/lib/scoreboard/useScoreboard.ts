@@ -14,16 +14,6 @@ type Scoreboard = Omit<components['schemas']['Scoreboard'], 'data'> & {
   };
 };
 
-export type ColumnType = {
-  id: string;
-  label: string;
-  align: string;
-  width: number;
-  type: string;
-  minWidth?: number;
-  link_id?: string;
-};
-
 export type DataType = {
   id: number;
   rank: number;
