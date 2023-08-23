@@ -1,86 +1,93 @@
-
-# Define variables for the job
 variables:
-  FF_USE_FASTZIP: "true" # enable fastzip - a faster zip implementation that also supports level configuration.
-  ARTIFACT_COMPRESSION_LEVEL: default # can also be set to fastest, fast, slow and slowest. If just enabling fastzip is not enough try setting this to fastest or fast.
-  CACHE_COMPRESSION_LEVEL: default # same as above, but for caches
-  TRANSFER_METER_FREQUENCY: 5s # will display transfer progress every 5 seconds for artifacts and remote caches.
-  # GIT_CLEAN_FLAGS: -ffdx -e node_modules/ .yarn .sonar/cache
+  FF_USE_FASTZIP: "true"
+  ARTIFACT_COMPRESSION_LEVEL: default
+  CACHE_COMPRESSION_LEVEL: default
+  TRANSFER_METER_FREQUENCY: 5s
 
-workflow:
-  rules:
-    # Rules for all merge requests to development branch
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "development"'
-      when: always
-    # Rules for all pushes to development branch
-    - if: '$CI_COMMIT_BRANCH == "development"'
-      when: always
-
-# Define the stages for the pipeline
 stages:
   - Test
   - Build
   - Quality-Analysis
 
+cache: &global_cache
+  - key: $CI_COMMIT_REF_NAME_MODULE
+    paths:
+      - node_modules/
+    when: on_success
+    policy: pull
+    untracked: true
+
+workflow:
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "development"'
+      when: always
+    - if: '$CI_COMMIT_BRANCH == "development"'
+      when: always
+
+
+Install:
+  image: timbru31/node-alpine-git
+  stage: .pre
+  cache:
+    - key: $CI_COMMIT_REF_NAME_YARN
+      paths:
+        - .yarn/
+      when: on_success
+      policy: pull-push
+    - key: $CI_COMMIT_REF_NAME_MODULE
+      paths:
+        - node_modules/
+      when: on_success
+      policy: pull-push
+  tags:
+    - build
+  script:
+    - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
+
+
 Lint-test:
   stage: Test
   image: timbru31/node-alpine-git
   cache:
-    key: $CI_COMMIT_REF_NAME_LINT
-    paths:
-      - .eslint
-    key: $CI_COMMIT_REF_NAME_MODULE
-    paths:
-      - node_modules/
-      - .yarn
-  before_script:
-    - sed -i 's/workspaces/workspaces-disabled/g' package.json
-    - yarn install --frozen-lockfile --cache-folder .yarn
-    - sed -i 's/workspaces-disabled/workspaces/g' package.json
+    - key: $CI_COMMIT_REF_NAME_LINT
+      paths:
+        - .eslint
+    - *global_cache
   script:
     - yarn lint
   allow_failure: false
   tags:
     - test
+  except:
+    - development
 
 Unit-test:
   stage: Test
   image: timbru31/node-alpine-git
   cache:
-    key: $CI_COMMIT_REF_NAME_MODULE
-    paths:
-      - node_modules/
-      - .yarn
-  before_script:
-    - yarn install --frozen-lockfile --cache-folder .yarn
+    - *global_cache
   script:
     - yarn test --passWithNoTests
   allow_failure: false
   tags: 
     - test
-  needs:
-    - Lint-test
+  except:
+    - development
 
 Build:
   image: timbru31/node-alpine-git
   cache:
-    key: $CI_COMMIT_REF_NAME_MODULE
-    paths:
-      - node_modules/
-      - .yarn
+    - *global_cache
   artifacts:
     paths:
       - ./build
   before_script:
     - export NODE_OPTIONS=--openssl-legacy-provider
-    - yarn install --frozen-lockfile --cache-folder .yarn
   script:
     - yarn build
   stage: Build
   tags:
     - build
-  needs:
-    - Unit-test
 
 Sonarqube:
   stage: Quality-Analysis
@@ -88,39 +95,41 @@ Sonarqube:
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: ['']
   variables:
-    SONAR_USER_HOME: '${CI_PROJECT_DIR}/.sonar' # Defines the location of the analysis task cache
-    GIT_DEPTH: '0' # Tells git to fetch all the branches of the project, required by the analysis task
+    SONAR_USER_HOME: '${CI_PROJECT_DIR}/.sonar'
+    GIT_DEPTH: '0'
   cache:
-    key: $CI_COMMIT_REF_NAME_Sonarqube
+    key: $CI_COMMIT_REF_NAME_SONARQUBE
     paths:
       - .sonar/cache
   script:
     - sonar-scanner -Dsonar.qualitygate.wait=true -Dsonar.login=$SONAR_TOKEN
-    # quality gate is an indicator of code quality that can be configured to give a go/no-go signal of the code
-    # In order for the quality gate to fail on the GitLab side when it fails on the SonarQube side, the scanner needs to wait for the SonarQube quality gate status
   allow_failure: true
   tags:
     - test
-  needs:
-    - Unit-test
+  only:
+    - development
 
 Lighthouse:
   allow_failure: true
   image: cypress/browsers:node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
   cache:
-    key: $CI_COMMIT_REF_NAME_MODULE
-    paths:
-      - node_modules/
-      - .yarn
-  artifacts:
-    paths:
-      - build/
-  before_script:
-    - yarn install --frozen-lockfile --cache-folder .yarn
+    - *global_cache
   script:
-    - yarn run lhci autorun #if frontend not provide the yarn lighthouse to run
+    - yarn run lhci autorun
+  after_script:
+    - yarn run lhci upload --target=lhci 
+                           --serverBaseUrl=$LHCI_SERVER_BASE_URL 
+                           --token=$LHCI_TOKEN 
+                           --basicAuth.username=$LHCI_AUTH_USERNAME 
+                           --basicAuth.password=$LHCI_AUTH_PASSWORD
+                           
   stage: Quality-Analysis
   tags:
     - test
-  dependencies:
-    - Build
+  needs:
+    - job: Build
+      artifacts: true
+  only:
+    - development
+    
+      

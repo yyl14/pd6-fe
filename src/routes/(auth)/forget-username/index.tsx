@@ -1,5 +1,11 @@
-import ForgetUsername from '@/containers/auth/ForgetUsername';
+import { Suspense, lazy } from 'react';
+
+const ForgetUsername = lazy(() => import('@/pages/ForgetUsername'));
 
 export default function ForgetUsernameRoute() {
-  return <ForgetUsername />;
+  return (
+    <Suspense fallback={<></>}>
+      <ForgetUsername />
+    </Suspense>
+  );
 }

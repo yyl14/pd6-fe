@@ -1,15 +1,19 @@
 import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import Icon from '@/components/ui/icon/index';
+import useChallenge from '@/lib/challenge/useChallenge';
+import useProblem from '@/lib/problem/useProblem';
+import useChallengeTasks from '@/lib/task/useChallengeTasks';
 
 export default function ProblemSetChallenge({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, challengeId, problemId, submissionId } = useParams();
   const baseURL = '/6a/problem-set';
-  const challenges = useSelector((state) => state.challenges.byId);
-  const problems = useSelector((state) => state.problem);
+
+  const { challenge } = useChallenge(Number(challengeId));
+  const { problem } = useProblem(Number(problemId));
+  const { tasks } = useChallengeTasks(challengeId);
 
   const [display, setDisplay] = useState(true);
   const [title, setTitle] = useState('');
@@ -32,9 +36,9 @@ export default function ProblemSetChallenge({ classNames, history, location, mod
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
-      if (challenges[challengeId]) {
-        setTitle(challenges[challengeId].title);
-        if (problems.allIds.length !== 0) {
+      if (challenge && tasks) {
+        setTitle(challenge.title);
+        if (tasks.problem.length !== 0) {
           setItemList(
             [
               {
@@ -43,13 +47,11 @@ export default function ProblemSetChallenge({ classNames, history, location, mod
                 path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}`,
               },
             ].concat(
-              challenges[challengeId].problemIds
-                .map((id) => problems.byId[id])
-                .map(({ id, challenge_label }) => ({
-                  text: challenge_label,
-                  icon: <Icon.Code />,
-                  path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${id}`,
-                })),
+              tasks.problem.map(({ id, challenge_label }) => ({
+                text: challenge_label,
+                icon: <Icon.Code />,
+                path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${id}`,
+              })),
             ),
           );
         } else {
@@ -62,13 +64,13 @@ export default function ProblemSetChallenge({ classNames, history, location, mod
           ]);
         }
       }
-    } else if (mode === 'submission' && challenges[challengeId] && problems.byId[problemId]) {
+    } else if (mode === 'submission' && challenge && problem) {
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToProblem}>
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
-      setTitle(`${challenges[challengeId].title} / ${problems.byId[problemId].challenge_label}`);
+      setTitle(`${challenge.title} / ${problem.challenge_label}`);
       setItemList([
         {
           text: 'Code Submission',
@@ -97,17 +99,17 @@ export default function ProblemSetChallenge({ classNames, history, location, mod
       ]);
     }
   }, [
+    challenge,
     challengeId,
-    challenges,
     classId,
     classNames.arrow,
     courseId,
     history,
     mode,
+    problem,
     problemId,
-    problems.allIds.length,
-    problems.byId,
     submissionId,
+    tasks,
   ]);
 
   const foldChallenge = () => {

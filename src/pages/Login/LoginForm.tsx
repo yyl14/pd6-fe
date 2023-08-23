@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 export default function LoginForm() {
   const history = useHistory();
   const query = useQuery();
-  const redirectUrl = useMemo(() => query.get('redirectUrl'), [query]);
+  const redirectUrl = useMemo(() => query.get('redirect_url'), [query]);
   const classNames = useStyles();
 
   const setAuth = useAuthStore((state) => state.set);
@@ -138,7 +138,7 @@ export default function LoginForm() {
         <form className={`auth-form-content ${classNames.authForm}`} onSubmit={handleSubmit}>
           <TextField
             id="login-username"
-            className={`auth-form-input ${classNames.authTextFields}`}
+            className={classNames.authTextFields}
             label="Username"
             value={username}
             onChange={handleUsernameChange}
@@ -148,7 +148,7 @@ export default function LoginForm() {
           <TextField
             id="login-password"
             type={showPassword ? 'text' : 'password'}
-            className={`auth-form-input ${classNames.authTextFields}`}
+            className={classNames.authTextFields}
             label="Password"
             value={password}
             onChange={handlePasswordChange}

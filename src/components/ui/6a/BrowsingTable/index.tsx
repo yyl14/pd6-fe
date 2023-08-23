@@ -27,13 +27,7 @@ import SearchField from './SearchField';
 import { ColumnConfigItem, DataSchemaBase, FilterConfigItem, RowSchemaBase } from './types';
 import useStyles from './useStyles';
 
-const ROWS_PER_PAGE_OPTIONS: RowsPerPageOption[] = [10, 25, 50, 100];
-
-type BrowsingTableProps<DataSchema extends DataSchemaBase, RowSchema extends RowSchemaBase> = (
-  | { hasLink?: true; dataToRow: (data: DataSchema) => RowSchema & { link: string } }
-  | { hasLink?: false; dataToRow: (data: DataSchema) => RowSchema }
-) &
-  BrowsingTablePropsBase<DataSchema, RowSchema>;
+const ROWS_PER_PAGE_OPTIONS: readonly RowsPerPageOption[] = [10, 25, 50, 100];
 
 interface BrowsingTablePropsBase<DataSchema extends DataSchemaBase, RowSchema extends RowSchemaBase> {
   columnsConfig: ColumnConfigItem<DataSchema, RowSchema>[];
@@ -48,9 +42,15 @@ interface BrowsingTablePropsBase<DataSchema extends DataSchemaBase, RowSchema ex
   filter: FilterInterface<DataSchema>;
   sort: SortInterface<DataSchema>;
 
-  buttons: JSX.Element | false;
+  buttons?: JSX.Element | false;
   hasRefreshButton?: boolean; // eslint-disable-line react/require-default-props
 }
+
+type BrowsingTableProps<DataSchema extends DataSchemaBase, RowSchema extends RowSchemaBase> = (
+  | { hasLink?: true; dataToRow: (data: DataSchema) => RowSchema & { link: string } }
+  | { hasLink?: false; dataToRow: (data: DataSchema) => RowSchema }
+) &
+  BrowsingTablePropsBase<DataSchema, RowSchema>;
 
 function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowSchemaBase>({
   filterConfig,
@@ -63,7 +63,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
   pagination,
   filter,
   sort,
-  buttons,
+  buttons = false,
   hasRefreshButton = false,
   hasLink = false,
 }: BrowsingTableProps<DataSchema, RowSchema>) {
@@ -80,7 +80,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
     rowsPerPage,
     setRowsPerPage,
   } = pagination;
-  const { setFilter, createFilter, filter: filterValue } = filter;
+  const { setFilter, filter: filterValue } = filter;
   const { sort: sortValue, setSort, createSort } = sort;
 
   const [filteringIndex, setFilteringIndex] = useState(0);
@@ -111,7 +111,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
         {hasFilter && (
           <div className={classes.filterWrapper}>
             <div className={classes.searchFields}>
-              <FormControl variant="outlined" style={{ flexShrink: 7 }}>
+              <FormControl variant="outlined" style={{ flexShrink: 7, height: '40px' }}>
                 <Select
                   autoWidth
                   className={classes.filterSelect}
@@ -128,12 +128,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
                 </Select>
               </FormControl>
             </div>
-            <SearchField
-              filter={filterValue}
-              filterConfigItem={filteringItem}
-              setFilter={setFilter}
-              createFilter={createFilter}
-            />
+            <SearchField filterValue={filterValue} filterConfig={filteringItem} setFilter={setFilter} />
             <div className={classes.buttons}>
               <Button disabled>
                 {/* TODO: Advanced search */}
@@ -259,8 +254,8 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
             </TableHead>
             <TableBody>
               {data
-                ?.map((datum) => dataToRow(datum))
-                .map((row) => (
+                ?.map((datum) => [dataToRow(datum), datum] as const)
+                .map(([row, datum]) => (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.id} className={classes.row}>
                     <TableCell key={`${row.id}-left`} className={classes.tableRowContainerLeftSpacing} />
                     {columnsConfig.map((column) => {
@@ -274,7 +269,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
                               style={{ minWidth: column.minWidth, width: column.width, maxWidth: column.width }}
                               align={column.align}
                             >
-                              <Link to={value} className={classes.textLink}>
+                              <Link to={column.formatLink(datum)} className={classes.textLink}>
                                 {value}
                               </Link>
                             </TableCell>

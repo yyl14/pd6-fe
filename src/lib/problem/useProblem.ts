@@ -6,7 +6,9 @@ import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
 import { deleteProblem, editProblem, readProblem } from './fetchers';
 
 const useProblem = (problemId: number) => {
-  const readProblemSWR = useSWR(`/Problem/${problemId}`, () => readProblem({ problem_id: problemId }));
+  const readProblemSWR = useSWR(problemId ? `/Problem/${problemId}` : null, () =>
+    readProblem({ problem_id: problemId }),
+  );
   const deleteProblemSWR = useSWRMutation(`/Problem/${problemId}`, () => deleteProblem({ problem_id: problemId }));
   const editProblemSWR = useSWRMutation(`/Problem/${problemId}`, toSWRMutationFetcher(editProblem));
 

@@ -198,8 +198,34 @@ export default function ChallengeList({ courseId, classId }: { courseId: string;
           },
         ]}
         filterConfig={[
-          { dataColumn: 'title', label: 'Title', type: 'TEXT', operator: 'LIKE' },
-          // TODO: status filter
+          {
+            label: 'Title',
+            dataColumn: 'title',
+            type: 'TEXT',
+            operator: 'LIKE',
+          },
+          {
+            label: 'Status',
+            multi: true,
+            type: 'ENUM_SINGLE',
+            options: [
+              {
+                label: 'Not Yet',
+                value: [{ column: 'start_time', operator: '>', operand: moment().toISOString() }],
+              },
+              {
+                label: 'Opened',
+                value: [
+                  { column: 'start_time', operator: '<=', operand: moment().toISOString() },
+                  { column: 'end_time', operator: '>', operand: moment().toISOString() },
+                ],
+              },
+              {
+                label: 'Closed',
+                value: [{ column: 'end_time', operator: '<=', operand: moment().toISOString() }],
+              },
+            ],
+          },
         ]}
         data={browseChallengeUnderClass.data?.data}
         dataToRow={({ id, title, start_time, end_time }) => ({

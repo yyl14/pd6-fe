@@ -82,7 +82,7 @@ export default function Course({ classes, history, location, mode, open, onClose
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
-      setTitle1(course.name);
+      setTitle1(course?.name);
       setItemList([
         {
           text: 'Setting',
