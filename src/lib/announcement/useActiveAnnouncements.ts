@@ -8,15 +8,12 @@ import { addAnnouncement, browseAnnouncement } from './fetchers';
 
 export type AnnouncementDataSchema = components['schemas']['pydantic__dataclasses__Announcement'];
 
-const useActiveAnnouncements = (announcementId: number) => {
+const useActiveAnnouncements = () => {
   const useSWRWithBrowseParams = withDataSchema<AnnouncementDataSchema>();
 
-  const browseAllAnnouncementSWR = useSWRWithBrowseParams(
-    `/announcement`,
-    browseAnnouncement,
-    { announcement_id: announcementId },
-    { baseSort: { column: 'expire_time', order: 'DESC' } },
-  );
+  const browseAllAnnouncementSWR = useSWRWithBrowseParams(`/announcement`, browseAnnouncement, {
+    baseFilter: { column: 'expire_time', order: 'DESC' },
+  });
 
   const addAnnouncementSWR = useSWRMutation(`/announcement`, toSWRMutationFetcher(addAnnouncement));
 
