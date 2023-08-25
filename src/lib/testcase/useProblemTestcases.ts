@@ -24,8 +24,8 @@ const useProblemTestcases = (problemId: number) => {
   return {
     testcases: browseAllTestcaseSWR.data?.data.data,
     addTestcase: addTestcaseSWR.trigger,
-    sampleTestcases: downloadAllSampleTestcaseSWR.data?.data.data,
-    nonSampleTestcases: downloadAllNonSampleTestcaseSWR.data?.data.data,
+    downloadSampleTestcases: downloadAllSampleTestcaseSWR.trigger,
+    downloadNonSampleTestcases: downloadAllNonSampleTestcaseSWR.trigger,
 
     isLoading: {
       browse: browseAllTestcaseSWR.isLoading,
