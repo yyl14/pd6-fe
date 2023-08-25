@@ -1,3 +1,4 @@
+import moment from 'moment';
 import useSWRMutation from 'swr/mutation';
 
 import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
@@ -10,9 +11,10 @@ export type AnnouncementDataSchema = components['schemas']['pydantic__dataclasse
 
 const useActiveAnnouncements = () => {
   const useSWRWithBrowseParams = withDataSchema<AnnouncementDataSchema>();
+  const currentTime = moment().toISOString();
 
   const browseAllAnnouncementSWR = useSWRWithBrowseParams(`/announcement`, browseAnnouncement, {
-    baseFilter: { column: 'expire_time', operator: '>=', operand: 'current_time' },
+    baseFilter: { column: 'expire_time', operator: '>=', operand: currentTime },
   });
 
   const addAnnouncementSWR = useSWRMutation(`/announcement`, toSWRMutationFetcher(addAnnouncement));
