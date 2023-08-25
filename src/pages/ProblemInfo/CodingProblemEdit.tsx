@@ -81,8 +81,8 @@ interface TableDataProp {
   time_limit: number;
   memory_limit: number;
   score: number;
-  input_filename: string;
-  output_filename: string;
+  input_filename: string | null | undefined;
+  output_filename: string | null | undefined;
   in_file: File | null;
   out_file: File | null;
   new: boolean;
@@ -263,12 +263,12 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
   const sampleTrans = (id: string | number) => {
     if (sampleTableData[Number(id)].input_filename !== null) {
       return Number(
-        sampleTableData[Number(id)].input_filename.slice(6, sampleTableData[Number(id)].input_filename.indexOf('.')),
+        sampleTableData[Number(id)].input_filename?.slice(6, sampleTableData[Number(id)].input_filename?.indexOf('.')),
       );
     }
     if (sampleTableData[Number(id)].output_filename !== null) {
       return Number(
-        sampleTableData[Number(id)].output_filename.slice(6, sampleTableData[Number(id)].output_filename.indexOf('.')),
+        sampleTableData[Number(id)].output_filename?.slice(6, sampleTableData[Number(id)].output_filename?.indexOf('.')),
       );
     }
     return 0;
@@ -277,17 +277,17 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
   const testcaseTrans = (id: string | number) => {
     if (testcaseTableData[Number(id)].input_filename !== null) {
       return Number(
-        testcaseTableData[Number(id)].input_filename.slice(
+        testcaseTableData[Number(id)].input_filename?.slice(
           0,
-          testcaseTableData[Number(id)].input_filename.indexOf('.'),
+          testcaseTableData[Number(id)].input_filename?.indexOf('.'),
         ),
       );
     }
     if (testcaseTableData[Number(id)].output_filename !== null) {
       return Number(
-        testcaseTableData[Number(id)].output_filename.slice(
+        testcaseTableData[Number(id)].output_filename?.slice(
           0,
-          testcaseTableData[Number(id)].output_filename.indexOf('.'),
+          testcaseTableData[Number(id)].output_filename?.indexOf('.'),
         ),
       );
     }
@@ -368,26 +368,26 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
     setHasChange(true);
   };
 
-  const handleSampleConfirm = (newSelectedFiles) => {
+  const handleSampleConfirm = (newSelectedFiles: TableDataProp[]) => {
     const newTableData = Object.keys(newSelectedFiles).reduce((acc, item) => {
       const keys = Object.keys(sampleTableData).filter(
-        (key) => sampleTableData[Number(key)].no === newSelectedFiles[item].no,
+        (key) => sampleTableData[Number(key)].no === newSelectedFiles[Number(item)].no,
       );
       if (keys.length === 0) {
         // this is new case
         return {
           ...acc,
           [-item]: {
-            id: -item,
-            no: newSelectedFiles[item].no,
-            label: newSelectedFiles[item].no,
-            time_limit: newSelectedFiles[item].time_limit,
-            memory_limit: newSelectedFiles[item].memory_limit,
+            id: Number(-item),
+            no: newSelectedFiles[Number(item)].no,
+            label: newSelectedFiles[Number(item)].no,
+            time_limit: newSelectedFiles[Number(item)].time_limit,
+            memory_limit: newSelectedFiles[Number(item)].memory_limit,
             score: 0,
-            input_filename: newSelectedFiles[item].in === null ? null : newSelectedFiles[item].in.name,
-            output_filename: newSelectedFiles[item].out === null ? null : newSelectedFiles[item].out.name,
-            in_file: newSelectedFiles[item].in,
-            out_file: newSelectedFiles[item].out,
+            input_filename: newSelectedFiles[Number(item)].in_file === null ? null : newSelectedFiles[Number(item)].in_file?.name,
+            output_filename: newSelectedFiles[Number(item)].out_file === null ? null : newSelectedFiles[Number(item)].out_file?.name,
+            in_file: newSelectedFiles[Number(item)].in_file,
+            out_file: newSelectedFiles[Number(item)].out_file,
             new: true,
             note: '',
           },
@@ -398,24 +398,24 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
         ...acc,
         [keys[0]]: {
           id: Number(keys[0]),
-          no: newSelectedFiles[item].no,
-          label: newSelectedFiles[item].no,
-          time_limit: newSelectedFiles[item].time_limit,
-          memory_limit: newSelectedFiles[item].memory_limit,
+          no: newSelectedFiles[Number(item)].no,
+          label: newSelectedFiles[Number(item)].no,
+          time_limit: newSelectedFiles[Number(item)].time_limit,
+          memory_limit: newSelectedFiles[Number(item)].memory_limit,
           input_filename:
-            newSelectedFiles[item].in === null
+            newSelectedFiles[Number(item)].in_file === null
               ? sampleTableData[Number(keys[0])].input_filename
-              : newSelectedFiles[item].in.name,
+              : newSelectedFiles[Number(item)].in_file?.name,
           output_filename:
-            newSelectedFiles[item].out === null
+            newSelectedFiles[Number(item)].out_file === null
               ? sampleTableData[Number(keys[0])].output_filename
-              : newSelectedFiles[item].out.name,
+              : newSelectedFiles[Number(item)].out_file?.name,
           in_file:
-            newSelectedFiles[item].in === null ? sampleTableData[Number(keys[0])].in_file : newSelectedFiles[item].in,
+            newSelectedFiles[Number(item)].in_file === null ? sampleTableData[Number(keys[0])].in_file : newSelectedFiles[Number(item)].in_file,
           out_file:
-            newSelectedFiles[item].out === null
+            newSelectedFiles[Number(item)].out_file === null
               ? sampleTableData[Number(keys[0])].out_file
-              : newSelectedFiles[item].out,
+              : newSelectedFiles[Number(item)].out_file,
           new: sampleTableData[Number(keys[0])].new,
           note: sampleTableData[Number(keys[0])].note,
         },
@@ -428,10 +428,10 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
     setSamplePopUp(false);
   };
 
-  const handleTestingConfirm = (newSelectedFiles) => {
+  const handleTestingConfirm = (newSelectedFiles: TableDataProp[]) => {
     const newTableData = Object.keys(newSelectedFiles).reduce((acc, item) => {
       const keys = Object.keys(testcaseTableData).filter(
-        (key) => testcaseTableData[Number(key)].no === newSelectedFiles[item].no,
+        (key) => testcaseTableData[Number(key)].no === newSelectedFiles[Number(item)].no,
       );
       if (keys.length === 0) {
         // this is new case
@@ -439,15 +439,15 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
           ...acc,
           [-item]: {
             id: -item,
-            no: newSelectedFiles[item].no,
-            label: newSelectedFiles[item].no,
-            score: newSelectedFiles[item].score,
-            time_limit: newSelectedFiles[item].time_limit,
-            memory_limit: newSelectedFiles[item].memory_limit,
-            input_filename: newSelectedFiles[item].in === null ? null : newSelectedFiles[item].in.name,
-            output_filename: newSelectedFiles[item].out === null ? null : newSelectedFiles[item].out.name,
-            in_file: newSelectedFiles[item].in,
-            out_file: newSelectedFiles[item].out,
+            no: newSelectedFiles[Number(item)].no,
+            label: newSelectedFiles[Number(item)].no,
+            score: newSelectedFiles[Number(item)].score,
+            time_limit: newSelectedFiles[Number(item)].time_limit,
+            memory_limit: newSelectedFiles[Number(item)].memory_limit,
+            input_filename: newSelectedFiles[Number(item)].in_file === null ? null : newSelectedFiles[Number(item)].in_file?.name,
+            output_filename: newSelectedFiles[Number(item)].out_file === null ? null : newSelectedFiles[Number(item)].out_file?.name,
+            in_file: newSelectedFiles[Number(item)].in_file,
+            out_file: newSelectedFiles[Number(item)].out_file,
             new: true,
             note: '',
           },
@@ -458,25 +458,25 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
         ...acc,
         [keys[0]]: {
           id: Number(keys[0]),
-          no: newSelectedFiles[item].no,
-          label: newSelectedFiles[item].no,
-          score: newSelectedFiles[item].score,
-          time_limit: newSelectedFiles[item].time_limit,
-          memory_limit: newSelectedFiles[item].memory_limit,
+          no: newSelectedFiles[Number(item)].no,
+          label: newSelectedFiles[Number(item)].no,
+          score: newSelectedFiles[Number(item)].score,
+          time_limit: newSelectedFiles[Number(item)].time_limit,
+          memory_limit: newSelectedFiles[Number(item)].memory_limit,
           input_filename:
-            newSelectedFiles[item].in === null
+            newSelectedFiles[Number(item)].in_file === null
               ? testcaseTableData[Number(keys[0])].input_filename
-              : newSelectedFiles[item].in.name,
+              : newSelectedFiles[Number(item)].in_file?.name,
           output_filename:
-            newSelectedFiles[item].out === null
+            newSelectedFiles[Number(item)].out_file === null
               ? testcaseTableData[Number(keys[0])].output_filename
-              : newSelectedFiles[item].out.name,
+              : newSelectedFiles[Number(item)].out_file?.name,
           in_file:
-            newSelectedFiles[item].in === null ? testcaseTableData[Number(keys[0])].in_file : newSelectedFiles[item].in,
+            newSelectedFiles[Number(item)].in_file === null ? testcaseTableData[Number(keys[0])].in_file : newSelectedFiles[Number(item)].in_file,
           out_file:
-            newSelectedFiles[item].out === null
+            newSelectedFiles[Number(item)].out_file === null
               ? testcaseTableData[Number(keys[0])].out_file
-              : newSelectedFiles[item].out,
+              : newSelectedFiles[Number(item)].out_file,
           new: testcaseTableData[Number(keys[0])].new,
           note: testcaseTableData[Number(keys[0])].note,
         },
