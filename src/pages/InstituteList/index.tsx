@@ -1,26 +1,13 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControlLabel,
-  Snackbar,
-  Switch,
-  TextField,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Snackbar, Switch, TextField, Typography, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
+
+
 
 import GeneralLoading from '@/components/GeneralLoading';
 import AlignedText from '@/components/ui/AlignedText';
 import CustomTable from '@/components/ui/CustomTable';
 import PageTitle from '@/components/ui/PageTitle';
-import TableFilterCard from '@/components/ui/TableFilterCard';
 import Icon from '@/components/ui/icon/index';
-import filterData from '@/function/filter';
-import sortData from '@/function/sort';
 import useInstitutes from '@/lib/institute/useInstitutes';
 
 const useStyles = makeStyles(() => ({
@@ -35,13 +22,21 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+interface TableDataProps {
+  id: number;
+  abbreviated_name: string;
+  full_name: string;
+  email_domain: string;
+  is_disabled: string;
+  path: string;
+}
+
 export default function InstituteList() {
   const classes = useStyles();
 
   const { addInstitute, isLoading, error } = useInstitutes();
 
-  const [transformedData, setTransformedData] = useState([]);
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState<TableDataProps[]>([]);
   const [disabled, setDisabled] = useState(true);
   const [popUp, setPopUp] = useState(false);
   const [inputs, setInputs] = useState({
@@ -49,12 +44,6 @@ export default function InstituteList() {
     initialism: '',
     email: '',
     status: false,
-  });
-
-  const [filter, setFilter] = useState(false);
-  const [filterInput, setFilterInput] = useState({
-    filter: ['Select all'],
-    sort: '(None)',
   });
 
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -108,31 +97,32 @@ export default function InstituteList() {
     });
   };
 
-  const filterStatus = (input) => {
-    const tempData = filterData(transformedData, 'is_disabled', input.filter);
-    const tempData2 = sortData(tempData, 'is_disabled', input.sort);
+  // const filterStatus = (input) => {
+  //   const tempData = filterData(transformedData, 'is_disabled', input.filter);
+  //   const tempData2 = sortData(tempData, 'is_disabled', input.sort);
 
-    setTableData(tempData2);
-  };
+  //   setTableData(tempData2);
+  // };
+
+  const { institutes } = useInstitutes();
 
   useEffect(() => {
-    const newData = [];
-    if (institutesIds !== undefined) {
-      institutesIds.forEach((key) => {
-        const item = institutesById[key];
-        const temp = { ...item };
-        if (item.is_disabled === true || item.is_disabled === 'Disabled') {
-          temp.is_disabled = 'Disabled';
-        } else if (item.is_disabled === false || item.is_disabled === 'Enabled') {
-          temp.is_disabled = 'Enabled';
-        }
-        temp.path = `/admin/account/institute/${temp.id}/setting`;
+    const newData: TableDataProps[] = [];
+    if (institutes !== undefined) {
+      institutes.forEach((item) => {
+        const temp: TableDataProps = {
+          id: item.id,
+          abbreviated_name: item.abbreviated_name,
+          full_name: item.full_name,
+          email_domain: item.email_domain,
+          path: `/admin/account/institute/${item.id}/setting`,
+          is_disabled: item.is_disabled ? 'Disabled' : 'Enabled',
+        };
         newData.push(temp);
       });
     }
-    setTransformedData(newData);
     setTableData(newData);
-  }, [institutesById, institutesIds]);
+  }, [institutes]);
 
   if (isLoading.browseAll) {
     return <GeneralLoading />;
@@ -177,22 +167,11 @@ export default function InstituteList() {
             type: 'string',
           },
         ]}
-        columnComponent={[
-          null,
-          null,
-          <TableFilterCard
-            key="filter"
-            popUp={filter}
-            setPopUp={setFilter}
-            filterInput={filterInput}
-            filterOptions={['Enabled', 'Disabled']}
-            setFilterInput={setFilterInput}
-            doFilter={filterStatus}
-          />,
-        ]}
         hasLink
         linkName="path"
-      />
+      >
+        5
+      </CustomTable>
       <Dialog
         open={popUp}
         keepMounted
