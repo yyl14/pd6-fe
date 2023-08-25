@@ -1,13 +1,13 @@
 import { Route, Switch } from 'react-router-dom';
 
-import CourseRoute from '@/routes/(main)/admin/course/course';
+import ClassRoutes from './class';
+import CourseRoutes from './course';
 
-export default function CoursesRoute() {
+export default function CourseAndClassRoutes() {
   return (
     <Switch>
-      <Route path="/6a/admin/course/course" component={CourseRoute} />
-      {/* <Route path="/6a/admin/course/class/:courseId/:classId" component={ClassRoutes} /> */}
-      <Route path="/6a/admin/course/course/:courseId" component={CourseRoutes} />
+      <Route path="/6a/admin/course/class" component={ClassRoutes} />
+      <Route path="/6a/admin/course/course" component={CourseRoutes} />
     </Switch>
   );
 }
