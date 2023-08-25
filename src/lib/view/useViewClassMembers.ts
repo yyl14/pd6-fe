@@ -2,7 +2,7 @@ import { components } from '../../../types/schema';
 import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
 import { browseClassMember } from './fetchers';
 
-export type ClassMemberSchema = components['schemas']['ClassMemberData'];
+export type ClassMemberSchema = components['schemas']['ViewClassMember'];
 
 const useViewClassMembers = (classId: number) => {
   const useSWRWithBrowseParams = withDataSchema<ClassMemberSchema>();
