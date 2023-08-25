@@ -7,3 +7,8 @@ export const addAssistingData = api.path('/problem/{problem_id}/assisting-data')
 export const editAssistingData = api.path('/assisting-data/{assisting_data_id}').method('put').create();
 
 export const deleteAssistingData = api.path('/assisting-data/{assisting_data_id}').method('delete').create();
+
+export const downloadAllAssistingData = api
+  .path('/problem/{problem_id}/all-assisting-data')
+  .method('post')
+  .create({ as_attachment: true });
