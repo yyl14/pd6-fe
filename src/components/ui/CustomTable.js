@@ -363,7 +363,6 @@ export default function CustomTable({
           </Button>
         </div>
       </Paper>
-  
     </>
   );
 }
