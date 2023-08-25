@@ -10,6 +10,7 @@ import PageTitle from '@/components/ui/PageTitle';
 import Icon from '@/components/ui/icon/index';
 import useInstitutes from '@/lib/institute/useInstitutes';
 
+
 const useStyles = makeStyles(() => ({
   dialogTitle: {
     marginBottom: '-18px',
@@ -97,31 +98,21 @@ export default function InstituteList() {
     });
   };
 
-  // const filterStatus = (input) => {
-  //   const tempData = filterData(transformedData, 'is_disabled', input.filter);
-  //   const tempData2 = sortData(tempData, 'is_disabled', input.sort);
-
-  //   setTableData(tempData2);
-  // };
-
   const { institutes } = useInstitutes();
 
   useEffect(() => {
-    const newData: TableDataProps[] = [];
     if (institutes !== undefined) {
-      institutes.forEach((item) => {
-        const temp: TableDataProps = {
+      setTableData(
+        institutes.map((item) => ({
           id: item.id,
           abbreviated_name: item.abbreviated_name,
           full_name: item.full_name,
           email_domain: item.email_domain,
-          path: `/admin/account/institute/${item.id}/setting`,
+          path: `/6a/admin/account/institute/${item.id}/setting`,
           is_disabled: item.is_disabled ? 'Disabled' : 'Enabled',
-        };
-        newData.push(temp);
-      });
+        })),
+      );
     }
-    setTableData(newData);
   }, [institutes]);
 
   if (isLoading.browseAll) {
@@ -169,9 +160,7 @@ export default function InstituteList() {
         ]}
         hasLink
         linkName="path"
-      >
-        5
-      </CustomTable>
+      />
       <Dialog
         open={popUp}
         keepMounted
@@ -248,7 +237,7 @@ export default function InstituteList() {
         onClose={() => {
           setShowSnackbar(false);
         }}
-        message={`Error: ${error.add}`}
+        message={`Error: ${error.add?.message}`}
       />
     </>
   );
