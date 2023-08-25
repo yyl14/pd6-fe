@@ -95,7 +95,7 @@ export default function ClassList({ courseId }: { courseId: string }) {
           browse !== undefined
             ? browse?.map((c) => ({
                 name: c.name,
-                memberCount: ,
+                memberCount: c.id,
                 path: `/6a/admin/course/class/${courseId}/${c.id}/member`,
               }))
             : []
