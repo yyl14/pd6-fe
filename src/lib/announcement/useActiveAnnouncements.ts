@@ -12,7 +12,7 @@ const useActiveAnnouncements = () => {
   const useSWRWithBrowseParams = withDataSchema<AnnouncementDataSchema>();
 
   const browseAllAnnouncementSWR = useSWRWithBrowseParams(`/announcement`, browseAnnouncement, {
-    baseFilter: { column: 'expire_time', order: 'DESC' },
+    baseFilter: { column: 'expire_time', operator: '>=', operand: 'current_time' },
   });
 
   const addAnnouncementSWR = useSWRMutation(`/announcement`, toSWRMutationFetcher(addAnnouncement));
@@ -25,7 +25,7 @@ const useActiveAnnouncements = () => {
       filter: browseAllAnnouncementSWR.filter,
       sort: browseAllAnnouncementSWR.sort,
     },
-    addChallengeUnderClass: addAnnouncementSWR.trigger,
+    addAnnouncement: addAnnouncementSWR.trigger,
     isLoading: {
       browse: browseAllAnnouncementSWR.isLoading,
       add: addAnnouncementSWR.isMutating,
