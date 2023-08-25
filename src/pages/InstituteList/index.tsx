@@ -66,14 +66,16 @@ export default function InstituteList() {
 
   const add = async () => {
     try {
-      const res = addInstitute({
+      const res = await addInstitute({
         abbreviated_name: inputs.initialism,
         full_name: inputs.fullName,
         email_domain: inputs.email,
         is_disabled: !inputs.status,
       });
 
-      if (!(await res).ok) {
+      if (!res.ok) {
+        setShowSnackbar(true);
+      } else {
         setPopUp(false);
         setInputs({
           fullName: '',
@@ -81,10 +83,10 @@ export default function InstituteList() {
           email: '',
           status: false,
         });
-        setShowSnackbar(true);
+
       }
     } catch {
-      setShowSnackbar(false);
+      setShowSnackbar(true);
     }
   };
 

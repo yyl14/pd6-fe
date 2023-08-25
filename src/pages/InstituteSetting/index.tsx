@@ -1,16 +1,7 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControlLabel,
-  Switch,
-  TextField,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Snackbar, Switch, TextField, Typography, makeStyles } from '@material-ui/core';
 import { useState } from 'react';
+
+
 
 import GeneralLoading from '@/components/GeneralLoading';
 import NoMatch from '@/components/noMatch';
@@ -18,6 +9,7 @@ import AlignedText from '@/components/ui/AlignedText';
 import PageTitle from '@/components/ui/PageTitle';
 import SimpleBar from '@/components/ui/SimpleBar';
 import useInstitute from '@/lib/institute/useInstitute';
+
 
 const useStyles = makeStyles(() => ({
   warningText: {
@@ -28,7 +20,7 @@ const useStyles = makeStyles(() => ({
 export default function InstituteSetting({ instituteId }: { instituteId: string }) {
   const classes = useStyles();
 
-  const { institute, editInstitute, isLoading } = useInstitute(Number(instituteId));
+  const { institute, editInstitute, isLoading, error: instituteError } = useInstitute(Number(instituteId));
 
   const [settingStatus, setSettingStatus] = useState({
     changeName: false,
@@ -46,6 +38,7 @@ export default function InstituteSetting({ instituteId }: { instituteId: string 
 
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState('');
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   if (institute === undefined) {
     if (isLoading.read) {
@@ -69,29 +62,33 @@ export default function InstituteSetting({ instituteId }: { instituteId: string 
     });
   };
 
-  const handleEditInstitute = (prop: string) => {
+  const handleEditInstitute = async (prop: string) => {
     if (newSetting.newEmail === '' && prop === 'newEmail') {
       setError(true);
       setErrorText("Can't be empty!");
       return;
     }
-    switch (prop) {
-      case 'newName':
-        editInstitute({ institute_id: Number(instituteId), full_name: newSetting.newName });
-        break;
-      case 'newInitialism':
-        editInstitute({ institute_id: Number(instituteId), abbreviated_name: newSetting.newInitialism });
-        break;
-      case 'newEmail':
-        editInstitute({ institute_id: Number(instituteId), email_domain: newSetting.newEmail });
-        break;
-      case 'newStatus':
-        editInstitute({ institute_id: Number(instituteId), is_disabled: newSetting.newStatus });
-        break;
-      default:
-        break;
+    try {
+      switch (prop) {
+        case 'newName':
+          await editInstitute({ institute_id: Number(instituteId), full_name: newSetting.newName });
+          break;
+        case 'newInitialism':
+          await editInstitute({ institute_id: Number(instituteId), abbreviated_name: newSetting.newInitialism });
+          break;
+        case 'newEmail':
+          await editInstitute({ institute_id: Number(instituteId), email_domain: newSetting.newEmail });
+          break;
+        case 'newStatus':
+          await editInstitute({ institute_id: Number(instituteId), is_disabled: newSetting.newStatus });
+          break;
+        default:
+          break;
+      }
+      handleClosePopUp();
+    } catch {
+      setShowSnackbar(true);
     }
-    handleClosePopUp();
   };
 
   return (
@@ -289,7 +286,7 @@ export default function InstituteSetting({ instituteId }: { instituteId: string 
                   setError(false);
                   setErrorText('');
                 } else {
-                  setNewSetting((input) => ({ ...input, newName: e.target.value }));
+                  setNewSetting((input) => ({ ...input, newEmail: e.target.value }));
                 }
               }}
               error={error}
@@ -352,6 +349,14 @@ export default function InstituteSetting({ instituteId }: { instituteId: string 
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowSnackbar(false);
+        }}
+        message={`Error: ${instituteError.edit?.message}`}
+      />
     </>
   );
 }

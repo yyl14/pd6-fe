@@ -10,6 +10,7 @@ import AccountRoutes from './account';
 import CoursesRoute from './course';
 import SystemRoutes from './system';
 
+
 export default function AdminRoutes() {
   useAdminMiddleware();
 

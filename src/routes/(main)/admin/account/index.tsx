@@ -1,12 +1,10 @@
 import { Route, Switch } from 'react-router-dom';
 
-import useAdminMiddleware from '@/middleware/useAdminMiddleware';
+
 
 import InstituteRoutes from './institute';
 
-export default function AdminRoutes() {
-  useAdminMiddleware();
-
+export default function AccountRoutes() {
   return (
     <Switch>
       <Route path="/6a/admin/account/institute/" component={InstituteRoutes} />
