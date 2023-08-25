@@ -3,6 +3,7 @@ import { Route, Switch, useParams } from 'react-router-dom';
 
 import GeneralLoading from '@/components/GeneralLoading';
 import withConditionalRender from '@/components/hoc/withConditionalRender';
+import NoMatch from '@/components/noMatch';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
@@ -54,7 +55,7 @@ export default function ProblemSetRoutes() {
     <Switch>
       <Route path="/6a/problem-set/:courseId/:classId/challenge/:challengeId" component={ChallengeInfoRoute} />
       <Route path="/6a/problem-set/:courseId/:classId" component={ProblemListRoute} />
-      <Route path="/6a/problem-set" component={ProblemListRoute} />
+      <Route path="/6a/problem-set" component={NoMatch} />
     </Switch>
   );
 }
