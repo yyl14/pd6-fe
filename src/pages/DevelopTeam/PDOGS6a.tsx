@@ -79,11 +79,11 @@ export default function PDOGS6a() {
       <SimpleBar title="Frontend" noIndent>
         <div className={classes.profile}>
           <Profile
-            img_url="../../../images/doge.png"
+            img_url="../../../images/donkey.jpg"
             name="李昀宸 Donkey"
             description="FE"
-            FB_link={null}
-            Github_link={null}
+            FB_link="https://www.facebook.com/profile.php?id=100003185348130"
+            Github_link="https://github.com/Donkey0322"
             Linkedin_link={null}
           />
           <Profile
@@ -231,12 +231,12 @@ export default function PDOGS6a() {
             Linkedin_link={null}
           />
           <Profile
-            img_url="../../../images/doge.png"
+            img_url="../../../images/johnnkc.jpg"
             name="吳家俊 johnnkc"
             description="QA"
-            FB_link={null}
+            FB_link="https://www.facebook.com/profile.php?id=100004229174326"
             Github_link={null}
-            Linkedin_link={null}
+            Linkedin_link="https://www.linkedin.com/in/john-ng-b5a480226"
           />
         </div>
       </SimpleBar>
