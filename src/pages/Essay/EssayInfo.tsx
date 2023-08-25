@@ -159,7 +159,7 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
           <MathpixLoader>
             {
               // @ts-ignore
-              <MathpixMarkdown text={essay?.description} htmlTags />
+              <MathpixMarkdown text={essay.description ? essay.description : ''} htmlTags />
             }
           </MathpixLoader>
         }

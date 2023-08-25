@@ -20,3 +20,6 @@ export const readProblemStatistics = api.path('/problem/{problem_id}/statistics'
 
 // useProblemRejudge
 export const rejudgeProblem = api.path('/problem/{problem_id}/rejudge').method('post').create();
+
+// useChallengeProblem
+export const addProblemUnderChallenge = api.path('/challenge/{challenge_id}/problem').method('post').create();

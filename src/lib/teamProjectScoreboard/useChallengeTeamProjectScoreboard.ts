@@ -4,9 +4,9 @@ import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
 
 import { addTeamProjectScoreboard } from './fetchers';
 
-const useChallengeContestContestScoreboard = () => {
+const useChallengeTeamProjectScoreboard = (challengeId: number) => {
   const addTeamProjectScoreboardSWR = useSWRMutation(
-    `/challenge/{challenge_id}/team-project-scoreboard`,
+    `/challenge/${challengeId}/team-project-scoreboard`,
     toSWRMutationFetcher(addTeamProjectScoreboard),
   );
 
@@ -22,4 +22,4 @@ const useChallengeContestContestScoreboard = () => {
   };
 };
 
-export default useChallengeContestContestScoreboard;
+export default useChallengeTeamProjectScoreboard;

@@ -23,3 +23,5 @@ export const browseAccountReviewedPeerReviewRecord = api
   .path('/peer-review/{peer_review_id}/account/{account_id}/review')
   .method('get')
   .create();
+
+export const addPeerReviewUnderChallenge = api.path('/challenge/{challenge_id}/peer-review').method('post').create();
