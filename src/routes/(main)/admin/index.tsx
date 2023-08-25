@@ -2,7 +2,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import useAdminMiddleware from '@/middleware/useAdminMiddleware';
 
-import CoursesRoute from './course';
+import CourseAndClassRoutes from './course';
 import SystemRoutes from './system';
 
 export default function AdminRoutes() {
@@ -10,8 +10,8 @@ export default function AdminRoutes() {
 
   return (
     <Switch>
+      <Route path="/6a/admin/course" component={CourseAndClassRoutes} />
       <Route path="/6a/admin/system" component={SystemRoutes} />
-      <Route path="/6a/admin/course" component={CoursesRoute} />
     </Switch>
   );
 }

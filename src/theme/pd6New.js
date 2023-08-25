@@ -557,6 +557,12 @@ const overrides = {
     },
   },
 
+  MuiTableCell: {
+    root: {
+      padding: '10px 5px 10px 5px',
+    },
+  },
+
   MuiPaper: {
     // elevation: {  },
     outlined: {

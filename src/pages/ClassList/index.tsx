@@ -82,7 +82,11 @@ export default function ClassList({ courseId }: { courseId: string }) {
     <>
       <PageTitle text={`${course?.name}`} />
       <CustomTable
+<<<<<<< HEAD
         hasSearch
+=======
+        hasSearch={false}
+>>>>>>> 6e3b79d83be11c3935761ddef6277899e0ca6d2a
         buttons={
           <>
             <Button onClick={onClickSetting}>Setting</Button>

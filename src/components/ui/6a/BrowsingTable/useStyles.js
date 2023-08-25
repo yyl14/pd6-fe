@@ -12,10 +12,10 @@ const useStyles = makeStyles((theme) => ({
   topContent2: {
     background: theme.palette.grey.A100,
     borderRadius: '10px 10px 0px 0px',
-    padding: '5px 15px 15px 15px',
+    padding: '5px 15px 10px 15px',
     display: 'flex',
     justifyContent: 'flex-end',
-    height: '75px',
+    height: '70px',
   },
   searchFields: {
     display: 'flex',
@@ -41,7 +41,6 @@ const useStyles = makeStyles((theme) => ({
   filterItem: {
     minWidth: '180px',
   },
-
   tableRowContainerLeftSpacing: {
     width: '15px',
     padding: '0px',
@@ -50,12 +49,16 @@ const useStyles = makeStyles((theme) => ({
     width: '10px',
     padding: '0px',
   },
+  tableHead: {
+    height: '48px',
+  },
   tableHeadCell: {
-    height: 'inherit',
+    height: '48px',
     padding: '7px 0px',
     background: 'white',
     borderBottomWidth: '1px',
     borderBottomColor: theme.palette.grey.A400,
+    alignItems: 'center',
   },
   progressContainer: {
     height: 0,
@@ -83,9 +86,9 @@ const useStyles = makeStyles((theme) => ({
     '& > :first-child': {
       paddingLeft: '25px', // 25px (Left space) + 5 px
     },
+    height: '51px',
   },
   tableBodyCell: {
-    padding: '17.5px 5px 17.5px 5px',
     overflowWrap: 'break-word',
     '&:hover~$stickyArrowCell': {
       backgroundImage: 'inherit',
