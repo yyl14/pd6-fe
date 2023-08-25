@@ -38,7 +38,7 @@ export default function PDOGS6a() {
             img_url="../../../images/GaryHu.jpg"
             name="胡家愷 Gary Hu"
             description="FE"
-            FB_link={null}
+            FB_link="https://www.facebook.com/gary.hu.5680"
             Github_link="https://github.com/gary1030"
             Linkedin_link="http://www.linkedin.com/in/gary-hu-2000"
           />
@@ -67,12 +67,12 @@ export default function PDOGS6a() {
             Linkedin_link="https://www.linkedin.com/in/jtongchen/"
           />
           <Profile
-            img_url="../../../images/doge.png"
-            name="徐芊綺"
+            img_url="../../../images/pupss95315.jpg"
+            name="徐芊綺 pupss95315"
             description="Design"
-            FB_link={null}
+            FB_link="https://www.facebook.com/profile.php?id=100000937182479"
             Github_link={null}
-            Linkedin_link={null}
+            Linkedin_link="https://www.linkedin.com/in/%E8%8A%8A%E7%B6%BA-%E5%BE%90-b1b417200/"
           />
         </div>
       </SimpleBar>
@@ -139,18 +139,18 @@ export default function PDOGS6a() {
             Linkedin_link={null}
           />
           <Profile
-            img_url="../../../images/doge.png"
-            name="吳政霖"
+            img_url="../../../images/johnny.jpg"
+            name="吳政霖 Johnny"
             description="BE"
-            FB_link={null}
+            FB_link="https://www.facebook.com/johnny.wu.71216"
             Github_link={null}
             Linkedin_link={null}
           />
           <Profile
-            img_url="../../../images/doge.png"
-            name="詹文淵"
+            img_url="../../../images/waynechang.jpg"
+            name="詹文淵 Wayne"
             description="BE"
-            FB_link={null}
+            FB_link="https://www.facebook.com/profile.php?id=100005546977889"
             Github_link={null}
             Linkedin_link={null}
           />
@@ -167,11 +167,11 @@ export default function PDOGS6a() {
             Linkedin_link={null}
           />
           <Profile
-            img_url="../../../images/doge.png"
-            name="楊景丞"
+            img_url="../../../images/jensenyang.jpg"
+            name="楊景丞 Jensen Yang"
             description="Design"
-            FB_link={null}
-            Github_link={null}
+            FB_link="https://www.facebook.com/jensen.yang.102"
+            Github_link="https://github.com/jensenyang2004"
             Linkedin_link={null}
           />
           <Profile
@@ -203,16 +203,16 @@ export default function PDOGS6a() {
             Linkedin_link="https://www.linkedin.com/in/maxyhwu/"
           />
           <Profile
-            img_url="../../../images/doge.png"
-            name="葉又銘"
+            img_url="../../../images/yym.jpg"
+            name="葉又銘 yym"
             description="DevOps"
-            FB_link={null}
-            Github_link={null}
+            FB_link="https://www.facebook.com/profile.php?id=100010253504873"
+            Github_link="https://github.com/YouMingYeh"
             Linkedin_link={null}
           />
           <Profile
-            img_url="../../../images/doge.png"
-            name="許文鑫"
+            img_url="../../../images/xwx.jpg"
+            name="許文鑫 xwx"
             description="DevOps"
             FB_link={null}
             Github_link={null}
@@ -220,7 +220,7 @@ export default function PDOGS6a() {
           />
         </div>
       </SimpleBar>
-      <SimpleBar title="QA" noIndent>
+      <SimpleBar title="Quality Assurance" noIndent>
         <div className={classes.profile}>
           <Profile
             img_url="../../../images/hc0518.jpg"
