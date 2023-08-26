@@ -1,15 +1,10 @@
 import { Route, Switch } from 'react-router-dom';
 
-
-
 import useAdminMiddleware from '@/middleware/useAdminMiddleware';
-
-
 
 import AccountRoutes from './account';
 import CoursesRoute from './course';
 import SystemRoutes from './system';
-
 
 export default function AdminRoutes() {
   useAdminMiddleware();
