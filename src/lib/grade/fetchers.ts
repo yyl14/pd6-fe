@@ -3,29 +3,19 @@ import fetchAPI from '@/lib/fetchAPI';
 import api from '../api';
 
 // useClassGrade()
-export const importClassGrade = async (
-  url: string,
-  {
-    arg,
-  }: {
-    arg: {
-      title: string;
-      file: Blob;
-    };
-  },
-) => {
+export const importClassGrade = async ({ class_id, title, file }: { class_id: number; title: string; file: Blob }) => {
   const formData = new FormData();
-  formData.append('grade_file', arg.file);
+  formData.append('grade_file', file);
 
   const options = {
     params: {
-      title: arg.title,
+      title,
     },
     method: 'POST',
     body: formData,
   };
 
-  await fetchAPI(url, options);
+  await fetchAPI(`/class/${class_id}/grade-import`, options);
 };
 
 export const browseClassGrade = api.path('/class/{class_id}/grade').method('get').create();

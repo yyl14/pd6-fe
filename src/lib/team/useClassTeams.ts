@@ -19,7 +19,7 @@ const useClassTeams = (classId: number) => {
   );
 
   const addTeamUnderClassSWR = useSWRMutation(`/class/${classId}/team`, toSWRMutationFetcher(addTeamUnderClass));
-  const importTeamSWR = useSWRMutation(`/class/${classId}/team-import`, importTeam);
+  const importTeamSWR = useSWRMutation(`/class/${classId}/team-import`, toSWRMutationFetcher(importTeam));
 
   return {
     browseTeamUnderClass: {

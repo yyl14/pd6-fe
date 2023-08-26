@@ -17,67 +17,37 @@ export const browseTeamAllMember = api.path('/team/{team_id}/member').method('ge
 
 export const deleteTeamMember = api.path('/team/{team_id}/member/{member_id}').method('delete').create();
 
-export const addTeamMember = async (
-  _url: string,
-  {
-    arg,
-  }: {
-    arg: {
-      team_id: number;
-      body: string;
-    };
-  },
-) => {
+export const addTeamMember = async ({ team_id, body }: { team_id: number; body: string }) => {
   const options = {
     method: 'POST',
-    body: arg.body,
+    body,
   };
 
-  const res = await fetchAPI(`/team/${arg.team_id}/member`, options);
+  const res = await fetchAPI(`/team/${team_id}/member`, options);
   return res;
 };
 
-export const editTeamMember = async (
-  _url: string,
-  {
-    arg,
-  }: {
-    arg: {
-      team_id: number;
-      body: string;
-    };
-  },
-) => {
+export const editTeamMember = async ({ team_id, body }: { team_id: number; body: string }) => {
   const options = {
     method: 'PATCH',
-    body: arg.body,
+    body,
   };
 
-  const res = await fetchAPI(`/team/${arg.team_id}/member`, options);
+  const res = await fetchAPI(`/team/${team_id}/member`, options);
   return res;
 };
 
-export const importTeam = async (
-  url: string,
-  {
-    arg,
-  }: {
-    arg: {
-      label: string;
-      file: Blob;
-    };
-  },
-) => {
+export const importTeam = async ({ class_id, label, file }: { class_id: number; label: string; file: Blob }) => {
   const formData = new FormData();
-  formData.append('team_file', arg.file);
+  formData.append('team_file', file);
 
   const options = {
     params: {
-      label: arg.label,
+      label,
     },
     method: 'POST',
     body: formData,
   };
 
-  await fetchAPI(url, options);
+  await fetchAPI(`/class/${class_id}/team-import`, options);
 };

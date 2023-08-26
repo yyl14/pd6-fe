@@ -1,11 +1,12 @@
-import Icon from '@/components/ui/icon/index';
-import useClass from '@/lib/class/useClass';
-import useCourse from '@/lib/course/useCourse';
-import useCourses from '@/lib/course/useCourses';
 import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+
+import Icon from '@/components/ui/icon/index';
+import useClass from '@/lib/class/useClass';
+import useCourse from '@/lib/course/useCourse';
+import useCourses from '@/lib/course/useCourses';
 
 export default function Course({ classes, history, location, mode, open, onClose }) {
   const { courseId, classId } = useParams();
@@ -25,16 +26,14 @@ export default function Course({ classes, history, location, mode, open, onClose
   const { class: classData } = useClass(Number(classId));
 
   useEffect(() => {
-    // console.log(mode, courseId, classId);
-    const goBack = (courseid) => {
-      history.push(`${baseURL}/course/${courseid}/class-list`);
+    const goBack = () => {
+      history.push(`${baseURL}/course/${courseId}/class-list`);
     };
 
-    if (mode === 'class-list') {
+    if (mode === 'class-list' && courses) {
       setTitle1('Lesson');
       setTitle2('Contest');
       setItemList(
-        courses &&
         courses
           .map(({ id, type, name }) => {
             switch (type) {
@@ -78,7 +77,7 @@ export default function Course({ classes, history, location, mode, open, onClose
       );
     } else if (mode === 'course-setting' && course) {
       setArrow(
-        <IconButton className={classes.arrow} onClick={() => goBack(courseId)}>
+        <IconButton className={classes.arrow} onClick={() => goBack()}>
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
@@ -92,7 +91,7 @@ export default function Course({ classes, history, location, mode, open, onClose
       ]);
     } else if (mode === 'class' && course && classData) {
       setArrow(
-        <IconButton className={classes.arrow} onClick={() => goBack(courseId)}>
+        <IconButton className={classes.arrow} onClick={() => goBack()}>
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
@@ -129,22 +128,6 @@ export default function Course({ classes, history, location, mode, open, onClose
     setDisplay1('unfold');
   };
 
-  if (course === undefined || (classId && classData === undefined)) {
-    return (
-      <div>
-        <Drawer
-          variant="persistent"
-          open={open}
-          onClose={onClose}
-          className={classes.drawer}
-          anchor="left"
-          PaperProps={{ elevation: 5 }}
-          classes={{ paper: classes.drawerPaper }}
-        />
-      </div>
-    );
-  }
-
   return (
     <div>
       <Drawer
@@ -177,7 +160,7 @@ export default function Course({ classes, history, location, mode, open, onClose
                   (item.type === 'LESSON' || mode !== 'class-list') && (
                     <ListItem
                       button
-                      key={item.id}
+                      key={item.text}
                       onClick={() => history.push(item.path)}
                       className={item.text !== 'Lesson' ? classes.item : classes.addItem}
                     >
@@ -220,7 +203,7 @@ export default function Course({ classes, history, location, mode, open, onClose
                       item.type === 'CONTEST' && (
                         <ListItem
                           button
-                          key={item.id}
+                          key={item.text}
                           onClick={() => history.push(item.path)}
                           className={item.text !== 'Contest' ? classes.item : classes.addItem}
                         >

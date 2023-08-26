@@ -9,7 +9,7 @@ export type ClassGradeSchema = components['schemas']['pydantic__dataclasses__Gra
 
 const useClassGrade = (classId: number) => {
   const addClassGradeSWR = useSWRMutation(`/class/${classId}/grade`, toSWRMutationFetcher(addClassGrade));
-  const importClassGradeSWR = useSWRMutation(`/class/${classId}/grade-import`, importClassGrade);
+  const importClassGradeSWR = useSWRMutation(`/class/${classId}/grade-import`, toSWRMutationFetcher(importClassGrade));
 
   return {
     addClassGrade: addClassGradeSWR.trigger,

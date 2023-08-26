@@ -3,7 +3,6 @@ import { useState } from 'react';
 
 import BrowsingTable from '@/components/ui/6a/BrowsingTable';
 import PageTitle from '@/components/ui/PageTitle';
-// import { useDispatch, useSelector } from 'react-redux';
 // import MemberEdit from '@/components/admin/course/MemberEdit';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
@@ -12,8 +11,7 @@ import useViewClassMembers, { ClassMemberSchema } from '@/lib/view/useViewClassM
 
 import ClassMemberSetting from '../ClassMemberSetting';
 
-/* This is a level 4 component (page component) */
-export default function MemberList({ courseId, classId }: { courseId: string; classId: string }) {
+export default function ClassMemberList({ courseId, classId }: { courseId: string; classId: string }) {
   const { course } = useCourse(Number(courseId));
   const { class: classData } = useClass(Number(classId));
 
@@ -151,12 +149,3 @@ export default function MemberList({ courseId, classId }: { courseId: string; cl
     </>
   );
 }
-
-// export default function ClassMemberList({ courseId, classId }: { courseId: string; classId: string }) {
-//   return (
-//     <>
-//       <PageTitle text="Class Member List" />
-//       {`${courseId} ${classId} `}
-//     </>
-//   );
-// }

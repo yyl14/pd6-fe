@@ -280,8 +280,8 @@ export default function Header() {
           },
         ]);
         setMenuList([
-          { title: 'My Profile', link: '/my-profile' },
-          { title: 'Logout', link: '/logout' },
+          { title: 'My Profile', link: '/6a/my-profile' },
+          { title: 'Logout', link: '/6a/logout' },
         ]);
         break;
       }

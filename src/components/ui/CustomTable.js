@@ -163,17 +163,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CustomTable({
-  hasSearch,
-  // searchWidthOption = 1, // will remove
-  // searchPlaceholder, // will remove
-  buttons,
-  columns,
-  // columnComponent, // will remove
-  data,
-  hasLink,
-  linkName,
-}) {
+export default function CustomTable({ hasSearch, buttons, columns, data, hasLink, linkName }) {
   const classes = useStyles();
   const [curPage, setPage] = useState(0);
   const [pageInput, setPageInput] = useState(1);

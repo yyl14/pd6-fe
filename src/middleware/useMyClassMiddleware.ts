@@ -12,10 +12,8 @@ const useMyClassMiddleware = () => {
   const { accountClasses: userClasses } = useUserClasses();
 
   useEffect(() => {
-    if (user?.role === 'MANAGER') {
-      history.push('/6a/admin/course/course');
-    } else if (user?.role === 'GUEST') {
-      history.push('/6a/my-profile');
+    if (user?.role !== 'NORMAL') {
+      history.push('/6a');
     }
   }, [user?.role, history]);
 
