@@ -342,9 +342,7 @@ export default function ChallengeStatistics({
           hasSearch={false}
           hasLink={false}
           linkName={false}
-        >
-          <></>
-        </CustomTable>
+        />
       </SimpleBar>
       <Dialog open={showEmailSentPopup} keepMounted onClose={() => setShowEmailSentPopup(false)}>
         <DialogTitle id="alert-dialog-slide-title">
