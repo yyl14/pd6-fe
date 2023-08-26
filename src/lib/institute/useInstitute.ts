@@ -14,11 +14,11 @@ const useInstitute = (instituteId: number) => {
     editInstitute: editInstituteSWR.trigger,
     isLoading: {
       read: readInstituteSWR.isLoading,
-      add: editInstituteSWR.isMutating,
+      edit: editInstituteSWR.isMutating,
     },
     error: {
       read: readInstituteSWR.error,
-      add: editInstituteSWR.error,
+      edit: editInstituteSWR.error,
     },
   };
 };

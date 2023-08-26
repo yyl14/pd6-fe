@@ -8,8 +8,8 @@ import { addTeamMember, browseTeamAllMember, deleteTeamMember, editTeamMember } 
 const useTeamMember = (teamId: number) => {
   const browseTeamAllMemberSWR = useSWR(`/team/${teamId}/member`, () => browseTeamAllMember({ team_id: teamId }));
   const deleteTeamMemberSWR = useSWRMutation(`/team/${teamId}/member/`, toSWRMutationFetcher(deleteTeamMember));
-  const addTeamMemberSWR = useSWRMutation(`/team/${teamId}/member`, addTeamMember);
-  const editTeamMemberSWR = useSWRMutation(`/team/${teamId}/member`, editTeamMember);
+  const addTeamMemberSWR = useSWRMutation(`/team/${teamId}/member`, toSWRMutationFetcher(addTeamMember));
+  const editTeamMemberSWR = useSWRMutation(`/team/${teamId}/member`, toSWRMutationFetcher(editTeamMember));
 
   return {
     teamMembers: browseTeamAllMemberSWR.data?.data.data,

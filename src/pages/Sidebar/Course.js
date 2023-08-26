@@ -1,11 +1,12 @@
-import Icon from '@/components/ui/icon/index';
-import useClass from '@/lib/class/useClass';
-import useCourse from '@/lib/course/useCourse';
-import useCourses from '@/lib/course/useCourses';
 import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+
+import Icon from '@/components/ui/icon/index';
+import useClass from '@/lib/class/useClass';
+import useCourse from '@/lib/course/useCourse';
+import useCourses from '@/lib/course/useCourses';
 
 export default function Course({ classes, history, location, mode, open, onClose }) {
   const { courseId, classId } = useParams();
@@ -26,8 +27,8 @@ export default function Course({ classes, history, location, mode, open, onClose
 
   useEffect(() => {
     // console.log(mode, courseId, classId);
-    const goBack = (courseid) => {
-      history.push(`${baseURL}/course/${courseid}/class-list`);
+    const goBack = () => {
+      history.push(`${baseURL}/course/${courseId}/class-list`);
     };
 
     if (mode === 'class-list') {
@@ -35,50 +36,50 @@ export default function Course({ classes, history, location, mode, open, onClose
       setTitle2('Contest');
       setItemList(
         courses &&
-        courses
-          .map(({ id, type, name }) => {
-            switch (type) {
-              case 'LESSON':
-                return {
-                  type,
-                  text: name,
-                  icon: <Icon.Class />,
-                  path: `${baseURL}/course/${id}/class-list`,
-                };
-              case 'CONTEST':
-                return {
-                  type,
-                  text: name,
-                  icon: <Icon.Star />,
-                  path: `${baseURL}/course/${id}/class-list`,
-                };
-              default:
-                return {
-                  type,
-                  text: name,
-                  icon: <Icon.Class />,
-                  path: `${baseURL}/course/${id}/class-list`,
-                };
-            }
-          })
-          .concat([
-            {
-              type: 'LESSON',
-              text: 'Lesson',
-              icon: <Icon.Newadd className={classes.addIconItem} />,
-              path: `${baseURL}/course/${courseId}/class-list/lesson`,
-            },
-            {
-              type: 'CONTEST',
-              text: 'Contest',
-              icon: <Icon.Newadd className={classes.addIconItem} />,
-              path: `${baseURL}/course/${courseId}/class-list/contest`,
-            },
-          ]),
+          courses
+            .map(({ id, type, name }) => {
+              switch (type) {
+                case 'LESSON':
+                  return {
+                    type,
+                    text: name,
+                    icon: <Icon.Class />,
+                    path: `${baseURL}/course/${id}/class-list`,
+                  };
+                case 'CONTEST':
+                  return {
+                    type,
+                    text: name,
+                    icon: <Icon.Star />,
+                    path: `${baseURL}/course/${id}/class-list`,
+                  };
+                default:
+                  return {
+                    type,
+                    text: name,
+                    icon: <Icon.Class />,
+                    path: `${baseURL}/course/${id}/class-list`,
+                  };
+              }
+            })
+            .concat([
+              {
+                type: 'LESSON',
+                text: 'Lesson',
+                icon: <Icon.Newadd className={classes.addIconItem} />,
+                path: `${baseURL}/course/${courseId}/class-list/lesson`,
+              },
+              {
+                type: 'CONTEST',
+                text: 'Contest',
+                icon: <Icon.Newadd className={classes.addIconItem} />,
+                path: `${baseURL}/course/${courseId}/class-list/contest`,
+              },
+            ]),
       );
     } else if (mode === 'course-setting' && course) {
       setArrow(
-        <IconButton className={classes.arrow} onClick={() => goBack(courseId)}>
+        <IconButton className={classes.arrow} onClick={() => goBack()}>
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
@@ -92,7 +93,7 @@ export default function Course({ classes, history, location, mode, open, onClose
       ]);
     } else if (mode === 'class' && course && classData) {
       setArrow(
-        <IconButton className={classes.arrow} onClick={() => goBack(courseId)}>
+        <IconButton className={classes.arrow} onClick={() => goBack()}>
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
