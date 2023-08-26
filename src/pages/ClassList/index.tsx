@@ -96,9 +96,9 @@ export default function ClassList({ courseId }: { courseId: string }) {
         data={
           browse !== undefined
             ? browse?.map((c) => ({
-                name: c.name,
-                memberCount: c.id,
-                path: `/6a/admin/course/class/${courseId}/${c.id}/member`,
+                name: c.class_info.name,
+                memberCount: c.member_count,
+                path: `/6a/admin/course/class/${courseId}/${c.class_info.id}/member`,
               }))
             : []
         }
