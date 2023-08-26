@@ -100,7 +100,7 @@ export default function ClassMemberSetting({
 
 //   const userId = useUserId();
 //   const { account } = useAccount(userId);
-//   const { browseMembers, isLoading: classMemberIsLoading, error: classMemberError} = useViewClassMembers(Number(classId));
+//   const { browseClassMembers, isLoading: classMemberIsLoading, error: classMemberError} = useViewClassMembers(Number(classId));
 
 //   const [TA, setTA] = useState([]);
 //   const [student, setStudent] = useState([]);
@@ -139,7 +139,7 @@ export default function ClassMemberSetting({
 //   // }, [authToken, classId, dispatch]);
 
 //   useEffect(() => {
-//     const classMembers = classes.byId[classId].memberIds.map((id) => members.byId[id]);
+//     const classMembers = browseClassMembers.data?.data;
 //     if (classMembers !== undefined) {
 //       setTA(
 //         classMembers
@@ -160,7 +160,7 @@ export default function ClassMemberSetting({
 //           .join('\n'),
 //       );
 //     }
-//   }, [accounts.byId, classId, classes.byId, members.byId]);
+//   }, [account, classId, browseClassMembers.data?.data]);
 
 //   // block user leaving current page through header and sidebar links (if contents have been changed)
 //   useEffect(() => {
@@ -193,15 +193,13 @@ export default function ClassMemberSetting({
 //     }
 //   });
 
-//   const handleChangeTA = (e: | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-//     | React.ChangeEvent<{ name?: string | undefined; value: unknown }>,
-// ) => {
+//   const handleChangeTA = (e) => {
 //     setTA(e.target.value);
 //     setTAChanged(
 //       e.target.value !==
-//         classes.byId[classId].memberIds
-//           .map((id) => members.byId[id])
-//           .filter((item) => item.role === 'MANAGER')
+//         // classes.byId[classId].memberIds
+//         //   .map((id) => members.byId[id])
+//         browseClassMembers.data?.data.filter((item) => item.role === 'MANAGER')
 //           .map((member) => accounts.byId[member.account_id].referral)
 //           .join('\n'),
 //     );
@@ -210,9 +208,7 @@ export default function ClassMemberSetting({
 //     setStudent(e.target.value);
 //     setStudentChanged(
 //       e.target.value !==
-//         classes.byId[classId].memberIds
-//           .map((id) => members.byId[id])
-//           .filter((item) => item.role === 'NORMAL')
+//       browseClassMembers.data?.data.filter((item) => item.role === 'NORMAL')
 //           .map((member) => accounts.byId[member.account_id].referral)
 //           .join('\n'),
 //     );
@@ -221,9 +217,7 @@ export default function ClassMemberSetting({
 //     setGuest(e.target.value);
 //     setGuestChanged(
 //       e.target.value !==
-//         classes.byId[classId].memberIds
-//           .map((id) => members.byId[id])
-//           .filter((item) => item.role === 'GUEST')
+//       browseClassMembers.data?.data.filter((item) => item.role === 'GUEST')
 //           .map((member) => accounts.byId[member.account_id].referral)
 //           .join('\n'),
 //     );
