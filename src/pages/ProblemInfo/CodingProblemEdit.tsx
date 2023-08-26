@@ -490,7 +490,7 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
 
   const handleAssistConfirm = () => {
     // add file to table;
-    const newData = cardSelectedFileA.reduce((acc, file) => {
+    const newData = cardSelectedFileA.reduce((acc, file: File) => {
       const index = assistTableData.findIndex((item) => item.filename === file.name);
       if (index === -1) {
         return [...acc, { id: file.name, filename: file.name, file }];
@@ -887,7 +887,7 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
       <SimpleBar title="Customized Judge Code (Optional)" noIndent>
         <AlignedText text="Judge Method" childrenType="field">
           <FormControl variant="outlined" className={className.select}>
-            <Select name="judgeMethod" value={judgeType} onChange={(e) => setJudgeType(e.target.value)}>
+            <Select name="judgeMethod" value={judgeType} onChange={(e) => setJudgeType(e.target.value as ('NORMAL' | 'CUSTOMIZED'))}>
               <MenuItem value="NORMAL">No customized judge</MenuItem>
               <MenuItem value="CUSTOMIZED">Customized judge</MenuItem>
             </Select>
@@ -897,7 +897,7 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
           <>
             <AlignedText text="Language" childrenType="field">
               <FormControl variant="outlined" className={className.select}>
-                <Select name="language" value={judgeLanguage} onChange={(e) => setJudgeLanguage(e.target.value)}>
+                <Select name="language" value={judgeLanguage} onChange={(e) => setJudgeLanguage(e.target.value as string)}>
                   <MenuItem value="Python 3.8">Python 3.8</MenuItem>
                 </Select>
               </FormControl>
@@ -905,7 +905,7 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
             <AlignedText text="Content" childrenType="field">
               <CodeField
                 value={judgeCode}
-                onChange={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setJudgeCode(e.target.value);
                   setHasChange(true);
                 }}
@@ -918,7 +918,7 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
       <SimpleBar title="Reviser Code (Optional)" noIndent>
         <AlignedText text="Reviser Type" childrenType="field">
           <FormControl variant="outlined" className={className.select}>
-            <Select name="reviser" value={reviserIsEnabled} onChange={(e) => setReviserIsEnabled(e.target.value)}>
+            <Select name="reviser" value={reviserIsEnabled} onChange={(e) => setReviserIsEnabled(e.target.value as boolean)}>
               <MenuItem>No customized reviser</MenuItem>
               {/* eslint-disable-next-line react/jsx-boolean-value */}
               <MenuItem>Customized reviser</MenuItem>
@@ -929,7 +929,7 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
           <>
             <AlignedText text="Language" childrenType="field">
               <FormControl variant="outlined" className={className.select}>
-                <Select name="language" value={reviserLanguage} onChange={(e) => setReviserLanguage(e.target.value)}>
+                <Select name="language" value={reviserLanguage} onChange={(e) => setReviserLanguage(e.target.value as string)}>
                   <MenuItem value="Python 3.8">Python 3.8</MenuItem>
                 </Select>
               </FormControl>
@@ -937,7 +937,7 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
             <AlignedText text="Content" childrenType="field">
               <CodeField
                 value={reviserCode}
-                onChange={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setReviserCode(e.target.value);
                   setHasChange(true);
                 }}
