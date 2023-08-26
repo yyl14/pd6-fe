@@ -3,25 +3,16 @@ import fetchAPI from '../fetchAPI';
 
 export const browseEssaySubmissionByEssayId = api.path('/essay/{essay_id}/essay-submission').method('get').create();
 
-export const uploadEssay = async (
-  url: string,
-  {
-    arg,
-  }: {
-    arg: {
-      file: Blob;
-    };
-  },
-) => {
+export const uploadEssay = async ({ essay_id, file }: { essay_id: number; file: Blob }) => {
   const formData = new FormData();
-  formData.append('essay_file', arg.file);
+  formData.append('essay_file', file);
 
   const options = {
     method: 'POST',
     body: formData,
   };
 
-  await fetchAPI(url, options);
+  await fetchAPI(`/essay/${essay_id}/essay-submission`, options);
 };
 
 export const downloadAllEssaySubmissions = api
@@ -31,24 +22,14 @@ export const downloadAllEssaySubmissions = api
 
 export const readEssaySubmission = api.path('/essay-submission/{essay_submission_id}').method('get').create();
 
-export const reuploadEssay = async (
-  url: string,
-  {
-    arg,
-  }: {
-    arg: {
-      essaySubmissionId: string;
-      file: Blob;
-    };
-  },
-) => {
+export const reuploadEssay = async ({ essay_submission_id, file }: { essay_submission_id: number; file: Blob }) => {
   const formData = new FormData();
-  formData.append('essay_file', arg.file);
+  formData.append('essay_file', file);
 
   const options = {
     method: 'PUT',
     body: formData,
   };
 
-  await fetchAPI(`/essay-submission/${arg.essaySubmissionId}`, options);
+  await fetchAPI(`/essay-submission/${essay_submission_id}`, options);
 };

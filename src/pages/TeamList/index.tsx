@@ -143,6 +143,7 @@ export default function TeamList({ courseId, classId }: { courseId: string; clas
         await Promise.all(
           selectedFile.map((file) =>
             importTeamUnderClass({
+              class_id: Number(classId),
               label: importInput,
               file,
             }),

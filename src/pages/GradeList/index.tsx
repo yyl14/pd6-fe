@@ -112,6 +112,7 @@ export default function GradeList({ courseId, classId }: { courseId: string; cla
           await Promise.all(
             selectedFile.map((file) =>
               importClassGrade({
+                class_id: Number(classId),
                 title: inputTitle,
                 file,
               }),

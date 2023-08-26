@@ -1,6 +1,8 @@
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
+import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
+
 import { browseEssaySubmissionByEssayId, downloadAllEssaySubmissions, uploadEssay } from './fetchers';
 
 const useEssayEssaySubmissions = (essayId: number) => {
@@ -8,7 +10,7 @@ const useEssayEssaySubmissions = (essayId: number) => {
     browseEssaySubmissionByEssayId({ essay_id: essayId }),
   );
 
-  const uploadEssaySWR = useSWRMutation(`/essay/${essayId}/essay-submission`, uploadEssay);
+  const uploadEssaySWR = useSWRMutation(`/essay/${essayId}/essay-submission`, toSWRMutationFetcher(uploadEssay));
 
   const downloadAllEssaySubmissionsSWR = useSWRMutation(`/essay/${essayId}/all-essay-submission`, () =>
     downloadAllEssaySubmissions({ essay_id: essayId, as_attachment: true }),

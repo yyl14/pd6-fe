@@ -9,7 +9,7 @@ const useTeam = (teamId: number | null) => {
   const readTeamSWR = useSWR(teamId ? `/team/${teamId}` : null, () => readTeam({ team_id: Number(teamId) }));
   const editTeamSWR = useSWRMutation(`/team/${teamId}`, toSWRMutationFetcher(editTeam));
   const deleteTeamSWR = useSWRMutation(`/team/${teamId}`, toSWRMutationFetcher(deleteTeam));
-  const addTeamMemberSWR = useSWRMutation(`/team/${teamId}/member`, addTeamMember);
+  const addTeamMemberSWR = useSWRMutation(`/team/${teamId}/member`, toSWRMutationFetcher(addTeamMember));
 
   return {
     team: readTeamSWR.data?.data.data,
