@@ -8,13 +8,20 @@ const useViewClassProblemSets = (classId: number) => {
   const useSWRWithBrowseParams = withDataSchema<ProblemSetSchema>();
 
   const browseProblemSetUnderClassSWR = useSWRWithBrowseParams(
-    `/class/{class_id}/view/problem-set`,
+    `/class/${classId}/view/problem-set`,
     browseProblemSetUnderClass,
     { class_id: classId },
+    { baseSort: { column: 'challenge_id', order: 'ASC' } },
   );
 
   return {
-    problemSets: browseProblemSetUnderClassSWR.data?.data.data,
+    browseProblemSetUnderClass: {
+      data: browseProblemSetUnderClassSWR.data?.data.data,
+      refresh: browseProblemSetUnderClassSWR.mutate,
+      pagination: browseProblemSetUnderClassSWR.pagination,
+      filter: browseProblemSetUnderClassSWR.filter,
+      sort: browseProblemSetUnderClassSWR.sort,
+    },
 
     isLoading: {
       browse: browseProblemSetUnderClassSWR.isLoading,
