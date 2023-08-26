@@ -19,6 +19,8 @@ import useCourseClasses from '@/lib/class/useCourseClasses';
 import useCourse from '@/lib/course/useCourse';
 import useCourses from '@/lib/course/useCourses';
 
+type CourseType = 'LESSON' | 'CONTEST';
+
 export default function ClassList({ courseId }: { courseId: string }) {
   const addType = window.location.href.split('/').at(-1);
   const { course } = useCourse(Number(courseId));
@@ -64,7 +66,6 @@ export default function ClassList({ courseId }: { courseId: string }) {
     setShowSnackBar(false);
   };
   const onAddCourse = async (name: string) => {
-    type CourseType = 'LESSON' | 'CONTEST';
     try {
       const type = getCourseType(String(addType)).toUpperCase();
       await addCourse({ name, type: type as CourseType });
