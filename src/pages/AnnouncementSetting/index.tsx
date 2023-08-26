@@ -21,15 +21,19 @@ import PageTitle from '@/components/ui/PageTitle';
 import SimpleBar from '@/components/ui/SimpleBar';
 import useAnnouncement from '@/lib/announcement/useAnnouncement';
 
-import AnnouncementEdit from '../AnnouncementEdit';
-
 const useStyles = makeStyles(() => ({
   duration: {
     transform: 'translate(0, -4px)',
   },
 }));
 
-export default function AnnouncementSetting({ announcementId }: { announcementId: string }) {
+export default function AnnouncementSetting({
+  announcementId,
+  handleEdit,
+}: {
+  announcementId: string;
+  handleEdit: () => void;
+}) {
   const classes = useStyles();
   const history = useHistory();
 
@@ -53,8 +57,6 @@ export default function AnnouncementSetting({ announcementId }: { announcementId
     }
   };
 
-  const [edit, setEdit] = useState(false);
-
   if (announcement === null) {
     if (announcementIsLoading.read || announcementIsLoading.delete) {
       return <GeneralLoading />;
@@ -65,48 +67,44 @@ export default function AnnouncementSetting({ announcementId }: { announcementId
   return (
     <>
       <PageTitle text={`${announcement?.title} / Setting`} />
-      {edit ? (
-        <AnnouncementEdit announcementId={announcementId} closeEdit={() => setEdit(false)} />
-      ) : (
-        <>
-          <SimpleBar
-            title="Announcement"
-            buttons={
-              <>
-                <Button onClick={() => setEdit(true)}>Edit</Button>
-              </>
-            }
-          >
-            <AlignedText text="Title" childrenType="text">
-              <Typography variant="body1">{announcement?.title}</Typography>
-            </AlignedText>
-            <AlignedText text="Duration" childrenType="text">
-              <Typography variant="body1" className={classes.duration}>
-                {moment(announcement?.post_time).format('YYYY/MM/DD HH:mm')}
-                <ArrowRightIcon style={{ transform: 'translate(0, 5px)' }} />
-                {moment(announcement?.expire_time).format('YYYY/MM/DD HH:mm')}
-              </Typography>
-            </AlignedText>
-            <AlignedText text="Content" childrenType="text">
-              <Typography variant="body1">{announcement?.content}</Typography>
-            </AlignedText>
-          </SimpleBar>
-          <SimpleBar
-            title="Delete Announcement"
-            childrenButtons={
-              <>
-                <Button color="secondary" onClick={() => setPopUpDelete(true)}>
-                  Delete
-                </Button>
-              </>
-            }
-          >
-            <Typography className="delete-announcement-body" variant="body1">
-              Once you delete this announcement, there is no going back. Please be certain.
+      <>
+        <SimpleBar
+          title="Announcement"
+          buttons={
+            <>
+              <Button onClick={handleEdit}>Edit</Button>
+            </>
+          }
+        >
+          <AlignedText text="Title" childrenType="text">
+            <Typography variant="body1">{announcement?.title}</Typography>
+          </AlignedText>
+          <AlignedText text="Duration" childrenType="text">
+            <Typography variant="body1" className={classes.duration}>
+              {moment(announcement?.post_time).format('YYYY/MM/DD HH:mm')}
+              <ArrowRightIcon style={{ transform: 'translate(0, 5px)' }} />
+              {moment(announcement?.expire_time).format('YYYY/MM/DD HH:mm')}
             </Typography>
-          </SimpleBar>
-        </>
-      )}
+          </AlignedText>
+          <AlignedText text="Content" childrenType="text">
+            <Typography variant="body1">{announcement?.content}</Typography>
+          </AlignedText>
+        </SimpleBar>
+        <SimpleBar
+          title="Delete Announcement"
+          childrenButtons={
+            <>
+              <Button color="secondary" onClick={() => setPopUpDelete(true)}>
+                Delete
+              </Button>
+            </>
+          }
+        >
+          <Typography className="delete-announcement-body" variant="body1">
+            Once you delete this announcement, there is no going back. Please be certain.
+          </Typography>
+        </SimpleBar>
+      </>
 
       {/* Delete dialog */}
       <Dialog open={popUpDelete} keepMounted onClose={() => setPopUpDelete(false)}>

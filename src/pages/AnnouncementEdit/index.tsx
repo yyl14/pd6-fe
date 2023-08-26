@@ -2,9 +2,12 @@ import { Button, Snackbar, TextField, makeStyles } from '@material-ui/core';
 import moment from 'moment-timezone';
 import { useState } from 'react';
 
+
+
 import GeneralLoading from '@/components/GeneralLoading';
 import AlignedText from '@/components/ui/AlignedText';
 import DateRangePicker from '@/components/ui/DateRangePicker';
+import PageTitle from '@/components/ui/PageTitle';
 import SimpleBar from '@/components/ui/SimpleBar';
 import useAnnouncement from '@/lib/announcement/useAnnouncement';
 import useAnnouncements from '@/lib/announcement/useAnnouncements';
@@ -26,10 +29,10 @@ const useStyles = makeStyles(() => ({
 
 export default function AnnouncementEdit({
   announcementId,
-  closeEdit,
+  handleDoneEditing,
 }: {
   announcementId: string;
-  closeEdit: () => void;
+  handleDoneEditing: () => void;
 }) {
   const classes = useStyles();
 
@@ -83,7 +86,7 @@ export default function AnnouncementEdit({
           expire_time: dateRangePicker[0].endDate.toISOString(),
         });
       }
-      closeEdit();
+      handleDoneEditing();
     } catch {
       setShowError(true);
     }
@@ -95,6 +98,7 @@ export default function AnnouncementEdit({
 
   return (
     <>
+      <PageTitle text={`${newAnnouncement ? '(Draft)' : announcement?.title} / Setting`} />
       <SimpleBar title="Announcement">
         <AlignedText text="Title" childrenType="field">
           <TextField defaultValue={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
@@ -118,7 +122,7 @@ export default function AnnouncementEdit({
         </AlignedText>
       </SimpleBar>
       <div className={classes.buttons}>
-        <Button onClick={closeEdit}>Cancel</Button>
+        <Button onClick={handleDoneEditing}>Cancel</Button>
         <Button color="primary" onClick={handleClickSave}>
           Save
         </Button>
