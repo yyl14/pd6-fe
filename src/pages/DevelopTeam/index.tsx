@@ -1,10 +1,10 @@
 import { Button, makeStyles } from '@material-ui/core';
-import { Suspense, lazy, useState } from 'react';
+import { useState } from 'react';
 
-const PDOGS6a = lazy(() => import('./PDOGS6a'));
-const PDOGS6 = lazy(() => import('./PDOGS6'));
-const PDOGS4s = lazy(() => import('./PDOGS4s'));
-const PDOGS1 = lazy(() => import('./PDOGS1'));
+import PDOGS1 from './PDOGS1';
+import PDOGS4s from './PDOGS4s';
+import PDOGS6 from './PDOGS6';
+import PDOGS6a from './PDOGS6a';
 
 const useStyles = makeStyles((theme) => ({
   PDOGS_Content_Display: {
@@ -40,32 +40,16 @@ export default function DevelopTeam() {
 
   const showTeam = () => {
     if (display[0] === true) {
-      return (
-        <Suspense fallback={<div>Loading...</div>}>
-          <PDOGS6a />
-        </Suspense>
-      );
+      return <PDOGS6a />;
     }
     if (display[1] === true) {
-      return (
-        <Suspense fallback={<div>Loading...</div>}>
-          <PDOGS6 />
-        </Suspense>
-      );
+      return <PDOGS6 />;
     }
     if (display[2] === true) {
-      return (
-        <Suspense fallback={<div>Loading...</div>}>
-          <PDOGS4s />
-        </Suspense>
-      );
+      return <PDOGS4s />;
     }
     if (display[3] === true) {
-      return (
-        <Suspense fallback={<div>Loading...</div>}>
-          <PDOGS1 />
-        </Suspense>
-      );
+      return <PDOGS1 />;
     }
     return <></>;
   };
