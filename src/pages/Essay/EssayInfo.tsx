@@ -111,14 +111,14 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
     setDisabledUpload(true);
     if (essaySubmission?.data[0]) {
       try {
-        await reuploadEssay({ essaySubmissionId: String(essaySubmission?.data[0].id), file: selectedFile[0] });
+        await reuploadEssay({ essay_submission_id: essaySubmission?.data[0].id, file: selectedFile[0] });
         mutateEssaySubmission();
       } catch {
         setPopUpFail(true);
       }
     } else {
       try {
-        await uploadEssay({ file: selectedFile[0] });
+        await uploadEssay({ essay_id: Number(essayId), file: selectedFile[0] });
         mutateEssaySubmission();
       } catch {
         setPopUpFail(true);
