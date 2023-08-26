@@ -51,13 +51,23 @@ const ClassSetting = ({ courseId, classId }: { courseId: string; classId: string
     setShowSnackBar(false);
   };
 
-  const onRename = () => {
-    editClass({ class_id: Number(classId), name: newClassName, course_id: Number(courseId) });
+  const onRename = async () => {
+    try {
+      await editClass({ class_id: Number(classId), name: newClassName, course_id: Number(courseId) });
+      setShowRenameDialog(false);
+    } catch {
+      setShowSnackBar(true);
+    }
   };
-  const onDelete = () => {
-    setShowDeleteDialog(false);
-    deleteClass();
-    history.push(`/6a/admin/course/course/${courseId}/class-list/`);
+
+  const onDelete = async () => {
+    try {
+      await deleteClass();
+      setShowDeleteDialog(false);
+      history.push(`/6a/admin/course/course/${courseId}/class-list/`);
+    } catch {
+      setShowSnackBar(true);
+    }
   };
 
   if (course === undefined || classData === undefined) {
@@ -148,7 +158,11 @@ const ClassSetting = ({ courseId, classId }: { courseId: string; classId: string
           </Button>
         </DialogActions>
       </Dialog>
-      <Snackbar open={showRenameDialog && showSnackBar} onClose={closeSnackbar} message={`Error: ${classError.edit}`} />
+      <Snackbar
+        open={showRenameDialog && showSnackBar}
+        onClose={closeSnackbar}
+        message={`Error: ${classError.edit?.message}`}
+      />
 
       <Dialog open={showDeleteDialog || classIsLoading.delete} maxWidth="md">
         <DialogTitle>
@@ -175,6 +189,11 @@ const ClassSetting = ({ courseId, classId }: { courseId: string; classId: string
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={showDeleteDialog && showSnackBar}
+        onClose={closeSnackbar}
+        message={`Error: ${classError.delete?.message}`}
+      />
     </div>
   );
 };

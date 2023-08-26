@@ -11,7 +11,7 @@ import useViewClassMembers, { ClassMemberSchema } from '@/lib/view/useViewClassM
 
 import ClassMemberSetting from '../ClassMemberSetting';
 
-export default function MemberList({ courseId, classId }: { courseId: string; classId: string }) {
+export default function ClassMemberList({ courseId, classId }: { courseId: string; classId: string }) {
   const { course } = useCourse(Number(courseId));
   const { class: classData } = useClass(Number(classId));
 
@@ -149,12 +149,3 @@ export default function MemberList({ courseId, classId }: { courseId: string; cl
     </>
   );
 }
-
-// export default function ClassMemberList({ courseId, classId }: { courseId: string; classId: string }) {
-//   return (
-//     <>
-//       <PageTitle text="Class Member List" />
-//       {`${courseId} ${classId} `}
-//     </>
-//   );
-// }

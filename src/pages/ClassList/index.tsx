@@ -9,11 +9,8 @@ import {
   Typography,
 } from '@material-ui/core';
 import { useState } from 'react';
-// import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-// import { addClass, addCourse, fetchClasses } from '@/actions/admin/course';
-// import { fetchClassMemberWithAccountReferral } from '@/actions/common/common';
 import AlignedText from '@/components/ui/AlignedText';
 import CustomTable from '@/components/ui/CustomTable';
 import PageTitle from '@/components/ui/PageTitle';
@@ -66,19 +63,21 @@ export default function ClassList({ courseId }: { courseId: string }) {
   const closeSnackbar = () => {
     setShowSnackBar(false);
   };
-  const onAddCourse = (name: string) => {
-    // dispatch(
-    // addCourse(authToken, name, getCourseType(addType).toUpperCase(), addCourseSuccess, () => setShowSnackBar(true)),
-    // );
+  const onAddCourse = async (name: string) => {
     type CourseType = 'LESSON' | 'CONTEST';
-    const type = getCourseType(String(addType)).toUpperCase();
-    addCourse({ name, type: type as CourseType });
-    setShowSnackBar(true);
+    try {
+      const type = getCourseType(String(addType)).toUpperCase();
+      await addCourse({ name, type: type as CourseType });
+    } catch {
+      setShowSnackBar(true);
+    }
   };
-  const onAddClass = (name: string) => {
-    // dispatch(addClass(authToken, courseId, name, addClassSuccess, () => setShowSnackBar(true)));
-    add({ course_id: Number(courseId), name });
-    setShowSnackBar(true);
+  const onAddClass = async (name: string) => {
+    try {
+      await add({ course_id: Number(courseId), name });
+    } catch {
+      setShowSnackBar(true);
+    }
   };
   return (
     <>
@@ -155,7 +154,7 @@ export default function ClassList({ courseId }: { courseId: string }) {
       <Snackbar
         open={addType !== 'class-list' && showSnackBar}
         onClose={closeSnackbar}
-        message={`Error: ${error.add}`}
+        message={`Error: ${error.add?.message}`}
       />
       <Dialog open={showAddClassDialog || classUnderCourseIsLoading.add} maxWidth="md">
         <DialogTitle>
@@ -193,19 +192,8 @@ export default function ClassList({ courseId }: { courseId: string }) {
       <Snackbar
         open={showAddClassDialog && showSnackBar}
         onClose={closeSnackbar}
-        message={`Error: ${classUnderCourseError.add}`}
+        message={`Error: ${classUnderCourseError.add?.message}`}
       />
     </>
   );
 }
-// import PageTitle from '@/components/ui/PageTitle';
-
-// export default function ClassList({ courseId }: { courseId: string }) {
-//   // console.log(courseId);
-//   return (
-//     <>
-//       <PageTitle text="Class List" />
-//       {`${courseId} `}
-//     </>
-//   );
-// }

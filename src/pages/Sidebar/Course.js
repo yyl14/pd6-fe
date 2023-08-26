@@ -26,56 +26,54 @@ export default function Course({ classes, history, location, mode, open, onClose
   const { class: classData } = useClass(Number(classId));
 
   useEffect(() => {
-    // console.log(mode, courseId, classId);
     const goBack = () => {
       history.push(`${baseURL}/course/${courseId}/class-list`);
     };
 
-    if (mode === 'class-list') {
+    if (mode === 'class-list' && courses) {
       setTitle1('Lesson');
       setTitle2('Contest');
       setItemList(
-        courses &&
-          courses
-            .map(({ id, type, name }) => {
-              switch (type) {
-                case 'LESSON':
-                  return {
-                    type,
-                    text: name,
-                    icon: <Icon.Class />,
-                    path: `${baseURL}/course/${id}/class-list`,
-                  };
-                case 'CONTEST':
-                  return {
-                    type,
-                    text: name,
-                    icon: <Icon.Star />,
-                    path: `${baseURL}/course/${id}/class-list`,
-                  };
-                default:
-                  return {
-                    type,
-                    text: name,
-                    icon: <Icon.Class />,
-                    path: `${baseURL}/course/${id}/class-list`,
-                  };
-              }
-            })
-            .concat([
-              {
-                type: 'LESSON',
-                text: 'Lesson',
-                icon: <Icon.Newadd className={classes.addIconItem} />,
-                path: `${baseURL}/course/${courseId}/class-list/lesson`,
-              },
-              {
-                type: 'CONTEST',
-                text: 'Contest',
-                icon: <Icon.Newadd className={classes.addIconItem} />,
-                path: `${baseURL}/course/${courseId}/class-list/contest`,
-              },
-            ]),
+        courses
+          .map(({ id, type, name }) => {
+            switch (type) {
+              case 'LESSON':
+                return {
+                  type,
+                  text: name,
+                  icon: <Icon.Class />,
+                  path: `${baseURL}/course/${id}/class-list`,
+                };
+              case 'CONTEST':
+                return {
+                  type,
+                  text: name,
+                  icon: <Icon.Star />,
+                  path: `${baseURL}/course/${id}/class-list`,
+                };
+              default:
+                return {
+                  type,
+                  text: name,
+                  icon: <Icon.Class />,
+                  path: `${baseURL}/course/${id}/class-list`,
+                };
+            }
+          })
+          .concat([
+            {
+              type: 'LESSON',
+              text: 'Lesson',
+              icon: <Icon.Newadd className={classes.addIconItem} />,
+              path: `${baseURL}/course/${courseId}/class-list/lesson`,
+            },
+            {
+              type: 'CONTEST',
+              text: 'Contest',
+              icon: <Icon.Newadd className={classes.addIconItem} />,
+              path: `${baseURL}/course/${courseId}/class-list/contest`,
+            },
+          ]),
       );
     } else if (mode === 'course-setting' && course) {
       setArrow(
@@ -130,22 +128,6 @@ export default function Course({ classes, history, location, mode, open, onClose
     setDisplay1('unfold');
   };
 
-  if (course === undefined || (classId && classData === undefined)) {
-    return (
-      <div>
-        <Drawer
-          variant="persistent"
-          open={open}
-          onClose={onClose}
-          className={classes.drawer}
-          anchor="left"
-          PaperProps={{ elevation: 5 }}
-          classes={{ paper: classes.drawerPaper }}
-        />
-      </div>
-    );
-  }
-
   return (
     <div>
       <Drawer
@@ -178,7 +160,7 @@ export default function Course({ classes, history, location, mode, open, onClose
                   (item.type === 'LESSON' || mode !== 'class-list') && (
                     <ListItem
                       button
-                      key={item.id}
+                      key={item.text}
                       onClick={() => history.push(item.path)}
                       className={item.text !== 'Lesson' ? classes.item : classes.addItem}
                     >
@@ -221,7 +203,7 @@ export default function Course({ classes, history, location, mode, open, onClose
                       item.type === 'CONTEST' && (
                         <ListItem
                           button
-                          key={item.id}
+                          key={item.text}
                           onClick={() => history.push(item.path)}
                           className={item.text !== 'Contest' ? classes.item : classes.addItem}
                         >

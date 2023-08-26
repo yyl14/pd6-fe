@@ -6,7 +6,7 @@ import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
 import { deleteClass, editClass, readClass } from './fetchers';
 
 const useClass = (classId: number) => {
-  const readClassSWR = useSWR(`/class/${classId}`, () => readClass({ class_id: classId }));
+  const readClassSWR = useSWR(classId ? `/class/${classId}` : null, () => readClass({ class_id: classId }));
   const deleteClassSWR = useSWRMutation(`/class/${classId}`, () => deleteClass({ class_id: classId }));
   const editClassSWR = useSWRMutation(`/class/${classId}`, toSWRMutationFetcher(editClass));
 

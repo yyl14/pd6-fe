@@ -6,7 +6,7 @@ import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
 import { deleteCourse, editCourse, readCourse } from './fetchers';
 
 const useCourse = (courseId: number) => {
-  const readCourseSWR = useSWR(`/course/${courseId}`, () => readCourse({ course_id: courseId }));
+  const readCourseSWR = useSWR(courseId ? `/course/${courseId}` : null, () => readCourse({ course_id: courseId }));
   const deleteCourseSWR = useSWRMutation(`/course/${courseId}`, () => deleteCourse({ course_id: courseId }));
   const editCourseSWR = useSWRMutation(`/course/${courseId}`, toSWRMutationFetcher(editCourse));
 
