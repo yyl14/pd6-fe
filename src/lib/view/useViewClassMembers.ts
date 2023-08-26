@@ -12,7 +12,13 @@ const useViewClassMembers = (classId: number) => {
   });
 
   return {
-    members: browseClassMemberSWR.data?.data.data,
+    browseClassMembers: {
+      data: browseClassMemberSWR.data?.data.data,
+      refresh: browseClassMemberSWR.mutate,
+      pagination: browseClassMemberSWR.pagination,
+      filter: browseClassMemberSWR.filter,
+      sort: browseClassMemberSWR.sort,
+    },
 
     isLoading: {
       browse: browseClassMemberSWR.isLoading,
