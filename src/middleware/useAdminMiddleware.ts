@@ -9,10 +9,8 @@ const useAdminMiddleware = () => {
   const { account: user } = useUser();
 
   useEffect(() => {
-    if (user?.role === 'NORMAL') {
-      history.push('/6a/my-class');
-    } else if (user?.role === 'GUEST') {
-      history.push('/6a/my-profile');
+    if (user?.role !== 'MANAGER') {
+      history.push('/6a');
     }
   }, [user?.role, history]);
 };
