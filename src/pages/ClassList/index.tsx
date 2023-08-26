@@ -73,20 +73,18 @@ export default function ClassList({ courseId }: { courseId: string }) {
     type CourseType = 'LESSON' | 'CONTEST';
     const type = getCourseType(String(addType)).toUpperCase();
     addCourse({ name, type: type as CourseType });
+    setShowSnackBar(true);
   };
   const onAddClass = (name: string) => {
     // dispatch(addClass(authToken, courseId, name, addClassSuccess, () => setShowSnackBar(true)));
     add({ course_id: Number(courseId), name });
+    setShowSnackBar(true);
   };
   return (
     <>
       <PageTitle text={`${course?.name}`} />
       <CustomTable
-<<<<<<< HEAD
-        hasSearch
-=======
         hasSearch={false}
->>>>>>> 6e3b79d83be11c3935761ddef6277899e0ca6d2a
         buttons={
           <>
             <Button onClick={onClickSetting}>Setting</Button>
