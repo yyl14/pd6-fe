@@ -13,3 +13,10 @@ export const browseClass = api.path('/class').method('get').create();
 export const browseAllClassUnderCourse = api.path('/course/{course_id}/class').method('get').create();
 
 export const addClassUnderCourse = api.path('/course/{course_id}/class').method('post').create();
+
+export const browseClassMembersWithAccountReferral = api
+  .path('/class/{class_id}/member/account-referral')
+  .method('get')
+  .create();
+
+export const replaceClassMembers = api.path('/class/{class_id}/member').method('put').create();
