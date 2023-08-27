@@ -1,13 +1,14 @@
 import useSWR from 'swr';
+
 import browseAllJudgmentJudgeCase from './fetchers';
 
-const useJudgementJudgeCases = (judgementId: number) => {
-  const browseAllJudgmentJudgeCaseSWR = useSWR(`/judgment/${judgementId}/judge-case`, () =>
-    browseAllJudgmentJudgeCase({ judgment_id: judgementId }),
+const useJudgementJudgeCases = (judgementId: number | null) => {
+  const browseAllJudgmentJudgeCaseSWR = useSWR(judgementId ? `/judgment/${judgementId}/judge-case` : null, () =>
+    browseAllJudgmentJudgeCase({ judgment_id: judgementId ?? 0 }),
   );
 
   return {
-    judge_case: browseAllJudgmentJudgeCaseSWR.data?.data.data,
+    judgeCases: browseAllJudgmentJudgeCaseSWR.data?.data.data,
 
     isLoading: {
       browse: browseAllJudgmentJudgeCaseSWR.isLoading,

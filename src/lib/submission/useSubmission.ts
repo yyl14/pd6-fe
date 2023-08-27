@@ -13,6 +13,7 @@ const useSubmission = (submissionId: number) => {
 
   return {
     submission: readSubmissionSWR.data?.data.data,
+    mutateSubmission: readSubmissionSWR.mutate,
     rejudge: rejudgeSubmissionSWR.trigger,
     isLoading: {
       read: readSubmissionSWR.isLoading,

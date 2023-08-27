@@ -9,27 +9,18 @@ import useCourse from '@/lib/course/useCourse';
 import useProblem from '@/lib/problem/useProblem';
 import useSubmission from '@/lib/submission/useSubmission';
 
-const SubmissionList = lazy(() => import(/* webpackChunkName: "SubmissionList" */ '@/pages/SubmissionList'));
+const MySubmission = lazy(() => import(/* webpackChunkName: "MySubmission" */ '@/pages/MySubmissionList'));
 const SubmissionDetail = lazy(() => import(/* webpackChunkName: "SubmissionDetail" */ '@/pages/SubmissionDetail'));
 
-function SubmissionListRoute() {
-  const { courseId, classId } = useParams<{ courseId: string; classId: string }>();
-
-  const { isLoading: courseIsLoading } = useCourse(Number(courseId));
-  const { isLoading: classIsLoading } = useClass(Number(classId));
-
+function MySubmissionRoute() {
   return (
     <Suspense fallback={<GeneralLoading />}>
-      {withConditionalRender(SubmissionList)({
-        courseId,
-        classId,
-        isLoading: courseIsLoading.read || classIsLoading.read,
-      })}
+      <MySubmission />
     </Suspense>
   );
 }
 
-function SubmissionDetailRoute() {
+function MySubmissionSubmissionDetailRoute() {
   const { courseId, classId, challengeId, problemId, submissionId } = useParams<{
     courseId: string;
     classId: string;
@@ -64,14 +55,14 @@ function SubmissionDetailRoute() {
   );
 }
 
-export default function SubmissionRoutes() {
+export default function MySubmissionRoutes() {
   return (
     <Switch>
       <Route
-        path="/6a/my-class/:courseId/:classId/submission/:challengeId/:problemId/:submissionId"
-        component={SubmissionDetailRoute}
+        path="/6a/my-submission/:courseId/:classId/:challengeId/:problemId/:submissionId"
+        component={MySubmissionSubmissionDetailRoute}
       />
-      <Route path="/6a/my-class/:courseId/:classId/submission" component={SubmissionListRoute} />
+      <Route path="/6a/my-submission" component={MySubmissionRoute} />
     </Switch>
   );
 }

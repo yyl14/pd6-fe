@@ -1,23 +1,31 @@
 import { components } from '../../../types/schema';
 import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
+import useUserId from '../user/useUserId';
 import { browseMySubmissionUnderProblem } from './fetchers';
 
-export type MySubmissionUnderProblemSchema = components['schemas']['view_browse_my_submission_under_problem_return'];
+export type MySubmissionUnderProblemSchema = components['schemas']['ViewMySubmissionUnderProblem'];
 
-const useViewProblemUserSubmissions = (accountId: number, problemId: number) => {
+const useViewProblemUserSubmissions = (problemId: number) => {
+  const userId = useUserId();
   const useSWRWithBrowseParams = withDataSchema<MySubmissionUnderProblemSchema>();
 
   const browseMySubmissionUnderProblemSWR = useSWRWithBrowseParams(
-    `/problem/{problem_id}/view/my-submission`,
+    `/problem/${problemId}/view/my-submission`,
     browseMySubmissionUnderProblem,
-    { account_id: accountId, problem_id: problemId },
+    { account_id: userId, problem_id: problemId },
   );
 
   return {
-    submissions: browseMySubmissionUnderProblemSWR.data?.data.data,
+    browseSubmission: {
+      data: browseMySubmissionUnderProblemSWR.data?.data.data.data,
+      refresh: browseMySubmissionUnderProblemSWR.mutate,
+      pagination: browseMySubmissionUnderProblemSWR.pagination,
+      filter: browseMySubmissionUnderProblemSWR.filter,
+      sort: browseMySubmissionUnderProblemSWR.sort,
+    },
 
     isLoading: {
-      browse: browseMySubmissionUnderProblemSWR.isLoading,
+      browse: browseMySubmissionUnderProblemSWR.isLoading || browseMySubmissionUnderProblemSWR.isValidating,
     },
 
     error: {

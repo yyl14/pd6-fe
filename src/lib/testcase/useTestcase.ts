@@ -1,4 +1,6 @@
 import useSWRMutation from 'swr/mutation';
+
+import { components } from '../../../types/schema';
 import toSWRMutationFetcher from '../../function/toSWRMutationFetcher';
 import {
   deleteTestcase,
@@ -8,6 +10,8 @@ import {
   uploadTestcaseInputData,
   uploadTestcaseOutputData,
 } from './fetchers';
+
+export type TestcaseSchema = components['schemas']['pydantic__dataclasses__ReadTestcaseOutput'];
 
 const useTestcase = () => {
   const deleteTestcaseSWR = useSWRMutation(`/testcase/{testcase_id}`, toSWRMutationFetcher(deleteTestcase));

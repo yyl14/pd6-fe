@@ -84,7 +84,7 @@ export default function ProblemList({ courseId, classId }: { courseId: string; c
           'Challenge Title': item.challenge_title,
           'Task Label': item.challenge_label,
           'Task Title': item.problem_title,
-          link: `/6a/problem-set/${courseId}/${classId}/challenge/${item.challenge_id}/${item.problem_id}`,
+          link: `/6a/problem-set/${courseId}/${classId}/challenge/${item.challenge_id}/problem/${item.problem_id}`,
         })}
         isLoading={classProblemLoading.browse || problemScoresLoading.browse}
         error={error.browse}
