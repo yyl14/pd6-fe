@@ -17,6 +17,7 @@ export default function AnnouncementEditRoute() {
       {withConditionalRender(AnnouncementEdit)({
         announcementId,
         handleDoneEditing: () => history.push(`/6a/admin/system/announcement/${announcementId}/setting`),
+        newAnnouncement: false,
       })}
     </Suspense>
   );

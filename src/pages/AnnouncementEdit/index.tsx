@@ -13,6 +13,7 @@ import useAnnouncement from '@/lib/announcement/useAnnouncement';
 import useAnnouncements from '@/lib/announcement/useAnnouncements';
 import useUserId from '@/lib/user/useUserId';
 
+
 const useStyles = makeStyles(() => ({
   contentField: {
     width: '720px',
@@ -30,14 +31,15 @@ const useStyles = makeStyles(() => ({
 export default function AnnouncementEdit({
   announcementId,
   handleDoneEditing,
+  newAnnouncement,
 }: {
-  announcementId: string;
+  announcementId: string | null;
   handleDoneEditing: () => void;
+  newAnnouncement: boolean;
 }) {
   const classes = useStyles();
 
   const userId = useUserId();
-  const newAnnouncement = announcementId === '';
   const { addAnnouncement, isLoading: announcementsIsLoading, error: announcementsError } = useAnnouncements();
   const {
     announcement,

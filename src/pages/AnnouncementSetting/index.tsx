@@ -1,18 +1,10 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  Snackbar,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Snackbar, Typography, makeStyles } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import moment from 'moment-timezone';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
+
 
 import GeneralLoading from '@/components/GeneralLoading';
 import NoMatch from '@/components/noMatch';
@@ -20,6 +12,7 @@ import AlignedText from '@/components/ui/AlignedText';
 import PageTitle from '@/components/ui/PageTitle';
 import SimpleBar from '@/components/ui/SimpleBar';
 import useAnnouncement from '@/lib/announcement/useAnnouncement';
+
 
 const useStyles = makeStyles(() => ({
   duration: {
@@ -45,14 +38,12 @@ export default function AnnouncementSetting({
   } = useAnnouncement(Number(announcementId));
   const [popUpDelete, setPopUpDelete] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const handleSubmitDelete = async () => {
     try {
       await deleteAnnouncement();
       history.push('/6a/admin/system/announcement');
     } catch {
-      setErrorMessage(announcementError.delete?.message);
       setShowError(true);
     }
   };
@@ -149,7 +140,7 @@ export default function AnnouncementSetting({
         onClose={() => {
           setShowError(false);
         }}
-        message={`Error: ${errorMessage}`}
+        message={`Error: ${announcementError.delete?.message}`}
       />
     </>
   );

@@ -12,10 +12,11 @@ export default function AnnouncementAddRoute() {
   return (
     <Suspense fallback={<GeneralLoading />}>
       {withConditionalRender(AnnouncementEdit)({
-        announcementId: '',
+        announcementId: null,
         handleDoneEditing: () => {
           history.push('/6a/admin/system/announcement');
         },
+        newAnnouncement: true,
       })}
     </Suspense>
   );
