@@ -5,10 +5,7 @@ import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
 import { deleteAssistingData, editAssistingData } from './fetchers';
 
 const useAssistingData = () => {
-  const editAssistingDataSWR = useSWRMutation(
-    `/assisting-data/{assisting_data_id}`,
-    toSWRMutationFetcher(editAssistingData),
-  );
+  const editAssistingDataSWR = useSWRMutation(`/assisting-data/{assisting_data_id}`, editAssistingData);
 
   const deleteAssistingDataSWR = useSWRMutation(
     `/assisting-data/{assisting_data_id}`,

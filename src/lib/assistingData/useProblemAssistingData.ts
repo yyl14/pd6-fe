@@ -10,10 +10,7 @@ const useProblemAssistingData = (problemId: number) => {
     browseAssistingData({ problem_id: problemId }),
   );
 
-  const addAssistingDataSWR = useSWRMutation(
-    `/problem/{problem_id}/assisting-data`,
-    toSWRMutationFetcher(addAssistingData),
-  );
+  const addAssistingDataSWR = useSWRMutation(`/problem/{problem_id}/assisting-data`, addAssistingData);
 
   const downloadAllAssistingDataSWR = useSWRMutation(
     `/problem/${problemId}/all-assisting-data`,

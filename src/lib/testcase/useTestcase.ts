@@ -19,7 +19,7 @@ const useTestcase = () => {
 
   const uploadTestcaseInputDataSWR = useSWRMutation(
     `/testcase/{testcase_id}/input-data`,
-    toSWRMutationFetcher(uploadTestcaseInputData),
+    uploadTestcaseInputData
   );
   const deleteTestcaseInputDataSWR = useSWRMutation(
     `/testcase/{testcase_id}/input-data`,
@@ -28,7 +28,7 @@ const useTestcase = () => {
 
   const uploadTestcaseOutputDataSWR = useSWRMutation(
     `/testcase/{testcase_id}/output-data`,
-    toSWRMutationFetcher(uploadTestcaseOutputData),
+    uploadTestcaseOutputData
   );
   const deleteTestcaseOutputDataSWR = useSWRMutation(
     `/testcase/{testcase_id}/output-data`,
