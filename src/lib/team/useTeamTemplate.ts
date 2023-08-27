@@ -2,12 +2,12 @@ import useSWRMutation from 'swr/mutation';
 
 import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
 
-import useS3File from '../s3File/useS3File';
+import useS3FileDownload from '../s3File/useS3FileDownload';
 import { getTeamTemplateFile } from './fetchers';
 
 const useTeamTemplate = () => {
   const teamTemplateSWR = useSWRMutation(`/team/template`, toSWRMutationFetcher(getTeamTemplateFile));
-  const { downloadFile } = useS3File();
+  const { downloadFile } = useS3FileDownload();
 
   async function downloadTeamTemplate() {
     const { data } = await teamTemplateSWR.trigger();
@@ -16,7 +16,7 @@ const useTeamTemplate = () => {
       return;
     }
 
-    await downloadFile(data.data.filename, data.data.s3_file_uuid, true);
+    await downloadFile({ fileName: data.data.filename, file_uuid: data.data.s3_file_uuid, asAttachment: true });
   }
 
   return {
