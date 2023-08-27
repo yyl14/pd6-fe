@@ -32,6 +32,7 @@ import useProblem from '@/lib/problem/useProblem';
 import useS3File from '@/lib/s3File/useS3File';
 import useProblemTestcase from '@/lib/testcase/useProblemTestcase';
 import useTestcase from '@/lib/testcase/useTestcase';
+import { TableDataProp, AssistDataProp, SaveDatas, SaveAssistingData } from './components';
 
 const useStyles = makeStyles(() => ({
   sampleArea: {
@@ -75,35 +76,21 @@ const StyledButton = withStyles({
   },
 })(Button);
 
-interface TableDataProp {
-  id: number;
-  no: number;
-  time_limit: number;
-  memory_limit: number;
-  score: number;
-  input_filename: string | null | undefined;
-  output_filename: string | null | undefined;
-  in_file: File | null;
-  out_file: File | null;
-  new: boolean;
-  note: string;
-}
-
-interface AssistDataProp {
-  id: string | number;
-  filename: string;
-  file: File | null;
-}
-
 /* This is a level 4 component (page component) */
 export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit: () => void; problemId: string }) {
   const className = useStyles();
 
   const { problem, editProblem, isLoading: problemLoading } = useProblem(Number(problemId));
-  const { assistingData, isLoading: problemAssistloading } = useProblemAssistingData(Number(problemId));
-  const { browseTestcase: testcases, isLoading: problemTestcaseLoading } = useProblemTestcase(Number(problemId));
   const { isLoading: testcaseLoading } = useTestcase();
+  const {
+    browseTestcase: testcases,
+    isLoading: problemTestcaseLoading,
+  } = useProblemTestcase(Number(problemId));
   const { isLoading: assistLoading } = useAssistingData();
+  const {
+    assistingData,
+    isLoading: problemAssistloading,
+  } = useProblemAssistingData(Number(problemId));
 
   const [label, setLabel] = useState('');
   const [newTitle, setTitle] = useState('');
@@ -268,7 +255,10 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
     }
     if (sampleTableData[Number(id)].output_filename !== null) {
       return Number(
-        sampleTableData[Number(id)].output_filename?.slice(6, sampleTableData[Number(id)].output_filename?.indexOf('.')),
+        sampleTableData[Number(id)].output_filename?.slice(
+          6,
+          sampleTableData[Number(id)].output_filename?.indexOf('.'),
+        ),
       );
     }
     return 0;
@@ -384,8 +374,10 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
             time_limit: newSelectedFiles[Number(item)].time_limit,
             memory_limit: newSelectedFiles[Number(item)].memory_limit,
             score: 0,
-            input_filename: newSelectedFiles[Number(item)].in_file === null ? null : newSelectedFiles[Number(item)].in_file?.name,
-            output_filename: newSelectedFiles[Number(item)].out_file === null ? null : newSelectedFiles[Number(item)].out_file?.name,
+            input_filename:
+              newSelectedFiles[Number(item)].in_file === null ? null : newSelectedFiles[Number(item)].in_file?.name,
+            output_filename:
+              newSelectedFiles[Number(item)].out_file === null ? null : newSelectedFiles[Number(item)].out_file?.name,
             in_file: newSelectedFiles[Number(item)].in_file,
             out_file: newSelectedFiles[Number(item)].out_file,
             new: true,
@@ -411,7 +403,9 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
               ? sampleTableData[Number(keys[0])].output_filename
               : newSelectedFiles[Number(item)].out_file?.name,
           in_file:
-            newSelectedFiles[Number(item)].in_file === null ? sampleTableData[Number(keys[0])].in_file : newSelectedFiles[Number(item)].in_file,
+            newSelectedFiles[Number(item)].in_file === null
+              ? sampleTableData[Number(keys[0])].in_file
+              : newSelectedFiles[Number(item)].in_file,
           out_file:
             newSelectedFiles[Number(item)].out_file === null
               ? sampleTableData[Number(keys[0])].out_file
@@ -444,12 +438,15 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
             score: newSelectedFiles[Number(item)].score,
             time_limit: newSelectedFiles[Number(item)].time_limit,
             memory_limit: newSelectedFiles[Number(item)].memory_limit,
-            input_filename: newSelectedFiles[Number(item)].in_file === null ? null : newSelectedFiles[Number(item)].in_file?.name,
-            output_filename: newSelectedFiles[Number(item)].out_file === null ? null : newSelectedFiles[Number(item)].out_file?.name,
+            input_filename:
+              newSelectedFiles[Number(item)].in_file === null ? null : newSelectedFiles[Number(item)].in_file?.name,
+            output_filename:
+              newSelectedFiles[Number(item)].out_file === null ? null : newSelectedFiles[Number(item)].out_file?.name,
             in_file: newSelectedFiles[Number(item)].in_file,
             out_file: newSelectedFiles[Number(item)].out_file,
             new: true,
             note: '',
+            is_disabled: false,
           },
         };
       }
@@ -472,7 +469,9 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
               ? testcaseTableData[Number(keys[0])].output_filename
               : newSelectedFiles[Number(item)].out_file?.name,
           in_file:
-            newSelectedFiles[Number(item)].in_file === null ? testcaseTableData[Number(keys[0])].in_file : newSelectedFiles[Number(item)].in_file,
+            newSelectedFiles[Number(item)].in_file === null
+              ? testcaseTableData[Number(keys[0])].in_file
+              : newSelectedFiles[Number(item)].in_file,
           out_file:
             newSelectedFiles[Number(item)].out_file === null
               ? testcaseTableData[Number(keys[0])].out_file
@@ -512,8 +511,10 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
 
   const handleSave = async () => {
     const newFullScore = Object.keys(testcaseTableData).reduce(
-      (acc, key) => acc + Number(testcaseTableData[Number(key)].score), 0
+      (acc, key) => acc + Number(testcaseTableData[Number(key)].score),
+      0,
     );
+
     const resEdit = editProblem({
       problem_id: Number(problemId),
       challenge_label: label,
@@ -534,46 +535,36 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
       setDisabled(true);
     }
 
-    // dispatch(
-    //   saveSamples(
-    //     authToken,
-    //     problemId,
-    //     testcases,
-    //     sampleDataIds,
-    //     sampleTableData,
-    //     () => {
-    //       setHandleSamplesSuccess(true);
-    //     },
-    //     handleFileUploadFail,
-    //   ),
-    // );
-    // dispatch(
-    //   saveTestcases(
-    //     authToken,
-    //     problemId,
-    //     testcases,
-    //     testcaseDataIds,
-    //     testcaseTableData,
-    //     status,
-    //     () => {
-    //       setHandleTestcasesSuccess(true);
-    //     },
-    //     handleFileUploadFail,
-    //   ),
-    // );
-    // dispatch(
-    //   saveAssistingData(
-    //     authToken,
-    //     problemId,
-    //     assistingData,
-    //     assistingDataIds,
-    //     assistTableData,
-    //     () => {
-    //       setHandleAssistingDataSuccess(true);
-    //     },
-    //     handleFileUploadFail,
-    //   ),
-    // );
+    // save samples
+    SaveDatas(
+      Number(problemId),
+      testcasesById,
+      sampleDataIds,
+      sampleTableData,
+      () => {setHandleSamplesSuccess(true); },
+      handleFileUploadFail,
+    )
+
+    // save testcases
+    SaveDatas(
+      Number(problemId),
+      testcasesById,
+      testcaseDataIds,
+      testcaseTableData,
+      () => {setHandleTestcasesSuccess(true); },
+      handleFileUploadFail,
+    )
+    
+    // save assisting data
+    SaveAssistingData(
+      Number(problemId),
+      assistingDatasById,
+      assistingDataIds,
+      assistTableData,
+      () => {setHandleAssistingDataSuccess(true); },
+      handleFileUploadFail,
+    )
+
   };
 
   const handleCancel = () => {
@@ -887,7 +878,11 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
       <SimpleBar title="Customized Judge Code (Optional)" noIndent>
         <AlignedText text="Judge Method" childrenType="field">
           <FormControl variant="outlined" className={className.select}>
-            <Select name="judgeMethod" value={judgeType} onChange={(e) => setJudgeType(e.target.value as ('NORMAL' | 'CUSTOMIZED'))}>
+            <Select
+              name="judgeMethod"
+              value={judgeType}
+              onChange={(e) => setJudgeType(e.target.value as 'NORMAL' | 'CUSTOMIZED')}
+            >
               <MenuItem value="NORMAL">No customized judge</MenuItem>
               <MenuItem value="CUSTOMIZED">Customized judge</MenuItem>
             </Select>
@@ -897,7 +892,11 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
           <>
             <AlignedText text="Language" childrenType="field">
               <FormControl variant="outlined" className={className.select}>
-                <Select name="language" value={judgeLanguage} onChange={(e) => setJudgeLanguage(e.target.value as string)}>
+                <Select
+                  name="language"
+                  value={judgeLanguage}
+                  onChange={(e) => setJudgeLanguage(e.target.value as string)}
+                >
                   <MenuItem value="Python 3.8">Python 3.8</MenuItem>
                 </Select>
               </FormControl>
@@ -918,7 +917,11 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
       <SimpleBar title="Reviser Code (Optional)" noIndent>
         <AlignedText text="Reviser Type" childrenType="field">
           <FormControl variant="outlined" className={className.select}>
-            <Select name="reviser" value={reviserIsEnabled} onChange={(e) => setReviserIsEnabled(e.target.value as boolean)}>
+            <Select
+              name="reviser"
+              value={reviserIsEnabled}
+              onChange={(e) => setReviserIsEnabled(e.target.value as boolean)}
+            >
               <MenuItem>No customized reviser</MenuItem>
               {/* eslint-disable-next-line react/jsx-boolean-value */}
               <MenuItem>Customized reviser</MenuItem>
@@ -929,7 +932,11 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
           <>
             <AlignedText text="Language" childrenType="field">
               <FormControl variant="outlined" className={className.select}>
-                <Select name="language" value={reviserLanguage} onChange={(e) => setReviserLanguage(e.target.value as string)}>
+                <Select
+                  name="language"
+                  value={reviserLanguage}
+                  onChange={(e) => setReviserLanguage(e.target.value as string)}
+                >
                   <MenuItem value="Python 3.8">Python 3.8</MenuItem>
                 </Select>
               </FormControl>
