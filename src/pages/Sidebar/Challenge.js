@@ -59,7 +59,6 @@ export default function Challenge({ classNames, history, location, mode, open, o
         challenge !== undefined &&
         userClasses !== undefined
       ) {
-        // console.log(problems, essays, userClasses);
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
         setArrow(
           <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
@@ -366,7 +365,15 @@ export default function Challenge({ classNames, history, location, mode, open, o
         </div>
         <div className={classNames.bottomSpace} />
       </Drawer>
-      {addTaskPopUp && <TaskAddingCard open={addTaskPopUp} setOpen={setAddTaskPopUp} />}
+      {addTaskPopUp && (
+        <TaskAddingCard
+          courseId={Number(courseId)}
+          classId={Number(classId)}
+          challengeId={Number(challengeId)}
+          open={addTaskPopUp}
+          setOpen={setAddTaskPopUp}
+        />
+      )}
     </div>
   );
 }

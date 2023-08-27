@@ -13,7 +13,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { useCallback, useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import GeneralLoading from '@/components/GeneralLoading';
 import AlignedText from '@/components/ui/AlignedText';
@@ -60,31 +60,32 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
+  courseId: number;
+  classId: number;
+  challengeId: number;
   open: boolean;
   setOpen: (open: boolean) => void;
 }
 
-export default function TaskAddingCard({ open, setOpen }: Props) {
-  const { courseId, classId, challengeId } = useParams<{ courseId: string; classId: string; challengeId: string }>();
+export default function TaskAddingCard({ courseId, classId, challengeId, open, setOpen }: Props) {
   const classNames = useStyles();
   const history = useHistory();
 
-  const { course, isLoading: courseIsLoading } = useCourse(Number(courseId));
-  const { class: classData, isLoading: classIsLoading } = useClass(Number(classId));
-  const { challenge, isLoading: challengeIsLoading } = useChallenge(Number(challengeId));
-  const { tasks } = useChallengeTasks(Number(challengeId));
-  const { browseTeamUnderClass } = useClassTeams(Number(classId));
-  const { browseChallengeUnderClass } = useChallengesUnderClass(Number(classId));
+  const { course, isLoading: courseIsLoading } = useCourse(courseId);
+  const { class: classData, isLoading: classIsLoading } = useClass(classId);
+  const { challenge, isLoading: challengeIsLoading } = useChallenge(challengeId);
+  const { tasks } = useChallengeTasks(challengeId);
+  const { browseTeamUnderClass } = useClassTeams(classId);
+  const { browseChallengeUnderClass } = useChallengesUnderClass(classId);
 
-  const [peerReviewChallengeId, setPeerReviewChallengeId] = useState<number>(Number(challengeId));
+  const [peerReviewChallengeId, setPeerReviewChallengeId] = useState<number>(challengeId);
   const { tasks: peerReviewTasks } = useChallengeTasks(peerReviewChallengeId);
 
-  const { addProblem, error: addProblemError } = useChallengeProblem(Number(challengeId));
-  const { addEssay, error: addEssayError } = useChallengeEssay(Number(challengeId));
-  const { addPeerReview, error: addPeerReviewError } = useChallengePeerReview(Number(challengeId));
-  const { addTeamProjectScoreboard, error: addTeamProjectScoreboardError } = useChallengeTeamProjectScoreboard(
-    Number(challengeId),
-  );
+  const { addProblem, error: addProblemError } = useChallengeProblem(challengeId);
+  const { addEssay, error: addEssayError } = useChallengeEssay(challengeId);
+  const { addPeerReview, error: addPeerReviewError } = useChallengePeerReview(challengeId);
+  const { addTeamProjectScoreboard, error: addTeamProjectScoreboardError } =
+    useChallengeTeamProjectScoreboard(challengeId);
 
   const [type, setType] = useState('Coding Problem');
   const [label, setLabel] = useState('');
