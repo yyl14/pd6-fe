@@ -50,7 +50,7 @@ interface SimpleBarProps {
   title: string;
   buttons?: JSX.Element | null;
   childrenButtons?: JSX.Element | null;
-  children?: JSX.Element | null;
+  children?: JSX.Element | null | undefined;
   noIndent?: boolean;
 }
 

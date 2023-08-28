@@ -8,7 +8,7 @@ import {
   Snackbar,
   Typography,
 } from '@material-ui/core';
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import GeneralLoading from '@/components/GeneralLoading';
 import NoMatch from '@/components/noMatch';
@@ -23,6 +23,7 @@ import BasicInfo from './setting/BasicInfo';
 import BasicInfoEdit from './setting/BasicInfoEdit';
 import NewPassword from './setting/NewPassword';
 import StudentInfoEdit from './setting/StudentInfoEdit';
+import { StudentCards } from './setting/types';
 
 const activeThemeList = [
   {
@@ -47,33 +48,41 @@ const activeThemeList = [
   },
 ];
 
+interface PendingStudentCardsForm {
+  id: number;
+  email: string;
+  account_id: number;
+  institute_id: number;
+  student_id: string;
+  is_consumed: boolean;
+}
+
 /* This is a level 3 component (page component) */
 
 export default function AccountSetting({ accountId }: { accountId: string }) {
   const { value: selectedTheme } = useContext(ThemeToggleContext);
   // setter: setSelectedTheme
-  const [cards, setCards] = useState([]);
-  const [pendingCards, setPendingCards] = useState([]);
+  const [selectedThemes, setSelectedThemes] = useState(selectedTheme);
+  const [cards, setCards] = useState<StudentCards[]>([]);
+  const [pendingCards, setPendingCards] = useState<PendingStudentCardsForm[]>([]);
   const [editBasicInfo, setEditBasicInfo] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [showThemeSelector, setShowThemeSelector] = useState(false);
   const [message, setMessage] = useState('');
 
-  // const accountId = useSelector((state) => state.user.id)
   const { account, error, isLoading: loading } = useAccount(Number(accountId));
-  // const account = useSelector((state) => state.user);
   const { studentCards, pendingStudentCards, isLoading } = useAccountStudentCards(Number(accountId));
   const [studentCardsById, studentCardsIds] = useReduxStateShape(studentCards);
   const [pendingStudentCardsById, pendingStudentCardsIds] = useReduxStateShape(pendingStudentCards);
 
   useEffect(() => {
-    if (account.role === 'GUEST') {
+    if (account?.role === 'GUEST') {
       setMessage('Please verify your institute email to activate your PDOGS account.');
       setShowSnackbar(true);
     } else {
       setShowSnackbar(false);
     }
-  }, [account.role]);
+  }, [account?.role]);
 
   useEffect(() => {
     if (!loading.editAccount && error.editAccount) {
@@ -133,6 +142,7 @@ export default function AccountSetting({ accountId }: { accountId: string }) {
           username={account.username}
           nickname={account.nickname}
           altMail={account.alternative_email}
+          accountId={accountId}
         />
       ) : (
         <BasicInfo
@@ -144,9 +154,9 @@ export default function AccountSetting({ accountId }: { accountId: string }) {
         />
       )}
       <div>
-        <StudentInfoEdit cards={cards} pendingCards={pendingCards} />
+        <StudentInfoEdit accountId={accountId} card={cards} pendingCard={pendingCards} />
       </div>
-      <NewPassword />
+      <NewPassword accountId={accountId} />
       <Snackbar
         open={showSnackbar}
         autoHideDuration={3000}
@@ -162,7 +172,10 @@ export default function AccountSetting({ accountId }: { accountId: string }) {
         </DialogTitle>
         <DialogContent>
           <FormControl variant="outlined">
-            <Select value={selectedTheme} onChange={(e) => setSelectedTheme(e.target.value)}>
+            <Select
+              value={selectedThemes}
+              onChange={(e) => setSelectedThemes(e.target.value as React.SetStateAction<string>)}
+            >
               {activeThemeList.map((item) => (
                 <MenuItem key={item.value} value={item.value}>
                   {item.label}
