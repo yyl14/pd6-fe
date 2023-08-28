@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+
 import { courseConstants } from '../actions/admin/constant';
 import { viewConstants } from '../actions/api/constant';
 import { commonConstants } from '../actions/common/constant';
@@ -24,8 +25,8 @@ const byId = (state = {}, action) => {
       return data.reduce(
         (acc, item) => ({
           ...acc,
-          [item.id]: {
-            ...item,
+          [item.class_info.id]: {
+            ...item.class_info,
             // memberIds of existing classes are unchanged
             memberIds: state[item.id] ? state[item.id].memberIds : [],
             gradeIds: state[item.id] ? state[item.id].gradeIds : [],
@@ -173,7 +174,7 @@ const allIds = (state = [], action) => {
     case courseConstants.FETCH_CLASSES_SUCCESS:
     case commonConstants.FETCH_ALL_CLASSES_SUCCESS: {
       const { data } = action.payload.data;
-      return [...new Set([...data.map((item) => item.id), ...state])];
+      return [...new Set([...data.map((item) => item.class_info.id), ...state])];
     }
     case commonConstants.FETCH_CLASS_SUCCESS: {
       const { id } = action.payload;
