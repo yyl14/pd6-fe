@@ -9,7 +9,6 @@ import {
   Typography,
   makeStyles,
 } from '@material-ui/core';
-import { Location } from 'history';
 import { useEffect, useRef, useState } from 'react';
 import { useBeforeunload } from 'react-beforeunload';
 import { useHistory } from 'react-router-dom';
@@ -100,7 +99,6 @@ const ClassMemberSetting = ({
   const [showErrorDetectedDialog, setShowErrorDetectedDialog] = useState(false);
   const [targetPath, setTargetPath] = useState('');
   const unblockHandle = useRef<() => void>();
-  const targetLocation = useRef<Location>();
   const history = useHistory();
 
   // unblock user leaving current page through header and sidebar links
@@ -112,9 +110,7 @@ const ClassMemberSetting = ({
       setShowDuplicateIdentityDialog(false);
       setShowErrorDetectedDialog(false);
       if (needRedirection) {
-        if (targetLocation.current) {
-          history.push(targetLocation.current);
-        }
+        history.push(targetPath);
       }
     }
   };
@@ -123,10 +119,6 @@ const ClassMemberSetting = ({
     list.filter((element) => element.role !== '' && element.account_referral !== '');
 
   const handleBlankListForStringType = (list: string[]) => list.filter((element) => element !== '');
-
-  // useEffect(() => {
-  //   dispatch(fetchClassMemberWithAccountReferral(authToken, classId));
-  // }, [authToken, classId, dispatch]);
 
   useEffect(() => {
     const classMembers = browseClassMembersWithAccountReferral;
