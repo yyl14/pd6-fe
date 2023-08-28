@@ -131,7 +131,7 @@ export default function PDOGS6a() {
       <SimpleBar title="Backend" noIndent>
         <div className={classes.profile}>
           <Profile
-            img_url="../../../images/lyc.JPG"
+            img_url="../../../images/lyc.jpg"
             name="賴羿蓁 lyc"
             description="BE"
             FB_link={null}
