@@ -29,12 +29,7 @@ export default function ClassMemberList({ courseId, classId }: { courseId: strin
     <>
       <PageTitle text={`${course?.name} / ${classData?.name} / Member`} />
       {edit ? (
-        <ClassMemberSetting
-          courseId={courseId}
-          classId={classId}
-          backToMemberList={() => setEdit(false)}
-          // loading={classMemberIsLoading.browse}
-        />
+        <ClassMemberSetting classId={classId} backToMemberList={() => setEdit(false)} />
       ) : (
         <>
           <BrowsingTable<
