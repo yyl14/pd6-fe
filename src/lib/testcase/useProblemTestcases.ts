@@ -1,27 +1,28 @@
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
+
 import toSWRMutationFetcher from '../../function/toSWRMutationFetcher';
 import { addTestcase, browseAllTestcase, downloadAllNonSampleTestcase, downloadAllSampleTestcase } from './fetchers';
 
-const useProblemTestcase = (problemId: number) => {
-  const browseAllTestcaseSWR = useSWR(`/problem/{problem_id}/testcase`, () =>
+const useProblemTestcases = (problemId: number) => {
+  const browseAllTestcaseSWR = useSWR(`/problem/${problemId}/testcase`, () =>
     browseAllTestcase({ problem_id: problemId }),
   );
 
-  const addTestcaseSWR = useSWRMutation(`/problem/{problem_id}/testcase`, toSWRMutationFetcher(addTestcase));
+  const addTestcaseSWR = useSWRMutation(`/problem/${problemId}/testcase`, toSWRMutationFetcher(addTestcase));
 
   const downloadAllSampleTestcaseSWR = useSWRMutation(
-    `/problem/{problem_id}/all-sample-testcase`,
+    `/problem/${problemId}/all-sample-testcase`,
     toSWRMutationFetcher(downloadAllSampleTestcase),
   );
 
   const downloadAllNonSampleTestcaseSWR = useSWRMutation(
-    `/problem/{problem_id}/all-non-sample-testcase`,
+    `/problem/${problemId}/all-non-sample-testcase`,
     toSWRMutationFetcher(downloadAllNonSampleTestcase),
   );
 
   return {
-    browseTestcase: browseAllTestcaseSWR.data?.data.data,
+    testcases: browseAllTestcaseSWR.data?.data.data,
     addTestcase: addTestcaseSWR.trigger,
     sampleTestcases: downloadAllSampleTestcaseSWR.data?.data.data,
     nonSampleTestcases: downloadAllNonSampleTestcaseSWR.data?.data.data,
@@ -42,4 +43,4 @@ const useProblemTestcase = (problemId: number) => {
   };
 };
 
-export default useProblemTestcase;
+export default useProblemTestcases;

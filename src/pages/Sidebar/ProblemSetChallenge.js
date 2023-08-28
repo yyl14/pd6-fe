@@ -25,10 +25,10 @@ export default function ProblemSetChallenge({ classNames, history, location, mod
       history.push(`${baseURL}/${courseId}/${classId}`);
     };
     const goBackToProblem = () => {
-      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}`);
+      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}`);
     };
     const goBackToSubmission = () => {
-      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`);
+      history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/my-submission`);
     };
     if (mode === 'challenge') {
       setArrow(
@@ -50,7 +50,7 @@ export default function ProblemSetChallenge({ classNames, history, location, mod
               tasks.problem.map(({ id, challenge_label }) => ({
                 text: challenge_label,
                 icon: <Icon.Code />,
-                path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${id}`,
+                path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/problem/${id}`,
               })),
             ),
           );
@@ -75,12 +75,12 @@ export default function ProblemSetChallenge({ classNames, history, location, mod
         {
           text: 'Code Submission',
           icon: <Icon.Code />,
-          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`,
+          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/code-submission`,
         },
         {
           text: 'My Submission',
           icon: <Icon.Statistic />,
-          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`,
+          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/my-submission`,
         },
       ]);
     } else if (mode === 'submission_detail') {
@@ -94,7 +94,7 @@ export default function ProblemSetChallenge({ classNames, history, location, mod
         {
           text: 'Submission Detail',
           icon: <Icon.Code />,
-          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission/${submissionId}`,
+          path: `${baseURL}/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/my-submission/${submissionId}`,
         },
       ]);
     }

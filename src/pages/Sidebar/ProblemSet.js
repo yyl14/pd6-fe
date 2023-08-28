@@ -10,7 +10,7 @@ export default function ProblemSet({ classNames, history, location, open, onClos
   const { courseId } = useParams();
 
   const { courses } = useCourses();
-  const { coursesClasses } = useCoursesClasses();
+  const { coursesClasses } = useCoursesClasses(courses?.map((course) => course.id) ?? null);
 
   const baseURL = '/6a/problem-set';
 
@@ -22,14 +22,16 @@ export default function ProblemSet({ classNames, history, location, open, onClos
       ?.sort((a, b) => a.name.localeCompare(b.name))
       .map((item) => item.id)
       .indexOf(Number(courseId));
-    if (foldIndex && foldIndex !== -1) {
-      const newList = display.length > 0 ? [...display] : courses?.map(() => 0);
-      if (newList[foldIndex] !== 1) {
-        newList[foldIndex] = 1;
-        setDisplay(newList);
-      }
+    if (foldIndex !== undefined && foldIndex !== -1) {
+      setDisplay((state) => {
+        const newList = state.length > 0 ? [...state] : courses?.map(() => 0);
+        if (newList[foldIndex] !== 1) {
+          newList[foldIndex] = 1;
+        }
+        return newList;
+      });
     }
-  }, [courses, courseId, display]);
+  }, [courses, courseId]);
 
   const changeFoldCourse = (id) => {
     const newList = [...display];
@@ -68,22 +70,22 @@ export default function ProblemSet({ classNames, history, location, open, onClos
                 {Boolean(display[orderId]) && (
                   <List>
                     {coursesClasses[id]
-                      ?.sort((a, b) => a.name.localeCompare(b.name))
+                      ?.sort((a, b) => a.class_info.name.localeCompare(b.class_info.name))
                       .map((classItem) => (
                         <ListItem
                           button
-                          key={classItem.id}
+                          key={classItem.class_info.id}
                           className={
-                            location.pathname === `${baseURL}/${id}/${classItem.id}`
+                            location.pathname === `${baseURL}/${id}/${classItem.class_info.id}`
                               ? `${classNames.active} ${classNames.item}`
                               : classNames.item
                           }
-                          onClick={() => history.push(`${baseURL}/${id}/${classItem.id}`)}
+                          onClick={() => history.push(`${baseURL}/${id}/${classItem.class_info.id}`)}
                         >
                           <ListItemIcon className={classNames.itemIcon}>
                             <Icon.Challenge />
                           </ListItemIcon>
-                          <ListItemText primary={classItem.name} className={classNames.itemText} />
+                          <ListItemText primary={classItem.class_info.name} className={classNames.itemText} />
                         </ListItem>
                       ))}
                   </List>

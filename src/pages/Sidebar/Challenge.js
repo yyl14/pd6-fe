@@ -51,11 +51,11 @@ export default function Challenge({ classNames, history, location, mode, open, o
       mode === 'challenge' &&
       tasks &&
       userClasses &&
-      userClasses.length !== 0 &&
-      userClasses.find((x) => x.class_id === Number(classId))
+      userClasses?.length !== 0 &&
+      userClasses?.find((x) => x.class_id === Number(classId))
     ) {
       if (
-        userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER' &&
+        userClasses?.find((x) => x.class_id === Number(classId)).role === 'MANAGER' &&
         challenge !== undefined &&
         userClasses !== undefined
       ) {
@@ -116,7 +116,10 @@ export default function Challenge({ classNames, history, location, mode, open, o
               })),
           ),
         );
-      } else if (userClasses.find((x) => x.class_id === Number(classId)).role === 'NORMAL' && challenge !== undefined) {
+      } else if (
+        userClasses?.find((x) => x.class_id === Number(classId)).role === 'NORMAL' &&
+        challenge !== undefined
+      ) {
         setArrow(
           <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
             <Icon.ArrowBackRoundedIcon />
@@ -163,7 +166,7 @@ export default function Challenge({ classNames, history, location, mode, open, o
               })),
           ),
         );
-      } else if (userClasses.find((x) => x.class_id === Number(classId)).role === 'GUEST' && challenge !== undefined) {
+      } else if (userClasses?.find((x) => x.class_id === Number(classId)).role === 'GUEST' && challenge !== undefined) {
         setArrow(
           <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
             <Icon.ArrowBackRoundedIcon />
@@ -192,12 +195,12 @@ export default function Challenge({ classNames, history, location, mode, open, o
       }
     } else if (
       mode === 'submission' &&
-      userClasses.length !== 0 &&
-      userClasses.find((x) => x.class_id === Number(classId)) &&
+      userClasses?.length !== 0 &&
+      userClasses?.find((x) => x.class_id === Number(classId)) &&
       challenge !== undefined &&
       problem !== undefined
     ) {
-      if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
+      if (userClasses?.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
       }
       setArrow(
@@ -220,10 +223,10 @@ export default function Challenge({ classNames, history, location, mode, open, o
       ]);
     } else if (
       mode === 'submission_detail' &&
-      userClasses.length !== 0 &&
-      userClasses.find((x) => x.class_id === Number(classId))
+      userClasses?.length !== 0 &&
+      userClasses?.find((x) => x.class_id === Number(classId))
     ) {
-      if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
+      if (userClasses?.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
       }
       setArrow(
@@ -240,7 +243,7 @@ export default function Challenge({ classNames, history, location, mode, open, o
         },
       ]);
     } else if (mode === 'my_submission_detail') {
-      if (userClasses.find((x) => x.class_id === Number(classId))?.role === 'MANAGER') {
+      if (userClasses?.find((x) => x.class_id === Number(classId))?.role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
       }
       setArrow(
@@ -347,8 +350,8 @@ export default function Challenge({ classNames, history, location, mode, open, o
               ))}
               {mode === 'challenge' &&
                 userClasses &&
-                userClasses.length !== 0 &&
-                userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER' &&
+                userClasses?.length !== 0 &&
+                userClasses?.find((x) => x.class_id === Number(classId)).role === 'MANAGER' &&
                 challenge !== undefined && (
                   <ListItem button key="Task" onClick={() => setAddTaskPopUp(true)} className={classNames.item}>
                     <ListItemIcon className={`${classNames.itemIcon} ${addTaskItemColor(addTaskPopUp)}`}>

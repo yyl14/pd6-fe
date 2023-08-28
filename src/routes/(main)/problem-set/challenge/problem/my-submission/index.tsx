@@ -9,21 +9,33 @@ import useCourse from '@/lib/course/useCourse';
 import useProblem from '@/lib/problem/useProblem';
 import useSubmission from '@/lib/submission/useSubmission';
 
-const SubmissionList = lazy(() => import(/* webpackChunkName: "SubmissionList" */ '@/pages/SubmissionList'));
+const ProblemMySubmissionList = lazy(
+  () => import(/* webpackChunkName: "ProblemMySubmissionList" */ '@/pages/ProblemMySubmissionList'),
+);
 const SubmissionDetail = lazy(() => import(/* webpackChunkName: "SubmissionDetail" */ '@/pages/SubmissionDetail'));
 
-function SubmissionListRoute() {
-  const { courseId, classId } = useParams<{ courseId: string; classId: string }>();
+function ProblemMySubmissionListRoute() {
+  const { courseId, classId, challengeId, problemId } = useParams<{
+    courseId: string;
+    classId: string;
+    challengeId: string;
+    problemId: string;
+  }>();
 
   const { isLoading: courseIsLoading } = useCourse(Number(courseId));
   const { isLoading: classIsLoading } = useClass(Number(classId));
+  const { isLoading: challengeIsLoading } = useChallenge(Number(challengeId));
+  const { isLoading: problemIsLoading } = useProblem(Number(problemId));
 
   return (
     <Suspense fallback={<GeneralLoading />}>
-      {withConditionalRender(SubmissionList)({
+      {withConditionalRender(ProblemMySubmissionList)({
         courseId,
         classId,
-        isLoading: courseIsLoading.read || classIsLoading.read,
+        challengeId,
+        problemId,
+        baseUrl: 'problem-set',
+        isLoading: courseIsLoading.read || classIsLoading.read || challengeIsLoading.read || problemIsLoading.read,
       })}
     </Suspense>
   );
@@ -64,14 +76,17 @@ function SubmissionDetailRoute() {
   );
 }
 
-export default function SubmissionRoutes() {
+export default function ProblemMySubmissionRoutes() {
   return (
     <Switch>
       <Route
-        path="/6a/my-class/:courseId/:classId/submission/:challengeId/:problemId/:submissionId"
+        path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission/:submissionId"
         component={SubmissionDetailRoute}
       />
-      <Route path="/6a/my-class/:courseId/:classId/submission" component={SubmissionListRoute} />
+      <Route
+        path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission"
+        component={ProblemMySubmissionListRoute}
+      />
     </Switch>
   );
 }

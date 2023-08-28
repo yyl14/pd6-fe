@@ -5,9 +5,9 @@ import toSWRFetcher from '@/function/toSWRMutationFetcher';
 
 import { deleteAccount, editAccount, readAccountWithDefaultStudentId } from './fetchers';
 
-const useAccount = (accountId: number) => {
-  const readAccountWithDefaultStudentIdSWR = useSWR(`/account/${accountId}`, () =>
-    readAccountWithDefaultStudentId({ account_id: accountId }),
+const useAccount = (accountId: number | null) => {
+  const readAccountWithDefaultStudentIdSWR = useSWR(accountId ? `/account/${accountId}` : null, () =>
+    readAccountWithDefaultStudentId({ account_id: accountId ?? 0 }),
   );
   const deleteAccountSWR = useSWRMutation(`/account/${accountId}`, toSWRFetcher(deleteAccount));
   const editAccountSWR = useSWRMutation(`/account/${accountId}`, toSWRFetcher(editAccount));

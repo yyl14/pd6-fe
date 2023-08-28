@@ -202,8 +202,7 @@ export interface paths {
     /**
      * Browse All Course 
      * @description ### 權限
-     * - System manager (hidden)
-     * - System normal (not hidden)
+     * - System normal
      */
     get: operations["browse_all_course_course_get"];
     /**
@@ -217,8 +216,7 @@ export interface paths {
     /**
      * Read Course 
      * @description ### 權限
-     * - System manager (hidden)
-     * - System normal (not hidden)
+     * - System normal
      */
     get: operations["read_course_course__course_id__get"];
     /**
@@ -238,8 +236,7 @@ export interface paths {
     /**
      * Browse All Class Under Course 
      * @description ### 權限
-     * - Class+ manager (hidden)
-     * - System normal (not hidden)
+     * - System normal
      */
     get: operations["browse_all_class_under_course_course__course_id__class_get"];
     /**
@@ -1698,6 +1695,12 @@ export interface components {
       /** Course Name */
       course_name: string;
     };
+    /** BrowseAllClassUnderCourseOutput */
+    BrowseAllClassUnderCourseOutput: {
+      class_info: components["schemas"]["pydantic__dataclasses__Class"];
+      /** Member Count */
+      member_count: number;
+    };
     /** BrowseAnnouncementOutput */
     BrowseAnnouncementOutput: {
       /** Data */
@@ -2829,6 +2832,14 @@ export interface components {
       /** Error */
       error: string;
     };
+    /** add_team_contest_scoreboard_under_challenge_return */
+    add_team_contest_scoreboard_under_challenge_return: {
+      /** Success */
+      success: boolean;
+      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      /** Error */
+      error: string;
+    };
     /** add_team_member_return */
     add_team_member_return: {
       /** Success */
@@ -2989,7 +3000,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__Class"])[];
+      data: (components["schemas"]["BrowseAllClassUnderCourseOutput"])[];
       /** Error */
       error: string;
     };
@@ -3691,7 +3702,7 @@ export interface components {
       error: string;
     };
     /** EditScoreboardInput */
-    processor__http__scoreboard_setting_team_contest__EditScoreboardInput: {
+    processor__http_api__scoreboard_setting_team_contest__EditScoreboardInput: {
       /** Challenge Label */
       challenge_label?: string;
       /** Title */
@@ -3704,7 +3715,7 @@ export interface components {
       team_label_filter?: string;
     };
     /** EditScoreboardInput */
-    processor__http__scoreboard_setting_team_project__EditScoreboardInput: {
+    processor__http_api__scoreboard_setting_team_project__EditScoreboardInput: {
       /** Challenge Label */
       challenge_label?: string;
       /** Title */
@@ -5079,8 +5090,7 @@ export interface operations {
   /**
    * Browse All Course 
    * @description ### 權限
-   * - System manager (hidden)
-   * - System normal (not hidden)
+   * - System normal
    */
   browse_all_course_course_get: {
     parameters: {
@@ -5125,8 +5135,7 @@ export interface operations {
   /**
    * Read Course 
    * @description ### 權限
-   * - System manager (hidden)
-   * - System normal (not hidden)
+   * - System normal
    */
   read_course_course__course_id__get: {
     parameters: {
@@ -5200,8 +5209,7 @@ export interface operations {
   /**
    * Browse All Class Under Course 
    * @description ### 權限
-   * - Class+ manager (hidden)
-   * - System normal (not hidden)
+   * - System normal
    */
   browse_all_class_under_course_course__course_id__class_get: {
     parameters: {
@@ -6419,7 +6427,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["pydantic__dataclasses__AddOutput"];
+          "application/json": components["schemas"]["add_team_contest_scoreboard_under_challenge_return"];
         };
       };
     };
@@ -7911,7 +7919,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["processor__http__scoreboard_setting_team_project__EditScoreboardInput"];
+        "application/json": components["schemas"]["processor__http_api__scoreboard_setting_team_project__EditScoreboardInput"];
       };
     };
     responses: {
@@ -7962,7 +7970,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["processor__http__scoreboard_setting_team_contest__EditScoreboardInput"];
+        "application/json": components["schemas"]["processor__http_api__scoreboard_setting_team_contest__EditScoreboardInput"];
       };
     };
     responses: {

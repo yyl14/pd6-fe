@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function CodeField({ value, onChange, disabled = false, placeholder }) {
+export default function CodeField({ value, onChange, disabled = false, placeholder = '' }) {
   const classNames = useStyles();
   return (
     <TextField

@@ -12,10 +12,10 @@ const useMyClassMiddleware = () => {
   const { accountClasses: userClasses } = useUserClasses();
 
   useEffect(() => {
-    if (user?.role !== 'NORMAL') {
+    if (user && user?.role !== 'NORMAL') {
       history.push('/6a');
     }
-  }, [user?.role, history]);
+  }, [user, history]);
 
   useEffect(() => {
     if (location.pathname === '/6a/my-class') {

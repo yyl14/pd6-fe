@@ -36,14 +36,13 @@ interface BrowsingTablePropsBase<DataSchema extends DataSchemaBase, RowSchema ex
   data: DataSchema[] | undefined;
   isLoading: boolean;
   error: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-  refresh?: () => void; // eslint-disable-line react/require-default-props
+  refresh?: () => void;
 
   pagination: PaginationInterface;
   filter: FilterInterface<DataSchema>;
   sort: SortInterface<DataSchema>;
 
   buttons?: JSX.Element | false;
-  hasRefreshButton?: boolean; // eslint-disable-line react/require-default-props
 }
 
 type BrowsingTableProps<DataSchema extends DataSchemaBase, RowSchema extends RowSchemaBase> = (
@@ -58,13 +57,12 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
   data,
   isLoading,
   error,
-  refresh = () => {},
+  refresh,
   dataToRow,
   pagination,
   filter,
   sort,
   buttons = false,
-  hasRefreshButton = false,
   hasLink = false,
 }: BrowsingTableProps<DataSchema, RowSchema>) {
   const classes = useStyles();
@@ -85,6 +83,8 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
 
   const [filteringIndex, setFilteringIndex] = useState(0);
   const filteringItem = filterConfig[filteringIndex];
+
+  const hasRefreshButton = refresh !== undefined;
 
   const [pageInput, setPageInput] = useState('');
 

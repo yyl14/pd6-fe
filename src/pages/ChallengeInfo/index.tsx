@@ -12,7 +12,7 @@ import SimpleBar from '@/components/ui/SimpleBar';
 import SimpleTable from '@/components/ui/SimpleTable';
 import useReduxStateShape from '@/hooks/useReduxStateShape';
 import useChallenge from '@/lib/challenge/useChallenge';
-import useProblemScore from '@/lib/problem/useProblemScore';
+import useProblemScores from '@/lib/problem/useProblemScores';
 import useChallengeTasks from '@/lib/task/useChallengeTasks';
 import useUserClasses from '@/lib/user/useUserClasses';
 
@@ -43,9 +43,12 @@ export default function ChallengeInfo({
   const className = useStyles();
   const { challenge, isLoading: challengeLoading, editChallenge } = useChallenge(Number(challengeId));
   const { accountClasses } = useUserClasses();
-  const { readScore } = useProblemScore();
-
   const { tasks } = useChallengeTasks(Number(challengeId));
+  const [problemsById, problemIds] = useReduxStateShape(tasks?.problem);
+  const [essaysById, essayIds] = useReduxStateShape(tasks?.essay);
+  const [peerReviewsById, peerReviewIds] = useReduxStateShape(tasks?.peer_review);
+  const [scoreboardsById, scoreboardIds] = useReduxStateShape(tasks?.scoreboard);
+  const { problemScores } = useProblemScores(problemIds.map((id) => Number(id)));
 
   const [currentTime] = useState(moment());
   const [status, setStatus] = useState('');
@@ -54,10 +57,6 @@ export default function ChallengeInfo({
   const [inputs, setInputs] = useState('');
   const [showDescription, setShowDescription] = useState<boolean>(true);
   const [tableData, setTableData] = useState<TableProp[]>([]);
-  const [problemsById, problemIds] = useReduxStateShape(tasks?.problem);
-  const [essaysById, essayIds] = useReduxStateShape(tasks?.essay);
-  const [peerReviewsById, peerReviewIds] = useReduxStateShape(tasks?.peer_review);
-  const [scoreboardsById, scoreboardIds] = useReduxStateShape(tasks?.scoreboard);
 
   useEffect(() => {
     if (challenge) {
@@ -88,26 +87,15 @@ export default function ChallengeInfo({
   }, [challenge, role, isProblemSet]);
 
   useEffect(() => {
-    async function getScore(id: number) {
-      try {
-        const { data } = await readScore({ problem_id: id });
-        return data?.data?.score;
-      } catch (err) {
-        return 0;
-      }
-    }
-
     async function settingTableData() {
-      const problemDataPromises = (problemIds || [])
+      const problemData: TableProp[] = (problemIds || [])
         .map((id) => problemsById[id])
         .sort((a, b) => a.challenge_label.localeCompare(b.challenge_label))
-        .map(async ({ id }) => ({
+        .map(({ id }) => ({
           challenge_label: problemsById[id]?.challenge_label,
-          score: await getScore(id),
+          score: problemScores?.find((score) => score.id === id)?.score ?? undefined,
           id: `coding-${id}`,
         }));
-
-      const problemData: TableProp[] = await Promise.all(problemDataPromises);
 
       if ((role === 'MANAGER' || role === 'NORMAL') && !isProblemSet) {
         const essayData: TableProp[] | undefined = essayIds
@@ -146,13 +134,13 @@ export default function ChallengeInfo({
   }, [
     challenge,
     role,
-    readScore,
     problemsById,
     problemIds,
     essaysById,
     essayIds,
     peerReviewsById,
     peerReviewIds,
+    problemScores,
     scoreboardsById,
     scoreboardIds,
     isProblemSet,
