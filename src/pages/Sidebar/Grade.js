@@ -72,7 +72,7 @@ export default function Grade({ classNames, history, location, mode, open, onClo
             {itemList.map((item) => (
               <ListItem
                 button
-                key={item.id}
+                key={item.text}
                 className={
                   location.pathname.includes(item.path) ? `${classNames.active} ${classNames.item}` : classNames.item
                 }

@@ -1,4 +1,5 @@
 import useSWR from 'swr';
+
 import { readSubmissionLatestJudgment } from './fetchers';
 
 const useSubmissionLatestJudgement = (submissioinId: number) => {
@@ -8,6 +9,7 @@ const useSubmissionLatestJudgement = (submissioinId: number) => {
 
   return {
     submissionLatestJudgement: readSubmissionLatestJudgmentSWR.data?.data.data,
+    mutateSubmissionLatestJudgement: readSubmissionLatestJudgmentSWR.mutate,
 
     isLoading: {
       read: readSubmissionLatestJudgmentSWR.isLoading,

@@ -2,10 +2,10 @@ import { components } from '../../../types/schema';
 import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
 import { browseSubmissionUnderClass } from './fetchers';
 
-export type SubmissionSchema = components['schemas']['ViewSubmissionUnderClass'];
+export type ViewClassSubmissionSchema = components['schemas']['ViewSubmissionUnderClass'];
 
 const useViewClassSubmissions = (classId: number) => {
-  const useSWRWithBrowseParams = withDataSchema<SubmissionSchema>();
+  const useSWRWithBrowseParams = withDataSchema<ViewClassSubmissionSchema>();
 
   const browseSubmissionUnderClassSWR = useSWRWithBrowseParams(
     `/class/{class_id}/view/submission`,
@@ -14,12 +14,16 @@ const useViewClassSubmissions = (classId: number) => {
   );
 
   return {
-    submissions: browseSubmissionUnderClassSWR.data?.data.data,
-
-    isLoading: {
-      browse: browseSubmissionUnderClassSWR.isLoading,
+    browseSubmissionUnderClass: {
+      data: browseSubmissionUnderClassSWR.data?.data.data,
+      refresh: browseSubmissionUnderClassSWR.mutate,
+      pagination: browseSubmissionUnderClassSWR.pagination,
+      filter: browseSubmissionUnderClassSWR.filter,
+      sort: browseSubmissionUnderClassSWR.sort,
     },
-
+    isLoading: {
+      browse: browseSubmissionUnderClassSWR.isLoading || browseSubmissionUnderClassSWR.isValidating,
+    },
     error: {
       browse: browseSubmissionUnderClassSWR.error,
     },

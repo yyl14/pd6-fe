@@ -2,7 +2,6 @@ import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-// import TaskAddingCard from '@/components/normal/myClass/Challenge/TaskAddingCard';
 import Icon from '@/components/ui/icon/index';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';
@@ -10,6 +9,8 @@ import useCourse from '@/lib/course/useCourse';
 import useProblem from '@/lib/problem/useProblem';
 import useChallengeTasks from '@/lib/task/useChallengeTasks';
 import useUserClasses from '@/lib/user/useUserClasses';
+
+import TaskAddingCard from './TaskAddingCard';
 
 export default function Challenge({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, challengeId, problemId, submissionId } = useParams();
@@ -21,7 +22,7 @@ export default function Challenge({ classNames, history, location, mode, open, o
   const { class: classData } = useClass(classId);
   const { course } = useCourse(courseId);
   const { accountClasses: userClasses } = useUserClasses();
-  const { problem } = useProblem();
+  const { problem } = useProblem(Number(problemId));
 
   const [display, setDisplay] = useState('unfold');
 
@@ -49,16 +50,15 @@ export default function Challenge({ classNames, history, location, mode, open, o
     if (
       mode === 'challenge' &&
       tasks &&
-      userClasses.length !== 0 &&
-      userClasses.find((x) => x.class_id === Number(classId))
+      userClasses &&
+      userClasses?.length !== 0 &&
+      userClasses?.find((x) => x.class_id === Number(classId))
     ) {
-      // console.log(userClasses);
       if (
-        userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER' &&
+        userClasses?.find((x) => x.class_id === Number(classId)).role === 'MANAGER' &&
         challenge !== undefined &&
         userClasses !== undefined
       ) {
-        // console.log(problems, essays, userClasses);
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
         setArrow(
           <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
@@ -116,7 +116,10 @@ export default function Challenge({ classNames, history, location, mode, open, o
               })),
           ),
         );
-      } else if (userClasses.find((x) => x.class_id === Number(classId)).role === 'NORMAL' && challenge !== undefined) {
+      } else if (
+        userClasses?.find((x) => x.class_id === Number(classId)).role === 'NORMAL' &&
+        challenge !== undefined
+      ) {
         setArrow(
           <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
             <Icon.ArrowBackRoundedIcon />
@@ -163,7 +166,7 @@ export default function Challenge({ classNames, history, location, mode, open, o
               })),
           ),
         );
-      } else if (userClasses.find((x) => x.class_id === Number(classId)).role === 'GUEST' && challenge !== undefined) {
+      } else if (userClasses?.find((x) => x.class_id === Number(classId)).role === 'GUEST' && challenge !== undefined) {
         setArrow(
           <IconButton className={classNames.arrow} onClick={goBackToChallenge}>
             <Icon.ArrowBackRoundedIcon />
@@ -192,12 +195,12 @@ export default function Challenge({ classNames, history, location, mode, open, o
       }
     } else if (
       mode === 'submission' &&
-      userClasses.length !== 0 &&
-      userClasses.find((x) => x.class_id === Number(classId)) &&
+      userClasses?.length !== 0 &&
+      userClasses?.find((x) => x.class_id === Number(classId)) &&
       challenge !== undefined &&
       problem !== undefined
     ) {
-      if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
+      if (userClasses?.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
       }
       setArrow(
@@ -220,10 +223,10 @@ export default function Challenge({ classNames, history, location, mode, open, o
       ]);
     } else if (
       mode === 'submission_detail' &&
-      userClasses.length !== 0 &&
-      userClasses.find((x) => x.class_id === Number(classId))
+      userClasses?.length !== 0 &&
+      userClasses?.find((x) => x.class_id === Number(classId))
     ) {
-      if (userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
+      if (userClasses?.find((x) => x.class_id === Number(classId)).role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
       }
       setArrow(
@@ -240,7 +243,7 @@ export default function Challenge({ classNames, history, location, mode, open, o
         },
       ]);
     } else if (mode === 'my_submission_detail') {
-      if (userClasses.find((x) => x.class_id === Number(classId))?.role === 'MANAGER') {
+      if (userClasses?.find((x) => x.class_id === Number(classId))?.role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
       }
       setArrow(
@@ -335,7 +338,7 @@ export default function Challenge({ classNames, history, location, mode, open, o
               {itemList.map((item) => (
                 <ListItem
                   button
-                  key={item.path}
+                  key={item?.path}
                   onClick={() => history.push(item.path)}
                   className={
                     location.pathname === item.path ? `${classNames.active} ${classNames.item}` : classNames.item
@@ -346,8 +349,9 @@ export default function Challenge({ classNames, history, location, mode, open, o
                 </ListItem>
               ))}
               {mode === 'challenge' &&
-                userClasses.length !== 0 &&
-                userClasses.find((x) => x.class_id === Number(classId)).role === 'MANAGER' &&
+                userClasses &&
+                userClasses?.length !== 0 &&
+                userClasses?.find((x) => x.class_id === Number(classId)).role === 'MANAGER' &&
                 challenge !== undefined && (
                   <ListItem button key="Task" onClick={() => setAddTaskPopUp(true)} className={classNames.item}>
                     <ListItemIcon className={`${classNames.itemIcon} ${addTaskItemColor(addTaskPopUp)}`}>
@@ -364,8 +368,15 @@ export default function Challenge({ classNames, history, location, mode, open, o
         </div>
         <div className={classNames.bottomSpace} />
       </Drawer>
-
-      {/* <TaskAddingCard open={addTaskPopUp} setOpen={setAddTaskPopUp} /> */}
+      {addTaskPopUp && (
+        <TaskAddingCard
+          courseId={Number(courseId)}
+          classId={Number(classId)}
+          challengeId={Number(challengeId)}
+          open={addTaskPopUp}
+          setOpen={setAddTaskPopUp}
+        />
+      )}
     </div>
   );
 }

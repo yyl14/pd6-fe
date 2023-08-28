@@ -1,15 +1,22 @@
-import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
+
+import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
+
+import { components } from '../../../types/schema';
 import { batchGetAccountWithDefaultStudentId } from './fetchers';
 
-const useAccountSummaries = (accountIds: string[]) => {
-  const batchGetAccountWithDefaultStudentIdSWR = useSWR(`/account-summary/batch`, () =>
-    batchGetAccountWithDefaultStudentId({ account_ids: JSON.stringify(accountIds) }),
+export type AccountSummarySchema = components['schemas']['pydantic__dataclasses__BatchGetAccountOutput'];
+
+const useAccountSummaries = () => {
+  const batchGetAccountWithDefaultStudentIdSWR = useSWRMutation(
+    `/account-summary/batch`,
+    toSWRMutationFetcher(batchGetAccountWithDefaultStudentId),
   );
 
   return {
-    accountSummaries: batchGetAccountWithDefaultStudentIdSWR.data?.data.data,
+    getAccountSummaries: batchGetAccountWithDefaultStudentIdSWR.trigger,
     isLoading: {
-      accountSummaries: batchGetAccountWithDefaultStudentIdSWR.isLoading,
+      accountSummaries: batchGetAccountWithDefaultStudentIdSWR.isMutating,
     },
     error: {
       accountSummaries: batchGetAccountWithDefaultStudentIdSWR.error,

@@ -30,6 +30,10 @@ export default function About({ classes, history, location, mode, open, onClose 
     setDisplay('unfold');
   };
 
+  if (location.pathname === '/6a/about') {
+    history.push('/6a/about/team');
+  }
+
   return (
     <div>
       <Drawer
@@ -58,7 +62,7 @@ export default function About({ classes, history, location, mode, open, onClose 
             {itemList.map((item) => (
               <ListItem
                 button
-                key={item.id}
+                key={item.text}
                 onClick={() => history.push(item.path)}
                 className={location.pathname === item.path ? `${classes.active} ${classes.item}` : classes.item}
               >

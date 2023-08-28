@@ -1,13 +1,14 @@
-import { Suspense, lazy } from 'react';
+import { Route, Switch } from 'react-router-dom';
 
-import GeneralLoading from '@/components/GeneralLoading';
+import NoMatch from '@/components/noMatch';
 
-const About = lazy(() => import(/* webpackChunkName: "About" */ '@/pages/About'));
+import TeamRoute from './team';
 
-export default function AboutRoute() {
+export default function AboutRoutes() {
   return (
-    <Suspense fallback={<GeneralLoading />}>
-      <About />
-    </Suspense>
+    <Switch>
+      <Route path="/6a/about/team" component={TeamRoute} />
+      <Route path="/6a/about" component={NoMatch} />
+    </Switch>
   );
 }

@@ -11,10 +11,10 @@ import {
   TableRow,
   TextField,
 } from '@material-ui/core';
-
 import { makeStyles } from '@material-ui/core/styles';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+
 import Icon from './icon/index';
 
 const useStyles = makeStyles((theme) => ({
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'none',
   },
   tableHead: {
-    height: '45px',
+    height: '48px',
     borderBottomWidth: '1px',
     borderBottomStyle: 'solid',
     borderBottomColor: theme.palette.grey.A400,
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   row: {
-    height: '60px',
+    height: '51px',
   },
   textLink: {
     textDecoration: 'none',

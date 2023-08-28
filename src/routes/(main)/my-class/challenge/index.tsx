@@ -6,9 +6,16 @@ import withConditionalRender from '@/components/hoc/withConditionalRender';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
+import useMyClassManagerMiddleware from '@/middleware/useMyClassManagerMiddleware';
+import ScoreboardRoutes from '@/routes/(main)/my-class/challenge/scoreboard';
+
+import EssayRoutes from './essay';
+import ProblemRoutes from './problem';
 
 const ChallengeList = lazy(() => import('@/pages/ChallengeList'));
 const ChallengeInfo = lazy(() => import('@/pages/ChallengeInfo'));
+const ChallengeStatistics = lazy(() => import('@/pages/ChallengeStatistics'));
+const ChallengeSetting = lazy(() => import('@/pages/ChallengeSetting'));
 
 function ChallengeListRoute() {
   const { courseId, classId } = useParams<{ courseId: string; classId: string }>();
@@ -37,6 +44,46 @@ function ChallengeInfoRoute() {
   return (
     <Suspense fallback={<GeneralLoading />}>
       {withConditionalRender(ChallengeInfo)({
+        classId,
+        challengeId,
+        isProblemSet: false,
+        isLoading: courseIsLoading.read || classIsLoading.read || challengeIsLoading.read,
+      })}
+    </Suspense>
+  );
+}
+
+function ChallengeStatisticsRoute() {
+  const { courseId, classId, challengeId } = useParams<{ courseId: string; classId: string; challengeId: string }>();
+  useMyClassManagerMiddleware(courseId, classId);
+
+  const { isLoading: courseIsLoading } = useCourse(Number(courseId));
+  const { isLoading: classIsLoading } = useClass(Number(classId));
+  const { isLoading: challengeIsLoading } = useChallenge(Number(challengeId));
+
+  return (
+    <Suspense fallback={<GeneralLoading />}>
+      {withConditionalRender(ChallengeStatistics)({
+        courseId,
+        classId,
+        challengeId,
+        isLoading: courseIsLoading.read || classIsLoading.read || challengeIsLoading.read,
+      })}
+    </Suspense>
+  );
+}
+
+function ChallengeSettingRoute() {
+  const { courseId, classId, challengeId } = useParams<{ courseId: string; classId: string; challengeId: string }>();
+  useMyClassManagerMiddleware(courseId, classId);
+
+  const { isLoading: courseIsLoading } = useCourse(Number(courseId));
+  const { isLoading: classIsLoading } = useClass(Number(classId));
+  const { isLoading: challengeIsLoading } = useChallenge(Number(challengeId));
+
+  return (
+    <Suspense fallback={<GeneralLoading />}>
+      {withConditionalRender(ChallengeSetting)({
         courseId,
         classId,
         challengeId,
@@ -49,6 +96,14 @@ function ChallengeInfoRoute() {
 export default function ChallengeRoutes() {
   return (
     <Switch>
+      <Route
+        path="/6a/my-class/:courseId/:classId/challenge/:challengeId/statistics"
+        component={ChallengeStatisticsRoute}
+      />
+      <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/scoreboard" component={ScoreboardRoutes} />
+      <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/setting" component={ChallengeSettingRoute} />
+      <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/essay" component={EssayRoutes} />
+      <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/problem" component={ProblemRoutes} />
       <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId" component={ChallengeInfoRoute} />
       <Route path="/6a/my-class/:courseId/:classId/challenge" component={ChallengeListRoute} />
       {/* TODO: add task, problem, essay, peer review, scoreboard routes */}

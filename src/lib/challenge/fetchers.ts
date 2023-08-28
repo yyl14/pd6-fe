@@ -17,5 +17,9 @@ export const getMemberSubmissionStatistics = api
   .method('get')
   .create();
 
+export const downloadAllSubmissions = api.path('/challenge/{challenge_id}/all-submission').method('post').create({as_attachment: true});
 
-  
+export const downloadAllPlagiarismReports = api
+  .path('/challenge/{challenge_id}/all-plagiarism-report')
+  .method('post')
+  .create({as_attachment: true});

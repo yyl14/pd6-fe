@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import Icon from '@/components/ui/icon';
-import useS3File from '@/lib/s3File/useS3File';
+import useS3FileDownload from '@/lib/s3File/useS3FileDownload';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -52,14 +52,14 @@ const FileDownloading = ({ filename, uuid }: FileDownloadingProps) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const { downloadFile } = useS3File();
+  const { downloadFile } = useS3FileDownload();
   const [message, setMessage] = useState<string>('File Downloading...');
   const [tip, setTip] = useState<string>('');
 
   useEffect(() => {
     const handleDownloadFile = async () => {
       try {
-        await downloadFile(filename, uuid);
+        await downloadFile({ fileName: filename, file_uuid: uuid });
         setMessage('File Download Succeed.');
       } catch (e) {
         setMessage('Fail to Download File.');

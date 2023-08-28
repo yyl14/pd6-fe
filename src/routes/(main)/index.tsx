@@ -7,9 +7,11 @@ import useSystemRoleMiddleware from '@/middleware/useSystemRoleMiddleware';
 
 import Header from './Header';
 import Sidebar from './Sidebar';
-import AboutRoute from './about';
+import AboutRoutes from './about';
+import AdminRoutes from './admin';
 import FileDownloading from './file';
 import MyClassRoutes from './my-class';
+import MySubmissionRoute from './my-submission';
 import ProblemSetRoutes from './problem-set';
 import UserProfileRoute from './user-profile';
 
@@ -25,7 +27,7 @@ function Layout({ children }: { children: JSX.Element }) {
 
   // configure the path names in which sidebars are disabled
   useEffect(() => {
-    const disableSidebarPaths = ['/my-submission'];
+    const disableSidebarPaths = ['/6a/my-submission'];
     if (disableSidebarPaths.includes(location.pathname)) {
       setDisableSidebar(true);
     } else {
@@ -59,12 +61,12 @@ export default function MainRoutes() {
   return (
     <Layout>
       <Switch>
-        {/* <Route path="/6a/admin" component={Admin} /> */}
+        <Route path="/6a/admin" component={AdminRoutes} />
         {/* <Route path="/6a/my-profile" component={MyProfileRoute} /> */}
-        {/* <Route path="/6a/my-submission" component={MySubmission} /> */}
+        <Route path="/6a/my-submission" component={MySubmissionRoute} />
         <Route exact path="/6a/user-profile/:accountId" component={UserProfileRoute} />
         <Route path="/6a/file" component={FileDownloading} />
-        <Route path="/6a/about" component={AboutRoute} />
+        <Route path="/6a/about" component={AboutRoutes} />
         <Route path="/6a/my-class" component={MyClassRoutes} />
         <Route path="/6a/problem-set" component={ProblemSetRoutes} />
       </Switch>

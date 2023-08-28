@@ -62,17 +62,8 @@ export default function EmailVerification({ verificationCode }: { verificationCo
   useEffect(() => {
     (async () => {
       try {
-<<<<<<< HEAD
-        const {
-          data: { success },
-        } = await emailVerification();
-        if (success) {
-          setMessage('Email Verify Succeed.');
-        }
-=======
         await emailVerification();
         setMessage('Email Verify Succeed.');
->>>>>>> 1f025412 (Resolve "Pages - Auth")
       } catch (err) {
         setMessage('Fail to verify Email.');
       } finally {
@@ -81,11 +72,7 @@ export default function EmailVerification({ verificationCode }: { verificationCo
         }, 2000);
       }
     })();
-<<<<<<< HEAD
-  }, [history, queryString, emailVerification]);
-=======
   }, [history, emailVerification]);
->>>>>>> 1f025412 (Resolve "Pages - Auth")
 
   return (
     <div className={classes.wrapper}>
