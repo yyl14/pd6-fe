@@ -21,8 +21,8 @@ import { useHistory } from 'react-router-dom';
 import GeneralLoading from '@/components/GeneralLoading';
 import NoMatch from '@/components/noMatch';
 import AlignedText from '@/components/ui/AlignedText';
-import CodeArea from '@/components/ui/CodeArea';
-import SampleTestArea from '@/components/ui/SampleTestArea';
+import CodeTextArea from '@/components/ui/CodeTextArea';
+import SampleTestcaseArea from '@/components/ui/SampleTestcaseArea';
 import SimpleBar from '@/components/ui/SimpleBar';
 import SimpleTable from '@/components/ui/SimpleTable';
 import Icon from '@/components/ui/icon/index';
@@ -164,11 +164,11 @@ export default function CodingProblemInfo({
   // parse filename to get sample number
   const sampleTransToNumber = useCallback(
     (id: string | number) => {
-      if (testcasesById[id].input_filename !== null) {
-        return Number(testcasesById[id].input_filename.slice(6, testcasesById[id].input_filename.indexOf('.')));
+      if (testcasesById[id]?.input_filename !== null) {
+        return Number(testcasesById[id]?.input_filename?.slice(6, testcasesById[id]?.input_filename?.indexOf('.')));
       }
-      if (testcasesById[id].output_filename !== null) {
-        return Number(testcasesById[id].output_filename.slice(6, testcasesById[id].output_filename.indexOf('.')));
+      if (testcasesById[id]?.output_filename !== null) {
+        return Number(testcasesById[id]?.output_filename?.slice(6, testcasesById[id]?.output_filename?.indexOf('.')));
       }
       return 0;
     },
@@ -178,11 +178,11 @@ export default function CodingProblemInfo({
   // parse filename to get testcase number
   const testcaseTransToNumber = useCallback(
     (id: string | number) => {
-      if (testcasesById[id].input_filename !== null) {
-        return Number(testcasesById[id].input_filename.slice(0, testcasesById[id].input_filename.indexOf('.')));
+      if (testcasesById[id]?.input_filename !== null) {
+        return Number(testcasesById[id]?.input_filename?.slice(0, testcasesById[id]?.input_filename?.indexOf('.')));
       }
-      if (testcasesById[id].output_filename !== null) {
-        return Number(testcasesById[id].output_filename.slice(0, testcasesById[id].output_filename.indexOf('.')));
+      if (testcasesById[id]?.output_filename !== null) {
+        return Number(testcasesById[id]?.output_filename?.slice(0, testcasesById[id]?.output_filename?.indexOf('.')));
       }
       return 0;
     },
@@ -309,9 +309,9 @@ export default function CodingProblemInfo({
           data={sampleDataIds.map((id) => ({
             id,
             no: sampleTransToNumber(id),
-            time_limit: testcasesById[id].time_limit,
-            memory_limit: testcasesById[id].memory_limit,
-            note: testcasesById[id].note,
+            time_limit: testcasesById[id]?.time_limit,
+            memory_limit: testcasesById[id]?.memory_limit,
+            note: testcasesById[id]?.note,
           }))}
           buttons
           setData
@@ -323,10 +323,12 @@ export default function CodingProblemInfo({
                 <Typography variant="h6" className={className.sampleName}>
                   {`Sample ${sampleTransToNumber(id)}`}
                 </Typography>
-                <SampleTestArea
-                  input={testcasesById[id].input_file_uuid}
-                  output={testcasesById[id].output_file_uuid}
-                  note={testcasesById[id].note}
+                <SampleTestcaseArea
+                  input_uuid={testcasesById[id]?.input_file_uuid}
+                  input_fileName={testcasesById[id]?.input_filename}
+                  output_uuid={testcasesById[id]?.output_file_uuid}
+                  output_fileName={testcasesById[id]?.output_filename}
+                  note={testcasesById[id]?.note}
                 />
               </Grid>
             ))}
@@ -402,10 +404,10 @@ export default function CodingProblemInfo({
           data={testcaseDataIds.map((id) => ({
             id,
             no: testcaseTransToNumber(id),
-            time_limit: testcasesById[id].time_limit,
-            memory_limit: testcasesById[id].memory_limit,
-            score: testcasesById[id].score,
-            note: testcasesById[id].note ? testcasesById[id].note : '',
+            time_limit: testcasesById[id]?.time_limit,
+            memory_limit: testcasesById[id]?.memory_limit,
+            score: testcasesById[id]?.score,
+            note: testcasesById[id]?.note ? testcasesById[id]?.note : '',
           }))}
           buttons
           setData
@@ -438,7 +440,7 @@ export default function CodingProblemInfo({
               problem !== undefined
                 ? assistingDataIds.map((id) => ({
                     id,
-                    filename: assistingDatasById[id].filename,
+                    filename: assistingDatasById[id]?.filename,
                   }))
                 : []
             }
@@ -459,7 +461,7 @@ export default function CodingProblemInfo({
             />
           }
         >
-          <CodeArea value={problem?.judge_source.code_uuid ?? ''} />
+          <CodeTextArea code_uuid={problem?.judge_source?.code_uuid} code_fileName={problem?.judge_source?.filename}/>
         </SimpleBar>
       )}
       {role === 'MANAGER' && problem?.reviser_is_enabled && (
@@ -474,7 +476,7 @@ export default function CodingProblemInfo({
             />
           }
         >
-          <CodeArea value={problem?.reviser.code_uuid ?? ''} />
+          <CodeTextArea code_uuid={problem?.reviser?.code_uuid} code_fileName={problem?.reviser?.filename}/>
         </SimpleBar>
       )}
       {role === 'MANAGER' && (

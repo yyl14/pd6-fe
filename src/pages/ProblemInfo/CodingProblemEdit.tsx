@@ -29,10 +29,9 @@ import useReduxStateShape from '@/hooks/useReduxStateShape';
 import useAssistingData from '@/lib/assistingData/useAssistingData';
 import useProblemAssistingData from '@/lib/assistingData/useProblemAssistingData';
 import useProblem from '@/lib/problem/useProblem';
-import useS3File from '@/lib/s3File/useS3File';
 import useProblemTestcase from '@/lib/testcase/useProblemTestcase';
 import useTestcase from '@/lib/testcase/useTestcase';
-import { TableDataProp, AssistDataProp, SaveDatas, SaveAssistingData } from './components';
+import { TableDataProp, AssistDataProp, SaveDatas, SaveAssistingData, GetDataContent } from './components';
 
 const useStyles = makeStyles(() => ({
   sampleArea: {
@@ -162,14 +161,14 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
       if (problem.judge_type === 'CUSTOMIZED') {
         setJudgeLanguage('Python 3.8');
       }
-      if (problem.judge_source?.code_uuid) {
-        setJudgeCode(problem.judge_source.code_uuid);
+      if (problem.judge_source?.code_uuid && problem.judge_source?.filename) {
+        setJudgeCode(String(GetDataContent(problem.judge_source.code_uuid, problem.judge_source.filename)));
       }
       if (problem.reviser_is_enabled) {
         setReviserLanguage('Python 3.8');
       }
-      if (problem.reviser?.code_uuid) {
-        setReviserCode(problem.reviser?.code_uuid);
+      if (problem.reviser?.code_uuid && problem.reviser?.filename) {
+        setReviserCode(String(GetDataContent(problem.reviser.code_uuid, problem.reviser.filename)));
       }
     }
   }, [problem]);
@@ -302,12 +301,9 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
 
   const [disabled, setDisabled] = useState(false);
 
-  const { getFileContent } = useS3File();
-
   useEffect(() => {
     if (handleSamplesSuccess && handleTestcasesSuccess && handleInfoSuccess && handleAssistingDataSuccess) {
       if (uploadFailFilename.length === 0 && problem?.judge_source.filename !== undefined) {
-        getFileContent(problem?.judge_source.filename, problem?.judge_source.code_uuid, true);
         setDisabled(false);
         closeEdit();
       } else {
@@ -317,7 +313,6 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
     }
   }, [
     problem,
-    getFileContent,
     closeEdit,
     handleAssistingDataSuccess,
     handleInfoSuccess,
@@ -919,12 +914,11 @@ export default function CodingProblemEdit({ closeEdit, problemId }: { closeEdit:
           <FormControl variant="outlined" className={className.select}>
             <Select
               name="reviser"
-              value={reviserIsEnabled}
-              onChange={(e) => setReviserIsEnabled(e.target.value as boolean)}
+              value={reviserIsEnabled ? "CUSTOMIZED" : "NORMAL"}
+              onChange={(e) => setReviserIsEnabled((e.target.value === "CUSTOMIZED") as boolean)}
             >
-              <MenuItem>No customized reviser</MenuItem>
-              {/* eslint-disable-next-line react/jsx-boolean-value */}
-              <MenuItem>Customized reviser</MenuItem>
+              <MenuItem value="NORMAL">No customized reviser</MenuItem>
+              <MenuItem value="CUSTOMIZED">Customized reviser</MenuItem>
             </Select>
           </FormControl>
         </AlignedText>
