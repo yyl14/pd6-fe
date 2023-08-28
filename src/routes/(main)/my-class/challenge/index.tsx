@@ -7,6 +7,7 @@ import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useMyClassManagerMiddleware from '@/middleware/useMyClassManagerMiddleware';
+import PeerReviewRoutes from '@/routes/(main)/my-class/challenge/peer-review';
 import ScoreboardRoutes from '@/routes/(main)/my-class/challenge/scoreboard';
 
 import EssayRoutes from './essay';
@@ -104,6 +105,7 @@ export default function ChallengeRoutes() {
       <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/setting" component={ChallengeSettingRoute} />
       <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/essay" component={EssayRoutes} />
       <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/problem" component={ProblemRoutes} />
+      <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/peer-review" component={PeerReviewRoutes} />
       <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId" component={ChallengeInfoRoute} />
       <Route path="/6a/my-class/:courseId/:classId/challenge" component={ChallengeListRoute} />
       {/* TODO: add task, problem, essay, peer review, scoreboard routes */}

@@ -1,9 +1,10 @@
 import { IconButton, Portal, Snackbar } from '@material-ui/core';
 import { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+
 import Icon from './icon/index';
 
-export default function CopyToClipboardButton({ text, onClick = null, className, format = 'text/plain' }) {
+export default function CopyToClipboardButton({ text, onClick = null, className = null, format = 'text/plain' }) {
   const [showSnackbar, setShowSnackbar] = useState(false);
 
   const handleCopy = () => {

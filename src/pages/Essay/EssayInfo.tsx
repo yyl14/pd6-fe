@@ -71,7 +71,7 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
   const { challenge: challengeInfo } = useChallenge(Number(challengeId));
   const { essay, deleteEssay } = useEssay(Number(essayId));
 
-  const { mutateTasksUnderChallenge } = useChallengeTasks(Number(challengeId));
+  const { mutateTask } = useChallengeTasks(Number(challengeId));
   const { reuploadEssay, error: essaySubmissionError } = useEssaySubmission();
   const {
     uploadEssay,
@@ -132,7 +132,7 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
 
   const handleSubmitDelete = () => {
     deleteEssay({ essay_id: Number(essayId) });
-    mutateTasksUnderChallenge();
+    mutateTask();
     history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
   };
 

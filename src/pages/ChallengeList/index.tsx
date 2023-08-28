@@ -106,14 +106,14 @@ export default function ChallengeList({ courseId, classId }: { courseId: string;
     } else setDisabled(false);
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     const { title } = inputs;
     const scoredBy = inputs.scoredBy === 'Last Score' ? 'LAST' : 'BEST';
     const showTime = inputs.showTime === 'On End Time' ? 'END_TIME' : 'START_TIME';
     const startTime = dateRangePicker[0].startDate.toISOString();
     const endTime = dateRangePicker[0].endDate.toISOString();
 
-    addChallengeUnderClass({
+    await addChallengeUnderClass({
       class_id: Number(classId),
       title,
       publicize_type: showTime,
@@ -121,6 +121,7 @@ export default function ChallengeList({ courseId, classId }: { courseId: string;
       start_time: startTime,
       end_time: endTime,
     });
+    await browseChallengeUnderClass.refresh();
 
     setDisabled(true);
     setPopUp(false);
