@@ -2,6 +2,7 @@ import useAssistingData from '@/lib/assistingData/useAssistingData';
 import useProblemAssistingData from '@/lib/assistingData/useProblemAssistingData';
 import useProblemTestcase from '@/lib/testcase/useProblemTestcase';
 import useTestcase from '@/lib/testcase/useTestcase';
+import useS3FileContent from '@/lib/s3File/useS3FileContent';
 
 export interface TableDataProp {
   id: number;
@@ -45,6 +46,13 @@ interface AssistDataIdProp {
     problem_id: number;
     s3_file_uuid: string;
     filename: string;
+}
+
+export function GetDataContent (uuid: string | null, fileName: string | null) {
+  const { fileContent } = useS3FileContent(uuid, fileName);
+  if(fileContent) {
+    return fileContent;
+  }
 }
 
 export function SaveDatas(
