@@ -1,4 +1,5 @@
 import api from '../api';
+import fetchAPI from '../fetchAPI';
 
 export const readClass = api.path('/class/{class_id}').method('get').create();
 
@@ -19,4 +20,25 @@ export const browseClassMembersWithAccountReferral = api
   .method('get')
   .create();
 
-export const replaceClassMembers = api.path('/class/{class_id}/member').method('put').create();
+type AccountType = {
+  account_referral: string;
+  role: string;
+};
+
+interface ReplaceClassMemberResponseType extends Response {
+  data: {
+    data: boolean[];
+    error: string;
+    success: boolean;
+  };
+}
+
+export const replaceClassMembers = async ({ class_id, members }: { class_id: number; members: AccountType[] }) => {
+  const options = {
+    method: 'PUT',
+    body: JSON.stringify(members),
+  };
+
+  const res = await fetchAPI(`/class/${class_id}/member`, options);
+  return res as unknown as ReplaceClassMemberResponseType;
+};
