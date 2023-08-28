@@ -34,7 +34,7 @@ export const browsePeerReviewSummaryReview = api
   .method('get')
   .create();
 
-export const browsePeerReviewSummarryReceive = api
+export const browsePeerReviewSummaryReceive = api
   .path('/peer-review/{peer_review_id}/view/receiver-summary')
   .method('get')
   .create();

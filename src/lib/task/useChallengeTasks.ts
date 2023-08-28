@@ -28,7 +28,7 @@ const useChallengeTasks = (challengeId: number) => {
     addEssay: addTaskEssaySWR.trigger,
     addPeerReview: addTaskPeerReviewSWR.trigger,
     addTeamProjectScoreboard: addTaskTeamProjectScoreboardSWR.trigger,
-    mutateTasksUnderChallenge: readTaskSWR.mutate,
+    mutateTask: readTaskSWR.mutate,
 
     isLoading: {
       read: readTaskSWR.isLoading,

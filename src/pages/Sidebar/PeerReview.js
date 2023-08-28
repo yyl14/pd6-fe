@@ -7,20 +7,18 @@ import useChallenge from '@/lib/challenge/useChallenge';
 import useAccountPeerReviewRecords from '@/lib/peerReview/useAccountPeerReviewRecords';
 import usePeerReview from '@/lib/peerReview/usePeerReview';
 import useUserClasses from '@/lib/user/useUserClasses';
-import useUserId from '@/lib/user/useUserId';
 
 export default function PeerReview({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, challengeId, peerReviewId, accountId } = useParams();
 
   const baseURL = '/6a/my-class';
 
-  const userId = useUserId();
   const { challenge } = useChallenge(challengeId);
   const { accountClasses: userClasses } = useUserClasses();
-  const { peerReview } = usePeerReview(peerReviewId);
+  const { peerReview } = usePeerReview(Number(peerReviewId));
   const { accountReceivedPeerReviewRecord, accountReviewedPeerReviewRecord } = useAccountPeerReviewRecords(
-    peerReviewId,
-    userId,
+    Number(peerReviewId),
+    Number(accountId),
   );
 
   const [display, setDisplay] = useState('unfold');
@@ -72,7 +70,7 @@ export default function PeerReview({ classNames, history, location, mode, open, 
         },
       ]);
     } else if (mode === 'review' && peerReview !== undefined && accountReviewedPeerReviewRecord !== undefined) {
-      if (userClasses.find((x) => x.class_id === Number(classId))?.role === 'MANAGER') {
+      if (userClasses?.find((x) => x.class_id === Number(classId))?.role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
         setArrow(
           <IconButton className={classNames.arrow} onClick={goBackToPeerReviewGraderSummary}>
@@ -111,7 +109,7 @@ export default function PeerReview({ classNames, history, location, mode, open, 
         );
       }
     } else if (mode === 'receive' && peerReview !== undefined && accountReceivedPeerReviewRecord !== undefined) {
-      if (userClasses.find((x) => x.class_id === Number(classId))?.role === 'MANAGER') {
+      if (userClasses?.find((x) => x.class_id === Number(classId))?.role === 'MANAGER') {
         setTAicon(<Icon.TA className={classNames.titleRightIcon} />);
         setArrow(
           <IconButton className={classNames.arrow} onClick={goBackToPeerReviewReceiverSummary}>

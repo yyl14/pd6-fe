@@ -65,10 +65,8 @@ export default function ChallengeSetting({
 
   const handleDelete = async () => {
     try {
-      const res = deleteChallenge();
-      if ((await res).ok) {
-        history.push(`/my-class/${courseId}/${classId}/challenge`);
-      }
+      await deleteChallenge();
+      history.push(`/6a/my-class/${courseId}/${classId}/challenge`);
     } catch {
       setShowSnackbar(true);
     }
