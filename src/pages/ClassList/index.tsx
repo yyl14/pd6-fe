@@ -59,7 +59,7 @@ export default function ClassList({ courseId }: { courseId: string }) {
     setShowAddClassDialog(true);
   };
   const onClickSetting = () => {
-    history.push(`/admin/course/course/${courseId}/setting`);
+    history.push(`/6a/admin/course/course/${courseId}/setting`);
   };
 
   const closeSnackbar = () => {
