@@ -14,33 +14,24 @@ export interface BasicInfoForm {
   handleEdit: () => void;
 }
 
-export interface StudentInfoCardForm {
+export interface StudentInfoForm {
   studentId: string;
   email: string;
   isDefault: boolean;
   instituteId: string;
   emailVerifId: string;
   pending: boolean;
-  map(arg0: (p: StudentInfoCardForm) => import('react/jsx-runtime').JSX.Element): import('react').ReactNode;
+  // map(arg0: (p: StudentInfoForm) => import('react/jsx-runtime').JSX.Element): import('react').ReactNode;
+  length: number;
 }
 
-export interface StudentInfoForm {
-  // map(arg0: (p: StudentInfoForm) => import('react/jsx-runtime').JSX.Element): import('react').ReactNode;
-  // id: number;
-  // institute_id: number;
-  // student_id: string;
-  // email: string;
-  // is_default: boolean;
-  // length: number;
-  // isDefault: boolean;
-  studentId: string;
+export interface PendingStudentCardsForm {
+  id: number;
   email: string;
-  isDefault: boolean;
-  instituteId: string;
-  emailVerifId: string;
-  pending: boolean;
-  map(arg0: (p: StudentInfoForm) => import('react/jsx-runtime').JSX.Element): import('react').ReactNode;
-  length: number;
+  account_id: number;
+  institute_id: number;
+  student_id: string;
+  is_consumed: boolean;
 }
 
 export interface StudentCards {
@@ -49,5 +40,4 @@ export interface StudentCards {
   student_id: string;
   email: string;
   is_default: boolean;
-  map(arg0: (p: StudentCards) => import('react/jsx-runtime').JSX.Element): import('react').ReactNode;
 }

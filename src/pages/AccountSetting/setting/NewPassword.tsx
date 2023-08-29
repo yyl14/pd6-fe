@@ -30,7 +30,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function NewPassword({ accountId }: { accountId: string }) {
+export default function NewPassword({ accountId }: { accountId: number }) {
   const classes = useStyles();
   const [edit, setEdit] = useState(false);
   const [oldPassword, setOldPassword] = useState('');
@@ -45,7 +45,7 @@ export default function NewPassword({ accountId }: { accountId: string }) {
   });
 
   const authToken = useAuthToken();
-  const { error: serverError } = useAccount(Number(accountId));
+  const { error: serverError } = useAccount(accountId);
 
   const dispatch = useDispatch();
 

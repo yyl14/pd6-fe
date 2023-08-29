@@ -23,7 +23,7 @@ import BasicInfo from './setting/BasicInfo';
 import BasicInfoEdit from './setting/BasicInfoEdit';
 import NewPassword from './setting/NewPassword';
 import StudentInfoEdit from './setting/StudentInfoEdit';
-import { StudentCards } from './setting/types';
+import { PendingStudentCardsForm, StudentCards } from './setting/types';
 
 const activeThemeList = [
   {
@@ -48,20 +48,10 @@ const activeThemeList = [
   },
 ];
 
-interface PendingStudentCardsForm {
-  id: number;
-  email: string;
-  account_id: number;
-  institute_id: number;
-  student_id: string;
-  is_consumed: boolean;
-}
-
 /* This is a level 3 component (page component) */
 
-export default function AccountSetting({ accountId }: { accountId: string }) {
+export default function AccountSetting({ accountId }: { accountId: number }) {
   const { value: selectedTheme } = useContext(ThemeToggleContext);
-  // setter: setSelectedTheme
   const [selectedThemes, setSelectedThemes] = useState(selectedTheme);
   const [cards, setCards] = useState<StudentCards[]>([]);
   const [pendingCards, setPendingCards] = useState<PendingStudentCardsForm[]>([]);
@@ -70,8 +60,8 @@ export default function AccountSetting({ accountId }: { accountId: string }) {
   const [showThemeSelector, setShowThemeSelector] = useState(false);
   const [message, setMessage] = useState('');
 
-  const { account, error, isLoading: loading } = useAccount(Number(accountId));
-  const { studentCards, pendingStudentCards, isLoading } = useAccountStudentCards(Number(accountId));
+  const { account, error, isLoading: loading } = useAccount(accountId);
+  const { studentCards, pendingStudentCards, isLoading } = useAccountStudentCards(accountId);
   const [studentCardsById, studentCardsIds] = useReduxStateShape(studentCards);
   const [pendingStudentCardsById, pendingStudentCardsIds] = useReduxStateShape(pendingStudentCards);
 
@@ -106,7 +96,7 @@ export default function AccountSetting({ accountId }: { accountId: string }) {
   }, [pendingStudentCardsById, pendingStudentCardsIds]);
 
   function keydownHandler({ key }: { key: string }) {
-    if (String(key) === '/') {
+    if (key === '/') {
       setShowThemeSelector((state) => !state);
     }
   }

@@ -17,8 +17,6 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-// import { addAccount, downloadAccountFile, importAccount } from '@/actions/admin/account';
-// import { browseAccountWithDefaultStudentId } from '@/actions/api/view';
 import BrowsingTable from '@/components/ui/6a/BrowsingTable';
 import FileUploadArea from '@/components/ui/FileUploadArea';
 import PageTitle from '@/components/ui/PageTitle';
@@ -156,7 +154,6 @@ export default function AccountList({ accountId }: { accountId: string }) {
 
   const handleSubmit = () => {
     if (showImportDialog) {
-      // dispatch(importAccount(authToken, selectedFile, importAccountSuccess, () => setShowSnackBar(true)));
       if (selectedFile.length !== 0) {
         try {
           Promise.all(
@@ -219,21 +216,24 @@ export default function AccountList({ accountId }: { accountId: string }) {
             width: 200,
             align: 'center',
             type: 'string',
-            // sortable: 'username',
+            sortable: true,
+            dataColumn: 'username',
           },
           {
             name: 'Student ID',
             width: 200,
             align: 'center',
             type: 'string',
-            // sortable: 'student_id',
+            sortable: true,
+            dataColumn: 'student_id',
           },
           {
             name: 'Real Name',
             width: 200,
             align: 'center',
             type: 'string',
-            // sortable: 'real_name',
+            sortable: true,
+            dataColumn: 'real_name',
           },
         ]}
         filterConfig={[
@@ -257,12 +257,12 @@ export default function AccountList({ accountId }: { accountId: string }) {
           },
         ]}
         data={browseAccountWithDefaultStudentId.data?.data}
-        dataToRow={({ id, username, real_name, student_id }) => ({
-          id: String(id),
+        dataToRow={({ account_id, username, real_name, student_id }) => ({
+          id: String(account_id),
           Username: username,
           'Student ID': student_id,
           'Real Name': real_name,
-          link: `/admin/account/account/${id}/setting`,
+          link: `/admin/account/account/${account_id}/setting`,
         })}
         isLoading={browseAllAccountsIsLoading.account}
         error={viewError.browse}

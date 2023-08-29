@@ -9,8 +9,8 @@ import useAccount from '@/lib/account/useAccount';
 
 /* This is a level 3 component (page component) */
 
-export default function Profile({ accountId }: { accountId: string }) {
-  const { account, isLoading: accountIsLoading } = useAccount(Number(accountId));
+export default function Profile({ accountId }: { accountId: number }) {
+  const { account, isLoading: accountIsLoading } = useAccount(accountId);
 
   if (account === undefined) {
     if (accountIsLoading.account) {

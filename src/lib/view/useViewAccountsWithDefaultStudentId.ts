@@ -2,7 +2,7 @@ import { components } from '../../../types/schema';
 import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
 import { browseAccountWithDefaultStudentId } from './fetchers';
 
-export type AccountsWithDefaultStudentIdSchema = components['schemas']['ViewAccountOutput'];
+export type AccountsWithDefaultStudentIdSchema = components['schemas']['ViewAccount'];
 
 const useViewAccountsWithDefaultStudentId = () => {
   const useSWRWithBrowseParams = withDataSchema<AccountsWithDefaultStudentIdSchema>();

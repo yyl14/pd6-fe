@@ -20,7 +20,7 @@ import useInstitutes from '@/lib/institute/useInstitutes';
 import useAccountStudentCards from '@/lib/studentCard/useAccountStudentCards';
 
 import StudentInfoCard from './StudentInfoCard';
-import { StudentCards, StudentInfoCardForm } from './types';
+import { PendingStudentCardsForm, StudentCards } from './types';
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -77,17 +77,16 @@ export default function StudentInfoEdit({
   card,
   pendingCard,
 }: {
-  accountId: string;
-  card: StudentCards;
-  pendingCard: StudentCards;
+  accountId: number;
+  card: StudentCards[];
+  pendingCard: PendingStudentCardsForm[];
 }) {
   const classes = useStyles();
-
   const [cards, setCards] = useState(card);
   const [pendingCards, setPendingCards] = useState(pendingCard);
   const [add, setAdd] = useState(false); // addCard block
-  const [snackbar, setSnackbar] = useState(false);
-  const [errorSnackbar, setErrorSnackbar] = useState(false);
+  const [mailSnackBar, setMailSnackBar] = useState(false);
+  const [showSnackBar, setShowSnackBar] = useState(false);
   const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
   const [addInputs, setAddInputs] = useState({
     institute: 'National Taiwan University',
@@ -105,7 +104,11 @@ export default function StudentInfoEdit({
 
   const { institutes } = useInstitutes();
   const [institutesById, institutesId] = useReduxStateShape(institutes);
-  const { addStudentCard, isLoading, error } = useAccountStudentCards(Number(accountId));
+  const {
+    addStudentCard,
+    isLoading: addStudentCardIsLoading,
+    error: addStudentCardError,
+  } = useAccountStudentCards(accountId);
 
   const enableInstitutesId = institutesId.filter((item) => !institutesById[item].is_disabled);
 
@@ -145,17 +148,16 @@ export default function StudentInfoEdit({
     if (inputInstituteId.length !== 0) {
       try {
         const res = addStudentCard({
-          account_id: Number(accountId),
+          account_id: accountId,
           institute_id: Number(inputInstituteId[0]),
           institute_email_prefix: addInputs.email,
           student_id: addInputs.studentId,
         });
-
         if ((await res).ok) {
-          setSnackbar(true);
+          setMailSnackBar(true);
         }
       } catch (e) {
-        setErrorSnackbar(true);
+        setShowSnackBar(true);
       }
     }
     setAdd(false);
@@ -194,149 +196,148 @@ export default function StudentInfoEdit({
   return (
     <div>
       <SimpleBar title="Student Information">
-        <div>
-          {cards && (
-            <div>
-              {cards.map((p: StudentInfoCardForm) => {
-                if (p.isDefault === true) {
-                  return (
-                    <div key={accountId}>
-                      <StudentInfoCard
-                        studentId={p.studentId}
-                        email={p.email}
-                        emailVerifId={p.emailVerifId}
-                        accountId={accountId}
-                        isDefault={p.isDefault}
-                        instituteId={p.instituteId}
-                        pending={p.pending}
-                      />
-                      <p />
-                    </div>
-                  );
-                }
-                return <div key={accountId} />;
-              })}
-              <p />
-              {cards.map((p: StudentCards) => {
-                if (p.is_default === false) {
-                  return (
-                    <div key={accountId}>
-                      <StudentInfoCard
-                        studentId={p.student_id}
-                        email={p.email}
-                        emailVerifId={p.emailVerifId}
-                        accountId={accountId}
-                        isDefault={p.is_default}
-                        instituteId={String(p.institute_id)}
-                        pending={p.pending}
-                      />
-                      <p />
-                    </div>
-                  );
-                }
-                return <div key={accountId} />;
-              })}
-            </div>
-          )}
-          {pendingCards && (
-            <div>
-              {pendingCards.map((p) => (
-                <div key={accountId}>
-                  <StudentInfoCard
-                    studentId={p.studentId}
-                    email={p.email}
-                    emailVerifId={p.emailVerifId}
-                    accountId={accountId}
-                    isDefault={p.isDefault}
-                    instituteId={p.instituteId}
-                    pending={p.pending}
-                  />
-                  <p />
+        {cards && (
+          <div>
+            {cards.map((p) => {
+              if (p.is_default === true) {
+                return (
+                  <div key={accountId}>
+                    <StudentInfoCard
+                      accountId={accountId}
+                      isDefault={false}
+                      studentId={Number(p.student_id)}
+                      email={p.email}
+                      instituteId={p.institute_id}
+                    />
+                    <p />
+                  </div>
+                );
+              }
+              return <div key={accountId} />;
+            })}
+            <p />
+            {cards.map((p) => {
+              if (p.is_default === false) {
+                return (
+                  <div key={accountId}>
+                    <StudentInfoCard
+                      accountId={accountId}
+                      isDefault={false}
+                      studentId={Number(p.student_id)}
+                      email={p.email}
+                      instituteId={p.institute_id}
+                    />
+                    <p />
+                  </div>
+                );
+              }
+              return <div key={accountId} />;
+            })}
+          </div>
+        )}
+        <p />
+        {pendingCards && (
+          <div>
+            {pendingCards.map((p) => (
+              <div key={p.id}>
+                <StudentInfoCard
+                  accountId={accountId}
+                  isDefault={false}
+                  email={p.email}
+                  studentId={Number(p.student_id)}
+                  instituteId={p.institute_id}
+                />
+                <p />
+              </div>
+            ))}
+          </div>
+        )}
+        {add && (
+          <div className={classes.addBlock}>
+            <Card variant="outlined">
+              <CardContent className={classes.addCard}>
+                <div className={classes.row}>
+                  <div className={classes.item}>
+                    <Typography>Institute</Typography>
+                  </div>
+                  <FormControl variant="outlined" className={classes.selectList}>
+                    <Select value={addInputs.institute} name="institute" onChange={(e) => handleChange(e)}>
+                      {enableInstitutesId.map((item) => (
+                        <MenuItem key={item} value={institutesById[item].full_name}>
+                          {institutesById[item].full_name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </div>
-              ))}
-            </div>
-          )}
-          {add && (
-            <div className={classes.addBlock}>
-              <Card variant="outlined">
-                <CardContent className={classes.addCard}>
-                  <div className={classes.row}>
-                    <div className={classes.item}>
-                      <Typography>Institute</Typography>
-                    </div>
-                    <FormControl variant="outlined" className={classes.selectList}>
-                      <Select value={addInputs.institute} name="institute" onChange={(e) => handleChange(e)}>
-                        {enableInstitutesId.map((item) => (
-                          <MenuItem key={item} value={institutesById[item].full_name}>
-                            {institutesById[item].full_name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
+                <AlignedText text="Student ID" childrenType="field">
+                  <TextField
+                    variant="outlined"
+                    name="studentId"
+                    value={addInputs.studentId}
+                    onChange={(e) => handleChange(e)}
+                    error={errors.studentId}
+                    helperText={errorTexts.studentId}
+                  />
+                </AlignedText>
+                <div className={classes.mailrow}>
+                  <div className={classes.item}>
+                    <Typography>Email</Typography>
                   </div>
-                  <AlignedText text="Student ID" childrenType="field">
-                    <TextField
-                      variant="outlined"
-                      name="studentId"
-                      value={addInputs.studentId}
-                      onChange={(e) => handleChange(e)}
-                      error={errors.studentId}
-                      helperText={errorTexts.studentId}
-                    />
-                  </AlignedText>
-                  <div className={classes.mailrow}>
-                    <div className={classes.item}>
-                      <Typography>Email</Typography>
-                    </div>
-                    <TextField
-                      variant="outlined"
-                      name="email"
-                      className={classes.mailfield}
-                      value={addInputs.email}
-                      onChange={(e) => handleChange(e)}
-                      error={errors.email}
-                      helperText={errorTexts.email}
-                    />
-                    <Typography>{emailTail}</Typography>
-                  </div>
-                  <div className={classes.buttons}>
-                    <Button onClick={handleAddCancel}>Cancel</Button>
-                    <Button color="primary" onClick={handleAddSave}>
-                      Save
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+                  <TextField
+                    variant="outlined"
+                    name="email"
+                    className={classes.mailfield}
+                    value={addInputs.email}
+                    onChange={(e) => handleChange(e)}
+                    error={errors.email}
+                    helperText={errorTexts.email}
+                  />
+                  <Typography>{emailTail}</Typography>
+                </div>
+                <div className={classes.buttons}>
+                  <Button onClick={handleAddCancel}>Cancel</Button>
+                  <Button color="primary" onClick={handleAddSave}>
+                    Save
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+        {!add && !pendingCards.length && !addStudentCardIsLoading.add && (
+          <div className={classes.buttonContainer}>
+            <div className={classes.buttons}>
+              <Button
+                onClick={() => {
+                  setAdd(true);
+                }}
+              >
+                +
+              </Button>
             </div>
-          )}
-          {!add && !pendingCards.length && !isLoading.add && (
-            <div className={classes.buttonContainer}>
-              <div className={classes.buttons}>
-                <Button onClick={() => setAdd(true)}>+</Button>
-              </div>
+          </div>
+        )}
+        {addStudentCardIsLoading.add && (
+          <div className={classes.buttonContainer}>
+            <div className={classes.buttons}>
+              <CircularProgress />
             </div>
-          )}
-          {isLoading.add && (
-            <div className={classes.buttonContainer}>
-              <div className={classes.buttons}>
-                <CircularProgress />
-              </div>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
+        <Snackbar
+          open={mailSnackBar}
+          autoHideDuration={3000}
+          message="Verification email sent! Please check your mailbox."
+          onClose={() => setMailSnackBar(false)}
+        />
+        <Snackbar
+          open={showSnackBar}
+          autoHideDuration={3000}
+          message={`Error: ${addStudentCardError.add}`}
+          onClose={() => setShowSnackBar(false)}
+        />
       </SimpleBar>
-      <Snackbar
-        open={snackbar}
-        autoHideDuration={3000}
-        message="Verification email sent! Please check your mailbox."
-        onClose={() => setSnackbar(false)}
-      />
-      <Snackbar
-        open={errorSnackbar}
-        autoHideDuration={3000}
-        message={`Error: ${error.add?.message}`}
-        onClose={() => setErrorSnackbar(false)}
-      />
     </div>
   );
 }

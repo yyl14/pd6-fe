@@ -48,30 +48,25 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function StudentInfoCard({
-  studentId,
-  email,
+  accountId,
   isDefault,
   instituteId,
-  emailVerifId,
-  pending,
-  accountId,
+  studentId,
+  email,
 }: {
-  studentId: string;
-  email: string;
+  accountId: number;
   isDefault: boolean;
-  instituteId: string;
-  emailVerifId: string;
-  pending: boolean;
-  accountId: string;
+  instituteId: number;
+  studentId: number;
+  email: string;
 }) {
   const classes = useStyles();
   const disabled = isDefault;
+  const [pending, setPending] = useState(false);
 
-  const { institute } = useInstitute(Number(instituteId));
-  const { resendEmailVerification, deletePendingEmailVerification } = useEmailVerification(Number(emailVerifId));
-  const { makeStudentCardDefault, mutateStudentCards, mutatePendingStudentCards } = useAccountStudentCards(
-    Number(accountId),
-  );
+  const { institute } = useInstitute(instituteId);
+  const { deletePendingEmailVerification, resendEmailVerification } = useEmailVerification(accountId);
+  const { makeStudentCardDefault, mutateStudentCards, mutatePendingStudentCards } = useAccountStudentCards(accountId);
 
   const [snackbar, setSnackbar] = useState(false);
 
@@ -82,6 +77,7 @@ export default function StudentInfoCard({
     });
     if ((await res).ok) {
       mutateStudentCards();
+      setPending(true);
     }
   };
 
@@ -123,7 +119,7 @@ export default function StudentInfoCard({
               <Button
                 disabled={disabled}
                 onClick={() => {
-                  handleSetDefault(Number(emailVerifId));
+                  handleSetDefault(accountId);
                 }}
               >
                 Set as Default
@@ -143,8 +139,19 @@ export default function StudentInfoCard({
               </AlignedText>
             </div>
             <div className={classes.defaultButton}>
-              <Button onClick={handleDelete}>Delete</Button>
-              <Button onClick={handleResend} color="primary">
+              <Button
+                onClick={() => {
+                  handleDelete();
+                }}
+              >
+                Delete
+              </Button>
+              <Button
+                onClick={() => {
+                  handleResend();
+                }}
+                color="primary"
+              >
                 Resend
               </Button>
             </div>
