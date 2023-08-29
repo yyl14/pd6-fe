@@ -1,25 +1,34 @@
 import { components } from '../../../types/schema';
 import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
+import useUserId from '../user/useUserId';
 import { browseMySubmission } from './fetchers';
 
-export type PeerReviewSummaryReviewSchema = components['schemas']['view_peer_review_summary_review_return'];
+export type BrowseSubmissionSchema = components['schemas']['ViewMySubmission'];
 
-const useViewUserSubmissions = (accountId: number) => {
-  const useSWRWithBrowseParams = withDataSchema<PeerReviewSummaryReviewSchema>();
+const useViewUserSubmissions = () => {
+  const userId = useUserId();
+  const useSWRWithBrowseParams = withDataSchema<BrowseSubmissionSchema>();
 
-  const browseMySubmissionSWR = useSWRWithBrowseParams(`/view/my-submission`, browseMySubmission, {
-    account_id: accountId,
-  });
+  const browseSubmissionSWR = useSWRWithBrowseParams(
+    `/view/my-submission`,
+    browseMySubmission,
+    { account_id: userId },
+    { baseSort: { column: 'submit_time', order: 'DESC' } },
+  );
 
   return {
-    submissions: browseMySubmissionSWR.data?.data.data,
-
-    isLoading: {
-      browse: browseMySubmissionSWR.isLoading,
+    browseSubmission: {
+      data: browseSubmissionSWR.data?.data.data.data,
+      refresh: browseSubmissionSWR.mutate,
+      pagination: browseSubmissionSWR.pagination,
+      filter: browseSubmissionSWR.filter,
+      sort: browseSubmissionSWR.sort,
     },
-
+    isLoading: {
+      browse: browseSubmissionSWR.isLoading || browseSubmissionSWR.isValidating,
+    },
     error: {
-      browse: browseMySubmissionSWR.error,
+      browse: browseSubmissionSWR.error,
     },
   };
 };

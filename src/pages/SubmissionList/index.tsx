@@ -83,7 +83,7 @@ export default function SubmissionList({ courseId, classId }: { courseId: string
             align: 'center',
             type: 'link',
             formatLink: (datum) =>
-              `/6a/my-class/${courseId}/${classId}/challenge/${datum.challenge_id}/${datum.problem_id}`,
+              `/6a/my-class/${courseId}/${classId}/challenge/${datum.challenge_id}/problem/${datum.problem_id}`,
           },
           {
             name: 'Status',
@@ -194,8 +194,10 @@ export default function SubmissionList({ courseId, classId }: { courseId: string
           username,
           student_id,
           real_name,
+          challenge_id,
           challenge_title,
           challenge_label,
+          problem_id,
           verdict,
           submit_time,
         }) => ({
@@ -208,15 +210,15 @@ export default function SubmissionList({ courseId, classId }: { courseId: string
           Problem: challenge_label,
           Status: verdict ? startCase(toLower(verdict)) : 'Waiting for judge',
           Time: moment(submit_time).format('YYYY-MM-DD, HH:mm:ss'),
-          link: `/6a/my-class/${courseId}/${classId}/submission/${submission_id}`,
+          link: `/6a/my-class/${courseId}/${classId}/submission/${challenge_id}/${problem_id}/${submission_id}`,
         })}
         isLoading={viewClassSubmissionsIsLoading.browse}
         error={viewClassSubmissionsError.browse}
         pagination={browseSubmissionUnderClass.pagination}
         filter={browseSubmissionUnderClass.filter}
         sort={browseSubmissionUnderClass.sort}
+        refresh={() => browseSubmissionUnderClass.refresh()}
         hasLink
-        hasRefreshButton
       />
     </>
   );

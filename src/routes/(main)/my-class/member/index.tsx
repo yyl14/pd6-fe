@@ -6,9 +6,9 @@ import withConditionalRender from '@/components/hoc/withConditionalRender';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 
-const MemberList = lazy(() => import('@/pages/ClassMemberList'));
+const ClassMemberList = lazy(() => import('@/pages/ClassMemberList'));
 
-export function MemberListRoute() {
+function ClassMemberListRoute() {
   const { courseId, classId } = useParams<{ courseId: string; classId: string }>();
 
   const { isLoading: courseIsLoading } = useCourse(Number(courseId));
@@ -16,7 +16,7 @@ export function MemberListRoute() {
 
   return (
     <Suspense fallback={<GeneralLoading />}>
-      {withConditionalRender(MemberList)({
+      {withConditionalRender(ClassMemberList)({
         courseId,
         classId,
         isLoading: courseIsLoading.read || classIsLoading.read,
@@ -28,7 +28,7 @@ export function MemberListRoute() {
 export default function MemberRoutes() {
   return (
     <Switch>
-      <Route path="/6a/my-class/:courseId/:classId/member" component={MemberListRoute} />
+      <Route exact path="/6a/my-class/:courseId/:classId/member" component={ClassMemberListRoute} />
     </Switch>
   );
 }

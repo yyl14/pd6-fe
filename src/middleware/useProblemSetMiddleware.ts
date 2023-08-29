@@ -9,19 +9,20 @@ const useProblemSetMiddleware = () => {
   const location = useLocation();
 
   const { courses } = useCourses();
-  const { coursesClasses } = useCoursesClasses();
+  const { coursesClasses } = useCoursesClasses(courses?.map((course) => course.id) ?? null);
 
   useEffect(() => {
     if (location.pathname === '/6a/problem-set') {
       const sortedCourses = courses?.sort((a, b) => a.name.localeCompare(b.name));
       const sortedClasses = sortedCourses
-        ?.map((course) => coursesClasses[course.id])
-        .flatMap((classes) => classes?.sort((a, b) => a.name.localeCompare(b.name)));
+        ?.map((course) => coursesClasses[course.id] ?? [])
+        .map((classes) => classes?.sort((a, b) => a.class_info.name.localeCompare(b.class_info.name)))
+        .flat();
 
       const defaultClass = sortedClasses?.at(0);
 
       if (defaultClass) {
-        history.push(`/6a/problem-set/${defaultClass?.course_id}/${defaultClass?.id}`);
+        history.push(`/6a/problem-set/${defaultClass?.class_info.course_id}/${defaultClass?.class_info.id}`);
       }
     }
   }, [courses, coursesClasses, history, location.pathname]);

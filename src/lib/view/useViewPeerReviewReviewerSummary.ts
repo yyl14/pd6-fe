@@ -2,19 +2,25 @@ import { components } from '../../../types/schema';
 import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
 import { browsePeerReviewSummaryReview } from './fetchers';
 
-export type PeerReviewSummaryReviewSchema = components['schemas']['view_peer_review_summary_review_return'];
+export type PeerReviewSummaryReviewSchema = components['schemas']['pydantic__dataclasses__ViewPeerReviewRecord'];
 
 const useViewPeerReviewReviewerSummary = (peerReviewId: number) => {
   const useSWRWithBrowseParams = withDataSchema<PeerReviewSummaryReviewSchema>();
 
   const browsePeerReviewSummaryReviewSWR = useSWRWithBrowseParams(
-    `/peer-review/{peer_review_id}/view/reviewer-summary`,
+    `/peer-review/${peerReviewId}/view/reviewer-summary`,
     browsePeerReviewSummaryReview,
     { peer_review_id: peerReviewId },
   );
 
   return {
-    peerReviewSummaryReview: browsePeerReviewSummaryReviewSWR.data?.data.data,
+    browsePeerReviewSummaryReview: {
+      data: browsePeerReviewSummaryReviewSWR.data?.data.data,
+      refresh: browsePeerReviewSummaryReviewSWR.mutate,
+      pagination: browsePeerReviewSummaryReviewSWR.pagination,
+      filter: browsePeerReviewSummaryReviewSWR.filter,
+      sort: browsePeerReviewSummaryReviewSWR.sort,
+    },
 
     isLoading: {
       browse: browsePeerReviewSummaryReviewSWR.isLoading,

@@ -6,6 +6,7 @@ import ResizeObserver from 'react-resize-observer';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import Icon from '@/components/ui/icon/index';
+import useActiveAnnouncements from '@/lib/announcement/useActiveAnnouncements';
 import useLogOut from '@/lib/auth/useLogOut';
 import useUser from '@/lib/user/useUser';
 import useUserClasses from '@/lib/user/useUserClasses';
@@ -219,7 +220,7 @@ export default function Header() {
 
   const { account: user } = useUser();
   const { accountClasses: userClasses } = useUserClasses();
-  // TODO: Announcements
+  const { activeAnnouncements } = useActiveAnnouncements();
 
   const [currentTime, setCurrentTime] = useState(format(new Date(), 'MMM d   HH:mm'));
   const [itemList, setItemList] = useState([]);
@@ -228,8 +229,7 @@ export default function Header() {
   const [userDropdown, setUserDropdown] = useState(false);
   const [notifyAlreadyClose, setNotifyAlreadyClose] = useState(false);
   const [userAlreadyClose, setUserAlreadyClose] = useState(false);
-  const [notifyList] = useState([]);
-  const [unreadNotifyExist] = useState(false);
+  const [notifyList, setNotifyList] = useState([]);
 
   const [hasClass, setHasClass] = useState(false);
   const [activeHeaderItemIndex, setActiveHeaderItemIndex] = useState(0);
@@ -384,17 +384,14 @@ export default function Header() {
     return () => clearInterval(interval);
   }, []);
 
-  // useEffect(() => {
-  //   const ns = user?.notifications.sort((a, b) => new Date(b.post_time).getTime() - new Date(a.post_time).getTime());
-  //   setNotifyList(ns);
-  //   setUnreadNotifyExist(
-  //     ns.filter(
-  //       (notify) =>
-  //         moment(new Date()).diff(moment(notify.post_time), 'days') >= 0 &&
-  //         moment(notify.expire_time).diff(moment(new Date()), 'days') >= 0,
-  //     ).length !== 0,
-  //   );
-  // }, [user?.notifications]);
+  useEffect(() => {
+    if (activeAnnouncements.data?.data) {
+      const ns = activeAnnouncements.data.data.sort(
+        (a, b) => new Date(b.post_time).getTime() - new Date(a.post_time).getTime(),
+      );
+      setNotifyList(ns);
+    }
+  }, [activeAnnouncements.data]);
 
   const toggleNotify = () => {
     if (!notifyAlreadyClose) {
@@ -452,7 +449,7 @@ export default function Header() {
               tabIndex="0"
             >
               <Icon.NotificationsIcon className={classes.notificationIcon} />
-              {unreadNotifyExist && <div className={classes.unreadDot} />}
+              {notifyList.length !== 0 && <div className={classes.unreadDot} />}
               {notifyDropdown && (
                 <div className={classes.notificationDropdownContent} ref={notifyRef}>
                   {notifyList.map(

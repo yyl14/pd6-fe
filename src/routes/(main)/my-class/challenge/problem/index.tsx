@@ -8,6 +8,9 @@ import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useProblem from '@/lib/problem/useProblem';
 
+import CodeSubmissionRoute from './code-submission';
+import ProblemMySubmissionRoutes from './my-submission';
+
 const ProblemInfo = lazy(() => import('@/pages/ProblemInfo'));
 
 function ProblemInfoRoute() {
@@ -40,7 +43,15 @@ export default function ProblemRoutes() {
   return (
     <Switch>
       <Route
-        path="/my-class/:courseId/:classId/challenge/:challengeId/problem/:problemId"
+        path="/6a/my-class/:courseId/:classId/challenge/:challengeId/problem/:problemId/code-submission"
+        component={CodeSubmissionRoute}
+      />
+      <Route
+        path="/6a/my-class/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission"
+        component={ProblemMySubmissionRoutes}
+      />
+      <Route
+        path="/6a/my-class/:courseId/:classId/challenge/:challengeId/problem/:problemId"
         component={ProblemInfoRoute}
       />
     </Switch>

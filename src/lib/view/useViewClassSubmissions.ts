@@ -22,7 +22,7 @@ const useViewClassSubmissions = (classId: number) => {
       sort: browseSubmissionUnderClassSWR.sort,
     },
     isLoading: {
-      browse: browseSubmissionUnderClassSWR.isLoading,
+      browse: browseSubmissionUnderClassSWR.isLoading || browseSubmissionUnderClassSWR.isValidating,
     },
     error: {
       browse: browseSubmissionUnderClassSWR.error,
