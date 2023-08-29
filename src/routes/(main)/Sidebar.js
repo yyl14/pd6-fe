@@ -227,7 +227,7 @@ export default function Sidebar({ open, onClose }) {
       <Route exact path="/6a/admin/system/submitlang">
         <System classes={classes} history={history} location={location} open={open} onClose={onClose} mode="main" />
       </Route>
-      <Route path="/6a/admin/system/submitlang/:languageId/setting">
+      <Route path="/6a/admin/system/submitlang/:submitlangId/setting">
         <System classes={classes} history={history} location={location} open={open} onClose={onClose} mode="language" />
       </Route>
 

@@ -1,8 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-
-
 import GeneralLoading from '@/components/GeneralLoading';
 import withConditionalRender from '@/components/hoc/withConditionalRender';
 import useAnnouncement from '@/lib/announcement/useAnnouncement';
