@@ -1,18 +1,16 @@
 import useSWR from 'swr';
 
 import { components } from '../../../types/schema';
-import useCourses from '../course/useCourses';
 import { browseAllClassUnderCourse } from './fetchers';
 
-type ClassSchema = components['schemas']['pydantic__dataclasses__Class'];
+type ClassSchema = components['schemas']['BrowseAllClassUnderCourseOutput'];
 
-const useCoursesClasses = () => {
-  const { courses, isLoading } = useCourses();
-  const browseCoursesClassesSWR = useSWR(courses ? 'coursesClasses' : null, () =>
+const useCoursesClasses = (courseIds: number[] | null) => {
+  const browseCoursesClassesSWR = useSWR(courseIds ? 'coursesClasses' : null, async () =>
     Promise.all(
-      courses?.map(async (item) => {
-        const classesRes = await browseAllClassUnderCourse({ course_id: item.id });
-        return [item.id, classesRes.data.data];
+      courseIds?.map(async (id) => {
+        const classesRes = await browseAllClassUnderCourse({ course_id: id });
+        return [id, classesRes.data.data];
       }) ?? [],
     ),
   );
@@ -22,7 +20,7 @@ const useCoursesClasses = () => {
   return {
     coursesClasses,
     isLoading: {
-      browse: isLoading.browseAll || browseCoursesClassesSWR.isLoading,
+      browse: browseCoursesClassesSWR.isLoading,
     },
   };
 };

@@ -1,13 +1,14 @@
 import useSWR from 'swr';
+
 import { browseAccountReceivedPeerReviewRecord, browseAccountReviewedPeerReviewRecord } from './fetchers';
 
 const useAccountPeerReviewRecords = (peerReviewId: number, accountId: number) => {
   const browseAccountReceivedPeerReviewRecordSWR = useSWR(
-    `/peer-review/{peer_review_id}/account/{account_id}/receive`,
+    `/peer-review/${peerReviewId}/account/${accountId}/receive`,
     () => browseAccountReceivedPeerReviewRecord({ peer_review_id: peerReviewId, account_id: accountId }),
   );
   const browseAccountReviewedPeerReviewRecordSWR = useSWR(
-    '/peer-review/{peer_review_id}/account/{account_id}/review',
+    `/peer-review/${peerReviewId}/account/${accountId}/review`,
     () => browseAccountReviewedPeerReviewRecord({ peer_review_id: peerReviewId, account_id: accountId }),
   );
 

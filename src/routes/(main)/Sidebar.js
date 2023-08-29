@@ -216,7 +216,7 @@ export default function Sidebar({ open, onClose }) {
       <Route exact path="/6a/admin/system/submitlang">
         <System classes={classes} history={history} location={location} open={open} onClose={onClose} mode="main" />
       </Route>
-      <Route path="/6a/admin/system/submitlang/:languageId/setting">
+      <Route path="/6a/admin/system/submitlang/:submitlangId/setting">
         <System classes={classes} history={history} location={location} open={open} onClose={onClose} mode="language" />
       </Route>
 
@@ -382,7 +382,7 @@ export default function Sidebar({ open, onClose }) {
       <Route exact path="/6a/my-class/:courseId/:classId/submission">
         <MyClass classNames={classes} history={history} location={location} open={open} onClose={onClose} mode="main" />
       </Route>
-      <Route path="/6a/my-class/:courseId/:classId/submission/:submissionId">
+      <Route path="/6a/my-class/:courseId/:classId/submission/:challengeId/:problemId/:submissionId">
         <Submission
           classNames={classes}
           history={history}
@@ -428,7 +428,7 @@ export default function Sidebar({ open, onClose }) {
           mode="challenge"
         />
       </Route>
-      <Route exact path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/:problemId">
+      <Route exact path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId">
         <ProblemSetChallenge
           classNames={classes}
           history={history}
@@ -438,7 +438,7 @@ export default function Sidebar({ open, onClose }) {
           mode="challenge"
         />
       </Route>
-      <Route exact path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/:problemId/my-submission">
+      <Route exact path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission">
         <ProblemSetChallenge
           classNames={classes}
           history={history}
@@ -448,7 +448,7 @@ export default function Sidebar({ open, onClose }) {
           mode="submission"
         />
       </Route>
-      <Route exact path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/:problemId/code-submission">
+      <Route exact path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/code-submission">
         <ProblemSetChallenge
           classNames={classes}
           history={history}
@@ -460,7 +460,7 @@ export default function Sidebar({ open, onClose }) {
       </Route>
       <Route
         exact
-        path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/:problemId/my-submission/:submissionId"
+        path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission/:submissionId"
       >
         <ProblemSetChallenge
           classNames={classes}

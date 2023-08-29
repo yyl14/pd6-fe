@@ -1,5 +1,6 @@
 import { Route, Switch } from 'react-router-dom';
 
+import NoMatch from '@/components/noMatch';
 import useAdminMiddleware from '@/middleware/useAdminMiddleware';
 
 import AccountRoutes from './account';
@@ -14,6 +15,7 @@ export default function AdminRoutes() {
       <Route path="/6a/admin/course" component={CourseAndClassRoutes} />
       <Route path="/6a/admin/account" component={AccountRoutes} />
       <Route path="/6a/admin/system" component={SystemRoutes} />
+      <Route component={NoMatch} />
     </Switch>
   );
 }

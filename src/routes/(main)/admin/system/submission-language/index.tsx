@@ -1,13 +1,27 @@
 import { Suspense, lazy } from 'react';
+import { Route, Switch } from 'react-router-dom';
 
 import GeneralLoading from '@/components/GeneralLoading';
+import NoMatch from '@/components/noMatch';
+
+import SubmitLangSettingRoute from './setting';
 
 const SubmitLang = lazy(() => import('@/pages/SubmitLang'));
 
-export default function SubmitLangRoute() {
+function SubmitLangRoute() {
   return (
     <Suspense fallback={<GeneralLoading />}>
       <SubmitLang />
     </Suspense>
+  );
+}
+
+export default function SubmitLangRoutes() {
+  return (
+    <Switch>
+      <Route exact path="/6a/admin/system/submitlang/:submitlangId/setting" component={SubmitLangSettingRoute} />
+      <Route exact path="/6a/admin/system/submitlang" component={SubmitLangRoute} />
+      <Route component={NoMatch} />
+    </Switch>
   );
 }

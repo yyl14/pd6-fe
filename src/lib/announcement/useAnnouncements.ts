@@ -10,12 +10,19 @@ export type AnnouncementDataSchema = components['schemas']['pydantic__dataclasse
 
 const useAnnouncements = () => {
   const useSWRWithBrowseParams = withDataSchema<AnnouncementDataSchema>();
-  const browseAllAnnouncementSWR = useSWRWithBrowseParams(`/announcement`, browseAnnouncement, {});
+  const browseAllAnnouncementSWR = useSWRWithBrowseParams(
+    `/announcement`,
+    browseAnnouncement,
+    {},
+    {
+      baseSort: { column: 'post_time', order: 'DESC' },
+    },
+  );
   const addAnnouncementSWR = useSWRMutation('/announcement', toSWRMutationFetcher(addAnnouncement));
 
   return {
     browseAnnouncement: {
-      data: browseAllAnnouncementSWR.data?.data.data,
+      data: browseAllAnnouncementSWR.data?.data.data.data,
       refresh: browseAllAnnouncementSWR.mutate,
       pagination: browseAllAnnouncementSWR.pagination,
       filter: browseAllAnnouncementSWR.filter,

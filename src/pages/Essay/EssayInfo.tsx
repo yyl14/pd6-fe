@@ -26,7 +26,7 @@ import useCourse from '@/lib/course/useCourse';
 import useEssay from '@/lib/essay/useEssay';
 import useEssayEssaySubmissions from '@/lib/essaySubmission/useEssayEssaySubmissions';
 import useEssaySubmission from '@/lib/essaySubmission/useEssaySubmission';
-import useS3File from '@/lib/s3File/useS3File';
+import useS3FileDownload from '@/lib/s3File/useS3FileDownload';
 import useChallengeTasks from '@/lib/task/useChallengeTasks';
 import useUserId from '@/lib/user/useUserId';
 
@@ -71,7 +71,7 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
   const { challenge: challengeInfo } = useChallenge(Number(challengeId));
   const { essay, deleteEssay } = useEssay(Number(essayId));
 
-  const { mutateTasksUnderChallenge } = useChallengeTasks(Number(challengeId));
+  const { mutateTask } = useChallengeTasks(Number(challengeId));
   const { reuploadEssay, error: essaySubmissionError } = useEssaySubmission();
   const {
     uploadEssay,
@@ -83,7 +83,7 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
   const userId = useUserId();
   const [selectedFile, setSelectedFile] = useState<File[]>([]);
   const [fileName, setFileName] = useState('');
-  const { downloadFile } = useS3File();
+  const { downloadFile } = useS3FileDownload();
   const [popUpUpload, setPopUpUpload] = useState(false);
   const [popUpFail, setPopUpFail] = useState(false);
   const [popUpDelete, setPopUpDelete] = useState(false);
@@ -132,7 +132,7 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
 
   const handleSubmitDelete = () => {
     deleteEssay({ essay_id: Number(essayId) });
-    mutateTasksUnderChallenge();
+    mutateTask();
     history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
   };
 
@@ -142,7 +142,10 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
 
   const handleClickLink = () => {
     if (essaySubmission?.data[0].account_id === userId && essaySubmission?.data[0].essay_id === Number(essayId)) {
-      downloadFile(essaySubmission?.data[0].filename, essaySubmission?.data[0].content_file_uuid);
+      downloadFile({
+        fileName: essaySubmission?.data[0].filename,
+        file_uuid: essaySubmission?.data[0].content_file_uuid,
+      });
     }
   };
 
@@ -159,7 +162,7 @@ export default function EssayInfo({ courseId, classId, challengeId, essayId, rol
           <MathpixLoader>
             {
               // @ts-ignore
-              <MathpixMarkdown text={essay?.description} htmlTags />
+              <MathpixMarkdown text={essay.description ? essay.description : ''} htmlTags />
             }
           </MathpixLoader>
         }

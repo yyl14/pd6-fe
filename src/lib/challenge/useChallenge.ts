@@ -5,18 +5,20 @@ import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
 
 import { deleteChallenge, editChallenge, readChallenge } from './fetchers';
 
-const useChallenge = (challengeId: number) => {
-  const readChallengeSWR = useSWR(`/Challenge/${challengeId}`, () => readChallenge({ challenge_id: challengeId }));
-  const deleteChallengeSWR = useSWRMutation(`/Challenge/${challengeId}`, () =>
-    deleteChallenge({ challenge_id: challengeId }),
-  );
-  const editChallengeSWR = useSWRMutation(`/Challenge/${challengeId}`, toSWRMutationFetcher(editChallenge));
+const useChallenge = (challengeId?: number) => {
+  const key = challengeId ? `/Challenge/${challengeId}` : null;
+
+  const readChallengeSWR = useSWR(key, () => (challengeId ? readChallenge({ challenge_id: challengeId }) : null));
+  const deleteChallengeSWR = useSWRMutation(key, () => {
+    if (challengeId) deleteChallenge({ challenge_id: challengeId });
+  });
+  const editChallengeSWR = useSWRMutation(key, toSWRMutationFetcher(editChallenge));
 
   return {
     challenge: readChallengeSWR.data?.data.data,
     editChallenge: editChallengeSWR.trigger,
     deleteChallenge: deleteChallengeSWR.trigger,
-    mutateChallenge: () => readChallengeSWR.mutate(),
+    mutateChallenge: readChallengeSWR,
 
     isLoading: {
       read: readChallengeSWR.isLoading,

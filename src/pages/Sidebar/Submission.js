@@ -1,6 +1,5 @@
 import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import Icon from '@/components/ui/icon/index';
@@ -8,16 +7,6 @@ import Icon from '@/components/ui/icon/index';
 export default function Submission({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, submissionId } = useParams();
   const baseURL = '/6a/my-class';
-  const classes = useSelector((state) => state.classes.byId);
-  const courses = useSelector((state) => state.courses.byId);
-  const userClasses = useSelector((state) => state.user.classes);
-
-  const submissions = useSelector((state) => state.submissions);
-
-  // useEffect(() => {
-  //   dispatch(fetchCourse(authToken, courseId));
-  //   dispatch(fetchClass(authToken, classId));
-  // }, [dispatch, authToken, classId, courseId]);
 
   const [display, setDisplay] = useState('unfold');
 
@@ -31,7 +20,6 @@ export default function Submission({ classNames, history, location, mode, open, 
     };
 
     if (mode === 'detail') {
-      // console.log(submissions);
       setArrow(
         <IconButton className={classNames.arrow} onClick={goBackToSubmission}>
           <Icon.ArrowBackRoundedIcon />
@@ -46,18 +34,7 @@ export default function Submission({ classNames, history, location, mode, open, 
         },
       ]);
     }
-  }, [
-    location.pathname,
-    history,
-    mode,
-    userClasses,
-    courseId,
-    classId,
-    submissions,
-    classes.arrow,
-    classNames.arrow,
-    submissionId,
-  ]);
+  }, [location.pathname, history, mode, courseId, classId, classNames.arrow, submissionId]);
 
   const foldAccount = () => {
     setDisplay('fold');
@@ -66,25 +43,6 @@ export default function Submission({ classNames, history, location, mode, open, 
   const unfoldAccount = () => {
     setDisplay('unfold');
   };
-
-  if (
-    (courseId !== undefined && courses[courseId] === undefined) ||
-    (classId !== undefined && classes[classId] === undefined)
-  ) {
-    return (
-      <div>
-        <Drawer
-          variant="persistent"
-          open={open}
-          onClose={onClose}
-          className={classNames.drawer}
-          anchor="left"
-          PaperProps={{ elevation: 5 }}
-          classes={{ paper: classNames.drawerPaper }}
-        />
-      </div>
-    );
-  }
 
   return (
     <div>
