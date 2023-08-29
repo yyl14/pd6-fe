@@ -1,40 +1,40 @@
 import moment from 'moment';
-import useSWRMutation from 'swr/mutation';
+import { useState } from 'react';
 
-import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
 import { withDataSchema } from '@/hooks/useSWRWithBrowseParams';
 
 import { components } from '../../../types/schema';
-import { addAnnouncement, browseAnnouncement } from './fetchers';
+import { browseAnnouncement } from './fetchers';
 
 export type AnnouncementDataSchema = components['schemas']['pydantic__dataclasses__Announcement'];
 
 const useActiveAnnouncements = () => {
   const useSWRWithBrowseParams = withDataSchema<AnnouncementDataSchema>();
-  const currentTime = moment().toISOString();
+  const [currentTime] = useState(moment().toISOString());
 
-  const browseAllAnnouncementSWR = useSWRWithBrowseParams(`/announcement`, browseAnnouncement, {
-    baseFilter: { column: 'expire_time', operator: '>=', operand: currentTime },
-  });
-
-  const addAnnouncementSWR = useSWRMutation(`/announcement`, toSWRMutationFetcher(addAnnouncement));
+  const browseActiveAnnouncementSWR = useSWRWithBrowseParams(
+    `/announcement`,
+    browseAnnouncement,
+    {},
+    {
+      baseFilter: { column: 'expire_time', operator: '>=', operand: currentTime },
+    },
+  );
 
   return {
-    browseAnnouncement: {
-      data: browseAllAnnouncementSWR.data?.data.data,
-      refresh: browseAllAnnouncementSWR.mutate,
-      pagination: browseAllAnnouncementSWR.pagination,
-      filter: browseAllAnnouncementSWR.filter,
-      sort: browseAllAnnouncementSWR.sort,
+    activeAnnouncements: {
+      data: browseActiveAnnouncementSWR.data?.data.data,
+      refresh: browseActiveAnnouncementSWR.mutate,
+      pagination: browseActiveAnnouncementSWR.pagination,
+      filter: browseActiveAnnouncementSWR.filter,
+      sort: browseActiveAnnouncementSWR.sort,
     },
-    addAnnouncement: addAnnouncementSWR.trigger,
+
     isLoading: {
-      browse: browseAllAnnouncementSWR.isLoading,
-      add: addAnnouncementSWR.isMutating,
+      browse: browseActiveAnnouncementSWR.isLoading,
     },
     error: {
-      browse: browseAllAnnouncementSWR.error,
-      add: addAnnouncementSWR.error,
+      browse: browseActiveAnnouncementSWR.error,
     },
   };
 };

@@ -1,9 +1,8 @@
 import { Suspense, lazy } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-
-
 import GeneralLoading from '@/components/GeneralLoading';
+import NoMatch from '@/components/noMatch';
 
 import AnnouncementAddRoute from './add';
 import AnnouncementEditRoute from './edit';
@@ -26,6 +25,7 @@ export default function AnnouncementRoutes() {
       <Route exact path="/6a/admin/system/announcement/:announcementId/edit" component={AnnouncementEditRoute} />
       <Route exact path="/6a/admin/system/announcement/add" component={AnnouncementAddRoute} />
       <Route exact path="/6a/admin/system/announcement" component={AnnouncementRoute} />
+      <Route component={NoMatch} />
     </Switch>
   );
 }

@@ -3,1299 +3,1298 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
-  "/": {
+  '/': {
     /** Default Page */
-    get: operations["default_page__get"];
+    get: operations['default_page__get'];
   };
-  "/email-verification": {
+  '/email-verification': {
     /** Email Verification */
-    get: operations["email_verification_email_verification_get"];
+    get: operations['email_verification_email_verification_get'];
     /** Email Verification */
-    post: operations["email_verification_email_verification_post"];
+    post: operations['email_verification_email_verification_post'];
   };
-  "/account/forget-password": {
+  '/account/forget-password': {
     /** Forget Password */
-    post: operations["forget_password_account_forget_password_post"];
+    post: operations['forget_password_account_forget_password_post'];
   };
-  "/account/forget-username": {
+  '/account/forget-username': {
     /** Forget Username */
-    post: operations["forget_username_account_forget_username_post"];
+    post: operations['forget_username_account_forget_username_post'];
   };
-  "/s3-file/{s3_file_uuid}/url": {
+  '/s3-file/{s3_file_uuid}/url': {
     /**
-     * Get S3 File Url 
+     * Get S3 File Url
      * @description ### 權限
      * - SN
-     * 
+     *
      * ### Note
      * - 目前所有 url 都有時間限制 (超時會自動過期)
      */
-    get: operations["get_s3_file_url_s3_file__s3_file_uuid__url_get"];
+    get: operations['get_s3_file_url_s3_file__s3_file_uuid__url_get'];
   };
-  "/institute": {
+  '/institute': {
     /**
-     * Browse All Institute 
+     * Browse All Institute
      * @description ### 權限
      * - Public
      */
-    get: operations["browse_all_institute_institute_get"];
+    get: operations['browse_all_institute_institute_get'];
     /**
-     * Add Institute 
+     * Add Institute
      * @description ### 權限
      * - System Manager
      */
-    post: operations["add_institute_institute_post"];
+    post: operations['add_institute_institute_post'];
   };
-  "/institute/{institute_id}": {
+  '/institute/{institute_id}': {
     /**
-     * Read Institute 
+     * Read Institute
      * @description ### 權限
      * - Public
      */
-    get: operations["read_institute_institute__institute_id__get"];
+    get: operations['read_institute_institute__institute_id__get'];
     /**
-     * Edit Institute 
+     * Edit Institute
      * @description ### 權限
      * - System Manager
      */
-    patch: operations["edit_institute_institute__institute_id__patch"];
+    patch: operations['edit_institute_institute__institute_id__patch'];
   };
-  "/account": {
+  '/account': {
     /**
-     * Browse Account With Default Student Id 
+     * Browse Account With Default Student Id
      * @description ### 權限
      * - System Manager
      * {'id': 'int', 'username': 'str', 'nickname': 'str', 'role': 'str', 'real_name': 'str', 'alternative_email': 'str'}
      */
-    get: operations["browse_account_with_default_student_id_account_get"];
+    get: operations['browse_account_with_default_student_id_account_get'];
     /** Add Account */
-    post: operations["add_account_account_post"];
+    post: operations['add_account_account_post'];
   };
-  "/account-summary/batch": {
+  '/account-summary/batch': {
     /**
-     * Batch Get Account With Default Student Id 
+     * Batch Get Account With Default Student Id
      * @description ### 權限
      * - System Normal
-     * 
+     *
      * ### Notes
      * - `account_ids`: list of int
      */
-    get: operations["batch_get_account_with_default_student_id_account_summary_batch_get"];
+    get: operations['batch_get_account_with_default_student_id_account_summary_batch_get'];
   };
-  "/account-summary/batch-by-account-referral": {
+  '/account-summary/batch-by-account-referral': {
     /**
-     * Batch Get Account By Account Referrals 
+     * Batch Get Account By Account Referrals
      * @description ### 權限
      * - System Normal
-     * 
+     *
      * ### Notes:
      * account_referrals: list of string
      */
-    get: operations["batch_get_account_by_account_referrals_account_summary_batch_by_account_referral_get"];
+    get: operations['batch_get_account_by_account_referrals_account_summary_batch_by_account_referral_get'];
   };
-  "/account/{account_id}/class": {
+  '/account/{account_id}/class': {
     /**
-     * Browse All Account With Class Role 
+     * Browse All Account With Class Role
      * @description ### 權限
      * - Self
-     * 
+     *
      * ### Available columns
      */
-    get: operations["browse_all_account_with_class_role_account__account_id__class_get"];
+    get: operations['browse_all_account_with_class_role_account__account_id__class_get'];
   };
-  "/account/template": {
+  '/account/template': {
     /**
-     * Get Account Template File 
+     * Get Account Template File
      * @description ### 權限
      * - System Manager
      */
-    get: operations["get_account_template_file_account_template_get"];
+    get: operations['get_account_template_file_account_template_get'];
   };
-  "/account/{account_id}": {
+  '/account/{account_id}': {
     /**
-     * Read Account With Default Student Id 
+     * Read Account With Default Student Id
      * @description ### 權限
      * - System Manager
      * - Self
      * - System Normal (個資除外)
      */
-    get: operations["read_account_with_default_student_id_account__account_id__get"];
+    get: operations['read_account_with_default_student_id_account__account_id__get'];
     /**
-     * Delete Account 
+     * Delete Account
      * @description ### 權限
      * - System manager
      * - Self
      */
-    delete: operations["delete_account_account__account_id__delete"];
+    delete: operations['delete_account_account__account_id__delete'];
     /**
-     * Edit Account 
+     * Edit Account
      * @description ### 權限
      * - System Manager
      * - Self
      */
-    patch: operations["edit_account_account__account_id__patch"];
+    patch: operations['edit_account_account__account_id__patch'];
   };
-  "/account/{account_id}/default-student-card": {
+  '/account/{account_id}/default-student-card': {
     /**
-     * Make Student Card Default 
+     * Make Student Card Default
      * @description ### 權限
      * - System manager
      * - Self
      */
-    put: operations["make_student_card_default_account__account_id__default_student_card_put"];
+    put: operations['make_student_card_default_account__account_id__default_student_card_put'];
   };
-  "/account/{account_id}/email-verification": {
+  '/account/{account_id}/email-verification': {
     /**
-     * Browse All Account Pending Email Verification 
+     * Browse All Account Pending Email Verification
      * @description ### 權限
      * - System manager
      * - Self
      */
-    get: operations["browse_all_account_pending_email_verification_account__account_id__email_verification_get"];
+    get: operations['browse_all_account_pending_email_verification_account__account_id__email_verification_get'];
   };
-  "/account/{account_id}/student-card": {
+  '/account/{account_id}/student-card': {
     /**
-     * Browse All Account Student Card 
+     * Browse All Account Student Card
      * @description ### 權限
      * - System manager
      * - Self
      */
-    get: operations["browse_all_account_student_card_account__account_id__student_card_get"];
+    get: operations['browse_all_account_student_card_account__account_id__student_card_get'];
     /**
-     * Add Student Card To Account 
+     * Add Student Card To Account
      * @description ### 權限
      * - System manager
      * - Self
      */
-    post: operations["add_student_card_to_account_account__account_id__student_card_post"];
+    post: operations['add_student_card_to_account_account__account_id__student_card_post'];
   };
-  "/student-card/{student_card_id}": {
+  '/student-card/{student_card_id}': {
     /**
-     * Read Student Card 
+     * Read Student Card
      * @description ### 權限
      * - System manager
      * - Self
      */
-    get: operations["read_student_card_student_card__student_card_id__get"];
+    get: operations['read_student_card_student_card__student_card_id__get'];
   };
-  "/email-verification/{email_verification_id}/resend": {
+  '/email-verification/{email_verification_id}/resend': {
     /**
-     * Resend Email Verification 
+     * Resend Email Verification
      * @description ### 權限
      * - System manager
      * - Self
      */
-    post: operations["resend_email_verification_email_verification__email_verification_id__resend_post"];
+    post: operations['resend_email_verification_email_verification__email_verification_id__resend_post'];
   };
-  "/email-verification/{email_verification_id}": {
+  '/email-verification/{email_verification_id}': {
     /**
-     * Delete Pending Email Verification 
+     * Delete Pending Email Verification
      * @description ### 權限
      * - System manager
      * - Self
      */
-    delete: operations["delete_pending_email_verification_email_verification__email_verification_id__delete"];
+    delete: operations['delete_pending_email_verification_email_verification__email_verification_id__delete'];
   };
-  "/course": {
+  '/course': {
     /**
-     * Browse All Course 
+     * Browse All Course
      * @description ### 權限
      * - System normal
      */
-    get: operations["browse_all_course_course_get"];
+    get: operations['browse_all_course_course_get'];
     /**
-     * Add Course 
+     * Add Course
      * @description ### 權限
      * - System manager
      */
-    post: operations["add_course_course_post"];
+    post: operations['add_course_course_post'];
   };
-  "/course/{course_id}": {
+  '/course/{course_id}': {
     /**
-     * Read Course 
+     * Read Course
      * @description ### 權限
      * - System normal
      */
-    get: operations["read_course_course__course_id__get"];
+    get: operations['read_course_course__course_id__get'];
     /**
-     * Delete Course 
+     * Delete Course
      * @description ### 權限
      * - System manager
      */
-    delete: operations["delete_course_course__course_id__delete"];
+    delete: operations['delete_course_course__course_id__delete'];
     /**
-     * Edit Course 
+     * Edit Course
      * @description ### 權限
      * - System manager
      */
-    patch: operations["edit_course_course__course_id__patch"];
+    patch: operations['edit_course_course__course_id__patch'];
   };
-  "/course/{course_id}/class": {
+  '/course/{course_id}/class': {
     /**
-     * Browse All Class Under Course 
+     * Browse All Class Under Course
      * @description ### 權限
      * - System normal
      */
-    get: operations["browse_all_class_under_course_course__course_id__class_get"];
+    get: operations['browse_all_class_under_course_course__course_id__class_get'];
     /**
-     * Add Class Under Course 
+     * Add Class Under Course
      * @description ### 權限
      * - System manager
      */
-    post: operations["add_class_under_course_course__course_id__class_post"];
+    post: operations['add_class_under_course_course__course_id__class_post'];
   };
-  "/class": {
+  '/class': {
     /**
-     * Browse Class 
+     * Browse Class
      * @description ### 權限
      * - system normal: all
-     * 
+     *
      * ### Available columns
      * {'id': 'int', 'name': 'str', 'course_id': 'int', 'is_deleted': 'bool'}
      */
-    get: operations["browse_class_class_get"];
+    get: operations['browse_class_class_get'];
   };
-  "/class/{class_id}": {
+  '/class/{class_id}': {
     /**
-     * Read Class 
+     * Read Class
      * @description ### 權限
      * - System normal: all
      */
-    get: operations["read_class_class__class_id__get"];
+    get: operations['read_class_class__class_id__get'];
     /**
-     * Delete Class 
+     * Delete Class
      * @description ### 權限
      * - System manager
      */
-    delete: operations["delete_class_class__class_id__delete"];
+    delete: operations['delete_class_class__class_id__delete'];
     /**
-     * Edit Class 
+     * Edit Class
      * @description ### 權限
      * - Class+ manager
      */
-    patch: operations["edit_class_class__class_id__patch"];
+    patch: operations['edit_class_class__class_id__patch'];
   };
-  "/class/{class_id}/member": {
+  '/class/{class_id}/member': {
     /**
-     * Browse Class Member 
+     * Browse Class Member
      * @description ### 權限
      * - Class normal
      * - Class+ manager
-     * 
+     *
      * ### Available columns
      * {'member_id': 'int', 'class_id': 'int', 'role': 'RoleType'}
      */
-    get: operations["browse_class_member_class__class_id__member_get"];
+    get: operations['browse_class_member_class__class_id__member_get'];
     /**
-     * Replace Class Members 
+     * Replace Class Members
      * @description ### 權限
      * - Class+ manager
      */
-    put: operations["replace_class_members_class__class_id__member_put"];
+    put: operations['replace_class_members_class__class_id__member_put'];
   };
-  "/class/{class_id}/member/account-referral": {
+  '/class/{class_id}/member/account-referral': {
     /**
-     * Browse All Class Member With Account Referral 
+     * Browse All Class Member With Account Referral
      * @description ### 權限
      * - Class normal
      * - Class+ manager
      */
-    get: operations["browse_all_class_member_with_account_referral_class__class_id__member_account_referral_get"];
+    get: operations['browse_all_class_member_with_account_referral_class__class_id__member_account_referral_get'];
   };
-  "/class/{class_id}/member/{member_id}": {
+  '/class/{class_id}/member/{member_id}': {
     /**
-     * Delete Class Member 
+     * Delete Class Member
      * @description ### 權限
      * - Class+ manager
      */
-    delete: operations["delete_class_member_class__class_id__member__member_id__delete"];
+    delete: operations['delete_class_member_class__class_id__member__member_id__delete'];
   };
-  "/class/{class_id}/team": {
+  '/class/{class_id}/team': {
     /**
-     * Browse Team Under Class 
+     * Browse Team Under Class
      * @description ### 權限
      * - Class normal: all
-     * 
+     *
      * ### Available columns
      * {'id': 'int', 'name': 'str', 'class_id': 'int', 'label': 'str', 'is_deleted': 'bool'}
      */
-    get: operations["browse_team_under_class_class__class_id__team_get"];
+    get: operations['browse_team_under_class_class__class_id__team_get'];
     /**
-     * Add Team Under Class 
+     * Add Team Under Class
      * @description ### 權限
      * - Class manager
      */
-    post: operations["add_team_under_class_class__class_id__team_post"];
+    post: operations['add_team_under_class_class__class_id__team_post'];
   };
-  "/class/{class_id}/submission": {
+  '/class/{class_id}/submission': {
     /**
-     * Browse Submission Under Class 
+     * Browse Submission Under Class
      * @description ### 權限
      * - Class manager
-     * 
+     *
      * ### Available columns
      * {'id': 'int', 'account_id': 'int', 'problem_id': 'int', 'language_id': 'int', 'content_file_uuid': 'UUID', 'content_length': 'int', 'filename': 'str', 'submit_time': 'ServerTZDatetime'}
      */
-    get: operations["browse_submission_under_class_class__class_id__submission_get"];
+    get: operations['browse_submission_under_class_class__class_id__submission_get'];
   };
-  "/class/{class_id}/team-import": {
+  '/class/{class_id}/team-import': {
     /**
-     * Import Team 
+     * Import Team
      * @description ### 權限
      * - Class manager
      */
-    post: operations["import_team_class__class_id__team_import_post"];
+    post: operations['import_team_class__class_id__team_import_post'];
   };
-  "/team/template": {
+  '/team/template': {
     /**
-     * Get Team Template File 
+     * Get Team Template File
      * @description ### 權限
      * - system normal
      */
-    get: operations["get_team_template_file_team_template_get"];
+    get: operations['get_team_template_file_team_template_get'];
   };
-  "/team/{team_id}": {
+  '/team/{team_id}': {
     /**
-     * Read Team 
+     * Read Team
      * @description ### 權限
      * - Class normal
      */
-    get: operations["read_team_team__team_id__get"];
+    get: operations['read_team_team__team_id__get'];
     /**
-     * Delete Team 
+     * Delete Team
      * @description ### 權限
      * - Class manager
      */
-    delete: operations["delete_team_team__team_id__delete"];
+    delete: operations['delete_team_team__team_id__delete'];
     /**
-     * Edit Team 
+     * Edit Team
      * @description ### 權限
      * - Class manager
      * - Team manager (limited)
      */
-    patch: operations["edit_team_team__team_id__patch"];
+    patch: operations['edit_team_team__team_id__patch'];
   };
-  "/team/{team_id}/member": {
+  '/team/{team_id}/member': {
     /**
-     * Browse Team All Member 
+     * Browse Team All Member
      * @description ### 權限
      * - Class normal
      */
-    get: operations["browse_team_all_member_team__team_id__member_get"];
+    get: operations['browse_team_all_member_team__team_id__member_get'];
     /**
-     * Add Team Member 
+     * Add Team Member
      * @description ### 權限
      * - class manager
      */
-    post: operations["add_team_member_team__team_id__member_post"];
+    post: operations['add_team_member_team__team_id__member_post'];
     /**
-     * Edit Team Member 
+     * Edit Team Member
      * @description ### 權限
      * - Class manager
      */
-    patch: operations["edit_team_member_team__team_id__member_patch"];
+    patch: operations['edit_team_member_team__team_id__member_patch'];
   };
-  "/team/{team_id}/member/{member_id}": {
+  '/team/{team_id}/member/{member_id}': {
     /**
-     * Delete Team Member 
+     * Delete Team Member
      * @description ### 權限
      * - Class manager
      */
-    delete: operations["delete_team_member_team__team_id__member__member_id__delete"];
+    delete: operations['delete_team_member_team__team_id__member__member_id__delete'];
   };
-  "/class/{class_id}/grade-import": {
+  '/class/{class_id}/grade-import': {
     /**
-     * Import Class Grade 
+     * Import Class Grade
      * @description ### 權限
      * - Class manager
      */
-    post: operations["import_class_grade_class__class_id__grade_import_post"];
+    post: operations['import_class_grade_class__class_id__grade_import_post'];
   };
-  "/class/{class_id}/grade": {
+  '/class/{class_id}/grade': {
     /**
-     * Browse Class Grade 
+     * Browse Class Grade
      * @description ### 權限
      * - Class manager (all)
      * - Class normal (self)
-     * 
+     *
      * ### Available columns
      * {'receiver_id': 'int', 'grader_id': 'int', 'class_id': 'int', 'title': 'str', 'score': 'str', 'comment': 'str', 'update_time': 'str'}
      */
-    get: operations["browse_class_grade_class__class_id__grade_get"];
+    get: operations['browse_class_grade_class__class_id__grade_get'];
     /**
-     * Add Grade 
+     * Add Grade
      * @description ### 權限
      * - Class Manager
      */
-    post: operations["add_grade_class__class_id__grade_post"];
+    post: operations['add_grade_class__class_id__grade_post'];
   };
-  "/account/{account_id}/grade": {
+  '/account/{account_id}/grade': {
     /**
-     * Browse Account Grade 
+     * Browse Account Grade
      * @description ### 權限
      * - Self
-     * 
+     *
      * ### Available columns
      * {'class_id': 'int', 'title': 'str', 'score': 'str', 'comment': 'str', 'update_time': 'str'}
      */
-    get: operations["browse_account_grade_account__account_id__grade_get"];
+    get: operations['browse_account_grade_account__account_id__grade_get'];
   };
-  "/grade/template": {
+  '/grade/template': {
     /**
-     * Get Grade Template File 
+     * Get Grade Template File
      * @description ### 權限
      * - system normal
      */
-    get: operations["get_grade_template_file_grade_template_get"];
+    get: operations['get_grade_template_file_grade_template_get'];
   };
-  "/grade/{grade_id}": {
+  '/grade/{grade_id}': {
     /**
-     * Get Grade 
+     * Get Grade
      * @description ### 權限
      * - Class manager (all)
      * - Class normal (self)
      */
-    get: operations["get_grade_grade__grade_id__get"];
+    get: operations['get_grade_grade__grade_id__get'];
     /**
-     * Delete Grade 
+     * Delete Grade
      * @description ### 權限
      * - Class manager
      */
-    delete: operations["delete_grade_grade__grade_id__delete"];
+    delete: operations['delete_grade_grade__grade_id__delete'];
     /**
-     * Edit Grade 
+     * Edit Grade
      * @description ### 權限
      * - Class manager
      */
-    patch: operations["edit_grade_grade__grade_id__patch"];
+    patch: operations['edit_grade_grade__grade_id__patch'];
   };
-  "/class/{class_id}/challenge": {
+  '/class/{class_id}/challenge': {
     /**
-     * Browse Challenge Under Class 
+     * Browse Challenge Under Class
      * @description ### 權限
      * - Class manager (all)
      * - System normal (not scheduled)
-     * 
+     *
      * ### Available columns
      * {'id': 'int', 'class_id': 'int', 'publicize_type': 'ChallengePublicizeType', 'selection_type': 'TaskSelectionType', 'title': 'str', 'setter_id': 'int', 'description': 'str', 'start_time': 'ServerTZDatetime', 'end_time': 'ServerTZDatetime', 'is_deleted': 'bool'}
      */
-    get: operations["browse_challenge_under_class_class__class_id__challenge_get"];
+    get: operations['browse_challenge_under_class_class__class_id__challenge_get'];
     /**
-     * Add Challenge Under Class 
+     * Add Challenge Under Class
      * @description ### 權限
      * - Class manager
      */
-    post: operations["add_challenge_under_class_class__class_id__challenge_post"];
+    post: operations['add_challenge_under_class_class__class_id__challenge_post'];
   };
-  "/challenge/{challenge_id}": {
+  '/challenge/{challenge_id}': {
     /**
-     * Read Challenge 
+     * Read Challenge
      * @description ### 權限
      * - Class manager (all)
      * - Class normal & guest (after start time)
      * - System normal (after scheduled time)
      */
-    get: operations["read_challenge_challenge__challenge_id__get"];
+    get: operations['read_challenge_challenge__challenge_id__get'];
     /**
-     * Delete Challenge 
+     * Delete Challenge
      * @description ### 權限
      * - Class manager
      */
-    delete: operations["delete_challenge_challenge__challenge_id__delete"];
+    delete: operations['delete_challenge_challenge__challenge_id__delete'];
     /**
-     * Edit Challenge 
+     * Edit Challenge
      * @description ### 權限
      * - Class manager
      */
-    patch: operations["edit_challenge_challenge__challenge_id__patch"];
+    patch: operations['edit_challenge_challenge__challenge_id__patch'];
   };
-  "/challenge/{challenge_id}/problem": {
+  '/challenge/{challenge_id}/problem': {
     /**
-     * Add Problem Under Challenge 
+     * Add Problem Under Challenge
      * @description ### 權限
      * - Class manager
      */
-    post: operations["add_problem_under_challenge_challenge__challenge_id__problem_post"];
+    post: operations['add_problem_under_challenge_challenge__challenge_id__problem_post'];
   };
-  "/challenge/{challenge_id}/essay": {
+  '/challenge/{challenge_id}/essay': {
     /**
-     * Add Essay Under Challenge 
+     * Add Essay Under Challenge
      * @description ### 權限
      * - Class manager
      */
-    post: operations["add_essay_under_challenge_challenge__challenge_id__essay_post"];
+    post: operations['add_essay_under_challenge_challenge__challenge_id__essay_post'];
   };
-  "/challenge/{challenge_id}/peer-review": {
+  '/challenge/{challenge_id}/peer-review': {
     /**
-     * Add Peer Review Under Challenge 
+     * Add Peer Review Under Challenge
      * @description ### 權限
      * - Class manager
      */
-    post: operations["add_peer_review_under_challenge_challenge__challenge_id__peer_review_post"];
+    post: operations['add_peer_review_under_challenge_challenge__challenge_id__peer_review_post'];
   };
-  "/challenge/{challenge_id}/team-project-scoreboard": {
+  '/challenge/{challenge_id}/team-project-scoreboard': {
     /**
-     * Add Team Project Scoreboard Under Challenge 
+     * Add Team Project Scoreboard Under Challenge
      * @description ### 權限
      * - Class manager
      */
-    post: operations["add_team_project_scoreboard_under_challenge_challenge__challenge_id__team_project_scoreboard_post"];
+    post: operations['add_team_project_scoreboard_under_challenge_challenge__challenge_id__team_project_scoreboard_post'];
   };
-  "/challenge/{challenge_id}/task": {
+  '/challenge/{challenge_id}/task': {
     /**
-     * Browse All Task Under Challenge 
+     * Browse All Task Under Challenge
      * @description ### 權限
      * - Class manager (all)
      * - Class guest (active/archived challenges)
      * - System Normal (by challenge publicize type)
      */
-    get: operations["browse_all_task_under_challenge_challenge__challenge_id__task_get"];
+    get: operations['browse_all_task_under_challenge_challenge__challenge_id__task_get'];
   };
-  "/challenge/{challenge_id}/task-status": {
+  '/challenge/{challenge_id}/task-status': {
     /**
-     * Browse All Task Status Under Challenge 
+     * Browse All Task Status Under Challenge
      * @description ### 權限
      * - Self: see self
      */
-    get: operations["browse_all_task_status_under_challenge_challenge__challenge_id__task_status_get"];
+    get: operations['browse_all_task_status_under_challenge_challenge__challenge_id__task_status_get'];
   };
-  "/challenge/{challenge_id}/statistics/summary": {
+  '/challenge/{challenge_id}/statistics/summary': {
     /**
-     * Get Challenge Statistics 
+     * Get Challenge Statistics
      * @description ### 權限
      * - class manager
      */
-    get: operations["get_challenge_statistics_challenge__challenge_id__statistics_summary_get"];
+    get: operations['get_challenge_statistics_challenge__challenge_id__statistics_summary_get'];
   };
-  "/challenge/{challenge_id}/statistics/member-submission": {
+  '/challenge/{challenge_id}/statistics/member-submission': {
     /**
-     * Get Member Submission Statistics 
+     * Get Member Submission Statistics
      * @description ### 權限
      * - class manager
      */
-    get: operations["get_member_submission_statistics_challenge__challenge_id__statistics_member_submission_get"];
+    get: operations['get_member_submission_statistics_challenge__challenge_id__statistics_member_submission_get'];
   };
-  "/challenge/{challenge_id}/all-submission": {
+  '/challenge/{challenge_id}/all-submission': {
     /**
-     * Download All Submissions 
+     * Download All Submissions
      * @description ### 權限
      * - class manager
      */
-    post: operations["download_all_submissions_challenge__challenge_id__all_submission_post"];
+    post: operations['download_all_submissions_challenge__challenge_id__all_submission_post'];
   };
-  "/challenge/{challenge_id}/all-plagiarism-report": {
+  '/challenge/{challenge_id}/all-plagiarism-report': {
     /**
-     * Download All Plagiarism Reports 
+     * Download All Plagiarism Reports
      * @description ### 權限
      * - class manager
      */
-    post: operations["download_all_plagiarism_reports_challenge__challenge_id__all_plagiarism_report_post"];
+    post: operations['download_all_plagiarism_reports_challenge__challenge_id__all_plagiarism_report_post'];
   };
-  "/challenge/{challenge_id}/team-contest-scoreboard": {
+  '/challenge/{challenge_id}/team-contest-scoreboard': {
     /**
-     * Add Team Contest Scoreboard Under Challenge 
+     * Add Team Contest Scoreboard Under Challenge
      * @description ### 權限
      * - class manager
      */
-    post: operations["add_team_contest_scoreboard_under_challenge_challenge__challenge_id__team_contest_scoreboard_post"];
+    post: operations['add_team_contest_scoreboard_under_challenge_challenge__challenge_id__team_contest_scoreboard_post'];
   };
-  "/problem": {
+  '/problem': {
     /**
-     * Browse Problem Set 
+     * Browse Problem Set
      * @description ### 權限
      * - System normal (not hidden)
      */
-    get: operations["browse_problem_set_problem_get"];
+    get: operations['browse_problem_set_problem_get'];
   };
-  "/problem/{problem_id}": {
+  '/problem/{problem_id}': {
     /**
-     * Read Problem 
+     * Read Problem
      * @description ### 權限
      * - Class manager (hidden)
      * - System normal (not hidden)
      */
-    get: operations["read_problem_problem__problem_id__get"];
+    get: operations['read_problem_problem__problem_id__get'];
     /**
-     * Delete Problem 
+     * Delete Problem
      * @description ### 權限
      * - Class manager
      */
-    delete: operations["delete_problem_problem__problem_id__delete"];
+    delete: operations['delete_problem_problem__problem_id__delete'];
     /**
-     * Edit Problem 
+     * Edit Problem
      * @description ### 權限
      * - Class manager
      */
-    patch: operations["edit_problem_problem__problem_id__patch"];
+    patch: operations['edit_problem_problem__problem_id__patch'];
   };
-  "/problem/{problem_id}/testcase": {
+  '/problem/{problem_id}/testcase': {
     /**
-     * Browse All Testcase Under Problem 
+     * Browse All Testcase Under Problem
      * @description ### 權限
      * - System normal (data without file uuid)
      * - CM (all data)
      */
-    get: operations["browse_all_testcase_under_problem_problem__problem_id__testcase_get"];
+    get: operations['browse_all_testcase_under_problem_problem__problem_id__testcase_get'];
     /**
-     * Add Testcase Under Problem 
+     * Add Testcase Under Problem
      * @description ### 權限
      * - Class manager
      */
-    post: operations["add_testcase_under_problem_problem__problem_id__testcase_post"];
+    post: operations['add_testcase_under_problem_problem__problem_id__testcase_post'];
   };
-  "/problem/{problem_id}/assisting-data": {
+  '/problem/{problem_id}/assisting-data': {
     /**
-     * Browse All Assisting Data Under Problem 
+     * Browse All Assisting Data Under Problem
      * @description ### 權限
      * - class manager
      */
-    get: operations["browse_all_assisting_data_under_problem_problem__problem_id__assisting_data_get"];
+    get: operations['browse_all_assisting_data_under_problem_problem__problem_id__assisting_data_get'];
     /**
-     * Add Assisting Data Under Problem 
+     * Add Assisting Data Under Problem
      * @description ### 權限
      * - class manager
      */
-    post: operations["add_assisting_data_under_problem_problem__problem_id__assisting_data_post"];
+    post: operations['add_assisting_data_under_problem_problem__problem_id__assisting_data_post'];
   };
-  "/problem/{problem_id}/all-assisting-data": {
+  '/problem/{problem_id}/all-assisting-data': {
     /**
-     * Download All Assisting Data 
+     * Download All Assisting Data
      * @description ### 權限
      * - class manager
      */
-    post: operations["download_all_assisting_data_problem__problem_id__all_assisting_data_post"];
+    post: operations['download_all_assisting_data_problem__problem_id__all_assisting_data_post'];
   };
-  "/problem/{problem_id}/all-sample-testcase": {
+  '/problem/{problem_id}/all-sample-testcase': {
     /**
-     * Download All Sample Testcase 
+     * Download All Sample Testcase
      * @description ### 權限
      * - class manager
      */
-    post: operations["download_all_sample_testcase_problem__problem_id__all_sample_testcase_post"];
+    post: operations['download_all_sample_testcase_problem__problem_id__all_sample_testcase_post'];
   };
-  "/problem/{problem_id}/all-non-sample-testcase": {
+  '/problem/{problem_id}/all-non-sample-testcase': {
     /**
-     * Download All Non Sample Testcase 
+     * Download All Non Sample Testcase
      * @description ### 權限
      * - class manager
      */
-    post: operations["download_all_non_sample_testcase_problem__problem_id__all_non_sample_testcase_post"];
+    post: operations['download_all_non_sample_testcase_problem__problem_id__all_non_sample_testcase_post'];
   };
-  "/problem/{problem_id}/score": {
+  '/problem/{problem_id}/score': {
     /**
-     * Get Score By Challenge Type Under Problem 
+     * Get Score By Challenge Type Under Problem
      * @description ### 權限
      * - Self
      */
-    get: operations["get_score_by_challenge_type_under_problem_problem__problem_id__score_get"];
+    get: operations['get_score_by_challenge_type_under_problem_problem__problem_id__score_get'];
   };
-  "/problem/{problem_id}/best-score": {
+  '/problem/{problem_id}/best-score': {
     /**
-     * Get Score By Best Under Problem 
+     * Get Score By Best Under Problem
      * @description ### 權限
      * - Self
      */
-    get: operations["get_score_by_best_under_problem_problem__problem_id__best_score_get"];
+    get: operations['get_score_by_best_under_problem_problem__problem_id__best_score_get'];
   };
-  "/problem/{problem_id}/rejudge": {
+  '/problem/{problem_id}/rejudge': {
     /**
-     * Rejudge Problem 
+     * Rejudge Problem
      * @description ### 權限
      * - Class manager
      */
-    post: operations["rejudge_problem_problem__problem_id__rejudge_post"];
+    post: operations['rejudge_problem_problem__problem_id__rejudge_post'];
   };
-  "/problem/{problem_id}/statistics": {
+  '/problem/{problem_id}/statistics': {
     /**
-     * Get Problem Statistics 
+     * Get Problem Statistics
      * @description ### 權限
      * - System normal
      */
-    get: operations["get_problem_statistics_problem__problem_id__statistics_get"];
+    get: operations['get_problem_statistics_problem__problem_id__statistics_get'];
   };
-  "/testcase/{testcase_id}": {
+  '/testcase/{testcase_id}': {
     /**
-     * Read Testcase 
+     * Read Testcase
      * @description ### 權限
      * - System normal
      */
-    get: operations["read_testcase_testcase__testcase_id__get"];
+    get: operations['read_testcase_testcase__testcase_id__get'];
     /**
-     * Delete Testcase 
+     * Delete Testcase
      * @description ### 權限
      * - Class manager
      */
-    delete: operations["delete_testcase_testcase__testcase_id__delete"];
+    delete: operations['delete_testcase_testcase__testcase_id__delete'];
     /**
-     * Edit Testcase 
+     * Edit Testcase
      * @description ### 權限
      * - Class manager
      */
-    patch: operations["edit_testcase_testcase__testcase_id__patch"];
+    patch: operations['edit_testcase_testcase__testcase_id__patch'];
   };
-  "/testcase/{testcase_id}/input-data": {
+  '/testcase/{testcase_id}/input-data': {
     /**
-     * Upload Testcase Input Data 
+     * Upload Testcase Input Data
      * @description ### 權限
      * - Class manager
      */
-    put: operations["upload_testcase_input_data_testcase__testcase_id__input_data_put"];
+    put: operations['upload_testcase_input_data_testcase__testcase_id__input_data_put'];
     /**
-     * Delete Testcase Input Data 
+     * Delete Testcase Input Data
      * @description ### 權限
      * - Class manager
      */
-    delete: operations["delete_testcase_input_data_testcase__testcase_id__input_data_delete"];
+    delete: operations['delete_testcase_input_data_testcase__testcase_id__input_data_delete'];
   };
-  "/testcase/{testcase_id}/output-data": {
+  '/testcase/{testcase_id}/output-data': {
     /**
-     * Upload Testcase Output Data 
+     * Upload Testcase Output Data
      * @description ### 權限
      * - Class manager
      */
-    put: operations["upload_testcase_output_data_testcase__testcase_id__output_data_put"];
+    put: operations['upload_testcase_output_data_testcase__testcase_id__output_data_put'];
     /**
-     * Delete Testcase Output Data 
+     * Delete Testcase Output Data
      * @description ### 權限
      * - Class manager
      */
-    delete: operations["delete_testcase_output_data_testcase__testcase_id__output_data_delete"];
+    delete: operations['delete_testcase_output_data_testcase__testcase_id__output_data_delete'];
   };
-  "/assisting-data/{assisting_data_id}": {
+  '/assisting-data/{assisting_data_id}': {
     /**
-     * Read Assisting Data 
+     * Read Assisting Data
      * @description ### 權限
      * - class manager
      */
-    get: operations["read_assisting_data_assisting_data__assisting_data_id__get"];
+    get: operations['read_assisting_data_assisting_data__assisting_data_id__get'];
     /**
-     * Edit Assisting Data 
+     * Edit Assisting Data
      * @description ### 權限
      * - class manager
      */
-    put: operations["edit_assisting_data_assisting_data__assisting_data_id__put"];
+    put: operations['edit_assisting_data_assisting_data__assisting_data_id__put'];
     /**
-     * Delete Assisting Data 
+     * Delete Assisting Data
      * @description ### 權限
      * - class manager
      */
-    delete: operations["delete_assisting_data_assisting_data__assisting_data_id__delete"];
+    delete: operations['delete_assisting_data_assisting_data__assisting_data_id__delete'];
   };
-  "/submission/language": {
+  '/submission/language': {
     /**
-     * Browse All Submission Language 
+     * Browse All Submission Language
      * @description ### 權限
      * - System normal
      */
-    get: operations["browse_all_submission_language_submission_language_get"];
+    get: operations['browse_all_submission_language_submission_language_get'];
     /**
-     * Add Submission Language 
+     * Add Submission Language
      * @description ### 權限
      * - System manager
      */
-    post: operations["add_submission_language_submission_language_post"];
+    post: operations['add_submission_language_submission_language_post'];
   };
-  "/submission/language/{language_id}": {
+  '/submission/language/{language_id}': {
     /**
-     * Edit Submission Language 
+     * Edit Submission Language
      * @description ### 權限
      * - System manager
      */
-    patch: operations["edit_submission_language_submission_language__language_id__patch"];
+    patch: operations['edit_submission_language_submission_language__language_id__patch'];
   };
-  "/problem/{problem_id}/submission": {
+  '/problem/{problem_id}/submission': {
     /**
-     * Submit 
+     * Submit
      * @description ### 權限
      * - System Manager (all)
      * - System normal (non scheduled)
-     * 
+     *
      * ### 限制
      * - 上傳檔案 < 1mb
      */
-    post: operations["submit_problem__problem_id__submission_post"];
+    post: operations['submit_problem__problem_id__submission_post'];
   };
-  "/submission": {
+  '/submission': {
     /**
-     * Browse Submission 
+     * Browse Submission
      * @description ### 權限
      * - Self: see self
-     * 
+     *
      * ### Available columns
      * {'problem_id': 'int', 'language_id': 'int', 'submit_time': 'ServerTZDatetime'}
      */
-    get: operations["browse_submission_submission_get"];
+    get: operations['browse_submission_submission_get'];
   };
-  "/submission/judgment/batch": {
+  '/submission/judgment/batch': {
     /**
-     * Batch Get Submission Judgment 
+     * Batch Get Submission Judgment
      * @description ### 權限
      * - System Normal
-     * 
+     *
      * ### Notes
      * - `submission_ids`: list of int
      */
-    get: operations["batch_get_submission_judgment_submission_judgment_batch_get"];
+    get: operations['batch_get_submission_judgment_submission_judgment_batch_get'];
   };
-  "/submission/{submission_id}": {
+  '/submission/{submission_id}': {
     /**
-     * Read Submission 
+     * Read Submission
      * @description ### 權限
      * - Self
      * - Class manager
      */
-    get: operations["read_submission_submission__submission_id__get"];
+    get: operations['read_submission_submission__submission_id__get'];
   };
-  "/submission/{submission_id}/judgment": {
+  '/submission/{submission_id}/judgment': {
     /**
-     * Browse All Submission Judgment 
+     * Browse All Submission Judgment
      * @description ### 權限
      * - Class manager
      */
-    get: operations["browse_all_submission_judgment_submission__submission_id__judgment_get"];
+    get: operations['browse_all_submission_judgment_submission__submission_id__judgment_get'];
   };
-  "/submission/{submission_id}/latest-judgment": {
+  '/submission/{submission_id}/latest-judgment': {
     /**
-     * Read Submission Latest Judgment 
+     * Read Submission Latest Judgment
      * @description ### 權限
      * - Self: see self
      * - Class manager: see class
      */
-    get: operations["read_submission_latest_judgment_submission__submission_id__latest_judgment_get"];
+    get: operations['read_submission_latest_judgment_submission__submission_id__latest_judgment_get'];
   };
-  "/submission/{submission_id}/rejudge": {
+  '/submission/{submission_id}/rejudge': {
     /**
-     * Rejudge Submission 
+     * Rejudge Submission
      * @description ### 權限
      * - Class manager
      */
-    post: operations["rejudge_submission_submission__submission_id__rejudge_post"];
+    post: operations['rejudge_submission_submission__submission_id__rejudge_post'];
   };
-  "/judgment/verdict": {
+  '/judgment/verdict': {
     /**
-     * Browse All Judgment Verdict 
+     * Browse All Judgment Verdict
      * @description ### 權限
      * - Public
      */
-    get: operations["browse_all_judgment_verdict_judgment_verdict_get"];
+    get: operations['browse_all_judgment_verdict_judgment_verdict_get'];
   };
-  "/judgment/{judgment_id}": {
+  '/judgment/{judgment_id}': {
     /**
-     * Read Judgment 
+     * Read Judgment
      * @description ### 權限
      * - Self
      * - Class manager
      */
-    get: operations["read_judgment_judgment__judgment_id__get"];
+    get: operations['read_judgment_judgment__judgment_id__get'];
   };
-  "/judgment/{judgment_id}/judge-case": {
+  '/judgment/{judgment_id}/judge-case': {
     /**
-     * Browse All Judgment Judge Case 
+     * Browse All Judgment Judge Case
      * @description ### 權限
      * - Self
      * - Class manager
      */
-    get: operations["browse_all_judgment_judge_case_judgment__judgment_id__judge_case_get"];
+    get: operations['browse_all_judgment_judge_case_judgment__judgment_id__judge_case_get'];
   };
-  "/essay/{essay_id}": {
+  '/essay/{essay_id}': {
     /**
-     * Read Essay 
+     * Read Essay
      * @description ### 權限
      * - class normal
      */
-    get: operations["read_essay_essay__essay_id__get"];
+    get: operations['read_essay_essay__essay_id__get'];
     /**
-     * Delete Essay 
+     * Delete Essay
      * @description ### 權限
      * - class manager
      */
-    delete: operations["delete_essay_essay__essay_id__delete"];
+    delete: operations['delete_essay_essay__essay_id__delete'];
     /**
-     * Edit Essay 
+     * Edit Essay
      * @description ### 權限
      * - class manager
      */
-    patch: operations["edit_essay_essay__essay_id__patch"];
+    patch: operations['edit_essay_essay__essay_id__patch'];
   };
-  "/essay/{essay_id}/all-essay-submission": {
+  '/essay/{essay_id}/all-essay-submission': {
     /**
-     * Download All Essay Submission 
+     * Download All Essay Submission
      * @description ### 權限
      * - class manager
      */
-    post: operations["download_all_essay_submission_essay__essay_id__all_essay_submission_post"];
+    post: operations['download_all_essay_submission_essay__essay_id__all_essay_submission_post'];
   };
-  "/essay/{essay_id}/essay-submission": {
+  '/essay/{essay_id}/essay-submission': {
     /**
-     * Browse Essay Submission By Essay Id 
+     * Browse Essay Submission By Essay Id
      * @description ### 權限
      * - Self
-     * 
+     *
      * ### Available columns
      * {'id': 'int', 'account_id': 'int', 'essay_id': 'int', 'content_file_uuid': 'UUID', 'filename': 'str', 'submit_time': 'ServerTZDatetime'}
      */
-    get: operations["browse_essay_submission_by_essay_id_essay__essay_id__essay_submission_get"];
+    get: operations['browse_essay_submission_by_essay_id_essay__essay_id__essay_submission_get'];
     /**
-     * Upload Essay 
+     * Upload Essay
      * @description ### 權限
      * - class normal
-     * 
+     *
      * ### 限制
      * - 上傳檔案 < 10mb
      */
-    post: operations["upload_essay_essay__essay_id__essay_submission_post"];
+    post: operations['upload_essay_essay__essay_id__essay_submission_post'];
   };
-  "/essay-submission/{essay_submission_id}": {
+  '/essay-submission/{essay_submission_id}': {
     /**
-     * Read Essay Submission 
+     * Read Essay Submission
      * @description ### 權限
      * - class manager (always)
      * - class normal (self)
      */
-    get: operations["read_essay_submission_essay_submission__essay_submission_id__get"];
+    get: operations['read_essay_submission_essay_submission__essay_submission_id__get'];
     /**
-     * Reupload Essay 
+     * Reupload Essay
      * @description ### 權限
      * - Class normal = self
-     * 
+     *
      * ### 限制
      * - 上傳檔案 < 10mb
      */
-    put: operations["reupload_essay_essay_submission__essay_submission_id__put"];
+    put: operations['reupload_essay_essay_submission__essay_submission_id__put'];
   };
-  "/peer-review/{peer_review_id}": {
+  '/peer-review/{peer_review_id}': {
     /**
-     * Read Peer Review 
+     * Read Peer Review
      * @description ### 權限
      * - Class manager (hidden)
      * - Class normal (not hidden)
      */
-    get: operations["read_peer_review_peer_review__peer_review_id__get"];
+    get: operations['read_peer_review_peer_review__peer_review_id__get'];
     /**
-     * Delete Peer Review 
+     * Delete Peer Review
      * @description ### 權限
      * - Class manager
      */
-    delete: operations["delete_peer_review_peer_review__peer_review_id__delete"];
+    delete: operations['delete_peer_review_peer_review__peer_review_id__delete'];
     /**
-     * Edit Peer Review 
+     * Edit Peer Review
      * @description ### 權限
      * - Class manager
      */
-    patch: operations["edit_peer_review_peer_review__peer_review_id__patch"];
+    patch: operations['edit_peer_review_peer_review__peer_review_id__patch'];
   };
-  "/peer-review/{peer_review_id}/record": {
+  '/peer-review/{peer_review_id}/record': {
     /**
-     * Browse Peer Review Record 
+     * Browse Peer Review Record
      * @description ### 權限
      * - Class manager (full)
      * - Self (看不到對方)
-     * 
+     *
      * ### Available columns
      * {'grader_id': 'int', 'receiver_id': 'int', 'score': 'int', 'comment': 'str', 'submit_time': 'ServerTZDatetime'}
      */
-    get: operations["browse_peer_review_record_peer_review__peer_review_id__record_get"];
+    get: operations['browse_peer_review_record_peer_review__peer_review_id__record_get'];
     /**
-     * Assign Peer Review Record 
+     * Assign Peer Review Record
      * @description 發互評 (決定 A 要評誰 )
-     * 
+     *
      * ### 權限
      * - Self is class *normal ONLY*
      */
-    post: operations["assign_peer_review_record_peer_review__peer_review_id__record_post"];
+    post: operations['assign_peer_review_record_peer_review__peer_review_id__record_post'];
   };
-  "/peer-review-record/{peer_review_record_id}": {
+  '/peer-review-record/{peer_review_record_id}': {
     /**
-     * Read Peer Review Record 
+     * Read Peer Review Record
      * @description ### 權限
      * - Class manager (full)
      * - Self = Class normal (看不到對方)
      */
-    get: operations["read_peer_review_record_peer_review_record__peer_review_record_id__get"];
+    get: operations['read_peer_review_record_peer_review_record__peer_review_record_id__get'];
     /**
-     * Submit Peer Review Record 
+     * Submit Peer Review Record
      * @description 互評完了，交互評成績評語
-     * 
+     *
      * ### 權限
      * - Self is class *normal ONLY*
      */
-    patch: operations["submit_peer_review_record_peer_review_record__peer_review_record_id__patch"];
+    patch: operations['submit_peer_review_record_peer_review_record__peer_review_record_id__patch'];
   };
-  "/peer-review/{peer_review_id}/account/{account_id}/receive": {
+  '/peer-review/{peer_review_id}/account/{account_id}/receive': {
     /**
-     * Browse Account Received Peer Review Record 
+     * Browse Account Received Peer Review Record
      * @description ### 權限
      * - Class Manager (all)
      * - Self = Class normal
      */
-    get: operations["browse_account_received_peer_review_record_peer_review__peer_review_id__account__account_id__receive_get"];
+    get: operations['browse_account_received_peer_review_record_peer_review__peer_review_id__account__account_id__receive_get'];
   };
-  "/peer-review/{peer_review_id}/account/{account_id}/review": {
+  '/peer-review/{peer_review_id}/account/{account_id}/review': {
     /**
-     * Browse Account Reviewed Peer Review Record 
+     * Browse Account Reviewed Peer Review Record
      * @description ### 權限
      * - Class Manager (all)
      * - Self = Class normal
      */
-    get: operations["browse_account_reviewed_peer_review_record_peer_review__peer_review_id__account__account_id__review_get"];
+    get: operations['browse_account_reviewed_peer_review_record_peer_review__peer_review_id__account__account_id__review_get'];
   };
-  "/scoreboard/{scoreboard_id}": {
+  '/scoreboard/{scoreboard_id}': {
     /**
-     * Read Scoreboard 
+     * Read Scoreboard
      * @description ### 權限
      * - Class normal
      */
-    get: operations["read_scoreboard_scoreboard__scoreboard_id__get"];
+    get: operations['read_scoreboard_scoreboard__scoreboard_id__get'];
     /**
-     * Delete Scoreboard 
+     * Delete Scoreboard
      * @description ### 權限
      * - Class manager
      */
-    delete: operations["delete_scoreboard_scoreboard__scoreboard_id__delete"];
+    delete: operations['delete_scoreboard_scoreboard__scoreboard_id__delete'];
   };
-  "/team-project-scoreboard/view/{scoreboard_id}": {
+  '/team-project-scoreboard/view/{scoreboard_id}': {
     /**
-     * View Team Project Scoreboard 
+     * View Team Project Scoreboard
      * @description ### 權限
      * - Class normal
      */
-    get: operations["view_team_project_scoreboard_team_project_scoreboard_view__scoreboard_id__get"];
+    get: operations['view_team_project_scoreboard_team_project_scoreboard_view__scoreboard_id__get'];
   };
-  "/team-project-scoreboard/{scoreboard_id}": {
+  '/team-project-scoreboard/{scoreboard_id}': {
     /**
-     * Edit Team Project Scoreboard 
+     * Edit Team Project Scoreboard
      * @description ### 權限
      * - Class manager
      */
-    patch: operations["edit_team_project_scoreboard_team_project_scoreboard__scoreboard_id__patch"];
+    patch: operations['edit_team_project_scoreboard_team_project_scoreboard__scoreboard_id__patch'];
   };
-  "/team-contest-scoreboard/view/{scoreboard_id}": {
+  '/team-contest-scoreboard/view/{scoreboard_id}': {
     /**
-     * View Team Contest Scoreboard 
+     * View Team Contest Scoreboard
      * @description ### 權限
      * - System Normal
      */
-    get: operations["view_team_contest_scoreboard_team_contest_scoreboard_view__scoreboard_id__get"];
+    get: operations['view_team_contest_scoreboard_team_contest_scoreboard_view__scoreboard_id__get'];
   };
-  "/team-contest-scoreboard/{scoreboard_id}": {
+  '/team-contest-scoreboard/{scoreboard_id}': {
     /**
-     * Edit Team Contest Scoreboard 
+     * Edit Team Contest Scoreboard
      * @description ### 權限
      * - Class manager
      */
-    patch: operations["edit_team_contest_scoreboard_team_contest_scoreboard__scoreboard_id__patch"];
+    patch: operations['edit_team_contest_scoreboard_team_contest_scoreboard__scoreboard_id__patch'];
   };
-  "/announcement": {
+  '/announcement': {
     /**
-     * Browse Announcement 
+     * Browse Announcement
      * @description ### 權限
      * - System manager (all)
      * - System guest (limited)
-     * 
+     *
      * ### Available columns
      * {'id': 'int', 'title': 'str', 'content': 'str', 'author_id': 'int', 'post_time': 'ServerTZDatetime', 'expire_time': 'ServerTZDatetime', 'is_deleted': 'bool'}
      */
-    get: operations["browse_announcement_announcement_get"];
+    get: operations['browse_announcement_announcement_get'];
     /**
-     * Add Announcement 
+     * Add Announcement
      * @description ### 權限
      * - System manager
      */
-    post: operations["add_announcement_announcement_post"];
+    post: operations['add_announcement_announcement_post'];
   };
-  "/announcement/{announcement_id}": {
+  '/announcement/{announcement_id}': {
     /**
-     * Read Announcement 
+     * Read Announcement
      * @description ### 權限
      * - System manager (all)
      * - System guest (limited)
      */
-    get: operations["read_announcement_announcement__announcement_id__get"];
+    get: operations['read_announcement_announcement__announcement_id__get'];
     /**
-     * Delete Announcement 
+     * Delete Announcement
      * @description ### 權限
      * - System manager
      */
-    delete: operations["delete_announcement_announcement__announcement_id__delete"];
+    delete: operations['delete_announcement_announcement__announcement_id__delete'];
     /**
-     * Edit Announcement 
+     * Edit Announcement
      * @description ### 權限
      * - System manager
      */
-    patch: operations["edit_announcement_announcement__announcement_id__patch"];
+    patch: operations['edit_announcement_announcement__announcement_id__patch'];
   };
-  "/access-log": {
+  '/access-log': {
     /**
-     * Browse Access Log 
+     * Browse Access Log
      * @description ### 權限
      * - Class+ manager
-     * 
+     *
      * ### Available columns
      * {'access_time': 'ServerTZDatetime', 'request_method': 'str', 'resource_path': 'str', 'ip': 'str', 'account_id': 'int'}
      */
-    get: operations["browse_access_log_access_log_get"];
+    get: operations['browse_access_log_access_log_get'];
   };
-  "/view/account": {
+  '/view/account': {
     /**
-     * View Browse Account With Default Student Id 
+     * View Browse Account With Default Student Id
      * @description ### 權限
      * - System Manager
-     * 
+     *
      * ### Available columns
      * {'account_id': 'int', 'username': 'str', 'real_name': 'str', 'student_id': 'str'}
      */
-    get: operations["view_browse_account_with_default_student_id_view_account_get"];
+    get: operations['view_browse_account_with_default_student_id_view_account_get'];
   };
-  "/class/{class_id}/view/member": {
+  '/class/{class_id}/view/member': {
     /**
-     * View Browse Class Member 
+     * View Browse Class Member
      * @description ### 權限
      * - Class normal
      * - Class+ manager
-     * 
+     *
      * ### Available columns
      * {'account_id': 'int', 'username': 'str', 'student_id': 'str', 'real_name': 'str', 'abbreviated_name': 'str', 'role': 'RoleType', 'class_id': 'int'}
      */
-    get: operations["view_browse_class_member_class__class_id__view_member_get"];
+    get: operations['view_browse_class_member_class__class_id__view_member_get'];
   };
-  "/class/{class_id}/view/submission": {
+  '/class/{class_id}/view/submission': {
     /**
-     * View Browse Submission Under Class 
+     * View Browse Submission Under Class
      * @description ### 權限
      * - Class manager
-     * 
+     *
      * ### Available columns
      * {'submission_id': 'int', 'account_id': 'int', 'username': 'str', 'student_id': 'str', 'real_name': 'str', 'challenge_id': 'int', 'challenge_title': 'str', 'problem_id': 'int', 'challenge_label': 'str', 'verdict': 'VerdictType', 'submit_time': 'ServerTZDatetime', 'class_id': 'int'}
      */
-    get: operations["view_browse_submission_under_class_class__class_id__view_submission_get"];
+    get: operations['view_browse_submission_under_class_class__class_id__view_submission_get'];
   };
-  "/view/my-submission": {
+  '/view/my-submission': {
     /**
-     * View Browse Submission 
+     * View Browse Submission
      * @description ### 權限
      * - Self: see self
-     * 
+     *
      * ### Available columns
      * {'submission_id': 'int', 'course_id': 'int', 'course_name': 'str', 'class_id': 'int', 'class_name': 'str', 'challenge_id': 'int', 'challenge_title': 'str', 'problem_id': 'int', 'challenge_label': 'str', 'verdict': 'VerdictType', 'submit_time': 'ServerTZDatetime', 'account_id': 'int'}
      */
-    get: operations["view_browse_submission_view_my_submission_get"];
+    get: operations['view_browse_submission_view_my_submission_get'];
   };
-  "/problem/{problem_id}/view/my-submission": {
+  '/problem/{problem_id}/view/my-submission': {
     /**
-     * View Browse My Submission Under Problem 
+     * View Browse My Submission Under Problem
      * @description ### 權限
      * - Self: see self
-     * 
+     *
      * ### Available columns
      * {'submission_id': 'int', 'judgment_id': 'int', 'verdict': 'VerdictType', 'score': 'int', 'total_time': 'int', 'max_memory': 'int', 'submit_time': 'ServerTZDatetime', 'account_id': 'int', 'problem_id': 'int'}
      */
-    get: operations["view_browse_my_submission_under_problem_problem__problem_id__view_my_submission_get"];
+    get: operations['view_browse_my_submission_under_problem_problem__problem_id__view_my_submission_get'];
   };
-  "/class/{class_id}/view/problem-set": {
+  '/class/{class_id}/view/problem-set': {
     /**
-     * View Browse Problem Set Under Class 
+     * View Browse Problem Set Under Class
      * @description ### 權限
      * - System normal (not hidden)
-     * 
+     *
      * ### Available columns
      * {'challenge_id': 'int', 'challenge_title': 'str', 'problem_id': 'int', 'challenge_label': 'str', 'problem_title': 'str', 'class_id': 'int'}
      */
-    get: operations["view_browse_problem_set_under_class_class__class_id__view_problem_set_get"];
+    get: operations['view_browse_problem_set_under_class_class__class_id__view_problem_set_get'];
   };
-  "/class/{class_id}/view/grade": {
+  '/class/{class_id}/view/grade': {
     /**
-     * View Browse Class Grade 
+     * View Browse Class Grade
      * @description ### 權限
      * - Class manager (all)
      * - Class normal (self)
-     * 
+     *
      * ### Available columns
      * {'account_id': 'int', 'username': 'str', 'student_id': 'str', 'real_name': 'str', 'title': 'str', 'score': 'str', 'update_time': 'ServerTZDatetime', 'grade_id': 'int', 'class_id': 'int'}
      */
-    get: operations["view_browse_class_grade_class__class_id__view_grade_get"];
+    get: operations['view_browse_class_grade_class__class_id__view_grade_get'];
   };
-  "/view/access-log": {
+  '/view/access-log': {
     /**
-     * View Browse Access Log 
+     * View Browse Access Log
      * @description ### 權限
      * - Class+ manager
-     * 
+     *
      * ### Available columns
      * {'account_id': 'int', 'username': 'str', 'student_id': 'str', 'real_name': 'str', 'ip': 'str', 'resource_path': 'str', 'request_method': 'str', 'access_time': 'ServerTZDatetime', 'access_log_id': 'int'}
      */
-    get: operations["view_browse_access_log_view_access_log_get"];
+    get: operations['view_browse_access_log_view_access_log_get'];
   };
-  "/peer-review/{peer_review_id}/view/reviewer-summary": {
+  '/peer-review/{peer_review_id}/view/reviewer-summary': {
     /**
-     * View Peer Review Summary Review 
+     * View Peer Review Summary Review
      * @description ### 權限
      * - Class Manager
-     * 
+     *
      * ### Available columns
      * {'username': 'str', 'real_name': 'str', 'student_id': 'str', 'average_score': 'float'}
      */
-    get: operations["view_peer_review_summary_review_peer_review__peer_review_id__view_reviewer_summary_get"];
+    get: operations['view_peer_review_summary_review_peer_review__peer_review_id__view_reviewer_summary_get'];
   };
-  "/peer-review/{peer_review_id}/view/receiver-summary": {
+  '/peer-review/{peer_review_id}/view/receiver-summary': {
     /**
-     * View Peer Review Summary Receive 
+     * View Peer Review Summary Receive
      * @description ### 權限
      * - Class Manager
-     * 
+     *
      * ### Available columns
      * {'username': 'str', 'real_name': 'str', 'student_id': 'str', 'average_score': 'float'}
      */
-    get: operations["view_peer_review_summary_receive_peer_review__peer_review_id__view_receiver_summary_get"];
+    get: operations['view_peer_review_summary_receive_peer_review__peer_review_id__view_receiver_summary_get'];
   };
-  "/hardcode/team-contest-scoreboard/{scoreboard_id}/runs": {
+  '/hardcode/team-contest-scoreboard/{scoreboard_id}/runs': {
     /**
-     * View Team Contest Scoreboard Runs 
+     * View Team Contest Scoreboard Runs
      * @description ### 權限
      * - System Normal
      */
-    get: operations["view_team_contest_scoreboard_runs_hardcode_team_contest_scoreboard__scoreboard_id__runs_get"];
+    get: operations['view_team_contest_scoreboard_runs_hardcode_team_contest_scoreboard__scoreboard_id__runs_get'];
   };
-  "/account/jwt": {
+  '/account/jwt': {
     /** Login */
-    post: operations["login_account_jwt_post"];
+    post: operations['login_account_jwt_post'];
   };
-  "/account-normal": {
+  '/account-normal': {
     /**
-     * Add Normal Account 
+     * Add Normal Account
      * @description ### 權限
      * - System Manager
      */
-    post: operations["add_normal_account_account_normal_post"];
+    post: operations['add_normal_account_account_normal_post'];
   };
-  "/account-import": {
+  '/account-import': {
     /**
-     * Import Account 
+     * Import Account
      * @description ### 權限
      * - System Manager
      */
-    post: operations["import_account_account_import_post"];
+    post: operations['import_account_account_import_post'];
   };
-  "/account/{account_id}/pass_hash": {
+  '/account/{account_id}/pass_hash': {
     /**
-     * Edit Password 
+     * Edit Password
      * @description ### 權限
      * - System Manager
      * - Self (need old password)
      */
-    put: operations["edit_password_account__account_id__pass_hash_put"];
+    put: operations['edit_password_account__account_id__pass_hash_put'];
   };
-  "/account/reset-password": {
+  '/account/reset-password': {
     /** Reset Password */
-    post: operations["reset_password_account_reset_password_post"];
+    post: operations['reset_password_account_reset_password_post'];
   };
-  "/metrics": {
+  '/metrics': {
     /**
-     * Metrics 
+     * Metrics
      * @description Endpoint that serves Prometheus metrics.
      */
-    get: operations["metrics_metrics_get"];
+    get: operations['metrics_metrics_get'];
   };
 }
 
@@ -1308,7 +1307,7 @@ export interface components {
       /** Id */
       id: number;
       /**
-       * Access Time 
+       * Access Time
        * Format: date-time
        */
       access_time: string;
@@ -1332,7 +1331,7 @@ export interface components {
       /** Real Name */
       real_name: string;
       /**
-       * Alternative Email 
+       * Alternative Email
        * Format: email
        */
       alternative_email?: string;
@@ -1352,31 +1351,31 @@ export interface components {
       /** Author Id */
       author_id: number;
       /**
-       * Post Time 
+       * Post Time
        * Format: date-time
        */
       post_time: string;
       /**
-       * Expire Time 
+       * Expire Time
        * Format: date-time
        */
       expire_time: string;
     };
     /** AddChallengeInput */
     AddChallengeInput: {
-      publicize_type: components["schemas"]["ChallengePublicizeType"];
-      selection_type: components["schemas"]["TaskSelectionType"];
+      publicize_type: components['schemas']['ChallengePublicizeType'];
+      selection_type: components['schemas']['TaskSelectionType'];
       /** Title */
       title: string;
       /** Description */
       description?: string;
       /**
-       * Start Time 
+       * Start Time
        * Format: date-time
        */
       start_time: string;
       /**
-       * End Time 
+       * End Time
        * Format: date-time
        */
       end_time: string;
@@ -1390,7 +1389,7 @@ export interface components {
     AddCourseInput: {
       /** Name */
       name: string;
-      type: components["schemas"]["CourseType"];
+      type: components['schemas']['CourseType'];
     };
     /** AddEssayInput */
     AddEssayInput: {
@@ -1429,7 +1428,7 @@ export interface components {
     AddMemberInput: {
       /** Account Referral */
       account_referral: string;
-      role: components["schemas"]["RoleType"];
+      role: components['schemas']['RoleType'];
     };
     /** AddNormalAccountInput */
     AddNormalAccountInput: {
@@ -1440,12 +1439,12 @@ export interface components {
       /** Password */
       password: string;
       /**
-       * Nickname 
+       * Nickname
        * @default
        */
       nickname?: string;
       /**
-       * Alternative Email 
+       * Alternative Email
        * Format: email
        */
       alternative_email?: string;
@@ -1511,7 +1510,7 @@ export interface components {
       /** Title */
       title: string;
       /** Target Problem Ids */
-      target_problem_ids: (number)[];
+      target_problem_ids: number[];
       /** Penalty Formula */
       penalty_formula: string;
       /** Team Label Filter */
@@ -1531,7 +1530,7 @@ export interface components {
       /** Title */
       title: string;
       /** Target Problem Ids */
-      target_problem_ids: (number)[];
+      target_problem_ids: number[];
       /** Scoring Formula */
       scoring_formula: string;
       /** Baseline Team Id */
@@ -1561,12 +1560,12 @@ export interface components {
     /** AssignPeerReviewOutput */
     AssignPeerReviewOutput: {
       /** Id */
-      id: (number)[];
+      id: number[];
     };
     /** Body_add_assisting_data_under_problem_problem__problem_id__assisting_data_post */
     Body_add_assisting_data_under_problem_problem__problem_id__assisting_data_post: {
       /**
-       * Assisting Data 
+       * Assisting Data
        * Format: binary
        */
       assisting_data: string;
@@ -1574,7 +1573,7 @@ export interface components {
     /** Body_edit_assisting_data_assisting_data__assisting_data_id__put */
     Body_edit_assisting_data_assisting_data__assisting_data_id__put: {
       /**
-       * Assisting Data File 
+       * Assisting Data File
        * Format: binary
        */
       assisting_data_file: string;
@@ -1582,7 +1581,7 @@ export interface components {
     /** Body_import_account_account_import_post */
     Body_import_account_account_import_post: {
       /**
-       * Account File 
+       * Account File
        * Format: binary
        */
       account_file: string;
@@ -1590,7 +1589,7 @@ export interface components {
     /** Body_import_class_grade_class__class_id__grade_import_post */
     Body_import_class_grade_class__class_id__grade_import_post: {
       /**
-       * Grade File 
+       * Grade File
        * Format: binary
        */
       grade_file: string;
@@ -1598,7 +1597,7 @@ export interface components {
     /** Body_import_team_class__class_id__team_import_post */
     Body_import_team_class__class_id__team_import_post: {
       /**
-       * Team File 
+       * Team File
        * Format: binary
        */
       team_file: string;
@@ -1606,7 +1605,7 @@ export interface components {
     /** Body_reupload_essay_essay_submission__essay_submission_id__put */
     Body_reupload_essay_essay_submission__essay_submission_id__put: {
       /**
-       * Essay File 
+       * Essay File
        * Format: binary
        */
       essay_file: string;
@@ -1614,7 +1613,7 @@ export interface components {
     /** Body_submit_problem__problem_id__submission_post */
     Body_submit_problem__problem_id__submission_post: {
       /**
-       * Content File 
+       * Content File
        * Format: binary
        */
       content_file: string;
@@ -1622,7 +1621,7 @@ export interface components {
     /** Body_upload_essay_essay__essay_id__essay_submission_post */
     Body_upload_essay_essay__essay_id__essay_submission_post: {
       /**
-       * Essay File 
+       * Essay File
        * Format: binary
        */
       essay_file: string;
@@ -1630,7 +1629,7 @@ export interface components {
     /** Body_upload_testcase_input_data_testcase__testcase_id__input_data_put */
     Body_upload_testcase_input_data_testcase__testcase_id__input_data_put: {
       /**
-       * Input File 
+       * Input File
        * Format: binary
        */
       input_file: string;
@@ -1638,7 +1637,7 @@ export interface components {
     /** Body_upload_testcase_output_data_testcase__testcase_id__output_data_put */
     Body_upload_testcase_output_data_testcase__testcase_id__output_data_put: {
       /**
-       * Output File 
+       * Output File
        * Format: binary
        */
       output_file: string;
@@ -1646,14 +1645,14 @@ export interface components {
     /** BrowseAccessLogOutput */
     BrowseAccessLogOutput: {
       /** Data */
-      data: (components["schemas"]["AccessLog"])[];
+      data: components['schemas']['AccessLog'][];
       /** Total Count */
       total_count: number;
     };
     /** BrowseAccountGradeOutput */
     BrowseAccountGradeOutput: {
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__Grade"])[];
+      data: components['schemas']['pydantic__dataclasses__Grade'][];
       /** Total Count */
       total_count: number;
     };
@@ -1677,7 +1676,7 @@ export interface components {
     /** BrowseAccountWithDefaultStudentIdOutput */
     BrowseAccountWithDefaultStudentIdOutput: {
       /** Data */
-      data: (components["schemas"]["BrowseAccountOutput"])[];
+      data: components['schemas']['BrowseAccountOutput'][];
       /** Total Count */
       total_count: number;
     };
@@ -1685,7 +1684,7 @@ export interface components {
     BrowseAccountWithRoleOutput: {
       /** Member Id */
       member_id: number;
-      role: components["schemas"]["RoleType"];
+      role: components['schemas']['RoleType'];
       /** Class Id */
       class_id: number;
       /** Class Name */
@@ -1697,49 +1696,49 @@ export interface components {
     };
     /** BrowseAllClassUnderCourseOutput */
     BrowseAllClassUnderCourseOutput: {
-      class_info: components["schemas"]["pydantic__dataclasses__Class"];
+      class_info: components['schemas']['pydantic__dataclasses__Class'];
       /** Member Count */
       member_count: number;
     };
     /** BrowseAnnouncementOutput */
     BrowseAnnouncementOutput: {
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__Announcement"])[];
+      data: components['schemas']['pydantic__dataclasses__Announcement'][];
       /** Total Count */
       total_count: number;
     };
     /** BrowseChallengeUnderclassOutput */
     BrowseChallengeUnderclassOutput: {
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__Challenge"])[];
+      data: components['schemas']['pydantic__dataclasses__Challenge'][];
       /** Total Count */
       total_count: number;
     };
     /** BrowseClassGradeOutput */
     BrowseClassGradeOutput: {
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__Grade"])[];
+      data: components['schemas']['pydantic__dataclasses__Grade'][];
       /** Total Count */
       total_count: number;
     };
     /** BrowseClassMemberOutput */
     BrowseClassMemberOutput: {
       /** Data */
-      data: (components["schemas"]["ClassMemberData"])[];
+      data: components['schemas']['ClassMemberData'][];
       /** Total Count */
       total_count: number;
     };
     /** BrowseClassOutput */
     BrowseClassOutput: {
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__Class"])[];
+      data: components['schemas']['pydantic__dataclasses__Class'][];
       /** Total Count */
       total_count: number;
     };
     /** BrowseEssaySubmissionByEssayId */
     BrowseEssaySubmissionByEssayId: {
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__EssaySubmission"])[];
+      data: components['schemas']['pydantic__dataclasses__EssaySubmission'][];
       /** Total Count */
       total_count: number;
     };
@@ -1760,7 +1759,7 @@ export interface components {
       /** Comment */
       comment: string;
       /**
-       * Submit Time 
+       * Submit Time
        * Format: date-time
        */
       submit_time: string;
@@ -1768,53 +1767,53 @@ export interface components {
     /** BrowsePeerReviewRecordOutput */
     BrowsePeerReviewRecordOutput: {
       /** Data */
-      data: (components["schemas"]["BrowsePeerReviewRecordData"])[];
+      data: components['schemas']['BrowsePeerReviewRecordData'][];
       /** Total Count */
       total_count: number;
     };
     /** BrowseSubmissionOutput */
     BrowseSubmissionOutput: {
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__Submission"])[];
+      data: components['schemas']['pydantic__dataclasses__Submission'][];
       /** Total Count */
       total_count: number;
     };
     /** BrowseSubmissionUnderClassOutput */
     BrowseSubmissionUnderClassOutput: {
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__Submission"])[];
+      data: components['schemas']['pydantic__dataclasses__Submission'][];
       /** Total Count */
       total_count: number;
     };
     /** BrowseTaskOutput */
     BrowseTaskOutput: {
       /** Problem */
-      problem: (components["schemas"]["pydantic__dataclasses__Problem"])[];
+      problem: components['schemas']['pydantic__dataclasses__Problem'][];
       /** Peer Review */
-      peer_review: (components["schemas"]["pydantic__dataclasses__PeerReview"])[];
+      peer_review: components['schemas']['pydantic__dataclasses__PeerReview'][];
       /** Essay */
-      essay: (components["schemas"]["pydantic__dataclasses__Essay"])[];
+      essay: components['schemas']['pydantic__dataclasses__Essay'][];
       /** Scoreboard */
-      scoreboard: (components["schemas"]["Scoreboard"])[];
+      scoreboard: components['schemas']['Scoreboard'][];
     };
     /** BrowseTeamUnderClassOutput */
     BrowseTeamUnderClassOutput: {
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__Team"])[];
+      data: components['schemas']['pydantic__dataclasses__Team'][];
       /** Total Count */
       total_count: number;
     };
     /**
-     * ChallengePublicizeType 
-     * @description An enumeration. 
+     * ChallengePublicizeType
+     * @description An enumeration.
      * @enum {string}
      */
-    ChallengePublicizeType: "START_TIME" | "END_TIME";
+    ChallengePublicizeType: 'START_TIME' | 'END_TIME';
     /** ClassMemberData */
     ClassMemberData: {
       /** Member Id */
       member_id: number;
-      role: components["schemas"]["RoleType"];
+      role: components['schemas']['RoleType'];
       /** Username */
       username: string;
       /** Real Name */
@@ -1825,11 +1824,11 @@ export interface components {
       institute_abbreviated_name: string;
     };
     /**
-     * CourseType 
-     * @description An enumeration. 
+     * CourseType
+     * @description An enumeration.
      * @enum {string}
      */
-    CourseType: "LESSON" | "CONTEST";
+    CourseType: 'LESSON' | 'CONTEST';
     /** CustomizedReviserInput */
     CustomizedReviserInput: {
       /** Judge Language */
@@ -1849,7 +1848,7 @@ export interface components {
       /** Nickname */
       nickname?: string;
       /**
-       * Alternative Email 
+       * Alternative Email
        * Format: email
        */
       alternative_email?: string;
@@ -1863,31 +1862,31 @@ export interface components {
       /** Content */
       content?: string;
       /**
-       * Post Time 
+       * Post Time
        * Format: date-time
        */
       post_time?: string;
       /**
-       * Expire Time 
+       * Expire Time
        * Format: date-time
        */
       expire_time?: string;
     };
     /** EditChallengeInput */
     EditChallengeInput: {
-      publicize_type?: components["schemas"]["ChallengePublicizeType"];
-      selection_type?: components["schemas"]["TaskSelectionType"];
+      publicize_type?: components['schemas']['ChallengePublicizeType'];
+      selection_type?: components['schemas']['TaskSelectionType'];
       /** Title */
       title?: string;
       /** Description */
       description?: string;
       /**
-       * Start Time 
+       * Start Time
        * Format: date-time
        */
       start_time?: string;
       /**
-       * End Time 
+       * End Time
        * Format: date-time
        */
       end_time?: string;
@@ -1903,7 +1902,7 @@ export interface components {
     EditCourseInput: {
       /** Name */
       name?: string;
-      type?: components["schemas"]["CourseType"];
+      type?: components['schemas']['CourseType'];
     };
     /** EditEssayInput */
     EditEssayInput: {
@@ -1938,7 +1937,7 @@ export interface components {
     EditMemberInput: {
       /** Member Id */
       member_id: number;
-      role: components["schemas"]["RoleType"];
+      role: components['schemas']['RoleType'];
     };
     /** EditPasswordInput */
     EditPasswordInput: {
@@ -1980,11 +1979,11 @@ export interface components {
       source?: string;
       /** Hint */
       hint?: string;
-      judge_type: components["schemas"]["ProblemJudgeType"];
-      judge_source?: components["schemas"]["JudgeSourceInput"];
+      judge_type: components['schemas']['ProblemJudgeType'];
+      judge_source?: components['schemas']['JudgeSourceInput'];
       /** Reviser Is Enabled */
       reviser_is_enabled?: boolean;
-      reviser?: components["schemas"]["CustomizedReviserInput"];
+      reviser?: components['schemas']['CustomizedReviserInput'];
       /** Is Lazy Judge */
       is_lazy_judge?: boolean;
     };
@@ -2043,7 +2042,7 @@ export interface components {
       /** Username */
       username: string;
       /**
-       * Email 
+       * Email
        * Format: email
        */
       email: string;
@@ -2051,7 +2050,7 @@ export interface components {
     /** ForgetUsernameInput */
     ForgetUsernameInput: {
       /**
-       * Email 
+       * Email
        * Format: email
        */
       email: string;
@@ -2059,7 +2058,7 @@ export interface components {
     /** GetAccountTemplateOutput */
     GetAccountTemplateOutput: {
       /**
-       * S3 File Uuid 
+       * S3 File Uuid
        * Format: uuid
        */
       s3_file_uuid: string;
@@ -2069,12 +2068,12 @@ export interface components {
     /** GetChallengeStatOutput */
     GetChallengeStatOutput: {
       /** Tasks */
-      tasks: (components["schemas"]["ProblemStatOutput"])[];
+      tasks: components['schemas']['ProblemStatOutput'][];
     };
     /** GetGradeTemplateOutput */
     GetGradeTemplateOutput: {
       /**
-       * S3 File Uuid 
+       * S3 File Uuid
        * Format: uuid
        */
       s3_file_uuid: string;
@@ -2084,11 +2083,11 @@ export interface components {
     /** GetMemberSubmissionStatOutput */
     GetMemberSubmissionStatOutput: {
       /** Member */
-      member: (components["schemas"]["MemberSubmissionStatOutput"])[];
+      member: components['schemas']['MemberSubmissionStatOutput'][];
     };
     /** GetMemberSubmissionStatisticsOutput */
     GetMemberSubmissionStatisticsOutput: {
-      data: components["schemas"]["GetMemberSubmissionStatOutput"];
+      data: components['schemas']['GetMemberSubmissionStatOutput'];
       /** Total Count */
       total_count: number;
     };
@@ -2104,7 +2103,7 @@ export interface components {
     /** GetTeamTemplateOutput */
     GetTeamTemplateOutput: {
       /**
-       * S3 File Uuid 
+       * S3 File Uuid
        * Format: uuid
        */
       s3_file_uuid: string;
@@ -2117,7 +2116,7 @@ export interface components {
       judgment_id: number;
       /** Testcase Id */
       testcase_id: number;
-      verdict: components["schemas"]["VerdictType"];
+      verdict: components['schemas']['VerdictType'];
       /** Time Lapse */
       time_lapse: number;
       /** Peak Memory */
@@ -2130,7 +2129,7 @@ export interface components {
       /** Judge Language */
       judge_language: string;
       /**
-       * Code Uuid 
+       * Code Uuid
        * Format: uuid
        */
       code_uuid: string;
@@ -2163,22 +2162,22 @@ export interface components {
       /** Id */
       id: number;
       /** Problem Scores */
-      problem_scores: (components["schemas"]["ProblemScores"])[];
+      problem_scores: components['schemas']['ProblemScores'][];
       /** Essay Submissions */
-      essay_submissions: (components["schemas"]["pydantic__dataclasses__EssaySubmission"])[];
+      essay_submissions: components['schemas']['pydantic__dataclasses__EssaySubmission'][];
     };
     /**
-     * ProblemJudgeType 
-     * @description An enumeration. 
+     * ProblemJudgeType
+     * @description An enumeration.
      * @enum {string}
      */
-    ProblemJudgeType: "NORMAL" | "CUSTOMIZED";
+    ProblemJudgeType: 'NORMAL' | 'CUSTOMIZED';
     /** ProblemReviser */
     ProblemReviser: {
       /** Judge Language */
       judge_language: string;
       /**
-       * Code Uuid 
+       * Code Uuid
        * Format: uuid
        */
       code_uuid: string;
@@ -2189,7 +2188,7 @@ export interface components {
     ProblemScores: {
       /** Problem Id */
       problem_id: number;
-      judgment: components["schemas"]["pydantic__dataclasses__Judgment"];
+      judgment: components['schemas']['pydantic__dataclasses__Judgment'];
     };
     /** ProblemStatOutput */
     ProblemStatOutput: {
@@ -2225,7 +2224,7 @@ export interface components {
       member_id: number;
       /** Member Referral */
       member_referral: string;
-      member_role: components["schemas"]["RoleType"];
+      member_role: components['schemas']['RoleType'];
     };
     /** ReadPeerReviewRecordOutput */
     ReadPeerReviewRecordOutput: {
@@ -2244,14 +2243,14 @@ export interface components {
       /** Comment */
       comment: string;
       /**
-       * Submit Time 
+       * Submit Time
        * Format: date-time
        */
       submit_time: string;
       /** Filename */
       filename: string;
       /**
-       * File Uuid 
+       * File Uuid
        * Format: uuid
        */
       file_uuid: string;
@@ -2264,7 +2263,7 @@ export interface components {
       challenge_id: number;
       /** Challenge Label */
       challenge_label: string;
-      judge_type: components["schemas"]["ProblemJudgeType"];
+      judge_type: components['schemas']['ProblemJudgeType'];
       /** Title */
       title: string;
       /** Setter Id */
@@ -2281,10 +2280,10 @@ export interface components {
       hint: string;
       /** Is Deleted */
       is_deleted: boolean;
-      judge_source: components["schemas"]["JudgeSource"];
+      judge_source: components['schemas']['JudgeSource'];
       /** Reviser Is Enabled */
       reviser_is_enabled: boolean;
-      reviser: components["schemas"]["ProblemReviser"];
+      reviser: components['schemas']['ProblemReviser'];
     };
     /** ReadProblemStatusOutput */
     ReadProblemStatusOutput: {
@@ -2304,17 +2303,17 @@ export interface components {
       /** Title */
       title: string;
       /** Target Problem Ids */
-      target_problem_ids: (number)[];
+      target_problem_ids: number[];
       /** Is Deleted */
       is_deleted: boolean;
-      type: components["schemas"]["ScoreboardType"];
+      type: components['schemas']['ScoreboardType'];
       /** Data */
       data: unknown;
     };
     /** ReadStatusOutput */
     ReadStatusOutput: {
       /** Problem */
-      problem: (components["schemas"]["ReadProblemStatusOutput"])[];
+      problem: components['schemas']['ReadProblemStatusOutput'][];
     };
     /** RejudgeProblemOutput */
     RejudgeProblemOutput: {
@@ -2342,17 +2341,17 @@ export interface components {
       submissionTime: number;
     };
     /**
-     * ReviserSettingType 
-     * @description An enumeration. 
+     * ReviserSettingType
+     * @description An enumeration.
      * @enum {string}
      */
-    ReviserSettingType: "CUSTOMIZED";
+    ReviserSettingType: 'CUSTOMIZED';
     /**
-     * RoleType 
-     * @description An enumeration. 
+     * RoleType
+     * @description An enumeration.
      * @enum {string}
      */
-    RoleType: "GUEST" | "NORMAL" | "MANAGER";
+    RoleType: 'GUEST' | 'NORMAL' | 'MANAGER';
     /** S3FileUrlOutput */
     S3FileUrlOutput: {
       /** Url */
@@ -2369,24 +2368,24 @@ export interface components {
       /** Title */
       title: string;
       /** Target Problem Ids */
-      target_problem_ids: (number)[];
+      target_problem_ids: number[];
       /** Is Deleted */
       is_deleted: boolean;
-      type: components["schemas"]["ScoreboardType"];
+      type: components['schemas']['ScoreboardType'];
       /** Setting Id */
       setting_id: number;
     };
     /**
-     * ScoreboardType 
-     * @description An enumeration. 
+     * ScoreboardType
+     * @description An enumeration.
      * @enum {string}
      */
-    ScoreboardType: "TEAM_PROJECT" | "TEAM_CONTEST";
+    ScoreboardType: 'TEAM_PROJECT' | 'TEAM_CONTEST';
     /** SetClassMemberInput */
     SetClassMemberInput: {
       /** Account Referral */
       account_referral: string;
-      role: components["schemas"]["RoleType"];
+      role: components['schemas']['RoleType'];
     };
     /** SubmissionLanguage */
     SubmissionLanguage: {
@@ -2407,18 +2406,18 @@ export interface components {
       comment: string;
     };
     /**
-     * TaskSelectionType 
-     * @description An enumeration. 
+     * TaskSelectionType
+     * @description An enumeration.
      * @enum {string}
      */
-    TaskSelectionType: "LAST" | "BEST";
+    TaskSelectionType: 'LAST' | 'BEST';
     /** TeamMember */
     TeamMember: {
       /** Member Id */
       member_id: number;
       /** Team Id */
       team_id: number;
-      role: components["schemas"]["RoleType"];
+      role: components['schemas']['RoleType'];
     };
     /** TimeInfo */
     TimeInfo: {
@@ -2430,11 +2429,20 @@ export interface components {
       timestamp: number;
     };
     /**
-     * VerdictType 
-     * @description An enumeration. 
+     * VerdictType
+     * @description An enumeration.
      * @enum {string}
      */
-    VerdictType: "ACCEPTED" | "WRONG ANSWER" | "MEMORY LIMIT EXCEED" | "TIME LIMIT EXCEED" | "RUNTIME ERROR" | "COMPILE ERROR" | "CONTACT MANAGER" | "FORBIDDEN ACTION" | "SYSTEM ERROR";
+    VerdictType:
+      | 'ACCEPTED'
+      | 'WRONG ANSWER'
+      | 'MEMORY LIMIT EXCEED'
+      | 'TIME LIMIT EXCEED'
+      | 'RUNTIME ERROR'
+      | 'COMPILE ERROR'
+      | 'CONTACT MANAGER'
+      | 'FORBIDDEN ACTION'
+      | 'SYSTEM ERROR';
     /** ViewAccessLog */
     ViewAccessLog: {
       /** Account Id */
@@ -2452,7 +2460,7 @@ export interface components {
       /** Request Method */
       request_method: string;
       /**
-       * Access Time 
+       * Access Time
        * Format: date-time
        */
       access_time: string;
@@ -2462,7 +2470,7 @@ export interface components {
     /** ViewAccessLogOutput */
     ViewAccessLogOutput: {
       /** Data */
-      data: (components["schemas"]["ViewAccessLog"])[];
+      data: components['schemas']['ViewAccessLog'][];
       /** Total Count */
       total_count: number;
     };
@@ -2480,7 +2488,7 @@ export interface components {
     /** ViewAccountOutput */
     ViewAccountOutput: {
       /** Data */
-      data: (components["schemas"]["ViewAccount"])[];
+      data: components['schemas']['ViewAccount'][];
       /** Total Count */
       total_count: number;
     };
@@ -2496,14 +2504,14 @@ export interface components {
       real_name: string;
       /** Abbreviated Name */
       abbreviated_name: string;
-      role: components["schemas"]["RoleType"];
+      role: components['schemas']['RoleType'];
       /** Class Id */
       class_id: number;
     };
     /** ViewClassMemberOutput */
     ViewClassMemberOutput: {
       /** Data */
-      data: (components["schemas"]["ViewClassMember"])[];
+      data: components['schemas']['ViewClassMember'][];
       /** Total Count */
       total_count: number;
     };
@@ -2522,7 +2530,7 @@ export interface components {
       /** Score */
       score: string;
       /**
-       * Update Time 
+       * Update Time
        * Format: date-time
        */
       update_time: string;
@@ -2534,7 +2542,7 @@ export interface components {
     /** ViewGradeOutput */
     ViewGradeOutput: {
       /** Data */
-      data: (components["schemas"]["ViewGrade"])[];
+      data: components['schemas']['ViewGrade'][];
       /** Total Count */
       total_count: number;
     };
@@ -2558,9 +2566,9 @@ export interface components {
       problem_id: number;
       /** Challenge Label */
       challenge_label: string;
-      verdict: components["schemas"]["VerdictType"];
+      verdict: components['schemas']['VerdictType'];
       /**
-       * Submit Time 
+       * Submit Time
        * Format: date-time
        */
       submit_time: string;
@@ -2570,7 +2578,7 @@ export interface components {
     /** ViewMySubmissionOutput */
     ViewMySubmissionOutput: {
       /** Data */
-      data: (components["schemas"]["ViewMySubmission"])[];
+      data: components['schemas']['ViewMySubmission'][];
       /** Total Count */
       total_count: number;
     };
@@ -2580,7 +2588,7 @@ export interface components {
       submission_id: number;
       /** Judgment Id */
       judgment_id: number;
-      verdict: components["schemas"]["VerdictType"];
+      verdict: components['schemas']['VerdictType'];
       /** Score */
       score: number;
       /** Total Time */
@@ -2588,7 +2596,7 @@ export interface components {
       /** Max Memory */
       max_memory: number;
       /**
-       * Submit Time 
+       * Submit Time
        * Format: date-time
        */
       submit_time: string;
@@ -2600,7 +2608,7 @@ export interface components {
     /** ViewMySubmissionUnderProblemOutput */
     ViewMySubmissionUnderProblemOutput: {
       /** Data */
-      data: (components["schemas"]["ViewMySubmissionUnderProblem"])[];
+      data: components['schemas']['ViewMySubmissionUnderProblem'][];
       /** Total Count */
       total_count: number;
     };
@@ -2622,7 +2630,7 @@ export interface components {
     /** ViewProblemSetOutput */
     ViewProblemSetOutput: {
       /** Data */
-      data: (components["schemas"]["ViewProblemSet"])[];
+      data: components['schemas']['ViewProblemSet'][];
       /** Total Count */
       total_count: number;
     };
@@ -2646,9 +2654,9 @@ export interface components {
       problem_id: number;
       /** Challenge Label */
       challenge_label: string;
-      verdict: components["schemas"]["VerdictType"];
+      verdict: components['schemas']['VerdictType'];
       /**
-       * Submit Time 
+       * Submit Time
        * Format: date-time
        */
       submit_time: string;
@@ -2658,7 +2666,7 @@ export interface components {
     /** ViewSubmissionUnderClassOutput */
     ViewSubmissionUnderClassOutput: {
       /** Data */
-      data: (components["schemas"]["ViewSubmissionUnderClass"])[];
+      data: components['schemas']['ViewSubmissionUnderClass'][];
       /** Total Count */
       total_count: number;
     };
@@ -2673,7 +2681,7 @@ export interface components {
       /** Solved Problem Count */
       solved_problem_count: number;
       /** Target Problem Data */
-      target_problem_data: (components["schemas"]["ViewTeamContestScoreboardProblemScoreOutput"])[];
+      target_problem_data: components['schemas']['ViewTeamContestScoreboardProblemScoreOutput'][];
     };
     /** ViewTeamContestScoreboardProblemScoreOutput */
     ViewTeamContestScoreboardProblemScoreOutput: {
@@ -2694,9 +2702,9 @@ export interface components {
     };
     /** ViewTeamContestScoreboardRunsOutput */
     ViewTeamContestScoreboardRunsOutput: {
-      time: components["schemas"]["TimeInfo"];
+      time: components['schemas']['TimeInfo'];
       /** Runs */
-      runs: (components["schemas"]["ReturnEachRun"])[];
+      runs: components['schemas']['ReturnEachRun'][];
     };
     /** ViewTeamProjectScoreboardOutput */
     ViewTeamProjectScoreboardOutput: {
@@ -2707,7 +2715,7 @@ export interface components {
       /** Total Score */
       total_score: number;
       /** Target Problem Data */
-      target_problem_data: (components["schemas"]["ViewTeamProjectScoreboardProblemScoreOutput"])[];
+      target_problem_data: components['schemas']['ViewTeamProjectScoreboardProblemScoreOutput'][];
     };
     /** ViewTeamProjectScoreboardProblemScoreOutput */
     ViewTeamProjectScoreboardProblemScoreOutput: {
@@ -2731,7 +2739,7 @@ export interface components {
     add_announcement_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
       /** Error */
       error: string;
     };
@@ -2739,7 +2747,7 @@ export interface components {
     add_assisting_data_under_problem_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
       /** Error */
       error: string;
     };
@@ -2747,7 +2755,7 @@ export interface components {
     add_challenge_under_class_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
       /** Error */
       error: string;
     };
@@ -2755,7 +2763,7 @@ export interface components {
     add_class_under_course_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
       /** Error */
       error: string;
     };
@@ -2763,7 +2771,7 @@ export interface components {
     add_course_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
       /** Error */
       error: string;
     };
@@ -2771,7 +2779,7 @@ export interface components {
     add_essay_under_challenge_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
       /** Error */
       error: string;
     };
@@ -2779,7 +2787,7 @@ export interface components {
     add_grade_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
       /** Error */
       error: string;
     };
@@ -2787,7 +2795,7 @@ export interface components {
     add_institute_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
       /** Error */
       error: string;
     };
@@ -2795,7 +2803,7 @@ export interface components {
     add_normal_account_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
       /** Error */
       error: string;
     };
@@ -2803,7 +2811,7 @@ export interface components {
     add_peer_review_under_challenge_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
       /** Error */
       error: string;
     };
@@ -2811,7 +2819,7 @@ export interface components {
     add_problem_under_challenge_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
       /** Error */
       error: string;
     };
@@ -2828,7 +2836,7 @@ export interface components {
     add_submission_language_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
       /** Error */
       error: string;
     };
@@ -2836,7 +2844,7 @@ export interface components {
     add_team_contest_scoreboard_under_challenge_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
       /** Error */
       error: string;
     };
@@ -2845,7 +2853,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (boolean)[];
+      data: boolean[];
       /** Error */
       error: string;
     };
@@ -2853,7 +2861,7 @@ export interface components {
     add_team_project_scoreboard_under_challenge_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
       /** Error */
       error: string;
     };
@@ -2861,7 +2869,7 @@ export interface components {
     add_team_under_class_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
       /** Error */
       error: string;
     };
@@ -2869,7 +2877,7 @@ export interface components {
     add_testcase_under_problem_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
       /** Error */
       error: string;
     };
@@ -2877,7 +2885,7 @@ export interface components {
     assign_peer_review_record_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["AssignPeerReviewOutput"];
+      data: components['schemas']['AssignPeerReviewOutput'];
       /** Error */
       error: string;
     };
@@ -2886,7 +2894,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__BatchGetAccountOutput"])[];
+      data: components['schemas']['pydantic__dataclasses__BatchGetAccountOutput'][];
       /** Error */
       error: string;
     };
@@ -2895,7 +2903,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__BatchGetAccountOutput"])[];
+      data: components['schemas']['pydantic__dataclasses__BatchGetAccountOutput'][];
       /** Error */
       error: string;
     };
@@ -2904,7 +2912,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__Judgment"])[];
+      data: components['schemas']['pydantic__dataclasses__Judgment'][];
       /** Error */
       error: string;
     };
@@ -2912,7 +2920,7 @@ export interface components {
     browse_access_log_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["BrowseAccessLogOutput"];
+      data: components['schemas']['BrowseAccessLogOutput'];
       /** Error */
       error: string;
     };
@@ -2920,7 +2928,7 @@ export interface components {
     browse_account_grade_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["BrowseAccountGradeOutput"];
+      data: components['schemas']['BrowseAccountGradeOutput'];
       /** Error */
       error: string;
     };
@@ -2929,7 +2937,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (number)[];
+      data: number[];
       /** Error */
       error: string;
     };
@@ -2938,7 +2946,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (number)[];
+      data: number[];
       /** Error */
       error: string;
     };
@@ -2946,7 +2954,7 @@ export interface components {
     browse_account_with_default_student_id_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["BrowseAccountWithDefaultStudentIdOutput"];
+      data: components['schemas']['BrowseAccountWithDefaultStudentIdOutput'];
       /** Error */
       error: string;
     };
@@ -2955,7 +2963,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["EmailVerification"])[];
+      data: components['schemas']['EmailVerification'][];
       /** Error */
       error: string;
     };
@@ -2964,7 +2972,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__StudentCard"])[];
+      data: components['schemas']['pydantic__dataclasses__StudentCard'][];
       /** Error */
       error: string;
     };
@@ -2973,7 +2981,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["BrowseAccountWithRoleOutput"])[];
+      data: components['schemas']['BrowseAccountWithRoleOutput'][];
       /** Error */
       error: string;
     };
@@ -2982,7 +2990,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__ReadAssistingDataOutput"])[];
+      data: components['schemas']['pydantic__dataclasses__ReadAssistingDataOutput'][];
       /** Error */
       error: string;
     };
@@ -2991,7 +2999,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["ReadClassMemberOutput"])[];
+      data: components['schemas']['ReadClassMemberOutput'][];
       /** Error */
       error: string;
     };
@@ -3000,7 +3008,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["BrowseAllClassUnderCourseOutput"])[];
+      data: components['schemas']['BrowseAllClassUnderCourseOutput'][];
       /** Error */
       error: string;
     };
@@ -3009,7 +3017,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__Course"])[];
+      data: components['schemas']['pydantic__dataclasses__Course'][];
       /** Error */
       error: string;
     };
@@ -3018,7 +3026,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__Institute"])[];
+      data: components['schemas']['pydantic__dataclasses__Institute'][];
       /** Error */
       error: string;
     };
@@ -3027,7 +3035,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["JudgeCase"])[];
+      data: components['schemas']['JudgeCase'][];
       /** Error */
       error: string;
     };
@@ -3035,7 +3043,7 @@ export interface components {
     browse_all_judgment_verdict_return: {
       /** Success */
       success: boolean;
-      data: (components["schemas"]["VerdictType"])[];
+      data: components['schemas']['VerdictType'][];
       /** Error */
       error: string;
     };
@@ -3044,7 +3052,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__Judgment"])[];
+      data: components['schemas']['pydantic__dataclasses__Judgment'][];
       /** Error */
       error: string;
     };
@@ -3053,7 +3061,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["SubmissionLanguage"])[];
+      data: components['schemas']['SubmissionLanguage'][];
       /** Error */
       error: string;
     };
@@ -3062,7 +3070,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["ReadStatusOutput"])[];
+      data: components['schemas']['ReadStatusOutput'][];
       /** Error */
       error: string;
     };
@@ -3070,7 +3078,7 @@ export interface components {
     browse_all_task_under_challenge_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["BrowseTaskOutput"];
+      data: components['schemas']['BrowseTaskOutput'];
       /** Error */
       error: string;
     };
@@ -3079,7 +3087,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__ReadTestcaseOutput"])[];
+      data: components['schemas']['pydantic__dataclasses__ReadTestcaseOutput'][];
       /** Error */
       error: string;
     };
@@ -3087,7 +3095,7 @@ export interface components {
     browse_announcement_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["BrowseAnnouncementOutput"];
+      data: components['schemas']['BrowseAnnouncementOutput'];
       /** Error */
       error: string;
     };
@@ -3095,7 +3103,7 @@ export interface components {
     browse_challenge_under_class_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["BrowseChallengeUnderclassOutput"];
+      data: components['schemas']['BrowseChallengeUnderclassOutput'];
       /** Error */
       error: string;
     };
@@ -3103,7 +3111,7 @@ export interface components {
     browse_class_grade_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["BrowseClassGradeOutput"];
+      data: components['schemas']['BrowseClassGradeOutput'];
       /** Error */
       error: string;
     };
@@ -3111,7 +3119,7 @@ export interface components {
     browse_class_member_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["BrowseClassMemberOutput"];
+      data: components['schemas']['BrowseClassMemberOutput'];
       /** Error */
       error: string;
     };
@@ -3119,7 +3127,7 @@ export interface components {
     browse_class_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["BrowseClassOutput"];
+      data: components['schemas']['BrowseClassOutput'];
       /** Error */
       error: string;
     };
@@ -3127,7 +3135,7 @@ export interface components {
     browse_essay_submission_by_essay_id_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["BrowseEssaySubmissionByEssayId"];
+      data: components['schemas']['BrowseEssaySubmissionByEssayId'];
       /** Error */
       error: string;
     };
@@ -3135,7 +3143,7 @@ export interface components {
     browse_peer_review_record_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["BrowsePeerReviewRecordOutput"];
+      data: components['schemas']['BrowsePeerReviewRecordOutput'];
       /** Error */
       error: string;
     };
@@ -3144,7 +3152,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__Problem"])[];
+      data: components['schemas']['pydantic__dataclasses__Problem'][];
       /** Error */
       error: string;
     };
@@ -3152,7 +3160,7 @@ export interface components {
     browse_submission_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["BrowseSubmissionOutput"];
+      data: components['schemas']['BrowseSubmissionOutput'];
       /** Error */
       error: string;
     };
@@ -3160,7 +3168,7 @@ export interface components {
     browse_submission_under_class_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["BrowseSubmissionUnderClassOutput"];
+      data: components['schemas']['BrowseSubmissionUnderClassOutput'];
       /** Error */
       error: string;
     };
@@ -3169,7 +3177,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["TeamMember"])[];
+      data: components['schemas']['TeamMember'][];
       /** Error */
       error: string;
     };
@@ -3177,7 +3185,7 @@ export interface components {
     browse_team_under_class_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["BrowseTeamUnderClassOutput"];
+      data: components['schemas']['BrowseTeamUnderClassOutput'];
       /** Error */
       error: string;
     };
@@ -3581,7 +3589,7 @@ export interface components {
     get_account_template_file_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["GetAccountTemplateOutput"];
+      data: components['schemas']['GetAccountTemplateOutput'];
       /** Error */
       error: string;
     };
@@ -3589,7 +3597,7 @@ export interface components {
     get_challenge_statistics_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["GetChallengeStatOutput"];
+      data: components['schemas']['GetChallengeStatOutput'];
       /** Error */
       error: string;
     };
@@ -3597,7 +3605,7 @@ export interface components {
     get_grade_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__Grade"];
+      data: components['schemas']['pydantic__dataclasses__Grade'];
       /** Error */
       error: string;
     };
@@ -3605,7 +3613,7 @@ export interface components {
     get_grade_template_file_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["GetGradeTemplateOutput"];
+      data: components['schemas']['GetGradeTemplateOutput'];
       /** Error */
       error: string;
     };
@@ -3613,7 +3621,7 @@ export interface components {
     get_member_submission_statistics_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["GetMemberSubmissionStatisticsOutput"];
+      data: components['schemas']['GetMemberSubmissionStatisticsOutput'];
       /** Error */
       error: string;
     };
@@ -3621,7 +3629,7 @@ export interface components {
     get_problem_statistics_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["GetProblemStatOutput"];
+      data: components['schemas']['GetProblemStatOutput'];
       /** Error */
       error: string;
     };
@@ -3629,7 +3637,7 @@ export interface components {
     get_s3_file_url_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["S3FileUrlOutput"];
+      data: components['schemas']['S3FileUrlOutput'];
       /** Error */
       error: string;
     };
@@ -3637,7 +3645,7 @@ export interface components {
     get_score_by_best_under_problem_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__GetScoreByTypeOutput"];
+      data: components['schemas']['pydantic__dataclasses__GetScoreByTypeOutput'];
       /** Error */
       error: string;
     };
@@ -3645,7 +3653,7 @@ export interface components {
     get_score_by_challenge_type_under_problem_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__GetScoreByTypeOutput"];
+      data: components['schemas']['pydantic__dataclasses__GetScoreByTypeOutput'];
       /** Error */
       error: string;
     };
@@ -3653,7 +3661,7 @@ export interface components {
     get_team_template_file_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["GetTeamTemplateOutput"];
+      data: components['schemas']['GetTeamTemplateOutput'];
       /** Error */
       error: string;
     };
@@ -3688,7 +3696,7 @@ export interface components {
     login_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["LoginOutput"];
+      data: components['schemas']['LoginOutput'];
       /** Error */
       error: string;
     };
@@ -3708,7 +3716,7 @@ export interface components {
       /** Title */
       title?: string;
       /** Target Problem Ids */
-      target_problem_ids?: (number)[];
+      target_problem_ids?: number[];
       /** Penalty Formula */
       penalty_formula?: string;
       /** Team Label Filter */
@@ -3721,7 +3729,7 @@ export interface components {
       /** Title */
       title?: string;
       /** Target Problem Ids */
-      target_problem_ids?: (number)[];
+      target_problem_ids?: number[];
       /** Scoring Formula */
       scoring_formula?: string;
       /** Baseline Team Id */
@@ -3747,12 +3755,12 @@ export interface components {
       /** Author Id */
       author_id: number;
       /**
-       * Post Time 
+       * Post Time
        * Format: date-time
        */
       post_time: string;
       /**
-       * Expire Time 
+       * Expire Time
        * Format: date-time
        */
       expire_time: string;
@@ -3776,8 +3784,8 @@ export interface components {
       id: number;
       /** Class Id */
       class_id: number;
-      publicize_type: components["schemas"]["ChallengePublicizeType"];
-      selection_type: components["schemas"]["TaskSelectionType"];
+      publicize_type: components['schemas']['ChallengePublicizeType'];
+      selection_type: components['schemas']['TaskSelectionType'];
       /** Title */
       title: string;
       /** Setter Id */
@@ -3785,12 +3793,12 @@ export interface components {
       /** Description */
       description: string;
       /**
-       * Start Time 
+       * Start Time
        * Format: date-time
        */
       start_time: string;
       /**
-       * End Time 
+       * End Time
        * Format: date-time
        */
       end_time: string;
@@ -3814,7 +3822,7 @@ export interface components {
       id: number;
       /** Name */
       name: string;
-      type: components["schemas"]["CourseType"];
+      type: components['schemas']['CourseType'];
       /** Is Deleted */
       is_deleted: boolean;
     };
@@ -3844,21 +3852,21 @@ export interface components {
       /** Essay Id */
       essay_id: number;
       /**
-       * Content File Uuid 
+       * Content File Uuid
        * Format: uuid
        */
       content_file_uuid: string;
       /** Filename */
       filename: string;
       /**
-       * Submit Time 
+       * Submit Time
        * Format: date-time
        */
       submit_time: string;
     };
     /** GetScoreByTypeOutput */
     pydantic__dataclasses__GetScoreByTypeOutput: {
-      challenge_type: components["schemas"]["TaskSelectionType"];
+      challenge_type: components['schemas']['TaskSelectionType'];
       /** Score */
       score: number;
     };
@@ -3879,7 +3887,7 @@ export interface components {
       /** Comment */
       comment: string;
       /**
-       * Update Time 
+       * Update Time
        * Format: date-time
        */
       update_time: string;
@@ -3905,7 +3913,7 @@ export interface components {
       id: number;
       /** Submission Id */
       submission_id: number;
-      verdict: components["schemas"]["VerdictType"];
+      verdict: components['schemas']['VerdictType'];
       /** Total Time */
       total_time: number;
       /** Max Memory */
@@ -3915,7 +3923,7 @@ export interface components {
       /** Error Message */
       error_message: string;
       /**
-       * Judge Time 
+       * Judge Time
        * Format: date-time
        */
       judge_time: string;
@@ -3953,7 +3961,7 @@ export interface components {
       challenge_id: number;
       /** Challenge Label */
       challenge_label: string;
-      judge_type: components["schemas"]["ProblemJudgeType"];
+      judge_type: components['schemas']['ProblemJudgeType'];
       /** Setting Id */
       setting_id: number;
       /** Title */
@@ -3975,13 +3983,13 @@ export interface components {
       /** Is Deleted */
       is_deleted: boolean;
       /** Reviser Settings */
-      reviser_settings: (components["schemas"]["pydantic__dataclasses__ProblemReviserSetting"])[];
+      reviser_settings: components['schemas']['pydantic__dataclasses__ProblemReviserSetting'][];
     };
     /** ProblemReviserSetting */
     pydantic__dataclasses__ProblemReviserSetting: {
       /** Id */
       id: number;
-      type: components["schemas"]["ReviserSettingType"];
+      type: components['schemas']['ReviserSettingType'];
     };
     /** ReadAssistingDataOutput */
     pydantic__dataclasses__ReadAssistingDataOutput: {
@@ -3990,7 +3998,7 @@ export interface components {
       /** Problem Id */
       problem_id: number;
       /**
-       * S3 File Uuid 
+       * S3 File Uuid
        * Format: uuid
        */
       s3_file_uuid: string;
@@ -4010,12 +4018,12 @@ export interface components {
       /** Label */
       label: string;
       /**
-       * Input File Uuid 
+       * Input File Uuid
        * Format: uuid
        */
       input_file_uuid: string;
       /**
-       * Output File Uuid 
+       * Output File Uuid
        * Format: uuid
        */
       output_file_uuid: string;
@@ -4058,7 +4066,7 @@ export interface components {
       /** Language Id */
       language_id: number;
       /**
-       * Content File Uuid 
+       * Content File Uuid
        * Format: uuid
        */
       content_file_uuid: string;
@@ -4067,7 +4075,7 @@ export interface components {
       /** Filename */
       filename: string;
       /**
-       * Submit Time 
+       * Submit Time
        * Format: date-time
        */
       submit_time: string;
@@ -4096,16 +4104,16 @@ export interface components {
       /** Student Id */
       student_id: string;
       /** Peer Review Record Ids */
-      peer_review_record_ids: (number)[];
+      peer_review_record_ids: number[];
       /** Peer Review Record Scores */
-      peer_review_record_scores: (number)[];
+      peer_review_record_scores: number[];
       /** Average Score */
       average_score: number;
     };
     /** ViewPeerReviewRecordOutput */
     pydantic__dataclasses__ViewPeerReviewRecordOutput: {
       /** Data */
-      data: (components["schemas"]["pydantic__dataclasses__ViewPeerReviewRecord"])[];
+      data: components['schemas']['pydantic__dataclasses__ViewPeerReviewRecord'][];
       /** Total Count */
       total_count: number;
     };
@@ -4122,7 +4130,7 @@ export interface components {
     read_account_with_default_student_id_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["ReadAccountOutput"];
+      data: components['schemas']['ReadAccountOutput'];
       /** Error */
       error: string;
     };
@@ -4130,7 +4138,7 @@ export interface components {
     read_announcement_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__Announcement"];
+      data: components['schemas']['pydantic__dataclasses__Announcement'];
       /** Error */
       error: string;
     };
@@ -4138,7 +4146,7 @@ export interface components {
     read_assisting_data_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__ReadAssistingDataOutput"];
+      data: components['schemas']['pydantic__dataclasses__ReadAssistingDataOutput'];
       /** Error */
       error: string;
     };
@@ -4146,7 +4154,7 @@ export interface components {
     read_challenge_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__Challenge"];
+      data: components['schemas']['pydantic__dataclasses__Challenge'];
       /** Error */
       error: string;
     };
@@ -4154,7 +4162,7 @@ export interface components {
     read_class_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__Class"];
+      data: components['schemas']['pydantic__dataclasses__Class'];
       /** Error */
       error: string;
     };
@@ -4162,7 +4170,7 @@ export interface components {
     read_course_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__Course"];
+      data: components['schemas']['pydantic__dataclasses__Course'];
       /** Error */
       error: string;
     };
@@ -4170,7 +4178,7 @@ export interface components {
     read_essay_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__Essay"];
+      data: components['schemas']['pydantic__dataclasses__Essay'];
       /** Error */
       error: string;
     };
@@ -4178,7 +4186,7 @@ export interface components {
     read_essay_submission_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__EssaySubmission"];
+      data: components['schemas']['pydantic__dataclasses__EssaySubmission'];
       /** Error */
       error: string;
     };
@@ -4186,7 +4194,7 @@ export interface components {
     read_institute_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__Institute"];
+      data: components['schemas']['pydantic__dataclasses__Institute'];
       /** Error */
       error: string;
     };
@@ -4194,7 +4202,7 @@ export interface components {
     read_judgment_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__Judgment"];
+      data: components['schemas']['pydantic__dataclasses__Judgment'];
       /** Error */
       error: string;
     };
@@ -4202,7 +4210,7 @@ export interface components {
     read_peer_review_record_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["ReadPeerReviewRecordOutput"];
+      data: components['schemas']['ReadPeerReviewRecordOutput'];
       /** Error */
       error: string;
     };
@@ -4210,7 +4218,7 @@ export interface components {
     read_peer_review_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__PeerReview"];
+      data: components['schemas']['pydantic__dataclasses__PeerReview'];
       /** Error */
       error: string;
     };
@@ -4218,7 +4226,7 @@ export interface components {
     read_problem_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["ReadProblemOutput"];
+      data: components['schemas']['ReadProblemOutput'];
       /** Error */
       error: string;
     };
@@ -4226,7 +4234,7 @@ export interface components {
     read_scoreboard_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["ReadScoreboardOutput"];
+      data: components['schemas']['ReadScoreboardOutput'];
       /** Error */
       error: string;
     };
@@ -4234,7 +4242,7 @@ export interface components {
     read_student_card_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__StudentCard"];
+      data: components['schemas']['pydantic__dataclasses__StudentCard'];
       /** Error */
       error: string;
     };
@@ -4242,7 +4250,7 @@ export interface components {
     read_submission_latest_judgment_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__Judgment"];
+      data: components['schemas']['pydantic__dataclasses__Judgment'];
       /** Error */
       error: string;
     };
@@ -4250,7 +4258,7 @@ export interface components {
     read_submission_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__Submission"];
+      data: components['schemas']['pydantic__dataclasses__Submission'];
       /** Error */
       error: string;
     };
@@ -4258,7 +4266,7 @@ export interface components {
     read_team_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__Team"];
+      data: components['schemas']['pydantic__dataclasses__Team'];
       /** Error */
       error: string;
     };
@@ -4266,7 +4274,7 @@ export interface components {
     read_testcase_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__ReadTestcaseOutput"];
+      data: components['schemas']['pydantic__dataclasses__ReadTestcaseOutput'];
       /** Error */
       error: string;
     };
@@ -4274,7 +4282,7 @@ export interface components {
     rejudge_problem_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["RejudgeProblemOutput"];
+      data: components['schemas']['RejudgeProblemOutput'];
       /** Error */
       error: string;
     };
@@ -4292,7 +4300,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (boolean)[];
+      data: boolean[];
       /** Error */
       error: string;
     };
@@ -4336,7 +4344,7 @@ export interface components {
     submit_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__AddOutput"];
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
       /** Error */
       error: string;
     };
@@ -4371,7 +4379,7 @@ export interface components {
     view_browse_access_log_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["ViewAccessLogOutput"];
+      data: components['schemas']['ViewAccessLogOutput'];
       /** Error */
       error: string;
     };
@@ -4379,7 +4387,7 @@ export interface components {
     view_browse_account_with_default_student_id_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["ViewAccountOutput"];
+      data: components['schemas']['ViewAccountOutput'];
       /** Error */
       error: string;
     };
@@ -4387,7 +4395,7 @@ export interface components {
     view_browse_class_grade_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["ViewGradeOutput"];
+      data: components['schemas']['ViewGradeOutput'];
       /** Error */
       error: string;
     };
@@ -4395,7 +4403,7 @@ export interface components {
     view_browse_class_member_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["ViewClassMemberOutput"];
+      data: components['schemas']['ViewClassMemberOutput'];
       /** Error */
       error: string;
     };
@@ -4403,7 +4411,7 @@ export interface components {
     view_browse_my_submission_under_problem_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["ViewMySubmissionUnderProblemOutput"];
+      data: components['schemas']['ViewMySubmissionUnderProblemOutput'];
       /** Error */
       error: string;
     };
@@ -4411,7 +4419,7 @@ export interface components {
     view_browse_problem_set_under_class_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["ViewProblemSetOutput"];
+      data: components['schemas']['ViewProblemSetOutput'];
       /** Error */
       error: string;
     };
@@ -4419,7 +4427,7 @@ export interface components {
     view_browse_submission_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["ViewMySubmissionOutput"];
+      data: components['schemas']['ViewMySubmissionOutput'];
       /** Error */
       error: string;
     };
@@ -4427,7 +4435,7 @@ export interface components {
     view_browse_submission_under_class_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["ViewSubmissionUnderClassOutput"];
+      data: components['schemas']['ViewSubmissionUnderClassOutput'];
       /** Error */
       error: string;
     };
@@ -4435,7 +4443,7 @@ export interface components {
     view_peer_review_summary_receive_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__ViewPeerReviewRecordOutput"];
+      data: components['schemas']['pydantic__dataclasses__ViewPeerReviewRecordOutput'];
       /** Error */
       error: string;
     };
@@ -4443,7 +4451,7 @@ export interface components {
     view_peer_review_summary_review_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["pydantic__dataclasses__ViewPeerReviewRecordOutput"];
+      data: components['schemas']['pydantic__dataclasses__ViewPeerReviewRecordOutput'];
       /** Error */
       error: string;
     };
@@ -4452,7 +4460,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["ViewTeamContestScoreboardOutput"])[];
+      data: components['schemas']['ViewTeamContestScoreboardOutput'][];
       /** Error */
       error: string;
     };
@@ -4460,7 +4468,7 @@ export interface components {
     view_team_contest_scoreboard_runs_return: {
       /** Success */
       success: boolean;
-      data: components["schemas"]["ViewTeamContestScoreboardRunsOutput"];
+      data: components['schemas']['ViewTeamContestScoreboardRunsOutput'];
       /** Error */
       error: string;
     };
@@ -4469,7 +4477,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: (components["schemas"]["ViewTeamProjectScoreboardOutput"])[];
+      data: components['schemas']['ViewTeamProjectScoreboardOutput'][];
       /** Error */
       error: string;
     };
@@ -4484,14 +4492,13 @@ export interface components {
 export type external = Record<string, never>;
 
 export interface operations {
-
   /** Default Page */
   default_page__get: {
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "text/html": string;
+          'text/html': string;
         };
       };
     };
@@ -4507,7 +4514,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["pydantic__dataclasses__email_verification_return"];
+          'application/json': components['schemas']['pydantic__dataclasses__email_verification_return'];
         };
       };
     };
@@ -4523,7 +4530,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["pydantic__dataclasses__email_verification_return"];
+          'application/json': components['schemas']['pydantic__dataclasses__email_verification_return'];
         };
       };
     };
@@ -4532,14 +4539,14 @@ export interface operations {
   forget_password_account_forget_password_post: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["ForgetPasswordInput"];
+        'application/json': components['schemas']['ForgetPasswordInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["forget_password_return"];
+          'application/json': components['schemas']['forget_password_return'];
         };
       };
     };
@@ -4548,23 +4555,23 @@ export interface operations {
   forget_username_account_forget_username_post: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["ForgetUsernameInput"];
+        'application/json': components['schemas']['ForgetUsernameInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["forget_username_return"];
+          'application/json': components['schemas']['forget_username_return'];
         };
       };
     };
   };
   /**
-   * Get S3 File Url 
+   * Get S3 File Url
    * @description ### 權限
    * - SN
-   * 
+   *
    * ### Note
    * - 目前所有 url 都有時間限制 (超時會自動過期)
    */
@@ -4575,7 +4582,7 @@ export interface operations {
         as_attachment: boolean;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         s3_file_uuid: string;
@@ -4585,65 +4592,65 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["get_s3_file_url_return"];
+          'application/json': components['schemas']['get_s3_file_url_return'];
         };
       };
     };
   };
   /**
-   * Browse All Institute 
+   * Browse All Institute
    * @description ### 權限
    * - Public
    */
   browse_all_institute_institute_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_all_institute_return"];
+          'application/json': components['schemas']['browse_all_institute_return'];
         };
       };
     };
   };
   /**
-   * Add Institute 
+   * Add Institute
    * @description ### 權限
    * - System Manager
    */
   add_institute_institute_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddInstituteInput"];
+        'application/json': components['schemas']['AddInstituteInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_institute_return"];
+          'application/json': components['schemas']['add_institute_return'];
         };
       };
     };
   };
   /**
-   * Read Institute 
+   * Read Institute
    * @description ### 權限
    * - Public
    */
   read_institute_institute__institute_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         institute_id: number;
@@ -4653,20 +4660,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_institute_return"];
+          'application/json': components['schemas']['read_institute_return'];
         };
       };
     };
   };
   /**
-   * Edit Institute 
+   * Edit Institute
    * @description ### 權限
    * - System Manager
    */
   edit_institute_institute__institute_id__patch: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         institute_id: number;
@@ -4674,20 +4681,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EditInstituteInput"];
+        'application/json': components['schemas']['EditInstituteInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_institute_return"];
+          'application/json': components['schemas']['edit_institute_return'];
         };
       };
     };
   };
   /**
-   * Browse Account With Default Student Id 
+   * Browse Account With Default Student Id
    * @description ### 權限
    * - System Manager
    * {'id': 'int', 'username': 'str', 'nickname': 'str', 'role': 'str', 'real_name': 'str', 'alternative_email': 'str'}
@@ -4701,14 +4708,14 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_account_with_default_student_id_return"];
+          'application/json': components['schemas']['browse_account_with_default_student_id_return'];
         };
       };
     };
@@ -4717,28 +4724,28 @@ export interface operations {
   add_account_account_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddAccountInput"];
+        'application/json': components['schemas']['AddAccountInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_account_return"];
+          'application/json': components['schemas']['add_account_return'];
         };
       };
     };
   };
   /**
-   * Batch Get Account With Default Student Id 
+   * Batch Get Account With Default Student Id
    * @description ### 權限
    * - System Normal
-   * 
+   *
    * ### Notes
    * - `account_ids`: list of int
    */
@@ -4748,23 +4755,23 @@ export interface operations {
         account_ids: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["batch_get_account_with_default_student_id_return"];
+          'application/json': components['schemas']['batch_get_account_with_default_student_id_return'];
         };
       };
     };
   };
   /**
-   * Batch Get Account By Account Referrals 
+   * Batch Get Account By Account Referrals
    * @description ### 權限
    * - System Normal
-   * 
+   *
    * ### Notes:
    * account_referrals: list of string
    */
@@ -4774,29 +4781,29 @@ export interface operations {
         account_referrals: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["batch_get_account_by_account_referrals_return"];
+          'application/json': components['schemas']['batch_get_account_by_account_referrals_return'];
         };
       };
     };
   };
   /**
-   * Browse All Account With Class Role 
+   * Browse All Account With Class Role
    * @description ### 權限
    * - Self
-   * 
+   *
    * ### Available columns
    */
   browse_all_account_with_class_role_account__account_id__class_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         account_id: number;
@@ -4806,33 +4813,33 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_all_account_with_class_role_return"];
+          'application/json': components['schemas']['browse_all_account_with_class_role_return'];
         };
       };
     };
   };
   /**
-   * Get Account Template File 
+   * Get Account Template File
    * @description ### 權限
    * - System Manager
    */
   get_account_template_file_account_template_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["get_account_template_file_return"];
+          'application/json': components['schemas']['get_account_template_file_return'];
         };
       };
     };
   };
   /**
-   * Read Account With Default Student Id 
+   * Read Account With Default Student Id
    * @description ### 權限
    * - System Manager
    * - Self
@@ -4841,7 +4848,7 @@ export interface operations {
   read_account_with_default_student_id_account__account_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         account_id: number;
@@ -4851,13 +4858,13 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_account_with_default_student_id_return"];
+          'application/json': components['schemas']['read_account_with_default_student_id_return'];
         };
       };
     };
   };
   /**
-   * Delete Account 
+   * Delete Account
    * @description ### 權限
    * - System manager
    * - Self
@@ -4865,7 +4872,7 @@ export interface operations {
   delete_account_account__account_id__delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         account_id: number;
@@ -4875,13 +4882,13 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_account_return"];
+          'application/json': components['schemas']['delete_account_return'];
         };
       };
     };
   };
   /**
-   * Edit Account 
+   * Edit Account
    * @description ### 權限
    * - System Manager
    * - Self
@@ -4889,7 +4896,7 @@ export interface operations {
   edit_account_account__account_id__patch: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         account_id: number;
@@ -4897,20 +4904,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EditAccountInput"];
+        'application/json': components['schemas']['EditAccountInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_account_return"];
+          'application/json': components['schemas']['edit_account_return'];
         };
       };
     };
   };
   /**
-   * Make Student Card Default 
+   * Make Student Card Default
    * @description ### 權限
    * - System manager
    * - Self
@@ -4918,7 +4925,7 @@ export interface operations {
   make_student_card_default_account__account_id__default_student_card_put: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         account_id: number;
@@ -4926,20 +4933,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["DefaultStudentCardInput"];
+        'application/json': components['schemas']['DefaultStudentCardInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["make_student_card_default_return"];
+          'application/json': components['schemas']['make_student_card_default_return'];
         };
       };
     };
   };
   /**
-   * Browse All Account Pending Email Verification 
+   * Browse All Account Pending Email Verification
    * @description ### 權限
    * - System manager
    * - Self
@@ -4947,7 +4954,7 @@ export interface operations {
   browse_all_account_pending_email_verification_account__account_id__email_verification_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         account_id: number;
@@ -4957,13 +4964,13 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_all_account_pending_email_verification_return"];
+          'application/json': components['schemas']['browse_all_account_pending_email_verification_return'];
         };
       };
     };
   };
   /**
-   * Browse All Account Student Card 
+   * Browse All Account Student Card
    * @description ### 權限
    * - System manager
    * - Self
@@ -4971,7 +4978,7 @@ export interface operations {
   browse_all_account_student_card_account__account_id__student_card_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         account_id: number;
@@ -4981,13 +4988,13 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_all_account_student_card_return"];
+          'application/json': components['schemas']['browse_all_account_student_card_return'];
         };
       };
     };
   };
   /**
-   * Add Student Card To Account 
+   * Add Student Card To Account
    * @description ### 權限
    * - System manager
    * - Self
@@ -4995,7 +5002,7 @@ export interface operations {
   add_student_card_to_account_account__account_id__student_card_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         account_id: number;
@@ -5003,20 +5010,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddStudentCardInput"];
+        'application/json': components['schemas']['AddStudentCardInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_student_card_to_account_return"];
+          'application/json': components['schemas']['add_student_card_to_account_return'];
         };
       };
     };
   };
   /**
-   * Read Student Card 
+   * Read Student Card
    * @description ### 權限
    * - System manager
    * - Self
@@ -5024,7 +5031,7 @@ export interface operations {
   read_student_card_student_card__student_card_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         student_card_id: number;
@@ -5034,13 +5041,13 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_student_card_return"];
+          'application/json': components['schemas']['read_student_card_return'];
         };
       };
     };
   };
   /**
-   * Resend Email Verification 
+   * Resend Email Verification
    * @description ### 權限
    * - System manager
    * - Self
@@ -5048,7 +5055,7 @@ export interface operations {
   resend_email_verification_email_verification__email_verification_id__resend_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         email_verification_id: number;
@@ -5058,13 +5065,13 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["resend_email_verification_return"];
+          'application/json': components['schemas']['resend_email_verification_return'];
         };
       };
     };
   };
   /**
-   * Delete Pending Email Verification 
+   * Delete Pending Email Verification
    * @description ### 權限
    * - System manager
    * - Self
@@ -5072,7 +5079,7 @@ export interface operations {
   delete_pending_email_verification_email_verification__email_verification_id__delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         email_verification_id: number;
@@ -5082,65 +5089,65 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_pending_email_verification_return"];
+          'application/json': components['schemas']['delete_pending_email_verification_return'];
         };
       };
     };
   };
   /**
-   * Browse All Course 
+   * Browse All Course
    * @description ### 權限
    * - System normal
    */
   browse_all_course_course_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_all_course_return"];
+          'application/json': components['schemas']['browse_all_course_return'];
         };
       };
     };
   };
   /**
-   * Add Course 
+   * Add Course
    * @description ### 權限
    * - System manager
    */
   add_course_course_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddCourseInput"];
+        'application/json': components['schemas']['AddCourseInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_course_return"];
+          'application/json': components['schemas']['add_course_return'];
         };
       };
     };
   };
   /**
-   * Read Course 
+   * Read Course
    * @description ### 權限
    * - System normal
    */
   read_course_course__course_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         course_id: number;
@@ -5150,20 +5157,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_course_return"];
+          'application/json': components['schemas']['read_course_return'];
         };
       };
     };
   };
   /**
-   * Delete Course 
+   * Delete Course
    * @description ### 權限
    * - System manager
    */
   delete_course_course__course_id__delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         course_id: number;
@@ -5173,20 +5180,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_course_return"];
+          'application/json': components['schemas']['delete_course_return'];
         };
       };
     };
   };
   /**
-   * Edit Course 
+   * Edit Course
    * @description ### 權限
    * - System manager
    */
   edit_course_course__course_id__patch: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         course_id: number;
@@ -5194,27 +5201,27 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EditCourseInput"];
+        'application/json': components['schemas']['EditCourseInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_course_return"];
+          'application/json': components['schemas']['edit_course_return'];
         };
       };
     };
   };
   /**
-   * Browse All Class Under Course 
+   * Browse All Class Under Course
    * @description ### 權限
    * - System normal
    */
   browse_all_class_under_course_course__course_id__class_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         course_id: number;
@@ -5224,20 +5231,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_all_class_under_course_return"];
+          'application/json': components['schemas']['browse_all_class_under_course_return'];
         };
       };
     };
   };
   /**
-   * Add Class Under Course 
+   * Add Class Under Course
    * @description ### 權限
    * - System manager
    */
   add_class_under_course_course__course_id__class_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         course_id: number;
@@ -5245,23 +5252,23 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddClassInput"];
+        'application/json': components['schemas']['AddClassInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_class_under_course_return"];
+          'application/json': components['schemas']['add_class_under_course_return'];
         };
       };
     };
   };
   /**
-   * Browse Class 
+   * Browse Class
    * @description ### 權限
    * - system normal: all
-   * 
+   *
    * ### Available columns
    * {'id': 'int', 'name': 'str', 'course_id': 'int', 'is_deleted': 'bool'}
    */
@@ -5274,27 +5281,27 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_class_return"];
+          'application/json': components['schemas']['browse_class_return'];
         };
       };
     };
   };
   /**
-   * Read Class 
+   * Read Class
    * @description ### 權限
    * - System normal: all
    */
   read_class_class__class_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -5304,20 +5311,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_class_return"];
+          'application/json': components['schemas']['read_class_return'];
         };
       };
     };
   };
   /**
-   * Delete Class 
+   * Delete Class
    * @description ### 權限
    * - System manager
    */
   delete_class_class__class_id__delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -5327,20 +5334,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_class_return"];
+          'application/json': components['schemas']['delete_class_return'];
         };
       };
     };
   };
   /**
-   * Edit Class 
+   * Edit Class
    * @description ### 權限
    * - Class+ manager
    */
   edit_class_class__class_id__patch: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -5348,24 +5355,24 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EditClassInput"];
+        'application/json': components['schemas']['EditClassInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_class_return"];
+          'application/json': components['schemas']['edit_class_return'];
         };
       };
     };
   };
   /**
-   * Browse Class Member 
+   * Browse Class Member
    * @description ### 權限
    * - Class normal
    * - Class+ manager
-   * 
+   *
    * ### Available columns
    * {'member_id': 'int', 'class_id': 'int', 'role': 'RoleType'}
    */
@@ -5378,7 +5385,7 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -5388,20 +5395,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_class_member_return"];
+          'application/json': components['schemas']['browse_class_member_return'];
         };
       };
     };
   };
   /**
-   * Replace Class Members 
+   * Replace Class Members
    * @description ### 權限
    * - Class+ manager
    */
   replace_class_members_class__class_id__member_put: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -5409,20 +5416,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": (components["schemas"]["SetClassMemberInput"])[];
+        'application/json': components['schemas']['SetClassMemberInput'][];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["replace_class_members_return"];
+          'application/json': components['schemas']['replace_class_members_return'];
         };
       };
     };
   };
   /**
-   * Browse All Class Member With Account Referral 
+   * Browse All Class Member With Account Referral
    * @description ### 權限
    * - Class normal
    * - Class+ manager
@@ -5430,7 +5437,7 @@ export interface operations {
   browse_all_class_member_with_account_referral_class__class_id__member_account_referral_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -5440,20 +5447,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_all_class_member_with_account_referral_return"];
+          'application/json': components['schemas']['browse_all_class_member_with_account_referral_return'];
         };
       };
     };
   };
   /**
-   * Delete Class Member 
+   * Delete Class Member
    * @description ### 權限
    * - Class+ manager
    */
   delete_class_member_class__class_id__member__member_id__delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -5464,16 +5471,16 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_class_member_return"];
+          'application/json': components['schemas']['delete_class_member_return'];
         };
       };
     };
   };
   /**
-   * Browse Team Under Class 
+   * Browse Team Under Class
    * @description ### 權限
    * - Class normal: all
-   * 
+   *
    * ### Available columns
    * {'id': 'int', 'name': 'str', 'class_id': 'int', 'label': 'str', 'is_deleted': 'bool'}
    */
@@ -5486,7 +5493,7 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -5496,20 +5503,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_team_under_class_return"];
+          'application/json': components['schemas']['browse_team_under_class_return'];
         };
       };
     };
   };
   /**
-   * Add Team Under Class 
+   * Add Team Under Class
    * @description ### 權限
    * - Class manager
    */
   add_team_under_class_class__class_id__team_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -5517,23 +5524,23 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddTeamInput"];
+        'application/json': components['schemas']['AddTeamInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_team_under_class_return"];
+          'application/json': components['schemas']['add_team_under_class_return'];
         };
       };
     };
   };
   /**
-   * Browse Submission Under Class 
+   * Browse Submission Under Class
    * @description ### 權限
    * - Class manager
-   * 
+   *
    * ### Available columns
    * {'id': 'int', 'account_id': 'int', 'problem_id': 'int', 'language_id': 'int', 'content_file_uuid': 'UUID', 'content_length': 'int', 'filename': 'str', 'submit_time': 'ServerTZDatetime'}
    */
@@ -5546,7 +5553,7 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -5556,13 +5563,13 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_submission_under_class_return"];
+          'application/json': components['schemas']['browse_submission_under_class_return'];
         };
       };
     };
   };
   /**
-   * Import Team 
+   * Import Team
    * @description ### 權限
    * - Class manager
    */
@@ -5572,7 +5579,7 @@ export interface operations {
         label: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -5580,47 +5587,47 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["Body_import_team_class__class_id__team_import_post"];
+        'multipart/form-data': components['schemas']['Body_import_team_class__class_id__team_import_post'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["import_team_return"];
+          'application/json': components['schemas']['import_team_return'];
         };
       };
     };
   };
   /**
-   * Get Team Template File 
+   * Get Team Template File
    * @description ### 權限
    * - system normal
    */
   get_team_template_file_team_template_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["get_team_template_file_return"];
+          'application/json': components['schemas']['get_team_template_file_return'];
         };
       };
     };
   };
   /**
-   * Read Team 
+   * Read Team
    * @description ### 權限
    * - Class normal
    */
   read_team_team__team_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         team_id: number;
@@ -5630,20 +5637,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_team_return"];
+          'application/json': components['schemas']['read_team_return'];
         };
       };
     };
   };
   /**
-   * Delete Team 
+   * Delete Team
    * @description ### 權限
    * - Class manager
    */
   delete_team_team__team_id__delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         team_id: number;
@@ -5653,13 +5660,13 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_team_return"];
+          'application/json': components['schemas']['delete_team_return'];
         };
       };
     };
   };
   /**
-   * Edit Team 
+   * Edit Team
    * @description ### 權限
    * - Class manager
    * - Team manager (limited)
@@ -5667,7 +5674,7 @@ export interface operations {
   edit_team_team__team_id__patch: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         team_id: number;
@@ -5675,27 +5682,27 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EditTeamInput"];
+        'application/json': components['schemas']['EditTeamInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_team_return"];
+          'application/json': components['schemas']['edit_team_return'];
         };
       };
     };
   };
   /**
-   * Browse Team All Member 
+   * Browse Team All Member
    * @description ### 權限
    * - Class normal
    */
   browse_team_all_member_team__team_id__member_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         team_id: number;
@@ -5705,20 +5712,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_team_all_member_return"];
+          'application/json': components['schemas']['browse_team_all_member_return'];
         };
       };
     };
   };
   /**
-   * Add Team Member 
+   * Add Team Member
    * @description ### 權限
    * - class manager
    */
   add_team_member_team__team_id__member_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         team_id: number;
@@ -5726,27 +5733,27 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": (components["schemas"]["AddMemberInput"])[];
+        'application/json': components['schemas']['AddMemberInput'][];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_team_member_return"];
+          'application/json': components['schemas']['add_team_member_return'];
         };
       };
     };
   };
   /**
-   * Edit Team Member 
+   * Edit Team Member
    * @description ### 權限
    * - Class manager
    */
   edit_team_member_team__team_id__member_patch: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         team_id: number;
@@ -5754,27 +5761,27 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": (components["schemas"]["EditMemberInput"])[];
+        'application/json': components['schemas']['EditMemberInput'][];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_team_member_return"];
+          'application/json': components['schemas']['edit_team_member_return'];
         };
       };
     };
   };
   /**
-   * Delete Team Member 
+   * Delete Team Member
    * @description ### 權限
    * - Class manager
    */
   delete_team_member_team__team_id__member__member_id__delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         team_id: number;
@@ -5785,13 +5792,13 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_team_member_return"];
+          'application/json': components['schemas']['delete_team_member_return'];
         };
       };
     };
   };
   /**
-   * Import Class Grade 
+   * Import Class Grade
    * @description ### 權限
    * - Class manager
    */
@@ -5801,7 +5808,7 @@ export interface operations {
         title: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -5809,24 +5816,24 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["Body_import_class_grade_class__class_id__grade_import_post"];
+        'multipart/form-data': components['schemas']['Body_import_class_grade_class__class_id__grade_import_post'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["import_class_grade_return"];
+          'application/json': components['schemas']['import_class_grade_return'];
         };
       };
     };
   };
   /**
-   * Browse Class Grade 
+   * Browse Class Grade
    * @description ### 權限
    * - Class manager (all)
    * - Class normal (self)
-   * 
+   *
    * ### Available columns
    * {'receiver_id': 'int', 'grader_id': 'int', 'class_id': 'int', 'title': 'str', 'score': 'str', 'comment': 'str', 'update_time': 'str'}
    */
@@ -5839,7 +5846,7 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -5849,20 +5856,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_class_grade_return"];
+          'application/json': components['schemas']['browse_class_grade_return'];
         };
       };
     };
   };
   /**
-   * Add Grade 
+   * Add Grade
    * @description ### 權限
    * - Class Manager
    */
   add_grade_class__class_id__grade_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -5870,23 +5877,23 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddGradeInput"];
+        'application/json': components['schemas']['AddGradeInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_grade_return"];
+          'application/json': components['schemas']['add_grade_return'];
         };
       };
     };
   };
   /**
-   * Browse Account Grade 
+   * Browse Account Grade
    * @description ### 權限
    * - Self
-   * 
+   *
    * ### Available columns
    * {'class_id': 'int', 'title': 'str', 'score': 'str', 'comment': 'str', 'update_time': 'str'}
    */
@@ -5899,7 +5906,7 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         account_id: number;
@@ -5909,33 +5916,33 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_account_grade_return"];
+          'application/json': components['schemas']['browse_account_grade_return'];
         };
       };
     };
   };
   /**
-   * Get Grade Template File 
+   * Get Grade Template File
    * @description ### 權限
    * - system normal
    */
   get_grade_template_file_grade_template_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["get_grade_template_file_return"];
+          'application/json': components['schemas']['get_grade_template_file_return'];
         };
       };
     };
   };
   /**
-   * Get Grade 
+   * Get Grade
    * @description ### 權限
    * - Class manager (all)
    * - Class normal (self)
@@ -5943,7 +5950,7 @@ export interface operations {
   get_grade_grade__grade_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         grade_id: number;
@@ -5953,20 +5960,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["get_grade_return"];
+          'application/json': components['schemas']['get_grade_return'];
         };
       };
     };
   };
   /**
-   * Delete Grade 
+   * Delete Grade
    * @description ### 權限
    * - Class manager
    */
   delete_grade_grade__grade_id__delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         grade_id: number;
@@ -5976,20 +5983,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_grade_return"];
+          'application/json': components['schemas']['delete_grade_return'];
         };
       };
     };
   };
   /**
-   * Edit Grade 
+   * Edit Grade
    * @description ### 權限
    * - Class manager
    */
   edit_grade_grade__grade_id__patch: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         grade_id: number;
@@ -5997,24 +6004,24 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EditGradeInput"];
+        'application/json': components['schemas']['EditGradeInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_grade_return"];
+          'application/json': components['schemas']['edit_grade_return'];
         };
       };
     };
   };
   /**
-   * Browse Challenge Under Class 
+   * Browse Challenge Under Class
    * @description ### 權限
    * - Class manager (all)
    * - System normal (not scheduled)
-   * 
+   *
    * ### Available columns
    * {'id': 'int', 'class_id': 'int', 'publicize_type': 'ChallengePublicizeType', 'selection_type': 'TaskSelectionType', 'title': 'str', 'setter_id': 'int', 'description': 'str', 'start_time': 'ServerTZDatetime', 'end_time': 'ServerTZDatetime', 'is_deleted': 'bool'}
    */
@@ -6027,7 +6034,7 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -6037,20 +6044,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_challenge_under_class_return"];
+          'application/json': components['schemas']['browse_challenge_under_class_return'];
         };
       };
     };
   };
   /**
-   * Add Challenge Under Class 
+   * Add Challenge Under Class
    * @description ### 權限
    * - Class manager
    */
   add_challenge_under_class_class__class_id__challenge_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -6058,20 +6065,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddChallengeInput"];
+        'application/json': components['schemas']['AddChallengeInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_challenge_under_class_return"];
+          'application/json': components['schemas']['add_challenge_under_class_return'];
         };
       };
     };
   };
   /**
-   * Read Challenge 
+   * Read Challenge
    * @description ### 權限
    * - Class manager (all)
    * - Class normal & guest (after start time)
@@ -6080,7 +6087,7 @@ export interface operations {
   read_challenge_challenge__challenge_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         challenge_id: number;
@@ -6090,20 +6097,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_challenge_return"];
+          'application/json': components['schemas']['read_challenge_return'];
         };
       };
     };
   };
   /**
-   * Delete Challenge 
+   * Delete Challenge
    * @description ### 權限
    * - Class manager
    */
   delete_challenge_challenge__challenge_id__delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         challenge_id: number;
@@ -6113,20 +6120,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_challenge_return"];
+          'application/json': components['schemas']['delete_challenge_return'];
         };
       };
     };
   };
   /**
-   * Edit Challenge 
+   * Edit Challenge
    * @description ### 權限
    * - Class manager
    */
   edit_challenge_challenge__challenge_id__patch: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         challenge_id: number;
@@ -6134,27 +6141,27 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EditChallengeInput"];
+        'application/json': components['schemas']['EditChallengeInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_challenge_return"];
+          'application/json': components['schemas']['edit_challenge_return'];
         };
       };
     };
   };
   /**
-   * Add Problem Under Challenge 
+   * Add Problem Under Challenge
    * @description ### 權限
    * - Class manager
    */
   add_problem_under_challenge_challenge__challenge_id__problem_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         challenge_id: number;
@@ -6162,27 +6169,27 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddProblemInput"];
+        'application/json': components['schemas']['AddProblemInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_problem_under_challenge_return"];
+          'application/json': components['schemas']['add_problem_under_challenge_return'];
         };
       };
     };
   };
   /**
-   * Add Essay Under Challenge 
+   * Add Essay Under Challenge
    * @description ### 權限
    * - Class manager
    */
   add_essay_under_challenge_challenge__challenge_id__essay_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         challenge_id: number;
@@ -6190,27 +6197,27 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddEssayInput"];
+        'application/json': components['schemas']['AddEssayInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_essay_under_challenge_return"];
+          'application/json': components['schemas']['add_essay_under_challenge_return'];
         };
       };
     };
   };
   /**
-   * Add Peer Review Under Challenge 
+   * Add Peer Review Under Challenge
    * @description ### 權限
    * - Class manager
    */
   add_peer_review_under_challenge_challenge__challenge_id__peer_review_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         challenge_id: number;
@@ -6218,27 +6225,27 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddPeerReviewInput"];
+        'application/json': components['schemas']['AddPeerReviewInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_peer_review_under_challenge_return"];
+          'application/json': components['schemas']['add_peer_review_under_challenge_return'];
         };
       };
     };
   };
   /**
-   * Add Team Project Scoreboard Under Challenge 
+   * Add Team Project Scoreboard Under Challenge
    * @description ### 權限
    * - Class manager
    */
   add_team_project_scoreboard_under_challenge_challenge__challenge_id__team_project_scoreboard_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         challenge_id: number;
@@ -6246,20 +6253,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddTeamProjectScoreboardInput"];
+        'application/json': components['schemas']['AddTeamProjectScoreboardInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_team_project_scoreboard_under_challenge_return"];
+          'application/json': components['schemas']['add_team_project_scoreboard_under_challenge_return'];
         };
       };
     };
   };
   /**
-   * Browse All Task Under Challenge 
+   * Browse All Task Under Challenge
    * @description ### 權限
    * - Class manager (all)
    * - Class guest (active/archived challenges)
@@ -6268,7 +6275,7 @@ export interface operations {
   browse_all_task_under_challenge_challenge__challenge_id__task_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         challenge_id: number;
@@ -6278,20 +6285,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_all_task_under_challenge_return"];
+          'application/json': components['schemas']['browse_all_task_under_challenge_return'];
         };
       };
     };
   };
   /**
-   * Browse All Task Status Under Challenge 
+   * Browse All Task Status Under Challenge
    * @description ### 權限
    * - Self: see self
    */
   browse_all_task_status_under_challenge_challenge__challenge_id__task_status_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         challenge_id: number;
@@ -6301,20 +6308,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_all_task_status_under_challenge_return"];
+          'application/json': components['schemas']['browse_all_task_status_under_challenge_return'];
         };
       };
     };
   };
   /**
-   * Get Challenge Statistics 
+   * Get Challenge Statistics
    * @description ### 權限
    * - class manager
    */
   get_challenge_statistics_challenge__challenge_id__statistics_summary_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         challenge_id: number;
@@ -6324,20 +6331,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["get_challenge_statistics_return"];
+          'application/json': components['schemas']['get_challenge_statistics_return'];
         };
       };
     };
   };
   /**
-   * Get Member Submission Statistics 
+   * Get Member Submission Statistics
    * @description ### 權限
    * - class manager
    */
   get_member_submission_statistics_challenge__challenge_id__statistics_member_submission_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         challenge_id: number;
@@ -6347,13 +6354,13 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["get_member_submission_statistics_return"];
+          'application/json': components['schemas']['get_member_submission_statistics_return'];
         };
       };
     };
   };
   /**
-   * Download All Submissions 
+   * Download All Submissions
    * @description ### 權限
    * - class manager
    */
@@ -6363,7 +6370,7 @@ export interface operations {
         as_attachment: boolean;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         challenge_id: number;
@@ -6373,13 +6380,13 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["download_all_submissions_return"];
+          'application/json': components['schemas']['download_all_submissions_return'];
         };
       };
     };
   };
   /**
-   * Download All Plagiarism Reports 
+   * Download All Plagiarism Reports
    * @description ### 權限
    * - class manager
    */
@@ -6389,7 +6396,7 @@ export interface operations {
         as_attachment: boolean;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         challenge_id: number;
@@ -6399,20 +6406,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["download_all_plagiarism_reports_return"];
+          'application/json': components['schemas']['download_all_plagiarism_reports_return'];
         };
       };
     };
   };
   /**
-   * Add Team Contest Scoreboard Under Challenge 
+   * Add Team Contest Scoreboard Under Challenge
    * @description ### 權限
    * - class manager
    */
   add_team_contest_scoreboard_under_challenge_challenge__challenge_id__team_contest_scoreboard_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         challenge_id: number;
@@ -6420,40 +6427,40 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddTeamContestScoreboardInput"];
+        'application/json': components['schemas']['AddTeamContestScoreboardInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_team_contest_scoreboard_under_challenge_return"];
+          'application/json': components['schemas']['add_team_contest_scoreboard_under_challenge_return'];
         };
       };
     };
   };
   /**
-   * Browse Problem Set 
+   * Browse Problem Set
    * @description ### 權限
    * - System normal (not hidden)
    */
   browse_problem_set_problem_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_problem_set_return"];
+          'application/json': components['schemas']['browse_problem_set_return'];
         };
       };
     };
   };
   /**
-   * Read Problem 
+   * Read Problem
    * @description ### 權限
    * - Class manager (hidden)
    * - System normal (not hidden)
@@ -6461,7 +6468,7 @@ export interface operations {
   read_problem_problem__problem_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         problem_id: number;
@@ -6471,20 +6478,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_problem_return"];
+          'application/json': components['schemas']['read_problem_return'];
         };
       };
     };
   };
   /**
-   * Delete Problem 
+   * Delete Problem
    * @description ### 權限
    * - Class manager
    */
   delete_problem_problem__problem_id__delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         problem_id: number;
@@ -6494,20 +6501,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_problem_return"];
+          'application/json': components['schemas']['delete_problem_return'];
         };
       };
     };
   };
   /**
-   * Edit Problem 
+   * Edit Problem
    * @description ### 權限
    * - Class manager
    */
   edit_problem_problem__problem_id__patch: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         problem_id: number;
@@ -6515,20 +6522,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EditProblemInput"];
+        'application/json': components['schemas']['EditProblemInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_problem_return"];
+          'application/json': components['schemas']['edit_problem_return'];
         };
       };
     };
   };
   /**
-   * Browse All Testcase Under Problem 
+   * Browse All Testcase Under Problem
    * @description ### 權限
    * - System normal (data without file uuid)
    * - CM (all data)
@@ -6536,7 +6543,7 @@ export interface operations {
   browse_all_testcase_under_problem_problem__problem_id__testcase_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         problem_id: number;
@@ -6546,20 +6553,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_all_testcase_under_problem_return"];
+          'application/json': components['schemas']['browse_all_testcase_under_problem_return'];
         };
       };
     };
   };
   /**
-   * Add Testcase Under Problem 
+   * Add Testcase Under Problem
    * @description ### 權限
    * - Class manager
    */
   add_testcase_under_problem_problem__problem_id__testcase_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         problem_id: number;
@@ -6567,27 +6574,27 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddTestcaseInput"];
+        'application/json': components['schemas']['AddTestcaseInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_testcase_under_problem_return"];
+          'application/json': components['schemas']['add_testcase_under_problem_return'];
         };
       };
     };
   };
   /**
-   * Browse All Assisting Data Under Problem 
+   * Browse All Assisting Data Under Problem
    * @description ### 權限
    * - class manager
    */
   browse_all_assisting_data_under_problem_problem__problem_id__assisting_data_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         problem_id: number;
@@ -6597,20 +6604,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_all_assisting_data_under_problem_return"];
+          'application/json': components['schemas']['browse_all_assisting_data_under_problem_return'];
         };
       };
     };
   };
   /**
-   * Add Assisting Data Under Problem 
+   * Add Assisting Data Under Problem
    * @description ### 權限
    * - class manager
    */
   add_assisting_data_under_problem_problem__problem_id__assisting_data_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         problem_id: number;
@@ -6618,20 +6625,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["Body_add_assisting_data_under_problem_problem__problem_id__assisting_data_post"];
+        'multipart/form-data': components['schemas']['Body_add_assisting_data_under_problem_problem__problem_id__assisting_data_post'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_assisting_data_under_problem_return"];
+          'application/json': components['schemas']['add_assisting_data_under_problem_return'];
         };
       };
     };
   };
   /**
-   * Download All Assisting Data 
+   * Download All Assisting Data
    * @description ### 權限
    * - class manager
    */
@@ -6641,7 +6648,7 @@ export interface operations {
         as_attachment: boolean;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         problem_id: number;
@@ -6651,13 +6658,13 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["download_all_assisting_data_return"];
+          'application/json': components['schemas']['download_all_assisting_data_return'];
         };
       };
     };
   };
   /**
-   * Download All Sample Testcase 
+   * Download All Sample Testcase
    * @description ### 權限
    * - class manager
    */
@@ -6667,7 +6674,7 @@ export interface operations {
         as_attachment: boolean;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         problem_id: number;
@@ -6677,13 +6684,13 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["download_all_sample_testcase_return"];
+          'application/json': components['schemas']['download_all_sample_testcase_return'];
         };
       };
     };
   };
   /**
-   * Download All Non Sample Testcase 
+   * Download All Non Sample Testcase
    * @description ### 權限
    * - class manager
    */
@@ -6693,7 +6700,7 @@ export interface operations {
         as_attachment: boolean;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         problem_id: number;
@@ -6703,20 +6710,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["download_all_non_sample_testcase_return"];
+          'application/json': components['schemas']['download_all_non_sample_testcase_return'];
         };
       };
     };
   };
   /**
-   * Get Score By Challenge Type Under Problem 
+   * Get Score By Challenge Type Under Problem
    * @description ### 權限
    * - Self
    */
   get_score_by_challenge_type_under_problem_problem__problem_id__score_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         problem_id: number;
@@ -6726,20 +6733,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["get_score_by_challenge_type_under_problem_return"];
+          'application/json': components['schemas']['get_score_by_challenge_type_under_problem_return'];
         };
       };
     };
   };
   /**
-   * Get Score By Best Under Problem 
+   * Get Score By Best Under Problem
    * @description ### 權限
    * - Self
    */
   get_score_by_best_under_problem_problem__problem_id__best_score_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         problem_id: number;
@@ -6749,20 +6756,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["get_score_by_best_under_problem_return"];
+          'application/json': components['schemas']['get_score_by_best_under_problem_return'];
         };
       };
     };
   };
   /**
-   * Rejudge Problem 
+   * Rejudge Problem
    * @description ### 權限
    * - Class manager
    */
   rejudge_problem_problem__problem_id__rejudge_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         problem_id: number;
@@ -6772,20 +6779,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["rejudge_problem_return"];
+          'application/json': components['schemas']['rejudge_problem_return'];
         };
       };
     };
   };
   /**
-   * Get Problem Statistics 
+   * Get Problem Statistics
    * @description ### 權限
    * - System normal
    */
   get_problem_statistics_problem__problem_id__statistics_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         problem_id: number;
@@ -6795,20 +6802,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["get_problem_statistics_return"];
+          'application/json': components['schemas']['get_problem_statistics_return'];
         };
       };
     };
   };
   /**
-   * Read Testcase 
+   * Read Testcase
    * @description ### 權限
    * - System normal
    */
   read_testcase_testcase__testcase_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         testcase_id: number;
@@ -6818,20 +6825,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_testcase_return"];
+          'application/json': components['schemas']['read_testcase_return'];
         };
       };
     };
   };
   /**
-   * Delete Testcase 
+   * Delete Testcase
    * @description ### 權限
    * - Class manager
    */
   delete_testcase_testcase__testcase_id__delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         testcase_id: number;
@@ -6841,20 +6848,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_testcase_return"];
+          'application/json': components['schemas']['delete_testcase_return'];
         };
       };
     };
   };
   /**
-   * Edit Testcase 
+   * Edit Testcase
    * @description ### 權限
    * - Class manager
    */
   edit_testcase_testcase__testcase_id__patch: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         testcase_id: number;
@@ -6862,27 +6869,27 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EditTestcaseInput"];
+        'application/json': components['schemas']['EditTestcaseInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_testcase_return"];
+          'application/json': components['schemas']['edit_testcase_return'];
         };
       };
     };
   };
   /**
-   * Upload Testcase Input Data 
+   * Upload Testcase Input Data
    * @description ### 權限
    * - Class manager
    */
   upload_testcase_input_data_testcase__testcase_id__input_data_put: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         testcase_id: number;
@@ -6890,27 +6897,27 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["Body_upload_testcase_input_data_testcase__testcase_id__input_data_put"];
+        'multipart/form-data': components['schemas']['Body_upload_testcase_input_data_testcase__testcase_id__input_data_put'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["upload_testcase_input_data_return"];
+          'application/json': components['schemas']['upload_testcase_input_data_return'];
         };
       };
     };
   };
   /**
-   * Delete Testcase Input Data 
+   * Delete Testcase Input Data
    * @description ### 權限
    * - Class manager
    */
   delete_testcase_input_data_testcase__testcase_id__input_data_delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         testcase_id: number;
@@ -6920,20 +6927,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_testcase_input_data_return"];
+          'application/json': components['schemas']['delete_testcase_input_data_return'];
         };
       };
     };
   };
   /**
-   * Upload Testcase Output Data 
+   * Upload Testcase Output Data
    * @description ### 權限
    * - Class manager
    */
   upload_testcase_output_data_testcase__testcase_id__output_data_put: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         testcase_id: number;
@@ -6941,27 +6948,27 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["Body_upload_testcase_output_data_testcase__testcase_id__output_data_put"];
+        'multipart/form-data': components['schemas']['Body_upload_testcase_output_data_testcase__testcase_id__output_data_put'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["upload_testcase_output_data_return"];
+          'application/json': components['schemas']['upload_testcase_output_data_return'];
         };
       };
     };
   };
   /**
-   * Delete Testcase Output Data 
+   * Delete Testcase Output Data
    * @description ### 權限
    * - Class manager
    */
   delete_testcase_output_data_testcase__testcase_id__output_data_delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         testcase_id: number;
@@ -6971,20 +6978,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_testcase_output_data_return"];
+          'application/json': components['schemas']['delete_testcase_output_data_return'];
         };
       };
     };
   };
   /**
-   * Read Assisting Data 
+   * Read Assisting Data
    * @description ### 權限
    * - class manager
    */
   read_assisting_data_assisting_data__assisting_data_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         assisting_data_id: number;
@@ -6994,20 +7001,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_assisting_data_return"];
+          'application/json': components['schemas']['read_assisting_data_return'];
         };
       };
     };
   };
   /**
-   * Edit Assisting Data 
+   * Edit Assisting Data
    * @description ### 權限
    * - class manager
    */
   edit_assisting_data_assisting_data__assisting_data_id__put: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         assisting_data_id: number;
@@ -7015,27 +7022,27 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["Body_edit_assisting_data_assisting_data__assisting_data_id__put"];
+        'multipart/form-data': components['schemas']['Body_edit_assisting_data_assisting_data__assisting_data_id__put'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_assisting_data_return"];
+          'application/json': components['schemas']['edit_assisting_data_return'];
         };
       };
     };
   };
   /**
-   * Delete Assisting Data 
+   * Delete Assisting Data
    * @description ### 權限
    * - class manager
    */
   delete_assisting_data_assisting_data__assisting_data_id__delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         assisting_data_id: number;
@@ -7045,65 +7052,65 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_assisting_data_return"];
+          'application/json': components['schemas']['delete_assisting_data_return'];
         };
       };
     };
   };
   /**
-   * Browse All Submission Language 
+   * Browse All Submission Language
    * @description ### 權限
    * - System normal
    */
   browse_all_submission_language_submission_language_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_all_submission_language_return"];
+          'application/json': components['schemas']['browse_all_submission_language_return'];
         };
       };
     };
   };
   /**
-   * Add Submission Language 
+   * Add Submission Language
    * @description ### 權限
    * - System manager
    */
   add_submission_language_submission_language_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddSubmissionLanguageInput"];
+        'application/json': components['schemas']['AddSubmissionLanguageInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_submission_language_return"];
+          'application/json': components['schemas']['add_submission_language_return'];
         };
       };
     };
   };
   /**
-   * Edit Submission Language 
+   * Edit Submission Language
    * @description ### 權限
    * - System manager
    */
   edit_submission_language_submission_language__language_id__patch: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         language_id: number;
@@ -7111,24 +7118,24 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EditSubmissionLanguageInput"];
+        'application/json': components['schemas']['EditSubmissionLanguageInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_submission_language_return"];
+          'application/json': components['schemas']['edit_submission_language_return'];
         };
       };
     };
   };
   /**
-   * Submit 
+   * Submit
    * @description ### 權限
    * - System Manager (all)
    * - System normal (non scheduled)
-   * 
+   *
    * ### 限制
    * - 上傳檔案 < 1mb
    */
@@ -7138,8 +7145,8 @@ export interface operations {
         language_id: number;
       };
       header: {
-        "auth-token"?: string;
-        "content-length": number;
+        'auth-token'?: string;
+        'content-length': number;
       };
       path: {
         problem_id: number;
@@ -7147,23 +7154,23 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["Body_submit_problem__problem_id__submission_post"];
+        'multipart/form-data': components['schemas']['Body_submit_problem__problem_id__submission_post'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["submit_return"];
+          'application/json': components['schemas']['submit_return'];
         };
       };
     };
   };
   /**
-   * Browse Submission 
+   * Browse Submission
    * @description ### 權限
    * - Self: see self
-   * 
+   *
    * ### Available columns
    * {'problem_id': 'int', 'language_id': 'int', 'submit_time': 'ServerTZDatetime'}
    */
@@ -7177,23 +7184,23 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_submission_return"];
+          'application/json': components['schemas']['browse_submission_return'];
         };
       };
     };
   };
   /**
-   * Batch Get Submission Judgment 
+   * Batch Get Submission Judgment
    * @description ### 權限
    * - System Normal
-   * 
+   *
    * ### Notes
    * - `submission_ids`: list of int
    */
@@ -7203,20 +7210,20 @@ export interface operations {
         submission_ids: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["batch_get_submission_judgment_return"];
+          'application/json': components['schemas']['batch_get_submission_judgment_return'];
         };
       };
     };
   };
   /**
-   * Read Submission 
+   * Read Submission
    * @description ### 權限
    * - Self
    * - Class manager
@@ -7224,7 +7231,7 @@ export interface operations {
   read_submission_submission__submission_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         submission_id: number;
@@ -7234,20 +7241,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_submission_return"];
+          'application/json': components['schemas']['read_submission_return'];
         };
       };
     };
   };
   /**
-   * Browse All Submission Judgment 
+   * Browse All Submission Judgment
    * @description ### 權限
    * - Class manager
    */
   browse_all_submission_judgment_submission__submission_id__judgment_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         submission_id: number;
@@ -7257,13 +7264,13 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_all_submission_judgment_return"];
+          'application/json': components['schemas']['browse_all_submission_judgment_return'];
         };
       };
     };
   };
   /**
-   * Read Submission Latest Judgment 
+   * Read Submission Latest Judgment
    * @description ### 權限
    * - Self: see self
    * - Class manager: see class
@@ -7271,7 +7278,7 @@ export interface operations {
   read_submission_latest_judgment_submission__submission_id__latest_judgment_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         submission_id: number;
@@ -7281,20 +7288,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_submission_latest_judgment_return"];
+          'application/json': components['schemas']['read_submission_latest_judgment_return'];
         };
       };
     };
   };
   /**
-   * Rejudge Submission 
+   * Rejudge Submission
    * @description ### 權限
    * - Class manager
    */
   rejudge_submission_submission__submission_id__rejudge_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         submission_id: number;
@@ -7304,33 +7311,33 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["rejudge_submission_return"];
+          'application/json': components['schemas']['rejudge_submission_return'];
         };
       };
     };
   };
   /**
-   * Browse All Judgment Verdict 
+   * Browse All Judgment Verdict
    * @description ### 權限
    * - Public
    */
   browse_all_judgment_verdict_judgment_verdict_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_all_judgment_verdict_return"];
+          'application/json': components['schemas']['browse_all_judgment_verdict_return'];
         };
       };
     };
   };
   /**
-   * Read Judgment 
+   * Read Judgment
    * @description ### 權限
    * - Self
    * - Class manager
@@ -7338,7 +7345,7 @@ export interface operations {
   read_judgment_judgment__judgment_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         judgment_id: number;
@@ -7348,13 +7355,13 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_judgment_return"];
+          'application/json': components['schemas']['read_judgment_return'];
         };
       };
     };
   };
   /**
-   * Browse All Judgment Judge Case 
+   * Browse All Judgment Judge Case
    * @description ### 權限
    * - Self
    * - Class manager
@@ -7362,7 +7369,7 @@ export interface operations {
   browse_all_judgment_judge_case_judgment__judgment_id__judge_case_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         judgment_id: number;
@@ -7372,20 +7379,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_all_judgment_judge_case_return"];
+          'application/json': components['schemas']['browse_all_judgment_judge_case_return'];
         };
       };
     };
   };
   /**
-   * Read Essay 
+   * Read Essay
    * @description ### 權限
    * - class normal
    */
   read_essay_essay__essay_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         essay_id: number;
@@ -7395,20 +7402,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_essay_return"];
+          'application/json': components['schemas']['read_essay_return'];
         };
       };
     };
   };
   /**
-   * Delete Essay 
+   * Delete Essay
    * @description ### 權限
    * - class manager
    */
   delete_essay_essay__essay_id__delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         essay_id: number;
@@ -7418,20 +7425,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_essay_return"];
+          'application/json': components['schemas']['delete_essay_return'];
         };
       };
     };
   };
   /**
-   * Edit Essay 
+   * Edit Essay
    * @description ### 權限
    * - class manager
    */
   edit_essay_essay__essay_id__patch: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         essay_id: number;
@@ -7439,20 +7446,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EditEssayInput"];
+        'application/json': components['schemas']['EditEssayInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_essay_return"];
+          'application/json': components['schemas']['edit_essay_return'];
         };
       };
     };
   };
   /**
-   * Download All Essay Submission 
+   * Download All Essay Submission
    * @description ### 權限
    * - class manager
    */
@@ -7462,7 +7469,7 @@ export interface operations {
         as_attachment: boolean;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         essay_id: number;
@@ -7472,16 +7479,16 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["download_all_essay_submission_return"];
+          'application/json': components['schemas']['download_all_essay_submission_return'];
         };
       };
     };
   };
   /**
-   * Browse Essay Submission By Essay Id 
+   * Browse Essay Submission By Essay Id
    * @description ### 權限
    * - Self
-   * 
+   *
    * ### Available columns
    * {'id': 'int', 'account_id': 'int', 'essay_id': 'int', 'content_file_uuid': 'UUID', 'filename': 'str', 'submit_time': 'ServerTZDatetime'}
    */
@@ -7494,7 +7501,7 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         essay_id: number;
@@ -7504,24 +7511,24 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_essay_submission_by_essay_id_return"];
+          'application/json': components['schemas']['browse_essay_submission_by_essay_id_return'];
         };
       };
     };
   };
   /**
-   * Upload Essay 
+   * Upload Essay
    * @description ### 權限
    * - class normal
-   * 
+   *
    * ### 限制
    * - 上傳檔案 < 10mb
    */
   upload_essay_essay__essay_id__essay_submission_post: {
     parameters: {
       header: {
-        "auth-token"?: string;
-        "content-length": number;
+        'auth-token'?: string;
+        'content-length': number;
       };
       path: {
         essay_id: number;
@@ -7529,20 +7536,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["Body_upload_essay_essay__essay_id__essay_submission_post"];
+        'multipart/form-data': components['schemas']['Body_upload_essay_essay__essay_id__essay_submission_post'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["upload_essay_return"];
+          'application/json': components['schemas']['upload_essay_return'];
         };
       };
     };
   };
   /**
-   * Read Essay Submission 
+   * Read Essay Submission
    * @description ### 權限
    * - class manager (always)
    * - class normal (self)
@@ -7550,7 +7557,7 @@ export interface operations {
   read_essay_submission_essay_submission__essay_submission_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         essay_submission_id: number;
@@ -7560,24 +7567,24 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_essay_submission_return"];
+          'application/json': components['schemas']['read_essay_submission_return'];
         };
       };
     };
   };
   /**
-   * Reupload Essay 
+   * Reupload Essay
    * @description ### 權限
    * - Class normal = self
-   * 
+   *
    * ### 限制
    * - 上傳檔案 < 10mb
    */
   reupload_essay_essay_submission__essay_submission_id__put: {
     parameters: {
       header: {
-        "auth-token"?: string;
-        "content-length": number;
+        'auth-token'?: string;
+        'content-length': number;
       };
       path: {
         essay_submission_id: number;
@@ -7585,20 +7592,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["Body_reupload_essay_essay_submission__essay_submission_id__put"];
+        'multipart/form-data': components['schemas']['Body_reupload_essay_essay_submission__essay_submission_id__put'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["reupload_essay_return"];
+          'application/json': components['schemas']['reupload_essay_return'];
         };
       };
     };
   };
   /**
-   * Read Peer Review 
+   * Read Peer Review
    * @description ### 權限
    * - Class manager (hidden)
    * - Class normal (not hidden)
@@ -7606,7 +7613,7 @@ export interface operations {
   read_peer_review_peer_review__peer_review_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         peer_review_id: number;
@@ -7616,20 +7623,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_peer_review_return"];
+          'application/json': components['schemas']['read_peer_review_return'];
         };
       };
     };
   };
   /**
-   * Delete Peer Review 
+   * Delete Peer Review
    * @description ### 權限
    * - Class manager
    */
   delete_peer_review_peer_review__peer_review_id__delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         peer_review_id: number;
@@ -7639,20 +7646,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_peer_review_return"];
+          'application/json': components['schemas']['delete_peer_review_return'];
         };
       };
     };
   };
   /**
-   * Edit Peer Review 
+   * Edit Peer Review
    * @description ### 權限
    * - Class manager
    */
   edit_peer_review_peer_review__peer_review_id__patch: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         peer_review_id: number;
@@ -7660,24 +7667,24 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EditPeerReviewInput"];
+        'application/json': components['schemas']['EditPeerReviewInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_peer_review_return"];
+          'application/json': components['schemas']['edit_peer_review_return'];
         };
       };
     };
   };
   /**
-   * Browse Peer Review Record 
+   * Browse Peer Review Record
    * @description ### 權限
    * - Class manager (full)
    * - Self (看不到對方)
-   * 
+   *
    * ### Available columns
    * {'grader_id': 'int', 'receiver_id': 'int', 'score': 'int', 'comment': 'str', 'submit_time': 'ServerTZDatetime'}
    */
@@ -7690,7 +7697,7 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         peer_review_id: number;
@@ -7700,22 +7707,22 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_peer_review_record_return"];
+          'application/json': components['schemas']['browse_peer_review_record_return'];
         };
       };
     };
   };
   /**
-   * Assign Peer Review Record 
+   * Assign Peer Review Record
    * @description 發互評 (決定 A 要評誰 )
-   * 
+   *
    * ### 權限
    * - Self is class *normal ONLY*
    */
   assign_peer_review_record_peer_review__peer_review_id__record_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         peer_review_id: number;
@@ -7725,13 +7732,13 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["assign_peer_review_record_return"];
+          'application/json': components['schemas']['assign_peer_review_record_return'];
         };
       };
     };
   };
   /**
-   * Read Peer Review Record 
+   * Read Peer Review Record
    * @description ### 權限
    * - Class manager (full)
    * - Self = Class normal (看不到對方)
@@ -7739,7 +7746,7 @@ export interface operations {
   read_peer_review_record_peer_review_record__peer_review_record_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         peer_review_record_id: number;
@@ -7749,22 +7756,22 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_peer_review_record_return"];
+          'application/json': components['schemas']['read_peer_review_record_return'];
         };
       };
     };
   };
   /**
-   * Submit Peer Review Record 
+   * Submit Peer Review Record
    * @description 互評完了，交互評成績評語
-   * 
+   *
    * ### 權限
    * - Self is class *normal ONLY*
    */
   submit_peer_review_record_peer_review_record__peer_review_record_id__patch: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         peer_review_record_id: number;
@@ -7772,20 +7779,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["SubmitPeerReviewInput"];
+        'application/json': components['schemas']['SubmitPeerReviewInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["submit_peer_review_record_return"];
+          'application/json': components['schemas']['submit_peer_review_record_return'];
         };
       };
     };
   };
   /**
-   * Browse Account Received Peer Review Record 
+   * Browse Account Received Peer Review Record
    * @description ### 權限
    * - Class Manager (all)
    * - Self = Class normal
@@ -7793,7 +7800,7 @@ export interface operations {
   browse_account_received_peer_review_record_peer_review__peer_review_id__account__account_id__receive_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         peer_review_id: number;
@@ -7804,13 +7811,13 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_account_received_peer_review_record_return"];
+          'application/json': components['schemas']['browse_account_received_peer_review_record_return'];
         };
       };
     };
   };
   /**
-   * Browse Account Reviewed Peer Review Record 
+   * Browse Account Reviewed Peer Review Record
    * @description ### 權限
    * - Class Manager (all)
    * - Self = Class normal
@@ -7818,7 +7825,7 @@ export interface operations {
   browse_account_reviewed_peer_review_record_peer_review__peer_review_id__account__account_id__review_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         peer_review_id: number;
@@ -7829,20 +7836,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_account_reviewed_peer_review_record_return"];
+          'application/json': components['schemas']['browse_account_reviewed_peer_review_record_return'];
         };
       };
     };
   };
   /**
-   * Read Scoreboard 
+   * Read Scoreboard
    * @description ### 權限
    * - Class normal
    */
   read_scoreboard_scoreboard__scoreboard_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         scoreboard_id: number;
@@ -7852,20 +7859,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_scoreboard_return"];
+          'application/json': components['schemas']['read_scoreboard_return'];
         };
       };
     };
   };
   /**
-   * Delete Scoreboard 
+   * Delete Scoreboard
    * @description ### 權限
    * - Class manager
    */
   delete_scoreboard_scoreboard__scoreboard_id__delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         scoreboard_id: number;
@@ -7875,20 +7882,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_scoreboard_return"];
+          'application/json': components['schemas']['delete_scoreboard_return'];
         };
       };
     };
   };
   /**
-   * View Team Project Scoreboard 
+   * View Team Project Scoreboard
    * @description ### 權限
    * - Class normal
    */
   view_team_project_scoreboard_team_project_scoreboard_view__scoreboard_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         scoreboard_id: number;
@@ -7898,20 +7905,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["view_team_project_scoreboard_return"];
+          'application/json': components['schemas']['view_team_project_scoreboard_return'];
         };
       };
     };
   };
   /**
-   * Edit Team Project Scoreboard 
+   * Edit Team Project Scoreboard
    * @description ### 權限
    * - Class manager
    */
   edit_team_project_scoreboard_team_project_scoreboard__scoreboard_id__patch: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         scoreboard_id: number;
@@ -7919,27 +7926,27 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["processor__http_api__scoreboard_setting_team_project__EditScoreboardInput"];
+        'application/json': components['schemas']['processor__http_api__scoreboard_setting_team_project__EditScoreboardInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_team_project_scoreboard_return"];
+          'application/json': components['schemas']['edit_team_project_scoreboard_return'];
         };
       };
     };
   };
   /**
-   * View Team Contest Scoreboard 
+   * View Team Contest Scoreboard
    * @description ### 權限
    * - System Normal
    */
   view_team_contest_scoreboard_team_contest_scoreboard_view__scoreboard_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         scoreboard_id: number;
@@ -7949,20 +7956,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["view_team_contest_scoreboard_return"];
+          'application/json': components['schemas']['view_team_contest_scoreboard_return'];
         };
       };
     };
   };
   /**
-   * Edit Team Contest Scoreboard 
+   * Edit Team Contest Scoreboard
    * @description ### 權限
    * - Class manager
    */
   edit_team_contest_scoreboard_team_contest_scoreboard__scoreboard_id__patch: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         scoreboard_id: number;
@@ -7970,24 +7977,24 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["processor__http_api__scoreboard_setting_team_contest__EditScoreboardInput"];
+        'application/json': components['schemas']['processor__http_api__scoreboard_setting_team_contest__EditScoreboardInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_team_contest_scoreboard_return"];
+          'application/json': components['schemas']['edit_team_contest_scoreboard_return'];
         };
       };
     };
   };
   /**
-   * Browse Announcement 
+   * Browse Announcement
    * @description ### 權限
    * - System manager (all)
    * - System guest (limited)
-   * 
+   *
    * ### Available columns
    * {'id': 'int', 'title': 'str', 'content': 'str', 'author_id': 'int', 'post_time': 'ServerTZDatetime', 'expire_time': 'ServerTZDatetime', 'is_deleted': 'bool'}
    */
@@ -8000,45 +8007,45 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_announcement_return"];
+          'application/json': components['schemas']['browse_announcement_return'];
         };
       };
     };
   };
   /**
-   * Add Announcement 
+   * Add Announcement
    * @description ### 權限
    * - System manager
    */
   add_announcement_announcement_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddAnnouncementInput"];
+        'application/json': components['schemas']['AddAnnouncementInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_announcement_return"];
+          'application/json': components['schemas']['add_announcement_return'];
         };
       };
     };
   };
   /**
-   * Read Announcement 
+   * Read Announcement
    * @description ### 權限
    * - System manager (all)
    * - System guest (limited)
@@ -8046,7 +8053,7 @@ export interface operations {
   read_announcement_announcement__announcement_id__get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         announcement_id: number;
@@ -8056,20 +8063,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["read_announcement_return"];
+          'application/json': components['schemas']['read_announcement_return'];
         };
       };
     };
   };
   /**
-   * Delete Announcement 
+   * Delete Announcement
    * @description ### 權限
    * - System manager
    */
   delete_announcement_announcement__announcement_id__delete: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         announcement_id: number;
@@ -8079,20 +8086,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["delete_announcement_return"];
+          'application/json': components['schemas']['delete_announcement_return'];
         };
       };
     };
   };
   /**
-   * Edit Announcement 
+   * Edit Announcement
    * @description ### 權限
    * - System manager
    */
   edit_announcement_announcement__announcement_id__patch: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         announcement_id: number;
@@ -8100,23 +8107,23 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EditAnnouncementInput"];
+        'application/json': components['schemas']['EditAnnouncementInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_announcement_return"];
+          'application/json': components['schemas']['edit_announcement_return'];
         };
       };
     };
   };
   /**
-   * Browse Access Log 
+   * Browse Access Log
    * @description ### 權限
    * - Class+ manager
-   * 
+   *
    * ### Available columns
    * {'access_time': 'ServerTZDatetime', 'request_method': 'str', 'resource_path': 'str', 'ip': 'str', 'account_id': 'int'}
    */
@@ -8129,23 +8136,23 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["browse_access_log_return"];
+          'application/json': components['schemas']['browse_access_log_return'];
         };
       };
     };
   };
   /**
-   * View Browse Account With Default Student Id 
+   * View Browse Account With Default Student Id
    * @description ### 權限
    * - System Manager
-   * 
+   *
    * ### Available columns
    * {'account_id': 'int', 'username': 'str', 'real_name': 'str', 'student_id': 'str'}
    */
@@ -8158,24 +8165,24 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["view_browse_account_with_default_student_id_return"];
+          'application/json': components['schemas']['view_browse_account_with_default_student_id_return'];
         };
       };
     };
   };
   /**
-   * View Browse Class Member 
+   * View Browse Class Member
    * @description ### 權限
    * - Class normal
    * - Class+ manager
-   * 
+   *
    * ### Available columns
    * {'account_id': 'int', 'username': 'str', 'student_id': 'str', 'real_name': 'str', 'abbreviated_name': 'str', 'role': 'RoleType', 'class_id': 'int'}
    */
@@ -8188,7 +8195,7 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -8198,16 +8205,16 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["view_browse_class_member_return"];
+          'application/json': components['schemas']['view_browse_class_member_return'];
         };
       };
     };
   };
   /**
-   * View Browse Submission Under Class 
+   * View Browse Submission Under Class
    * @description ### 權限
    * - Class manager
-   * 
+   *
    * ### Available columns
    * {'submission_id': 'int', 'account_id': 'int', 'username': 'str', 'student_id': 'str', 'real_name': 'str', 'challenge_id': 'int', 'challenge_title': 'str', 'problem_id': 'int', 'challenge_label': 'str', 'verdict': 'VerdictType', 'submit_time': 'ServerTZDatetime', 'class_id': 'int'}
    */
@@ -8220,7 +8227,7 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -8230,16 +8237,16 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["view_browse_submission_under_class_return"];
+          'application/json': components['schemas']['view_browse_submission_under_class_return'];
         };
       };
     };
   };
   /**
-   * View Browse Submission 
+   * View Browse Submission
    * @description ### 權限
    * - Self: see self
-   * 
+   *
    * ### Available columns
    * {'submission_id': 'int', 'course_id': 'int', 'course_name': 'str', 'class_id': 'int', 'class_name': 'str', 'challenge_id': 'int', 'challenge_title': 'str', 'problem_id': 'int', 'challenge_label': 'str', 'verdict': 'VerdictType', 'submit_time': 'ServerTZDatetime', 'account_id': 'int'}
    */
@@ -8253,23 +8260,23 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["view_browse_submission_return"];
+          'application/json': components['schemas']['view_browse_submission_return'];
         };
       };
     };
   };
   /**
-   * View Browse My Submission Under Problem 
+   * View Browse My Submission Under Problem
    * @description ### 權限
    * - Self: see self
-   * 
+   *
    * ### Available columns
    * {'submission_id': 'int', 'judgment_id': 'int', 'verdict': 'VerdictType', 'score': 'int', 'total_time': 'int', 'max_memory': 'int', 'submit_time': 'ServerTZDatetime', 'account_id': 'int', 'problem_id': 'int'}
    */
@@ -8283,7 +8290,7 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         problem_id: number;
@@ -8293,16 +8300,16 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["view_browse_my_submission_under_problem_return"];
+          'application/json': components['schemas']['view_browse_my_submission_under_problem_return'];
         };
       };
     };
   };
   /**
-   * View Browse Problem Set Under Class 
+   * View Browse Problem Set Under Class
    * @description ### 權限
    * - System normal (not hidden)
-   * 
+   *
    * ### Available columns
    * {'challenge_id': 'int', 'challenge_title': 'str', 'problem_id': 'int', 'challenge_label': 'str', 'problem_title': 'str', 'class_id': 'int'}
    */
@@ -8315,7 +8322,7 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -8325,17 +8332,17 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["view_browse_problem_set_under_class_return"];
+          'application/json': components['schemas']['view_browse_problem_set_under_class_return'];
         };
       };
     };
   };
   /**
-   * View Browse Class Grade 
+   * View Browse Class Grade
    * @description ### 權限
    * - Class manager (all)
    * - Class normal (self)
-   * 
+   *
    * ### Available columns
    * {'account_id': 'int', 'username': 'str', 'student_id': 'str', 'real_name': 'str', 'title': 'str', 'score': 'str', 'update_time': 'ServerTZDatetime', 'grade_id': 'int', 'class_id': 'int'}
    */
@@ -8348,7 +8355,7 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         class_id: number;
@@ -8358,16 +8365,16 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["view_browse_class_grade_return"];
+          'application/json': components['schemas']['view_browse_class_grade_return'];
         };
       };
     };
   };
   /**
-   * View Browse Access Log 
+   * View Browse Access Log
    * @description ### 權限
    * - Class+ manager
-   * 
+   *
    * ### Available columns
    * {'account_id': 'int', 'username': 'str', 'student_id': 'str', 'real_name': 'str', 'ip': 'str', 'resource_path': 'str', 'request_method': 'str', 'access_time': 'ServerTZDatetime', 'access_log_id': 'int'}
    */
@@ -8380,23 +8387,23 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["view_browse_access_log_return"];
+          'application/json': components['schemas']['view_browse_access_log_return'];
         };
       };
     };
   };
   /**
-   * View Peer Review Summary Review 
+   * View Peer Review Summary Review
    * @description ### 權限
    * - Class Manager
-   * 
+   *
    * ### Available columns
    * {'username': 'str', 'real_name': 'str', 'student_id': 'str', 'average_score': 'float'}
    */
@@ -8409,7 +8416,7 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         peer_review_id: number;
@@ -8419,16 +8426,16 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["view_peer_review_summary_review_return"];
+          'application/json': components['schemas']['view_peer_review_summary_review_return'];
         };
       };
     };
   };
   /**
-   * View Peer Review Summary Receive 
+   * View Peer Review Summary Receive
    * @description ### 權限
    * - Class Manager
-   * 
+   *
    * ### Available columns
    * {'username': 'str', 'real_name': 'str', 'student_id': 'str', 'average_score': 'float'}
    */
@@ -8441,7 +8448,7 @@ export interface operations {
         sort?: string;
       };
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         peer_review_id: number;
@@ -8451,20 +8458,20 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["view_peer_review_summary_receive_return"];
+          'application/json': components['schemas']['view_peer_review_summary_receive_return'];
         };
       };
     };
   };
   /**
-   * View Team Contest Scoreboard Runs 
+   * View Team Contest Scoreboard Runs
    * @description ### 權限
    * - System Normal
    */
   view_team_contest_scoreboard_runs_hardcode_team_contest_scoreboard__scoreboard_id__runs_get: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         scoreboard_id: number;
@@ -8474,7 +8481,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["view_team_contest_scoreboard_runs_return"];
+          'application/json': components['schemas']['view_team_contest_scoreboard_runs_return'];
         };
       };
     };
@@ -8483,75 +8490,75 @@ export interface operations {
   login_account_jwt_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["LoginInput"];
+        'application/json': components['schemas']['LoginInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["login_return"];
+          'application/json': components['schemas']['login_return'];
         };
       };
     };
   };
   /**
-   * Add Normal Account 
+   * Add Normal Account
    * @description ### 權限
    * - System Manager
    */
   add_normal_account_account_normal_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddNormalAccountInput"];
+        'application/json': components['schemas']['AddNormalAccountInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["add_normal_account_return"];
+          'application/json': components['schemas']['add_normal_account_return'];
         };
       };
     };
   };
   /**
-   * Import Account 
+   * Import Account
    * @description ### 權限
    * - System Manager
    */
   import_account_account_import_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["Body_import_account_account_import_post"];
+        'multipart/form-data': components['schemas']['Body_import_account_account_import_post'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["import_account_return"];
+          'application/json': components['schemas']['import_account_return'];
         };
       };
     };
   };
   /**
-   * Edit Password 
+   * Edit Password
    * @description ### 權限
    * - System Manager
    * - Self (need old password)
@@ -8559,7 +8566,7 @@ export interface operations {
   edit_password_account__account_id__pass_hash_put: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
       path: {
         account_id: number;
@@ -8567,14 +8574,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EditPasswordInput"];
+        'application/json': components['schemas']['EditPasswordInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["edit_password_return"];
+          'application/json': components['schemas']['edit_password_return'];
         };
       };
     };
@@ -8583,25 +8590,25 @@ export interface operations {
   reset_password_account_reset_password_post: {
     parameters: {
       header?: {
-        "auth-token"?: string;
+        'auth-token'?: string;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["ResetPasswordInput"];
+        'application/json': components['schemas']['ResetPasswordInput'];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["reset_password_return"];
+          'application/json': components['schemas']['reset_password_return'];
         };
       };
     };
   };
   /**
-   * Metrics 
+   * Metrics
    * @description Endpoint that serves Prometheus metrics.
    */
   metrics_metrics_get: {
@@ -8609,7 +8616,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": unknown;
+          'application/json': unknown;
         };
       };
     };

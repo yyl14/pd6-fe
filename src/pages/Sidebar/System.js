@@ -1,14 +1,18 @@
 import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import Icon from '@/components/ui/icon/index';
+import useReduxStateShape from '@/hooks/useReduxStateShape';
+import useAnnouncements from '@/lib/announcement/useAnnouncements';
+import useSubmitLangs from '@/lib/submitLang/useSubmitLangs';
 
 export default function System({ classes, history, location, mode, open, onClose }) {
-  const { announcementId, languageId } = useParams();
-  const announcementList = useSelector((state) => state.announcements);
-  const languageList = useSelector((state) => state.submitLangs);
+  const { announcementId, submitlangId } = useParams();
+  const { browseAnnouncement } = useAnnouncements();
+  const { submitLangs } = useSubmitLangs();
+  const [announcementById] = useReduxStateShape(browseAnnouncement.data);
+  const [submitLangById] = useReduxStateShape(submitLangs);
   const baseURL = '/6a/admin/system';
   const [display, setDisplay] = useState('unfold');
   const [title, setTitle] = useState('');
@@ -16,8 +20,6 @@ export default function System({ classes, history, location, mode, open, onClose
   const [arrow, setArrow] = useState(null);
 
   useEffect(() => {
-    // console.log(instituteId, accountId);
-
     const goBackToAnnouncement = () => {
       history.push(`${baseURL}/announcement`);
     };
@@ -59,13 +61,13 @@ export default function System({ classes, history, location, mode, open, onClose
           icon: <Icon.Setting />,
         },
       ]);
-    } else if (mode === 'announcement' && announcementList.byId[announcementId]) {
+    } else if (mode === 'announcement' && announcementById && announcementById[announcementId]) {
       setArrow(
         <IconButton className={classes.arrow} onClick={goBackToAnnouncement}>
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
-      setTitle(announcementList.byId[announcementId].title);
+      setTitle(announcementById[announcementId].title);
       setItemList([
         {
           text: 'Setting',
@@ -73,17 +75,17 @@ export default function System({ classes, history, location, mode, open, onClose
           icon: <Icon.Setting />,
         },
       ]);
-    } else if (mode === 'language' && languageList.byId[languageId]) {
+    } else if (mode === 'language' && submitLangById && submitLangById[submitlangId]) {
       setArrow(
         <IconButton className={classes.arrow} onClick={goBackToLanguage}>
           <Icon.ArrowBackRoundedIcon />
         </IconButton>,
       );
-      setTitle(`${languageList.byId[languageId].name} ${languageList.byId[languageId].version}`);
+      setTitle(`${submitLangById[submitlangId].name} ${submitLangById[submitlangId].version}`);
       setItemList([
         {
           text: 'Setting',
-          path: `${baseURL}/submitlang/${languageId}/setting`,
+          path: `${baseURL}/submitlang/${submitlangId}/setting`,
           icon: <Icon.Setting />,
         },
       ]);
@@ -98,15 +100,9 @@ export default function System({ classes, history, location, mode, open, onClose
           path: '/6a/system/team',
           icon: <Icon.DevTeam />,
         },
-        // {
-        //   text: 'Access Log',
-        //   path: '/system/accesslog',
-        //   icon: <Icon.Paper />,
-        // },
       ]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, history, mode, announcementList, languageList, announcementId, languageId]);
+  }, [location.pathname, history, mode, announcementId, announcementById, classes.arrow, submitLangById, submitlangId]);
 
   const foldSystem = () => {
     setDisplay('fold');
@@ -115,25 +111,6 @@ export default function System({ classes, history, location, mode, open, onClose
   const unfoldSystem = () => {
     setDisplay('unfold');
   };
-
-  if (
-    (announcementId !== undefined && announcementList.byId[announcementId] === undefined) ||
-    (languageId !== undefined && languageList.byId[languageId] === undefined)
-  ) {
-    return (
-      <div>
-        <Drawer
-          variant="persistent"
-          open={open}
-          onClose={onClose}
-          className={classes.drawer}
-          anchor="left"
-          PaperProps={{ elevation: 5 }}
-          classes={{ paper: classes.drawerPaper }}
-        />
-      </div>
-    );
-  }
 
   return (
     <div>

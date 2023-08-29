@@ -62,5 +62,6 @@ export type ColumnConfigItem<DataSchema extends DataSchemaBase, RowSchema extend
 
     minWidth?: number;
     width?: number;
+    maxWidth?: number;
     colors?: Record<string, ColumnColorsValue>;
   };

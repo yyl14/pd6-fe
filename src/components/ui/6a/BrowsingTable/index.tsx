@@ -164,7 +164,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
                       style={{
                         minWidth: column.minWidth,
                         width: column.width,
-                        maxWidth: column.width,
+                        maxWidth: column.maxWidth,
                         display: 'flex',
                         justifyContent: 'center',
                       }}
@@ -266,7 +266,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
                             <TableCell className={classes.tableColumnLeftSpacing} />
                             <TableCell
                               className={`${classes.tableBodyCell} ${classes.textLink}`}
-                              style={{ minWidth: column.minWidth, width: column.width, maxWidth: column.width }}
+                              style={{ minWidth: column.minWidth, width: column.width, maxWidth: column.maxWidth }}
                               align={column.align}
                             >
                               <Link to={column.formatLink(datum)} className={classes.textLink}>
@@ -284,7 +284,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
                             className={`${column.colors && column.colors[value] && classes[column.colors[value]]} ${
                               classes.tableBodyCell
                             }`}
-                            style={{ minWidth: column.minWidth, width: column.width, maxWidth: column.width }}
+                            style={{ minWidth: column.minWidth, width: column.width, maxWidth: column.maxWidth }}
                           >
                             {value}
                           </TableCell>
