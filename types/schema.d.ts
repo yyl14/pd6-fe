@@ -1702,14 +1702,6 @@ export interface components {
     };
     /** BrowseAnnouncementOutput */
     BrowseAnnouncementOutput: {
-      map(
-        arg0: (item: {
-          id: unknown;
-          title: unknown;
-          post_time: import('moment').MomentInput;
-          expire_time: import('moment').MomentInput;
-        }) => { id: unknown; Title: unknown; 'Post Time': string; 'End Time': string; link: string },
-      ): unknown;
       /** Data */
       data: components['schemas']['pydantic__dataclasses__Announcement'][];
       /** Total Count */
@@ -3016,7 +3008,7 @@ export interface components {
       /** Success */
       success: boolean;
       /** Data */
-      data: components['schemas']['pydantic__dataclasses__Class'][];
+      data: components['schemas']['BrowseAllClassUnderCourseOutput'][];
       /** Error */
       error: string;
     };
@@ -6442,7 +6434,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          'application/json': components['schemas']['pydantic__dataclasses__AddOutput'];
+          'application/json': components['schemas']['add_team_contest_scoreboard_under_challenge_return'];
         };
       };
     };
@@ -7934,7 +7926,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['processor__http__scoreboard_setting_team_project__EditScoreboardInput'];
+        'application/json': components['schemas']['processor__http_api__scoreboard_setting_team_project__EditScoreboardInput'];
       };
     };
     responses: {
@@ -7985,7 +7977,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['processor__http__scoreboard_setting_team_contest__EditScoreboardInput'];
+        'application/json': components['schemas']['processor__http_api__scoreboard_setting_team_contest__EditScoreboardInput'];
       };
     };
     responses: {
