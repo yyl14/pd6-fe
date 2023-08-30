@@ -272,19 +272,12 @@ const ClassMemberSetting = ({
           TATransformedList.concat(studentTransformedList, guestTransformedList),
         );
 
-        const members =
-          browseClassMembersWithAccountReferral?.map((member) => ({
-            account_referral: member.member_referral,
-            role: member.member_role,
-          })) ?? [];
-
         // if data is saved with dialog, redirection is needed
         try {
-          const { data } = await replaceClassMembers({ class_id: Number(classId), members });
+          const data = await replaceClassMembers({ class_id: Number(classId), members: replacingList });
           const failedList = data.data
             .reduce((acc, cur, index) => (cur === false ? acc.concat(index) : acc), [] as number[])
             .map((index) => replacingList[index].account_referral);
-
           if (failedList.length === 0) {
             unblockAndReturn(saveWithDialog);
           } else {

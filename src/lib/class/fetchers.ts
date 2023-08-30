@@ -25,13 +25,11 @@ type AccountType = {
   role: string;
 };
 
-interface ReplaceClassMemberResponseType extends Response {
-  data: {
-    data: boolean[];
-    error: string;
-    success: boolean;
-  };
-}
+type ReplaceClassMemberResponseType = {
+  data: boolean[];
+  error: string;
+  success: boolean;
+};
 
 export const replaceClassMembers = async ({ class_id, members }: { class_id: number; members: AccountType[] }) => {
   const options = {
