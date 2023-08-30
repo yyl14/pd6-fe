@@ -15,15 +15,14 @@ import {
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import BrowsingTable from '@/components/ui/6a/BrowsingTable';
 import FileUploadArea from '@/components/ui/FileUploadArea';
 import PageTitle from '@/components/ui/PageTitle';
 import Icon from '@/components/ui/icon/index';
-import useAccount from '@/lib/account/useAccount';
 import useAccountAdmin from '@/lib/account/useAccountAdmin';
 import useAccountTemplate from '@/lib/account/useAccountTemplate';
+import useS3FileDownload from '@/lib/s3File/useS3FileDownload';
 import useViewAccountsWithDefaultStudentId, {
   AccountsWithDefaultStudentIdSchema,
 } from '@/lib/view/useViewAccountsWithDefaultStudentId';
@@ -52,9 +51,8 @@ const StyledButton = withStyles({
   },
 })(Button);
 
-export default function AccountList({ accountId }: { accountId: string }) {
+export default function AccountList() {
   const classNames = useStyles();
-  const dispatch = useDispatch();
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [addInputs, setAddInputs] = useState({
@@ -71,11 +69,14 @@ export default function AccountList({ accountId }: { accountId: string }) {
   const [errorText, setErrorText] = useState('');
   const [showSnackBar, setShowSnackBar] = useState(false);
   const [showSnackBar1, setShowSnackBar1] = useState(false);
-  // const { studentCards: browseAccountWithDefaultStudentId } = useAccountStudentCards(Number(accountId));
-  const { isLoading: browseAllAccountsIsLoading } = useAccount(Number(accountId));
-  const { account: browseAccountWithDefaultStudentId, error: viewError } = useViewAccountsWithDefaultStudentId();
-  const { getAccountTemplateFile: downloadAccountFile } = useAccountTemplate();
-  const { addNormalAccount: addAccount, importAccount, error } = useAccountAdmin();
+  const {
+    account: browseAccountWithDefaultStudentId,
+    isLoading: viewIsLoading,
+    error: viewError,
+  } = useViewAccountsWithDefaultStudentId();
+  const { getAccountTemplateFile } = useAccountTemplate();
+  const { addNormalAccount, importAccount, error } = useAccountAdmin();
+  const { downloadFile } = useS3FileDownload();
 
   useEffect(() => {
     if (showImportDialog) {
@@ -147,23 +148,17 @@ export default function AccountList({ accountId }: { accountId: string }) {
     setShowPassword({ pw1: false, pw2: false });
   };
 
-  const importAccountSuccess = () => {
-    setSelectedFile([]);
-    setShowImportDialog(false);
-  };
-
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (showImportDialog) {
       if (selectedFile.length !== 0) {
         try {
-          Promise.all(
-            selectedFile.map((file) =>
-              importAccount({
-                file,
-              }),
-            ),
+          await Promise.all(
+            selectedFile.map(async (file) => {
+              await importAccount({ file });
+            }),
           );
-          dispatch(importAccountSuccess());
+          setSelectedFile([]);
+          setShowImportDialog(false);
         } catch {
           setShowSnackBar(true);
         }
@@ -179,23 +174,29 @@ export default function AccountList({ accountId }: { accountId: string }) {
         return;
       }
       try {
-        addAccount({
+        await addNormalAccount({
           real_name: addInputs.realName,
           username: addInputs.username,
           password: addInputs.password1,
           nickname: addInputs.password2,
-          alternative_email: addInputs.altMail,
+          alternative_email: addInputs.altMail !== '' ? addInputs.altMail : undefined,
         });
-        dispatch(addAccountSuccess());
+        addAccountSuccess();
       } catch {
         setShowSnackBar1(true);
       }
     }
   };
 
-  const downloadTemplate = () => {
-    dispatch(downloadAccountFile());
-    setShowImportDialog(false);
+  const downloadTemplate = async () => {
+    try {
+      const res = await getAccountTemplateFile();
+      await downloadFile({
+        file_uuid: res.data.data.s3_file_uuid,
+        fileName: res.data.data.filename,
+      });
+      // eslint-disable-next-line no-empty
+    } catch {}
   };
 
   return (
@@ -262,9 +263,9 @@ export default function AccountList({ accountId }: { accountId: string }) {
           Username: username,
           'Student ID': student_id,
           'Real Name': real_name,
-          link: `/admin/account/account/${account_id}/setting`,
+          link: `/6a/admin/account/account/${account_id}/setting`,
         })}
-        isLoading={browseAllAccountsIsLoading.account}
+        isLoading={viewIsLoading.browse}
         error={viewError.browse}
         pagination={browseAccountWithDefaultStudentId.pagination}
         filter={browseAccountWithDefaultStudentId.filter}
@@ -368,7 +369,7 @@ export default function AccountList({ accountId }: { accountId: string }) {
         onClose={() => {
           setShowSnackBar1(false);
         }}
-        message={`Error: ${viewError.browse}`}
+        message={`Error: ${error.addNormalAccount?.message}`}
       />
 
       <Dialog open={showImportDialog} onClose={() => setShowImportDialog(false)} maxWidth="md">
@@ -430,7 +431,7 @@ export default function AccountList({ accountId }: { accountId: string }) {
         onClose={() => {
           setShowSnackBar(false);
         }}
-        message={`Error: ${error.importAccount}`}
+        message={`Error: ${error.importAccount?.message}`}
       />
     </>
   );

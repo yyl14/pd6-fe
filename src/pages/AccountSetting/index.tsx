@@ -15,15 +15,12 @@ import NoMatch from '@/components/noMatch';
 import PageTitle from '@/components/ui/PageTitle';
 import ThemeToggleContext from '@/contexts/ThemeContext';
 import useEventListener from '@/hooks/useEventListener';
-import useReduxStateShape from '@/hooks/useReduxStateShape';
 import useAccount from '@/lib/account/useAccount';
-import useAccountStudentCards from '@/lib/studentCard/useAccountStudentCards';
 
 import BasicInfo from './setting/BasicInfo';
 import BasicInfoEdit from './setting/BasicInfoEdit';
 import NewPassword from './setting/NewPassword';
-import StudentInfoEdit from './setting/StudentInfoEdit';
-import { PendingStudentCardsForm, StudentCards } from './setting/types';
+import StudentCards from './setting/StudentCards';
 
 const activeThemeList = [
   {
@@ -48,22 +45,15 @@ const activeThemeList = [
   },
 ];
 
-/* This is a level 3 component (page component) */
-
-export default function AccountSetting({ accountId }: { accountId: number }) {
+export default function AccountSetting({ accountId, isAdmin }: { accountId: number; isAdmin: boolean }) {
   const { value: selectedTheme } = useContext(ThemeToggleContext);
   const [selectedThemes, setSelectedThemes] = useState(selectedTheme);
-  const [cards, setCards] = useState<StudentCards[]>([]);
-  const [pendingCards, setPendingCards] = useState<PendingStudentCardsForm[]>([]);
   const [editBasicInfo, setEditBasicInfo] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [showThemeSelector, setShowThemeSelector] = useState(false);
   const [message, setMessage] = useState('');
 
   const { account, error, isLoading: loading } = useAccount(accountId);
-  const { studentCards, pendingStudentCards, isLoading } = useAccountStudentCards(accountId);
-  const [studentCardsById, studentCardsIds] = useReduxStateShape(studentCards);
-  const [pendingStudentCardsById, pendingStudentCardsIds] = useReduxStateShape(pendingStudentCards);
 
   useEffect(() => {
     if (account?.role === 'GUEST') {
@@ -85,16 +75,6 @@ export default function AccountSetting({ accountId }: { accountId: number }) {
     }
   }, [error.editAccount, loading.editAccount]);
 
-  useEffect(() => {
-    const newData = studentCardsIds?.map((id) => studentCardsById[id]) ?? [];
-    setCards(newData);
-  }, [studentCardsById, studentCardsIds]);
-
-  useEffect(() => {
-    const newData = pendingStudentCardsIds?.map((id) => pendingStudentCardsById[id]) ?? [];
-    setPendingCards(newData);
-  }, [pendingStudentCardsById, pendingStudentCardsIds]);
-
   function keydownHandler({ key }: { key: string }) {
     if (key === '/') {
       setShowThemeSelector((state) => !state);
@@ -103,8 +83,8 @@ export default function AccountSetting({ accountId }: { accountId: number }) {
 
   useEventListener('keydown', keydownHandler);
 
-  if (account === undefined || studentCards === undefined) {
-    if (loading.account || isLoading.browseAll || isLoading.browsePending) {
+  if (account === undefined) {
+    if (loading.account) {
       return <GeneralLoading />;
     }
     return <NoMatch />;
@@ -132,6 +112,7 @@ export default function AccountSetting({ accountId }: { accountId: number }) {
           username={account.username}
           nickname={account.nickname}
           altMail={account.alternative_email}
+          isAdmin={isAdmin}
           accountId={accountId}
         />
       ) : (
@@ -144,9 +125,9 @@ export default function AccountSetting({ accountId }: { accountId: number }) {
         />
       )}
       <div>
-        <StudentInfoEdit accountId={accountId} card={cards} pendingCard={pendingCards} />
+        <StudentCards accountId={accountId} />
       </div>
-      <NewPassword accountId={accountId} />
+      <NewPassword accountId={accountId} isAdmin={isAdmin} />
       <Snackbar
         open={showSnackbar}
         autoHideDuration={3000}

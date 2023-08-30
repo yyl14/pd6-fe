@@ -15,13 +15,10 @@ import {
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { editPassword } from '@/actions/user/user';
 import AlignedText from '@/components/ui/AlignedText';
 import SimpleBar from '@/components/ui/SimpleBar';
-import useAccount from '@/lib/account/useAccount';
-import useAuthToken from '@/lib/user/useAuthToken';
+import useEditPassword from '@/lib/account/useEditPassword';
 
 const useStyles = makeStyles(() => ({
   buttons: {
@@ -30,7 +27,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function NewPassword({ accountId }: { accountId: number }) {
+export default function NewPassword({ accountId, isAdmin }: { accountId: number; isAdmin: boolean }) {
   const classes = useStyles();
   const [edit, setEdit] = useState(false);
   const [oldPassword, setOldPassword] = useState('');
@@ -44,10 +41,7 @@ export default function NewPassword({ accountId }: { accountId: number }) {
     confirmPassword: false,
   });
 
-  const authToken = useAuthToken();
-  const { error: serverError } = useAccount(accountId);
-
-  const dispatch = useDispatch();
+  const { editPassword, error } = useEditPassword(accountId);
 
   const initErrors = {
     oldPassword: false,
@@ -65,28 +59,23 @@ export default function NewPassword({ accountId }: { accountId: number }) {
   const [helperText, setHelperText] = useState(initHelperText);
   const [popUp, setPopUp] = useState(false);
 
-  const handleResetPassword = () => {
-    // change system password
-    dispatch(
-      editPassword(
-        authToken,
-        accountId,
-        oldPassword,
-        newPassword,
-        () => {
-          setEdit(false);
-          setOldPassword('');
-          setNewPassword('');
-          setConfirmPassword('');
-          setDisabled(true);
-          setErrors(initErrors);
-          setHelperText(initHelperText);
-        },
-        () => {
-          setShowSnackbar(true);
-        },
-      ),
-    );
+  const handleResetPassword = async () => {
+    try {
+      await editPassword({
+        account_id: accountId,
+        old_password: isAdmin ? undefined : oldPassword,
+        new_password: newPassword,
+      });
+      setEdit(false);
+      setOldPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      setDisabled(true);
+      setErrors(initErrors);
+      setHelperText(initHelperText);
+    } catch {
+      setShowSnackbar(true);
+    }
   };
 
   const handleCancel = () => {
@@ -99,7 +88,7 @@ export default function NewPassword({ accountId }: { accountId: number }) {
   };
 
   useEffect(() => {
-    if (confirmPassword === '') return;
+    if (confirmPassword === '' || isAdmin) return;
     setErrors((input) => ({
       ...input,
       oldPassword: oldPassword === '',
@@ -121,55 +110,65 @@ export default function NewPassword({ accountId }: { accountId: number }) {
         confirmPassword: newPassword !== confirmPassword ? "Passwords don't match" : '',
       }));
     }
-  }, [oldPassword, newPassword, confirmPassword]);
+  }, [oldPassword, newPassword, confirmPassword, isAdmin]);
 
   useEffect(() => {
     if (
-      oldPassword !== '' &&
-      newPassword !== '' &&
-      confirmPassword !== '' &&
-      !errors.oldPassword &&
-      !errors.newPassword &&
-      !errors.confirmPassword
+      isAdmin ||
+      (oldPassword !== '' &&
+        newPassword !== '' &&
+        confirmPassword !== '' &&
+        !errors.oldPassword &&
+        !errors.newPassword &&
+        !errors.confirmPassword)
     ) {
       setDisabled(false);
       return;
     }
     setDisabled(true);
-  }, [oldPassword, newPassword, confirmPassword, errors.oldPassword, errors.newPassword, errors.confirmPassword]);
+  }, [
+    oldPassword,
+    newPassword,
+    confirmPassword,
+    errors.oldPassword,
+    errors.newPassword,
+    errors.confirmPassword,
+    isAdmin,
+  ]);
 
   return (
     <>
       {edit ? (
         <SimpleBar title="Password">
           <>
-            <AlignedText text="Current Password" childrenType="field" maxWidth="lg">
-              <TextField
-                value={oldPassword}
-                variant="outlined"
-                type={showPassword.oldPassword ? 'text' : 'password'}
-                onChange={(e) => {
-                  setOldPassword(e.target.value);
-                }}
-                error={errors.oldPassword}
-                helperText={helperText.oldPassword}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => {
-                          setShowPassword((input) => ({ ...input, oldPassword: !input.oldPassword }));
-                        }}
-                        edge="end"
-                      >
-                        {showPassword.oldPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </AlignedText>
-
+            {!isAdmin && (
+              <AlignedText text="Current Password" childrenType="field" maxWidth="lg">
+                <TextField
+                  value={oldPassword}
+                  variant="outlined"
+                  type={showPassword.oldPassword ? 'text' : 'password'}
+                  onChange={(e) => {
+                    setOldPassword(e.target.value);
+                  }}
+                  error={errors.oldPassword}
+                  helperText={helperText.oldPassword}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => {
+                            setShowPassword((input) => ({ ...input, oldPassword: !input.oldPassword }));
+                          }}
+                          edge="end"
+                        >
+                          {showPassword.oldPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </AlignedText>
+            )}
             <AlignedText text="New Password" childrenType="field" maxWidth="lg">
               <TextField
                 value={newPassword}
@@ -196,32 +195,34 @@ export default function NewPassword({ accountId }: { accountId: number }) {
                 }}
               />
             </AlignedText>
-            <AlignedText text="Confirmed Password" childrenType="field" maxWidth="lg">
-              <TextField
-                value={confirmPassword}
-                variant="outlined"
-                type={showPassword.confirmPassword ? 'text' : 'password'}
-                onChange={(e) => {
-                  setConfirmPassword(e.target.value);
-                }}
-                error={errors.confirmPassword}
-                helperText={helperText.confirmPassword}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => {
-                          setShowPassword((input) => ({ ...input, confirmPassword: !input.confirmPassword }));
-                        }}
-                        edge="end"
-                      >
-                        {showPassword.confirmPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </AlignedText>
+            {!isAdmin && (
+              <AlignedText text="Confirmed Password" childrenType="field" maxWidth="lg">
+                <TextField
+                  value={confirmPassword}
+                  variant="outlined"
+                  type={showPassword.confirmPassword ? 'text' : 'password'}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                  }}
+                  error={errors.confirmPassword}
+                  helperText={helperText.confirmPassword}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => {
+                            setShowPassword((input) => ({ ...input, confirmPassword: !input.confirmPassword }));
+                          }}
+                          edge="end"
+                        >
+                          {showPassword.confirmPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </AlignedText>
+            )}
             <div className={classes.buttons}>
               <Button onClick={handleCancel}>Cancel</Button>
               <Button color="primary" type="submit" disabled={disabled} onClick={() => setPopUp(true)}>
@@ -282,7 +283,7 @@ export default function NewPassword({ accountId }: { accountId: number }) {
         onClose={() => {
           setShowSnackbar(false);
         }}
-        message={`Error: ${serverError.editAccount}`}
+        message={`Error: ${error.editPassword?.message}`}
       />
     </>
   );

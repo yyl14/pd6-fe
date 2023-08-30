@@ -34,7 +34,7 @@ export interface PendingStudentCardsForm {
   is_consumed: boolean;
 }
 
-export interface StudentCards {
+export interface StudentCardType {
   id: number;
   institute_id: number;
   student_id: string;

@@ -11,6 +11,7 @@ import AboutRoutes from './about';
 import AdminRoutes from './admin';
 import FileDownloading from './file';
 import MyClassRoutes from './my-class';
+import MyProfileRoute from './my-profile';
 import MySubmissionRoute from './my-submission';
 import ProblemSetRoutes from './problem-set';
 import UserProfileRoute from './user-profile';
@@ -62,7 +63,7 @@ export default function MainRoutes() {
     <Layout>
       <Switch>
         <Route path="/6a/admin" component={AdminRoutes} />
-        {/* <Route path="/6a/my-profile" component={MyProfileRoute} /> */}
+        <Route path="/6a/my-profile" component={MyProfileRoute} />
         <Route path="/6a/my-submission" component={MySubmissionRoute} />
         <Route exact path="/6a/user-profile/:accountId" component={UserProfileRoute} />
         <Route path="/6a/file" component={FileDownloading} />

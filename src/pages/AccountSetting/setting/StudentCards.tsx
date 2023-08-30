@@ -11,7 +11,7 @@ import {
   Typography,
   makeStyles,
 } from '@material-ui/core';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import AlignedText from '@/components/ui/AlignedText';
 import SimpleBar from '@/components/ui/SimpleBar';
@@ -19,8 +19,7 @@ import useReduxStateShape from '@/hooks/useReduxStateShape';
 import useInstitutes from '@/lib/institute/useInstitutes';
 import useAccountStudentCards from '@/lib/studentCard/useAccountStudentCards';
 
-import StudentInfoCard from './StudentInfoCard';
-import { PendingStudentCardsForm, StudentCards } from './types';
+import StudentCard from './StudentCard';
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -72,24 +71,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function StudentInfoEdit({
-  accountId,
-  card,
-  pendingCard,
-}: {
-  accountId: number;
-  card: StudentCards[];
-  pendingCard: PendingStudentCardsForm[];
-}) {
+export default function StudentCards({ accountId }: { accountId: number }) {
   const classes = useStyles();
-  const [cards, setCards] = useState(card);
-  const [pendingCards, setPendingCards] = useState(pendingCard);
-  const [add, setAdd] = useState(false); // addCard block
+  const { studentCards, pendingStudentCards } = useAccountStudentCards(accountId);
+  const [add, setAdd] = useState(false);
   const [mailSnackBar, setMailSnackBar] = useState(false);
   const [showSnackBar, setShowSnackBar] = useState(false);
-  const [emailTail, setEmailTail] = useState('@ntu.edu.tw');
+  const [emailTail, setEmailTail] = useState('');
   const [addInputs, setAddInputs] = useState({
-    institute: 'National Taiwan University',
+    institute: '',
     studentId: '',
     email: '',
   });
@@ -112,22 +102,10 @@ export default function StudentInfoEdit({
 
   const enableInstitutesId = institutesId.filter((item) => !institutesById[item].is_disabled);
 
-  useEffect(() => {
-    if (card) {
-      setCards(card);
-    }
-  }, [card]);
-
-  useEffect(() => {
-    if (pendingCard) {
-      setPendingCards(pendingCard);
-    }
-  }, [pendingCard]);
-
   const handleAddCancel = () => {
     setAdd(false);
-    setAddInputs({ institute: 'National Taiwan University', studentId: '', email: '' });
-    setEmailTail('@ntu.edu.tw');
+    setAddInputs({ institute: '', studentId: '', email: '' });
+    setEmailTail('');
     setErrors({ studentId: false, email: false });
     setErrorTexts({ studentId: '', email: '' });
   };
@@ -147,15 +125,13 @@ export default function StudentInfoEdit({
     const inputInstituteId = institutesId.filter((id) => institutesById[id].full_name === addInputs.institute);
     if (inputInstituteId.length !== 0) {
       try {
-        const res = addStudentCard({
+        await addStudentCard({
           account_id: accountId,
           institute_id: Number(inputInstituteId[0]),
           institute_email_prefix: addInputs.email,
           student_id: addInputs.studentId,
         });
-        if ((await res).ok) {
-          setMailSnackBar(true);
-        }
+        setMailSnackBar(true);
       } catch (e) {
         setShowSnackBar(true);
       }
@@ -196,18 +172,20 @@ export default function StudentInfoEdit({
   return (
     <div>
       <SimpleBar title="Student Information">
-        {cards && (
+        {studentCards && (
           <div>
-            {cards.map((p) => {
+            {studentCards.map((p) => {
               if (p.is_default === true) {
                 return (
-                  <div key={accountId}>
-                    <StudentInfoCard
+                  <div key={p.student_id}>
+                    <StudentCard
                       accountId={accountId}
-                      isDefault={false}
-                      studentId={Number(p.student_id)}
+                      isDefault={p.is_default}
+                      isPending={false}
+                      studentId={p.student_id}
                       email={p.email}
-                      instituteId={p.institute_id}
+                      cardId={p.id}
+                      instituteName={institutesById[p.institute_id]?.full_name}
                     />
                     <p />
                   </div>
@@ -216,16 +194,18 @@ export default function StudentInfoEdit({
               return <div key={accountId} />;
             })}
             <p />
-            {cards.map((p) => {
+            {studentCards.map((p) => {
               if (p.is_default === false) {
                 return (
-                  <div key={accountId}>
-                    <StudentInfoCard
+                  <div key={p.student_id}>
+                    <StudentCard
                       accountId={accountId}
-                      isDefault={false}
-                      studentId={Number(p.student_id)}
+                      isDefault={p.is_default}
+                      isPending={false}
+                      studentId={p.student_id}
                       email={p.email}
-                      instituteId={p.institute_id}
+                      cardId={p.id}
+                      instituteName={institutesById[p.institute_id]?.full_name}
                     />
                     <p />
                   </div>
@@ -236,16 +216,18 @@ export default function StudentInfoEdit({
           </div>
         )}
         <p />
-        {pendingCards && (
+        {pendingStudentCards && (
           <div>
-            {pendingCards.map((p) => (
+            {pendingStudentCards.map((p) => (
               <div key={p.id}>
-                <StudentInfoCard
+                <StudentCard
                   accountId={accountId}
                   isDefault={false}
+                  isPending
                   email={p.email}
-                  studentId={Number(p.student_id)}
-                  instituteId={p.institute_id}
+                  studentId={p.student_id}
+                  cardId={p.id}
+                  instituteName={institutesById[p.institute_id]?.full_name}
                 />
                 <p />
               </div>
@@ -305,7 +287,7 @@ export default function StudentInfoEdit({
             </Card>
           </div>
         )}
-        {!add && !pendingCards.length && !addStudentCardIsLoading.add && (
+        {!add && !pendingStudentCards?.length && !addStudentCardIsLoading.add && (
           <div className={classes.buttonContainer}>
             <div className={classes.buttons}>
               <Button
@@ -334,7 +316,7 @@ export default function StudentInfoEdit({
         <Snackbar
           open={showSnackBar}
           autoHideDuration={3000}
-          message={`Error: ${addStudentCardError.add}`}
+          message={`${addStudentCardError.add}`}
           onClose={() => setShowSnackBar(false)}
         />
       </SimpleBar>

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import AlignedText from '@/components/ui/AlignedText';
 import Icon from '@/components/ui/icon/index';
 import useEmailVerification from '@/lib/email/useEmailVerification';
-import useInstitute from '@/lib/institute/useInstitute';
 import useAccountStudentCards from '@/lib/studentCard/useAccountStudentCards';
 
 const useStyles = makeStyles(() => ({
@@ -47,63 +46,57 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function StudentInfoCard({
+export default function StudentCard({
   accountId,
   isDefault,
-  instituteId,
+  isPending,
+  instituteName,
   studentId,
+  cardId,
   email,
 }: {
   accountId: number;
   isDefault: boolean;
-  instituteId: number;
-  studentId: number;
+  isPending: boolean;
+  instituteName: string | null | undefined;
+  studentId: string;
+  cardId: number;
   email: string;
 }) {
   const classes = useStyles();
-  const disabled = isDefault;
-  const [pending, setPending] = useState(false);
 
-  const { institute } = useInstitute(instituteId);
-  const { deletePendingEmailVerification, resendEmailVerification } = useEmailVerification(accountId);
+  const { deletePendingEmailVerification, resendEmailVerification } = useEmailVerification(cardId);
   const { makeStudentCardDefault, mutateStudentCards, mutatePendingStudentCards } = useAccountStudentCards(accountId);
 
   const [snackbar, setSnackbar] = useState(false);
 
-  const handleSetDefault = async (cardId: number) => {
-    const res = makeStudentCardDefault({
+  const handleSetDefault = async () => {
+    await makeStudentCardDefault({
       account_id: Number(accountId),
       student_card_id: cardId,
     });
-    if ((await res).ok) {
-      mutateStudentCards();
-      setPending(true);
-    }
+    mutateStudentCards();
   };
 
   const handleResend = async () => {
-    const res = resendEmailVerification();
-    if ((await res).ok) {
-      setSnackbar(true);
-    }
+    await resendEmailVerification();
+    setSnackbar(true);
   };
 
   const handleDelete = async () => {
-    const res = deletePendingEmailVerification();
-    if ((await res).ok) {
-      mutatePendingStudentCards();
-    }
+    await deletePendingEmailVerification();
+    mutatePendingStudentCards();
   };
 
   return (
     <div className={classes.root}>
       <div className={classes.defaultHeader}>
         {isDefault && <Icon.StarIcon style={{ color: 'ffe81e' }} className={classes.starIcon} />}
-        {pending && <Icon.Warning style={{ color: '656565' }} className={classes.pendingIcon} />}
-        <Typography variant="body1">{institute?.full_name ?? 'Unknown Institute'}</Typography>
+        {isPending && <Icon.Warning style={{ color: '656565' }} className={classes.pendingIcon} />}
+        <Typography variant="body1">{instituteName ?? 'Unknown Institute'}</Typography>
       </div>
       <Card variant="outlined">
-        {!pending ? (
+        {!isPending ? (
           <CardContent className={classes.editCardContent}>
             <div>
               <AlignedText text="Student ID" childrenType="text">
@@ -117,9 +110,9 @@ export default function StudentInfoCard({
             </div>
             <div className={classes.defaultButton}>
               <Button
-                disabled={disabled}
+                disabled={isDefault}
                 onClick={() => {
-                  handleSetDefault(accountId);
+                  handleSetDefault();
                 }}
               >
                 Set as Default

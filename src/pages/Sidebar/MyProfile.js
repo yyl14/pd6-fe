@@ -1,17 +1,17 @@
 import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import Icon from '@/components/ui/icon/index';
+import useUser from '@/lib/user/useUser';
 
 export default function MyProfile({ classes, history, location, mode, open, onClose }) {
-  const account = useSelector((state) => state.user);
+  const { account } = useUser();
   const [display, setDisplay] = useState('unfold');
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
 
   useEffect(() => {
-    if (mode === 'main') {
+    if (mode === 'main' && account) {
       setTitle(account.username);
       setItemList([
         {
@@ -59,7 +59,7 @@ export default function MyProfile({ classes, history, location, mode, open, onCl
             {itemList.map((item) => (
               <ListItem
                 button
-                key={item.id}
+                key={item.text}
                 onClick={() => history.push(item.path)}
                 className={location.pathname === item.path ? `${classes.active} ${classes.item}` : classes.item}
               >
