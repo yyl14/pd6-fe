@@ -2,7 +2,7 @@ import { components } from '../../../types/schema';
 import { withDataSchema } from '../../hooks/useSWRWithBrowseParams';
 import { browseAccountWithDefaultStudentId } from './fetchers';
 
-export type AccountsWithDefaultStudentIdSchema = components['schemas']['BrowseAccountOutput'];
+export type AccountsWithDefaultStudentIdSchema = components['schemas']['ViewAccount'];
 
 const useViewAccountsWithDefaultStudentId = () => {
   const useSWRWithBrowseParams = withDataSchema<AccountsWithDefaultStudentIdSchema>();
@@ -14,7 +14,12 @@ const useViewAccountsWithDefaultStudentId = () => {
   );
 
   return {
-    account: browseAccountWithDefaultStudentIdSWR.data?.data.data,
+    account: {
+      data: browseAccountWithDefaultStudentIdSWR.data?.data.data,
+      filter: browseAccountWithDefaultStudentIdSWR.filter,
+      pagination: browseAccountWithDefaultStudentIdSWR.pagination,
+      sort: browseAccountWithDefaultStudentIdSWR.sort,
+    },
 
     isLoading: {
       browse: browseAccountWithDefaultStudentIdSWR.isLoading,

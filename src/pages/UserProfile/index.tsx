@@ -5,8 +5,6 @@ import PageTitle from '@/components/ui/PageTitle';
 import SimpleBar from '@/components/ui/SimpleBar';
 import useAccount from '@/lib/account/useAccount';
 
-/* This is a level 3 component (page component) */
-
 export default function UserProfile({ accountId }: { accountId: number }) {
   const { account: user } = useAccount(accountId);
   return (
