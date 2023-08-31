@@ -37,7 +37,7 @@ Install:
       paths:
         - node_modules/
       when: on_success
-      policy: pull-push
+      policy: push
   tags:
     - build
   script:
