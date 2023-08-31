@@ -69,7 +69,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-// /* This is a level 4 component (page component) */
 const ClassMemberSetting = ({
   classId,
   backToMemberList,
@@ -88,9 +87,6 @@ const ClassMemberSetting = ({
   const [TAChanged, setTAChanged] = useState(false);
   const [studentChanged, setStudentChanged] = useState(false);
   const [guestChanged, setGuestChanged] = useState(false);
-  // eslint-disable-next-line
-  const [duplicateListWithAccountType, setDuplicateListWithAccountType] = useState<AccountType[]>([]);
-  // eslint-disable-next-line
   const [duplicateList, setDuplicateList] = useState<string[]>([]);
   const [errorDetectedList, setErrorDetectedList] = useState<string[]>([]);
   const [submitError, setSubmitError] = useState(false);
@@ -150,7 +146,6 @@ const ClassMemberSetting = ({
       if (TAChanged || studentChanged || guestChanged) {
         setTargetPath(location.pathname);
         setShowUnsavedChangesDialog(true);
-        history.push(targetPath);
         return false;
       }
       return '';
@@ -160,14 +155,6 @@ const ClassMemberSetting = ({
       unblock();
     };
   }, [targetPath, TAChanged, guestChanged, history, studentChanged]);
-
-  useEffect(() => {
-    if (replaceClassMembersError) {
-      setSubmitError(true);
-    } else {
-      setSubmitError(false);
-    }
-  }, [replaceClassMembersError]);
 
   // block user leaving current page through browser close button and refresh button
   // (if any dialog is shown, or contents have been changed)
@@ -284,8 +271,9 @@ const ClassMemberSetting = ({
             setErrorDetectedList(failedList);
             setShowErrorDetectedDialog(true);
           }
-          // eslint-disable-next-line no-empty
-        } catch {}
+        } catch {
+          setSubmitError(true);
+        }
       }
     } else {
       unblockAndReturn(false);
@@ -311,7 +299,8 @@ const ClassMemberSetting = ({
             value={TA}
             onChange={(e) => handleChangeTA(e)}
             multiline
-            rows={20}
+            minRows={20}
+            maxRows={20}
             placeholder="B01234567&#10;aaa@ntnu.edu.tw&#10;#pdogs"
           />
         </div>
@@ -327,7 +316,8 @@ const ClassMemberSetting = ({
             value={student}
             onChange={(e) => handleChangeStudent(e)}
             multiline
-            rows={20}
+            minRows={20}
+            maxRows={20}
             placeholder="B01234567&#10;aaa@ntnu.edu.tw&#10;#pdogs"
           />
         </div>
@@ -343,7 +333,8 @@ const ClassMemberSetting = ({
             value={guest}
             onChange={(e) => handleChangeGuest(e)}
             multiline
-            rows={20}
+            minRows={20}
+            maxRows={20}
             placeholder="B01234567&#10;aaa@ntnu.edu.tw&#10;#pdogs"
           />
         </div>
@@ -390,9 +381,9 @@ const ClassMemberSetting = ({
             The following accounts appear in more than one column. Please remove duplicate identities.
           </Typography>
           <div className={classNames.failedList}>
-            {duplicateListWithAccountType.map((accountReferral) => (
-              <Typography variant="body1" key={`duplicate-${accountReferral}`}>
-                {accountReferral.account_referral}
+            {duplicateList.map((account) => (
+              <Typography variant="body1" key={`duplicate-${account}`}>
+                {account}
               </Typography>
             ))}
           </div>
@@ -416,7 +407,7 @@ const ClassMemberSetting = ({
             <>
               <Typography variant="body1">Save member failed due to the following reasons:</Typography>
               <Typography variant="body1" className={classNames.failedList}>
-                {submitError === true ? 'System Exception' : submitError}
+                {replaceClassMembersError.replaceClassMembers?.message}
               </Typography>
             </>
           ) : (

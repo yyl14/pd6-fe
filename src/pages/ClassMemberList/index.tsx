@@ -3,13 +3,12 @@ import { useState } from 'react';
 
 import BrowsingTable from '@/components/ui/6a/BrowsingTable';
 import PageTitle from '@/components/ui/PageTitle';
-// import MemberEdit from '@/components/admin/course/MemberEdit';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useInstitutes from '@/lib/institute/useInstitutes';
 import useViewClassMembers, { ClassMemberSchema } from '@/lib/view/useViewClassMembers';
 
-import ClassMemberSetting from '../ClassMemberSetting';
+import ClassMemberSetting from './classMemberSetting';
 
 export default function ClassMemberList({ courseId, classId }: { courseId: string; classId: string }) {
   const { course } = useCourse(Number(courseId));
