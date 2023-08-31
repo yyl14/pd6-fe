@@ -5,10 +5,9 @@
   "scripts": {
     "start": "craco --openssl-legacy-provider start",
     "dev": "craco --openssl-legacy-provider start",
-    "build": "craco build",
+    "build": "craco --openssl-legacy-provider build",
     "test": "craco test",
     "eject": "craco eject",
-    "prebuild": "npm run generate-build-meta",
     "generate-build-meta": "./node_modules/react-clear-cache/bin/cli.js",
     "analyze": "source-map-explorer 'build/static/js/*.js' --html bundle-size.html",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src --cache-location .eslint",
