@@ -1,5 +1,5 @@
 variables:
-  FF_USE_FASTZIP: "true"
+  FF_USE_FASTZIP: 'true'
   ARTIFACT_COMPRESSION_LEVEL: default
   CACHE_COMPRESSION_LEVEL: default
   TRANSFER_METER_FREQUENCY: 5s
@@ -24,7 +24,6 @@ workflow:
     - if: '$CI_COMMIT_BRANCH == "development"'
       when: always
 
-
 Install:
   image: timbru31/node-alpine-git
   stage: .pre
@@ -43,7 +42,6 @@ Install:
     - build
   script:
     - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
-
 
 Lint-test:
   stage: Test
@@ -69,7 +67,7 @@ Unit-test:
   script:
     - yarn test --passWithNoTests
   allow_failure: false
-  tags: 
+  tags:
     - test
   except:
     - development
@@ -117,12 +115,12 @@ Lighthouse:
   script:
     - yarn run lhci autorun
   after_script:
-    - yarn run lhci upload --target=lhci 
-                           --serverBaseUrl=$LHCI_SERVER_BASE_URL 
-                           --token=$LHCI_TOKEN 
-                           --basicAuth.username=$LHCI_AUTH_USERNAME 
-                           --basicAuth.password=$LHCI_AUTH_PASSWORD
-                           
+    - yarn run lhci upload --target=lhci
+      --serverBaseUrl=$LHCI_SERVER_BASE_URL
+      --token=$LHCI_TOKEN
+      --basicAuth.username=$LHCI_AUTH_USERNAME
+      --basicAuth.password=$LHCI_AUTH_PASSWORD
+
   stage: Quality-Analysis
   tags:
     - test
@@ -131,5 +129,3 @@ Lighthouse:
       artifacts: true
   only:
     - development
-    
-      

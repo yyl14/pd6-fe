@@ -151,17 +151,6 @@ export default function Sidebar({ open, onClose }) {
 
       {/* {Admin} */}
       {/* {Course} */}
-      <Route exact path="/6a/admin/course/course/">
-        {/* for fetchCourse and redirection */}
-        <Course
-          classes={classes}
-          history={history}
-          location={location}
-          open={open}
-          onClose={onClose}
-          mode="class-list"
-        />
-      </Route>
       <Route path="/6a/admin/course/course/:courseId/class-list">
         <Course
           classes={classes}

@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.22.9",
+    "@babel/runtime": "^7.22.11",
     "@ckeditor/ckeditor5-build-classic": "^27.1.0",
     "@ckeditor/ckeditor5-easy-image": "^27.1.0",
     "@ckeditor/ckeditor5-react": "^3.0.2",
@@ -38,7 +39,7 @@
     "prettier": "^2.3.2",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
-    "react-beforeunload": "^2.5.1",
+    "react-beforeunload": "^2.6.0",
     "react-clear-cache": "^1.4.12",
     "react-cookie": "^4.0.3",
     "react-copy-to-clipboard": "^5.0.3",
@@ -72,7 +73,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@craco/craco": "6.4.5",
+    "@craco/craco": "^6.4.5",
     "@iconify/icons-bx": "^1.1.2",
     "@iconify/react": "^3.0.0",
     "@lhci/cli": "0.7.2",
@@ -81,6 +82,7 @@
     "@testing-library/user-event": "^12.1.10",
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "@types/lodash": "^4.14.197",
+    "@types/react-beforeunload": "^2.1.1",
     "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",

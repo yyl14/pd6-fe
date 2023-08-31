@@ -1,16 +1,19 @@
 import { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import useCourses from '@/lib/course/useCourses';
 
 const useAdminCourseMiddleware = () => {
   const history = useHistory();
+  const location = useLocation();
 
   const { courses } = useCourses();
 
   useEffect(() => {
-    history.push(`/6a/admin/course/course/${courses?.at(0)?.id}/class-list`);
-  }, [courses, history]);
+    if (location.pathname === '/6a/admin/course/course' && courses !== undefined) {
+      history.push(`/6a/admin/course/course/${courses?.at(0)?.id}/class-list`);
+    }
+  }, [courses, history, location.pathname]);
 };
 
 export default useAdminCourseMiddleware;

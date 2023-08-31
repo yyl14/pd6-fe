@@ -63,7 +63,7 @@ export default function UserProfile({ classes, history, location, mode, open, on
             {itemList.map((item) => (
               <ListItem
                 button
-                key={item.id}
+                key={item.text}
                 onClick={() => history.push(item.path)}
                 className={location.pathname === item.path ? `${classes.active} ${classes.item}` : classes.item}
               >

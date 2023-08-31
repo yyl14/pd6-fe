@@ -2848,6 +2848,14 @@ export interface components {
       /** Error */
       error: string;
     };
+    /** add_team_contest_scoreboard_under_challenge_return */
+    add_team_contest_scoreboard_under_challenge_return: {
+      /** Success */
+      success: boolean;
+      data: components['schemas']['pydantic__dataclasses__AddOutput'];
+      /** Error */
+      error: string;
+    };
     /** add_team_member_return */
     add_team_member_return: {
       /** Success */

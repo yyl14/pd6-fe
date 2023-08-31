@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { Route, Switch, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import GeneralLoading from '@/components/GeneralLoading';
 import withConditionalRender from '@/components/hoc/withConditionalRender';
@@ -8,7 +8,7 @@ import useCourse from '@/lib/course/useCourse';
 
 const ClassMemberList = lazy(() => import('@/pages/ClassMemberList'));
 
-function ClassMemberListRoute() {
+export default function ClassMemberListRoute() {
   const { courseId, classId } = useParams<{ courseId: string; classId: string }>();
 
   const { isLoading: courseIsLoading } = useCourse(Number(courseId));
@@ -22,13 +22,5 @@ function ClassMemberListRoute() {
         isLoading: courseIsLoading.read || classIsLoading.read,
       })}
     </Suspense>
-  );
-}
-
-export default function MemberRoutes() {
-  return (
-    <Switch>
-      <Route exact path="/6a/my-class/:courseId/:classId/member" component={ClassMemberListRoute} />
-    </Switch>
   );
 }
