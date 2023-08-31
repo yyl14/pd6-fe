@@ -1,13 +1,13 @@
 import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import Icon from '@/components/ui/icon/index';
+import useAccount from '@/lib/account/useAccount';
 
 export default function UserProfile({ classes, history, location, mode, open, onClose }) {
   const { accountId } = useParams();
-  const accounts = useSelector((state) => state.accounts.byId);
+  const { account } = useAccount(accountId);
   const [display, setDisplay] = useState('unfold');
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
@@ -15,8 +15,8 @@ export default function UserProfile({ classes, history, location, mode, open, on
   const baseURL = '/6a/user-profile';
 
   useEffect(() => {
-    if (mode === 'main' && accounts[accountId] !== undefined) {
-      setTitle(accounts[accountId].username);
+    if (mode === 'main' && account !== undefined) {
+      setTitle(account.username);
       setItemList([
         {
           text: 'Profile',
@@ -25,7 +25,7 @@ export default function UserProfile({ classes, history, location, mode, open, on
         },
       ]);
     }
-  }, [accountId, accounts, mode]);
+  }, [accountId, account, mode]);
 
   const foldAccount = () => {
     setDisplay('fold');
