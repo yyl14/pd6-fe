@@ -5,6 +5,7 @@ variables:
   TRANSFER_METER_FREQUENCY: 5s
 
 stages:
+  - Test
   - Build
   - Quality-Analysis
 
