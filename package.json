@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.22.9",
+    "@babel/runtime": "^7.22.11",
     "@ckeditor/ckeditor5-build-classic": "^27.1.0",
     "@ckeditor/ckeditor5-easy-image": "^27.1.0",
     "@ckeditor/ckeditor5-react": "^3.0.2",
