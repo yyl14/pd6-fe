@@ -12,9 +12,9 @@ export default function AdminRoutes() {
 
   return (
     <Switch>
-      <Route path="/6a/admin/course" component={CourseAndClassRoutes} />
-      <Route path="/6a/admin/account" component={AccountRoutes} />
-      <Route path="/6a/admin/system" component={SystemRoutes} />
+      <Route path="/admin/course" component={CourseAndClassRoutes} />
+      <Route path="/admin/account" component={AccountRoutes} />
+      <Route path="/admin/system" component={SystemRoutes} />
       <Route component={NoMatch} />
     </Switch>
   );

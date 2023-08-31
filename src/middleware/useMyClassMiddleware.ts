@@ -13,20 +13,20 @@ const useMyClassMiddleware = () => {
 
   useEffect(() => {
     if (user && user?.role !== 'NORMAL') {
-      history.push('/6a');
+      history.push('/');
     }
   }, [user, history]);
 
   useEffect(() => {
-    if (location.pathname === '/6a/my-class') {
+    if (location.pathname === '/my-class') {
       if (userClasses) {
         if (userClasses.length === 0) {
-          history.push('/6a/problem-set');
+          history.push('/problem-set');
         }
         const sortedClasses = userClasses.sort(
           (a, b) => b.class_name.localeCompare(a.class_name) || b.course_name.localeCompare(a.course_name),
         );
-        history.push(`/6a/my-class/${sortedClasses[0].course_id}/${sortedClasses[0].class_id}/challenge`);
+        history.push(`/my-class/${sortedClasses[0].course_id}/${sortedClasses[0].class_id}/challenge`);
       }
     }
   }, [history, location.pathname, userClasses]);

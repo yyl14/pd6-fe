@@ -52,7 +52,7 @@ export default function SubmissionList({ courseId, classId }: { courseId: string
             minWidth: 140.5,
             align: 'center',
             type: 'link',
-            formatLink: (datum) => `/6a/user-profile/${datum.account_id}`,
+            formatLink: (datum) => `/user-profile/${datum.account_id}`,
           },
           {
             name: 'Student ID',
@@ -70,20 +70,20 @@ export default function SubmissionList({ courseId, classId }: { courseId: string
           },
           {
             name: 'Challenge',
-            width: 140.5,
+            maxWidth: 180,
             minWidth: 140.5,
             align: 'center',
             type: 'link',
-            formatLink: (datum) => `/6a/my-class/${courseId}/${classId}/challenge/${datum.challenge_id}`,
+            formatLink: (datum) => `/my-class/${courseId}/${classId}/challenge/${datum.challenge_id}`,
           },
           {
             name: 'Problem',
-            width: 140.5,
+            maxWidth: 180,
             minWidth: 140.5,
             align: 'center',
             type: 'link',
             formatLink: (datum) =>
-              `/6a/my-class/${courseId}/${classId}/challenge/${datum.challenge_id}/problem/${datum.problem_id}`,
+              `/my-class/${courseId}/${classId}/challenge/${datum.challenge_id}/problem/${datum.problem_id}`,
           },
           {
             name: 'Status',
@@ -210,7 +210,7 @@ export default function SubmissionList({ courseId, classId }: { courseId: string
           Problem: challenge_label,
           Status: verdict ? startCase(toLower(verdict)) : 'Waiting for judge',
           Time: moment(submit_time).format('YYYY-MM-DD, HH:mm:ss'),
-          link: `/6a/my-class/${courseId}/${classId}/submission/${challenge_id}/${problem_id}/${submission_id}`,
+          link: `/my-class/${courseId}/${classId}/submission/${challenge_id}/${problem_id}/${submission_id}`,
         })}
         isLoading={viewClassSubmissionsIsLoading.browse}
         error={viewClassSubmissionsError.browse}

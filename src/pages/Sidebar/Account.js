@@ -12,7 +12,7 @@ export default function Account({ classes, history, location, mode, open, onClos
   const { institute } = useInstitute(instituteId);
   const { account } = useAccount(accountId);
 
-  const baseURL = '/6a/admin/account';
+  const baseURL = '/admin/account';
 
   const [display, setDisplay] = useState('unfold');
 

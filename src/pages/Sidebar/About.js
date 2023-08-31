@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Icon from '@/components/ui/icon/index';
 
 export default function About({ classes, history, location, mode, open, onClose }) {
-  const baseURL = '/6a/about';
+  const baseURL = '/about';
   const [display, setDisplay] = useState('unfold');
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
@@ -30,8 +30,8 @@ export default function About({ classes, history, location, mode, open, onClose 
     setDisplay('unfold');
   };
 
-  if (location.pathname === '/6a/about') {
-    history.push('/6a/about/team');
+  if (location.pathname === '/about') {
+    history.push('/about/team');
   }
 
   return (

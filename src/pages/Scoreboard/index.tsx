@@ -107,7 +107,7 @@ export default function ScoreboardInfo({
                   ...teamInfo,
                   id: teamInfo.team_id,
                   rank: index + 1,
-                  team_path: `/6a/my-class/${courseId}/${classId}/team/${teamInfo.team_id}`,
+                  team_path: `/my-class/${courseId}/${classId}/team/${teamInfo.team_id}`,
                 },
               ),
             ),
@@ -143,7 +143,7 @@ export default function ScoreboardInfo({
     try {
       await deleteScoreboard();
       setDeletePopup(false);
-      history.push(`/6a/my-class/${courseId}/${classId}/challenge/${challengeId}`);
+      history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
     } catch {
       setShowSnackbar(true);
     }

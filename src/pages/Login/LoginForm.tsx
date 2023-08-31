@@ -80,7 +80,7 @@ export default function LoginForm() {
           if (redirectUrl) {
             history.push(redirectUrl);
           } else {
-            history.push('/6a');
+            history.push('/');
           }
         }
       } catch (err) {
@@ -173,17 +173,17 @@ export default function LoginForm() {
 
         <Typography variant="body2" className={classNames.authLink}>
           Need a new puppy?{' '}
-          <Link component={RouterLink} to="/6a/register">
+          <Link component={RouterLink} to="/register">
             Register
           </Link>{' '}
         </Typography>
         <Typography variant="body2" className={classNames.authLink}>
           Lost your puppy?{' '}
-          <Link component={RouterLink} to="/6a/forget-username">
+          <Link component={RouterLink} to="/forget-username">
             Find username
           </Link>
           {' or '}
-          <Link component={RouterLink} to="/6a/forget-password">
+          <Link component={RouterLink} to="/forget-password">
             Reset password
           </Link>
         </Typography>

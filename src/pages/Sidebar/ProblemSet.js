@@ -12,7 +12,7 @@ export default function ProblemSet({ classNames, history, location, open, onClos
   const { courses } = useCourses();
   const { coursesClasses } = useCoursesClasses(courses?.map((course) => course.id) ?? null);
 
-  const baseURL = '/6a/problem-set';
+  const baseURL = '/problem-set';
 
   const [display, setDisplay] = useState([]); // 0: fold, 1: unfold
 

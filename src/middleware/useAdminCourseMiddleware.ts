@@ -10,8 +10,8 @@ const useAdminCourseMiddleware = () => {
   const { courses } = useCourses();
 
   useEffect(() => {
-    if (location.pathname === '/6a/admin/course/course' && courses !== undefined) {
-      history.push(`/6a/admin/course/course/${courses?.at(0)?.id}/class-list`);
+    if (location.pathname === '/admin/course/course' && courses !== undefined) {
+      history.push(`/admin/course/course/${courses?.at(0)?.id}/class-list`);
     }
   }, [courses, history, location.pathname]);
 };

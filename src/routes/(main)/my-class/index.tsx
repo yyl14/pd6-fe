@@ -13,11 +13,11 @@ export default function MyClassRoutes() {
 
   return (
     <Switch>
-      <Route path="/6a/my-class/:courseId/:classId/challenge" component={ChallengeRoutes} />
-      <Route path="/6a/my-class/:courseId/:classId/submission" component={SubmissionRoutes} />
-      <Route path="/6a/my-class/:courseId/:classId/grade" component={GradeRoutes} />
-      <Route path="/6a/my-class/:courseId/:classId/team" component={TeamRoutes} />
-      <Route path="/6a/my-class/:courseId/:classId/member" component={MemberRoutes} />
+      <Route path="/my-class/:courseId/:classId/challenge" component={ChallengeRoutes} />
+      <Route path="/my-class/:courseId/:classId/submission" component={SubmissionRoutes} />
+      <Route path="/my-class/:courseId/:classId/grade" component={GradeRoutes} />
+      <Route path="/my-class/:courseId/:classId/team" component={TeamRoutes} />
+      <Route path="/my-class/:courseId/:classId/member" component={MemberRoutes} />
     </Switch>
   );
 }

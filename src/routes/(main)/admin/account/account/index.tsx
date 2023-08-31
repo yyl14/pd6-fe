@@ -38,8 +38,8 @@ function AccountSettingRoute() {
 export default function AccountRoutes() {
   return (
     <Switch>
-      <Route exact path="/6a/admin/account/account/:accountId/setting" component={AccountSettingRoute} />
-      <Route exact path="/6a/admin/account/account" component={AccountListRoute} />
+      <Route exact path="/admin/account/account/:accountId/setting" component={AccountSettingRoute} />
+      <Route exact path="/admin/account/account" component={AccountListRoute} />
     </Switch>
   );
 }

@@ -208,7 +208,7 @@ export default function TaskAddingCard({ courseId, classId, challengeId, open, s
             challenge_label: label,
             title,
           });
-          history.push(`/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/problem/${data.data.id}`);
+          history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/problem/${data.data.id}`);
         } catch {
           setShowAddProblemErrorSnackbar(true);
         }
@@ -221,7 +221,7 @@ export default function TaskAddingCard({ courseId, classId, challengeId, open, s
             challenge_label: label,
             title,
           });
-          history.push(`/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/essay/${data.data.id}`);
+          history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/essay/${data.data.id}`);
         } catch {
           setShowAddEssayErrorSnackbar(true);
         }
@@ -241,7 +241,7 @@ export default function TaskAddingCard({ courseId, classId, challengeId, open, s
           });
           setPeerReviewChallengeId(Number(challengeId));
           setTaskLabelId('');
-          history.push(`/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${data.data.id}`);
+          history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${data.data.id}`);
         } catch {
           setShowAddPeerReviewErrorSnackbar(true);
         }
@@ -265,7 +265,7 @@ export default function TaskAddingCard({ courseId, classId, challengeId, open, s
           setScoringFormula('');
           setBaselineTeam(null);
           setTeamLabelFilter('');
-          history.push(`/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/scoreboard/${data.data.id}`);
+          history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/scoreboard/${data.data.id}`);
         } catch {
           setShowAddScoreboardErrorSnackbar(true);
         }

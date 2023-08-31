@@ -64,7 +64,7 @@ const ClassSetting = ({ courseId, classId }: { courseId: string; classId: string
     try {
       await deleteClass();
       setShowDeleteDialog(false);
-      history.push(`/6a/admin/course/course/${courseId}/class-list/`);
+      history.push(`/admin/course/course/${courseId}/class-list`);
     } catch {
       setShowSnackBar(true);
     }

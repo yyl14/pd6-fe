@@ -7,7 +7,7 @@ import useTeam from '@/lib/team/useTeam';
 
 export default function Team({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, teamId } = useParams();
-  const baseURL = '/6a/my-class';
+  const baseURL = '/my-class';
   const { team } = useTeam(teamId);
 
   const [display, setDisplay] = useState('unfold');

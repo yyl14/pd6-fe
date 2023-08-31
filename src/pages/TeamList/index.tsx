@@ -241,7 +241,7 @@ export default function TeamList({ courseId, classId }: { courseId: string; clas
             minWidth: 153,
             width: 400,
             type: 'link',
-            formatLink: (datum) => `/6a/my-class/${courseId}/${classId}/team/${String(datum.id)}`,
+            formatLink: (datum) => `/my-class/${courseId}/${classId}/team/${String(datum.id)}`,
           },
         ]}
         filterConfig={[
@@ -263,7 +263,7 @@ export default function TeamList({ courseId, classId }: { courseId: string; clas
           id: String(id),
           Label: label,
           'Team Name': name,
-          link: `/6a/my-class/${courseId}/${classId}/team/${String(id)}`,
+          link: `/my-class/${courseId}/${classId}/team/${String(id)}`,
         })}
         isLoading={classTeamIsLoading.browse}
         error={classTeamError.browse}

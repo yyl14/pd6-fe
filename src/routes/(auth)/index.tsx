@@ -10,12 +10,12 @@ import ResetPasswordRoute from './reset-password';
 export default function AuthRoutes() {
   return (
     <>
-      <Route path="/6a/login" component={LoginRoute} />
-      <Route path="/6a/email-verification" component={EmailVerificationRoute} />
-      <Route path="/6a/forget-username" component={ForgetUsernameRoute} />
-      <Route path="/6a/forget-password" component={ForgetPasswordRoute} />
-      <Route path="/6a/reset-password" component={ResetPasswordRoute} />
-      <Route path="/6a/register" component={RegisterRoute} />
+      <Route path="/login" component={LoginRoute} />
+      <Route path="/email-verification" component={EmailVerificationRoute} />
+      <Route path="/forget-username" component={ForgetUsernameRoute} />
+      <Route path="/forget-password" component={ForgetPasswordRoute} />
+      <Route path="/reset-password" component={ResetPasswordRoute} />
+      <Route path="/register" component={RegisterRoute} />
     </>
   );
 }

@@ -7,8 +7,8 @@ import TeamRoute from './team';
 export default function AboutRoutes() {
   return (
     <Switch>
-      <Route path="/6a/about/team" component={TeamRoute} />
-      <Route path="/6a/about" component={NoMatch} />
+      <Route path="/about/team" component={TeamRoute} />
+      <Route path="/about" component={NoMatch} />
     </Switch>
   );
 }

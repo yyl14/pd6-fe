@@ -13,7 +13,7 @@ export default function System({ classes, history, location, mode, open, onClose
   const { submitLangs } = useSubmitLangs();
   const [announcementById] = useReduxStateShape(browseAnnouncement.data);
   const [submitLangById] = useReduxStateShape(submitLangs);
-  const baseURL = '/6a/admin/system';
+  const baseURL = '/admin/system';
   const [display, setDisplay] = useState('unfold');
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
@@ -90,14 +90,14 @@ export default function System({ classes, history, location, mode, open, onClose
         },
       ]);
     } else if (mode === 'system') {
-      if (location.pathname === '/6a/system') {
-        history.push('/6a/system/team');
+      if (location.pathname === '/system') {
+        history.push('/system/team');
       }
       setTitle('System');
       setItemList([
         {
           text: 'Develop Team',
-          path: '/6a/system/team',
+          path: '/system/team',
           icon: <Icon.DevTeam />,
         },
       ]);

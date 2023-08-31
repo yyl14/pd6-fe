@@ -196,7 +196,7 @@ export default function GradeList({ courseId, classId }: { courseId: string; cla
             minWidth: 139,
             align: 'center',
             type: 'link',
-            formatLink: (datum) => `/6a/user-profile/${datum.account_id}`,
+            formatLink: (datum) => `/user-profile/${datum.account_id}`,
           },
           {
             name: 'Student ID',
@@ -270,7 +270,7 @@ export default function GradeList({ courseId, classId }: { courseId: string; cla
           Title: title,
           Score: score,
           Time: moment(update_time).format('YYYY-MM-DD, HH:mm:ss'),
-          link: `/6a/my-class/${courseId}/${classId}/grade/${grade_id}`,
+          link: `/my-class/${courseId}/${classId}/grade/${grade_id}`,
         })}
         isLoading={viewClassGradeIsLoading.browse}
         error={viewClassGradeError.browse}

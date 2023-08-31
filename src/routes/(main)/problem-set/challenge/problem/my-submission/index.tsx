@@ -80,11 +80,11 @@ export default function ProblemMySubmissionRoutes() {
   return (
     <Switch>
       <Route
-        path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission/:submissionId"
+        path="/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission/:submissionId"
         component={SubmissionDetailRoute}
       />
       <Route
-        path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission"
+        path="/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission"
         component={ProblemMySubmissionListRoute}
       />
     </Switch>

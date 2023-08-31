@@ -263,7 +263,7 @@ export default function AccountList() {
           Username: username,
           'Student ID': student_id,
           'Real Name': real_name,
-          link: `/6a/admin/account/account/${account_id}/setting`,
+          link: `/admin/account/account/${account_id}/setting`,
         })}
         isLoading={viewIsLoading.browse}
         error={viewError.browse}

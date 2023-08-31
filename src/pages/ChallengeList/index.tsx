@@ -236,7 +236,7 @@ export default function ChallengeList({ courseId, classId }: { courseId: string;
           'Start Time': moment(start_time).format('YYYY-MM-DD, HH:mm'),
           'End Time': moment(end_time).format('YYYY-MM-DD, HH:mm'),
           Status: getStatus(start_time, end_time),
-          link: `/6a/my-class/${courseId}/${classId}/challenge/${id}`,
+          link: `/my-class/${courseId}/${classId}/challenge/${id}`,
         })}
         isLoading={challengeUnderClassIsLoading.browse}
         error={challengeUnderClassError.browse}

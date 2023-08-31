@@ -32,7 +32,7 @@ export default function SubmitLang() {
           } else if (item.is_disabled === false) {
             temp.isDisabled = 'Enabled';
           }
-          temp.path = `/6a/admin/system/submitlang/${item.id}/setting`;
+          temp.path = `/admin/system/submitlang/${item.id}/setting`;
           return temp;
         })}
         columns={[

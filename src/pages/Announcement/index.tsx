@@ -71,7 +71,7 @@ export default function Announcement() {
           Title: title,
           'Post Time': moment(post_time).format('YYYY-MM-DD, HH:mm:ss'),
           'End Time': moment(expire_time).format('YYYY-MM-DD, HH:mm:ss'),
-          link: `/6a/admin/system/announcement/${id}/setting`,
+          link: `/admin/system/announcement/${id}/setting`,
         })}
         isLoading={isLoading.browseAll}
         error={error.browseAll}
@@ -79,7 +79,7 @@ export default function Announcement() {
         filter={browseAnnouncement.filter}
         sort={browseAnnouncement.sort}
         buttons={
-          <Button variant="contained" color="primary" onClick={() => history.push('/6a/admin/system/announcement/add')}>
+          <Button variant="contained" color="primary" onClick={() => history.push('/admin/system/announcement/add')}>
             +
           </Button>
         }

@@ -16,7 +16,7 @@ export default function AnnouncementEditRoute() {
     <Suspense fallback={<GeneralLoading />}>
       {withConditionalRender(AnnouncementEdit)({
         announcementId,
-        handleDoneEditing: () => history.push(`/6a/admin/system/announcement/${announcementId}/setting`),
+        handleDoneEditing: () => history.push(`/admin/system/announcement/${announcementId}/setting`),
         newAnnouncement: false,
       })}
     </Suspense>

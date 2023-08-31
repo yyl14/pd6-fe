@@ -133,12 +133,12 @@ export default function Sidebar({ open, onClose }) {
   return (
     <Switch>
       {/* {My Profile} */}
-      <Route exact path="/6a/my-profile">
+      <Route exact path="/my-profile">
         <MyProfile classes={classes} history={history} location={location} open={open} onClose={onClose} mode="main" />
       </Route>
 
       {/* {Other's Profile} */}
-      <Route exact path="/6a/user-profile/:accountId">
+      <Route exact path="/user-profile/:accountId">
         <UserProfile
           classes={classes}
           history={history}
@@ -151,7 +151,7 @@ export default function Sidebar({ open, onClose }) {
 
       {/* {Admin} */}
       {/* {Course} */}
-      <Route path="/6a/admin/course/course/:courseId/class-list">
+      <Route path="/admin/course/course/:courseId/class-list">
         <Course
           classes={classes}
           history={history}
@@ -161,7 +161,7 @@ export default function Sidebar({ open, onClose }) {
           mode="class-list"
         />
       </Route>
-      <Route path="/6a/admin/course/course/:courseId/setting">
+      <Route path="/admin/course/course/:courseId/setting">
         <Course
           classes={classes}
           history={history}
@@ -171,14 +171,14 @@ export default function Sidebar({ open, onClose }) {
           mode="course-setting"
         />
       </Route>
-      <Route path="/6a/admin/course/class/:courseId/:classId/">
+      <Route path="/admin/course/class/:courseId/:classId/">
         <Course classes={classes} history={history} location={location} open={open} onClose={onClose} mode="class" />
       </Route>
       {/* {Account} */}
-      <Route exact path="/6a/admin/account/institute">
+      <Route exact path="/admin/account/institute">
         <Account classes={classes} history={history} location={location} open={open} onClose={onClose} mode="main" />
       </Route>
-      <Route path="/6a/admin/account/institute/:instituteId/setting">
+      <Route path="/admin/account/institute/:instituteId/setting">
         <Account
           classes={classes}
           history={history}
@@ -188,22 +188,22 @@ export default function Sidebar({ open, onClose }) {
           mode="institute"
         />
       </Route>
-      <Route exact path="/6a/admin/account/account">
+      <Route exact path="/admin/account/account">
         <Account classes={classes} history={history} location={location} open={open} onClose={onClose} mode="main" />
       </Route>
-      <Route path="/6a/admin/account/account/:accountId/setting">
+      <Route path="/admin/account/account/:accountId/setting">
         <Account classes={classes} history={history} location={location} open={open} onClose={onClose} mode="account" />
       </Route>
-      <Route exact path="/6a/admin/system/accesslog">
+      <Route exact path="/admin/system/accesslog">
         <System classes={classes} history={history} location={location} open={open} onClose={onClose} mode="main" />
       </Route>
-      <Route exact path="/6a/admin/system/announcement">
+      <Route exact path="/admin/system/announcement">
         <System classes={classes} history={history} location={location} open={open} onClose={onClose} mode="main" />
       </Route>
-      <Route exact path="/6a/admin/system/announcement/add">
+      <Route exact path="/admin/system/announcement/add">
         <System classes={classes} history={history} location={location} open={open} onClose={onClose} mode="create" />
       </Route>
-      <Route path="/6a/admin/system/announcement/:announcementId/setting">
+      <Route path="/admin/system/announcement/:announcementId/setting">
         <System
           classes={classes}
           history={history}
@@ -213,23 +213,23 @@ export default function Sidebar({ open, onClose }) {
           mode="announcement"
         />
       </Route>
-      <Route exact path="/6a/admin/system/submitlang">
+      <Route exact path="/admin/system/submitlang">
         <System classes={classes} history={history} location={location} open={open} onClose={onClose} mode="main" />
       </Route>
-      <Route path="/6a/admin/system/submitlang/:submitlangId/setting">
+      <Route path="/admin/system/submitlang/:submitlangId/setting">
         <System classes={classes} history={history} location={location} open={open} onClose={onClose} mode="language" />
       </Route>
 
       {/* {My Class} */}
       {/* {Challenge} */}
-      <Route exact path="/6a/my-class">
+      <Route exact path="/my-class">
         {/* for fetchClass and redirection */}
         <MyClass classNames={classes} history={history} location={location} open={open} onClose={onClose} mode="main" />
       </Route>
-      <Route exact path="/6a/my-class/:courseId/:classId/challenge">
+      <Route exact path="/my-class/:courseId/:classId/challenge">
         <MyClass classNames={classes} history={history} location={location} open={open} onClose={onClose} mode="main" />
       </Route>
-      <Route exact path="/6a/my-class/:courseId/:classId/challenge/:challengeId">
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId">
         <Challenge
           classNames={classes}
           history={history}
@@ -239,7 +239,7 @@ export default function Sidebar({ open, onClose }) {
           mode="challenge"
         />
       </Route>
-      <Route exact path="/6a/my-class/:courseId/:classId/challenge/:challengeId/statistics">
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/statistics">
         <Challenge
           classNames={classes}
           history={history}
@@ -249,7 +249,7 @@ export default function Sidebar({ open, onClose }) {
           mode="challenge"
         />
       </Route>
-      <Route exact path="/6a/my-class/:courseId/:classId/challenge/:challengeId/setting">
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/setting">
         <Challenge
           classNames={classes}
           history={history}
@@ -259,7 +259,7 @@ export default function Sidebar({ open, onClose }) {
           mode="challenge"
         />
       </Route>
-      <Route exact path="/6a/my-class/:courseId/:classId/challenge/:challengeId/problem/:problemId">
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/problem/:problemId">
         <Challenge
           classNames={classes}
           history={history}
@@ -269,7 +269,7 @@ export default function Sidebar({ open, onClose }) {
           mode="challenge"
         />
       </Route>
-      <Route exact path="/6a/my-class/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission">
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission">
         <Challenge
           classNames={classes}
           history={history}
@@ -279,7 +279,7 @@ export default function Sidebar({ open, onClose }) {
           mode="submission"
         />
       </Route>
-      <Route exact path="/6a/my-class/:courseId/:classId/challenge/:challengeId/problem/:problemId/code-submission">
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/problem/:problemId/code-submission">
         <Challenge
           classNames={classes}
           history={history}
@@ -291,7 +291,7 @@ export default function Sidebar({ open, onClose }) {
       </Route>
       <Route
         exact
-        path="/6a/my-class/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission/:submissionId"
+        path="/my-class/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission/:submissionId"
       >
         <Challenge
           classNames={classes}
@@ -302,7 +302,7 @@ export default function Sidebar({ open, onClose }) {
           mode="submission_detail"
         />
       </Route>
-      <Route exact path="/6a/my-class/:courseId/:classId/challenge/:challengeId/essay/:essayId">
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/essay/:essayId">
         <Challenge
           classNames={classes}
           history={history}
@@ -312,7 +312,7 @@ export default function Sidebar({ open, onClose }) {
           mode="challenge"
         />
       </Route>
-      <Route exact path="/6a/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId">
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId">
         <Challenge
           classNames={classes}
           history={history}
@@ -322,7 +322,7 @@ export default function Sidebar({ open, onClose }) {
           mode="challenge"
         />
       </Route>
-      <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receiver-summary">
+      <Route path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receiver-summary">
         <PeerReview
           classNames={classes}
           history={history}
@@ -332,7 +332,7 @@ export default function Sidebar({ open, onClose }) {
           mode="peer-review-summary"
         />
       </Route>
-      <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/grader-summary">
+      <Route path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/grader-summary">
         <PeerReview
           classNames={classes}
           history={history}
@@ -344,7 +344,7 @@ export default function Sidebar({ open, onClose }) {
       </Route>
       <Route
         exact
-        path="/6a/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receive/:accountId/:recordId"
+        path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receive/:accountId/:recordId"
       >
         <PeerReview
           classNames={classes}
@@ -357,7 +357,7 @@ export default function Sidebar({ open, onClose }) {
       </Route>
       <Route
         exact
-        path="/6a/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/review/:accountId/:recordId"
+        path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/review/:accountId/:recordId"
       >
         <PeerReview
           classNames={classes}
@@ -368,7 +368,7 @@ export default function Sidebar({ open, onClose }) {
           mode="review"
         />
       </Route>
-      <Route exact path="/6a/my-class/:courseId/:classId/challenge/:challengeId/scoreboard/:scoreboardId">
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/scoreboard/:scoreboardId">
         <Challenge
           classNames={classes}
           history={history}
@@ -379,10 +379,10 @@ export default function Sidebar({ open, onClose }) {
         />
       </Route>
       {/* {Submission} */}
-      <Route exact path="/6a/my-class/:courseId/:classId/submission">
+      <Route exact path="/my-class/:courseId/:classId/submission">
         <MyClass classNames={classes} history={history} location={location} open={open} onClose={onClose} mode="main" />
       </Route>
-      <Route path="/6a/my-class/:courseId/:classId/submission/:challengeId/:problemId/:submissionId">
+      <Route path="/my-class/:courseId/:classId/submission/:challengeId/:problemId/:submissionId">
         <Submission
           classNames={classes}
           history={history}
@@ -393,32 +393,32 @@ export default function Sidebar({ open, onClose }) {
         />
       </Route>
       {/* {Grade} */}
-      <Route exact path="/6a/my-class/:courseId/:classId/grade">
+      <Route exact path="/my-class/:courseId/:classId/grade">
         <MyClass classNames={classes} history={history} location={location} open={open} onClose={onClose} mode="main" />
       </Route>
-      <Route path="/6a/my-class/:courseId/:classId/grade/:studentId">
+      <Route path="/my-class/:courseId/:classId/grade/:studentId">
         <Grade classNames={classes} history={history} location={location} open={open} onClose={onClose} mode="detail" />
       </Route>
       {/* {Team} */}
-      <Route exact path="/6a/my-class/:courseId/:classId/team">
+      <Route exact path="/my-class/:courseId/:classId/team">
         <MyClass classNames={classes} history={history} location={location} open={open} onClose={onClose} mode="main" />
       </Route>
-      <Route path="/6a/my-class/:courseId/:classId/team/:teamId">
+      <Route path="/my-class/:courseId/:classId/team/:teamId">
         <Team classNames={classes} history={history} location={location} open={open} onClose={onClose} mode="detail" />
       </Route>
       {/* {Member} */}
-      <Route path="/6a/my-class/:courseId/:classId/member">
+      <Route path="/my-class/:courseId/:classId/member">
         <MyClass classNames={classes} history={history} location={location} open={open} onClose={onClose} mode="main" />
       </Route>
 
       {/* {Problem Set} */}
-      <Route exact path="/6a/problem-set">
+      <Route exact path="/problem-set">
         <ProblemSet classNames={classes} history={history} location={location} open={open} onClose={onClose} />
       </Route>
-      <Route exact path="/6a/problem-set/:courseId/:classId">
+      <Route exact path="/problem-set/:courseId/:classId">
         <ProblemSet classNames={classes} history={history} location={location} open={open} onClose={onClose} />
       </Route>
-      <Route exact path="/6a/problem-set/:courseId/:classId/challenge/:challengeId">
+      <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId">
         <ProblemSetChallenge
           classNames={classes}
           history={history}
@@ -428,7 +428,7 @@ export default function Sidebar({ open, onClose }) {
           mode="challenge"
         />
       </Route>
-      <Route exact path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId">
+      <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId">
         <ProblemSetChallenge
           classNames={classes}
           history={history}
@@ -438,7 +438,7 @@ export default function Sidebar({ open, onClose }) {
           mode="challenge"
         />
       </Route>
-      <Route exact path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission">
+      <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission">
         <ProblemSetChallenge
           classNames={classes}
           history={history}
@@ -448,7 +448,7 @@ export default function Sidebar({ open, onClose }) {
           mode="submission"
         />
       </Route>
-      <Route exact path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/code-submission">
+      <Route exact path="/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/code-submission">
         <ProblemSetChallenge
           classNames={classes}
           history={history}
@@ -460,7 +460,7 @@ export default function Sidebar({ open, onClose }) {
       </Route>
       <Route
         exact
-        path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission/:submissionId"
+        path="/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission/:submissionId"
       >
         <ProblemSetChallenge
           classNames={classes}
@@ -473,15 +473,15 @@ export default function Sidebar({ open, onClose }) {
       </Route>
 
       {/* {System (About)} */}
-      <Route exact path="/6a/about">
+      <Route exact path="/about">
         <About classes={classes} history={history} location={location} open={open} onClose={onClose} mode="system" />
       </Route>
-      <Route exact path="/6a/about/team">
+      <Route exact path="/about/team">
         <About classes={classes} history={history} location={location} open={open} onClose={onClose} mode="system" />
       </Route>
 
       {/* {My Submission} */}
-      <Route exact path="/6a/my-submission/:courseId/:classId/:challengeId/:problemId/:submissionId">
+      <Route exact path="/my-submission/:courseId/:classId/:challengeId/:problemId/:submissionId">
         <Challenge
           classNames={classes}
           history={history}

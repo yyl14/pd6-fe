@@ -9,7 +9,7 @@ import useChallengeTasks from '@/lib/task/useChallengeTasks';
 
 export default function ProblemSetChallenge({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, challengeId, problemId, submissionId } = useParams();
-  const baseURL = '/6a/problem-set';
+  const baseURL = '/problem-set';
 
   const { challenge } = useChallenge(Number(challengeId));
   const { problem } = useProblem(Number(problemId));

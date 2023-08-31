@@ -12,7 +12,7 @@ export default function UserProfile({ classes, history, location, mode, open, on
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
 
-  const baseURL = '/6a/user-profile';
+  const baseURL = '/user-profile';
 
   useEffect(() => {
     if (mode === 'main' && account !== undefined) {

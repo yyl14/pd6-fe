@@ -48,7 +48,7 @@ export default function ClassMemberList({ courseId, classId }: { courseId: strin
                 width: 200,
                 align: 'center',
                 type: 'link',
-                formatLink: (datum) => `/6a/user-profile/${datum.account_id}`,
+                formatLink: (datum) => `/user-profile/${datum.account_id}`,
               },
               {
                 name: 'Student ID',

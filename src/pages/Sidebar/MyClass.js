@@ -10,7 +10,7 @@ import useUserClasses from '@/lib/user/useUserClasses?';
 export default function MyClass({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId } = useParams();
 
-  const baseURL = '/6a/my-class';
+  const baseURL = '/my-class';
 
   const { course } = useCourse(courseId);
   const { class: classData } = useClass(classId);

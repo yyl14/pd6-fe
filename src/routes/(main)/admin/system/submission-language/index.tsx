@@ -19,8 +19,8 @@ function SubmitLangRoute() {
 export default function SubmitLangRoutes() {
   return (
     <Switch>
-      <Route exact path="/6a/admin/system/submitlang/:submitlangId/setting" component={SubmitLangSettingRoute} />
-      <Route exact path="/6a/admin/system/submitlang" component={SubmitLangRoute} />
+      <Route exact path="/admin/system/submitlang/:submitlangId/setting" component={SubmitLangSettingRoute} />
+      <Route exact path="/admin/system/submitlang" component={SubmitLangRoute} />
       <Route component={NoMatch} />
     </Switch>
   );

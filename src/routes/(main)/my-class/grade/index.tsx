@@ -50,8 +50,8 @@ function GradeDetailRoute() {
 export default function GradeRoutes() {
   return (
     <Switch>
-      <Route exact path="/6a/my-class/:courseId/:classId/grade" component={GradeListRoute} />
-      <Route path="/6a/my-class/:courseId/:classId/grade/:gradeId" component={GradeDetailRoute} />
+      <Route exact path="/my-class/:courseId/:classId/grade" component={GradeListRoute} />
+      <Route path="/my-class/:courseId/:classId/grade/:gradeId" component={GradeDetailRoute} />
     </Switch>
   );
 }

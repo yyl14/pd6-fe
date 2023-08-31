@@ -135,7 +135,7 @@ export default function SubmissionDetail({
           <Typography variant="body1">{submissionId}</Typography>
         </AlignedText>
         <AlignedText text="Username" childrenType="text">
-          <Link to={`/6a/user-profile/${account?.id}`} className={classNames.textLink}>
+          <Link to={`/user-profile/${account?.id}`} className={classNames.textLink}>
             <Typography variant="body1">{account?.username}</Typography>
           </Link>
         </AlignedText>
@@ -146,13 +146,13 @@ export default function SubmissionDetail({
           <Typography variant="body1">{account?.real_name}</Typography>
         </AlignedText>
         <AlignedText text="Challenge" childrenType="text">
-          <Link to={`/6a/${baseUrl}/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
+          <Link to={`/${baseUrl}/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
             <Typography variant="body1">{challenge?.title}</Typography>
           </Link>
         </AlignedText>
         <AlignedText text="Task Label" childrenType="text">
           <Link
-            to={`/6a/${baseUrl}/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}`}
+            to={`/${baseUrl}/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}`}
             className={classNames.textLink}
           >
             <Typography variant="body1">{problem?.challenge_label}</Typography>

@@ -43,8 +43,8 @@ function InstituteSettingRoute() {
 export default function InstituteRoutes() {
   return (
     <Switch>
-      <Route exact path="/6a/admin/account/institute/:instituteId/setting" component={InstituteSettingRoute} />
-      <Route exact path="/6a/admin/account/institute" component={InstituteListRoute} />
+      <Route exact path="/admin/account/institute/:instituteId/setting" component={InstituteSettingRoute} />
+      <Route exact path="/admin/account/institute" component={InstituteListRoute} />
     </Switch>
   );
 }

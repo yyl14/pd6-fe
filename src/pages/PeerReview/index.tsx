@@ -87,7 +87,7 @@ export default function PeerReview({
 
   const clickViewPeerReview = () => {
     history.push(
-      `/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary`,
+      `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary`,
     );
   };
 
@@ -95,7 +95,7 @@ export default function PeerReview({
     if (receiveRecordIds?.length) {
       const targetRecordId = receiveRecordIds.sort((a, b) => a - b)[0];
       history.push(
-        `/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${userId}/${targetRecordId}`,
+        `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${userId}/${targetRecordId}`,
       );
     } else setShowSnackbar(true);
   };
@@ -113,13 +113,13 @@ export default function PeerReview({
           if (ids.length) {
             const targetRecordId = ids.sort((a, b) => a - b)[0];
             history.push(
-              `/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${userId}/${targetRecordId}`,
+              `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${userId}/${targetRecordId}`,
             );
           }
         } else {
           const targetRecordId = reviewRecordIds.sort((a, b) => a - b)[0];
           history.push(
-            `/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${userId}/${targetRecordId}`,
+            `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/review/${userId}/${targetRecordId}`,
           );
         }
       }
@@ -132,7 +132,7 @@ export default function PeerReview({
     try {
       await deletePeerReview();
       await mutateTask();
-      history.push(`/6a/my-class/${courseId}/${classId}/challenge/${challengeId}`);
+      history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
     } catch {
       setShowErrorSnackbar(true);
     }

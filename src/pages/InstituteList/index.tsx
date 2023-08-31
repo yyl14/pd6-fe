@@ -1,7 +1,17 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Snackbar, Switch, TextField, Typography, makeStyles } from '@material-ui/core';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControlLabel,
+  Snackbar,
+  Switch,
+  TextField,
+  Typography,
+  makeStyles,
+} from '@material-ui/core';
 import { useEffect, useState } from 'react';
-
-
 
 import GeneralLoading from '@/components/GeneralLoading';
 import AlignedText from '@/components/ui/AlignedText';
@@ -9,7 +19,6 @@ import CustomTable from '@/components/ui/CustomTable';
 import PageTitle from '@/components/ui/PageTitle';
 import Icon from '@/components/ui/icon/index';
 import useInstitutes from '@/lib/institute/useInstitutes';
-
 
 const useStyles = makeStyles(() => ({
   dialogTitle: {
@@ -83,7 +92,6 @@ export default function InstituteList() {
           email: '',
           status: false,
         });
-
       }
     } catch {
       setShowSnackbar(true);
@@ -110,7 +118,7 @@ export default function InstituteList() {
           abbreviated_name: item.abbreviated_name,
           full_name: item.full_name,
           email_domain: item.email_domain,
-          path: `/6a/admin/account/institute/${item.id}/setting`,
+          path: `/admin/account/institute/${item.id}/setting`,
           is_disabled: item.is_disabled ? 'Disabled' : 'Enabled',
         })),
       );

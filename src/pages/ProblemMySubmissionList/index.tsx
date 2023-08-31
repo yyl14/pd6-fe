@@ -185,7 +185,7 @@ export default function ProblemMySubmission({
           'Used Time (ms)': String(total_time),
           'Used Memory (kb)': String(max_memory),
           'Submit Time': moment(submit_time).format('YYYY-MM-DD, HH:mm:ss'),
-          link: `/6a/${baseUrl}/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/my-submission/${submission_id}`,
+          link: `/${baseUrl}/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/my-submission/${submission_id}`,
         })}
         isLoading={isLoading.browse}
         error={error.browse}

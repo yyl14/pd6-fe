@@ -16,7 +16,7 @@ export default function MyProfile({ classes, history, location, mode, open, onCl
       setItemList([
         {
           text: 'Setting',
-          path: '/6a/my-profile',
+          path: '/my-profile',
           icon: <Icon.Setting />,
         },
       ]);

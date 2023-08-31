@@ -6,7 +6,7 @@ import Icon from '@/components/ui/icon/index';
 
 export default function Grade({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId } = useParams();
-  const baseURL = '/6a/my-class';
+  const baseURL = '/my-class';
 
   const [display, setDisplay] = useState('unfold');
 

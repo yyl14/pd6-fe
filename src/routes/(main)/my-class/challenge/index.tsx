@@ -98,16 +98,16 @@ export default function ChallengeRoutes() {
   return (
     <Switch>
       <Route
-        path="/6a/my-class/:courseId/:classId/challenge/:challengeId/statistics"
+        path="/my-class/:courseId/:classId/challenge/:challengeId/statistics"
         component={ChallengeStatisticsRoute}
       />
-      <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/scoreboard" component={ScoreboardRoutes} />
-      <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/setting" component={ChallengeSettingRoute} />
-      <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/essay" component={EssayRoutes} />
-      <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/problem" component={ProblemRoutes} />
-      <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId/peer-review" component={PeerReviewRoutes} />
-      <Route path="/6a/my-class/:courseId/:classId/challenge/:challengeId" component={ChallengeInfoRoute} />
-      <Route path="/6a/my-class/:courseId/:classId/challenge" component={ChallengeListRoute} />
+      <Route path="/my-class/:courseId/:classId/challenge/:challengeId/scoreboard" component={ScoreboardRoutes} />
+      <Route path="/my-class/:courseId/:classId/challenge/:challengeId/setting" component={ChallengeSettingRoute} />
+      <Route path="/my-class/:courseId/:classId/challenge/:challengeId/essay" component={EssayRoutes} />
+      <Route path="/my-class/:courseId/:classId/challenge/:challengeId/problem" component={ProblemRoutes} />
+      <Route path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review" component={PeerReviewRoutes} />
+      <Route path="/my-class/:courseId/:classId/challenge/:challengeId" component={ChallengeInfoRoute} />
+      <Route path="/my-class/:courseId/:classId/challenge" component={ChallengeListRoute} />
       {/* TODO: add task, problem, essay, peer review, scoreboard routes */}
     </Switch>
   );

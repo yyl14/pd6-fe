@@ -27,7 +27,7 @@ const basicColumns1 = [
     align: 'center',
     minWidth: 139,
     type: 'link',
-    formatLink: (datum: PeerReviewSummaryReceiveSchema) => `/6a/user-profile/${datum.account_id}`,
+    formatLink: (datum: PeerReviewSummaryReceiveSchema) => `/user-profile/${datum.account_id}`,
   },
   {
     name: 'Student ID',
@@ -139,7 +139,7 @@ export default function PeerReviewReceiverSummary({
             minWidth: 100,
             type: 'link',
             formatLink: (item: PeerReviewSummaryReceiveSchema) =>
-              `/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${
+              `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${
                 item.account_id
               }/${item.peer_review_record_ids.sort((a, b) => a - b)[peerIndex]}`,
           })),
@@ -187,10 +187,10 @@ export default function PeerReviewReceiverSummary({
             'Real Name': item.real_name,
             'Average Score': String(item?.average_score ?? ''),
             link: item.peer_review_record_ids[0]
-              ? `/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${
+              ? `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receive/${
                   item.account_id
                 }/${item.peer_review_record_ids.sort((a, b) => a - b)[0]}`
-              : `/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary/1`,
+              : `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary/1`,
             ...peerData,
           };
         }}
@@ -211,7 +211,7 @@ export default function PeerReviewReceiverSummary({
         autoHideDuration={1500}
         onClose={() => {
           history.push(
-            `/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary`,
+            `/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${peerReviewId}/receiver-summary`,
           );
           setShowSnackbar(false);
         }}

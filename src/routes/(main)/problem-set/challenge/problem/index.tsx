@@ -43,15 +43,15 @@ export default function ProblemRoutes() {
   return (
     <Switch>
       <Route
-        path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/code-submission"
+        path="/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/code-submission"
         component={CodeSubmissionRoute}
       />
       <Route
-        path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission"
+        path="/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission"
         component={ProblemMySubmissionListRoute}
       />
       <Route
-        path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId"
+        path="/problem-set/:courseId/:classId/challenge/:challengeId/problem/:problemId"
         component={ProblemInfoRoute}
       />
     </Switch>

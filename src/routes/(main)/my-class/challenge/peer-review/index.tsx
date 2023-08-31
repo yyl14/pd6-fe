@@ -40,24 +40,24 @@ export default function PeerReviewRoutes() {
   return (
     <Switch>
       <Route
-        path="/6a/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receive/:accountId/:recordId"
+        path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receive/:accountId/:recordId"
         component={PeerReviewReceivedRecordRoute}
       />
 
       <Route
-        path="/6a/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/review/:accountId/:recordId"
+        path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/review/:accountId/:recordId"
         component={PeerReviewReviewedRecordRoute}
       />
       <Route
-        path="/6a/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/grader-summary/:isNull?"
+        path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/grader-summary/:isNull?"
         component={PeerReviewGraderSummaryRoute}
       />
       <Route
-        path="/6a/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receiver-summary/:isNull?"
+        path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId/receiver-summary/:isNull?"
         component={PeerReviewReceiverSummaryRoute}
       />
       <Route
-        path="/6a/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId"
+        path="/my-class/:courseId/:classId/challenge/:challengeId/peer-review/:peerReviewId"
         component={PeerReviewRoute}
       />
     </Switch>

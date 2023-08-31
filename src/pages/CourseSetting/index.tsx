@@ -56,7 +56,7 @@ export default function CourseSetting({ courseId }: { courseId: string }) {
     try {
       await deleteCourse();
       setShowDeleteDialog(false);
-      history.push('/6a/admin/course/course');
+      history.push('/admin/course/course');
     } catch {
       setShowSnackBar(true);
     }

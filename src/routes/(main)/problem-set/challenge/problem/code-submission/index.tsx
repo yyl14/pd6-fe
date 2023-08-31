@@ -32,11 +32,11 @@ export default function CodeSubmissionRoute() {
         problemId,
         handleSubmissionSuccess: () => {
           history.push(
-            `/6a/problem-set/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/my-submission`,
+            `/problem-set/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/my-submission`,
           );
         },
         handleCancel: () =>
-          history.push(`/6a/problem-set/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}`),
+          history.push(`/problem-set/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}`),
         isLoading: courseIsLoading.read || classIsLoading.read || challengeIsLoading.read || problemIsLoading.read,
       })}
     </Suspense>
