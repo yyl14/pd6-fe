@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -41,7 +42,10 @@ export default function CodeTextArea({
   return (
     <div className={className.codeContent}>
       <div className={className.buttonWrapper}>
-        <CopyToClipboardButton className={className.copyIcon} text={code} />
+        {
+          // @ts-ignore
+          <CopyToClipboardButton className={className.copyIcon} text={code} />
+        }
       </div>
       <TextField
         value={code}
