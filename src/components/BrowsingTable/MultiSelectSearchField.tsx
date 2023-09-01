@@ -3,8 +3,8 @@ import { useState } from 'react';
 
 import { FilterItem, FilterOperator } from '@/hooks/useBrowseParams/types';
 
-import Icon from '../../icon/index';
 import MultiSelect from '../MultiSelect';
+import Icon from '../icon/index';
 import { DataSchemaBase, FilterConfigOption } from './types';
 
 type MultiSelectSearchFieldProps<DataSchema extends DataSchemaBase> = (

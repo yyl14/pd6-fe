@@ -15,12 +15,12 @@ import {
   withStyles,
 } from '@material-ui/core';
 
+import AlignedText from '@/components/AlignedText';
+import CodeField from '@/components/CodeField';
 import GeneralLoading from '@/components/GeneralLoading';
-import AlignedText from '@/components/ui/AlignedText';
-import CodeField from '@/components/ui/CodeField';
-import SimpleBar from '@/components/ui/SimpleBar';
-import SimpleTable from '@/components/ui/SimpleTable';
-import Icon from '@/components/ui/icon/index';
+import SimpleBar from '@/components/SimpleBar';
+import SimpleTable from '@/components/SimpleTable';
+import Icon from '@/components/icon/index';
 
 import AssistingDataUploadCard from './components/AssistingDataUploadCard';
 import TestcaseUploadCard from './components/TestcaseUploadCard';

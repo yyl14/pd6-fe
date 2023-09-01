@@ -1,4 +1,5 @@
 import { Typography } from '@material-ui/core';
+
 import Icon from './icon/index';
 
 export default function ErrorText({ children, className }) {

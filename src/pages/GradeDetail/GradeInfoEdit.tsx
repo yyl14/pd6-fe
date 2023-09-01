@@ -3,8 +3,8 @@ import moment from 'moment-timezone';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import AlignedText from '@/components/ui/AlignedText';
-import SimpleBar from '@/components/ui/SimpleBar';
+import AlignedText from '@/components/AlignedText';
+import SimpleBar from '@/components/SimpleBar';
 import useGrade from '@/lib/grade/useGrade';
 
 import { GradeAccountInfo } from './types';

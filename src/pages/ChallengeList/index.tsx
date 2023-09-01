@@ -14,11 +14,11 @@ import {
 import moment from 'moment';
 import { useState } from 'react';
 
-import BrowsingTable from '@/components/ui/6a/BrowsingTable';
-import AlignedText from '@/components/ui/AlignedText';
-import DateRangePicker from '@/components/ui/DateRangePicker';
-import PageTitle from '@/components/ui/PageTitle';
-import Icon from '@/components/ui/icon/index';
+import AlignedText from '@/components/AlignedText';
+import BrowsingTable from '@/components/BrowsingTable';
+import DateRangePicker from '@/components/DateRangePicker';
+import PageTitle from '@/components/PageTitle';
+import Icon from '@/components/icon/index';
 import useChallengesUnderClass, { ChallengeDataSchema } from '@/lib/challenge/useChallengesUnderClass';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';

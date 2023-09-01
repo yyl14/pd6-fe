@@ -2,8 +2,6 @@ import { Card, CardActions, CardContent, IconButton, Typography } from '@materia
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useRef, useState } from 'react';
 
-import useS3FileContent from '@/lib/s3File/useS3FileContent';
-
 import CopyToClipboardButton from './CopyToClipboardButton';
 import Icon from './icon/index';
 
@@ -18,6 +16,9 @@ const useStyles = makeStyles({
   defaultCardContent: {
     padding: '4px 30px 20px 30px',
     wordBreak: 'break-word',
+    // '&:last-child': {
+    //  padding: '22.5px 30px 5.5px',
+    // },
   },
   limitedCardContent: {
     height: '333.5px',
@@ -47,7 +48,6 @@ const useStyles = makeStyles({
     WebkitLineClamp: 8,
   },
   title: {
-    display: 'flex',
     marginTop: '18.5px',
   },
   copyIcon: {
@@ -72,120 +72,101 @@ const useStyles = makeStyles({
   },
 });
 
-interface SampleTestcaseAreaProp {
-  inputUuid: string | null;
-  inputFileName: string | null;
-  outputUuid: string | null;
-  outputFileName: string | null;
-  note: string;
-}
-
-export default function SampleTestcaseArea({
-  inputUuid,
-  inputFileName,
-  outputUuid,
-  outputFileName,
-  note = '',
-}: SampleTestcaseAreaProp) {
-  const className = useStyles();
-  const ref = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLDivElement>(null);
-  const outputRef = useRef<HTMLDivElement>(null);
-  const noteRef = useRef<HTMLDivElement>(null);
+export default function SampleTestArea({ input, output, note = '' }) {
+  const classes = useStyles();
+  const ref = useRef();
+  const inputRef = useRef();
+  const outputRef = useRef();
+  const noteRef = useRef();
   const [showExpandArrow, setShowExpandArrow] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [truncatePosition, setTruncatePosition] = useState('');
 
-  const { fileContent: input } = useS3FileContent(inputUuid, inputFileName);
-  const { fileContent: output } = useS3FileContent(outputUuid, outputFileName);
-
   useEffect(() => {
-    if (ref?.current?.clientHeight && ref.current.clientHeight > 401.5) {
+    if (ref.current.clientHeight > 401.5) {
       if (!showExpandArrow) {
         setShowExpandArrow(true);
         setExpanded(false);
 
-        if (inputRef?.current?.clientHeight && outputRef?.current?.clientHeight) {
-          if (inputRef.current.clientHeight >= 248) {
-            setTruncatePosition('inputContent');
-          } else if (inputRef.current.clientHeight >= 223) {
-            setTruncatePosition('outputTitle');
-          } else if (inputRef.current.clientHeight + outputRef.current.clientHeight >= 198) {
-            setTruncatePosition('outputContent');
-          } else if (inputRef.current.clientHeight + outputRef.current.clientHeight >= 148) {
-            setTruncatePosition('noteTitle');
-          } else if (
-            noteRef?.current?.clientHeight &&
-            inputRef.current.clientHeight + outputRef.current.clientHeight + noteRef.current.clientHeight >= 124
-            // inputRef.current.clientHeight + noteRef.current.clientHeight >= 198
-          ) {
-            setTruncatePosition('noteContent');
-          }
+        if (inputRef.current.clientHeight >= 248) {
+          setTruncatePosition('inputContent');
+        } else if (inputRef.current.clientHeight >= 223) {
+          setTruncatePosition('outputTitle');
+        } else if (inputRef.current.clientHeight + outputRef.current.clientHeight >= 198) {
+          setTruncatePosition('outputContent');
+        } else if (inputRef.current.clientHeight + outputRef.current.clientHeight >= 148) {
+          setTruncatePosition('noteTitle');
+        } else if (
+          inputRef.current.clientHeight + outputRef.current.clientHeight + noteRef.current.clientHeight >=
+          124
+          // inputRef.current.clientHeight + noteRef.current.clientHeight >= 198
+        ) {
+          setTruncatePosition('noteContent');
         }
       }
     }
   }, [expanded, inputRef, noteRef, ref, showExpandArrow]);
 
-  const handleExpand = (limited: boolean, isExpanded: boolean) => {
+  const handleExpand = (limited, isExpanded) => {
     if (limited) {
       if (isExpanded) {
-        return className.limitedCardContentExpanded;
+        return classes.limitedCardContentExpanded;
       }
-      return className.limitedCardContent;
+      return classes.limitedCardContent;
     }
-    return className.defaultCardContent;
+    return classes.defaultCardContent;
   };
-  const handleTruncate = (position: string) => {
+  const handleTruncate = (position) => {
     switch (position) {
       case 'inputContent':
-        return className.truncateInputContent;
+        return classes.truncateInputContent;
       case 'outputTitle':
-        return className.truncateOutputTitle;
+        return classes.truncateOutputTitle;
       case 'outputContent':
-        return className.truncateOutputContent;
+        return classes.truncateOutputContent;
       case 'noteTitle':
-        return className.truncateNoteTitle;
+        return classes.truncateNoteTitle;
       case 'noteContent':
-        return className.truncateNoteContent;
+        return classes.truncateNoteContent;
       default:
-        return className.truncateInputContent;
+        return classes.truncateInputContent;
     }
   };
-  const handleHideTextOverflowCardContent = (position: string, isExpanded: boolean) => {
+  const handleHideTextOverflowCardContent = (position, isExpanded) => {
     if (position === 'inputContent') {
       if (!isExpanded) {
-        return className.hideTextOverflowCardContent;
+        return classes.hideTextOverflowCardContent;
       }
-      return className.limitedCardContentExpanded;
+      return classes.limitedCardContentExpanded;
     }
-    return className.defaultCardContent;
+    return classes.defaultCardContent;
   };
-  const handleHideTextOverflowActions = (position: string, isExpanded: boolean) => {
+  const handleHideTextOverflowActions = (position, isExpanded) => {
     if (position === 'inputContent' && !isExpanded) {
-      return className.hideTextOverflowActions;
+      return classes.hideTextOverflowActions;
     }
-    return className.actions;
+    return classes.actions;
   };
 
   return (
     <div ref={ref}>
-      <Card className={className.root} variant="outlined">
+      <Card className={classes.root} variant="outlined">
         <CardContent
           className={`${handleExpand(showExpandArrow, expanded)}
           ${handleTruncate(truncatePosition)} ${handleHideTextOverflowCardContent(truncatePosition, expanded)}`}
         >
           {input && (
             <>
-              <div className={className.title}>
+              <div className={classes.title}>
                 <Typography variant="h6" display="inline">
                   Input
                 </Typography>
-                <div>
-                  <CopyToClipboardButton text={input} className={className.copyIcon} />
+                <div className={classes.copyIcon}>
+                  <CopyToClipboardButton text={input} />
                 </div>
               </div>
-              <div className={className.content} ref={inputRef}>
-                <Typography variant="body1" className={className.code}>
+              <div className={classes.content} ref={inputRef}>
+                <Typography variant="body1" className={classes.code}>
                   {input.split('\n').map((string) => (
                     <React.Fragment key={string}>
                       {string}
@@ -198,16 +179,16 @@ export default function SampleTestcaseArea({
           )}
           {output && (
             <>
-              <div className={className.title}>
+              <div className={classes.title}>
                 <Typography variant="h6" display="inline">
                   Output
                 </Typography>
-                <div>
-                  <CopyToClipboardButton text={output} className={className.copyIcon} />
+                <div className={classes.copyIcon}>
+                  <CopyToClipboardButton text={output} />
                 </div>
               </div>
-              <div className={className.content} ref={outputRef}>
-                <Typography variant="body1" className={className.code}>
+              <div className={classes.content} ref={outputRef}>
+                <Typography variant="body1" className={classes.code}>
                   {output.split('\n').map((string) => (
                     <React.Fragment key={string}>
                       {string}
@@ -220,15 +201,15 @@ export default function SampleTestcaseArea({
           )}
           {note && (
             <>
-              <div className={className.title}>
+              <div className={classes.title}>
                 <Typography variant="h6" display="inline">
                   Note
                 </Typography>
-                <div>
-                  <CopyToClipboardButton text={note} className={className.copyIcon} />
+                <div className={classes.copyIcon}>
+                  <CopyToClipboardButton text={note} />
                 </div>
               </div>
-              <div className={className.content} ref={noteRef}>
+              <div className={classes.content} ref={noteRef}>
                 <Typography variant="body1">
                   {note.split('\n').map((string) => (
                     <React.Fragment key={string}>
@@ -243,7 +224,7 @@ export default function SampleTestcaseArea({
         </CardContent>
 
         {showExpandArrow && (
-          <CardActions className={`${className.actions} ${handleHideTextOverflowActions(truncatePosition, expanded)}`}>
+          <CardActions className={`${classes.actions} ${handleHideTextOverflowActions(truncatePosition, expanded)}`}>
             <IconButton onClick={() => setExpanded(!expanded)}>
               {expanded ? <Icon.ExpandLessOutlinedIcon /> : <Icon.ExpandMoreOutlinedIcon />}
             </IconButton>

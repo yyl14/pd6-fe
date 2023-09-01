@@ -2,8 +2,8 @@ import { Snackbar } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 
 import GeneralLoading from '@/components/GeneralLoading';
+import PageTitle from '@/components/PageTitle';
 import NoMatch from '@/components/noMatch';
-import PageTitle from '@/components/ui/PageTitle';
 import systemRoleTransformation from '@/function/systemRoleTransformation';
 import useReduxStateShape from '@/hooks/useReduxStateShape';
 import useAccountSummaries from '@/lib/accountSummary/useAccountSummaries';

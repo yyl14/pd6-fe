@@ -13,11 +13,11 @@ import {
 } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 
+import AlignedText from '@/components/AlignedText';
+import CustomTable from '@/components/CustomTable';
 import GeneralLoading from '@/components/GeneralLoading';
-import AlignedText from '@/components/ui/AlignedText';
-import CustomTable from '@/components/ui/CustomTable';
-import PageTitle from '@/components/ui/PageTitle';
-import Icon from '@/components/ui/icon/index';
+import PageTitle from '@/components/PageTitle';
+import Icon from '@/components/icon/index';
 import useInstitutes from '@/lib/institute/useInstitutes';
 
 const useStyles = makeStyles(() => ({

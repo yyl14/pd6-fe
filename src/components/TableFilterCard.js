@@ -8,8 +8,8 @@ import {
   Select,
   makeStyles,
 } from '@material-ui/core';
-
 import { useState } from 'react';
+
 import AlignedText from './AlignedText';
 import Icon from './icon/index';
 

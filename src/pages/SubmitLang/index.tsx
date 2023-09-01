@@ -1,5 +1,5 @@
-import CustomTable from '@/components/ui/CustomTable';
-import PageTitle from '@/components/ui/PageTitle';
+import CustomTable from '@/components/CustomTable';
+import PageTitle from '@/components/PageTitle';
 import useReduxStateShape from '@/hooks/useReduxStateShape';
 import useSubmitLangs from '@/lib/submitLang/useSubmitLangs';
 

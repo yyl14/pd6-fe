@@ -1,5 +1,5 @@
-import BrowsingTable from '@/components/ui/6a/BrowsingTable';
-import PageTitle from '@/components/ui/PageTitle';
+import BrowsingTable from '@/components/BrowsingTable';
+import PageTitle from '@/components/PageTitle';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useProblemScores from '@/lib/problem/useProblemScores';

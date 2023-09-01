@@ -10,11 +10,11 @@ import {
 } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 
+import AlignedText from '@/components/AlignedText';
 import GeneralLoading from '@/components/GeneralLoading';
+import PageTitle from '@/components/PageTitle';
+import SimpleBar from '@/components/SimpleBar';
 import NoMatch from '@/components/noMatch';
-import AlignedText from '@/components/ui/AlignedText';
-import PageTitle from '@/components/ui/PageTitle';
-import SimpleBar from '@/components/ui/SimpleBar';
 import useReduxStateShape from '@/hooks/useReduxStateShape';
 import useSubmitLang from '@/lib/submitLang/useSubmitLang';
 import useSubmitLangs from '@/lib/submitLang/useSubmitLangs';

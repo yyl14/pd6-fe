@@ -2,8 +2,8 @@ import { Button } from '@material-ui/core';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
 
-import BrowsingTable from '@/components/ui/6a/BrowsingTable';
-import PageTitle from '@/components/ui/PageTitle';
+import BrowsingTable from '@/components/BrowsingTable';
+import PageTitle from '@/components/PageTitle';
 import useAnnouncements, { AnnouncementDataSchema } from '@/lib/announcement/useAnnouncements';
 
 export default function Announcement() {

@@ -13,11 +13,11 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import AlignedText from '@/components/AlignedText';
 import GeneralLoading from '@/components/GeneralLoading';
+import PageTitle from '@/components/PageTitle';
+import SimpleBar from '@/components/SimpleBar';
 import NoMatch from '@/components/noMatch';
-import AlignedText from '@/components/ui/AlignedText';
-import PageTitle from '@/components/ui/PageTitle';
-import SimpleBar from '@/components/ui/SimpleBar';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useCourses from '@/lib/course/useCourses';
 import useUserClasses from '@/lib/user/useUserClasses';

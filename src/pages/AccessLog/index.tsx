@@ -1,7 +1,7 @@
 import moment from 'moment';
 
-import BrowsingTable from '@/components/ui/6a/BrowsingTable';
-import PageTitle from '@/components/ui/PageTitle';
+import BrowsingTable from '@/components/BrowsingTable';
+import PageTitle from '@/components/PageTitle';
 import useViewAccessLogs, { ViewAccessLogSchema } from '@/lib/view/useViewAccessLogs';
 
 export default function AccessLog() {

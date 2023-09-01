@@ -14,10 +14,10 @@ import {
 } from '@material-ui/core';
 import { ChangeEvent, useEffect, useState } from 'react';
 
-import AlignedText from '@/components/ui/AlignedText';
-import SimpleBar from '@/components/ui/SimpleBar';
-import SimpleTable from '@/components/ui/SimpleTable';
-import Icon from '@/components/ui/icon/index';
+import AlignedText from '@/components/AlignedText';
+import SimpleBar from '@/components/SimpleBar';
+import SimpleTable from '@/components/SimpleTable';
+import Icon from '@/components/icon/index';
 import systemRoleTransformation from '@/function/systemRoleTransformation';
 import useReduxStateShape from '@/hooks/useReduxStateShape';
 import useAccountSummaries from '@/lib/accountSummary/useAccountSummaries';

@@ -11,10 +11,10 @@ import {
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import AlignedText from '@/components/ui/AlignedText';
-import CustomTable from '@/components/ui/CustomTable';
-import PageTitle from '@/components/ui/PageTitle';
-import Icon from '@/components/ui/icon/index';
+import AlignedText from '@/components/AlignedText';
+import CustomTable from '@/components/CustomTable';
+import PageTitle from '@/components/PageTitle';
+import Icon from '@/components/icon/index';
 import useCourseClasses from '@/lib/class/useCourseClasses';
 import useCourse from '@/lib/course/useCourse';
 import useCourses from '@/lib/course/useCourses';

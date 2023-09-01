@@ -15,8 +15,8 @@ import {
 } from '@material-ui/core';
 import { ChangeEvent, useState } from 'react';
 
-import AlignedText from '@/components/ui/AlignedText';
-import Icon from '@/components/ui/icon/index';
+import AlignedText from '@/components/AlignedText';
+import Icon from '@/components/icon/index';
 import useAccountSummariesByAccountReferral from '@/lib/accountSummary/useAccountSummariesByAccountReferral';
 
 import { SelectedTeamMember } from './types';

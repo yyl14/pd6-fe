@@ -2,8 +2,8 @@ import startCase from 'lodash/startCase';
 import toLower from 'lodash/toLower';
 import moment from 'moment';
 
-import BrowsingTable from '@/components/ui/6a/BrowsingTable';
-import PageTitle from '@/components/ui/PageTitle';
+import BrowsingTable from '@/components/BrowsingTable';
+import PageTitle from '@/components/PageTitle';
 import useUserClasses from '@/lib/user/useUserClasses';
 import useViewUserSubmissions, { BrowseSubmissionSchema } from '@/lib/view/useViewUserSubmissions';
 

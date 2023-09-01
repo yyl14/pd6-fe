@@ -1,8 +1,8 @@
 import { Typography, makeStyles } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
-import AlignedText from '@/components/ui/AlignedText';
-import SimpleBar from '@/components/ui/SimpleBar';
+import AlignedText from '@/components/AlignedText';
+import SimpleBar from '@/components/SimpleBar';
 import useChallenge from '@/lib/challenge/useChallenge';
 import usePeerReview from '@/lib/peerReview/usePeerReview';
 import useProblem from '@/lib/problem/useProblem';

@@ -1,8 +1,8 @@
 import { Button, Card, CardContent, Snackbar, Typography, makeStyles } from '@material-ui/core';
 import { useState } from 'react';
 
-import AlignedText from '@/components/ui/AlignedText';
-import Icon from '@/components/ui/icon/index';
+import AlignedText from '@/components/AlignedText';
+import Icon from '@/components/icon/index';
 import useEmailVerification from '@/lib/email/useEmailVerification';
 import useAccountStudentCards from '@/lib/studentCard/useAccountStudentCards';
 

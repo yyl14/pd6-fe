@@ -1,6 +1,7 @@
 import { Typography, makeStyles } from '@material-ui/core';
 import { useState } from 'react';
-import '../../styles/auth.css';
+
+import '../styles/auth.css';
 import Icon from './icon';
 
 const useStyles = makeStyles(() => ({

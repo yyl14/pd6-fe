@@ -16,10 +16,10 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { ChangeEvent, useEffect, useState } from 'react';
 
-import BrowsingTable from '@/components/ui/6a/BrowsingTable';
-import FileUploadArea from '@/components/ui/FileUploadArea';
-import PageTitle from '@/components/ui/PageTitle';
-import Icon from '@/components/ui/icon/index';
+import BrowsingTable from '@/components/BrowsingTable';
+import FileUploadArea from '@/components/FileUploadArea';
+import PageTitle from '@/components/PageTitle';
+import Icon from '@/components/icon/index';
 import useAccountAdmin from '@/lib/account/useAccountAdmin';
 import useAccountTemplate from '@/lib/account/useAccountTemplate';
 import useS3FileDownload from '@/lib/s3File/useS3FileDownload';

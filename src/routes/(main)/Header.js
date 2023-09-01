@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import ResizeObserver from 'react-resize-observer';
 import { useHistory, useLocation } from 'react-router-dom';
 
-import Icon from '@/components/ui/icon/index';
+import Icon from '@/components/icon/index';
 import useActiveAnnouncements from '@/lib/announcement/useActiveAnnouncements';
 import useLogOut from '@/lib/auth/useLogOut';
 import useUser from '@/lib/user/useUser';

@@ -2,9 +2,9 @@ import { Button, FormControl, MenuItem, Select, Snackbar, makeStyles } from '@ma
 import moment from 'moment';
 import { useEffect, useMemo, useState } from 'react';
 
-import AlignedText from '@/components/ui/AlignedText';
-import CodeField from '@/components/ui/CodeField';
-import PageTitle from '@/components/ui/PageTitle';
+import AlignedText from '@/components/AlignedText';
+import CodeField from '@/components/CodeField';
+import PageTitle from '@/components/PageTitle';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useProblem from '@/lib/problem/useProblem';
 import useSubmit from '@/lib/submission/useSubmit';

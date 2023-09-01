@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { FilterItem, FilterOperator } from '@/hooks/useBrowseParams/types';
 
-import Icon from '../../icon/index';
+import Icon from '../icon/index';
 import { DataSchemaBase } from './types';
 
 const useStyles = makeStyles(() => ({

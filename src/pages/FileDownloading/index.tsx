@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import Icon from '@/components/ui/icon';
+import Icon from '@/components/icon';
 import useS3FileDownload from '@/lib/s3File/useS3FileDownload';
 
 const useStyles = makeStyles((theme) => ({

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
 
+import Icon from '@/components/icon';
 import NoMatch from '@/components/noMatch';
-import Icon from '@/components/ui/icon';
 import useAuthMiddleware from '@/middleware/useAuthMiddleware';
 import useSystemRoleMiddleware from '@/middleware/useSystemRoleMiddleware';
 

@@ -4,10 +4,10 @@ import toLower from 'lodash/toLower';
 import moment from 'moment';
 import { useState } from 'react';
 
-import BrowsingTable from '@/components/ui/6a/BrowsingTable';
-import AlignedText from '@/components/ui/AlignedText';
-import PageTitle from '@/components/ui/PageTitle';
-import SimpleBar from '@/components/ui/SimpleBar';
+import AlignedText from '@/components/AlignedText';
+import BrowsingTable from '@/components/BrowsingTable';
+import PageTitle from '@/components/PageTitle';
+import SimpleBar from '@/components/SimpleBar';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useProblem from '@/lib/problem/useProblem';
 import useProblemScore from '@/lib/problem/useProblemScore';

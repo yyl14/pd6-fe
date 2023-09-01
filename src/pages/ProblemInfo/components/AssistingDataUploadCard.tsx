@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@material-ui/core';
 import { useState } from 'react';
 
-import FileUploadArea from '@/components/ui/FileUploadArea';
+import FileUploadArea from '@/components/FileUploadArea';
 
 import { AssistingDataEditTableSchema } from '../types';
 

@@ -15,10 +15,10 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import AlignedText from '@/components/AlignedText';
 import GeneralLoading from '@/components/GeneralLoading';
-import AlignedText from '@/components/ui/AlignedText';
-import MultiSelect from '@/components/ui/MultiSelect';
-import Icon from '@/components/ui/icon/index';
+import MultiSelect from '@/components/MultiSelect';
+import Icon from '@/components/icon/index';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useChallengesUnderClass from '@/lib/challenge/useChallengesUnderClass';
 import useClass from '@/lib/class/useClass';

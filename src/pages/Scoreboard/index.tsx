@@ -2,11 +2,11 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar, Ty
 import { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import AlignedText from '@/components/AlignedText';
+import PageTitle from '@/components/PageTitle';
+import SimpleBar from '@/components/SimpleBar';
+import SimpleTable from '@/components/SimpleTable';
 import NoMatch from '@/components/noMatch';
-import AlignedText from '@/components/ui/AlignedText';
-import PageTitle from '@/components/ui/PageTitle';
-import SimpleBar from '@/components/ui/SimpleBar';
-import SimpleTable from '@/components/ui/SimpleTable';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';

@@ -1,9 +1,7 @@
+import { Button, TextField, makeStyles } from '@material-ui/core';
 import { useState } from 'react';
 
-import { Button, TextField, makeStyles } from '@material-ui/core';
-
-import SimpleBar from '@/components/ui/SimpleBar';
-
+import SimpleBar from '@/components/SimpleBar';
 import useEssay from '@/lib/essay/useEssay';
 
 const useStyles = makeStyles(() => ({

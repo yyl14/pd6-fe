@@ -3,9 +3,9 @@ import range from 'lodash/range';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import BrowsingTable from '@/components/ui/6a/BrowsingTable';
-import CopyToClipboardButton from '@/components/ui/CopyToClipboardButton';
-import PageTitle from '@/components/ui/PageTitle';
+import BrowsingTable from '@/components/BrowsingTable';
+import CopyToClipboardButton from '@/components/CopyToClipboardButton';
+import PageTitle from '@/components/PageTitle';
 import useChallenge from '@/lib/challenge/useChallenge';
 import usePeerReview from '@/lib/peerReview/usePeerReview';
 import useViewPeerReviewReviewerSummary, {

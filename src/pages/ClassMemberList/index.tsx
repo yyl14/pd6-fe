@@ -1,8 +1,8 @@
 import { Button } from '@material-ui/core';
 import { useState } from 'react';
 
-import BrowsingTable from '@/components/ui/6a/BrowsingTable';
-import PageTitle from '@/components/ui/PageTitle';
+import BrowsingTable from '@/components/BrowsingTable';
+import PageTitle from '@/components/PageTitle';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useInstitutes from '@/lib/institute/useInstitutes';

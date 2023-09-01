@@ -5,12 +5,12 @@ import moment from 'moment';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import AlignedText from '@/components/ui/AlignedText';
-import CodeArea from '@/components/ui/CodeArea';
-import PageTitle from '@/components/ui/PageTitle';
-import SimpleBar from '@/components/ui/SimpleBar';
-import SimpleTable from '@/components/ui/SimpleTable';
-import Icon from '@/components/ui/icon/index';
+import AlignedText from '@/components/AlignedText';
+import CodeArea from '@/components/CodeArea';
+import PageTitle from '@/components/PageTitle';
+import SimpleBar from '@/components/SimpleBar';
+import SimpleTable from '@/components/SimpleTable';
+import Icon from '@/components/icon/index';
 import getNonSampleTestCaseOrder from '@/function/getNonSampleTestcaseOrder';
 import getSampleTestCaseOrder from '@/function/getSampleTestcaseOrder';
 import getTestCaseLabel from '@/function/getTestcaseLabel';

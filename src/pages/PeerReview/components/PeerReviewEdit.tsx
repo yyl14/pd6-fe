@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import { useState } from 'react';
 
-import SimpleBar from '@/components/ui/SimpleBar';
+import SimpleBar from '@/components/SimpleBar';
 import usePeerReview from '@/lib/peerReview/usePeerReview';
 import useChallengeTasks from '@/lib/task/useChallengeTasks';
 import BasicInfo from '@/pages/PeerReview/components/BasicInfo';

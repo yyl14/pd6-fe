@@ -15,11 +15,11 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import AlignedText from '@/components/AlignedText';
+import FileUploadArea from '@/components/FileUploadArea';
+import SimpleBar from '@/components/SimpleBar';
+import Icon from '@/components/icon/index';
 import NoMatch from '@/components/noMatch';
-import AlignedText from '@/components/ui/AlignedText';
-import FileUploadArea from '@/components/ui/FileUploadArea';
-import SimpleBar from '@/components/ui/SimpleBar';
-import Icon from '@/components/ui/icon/index';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
