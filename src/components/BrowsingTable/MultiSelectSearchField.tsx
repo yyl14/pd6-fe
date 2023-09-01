@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { FilterItem, FilterOperator } from '@/hooks/useBrowseParams/types';
 
-import MultiSelect from '../MultiSelect';
+import MultiSelect from '../6a/MultiSelect';
 import Icon from '../icon/index';
 import { DataSchemaBase, FilterConfigOption } from './types';
 

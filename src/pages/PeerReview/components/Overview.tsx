@@ -13,10 +13,7 @@ export default function Overview({ peerReviewId, accountId }: { peerReviewId: st
   return (
     <SimpleBar title="Overview" noIndent>
       <SimpleTable
-        // TODO: remove after refactor SimpleTable
-        buttons={null}
         setData={null}
-        //
         isEdit={false}
         hasDelete={false}
         columns={[
