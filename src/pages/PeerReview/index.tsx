@@ -192,7 +192,7 @@ export default function PeerReview({
                   {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    <MathpixMarkdown text={peerReview?.description} htmlTags />
+                    <MathpixMarkdown text={peerReview?.description ?? ''} htmlTags />
                   }
                 </MathpixLoader>
               }
