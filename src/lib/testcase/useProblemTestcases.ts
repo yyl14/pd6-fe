@@ -23,6 +23,7 @@ const useProblemTestcases = (problemId: number) => {
 
   return {
     testcases: browseAllTestcaseSWR.data?.data.data,
+    mutateProblemTestcases: browseAllTestcaseSWR.mutate,
     addTestcase: addTestcaseSWR.trigger,
     downloadSampleTestcases: downloadAllSampleTestcaseSWR.trigger,
     downloadNonSampleTestcases: downloadAllNonSampleTestcaseSWR.trigger,

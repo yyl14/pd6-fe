@@ -298,7 +298,7 @@ export default function CodingProblemInfo({
               .map((testcase) => (
                 <Grid item xs={6} key={testcase?.id}>
                   <Typography variant="h6" className={className.sampleName}>
-                    {`Sample ${testcase.label}`}
+                    {`Sample ${testcase?.label}`}
                   </Typography>
                   <SampleTestcaseArea
                     inputUuid={testcase?.input_file_uuid}

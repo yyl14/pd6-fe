@@ -22,6 +22,7 @@ const useCodingProblemEdit = (problemId: number) => {
   const {
     testcases: originalTestcases,
     isLoading: problemTestcasesIsLoading,
+    mutateProblemTestcases,
     addTestcase,
   } = useProblemTestcases(problemId);
   const {
@@ -35,6 +36,7 @@ const useCodingProblemEdit = (problemId: number) => {
     assistingData: originalAssistingData,
     isLoading: problemAssistingDataIsLoading,
     addAssistingDataUnderProblem,
+    mutateProblemAssistingData,
   } = useProblemAssistingData(Number(problemId));
   const { deleteAssistingData, editAssistingData, isLoading: assistingDataIsLoading } = useAssistingData();
 
@@ -274,6 +276,8 @@ const useCodingProblemEdit = (problemId: number) => {
     );
 
     await Promise.all([addTestcasePromise, editTestcasePromise, deleteTestcasePromise]);
+    mutateProblemTestcases();
+    mutateProblemAssistingData();
   };
 
   const saveAssistingData = async () => {

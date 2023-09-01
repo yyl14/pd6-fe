@@ -98,7 +98,15 @@ const useStyles = makeStyles((theme) => ({
   accepted: { color: theme.palette.green.main },
 }));
 
-export default function SimpleTable({ isEdit, hasDelete, buttons = <></>, columns, data, setData }) {
+export default function SimpleTable({
+  isEdit,
+  hasDelete,
+  hasButtons = false,
+  buttons = <></>,
+  columns,
+  data,
+  setData,
+}) {
   const classes = useStyles();
   const [filterData, setFilterData] = useState(data);
 
@@ -136,7 +144,7 @@ export default function SimpleTable({ isEdit, hasDelete, buttons = <></>, column
 
   return (
     <>
-      <div className={isEdit && buttons ? classes.topContent : classes.hide}>
+      <div className={isEdit && hasButtons ? classes.topContent : classes.hide}>
         <div className={classes.buttons}>{buttons}</div>
       </div>
       <Paper className={classes.root} elevation={0}>
