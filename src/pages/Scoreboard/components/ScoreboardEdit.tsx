@@ -1,9 +1,9 @@
 import { Button, FormControl, MenuItem, Select, TextField, Typography, makeStyles } from '@material-ui/core';
 import { useState } from 'react';
 
-import AlignedText from '@/components/ui/AlignedText';
-import MultiSelect from '@/components/ui/MultiSelect';
-import SimpleBar from '@/components/ui/SimpleBar';
+import AlignedText from '@/components/AlignedText';
+import MultiSelect from '@/components/MultiSelect';
+import SimpleBar from '@/components/SimpleBar';
 import useScoreboard from '@/lib/scoreboard/useScoreboard';
 import useChallengeTasks from '@/lib/task/useChallengeTasks';
 import useTeamProjectScoreboard from '@/lib/teamProjectScoreboard/useTeamProjectScoreboard';

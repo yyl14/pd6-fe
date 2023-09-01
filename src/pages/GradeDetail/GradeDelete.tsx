@@ -2,8 +2,8 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar, Ty
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import AlignedText from '@/components/ui/AlignedText';
-import SimpleBar from '@/components/ui/SimpleBar';
+import AlignedText from '@/components/AlignedText';
+import SimpleBar from '@/components/SimpleBar';
 import useGrade from '@/lib/grade/useGrade';
 
 interface GradeDeleteProps {

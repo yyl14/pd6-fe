@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import ResizeObserver from 'react-resize-observer';
 import { useHistory, useLocation } from 'react-router-dom';
 
-import Icon from '@/components/ui/icon/index';
+import Icon from '@/components/icon/index';
 import useActiveAnnouncements from '@/lib/announcement/useActiveAnnouncements';
 import useLogOut from '@/lib/auth/useLogOut';
 import useUser from '@/lib/user/useUser';
@@ -265,23 +265,23 @@ export default function Header() {
         setItemList([
           {
             text: 'Course',
-            basePath: '/6a/admin/course',
-            path: '/6a/admin/course/course',
+            basePath: '/admin/course',
+            path: '/admin/course/course',
           },
           {
             text: 'Account',
-            basePath: '/6a/admin/account',
-            path: '/6a/admin/account/institute',
+            basePath: '/admin/account',
+            path: '/admin/account/institute',
           },
           {
             text: 'System',
-            basePath: '/6a/admin/system',
-            path: '/6a/admin/system/accesslog',
+            basePath: '/admin/system',
+            path: '/admin/system/accesslog',
           },
         ]);
         setMenuList([
-          { title: 'My Profile', link: '/6a/my-profile' },
-          { title: 'Logout', link: '/6a/logout' },
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
         ]);
         break;
       }
@@ -290,38 +290,38 @@ export default function Header() {
           setItemList([
             {
               text: 'My Class',
-              basePath: '/6a/my-class',
-              path: '/6a/my-class',
+              basePath: '/my-class',
+              path: '/my-class',
             },
             {
               text: 'Problem Set',
-              basePath: '/6a/problem-set',
-              path: '/6a/problem-set',
+              basePath: '/problem-set',
+              path: '/problem-set',
             },
             {
               text: 'About',
-              basePath: '/6a/about',
-              path: '/6a/about/team',
+              basePath: '/about',
+              path: '/about/team',
             },
           ]);
         } else {
           setItemList([
             {
               text: 'Problem Set',
-              basePath: '/6a/problem-set',
-              path: '/6a/problem-set',
+              basePath: '/problem-set',
+              path: '/problem-set',
             },
             {
               text: 'About',
-              basePath: '/6a/about',
-              path: '/6a/about/team',
+              basePath: '/about',
+              path: '/about/team',
             },
           ]);
         }
         setMenuList([
-          { title: 'My Submission', link: '/6a/my-submission' },
-          { title: 'My Profile', link: '/6a/my-profile' },
-          { title: 'Logout', link: '/6a/logout' },
+          { title: 'My Submission', link: '/my-submission' },
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
         ]);
         break;
       }
@@ -329,16 +329,16 @@ export default function Header() {
         // System Guest
         setItemList([]);
         setMenuList([
-          { title: 'My Profile', link: '/6a/my-profile' },
-          { title: 'Logout', link: '/6a/logout' },
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
         ]);
         break;
       }
       default: {
         setItemList([]);
         setMenuList([
-          { title: 'My Profile', link: '/6a/my-profile' },
-          { title: 'Logout', link: '/6a/logout' },
+          { title: 'My Profile', link: '/my-profile' },
+          { title: 'Logout', link: '/logout' },
         ]);
       }
     }
@@ -409,8 +409,8 @@ export default function Header() {
 
   const logOut = useLogOut();
   const goto = (link) => {
-    if (link === '/6a/logout') {
-      logOut('/6a');
+    if (link === '/logout') {
+      logOut('/');
     } else {
       history.push(link);
     }
@@ -420,7 +420,7 @@ export default function Header() {
     <div>
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.toolbar}>
-          <button type="button" className={classes.logo} onClick={() => history.push('/6a')}>
+          <button type="button" className={classes.logo} onClick={() => history.push('/')}>
             {theme.headerStyle.logo}
           </button>
           {theme.headerStyle.hasIndicator && <div className={classes.itemActiveIndicator} style={indicatorStyles} />}

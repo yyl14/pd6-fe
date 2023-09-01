@@ -2,7 +2,7 @@ import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Typography
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Icon from '@/components/ui/icon/index';
+import Icon from '@/components/icon/index';
 import useAccount from '@/lib/account/useAccount';
 
 export default function UserProfile({ classes, history, location, mode, open, onClose }) {
@@ -12,7 +12,7 @@ export default function UserProfile({ classes, history, location, mode, open, on
   const [title, setTitle] = useState('');
   const [itemList, setItemList] = useState([]);
 
-  const baseURL = '/6a/user-profile';
+  const baseURL = '/user-profile';
 
   useEffect(() => {
     if (mode === 'main' && account !== undefined) {

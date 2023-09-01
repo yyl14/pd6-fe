@@ -18,12 +18,12 @@ import { MathpixLoader, MathpixMarkdown } from 'mathpix-markdown-it';
 import { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import AlignedText from '@/components/ui/AlignedText';
-import CodeTextArea from '@/components/ui/CodeTextArea';
-import SampleTestcaseArea from '@/components/ui/SampleTestcaseArea';
-import SimpleBar from '@/components/ui/SimpleBar';
-import SimpleTable from '@/components/ui/SimpleTable';
-import Icon from '@/components/ui/icon/index';
+import AlignedText from '@/components/AlignedText';
+import CodeTextArea from '@/components/CodeTextArea';
+import SampleTestcaseArea from '@/components/SampleTestcaseArea';
+import SimpleBar from '@/components/SimpleBar';
+import SimpleTable from '@/components/SimpleTable';
+import Icon from '@/components/icon/index';
 import useReduxStateShape from '@/hooks/useReduxStateShape';
 import useProblemAssistingData from '@/lib/assistingData/useProblemAssistingData';
 import useClass from '@/lib/class/useClass';
@@ -108,11 +108,9 @@ export default function CodingProblemInfo({
 
   const handleDelete = async () => {
     try {
-      const res = await deleteProblem();
-      if (res.ok) {
-        setDeletePopUp(false);
-        history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
-      }
+      await deleteProblem();
+      setDeletePopUp(false);
+      history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
     } catch {
       setErrorMsg(problemError.delete.message);
       setShowSnackbar(true);

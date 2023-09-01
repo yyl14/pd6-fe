@@ -11,9 +11,9 @@ import {
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import AlignedText from '@/components/ui/AlignedText';
-import PageTitle from '@/components/ui/PageTitle';
-import SimpleBar from '@/components/ui/SimpleBar';
+import AlignedText from '@/components/AlignedText';
+import PageTitle from '@/components/PageTitle';
+import SimpleBar from '@/components/SimpleBar';
 import useCourse from '@/lib/course/useCourse';
 
 export default function CourseSetting({ courseId }: { courseId: string }) {
@@ -56,7 +56,7 @@ export default function CourseSetting({ courseId }: { courseId: string }) {
     try {
       await deleteCourse();
       setShowDeleteDialog(false);
-      history.push('/6a/admin/course/course');
+      history.push('/admin/course/course');
     } catch {
       setShowSnackBar(true);
     }

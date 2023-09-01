@@ -2,8 +2,8 @@ import { makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import PageTitle from '@/components/ui/PageTitle';
-import Icon from '@/components/ui/icon';
+import PageTitle from '@/components/PageTitle';
+import Icon from '@/components/icon';
 import useVerifyEmail from '@/lib/email/useVerifyEmail';
 
 const useStyles = makeStyles((theme) => ({

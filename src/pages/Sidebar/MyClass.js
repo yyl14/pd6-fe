@@ -2,7 +2,7 @@ import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Typography
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Icon from '@/components/ui/icon/index';
+import Icon from '@/components/icon/index';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useUserClasses from '@/lib/user/useUserClasses?';
@@ -10,7 +10,7 @@ import useUserClasses from '@/lib/user/useUserClasses?';
 export default function MyClass({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId } = useParams();
 
-  const baseURL = '/6a/my-class';
+  const baseURL = '/my-class';
 
   const { course } = useCourse(courseId);
   const { class: classData } = useClass(classId);

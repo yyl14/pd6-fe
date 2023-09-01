@@ -11,13 +11,13 @@ const useSystemRoleMiddleware = () => {
   const { accountClasses: userClasses } = useUserClasses();
 
   useEffect(() => {
-    if (user && userClasses && location.pathname === '/6a') {
+    if (user && userClasses && location.pathname === '/') {
       if (user.role === 'MANAGER') {
-        history.push('/6a/admin/course/course');
+        history.push('/admin/course/course');
       } else if (user.role === 'NORMAL') {
-        history.push('/6a/my-class');
+        history.push('/my-class');
       } else {
-        history.push('/6a/my-profile');
+        history.push('/my-profile');
       }
     }
   }, [history, location.pathname, user, userClasses]);

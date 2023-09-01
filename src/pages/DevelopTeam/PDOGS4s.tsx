@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 
-import SimpleBar from '@/components/ui/SimpleBar';
-import Profile from '@/components/ui/profile';
+import Profile from '@/components/Profile';
+import SimpleBar from '@/components/SimpleBar';
 
 const useStyles = makeStyles(() => ({
   profile: {

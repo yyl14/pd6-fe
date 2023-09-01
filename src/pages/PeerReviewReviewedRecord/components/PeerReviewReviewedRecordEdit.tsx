@@ -2,8 +2,8 @@ import { Button, FormControl, MenuItem, Select, TextField, makeStyles } from '@m
 import { range } from 'lodash';
 import { useState } from 'react';
 
-import AlignedText from '@/components/ui/AlignedText';
-import SimpleBar from '@/components/ui/SimpleBar';
+import AlignedText from '@/components/AlignedText';
+import SimpleBar from '@/components/SimpleBar';
 import usePeerReview from '@/lib/peerReview/usePeerReview';
 import usePeerReviewRecord from '@/lib/peerReview/usePeerReviewRecord';
 

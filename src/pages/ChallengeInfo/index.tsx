@@ -6,10 +6,10 @@ import { useEffect, useState } from 'react';
 
 import GeneralLoading from '@//components/GeneralLoading';
 import NoMatch from '@//components/noMatch';
-import AlignedText from '@/components/ui/AlignedText';
-import PageTitle from '@/components/ui/PageTitle';
-import SimpleBar from '@/components/ui/SimpleBar';
-import SimpleTable from '@/components/ui/SimpleTable';
+import AlignedText from '@/components/AlignedText';
+import PageTitle from '@/components/PageTitle';
+import SimpleBar from '@/components/SimpleBar';
+import SimpleTable from '@/components/SimpleTable';
 import useReduxStateShape from '@/hooks/useReduxStateShape';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useProblemScores from '@/lib/problem/useProblemScores';

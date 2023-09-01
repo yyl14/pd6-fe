@@ -2,8 +2,8 @@ import { Button } from '@material-ui/core';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
 
-import BrowsingTable from '@/components/ui/6a/BrowsingTable';
-import PageTitle from '@/components/ui/PageTitle';
+import BrowsingTable from '@/components/BrowsingTable';
+import PageTitle from '@/components/PageTitle';
 import useAnnouncements, { AnnouncementDataSchema } from '@/lib/announcement/useAnnouncements';
 
 export default function Announcement() {
@@ -71,7 +71,7 @@ export default function Announcement() {
           Title: title,
           'Post Time': moment(post_time).format('YYYY-MM-DD, HH:mm:ss'),
           'End Time': moment(expire_time).format('YYYY-MM-DD, HH:mm:ss'),
-          link: `/6a/admin/system/announcement/${id}/setting`,
+          link: `/admin/system/announcement/${id}/setting`,
         })}
         isLoading={isLoading.browseAll}
         error={error.browseAll}
@@ -79,7 +79,7 @@ export default function Announcement() {
         filter={browseAnnouncement.filter}
         sort={browseAnnouncement.sort}
         buttons={
-          <Button variant="contained" color="primary" onClick={() => history.push('/6a/admin/system/announcement/add')}>
+          <Button variant="contained" color="primary" onClick={() => history.push('/admin/system/announcement/add')}>
             +
           </Button>
         }

@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@material-ui/core';
 
-import Trademark from '@/components/ui/Trademark';
+import Trademark from '@/components/Trademark';
 import '@/styles/auth.css';
 import '@/styles/index.css';
 

@@ -3,12 +3,12 @@ import { MathpixLoader, MathpixMarkdown } from 'mathpix-markdown-it';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import AlignedText from '@/components/AlignedText';
+import CodeArea from '@/components/CodeArea';
+import PageTitle from '@/components/PageTitle';
+import SimpleBar from '@/components/SimpleBar';
+import Icon from '@/components/icon';
 import NoMatch from '@/components/noMatch';
-import AlignedText from '@/components/ui/AlignedText';
-import CodeArea from '@/components/ui/CodeArea';
-import PageTitle from '@/components/ui/PageTitle';
-import SimpleBar from '@/components/ui/SimpleBar';
-import Icon from '@/components/ui/icon';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useAccountPeerReviewRecords from '@/lib/peerReview/useAccountPeerReviewRecords';
 import usePeerReview from '@/lib/peerReview/usePeerReview';

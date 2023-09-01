@@ -31,7 +31,7 @@ export default function ScoreboardRoutes() {
   return (
     <Switch>
       <Route
-        path="/6a/my-class/:courseId/:classId/challenge/:challengeId/scoreboard/:scoreboardId"
+        path="/my-class/:courseId/:classId/challenge/:challengeId/scoreboard/:scoreboardId"
         component={ScoreboardRoute}
       />
     </Switch>

@@ -2,10 +2,10 @@ import { Button, Snackbar, TextField, makeStyles } from '@material-ui/core';
 import moment from 'moment';
 import { useState } from 'react';
 
-import AlignedText from '@/components/ui/AlignedText';
-import DateRangePicker from '@/components/ui/DateRangePicker';
-import RadioGroupForm from '@/components/ui/RadioGroupForm';
-import SimpleBar from '@/components/ui/SimpleBar';
+import AlignedText from '@/components/AlignedText';
+import DateRangePicker from '@/components/DateRangePicker';
+import RadioGroupForm from '@/components/RadioGroupForm';
+import SimpleBar from '@/components/SimpleBar';
 import useChallenge from '@/lib/challenge/useChallenge';
 
 const useStyles = makeStyles(() => ({

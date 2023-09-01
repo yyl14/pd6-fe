@@ -11,9 +11,9 @@ const useAuthMiddleware = () => {
   const redirectToLogin = useCallback(() => {
     if (location.pathname !== '/') {
       const redirectUrl = encodeURIComponent(`${location.pathname}${location.search}`);
-      history.push(`/6a/login?redirect_url=${redirectUrl}`);
+      history.push(`/login?redirect_url=${redirectUrl}`);
     } else {
-      history.push('/6a/login');
+      history.push('/login');
     }
   }, [history, location]);
 

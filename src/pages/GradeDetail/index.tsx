@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import GeneralLoading from '@/components/GeneralLoading';
+import PageTitle from '@/components/PageTitle';
 import NoMatch from '@/components/noMatch';
-import PageTitle from '@/components/ui/PageTitle';
 import useAccountSummaries from '@/lib/accountSummary/useAccountSummaries';
 import useGrade from '@/lib/grade/useGrade';
 import useUserClasses from '@/lib/user/useUserClasses';

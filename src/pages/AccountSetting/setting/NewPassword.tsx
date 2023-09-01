@@ -16,8 +16,8 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { useEffect, useState } from 'react';
 
-import AlignedText from '@/components/ui/AlignedText';
-import SimpleBar from '@/components/ui/SimpleBar';
+import AlignedText from '@/components/AlignedText';
+import SimpleBar from '@/components/SimpleBar';
 import useEditPassword from '@/lib/account/useEditPassword';
 
 const useStyles = makeStyles(() => ({

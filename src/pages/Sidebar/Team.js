@@ -2,12 +2,12 @@ import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Icon from '@/components/ui/icon/index';
+import Icon from '@/components/icon/index';
 import useTeam from '@/lib/team/useTeam';
 
 export default function Team({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, teamId } = useParams();
-  const baseURL = '/6a/my-class';
+  const baseURL = '/my-class';
   const { team } = useTeam(teamId);
 
   const [display, setDisplay] = useState('unfold');

@@ -21,10 +21,10 @@ function AnnouncementRoute() {
 export default function AnnouncementRoutes() {
   return (
     <Switch>
-      <Route exact path="/6a/admin/system/announcement/:announcementId/setting" component={AnnouncementSettingRoute} />
-      <Route exact path="/6a/admin/system/announcement/:announcementId/edit" component={AnnouncementEditRoute} />
-      <Route exact path="/6a/admin/system/announcement/add" component={AnnouncementAddRoute} />
-      <Route exact path="/6a/admin/system/announcement" component={AnnouncementRoute} />
+      <Route exact path="/admin/system/announcement/:announcementId/setting" component={AnnouncementSettingRoute} />
+      <Route exact path="/admin/system/announcement/:announcementId/edit" component={AnnouncementEditRoute} />
+      <Route exact path="/admin/system/announcement/add" component={AnnouncementAddRoute} />
+      <Route exact path="/admin/system/announcement" component={AnnouncementRoute} />
       <Route component={NoMatch} />
     </Switch>
   );

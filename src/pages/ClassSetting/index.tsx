@@ -11,10 +11,10 @@ import {
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import AlignedText from '@/components/AlignedText';
+import PageTitle from '@/components/PageTitle';
+import SimpleBar from '@/components/SimpleBar';
 import NoMatch from '@/components/noMatch';
-import AlignedText from '@/components/ui/AlignedText';
-import PageTitle from '@/components/ui/PageTitle';
-import SimpleBar from '@/components/ui/SimpleBar';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 
@@ -64,7 +64,7 @@ const ClassSetting = ({ courseId, classId }: { courseId: string; classId: string
     try {
       await deleteClass();
       setShowDeleteDialog(false);
-      history.push(`/6a/admin/course/course/${courseId}/class-list/`);
+      history.push(`/admin/course/course/${courseId}/class-list`);
     } catch {
       setShowSnackBar(true);
     }

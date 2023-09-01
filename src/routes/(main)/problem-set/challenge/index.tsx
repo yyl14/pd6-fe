@@ -33,8 +33,8 @@ function ChallengeInfoRoute() {
 export default function ChallengeRoutes() {
   return (
     <Switch>
-      <Route path="/6a/problem-set/:courseId/:classId/challenge/:challengeId/problem" component={ProblemRoutes} />
-      <Route path="/6a/problem-set/:courseId/:classId/challenge/:challengeId" component={ChallengeInfoRoute} />
+      <Route path="/problem-set/:courseId/:classId/challenge/:challengeId/problem" component={ProblemRoutes} />
+      <Route path="/problem-set/:courseId/:classId/challenge/:challengeId" component={ChallengeInfoRoute} />
     </Switch>
   );
 }

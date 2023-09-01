@@ -15,10 +15,10 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import AlignedText from '@/components/AlignedText';
 import GeneralLoading from '@/components/GeneralLoading';
-import AlignedText from '@/components/ui/AlignedText';
-import MultiSelect from '@/components/ui/MultiSelect';
-import Icon from '@/components/ui/icon/index';
+import MultiSelect from '@/components/MultiSelect';
+import Icon from '@/components/icon/index';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useChallengesUnderClass from '@/lib/challenge/useChallengesUnderClass';
 import useClass from '@/lib/class/useClass';
@@ -208,7 +208,7 @@ export default function TaskAddingCard({ courseId, classId, challengeId, open, s
             challenge_label: label,
             title,
           });
-          history.push(`/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/problem/${data.data.id}`);
+          history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/problem/${data.data.id}`);
         } catch {
           setShowAddProblemErrorSnackbar(true);
         }
@@ -221,7 +221,7 @@ export default function TaskAddingCard({ courseId, classId, challengeId, open, s
             challenge_label: label,
             title,
           });
-          history.push(`/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/essay/${data.data.id}`);
+          history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/essay/${data.data.id}`);
         } catch {
           setShowAddEssayErrorSnackbar(true);
         }
@@ -241,7 +241,7 @@ export default function TaskAddingCard({ courseId, classId, challengeId, open, s
           });
           setPeerReviewChallengeId(Number(challengeId));
           setTaskLabelId('');
-          history.push(`/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${data.data.id}`);
+          history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${data.data.id}`);
         } catch {
           setShowAddPeerReviewErrorSnackbar(true);
         }
@@ -265,7 +265,7 @@ export default function TaskAddingCard({ courseId, classId, challengeId, open, s
           setScoringFormula('');
           setBaselineTeam(null);
           setTeamLabelFilter('');
-          history.push(`/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/scoreboard/${data.data.id}`);
+          history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/scoreboard/${data.data.id}`);
         } catch {
           setShowAddScoreboardErrorSnackbar(true);
         }

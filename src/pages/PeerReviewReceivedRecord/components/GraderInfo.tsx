@@ -2,8 +2,8 @@ import { Typography, makeStyles } from '@material-ui/core';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
-import AlignedText from '@/components/ui/AlignedText';
-import SimpleBar from '@/components/ui/SimpleBar';
+import AlignedText from '@/components/AlignedText';
+import SimpleBar from '@/components/SimpleBar';
 import useAccount from '@/lib/account/useAccount';
 
 const useStyles = makeStyles((theme) => ({

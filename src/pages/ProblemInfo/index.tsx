@@ -11,9 +11,9 @@ import {
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import AlignedText from '@/components/ui/AlignedText';
-import PageTitle from '@/components/ui/PageTitle';
-import Icon from '@/components/ui/icon/index';
+import AlignedText from '@/components/AlignedText';
+import PageTitle from '@/components/PageTitle';
+import Icon from '@/components/icon/index';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
@@ -116,7 +116,9 @@ export default function ProblemInfo({
               variant="outlined"
               color="primary"
               onClick={() =>
-                history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)
+                history.push(
+                  `/my-class/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/my-submission`,
+                )
               }
               startIcon={<Icon.HistoryIcon />}
             >
@@ -125,7 +127,9 @@ export default function ProblemInfo({
             <Button
               color="primary"
               onClick={() =>
-                history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)
+                history.push(
+                  `/my-class/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/code-submission`,
+                )
               }
             >
               Submit
@@ -139,7 +143,9 @@ export default function ProblemInfo({
               variant="outlined"
               color="primary"
               onClick={() =>
-                history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/my-submission`)
+                history.push(
+                  `/my-class/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/my-submission`,
+                )
               }
               startIcon={<Icon.HistoryIcon />}
             >
@@ -148,7 +154,9 @@ export default function ProblemInfo({
             <Button
               color="primary"
               onClick={() =>
-                history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/${problemId}/code-submission`)
+                history.push(
+                  `/my-class/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/code-submission`,
+                )
               }
             >
               Submit

@@ -1,18 +1,15 @@
 import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import Icon from '@/components/ui/icon/index';
+import Icon from '@/components/icon/index';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useCourses from '@/lib/course/useCourses';
 
 export default function Course({ classes, history, location, mode, open, onClose }) {
   const { courseId, classId } = useParams();
-  const courseList = useSelector((state) => state.courses);
-  const classList = useSelector((state) => state.classes);
-  const baseURL = '/6a/admin/course';
+  const baseURL = '/admin/course';
   const [display, setDisplay] = useState('unfold');
   const [display1, setDisplay1] = useState('unfold');
 
@@ -110,7 +107,7 @@ export default function Course({ classes, history, location, mode, open, onClose
       ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, history, courseList, courseId, classList, classId, mode, courses, course, classData]);
+  }, [location.pathname, history, courseId, classId, mode, courses, course, classData]);
 
   const foldLesson = () => {
     setDisplay('fold');

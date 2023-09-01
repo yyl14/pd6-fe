@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 
-import Icon from '@/components/ui/icon';
+import Icon from '@/components/icon';
 
 import { IOUploadCardTableSchema } from '../types';
 

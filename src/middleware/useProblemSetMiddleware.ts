@@ -12,7 +12,7 @@ const useProblemSetMiddleware = () => {
   const { coursesClasses } = useCoursesClasses(courses?.map((course) => course.id) ?? null);
 
   useEffect(() => {
-    if (location.pathname === '/6a/problem-set') {
+    if (location.pathname === '/problem-set') {
       const sortedCourses = courses?.sort((a, b) => a.name.localeCompare(b.name));
       const sortedClasses = sortedCourses
         ?.map((course) => coursesClasses[course.id] ?? [])
@@ -22,7 +22,7 @@ const useProblemSetMiddleware = () => {
       const defaultClass = sortedClasses?.at(0);
 
       if (defaultClass) {
-        history.push(`/6a/problem-set/${defaultClass?.class_info.course_id}/${defaultClass?.class_info.id}`);
+        history.push(`/problem-set/${defaultClass?.class_info.course_id}/${defaultClass?.class_info.id}`);
       }
     }
   }, [courses, coursesClasses, history, location.pathname]);

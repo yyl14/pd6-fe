@@ -12,12 +12,12 @@ import {
 } from '@material-ui/core';
 import { ChangeEvent, useEffect, useState } from 'react';
 
+import AlignedText from '@/components/AlignedText';
+import BrowsingTable from '@/components/BrowsingTable';
+import FileUploadArea from '@/components/FileUploadArea';
+import PageTitle from '@/components/PageTitle';
+import Icon from '@/components/icon/index';
 import NoMatch from '@/components/noMatch';
-import BrowsingTable from '@/components/ui/6a/BrowsingTable';
-import AlignedText from '@/components/ui/AlignedText';
-import FileUploadArea from '@/components/ui/FileUploadArea';
-import PageTitle from '@/components/ui/PageTitle';
-import Icon from '@/components/ui/icon/index';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useClassTeams, { TeamDataSchema } from '@/lib/team/useClassTeams';
@@ -241,7 +241,7 @@ export default function TeamList({ courseId, classId }: { courseId: string; clas
             minWidth: 153,
             width: 400,
             type: 'link',
-            formatLink: (datum) => `/6a/my-class/${courseId}/${classId}/team/${String(datum.id)}`,
+            formatLink: (datum) => `/my-class/${courseId}/${classId}/team/${String(datum.id)}`,
           },
         ]}
         filterConfig={[
@@ -263,7 +263,7 @@ export default function TeamList({ courseId, classId }: { courseId: string; clas
           id: String(id),
           Label: label,
           'Team Name': name,
-          link: `/6a/my-class/${courseId}/${classId}/team/${String(id)}`,
+          link: `/my-class/${courseId}/${classId}/team/${String(id)}`,
         })}
         isLoading={classTeamIsLoading.browse}
         error={classTeamError.browse}

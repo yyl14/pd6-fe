@@ -11,8 +11,8 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 
 import GeneralLoading from '@/components/GeneralLoading';
+import PageTitle from '@/components/PageTitle';
 import NoMatch from '@/components/noMatch';
-import PageTitle from '@/components/ui/PageTitle';
 import ThemeToggleContext from '@/contexts/ThemeContext';
 import useEventListener from '@/hooks/useEventListener';
 import useAccount from '@/lib/account/useAccount';

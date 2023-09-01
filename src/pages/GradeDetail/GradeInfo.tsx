@@ -2,8 +2,8 @@ import { Button, Typography, makeStyles } from '@material-ui/core';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 
-import AlignedText from '@/components/ui/AlignedText';
-import SimpleBar from '@/components/ui/SimpleBar';
+import AlignedText from '@/components/AlignedText';
+import SimpleBar from '@/components/SimpleBar';
 
 import { GradeAccountInfo } from './types';
 

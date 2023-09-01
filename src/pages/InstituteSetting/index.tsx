@@ -1,15 +1,24 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Snackbar, Switch, TextField, Typography, makeStyles } from '@material-ui/core';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControlLabel,
+  Snackbar,
+  Switch,
+  TextField,
+  Typography,
+  makeStyles,
+} from '@material-ui/core';
 import { useState } from 'react';
 
-
-
+import AlignedText from '@/components/AlignedText';
 import GeneralLoading from '@/components/GeneralLoading';
+import PageTitle from '@/components/PageTitle';
+import SimpleBar from '@/components/SimpleBar';
 import NoMatch from '@/components/noMatch';
-import AlignedText from '@/components/ui/AlignedText';
-import PageTitle from '@/components/ui/PageTitle';
-import SimpleBar from '@/components/ui/SimpleBar';
 import useInstitute from '@/lib/institute/useInstitute';
-
 
 const useStyles = makeStyles(() => ({
   warningText: {

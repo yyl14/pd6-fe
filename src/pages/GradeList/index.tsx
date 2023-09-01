@@ -13,11 +13,11 @@ import {
 import moment from 'moment-timezone';
 import { ChangeEvent, useEffect, useState } from 'react';
 
-import BrowsingTable from '@/components/ui/6a/BrowsingTable';
-import AlignedText from '@/components/ui/AlignedText';
-import FileUploadArea from '@/components/ui/FileUploadArea';
-import PageTitle from '@/components/ui/PageTitle';
-import Icon from '@/components/ui/icon/index';
+import AlignedText from '@/components/AlignedText';
+import BrowsingTable from '@/components/BrowsingTable';
+import FileUploadArea from '@/components/FileUploadArea';
+import PageTitle from '@/components/PageTitle';
+import Icon from '@/components/icon/index';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useClassGrade from '@/lib/grade/useClassGrade';
@@ -196,7 +196,7 @@ export default function GradeList({ courseId, classId }: { courseId: string; cla
             minWidth: 139,
             align: 'center',
             type: 'link',
-            formatLink: (datum) => `/6a/user-profile/${datum.account_id}`,
+            formatLink: (datum) => `/user-profile/${datum.account_id}`,
           },
           {
             name: 'Student ID',
@@ -270,7 +270,7 @@ export default function GradeList({ courseId, classId }: { courseId: string; cla
           Title: title,
           Score: score,
           Time: moment(update_time).format('YYYY-MM-DD, HH:mm:ss'),
-          link: `/6a/my-class/${courseId}/${classId}/grade/${grade_id}`,
+          link: `/my-class/${courseId}/${classId}/grade/${grade_id}`,
         })}
         isLoading={viewClassGradeIsLoading.browse}
         error={viewClassGradeError.browse}

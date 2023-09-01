@@ -5,12 +5,12 @@ import moment from 'moment';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import AlignedText from '@/components/ui/AlignedText';
-import CodeArea from '@/components/ui/CodeArea';
-import PageTitle from '@/components/ui/PageTitle';
-import SimpleBar from '@/components/ui/SimpleBar';
-import SimpleTable from '@/components/ui/SimpleTable';
-import Icon from '@/components/ui/icon/index';
+import AlignedText from '@/components/AlignedText';
+import CodeArea from '@/components/CodeArea';
+import PageTitle from '@/components/PageTitle';
+import SimpleBar from '@/components/SimpleBar';
+import SimpleTable from '@/components/SimpleTable';
+import Icon from '@/components/icon/index';
 import getNonSampleTestCaseOrder from '@/function/getNonSampleTestcaseOrder';
 import getSampleTestCaseOrder from '@/function/getSampleTestcaseOrder';
 import getTestCaseLabel from '@/function/getTestcaseLabel';
@@ -135,7 +135,7 @@ export default function SubmissionDetail({
           <Typography variant="body1">{submissionId}</Typography>
         </AlignedText>
         <AlignedText text="Username" childrenType="text">
-          <Link to={`/6a/user-profile/${account?.id}`} className={classNames.textLink}>
+          <Link to={`/user-profile/${account?.id}`} className={classNames.textLink}>
             <Typography variant="body1">{account?.username}</Typography>
           </Link>
         </AlignedText>
@@ -146,13 +146,13 @@ export default function SubmissionDetail({
           <Typography variant="body1">{account?.real_name}</Typography>
         </AlignedText>
         <AlignedText text="Challenge" childrenType="text">
-          <Link to={`/6a/${baseUrl}/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
+          <Link to={`/${baseUrl}/${courseId}/${classId}/challenge/${challengeId}`} className={classNames.textLink}>
             <Typography variant="body1">{challenge?.title}</Typography>
           </Link>
         </AlignedText>
         <AlignedText text="Task Label" childrenType="text">
           <Link
-            to={`/6a/${baseUrl}/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}`}
+            to={`/${baseUrl}/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}`}
             className={classNames.textLink}
           >
             <Typography variant="body1">{problem?.challenge_label}</Typography>

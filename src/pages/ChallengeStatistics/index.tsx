@@ -10,11 +10,11 @@ import {
 } from '@material-ui/core';
 import { useEffect, useMemo, useState } from 'react';
 
-import CopyToClipboardButton from '@/components/ui/CopyToClipboardButton';
-import CustomTable from '@/components/ui/CustomTable';
-import PageTitle from '@/components/ui/PageTitle';
-import SimpleBar from '@/components/ui/SimpleBar';
-import SimpleTable from '@/components/ui/SimpleTable';
+import CopyToClipboardButton from '@/components/CopyToClipboardButton';
+import CustomTable from '@/components/CustomTable';
+import PageTitle from '@/components/PageTitle';
+import SimpleBar from '@/components/SimpleBar';
+import SimpleTable from '@/components/SimpleTable';
 import useReduxStateShape from '@/hooks/useReduxStateShape';
 import useAccountSummaries, { AccountSummarySchema } from '@/lib/accountSummary/useAccountSummaries';
 import useChallenge from '@/lib/challenge/useChallenge';

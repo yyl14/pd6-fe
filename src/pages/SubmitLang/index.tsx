@@ -1,5 +1,5 @@
-import CustomTable from '@/components/ui/CustomTable';
-import PageTitle from '@/components/ui/PageTitle';
+import CustomTable from '@/components/CustomTable';
+import PageTitle from '@/components/PageTitle';
 import useReduxStateShape from '@/hooks/useReduxStateShape';
 import useSubmitLangs from '@/lib/submitLang/useSubmitLangs';
 
@@ -32,7 +32,7 @@ export default function SubmitLang() {
           } else if (item.is_disabled === false) {
             temp.isDisabled = 'Enabled';
           }
-          temp.path = `/6a/admin/system/submitlang/${item.id}/setting`;
+          temp.path = `/admin/system/submitlang/${item.id}/setting`;
           return temp;
         })}
         columns={[

@@ -2,8 +2,8 @@ import startCase from 'lodash/startCase';
 import toLower from 'lodash/toLower';
 import moment from 'moment';
 
-import BrowsingTable from '@/components/ui/6a/BrowsingTable';
-import PageTitle from '@/components/ui/PageTitle';
+import BrowsingTable from '@/components/BrowsingTable';
+import PageTitle from '@/components/PageTitle';
 import useUserClasses from '@/lib/user/useUserClasses';
 import useViewUserSubmissions, { BrowseSubmissionSchema } from '@/lib/view/useViewUserSubmissions';
 
@@ -52,7 +52,7 @@ export default function MySubmission() {
             type: 'link',
             minWidth: 150,
             formatLink: (datum) =>
-              `/6a/${isUserClass(datum.class_id) ? 'problem-set' : 'my-class'}/${datum.course_id}/${
+              `/${isUserClass(datum.class_id) ? 'problem-set' : 'my-class'}/${datum.course_id}/${
                 datum.class_id
               }/challenge`,
           },
@@ -68,7 +68,7 @@ export default function MySubmission() {
             type: 'link',
             minWidth: 150,
             formatLink: (datum) =>
-              `/6a/${isUserClass(datum.class_id) ? 'problem-set' : 'my-class'}/${datum.course_id}/${
+              `/${isUserClass(datum.class_id) ? 'problem-set' : 'my-class'}/${datum.course_id}/${
                 datum.class_id
               }/challenge/${datum.challenge_id}/${datum.problem_id}`,
           },
@@ -175,7 +175,7 @@ export default function MySubmission() {
           Task: challenge_label,
           Status: verdict ? startCase(toLower(verdict)) : 'Waiting for judge',
           'Submitted Time': moment(submit_time).format('YYYY-MM-DD, HH:mm:ss'),
-          link: `/6a/my-submission/${course_id}/${class_id}/${challenge_id}/${problem_id}/${submission_id}`,
+          link: `/my-submission/${course_id}/${class_id}/${challenge_id}/${problem_id}/${submission_id}`,
         })}
         isLoading={isLoading.browse}
         error={error.browse}

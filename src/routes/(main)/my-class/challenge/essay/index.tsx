@@ -3,7 +3,6 @@ import { Route, Switch, useParams } from 'react-router-dom';
 
 import GeneralLoading from '@/components/GeneralLoading';
 import withConditionalRender from '@/components/hoc/withConditionalRender';
-
 import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
@@ -49,11 +48,7 @@ function EssayRoute() {
 export default function EssayRoutes() {
   return (
     <Switch>
-      <Route
-        exact
-        path="/6a/my-class/:courseId/:classId/challenge/:challengeId/essay/:essayId"
-        component={EssayRoute}
-      />
+      <Route exact path="/my-class/:courseId/:classId/challenge/:challengeId/essay/:essayId" component={EssayRoute} />
     </Switch>
   );
 }

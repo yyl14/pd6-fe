@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import { useState } from 'react';
 
-import AlignedText from '@/components/ui/AlignedText';
+import AlignedText from '@/components/AlignedText';
 
 import { IOUploadCardTableSchema, TestcaseEditTableSchema } from '../types';
 import IOFileUploadArea from './IOFileUploadArea';

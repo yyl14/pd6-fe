@@ -31,12 +31,10 @@ export default function CodeSubmissionRoute() {
         challengeId,
         problemId,
         handleSubmissionSuccess: () => {
-          history.push(
-            `/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/my-submission`,
-          );
+          history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/my-submission`);
         },
         handleCancel: () =>
-          history.push(`/6a/my-class/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}`),
+          history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}`),
         isLoading: courseIsLoading.read || classIsLoading.read || challengeIsLoading.read || problemIsLoading.read,
       })}
     </Suspense>

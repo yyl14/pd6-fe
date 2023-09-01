@@ -2,7 +2,7 @@ import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Typography
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Icon from '@/components/ui/icon/index';
+import Icon from '@/components/icon/index';
 import useCoursesClasses from '@/lib/class/useCoursesClasses';
 import useCourses from '@/lib/course/useCourses';
 
@@ -12,7 +12,7 @@ export default function ProblemSet({ classNames, history, location, open, onClos
   const { courses } = useCourses();
   const { coursesClasses } = useCoursesClasses(courses?.map((course) => course.id) ?? null);
 
-  const baseURL = '/6a/problem-set';
+  const baseURL = '/problem-set';
 
   const [display, setDisplay] = useState([]); // 0: fold, 1: unfold
 

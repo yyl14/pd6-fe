@@ -1,11 +1,11 @@
 import { Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 
+import AlignedText from '@/components/AlignedText';
+import CodeArea from '@/components/CodeArea';
+import PageTitle from '@/components/PageTitle';
+import SimpleBar from '@/components/SimpleBar';
 import NoMatch from '@/components/noMatch';
-import AlignedText from '@/components/ui/AlignedText';
-import CodeArea from '@/components/ui/CodeArea';
-import PageTitle from '@/components/ui/PageTitle';
-import SimpleBar from '@/components/ui/SimpleBar';
 import useAccountPeerReviewRecords from '@/lib/peerReview/useAccountPeerReviewRecords';
 import usePeerReview from '@/lib/peerReview/usePeerReview';
 import usePeerReviewRecord from '@/lib/peerReview/usePeerReviewRecord';

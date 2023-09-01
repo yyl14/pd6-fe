@@ -2,7 +2,7 @@ import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Icon from '@/components/ui/icon/index';
+import Icon from '@/components/icon/index';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
@@ -15,7 +15,7 @@ import TaskAddingCard from './TaskAddingCard';
 export default function Challenge({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, challengeId, problemId, submissionId } = useParams();
 
-  const baseURL = '/6a/my-class';
+  const baseURL = '/my-class';
 
   const { challenge } = useChallenge(challengeId);
   const { tasks } = useChallengeTasks(challengeId);
@@ -44,7 +44,7 @@ export default function Challenge({ classNames, history, location, mode, open, o
       history.push(`${baseURL}/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/my-submission`);
     };
     const goBackToMySubmission = () => {
-      history.push('/6a/my-submission');
+      history.push('/my-submission');
     };
 
     if (

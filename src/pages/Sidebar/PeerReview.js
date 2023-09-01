@@ -2,7 +2,7 @@ import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Icon from '@/components/ui/icon/index';
+import Icon from '@/components/icon/index';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useAccountPeerReviewRecords from '@/lib/peerReview/useAccountPeerReviewRecords';
 import usePeerReview from '@/lib/peerReview/usePeerReview';
@@ -11,7 +11,7 @@ import useUserClasses from '@/lib/user/useUserClasses';
 export default function PeerReview({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, challengeId, peerReviewId, accountId } = useParams();
 
-  const baseURL = '/6a/my-class';
+  const baseURL = '/my-class';
 
   const { challenge } = useChallenge(challengeId);
   const { accountClasses: userClasses } = useUserClasses();

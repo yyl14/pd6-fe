@@ -68,10 +68,10 @@ export default function SubmissionRoutes() {
   return (
     <Switch>
       <Route
-        path="/6a/my-class/:courseId/:classId/submission/:challengeId/:problemId/:submissionId"
+        path="/my-class/:courseId/:classId/submission/:challengeId/:problemId/:submissionId"
         component={SubmissionDetailRoute}
       />
-      <Route path="/6a/my-class/:courseId/:classId/submission" component={SubmissionListRoute} />
+      <Route path="/my-class/:courseId/:classId/submission" component={SubmissionListRoute} />
     </Switch>
   );
 }

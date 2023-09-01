@@ -1,18 +1,25 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Snackbar, Typography, makeStyles } from '@material-ui/core';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  Snackbar,
+  Typography,
+  makeStyles,
+} from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import moment from 'moment-timezone';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-
-
+import AlignedText from '@/components/AlignedText';
 import GeneralLoading from '@/components/GeneralLoading';
+import PageTitle from '@/components/PageTitle';
+import SimpleBar from '@/components/SimpleBar';
 import NoMatch from '@/components/noMatch';
-import AlignedText from '@/components/ui/AlignedText';
-import PageTitle from '@/components/ui/PageTitle';
-import SimpleBar from '@/components/ui/SimpleBar';
 import useAnnouncement from '@/lib/announcement/useAnnouncement';
-
 
 const useStyles = makeStyles(() => ({
   duration: {
@@ -42,7 +49,7 @@ export default function AnnouncementSetting({
   const handleSubmitDelete = async () => {
     try {
       await deleteAnnouncement();
-      history.push('/6a/admin/system/announcement');
+      history.push('/admin/system/announcement');
     } catch {
       setShowError(true);
     }

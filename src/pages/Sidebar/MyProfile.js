@@ -1,7 +1,7 @@
 import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 
-import Icon from '@/components/ui/icon/index';
+import Icon from '@/components/icon/index';
 import useUser from '@/lib/user/useUser';
 
 export default function MyProfile({ classes, history, location, mode, open, onClose }) {
@@ -16,7 +16,7 @@ export default function MyProfile({ classes, history, location, mode, open, onCl
       setItemList([
         {
           text: 'Setting',
-          path: '/6a/my-profile',
+          path: '/my-profile',
           icon: <Icon.Setting />,
         },
       ]);

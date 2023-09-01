@@ -1,8 +1,8 @@
 import { Typography, makeStyles } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
-import AlignedText from '@/components/ui/AlignedText';
-import SimpleBar from '@/components/ui/SimpleBar';
+import AlignedText from '@/components/AlignedText';
+import SimpleBar from '@/components/SimpleBar';
 import useChallenge from '@/lib/challenge/useChallenge';
 import usePeerReview from '@/lib/peerReview/usePeerReview';
 import useProblem from '@/lib/problem/useProblem';
@@ -40,7 +40,7 @@ export default function BasicInfo({
         <AlignedText text="Task to be Reviewed" childrenType="text">
           <Typography variant="body1">
             <Link
-              to={`/6a/my-class/${courseId}/${classId}/challenge/${problem?.challenge_id}/${peerReview.target_problem_id}`}
+              to={`/my-class/${courseId}/${classId}/challenge/${problem?.challenge_id}/${peerReview.target_problem_id}`}
               className={classNames.textLink}
             >
               {`${challenge.title} / ${problem.challenge_label}`}

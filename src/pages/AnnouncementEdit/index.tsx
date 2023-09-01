@@ -2,17 +2,14 @@ import { Button, Snackbar, TextField, makeStyles } from '@material-ui/core';
 import moment from 'moment-timezone';
 import { useState } from 'react';
 
-
-
+import AlignedText from '@/components/AlignedText';
+import DateRangePicker from '@/components/DateRangePicker';
 import GeneralLoading from '@/components/GeneralLoading';
-import AlignedText from '@/components/ui/AlignedText';
-import DateRangePicker from '@/components/ui/DateRangePicker';
-import PageTitle from '@/components/ui/PageTitle';
-import SimpleBar from '@/components/ui/SimpleBar';
+import PageTitle from '@/components/PageTitle';
+import SimpleBar from '@/components/SimpleBar';
 import useAnnouncement from '@/lib/announcement/useAnnouncement';
 import useAnnouncements from '@/lib/announcement/useAnnouncements';
 import useUserId from '@/lib/user/useUserId';
-
 
 const useStyles = makeStyles(() => ({
   contentField: {

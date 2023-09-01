@@ -50,8 +50,8 @@ function TeamDetailRoute() {
 export default function TeamRoutes() {
   return (
     <Switch>
-      <Route exact path="/6a/my-class/:courseId/:classId/team" component={TeamListRoute} />
-      <Route path="/6a/my-class/:courseId/:classId/team/:teamId" component={TeamDetailRoute} />
+      <Route exact path="/my-class/:courseId/:classId/team" component={TeamListRoute} />
+      <Route path="/my-class/:courseId/:classId/team/:teamId" component={TeamDetailRoute} />
     </Switch>
   );
 }

@@ -1,7 +1,7 @@
 import { Button, Typography } from '@material-ui/core';
 
-import AlignedText from '@/components/ui/AlignedText';
-import SimpleBar from '@/components/ui/SimpleBar';
+import AlignedText from '@/components/AlignedText';
+import SimpleBar from '@/components/SimpleBar';
 
 interface BasicInfoProp {
   teamName: string;

@@ -2,14 +2,14 @@ import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Icon from '@/components/ui/icon/index';
+import Icon from '@/components/icon/index';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useProblem from '@/lib/problem/useProblem';
 import useChallengeTasks from '@/lib/task/useChallengeTasks';
 
 export default function ProblemSetChallenge({ classNames, history, location, mode, open, onClose }) {
   const { courseId, classId, challengeId, problemId, submissionId } = useParams();
-  const baseURL = '/6a/problem-set';
+  const baseURL = '/problem-set';
 
   const { challenge } = useChallenge(Number(challengeId));
   const { problem } = useProblem(Number(problemId));

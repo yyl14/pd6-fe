@@ -13,8 +13,8 @@ import {
 } from '@material-ui/core';
 import { useState } from 'react';
 
-import AlignedText from '@/components/ui/AlignedText';
-import SimpleBar from '@/components/ui/SimpleBar';
+import AlignedText from '@/components/AlignedText';
+import SimpleBar from '@/components/SimpleBar';
 import useReduxStateShape from '@/hooks/useReduxStateShape';
 import useInstitutes from '@/lib/institute/useInstitutes';
 import useAccountStudentCards from '@/lib/studentCard/useAccountStudentCards';

@@ -28,7 +28,7 @@ function ClassMemberListRoute() {
 export default function MemberRoutes() {
   return (
     <Switch>
-      <Route exact path="/6a/my-class/:courseId/:classId/member" component={ClassMemberListRoute} />
+      <Route exact path="/my-class/:courseId/:classId/member" component={ClassMemberListRoute} />
     </Switch>
   );
 }

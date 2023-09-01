@@ -11,10 +11,10 @@ import {
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import AlignedText from '@/components/ui/AlignedText';
-import CustomTable from '@/components/ui/CustomTable';
-import PageTitle from '@/components/ui/PageTitle';
-import Icon from '@/components/ui/icon/index';
+import AlignedText from '@/components/AlignedText';
+import CustomTable from '@/components/CustomTable';
+import PageTitle from '@/components/PageTitle';
+import Icon from '@/components/icon/index';
 import useCourseClasses from '@/lib/class/useCourseClasses';
 import useCourse from '@/lib/course/useCourse';
 import useCourses from '@/lib/course/useCourses';
@@ -38,13 +38,6 @@ export default function ClassList({ courseId }: { courseId: string }) {
   const [showAddClassDialog, setShowAddClassDialog] = useState(false);
   const [showSnackBar, setShowSnackBar] = useState(false);
 
-  // fetch members under all classes to get member count
-  //   useEffect(() => {
-  //     if (course && !loading.renameClass && !loading.deleteClass && !loading.addClass) {
-  //       courses.byId[courseId].classIds.map((id: string) => dispatch(fetchClassMemberWithAccountReferral(authToken, id)));
-  //     }
-  //   }, [authToken, courseId, course, dispatch, loading.addClass, loading.deleteClass, loading.renameClass]);
-
   const getCourseType = (courseType: string) => {
     switch (courseType) {
       case 'lesson':
@@ -59,7 +52,7 @@ export default function ClassList({ courseId }: { courseId: string }) {
     setShowAddClassDialog(true);
   };
   const onClickSetting = () => {
-    history.push(`/6a/admin/course/course/${courseId}/setting`);
+    history.push(`/admin/course/course/${courseId}/setting`);
   };
 
   const closeSnackbar = () => {
@@ -68,14 +61,17 @@ export default function ClassList({ courseId }: { courseId: string }) {
   const onAddCourse = async (name: string) => {
     try {
       const type = getCourseType(String(addType)).toUpperCase();
-      await addCourse({ name, type: type as CourseType });
+      const { data } = await addCourse({ name, type: type as CourseType });
+
+      history.push(`/admin/course/course/${data.data.id}/setting`);
     } catch {
       setShowSnackBar(true);
     }
   };
   const onAddClass = async (name: string) => {
     try {
-      await add({ course_id: Number(courseId), name });
+      const { data } = await add({ course_id: Number(courseId), name });
+      history.push(`/admin/course/class/${courseId}/${data.data.id}/member`);
     } catch {
       setShowSnackBar(true);
     }
@@ -98,7 +94,7 @@ export default function ClassList({ courseId }: { courseId: string }) {
             ? browse?.map((c) => ({
                 name: c.class_info.name,
                 memberCount: c.member_count,
-                path: `/6a/admin/course/class/${courseId}/${c.class_info.id}/member`,
+                path: `/admin/course/class/${courseId}/${c.class_info.id}/member`,
               }))
             : []
         }
@@ -138,7 +134,7 @@ export default function ClassList({ courseId }: { courseId: string }) {
           <Button
             onClick={() => {
               setAddCourseName('');
-              history.push(`/6a/admin/course/course/${courseId}/class-list`);
+              history.push(`/admin/course/course/${courseId}/class-list`);
             }}
           >
             Cancel
