@@ -231,6 +231,7 @@ export default function TeamMemberEdit({ teamId, isManager, handleBack }: TeamMe
         <SimpleTable
           isEdit={isManager}
           hasDelete={isManager}
+          hasButtons
           buttons={
             isManager ? (
               <Button color="primary" onClick={() => setPopUp(true)}>

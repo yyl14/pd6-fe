@@ -22,6 +22,7 @@ const useProblemAssistingData = (problemId: number) => {
 
   return {
     assistingData: browseAssistingDataSWR.data?.data.data,
+    mutateProblemAssistingData: browseAssistingDataSWR.mutate,
     addAssistingDataUnderProblem: addAssistingDataUnderProblemSWR.trigger,
     downloadAllAssistingData: downloadAllAssistingDataSWR.trigger,
 
