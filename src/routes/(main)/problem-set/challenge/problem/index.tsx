@@ -33,6 +33,7 @@ function ProblemInfoRoute() {
         classId,
         challengeId,
         problemId,
+        isProblemSet: true,
         isLoading: courseIsLoading.read || classIsLoading.read || challengeIsLoading.read || problemIsLoading.read,
       })}
     </Suspense>
