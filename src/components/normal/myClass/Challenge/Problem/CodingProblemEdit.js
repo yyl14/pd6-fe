@@ -17,15 +17,6 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import AlignedText from '../../../../ui/AlignedText';
-import SimpleBar from '../../../../ui/SimpleBar';
-import SimpleTable from '../../../../ui/SimpleTable';
-import Icon from '../../../../ui/icon/index';
-
-import CodeField from '../../../../ui/CodeField';
-import AssistingDataUploadCard from './AssistingDataUploadCard';
-import SampleUploadCard from './SampleUploadCard';
-import TestingDataUploadCard from './TestingDataUploadCard';
 
 import {
   editProblemInfo,
@@ -34,8 +25,15 @@ import {
   saveSamples,
   saveTestcases,
 } from '../../../../../actions/myClass/problem';
-
 import GeneralLoading from '../../../../GeneralLoading';
+import AlignedText from '../../../../ui/AlignedText';
+import CodeField from '../../../../ui/CodeField';
+import SimpleBar from '../../../../ui/SimpleBar';
+import SimpleTable from '../../../../ui/SimpleTable';
+import Icon from '../../../../ui/icon/index';
+import AssistingDataUploadCard from './AssistingDataUploadCard';
+import SampleUploadCard from './SampleUploadCard';
+import TestingDataUploadCard from './TestingDataUploadCard';
 
 const useStyles = makeStyles(() => ({
   sampleArea: {
@@ -383,7 +381,6 @@ export default function CodingProblemEdit({ closeEdit }) {
         },
       };
     }, sampleTableData);
-    // console.log(newTableData);
     setSampleTableData(newTableData);
     setCardSelectedFileS({});
     setHasChange(true);
@@ -970,7 +967,7 @@ ${'\u00A0\u00A0\u00A0\u00A0'}print('Cannot import!')
           </Button>
           <div>
             <Button color="default" onClick={closeEdit}>
-              Don’t Save
+              Don&apos;t Save
             </Button>
             <Button color="primary" onClick={handleSave}>
               Save

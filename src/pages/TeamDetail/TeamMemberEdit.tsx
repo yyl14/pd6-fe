@@ -232,10 +232,12 @@ export default function TeamMemberEdit({ teamId, isManager, handleBack }: TeamMe
           isEdit={isManager}
           hasDelete={isManager}
           buttons={
-            isManager && (
+            isManager ? (
               <Button color="primary" onClick={() => setPopUp(true)}>
                 <Icon.Add />
               </Button>
+            ) : (
+              <></>
             )
           }
           data={tableData}

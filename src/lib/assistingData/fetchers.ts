@@ -10,44 +10,26 @@ export const downloadAllAssistingData = api
   .method('post')
   .create({ as_attachment: true });
 
-export const addAssistingData = async (
-  url: string,
-  {
-    arg,
-  }: {
-    arg: {
-      file: Blob;
-    };
-  },
-) => {
+export const addAssistingDataUnderProblem = async ({ problemId, file }: { problemId: number; file: Blob }) => {
   const formData = new FormData();
-  formData.append('assisting_data', arg.file);
+  formData.append('assisting_data', file);
 
   const options = {
     method: 'POST',
     body: formData,
   };
 
-  await fetchAPI(url, options);
+  await fetchAPI(`/problem/${problemId}/assisting-data`, options);
 };
 
-export const editAssistingData = async (
-  url: string,
-  {
-    arg,
-  }: {
-    arg: {
-      file: Blob;
-    };
-  },
-) => {
+export const editAssistingData = async ({ assistingDataId, file }: { assistingDataId: number; file: Blob }) => {
   const formData = new FormData();
-  formData.append('assisting_data_file', arg.file);
+  formData.append('assisting_data_file', file);
 
   const options = {
-    method: 'POST',
+    method: 'PUT',
     body: formData,
   };
 
-  await fetchAPI(url, options);
+  await fetchAPI(`/assisting-data/${assistingDataId}`, options);
 };

@@ -232,7 +232,6 @@ export default function ChallengeInfo({
         <SimpleTable
           isEdit={false}
           hasDelete={false}
-          buttons={false}
           columns={[
             {
               id: 'challenge_label',

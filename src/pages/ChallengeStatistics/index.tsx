@@ -292,7 +292,6 @@ export default function ChallengeStatistics({
           data={statisticsData}
           isEdit={false}
           hasDelete={false}
-          buttons={false}
           setData={false}
           columns={[
             {

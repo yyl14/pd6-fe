@@ -11,6 +11,9 @@ import PageTitle from '@/components/ui/PageTitle';
 import SimpleBar from '@/components/ui/SimpleBar';
 import SimpleTable from '@/components/ui/SimpleTable';
 import Icon from '@/components/ui/icon/index';
+import getNonSampleTestCaseOrder from '@/function/getNonSampleTestcaseOrder';
+import getSampleTestCaseOrder from '@/function/getSampleTestcaseOrder';
+import getTestCaseLabel from '@/function/getTestcaseLabel';
 import useUserClassRole from '@/hooks/useUserClassRole';
 import useAccount from '@/lib/account/useAccount';
 import useChallenge from '@/lib/challenge/useChallenge';
@@ -21,7 +24,6 @@ import useS3FileContent from '@/lib/s3File/useS3FileContent';
 import useSubmission from '@/lib/submission/useSubmission';
 import useSubmitLangs from '@/lib/submitLang/useSubmitLangs';
 import useProblemTestcase from '@/lib/testcase/useProblemTestcases';
-import { TestcaseSchema } from '@/lib/testcase/useTestcase';
 import useUserClasses from '@/lib/user/useUserClasses';
 
 import useStyles from './useStyles';
@@ -65,36 +67,6 @@ export default function SubmissionDetail({
 
   const isInUserClass = userClasses?.some((userClass) => userClass.class_id === Number(classId)) ?? false;
   const baseUrl = isInUserClass ? 'my-class' : 'problem-set';
-
-  const getSampleTestCaseOrder = (testCase: TestcaseSchema): number => {
-    if (testCase.input_filename !== null) {
-      return Number(testCase.input_filename.slice('sample'.length, testCase.input_filename.indexOf('.')));
-    }
-    if (testCase.output_filename !== null) {
-      return Number(testCase.output_filename.slice('sample'.length, testCase.output_filename.indexOf('.')));
-    }
-    return -1;
-  };
-
-  const getNonSampleTestCaseOrder = (testCase: TestcaseSchema): number => {
-    if (testCase.input_filename !== null) {
-      return Number(testCase.input_filename.slice(0, testCase.input_filename.indexOf('.')));
-    }
-    if (testCase.output_filename !== null) {
-      return Number(testCase.output_filename.slice(0, testCase.output_filename.indexOf('.')));
-    }
-    return -1;
-  };
-
-  const getTestCaseLabel = (testCase: TestcaseSchema): string => {
-    if (testCase.input_filename !== null) {
-      return testCase.input_filename.slice(0, testCase.input_filename.indexOf('.'));
-    }
-    if (testCase.output_filename !== null) {
-      return testCase.output_filename.slice(0, testCase.output_filename.indexOf('.'));
-    }
-    return '';
-  };
 
   const sampleTestCases = testcases?.filter((testcase) => testcase.is_sample);
   const nonSampleTestCases = testcases?.filter((testcase) => !testcase.is_sample);
@@ -225,7 +197,6 @@ export default function SubmissionDetail({
           isEdit={false}
           hasDelete={false}
           setData={() => {}}
-          buttons={<></>}
           columns={[
             {
               id: 'no',

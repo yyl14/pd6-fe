@@ -2,7 +2,7 @@ import { Card, CardActions, CardContent, IconButton, Typography } from '@materia
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { GetDataContent } from '@/pages/ProblemInfo/components';
+import useS3FileContent from '@/lib/s3File/useS3FileContent';
 
 import CopyToClipboardButton from './CopyToClipboardButton';
 import Icon from './icon/index';
@@ -18,9 +18,6 @@ const useStyles = makeStyles({
   defaultCardContent: {
     padding: '4px 30px 20px 30px',
     wordBreak: 'break-word',
-    // '&:last-child': {
-    //  padding: '22.5px 30px 5.5px',
-    // },
   },
   limitedCardContent: {
     height: '333.5px',
@@ -50,6 +47,7 @@ const useStyles = makeStyles({
     WebkitLineClamp: 8,
   },
   title: {
+    display: 'flex',
     marginTop: '18.5px',
   },
   copyIcon: {
@@ -75,18 +73,18 @@ const useStyles = makeStyles({
 });
 
 interface SampleTestcaseAreaProp {
-  input_uuid: string | null;
-  input_fileName: string | null;
-  output_uuid: string | null;
-  output_fileName: string | null;
+  inputUuid: string | null;
+  inputFileName: string | null;
+  outputUuid: string | null;
+  outputFileName: string | null;
   note: string;
 }
 
 export default function SampleTestcaseArea({
-  input_uuid,
-  input_fileName,
-  output_uuid,
-  output_fileName,
+  inputUuid,
+  inputFileName,
+  outputUuid,
+  outputFileName,
   note = '',
 }: SampleTestcaseAreaProp) {
   const className = useStyles();
@@ -98,8 +96,8 @@ export default function SampleTestcaseArea({
   const [expanded, setExpanded] = useState(false);
   const [truncatePosition, setTruncatePosition] = useState('');
 
-  const input = GetDataContent(input_uuid, input_fileName);
-  const output = GetDataContent(output_uuid, output_fileName);
+  const { fileContent: input } = useS3FileContent(inputUuid, inputFileName);
+  const { fileContent: output } = useS3FileContent(outputUuid, outputFileName);
 
   useEffect(() => {
     if (ref?.current?.clientHeight && ref.current.clientHeight > 401.5) {
@@ -116,9 +114,9 @@ export default function SampleTestcaseArea({
             setTruncatePosition('outputContent');
           } else if (inputRef.current.clientHeight + outputRef.current.clientHeight >= 148) {
             setTruncatePosition('noteTitle');
-          } else if ( noteRef?.current?.clientHeight && 
-            inputRef.current.clientHeight + outputRef.current.clientHeight + noteRef.current.clientHeight >=
-            124
+          } else if (
+            noteRef?.current?.clientHeight &&
+            inputRef.current.clientHeight + outputRef.current.clientHeight + noteRef.current.clientHeight >= 124
             // inputRef.current.clientHeight + noteRef.current.clientHeight >= 198
           ) {
             setTruncatePosition('noteContent');
@@ -183,7 +181,7 @@ export default function SampleTestcaseArea({
                   Input
                 </Typography>
                 <div>
-                  <CopyToClipboardButton text={input} className={className.copyIcon}/>
+                  <CopyToClipboardButton text={input} className={className.copyIcon} />
                 </div>
               </div>
               <div className={className.content} ref={inputRef}>
@@ -205,7 +203,7 @@ export default function SampleTestcaseArea({
                   Output
                 </Typography>
                 <div>
-                  <CopyToClipboardButton text={output} className={className.copyIcon}/>
+                  <CopyToClipboardButton text={output} className={className.copyIcon} />
                 </div>
               </div>
               <div className={className.content} ref={outputRef}>
@@ -227,7 +225,7 @@ export default function SampleTestcaseArea({
                   Note
                 </Typography>
                 <div>
-                  <CopyToClipboardButton text={note} className={className.copyIcon}/>
+                  <CopyToClipboardButton text={note} className={className.copyIcon} />
                 </div>
               </div>
               <div className={className.content} ref={noteRef}>

@@ -98,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
   accepted: { color: theme.palette.green.main },
 }));
 
-export default function SimpleTable({ isEdit, hasDelete, buttons, columns, data, setData }) {
+export default function SimpleTable({ isEdit, hasDelete, buttons = <></>, columns, data, setData }) {
   const classes = useStyles();
   const [filterData, setFilterData] = useState(data);
 

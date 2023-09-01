@@ -1,6 +1,8 @@
 import { TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { GetDataContent } from '@/pages/ProblemInfo/components';
+
+import useS3FileContent from '@/lib/s3File/useS3FileContent';
+
 import CopyToClipboardButton from './CopyToClipboardButton';
 
 const useStyles = makeStyles({
@@ -25,11 +27,16 @@ const useStyles = makeStyles({
   },
 });
 
-
-export default function CodeTextArea({ code_uuid, code_fileName}: {code_uuid: string | null; code_fileName: string | null}) {
+export default function CodeTextArea({
+  codeUuid,
+  codeFileName,
+}: {
+  codeUuid: string | null;
+  codeFileName: string | null;
+}) {
   const className = useStyles();
 
-  const code = GetDataContent(code_uuid, code_fileName);
+  const { fileContent: code } = useS3FileContent(codeUuid, codeFileName);
 
   return (
     <div className={className.codeContent}>

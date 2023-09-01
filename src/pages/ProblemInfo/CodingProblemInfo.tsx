@@ -18,8 +18,6 @@ import { MathpixLoader, MathpixMarkdown } from 'mathpix-markdown-it';
 import { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import GeneralLoading from '@/components/GeneralLoading';
-import NoMatch from '@/components/noMatch';
 import AlignedText from '@/components/ui/AlignedText';
 import CodeTextArea from '@/components/ui/CodeTextArea';
 import SampleTestcaseArea from '@/components/ui/SampleTestcaseArea';
@@ -28,11 +26,10 @@ import SimpleTable from '@/components/ui/SimpleTable';
 import Icon from '@/components/ui/icon/index';
 import useReduxStateShape from '@/hooks/useReduxStateShape';
 import useProblemAssistingData from '@/lib/assistingData/useProblemAssistingData';
-import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useProblem from '@/lib/problem/useProblem';
-import useProblemTestcase from '@/lib/testcase/useProblemTestcase';
+import useProblemTestcases from '@/lib/testcase/useProblemTestcases';
 import useUserClasses from '@/lib/user/useUserClasses';
 
 const useStyles = makeStyles(() => ({
@@ -81,24 +78,21 @@ export default function CodingProblemInfo({
   const className = useStyles();
 
   const { accountClasses } = useUserClasses();
-  const { class: Class } = useClass(Number(classId));
+  const { class: classData } = useClass(Number(classId));
   const { course } = useCourse(Number(courseId));
-  const { problem, isLoading: problemLoading } = useProblem(Number(problemId));
+  const { problem } = useProblem(Number(problemId));
   const {
-    browseTestcase: testcases,
+    testcases,
     downloadSampleTestcases,
     downloadNonSampleTestcases,
-    isLoading: testcaseLoading,
     error: testcaseError,
-  } = useProblemTestcase(Number(problemId));
+  } = useProblemTestcases(Number(problemId));
   const {
     assistingData,
     downloadAllAssistingData,
-    isLoading: assistDataLoading,
     error: assistDataError,
   } = useProblemAssistingData(Number(problemId));
   const { deleteProblem, error: problemError } = useProblem(Number(problemId));
-  const { isLoading: challengeLoading } = useChallenge(Number(challengeId));
 
   const [status, setStatus] = useState(true);
   const [role, setRole] = useState('NORMAL');
@@ -110,12 +104,12 @@ export default function CodingProblemInfo({
   const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
 
   const [testcasesById, testcaseIds] = useReduxStateShape(testcases);
-  const [assistingDatasById, assistingDataIds] = useReduxStateShape(assistingData);
+  const [assistingDataById, assistingDataIds] = useReduxStateShape(assistingData);
 
   const handleDelete = async () => {
     try {
-      const res = deleteProblem();
-      if ((await res).ok) {
+      const res = await deleteProblem();
+      if (res.ok) {
         setDeletePopUp(false);
         history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}`);
       }
@@ -127,8 +121,8 @@ export default function CodingProblemInfo({
 
   const downloadAllAssistingFile = async () => {
     try {
-      const res = downloadAllAssistingData({ problem_id: Number(problemId), as_attachment: true });
-      if ((await res).ok) {
+      const res = await downloadAllAssistingData({ problem_id: Number(problemId), as_attachment: true });
+      if (res.ok) {
         setEmailSentPopup(true);
       }
     } catch {
@@ -139,8 +133,8 @@ export default function CodingProblemInfo({
 
   const downloadAllSampleFile = async () => {
     try {
-      const res = downloadSampleTestcases({ problem_id: Number(problemId), as_attachment: true });
-      if ((await res).ok) {
+      const res = await downloadSampleTestcases({ problem_id: Number(problemId), as_attachment: true });
+      if (res.ok) {
         setEmailSentPopup(true);
       }
     } catch {
@@ -151,8 +145,8 @@ export default function CodingProblemInfo({
 
   const downloadAllTestingFile = async () => {
     try {
-      const res = downloadNonSampleTestcases({ problem_id: Number(problemId), as_attachment: true });
-      if ((await res).ok) {
+      const res = await downloadNonSampleTestcases({ problem_id: Number(problemId), as_attachment: true });
+      if (res.ok) {
         setEmailSentPopup(true);
       }
     } catch {
@@ -212,14 +206,6 @@ export default function CodingProblemInfo({
       setRole('GUEST');
     }
   }, [classId, accountClasses]);
-
-  if (problemLoading.read || testcaseLoading.browse || assistDataLoading.browse || challengeLoading.read) {
-    return <GeneralLoading />;
-  }
-
-  if (problem === undefined || Class === undefined || course === undefined) {
-    return <NoMatch />;
-  }
 
   return (
     <>
@@ -308,30 +294,31 @@ export default function CodingProblemInfo({
           ]}
           data={sampleDataIds.map((id) => ({
             id,
-            no: sampleTransToNumber(id),
+            no: testcasesById[id]?.label,
             time_limit: testcasesById[id]?.time_limit,
             memory_limit: testcasesById[id]?.memory_limit,
             note: testcasesById[id]?.note,
           }))}
-          buttons
           setData
         />
         <div className={className.sampleArea}>
           <Grid container spacing={3}>
-            {sampleDataIds.map((id) => (
-              <Grid item xs={6} key={id}>
-                <Typography variant="h6" className={className.sampleName}>
-                  {`Sample ${sampleTransToNumber(id)}`}
-                </Typography>
-                <SampleTestcaseArea
-                  input_uuid={testcasesById[id]?.input_file_uuid}
-                  input_fileName={testcasesById[id]?.input_filename}
-                  output_uuid={testcasesById[id]?.output_file_uuid}
-                  output_fileName={testcasesById[id]?.output_filename}
-                  note={testcasesById[id]?.note}
-                />
-              </Grid>
-            ))}
+            {sampleDataIds
+              .map((id) => testcasesById[id])
+              .map((testcase) => (
+                <Grid item xs={6} key={testcase?.id}>
+                  <Typography variant="h6" className={className.sampleName}>
+                    {`Sample ${testcase.label}`}
+                  </Typography>
+                  <SampleTestcaseArea
+                    inputUuid={testcase?.input_file_uuid}
+                    inputFileName={testcase?.input_filename}
+                    outputUuid={testcase?.output_file_uuid}
+                    outputFileName={testcase?.output_filename}
+                    note={testcase?.note}
+                  />
+                </Grid>
+              ))}
           </Grid>
         </div>
       </SimpleBar>
@@ -403,13 +390,12 @@ export default function CodingProblemInfo({
           ]}
           data={testcaseDataIds.map((id) => ({
             id,
-            no: testcaseTransToNumber(id),
+            no: testcasesById[id]?.label,
             time_limit: testcasesById[id]?.time_limit,
             memory_limit: testcasesById[id]?.memory_limit,
             score: testcasesById[id]?.score,
             note: testcasesById[id]?.note ? testcasesById[id]?.note : '',
           }))}
-          buttons
           setData
         />
       </SimpleBar>
@@ -440,11 +426,10 @@ export default function CodingProblemInfo({
               problem !== undefined
                 ? assistingDataIds.map((id) => ({
                     id,
-                    filename: assistingDatasById[id]?.filename,
+                    filename: assistingDataById[id]?.filename,
                   }))
                 : []
             }
-            buttons
             setData
           />
         </SimpleBar>
@@ -461,7 +446,7 @@ export default function CodingProblemInfo({
             />
           }
         >
-          <CodeTextArea code_uuid={problem?.judge_source?.code_uuid} code_fileName={problem?.judge_source?.filename}/>
+          <CodeTextArea codeUuid={problem?.judge_source?.code_uuid} codeFileName={problem?.judge_source?.filename} />
         </SimpleBar>
       )}
       {role === 'MANAGER' && problem?.reviser_is_enabled && (
@@ -476,7 +461,7 @@ export default function CodingProblemInfo({
             />
           }
         >
-          <CodeTextArea code_uuid={problem?.reviser?.code_uuid} code_fileName={problem?.reviser?.filename}/>
+          <CodeTextArea codeUuid={problem?.reviser?.code_uuid} codeFileName={problem?.reviser?.filename} />
         </SimpleBar>
       )}
       {role === 'MANAGER' && (
@@ -497,7 +482,7 @@ export default function CodingProblemInfo({
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Class" childrenType="text" textColor="secondary">
-            <Typography variant="body1">{`${course.name} ${Class?.name}`}</Typography>
+            <Typography variant="body1">{`${course?.name} ${classData?.name}`}</Typography>
           </AlignedText>
           <AlignedText text="Title" childrenType="text" textColor="secondary">
             <Typography variant="body1">{problem === undefined ? 'error' : problem.title}</Typography>

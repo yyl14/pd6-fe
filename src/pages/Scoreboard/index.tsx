@@ -198,7 +198,6 @@ export default function ScoreboardInfo({
       <SimpleBar title="Scoreboard" noIndent>
         <SimpleTable
           // TODO: remove after refactor SimpleTable
-          buttons={null}
           setData={null}
           //
           isEdit={false}

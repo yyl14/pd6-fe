@@ -11,8 +11,6 @@ import {
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import GeneralLoading from '@/components/GeneralLoading';
-import NoMatch from '@/components/noMatch';
 import AlignedText from '@/components/ui/AlignedText';
 import PageTitle from '@/components/ui/PageTitle';
 import Icon from '@/components/ui/icon/index';
@@ -23,8 +21,8 @@ import useProblem from '@/lib/problem/useProblem';
 import useProblemRejudge from '@/lib/problem/useProblemRejudge';
 import useUserClasses from '@/lib/user/useUserClasses';
 
-import CodingProblemInfo from './CodingProblemInfo';
 import CodingProblemEdit from './CodingProblemEdit';
+import CodingProblemInfo from './CodingProblemInfo';
 
 const useStyles = makeStyles(() => ({
   sampleArea: {
@@ -54,8 +52,8 @@ export default function ProblemInfo({
   const history = useHistory();
   const className = useStyles();
   const { accountClasses } = useUserClasses();
-  const { class: Class, isLoading: classLoading } = useClass(Number(classId));
-  const { course, isLoading: courseLoading } = useCourse(Number(courseId));
+  const { class: classData } = useClass(Number(classId));
+  const { course } = useCourse(Number(courseId));
   const { problem } = useProblem(Number(problemId));
   const { challenge } = useChallenge(Number(challengeId));
   const { rejudgeProblem, error } = useProblemRejudge(Number(problemId));
@@ -65,7 +63,11 @@ export default function ProblemInfo({
   const [rejudgePopUp, setRejudgePopUp] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
 
-  const handleCloseEdit = () => {
+  const handleEditSuccess = () => {
+    setEdit(false);
+  };
+
+  const handleEditCancel = () => {
     setEdit(false);
   };
 
@@ -91,13 +93,6 @@ export default function ProblemInfo({
   useEffect(() => {
     setEdit(false);
   }, [problemId]);
-
-  if (problem === undefined || challenge === undefined || course === undefined || Class === undefined) {
-    if (courseLoading.read || classLoading.read) {
-      return <GeneralLoading />;
-    }
-    return <NoMatch />;
-  }
 
   return (
     <>
@@ -162,7 +157,7 @@ export default function ProblemInfo({
         )
       )}
       {edit ? (
-        <CodingProblemEdit closeEdit={handleCloseEdit} problemId={problemId}/>
+        <CodingProblemEdit handleSuccess={handleEditSuccess} handleCancel={handleEditCancel} problemId={problemId} />
       ) : (
         <CodingProblemInfo courseId={courseId} classId={classId} challengeId={challengeId} problemId={problemId} />
       )}
@@ -172,7 +167,7 @@ export default function ProblemInfo({
         </DialogTitle>
         <DialogContent>
           <AlignedText text="Class" childrenType="text">
-            <Typography>{`${course?.name} ${Class?.name}`}</Typography>
+            <Typography>{`${course?.name} ${classData?.name}`}</Typography>
           </AlignedText>
           <AlignedText text="Title" childrenType="text">
             <Typography>{problem === undefined ? 'error' : problem.title}</Typography>
