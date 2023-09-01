@@ -25,12 +25,12 @@ import SimpleBar from '@/components/SimpleBar';
 import SimpleTable from '@/components/SimpleTable';
 import Icon from '@/components/icon/index';
 import useReduxStateShape from '@/hooks/useReduxStateShape';
+import useUserClassRole from '@/hooks/useUserClassRole';
 import useProblemAssistingData from '@/lib/assistingData/useProblemAssistingData';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useProblem from '@/lib/problem/useProblem';
 import useProblemTestcases from '@/lib/testcase/useProblemTestcases';
-import useUserClasses from '@/lib/user/useUserClasses';
 
 const useStyles = makeStyles(() => ({
   sampleArea: {
@@ -77,7 +77,6 @@ export default function CodingProblemInfo({
   const history = useHistory();
   const className = useStyles();
 
-  const { accountClasses } = useUserClasses();
   const { class: classData } = useClass(Number(classId));
   const { course } = useCourse(Number(courseId));
   const { problem } = useProblem(Number(problemId));
@@ -95,13 +94,14 @@ export default function CodingProblemInfo({
   const { deleteProblem, error: problemError } = useProblem(Number(problemId));
 
   const [status, setStatus] = useState(true);
-  const [role, setRole] = useState('NORMAL');
   const [errorMsg, setErrorMsg] = useState<string | null>('');
   const [sampleDataIds, setSampleDataIds] = useState<(string | number)[]>([]);
   const [testcaseDataIds, setTestcaseDataIds] = useState<(string | number)[]>([]);
   const [deletePopUp, setDeletePopUp] = useState(false);
   const [emailSentPopup, setEmailSentPopup] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
+
+  const role = useUserClassRole(Number(classId));
 
   const [testcasesById, testcaseIds] = useReduxStateShape(testcases);
   const [assistingDataById, assistingDataIds] = useReduxStateShape(assistingData);
@@ -197,14 +197,6 @@ export default function CodingProblemInfo({
     }
   }, [testcasesById, testcaseIds, sampleTransToNumber, testcaseTransToNumber]);
 
-  useEffect(() => {
-    if (accountClasses?.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
-      setRole('MANAGER');
-    } else if (accountClasses?.filter((item) => item.class_id === Number(classId))[0].role === 'GUEST') {
-      setRole('GUEST');
-    }
-  }, [classId, accountClasses]);
-
   return (
     <>
       <SimpleBar title="Title">
@@ -216,7 +208,7 @@ export default function CodingProblemInfo({
           <MathpixLoader>
             {
               // @ts-ignore
-              <MathpixMarkdown text={problem.description} htmlTags />
+              <MathpixMarkdown text={problem.description ?? ''} htmlTags />
             }
           </MathpixLoader>
         }
@@ -227,7 +219,7 @@ export default function CodingProblemInfo({
           <MathpixLoader>
             {
               // @ts-ignore
-              <MathpixMarkdown text={problem.io_description} htmlTags />
+              <MathpixMarkdown text={problem.io_description ?? ''} htmlTags />
             }
           </MathpixLoader>
         }
@@ -244,7 +236,7 @@ export default function CodingProblemInfo({
             <MathpixLoader>
               {
                 // @ts-ignore
-                <MathpixMarkdown text={problem.hint} htmlTags />
+                <MathpixMarkdown text={problem.hint ?? ''} htmlTags />
               }
             </MathpixLoader>
           }

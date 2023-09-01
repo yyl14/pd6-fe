@@ -14,12 +14,12 @@ import { useHistory } from 'react-router-dom';
 import AlignedText from '@/components/AlignedText';
 import PageTitle from '@/components/PageTitle';
 import Icon from '@/components/icon/index';
+import useUserClassRole from '@/hooks/useUserClassRole';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useProblem from '@/lib/problem/useProblem';
 import useProblemRejudge from '@/lib/problem/useProblemRejudge';
-import useUserClasses from '@/lib/user/useUserClasses';
 
 import CodingProblemEdit from './CodingProblemEdit';
 import CodingProblemInfo from './CodingProblemInfo';
@@ -43,23 +43,25 @@ export default function ProblemInfo({
   classId,
   challengeId,
   problemId,
+  isProblemSet = false,
 }: {
   courseId: string;
   classId: string;
   challengeId: string;
   problemId: string;
+  isProblemSet?: boolean;
 }) {
   const history = useHistory();
   const className = useStyles();
-  const { accountClasses } = useUserClasses();
   const { class: classData } = useClass(Number(classId));
   const { course } = useCourse(Number(courseId));
   const { problem } = useProblem(Number(problemId));
   const { challenge } = useChallenge(Number(challengeId));
   const { rejudgeProblem, error } = useProblemRejudge(Number(problemId));
 
+  const role = useUserClassRole(Number(classId));
+
   const [edit, setEdit] = useState(false);
-  const [role, setRole] = useState('NORMAL');
   const [rejudgePopUp, setRejudgePopUp] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
 
@@ -83,14 +85,6 @@ export default function ProblemInfo({
   };
 
   useEffect(() => {
-    if (accountClasses?.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER') {
-      setRole('MANAGER');
-    } else if (accountClasses?.filter((item) => item.class_id === Number(classId))[0].role === 'GUEST') {
-      setRole('GUEST');
-    }
-  }, [classId, accountClasses]);
-
-  useEffect(() => {
     setEdit(false);
   }, [problemId]);
 
@@ -101,7 +95,7 @@ export default function ProblemInfo({
           problem === undefined ? 'error' : problem.challenge_label
         }`}
       />
-      {!edit && role === 'MANAGER' ? (
+      {!edit && role === 'MANAGER' && !isProblemSet ? (
         <div className={className.managerButtons}>
           <div>
             <Button color="default" onClick={() => setEdit(true)}>

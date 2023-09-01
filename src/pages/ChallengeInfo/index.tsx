@@ -206,7 +206,7 @@ export default function ChallengeInfo({
             <MathpixLoader>
               {
                 // @ts-ignore
-                <MathpixMarkdown text={challenge.description ? challenge.description : ''} htmlTags />
+                <MathpixMarkdown text={challenge?.description ?? ''} htmlTags />
               }
             </MathpixLoader>
           )}
