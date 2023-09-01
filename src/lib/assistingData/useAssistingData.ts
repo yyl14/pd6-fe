@@ -1,8 +1,11 @@
 import useSWRMutation from 'swr/mutation';
+import { components } from 'types/schema';
 
 import toSWRMutationFetcher from '@/function/toSWRMutationFetcher';
 
 import { deleteAssistingData, editAssistingData } from './fetchers';
+
+export type AssistingDataSchema = components['schemas']['pydantic__dataclasses__ReadAssistingDataOutput'];
 
 const useAssistingData = () => {
   const editAssistingDataSWR = useSWRMutation(

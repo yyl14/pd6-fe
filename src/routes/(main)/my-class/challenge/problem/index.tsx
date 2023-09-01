@@ -47,7 +47,7 @@ export default function ProblemRoutes() {
         component={CodeSubmissionRoute}
       />
       <Route
-        path="/6a/my-class/:courseId/:classId/challenge/:challengeId/problem/:problemId/my-submission"
+        path="/6a/my-class/:courseId/:classId/chqallenge/:challengeId/problem/:problemId/my-submission"
         component={ProblemMySubmissionRoutes}
       />
       <Route

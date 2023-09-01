@@ -1,4 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@material-ui/core';
+
 import FileUploadArea from '../../../../ui/FileUploadArea';
 
 export default function AssistingDataUploadCard({
@@ -8,9 +9,6 @@ export default function AssistingDataUploadCard({
   setSelectedFile,
   handleTempUpload,
 }) {
-  // const error = useSelector((state) => state.error);
-  // const loading = useSelector((state) => state.loading.myClass.problem);
-
   const handleConfirm = () => {
     handleTempUpload();
   };

@@ -9,6 +9,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { useState } from 'react';
+
 import AlignedText from '../../../../ui/AlignedText';
 import IOFileUploadArea from '../../../../ui/IOFileUploadArea';
 
@@ -40,9 +41,6 @@ export default function SampleUploadCard({
   handleTempUpload,
 }) {
   const classes = useStyles();
-
-  // const error = useSelector((state) => state.error);
-  // const loading = useSelector((state) => state.loading.myClass.problem);
 
   const [time, setTime] = useState(1000);
   const [memory, setMemory] = useState(65535);

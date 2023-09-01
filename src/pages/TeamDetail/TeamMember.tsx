@@ -58,7 +58,6 @@ export default function TeamMember({ isManager, tableData, handleEdit }: TeamMem
           ]}
           isEdit={false}
           hasDelete={false}
-          buttons={null}
           setData={null}
         />
       </SimpleBar>

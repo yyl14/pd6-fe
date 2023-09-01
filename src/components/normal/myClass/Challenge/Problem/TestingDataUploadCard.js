@@ -9,6 +9,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { useState } from 'react';
+
 import AlignedText from '../../../../ui/AlignedText';
 import IOFileUploadArea from '../../../../ui/IOFileUploadArea';
 
@@ -40,9 +41,6 @@ export default function TestingDataUploadCard({
   handleTempUpload,
 }) {
   const classes = useStyles();
-
-  // const error = useSelector((state) => state.error);
-  // const loading = useSelector((state) => state.loading.myClass.problem);
 
   const [time, setTime] = useState(1000);
   const [memory, setMemory] = useState(65535);
@@ -97,12 +95,7 @@ export default function TestingDataUploadCard({
           <AlignedText text="Default Score" childrenType="field">
             <TextField id="score" value={score} onChange={(e) => setScore(e.target.value)} />
           </AlignedText>
-          <IOFileUploadArea
-            text="Testing Data"
-            uploadCase="testcase"
-            selectedFile={selectedFile}
-            setSelectedFile={setSelectedFile}
-          />
+          <IOFileUploadArea uploadCase="testcase" selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancel} color="default">
