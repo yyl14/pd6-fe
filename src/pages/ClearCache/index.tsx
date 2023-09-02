@@ -13,7 +13,10 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
   },
   title: {
-    marginBottom: '8px',
+    marginBottom: '16px',
+  },
+  caption: {
+    textAlign: 'center',
   },
 }));
 
@@ -30,7 +33,7 @@ export default function ClearCache() {
       <Button color="primary" onClick={() => emptyCacheStorage()} type="button">
         Say &quot;Good Puppy&quot; & Start
       </Button>
-      <Typography variant="caption">
+      <Typography variant="caption" className={classNames.caption}>
         This button clears the PDOGS browser cache, ensuring compatibility with the new version of website.
       </Typography>
     </Container>
