@@ -80,6 +80,7 @@ export default function TestcaseUploadCard({
       return [...acc, newTableEntry];
     }, [] as TestcaseEditTableSchema[]);
     onConfirm(filesToUpload);
+    setSelectedFiles([]);
   };
 
   const titleText = isSample ? 'Upload Sample Data' : 'Upload Testing Data';
