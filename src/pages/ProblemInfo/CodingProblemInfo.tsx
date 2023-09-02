@@ -208,7 +208,7 @@ export default function CodingProblemInfo({
           <MathpixLoader>
             {
               // @ts-ignore
-              <MathpixMarkdown text={problem.description ?? ''} htmlTags />
+              <MathpixMarkdown text={problem?.description ?? ''} htmlTags />
             }
           </MathpixLoader>
         }
@@ -219,7 +219,7 @@ export default function CodingProblemInfo({
           <MathpixLoader>
             {
               // @ts-ignore
-              <MathpixMarkdown text={problem.io_description ?? ''} htmlTags />
+              <MathpixMarkdown text={problem?.io_description ?? ''} htmlTags />
             }
           </MathpixLoader>
         }
@@ -236,7 +236,7 @@ export default function CodingProblemInfo({
             <MathpixLoader>
               {
                 // @ts-ignore
-                <MathpixMarkdown text={problem.hint ?? ''} htmlTags />
+                <MathpixMarkdown text={problem?.hint ?? ''} htmlTags />
               }
             </MathpixLoader>
           }
