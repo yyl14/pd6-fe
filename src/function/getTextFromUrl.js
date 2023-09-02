@@ -9,7 +9,6 @@ export default function getTextFromUrl(url) {
         const type = request.getResponseHeader('Content-Type');
         if (type.indexOf('text') !== 1) {
           resolve(request.responseText);
-          // return request.responseText;
         }
       }
     };

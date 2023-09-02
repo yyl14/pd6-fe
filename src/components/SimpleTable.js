@@ -114,28 +114,22 @@ export default function SimpleTable({
     setFilterData(data);
   }, [columns, data]);
 
-  const handleChange = (newItem) => {
-    for (let i = 0; i < data.length; i += 1) {
-      if (data[i].id === newItem.id) {
-        data.splice(i, 1, newItem);
-        break;
-      }
-    }
+  const handleChange = (rowId, newValue) => {
+    const rowIndexToReplace = data?.findIndex((row) => row.id === rowId);
     const newData = [...data];
+    newData.splice(rowIndexToReplace, 1, newValue);
+
     if (isEdit) {
       setData(newData);
     }
     setFilterData(newData);
   };
 
-  const handleDelete = (e, rowID) => {
-    for (let i = 0; i < data.length; i += 1) {
-      if (data[i].id === rowID) {
-        data.splice(i, 1);
-        break;
-      }
-    }
+  const handleDelete = (rowId) => {
+    const rowIndexToDelete = data?.findIndex((row) => row.id === rowId);
     const newData = [...data];
+    newData.splice(rowIndexToDelete, 1);
+
     if (isEdit) {
       setData(newData);
     }
@@ -191,9 +185,7 @@ export default function SimpleTable({
                               multiline={column.editType === 'flexibleInput'}
                               value={value}
                               onChange={(e) => {
-                                const temp = { ...row };
-                                temp[column.id] = e.target.value;
-                                handleChange(temp);
+                                handleChange(row.id, { ...row, [column.id]: e.target.value });
                               }}
                             />
                           </TableCell>
@@ -209,9 +201,7 @@ export default function SimpleTable({
                                 id="value-selection"
                                 value={value}
                                 onChange={(e) => {
-                                  const temp = { ...row };
-                                  temp[column.id] = e.target.value;
-                                  handleChange(temp);
+                                  handleChange(row.id, { ...row, [column.id]: e.target.value });
                                 }}
                               >
                                 {column.dropdownList.map((item) => (
@@ -268,8 +258,8 @@ export default function SimpleTable({
                   >
                     <Icon.Trash
                       className={classes.deleteIcon}
-                      onClick={(e) => {
-                        handleDelete(e, row.id);
+                      onClick={() => {
+                        handleDelete(row.id);
                       }}
                     />
                   </TableCell>
