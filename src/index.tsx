@@ -1,10 +1,10 @@
 import { ClearCacheProvider } from 'react-clear-cache';
 import { CookiesProvider } from 'react-cookie';
 import ReactDOM from 'react-dom';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 
+import App from './App';
 import './index.css';
+import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <ClearCacheProvider duration={60000}>
