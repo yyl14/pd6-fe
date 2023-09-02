@@ -8,7 +8,7 @@ const useViewClassGrades = (classId: number) => {
   const useSWRWithBrowseParams = withDataSchema<ClassGradesSchema>();
 
   const browseClassGradeSWR = useSWRWithBrowseParams(
-    `/class/{class_id}/view/grade`,
+    `/class/${classId}/view/grade`,
     browseClassGrade,
     {
       class_id: classId,

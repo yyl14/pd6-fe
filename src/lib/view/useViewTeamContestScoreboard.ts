@@ -1,8 +1,9 @@
 import useSWR from 'swr';
+
 import { viewTeamContestScoreboard } from './fetchers';
 
 const useViewTeamContestScoreboard = (scoreboardId: number) => {
-  const viewTeamContestScoreboardSWR = useSWR(`/team-contest-scoreboard/view/{scoreboard_id}`, () =>
+  const viewTeamContestScoreboardSWR = useSWR(`/team-contest-scoreboard/view/${scoreboardId}`, () =>
     viewTeamContestScoreboard({ scoreboard_id: scoreboardId }),
   );
 

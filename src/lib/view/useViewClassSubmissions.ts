@@ -8,7 +8,7 @@ const useViewClassSubmissions = (classId: number) => {
   const useSWRWithBrowseParams = withDataSchema<ViewClassSubmissionSchema>();
 
   const browseSubmissionUnderClassSWR = useSWRWithBrowseParams(
-    `/class/{class_id}/view/submission`,
+    `/class/${classId}/view/submission`,
     browseSubmissionUnderClass,
     { class_id: classId },
   );

@@ -8,7 +8,7 @@ import useCourse from '@/lib/course/useCourse';
 import useInstitutes from '@/lib/institute/useInstitutes';
 import useViewClassMembers, { ClassMemberSchema } from '@/lib/view/useViewClassMembers';
 
-import ClassMemberSetting from './classMemberSetting';
+import ClassMemberSetting from './ClassMemberSetting';
 
 export default function ClassMemberList({ courseId, classId }: { courseId: string; classId: string }) {
   const { course } = useCourse(Number(courseId));
