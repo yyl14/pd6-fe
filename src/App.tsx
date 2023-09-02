@@ -1,39 +1,21 @@
 import { CssBaseline } from '@material-ui/core';
 import { MuiThemeProvider } from '@material-ui/core/styles';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect } from 'react';
 import { useClearCacheCtx } from 'react-clear-cache';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 
-import ThemeContext from '@/contexts/ThemeContext';
 import RootRoute from '@/routes';
 import '@/styles/ui.css';
-import theme, { ThemeType } from '@/theme/index';
+import theme from '@/theme/index';
 
 import './App.css';
+import useThemeStore from './stores/themeStore';
 
 function App() {
-  const [selectedTheme, setSelectedTheme] = useState<ThemeType>('pd6New');
-
   const { isLatestVersion, emptyCacheStorage } = useClearCacheCtx();
-
-  const setTheme = useCallback((value: ThemeType) => {
-    setSelectedTheme(value);
-    localStorage.setItem('theme', value);
-  }, []);
-
-  const themeContextValue = useMemo(() => ({ value: selectedTheme, setter: setTheme }), [selectedTheme, setTheme]);
-
-  // Initialize theme selection from local storage
-  useEffect(() => {
-    const themeData = localStorage.getItem('theme') as ThemeType;
-    if (themeData) {
-      setSelectedTheme(themeData);
-    } else {
-      localStorage.setItem('theme', 'pd6New');
-    }
-  }, []);
+  const { theme: selectedTheme } = useThemeStore();
 
   useEffect(() => {
     const url = window.location.origin;
@@ -60,16 +42,14 @@ function App() {
   }
 
   return (
-    <ThemeContext.Provider value={themeContextValue}>
-      <MuiThemeProvider theme={theme[selectedTheme]}>
-        <CssBaseline />
-        <Router>
-          <Switch>
-            <Route component={RootRoute} />
-          </Switch>
-        </Router>
-      </MuiThemeProvider>
-    </ThemeContext.Provider>
+    <MuiThemeProvider theme={selectedTheme ? theme[selectedTheme] : theme.pd6New}>
+      <CssBaseline />
+      <Router>
+        <Switch>
+          <Route component={RootRoute} />
+        </Switch>
+      </Router>
+    </MuiThemeProvider>
   );
 }
 
