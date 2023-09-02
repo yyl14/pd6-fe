@@ -4,12 +4,12 @@ import { MathpixLoader, MathpixMarkdown } from 'mathpix-markdown-it';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 
-import GeneralLoading from '@//components/GeneralLoading';
-import NoMatch from '@//components/noMatch';
 import AlignedText from '@/components/AlignedText';
+import GeneralLoading from '@/components/GeneralLoading';
 import PageTitle from '@/components/PageTitle';
 import SimpleBar from '@/components/SimpleBar';
 import SimpleTable from '@/components/SimpleTable';
+import NoMatch from '@/components/noMatch';
 import useReduxStateShape from '@/hooks/useReduxStateShape';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useProblemScores from '@/lib/problem/useProblemScores';

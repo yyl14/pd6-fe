@@ -19,6 +19,7 @@ import useAccount from '@/lib/account/useAccount';
 
 import BasicInfo from './setting/BasicInfo';
 import BasicInfoEdit from './setting/BasicInfoEdit';
+import AccountDelete from './setting/DeleteAccount';
 import NewPassword from './setting/NewPassword';
 import StudentCards from './setting/StudentCards';
 
@@ -128,6 +129,7 @@ export default function AccountSetting({ accountId, isAdmin }: { accountId: numb
         <StudentCards accountId={accountId} />
       </div>
       <NewPassword accountId={accountId} isAdmin={isAdmin} />
+      {isAdmin && <AccountDelete accountId={accountId} />}
       <Snackbar
         open={showSnackbar}
         autoHideDuration={3000}
