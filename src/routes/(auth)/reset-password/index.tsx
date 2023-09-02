@@ -4,7 +4,7 @@ const ResetPassword = lazy(() => import('@/pages/ResetPassword'));
 
 export default function ResetPasswordRoute() {
   return (
-    <Suspense>
+    <Suspense fallback={<></>}>
       <ResetPassword />
     </Suspense>
   );
