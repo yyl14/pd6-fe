@@ -7,7 +7,7 @@ export type ClassMemberSchema = components['schemas']['ViewClassMember'];
 const useViewClassMembers = (classId: number) => {
   const useSWRWithBrowseParams = withDataSchema<ClassMemberSchema>();
 
-  const browseClassMemberSWR = useSWRWithBrowseParams(`/class/{class_id}/view/member`, browseClassMember, {
+  const browseClassMemberSWR = useSWRWithBrowseParams(`/class/${classId}/view/member`, browseClassMember, {
     class_id: classId,
   });
 

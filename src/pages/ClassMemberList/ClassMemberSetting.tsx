@@ -15,6 +15,7 @@ import { useHistory } from 'react-router-dom';
 
 import useBrowseClassMembersWithAccountReferral from '@/lib/class/useBrowseClassMembersWithAccountReferral';
 import useReplaceClassMembers from '@/lib/class/useReplaceClassMembers';
+import useViewClassMembers from '@/lib/view/useViewClassMembers';
 
 type AccountType = {
   account_referral: string;
@@ -79,6 +80,9 @@ const ClassMemberSetting = ({
   const classNames = useStyles();
   const history = useHistory();
 
+  const {
+    browseClassMembers: { refresh: browseClassMembersRefresh },
+  } = useViewClassMembers(Number(classId));
   const { browseClassMembersWithAccountReferral } = useBrowseClassMembersWithAccountReferral(Number(classId));
   const { replaceClassMembers, error: replaceClassMembersError } = useReplaceClassMembers(Number(classId));
 
@@ -276,6 +280,7 @@ const ClassMemberSetting = ({
         } catch {
           setSubmitError(true);
         }
+        browseClassMembersRefresh();
       }
     } else {
       unblockAndReturn(false);
