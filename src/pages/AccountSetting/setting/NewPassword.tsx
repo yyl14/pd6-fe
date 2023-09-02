@@ -196,7 +196,7 @@ export default function NewPassword({ accountId, isAdmin }: { accountId: number;
               />
             </AlignedText>
             {!isAdmin && (
-              <AlignedText text="Confirmed Password" childrenType="field" maxWidth="lg">
+              <AlignedText text="Confirm New Password" childrenType="field" maxWidth="lg">
                 <TextField
                   value={confirmPassword}
                   variant="outlined"
