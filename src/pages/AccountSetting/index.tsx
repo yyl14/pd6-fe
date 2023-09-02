@@ -1,69 +1,33 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  MenuItem,
-  Select,
-  Snackbar,
-  Typography,
-} from '@material-ui/core';
-import React, { useContext, useEffect, useState } from 'react';
+import { Snackbar } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 
 import GeneralLoading from '@/components/GeneralLoading';
 import PageTitle from '@/components/PageTitle';
 import NoMatch from '@/components/noMatch';
-import ThemeToggleContext from '@/contexts/ThemeContext';
-import useEventListener from '@/hooks/useEventListener';
 import useAccount from '@/lib/account/useAccount';
 
+import AccountDelete from './setting/AccountDelete';
 import BasicInfo from './setting/BasicInfo';
 import BasicInfoEdit from './setting/BasicInfoEdit';
-import AccountDelete from './setting/DeleteAccount';
 import NewPassword from './setting/NewPassword';
 import StudentCards from './setting/StudentCards';
-
-const activeThemeList = [
-  {
-    label: 'PDOGS 6',
-    value: 'pd6New',
-  },
-  {
-    label: 'PDOGS 6 Classic',
-    value: 'pd6',
-  },
-  {
-    label: 'DOGE',
-    value: 'doge',
-  },
-  {
-    label: 'IM Night 2021',
-    value: 'IMNight2021',
-  },
-  {
-    label: 'IM Camp 2021',
-    value: 'IMCamp2021',
-  },
-];
+import ThemeSetting from './setting/ThemeSetting';
 
 export default function AccountSetting({ accountId, isAdmin }: { accountId: number; isAdmin: boolean }) {
-  const { value: selectedTheme } = useContext(ThemeToggleContext);
-  const [selectedThemes, setSelectedThemes] = useState(selectedTheme);
   const [editBasicInfo, setEditBasicInfo] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
-  const [showThemeSelector, setShowThemeSelector] = useState(false);
   const [message, setMessage] = useState('');
 
   const { account, error, isLoading: loading } = useAccount(accountId);
 
   useEffect(() => {
-    if (account?.role === 'GUEST') {
+    if (account?.role === 'GUEST' && !isAdmin) {
       setMessage('Please verify your institute email to activate your PDOGS account.');
       setShowSnackbar(true);
     } else {
       setShowSnackbar(false);
     }
-  }, [account?.role]);
+  }, [account?.role, isAdmin]);
 
   useEffect(() => {
     if (!loading.editAccount && error.editAccount) {
@@ -75,14 +39,6 @@ export default function AccountSetting({ accountId, isAdmin }: { accountId: numb
       setShowSnackbar(true);
     }
   }, [error.editAccount, loading.editAccount]);
-
-  function keydownHandler({ key }: { key: string }) {
-    if (key === '/') {
-      setShowThemeSelector((state) => !state);
-    }
-  }
-
-  useEventListener('keydown', keydownHandler);
 
   if (account === undefined) {
     if (loading.account) {
@@ -130,6 +86,8 @@ export default function AccountSetting({ accountId, isAdmin }: { accountId: numb
       </div>
       <NewPassword accountId={accountId} isAdmin={isAdmin} />
       {isAdmin && <AccountDelete accountId={accountId} />}
+      {!isAdmin && <ThemeSetting />}
+
       <Snackbar
         open={showSnackbar}
         autoHideDuration={3000}
@@ -139,25 +97,6 @@ export default function AccountSetting({ accountId, isAdmin }: { accountId: numb
         }}
         message={message}
       />
-      <Dialog open={showThemeSelector} onClose={() => setShowThemeSelector(false)}>
-        <DialogTitle>
-          <Typography variant="h4">Wow, super secret option! 🐕</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <FormControl variant="outlined">
-            <Select
-              value={selectedThemes}
-              onChange={(e) => setSelectedThemes(e.target.value as React.SetStateAction<string>)}
-            >
-              {activeThemeList.map((item) => (
-                <MenuItem key={item.value} value={item.value}>
-                  {item.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }
