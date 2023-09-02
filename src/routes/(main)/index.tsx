@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
 
+import GeneralLoading from '@/components/GeneralLoading';
 import Icon from '@/components/icon';
 import NoMatch from '@/components/noMatch';
 import useAuthMiddleware from '@/middleware/useAuthMiddleware';
@@ -71,6 +72,7 @@ export default function MainRoutes() {
         <Route path="/about" component={AboutRoutes} />
         <Route path="/my-class" component={MyClassRoutes} />
         <Route path="/problem-set" component={ProblemSetRoutes} />
+        <Route exact path="/" component={GeneralLoading} />
         <Route component={NoMatch} />
       </Switch>
     </Layout>
