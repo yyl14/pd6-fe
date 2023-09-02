@@ -77,6 +77,7 @@ const ClassMemberSetting = ({
   backToMemberList: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const classNames = useStyles();
+  const history = useHistory();
 
   const { browseClassMembersWithAccountReferral } = useBrowseClassMembersWithAccountReferral(Number(classId));
   const { replaceClassMembers, error: replaceClassMembersError } = useReplaceClassMembers(Number(classId));
@@ -84,9 +85,12 @@ const ClassMemberSetting = ({
   const [TA, setTA] = useState('');
   const [student, setStudent] = useState('');
   const [guest, setGuest] = useState('');
+
+  const [hasInitialized, setHasInitialized] = useState(false);
   const [TAChanged, setTAChanged] = useState(false);
   const [studentChanged, setStudentChanged] = useState(false);
   const [guestChanged, setGuestChanged] = useState(false);
+
   const [duplicateList, setDuplicateList] = useState<string[]>([]);
   const [errorDetectedList, setErrorDetectedList] = useState<string[]>([]);
   const [submitError, setSubmitError] = useState(false);
@@ -95,7 +99,6 @@ const ClassMemberSetting = ({
   const [showErrorDetectedDialog, setShowErrorDetectedDialog] = useState(false);
   const [targetPath, setTargetPath] = useState('');
   const unblockHandle = useRef<() => void>();
-  const history = useHistory();
 
   // unblock user leaving current page through header and sidebar links
   // and push to original target location if necessary
@@ -118,7 +121,7 @@ const ClassMemberSetting = ({
 
   useEffect(() => {
     const classMembers = browseClassMembersWithAccountReferral;
-    if (classMembers !== undefined) {
+    if (!hasInitialized && classMembers !== undefined) {
       setTA(
         classMembers
           .filter((item) => item.member_role === 'MANAGER')
@@ -137,23 +140,22 @@ const ClassMemberSetting = ({
           .map((member) => member.member_referral)
           .join('\n'),
       );
+      setHasInitialized(true);
     }
-  }, [browseClassMembersWithAccountReferral]);
+  }, [hasInitialized, browseClassMembersWithAccountReferral]);
 
   // block user leaving current page through header and sidebar links (if contents have been changed)
   useEffect(() => {
+    // eslint-disable-next-line consistent-return
     const unblock = history.block((location) => {
       if (TAChanged || studentChanged || guestChanged) {
         setTargetPath(location.pathname);
         setShowUnsavedChangesDialog(true);
         return false;
       }
-      return '';
     });
 
-    return () => {
-      unblock();
-    };
+    unblockHandle.current = unblock;
   }, [targetPath, TAChanged, guestChanged, history, studentChanged]);
 
   // block user leaving current page through browser close button and refresh button

@@ -21,7 +21,6 @@ export default function Account({ classes, history, location, mode, open, onClos
   const [arrow, setArrow] = useState(null);
 
   useEffect(() => {
-    // console.log(instituteId, accountId);
     const goBackToInstitute = () => {
       history.push(`${baseURL}/institute`);
     };

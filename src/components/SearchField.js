@@ -3,7 +3,6 @@ import { FormControl, MenuItem, Select, TextField } from '@material-ui/core';
 import MultiSelect from './MultiSelect';
 
 const SearchField = ({ classes, tempFilterValue, setTempFilterValue, filterConfig, filteringIndex, onSearch }) => {
-  // console.log(filterConfig[filteringIndex]);
   switch (filterConfig[filteringIndex].type) {
     case 'TEXT': {
       return (
