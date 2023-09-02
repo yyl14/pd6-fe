@@ -26,6 +26,7 @@ export default function AssistingDataUploadCard({ show, onClose, onConfirm }: As
       filename: file.name,
     }));
     onConfirm(filesToUpload);
+    setSelectedFiles([]);
   };
 
   return (
