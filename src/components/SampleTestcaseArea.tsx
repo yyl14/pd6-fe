@@ -175,7 +175,7 @@ export default function SampleTestcaseArea({
           className={`${handleExpand(showExpandArrow, expanded)}
           ${handleTruncate(truncatePosition)} ${handleHideTextOverflowCardContent(truncatePosition, expanded)}`}
         >
-          {input && (
+          {input !== undefined && input !== null && (
             <>
               <div className={className.title}>
                 <Typography variant="h6" display="inline">
@@ -200,7 +200,7 @@ export default function SampleTestcaseArea({
               </div>
             </>
           )}
-          {output && (
+          {output !== undefined && output !== null && (
             <>
               <div className={className.title}>
                 <Typography variant="h6" display="inline">

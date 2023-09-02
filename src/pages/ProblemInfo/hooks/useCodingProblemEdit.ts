@@ -251,9 +251,18 @@ const useCodingProblemEdit = (problemId: number) => {
 
     const editTestcasePromise = Promise.all(
       testcaseTableDataToUpdate.map(async (datum) => {
-        const { id, is_disabled, time_limit, memory_limit, input_filename, input_file, output_filename, output_file } =
-          datum;
-        await editTestcase({ testcase_id: id as number, is_disabled, time_limit, memory_limit });
+        const {
+          id,
+          is_disabled,
+          time_limit,
+          memory_limit,
+          note,
+          input_filename,
+          input_file,
+          output_filename,
+          output_file,
+        } = datum;
+        await editTestcase({ testcase_id: id as number, note, is_disabled, time_limit, memory_limit });
 
         // Add testcase input / output data
         await Promise.all([
