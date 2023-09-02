@@ -159,7 +159,6 @@ export default function ResetPassword() {
               type={showPassword2 ? 'text' : 'password'}
               label="Confirm New Password"
               className={`auth-form-input ${classNames.authTextFields}`}
-              // placeholder="Confirmed Password"
               value={password2}
               helperText={errorText}
               onChange={(e) => handleChange(e)}
