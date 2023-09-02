@@ -22,11 +22,12 @@ const useMyClassMiddleware = () => {
       if (userClasses) {
         if (userClasses.length === 0) {
           history.push('/problem-set');
+        } else {
+          const sortedClasses = userClasses.sort(
+            (a, b) => b.class_name.localeCompare(a.class_name) || b.course_name.localeCompare(a.course_name),
+          );
+          history.push(`/my-class/${sortedClasses[0].course_id}/${sortedClasses[0].class_id}/challenge`);
         }
-        const sortedClasses = userClasses.sort(
-          (a, b) => b.class_name.localeCompare(a.class_name) || b.course_name.localeCompare(a.course_name),
-        );
-        history.push(`/my-class/${sortedClasses[0].course_id}/${sortedClasses[0].class_id}/challenge`);
       }
     }
   }, [history, location.pathname, userClasses]);
