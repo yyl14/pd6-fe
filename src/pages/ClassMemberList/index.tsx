@@ -1,4 +1,6 @@
 import { Button } from '@material-ui/core';
+import lowerCase from 'lodash/lowerCase';
+import startCase from 'lodash/startCase';
 import { useState } from 'react';
 
 import BrowsingTable from '@/components/BrowsingTable';
@@ -125,7 +127,7 @@ export default function ClassMemberList({ courseId, classId }: { courseId: strin
               'Student ID': student_id,
               'Real Name': real_name,
               Institute: abbreviated_name,
-              Role: role,
+              Role: startCase(lowerCase(role)),
             })}
             isLoading={classMemberIsLoading.browse}
             error={classMemberError.browse}
