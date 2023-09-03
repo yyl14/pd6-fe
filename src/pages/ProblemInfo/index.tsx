@@ -88,6 +88,8 @@ export default function ProblemInfo({
     setEdit(false);
   }, [problemId]);
 
+  const baseUrl = isProblemSet ? 'problem-set' : 'my-class';
+
   return (
     <>
       <PageTitle
@@ -111,7 +113,7 @@ export default function ProblemInfo({
               color="primary"
               onClick={() =>
                 history.push(
-                  `/my-class/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/my-submission`,
+                  `/${baseUrl}/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/my-submission`,
                 )
               }
               startIcon={<Icon.HistoryIcon />}
@@ -122,7 +124,7 @@ export default function ProblemInfo({
               color="primary"
               onClick={() =>
                 history.push(
-                  `/my-class/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/code-submission`,
+                  `/${baseUrl}/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/code-submission`,
                 )
               }
             >
@@ -138,7 +140,7 @@ export default function ProblemInfo({
               color="primary"
               onClick={() =>
                 history.push(
-                  `/my-class/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/my-submission`,
+                  `/${baseUrl}/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/my-submission`,
                 )
               }
               startIcon={<Icon.HistoryIcon />}
@@ -149,7 +151,7 @@ export default function ProblemInfo({
               color="primary"
               onClick={() =>
                 history.push(
-                  `/my-class/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/code-submission`,
+                  `/${baseUrl}/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/code-submission`,
                 )
               }
             >
