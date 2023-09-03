@@ -3,6 +3,7 @@ import { Route, Switch, useParams } from 'react-router-dom';
 
 import GeneralLoading from '@/components/GeneralLoading';
 import withConditionalRender from '@/components/hoc/withConditionalRender';
+import useQuery from '@/hooks/useQuery';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
@@ -30,31 +31,44 @@ function SubmissionListRoute() {
 }
 
 function SubmissionDetailRoute() {
-  const { courseId, classId, challengeId, problemId, submissionId } = useParams<{
+  const { courseId, classId, submissionId } = useParams<{
     courseId: string;
     classId: string;
-    challengeId: string;
-    problemId: string;
     submissionId: string;
   }>();
+
+  const query = useQuery();
+  const challengeId = query.get('challengeId');
+  const problemId = query.get('problemId');
+
   const { isLoading: courseLoading, error: courseError } = useCourse(Number(courseId));
   const { isLoading: classLoading, error: classError } = useClass(Number(classId));
-  const { isLoading: challengeLoading, error: challengeError } = useChallenge(Number(challengeId));
-  const { isLoading: problemLoading, error: problemError } = useProblem(Number(problemId));
-  const { isLoading: submissionLoading, error: submissionError } = useSubmission(Number(submissionId));
+  const { submission, isLoading: submissionLoading, error: submissionError } = useSubmission(Number(submissionId));
+  const {
+    problem,
+    isLoading: problemLoading,
+    error: problemError,
+  } = useProblem(problemId ? Number(problemId) : submission?.problem_id);
+  const {
+    challenge,
+    isLoading: challengeLoading,
+    error: challengeError,
+  } = useChallenge(challengeId ? Number(challengeId) : problem?.challenge_id);
 
   return (
     <Suspense fallback={<GeneralLoading />}>
       {withConditionalRender(SubmissionDetail)({
         courseId,
         classId,
-        challengeId,
-        problemId,
+        challengeId: challengeId || String(challenge?.id),
+        problemId: problemId || String(problem?.id),
         submissionId,
         isLoading:
           courseLoading.read ||
           classLoading.read ||
+          !challenge ||
           challengeLoading.read ||
+          !problem ||
           problemLoading.read ||
           submissionLoading.read,
         noMatch:
@@ -67,10 +81,7 @@ function SubmissionDetailRoute() {
 export default function SubmissionRoutes() {
   return (
     <Switch>
-      <Route
-        path="/my-class/:courseId/:classId/submission/:challengeId/:problemId/:submissionId"
-        component={SubmissionDetailRoute}
-      />
+      <Route path="/my-class/:courseId/:classId/submission/:submissionId" component={SubmissionDetailRoute} />
       <Route path="/my-class/:courseId/:classId/submission" component={SubmissionListRoute} />
     </Switch>
   );
