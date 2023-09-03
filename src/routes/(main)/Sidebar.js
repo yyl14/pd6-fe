@@ -382,7 +382,7 @@ export default function Sidebar({ open, onClose }) {
       <Route exact path="/my-class/:courseId/:classId/submission">
         <MyClass classNames={classes} history={history} location={location} open={open} onClose={onClose} mode="main" />
       </Route>
-      <Route path="/my-class/:courseId/:classId/submission/:challengeId/:problemId/:submissionId">
+      <Route path="/my-class/:courseId/:classId/submission/:submissionId">
         <Submission
           classNames={classes}
           history={history}

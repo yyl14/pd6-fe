@@ -100,7 +100,7 @@ export default function ScoreboardInfo({
                   ...acc,
                   [`problem-${curr.problem_id}-score`]: curr.score,
                   ...(curr.submission_id && {
-                    [`problem-${curr.problem_id}-submission`]: `/my-class/${courseId}/${classId}/submission/${curr.submission_id}`,
+                    [`problem-${curr.problem_id}-submission`]: `/my-class/${courseId}/${classId}/submission/${curr.submission_id}?problemId=${curr.problem_id}`,
                   }),
                 }),
                 {

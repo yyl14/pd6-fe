@@ -176,7 +176,7 @@ export default function ChallengeStatistics({
             memberChallengeDetail[`problem-${p.problem_id}`] = p.judgment.score;
             memberChallengeDetail[
               `problem-${p.problem_id}-link`
-            ] = `${window.location.origin}/my-class/${courseId}/${classId}/submission/${p.judgment.submission_id}`;
+            ] = `${window.location.origin}/my-class/${courseId}/${classId}/submission/${p.judgment.submission_id}?problemId=${p?.problem_id}`;
             return p;
           });
         }
