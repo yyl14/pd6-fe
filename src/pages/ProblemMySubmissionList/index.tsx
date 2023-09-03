@@ -181,9 +181,9 @@ export default function ProblemMySubmission({
           id: String(submission_id),
           'Submission ID': String(submission_id),
           Status: verdict ? startCase(toLower(verdict)) : 'Waiting for judge',
-          Score: submissionScore ? String(submissionScore) : '',
-          'Used Time (ms)': total_time ? String(total_time) : '',
-          'Used Memory (kb)': max_memory ? String(max_memory) : '',
+          Score: submissionScore !== null ? String(submissionScore) : '',
+          'Used Time (ms)': total_time !== null ? String(total_time) : '',
+          'Used Memory (kb)': max_memory !== null ? String(max_memory) : '',
           'Submit Time': submit_time ? moment(submit_time).format('YYYY-MM-DD, HH:mm:ss') : '',
           link: `/${baseUrl}/${courseId}/${classId}/challenge/${challengeId}/problem/${problemId}/my-submission/${submission_id}`,
         })}
