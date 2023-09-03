@@ -19,10 +19,10 @@ import BrowsingTable from '@/components/BrowsingTable';
 import DateRangePicker from '@/components/DateRangePicker';
 import PageTitle from '@/components/PageTitle';
 import Icon from '@/components/icon/index';
+import useUserClassRole from '@/hooks/useUserClassRole';
 import useChallengesUnderClass, { ChallengeDataSchema } from '@/lib/challenge/useChallengesUnderClass';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
-import useUserClasses from '@/lib/user/useUserClasses';
 
 const useStyles = makeStyles((theme) => ({
   textField: {
@@ -55,8 +55,6 @@ export default function ChallengeList({ courseId, classId }: { courseId: string;
   const { course } = useCourse(Number(courseId));
   const { class: classData } = useClass(Number(classId));
 
-  const { accountClasses } = useUserClasses();
-
   const {
     browseChallengeUnderClass,
     addChallengeUnderClass,
@@ -79,7 +77,9 @@ export default function ChallengeList({ courseId, classId }: { courseId: string;
     showTime: 'On End Time',
   });
   const [disabled, setDisabled] = useState(true);
-  const isManager = accountClasses?.filter((item) => item.class_id === Number(classId))[0].role === 'MANAGER';
+  const userClassRole = useUserClassRole(Number(classId));
+
+  const isManager = userClassRole === 'MANAGER';
 
   const getStatus = (startTime: string, endTime: string) => {
     const currentTime = moment();
