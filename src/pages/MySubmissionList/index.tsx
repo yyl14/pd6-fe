@@ -52,7 +52,7 @@ export default function MySubmission() {
             type: 'link',
             minWidth: 150,
             formatLink: (datum) =>
-              `/${isUserClass(datum.class_id) ? 'problem-set' : 'my-class'}/${datum.course_id}/${
+              `/${isUserClass(datum.class_id) ? 'my-class' : 'problem-set'}/${datum.course_id}/${
                 datum.class_id
               }/challenge`,
           },
@@ -68,7 +68,7 @@ export default function MySubmission() {
             type: 'link',
             minWidth: 150,
             formatLink: (datum) =>
-              `/${isUserClass(datum.class_id) ? 'problem-set' : 'my-class'}/${datum.course_id}/${
+              `/${isUserClass(datum.class_id) ? 'my-class' : 'problem-set'}/${datum.course_id}/${
                 datum.class_id
               }/challenge/${datum.challenge_id}/${datum.problem_id}`,
           },
