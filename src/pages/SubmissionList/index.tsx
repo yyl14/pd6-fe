@@ -209,7 +209,7 @@ export default function SubmissionList({ courseId, classId }: { courseId: string
           Challenge: challenge_title,
           Problem: challenge_label,
           Status: verdict ? startCase(toLower(verdict)) : 'Waiting for judge',
-          Time: moment(submit_time).format('YYYY-MM-DD, HH:mm:ss'),
+          Time: submit_time ? moment(submit_time).format('YYYY-MM-DD, HH:mm:ss') : '',
           link: `/my-class/${courseId}/${classId}/submission/${challenge_id}/${problem_id}/${submission_id}`,
         })}
         isLoading={viewClassSubmissionsIsLoading.browse}
