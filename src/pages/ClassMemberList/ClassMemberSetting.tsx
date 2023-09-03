@@ -112,6 +112,7 @@ const ClassMemberSetting = ({
       unblockHandle.current();
       setShowDuplicateIdentityDialog(false);
       setShowErrorDetectedDialog(false);
+      setHasInitialized(false);
       if (needRedirection) {
         history.push(targetPath);
       }
@@ -208,11 +209,13 @@ const ClassMemberSetting = ({
     if (TAChanged || studentChanged || guestChanged) {
       setShowUnsavedChangesDialog(true);
     } else {
+      setHasInitialized(false);
       unblockAndReturn(false);
     }
   };
   const handleUnsave = () => {
     setShowUnsavedChangesDialog(false);
+    setHasInitialized(false);
     unblockAndReturn(true);
   };
   const handleSave = async (saveWithDialog: boolean) => {
@@ -281,6 +284,7 @@ const ClassMemberSetting = ({
           setSubmitError(true);
         }
         browseClassMembersRefresh();
+        setHasInitialized(false);
       }
     } else {
       unblockAndReturn(false);
