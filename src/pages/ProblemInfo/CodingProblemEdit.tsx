@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -27,6 +28,7 @@ import TestcaseUploadCard from './components/TestcaseUploadCard';
 import compareAssistingDataTableData from './functions/compareAssistingDataTableData';
 import compareTestcaseTableData from './functions/compareTestcaseTableData';
 import useCodingProblemEdit from './hooks/useCodingProblemEdit';
+import useUploadFailedPopup from './hooks/useUploadFailedPopup';
 import {
   AssistingDataEditTableSchema,
   JudgeLanguageType,
@@ -150,9 +152,6 @@ export default function CodingProblemEdit({
     setShowNonSampleTestcaseUploadPopup,
     setShowAssistingDataUploadPopup,
     setShowWarningPopup,
-    showUploadFailPopup,
-    setShowUploadFailPopup,
-    uploadFailedFilenames,
 
     inputsDisabled,
     saveButtonDisabled,
@@ -160,10 +159,23 @@ export default function CodingProblemEdit({
     setHasChanges,
   } = useCodingProblemEdit(Number(problemId));
 
+  const { showUploadFailPopup, setShowUploadFailPopup, uploadFailures, setUploadFailures } = useUploadFailedPopup();
+
   /** Handlers */
   const handleClickSave = async () => {
-    await Promise.all([saveProblemMetaData(), saveTestcaseData(), saveAssistingData()]);
-    if (uploadFailedFilenames.length > 0) {
+    const [, testcaseFileFailures, assistingDataFileFailures] = await Promise.allSettled([
+      saveProblemMetaData(),
+      saveTestcaseData(),
+      saveAssistingData(),
+    ]);
+
+    const uploadFailuresValue = [
+      ...(testcaseFileFailures.status === 'fulfilled' ? testcaseFileFailures.value : []),
+      ...(assistingDataFileFailures.status === 'fulfilled' ? assistingDataFileFailures.value : []),
+    ];
+
+    if (uploadFailuresValue.length > 0) {
+      setUploadFailures(uploadFailuresValue);
       setShowUploadFailPopup(true);
     } else {
       handleSuccess();
@@ -625,7 +637,7 @@ ${'\u00A0\u00A0\u00A0\u00A0'}print('Cannot import!')
           </Button>
           <div>
             <Button color="default" onClick={handleCancel}>
-              Don’t Save
+              Don&apos;t Save
             </Button>
             <Button color="primary" onClick={handleClickSave}>
               Save
@@ -645,11 +657,12 @@ ${'\u00A0\u00A0\u00A0\u00A0'}print('Cannot import!')
           <Typography variant="h4">Upload Fail</Typography>
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body2">File below was failed to be uploaded:</Typography>
-          {uploadFailedFilenames.map((filename) => (
-            <Typography variant="body2" key={filename}>
-              {filename}
-            </Typography>
+          <Typography variant="body1">Files below fail to be uploaded:</Typography>
+          {uploadFailures.map(({ filename, reason }) => (
+            <Box marginTop={1} key={filename}>
+              <Typography variant="body2">{filename}</Typography>
+              <Typography variant="caption">{reason.toString()}</Typography>
+            </Box>
           ))}
         </DialogContent>
         <DialogActions className={className.dialogButtons}>

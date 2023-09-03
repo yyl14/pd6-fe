@@ -32,7 +32,7 @@ export const uploadTestcaseInputData = async ({ testcaseId, file }: { testcaseId
     body: formData,
   };
 
-  await fetchAPI(`/testcase/${testcaseId}/input-data`, options);
+  return fetchAPI(`/testcase/${testcaseId}/input-data`, options);
 };
 
 export const uploadTestcaseOutputData = async ({ testcaseId, file }: { testcaseId: number; file: Blob }) => {
@@ -44,5 +44,5 @@ export const uploadTestcaseOutputData = async ({ testcaseId, file }: { testcaseI
     body: formData,
   };
 
-  await fetchAPI(`/testcase/${testcaseId}/output-data`, options);
+  return fetchAPI(`/testcase/${testcaseId}/output-data`, options);
 };

@@ -13,32 +13,20 @@ import useCustomizedJudgeEditFields from './useCustomizedJudgeEditFields';
 import useProblemMetaEditFields from './useProblemMetaEditFields';
 import useReviserEditFields from './useReviserEditFields';
 import useTestcaseEditTables from './useTestcaseEditTables';
-import useUploadFailedPopup from './useUploadFailedPopup';
+import { UploadFailureType } from './useUploadFailedPopup';
 
 /** Component logic for CodingProblemEdit */
 const useCodingProblemEdit = (problemId: number) => {
   /** Data */
   const { editProblem, isLoading: problemIsLoading } = useProblem(problemId);
-  const {
-    testcases: originalTestcases,
-    isLoading: problemTestcasesIsLoading,
-    mutateProblemTestcases,
-    addTestcase,
-  } = useProblemTestcases(problemId);
-  const {
-    editTestcase,
-    deleteTestcase,
-    uploadInputData,
-    uploadOutputData,
-    isLoading: testcaseIsLoading,
-  } = useTestcase();
+  const { testcases: originalTestcases, mutateProblemTestcases, addTestcase } = useProblemTestcases(problemId);
+  const { editTestcase, deleteTestcase, uploadInputData, uploadOutputData } = useTestcase();
   const {
     assistingData: originalAssistingData,
-    isLoading: problemAssistingDataIsLoading,
     addAssistingDataUnderProblem,
     mutateProblemAssistingData,
   } = useProblemAssistingData(Number(problemId));
-  const { deleteAssistingData, editAssistingData, isLoading: assistingDataIsLoading } = useAssistingData();
+  const { deleteAssistingData, editAssistingData } = useAssistingData();
 
   /** States */
   const {
@@ -96,21 +84,11 @@ const useCodingProblemEdit = (problemId: number) => {
   const [showAssistingDataUploadPopup, setShowAssistingDataUploadPopup] = useState(false);
   const [showWarningPopup, setShowWarningPopup] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
-  const { showUploadFailPopup, setShowUploadFailPopup, uploadFailedFilenames, addUploadFailedFilename } =
-    useUploadFailedPopup();
 
-  const editIsLoading =
-    problemIsLoading.edit ||
-    problemTestcasesIsLoading.add ||
-    testcaseIsLoading.editTestcase ||
-    testcaseIsLoading.deleteTestcase ||
-    testcaseIsLoading.uploadInputData ||
-    testcaseIsLoading.uploadOutputData ||
-    testcaseIsLoading.deleteInputData ||
-    testcaseIsLoading.deleteOutputData ||
-    problemAssistingDataIsLoading.add ||
-    assistingDataIsLoading.edit ||
-    assistingDataIsLoading.delete;
+  const [saveTestcaseIsLoading, setSaveTestcaseIsLoading] = useState(false);
+  const [saveAssistingDataIsLoading, setSaveAssistingDataIsLoading] = useState(false);
+
+  const editIsLoading = problemIsLoading.edit || saveTestcaseIsLoading || saveAssistingDataIsLoading;
 
   const inputsDisabled =
     editIsLoading ||
@@ -173,8 +151,10 @@ const useCodingProblemEdit = (problemId: number) => {
 
   const saveTestcaseData = async () => {
     if (!originalTestcases) {
-      return;
+      return [];
     }
+    setSaveTestcaseIsLoading(true);
+
     /**
      * NOTE:
      * `testcaseTableDataToUpdate` will only include testcases that has its metadata
@@ -194,8 +174,9 @@ const useCodingProblemEdit = (problemId: number) => {
         (datum.is_disabled ||
           datum.time_limit !== originalTestcase.time_limit ||
           datum.memory_limit !== originalTestcase.memory_limit ||
+          datum.score !== originalTestcase.score ||
           datum.note !== originalTestcase.note ||
-          /** NOTE: File data in table data indicates file changes. */
+          /** NOTE: File data present in table data indicates file changes. */
           datum.input_file ||
           datum.output_file)
       );
@@ -234,65 +215,90 @@ const useCodingProblemEdit = (problemId: number) => {
         const addedTestcaseId = addTestcaseRes.data.data.id;
 
         // Add testcase input / output data
-        await Promise.all([
-          input_file
-            ? uploadInputData({ testcaseId: addedTestcaseId, file: input_file }).catch(() => {
-                addUploadFailedFilename(input_filename);
-              })
-            : Promise.resolve(),
-          output_file
-            ? uploadOutputData({ testcaseId: addedTestcaseId, file: output_file }).catch(() => {
-                addUploadFailedFilename(output_filename);
-              })
-            : Promise.resolve(),
+        const filesRes = await Promise.allSettled([
+          input_file ? uploadInputData({ testcaseId: addedTestcaseId, file: input_file }) : Promise.resolve(),
+          output_file ? uploadOutputData({ testcaseId: addedTestcaseId, file: output_file }) : Promise.resolve(),
+        ]).then(([inputRes, outputRes]) => [
+          ...(inputRes.status === 'rejected' ? [{ filename: input_filename, reason: inputRes.reason }] : []),
+          ...(outputRes.status === 'rejected' ? [{ filename: output_filename, reason: outputRes.reason }] : []),
         ]);
+
+        const uploadTasksCount = [input_file, output_file].filter((file) => file).length;
+        if (filesRes.length === uploadTasksCount) {
+          /** Delete added testcase if all upload tasks failed */
+          await deleteTestcase({ testcase_id: addedTestcaseId });
+        }
+
+        return filesRes;
       }),
+    ).then((responses) =>
+      responses.reduce(
+        (acc, response) => (response.status === 'fulfilled' ? [...acc, ...response.value] : acc),
+        [] as UploadFailureType[],
+      ),
     );
 
-    const editTestcasePromise = Promise.all(
+    const editTestcasePromise = Promise.allSettled(
       testcaseTableDataToUpdate.map(async (datum) => {
         const {
           id,
           is_disabled,
           time_limit,
           memory_limit,
+          score,
           note,
           input_filename,
           input_file,
           output_filename,
           output_file,
         } = datum;
-        await editTestcase({ testcase_id: id as number, note, is_disabled, time_limit, memory_limit });
+        await editTestcase({ testcase_id: id as number, score, note, is_disabled, time_limit, memory_limit });
 
-        // Add testcase input / output data
-        await Promise.all([
-          input_file
-            ? uploadInputData({ testcaseId: id as number, file: input_file }).catch(() => {
-                addUploadFailedFilename(input_filename);
-              })
-            : Promise.resolve(),
-          output_file
-            ? uploadOutputData({ testcaseId: id as number, file: output_file }).catch(() => {
-                addUploadFailedFilename(output_filename);
-              })
-            : Promise.resolve(),
+        // Replace testcase input / output data
+        const filesRes = await Promise.allSettled([
+          input_file ? uploadInputData({ testcaseId: id as number, file: input_file }) : Promise.resolve('ok'),
+          output_file ? uploadOutputData({ testcaseId: id as number, file: output_file }) : Promise.resolve('ok'),
+        ]).then(([inputRes, outputRes]) => [
+          ...(inputRes.status === 'rejected' ? [{ filename: input_filename, reason: inputRes.reason }] : []),
+          ...(outputRes.status === 'rejected' ? [{ filename: output_filename, reason: outputRes.reason }] : []),
         ]);
+
+        return filesRes;
       }),
+    ).then((responses) =>
+      responses.reduce(
+        (acc, response) => (response.status === 'fulfilled' ? [...acc, ...response.value] : acc),
+        [] as UploadFailureType[],
+      ),
     );
 
-    const deleteTestcasePromise = Promise.all(
+    const deleteTestcasePromise = Promise.allSettled(
       testcaseIdsToDelete.map((id) => deleteTestcase({ testcase_id: Number(id) })),
     );
 
-    await Promise.all([addTestcasePromise, editTestcasePromise, deleteTestcasePromise]);
+    const fileUploadFailures = await Promise.allSettled([
+      addTestcasePromise,
+      editTestcasePromise,
+      deleteTestcasePromise,
+    ]).then(([addFailedFilesRes, editFailedFilesRes]) => [
+      ...(addFailedFilesRes.status === 'fulfilled' ? addFailedFilesRes.value : []),
+      ...(editFailedFilesRes.status === 'fulfilled' ? editFailedFilesRes.value : []),
+    ]);
+
     mutateProblemTestcases();
     mutateProblemAssistingData();
+
+    setSaveTestcaseIsLoading(false);
+
+    return fileUploadFailures;
   };
 
   const saveAssistingData = async () => {
     if (!originalAssistingData) {
-      return;
+      return [];
     }
+    setSaveAssistingDataIsLoading(true);
+
     const tableData = assistingDataTableData;
 
     const tableDataToAdd: AssistingDataEditTableSchema[] = tableData.filter(
@@ -309,27 +315,56 @@ const useCodingProblemEdit = (problemId: number) => {
     const addAssistingDataUnderProblemPromise = Promise.allSettled(
       tableDataToAdd.map(async (datum) => {
         const { file, filename } = datum;
-        await addAssistingDataUnderProblem({
+        const res = await addAssistingDataUnderProblem({
           problemId: Number(problemId),
           file: file as Blob,
-        }).catch(() => addUploadFailedFilename(filename));
+        }).then(
+          () => [] as UploadFailureType[],
+          (err) => [{ filename, reason: err }] as UploadFailureType[],
+        );
+
+        return res;
       }),
+    ).then((responses) =>
+      responses.reduce(
+        (acc, response) => (response.status === 'fulfilled' ? [...acc, ...response.value] : acc),
+        [] as UploadFailureType[],
+      ),
     );
 
-    const editAssistingDataPromise = Promise.all(
+    const editAssistingDataPromise = Promise.allSettled(
       tableDataToUpdate.map(async (datum) => {
         const { id, file, filename } = datum;
-        await editAssistingData({ assistingDataId: id as number, file: file as Blob }).catch(() =>
-          addUploadFailedFilename(filename),
+        const res = await editAssistingData({ assistingDataId: id as number, file: file as Blob }).then(
+          () => [] as UploadFailureType[],
+          (err) => [{ filename, reason: err }] as UploadFailureType[],
         );
+
+        return res;
       }),
+    ).then((responses) =>
+      responses.reduce(
+        (acc, response) => (response.status === 'fulfilled' ? [...acc, ...response.value] : acc),
+        [] as UploadFailureType[],
+      ),
     );
 
-    const deleteAssistingDataPromise = Promise.all(
+    const deleteAssistingDataPromise = Promise.allSettled(
       assistingDataIdsToDelete.map((id) => deleteAssistingData({ assisting_data_id: Number(id) })),
     );
 
-    await Promise.all([addAssistingDataUnderProblemPromise, editAssistingDataPromise, deleteAssistingDataPromise]);
+    const fileUploadFailures = await Promise.allSettled([
+      addAssistingDataUnderProblemPromise,
+      editAssistingDataPromise,
+      deleteAssistingDataPromise,
+    ]).then(([addFailedFilesRes, editFailedFilesRes]) => [
+      ...(addFailedFilesRes.status === 'fulfilled' ? addFailedFilesRes.value : []),
+      ...(editFailedFilesRes.status === 'fulfilled' ? editFailedFilesRes.value : []),
+    ]);
+
+    setSaveAssistingDataIsLoading(false);
+
+    return fileUploadFailures;
   };
 
   return {
@@ -394,9 +429,6 @@ const useCodingProblemEdit = (problemId: number) => {
     setShowNonSampleTestcaseUploadPopup,
     setShowAssistingDataUploadPopup,
     setShowWarningPopup,
-    showUploadFailPopup,
-    setShowUploadFailPopup,
-    uploadFailedFilenames,
 
     inputsDisabled,
     saveButtonDisabled,
