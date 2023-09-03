@@ -10,11 +10,6 @@ const useProblemAssistingData = (problemId: number) => {
     browseAssistingData({ problem_id: problemId }),
   );
 
-  const addAssistingDataUnderProblemSWR = useSWRMutation(
-    `/problem/${problemId}/assisting-data`,
-    toSWRMutationFetcher(addAssistingDataUnderProblem),
-  );
-
   const downloadAllAssistingDataSWR = useSWRMutation(
     `/problem/${problemId}/all-assisting-data`,
     toSWRMutationFetcher(downloadAllAssistingData),
@@ -23,18 +18,16 @@ const useProblemAssistingData = (problemId: number) => {
   return {
     assistingData: browseAssistingDataSWR.data?.data.data,
     mutateProblemAssistingData: browseAssistingDataSWR.mutate,
-    addAssistingDataUnderProblem: addAssistingDataUnderProblemSWR.trigger,
+    addAssistingDataUnderProblem,
     downloadAllAssistingData: downloadAllAssistingDataSWR.trigger,
 
     isLoading: {
       browse: browseAssistingDataSWR.isLoading,
-      add: addAssistingDataUnderProblemSWR.isMutating,
       downloadAssistingData: downloadAllAssistingDataSWR.isMutating,
     },
 
     error: {
       browse: browseAssistingDataSWR.error,
-      add: addAssistingDataUnderProblemSWR.error,
       downloadAllAssistingData: downloadAllAssistingDataSWR.error,
     },
   };

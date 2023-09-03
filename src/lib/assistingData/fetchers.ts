@@ -19,7 +19,7 @@ export const addAssistingDataUnderProblem = async ({ problemId, file }: { proble
     body: formData,
   };
 
-  await fetchAPI(`/problem/${problemId}/assisting-data`, options);
+  return fetchAPI(`/problem/${problemId}/assisting-data`, options);
 };
 
 export const editAssistingData = async ({ assistingDataId, file }: { assistingDataId: number; file: Blob }) => {
@@ -31,5 +31,5 @@ export const editAssistingData = async ({ assistingDataId, file }: { assistingDa
     body: formData,
   };
 
-  await fetchAPI(`/assisting-data/${assistingDataId}`, options);
+  return fetchAPI(`/assisting-data/${assistingDataId}`, options);
 };

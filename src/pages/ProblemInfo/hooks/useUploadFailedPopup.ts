@@ -1,16 +1,19 @@
 import { useState } from 'react';
 
-const useUploadFailedPopup = () => {
-  const [uploadFailedFilenames, setUploadFailedFilenames] = useState<string[]>([]);
-  const [showUploadFailPopup, setShowUploadFailPopup] = useState(false);
+export interface UploadFailureType {
+  filename: string;
+  reason: string;
+}
 
-  const addUploadFailedFilename = (filename: string) => setUploadFailedFilenames((state) => [...state, filename]);
+const useUploadFailedPopup = () => {
+  const [uploadFailures, setUploadFailures] = useState<UploadFailureType[]>([]);
+  const [showUploadFailPopup, setShowUploadFailPopup] = useState(false);
 
   return {
     showUploadFailPopup,
     setShowUploadFailPopup,
-    uploadFailedFilenames,
-    addUploadFailedFilename,
+    uploadFailures,
+    setUploadFailures,
   };
 };
 
