@@ -174,7 +174,7 @@ export default function MySubmission() {
           Challenge: challenge_title,
           Task: challenge_label,
           Status: verdict ? startCase(toLower(verdict)) : 'Waiting for judge',
-          'Submitted Time': moment(submit_time).format('YYYY-MM-DD, HH:mm:ss'),
+          'Submitted Time': submit_time ? moment(submit_time).format('YYYY-MM-DD, HH:mm:ss') : '',
           link: `/my-submission/${course_id}/${class_id}/${challenge_id}/${problem_id}/${submission_id}`,
         })}
         isLoading={isLoading.browse}
