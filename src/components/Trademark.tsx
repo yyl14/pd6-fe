@@ -1,4 +1,5 @@
 import { Typography, makeStyles } from '@material-ui/core';
+import moment from 'moment';
 import { useState } from 'react';
 
 import '../styles/auth.css';
@@ -22,13 +23,20 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function Trademark() {
-  const [importantFunctionality, setImportantFunctionality] = useState(false);
+  const [importantFunctionality, setImportantFunctionality] = useState(Math.random() > 0.95);
+  const [evenMoreImportantFunctionality, setEvenMoreImportantFunctionality] = useState(Math.random() > 0.95);
+
   const classNames = useStyles();
+
+  const currentYear = moment().format('YYYY');
 
   const onClickTrademark = () => {
     if (!importantFunctionality && Math.random() > 0.8) {
       setImportantFunctionality(true);
     } else setImportantFunctionality(false);
+    if (!evenMoreImportantFunctionality && Math.random() > 0.9) {
+      setEvenMoreImportantFunctionality(true);
+    } else setEvenMoreImportantFunctionality(false);
   };
 
   return (
@@ -43,7 +51,7 @@ export default function Trademark() {
             letterSpacing: '2px',
           }}
         >
-          {importantFunctionality ? 'RDOGS' : 'PDOGS'}
+          {`${importantFunctionality ? 'RDOG' : 'PDOG'}${evenMoreImportantFunctionality ? 'E' : 'S'}`}
         </span>
         <span
           style={{
@@ -68,7 +76,7 @@ export default function Trademark() {
           <br />
           National Taiwan University
           <br />
-          2021 All rights reserved.
+          {`2021-${currentYear} All rights reserved.`}
         </Typography>
       </div>
     </div>
