@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import BrowsingTable from '@/components/BrowsingTable';
 import PageTitle from '@/components/PageTitle';
+import useUserClassRole from '@/hooks/useUserClassRole';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useInstitutes from '@/lib/institute/useInstitutes';
@@ -23,6 +24,8 @@ export default function ClassMemberList({ courseId, classId }: { courseId: strin
   } = useViewClassMembers(Number(classId));
 
   const { institutes } = useInstitutes();
+
+  const userClassRole = useUserClassRole(Number(classId));
 
   const [edit, setEdit] = useState(false);
 
@@ -134,11 +137,7 @@ export default function ClassMemberList({ courseId, classId }: { courseId: strin
             pagination={browseClassMembers.pagination}
             filter={browseClassMembers.filter}
             sort={browseClassMembers.sort}
-            buttons={
-              <>
-                <Button onClick={() => setEdit(true)}>Edit</Button>
-              </>
-            }
+            buttons={userClassRole === 'MANAGER' ? <Button onClick={() => setEdit(true)}>Edit</Button> : <></>}
           />
         </>
       )}
