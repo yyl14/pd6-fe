@@ -1,4 +1,4 @@
-import { Button, TextField, Typography, makeStyles } from '@material-ui/core';
+import { Button, Snackbar, TextField, Typography, makeStyles } from '@material-ui/core';
 import { useState } from 'react';
 
 import AlignedText from '@/components/AlignedText';
@@ -44,7 +44,8 @@ export default function BasicInfoEdit({
     realName: '',
   });
   const classes = useStyles();
-  const { editAccount } = useAccount(accountId);
+  const { editAccount, error } = useAccount(accountId);
+  const [showSnackBar, setShowSnackBar] = useState(false);
 
   const handleSave = async () => {
     if (inputs.username === '') {
@@ -62,14 +63,15 @@ export default function BasicInfoEdit({
     try {
       await editAccount({
         account_id: accountId,
-        username,
-        nickname,
-        alternative_email: altMailChanged ? altMail : undefined,
-        real_name: realName,
+        username: inputs.username,
+        nickname: inputs.nickname,
+        alternative_email: altMailChanged ? inputs.altMail : undefined,
+        real_name: isAdmin ? inputs.realName : undefined,
       });
       handleBack(altMailChanged ? 'Alternative email will be updated once it’s verified.' : '');
-      // eslint-disable-next-line no-empty
-    } catch {}
+    } catch {
+      setShowSnackBar(true);
+    }
   };
 
   const handleCancel = () => {
@@ -136,6 +138,11 @@ export default function BasicInfoEdit({
           </div>
         </>
       </SimpleBar>
+      <Snackbar
+        open={showSnackBar}
+        onClose={() => setShowSnackBar(false)}
+        message={`Error: ${error.editAccount?.message}`}
+      />
     </div>
   );
 }
