@@ -89,7 +89,6 @@ export default function ProblemInfo({
   }, [problemId]);
 
   const baseUrl = isProblemSet ? 'problem-set' : 'my-class';
-  console.log(baseUrl);
 
   return (
     <>
