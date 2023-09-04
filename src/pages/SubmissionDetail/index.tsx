@@ -63,7 +63,7 @@ export default function SubmissionDetail({
   );
   const { judgeCases } = useJudgementJudgeCases(submissionLatestJudgement?.id ?? null);
 
-  const submitLang = submitLangs?.find((lang) => lang.id === submission?.id);
+  const submitLang = submitLangs?.find((lang) => lang.id === submission?.language_id);
 
   const isInUserClass = userClasses?.some((userClass) => userClass.class_id === Number(classId)) ?? false;
   const baseUrl = isInUserClass ? 'my-class' : 'problem-set';
