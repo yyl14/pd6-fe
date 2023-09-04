@@ -74,13 +74,12 @@ export default function TaskAddingCard({ courseId, classId, challengeId, open, s
   const { course, isLoading: courseIsLoading } = useCourse(courseId);
   const { class: classData, isLoading: classIsLoading } = useClass(classId);
   const { challenge, isLoading: challengeIsLoading } = useChallenge(challengeId);
-  const { tasks } = useChallengeTasks(challengeId);
+  const { tasks, mutateTask } = useChallengeTasks(challengeId);
   const { browseTeamUnderClass } = useClassTeams(classId);
   const { browseChallengeUnderClass } = useChallengesUnderClass(classId);
 
   const [peerReviewChallengeId, setPeerReviewChallengeId] = useState<number>(challengeId);
   const { tasks: peerReviewTasks } = useChallengeTasks(peerReviewChallengeId);
-  const { mutateTask } = useChallengeTasks(challengeId);
 
   const { addProblem, error: addProblemError } = useChallengeProblem(challengeId);
   const { addEssay, error: addEssayError } = useChallengeEssay(challengeId);
