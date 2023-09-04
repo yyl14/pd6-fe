@@ -163,7 +163,13 @@ export default function ProblemInfo({
       {edit ? (
         <CodingProblemEdit handleSuccess={handleEditSuccess} handleCancel={handleEditCancel} problemId={problemId} />
       ) : (
-        <CodingProblemInfo courseId={courseId} classId={classId} challengeId={challengeId} problemId={problemId} />
+        <CodingProblemInfo
+          courseId={courseId}
+          classId={classId}
+          challengeId={challengeId}
+          problemId={problemId}
+          isProblemSet={isProblemSet}
+        />
       )}
       <Dialog open={rejudgePopUp} onClose={() => setRejudgePopUp(false)} maxWidth="md">
         <DialogTitle>

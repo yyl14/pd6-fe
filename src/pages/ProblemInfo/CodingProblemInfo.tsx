@@ -68,11 +68,13 @@ export default function CodingProblemInfo({
   classId,
   challengeId,
   problemId,
+  isProblemSet,
 }: {
   courseId: string;
   classId: string;
   challengeId: string;
   problemId: string;
+  isProblemSet: boolean;
 }) {
   const history = useHistory();
   const className = useStyles();
@@ -243,7 +245,7 @@ export default function CodingProblemInfo({
         </SimpleBar>
       )}
       <SimpleBar title="Sample Data" noIndent>
-        {role === 'MANAGER' && (
+        {!isProblemSet && role === 'MANAGER' && (
           <StyledButton
             variant="outlined"
             color="inherit"
@@ -316,7 +318,7 @@ export default function CodingProblemInfo({
         noIndent
         title="Testing Data"
         buttons={
-          role === 'MANAGER' ? (
+          !isProblemSet && role === 'MANAGER' ? (
             <FormControlLabel
               control={<Switch checked={status} name="status" color="primary" disabled />}
               label={status ? 'Enabled' : 'Disabled'}
@@ -325,7 +327,7 @@ export default function CodingProblemInfo({
           ) : null
         }
       >
-        {role === 'MANAGER' && (
+        {!isProblemSet && role === 'MANAGER' && (
           <StyledButton
             variant="outlined"
             color="inherit"
@@ -389,7 +391,7 @@ export default function CodingProblemInfo({
           setData
         />
       </SimpleBar>
-      {role === 'MANAGER' && (
+      {!isProblemSet && role === 'MANAGER' && (
         <SimpleBar title="Assisting Data (Optional)" noIndent>
           <StyledButton
             variant="outlined"
@@ -424,7 +426,7 @@ export default function CodingProblemInfo({
           />
         </SimpleBar>
       )}
-      {role === 'MANAGER' && problem?.judge_type === 'CUSTOMIZED' && (
+      {!isProblemSet && role === 'MANAGER' && problem?.judge_type === 'CUSTOMIZED' && (
         <SimpleBar
           title="Customized Judge Code (Optional)"
           noIndent
@@ -439,7 +441,7 @@ export default function CodingProblemInfo({
           <CodeTextArea codeUuid={problem?.judge_source?.code_uuid} codeFileName={problem?.judge_source?.filename} />
         </SimpleBar>
       )}
-      {role === 'MANAGER' && problem?.reviser_is_enabled && (
+      {!isProblemSet && role === 'MANAGER' && problem?.reviser_is_enabled && (
         <SimpleBar
           title="Reviser Code (Optional)"
           noIndent
@@ -454,7 +456,7 @@ export default function CodingProblemInfo({
           <CodeTextArea codeUuid={problem?.reviser?.code_uuid} codeFileName={problem?.reviser?.filename} />
         </SimpleBar>
       )}
-      {role === 'MANAGER' && (
+      {!isProblemSet && role === 'MANAGER' && (
         <SimpleBar
           title="Delete Task"
           childrenButtons={
