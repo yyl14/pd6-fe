@@ -79,7 +79,7 @@ export default function TaskAddingCard({ courseId, classId, challengeId, open, s
   const { browseChallengeUnderClass } = useChallengesUnderClass(classId);
 
   const [peerReviewChallengeId, setPeerReviewChallengeId] = useState<number>(challengeId);
-  const { tasks: peerReviewTasks } = useChallengeTasks(peerReviewChallengeId);
+  const { tasks: peerReviewTasks, mutateTask } = useChallengeTasks(peerReviewChallengeId);
 
   const { addProblem, error: addProblemError } = useChallengeProblem(challengeId);
   const { addEssay, error: addEssayError } = useChallengeEssay(challengeId);
@@ -208,6 +208,7 @@ export default function TaskAddingCard({ courseId, classId, challengeId, open, s
             challenge_label: label,
             title,
           });
+          mutateTask();
           history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/problem/${data.data.id}`);
         } catch {
           setShowAddProblemErrorSnackbar(true);
@@ -221,6 +222,7 @@ export default function TaskAddingCard({ courseId, classId, challengeId, open, s
             challenge_label: label,
             title,
           });
+          mutateTask();
           history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/essay/${data.data.id}`);
         } catch {
           setShowAddEssayErrorSnackbar(true);
@@ -241,6 +243,7 @@ export default function TaskAddingCard({ courseId, classId, challengeId, open, s
           });
           setPeerReviewChallengeId(Number(challengeId));
           setTaskLabelId('');
+          mutateTask();
           history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/peer-review/${data.data.id}`);
         } catch {
           setShowAddPeerReviewErrorSnackbar(true);
@@ -265,6 +268,7 @@ export default function TaskAddingCard({ courseId, classId, challengeId, open, s
           setScoringFormula('');
           setBaselineTeam(null);
           setTeamLabelFilter('');
+          mutateTask();
           history.push(`/my-class/${courseId}/${classId}/challenge/${challengeId}/scoreboard/${data.data.id}`);
         } catch {
           setShowAddScoreboardErrorSnackbar(true);
