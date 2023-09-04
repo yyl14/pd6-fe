@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Button, TextField, Typography, makeStyles } from '@material-ui/core';
+import { Box, Button, TextField, Typography, makeStyles } from '@material-ui/core';
 import { MathpixLoader, MathpixMarkdown } from 'mathpix-markdown-it';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -185,7 +185,7 @@ export default function ChallengeInfo({
           }
         >
           {editMode ? (
-            <div>
+            <>
               <TextField
                 placeholder="(Text, LaTeX, Markdown and HTML supported)"
                 className={className.descriptionField}
@@ -196,11 +196,13 @@ export default function ChallengeInfo({
                 maxRows={10}
                 variant="outlined"
               />
-              <Button onClick={handleCancel}>Cancel</Button>
-              <Button onClick={handleSave} color="primary">
-                Save
-              </Button>
-            </div>
+              <Box>
+                <Button onClick={handleCancel}>Cancel</Button>
+                <Button onClick={handleSave} color="primary">
+                  Save
+                </Button>
+              </Box>
+            </>
           ) : (
             // @ts-ignore
             <MathpixLoader>
