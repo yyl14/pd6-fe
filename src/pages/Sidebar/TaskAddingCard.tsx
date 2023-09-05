@@ -74,7 +74,7 @@ export default function TaskAddingCard({ courseId, classId, challengeId, open, s
   const { course, isLoading: courseIsLoading } = useCourse(courseId);
   const { class: classData, isLoading: classIsLoading } = useClass(classId);
   const { challenge, isLoading: challengeIsLoading } = useChallenge(challengeId);
-  const { tasks } = useChallengeTasks(challengeId);
+  const { tasks, mutateTask } = useChallengeTasks(challengeId);
   const { browseTeamUnderClass } = useClassTeams(classId);
   const { browseChallengeUnderClass } = useChallengesUnderClass(classId);
 
@@ -275,6 +275,7 @@ export default function TaskAddingCard({ courseId, classId, challengeId, open, s
         break;
       }
     }
+    mutateTask();
     setType('Coding Problem');
     setTitle('');
     setLabel('');
