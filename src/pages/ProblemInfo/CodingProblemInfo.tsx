@@ -427,32 +427,12 @@ export default function CodingProblemInfo({
         </SimpleBar>
       )}
       {!isProblemSet && role === 'MANAGER' && problem?.judge_type === 'CUSTOMIZED' && (
-        <SimpleBar
-          title="Customized Judge Code (Optional)"
-          noIndent
-          buttons={
-            <FormControlLabel
-              control={<Switch checked name="customizeJudge" color="primary" disabled />}
-              label="Enabled"
-              className={className.statusSwitch}
-            />
-          }
-        >
+        <SimpleBar title="Customized Judge Code (Optional)" noIndent>
           <CodeTextArea codeUuid={problem?.judge_source?.code_uuid} codeFileName={problem?.judge_source?.filename} />
         </SimpleBar>
       )}
       {!isProblemSet && role === 'MANAGER' && problem?.reviser_is_enabled && (
-        <SimpleBar
-          title="Reviser Code (Optional)"
-          noIndent
-          buttons={
-            <FormControlLabel
-              control={<Switch checked name="customizeJudge" color="primary" disabled />}
-              label="Enabled"
-              className={className.statusSwitch}
-            />
-          }
-        >
+        <SimpleBar title="Reviser Code (Optional)" noIndent>
           <CodeTextArea codeUuid={problem?.reviser?.code_uuid} codeFileName={problem?.reviser?.filename} />
         </SimpleBar>
       )}
