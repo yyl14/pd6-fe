@@ -274,6 +274,8 @@ const ClassMemberSetting = ({
           const failedList = data.data
             .reduce((acc, cur, index) => (cur === false ? acc.concat(index) : acc), [] as number[])
             .map((index) => replacingList[index].account_referral);
+
+          setHasInitialized(false);
           if (failedList.length === 0) {
             unblockAndReturn(saveWithDialog);
           } else {
@@ -284,7 +286,6 @@ const ClassMemberSetting = ({
           setSubmitError(true);
         }
         browseClassMembersRefresh();
-        setHasInitialized(false);
       }
     } else {
       unblockAndReturn(false);
