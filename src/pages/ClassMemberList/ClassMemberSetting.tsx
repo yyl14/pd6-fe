@@ -83,7 +83,8 @@ const ClassMemberSetting = ({
   const {
     browseClassMembers: { refresh: browseClassMembersRefresh },
   } = useViewClassMembers(Number(classId));
-  const { browseClassMembersWithAccountReferral } = useBrowseClassMembersWithAccountReferral(Number(classId));
+  const { browseClassMembersWithAccountReferral, mutateBrowseClassMembersWithAccountReferral } =
+    useBrowseClassMembersWithAccountReferral(Number(classId));
   const { replaceClassMembers, error: replaceClassMembersError } = useReplaceClassMembers(Number(classId));
 
   const [TA, setTA] = useState('');
@@ -275,8 +276,9 @@ const ClassMemberSetting = ({
             .reduce((acc, cur, index) => (cur === false ? acc.concat(index) : acc), [] as number[])
             .map((index) => replacingList[index].account_referral);
 
-          setHasInitialized(false);
           if (failedList.length === 0) {
+            mutateBrowseClassMembersWithAccountReferral();
+            setHasInitialized(false);
             unblockAndReturn(saveWithDialog);
           } else {
             setErrorDetectedList(failedList);
@@ -286,6 +288,8 @@ const ClassMemberSetting = ({
           setSubmitError(true);
         }
         browseClassMembersRefresh();
+        mutateBrowseClassMembersWithAccountReferral();
+        setHasInitialized(false);
       }
     } else {
       unblockAndReturn(false);

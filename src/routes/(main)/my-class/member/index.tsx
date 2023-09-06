@@ -19,6 +19,7 @@ function ClassMemberListRoute() {
       {withConditionalRender(ClassMemberList)({
         courseId,
         classId,
+        isAdmin: false,
         isLoading: courseIsLoading.read || classIsLoading.read,
       })}
     </Suspense>

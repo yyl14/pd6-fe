@@ -13,7 +13,15 @@ import useViewClassMembers, { ClassMemberSchema } from '@/lib/view/useViewClassM
 
 import ClassMemberSetting from './ClassMemberSetting';
 
-export default function ClassMemberList({ courseId, classId }: { courseId: string; classId: string }) {
+export default function ClassMemberList({
+  courseId,
+  classId,
+  isAdmin,
+}: {
+  courseId: string;
+  classId: string;
+  isAdmin: boolean;
+}) {
   const { course } = useCourse(Number(courseId));
   const { class: classData } = useClass(Number(classId));
 
@@ -137,7 +145,9 @@ export default function ClassMemberList({ courseId, classId }: { courseId: strin
             pagination={browseClassMembers.pagination}
             filter={browseClassMembers.filter}
             sort={browseClassMembers.sort}
-            buttons={userClassRole === 'MANAGER' ? <Button onClick={() => setEdit(true)}>Edit</Button> : <></>}
+            buttons={
+              userClassRole === 'MANAGER' || isAdmin ? <Button onClick={() => setEdit(true)}>Edit</Button> : <></>
+            }
           />
         </>
       )}

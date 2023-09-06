@@ -8,6 +8,7 @@ const useBrowseClassMembersWithAccountReferral = (classId: number) => {
   );
   return {
     browseClassMembersWithAccountReferral: browseClassMembersWithAccountReferralSWR.data?.data.data,
+    mutateBrowseClassMembersWithAccountReferral: browseClassMembersWithAccountReferralSWR.mutate,
     isLoading: {
       browse: browseClassMembersWithAccountReferralSWR.isLoading,
     },
