@@ -124,7 +124,7 @@ export default function Essay({
             <Typography>{essayInfo?.challenge_label}</Typography>
           </AlignedText>
           <AlignedText text="Download Options" childrenType="text">
-            <Typography>All users&apos; last submissioin</Typography>
+            <Typography>All users&apos; last submission</Typography>
           </AlignedText>
         </DialogContent>
         <DialogActions>
