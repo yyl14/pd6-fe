@@ -128,11 +128,13 @@ export default function TeamList({ courseId, classId }: { courseId: string; clas
   };
 
   const addTeamSuccess = () => {
+    browseTeamUnderClass.refresh();
     clearAddInput();
     setShowAddDialog(false);
   };
 
   const importTeamSuccess = () => {
+    browseTeamUnderClass.refresh();
     clearImportInput();
     setShowImportDialog(false);
   };
