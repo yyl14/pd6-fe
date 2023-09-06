@@ -126,6 +126,8 @@ const ClassMemberSetting = ({
 
   useEffect(() => {
     const classMembers = browseClassMembersWithAccountReferral;
+    // eslint-disable-next-line no-console
+    console.log(hasInitialized, classMembers);
     if (!hasInitialized && classMembers !== undefined) {
       setTA(
         classMembers
