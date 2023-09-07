@@ -1,3 +1,5 @@
+import { Fab, makeStyles } from '@material-ui/core';
+import { Feedback } from '@material-ui/icons';
 import { useEffect, useState } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
 
@@ -18,7 +20,17 @@ import MySubmissionRoute from './my-submission';
 import ProblemSetRoutes from './problem-set';
 import UserProfileRoute from './user-profile';
 
+const useStyles = makeStyles(() => ({
+  bugReport: {
+    zIndex: 10000,
+    position: 'fixed',
+    right: '3.5vw',
+    top: 'calc(95vh - 55px)',
+  },
+}));
+
 function Layout({ children }: { children: JSX.Element }) {
+  const classNames = useStyles();
   const location = useLocation();
 
   const [showSidebar, setShowSidebar] = useState(true);
@@ -54,6 +66,9 @@ function Layout({ children }: { children: JSX.Element }) {
           <div className="layout-content">{children}</div>
         </div>
       </div>
+      <Fab href="https://forms.gle/KaYJnXwgvsovzqVG7" target="_blank" color="default" className={classNames.bugReport}>
+        <Feedback />
+      </Fab>
     </div>
   );
 }
