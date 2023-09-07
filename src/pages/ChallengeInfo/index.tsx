@@ -11,10 +11,10 @@ import SimpleBar from '@/components/SimpleBar';
 import SimpleTable from '@/components/SimpleTable';
 import NoMatch from '@/components/noMatch';
 import useReduxStateShape from '@/hooks/useReduxStateShape';
+import useUserClassRole from '@/hooks/useUserClassRole';
 import useChallenge from '@/lib/challenge/useChallenge';
 import useProblemScores from '@/lib/problem/useProblemScores';
 import useChallengeTasks from '@/lib/task/useChallengeTasks';
-import useUserClasses from '@/lib/user/useUserClasses';
 
 interface TableProp {
   challenge_label?: string;
@@ -42,7 +42,6 @@ export default function ChallengeInfo({
 }) {
   const className = useStyles();
   const { challenge, isLoading: challengeLoading, editChallenge } = useChallenge(Number(challengeId));
-  const { accountClasses } = useUserClasses();
   const { tasks } = useChallengeTasks(Number(challengeId));
   const [problemsById, problemIds] = useReduxStateShape(tasks?.problem);
   const [essaysById, essayIds] = useReduxStateShape(tasks?.essay);
@@ -52,14 +51,16 @@ export default function ChallengeInfo({
 
   const [currentTime] = useState(moment());
   const [status, setStatus] = useState('');
-  const [role, setRole] = useState('NORMAL');
+  const role = useUserClassRole(Number(classId));
   const [editMode, setEditMode] = useState(false);
-  const [inputs, setInputs] = useState('');
+  const [descriptionInputValue, setDescriptionInputValue] = useState('');
   const [showDescription, setShowDescription] = useState<boolean>(true);
   const [tableData, setTableData] = useState<TableProp[]>([]);
 
+  const [hasInitialized, setHasInitialized] = useState(false);
+
   useEffect(() => {
-    if (challenge) {
+    if (challenge !== undefined) {
       if (currentTime.isBefore(moment(challenge.start_time))) {
         setStatus('Not Yet');
       } else if (currentTime.isBefore(moment(challenge.end_time))) {
@@ -67,16 +68,12 @@ export default function ChallengeInfo({
       } else {
         setStatus('Closed');
       }
-      setInputs(challenge.description);
+      if (!hasInitialized) {
+        setDescriptionInputValue(challenge.description);
+        setHasInitialized(true);
+      }
     }
-  }, [challenge, currentTime]);
-
-  useEffect(() => {
-    const tempRole = accountClasses?.find((item) => item.class_id === Number(classId))?.role;
-    if (tempRole) {
-      setRole(tempRole);
-    }
-  }, [classId, accountClasses]);
+  }, [challenge, currentTime, hasInitialized]);
 
   useEffect(() => {
     if (challenge?.description === '' && (isProblemSet || role !== 'MANAGER')) {
@@ -159,18 +156,18 @@ export default function ChallengeInfo({
 
   const handleCancel = () => {
     setEditMode(false);
-    setInputs(challenge.description);
+    setDescriptionInputValue(challenge.description);
   };
 
   const handleSave = async () => {
     try {
       await editChallenge({
         challenge_id: Number(challengeId),
-        description: inputs,
+        description: descriptionInputValue,
       });
       setEditMode(false);
     } catch {
-      setInputs(challenge.description);
+      setDescriptionInputValue(challenge.description);
     }
   };
 
@@ -189,8 +186,8 @@ export default function ChallengeInfo({
               <TextField
                 placeholder="(Text, LaTeX, Markdown and HTML supported)"
                 className={className.descriptionField}
-                value={inputs}
-                onChange={(e) => setInputs(e.target.value)}
+                value={descriptionInputValue}
+                onChange={(e) => setDescriptionInputValue(e.target.value)}
                 multiline
                 minRows={10}
                 maxRows={10}
