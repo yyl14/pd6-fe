@@ -1,8 +1,9 @@
 import { Button, FormControl, MenuItem, Select } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { FilterItem, FilterOperator } from '@/hooks/useBrowseParams/types';
+import useQuery from '@/hooks/useQuery';
 
 import Icon from '../icon/index';
 import { DataSchemaBase, FilterConfigOption } from './types';
@@ -35,10 +36,22 @@ const SelectSearchField = <DataSchema extends DataSchemaBase>({
   options,
 }: SelectSearchFieldProps<DataSchema>) => {
   const classes = useStyles();
+  const [query, setQuery] = useQuery();
 
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
 
+  useEffect(
+    /** Initializes selected option from query. */
+    () => {
+      const selectedOptionIndexQuery = query.get('selectedOptionIndex');
+      if (selectedOptionIndexQuery && selectedOptionIndexQuery !== '')
+        setSelectedOptionIndex(Number(selectedOptionIndexQuery));
+    },
+    [query],
+  );
+
   const handleSearchClick = () => {
+    setQuery('selectedOptionIndex', selectedOptionIndex.toString());
     const selectedOptionValue = options.at(selectedOptionIndex)?.value;
     if (multi) {
       handleSearch(selectedOptionValue as FilterItem<DataSchema, keyof DataSchema, FilterOperator>[]);

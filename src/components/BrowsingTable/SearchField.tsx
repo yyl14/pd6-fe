@@ -7,7 +7,6 @@ import { DataSchemaBase, FilterConfigItem } from './types';
 
 interface SearchFieldProps<DataSchema extends DataSchemaBase> {
   filterConfig: FilterConfigItem<DataSchema>;
-  filterValue: FilterItem<DataSchema, keyof DataSchema, FilterOperator>[];
   setFilter: (
     reducer: (
       state: FilterItem<DataSchema, keyof DataSchema, FilterOperator>[],
@@ -15,18 +14,13 @@ interface SearchFieldProps<DataSchema extends DataSchemaBase> {
   ) => void;
 }
 
-const SearchField = <DataSchema extends DataSchemaBase>({
-  filterConfig,
-  filterValue,
-  setFilter,
-}: SearchFieldProps<DataSchema>) => {
+const SearchField = <DataSchema extends DataSchemaBase>({ filterConfig, setFilter }: SearchFieldProps<DataSchema>) => {
   const { type } = filterConfig;
 
   switch (type) {
     case 'TEXT':
       return (
         <TextSearchField
-          filter={filterValue[0]}
           handleSearch={(newValue: string) =>
             setFilter(() =>
               newValue === '' // Clear filter if input is empty

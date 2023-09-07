@@ -42,7 +42,7 @@ function checkPassword(password1: string, password2: string) {
 
 export default function ResetPassword() {
   const classNames = useStyles();
-  const query = useQuery();
+  const [query] = useQuery();
   const history = useHistory();
 
   const { resetPassword } = useResetPassword();

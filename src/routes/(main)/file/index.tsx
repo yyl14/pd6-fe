@@ -7,7 +7,7 @@ const FileDownload = lazy(() => import(/* webpackChunkName: "FileDownload" */ '@
 
 export default function FileDownloading() {
   const history = useHistory();
-  const query = useQuery();
+  const [query] = useQuery();
   const filename = useMemo<string>(() => query.get('filename') as string, [query]);
   const uuid = useMemo<string>(() => query.get('uuid') as string, [query]);
 

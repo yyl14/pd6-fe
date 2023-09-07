@@ -1,11 +1,9 @@
-import { useHistory } from 'react-router-dom';
-
 import { useMemo } from 'react';
+
 import useQuery from '../useQuery';
 
 const useBrowseParamsQueries = () => {
-  const query = useQuery();
-  const history = useHistory();
+  const [query, setQuery] = useQuery();
 
   const rowsPerPageQueryString = query.get('rows');
   const pageQueryString = query.get('page');
@@ -19,14 +17,6 @@ const useBrowseParamsQueries = () => {
   const pageQuery = useMemo(() => (pageQueryString ? Number(pageQueryString) : null), [pageQueryString]);
   const filterQuery = useMemo(() => (filterQueryString ? JSON.parse(filterQueryString) : null), [filterQueryString]);
   const sortQuery = useMemo(() => (sortQueryString ? JSON.parse(sortQueryString) : null), [sortQueryString]);
-
-  const setQuery = (name: string, newValue: string) => {
-    if (query.get(name) !== newValue) {
-      const { pathname } = history.location;
-      query.set(name, String(newValue));
-      history.replace({ pathname, search: query.toString() });
-    }
-  };
 
   const setRowsPerPageQuery = (newValue: number) => {
     setQuery('rows', String(newValue));
