@@ -1,4 +1,4 @@
-import { Button, makeStyles } from '@material-ui/core';
+import { Button, ButtonGroup, makeStyles } from '@material-ui/core';
 import { useState } from 'react';
 
 import PDOGS1 from './PDOGS1';
@@ -13,10 +13,14 @@ const useStyles = makeStyles((theme) => ({
   PDOGS_Button_default: {
     backgroundColor: theme.palette.background.default,
     color: theme.palette.primary.main,
+    marginLeft: 0,
+    marginRight: 0,
   },
   PDOGS_Button_Clicked: {
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
+    marginLeft: 0,
+    marginRight: 0,
   },
 }));
 
@@ -57,38 +61,40 @@ export default function DevelopTeam() {
   return (
     <div>
       <h1>Develop Team</h1>
-      <Button
-        variant="outlined"
-        color="primary"
-        className={display[0] === true ? classes.PDOGS_Button_Clicked : classes.PDOGS_Button_default}
-        onClick={handleClick6a}
-      >
-        PDOGS 6a
-      </Button>
-      <Button
-        variant="outlined"
-        color="primary"
-        className={display[1] === true ? classes.PDOGS_Button_Clicked : classes.PDOGS_Button_default}
-        onClick={handleClick6}
-      >
-        PDOGS 6
-      </Button>
-      <Button
-        variant="outlined"
-        color="primary"
-        className={display[2] === true ? classes.PDOGS_Button_Clicked : classes.PDOGS_Button_default}
-        onClick={handleClick4s}
-      >
-        PDOGS 4S
-      </Button>
-      <Button
-        variant="outlined"
-        color="primary"
-        className={display[3] === true ? classes.PDOGS_Button_Clicked : classes.PDOGS_Button_default}
-        onClick={handleClick1}
-      >
-        PDOGS 1.0 &amp; 2.0
-      </Button>
+      <ButtonGroup>
+        <Button
+          variant="outlined"
+          color="primary"
+          className={display[0] === true ? classes.PDOGS_Button_Clicked : classes.PDOGS_Button_default}
+          onClick={handleClick6a}
+        >
+          PDOGS 6a
+        </Button>
+        <Button
+          variant="outlined"
+          color="primary"
+          className={display[1] === true ? classes.PDOGS_Button_Clicked : classes.PDOGS_Button_default}
+          onClick={handleClick6}
+        >
+          PDOGS 6
+        </Button>
+        <Button
+          variant="outlined"
+          color="primary"
+          className={display[2] === true ? classes.PDOGS_Button_Clicked : classes.PDOGS_Button_default}
+          onClick={handleClick4s}
+        >
+          PDOGS 4S
+        </Button>
+        <Button
+          variant="outlined"
+          color="primary"
+          className={display[3] === true ? classes.PDOGS_Button_Clicked : classes.PDOGS_Button_default}
+          onClick={handleClick1}
+        >
+          PDOGS 1.0 &amp; 2.0
+        </Button>
+      </ButtonGroup>
       <div className={classes.PDOGS_Content_Display}>{showTeam()}</div>
     </div>
   );
