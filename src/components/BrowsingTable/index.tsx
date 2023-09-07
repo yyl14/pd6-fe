@@ -334,7 +334,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
             <Typography className={classes.pageText} variant="body1">
               rows
             </Typography>
-            <Button className={classes.pageChangeButtons} disabled={currentPage === 0} onClick={handlePrevPage}>
+            <Button className={classes.pageChangeButtons} disabled={currentPage <= 0} onClick={handlePrevPage}>
               <Icon.ChevronLeftOutlinedIcon className={classes.arrowIcon} />
             </Button>
             <TextField
@@ -342,13 +342,14 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
               value={pageInput}
               onChange={(e) => setPageInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handlePageChangeFromInput()}
+              disabled={totalNumberOfPages === 0}
             />
             <Typography className={classes.pageText} variant="body1">
               {`of ${totalNumberOfPages}`}
             </Typography>
             <Button
               className={classes.pageChangeButtons}
-              disabled={currentPage === totalNumberOfPages - 1}
+              disabled={currentPage >= totalNumberOfPages - 1}
               onClick={handleNextPage}
             >
               <Icon.ChevronRightOutlinedIcon className={classes.arrowIcon} />
