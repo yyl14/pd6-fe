@@ -5,7 +5,7 @@ import useBrowseParamsQueries from './useBrowseParamsQueries';
 
 const DEFAULT_ROWS_PER_PAGE: RowsPerPageOption = 10;
 const DEFAULT_PAGE = 0;
-const DEFAULT_NUMBER_OF_PAGES = 100;
+const DEFAULT_NUMBER_OF_PAGES = 0;
 
 const isValidRowsPerPage = (value: number | null): value is RowsPerPageOption =>
   value === 10 || value === 25 || value === 50 || value === 100;
@@ -21,7 +21,7 @@ const usePagination = () => {
   const [currentPage, setCurrentPage] = useState(isValidPage(pageQuery) ? pageQuery : DEFAULT_PAGE);
   const [totalCount, setTotalCount] = useState<number | undefined>(undefined);
 
-  const totalNumberOfPages = totalCount ? Math.ceil(totalCount / rowsPerPage) : DEFAULT_NUMBER_OF_PAGES;
+  const totalNumberOfPages = totalCount !== undefined ? Math.ceil(totalCount / rowsPerPage) : DEFAULT_NUMBER_OF_PAGES;
 
   const setCurrentPageWithQuery = (value: number): void => {
     setCurrentPage(value);

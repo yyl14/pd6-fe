@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ApiResponse } from 'openapi-typescript-fetch';
 import { useEffect } from 'react';
 import useSWR from 'swr';
 
-import { ApiResponse } from 'openapi-typescript-fetch';
-import { FilterItem, FilterOperator, SortItem } from './useBrowseParams/types';
-
 import serializeBrowseParams from '../function/serializeBrowseParams';
 import useBrowseParams from './useBrowseParams';
+import { FilterItem, FilterOperator, SortItem } from './useBrowseParams/types';
 
 type TypedFetchFunc<A, R> = (arg: A, init?: RequestInit | undefined) => Promise<ApiResponse<R>>;
 
@@ -51,7 +50,15 @@ const useSWRWithBrowseParams = <
 
   const totalCount = swr.data?.data.data.total_count;
 
-  useEffect(() => setTotalCount(totalCount), [setTotalCount, totalCount]);
+  useEffect(
+    /** Updates total count. */
+    () => {
+      if (totalCount) {
+        setTotalCount(totalCount);
+      }
+    },
+    [setTotalCount, totalCount],
+  );
 
   return { ...swr, pagination, filter, sort };
 };
