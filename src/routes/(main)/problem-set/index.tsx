@@ -35,6 +35,7 @@ export default function ProblemSetRoutes() {
     <Switch>
       <Route path="/problem-set/:courseId/:classId/challenge" component={ChallengeRoutes} />
       <Route path="/problem-set/:courseId/:classId" component={ProblemListRoute} />
+      <Route path="/problem-set" component={GeneralLoading} />
     </Switch>
   );
 }
