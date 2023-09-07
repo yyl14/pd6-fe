@@ -272,13 +272,16 @@ const ClassMemberSetting = ({
         // if data is saved with dialog, redirection is needed
         try {
           const data = await replaceClassMembers({ class_id: Number(classId), members: replacingList });
+
           const failedList = data.data
             .reduce((acc, cur, index) => (cur === false ? acc.concat(index) : acc), [] as number[])
             .map((index) => replacingList[index].account_referral);
 
+          mutateBrowseClassMembersWithAccountReferral();
+          setHasInitialized(false);
+          browseClassMembersRefresh();
+
           if (failedList.length === 0) {
-            mutateBrowseClassMembersWithAccountReferral();
-            setHasInitialized(false);
             unblockAndReturn(saveWithDialog);
           } else {
             setErrorDetectedList(failedList);
@@ -287,9 +290,6 @@ const ClassMemberSetting = ({
         } catch {
           setSubmitError(true);
         }
-        browseClassMembersRefresh();
-        mutateBrowseClassMembersWithAccountReferral();
-        setHasInitialized(false);
       }
     } else {
       unblockAndReturn(false);
