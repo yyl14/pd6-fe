@@ -1,11 +1,10 @@
 import { Button, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { FilterItem, FilterOperator } from '@/hooks/useBrowseParams/types';
+import useQuery from '@/hooks/useQuery';
 
 import Icon from '../icon/index';
-import { DataSchemaBase } from './types';
 
 const useStyles = makeStyles(() => ({
   search: {
@@ -16,24 +15,35 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface TextSearchFieldProps<DataSchema extends DataSchemaBase> {
-  filter: FilterItem<DataSchema, keyof DataSchema, FilterOperator> | undefined;
+interface TextSearchFieldProps {
   handleSearch: (searchValue: string) => void;
 }
 
-function TextSearchField<DataSchema extends DataSchemaBase>({
-  filter,
-  handleSearch,
-}: TextSearchFieldProps<DataSchema>) {
+function TextSearchField({ handleSearch }: TextSearchFieldProps) {
   const classes = useStyles();
+  const [query, setQuery] = useQuery();
 
-  const [inputValue, setInputValue] = useState<string>((filter?.operand as string) ?? '');
+  const [inputValue, setInputValue] = useState<string>('');
+
+  useEffect(
+    /** Initializes input value from query. */
+    () => {
+      const filteringStringQuery = query.get('filteringString');
+      if (filteringStringQuery) {
+        setInputValue(filteringStringQuery);
+      }
+    },
+    [query],
+  );
 
   return (
     <>
       <TextField
         id="search"
-        onChange={(e) => setInputValue(e.target.value)}
+        onChange={(e) => {
+          setQuery('filteringString', e.target.value);
+          setInputValue(e.target.value);
+        }}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
             handleSearch(inputValue);

@@ -37,7 +37,7 @@ function SubmissionDetailRoute() {
     submissionId: string;
   }>();
 
-  const query = useQuery();
+  const [query] = useQuery();
   const challengeId = query.get('challengeId');
   const problemId = query.get('problemId');
 

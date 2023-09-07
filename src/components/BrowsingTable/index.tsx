@@ -21,6 +21,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { FilterInterface, PaginationInterface, RowsPerPageOption, SortInterface } from '@/hooks/useBrowseParams/types';
+import useQuery from '@/hooks/useQuery';
 
 import Icon from '../icon/index';
 import SearchField from './SearchField';
@@ -66,6 +67,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
   hasLink = false,
 }: BrowsingTableProps<DataSchema, RowSchema>) {
   const classes = useStyles();
+  const [query, setQuery] = useQuery();
 
   const hasFilter = filterConfig.length !== 0;
 
@@ -78,7 +80,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
     rowsPerPage,
     setRowsPerPage,
   } = pagination;
-  const { setFilter, filter: filterValue } = filter;
+  const { setFilter } = filter;
   const { sort: sortValue, setSort, createSort } = sort;
 
   const [filteringIndex, setFilteringIndex] = useState(0);
@@ -91,6 +93,11 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
   useEffect(() => {
     setPageInput(String(currentPage + 1));
   }, [currentPage]);
+
+  useEffect(() => {
+    const filteringIndexQuery = query.get('filteringIndex');
+    if (filteringIndexQuery) setFilteringIndex(Number(filteringIndexQuery));
+  }, [query]);
 
   const handlePageChangeFromInput = () => {
     const pageInputValue = Number(pageInput);
@@ -118,6 +125,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
                   value={filteringIndex}
                   onChange={(e) => {
                     setFilteringIndex(e.target.value as number);
+                    setQuery('filteringIndex', String(e.target.value));
                   }}
                 >
                   {filterConfig.map((item, index) => (
@@ -128,7 +136,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
                 </Select>
               </FormControl>
             </div>
-            <SearchField filterValue={filterValue} filterConfig={filteringItem} setFilter={setFilter} />
+            <SearchField filterConfig={filteringItem} setFilter={setFilter} />
             <div className={classes.buttons}>
               <Button disabled>
                 {/* TODO: Advanced search */}
