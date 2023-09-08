@@ -12,21 +12,15 @@ interface SearchFieldProps<DataSchema extends DataSchemaBase> {
       state: FilterItem<DataSchema, keyof DataSchema, FilterOperator>[],
     ) => FilterItem<DataSchema, keyof DataSchema, FilterOperator>[],
   ) => void;
-  filterIndex: number;
 }
 
-const SearchField = <DataSchema extends DataSchemaBase>({
-  filterConfig,
-  setFilter,
-  filterIndex,
-}: SearchFieldProps<DataSchema>) => {
+const SearchField = <DataSchema extends DataSchemaBase>({ filterConfig, setFilter }: SearchFieldProps<DataSchema>) => {
   const { type } = filterConfig;
 
   switch (type) {
     case 'TEXT':
       return (
         <TextSearchField
-          filterIndex={filterIndex}
           handleSearch={(newValue: string) =>
             setFilter(() =>
               newValue === '' // Clear filter if input is empty
@@ -45,14 +39,12 @@ const SearchField = <DataSchema extends DataSchemaBase>({
     case 'ENUM_SINGLE':
       return filterConfig.multi ? (
         <SelectSearchField
-          filterIndex={filterIndex}
           multi
           options={filterConfig.options}
           handleSearch={(newValue) => setFilter(() => newValue)}
         />
       ) : (
         <SelectSearchField
-          filterIndex={filterIndex}
           multi={false}
           options={filterConfig.options}
           handleSearch={(newValue) =>
@@ -69,14 +61,12 @@ const SearchField = <DataSchema extends DataSchemaBase>({
     case 'ENUM_MULTI':
       return filterConfig.multi ? (
         <MultiSelectSearchField
-          filterIndex={filterIndex}
           multi
           options={filterConfig.options}
           handleSearch={(newValue) => setFilter(() => newValue.flat())}
         />
       ) : (
         <MultiSelectSearchField
-          filterIndex={filterIndex}
           multi={false}
           options={filterConfig.options}
           handleSearch={(newValue) =>

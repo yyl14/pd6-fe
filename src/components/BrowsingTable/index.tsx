@@ -89,15 +89,21 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
   const hasRefreshButton = refresh !== undefined;
 
   const [pageInput, setPageInput] = useState('');
+  const filteringIndexQuery = query.get('filteringIndex');
 
   useEffect(() => {
     setPageInput(String(currentPage + 1));
   }, [currentPage]);
 
   useEffect(() => {
-    const filteringIndexQuery = query.get('filteringIndex');
+    if (!filteringIndexQuery) {
+      setQuery('filteringIndex', '0');
+    }
+  }, [filteringIndexQuery, setQuery]);
+
+  useEffect(() => {
     if (filteringIndexQuery) setFilteringIndex(Number(filteringIndexQuery));
-  }, [query]);
+  }, [filteringIndexQuery]);
 
   const handlePageChangeFromInput = () => {
     const pageInputValue = Number(pageInput);
@@ -136,7 +142,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
                 </Select>
               </FormControl>
             </div>
-            <SearchField filterIndex={filteringIndex} filterConfig={filteringItem} setFilter={setFilter} />
+            <SearchField filterConfig={filteringItem} setFilter={setFilter} />
             <div className={classes.buttons}>
               <Button disabled>
                 {/* TODO: Advanced search */}

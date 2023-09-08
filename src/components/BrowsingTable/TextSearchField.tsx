@@ -17,24 +17,25 @@ const useStyles = makeStyles(() => ({
 
 interface TextSearchFieldProps {
   handleSearch: (searchValue: string) => void;
-  filterIndex: number;
 }
 
-function TextSearchField({ handleSearch, filterIndex }: TextSearchFieldProps) {
+function TextSearchField({ handleSearch }: TextSearchFieldProps) {
   const classes = useStyles();
   const [query, setQuery] = useQuery();
+  const filteringIndexQuery = query.get('filteringIndex');
 
   const [inputValue, setInputValue] = useState<string>('');
 
   useEffect(
     /** Initializes input value from query. */
     () => {
-      const filteringStringQuery = query.get(`filteringString${filterIndex}`);
-      if (filteringStringQuery) {
-        setInputValue(filteringStringQuery);
-      }
+      if (!filteringIndexQuery) return;
+
+      const filteringStringQuery = query.get(`filteringString${filteringIndexQuery}`);
+      if (filteringStringQuery) setInputValue(filteringStringQuery);
+      /** else no-op, preserve input value when switching filtering item. */
     },
-    [query, filterIndex],
+    [query, filteringIndexQuery],
   );
 
   return (
@@ -42,7 +43,7 @@ function TextSearchField({ handleSearch, filterIndex }: TextSearchFieldProps) {
       <TextField
         id="search"
         onChange={(e) => {
-          setQuery(`filteringString${filterIndex}`, e.target.value);
+          setQuery(`filteringString${filteringIndexQuery}`, e.target.value);
           setInputValue(e.target.value);
         }}
         onKeyDown={(e) => {
