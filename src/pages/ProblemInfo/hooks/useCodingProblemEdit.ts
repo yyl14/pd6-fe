@@ -19,18 +19,17 @@ import { UploadFailureType } from './useUploadFailedPopup';
 const useCodingProblemEdit = (problemId: number) => {
   /** Data */
   const { editProblem, isLoading: problemIsLoading } = useProblem(problemId);
-  const { testcases: originalTestcases, mutateProblemTestcases, addTestcase } = useProblemTestcases(problemId);
+  const { testcases: originalTestcases, addTestcase } = useProblemTestcases(problemId);
   const { editTestcase, deleteTestcase, uploadInputData, uploadOutputData } = useTestcase();
-  const {
-    assistingData: originalAssistingData,
-    addAssistingDataUnderProblem,
-    mutateProblemAssistingData,
-  } = useProblemAssistingData(Number(problemId));
+  const { assistingData: originalAssistingData, addAssistingDataUnderProblem } = useProblemAssistingData(
+    Number(problemId),
+  );
   const { deleteAssistingData, editAssistingData } = useAssistingData();
 
   /** States */
   const {
-    hasInitialized: problemMetaHasInitialized,
+    problemMetaHasInitialized,
+    testcaseIsDisabledHasInitialized,
     labelInputValue,
     titleInputValue,
     descriptionInputValue,
@@ -93,6 +92,7 @@ const useCodingProblemEdit = (problemId: number) => {
   const inputsDisabled =
     editIsLoading ||
     !problemMetaHasInitialized ||
+    !testcaseIsDisabledHasInitialized ||
     !customizedJudgeHasInitialized ||
     !reviserHasInitialized ||
     !testcaseTablesHasInitialized ||
@@ -190,7 +190,6 @@ const useCodingProblemEdit = (problemId: number) => {
         const {
           label,
           is_sample,
-          is_disabled,
           score,
           time_limit,
           memory_limit,
@@ -206,7 +205,7 @@ const useCodingProblemEdit = (problemId: number) => {
           problem_id: Number(problemId),
           label,
           is_sample,
-          is_disabled,
+          is_disabled: testcaseIsDisabledInputValue,
           score,
           time_limit,
           memory_limit,
@@ -284,9 +283,6 @@ const useCodingProblemEdit = (problemId: number) => {
       ...(addFailedFilesRes.status === 'fulfilled' ? addFailedFilesRes.value : []),
       ...(editFailedFilesRes.status === 'fulfilled' ? editFailedFilesRes.value : []),
     ]);
-
-    mutateProblemTestcases();
-    mutateProblemAssistingData();
 
     setSaveTestcaseIsLoading(false);
 
