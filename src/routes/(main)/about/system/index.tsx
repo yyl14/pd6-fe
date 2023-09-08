@@ -2,12 +2,12 @@ import { Suspense, lazy } from 'react';
 
 import GeneralLoading from '@/components/GeneralLoading';
 
-const DevelopTeam = lazy(() => import(/* webpackChunkName: "DevelopTeam" */ '@/pages/DevelopTeam'));
+const SystemInfo = lazy(() => import(/* webpackChunkName: "SystemInfo" */ '@/pages/SystemInfo'));
 
-export default function TeamRoute() {
+export default function SystemRoute() {
   return (
     <Suspense fallback={<GeneralLoading />}>
-      <DevelopTeam />
+      <SystemInfo />
     </Suspense>
   );
 }
