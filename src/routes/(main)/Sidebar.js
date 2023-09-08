@@ -479,6 +479,9 @@ export default function Sidebar({ open, onClose }) {
       <Route exact path="/about/team">
         <About classes={classes} history={history} location={location} open={open} onClose={onClose} mode="system" />
       </Route>
+      <Route exact path="/about/system">
+        <About classes={classes} history={history} location={location} open={open} onClose={onClose} mode="system" />
+      </Route>
 
       {/* {My Submission} */}
       <Route exact path="/my-submission/:courseId/:classId/:challengeId/:problemId/:submissionId">

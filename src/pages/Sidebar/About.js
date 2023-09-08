@@ -18,6 +18,11 @@ export default function About({ classes, history, location, mode, open, onClose 
           path: `${baseURL}/team`,
           icon: <Icon.DevTeam />,
         },
+        {
+          text: 'System Info',
+          path: `${baseURL}/system`,
+          icon: <Icon.SettingsIcon />,
+        },
       ]);
     }
   }, [location.pathname, history, mode]);
@@ -29,10 +34,6 @@ export default function About({ classes, history, location, mode, open, onClose 
   const unfoldSystem = () => {
     setDisplay('unfold');
   };
-
-  if (location.pathname === '/about') {
-    history.push('/about/team');
-  }
 
   return (
     <div>
