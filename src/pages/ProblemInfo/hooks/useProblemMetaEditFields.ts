@@ -16,11 +16,12 @@ const useProblemMetaEditFields = (problemId: number) => {
   const [hintInputValue, setHintInputValue] = useState('');
   const [testcaseIsDisabledInputValue, setTestcaseIsDisabledInputValue] = useState(false);
 
-  const [hasInitialized, setHasInitialized] = useState(false);
+  const [problemMetaHasInitialized, setProblemMetaHasInitialized] = useState(false);
+  const [testcaseIsDisabledHasInitialized, setTestcaseIsDisabledHasInitialized] = useState(false);
 
   useEffect(() => {
     /** Initializes problem meta input values */
-    if (!problem || hasInitialized) {
+    if (!problem || problemMetaHasInitialized) {
       return;
     }
 
@@ -31,21 +32,25 @@ const useProblemMetaEditFields = (problemId: number) => {
     setSourceInputValue(problem.source);
     setHintInputValue(problem.hint);
 
-    setHasInitialized(true);
-  }, [problem, hasInitialized]);
+    setProblemMetaHasInitialized(true);
+  }, [problem, problemMetaHasInitialized]);
 
   useEffect(
     /** Initializes testcase disabled input value */
     () => {
-      if (testcases) {
-        setTestcaseIsDisabledInputValue(testcases.some((testcase) => testcase.is_disabled));
+      if (!testcases || testcaseIsDisabledHasInitialized) {
+        return;
       }
+
+      setTestcaseIsDisabledInputValue(testcases.some((testcase) => testcase.is_disabled));
+      setTestcaseIsDisabledHasInitialized(true);
     },
-    [testcases],
+    [testcases, testcaseIsDisabledHasInitialized],
   );
 
   return {
-    hasInitialized,
+    problemMetaHasInitialized,
+    testcaseIsDisabledHasInitialized,
 
     labelInputValue,
     titleInputValue,

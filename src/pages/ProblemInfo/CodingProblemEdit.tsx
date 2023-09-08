@@ -22,6 +22,8 @@ import GeneralLoading from '@/components/GeneralLoading';
 import SimpleBar from '@/components/SimpleBar';
 import SimpleTable from '@/components/SimpleTable';
 import Icon from '@/components/icon/index';
+import useProblemAssistingData from '@/lib/assistingData/useProblemAssistingData';
+import useProblemTestcases from '@/lib/testcase/useProblemTestcases';
 
 import AssistingDataUploadCard from './components/AssistingDataUploadCard';
 import TestcaseUploadCard from './components/TestcaseUploadCard';
@@ -89,6 +91,9 @@ export default function CodingProblemEdit({
   problemId: string;
 }) {
   const className = useStyles();
+
+  const { mutateProblemTestcases } = useProblemTestcases(Number(problemId));
+  const { mutateProblemAssistingData } = useProblemAssistingData(Number(problemId));
 
   const {
     /** Loading states */
@@ -169,6 +174,9 @@ export default function CodingProblemEdit({
       saveAssistingData(),
     ]);
 
+    mutateProblemTestcases();
+    mutateProblemAssistingData();
+
     const uploadFailuresValue = [
       ...(testcaseFileFailures.status === 'fulfilled' ? testcaseFileFailures.value : []),
       ...(assistingDataFileFailures.status === 'fulfilled' ? assistingDataFileFailures.value : []),
@@ -181,6 +189,7 @@ export default function CodingProblemEdit({
       handleSuccess();
     }
   };
+
   const handleClickCancel = async () => {
     if (hasChanges) {
       setShowWarningPopup(true);
@@ -375,7 +384,7 @@ export default function CodingProblemEdit({
           <FormControlLabel
             control={
               <Switch
-                checked={testcaseIsDisabledInputValue}
+                checked={!testcaseIsDisabledInputValue}
                 onChange={() => {
                   setTestcaseIsDisabledInputValue((state) => !state);
                   setHasChanges(true);
