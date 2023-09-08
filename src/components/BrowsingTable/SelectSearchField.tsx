@@ -28,12 +28,14 @@ type SelectSearchFieldProps<DataSchema extends DataSchemaBase> = (
     }
 ) & {
   options: FilterConfigOption<DataSchema, keyof DataSchema>[];
+  filterIndex: number;
 };
 
 const SelectSearchField = <DataSchema extends DataSchemaBase>({
   multi,
   handleSearch,
   options,
+  filterIndex,
 }: SelectSearchFieldProps<DataSchema>) => {
   const classes = useStyles();
   const [query, setQuery] = useQuery();
@@ -43,15 +45,15 @@ const SelectSearchField = <DataSchema extends DataSchemaBase>({
   useEffect(
     /** Initializes selected option from query. */
     () => {
-      const selectedOptionIndexQuery = query.get('selectedOptionIndex');
+      const selectedOptionIndexQuery = query.get(`selectedOptionIndex${filterIndex}`);
       if (selectedOptionIndexQuery && selectedOptionIndexQuery !== '')
         setSelectedOptionIndex(Number(selectedOptionIndexQuery));
     },
-    [query],
+    [query, filterIndex],
   );
 
   const handleSearchClick = () => {
-    setQuery('selectedOptionIndex', selectedOptionIndex.toString());
+    setQuery(`selectedOptionIndex${filterIndex}`, selectedOptionIndex.toString());
     const selectedOptionValue = options.at(selectedOptionIndex)?.value;
     if (multi) {
       handleSearch(selectedOptionValue as FilterItem<DataSchema, keyof DataSchema, FilterOperator>[]);

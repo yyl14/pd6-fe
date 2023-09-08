@@ -19,12 +19,14 @@ type MultiSelectSearchFieldProps<DataSchema extends DataSchemaBase> = (
     }
 ) & {
   options: FilterConfigOption<DataSchema, keyof DataSchema>[];
+  filterIndex: number;
 };
 
 const MultiSelectSearchField = <DataSchema extends DataSchemaBase>({
   multi,
   handleSearch,
   options,
+  filterIndex,
 }: MultiSelectSearchFieldProps<DataSchema>) => {
   const [query, setQuery] = useQuery();
 
@@ -33,12 +35,12 @@ const MultiSelectSearchField = <DataSchema extends DataSchemaBase>({
   useEffect(
     /** Initializes selected option from query. */
     () => {
-      const selectedOptionIndicesQuery = query.get('selectedOptionIndices');
+      const selectedOptionIndicesQuery = query.get(`selectedOptionIndices${filterIndex}`);
       if (selectedOptionIndicesQuery && selectedOptionIndicesQuery !== '') {
         setSelectedOptionIndices(JSON.parse(selectedOptionIndicesQuery));
       }
     },
-    [query],
+    [query, filterIndex],
   );
 
   const handleSearchClick = () => {
@@ -56,7 +58,7 @@ const MultiSelectSearchField = <DataSchema extends DataSchemaBase>({
         options={options.map((option, index) => ({ value: index, label: option.label }))}
         value={selectedOptionIndices}
         setValue={(newValue: number[]) => {
-          setQuery('selectedOptionIndices', JSON.stringify(newValue));
+          setQuery(`selectedOptionIndices${filterIndex}`, JSON.stringify(newValue));
           setSelectedOptionIndices(newValue);
         }}
       />

@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 function useQuery() {
   const history = useHistory();
-  const query = useMemo(() => new URLSearchParams(history.location.search), [history]);
+  const query = useMemo(() => new URLSearchParams(history.location.search), [history.location]);
 
   const setQuery = (name: string, newValue: string) => {
     if (query.get(name) !== newValue) {

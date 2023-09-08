@@ -136,7 +136,7 @@ function BrowsingTable<DataSchema extends DataSchemaBase, RowSchema extends RowS
                 </Select>
               </FormControl>
             </div>
-            <SearchField filterConfig={filteringItem} setFilter={setFilter} />
+            <SearchField filterIndex={filteringIndex} filterConfig={filteringItem} setFilter={setFilter} />
             <div className={classes.buttons}>
               <Button disabled>
                 {/* TODO: Advanced search */}
