@@ -5,7 +5,7 @@ import GeneralLoading from '@/components/GeneralLoading';
 import withConditionalRender from '@/components/hoc/withConditionalRender';
 import useCourse from '@/lib/course/useCourse';
 
-const ClassList = lazy(() => import('@/pages/ClassList'));
+const ClassList = lazy(() => import(/* webpackChunkName: "ClassList" */ '@/pages/ClassList'));
 
 export default function ClassListRoute() {
   const { courseId } = useParams<{ courseId: string }>();

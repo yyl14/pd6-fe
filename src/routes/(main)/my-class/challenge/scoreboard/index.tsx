@@ -4,7 +4,7 @@ import { Route, Switch, useParams } from 'react-router-dom';
 import GeneralLoading from '@/components/GeneralLoading';
 import withConditionalRender from '@/components/hoc/withConditionalRender';
 
-const Scoreboard = lazy(() => import('@/pages/Scoreboard'));
+const Scoreboard = lazy(() => import(/* webpackChunkName: "Scoreboard" */ '@/pages/Scoreboard'));
 
 function ScoreboardRoute() {
   const { courseId, classId, challengeId, scoreboardId } = useParams<{

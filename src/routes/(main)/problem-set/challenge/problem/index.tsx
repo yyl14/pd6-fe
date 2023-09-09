@@ -11,7 +11,7 @@ import useProblem from '@/lib/problem/useProblem';
 import CodeSubmissionRoute from './code-submission';
 import ProblemMySubmissionListRoute from './my-submission';
 
-const ProblemInfo = lazy(() => import('@/pages/ProblemInfo'));
+const ProblemInfo = lazy(() => import(/* webpackChunkName: "ProblemInfo" */ '@/pages/ProblemInfo'));
 
 function ProblemInfoRoute() {
   const { courseId, classId, challengeId, problemId } = useParams<{

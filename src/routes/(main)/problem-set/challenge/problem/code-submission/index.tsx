@@ -8,7 +8,7 @@ import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useProblem from '@/lib/problem/useProblem';
 
-const CodeSubmission = lazy(() => import('@/pages/CodeSubmission'));
+const CodeSubmission = lazy(() => import(/* webpackChunkName: "CodeSubmission" */ '@/pages/CodeSubmission'));
 
 export default function CodeSubmissionRoute() {
   const history = useHistory();

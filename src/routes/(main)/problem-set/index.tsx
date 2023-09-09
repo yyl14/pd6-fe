@@ -9,7 +9,7 @@ import useProblemSetMiddleware from '@/middleware/useProblemSetMiddleware';
 
 import ChallengeRoutes from './challenge';
 
-const ProblemList = lazy(() => import('@/pages/ProblemList'));
+const ProblemList = lazy(() => import(/* webpackChunkName: "ProblemList" */ '@/pages/ProblemList'));
 
 function ProblemListRoute() {
   const { courseId, classId } = useParams<{ courseId: string; classId: string }>();

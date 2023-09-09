@@ -13,10 +13,12 @@ import ScoreboardRoutes from '@/routes/(main)/my-class/challenge/scoreboard';
 import EssayRoutes from './essay';
 import ProblemRoutes from './problem';
 
-const ChallengeList = lazy(() => import('@/pages/ChallengeList'));
-const ChallengeInfo = lazy(() => import('@/pages/ChallengeInfo'));
-const ChallengeStatistics = lazy(() => import('@/pages/ChallengeStatistics'));
-const ChallengeSetting = lazy(() => import('@/pages/ChallengeSetting'));
+const ChallengeList = lazy(() => import(/* webpackChunkName: "ChallengeList" */ '@/pages/ChallengeList'));
+const ChallengeInfo = lazy(() => import(/* webpackChunkName: "ChallengeInfo" */ '@/pages/ChallengeInfo'));
+const ChallengeStatistics = lazy(
+  () => import(/* webpackChunkName: "ChallengeStatistics" */ '@/pages/ChallengeStatistics'),
+);
+const ChallengeSetting = lazy(() => import(/* webpackChunkName: "ChallengeSetting" */ '@/pages/ChallengeSetting'));
 
 function ChallengeListRoute() {
   const { courseId, classId } = useParams<{ courseId: string; classId: string }>();

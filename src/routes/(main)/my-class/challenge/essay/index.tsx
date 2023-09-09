@@ -8,7 +8,7 @@ import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useEssay from '@/lib/essay/useEssay';
 
-const Essay = lazy(() => import('@/pages/Essay'));
+const Essay = lazy(() => import(/* webpackChunkName: "Essay" */ '@/pages/Essay'));
 
 function EssayRoute() {
   const { courseId, classId, challengeId, essayId } = useParams<{

@@ -10,7 +10,7 @@ import PeerReviewReceivedRecordRoute from '@/routes/(main)/my-class/challenge/pe
 import PeerReviewReceiverSummaryRoute from '@/routes/(main)/my-class/challenge/peer-review/receiver-summary';
 import PeerReviewReviewedRecordRoute from '@/routes/(main)/my-class/challenge/peer-review/review';
 
-const PeerReview = lazy(() => import('@/pages/PeerReview'));
+const PeerReview = lazy(() => import(/* webpackChunkName: "PeerReview" */ '@/pages/PeerReview'));
 
 export function PeerReviewRoute() {
   const { courseId, classId, challengeId, peerReviewId } = useParams<{

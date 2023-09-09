@@ -8,7 +8,7 @@ import AuthRoutes from './(auth)';
 import DemoRoutes from './(demo)';
 import MainRoutes from './(main)';
 
-const ClearCache = lazy(() => import('@/pages/ClearCache'));
+const ClearCache = lazy(() => import(/* webpackChunkName: "ClearCache" */ '@/pages/ClearCache'));
 
 export default function RootRoute() {
   const { isLatestVersion } = useClearCacheCtx();
