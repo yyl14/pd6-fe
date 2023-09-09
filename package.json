@@ -5,7 +5,7 @@
   "scripts": {
     "start": "craco --openssl-legacy-provider start",
     "dev": "craco --openssl-legacy-provider start",
-    "build": "craco --openssl-legacy-provider build",
+    "build": "craco build",
     "test": "craco test",
     "eject": "craco eject",
     "prebuild": "npm run generate-build-meta",
