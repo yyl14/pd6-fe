@@ -7,8 +7,8 @@ import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useTeam from '@/lib/team/useTeam';
 
-const TeamList = lazy(() => import('@/pages/TeamList'));
-const TeamDetail = lazy(() => import('@/pages/TeamDetail'));
+const TeamList = lazy(() => import(/* webpackChunkName: "TeamList" */ '@/pages/TeamList'));
+const TeamDetail = lazy(() => import(/* webpackChunkName: "TeamDetail" */ '@/pages/TeamDetail'));
 
 function TeamListRoute() {
   const { courseId, classId } = useParams<{ courseId: string; classId: string }>();

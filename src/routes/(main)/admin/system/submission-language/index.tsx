@@ -6,7 +6,7 @@ import NoMatch from '@/components/noMatch';
 
 import SubmitLangSettingRoute from './setting';
 
-const SubmitLang = lazy(() => import('@/pages/SubmitLang'));
+const SubmitLang = lazy(() => import(/* webpackChunkName: "SubmitLang" */ '@/pages/SubmitLang'));
 
 function SubmitLangRoute() {
   return (

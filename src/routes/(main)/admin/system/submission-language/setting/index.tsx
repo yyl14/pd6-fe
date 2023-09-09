@@ -5,7 +5,7 @@ import GeneralLoading from '@/components/GeneralLoading';
 import withConditionalRender from '@/components/hoc/withConditionalRender';
 import useSubmitLangs from '@/lib/submitLang/useSubmitLangs';
 
-const SubmitLangSetting = lazy(() => import('@/pages/SubmitLangSetting'));
+const SubmitLangSetting = lazy(() => import(/* webpackChunkName: "SubmitLangSetting" */ '@/pages/SubmitLangSetting'));
 
 export default function SubmitLangSettingRoute() {
   const { submitlangId } = useParams<{

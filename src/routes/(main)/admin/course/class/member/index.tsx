@@ -6,7 +6,7 @@ import withConditionalRender from '@/components/hoc/withConditionalRender';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 
-const ClassMemberList = lazy(() => import('@/pages/ClassMemberList'));
+const ClassMemberList = lazy(() => import(/* webpackChunkName: "ClassMemberList" */ '@/pages/ClassMemberList'));
 
 export default function ClassMemberListRoute() {
   const { courseId, classId } = useParams<{ courseId: string; classId: string }>();

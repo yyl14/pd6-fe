@@ -5,7 +5,9 @@ import GeneralLoading from '@/components/GeneralLoading';
 import withConditionalRender from '@/components/hoc/withConditionalRender';
 import useViewPeerReviewReviewerSummary from '@/lib/view/useViewPeerReviewReviewerSummary';
 
-const PeerReviewGraderSummary = lazy(() => import('@/pages/PeerReviewGraderSummary'));
+const PeerReviewGraderSummary = lazy(
+  () => import(/* webpackChunkName: "PeerReviewGraderSummary" */ '@/pages/PeerReviewGraderSummary'),
+);
 
 export default function PeerReviewGraderSummaryRoute() {
   // eslint-disable-next-line @typescript-eslint/naming-convention

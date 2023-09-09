@@ -3,7 +3,7 @@ import { Suspense, lazy, useMemo } from 'react';
 import FullPageLoading from '@/components/FullPageLoading';
 import useQuery from '@/hooks/useQuery';
 
-const EmailVerification = lazy(() => import('@/pages/EmailVerification'));
+const EmailVerification = lazy(() => import(/* webpackChunkName: "EmailVerification" */ '@/pages/EmailVerification'));
 
 export default function EmailVerificationRoute() {
   const [query] = useQuery();
