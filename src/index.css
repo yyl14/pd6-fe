@@ -6,7 +6,7 @@
   src: local('Noto Sans Thin'), url(./fonts/NotoSans/NotoSans-Thin.ttf) format('truetype');
 } */
 
-/* @font-face {
+@font-face {
   font-family: 'Noto Sans';
   font-weight: 300;
   src: local('Noto Sans Light'), url(./fonts/NotoSans/NotoSans-Light.ttf) format('truetype');
@@ -45,7 +45,7 @@
   font-family: 'Noto Sans Mono';
   src: url(./fonts//NotoSansMono/NotoSansMono_SemiCondensed-Regular.ttf) format('truetype');
   font-display: swap;
-} */
+}
 
 /** Moon **/
 @font-face {
@@ -56,11 +56,11 @@
 }
 
 /** Cascadia **/
-/* @font-face {
+@font-face {
   font-family: 'Cascadia';
   src: local('Cascadia'), url(./fonts/Cascadia/Cascadia.otf) format('opentype');
   font-display: swap;
-} */
+}
 
 body {
   width: 100%;
@@ -71,5 +71,5 @@ body {
 }
 
 code {
-  font-family: 'Noto Sans Mono', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
