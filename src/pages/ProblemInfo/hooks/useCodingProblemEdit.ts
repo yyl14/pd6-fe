@@ -239,19 +239,16 @@ const useCodingProblemEdit = (problemId: number) => {
 
     const editTestcasePromise = Promise.allSettled(
       testcaseTableDataToUpdate.map(async (datum) => {
-        const {
-          id,
-          is_disabled,
-          time_limit,
-          memory_limit,
+        const { id, time_limit, memory_limit, score, note, input_filename, input_file, output_filename, output_file } =
+          datum;
+        await editTestcase({
+          testcase_id: id as number,
           score,
           note,
-          input_filename,
-          input_file,
-          output_filename,
-          output_file,
-        } = datum;
-        await editTestcase({ testcase_id: id as number, score, note, is_disabled, time_limit, memory_limit });
+          is_disabled: testcaseIsDisabledInputValue,
+          time_limit,
+          memory_limit,
+        });
 
         // Replace testcase input / output data
         const filesRes = await Promise.allSettled([
