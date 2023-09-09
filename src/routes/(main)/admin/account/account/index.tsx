@@ -5,8 +5,8 @@ import GeneralLoading from '@/components/GeneralLoading';
 import withConditionalRender from '@/components/hoc/withConditionalRender';
 import useAccount from '@/lib/account/useAccount';
 
-const AccountList = lazy(() => import('@/pages/AccountList'));
-const AccountSetting = lazy(() => import('@/pages/AccountSetting'));
+const AccountList = lazy(() => import(/* webpackChunkName: "AccountList" */ '@/pages/AccountList'));
+const AccountSetting = lazy(() => import(/* webpackChunkName: "AccountSetting" */ '@/pages/AccountSetting'));
 
 function AccountListRoute() {
   return (

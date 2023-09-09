@@ -5,7 +5,7 @@ import withConditionalRender from '@/components/hoc/withConditionalRender';
 import useAccount from '@/lib/account/useAccount';
 import useUserId from '@/lib/user/useUserId';
 
-const AccountSetting = lazy(() => import('@/pages/AccountSetting'));
+const AccountSetting = lazy(() => import(/* webpackChunkName: "AccountSetting" */ '@/pages/AccountSetting'));
 
 export default function MyProfileRoute() {
   const userId = useUserId();

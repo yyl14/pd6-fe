@@ -5,7 +5,9 @@ import GeneralLoading from '@/components/GeneralLoading';
 import withConditionalRender from '@/components/hoc/withConditionalRender';
 import useAnnouncement from '@/lib/announcement/useAnnouncement';
 
-const AnnouncementSetting = lazy(() => import('@/pages/AnnouncementSetting'));
+const AnnouncementSetting = lazy(
+  () => import(/* webpackChunkName: "AnnouncementSetting" */ '@/pages/AnnouncementSetting'),
+);
 
 export default function AnnouncementSettingRoute() {
   const history = useHistory();

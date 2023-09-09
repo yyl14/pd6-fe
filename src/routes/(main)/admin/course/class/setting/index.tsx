@@ -6,7 +6,7 @@ import withConditionalRender from '@/components/hoc/withConditionalRender';
 import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 
-const ClassSetting = lazy(() => import('@/pages/ClassSetting'));
+const ClassSetting = lazy(() => import(/* webpackChunkName: "ClassSetting" */ '@/pages/ClassSetting'));
 
 export default function ClassSettingRoute() {
   const { courseId, classId } = useParams<{ courseId: string; classId: string }>();

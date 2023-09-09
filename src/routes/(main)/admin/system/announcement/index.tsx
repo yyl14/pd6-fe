@@ -8,7 +8,7 @@ import AnnouncementAddRoute from './add';
 import AnnouncementEditRoute from './edit';
 import AnnouncementSettingRoute from './setting';
 
-const Announcement = lazy(() => import('@/pages/Announcement'));
+const Announcement = lazy(() => import(/* webpackChunkName: "Announcement" */ '@/pages/Announcement'));
 
 function AnnouncementRoute() {
   return (

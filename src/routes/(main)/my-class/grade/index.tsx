@@ -7,8 +7,8 @@ import useClass from '@/lib/class/useClass';
 import useCourse from '@/lib/course/useCourse';
 import useGrade from '@/lib/grade/useGrade';
 
-const GradeList = lazy(() => import('@/pages/GradeList'));
-const GradeDetail = lazy(() => import('@/pages/GradeDetail'));
+const GradeList = lazy(() => import(/* webpackChunkName: "GradeList" */ '@/pages/GradeList'));
+const GradeDetail = lazy(() => import(/* webpackChunkName: "GradeDetail" */ '@/pages/GradeDetail'));
 
 function GradeListRoute() {
   const { courseId, classId } = useParams<{ courseId: string; classId: string }>();

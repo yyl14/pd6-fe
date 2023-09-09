@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import GeneralLoading from '@/components/GeneralLoading';
 import withConditionalRender from '@/components/hoc/withConditionalRender';
 
-const AnnouncementEdit = lazy(() => import('@/pages/AnnouncementEdit'));
+const AnnouncementEdit = lazy(() => import(/* webpackChunkName: "AnnouncementEdit" */ '@/pages/AnnouncementEdit'));
 
 export default function AnnouncementEditRoute() {
   const history = useHistory();

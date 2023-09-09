@@ -6,8 +6,8 @@ import withConditionalRender from '@/components/hoc/withConditionalRender';
 import useInstitute from '@/lib/institute/useInstitute';
 import useInstitutes from '@/lib/institute/useInstitutes';
 
-const InstituteList = lazy(() => import('@/pages/InstituteList'));
-const InstituteSetting = lazy(() => import('@/pages/InstituteSetting'));
+const InstituteList = lazy(() => import(/* webpackChunkName: "InstituteList" */ '@/pages/InstituteList'));
+const InstituteSetting = lazy(() => import(/* webpackChunkName: "InstituteSetting" */ '@/pages/InstituteSetting'));
 
 function InstituteListRoute() {
   const { isLoading: instituteIsLoading, error: instituteError } = useInstitutes();

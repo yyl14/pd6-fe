@@ -9,7 +9,7 @@ import useCourse from '@/lib/course/useCourse';
 
 import ProblemRoutes from './problem';
 
-const ChallengeInfo = lazy(() => import('@/pages/ChallengeInfo'));
+const ChallengeInfo = lazy(() => import(/* webpackChunkName: "ChallengeInfo" */ '@/pages/ChallengeInfo'));
 
 function ChallengeInfoRoute() {
   const { courseId, classId, challengeId } = useParams<{ courseId: string; classId: string; challengeId: string }>();

@@ -5,7 +5,9 @@ import GeneralLoading from '@/components/GeneralLoading';
 import withConditionalRender from '@/components/hoc/withConditionalRender';
 import useViewPeerReviewReceiverSummary from '@/lib/view/useViewPeerReviewReceiverSummary';
 
-const PeerReviewReceiverSummary = lazy(() => import('@/pages/PeerReviewReceiverSummary'));
+const PeerReviewReceiverSummary = lazy(
+  () => import(/* webpackChunkName: "PeerReviewReceiverSummary" */ '@/pages/PeerReviewReceiverSummary'),
+);
 
 export default function PeerReviewReceiverSummaryRoute() {
   // eslint-disable-next-line @typescript-eslint/naming-convention

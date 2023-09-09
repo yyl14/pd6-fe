@@ -7,7 +7,9 @@ import useChallenge from '@/lib/challenge/useChallenge';
 import usePeerReview from '@/lib/peerReview/usePeerReview';
 import usePeerReviewRecord from '@/lib/peerReview/usePeerReviewRecord';
 
-const PeerReviewReviewedRecord = lazy(() => import('@/pages/PeerReviewReviewedRecord'));
+const PeerReviewReviewedRecord = lazy(
+  () => import(/* webpackChunkName: "PeerReviewReviewedRecord" */ '@/pages/PeerReviewReviewedRecord'),
+);
 
 export default function PeerReviewReviewedRecordRoute() {
   const { courseId, classId, challengeId, peerReviewId, accountId, recordId } = useParams<{
